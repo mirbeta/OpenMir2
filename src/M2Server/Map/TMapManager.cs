@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace M2Server
 {
-    public class TMapManager : TGList
+    public class TMapManager
     {
         private readonly Dictionary<string, TEnvirnoment> m_MapList = new Dictionary<string, TEnvirnoment>();
 
@@ -198,7 +198,7 @@ namespace M2Server
 
         public void LoadMapDoor()
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < Maps.Count; i++)
             {
                 this.Maps[i].AddDoorToMap();
             }

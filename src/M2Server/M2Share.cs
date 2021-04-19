@@ -68,52 +68,52 @@ namespace M2Server
         /// <summary>
         /// /禁止制造物品列表
         /// </summary>
-        public static TGStringList g_DisableMakeItemList = null;
+        public static IList<string> g_DisableMakeItemList = null;
         /// <summary>
         /// 禁止制造物品列表
         /// </summary>
-        public static TGStringList g_EnableMakeItemList = null;
+        public static IList<string> g_EnableMakeItemList = null;
         /// <summary>
         /// 禁止出售物品列表
         /// </summary>
-        public static TGStringList g_DisableSellOffList = null;
+        public static IList<string> g_DisableSellOffList = null;
         /// <summary>
         /// 禁止移动地图列表
         /// </summary>
-        public static TGStringList g_DisableMoveMapList = null;
+        public static IList<string> g_DisableMoveMapList = null;
         /// <summary>
         /// 禁止发信息名称列表
         /// </summary>
-        public static TGStringList g_DisableSendMsgList = null;
+        public static IList<string> g_DisableSendMsgList = null;
         /// <summary>
         /// 怪物爆物品限制
         /// </summary>
         public static Dictionary<string, TMonDrop> g_MonDropLimitLIst = null;
-        public static TGStringList g_DisableTakeOffList = null;
+        public static IList<string> g_DisableTakeOffList = null;
         // 禁止取下物品列表
-        public static TGStringList g_ChatLoggingList = null;
+        public static IList<string> g_ChatLoggingList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
         public static IList<TItemBind> g_ItemBindCharName = null;
-        public static TGStringList g_UnMasterList = null;
+        public static IList<string> g_UnMasterList = null;
         // 出师记录表
-        public static TGStringList g_UnForceMasterList = null;
+        public static IList<string> g_UnForceMasterList = null;
         // 强行出师记录表
-        public static TGStringList g_GameLogItemNameList = null;
+        public static IList<string> g_GameLogItemNameList = null;
         // 游戏日志物品名
         public static bool g_boGameLogGold = false;
         public static bool g_boGameLogGameGold = false;
         public static bool g_boGameLogGamePoint = false;
         public static bool g_boGameLogHumanDie = false;
-        public static TGStringList g_DenyIPAddrList = null;
+        public static IList<string> g_DenyIPAddrList = null;
         // IP过滤列表
-        public static TGStringList g_DenyChrNameList = null;
+        public static IList<string> g_DenyChrNameList = null;
         // 角色过滤列表
-        public static TGStringList g_DenyAccountList = null;
+        public static IList<string> g_DenyAccountList = null;
         // 登录帐号过滤列表
-        public static TGStringList g_NoClearMonLIst = null;
+        public static IList<string> g_NoClearMonLIst = null;
         // 不清除怪物列表
-        public static TGStringList g_NoHptoexpMonLIst = null;
+        public static IList<string> g_NoHptoexpMonLIst = null;
         // 不清除怪物列表
         public static object LogMsgCriticalSection = null;
         public static object ProcessMsgCriticalSection = null;
@@ -2154,7 +2154,6 @@ namespace M2Server
             bool result;
             int I;
             result = true;
-            g_DisableMoveMapList.__Lock();
             try
             {
                 for (I = 0; I < g_DisableMoveMapList.Count; I++)
@@ -2168,7 +2167,6 @@ namespace M2Server
             }
             finally
             {
-                g_DisableMoveMapList.UnLock();
             }
             return result;
         }
@@ -2178,7 +2176,6 @@ namespace M2Server
             bool result;
             int i;
             result = true;
-            g_DisableSellOffList.__Lock();
             try
             {
                 for (i = 0; i < g_DisableSellOffList.Count; i++)
@@ -2192,7 +2189,6 @@ namespace M2Server
             }
             finally
             {
-                g_DisableSellOffList.UnLock();
             }
             return result;
         }
@@ -2468,30 +2464,16 @@ namespace M2Server
 
         public static bool SaveDisableMakeItem()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "DisableMakeItem.txt";
-            g_DisableMakeItemList.__Lock();
-            try
-            {
-                //g_DisableMakeItemList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_DisableMakeItemList.UnLock();
-            }
-            result = true;
-            return result;
+            string  sFileName = g_Config.sEnvirDir + "DisableMakeItem.txt";
+            //g_DisableMakeItemList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadUnMasterList()
         {
-            bool result;
-            ArrayList LoadList;
-            string sFileName;
-            result = false;
-            sFileName = g_Config.sEnvirDir + "UnMaster.txt";
-            LoadList = new ArrayList();
+            bool result = false;
+            string sFileName = g_Config.sEnvirDir + "UnMaster.txt";
+            ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
             //    g_UnMasterList.__Lock();
@@ -2518,20 +2500,9 @@ namespace M2Server
 
         public static bool SaveUnMasterList()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "UnMaster.txt";
-            g_UnMasterList.__Lock();
-            try
-            {
-                //g_UnMasterList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_UnMasterList.UnLock();
-            }
-            result = true;
-            return result;
+            string sFileName = g_Config.sEnvirDir + "UnMaster.txt";
+            //g_UnMasterList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadUnForceMasterList()
@@ -2567,21 +2538,9 @@ namespace M2Server
 
         public static bool SaveUnForceMasterList()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "UnForceMaster.txt";
-            g_UnForceMasterList.__Lock();
-            try
-            {
-
-                //g_UnForceMasterList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_UnForceMasterList.UnLock();
-            }
-            result = true;
-            return result;
+            string sFileName = g_Config.sEnvirDir + "UnForceMaster.txt";
+            //g_UnForceMasterList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadEnableMakeItem()
@@ -2617,20 +2576,9 @@ namespace M2Server
 
         public static bool SaveEnableMakeItem()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
-            g_EnableMakeItemList.__Lock();
-            try
-            {
-                //g_EnableMakeItemList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_EnableMakeItemList.UnLock();
-            }
-            result = true;
-            return result;
+            string  sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
+            //g_EnableMakeItemList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadDisableMoveMap()
@@ -2666,21 +2614,9 @@ namespace M2Server
 
         public static bool SaveDisableMoveMap()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
-            g_DisableMoveMapList.__Lock();
-            try
-            {
-
-                //g_DisableMoveMapList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_DisableMoveMapList.UnLock();
-            }
-            result = true;
-            return result;
+            string  sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
+            //g_DisableMoveMapList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadAllowSellOffItem()
@@ -2717,21 +2653,9 @@ namespace M2Server
 
         public static bool SaveAllowSellOffItem()
         {
-            bool result;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "DisableSellOffItem.txt";
-            g_DisableSellOffList.__Lock();
-            try
-            {
-
-                //g_DisableSellOffList.SaveToFile(sFileName);
-            }
-            finally
-            {
-                g_DisableSellOffList.UnLock();
-            }
-            result = true;
-            return result;
+            string sFileName = g_Config.sEnvirDir + "DisableSellOffItem.txt";
+            //g_DisableSellOffList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool SaveChatLog()
@@ -2740,10 +2664,8 @@ namespace M2Server
             //if (File.Exists(sFileName))
             //{
             //    LoadList = new ArrayList();
-
             //    LoadList.LoadFromFile(sFileName);
             //    g_ChatLoggingList.Add(LoadList);
-
             //    //LoadList.Free;
             //}
             //else
@@ -2755,63 +2677,61 @@ namespace M2Server
             //} finally {
             //    g_ChatLoggingList.UnLock();
             //}
-            result = true;
-            return result;
+            return true;
         }
 
         public static int GetUseItemIdx(string sName)
         {
-            int result;
-            result = -1;
-            if (sName.ToLower().CompareTo(U_DRESSNAME.ToLower()) == 0)
+            int result= -1;
+            if (string.Compare(sName, U_DRESSNAME, StringComparison.Ordinal) == 0)
             {
                 result = 0;
             }
-            else if (sName.ToLower().CompareTo(U_WEAPONNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_WEAPONNAME, StringComparison.Ordinal) == 0)
             {
                 result = 1;
             }
-            else if (sName.ToLower().CompareTo(U_RIGHTHANDNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_RIGHTHANDNAME, StringComparison.Ordinal) == 0)
             {
                 result = 2;
             }
-            else if (sName.ToLower().CompareTo(U_NECKLACENAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_NECKLACENAME, StringComparison.Ordinal) == 0)
             {
                 result = 3;
             }
-            else if (sName.ToLower().CompareTo(U_HELMETNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_HELMETNAME, StringComparison.Ordinal) == 0)
             {
                 result = 4;
             }
-            else if (sName.ToLower().CompareTo(U_ARMRINGLNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_ARMRINGLNAME, StringComparison.Ordinal) == 0)
             {
                 result = 5;
             }
-            else if (sName.ToLower().CompareTo(U_ARMRINGRNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_ARMRINGRNAME, StringComparison.Ordinal) == 0)
             {
                 result = 6;
             }
-            else if (sName.ToLower().CompareTo(U_RINGLNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_RINGLNAME, StringComparison.Ordinal) == 0)
             {
                 result = 7;
             }
-            else if (sName.ToLower().CompareTo(U_RINGRNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_RINGRNAME, StringComparison.Ordinal) == 0)
             {
                 result = 8;
             }
-            else if (sName.ToLower().CompareTo(U_BUJUKNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_BUJUKNAME, StringComparison.Ordinal) == 0)
             {
                 result = 9;
             }
-            else if (sName.ToLower().CompareTo(U_BELTNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_BELTNAME, StringComparison.Ordinal) == 0)
             {
                 result = 10;
             }
-            else if (sName.ToLower().CompareTo(U_BOOTSNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_BOOTSNAME, StringComparison.Ordinal) == 0)
             {
                 result = 11;
             }
-            else if (sName.ToLower().CompareTo(U_CHARMNAME.ToLower()) == 0)
+            else if (String.Compare(sName, U_CHARMNAME, StringComparison.Ordinal) == 0)
             {
                 result = 12;
             }
@@ -2869,11 +2789,9 @@ namespace M2Server
         public static bool LoadDisableSendMsgList()
         {
             bool result;
-            ArrayList LoadList;
-            string sFileName;
             result = false;
-            sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
-            LoadList = new ArrayList();
+            string sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
+            ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
             //    g_DisableSendMsgList.Clear();
@@ -2907,7 +2825,6 @@ namespace M2Server
             //if (File.Exists(sFileName))
             //{
             //    g_MonDropLimitLIst.Clear();
-
             //    LoadList.LoadFromFile(sFileName);
             //    for (I = 0; I < LoadList.Count; I ++ )
             //    {
@@ -3027,42 +2944,28 @@ namespace M2Server
 
         public static bool InDisableTakeOffList(int nItemIdx)
         {
-            bool result;
-            result = false;
-            g_DisableTakeOffList.__Lock();
-            try
-            {
-                //for (I = 0; I < g_DisableTakeOffList.Count; I ++ )
-                //{
-
-                //    if (((int)g_DisableTakeOffList.Values[I]) == nItemIdx - 1)
-                //    {
-                //        result = true;
-                //        break;
-                //    }
-                //}
-            }
-            finally
-            {
-                g_DisableTakeOffList.UnLock();
-            }
+            bool result= false;
+            //for (I = 0; I < g_DisableTakeOffList.Count; I ++ )
+            //{
+            //    if (((int)g_DisableTakeOffList.Values[I]) == nItemIdx - 1)
+            //    {
+            //        result = true;
+            //        break;
+            //    }
+            //}
             return result;
         }
 
         public static bool SaveDisableSendMsgList()
         {
             bool result;
-            int I;
-            ArrayList LoadList;
-            string sFileName;
-            sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
-            LoadList = new ArrayList();
-            for (I = 0; I < g_DisableSendMsgList.Count; I++)
+            string sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
+            ArrayList LoadList = new ArrayList();
+            for (var i = 0; i < g_DisableSendMsgList.Count; i++)
             {
-                LoadList.Add(g_DisableSendMsgList[I]);
+                LoadList.Add(g_DisableSendMsgList[i]);
             }
             //LoadList.SaveToFile(sFileName);
-            //LoadList.Free;
             result = true;
             return result;
         }
@@ -3116,24 +3019,15 @@ namespace M2Server
 
         public static byte GetGameLogItemNameList(string sItemName)
         {
-            byte result;
-            result = 0;
-            g_GameLogItemNameList.__Lock();
-            try
-            {
-                //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
-                //{
-                //    if ((sItemName).ToLower().CompareTo((g_GameLogItemNameList[I]).ToLower()) == 0)
-                //    {
-                //        result = 1;
-                //        break;
-                //    }
-                //}
-            }
-            finally
-            {
-                g_GameLogItemNameList.UnLock();
-            }
+            byte result= 0;
+            //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
+            //{
+            //    if ((sItemName).ToLower().CompareTo((g_GameLogItemNameList[I]).ToLower()) == 0)
+            //    {
+            //        result = 1;
+            //        break;
+            //    }
+            //}
             return result;
         }
 
@@ -3142,7 +3036,6 @@ namespace M2Server
             bool result;
             string sFileName;
             sFileName = g_Config.sEnvirDir + "GameLogItemNameList.txt";
-            g_GameLogItemNameList.__Lock();
             try
             {
 
@@ -3150,7 +3043,6 @@ namespace M2Server
             }
             finally
             {
-                g_GameLogItemNameList.UnLock();
             }
             result = true;
             return result;
@@ -3189,13 +3081,10 @@ namespace M2Server
 
         public static bool GetDenyIPAddrList(string sIPaddr)
         {
-            bool result;
-            int I;
-            result = false;
-            g_DenyIPAddrList.__Lock();
+            bool result= false;
             try
             {
-                for (I = 0; I < g_DenyIPAddrList.Count; I++)
+                for (var i = 0; i < g_DenyIPAddrList.Count; i++)
                 {
                     //if ((sIPaddr).ToLower().CompareTo((g_DenyIPAddrList[I]).ToLower()) == 0)
                     //{
@@ -3206,7 +3095,6 @@ namespace M2Server
             }
             finally
             {
-                g_DenyIPAddrList.UnLock();
             }
             return result;
         }
@@ -3274,7 +3162,6 @@ namespace M2Server
         {
             bool result;
             result = false;
-            g_DenyChrNameList.__Lock();
             try
             {
                 //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
@@ -3288,7 +3175,6 @@ namespace M2Server
             }
             finally
             {
-                g_DenyChrNameList.UnLock();
             }
             return result;
         }
@@ -3329,7 +3215,6 @@ namespace M2Server
             LoadList = new ArrayList();
             if (File.Exists(sFileName))
             {
-                g_DenyAccountList.__Lock();
                 try
                 {
                     g_DenyAccountList.Clear();
@@ -3341,7 +3226,6 @@ namespace M2Server
                 }
                 finally
                 {
-                    g_DenyAccountList.UnLock();
                 }
                 result = true;
             }
@@ -3355,13 +3239,10 @@ namespace M2Server
 
         public static bool GetDenyAccountList(string sAccount)
         {
-            bool result;
-            int I;
-            result = false;
-            g_DenyAccountList.__Lock();
+            bool result= false;
             try
             {
-                for (I = 0; I < g_DenyAccountList.Count; I++)
+                for (var I = 0; I < g_DenyAccountList.Count; I++)
                 {
                     //if ((sAccount).ToLower().CompareTo((g_DenyAccountList[I]).ToLower()) == 0)
                     //{
@@ -3372,7 +3253,6 @@ namespace M2Server
             }
             finally
             {
-                g_DenyAccountList.UnLock();
             }
             return result;
         }
@@ -3411,7 +3291,6 @@ namespace M2Server
             LoadList = new StringList();
             if (File.Exists(sFileName))
             {
-                g_NoClearMonLIst.__Lock();
                 try
                 {
                     g_NoClearMonLIst.Clear();
@@ -3423,7 +3302,6 @@ namespace M2Server
                 }
                 finally
                 {
-                    g_NoClearMonLIst.UnLock();
                 }
                 result = true;
             }
@@ -3439,7 +3317,6 @@ namespace M2Server
         {
             bool result;
             result = false;
-            g_NoHptoexpMonLIst.__Lock();
             try
             {
                 //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)
@@ -3453,7 +3330,6 @@ namespace M2Server
             }
             finally
             {
-                g_NoHptoexpMonLIst.UnLock();
             }
             return result;
         }
@@ -3461,22 +3337,14 @@ namespace M2Server
         public static bool GetNoClearMonList(string sMonName)
         {
             var result = false;
-            g_NoClearMonLIst.__Lock();
-            try
-            {
-                //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
-                //{
-                //    if ((sMonName).ToLower().CompareTo((g_NoClearMonLIst[I]).ToLower()) == 0)
-                //    {
-                //        result = true;
-                //        break;
-                //    }
-                //}
-            }
-            finally
-            {
-                g_NoClearMonLIst.UnLock();
-            }
+            //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
+            //{
+            //    if ((sMonName).ToLower().CompareTo((g_NoClearMonLIst[I]).ToLower()) == 0)
+            //    {
+            //        result = true;
+            //        break;
+            //    }
+            //}
             return result;
         }
 
@@ -3509,7 +3377,6 @@ namespace M2Server
             StringList SaveList;
             sFileName = g_Config.sEnvirDir + "NoClearMonList.txt";
             SaveList = new StringList();
-            g_NoClearMonLIst.__Lock();
             try
             {
                 for (I = 0; I < g_NoClearMonLIst.Count; I++)
@@ -3520,7 +3387,6 @@ namespace M2Server
             }
             finally
             {
-                g_NoClearMonLIst.UnLock();
             }
             // SaveList.Free;
             result = true;

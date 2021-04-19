@@ -10,7 +10,6 @@ namespace M2Server
         public void ShowDenyIPaddrLogon(string[] @Params, TPlayObject PlayObject)
         {
             int nCount;
-            M2Share.g_DenyIPAddrList.__Lock();
             try
             {
                 nCount = M2Share.g_DenyIPAddrList.Count;
@@ -28,7 +27,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyIPAddrList.UnLock();
             }
         }
     }

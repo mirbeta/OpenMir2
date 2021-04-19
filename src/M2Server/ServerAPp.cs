@@ -55,7 +55,7 @@ namespace M2Server
                     M2Share.MainOutMessage("地图数据加载失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("地图数据加载成功({0})...",  M2Share.g_MapManager.Count ));
+                M2Share.MainOutMessage(string.Format("地图数据加载成功({0})...", M2Share.g_MapManager.Maps.Count));
                 M2Share.MainOutMessage("正在加载怪物数据库...");
                 nCode = LocalDB.FrmDB.LoadMonsterDB();
                 if (nCode < 0)
@@ -285,22 +285,22 @@ namespace M2Server
             M2Share.QuestDiaryList = new List<TQDDinfo>();
             M2Share.AbuseTextList = new ArrayList();
             M2Share.g_MonSayMsgList = new ArrayList();
-            M2Share.g_ChatLoggingList = new TGStringList();
-            M2Share.g_DisableMakeItemList = new TGStringList();
-            M2Share.g_EnableMakeItemList = new TGStringList();
-            M2Share.g_DisableSellOffList = new TGStringList();
-            M2Share.g_DisableMoveMapList = new TGStringList();
-            M2Share.g_DisableSendMsgList = new TGStringList();
+            M2Share.g_ChatLoggingList = new List<string>();
+            M2Share.g_DisableMakeItemList = new List<string>();
+            M2Share.g_EnableMakeItemList = new List<string>();
+            M2Share.g_DisableSellOffList = new List<string>();
+            M2Share.g_DisableMoveMapList = new List<string>();
+            M2Share.g_DisableSendMsgList = new List<string>();
             M2Share.g_MonDropLimitLIst = new Dictionary<string, TMonDrop>();
-            M2Share.g_DisableTakeOffList = new TGStringList();
-            M2Share.g_UnMasterList = new TGStringList();
-            M2Share.g_UnForceMasterList = new TGStringList();
-            M2Share.g_GameLogItemNameList = new TGStringList();
-            M2Share.g_DenyIPAddrList = new TGStringList();
-            M2Share.g_DenyChrNameList = new TGStringList();
-            M2Share.g_DenyAccountList = new TGStringList();
-            M2Share.g_NoClearMonLIst = new TGStringList();
-            M2Share.g_NoHptoexpMonLIst = new TGStringList();
+            M2Share.g_DisableTakeOffList = new List<string>();
+            M2Share.g_UnMasterList = new List<string>();
+            M2Share.g_UnForceMasterList = new List<string>();
+            M2Share.g_GameLogItemNameList = new List<string>();
+            M2Share.g_DenyIPAddrList = new List<string>();
+            M2Share.g_DenyChrNameList = new List<string>();
+            M2Share.g_DenyAccountList = new List<string>();
+            M2Share.g_NoClearMonLIst = new List<string>();
+            M2Share.g_NoHptoexpMonLIst = new List<string>();
             M2Share.g_ItemBindIPaddr = new List<TItemBind>();
             M2Share.g_ItemBindAccount = new List<TItemBind>();
             M2Share.g_ItemBindCharName = new List<TItemBind>();

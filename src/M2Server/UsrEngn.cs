@@ -1992,7 +1992,7 @@ namespace M2Server
             for (var i = 0; i < m_ChangeServerList.Count; i++)
             {
                 SwitchData = m_ChangeServerList[i];
-                if (string.Compare(SwitchData.sChrName, sChrName., StringComparison.Ordinal) == 0 && SwitchData.nCode == nCode)
+                if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.Ordinal) == 0 && SwitchData.nCode == nCode)
                 {
                     result = SwitchData;
                     break;

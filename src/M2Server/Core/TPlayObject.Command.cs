@@ -1002,8 +1002,6 @@ namespace M2Server
 
         public void CmdClearMapMonster(TGameCmd Cmd, string sMapName, string sMonName, string sItems)
         {
-            int I;
-            int II;
             ArrayList MonList;
             TEnvirnoment Envir;
             int nMonCount;
@@ -1039,15 +1037,15 @@ namespace M2Server
                 boNotItem = false;
             }
             MonList = new ArrayList();
-            for (I = 0; I < M2Share.g_MapManager.Count; I++)
+            for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)
             {
-                //Envir = ((TEnvirnoment)(M2Share.g_MapManager.Items[I]));
+                Envir = M2Share.g_MapManager.Maps[i];
                 if ((Envir != null) && (boKillAllMap || (Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0)))
                 {
                     M2Share.UserEngine.GetMapMonster(Envir, MonList);
-                    for (II = 0; II < MonList.Count; II++)
+                    for (var j = 0; j < MonList.Count; j++)
                     {
-                        BaseObject = MonList[II] as TBaseObject;
+                        BaseObject = MonList[j] as TBaseObject;
                         if (boKillAll || (sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0))
                         {
                             BaseObject.m_boNoItem = boNotItem;
@@ -2427,7 +2425,6 @@ namespace M2Server
                 SysMsg("命令格式: @" + Cmd.sCmd + " 登录帐号 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyAccountList.__Lock();
             try
             {
                 if ((sFixDeny != "") && (sFixDeny[1] == '1'))
@@ -2444,7 +2441,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyAccountList.UnLock();
             }
         }
 
@@ -2460,7 +2456,6 @@ namespace M2Server
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyChrNameList.__Lock();
             try
             {
                 if ((sFixDeny != "") && (sFixDeny[1] == '1'))
@@ -2477,7 +2472,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyChrNameList.UnLock();
             }
         }
 
@@ -2493,7 +2487,6 @@ namespace M2Server
                 SysMsg("命令格式: @" + Cmd.sCmd + " IP地址 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyIPAddrList.__Lock();
             try
             {
                 if ((sFixDeny != "") && (sFixDeny[1] == '1'))
@@ -2510,7 +2503,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyIPAddrList.UnLock();
             }
         }
 
@@ -2550,7 +2542,6 @@ namespace M2Server
                 return;
             }
             boDelete = false;
-            M2Share.g_DenyAccountList.__Lock();
             try
             {
                 //for (I = 0; I < M2Share.g_DenyAccountList.Count; I++)
@@ -2570,7 +2561,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyAccountList.UnLock();
             }
             if (!boDelete)
             {
@@ -2592,7 +2582,6 @@ namespace M2Server
                 return;
             }
             boDelete = false;
-            M2Share.g_DenyChrNameList.__Lock();
             try
             {
                 //for (I = 0; I < M2Share.g_DenyChrNameList.Count; I++)
@@ -2612,7 +2601,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyChrNameList.UnLock();
             }
             if (!boDelete)
             {
@@ -2634,7 +2622,6 @@ namespace M2Server
                 return;
             }
             boDelete = false;
-            M2Share.g_DenyIPAddrList.__Lock();
             try
             {
                 //for (I = 0; I < M2Share.g_DenyIPAddrList.Count; I++)
@@ -2654,7 +2641,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyIPAddrList.UnLock();
             }
             if (!boDelete)
             {
@@ -2664,81 +2650,54 @@ namespace M2Server
 
         public void CmdShowDenyAccountLogon(TGameCmd Cmd, string sAccount, string sFixDeny)
         {
-            int I;
             if (m_btPermission < 6)
             {
                 return;
             }
-            M2Share.g_DenyAccountList.__Lock();
-            try
+            if (M2Share.g_DenyAccountList.Count <= 0)
             {
-                if (M2Share.g_DenyAccountList.Count <= 0)
-                {
-                    SysMsg("禁止登录帐号列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
-                    return;
-                }
-                for (I = 0; I < M2Share.g_DenyAccountList.Count; I++)
-                {
-                    //this.SysMsg(M2Share.g_DenyAccountList[I], TMsgColor.c_Green, TMsgType.t_Hint);
-                }
+                SysMsg("禁止登录帐号列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
+                return;
             }
-            finally
+            for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
             {
-                M2Share.g_DenyAccountList.UnLock();
+                //this.SysMsg(M2Share.g_DenyAccountList[I], TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
         public void CmdShowDenyCharNameLogon(TGameCmd Cmd, string sCharName, string sFixDeny)
         {
-            int I;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyChrNameList.__Lock();
-            try
+            if (M2Share.g_DenyChrNameList.Count <= 0)
             {
-                if (M2Share.g_DenyChrNameList.Count <= 0)
-                {
-                    SysMsg("禁止登录角色列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
-                    return;
-                }
-                for (I = 0; I < M2Share.g_DenyChrNameList.Count; I++)
-                {
-                    //this.SysMsg(M2Share.g_DenyChrNameList[I], TMsgColor.c_Green, TMsgType.t_Hint);
-                }
+                SysMsg("禁止登录角色列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
+                return;
             }
-            finally
+            for (var i = 0; i < M2Share.g_DenyChrNameList.Count; i++)
             {
-                M2Share.g_DenyChrNameList.UnLock();
+                //this.SysMsg(M2Share.g_DenyChrNameList[I], TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
         public void CmdShowDenyIPaddrLogon(TGameCmd Cmd, string sIPaddr, string sFixDeny)
         {
-            int I;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyIPAddrList.__Lock();
-            try
+            if (M2Share.g_DenyIPAddrList.Count <= 0)
             {
-                if (M2Share.g_DenyIPAddrList.Count <= 0)
-                {
-                    SysMsg("禁止登录角色列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
-                    return;
-                }
-                for (I = 0; I < M2Share.g_DenyIPAddrList.Count; I++)
-                {
-                    //this.SysMsg(M2Share.g_DenyIPAddrList[I], TMsgColor.c_Green, TMsgType.t_Hint);
-                }
+                SysMsg("禁止登录角色列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
+                return;
             }
-            finally
+            for (var i = 0; i < M2Share.g_DenyIPAddrList.Count; i++)
             {
-                M2Share.g_DenyIPAddrList.UnLock();
+                //this.SysMsg(M2Share.g_DenyIPAddrList[I], TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 

@@ -17,7 +17,6 @@ namespace M2Server
                 return;
             }
             var boDelete = false;
-            M2Share.g_DenyIPAddrList.__Lock();
             try
             {
                 for (var i = M2Share.g_DenyIPAddrList.Count - 1; i >= 0; i--)
@@ -41,7 +40,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyIPAddrList.UnLock();
             }
             if (!boDelete)
             {

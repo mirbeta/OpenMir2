@@ -9234,7 +9234,6 @@ namespace M2Server
                         }
                         else
                         {
-                            M2Share.g_UnForceMasterList.__Lock();
                             try
                             {
                                 M2Share.g_UnForceMasterList.Add(PlayObject.m_sMasterName);
@@ -9242,7 +9241,6 @@ namespace M2Server
                             }
                             finally
                             {
-                                M2Share.g_UnForceMasterList.UnLock();
                             }
                         }
                         PlayObject.m_sMasterName = "";

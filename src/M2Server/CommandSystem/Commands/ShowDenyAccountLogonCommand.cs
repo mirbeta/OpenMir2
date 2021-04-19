@@ -13,7 +13,6 @@ namespace M2Server
             {
                 return;
             }
-            M2Share.g_DenyAccountList.__Lock();
             try
             {
                 if (M2Share.g_DenyAccountList.Count <= 0)
@@ -28,7 +27,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyAccountList.UnLock();
             }
         }
     }

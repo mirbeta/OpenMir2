@@ -17,7 +17,6 @@ namespace M2Server
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 登录帐号 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            M2Share.g_DenyAccountList.__Lock();
             try
             {
                 if (sFixDeny != "" && sFixDeny[0] == '1')
@@ -34,7 +33,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyAccountList.UnLock();
             }
         }
     }

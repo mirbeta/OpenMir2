@@ -17,7 +17,6 @@ namespace M2Server
                 return;
             }
             var boDelete = false;
-            M2Share.g_DenyChrNameList.__Lock();
             try
             {
                 for (var i = 0; i < M2Share.g_DenyChrNameList.Count; i++)
@@ -37,7 +36,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyChrNameList.UnLock();
             }
             if (!boDelete)
             {

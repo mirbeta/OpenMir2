@@ -17,27 +17,19 @@ namespace M2Server
                 return;
             }
             var boDelete = false;
-            M2Share.g_DenyAccountList.__Lock();
-            try
+            for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
             {
-                for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
-                {
-                    //if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[i]).ToLower()) == 0)
-                    //{
-                    //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)
-                    //    //{
-                    //    //    M2Share.SaveDenyAccountList();
-                    //    //}
-                    //    M2Share.g_DenyAccountList.RemoveAt(i);
-                    //    PlayObject.SysMsg(sAccount + "已从禁止登录帐号列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
-                    //    boDelete = true;
-                    //    break;
-                    //}
-                }
-            }
-            finally
-            {
-                M2Share.g_DenyAccountList.UnLock();
+                //if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[i]).ToLower()) == 0)
+                //{
+                //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)
+                //    //{
+                //    //    M2Share.SaveDenyAccountList();
+                //    //}
+                //    M2Share.g_DenyAccountList.RemoveAt(i);
+                //    PlayObject.SysMsg(sAccount + "已从禁止登录帐号列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
+                //    boDelete = true;
+                //    break;
+                //}
             }
             if (!boDelete)
             {

@@ -44,15 +44,7 @@ namespace M2Server
                 }
                 if (!(boDisableSayMsg || m_PEnvir.Flag.boNOCHAT))
                 {
-                    try
-                    {
-                        M2Share.g_ChatLoggingList.__Lock();
-                        M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString() + "] " + m_sCharName + ": " + sData);
-                    }
-                    finally
-                    {
-                        M2Share.g_ChatLoggingList.UnLock();
-                    }
+                    M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString() + "] " + m_sCharName + ": " + sData);
                     m_sOldSayMsg = sData;
                     if (sData[1] == '/')
                     {

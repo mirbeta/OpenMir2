@@ -6716,7 +6716,6 @@ namespace M2Server
             TPlayObject Human;
             // 处理强行脱离师徒关系
             boIsfound = false;
-            M2Share.g_UnForceMasterList.__Lock();
             try
             {
                 //for (var I = 0; I < M2Share.g_UnForceMasterList.Count; I++)
@@ -6732,7 +6731,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_UnForceMasterList.UnLock();
             }
             if (boIsfound)
             {
@@ -6786,7 +6784,6 @@ namespace M2Server
                     else
                     {
                         // 如果师父不在线则保存到记录表中
-                        M2Share.g_UnMasterList.__Lock();
                         try
                         {
                             boIsfound = false;
@@ -6805,7 +6802,6 @@ namespace M2Server
                         }
                         finally
                         {
-                            M2Share.g_UnMasterList.UnLock();
                         }
                         if (!boIsfound)
                         {
@@ -6819,7 +6815,6 @@ namespace M2Server
             }
             // 处理出师记录
             boIsfound = false;
-            M2Share.g_UnMasterList.__Lock();
             try
             {
                 //for (var I = 0; I < M2Share.g_UnMasterList.Count; I++)
@@ -6835,7 +6830,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_UnMasterList.UnLock();
             }
             if (boIsfound && m_boMaster)
             {

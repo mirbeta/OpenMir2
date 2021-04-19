@@ -9,7 +9,6 @@ namespace M2Server
         [DefaultCommand]
         public void ShowDenyCharNameLogon(string[] @Params, TPlayObject PlayObject)
         {
-            M2Share.g_DenyChrNameList.__Lock();
             try
             {
                 if (M2Share.g_DenyChrNameList.Count <= 0)
@@ -24,7 +23,6 @@ namespace M2Server
             }
             finally
             {
-                M2Share.g_DenyChrNameList.UnLock();
             }
         }
     }
