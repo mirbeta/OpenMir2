@@ -3,9 +3,9 @@
     public class TSuperGuard : TNormNpc
     {
         public int n564 = 0;
-        public bool m_boAttackPet = false;
+        protected bool m_boAttackPet = false;
 
-        public bool AttackTarget()
+        private bool AttackTarget()
         {
             var result = false;
             short nOldX;
@@ -14,7 +14,7 @@
             short wHitMode;
             if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
             {
-                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick = HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -63,7 +63,7 @@
                 this.m_Master = null;
             }
             // 不允许召唤为宝宝
-            if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+            if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
             {
                 for (var i = 0; i < this.m_VisibleActors.Count; i++)
                 {
@@ -72,7 +72,7 @@
                     {
                         continue;
                     }
-                    if ((BaseObject.PKLevel() >= 2) || ((BaseObject.m_btRaceServer >= grobal2.RC_MONSTER) && (!BaseObject.m_boMission)))
+                    if (BaseObject.PKLevel() >= 2 || BaseObject.m_btRaceServer >= grobal2.RC_MONSTER && !BaseObject.m_boMission)
                     {
                         if (m_boAttackPet)
                         {

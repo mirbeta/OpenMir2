@@ -12,7 +12,7 @@ namespace M2Server
         {
             TGuild Guild;
             var result = false;
-            if (M2Share.CheckGuildName(sGuildName) && (FindGuild(sGuildName) == null))
+            if (M2Share.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
             {
                 Guild = new TGuild(sGuildName);
                 Guild.SetGuildInfo(sChief);
@@ -159,7 +159,7 @@ namespace M2Server
                 for (var j = Guild.GuildWarList.Count - 1; j >= 0; j--)
                 {
                     WarGuild = Guild.GuildWarList[j];
-                    if ((HUtil32.GetTickCount() - WarGuild.dwWarTick) > WarGuild.dwWarTime)
+                    if (HUtil32.GetTickCount() - WarGuild.dwWarTick > WarGuild.dwWarTime)
                     {
                         Guild.sub_499B4C(WarGuild.Guild);
                         Guild.GuildWarList.RemoveAt(j);

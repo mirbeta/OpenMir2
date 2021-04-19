@@ -19,12 +19,12 @@ namespace M2Server
                 var sX = @Params.Length > 1 ? @Params[1] : "";
                 var sY = @Params.Length > 2 ? @Params[2] : "";
                 TEnvirnoment Envir = null;
-                if ((sMapName == "") || (sX == "") || (sY == "") || ((sMapName != "") && (sMapName[1] == '?')))
+                if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[1] == '?')
                 {
                     PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandPositionMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-                if ((PlayObject.m_btPermission >= this.Attributes.nPermissionMin) || M2Share.CanMoveMap(sMapName))
+                if (PlayObject.m_btPermission >= this.Attributes.nPermissionMin || M2Share.CanMoveMap(sMapName))
                 {
                     Envir = M2Share.g_MapManager.FindMap(sMapName);
                     if (Envir != null)

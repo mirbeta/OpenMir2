@@ -57,7 +57,7 @@
                 {
                     boChangeFace = true;
                 }
-                if ((m_Master != null) && ((m_Master.m_TargetCret != null) || (m_Master.m_LastHiter != null)))
+                if (m_Master != null && (m_Master.m_TargetCret != null || m_Master.m_LastHiter != null))
                 {
                     boChangeFace = true;
                 }

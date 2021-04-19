@@ -18,7 +18,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[0] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 点数(为空则查看)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -27,7 +27,7 @@ namespace M2Server
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if ((nLevel >= 0) && (nLevel <= 255))
+                if (nLevel >= 0 && nLevel <= 255)
                 {
                     m_PlayObject.m_btReLevel = (byte)nLevel;
                     m_PlayObject.RefShowName();

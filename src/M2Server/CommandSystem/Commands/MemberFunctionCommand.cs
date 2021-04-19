@@ -11,7 +11,7 @@ namespace M2Server
         {
             var sParam = @Params.Length > 0 ? @Params[0] : "";
 
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 PlayObject.SysMsg("打开会员功能窗口.", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

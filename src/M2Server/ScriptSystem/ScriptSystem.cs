@@ -41,7 +41,7 @@ namespace M2Server
                     {
                         if (!bo1D)
                         {
-                            if ((s18[0] == '[') && (s18.ToLower().CompareTo(sLabel.ToLower()) == 0))
+                            if (s18[0] == '[' && s18.ToLower().CompareTo(sLabel.ToLower()) == 0)
                             {
                                 bo1D = true;
                                 List.Add(s18);
@@ -85,7 +85,7 @@ namespace M2Server
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s14 = LoadList[i].Trim();
-                if ((s14 != "") && (s14[0] == '#') && HUtil32.CompareLStr(s14, "#CALL", "#CALL".Length))
+                if (s14 != "" && s14[0] == '#' && HUtil32.CompareLStr(s14, "#CALL", "#CALL".Length))
                 {
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
@@ -117,7 +117,7 @@ namespace M2Server
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s14 = LoadList[i].Trim();
-                if ((s14 != "") && (s14[0] == '#'))
+                if (s14 != "" && s14[0] == '#')
                 {
                     if (HUtil32.CompareLStr(s14, "#SETHOME", "#SETHOME".Length))
                     {
@@ -831,7 +831,7 @@ namespace M2Server
                 nCMDCode = M2Share.nSC_SETRANDOMNO;
                 goto L001;
             }
-            if ((sCmd == M2Share.sSC_DELAYGOTO) || (sCmd == "DELAYCALL"))
+            if (sCmd == M2Share.sSC_DELAYGOTO || sCmd == "DELAYCALL")
             {
                 nCMDCode = M2Share.nSC_DELAYGOTO;
                 goto L001;
@@ -841,27 +841,27 @@ namespace M2Server
             if (nCMDCode > 0)
             {
                 QuestConditionInfo.nCmdCode = nCMDCode;
-                if ((sParam1 != "") && (sParam1[0] == '\"'))
+                if (sParam1 != "" && sParam1[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam1, '\"', '\"', ref sParam1);
                 }
-                if ((sParam2 != "") && (sParam2[0] == '\"'))
+                if (sParam2 != "" && sParam2[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam2, '\"', '\"', ref sParam2);
                 }
-                if ((sParam3 != "") && (sParam3[0] == '\"'))
+                if (sParam3 != "" && sParam3[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam3, '\"', '\"', ref sParam3);
                 }
-                if ((sParam4 != "") && (sParam4[0] == '\"'))
+                if (sParam4 != "" && sParam4[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam4, '\"', '\"', ref sParam4);
                 }
-                if ((sParam5 != "") && (sParam5[0] == '\"'))
+                if (sParam5 != "" && sParam5[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam5, '\"', '\"', ref sParam5);
                 }
-                if ((sParam6 != "") && (sParam6[0] == '\"'))
+                if (sParam6 != "" && sParam6[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam6, '\"', '\"', ref sParam6);
                 }
@@ -1711,27 +1711,27 @@ namespace M2Server
             if (nCMDCode > 0)
             {
                 QuestActionInfo.nCmdCode = nCMDCode;
-                if ((sParam1 != "") && (sParam1[0] == '\"'))
+                if (sParam1 != "" && sParam1[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam1, '\"', '\"', ref sParam1);
                 }
-                if ((sParam2 != "") && (sParam2[0] == '\"'))
+                if (sParam2 != "" && sParam2[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam2, '\"', '\"', ref sParam2);
                 }
-                if ((sParam3 != "") && (sParam3[0] == '\"'))
+                if (sParam3 != "" && sParam3[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam3, '\"', '\"', ref sParam3);
                 }
-                if ((sParam4 != "") && (sParam4[0] == '\"'))
+                if (sParam4 != "" && sParam4[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam4, '\"', '\"', ref sParam4);
                 }
-                if ((sParam5 != "") && (sParam5[0] == '\"'))
+                if (sParam5 != "" && sParam5[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam5, '\"', '\"', ref sParam5);
                 }
-                if ((sParam6 != "") && (sParam6[0] == '\"'))
+                if (sParam6 != "" && sParam6[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam6, '\"', '\"', ref sParam6);
                 }
@@ -1855,7 +1855,7 @@ namespace M2Server
                         }
                         else
                         {
-                            if ((s34[0] == '#') && (HUtil32.CompareLStr(s34, "#IF", "#IF".Length) || HUtil32.CompareLStr(s34, "#ACT", "#ACT".Length) || HUtil32.CompareLStr(s34, "#ELSEACT", "#ELSEACT".Length)))
+                            if (s34[0] == '#' && (HUtil32.CompareLStr(s34, "#IF", "#IF".Length) || HUtil32.CompareLStr(s34, "#ACT", "#ACT".Length) || HUtil32.CompareLStr(s34, "#ELSEACT", "#ELSEACT".Length)))
                             {
                                 bo8D = true;
                             }
@@ -1903,11 +1903,11 @@ namespace M2Server
                 for (I = 0; I < LoadList.Count; I++)
                 {
                     s34 = LoadList[I].Trim();
-                    if ((s34 == "") || (s34[0] == ';') || (s34[0] == '/'))
+                    if (s34 == "" || s34[0] == ';' || s34[0] == '/')
                     {
                         continue;
                     }
-                    if ((n6C == 0) && boFlag)
+                    if (n6C == 0 && boFlag)
                     {
                         if (s34.StartsWith("%")) // 物品价格倍率
                         {
@@ -2024,7 +2024,7 @@ namespace M2Server
                             continue;
                         }
                     }
-                    if ((n6C == 1) && (Script != null) && s34.StartsWith("#"))
+                    if (n6C == 1 && Script != null && s34.StartsWith("#"))
                     {
                         s38 = HUtil32.GetValidStr3(s34, ref s3C, new string[] { "=", " ", "\t" });
                         Script.boQuest = true;
@@ -2084,13 +2084,13 @@ namespace M2Server
                         ScriptNameList.Add(SayingRecord.sLabel);
                         continue;
                     }
-                    if ((Script != null) && (SayingRecord != null))
+                    if (Script != null && SayingRecord != null)
                     {
-                        if ((n6C >= 10) && (n6C < 20) && (s34[0] == '#'))
+                        if (n6C >= 10 && n6C < 20 && s34[0] == '#')
                         {
                             if (s34.Equals("#IF", StringComparison.OrdinalIgnoreCase))
                             {
-                                if ((SayingProcedure.ConditionList.Count > 0) || (SayingProcedure.sSayMsg != ""))
+                                if (SayingProcedure.ConditionList.Count > 0 || SayingProcedure.sSayMsg != "")
                                 {
                                     SayingProcedure = new TSayingProcedure();
                                     SayingRecord.ProcedureList.Add(SayingProcedure);
@@ -2115,7 +2115,7 @@ namespace M2Server
                             }
                             continue;
                         }
-                        if ((n6C == 10) && (SayingProcedure != null))
+                        if (n6C == 10 && SayingProcedure != null)
                         {
                             SayingProcedure.sSayMsg = SayingProcedure.sSayMsg + s34;
                         }
@@ -2163,12 +2163,12 @@ namespace M2Server
                             SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + s34;
                         }
                     }
-                    if ((n6C == 20) && boFlag)
+                    if (n6C == 20 && boFlag)
                     {
                         s34 = HUtil32.GetValidStrCap(s34, ref s48, new string[] { " ", "\t" });
                         s34 = HUtil32.GetValidStrCap(s34, ref s4C, new string[] { " ", "\t" });
                         s34 = HUtil32.GetValidStrCap(s34, ref s50, new string[] { " ", "\t" });
-                        if ((s48 != "") && (s50 != ""))
+                        if (s48 != "" && s50 != "")
                         {
                             if (s48[0] == '\"')
                             {
@@ -2883,7 +2883,7 @@ namespace M2Server
                         OldStringList.Add(sLabel);
                         try
                         {
-                            if ((sLabel.Length >= 2) && (sLabel[1] == '@') && (sLabel[0] == '@'))
+                            if (sLabel.Length >= 2 && sLabel[1] == '@' && sLabel[0] == '@')
                             {
                                 sLabel = "@@" + nIdx;
                             }

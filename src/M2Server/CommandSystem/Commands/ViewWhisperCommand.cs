@@ -15,7 +15,7 @@ namespace M2Server
         {
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
             var sParam2 = @Params.Length > 1 ? @Params[1] : "";
-            if ((sCharName == "") || ((sCharName != "") && (sCharName[1] == '?')))
+            if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandViewWhisperHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

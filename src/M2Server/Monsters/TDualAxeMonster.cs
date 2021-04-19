@@ -3,9 +3,9 @@ namespace M2Server
 {
     public class TDualAxeMonster : TMonster
     {
-        public bool bo558 = false;
-        public int m_nAttackCount = 0;
-        public int m_nAttackMax = 0;
+        private bool bo558 = false;
+        private int m_nAttackCount = 0;
+        protected int m_nAttackMax = 0;
 
         private void FlyAxeAttack(TBaseObject Target)
         {
@@ -36,12 +36,12 @@ namespace M2Server
             {
                 return result;
             }
-            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
-                if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7))
+                if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7)
                 {
-                    if ((m_nAttackMax - 1) > m_nAttackCount)
+                    if (m_nAttackMax - 1 > m_nAttackCount)
                     {
                         m_nAttackCount++;
                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -59,7 +59,7 @@ namespace M2Server
                 }
                 if (m_TargetCret.m_PEnvir == m_PEnvir)
                 {
-                    if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 11) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 11))
+                    if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 11 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 11)
                     {
                         SetTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
                     }
@@ -91,9 +91,9 @@ namespace M2Server
             TBaseObject TargetBaseObject;
             nRage = 9999;
             TargetBaseObject = null;
-            if (!m_boDeath && !bo558 && !m_boGhost && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boDeath && !bo558 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) >= 5000)
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick >= 5000)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     for (var i = 0; i < m_VisibleActors.Count; i++)
@@ -121,11 +121,11 @@ namespace M2Server
                         SetTargetCreat(TargetBaseObject);
                     }
                 }
-                if (((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed) && (m_TargetCret != null))
+                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed && m_TargetCret != null)
                 {
-                    if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4))
+                    if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4)
                     {
-                        if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2))
+                        if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2)
                         {
                             if (M2Share.RandomNumber.Random(5) == 0)
                             {

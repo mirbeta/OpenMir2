@@ -105,7 +105,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
-                    if ((sFlag != "") && (sFlag[0] == '['))
+                    if (sFlag != "" && sFlag[0] == '[')
                     {
                         sMapName = "";
                         MapFlag = new TMapFlag
@@ -114,7 +114,7 @@ namespace M2Server
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
                         sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new string[] { " ", ",", "\t" });
-                        if ((sMapDesc != "") && (sMapDesc[0] == '\"'))
+                        if (sMapDesc != "" && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
@@ -401,7 +401,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
-                    if ((sFlag != "") && (sFlag[0] != '[') && (sFlag[0] != ';'))
+                    if (sFlag != "" && sFlag[0] != '[' && sFlag[0] != ';')
                     {
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
                         sMapName = s34;
@@ -437,7 +437,7 @@ namespace M2Server
                 for (var i = 0; i < tMapList.Count; i++)
                 {
                     var tStr = tMapList[i];
-                    if ((tStr != "") && (tStr[0] != ';'))
+                    if (tStr != "" && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new string[] { " ", "\t" });

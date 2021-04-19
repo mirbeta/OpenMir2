@@ -30,7 +30,7 @@ namespace M2Server
             dwTimeOutTick = HUtil32.GetTickCount();
             while (true)
             {
-                if ((HUtil32.GetTickCount() - dwTimeOutTick) > dwTimeOut)
+                if (HUtil32.GetTickCount() - dwTimeOutTick > dwTimeOut)
                 {
                     //M2Share.n4EBB6C = M2Share.n4EBB68;
                     break;
@@ -59,7 +59,7 @@ namespace M2Server
                         nLen = s28.Length;
                         unsafe
                         {
-                            if ((nLen >= sizeof(TDefaultMessage)) && (HUtil32.Str_ToInt(s2C, 0) == nQueryID))
+                            if (nLen >= sizeof(TDefaultMessage) && HUtil32.Str_ToInt(s2C, 0) == nQueryID)
                             {
                                 nCheckCode = HUtil32.MakeLong(HUtil32.Str_ToInt(s2C, 0) ^ 170, nLen);
                                 byte[] data = new byte[sizeof(int)];
@@ -118,7 +118,7 @@ namespace M2Server
                     M2Share.MainOutMessage(sSaveDBTimeOut);
                 }
             }
-            if ((HUtil32.GetTickCount() - dwTimeOutTick) > M2Share.dwRunDBTimeMax)
+            if (HUtil32.GetTickCount() - dwTimeOutTick > M2Share.dwRunDBTimeMax)
             {
                 M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - dwTimeOutTick;
             }
@@ -143,7 +143,7 @@ namespace M2Server
             {
                 HumanRcd.Data.sChrName = sCharName;
                 HumanRcd.Data.sAccount = sAccount;
-                if ((HumanRcd.Data.sChrName == sCharName) && ((HumanRcd.Data.sAccount == "") || (HumanRcd.Data.sAccount == sAccount)))
+                if (HumanRcd.Data.sChrName == sCharName && (HumanRcd.Data.sAccount == "" || HumanRcd.Data.sAccount == sAccount))
                 {
                     result = true;
                 }
@@ -170,7 +170,7 @@ namespace M2Server
                 EDcode.EncodeString(sAccount) + "/" + EDcode.EncodeString(sCharName) + "/" + EDcode.EncodeBuffer(HumanRcd));
             if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sStr, 5000, false))
             {
-                if ((nIdent == grobal2.DBR_SAVEHUMANRCD) && (nRecog == 1))
+                if (nIdent == grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                 {
                     Console.WriteLine("[RunDB] 保存人物({0})数据成功", sCharName);
                     result = true;

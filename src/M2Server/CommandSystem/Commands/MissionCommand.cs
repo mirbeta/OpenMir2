@@ -16,7 +16,7 @@ namespace M2Server
             var sY = @Params.Length > 1 ? @Params[1] : "";
             short nX;
             short nY;
-            if ((sX == "") || (sY == ""))
+            if (sX == "" || sY == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

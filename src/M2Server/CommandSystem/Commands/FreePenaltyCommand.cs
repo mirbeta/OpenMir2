@@ -15,7 +15,7 @@ namespace M2Server
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
 
-            if ((sHumanName != "") && (sHumanName[0] == '?'))
+            if (sHumanName != "" && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandFreePKHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

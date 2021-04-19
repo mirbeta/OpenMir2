@@ -23,7 +23,7 @@ namespace M2Server
             M2Share.g_DenyIPAddrList.__Lock();
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[0] == '1'))
+                if (sFixDeny != "" && sFixDeny[0] == '1')
                 {
                     //M2Share.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
                     M2Share.SaveDenyIPAddrList();

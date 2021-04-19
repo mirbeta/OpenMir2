@@ -19,7 +19,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[0] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg("清除玩家的仓库密码！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(string.Format("命令格式: @{0} 人物名称", this.Attributes.Name), TMsgColor.c_Red, TMsgType.t_Hint);

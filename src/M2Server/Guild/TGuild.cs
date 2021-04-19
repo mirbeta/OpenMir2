@@ -235,7 +235,7 @@ namespace M2Server
             for (I = 0; I < LoadList.Count; I++)
             {
                 s18 = LoadList[I];
-                if ((s18 == "") || (s18[0] == ';'))
+                if (s18 == "" || s18[0] == ';')
                 {
                     continue;
                 }
@@ -314,7 +314,7 @@ namespace M2Server
                         }
                         break;
                     case 4:
-                        if ((n2C > 0) && (s24 != ""))
+                        if (n2C > 0 && s24 != "")
                         {
                             if (s24.Length > 30)
                             {
@@ -553,7 +553,7 @@ namespace M2Server
 
         public void CheckSaveGuildFile()
         {
-            if (boChanged && ((HUtil32.GetTickCount() - dwSaveTick) > 30 * 1000))
+            if (boChanged && HUtil32.GetTickCount() - dwSaveTick > 30 * 1000)
             {
                 boChanged = false;
                 SaveGuildInfoFile();
@@ -835,7 +835,7 @@ namespace M2Server
                 {
                     GuildRank = m_RankList[I];
                     NewGuildRank = GuildRankList[I];
-                    if ((GuildRank.nRankNo == NewGuildRank.nRankNo) && (GuildRank.sRankName == NewGuildRank.sRankName) && (GuildRank.MemberList.Count == NewGuildRank.MemberList.Count))
+                    if (GuildRank.nRankNo == NewGuildRank.nRankNo && GuildRank.sRankName == NewGuildRank.sRankName && GuildRank.MemberList.Count == NewGuildRank.MemberList.Count)
                     {
                         for (II = 0; II < GuildRank.MemberList.Count; II++)
                         {
@@ -980,7 +980,7 @@ namespace M2Server
                         break;
                     }
                 }
-                if ((result == 0) && (n2C != n30))
+                if (result == 0 && n2C != n30)
                 {
                     result = -6;
                 }
@@ -993,7 +993,7 @@ namespace M2Server
                     n28 = GuildRankList[I].nRankNo;
                     for (III = I + 1; III < GuildRankList.Count; III++)
                     {
-                        if ((GuildRankList[III].nRankNo == n28) || (n28 <= 0) || (n28 > 99))
+                        if (GuildRankList[III].nRankNo == n28 || n28 <= 0 || n28 > 99)
                         {
                             result = -7;
                             break;

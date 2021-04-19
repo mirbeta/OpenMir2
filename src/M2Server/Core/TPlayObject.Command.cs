@@ -16,7 +16,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sSkillName == "") || (nLevel <= 0))
+            if (sHumanName == "" || sSkillName == "" || nLevel <= 0)
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称  技能名称 修炼等级(0-3)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

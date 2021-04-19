@@ -21,19 +21,19 @@ namespace M2Server
                     {
                         if (IsProperTarget(m_TargetCret))
                         {
-                            if ((Math.Abs(m_nTargetX - m_nCurrX) <= 8) && (Math.Abs(m_nTargetY - m_nCurrY) <= 8))
+                            if (Math.Abs(m_nTargetX - m_nCurrX) <= 8 && Math.Abs(m_nTargetY - m_nCurrY) <= 8)
                             {
                                 nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
                                 if (nPower > 0)
                                 {
                                     baseobject = GetPoseCreate();
-                                    if ((baseobject != null) && IsProperTarget(baseobject) && (m_nAntiMagic >= 0))
+                                    if (baseobject != null && IsProperTarget(baseobject) && m_nAntiMagic >= 0)
                                     {
                                         nPower = baseobject.GetMagStruckDamage(this, nPower);
                                         if (nPower > 0)
                                         {
                                             baseobject.StruckDamage(nPower);
-                                            if ((HUtil32.GetTickCount() - m_dwSpellTick) > m_nNextHitTime)
+                                            if (HUtil32.GetTickCount() - m_dwSpellTick > m_nNextHitTime)
                                             {
                                                 m_dwSpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(grobal2.RM_SPELL, 48, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 48, "");
@@ -52,7 +52,7 @@ namespace M2Server
                 {
                     m_TargetCret = null;
                 }
-                if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000) || (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null)))
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();

@@ -27,7 +27,7 @@ namespace M2Server
                 }
                 if (IsProperTarget(BaseObject))
                 {
-                    if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= m_nViewRange) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= m_nViewRange))
+                    if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= m_nViewRange && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= m_nViewRange)
                     {
                         result = true;
                         break;
@@ -47,7 +47,7 @@ namespace M2Server
             {
                 return result;
             }
-            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 SendAttackMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY);
@@ -62,7 +62,7 @@ namespace M2Server
                     }
                     if (IsProperTarget(BaseObject))
                     {
-                        if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < m_nViewRange) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < m_nViewRange))
+                        if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < m_nViewRange && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < m_nViewRange)
                         {
                             m_dwTargetFocusTick = HUtil32.GetTickCount();
                             SendDelayMsg(this, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.m_nCurrX, BaseObject.m_nCurrY), 2, BaseObject.ObjectId, "", 600);
@@ -96,14 +96,14 @@ namespace M2Server
         {
             TBaseObject BaseObject;
             // 5 0x6A
-            if (!m_boGhost && !m_boDeath && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
+                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     if (m_boFixedHideMode)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwAttickTick) > 10000)
+                        if (HUtil32.GetTickCount() - m_dwAttickTick > 10000)
                         {
                             for (var i = 0; i < m_VisibleActors.Count; i++)
                             {
@@ -116,7 +116,7 @@ namespace M2Server
                                 {
                                     if (!BaseObject.m_boHideMode || m_boCoolEye)
                                     {
-                                        if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue))
+                                        if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue)
                                         {
                                             ComeOut();
                                             m_dwAttickTick = HUtil32.GetTickCount();
@@ -129,14 +129,14 @@ namespace M2Server
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - m_dwAttickTick) > 3000)
+                        if (HUtil32.GetTickCount() - m_dwAttickTick > 3000)
                         {
                             if (AttackTarget())
                             {
                                 base.Run();
                                 return;
                             }
-                            if ((HUtil32.GetTickCount() - m_dwAttickTick) > 10000)
+                            if (HUtil32.GetTickCount() - m_dwAttickTick > 10000)
                             {
                                 ComeDown();
                                 m_dwAttickTick = HUtil32.GetTickCount();

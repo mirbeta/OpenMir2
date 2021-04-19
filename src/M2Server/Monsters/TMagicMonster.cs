@@ -31,7 +31,7 @@ namespace M2Server
             var result = false;
             int nOldX;
             int nOldY;
-            if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3 * 1000)
+            if (HUtil32.GetTickCount() - m_dwThinkTick > 3 * 1000)
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
                 if (m_PEnvir.GetXYObjCount(m_nCurrX, m_nCurrY) >= 2)
@@ -48,7 +48,7 @@ namespace M2Server
                 nOldX = m_nCurrX;
                 nOldY = m_nCurrY;
                 WalkTo((byte)M2Share.RandomNumber.Random(8), false);
-                if ((nOldX != m_nCurrX) || (nOldY != m_nCurrY))
+                if (nOldX != m_nCurrX || nOldY != m_nCurrY)
                 {
                     m_boDupMode = false;
                     result = true;
@@ -71,7 +71,7 @@ namespace M2Server
                 {
                     if (GetAttackDir(m_TargetCret, ref bt06))
                     {
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -98,7 +98,7 @@ namespace M2Server
         {
             short nX = 0;
             short nY = 0;
-            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {
@@ -107,12 +107,12 @@ namespace M2Server
                 }
                 if (m_boWalkWaitLocked)
                 {
-                    if ((HUtil32.GetTickCount() - m_dwWalkWaitTick) > m_dwWalkWait)
+                    if (HUtil32.GetTickCount() - m_dwWalkWaitTick > m_dwWalkWait)
                     {
                         m_boWalkWaitLocked = false;
                     }
                 }
-                if (!m_boWalkWaitLocked && ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed))
+                if (!m_boWalkWaitLocked && HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     m_nWalkCount++;
@@ -149,11 +149,11 @@ namespace M2Server
                             if (m_TargetCret == null)
                             {
                                 m_Master.GetBackPosition(ref nX, ref nY);
-                                if ((Math.Abs(m_nTargetX - nX) > 1) || (Math.Abs(m_nTargetY - nY) > 1))
+                                if (Math.Abs(m_nTargetX - nX) > 1 || Math.Abs(m_nTargetY - nY) > 1)
                                 {
                                     m_nTargetX = nX;
                                     m_nTargetY = nY;
-                                    if ((Math.Abs(m_nCurrX - nX) <= 2) && (Math.Abs(m_nCurrY - nY) <= 2))
+                                    if (Math.Abs(m_nCurrX - nX) <= 2 && Math.Abs(m_nCurrY - nY) <= 2)
                                     {
                                         if (m_PEnvir.GetMovingObject(nX, nY, true) != null)
                                         {
@@ -163,7 +163,7 @@ namespace M2Server
                                     }
                                 }
                             }
-                            if ((!m_Master.m_boSlaveRelax) && ((m_PEnvir != m_Master.m_PEnvir) || (Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20) || (Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20)))
+                            if (!m_Master.m_boSlaveRelax && (m_PEnvir != m_Master.m_PEnvir || Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20 || Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20))
                             {
                                 SpaceMove(m_Master.m_PEnvir.sMapName, m_nTargetX, m_nTargetY, 1);
                             }
@@ -171,13 +171,13 @@ namespace M2Server
                     }
                     else
                     {
-                        if ((m_dwRunAwayTime > 0) && ((HUtil32.GetTickCount() - m_dwRunAwayStart) > m_dwRunAwayTime))
+                        if (m_dwRunAwayTime > 0 && HUtil32.GetTickCount() - m_dwRunAwayStart > m_dwRunAwayTime)
                         {
                             m_boRunAwayMode = false;
                             m_dwRunAwayTime = 0;
                         }
                     }
-                    if ((m_Master != null) && m_Master.m_boSlaveRelax)
+                    if (m_Master != null && m_Master.m_boSlaveRelax)
                     {
                         base.Run();
                         return;

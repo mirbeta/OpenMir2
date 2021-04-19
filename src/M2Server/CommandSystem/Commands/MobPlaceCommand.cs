@@ -32,14 +32,14 @@ namespace M2Server
                 nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
                 nX = (short)HUtil32.Str_ToInt(sX, 0);
                 nY = (short)HUtil32.Str_ToInt(sY, 0);
-                if ((nX <= 0) || (nY <= 0) || (sMonName == "") || (nCount <= 0))
+                if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
                 {
                     PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " X  Y 怪物名称 怪物数量", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
                 nCode = 1;
                 MEnvir = M2Share.g_MapManager.FindMap(M2Share.g_sMissionMap);
-                if (!M2Share.g_boMission || (MEnvir == null))
+                if (!M2Share.g_boMission || MEnvir == null)
                 {
                     PlayObject.SysMsg("还没有设定怪物集中点！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                     PlayObject.SysMsg("请先用命令" + this.Attributes.Name + "设置怪物的集中点。", TMsgColor.c_Red, TMsgType.t_Hint);

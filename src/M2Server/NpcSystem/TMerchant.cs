@@ -154,7 +154,7 @@ namespace M2Server
                 for (var i = 0; i < m_RefillGoodsList.Count; i++)
                 {
                     Goods = m_RefillGoodsList[i];
-                    if ((HUtil32.GetTickCount() - Goods.dwRefillTick) > Goods.dwRefillTime * 60 * 1000)
+                    if (HUtil32.GetTickCount() - Goods.dwRefillTick > Goods.dwRefillTime * 60 * 1000)
                     {
                         Goods.dwRefillTick = HUtil32.GetTickCount();
                         nIndex = M2Share.UserEngine.GetStdItemIdx(Goods.sItemName);
@@ -220,7 +220,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_ItemTypeList.Count; i++)
             {
-                if (((int)m_ItemTypeList[i]) == nStdMode)
+                if ((int)m_ItemTypeList[i] == nStdMode)
                 {
                     result = true;
                     break;
@@ -393,7 +393,7 @@ namespace M2Server
             {
                 for (II = DuraList.Count - 1; II > i; II--)
                 {
-                    if (((int)DuraList[II]) > ((int)DuraList[II - 1]))
+                    if ((int)DuraList[II] > (int)DuraList[II - 1])
                     {
                         //DuraList.Exchange(II, II - 1);
                     }
@@ -401,7 +401,7 @@ namespace M2Server
             }
             for (var i = 0; i < DuraList.Count; i++)
             {
-                nDura = nDura + ((int)DuraList[i]);
+                nDura = nDura + (int)DuraList[i];
                 nItemCount++;
                 if (nItemCount >= 5)
                 {
@@ -438,7 +438,7 @@ namespace M2Server
                     return;
                 }
             }
-            if ((User.m_UseItems[grobal2.U_WEAPON].wIndex != 0) && (User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice) && (User.CheckItems(M2Share.g_Config.sBlackStone) != null))
+            if (User.m_UseItems[grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
             {
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
                 if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
@@ -506,7 +506,7 @@ namespace M2Server
                 if (m_UpgradeWeaponList[i].sUserName == User.m_sCharName)
                 {
                     n18 = 1;
-                    if (((HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick) > M2Share.g_Config.dwUPgradeWeaponGetBackTime) || (User.m_btPermission >= 4))
+                    if (HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick > M2Share.g_Config.dwUPgradeWeaponGetBackTime || User.m_btPermission >= 4)
                     {
                         UpgradeInfo = m_UpgradeWeaponList[i];
                         m_UpgradeWeaponList.RemoveAt(i);
@@ -563,7 +563,7 @@ namespace M2Server
                         UpgradeInfo.UserItem.DuraMax += 4000;
                     }
                 }
-                if ((UpgradeInfo.btDc == UpgradeInfo.btMc) && (UpgradeInfo.btMc == UpgradeInfo.btSc))
+                if (UpgradeInfo.btDc == UpgradeInfo.btMc && UpgradeInfo.btMc == UpgradeInfo.btSc)
                 {
                     n1C = M2Share.RandomNumber.Random(3);
                 }
@@ -571,18 +571,18 @@ namespace M2Server
                 {
                     n1C = -1;
                 }
-                if (((UpgradeInfo.btDc >= UpgradeInfo.btMc) && (UpgradeInfo.btDc >= UpgradeInfo.btSc)) || (n1C == 0))
+                if (UpgradeInfo.btDc >= UpgradeInfo.btMc && UpgradeInfo.btDc >= UpgradeInfo.btSc || n1C == 0)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
                     n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 10;
-                        if ((n10 > 63) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCTwoPointRate) == 0))
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 11;
                         }
-                        if ((n10 > 79) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCThreePointRate) == 0))
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 12;
                         }
@@ -592,18 +592,18 @@ namespace M2Server
                         UpgradeInfo.UserItem.btValue[10] = 1;
                     }
                 }
-                if (((UpgradeInfo.btMc >= UpgradeInfo.btDc) && (UpgradeInfo.btMc >= UpgradeInfo.btSc)) || (n1C == 1))
+                if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
                     n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 20;
-                        if ((n10 > 63) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCTwoPointRate) == 0))
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 21;
                         }
-                        if ((n10 > 79) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCThreePointRate) == 0))
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 22;
                         }
@@ -613,18 +613,18 @@ namespace M2Server
                         UpgradeInfo.UserItem.btValue[10] = 1;
                     }
                 }
-                if (((UpgradeInfo.btSc >= UpgradeInfo.btMc) && (UpgradeInfo.btSc >= UpgradeInfo.btDc)) || (n1C == 2))
+                if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
                     n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 30;
-                        if ((n10 > 63) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCTwoPointRate) == 0))
+                        if (n10 > 63 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCTwoPointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 31;
                         }
-                        if ((n10 > 79) && (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCThreePointRate) == 0))
+                        if (n10 > 79 && M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCThreePointRate) == 0)
                         {
                             UpgradeInfo.UserItem.btValue[10] = 32;
                         }
@@ -665,7 +665,7 @@ namespace M2Server
             int n14;
             if (m_boCastle)
             {
-                if ((m_Castle != null) && m_Castle.IsMasterGuild(PlayObject.m_MyGuild))
+                if (m_Castle != null && m_Castle.IsMasterGuild(PlayObject.m_MyGuild))
                 {
                     n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));// 80%
                     result = HUtil32.Round(nPrice / 100 * n14);// 100
@@ -703,7 +703,7 @@ namespace M2Server
                     var nPrice = GetUserPrice(User, GetItemPrice(UserItem.wIndex));
                     var nStock = List14.Count;
                     short nSubMenu;
-                    if ((StdItem.StdMode <= 4) || (StdItem.StdMode == 42) || (StdItem.StdMode == 31))
+                    if (StdItem.StdMode <= 4 || StdItem.StdMode == 42 || StdItem.StdMode == 31)
                     {
                         nSubMenu = 0;
                     }
@@ -779,9 +779,9 @@ namespace M2Server
             }
             try
             {
-                if (!m_boCastle || !((m_Castle != null) && m_Castle.m_boUnderWar))
+                if (!m_boCastle || !(m_Castle != null && m_Castle.m_boUnderWar))
                 {
-                    if (!PlayObject.m_boDeath && (sData != "") && (sData[0] == '@'))
+                    if (!PlayObject.m_boDeath && sData != "" && sData[0] == '@')
                     {
                         sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                         s18 = "";
@@ -929,12 +929,12 @@ namespace M2Server
         {
             try
             {
-                if ((HUtil32.GetTickCount() - dwRefillGoodsTick) > 30000)
+                if (HUtil32.GetTickCount() - dwRefillGoodsTick > 30000)
                 {
                     dwRefillGoodsTick = HUtil32.GetTickCount();
                     RefillGoods();
                 }
-                if ((HUtil32.GetTickCount() - dwClearExpreUpgradeTick) > 10 * 60 * 1000)
+                if (HUtil32.GetTickCount() - dwClearExpreUpgradeTick > 10 * 60 * 1000)
                 {
                     dwClearExpreUpgradeTick = HUtil32.GetTickCount();
                     ClearExpreUpgradeListData();
@@ -950,7 +950,7 @@ namespace M2Server
                         SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
-                if (m_boCastle && (m_Castle != null) && m_Castle.m_boUnderWar)
+                if (m_boCastle && m_Castle != null && m_Castle.m_boUnderWar)
                 {
                     if (!m_boFixedHideMode)
                     {
@@ -966,7 +966,7 @@ namespace M2Server
                         SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
-                if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick > m_dwMoveTime * 1000))
+                if (m_boCanMove && HUtil32.GetTickCount() - m_dwMoveTick > m_dwMoveTime * 1000)
                 {
                     m_dwMoveTick = HUtil32.GetTickCount();
                     SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -1035,7 +1035,7 @@ namespace M2Server
             for (var i = m_UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
                 UpgradeInfo = m_UpgradeWeaponList[i];
-                if (((int)Math.Round(DateTime.Now.ToOADate() - UpgradeInfo.dtTime.ToOADate())) >= M2Share.g_Config.nClearExpireUpgradeWeaponDays)
+                if ((int)Math.Round(DateTime.Now.ToOADate() - UpgradeInfo.dtTime.ToOADate()) >= M2Share.g_Config.nClearExpireUpgradeWeaponDays)
                 {
                     Dispose(UpgradeInfo);
                     m_UpgradeWeaponList.RemoveAt(i);
@@ -1095,7 +1095,7 @@ namespace M2Server
             if (n10 > 0)
             {
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if ((StdItem != null) && (StdItem.StdMode > 4) && (StdItem.DuraMax > 0) && (UserItem.DuraMax > 0))
+                if (StdItem != null && StdItem.StdMode > 4 && StdItem.DuraMax > 0 && UserItem.DuraMax > 0)
                 {
                     if (StdItem.StdMode == 40)// 肉
                     {
@@ -1131,9 +1131,9 @@ namespace M2Server
                         nC = 0;
                         while (true)
                         {
-                            if ((StdItem.StdMode == 5) || (StdItem.StdMode == 6))
+                            if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
                             {
-                                if ((nC != 4) || (nC != 9))
+                                if (nC != 4 || nC != 9)
                                 {
                                     if (nC == 6)
                                     {
@@ -1201,10 +1201,10 @@ namespace M2Server
                             for (var j = 0; j < List20.Count; j++)
                             {
                                 UserItem = List20[j];
-                                if ((StdItem.StdMode <= 4) || (StdItem.StdMode == 42) || (StdItem.StdMode == 31) || (UserItem.MakeIndex == nInt))
+                                if (StdItem.StdMode <= 4 || StdItem.StdMode == 42 || StdItem.StdMode == 31 || UserItem.MakeIndex == nInt)
                                 {
                                     nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
-                                    if ((PlayObject.m_nGold >= nPrice) && (nPrice > 0))
+                                    if (PlayObject.m_nGold >= nPrice && nPrice > 0)
                                     {
                                         if (PlayObject.AddItemToBag(UserItem))
                                         {
@@ -1281,9 +1281,9 @@ namespace M2Server
                     List20 = m_GoodsList[i];
                     UserItem = List20[0];
                     Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if ((Item != null) && (Item.Name == sItemName))
+                    if (Item != null && Item.Name == sItemName)
                     {
-                        if ((List20.Count - 1) < nInt)
+                        if (List20.Count - 1 < nInt)
                         {
                             nInt = HUtil32._MAX(0, List20.Count - 10);
                         }
@@ -1320,9 +1320,9 @@ namespace M2Server
                     }
                     UserItem = List20[0];
                     Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if ((Item != null) && (Item.Name == sItemName))
+                    if (Item != null && Item.Name == sItemName)
                     {
-                        if ((List20.Count - 1) < nInt)
+                        if (List20.Count - 1 < nInt)
                         {
                             nInt = HUtil32._MAX(0, List20.Count - 10);
                         }
@@ -1370,7 +1370,7 @@ namespace M2Server
         {
             var result = true;
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-            if ((StdItem != null) && ((StdItem.StdMode == 25) || (StdItem.StdMode == 30)))
+            if (StdItem != null && (StdItem.StdMode == 25 || StdItem.StdMode == 30))
             {
                 if (UserItem.Dura < 4000)
                 {
@@ -1385,7 +1385,7 @@ namespace M2Server
             var result = false;
             TItem StdItem;
             var nPrice = GetSellItemPrice(GetUserItemPrice(UserItem));
-            if ((nPrice > 0) && !bo574 && ClientSellItem_sub_4A1C84(UserItem))
+            if (nPrice > 0 && !bo574 && ClientSellItem_sub_4A1C84(UserItem))
             {
                 if (PlayObject.IncGold(nPrice))
                 {
@@ -1518,7 +1518,7 @@ namespace M2Server
                 List1C = m_GoodsList[i];
                 MakeItem = List1C[0];
                 StdItem = M2Share.UserEngine.GetStdItem(MakeItem.wIndex);
-                if ((StdItem != null) && (StdItem.Name == sItemName))
+                if (StdItem != null && StdItem.Name == sItemName)
                 {
                     if (PlayObject.m_nGold >= M2Share.g_Config.nMakeDurgPrice)
                     {
@@ -1570,7 +1570,7 @@ namespace M2Server
         {
             int nRepairPrice;
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
-            if ((nPrice > 0) && (UserItem.DuraMax > UserItem.Dura))
+            if (nPrice > 0 && UserItem.DuraMax > UserItem.Dura)
             {
                 if (UserItem.DuraMax > 0)
                 {
@@ -1612,11 +1612,11 @@ namespace M2Server
             TItem StdItem;
             var result = false;
             var boCanRepair = true;
-            if ((PlayObject.m_sScriptLable == M2Share.sSUPERREPAIR) && !m_boS_repair)
+            if (PlayObject.m_sScriptLable == M2Share.sSUPERREPAIR && !m_boS_repair)
             {
                 boCanRepair = false;
             }
-            if ((PlayObject.m_sScriptLable != M2Share.sSUPERREPAIR) && !m_boRepair)
+            if (PlayObject.m_sScriptLable != M2Share.sSUPERREPAIR && !m_boRepair)
             {
                 boCanRepair = false;
             }
@@ -1634,7 +1634,7 @@ namespace M2Server
             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
-                if (boCanRepair && (nPrice > 0) && (UserItem.DuraMax > UserItem.Dura) && (StdItem.StdMode != 43))
+                if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)
                 {
                     if (UserItem.DuraMax > 0)
                     {

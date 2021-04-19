@@ -29,7 +29,7 @@ namespace M2Server
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 StartPoint = M2Share.StartPointList[i];
-                if ((StartPoint != null) && (StartPoint.m_nType > 0))
+                if (StartPoint != null && StartPoint.m_nType > 0)
                 {
                     Envir = FindMap(StartPoint.m_sMapName);
                     if (Envir != null)
@@ -42,7 +42,7 @@ namespace M2Server
                         {
                             for (nY = nMinY; nY <= nMaxY; nY++)
                             {
-                                if (((nX < nMaxX) && (nY == nMinY)) || ((nY < nMaxY) && (nX == nMinX)) || (nX == nMaxX) || (nY == nMaxY))
+                                if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
                                     SafeEvent = new TSafeEvent(Envir, nX, nY, StartPoint.m_nType);
                                     M2Share.EventManager.AddEvent(SafeEvent);
@@ -137,7 +137,7 @@ namespace M2Server
             bool result = false;
             TEnvirnoment SEnvir = FindMap(sSMapNO);
             TEnvirnoment DEnvir = FindMap(sDMapNO);
-            if ((SEnvir != null) && (DEnvir != null))
+            if (SEnvir != null && DEnvir != null)
             {
                 var GateObj = new TGateObj
                 {

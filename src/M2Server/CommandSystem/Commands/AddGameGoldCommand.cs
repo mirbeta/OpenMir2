@@ -20,7 +20,7 @@ namespace M2Server.Command
             {
                 return;
             }
-            if ((sHumName == "") || (nPoint <= 0))
+            if (sHumName == "" || nPoint <= 0)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称  金币数量", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -28,7 +28,7 @@ namespace M2Server.Command
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                if ((m_PlayObject.m_nGameGold + nPoint) < 2000000)
+                if (m_PlayObject.m_nGameGold + nPoint < 2000000)
                 {
                     m_PlayObject.m_nGameGold += nPoint;
                 }

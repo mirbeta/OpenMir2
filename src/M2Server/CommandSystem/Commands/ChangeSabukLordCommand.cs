@@ -17,7 +17,7 @@ namespace M2Server
             var sGuildName = @Params.Length > 1 ? @Params[1] : "";
             var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
 
-            if ((sCASTLENAME == "") || (sGuildName == ""))
+            if (sCASTLENAME == "" || sGuildName == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 城堡名称 行会名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -28,7 +28,7 @@ namespace M2Server
             bool boKillAllMap;
             bool boNotItem;
             TBaseObject BaseObject;
-            if ((sMapName == "") || (sMonName == "") || (sItems == ""))
+            if (sMapName == "" || sMonName == "" || sItems == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -58,7 +58,7 @@ namespace M2Server
                     Envir = M2Share.g_MapManager.Maps[i];
                     if (Envir != null)
                     {
-                        if (boKillAllMap || (Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0))
+                        if (boKillAllMap || Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0)
                         {
                             M2Share.UserEngine.GetMapMonster(Envir, MonList);
                             if (MonList.Count > 0)
@@ -68,14 +68,14 @@ namespace M2Server
                                     BaseObject = MonList[j] as TBaseObject;
                                     if (BaseObject != null)
                                     {
-                                        if ((BaseObject.m_Master != null) && (BaseObject.m_btRaceServer != 135))// 除135怪外，其它宝宝不清除
+                                        if (BaseObject.m_Master != null && BaseObject.m_btRaceServer != 135)// 除135怪外，其它宝宝不清除
                                         {
                                             if (BaseObject.m_Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)
                                             {
                                                 continue;
                                             }
                                         }
-                                        if (boKillAll || (sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0))
+                                        if (boKillAll || sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0)
                                         {
                                             BaseObject.m_boNoItem = boNotItem;
                                             BaseObject.m_WAbil.HP = 0;

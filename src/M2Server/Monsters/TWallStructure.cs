@@ -4,8 +4,8 @@ namespace M2Server
     public class TWallStructure: TGuardUnit
     {
         public int n55C = 0;
-        public int dw560 = 0;
-        public bool boSetMapFlaged = false;
+        private int dw560 = 0;
+        private bool boSetMapFlaged = false;
 
         public TWallStructure() : base()
         {
@@ -43,7 +43,7 @@ namespace M2Server
         public override void Die()
         {
             base.Die();
-            dw560 =HUtil32.GetTickCount();
+            dw560 = HUtil32.GetTickCount();
         }
 
         public override void Run()
@@ -75,7 +75,7 @@ namespace M2Server
             {
                 n08 = 4;
             }
-            if ((this.m_btDirection != n08) && (n08 < 5))
+            if (this.m_btDirection != n08 && n08 < 5)
             {
                 this.m_btDirection = (byte)n08;
                 this.SendRefMsg(grobal2.RM_DIGUP, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");

@@ -12,7 +12,7 @@ namespace M2Server
         {
             var sParam = @Params.Length > 0 ? @Params[0] : "";
 
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 PlayObject.SysMsg("下马命令，在骑马状态输入此命令下马。", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(string.Format("命令格式: @%s", this.Attributes.Name), TMsgColor.c_Red, TMsgType.t_Hint);

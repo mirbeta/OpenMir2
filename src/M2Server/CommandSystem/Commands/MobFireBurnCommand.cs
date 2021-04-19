@@ -20,7 +20,7 @@ namespace M2Server
             var sType = @Params.Length > 3 ? @Params[3] : "";//光环效果
             var sTime = @Params.Length > 4 ? @Params[4] : "";//持续时间
             var sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
-            if ((sMAP == "") || ((sMAP != "") && (sMAP[1] == '?')))
+            if (sMAP == "" || sMAP != "" && sMAP[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnHelpMsg, this.Attributes.Name, sMAP, sX,
                     sY, sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -35,7 +35,7 @@ namespace M2Server
             {
                 nPoint = 1;
             }
-            if ((sMAP == "") || (nX < 0) || (nY < 0) || (nType < 0) || (nTime < 0) || (nPoint < 0))
+            if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnHelpMsg, this.Attributes.Name, sMAP, sX, sY,
                     sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);

@@ -14,12 +14,12 @@ namespace M2Server
         public void GuildRecall(string[] @Params, TPlayObject PlayObject)
         {
             var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 PlayObject.SysMsg("命令功能: 行会传送，行会掌门人可以将整个行会成员全部集中。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (!PlayObject.m_boGuildMove && (PlayObject.m_btPermission < 6))
+            if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
             {
                 PlayObject.SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -37,7 +37,7 @@ namespace M2Server
             TGuildRank GuildRank;
             TUserCastle m_Castle;
             m_Castle = M2Share.CastleManager.InCastleWarArea(PlayObject);
-            if ((m_Castle != null) && m_Castle.m_boUnderWar)
+            if (m_Castle != null && m_Castle.m_boUnderWar)
             {
                 PlayObject.SysMsg("攻城区域不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

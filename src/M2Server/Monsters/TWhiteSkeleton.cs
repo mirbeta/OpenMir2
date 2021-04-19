@@ -33,7 +33,6 @@
         {
             this.m_nNextHitTime = 3000 - this.m_btSlaveMakeLevel * 600;
             this.m_nWalkSpeed = 1200 - this.m_btSlaveMakeLevel * 250;
-            
             this.m_dwWalkTick = HUtil32.GetTickCount() + 2000;
         }
     } 

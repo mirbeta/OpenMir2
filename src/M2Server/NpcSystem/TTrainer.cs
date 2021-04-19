@@ -22,14 +22,14 @@
         public override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;
-            if ((ProcessMsg.wIdent == grobal2.RM_STRUCK) || (ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK))
+            if (ProcessMsg.wIdent == grobal2.RM_STRUCK || ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK)
             {
                 if (ProcessMsg.BaseObject == this.ObjectId)
                 {
                     n56C += ProcessMsg.wParam;
                     m_dw568 = HUtil32.GetTickCount();
                     n570 ++;
-                    this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + (n56C / n570));
+                    this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + n56C / n570);
                 }
             }
             if (ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK)
@@ -43,9 +43,9 @@
         {
             if (n570 > 0)
             {
-                if ((HUtil32.GetTickCount() - m_dw568) > 3 * 1000)
+                if (HUtil32.GetTickCount() - m_dw568 > 3 * 1000)
                 {
-                    this.ProcessSayMsg("总破坏力为  " + n56C + ",平均值为 " + (n56C / n570));
+                    this.ProcessSayMsg("总破坏力为  " + n56C + ",平均值为 " + n56C / n570);
                     n570 = 0;
                     n56C = 0;
                 }

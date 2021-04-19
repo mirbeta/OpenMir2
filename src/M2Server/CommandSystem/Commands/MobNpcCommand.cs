@@ -22,7 +22,7 @@ namespace M2Server
             var sParam2 = @Params.Length > 1 ? @Params[1] : "";
             var sParam3 = @Params.Length > 2 ? @Params[2] : "";
             var sParam4 = @Params.Length > 3 ? @Params[3] : "";
-            if ((sParam1 == "") || (sParam2 == "") || ((sParam1 != "") && (sParam1[0] == '?')))
+            if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMobNpcHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -1653,7 +1653,7 @@ namespace M2Server
             }
             if (Math.Abs(sy - dy) > 2)
             {
-                if ((sx >= dx - 1) && (sx <= dx + 1))
+                if (sx >= dx - 1 && sx <= dx + 1)
                 {
                     flagx = 0;
                 }
@@ -1672,40 +1672,40 @@ namespace M2Server
             }
             if (Math.Abs(sx - dx) > 2)
             {
-                if ((sy > dy - 1) && (sy <= dy + 1))
+                if (sy > dy - 1 && sy <= dy + 1)
                 {
                     flagy = 0;
                 }
             }
-            if ((flagx == 0) && (flagy == -1))
+            if (flagx == 0 && flagy == -1)
             {
                 result = grobal2.DR_UP;
             }
-            if ((flagx == 1) && (flagy == -1))
+            if (flagx == 1 && flagy == -1)
             {
                 result = grobal2.DR_UPRIGHT;
             }
-            if ((flagx == 1) && (flagy == 0))
+            if (flagx == 1 && flagy == 0)
             {
                 result = grobal2.DR_RIGHT;
             }
-            if ((flagx == 1) && (flagy == 1))
+            if (flagx == 1 && flagy == 1)
             {
                 result = grobal2.DR_DOWNRIGHT;
             }
-            if ((flagx == 0) && (flagy == 1))
+            if (flagx == 0 && flagy == 1)
             {
                 result = grobal2.DR_DOWN;
             }
-            if ((flagx == -1) && (flagy == 1))
+            if (flagx == -1 && flagy == 1)
             {
                 result = grobal2.DR_DOWNLEFT;
             }
-            if ((flagx == -1) && (flagy == 0))
+            if (flagx == -1 && flagy == 0)
             {
                 result = grobal2.DR_LEFT;
             }
-            if ((flagx == -1) && (flagy == -1))
+            if (flagx == -1 && flagy == -1)
             {
                 result = grobal2.DR_UPLEFT;
             }
@@ -1724,19 +1724,19 @@ namespace M2Server
                     }
                     break;
                 case grobal2.U_WEAPON:
-                    if ((StdItem.StdMode == 5) || (StdItem.StdMode == 6))
+                    if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_RIGHTHAND:
-                    if ((StdItem.StdMode == 29) || (StdItem.StdMode == 30) || (StdItem.StdMode == 28))
+                    if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_NECKLACE:
-                    if ((StdItem.StdMode == 19) || (StdItem.StdMode == 20) || (StdItem.StdMode == 21))
+                    if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21)
                     {
                         result = true;
                     }
@@ -1748,44 +1748,44 @@ namespace M2Server
                     }
                     break;
                 case grobal2.U_ARMRINGL:
-                    if ((StdItem.StdMode == 24) || (StdItem.StdMode == 25) || (StdItem.StdMode == 26))
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_ARMRINGR:
-                    if ((StdItem.StdMode == 24) || (StdItem.StdMode == 26))
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 26)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_RINGL:
                 case grobal2.U_RINGR:
-                    if ((StdItem.StdMode == 22) || (StdItem.StdMode == 23))
+                    if (StdItem.StdMode == 22 || StdItem.StdMode == 23)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_BUJUK:
-                    if ((StdItem.StdMode == 25) || (StdItem.StdMode == 51))
+                    if (StdItem.StdMode == 25 || StdItem.StdMode == 51)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_BELT:
-                    if ((StdItem.StdMode == 54) || (StdItem.StdMode == 64))
+                    if (StdItem.StdMode == 54 || StdItem.StdMode == 64)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_BOOTS:
-                    if ((StdItem.StdMode == 52) || (StdItem.StdMode == 62))
+                    if (StdItem.StdMode == 52 || StdItem.StdMode == 62)
                     {
                         result = true;
                     }
                     break;
                 case grobal2.U_CHARM:
-                    if ((StdItem.StdMode == 53) || (StdItem.StdMode == 63))
+                    if (StdItem.StdMode == 53 || StdItem.StdMode == 63)
                     {
                         result = true;
                     }
@@ -1875,7 +1875,7 @@ namespace M2Server
             }
             for (var i = 0; i <= sGuildName.Length; i++)
             {
-                if ((sGuildName[i] < '0') || (sGuildName[i] == '/') || (sGuildName[i] == '\\') || (sGuildName[i] == ':') || (sGuildName[i] == '*') || (sGuildName[i] == ' ') || (sGuildName[i] == '\"') || (sGuildName[i] == '\'') || (sGuildName[i] == '<') || (sGuildName[i] == '|') || (sGuildName[i] == '?') || (sGuildName[i] == '>'))
+                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' ' || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
                 {
                     result = false;
                 }
@@ -1886,7 +1886,7 @@ namespace M2Server
         public static int GetItemNumber()
         {
             g_Config.nItemNumber++;
-            if (g_Config.nItemNumber > (int.MaxValue / 2 - 1))
+            if (g_Config.nItemNumber > int.MaxValue / 2 - 1)
             {
                 g_Config.nItemNumber = 1;
             }
@@ -1900,7 +1900,7 @@ namespace M2Server
             {
                 g_Config.nItemNumberEx = int.MaxValue / 2;
             }
-            if (g_Config.nItemNumberEx > (int.MaxValue - 1))
+            if (g_Config.nItemNumberEx > int.MaxValue - 1)
             {
                 g_Config.nItemNumberEx = int.MaxValue / 2;
             }
@@ -1918,7 +1918,7 @@ namespace M2Server
             }
             for (var i = 0; i <= sName.Length - 1; i++)
             {
-                if (((sName[i] >= '0') && (sName[i] <= '9')) || (sName[i] == '-'))
+                if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
                     result = sName.Substring(0, i - 1);
                     sC = sName.Substring(i + 1, sName.Length - i - 1);
@@ -2056,7 +2056,7 @@ namespace M2Server
             var result = string.Empty;
             nX = 0;
             nY = 0;
-            if ((nIndex >= 0) && (nIndex < StartPointList.Count))
+            if (nIndex >= 0 && nIndex < StartPointList.Count)
             {
                 var StartPoint = StartPointList[nIndex];
                 if (StartPoint != null)
@@ -3553,19 +3553,19 @@ namespace M2Server
                 for (I = 0; I < LoadList.Count; I++)
                 {
                     sLineText = LoadList[I].Trim();
-                    if ((sLineText != "") && (sLineText[1] < ';'))
+                    if (sLineText != "" && sLineText[1] < ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new string[] { " ", "/", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new string[] { " ", "/", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new string[] { " ", "/", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new string[] { " ", "/", ",", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new string[] { " ", "/", ",", "\t" });
-                        if ((sStatus != "") && (sRate != "") && (sColor != "") && (sMonName != "") && (sSayMsg != ""))
+                        if (sStatus != "" && sRate != "" && sColor != "" && sMonName != "" && sSayMsg != "")
                         {
                             nStatus = HUtil32.Str_ToInt(sStatus, -1);
                             nRate = HUtil32.Str_ToInt(sRate, -1);
                             nColor = HUtil32.Str_ToInt(sColor, -1);
-                            if ((nStatus >= 0) && (nRate >= 0) && (nColor >= 0))
+                            if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
                             {
                                 MonSayMsg = new TMonSayMsg();
                                 switch (nStatus)
@@ -3672,7 +3672,7 @@ namespace M2Server
             bool result;
             int nPos;
             result = false;
-            if ((sIPaddr == "") || (dIPaddr == ""))
+            if (sIPaddr == "" || dIPaddr == "")
             {
                 return result;
             }

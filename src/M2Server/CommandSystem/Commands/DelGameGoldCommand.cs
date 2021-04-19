@@ -20,7 +20,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumName == "") || (nPoint <= 0))
+            if (sHumName == "" || nPoint <= 0)
             {
                 return;
             }

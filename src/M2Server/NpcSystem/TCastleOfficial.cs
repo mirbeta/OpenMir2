@@ -11,7 +11,7 @@ namespace M2Server
                 PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) || (PlayObject.m_btPermission >= 3))
+            if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) || PlayObject.m_btPermission >= 3)
             {
                 base.Click(PlayObject);
             }
@@ -95,7 +95,7 @@ namespace M2Server
                     return;
                 }
                 string s18;
-                if ((sData != "") && (sData[0] == '@'))
+                if (sData != "" && sData[0] == '@')
                 {
                     var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                     s18 = "";

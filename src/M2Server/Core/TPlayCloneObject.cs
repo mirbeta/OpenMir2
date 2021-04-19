@@ -2,8 +2,8 @@
 {
     public class TPlayCloneObject: TPlayObject
     {
-        public int m_dwRunTime = 0;
-        public int m_dwRunNextTick = 0;
+        private int m_dwRunTime = 0;
+        private int m_dwRunNextTick = 0;
 
         public TPlayCloneObject(TPlayObject PlayObject) : base()
         {

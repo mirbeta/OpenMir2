@@ -2,7 +2,7 @@
 {
     public class TSpitSpider : TATMonster
     {
-        public bool m_boUsePoison = false;
+        protected bool m_boUsePoison = false;
 
         public TSpitSpider() : base()
         {
@@ -34,7 +34,7 @@
                         nX = (short)(this.m_nCurrX - 2 + k);
                         nY = (short)(this.m_nCurrY - 2 + i);
                         BaseObject = (TBaseObject)this.m_PEnvir.GetMovingObject(nX, nY, true);
-                        if ((BaseObject != null) && (BaseObject != this) && this.IsProperTarget(BaseObject) && (M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < this.m_btHitPoint))
+                        if (BaseObject != null && BaseObject != this && this.IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < this.m_btHitPoint)
                         {
                             nDamage = BaseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0)
@@ -65,7 +65,7 @@
             }
             if (this.TargetInSpitRange(this.m_TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick = HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick = HUtil32.GetTickCount();

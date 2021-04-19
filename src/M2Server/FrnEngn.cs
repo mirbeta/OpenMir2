@@ -7,10 +7,10 @@ namespace M2Server
 {
     public class TFrontEngine
     {
-        public object m_UserCriticalSection = null;
-        public IList<TLoadDBInfo> m_LoadRcdList = null;
-        public IList<TSaveRcd> m_SaveRcdList = null;
-        public IList<TGoldChangeInfo> m_ChangeGoldList = null;
+        private object m_UserCriticalSection = null;
+        private IList<TLoadDBInfo> m_LoadRcdList = null;
+        private IList<TSaveRcd> m_SaveRcdList = null;
+        private IList<TGoldChangeInfo> m_ChangeGoldList = null;
         private IList<TLoadDBInfo> m_LoadRcdTempList = null;
         private readonly IList<TSaveRcd> m_SaveRcdTempList = null;
         private readonly Thread _frontEngine;
@@ -34,7 +34,7 @@ namespace M2Server
             _frontEngine.Start();
         }
 
-        public void Execute()
+        private void Execute()
         {
             const string sExceptionMsg = "[Exception] TFrontEngine::Execute";
             while (true)
@@ -168,7 +168,7 @@ namespace M2Server
                     {
                         continue;
                     }
-                    if (RunDB.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, ref SaveRcd.HumanRcd) || (SaveRcd.nReTryCount > 50))
+                    if (RunDB.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, ref SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
                     {
                         if (SaveRcd.PlayObject != null)
                         {
@@ -408,7 +408,7 @@ namespace M2Server
                 for (var i = 0; i < m_LoadRcdList.Count; i++)
                 {
                     LoadRcdInfo = m_LoadRcdList[i];
-                    if ((LoadRcdInfo.nGateIdx == nGateIndex) && (LoadRcdInfo.nSocket == nSocket))
+                    if (LoadRcdInfo.nGateIdx == nGateIndex && LoadRcdInfo.nSocket == nSocket)
                     {
                         DisPose(LoadRcdInfo);
                         m_LoadRcdList.RemoveAt(i);
@@ -428,7 +428,7 @@ namespace M2Server
             var result = false;
             if (RunDB.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
-                if (((HumanRcd.Data.nGold + GoldChangeInfo.nGold) > 0) && ((HumanRcd.Data.nGold + GoldChangeInfo.nGold) < 2000000000))
+                if (HumanRcd.Data.nGold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.nGold + GoldChangeInfo.nGold < 2000000000)
                 {
                     HumanRcd.Data.nGold += GoldChangeInfo.nGold;
                     if (RunDB.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, ref HumanRcd))

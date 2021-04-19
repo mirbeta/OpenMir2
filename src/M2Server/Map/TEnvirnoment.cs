@@ -43,7 +43,7 @@ namespace M2Server
             try
             {
                 bo1E = false;
-                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
                 {
                     if (MapCellInfo.ObjList == null)
                     {
@@ -78,7 +78,7 @@ namespace M2Server
                                     }
                                 }
                             }
-                            if (!bo1E && (MapCellInfo.ObjList.Count >= 5))
+                            if (!bo1E && MapCellInfo.ObjList.Count >= 5)
                             {
                                 result = null;
                                 bo1E = true;
@@ -95,7 +95,7 @@ namespace M2Server
                         };
                         MapCellInfo.ObjList.Add(OSObject);
                         result = pRemoveObject;
-                        if ((btType == grobal2.OS_MOVINGOBJECT) && (!((TBaseObject)pRemoveObject).m_boAddToMaped))
+                        if (btType == grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boAddToMaped)
                         {
                             ((TBaseObject)pRemoveObject).m_boDelFormMaped = false;
                             ((TBaseObject)pRemoveObject).m_boAddToMaped = true;
@@ -124,7 +124,7 @@ namespace M2Server
         public bool GetMapCellInfo(int nX, int nY, ref TMapCellinfo MapCellInfo)
         {
             bool result;
-            if ((nX >= 0) && (nX < wWidth) && (nY >= 0) && (nY < wHeight))
+            if (nX >= 0 && nX < wWidth && nY >= 0 && nY < wHeight)
             {
                 MapCellInfo = MapCellArray[nX * wHeight + nY];
                 result = true;
@@ -178,13 +178,13 @@ namespace M2Server
                 }
                 if (bo1A)
                 {
-                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag != 0))
+                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag != 0)
                     {
                         result = -1;
                     }
                     else
                     {
-                        if (GetMapCellInfo(nCX, nCY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                        if (GetMapCellInfo(nCX, nCY, ref MapCellInfo) && MapCellInfo.ObjList != null)
                         {
                             var i = 0;
                             while (true)
@@ -196,7 +196,7 @@ namespace M2Server
                                 OSObject = MapCellInfo.ObjList[i];
                                 if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
                                 {
-                                    if (((TBaseObject)OSObject.CellObj) == ((TBaseObject)Cert))
+                                    if ((TBaseObject)OSObject.CellObj == (TBaseObject)Cert)
                                     {
                                         MapCellInfo.ObjList.RemoveAt(i);
                                         OSObject = null;
@@ -248,10 +248,10 @@ namespace M2Server
             TOSObject OSObject;
             TBaseObject BaseObject;
             var result = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
             {
                 result = true;
-                if (!boFlag && (MapCellInfo.ObjList != null))
+                if (!boFlag && MapCellInfo.ObjList != null)
                 {
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
@@ -290,14 +290,14 @@ namespace M2Server
             TOSObject OSObject;
             TBaseObject BaseObject;
             var result = true;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
             {
                 if (MapCellInfo.ObjList != null)
                 {
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (!boFlag && (OSObject.btType == grobal2.OS_MOVINGOBJECT))
+                        if (!boFlag && OSObject.btType == grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (BaseObject != null)
@@ -309,7 +309,7 @@ namespace M2Server
                                 }
                             }
                         }
-                        if (!boItem && (OSObject.btType == grobal2.OS_ITEMOBJECT))
+                        if (!boItem && OSObject.btType == grobal2.OS_ITEMOBJECT)
                         {
                             result = false;
                             break;
@@ -327,10 +327,10 @@ namespace M2Server
             TBaseObject BaseObject;
             TUserCastle Castle;
             var result = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
             {
                 result = true;
-                if (!boFlag && (MapCellInfo.ObjList != null))
+                if (!boFlag && MapCellInfo.ObjList != null)
                 {
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
@@ -341,7 +341,7 @@ namespace M2Server
                             if (BaseObject != null)
                             {
                                 Castle = M2Share.CastleManager.InCastleWarArea(BaseObject);
-                                if (M2Share.g_Config.boWarDisHumRun && (Castle != null) && Castle.m_boUnderWar)
+                                if (M2Share.g_Config.boWarDisHumRun && Castle != null && Castle.m_boUnderWar)
                                 {
                                 }
                                 else
@@ -422,13 +422,13 @@ namespace M2Server
                                     OSObject = MapCellInfo.ObjList[n18];
                                     if (OSObject != null)
                                     {
-                                        if ((OSObject.btType == btType) && (OSObject.CellObj == pRemoveObject))
+                                        if (OSObject.btType == btType && OSObject.CellObj == pRemoveObject)
                                         {
                                             MapCellInfo.ObjList.RemoveAt(n18);
                                             OSObject = null;
                                             result = 1;
                                             // 减地图人物怪物计数
-                                            if ((btType == grobal2.OS_MOVINGOBJECT) && (!((TBaseObject)pRemoveObject).m_boDelFormMaped))
+                                            if (btType == grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boDelFormMaped)
                                             {
                                                 ((TBaseObject)pRemoveObject).m_boDelFormMaped = true;
                                                 ((TBaseObject)pRemoveObject).m_boAddToMaped = false;
@@ -492,7 +492,7 @@ namespace M2Server
             TBaseObject BaseObject;
             TMapItem result = null;
             bo2C = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
             {
                 bo2C = true;
                 if (MapCellInfo.ObjList != null)
@@ -546,7 +546,7 @@ namespace M2Server
             {
                 var bo19 = GetMapCellInfo(nX, nY, ref MapCellInfo);
                 var bo1A = false;
-                if (bo19 && (MapCellInfo.chFlag != 0))
+                if (bo19 && MapCellInfo.chFlag != 0)
                 {
                     if (MapCellInfo.ObjList == null)
                     {
@@ -587,12 +587,12 @@ namespace M2Server
             try
             {
                 boVerify = false;
-                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo != null) && (MapCellInfo.ObjList != null))
+                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo != null && MapCellInfo.ObjList != null)
                 {
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if ((OSObject.btType == grobal2.OS_MOVINGOBJECT) && (OSObject.CellObj == BaseObject))
+                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT && OSObject.CellObj == BaseObject)
                         {
                             OSObject.dwAddTime = HUtil32.GetTickCount();
                             boVerify = true;
@@ -730,7 +730,7 @@ namespace M2Server
 
         private void Initialize(short nWidth, short nHeight)
         {
-            if ((nWidth > 1) && (nHeight > 1))
+            if (nWidth > 1 && nHeight > 1)
             {
                 if (MapCellArray != null)
                 {
@@ -810,7 +810,7 @@ namespace M2Server
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
@@ -845,7 +845,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.DR_DOWN:
-                    if (sny < (wWidth - nFlag))
+                    if (sny < wWidth - nFlag)
                     {
                         sny += (short)nFlag;
                     }
@@ -857,41 +857,41 @@ namespace M2Server
                     }
                     break;
                 case grobal2.DR_RIGHT:
-                    if (snx < (wWidth - nFlag))
+                    if (snx < wWidth - nFlag)
                     {
                         snx += (short)nFlag;
                     }
                     break;
                 case grobal2.DR_UPLEFT:
-                    if ((snx > nFlag - 1) && (sny > nFlag - 1))
+                    if (snx > nFlag - 1 && sny > nFlag - 1)
                     {
                         snx -= (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
                 case grobal2.DR_UPRIGHT:
-                    if ((snx > nFlag - 1) && (sny < (wHeight - nFlag)))
+                    if (snx > nFlag - 1 && sny < wHeight - nFlag)
                     {
                         snx += (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
                 case grobal2.DR_DOWNLEFT:
-                    if ((snx < (wWidth - nFlag)) && (sny > nFlag - 1))
+                    if (snx < wWidth - nFlag && sny > nFlag - 1)
                     {
                         snx -= (short)nFlag;
                         sny += (short)nFlag;
                     }
                     break;
                 case grobal2.DR_DOWNRIGHT:
-                    if ((snx < (wWidth - nFlag)) && (sny < (wHeight - nFlag)))
+                    if (snx < wWidth - nFlag && sny < wHeight - nFlag)
                     {
                         snx += (short)nFlag;
                         sny += (short)nFlag;
                     }
                     break;
             }
-            if ((snx == sx) && (sny == sy))
+            if (snx == sx && sny == sy)
             {
                 result = false;
             }
@@ -907,7 +907,7 @@ namespace M2Server
             var result = true;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = MapCellInfo.ObjList.Count - 1; i >= 0; i--)
                 {
@@ -934,7 +934,7 @@ namespace M2Server
                 for (var i = 0; i < m_DoorList.Count; i++)
                 {
                     Door = m_DoorList[i];
-                    if ((Math.Abs(Door.nX - nX) <= 1) && Math.Abs(Door.nY - nY) <= 1)
+                    if (Math.Abs(Door.nX - nX) <= 1 && Math.Abs(Door.nY - nY) <= 1)
                     {
                         if (!Door.Status.boOpened)
                         {
@@ -957,7 +957,7 @@ namespace M2Server
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
@@ -965,7 +965,7 @@ namespace M2Server
                     if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
                     {
                         BaseObject = (TBaseObject)OSObject.CellObj;
-                        if ((BaseObject != null) && (!BaseObject.m_boGhost) && BaseObject.bo2B9 && (!boFlag || (!BaseObject.m_boDeath)))
+                        if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.bo2B9 && (!boFlag || !BaseObject.m_boDeath))
                         {
                             result = BaseObject;
                             break;
@@ -988,24 +988,24 @@ namespace M2Server
                 nFlagValue = ((TBaseObject)BaseObject).GetQuestFalgStatus(MapQuestFlag.nFlag);
                 if (nFlagValue == MapQuestFlag.nValue)
                 {
-                    if ((boFlag == MapQuestFlag.boGrouped) || !boFlag)
+                    if (boFlag == MapQuestFlag.boGrouped || !boFlag)
                     {
                         bo1D = false;
-                        if ((MapQuestFlag.sMonName != "") && (MapQuestFlag.sItemName != ""))
+                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.sItemName != "")
                         {
-                            if ((MapQuestFlag.sMonName == sCharName) && (MapQuestFlag.sItemName == sItem))
+                            if (MapQuestFlag.sMonName == sCharName && MapQuestFlag.sItemName == sItem)
                             {
                                 bo1D = true;
                             }
                         }
-                        if ((MapQuestFlag.sMonName != "") && (MapQuestFlag.sItemName == ""))
+                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.sItemName == "")
                         {
-                            if ((MapQuestFlag.sMonName == sCharName) && (sItem == ""))
+                            if (MapQuestFlag.sMonName == sCharName && sItem == "")
                             {
                                 bo1D = true;
                             }
                         }
-                        if ((MapQuestFlag.sMonName == "") && (MapQuestFlag.sItemName != ""))
+                        if (MapQuestFlag.sMonName == "" && MapQuestFlag.sItemName != "")
                         {
                             if (MapQuestFlag.sItemName == sItem)
                             {
@@ -1031,7 +1031,7 @@ namespace M2Server
             TBaseObject BaseObject;
             nCount = 0;
             bo2C = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
             {
                 bo2C = true;
                 if (MapCellInfo.ObjList != null)
@@ -1069,7 +1069,7 @@ namespace M2Server
             for (var i = 0; i < m_DoorList.Count; i++)
             {
                 Door = m_DoorList[i];
-                if ((Door.nX == nX) && (Door.nY == nY))
+                if (Door.nX == nX && Door.nY == nY)
                 {
                     result = Door;
                     return result;
@@ -1087,7 +1087,7 @@ namespace M2Server
             {
                 for (var nYY = nY - nRage; nYY <= nY + nRage; nYY++)
                 {
-                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
                     {
                         for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                         {
@@ -1127,7 +1127,7 @@ namespace M2Server
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
@@ -1158,7 +1158,7 @@ namespace M2Server
             TOSObject OSObject;
             object result = null;
             bo2C = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
@@ -1224,7 +1224,7 @@ namespace M2Server
             TOSObject OSObject;
             TBaseObject BaseObject;
             var result = false;
-            if (GetMapCellInfo(nMapX, nMapY, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+            if (GetMapCellInfo(nMapX, nMapY, ref MapCellInfo) && MapCellInfo.ObjList != null)
             {
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
@@ -1247,7 +1247,7 @@ namespace M2Server
         {
             TMapCellinfo MapCellInfo = null;
             var result = true;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 2))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 2)
             {
                 result = false;
             }

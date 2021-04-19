@@ -21,7 +21,7 @@ namespace M2Server
                 return;
             }
             nFastStep = HUtil32.Str_ToInt(sFastStep, -1);
-            if ((sFastStep == "") || (nFastStep < 1) || ((sFastStep != "") && (sFastStep[0] == '?')))
+            if (sFastStep == "" || nFastStep < 1 || sFastStep != "" && sFastStep[0] == '?')
             {
                 PlayObject.SysMsg("设置怪物行动速度。", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 速度", TMsgColor.c_Red, TMsgType.t_Hint);

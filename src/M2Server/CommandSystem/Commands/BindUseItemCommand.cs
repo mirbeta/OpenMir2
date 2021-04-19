@@ -41,7 +41,7 @@ namespace M2Server
                 nBind = 3;
             }
             boLight = sLight == "1";
-            if ((nItem < 0) || (nBind < 0) || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (nItem < 0 || nBind < 0 || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -71,7 +71,7 @@ namespace M2Server
                         for (var i = 0; i < M2Share.g_ItemBindAccount.Count; i++)
                         {
                             ItemBind = M2Share.g_ItemBindAccount[i];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 boFind = true;
@@ -112,7 +112,7 @@ namespace M2Server
                         for (var i = 0; i < M2Share.g_ItemBindCharName.Count; i++)
                         {
                             ItemBind = M2Share.g_ItemBindCharName[i];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 boFind = true;
@@ -155,7 +155,7 @@ namespace M2Server
                         for (var i = 0; i < M2Share.g_ItemBindIPaddr.Count; i++)
                         {
                             ItemBind = M2Share.g_ItemBindIPaddr[i];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 boFind = true;

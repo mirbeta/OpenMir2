@@ -37,7 +37,7 @@ namespace M2Server
 
         public override void Run()
         {
-            if ((!m_boDeath) && (!bo554) && (!m_boGhost) && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 // 血量低于一半时开始用魔法攻击
                 if (m_WAbil.HP < m_WAbil.MaxHP / 2)
@@ -48,7 +48,7 @@ namespace M2Server
                 {
                     m_boUseMagic = false;
                 }
-                if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null))
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
@@ -59,11 +59,11 @@ namespace M2Server
                 }
                 var nX = Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX);
                 var nY = Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY);
-                if ((nX <= 2) && (nY <= 2))
+                if (nX <= 2 && nY <= 2)
                 {
-                    if (m_boUseMagic || (nX == 2) || (nY == 2))
+                    if (m_boUseMagic || nX == 2 || nY == 2)
                     {
-                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                        if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             int nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);

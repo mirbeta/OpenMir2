@@ -23,7 +23,7 @@ namespace M2Server
             M2Share.g_DenyChrNameList.__Lock();
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[0] == '1'))
+                if (sFixDeny != "" && sFixDeny[0] == '1')
                 {
                     //M2Share.g_DenyChrNameList.Add(sCharName, ((1) as Object));
                     M2Share.SaveDenyChrNameList();

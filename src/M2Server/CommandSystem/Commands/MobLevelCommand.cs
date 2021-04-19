@@ -18,7 +18,7 @@ namespace M2Server
             var Param = @Params.Length > 0 ? @Params[0] : "";
             ArrayList BaseObjectList;
             TBaseObject BaseObject;
-            if ((Param != "") && (Param[0] == '?'))
+            if (Param != "" && Param[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, new string[] { this.Attributes.Name, "" }), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

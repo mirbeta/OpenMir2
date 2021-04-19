@@ -39,7 +39,7 @@ namespace M2Server
             int n20;
             int nOldX;
             int nOldY;
-            if ((this.m_nCurrX != m_nTargetX) || (this.m_nCurrY != m_nTargetY))
+            if (this.m_nCurrX != m_nTargetX || this.m_nCurrY != m_nTargetY)
             {
                 n10 = m_nTargetX;
                 n14 = m_nTargetY;
@@ -88,7 +88,7 @@ namespace M2Server
                 n20 = M2Share.RandomNumber.Random(3);
                 for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i ++ )
                 {
-                    if ((nOldX == this.m_nCurrX) && (nOldY == this.m_nCurrY))
+                    if (nOldX == this.m_nCurrX && nOldY == this.m_nCurrY)
                     {
                         if (n20 != 0)
                         {
@@ -117,12 +117,12 @@ namespace M2Server
             bool result;
             if (ProcessMsg.wIdent == grobal2.RM_STRUCK)
             {
-                if ((ProcessMsg.BaseObject == this.ObjectId) && (M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null))
+                if (ProcessMsg.BaseObject == this.ObjectId && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
                 {
                     this.SetLastHiter(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     Struck(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     this.BreakHolySeizeMode();
-                    if ((this.m_Master != null) && (M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != this.m_Master) && (M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                    if (this.m_Master != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != this.m_Master && M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_btRaceServer == grobal2.RC_PLAYOBJECT)
                     {
                         this.m_Master.SetPKFlag(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     }
@@ -151,7 +151,7 @@ namespace M2Server
             this.m_dwStruckTick = HUtil32.GetTickCount();
             if (Hiter != null)
             {
-                if ((this.m_TargetCret == null) || this.GetAttackDir(this.m_TargetCret, ref btDir) || (M2Share.RandomNumber.Random(6) == 0))
+                if (this.m_TargetCret == null || this.GetAttackDir(this.m_TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0)
                 {
                     if (this.IsProperTarget(Hiter))
                     {

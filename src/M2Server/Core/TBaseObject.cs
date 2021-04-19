@@ -753,7 +753,7 @@ namespace M2Server
                         }
                         else
                         {
-                            if (m_PEnvir.bo2C && (n24 > nItemCount))
+                            if (m_PEnvir.bo2C && n24 > nItemCount)
                             {
                                 n24 = nItemCount;
                                 n28 = nDX;

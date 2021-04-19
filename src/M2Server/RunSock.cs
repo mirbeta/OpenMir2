@@ -196,7 +196,7 @@ namespace M2Server
                     {
                         var MsgHeader = *(TMsgHeader*)Buff;
                         var nCheckMsgLen = Math.Abs(MsgHeader.nLength) + sizeof(TMsgHeader);
-                        if ((MsgHeader.dwCode == grobal2.RUNGATECODE) && (nCheckMsgLen < 0x8000))
+                        if (MsgHeader.dwCode == grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
                             if (nLen < nCheckMsgLen)
                             {
@@ -303,7 +303,7 @@ namespace M2Server
                 {
                     if (M2Share.g_Config.nGateLoad > 0)
                     {
-                        if ((HUtil32.GetTickCount() - dwSendTestMsgTick) >= 100)
+                        if (HUtil32.GetTickCount() - dwSendTestMsgTick >= 100)
                         {
                             dwSendTestMsgTick = HUtil32.GetTickCount();
                             for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
@@ -348,7 +348,7 @@ namespace M2Server
                         if (RunSock.g_GateArr[i].Socket != null)
                         {
                             Gate = RunSock.g_GateArr[i];
-                            if ((HUtil32.GetTickCount() - Gate.dwSendTick) >= 1000)
+                            if (HUtil32.GetTickCount() - Gate.dwSendTick >= 1000)
                             {
                                 Gate.dwSendTick = HUtil32.GetTickCount();
                                 Gate.nSendMsgBytes = Gate.nSendBytesCount;
@@ -386,7 +386,7 @@ namespace M2Server
             try
             {
                 var sData = EDcode.DeCodeString(sMsg, true);
-                if ((sData.Length > 2) && (sData[0] == '*') && (sData[1] == '*'))
+                if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.Substring(2, sData.Length - 2);
                     sData = HUtil32.GetValidStr3(sData, ref sAccount, "/");
@@ -403,7 +403,7 @@ namespace M2Server
                     {
                         boFlag = false;
                     }
-                    if ((sAccount != "") && (sChrName != "") && (nSessionID >= 2))
+                    if (sAccount != "" && sChrName != "" && nSessionID >= 2)
                     {
                         nClientVersion = HUtil32.Str_ToInt(sClientVersion, 0);
                         result = true;
@@ -442,7 +442,7 @@ namespace M2Server
                         if (DoClientCertification_GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag))
                         {
                             SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
-                            if ((SessInfo != null) && (nPayMent > 0))
+                            if (SessInfo != null && nPayMent > 0)
                             {
                                 GateUser.boCertification = true;
                                 GateUser.sAccount = sAccount.Trim();
@@ -500,7 +500,7 @@ namespace M2Server
             // 如果网关未回复状态消息，则不再发送数据
             if (Gate.nSendChecked > 0)
             {
-                if ((HUtil32.GetTickCount() - Gate.dwSendCheckTick) > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
+                if (HUtil32.GetTickCount() - Gate.dwSendCheckTick > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
                 {
                     Gate.nSendChecked = 0;
                     Gate.nSendBlockCount = 0;
@@ -517,7 +517,7 @@ namespace M2Server
                 BufferA = MsgList[I];
                 while (true)
                 {
-                    if ((I + 1) >= MsgList.Count)
+                    if (I + 1 >= MsgList.Count)
                     {
                         break;
                     }
@@ -530,7 +530,7 @@ namespace M2Server
                     //Move(BufferA, nBuffALen, sizeof(int));
                     var nBuffBLen = *(int*)BufferB;
                     //Move(BufferB, nBuffBLen, sizeof(int));
-                    if ((nBuffALen + nBuffBLen) < M2Share.g_Config.nSendBlock)
+                    if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
                     {
                         MsgList.RemoveAt(I + 1);
                         var BufferC = Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
@@ -581,9 +581,9 @@ namespace M2Server
                         continue;
                     }
                     nSendBuffLen = *(int*)BufferA;//Move(BufferA, nSendBuffLen, sizeof(int));
-                    if ((Gate.nSendChecked == 0) && ((Gate.nSendBlockCount + nSendBuffLen) >= M2Share.g_Config.nCheckBlock))
+                    if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock)
                     {
-                        if ((Gate.nSendBlockCount == 0) && (M2Share.g_Config.nCheckBlock <= nSendBuffLen))
+                        if (Gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock <= nSendBuffLen)
                         {
                             MsgList.RemoveAt(0);
                             // 如果数据大小超过指定大小则扔掉(编辑数据比较大，与此有点关系)
@@ -642,7 +642,7 @@ namespace M2Server
                         }
                     }
                     BufferA = IntPtr.Zero;
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwSocLimit)
+                    if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
                     {
                         result = false;
                         break;
@@ -710,7 +710,7 @@ namespace M2Server
                                         }
                                         try
                                         {
-                                            if ((GateUser.PlayObject != null) && ((TPlayObject)GateUser.PlayObject).m_boGhost && !((TPlayObject)GateUser.PlayObject).m_boReconnection)
+                                            if (GateUser.PlayObject != null && ((TPlayObject)GateUser.PlayObject).m_boGhost && !((TPlayObject)GateUser.PlayObject).m_boReconnection)
                                             {
                                                 IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                             }
@@ -792,7 +792,7 @@ namespace M2Server
             MsgHeader.wIdent = grobal2.GM_SERVERUSERINDEX;
             MsgHeader.wUserListIndex = (short)nUserIdex;
             MsgHeader.nLength = 0;
-            if ((Socket != null) && Socket.Connected)
+            if (Socket != null && Socket.Connected)
             {
                 var data = new byte[sizeof(TMsgHeader)];
                 fixed (byte* pb = data)
@@ -843,7 +843,7 @@ namespace M2Server
                             if (Gate.UserList.Count > nUserIdx)
                             {
                                 GateUser = Gate.UserList[nUserIdx];
-                                if ((GateUser != null) && (GateUser.nSocket != MsgHeader.nSocket))
+                                if (GateUser != null && GateUser.nSocket != MsgHeader.nSocket)
                                 {
                                     GateUser = null;
                                 }
@@ -867,9 +867,9 @@ namespace M2Server
                         nCheckCode = 6;
                         if (GateUser != null)
                         {
-                            if ((GateUser.PlayObject != null) && (GateUser.UserEngine != null))
+                            if (GateUser.PlayObject != null && GateUser.UserEngine != null)
                             {
-                                if (GateUser.boCertification && (nMsgLen >= sizeof(TDefaultMessage)))
+                                if (GateUser.boCertification && nMsgLen >= sizeof(TDefaultMessage))
                                 {
                                     var DefMsg = (TDefaultMessage*)MsgBuff;
                                     if (nMsgLen == sizeof(TDefaultMessage))
@@ -912,7 +912,7 @@ namespace M2Server
                 wIdent = (short)nIdent,
                 nLength = 0
             };
-            if ((Socket != null) && Socket.Connected)
+            if (Socket != null && Socket.Connected)
             {
                 var data = new byte[sizeof(TMsgHeader)];
                 fixed (byte* pb = data)
@@ -967,9 +967,9 @@ namespace M2Server
                 if (GateIdx < grobal2.RUNGATEMAX)
                 {
                     Gate = RunSock.g_GateArr[GateIdx];
-                    if ((Gate.BufferList != null) && (Buffer != null))
+                    if (Gate.BufferList != null && Buffer != null)
                     {
-                        if (Gate.boUsed && (Gate.Socket != null))
+                        if (Gate.boUsed && Gate.Socket != null)
                         {
                             var Ptr = Marshal.AllocHGlobal(Buffer.Length);
                             Marshal.Copy(Buffer, 0, Ptr, Buffer.Length);
@@ -1135,7 +1135,7 @@ namespace M2Server
                 for (var I = 0; I < Gate.UserList.Count; I++)
                 {
                     GateUserInfo = Gate.UserList[I];
-                    if ((GateUserInfo != null) && (GateUserInfo.nSocket == nSocket))
+                    if (GateUserInfo != null && GateUserInfo.nSocket == nSocket)
                     {
                         GateUserInfo.FrontEngine = null;
                         GateUserInfo.UserEngine = M2Share.UserEngine;
@@ -1208,7 +1208,7 @@ namespace M2Server
                 {
                     Gate = RunSock.g_GateArr[i];
                     nCheckCode = 1;
-                    if (Gate.boUsed && (Gate.Socket != null) && (Gate.UserList != null))
+                    if (Gate.boUsed && Gate.Socket != null && Gate.UserList != null)
                     {
                         nCheckCode = 2;
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -1224,7 +1224,7 @@ namespace M2Server
                                     continue;
                                 }
                                 nCheckCode = 5;
-                                if ((GateUserInfo.sAccount == sAccount) || (GateUserInfo.nSessionID == nSessionID))
+                                if (GateUserInfo.sAccount == sAccount || GateUserInfo.nSessionID == nSessionID)
                                 {
                                     nCheckCode = 6;
                                     if (GateUserInfo.FrontEngine != null)

@@ -62,7 +62,7 @@ namespace M2Server
             base.UserSelect(PlayObject, sData);
             try
             {
-                if ((sData != "") && (sData[0] == '@'))
+                if (sData != "" && sData[0] == '@')
                 {
                     sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
                     boCanJmp = PlayObject.LableIsCanJmp(sLabel);

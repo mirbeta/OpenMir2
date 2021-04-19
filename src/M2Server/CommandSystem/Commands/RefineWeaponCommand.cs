@@ -17,7 +17,7 @@ namespace M2Server
             var nMc = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;
             var nSc = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
             var nHit = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
-            if ((nDc + nMc + nSc) > 10)
+            if (nDc + nMc + nSc > 10)
             {
                 return;
             }

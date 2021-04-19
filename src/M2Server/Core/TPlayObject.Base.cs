@@ -227,7 +227,7 @@ namespace M2Server
                     for (var j = i - 1; j >= 0; j--)
                     {
                         var UserItem1 = m_ItemList[j];
-                        if ((M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == sItemName) && (UserItem.MakeIndex == UserItem1.MakeIndex))
+                        if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == sItemName && UserItem.MakeIndex == UserItem1.MakeIndex)
                         {
                             m_ItemList.RemoveAt(j);
                             break;
@@ -249,7 +249,7 @@ namespace M2Server
                     m_nPkPoint = 0;
                     btB2++;
                 }
-                if ((m_nGold > M2Share.g_Config.nHumanMaxGold * 2) && (M2Share.g_Config.nHumanMaxGold > 0))
+                if (m_nGold > M2Share.g_Config.nHumanMaxGold * 2 && M2Share.g_Config.nHumanMaxGold > 0)
                 {
                     m_nGold = M2Share.g_Config.nHumanMaxGold * 2;
                 }
@@ -263,7 +263,7 @@ namespace M2Server
                         m_boEmergencyClose = true;
                         return;
                     }
-                    if ((m_nSoftVersionDateEx == 0) && M2Share.g_Config.boOldClientShowHiLevel)
+                    if (m_nSoftVersionDateEx == 0 && M2Share.g_Config.boOldClientShowHiLevel)
                     {
                         SysMsg(M2Share.sClientSoftVersionTooOld, TMsgColor.c_Blue, TMsgType.t_Hint);
                         SysMsg(M2Share.sDownLoadAndUseNewClient, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -344,11 +344,11 @@ namespace M2Server
                     if (m_Abil.Level > M2Share.g_Config.nTryModeLevel)
                     {
                         SysMsg("测试状态可以使用到第 " + M2Share.g_Config.nTryModeLevel, TMsgColor.c_Red, TMsgType.t_Hint);
-                        SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.jsym2.com)", TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", TMsgColor.c_Red, TMsgType.t_Hint);
                         m_boEmergencyClose = true;
                     }
                 }
-                if ((m_nPayMent == 3) && !bo6AB)
+                if (m_nPayMent == 3 && !bo6AB)
                 {
                     SysMsg(M2Share.g_sNowIsFreePlayMode, TMsgColor.c_Green, TMsgType.t_Hint);
                 }
@@ -356,7 +356,7 @@ namespace M2Server
                 {
                     SysMsg("当前服务器运行于冒险模式.", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
-                if ((m_MagicErgumSkill != null) && (!m_boUseThrusting))
+                if (m_MagicErgumSkill != null && !m_boUseThrusting)
                 {
                     m_boUseThrusting = true;
                     SendSocket("+LNG");
@@ -441,7 +441,7 @@ namespace M2Server
             {
                 if (m_boDealing)
                 {
-                    if (GetPoseCreate() != m_DealCreat || (m_DealCreat == this) || (m_DealCreat == null))
+                    if (GetPoseCreate() != m_DealCreat || m_DealCreat == this || m_DealCreat == null)
                     {
                         DealCancel();
                     }
@@ -453,29 +453,29 @@ namespace M2Server
                     m_boEmergencyClose = true;
                     m_boExpire = false;
                 }
-                if (m_boFireHitSkill && ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 20 * 1000))
+                if (m_boFireHitSkill && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 20 * 1000)
                 {
                     m_boFireHitSkill = false;
                     SysMsg(M2Share.sSpiritsGone, TMsgColor.c_Red, TMsgType.t_Hint);
                     SendSocket("+UFIR");
                 }
-                if (m_boTwinHitSkill && ((HUtil32.GetTickCount() - m_dwLatestTwinHitTick) > 60 * 1000))
+                if (m_boTwinHitSkill && HUtil32.GetTickCount() - m_dwLatestTwinHitTick > 60 * 1000)
                 {
                     m_boTwinHitSkill = false;
                     SendSocket("+UTWN");
                 }
-                if (m_boTimeRecall && (HUtil32.GetTickCount() > m_dwTimeRecallTick))
+                if (m_boTimeRecall && HUtil32.GetTickCount() > m_dwTimeRecallTick)
                 {
                     m_boTimeRecall = false;
                     SpaceMove(m_sMoveMap, m_nMoveX, m_nMoveY, 0);
                 }
                 // 增加挂机
-                if (m_boOffLineFlag && (HUtil32.GetTickCount() > m_dwKickOffLineTick))
+                if (m_boOffLineFlag && HUtil32.GetTickCount() > m_dwKickOffLineTick)
                 {
                     m_boOffLineFlag = false;
                     m_boSoftClose = true;
                 }
-                if (m_boDelayCall && ((HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall))
+                if (m_boDelayCall && HUtil32.GetTickCount() - m_dwDelayCallTick > m_nDelayCall)
                 {
                     m_boDelayCall = false;
                     var normNpc = M2Share.UserEngine.FindMerchant<TNormNpc>(m_DelayCallNPC);
@@ -488,7 +488,7 @@ namespace M2Server
                         normNpc.GotoLable(this, m_sDelayCallLabel, false);
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwCheckDupObjTick) > 3000)
+                if (HUtil32.GetTickCount() - m_dwCheckDupObjTick > 3000)
                 {
                     m_dwCheckDupObjTick = HUtil32.GetTickCount();
                     GetStartPoint();
@@ -505,8 +505,8 @@ namespace M2Server
                     {
                         bo2F0 = false;
                     }
-                    if ((((tObjCount >= 3) && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 3000)) || (tObjCount == 2)
-                        && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 10000)) && ((HUtil32.GetTickCount() - m_dwDupObjTick) < 20000))
+                    if ((tObjCount >= 3 && HUtil32.GetTickCount() - m_dwDupObjTick > 3000 || tObjCount == 2
+                        && HUtil32.GetTickCount() - m_dwDupObjTick > 10000) && HUtil32.GetTickCount() - m_dwDupObjTick < 20000)
                     {
                         CharPushed((byte)M2Share.RandomNumber.Random(8), 1);
                     }
@@ -516,16 +516,16 @@ namespace M2Server
                 {
                     ChangePKStatus(true);
                 }
-                if ((HUtil32.GetTickCount() - dwTick578) > 1000)
+                if (HUtil32.GetTickCount() - dwTick578 > 1000)
                 {
                     dwTick578 = HUtil32.GetTickCount();
                     var wHour = DateTime.Now.Hour;
                     var wMin = DateTime.Now.Minute;
                     var wSec = DateTime.Now.Second;
                     var wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.g_Config.boDiscountForNightTime && ((wHour == M2Share.g_Config.nHalfFeeStart) || (wHour == M2Share.g_Config.nHalfFeeEnd)))
+                    if (M2Share.g_Config.boDiscountForNightTime && (wHour == M2Share.g_Config.nHalfFeeStart || wHour == M2Share.g_Config.nHalfFeeEnd))
                     {
-                        if ((wMin == 0) && (wSec <= 30) && ((HUtil32.GetTickCount() - m_dwLogonTick) > 60000))
+                        if (wMin == 0 && wSec <= 30 && HUtil32.GetTickCount() - m_dwLogonTick > 60000)
                         {
                             LogonTimcCost();
                             m_dwLogonTick = HUtil32.GetTickCount();
@@ -544,9 +544,9 @@ namespace M2Server
                             }
                         }
                     }
-                    if ((Castle != null) && Castle.m_boUnderWar)
+                    if (Castle != null && Castle.m_boUnderWar)
                     {
-                        if ((m_PEnvir == Castle.m_MapPalace) && (m_MyGuild != null))
+                        if (m_PEnvir == Castle.m_MapPalace && m_MyGuild != null)
                         {
                             if (!Castle.IsMember(this))
                             {
@@ -576,7 +576,7 @@ namespace M2Server
                         RefShowName();
                     }
                 }
-                if ((HUtil32.GetTickCount() - dwTick57C) > 500)
+                if (HUtil32.GetTickCount() - dwTick57C > 500)
                 {
                     dwTick57C = HUtil32.GetTickCount();
                 }
@@ -588,7 +588,7 @@ namespace M2Server
             try
             {
                 m_dwGetMsgTick = HUtil32.GetTickCount();
-                while ((HUtil32.GetTickCount() - m_dwGetMsgTick < M2Share.g_Config.dwHumanGetMsgTime) && GetMessage(ref ProcessMsg))
+                while (HUtil32.GetTickCount() - m_dwGetMsgTick < M2Share.g_Config.dwHumanGetMsgTime && GetMessage(ref ProcessMsg))
                 {
                     if (!Operate(ProcessMsg))
                     {
@@ -670,7 +670,7 @@ namespace M2Server
                 }
             }
             tObjCount = m_nGameGold;
-            if (m_boDecGameGold && (HUtil32.GetTickCount() - m_dwDecGameGoldTick > m_dwDecGameGoldTime))
+            if (m_boDecGameGold && HUtil32.GetTickCount() - m_dwDecGameGoldTick > m_dwDecGameGoldTime)
             {
                 m_dwDecGameGoldTick = HUtil32.GetTickCount();
                 if (m_nGameGold >= m_nDecGameGold)
@@ -690,7 +690,7 @@ namespace M2Server
                     M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, grobal2.LOG_GAMEGOLD, m_sMapName, m_nCurrX, m_nCurrY, m_sCharName, M2Share.g_Config.sGameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick > m_dwIncGameGoldTime))
+            if (m_boIncGameGold && HUtil32.GetTickCount() - m_dwIncGameGoldTick > m_dwIncGameGoldTime)
             {
                 m_dwIncGameGoldTick = HUtil32.GetTickCount();
                 if (m_nGameGold + m_nIncGameGold < 2000000)
@@ -711,7 +711,7 @@ namespace M2Server
             }
             if (!m_boDecGameGold && m_PEnvir.Flag.boDECGAMEGOLD)
             {
-                if (HUtil32.GetTickCount() - m_dwDecGameGoldTick > (m_PEnvir.Flag.nDECGAMEGOLDTIME * 1000))
+                if (HUtil32.GetTickCount() - m_dwDecGameGoldTick > m_PEnvir.Flag.nDECGAMEGOLDTIME * 1000)
                 {
                     m_dwDecGameGoldTick = HUtil32.GetTickCount();
                     if (m_nGameGold >= m_PEnvir.Flag.nDECGAMEGOLD)
@@ -734,7 +734,7 @@ namespace M2Server
             }
             if (!m_boIncGameGold && m_PEnvir.Flag.boINCGAMEGOLD)
             {
-                if (HUtil32.GetTickCount() - m_dwIncGameGoldTick > (m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000))
+                if (HUtil32.GetTickCount() - m_dwIncGameGoldTick > m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000)
                 {
                     m_dwIncGameGoldTick = HUtil32.GetTickCount();
                     if (m_nGameGold + m_PEnvir.Flag.nINCGAMEGOLD <= 2000000)
@@ -759,7 +759,7 @@ namespace M2Server
             }
             if (m_PEnvir.Flag.boINCGAMEPOINT)
             {
-                if (HUtil32.GetTickCount() - m_dwIncGamePointTick > (m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000))
+                if (HUtil32.GetTickCount() - m_dwIncGamePointTick > m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000)
                 {
                     m_dwIncGamePointTick = HUtil32.GetTickCount();
                     if (m_nGamePoint + m_PEnvir.Flag.nINCGAMEPOINT <= 2000000)
@@ -778,7 +778,7 @@ namespace M2Server
                     }
                 }
             }
-            if (m_PEnvir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick > (m_PEnvir.Flag.nDECHPTIME * 1000)))
+            if (m_PEnvir.Flag.boDECHP && HUtil32.GetTickCount() - m_dwDecHPTick > m_PEnvir.Flag.nDECHPTIME * 1000)
             {
                 m_dwDecHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP > m_PEnvir.Flag.nDECHPPOINT)
@@ -791,7 +791,7 @@ namespace M2Server
                 }
                 HealthSpellChanged();
             }
-            if (m_PEnvir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick > (m_PEnvir.Flag.nINCHPTIME * 1000)))
+            if (m_PEnvir.Flag.boINCHP && HUtil32.GetTickCount() - m_dwIncHPTick > m_PEnvir.Flag.nINCHPTIME * 1000)
             {
                 m_dwIncHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP + m_PEnvir.Flag.nDECHPPOINT < m_WAbil.MaxHP)
@@ -807,7 +807,7 @@ namespace M2Server
             // 降饥饿点
             if (M2Share.g_Config.boHungerSystem)
             {
-                if ((HUtil32.GetTickCount() - m_dwDecHungerPointTick) > 1000)
+                if (HUtil32.GetTickCount() - m_dwDecHungerPointTick > 1000)
                 {
                     m_dwDecHungerPointTick = HUtil32.GetTickCount();
                     if (m_nHungerStatus > 0)
@@ -870,33 +870,33 @@ namespace M2Server
             try
             {
                 // 取得在线最高等级、PK、攻击力、魔法、道术 的人物
-                if ((M2Share.g_HighLevelHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighLevelHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighLevelHuman = null;
                 }
-                if ((M2Share.g_HighPKPointHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighPKPointHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighPKPointHuman = null;
                 }
-                if ((M2Share.g_HighDCHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighDCHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighDCHuman = null;
                 }
-                if ((M2Share.g_HighMCHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighMCHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighMCHuman = null;
                 }
-                if ((M2Share.g_HighSCHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighSCHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighSCHuman = null;
                 }
-                if ((M2Share.g_HighOnlineHuman == this) && (m_boDeath || m_boGhost))
+                if (M2Share.g_HighOnlineHuman == this && (m_boDeath || m_boGhost))
                 {
                     M2Share.g_HighOnlineHuman = null;
                 }
                 if (m_btPermission < 6)
                 {
-                    if ((M2Share.g_HighLevelHuman == null) || (M2Share.g_HighLevelHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighLevelHuman == null || (M2Share.g_HighLevelHuman as TPlayObject).m_boGhost)
                     {
                         M2Share.g_HighLevelHuman = this;
                     }
@@ -908,7 +908,7 @@ namespace M2Server
                         }
                     }
                     // 最高PK
-                    if ((M2Share.g_HighPKPointHuman == null) || (M2Share.g_HighPKPointHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighPKPointHuman == null || (M2Share.g_HighPKPointHuman as TPlayObject).m_boGhost)
                     {
                         if (m_nPkPoint > 0)
                         {
@@ -923,7 +923,7 @@ namespace M2Server
                         }
                     }
                     // 最高攻击力
-                    if ((M2Share.g_HighDCHuman == null) || (M2Share.g_HighDCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighDCHuman == null || (M2Share.g_HighDCHuman as TPlayObject).m_boGhost)
                     {
                         M2Share.g_HighDCHuman = this;
                     }
@@ -935,7 +935,7 @@ namespace M2Server
                         }
                     }
                     // 最高魔法
-                    if ((M2Share.g_HighMCHuman == null) || (M2Share.g_HighMCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighMCHuman == null || (M2Share.g_HighMCHuman as TPlayObject).m_boGhost)
                     {
                         M2Share.g_HighMCHuman = this;
                     }
@@ -947,7 +947,7 @@ namespace M2Server
                         }
                     }
                     // 最高道术
-                    if ((M2Share.g_HighSCHuman == null) || (M2Share.g_HighSCHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighSCHuman == null || (M2Share.g_HighSCHuman as TPlayObject).m_boGhost)
                     {
                         M2Share.g_HighSCHuman = this;
                     }
@@ -959,7 +959,7 @@ namespace M2Server
                         }
                     }
                     // 最长在线时间
-                    if ((M2Share.g_HighOnlineHuman == null) || (M2Share.g_HighOnlineHuman as TPlayObject).m_boGhost)
+                    if (M2Share.g_HighOnlineHuman == null || (M2Share.g_HighOnlineHuman as TPlayObject).m_boGhost)
                     {
                         M2Share.g_HighOnlineHuman = this;
                     }
@@ -976,7 +976,7 @@ namespace M2Server
             {
                 M2Share.MainOutMessage(sExceptionMsg3);
             }
-            if (M2Share.g_Config.boReNewChangeColor && (m_btReLevel > 0) && (HUtil32.GetTickCount() - m_dwReColorTick > M2Share.g_Config.dwReNewNameColorTime))
+            if (M2Share.g_Config.boReNewChangeColor && m_btReLevel > 0 && HUtil32.GetTickCount() - m_dwReColorTick > M2Share.g_Config.dwReNewNameColorTime)
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
@@ -1001,7 +1001,7 @@ namespace M2Server
                 if (HUtil32.GetTickCount() - m_dwClearObjTick > 10000)
                 {
                     m_dwClearObjTick = HUtil32.GetTickCount();
-                    if ((m_DearHuman != null) && (m_DearHuman.m_boDeath || m_DearHuman.m_boGhost))
+                    if (m_DearHuman != null && (m_DearHuman.m_boDeath || m_DearHuman.m_boGhost))
                     {
                         m_DearHuman = null;
                     }
@@ -1030,7 +1030,7 @@ namespace M2Server
                 M2Share.MainOutMessage(sExceptionMsg4);
                 M2Share.MainOutMessage(e.Message, MessageType.Error);
             }
-            if (!m_boClientFlag && (m_nStep >= 9) && M2Share.g_Config.boCheckFail)
+            if (!m_boClientFlag && m_nStep >= 9 && M2Share.g_Config.boCheckFail)
             {
                 if (m_nClientFlagMode == 1)
                 {
@@ -1042,10 +1042,10 @@ namespace M2Server
                     M2Share.UserEngine.ClearItemList();
                 }
             }
-            if ((m_nAutoGetExpPoint > 0) && ((m_AutoGetExpEnvir == null) || (m_AutoGetExpEnvir == m_PEnvir)) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick > m_nAutoGetExpTime))
+            if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == m_PEnvir) && HUtil32.GetTickCount() - m_dwAutoGetExpTick > m_nAutoGetExpTime)
             {
                 m_dwAutoGetExpTick = HUtil32.GetTickCount();
-                if (!m_boAutoGetExpInSafeZone || (m_boAutoGetExpInSafeZone && InSafeZone()))
+                if (!m_boAutoGetExpInSafeZone || m_boAutoGetExpInSafeZone && InSafeZone())
                 {
                     GetExp(m_nAutoGetExpPoint);
                 }
@@ -1101,7 +1101,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.CM_PICKUP:
-                    if ((m_nCurrX == ProcessMsg.nParam2) && (m_nCurrY == ProcessMsg.nParam3))
+                    if (m_nCurrX == ProcessMsg.nParam2 && m_nCurrY == ProcessMsg.nParam3)
                     {
                         ClientPickUpItem();
                     }
@@ -1392,7 +1392,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if ((dwDelayTime > M2Share.g_Config.dwDropOverSpeed) && (M2Share.g_Config.btSpeedControlMode == 1) && m_boFilterAction)
+                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
@@ -1497,7 +1497,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if ((dwDelayTime > M2Share.g_Config.dwDropOverSpeed) && (M2Share.g_Config.btSpeedControlMode == 1) && m_boFilterAction)
+                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
@@ -1562,7 +1562,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if ((dwDelayTime > M2Share.g_Config.dwDropOverSpeed) && (M2Share.g_Config.btSpeedControlMode == 1) && m_boFilterAction)
+                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
@@ -1673,7 +1673,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if ((dwDelayTime > M2Share.g_Config.dwDropOverSpeed) && (M2Share.g_Config.btSpeedControlMode == 1) && m_boFilterAction)
+                                if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
                                     SendSocket(grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
@@ -1828,7 +1828,7 @@ namespace M2Server
                 case grobal2.RM_PUSH:
                 case grobal2.RM_RUSH:
                 case grobal2.RM_RUSHKUNG:
-                    if ((ProcessMsg.BaseObject != this.ObjectId) || (ProcessMsg.wIdent == grobal2.RM_PUSH) || (ProcessMsg.wIdent == grobal2.RM_RUSH) || (ProcessMsg.wIdent == grobal2.RM_RUSHKUNG))
+                    if (ProcessMsg.BaseObject != this.ObjectId || ProcessMsg.wIdent == grobal2.RM_PUSH || ProcessMsg.wIdent == grobal2.RM_RUSH || ProcessMsg.wIdent == grobal2.RM_RUSHKUNG)
                     {
                         switch (ProcessMsg.wIdent)
                         {
@@ -1880,7 +1880,7 @@ namespace M2Server
                             {
                                 m_dw5D4 = HUtil32.GetTickCount();
                             }
-                            if ((M2Share.CastleManager.IsCastleMember(this) != null) && (M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null))
+                            if (M2Share.CastleManager.IsCastleMember(this) != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
                             {
                                 M2Share.ObjectSystem.Get(ProcessMsg.nParam3).bo2B0 = true;
                                 M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_dw2B4Tick = HUtil32.GetTickCount();
@@ -1961,7 +1961,7 @@ namespace M2Server
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_LEVELUP, m_Abil.Exp, m_Abil.Level, 0, 0);
                     SendSocket(m_DefMsg);
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    if ((m_nSoftVersionDateEx == 0) && (m_dwClientTick == 0))
+                    if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
                     {
                         GetOldAbil(ref OAbility);
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
@@ -2025,11 +2025,11 @@ namespace M2Server
                     break;
                 case grobal2.RM_ABILITY:
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    if ((m_nSoftVersionDateEx == 0) && (m_dwClientTick == 0))
+                    if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
                     {
                         GetOldAbil(ref OAbility);
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
-                        if (M2Share.g_Config.boOldClientShowHiLevel && (m_Abil.Level > 255))
+                        if (M2Share.g_Config.boOldClientShowHiLevel && m_Abil.Level > 255)
                         {
                             // '由于您使用的客户端版本太老了，无法正确显示人物信息！！！'
                             SysMsg(M2Share.g_sClientVersionTooOld, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -2335,7 +2335,7 @@ namespace M2Server
                     SendDefMessage(grobal2.SM_INSTANCEHEALGUAGE, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, 0, "");
                     break;
                 case grobal2.RM_CHANGEFACE:
-                    if ((ProcessMsg.nParam1 != 0) && (ProcessMsg.nParam2 != 0))
+                    if (ProcessMsg.nParam1 != 0 && ProcessMsg.nParam2 != 0)
                     {
                         m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_CHANGEFACE, ProcessMsg.nParam1, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), 0);
                         CharDesc = new TCharDesc();
@@ -2500,13 +2500,13 @@ namespace M2Server
                     SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
                     boMakeLuck = true;
                 }
-                else if ((m_UseItems[grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint2) && (M2Share.RandomNumber.Random(nRand + M2Share.g_Config.nWeaponMakeLuckPoint2Rate) == 1))
+                else if (m_UseItems[grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.g_Config.nWeaponMakeLuckPoint2Rate) == 1)
                 {
                     m_UseItems[grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
                     boMakeLuck = true;
                 }
-                else if ((m_UseItems[grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint3) && (M2Share.RandomNumber.Random(nRand * M2Share.g_Config.nWeaponMakeLuckPoint3Rate) == 1))
+                else if (m_UseItems[grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.g_Config.nWeaponMakeLuckPoint3Rate) == 1)
                 {
                     m_UseItems[grobal2.U_WEAPON].btValue[3]++;
                     SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
@@ -2538,7 +2538,7 @@ namespace M2Server
                 return false;
             }
             var UserItem = m_UseItems[grobal2.U_WEAPON];
-            if ((UserItem.wIndex <= 0) || (UserItem.DuraMax <= UserItem.Dura))
+            if (UserItem.wIndex <= 0 || UserItem.DuraMax <= UserItem.Dura)
             {
                 return false;
             }
@@ -2676,7 +2676,7 @@ namespace M2Server
         {
             var boIsVisible = false;
             TVisibleBaseObject VisibleBaseObject;
-            if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))
+            if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
             {
                 m_boIsVisibleActive = true;
             }
@@ -2734,7 +2734,7 @@ namespace M2Server
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && MapCellInfo.ObjList != null)
                         {
                             var nIdx = 0;
                             while (true)
@@ -2748,7 +2748,7 @@ namespace M2Server
                                 {
                                     if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
                                     {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                        if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60 * 1000)
                                         {
                                             Dispose(OSObject);
                                             MapCellInfo.ObjList.RemoveAt(nIdx);
@@ -2764,7 +2764,7 @@ namespace M2Server
                                         {
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                             {
-                                                if ((m_btRaceServer < grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                                                if (m_btRaceServer < grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || BaseObject.m_Master != null && Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3 || BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
                                                 {
                                                     UpdateVisibleGay(BaseObject);
                                                 }
@@ -2775,7 +2775,7 @@ namespace M2Server
                                     {
                                         if (OSObject.btType == grobal2.OS_ITEMOBJECT)
                                         {
-                                            if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
                                                 Dispose((TMapItem)OSObject.CellObj);
                                                 Dispose(OSObject);
@@ -2789,24 +2789,24 @@ namespace M2Server
                                             }
                                             var MapItem = (TMapItem)OSObject.CellObj;
                                             UpdateVisibleItem(n18, n1C, MapItem);
-                                            if ((MapItem.OfBaseObject != null) || (MapItem.DropBaseObject != null))
+                                            if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
                                                 // 2 * 60 * 1000
-                                                if ((HUtil32.GetTickCount() - MapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)
+                                                if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
                                                 {
                                                     MapItem.OfBaseObject = null;
                                                     MapItem.DropBaseObject = null;
                                                 }
                                                 else
                                                 {
-                                                    if ((MapItem.OfBaseObject as TBaseObject) != null)
+                                                    if (MapItem.OfBaseObject as TBaseObject != null)
                                                     {
                                                         if ((MapItem.OfBaseObject as TBaseObject).m_boGhost)
                                                         {
                                                             MapItem.OfBaseObject = null;
                                                         }
                                                     }
-                                                    if ((MapItem.DropBaseObject as TBaseObject) != null)
+                                                    if (MapItem.DropBaseObject as TBaseObject != null)
                                                     {
                                                         if ((MapItem.DropBaseObject as TBaseObject).m_boGhost)
                                                         {
@@ -2853,7 +2853,7 @@ namespace M2Server
                         if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                         {
                             BaseObject = VisibleBaseObject.BaseObject;
-                            if (!BaseObject.m_boFixedHideMode && (!BaseObject.m_boGhost))
+                            if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)
                             {
                                 // 01/21 修改防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                                 SendMsg(BaseObject, grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
@@ -2863,7 +2863,7 @@ namespace M2Server
                         Dispose(VisibleBaseObject);
                         continue;
                     }
-                    if ((m_btRaceServer == grobal2.RC_PLAYOBJECT) && (VisibleBaseObject.nVisibleFlag == 2))
+                    if (m_btRaceServer == grobal2.RC_PLAYOBJECT && VisibleBaseObject.nVisibleFlag == 2)
                     {
                         BaseObject = VisibleBaseObject.BaseObject;
                         if (BaseObject != this)
@@ -2967,7 +2967,7 @@ namespace M2Server
                     else
                     {
                         Castle = M2Share.CastleManager.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.g_Config.boShowGuildName || ((Castle != null) && Castle.m_boUnderWar) || m_boInFreePKArea)
+                        if (M2Share.g_Config.boShowGuildName || Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
                         {
                             sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", m_MyGuild.sGuildName);
                             sGuildName = sGuildName.Replace("%rankname", m_sGuildRankName);
@@ -3091,7 +3091,7 @@ namespace M2Server
                     m_DearHuman.m_DearHuman = null;
                     m_DearHuman = null;
                 }
-                if ((m_MasterHuman != null) || (m_MasterList.Count > 0))
+                if (m_MasterHuman != null || m_MasterList.Count > 0)
                 {
                     if (m_boMaster)
                     {
@@ -3152,12 +3152,12 @@ namespace M2Server
             {
                 return;// 不死戒指
             }
-            var boDropall = M2Share.g_Config.boDieRedScatterBagAll && (PKLevel() >= 2);
+            var boDropall = M2Share.g_Config.boDieRedScatterBagAll && PKLevel() >= 2;
             try
             {
                 for (var i = m_ItemList.Count - 1; i >= 0; i--)
                 {
-                    if (boDropall || (M2Share.RandomNumber.Random(M2Share.g_Config.nDieScatterBagRate) == 0))
+                    if (boDropall || M2Share.RandomNumber.Random(M2Share.g_Config.nDieScatterBagRate) == 0)
                     {
                         if (DropItemDown(m_ItemList[i], DropWide, true, ItemOfCreat, this))
                         {

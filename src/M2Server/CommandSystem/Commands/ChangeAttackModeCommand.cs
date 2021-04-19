@@ -13,7 +13,7 @@ namespace M2Server
         public void ChangeAttackMode(string[] @Params, TPlayObject PlayObject)
         {
             var nMode = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
-            if ((nMode >= 0) && (nMode <= 4))
+            if (nMode >= 0 && nMode <= 4)
             {
                 PlayObject.m_btAttatckMode = (byte)nMode;
             }

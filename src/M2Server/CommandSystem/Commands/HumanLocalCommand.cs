@@ -15,7 +15,7 @@ namespace M2Server
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var m_sIPLocal = "";
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandHumanLocalHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

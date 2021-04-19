@@ -14,7 +14,7 @@ namespace M2Server
         public void MapMove(string[] @Params, TPlayObject PlayObject)
         {
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            if ((sMapName == "") || ((sMapName != "") && (sMapName[0] == '?')))
+            if (sMapName == "" || sMapName != "" && sMapName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -25,7 +25,7 @@ namespace M2Server
                 PlayObject.SysMsg(string.Format(M2Share.g_sTheMapNotFound, sMapName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((PlayObject.m_btPermission >= this.Attributes.nPermissionMin) || M2Share.CanMoveMap(sMapName))
+            if (PlayObject.m_btPermission >= this.Attributes.nPermissionMin || M2Share.CanMoveMap(sMapName))
             {
                 PlayObject.SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 PlayObject.MapRandomMove(sMapName, 0);

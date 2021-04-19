@@ -14,7 +14,7 @@ namespace M2Server
             {
                 executeEvent = m_EventList[i];
                 if (executeEvent.m_boActive &&
-                    ((HUtil32.GetTickCount() - executeEvent.m_dwRunStart) > executeEvent.m_dwRunTick))
+                    HUtil32.GetTickCount() - executeEvent.m_dwRunStart > executeEvent.m_dwRunTick)
                 {
                     executeEvent.m_dwRunStart = HUtil32.GetTickCount();
                     executeEvent.Run();
@@ -29,7 +29,7 @@ namespace M2Server
             for (var i = m_ClosedEventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = m_ClosedEventList[i];
-                if ((HUtil32.GetTickCount() - executeEvent.m_dwCloseTick) > 5 * 60 * 1000)
+                if (HUtil32.GetTickCount() - executeEvent.m_dwCloseTick > 5 * 60 * 1000)
                 {
                     m_ClosedEventList.RemoveAt(i);
                     executeEvent = null;
@@ -44,8 +44,8 @@ namespace M2Server
             for (var i = m_EventList.Count - 1; i >= 0; i--)
             {
                 currentEvent = m_EventList[i];
-                if ((currentEvent.m_Envir == Envir) && (currentEvent.m_nX == nX) && (currentEvent.m_nY == nY) &&
-                    (currentEvent.m_nEventType == nType))
+                if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY &&
+                    currentEvent.m_nEventType == nType)
                 {
                     result = currentEvent;
                     break;

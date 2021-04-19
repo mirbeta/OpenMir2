@@ -15,7 +15,7 @@ namespace M2Server
             TBaseObject BaseObject;
             int nPower;
             TAbility WAbil;
-            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
@@ -30,7 +30,7 @@ namespace M2Server
                     }
                     if (IsProperTarget(BaseObject))
                     {
-                        if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= m_nViewRange) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= m_nViewRange))
+                        if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= m_nViewRange && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= m_nViewRange)
                         {
                             SendDelayMsg(this, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.m_nCurrX, BaseObject.m_nCurrY), 1, BaseObject.ObjectId, "", 200);
                             SendRefMsg(grobal2.RM_10205, 0, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 1, "");
@@ -44,7 +44,7 @@ namespace M2Server
 
         public override void Run()
         {
-            if (!m_boGhost && !m_boDeath && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 if (m_VisibleActors.Count > 0)
                 {

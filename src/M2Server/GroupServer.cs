@@ -328,11 +328,11 @@ namespace M2Server
                 Str = HUtil32.GetValidStr3(Str, ref warguildname, "/");
                 Str = HUtil32.GetValidStr3(Str, ref StartTime, "/");
                 remaintime = Str;
-                if ((gname != "") && (warguildname != ""))
+                if (gname != "" && warguildname != "")
                 {
                     g = M2Share.GuildManager.FindGuild(gname);
                     WarGuild = M2Share.GuildManager.FindGuild(warguildname);
-                    if ((g != null) && (WarGuild != null))
+                    if (g != null && WarGuild != null)
                     {
                         currenttick = HUtil32.GetTickCount();
                         if (M2Share.g_nServerTickDifference == 0)

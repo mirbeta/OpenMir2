@@ -12,7 +12,7 @@ namespace M2Server
         public override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;
-            if ((ProcessMsg.wIdent == grobal2.RM_STRUCK) || (ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK) || (ProcessMsg.wIdent == grobal2.RM_SPELL))
+            if (ProcessMsg.wIdent == grobal2.RM_STRUCK || ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK || ProcessMsg.wIdent == grobal2.RM_SPELL)
             {
                 if (m_Master != null)
                 {
@@ -71,18 +71,18 @@ namespace M2Server
         public override void Run()
         {
             int nAttackDir;
-            if ((!m_boDeath) && (!bo554) && (!m_boGhost) && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0) && ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000))
+            if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000)
             {
 
-                if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null))
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
 
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
-                if (((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed) && (m_TargetCret != null) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4))
+                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed && m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)
                 {
-                    if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 2) && (M2Share.RandomNumber.Random(3) != 0))
+                    if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 2 && M2Share.RandomNumber.Random(3) != 0)
                     {
                         base.Run();
                         return;
@@ -90,7 +90,7 @@ namespace M2Server
                     GetBackPosition(ref m_nTargetX, ref m_nTargetY);
                 }
 
-                if ((m_TargetCret != null) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6) && ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime))
+                if (m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6 && HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
 
                     m_dwHitTick = HUtil32.GetTickCount();

@@ -160,7 +160,7 @@ namespace M2Server
         {
             if (QuestActionInfo.sParam1.ToLower().CompareTo("START".ToLower()) == 0)
             {
-                if ((nPoint > 0) && (nTime > 0))
+                if (nPoint > 0 && nTime > 0)
                 {
                     PlayObject.m_nIncGameGold = nPoint;
                     PlayObject.m_dwIncGameGoldTime = nTime * 1000;

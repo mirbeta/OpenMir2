@@ -41,7 +41,7 @@ namespace M2Server
             return result;
         }
 
-        // nType 为指定类型 1 为护身符 2 为毒药
+        // nType ???????? 1 ??????? 2 ????
         public static bool CheckAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
             bool result;
@@ -51,12 +51,12 @@ namespace M2Server
             if (PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
             {
                 AmuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex);
-                if ((AmuletStdItem != null) && (AmuletStdItem.StdMode == 25))
+                if (AmuletStdItem != null && AmuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if ((AmuletStdItem.Shape == 5) && (HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount))
+                            if (AmuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_ARMRINGL;
                                 result = true;
@@ -64,7 +64,7 @@ namespace M2Server
                             }
                             break;
                         case 2:
-                            if ((AmuletStdItem.Shape <= 2) && (HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount))
+                            if (AmuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_ARMRINGL;
                                 result = true;
@@ -77,12 +77,12 @@ namespace M2Server
             if (PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex > 0)
             {
                 AmuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex);
-                if ((AmuletStdItem != null) && (AmuletStdItem.StdMode == 25))
+                if (AmuletStdItem != null && AmuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if ((AmuletStdItem.Shape == 5) && (HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount))
+                            if (AmuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_BUJUK;
                                 result = true;
@@ -90,7 +90,7 @@ namespace M2Server
                             }
                             break;
                         case 2:
-                            if ((AmuletStdItem.Shape <= 2) && (HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount))
+                            if (AmuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_BUJUK;
                                 result = true;
@@ -103,7 +103,7 @@ namespace M2Server
             return result;
         }
 
-        // nType 为指定类型 1 为护身符 2 为毒药
+        // nType ???????? 1 ??????? 2 ????
         public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
             if (PlayObject.m_UseItems[Idx].Dura > nCount * 100)

@@ -52,12 +52,12 @@ namespace M2Server
         public override void Run()
         {
             TBaseObject BB;
-            if (!m_boGhost && !m_boDeath && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
+                if (HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
-                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
+                    if (HUtil32.GetTickCount() - m_dwHitTick >= m_nNextHitTime)
                     {
 
                         m_dwHitTick = HUtil32.GetTickCount();

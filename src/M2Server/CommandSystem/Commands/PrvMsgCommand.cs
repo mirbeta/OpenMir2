@@ -15,7 +15,7 @@ namespace M2Server
         {
             var nPermission = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var sHumanName = @Params.Length > 1 ? @Params[1] : "";
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandPrvMsgHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);

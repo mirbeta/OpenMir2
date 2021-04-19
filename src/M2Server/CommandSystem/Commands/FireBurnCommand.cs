@@ -20,7 +20,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((nInt == 0) || (nTime == 0) || (nN == 0))
+            if (nInt == 0 || nTime == 0 || nN == 0)
             {
                 PlayObject.SysMsg("命令格式: @" + M2Share.g_GameCommand.FIREBURN.sCmd + " nInt nTime nN", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

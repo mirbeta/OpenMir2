@@ -20,7 +20,7 @@ namespace M2Server
                 return;
             }
             nCount = HUtil32.Str_ToInt(sUserCount, -1);
-            if ((sUserCount == "") || (nCount < 1) || ((sUserCount != "") && (sUserCount[0] == '?')))
+            if (sUserCount == "" || nCount < 1 || sUserCount != "" && sUserCount[0] == '?')
             {
                 PlayObject.SysMsg("设置服务器最高上线人数。", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人数", TMsgColor.c_Red, TMsgType.t_Hint);

@@ -22,7 +22,7 @@ namespace M2Server
             {
                 Ctr = sCtr[0];
             }
-            if ((sHumanName == "") || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || (nGold < 0) || (nGold > 200000000) || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nGold < 0 || nGold > 200000000 || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandGameGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

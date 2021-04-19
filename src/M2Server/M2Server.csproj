@@ -408,9 +408,6 @@
     <Compile Include="ScriptSystem\ScriptDef.cs" />
     <Compile Include="ScriptSystem\ScriptEngine.cs" />
     <Compile Include="ScriptSystem\ScriptSystem.cs" />
-    <Compile Include="SDK.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\TAnimalObject.cs" />
     <Compile Include="Core\TBaseObject.cs" />
     <Compile Include="Core\TPlayCloneObject.cs" />

@@ -21,7 +21,7 @@ namespace M2Server
             var sParam1 = @Params.Length > 1 ? @Params[1] : "";
             TBaseObject BaseObject;
             const string sDelOK = "删除NPC成功...";
-            if ((sParam1 != "") && (sParam1[0] == '?'))
+            if (sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, new string[] { this.Attributes.Name, "" }), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

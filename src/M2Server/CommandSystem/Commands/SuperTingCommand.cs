@@ -20,7 +20,7 @@ namespace M2Server
             TPlayObject m_PlayObject;
             TPlayObject MoveHuman;
             ArrayList HumanList;
-            if ((sRange == "") || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sRange == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandSuperTingHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

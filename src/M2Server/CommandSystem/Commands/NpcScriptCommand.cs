@@ -25,7 +25,7 @@ namespace M2Server
             StringList LoadList;
             string sScriptLine;
 
-            if ((sParam1 == "") || ((sParam1 != "") && (sParam1[0] == '?')))
+            if (sParam1 == "" || sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandNpcScriptHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -17,7 +17,7 @@ namespace M2Server
             }
             if (TargetInSpitRange(m_TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
                     m_dwHitTick = HUtil32.GetTickCount();
                     m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -60,7 +60,7 @@ namespace M2Server
                         nX = (short)(m_nCurrX - 2 + k);
                         nY = (short)(m_nCurrY - 2 + i);
                         BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
-                        if ((BaseObject != null) && (BaseObject != this) && IsProperTarget(BaseObject) && (M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint))
+                        if (BaseObject != null && BaseObject != this && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
                         {
                             nDamage = BaseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0)

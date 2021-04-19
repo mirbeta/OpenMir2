@@ -14,7 +14,7 @@ namespace M2Server
         public void PKpoint(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if ((sHumanName != "") && (sHumanName[1] == '?'))
+            if (sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandPKPointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

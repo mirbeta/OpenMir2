@@ -31,7 +31,7 @@ namespace M2Server
                 }
                 if (IsProperTarget(BaseObject))
                 {
-                    if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 1) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 1))
+                    if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 1 && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 1)
                     {
                         n10 = 0;
                         n10 += BaseObject.GetHitStruckDamage(this, nPower / 2);
@@ -57,7 +57,7 @@ namespace M2Server
             if (GetAttackDir(m_TargetCret, ref btDir))
             {
 
-                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
 
                     m_dwHitTick = HUtil32.GetTickCount();
@@ -85,7 +85,7 @@ namespace M2Server
         {
             if (!m_boDeath && !m_boGhost)
             {
-                if ((HUtil32.GetTickCount() - dw558) > 60 * 1000)
+                if (HUtil32.GetTickCount() - dw558 > 60 * 1000)
                 {
 
                     dw558 = HUtil32.GetTickCount();

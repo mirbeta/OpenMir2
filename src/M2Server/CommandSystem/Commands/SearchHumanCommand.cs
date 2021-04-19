@@ -14,14 +14,14 @@ namespace M2Server
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject m_PlayObject;
-            if (PlayObject.m_boProbeNecklace || (PlayObject.m_btPermission >= 6))
+            if (PlayObject.m_boProbeNecklace || PlayObject.m_btPermission >= 6)
             {
                 if (sHumanName == "")
                 {
                     PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-                if (((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) > 10000) || (PlayObject.m_btPermission >= 3))
+                if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)
                 {
                     PlayObject.m_dwProbeTick = HUtil32.GetTickCount();
                     m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

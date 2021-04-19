@@ -23,7 +23,7 @@ namespace M2Server
             int nGold;
             TUserCastle Castle;
             ArrayList List;
-            if ((sCASTLENAME != "") && (sCASTLENAME[0] == '?'))
+            if (sCASTLENAME != "" && sCASTLENAME[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -47,7 +47,7 @@ namespace M2Server
             }
             Ctr = sCtr[1];
             nGold = HUtil32.Str_ToInt(sGold, -1);
-            if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || (nGold < 0) || (nGold > 100000000))
+            if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandSbkGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

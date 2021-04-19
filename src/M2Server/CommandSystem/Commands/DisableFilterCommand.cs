@@ -17,7 +17,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam1 != "") && (sParam1[0] == '?'))
+            if (sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg("启用/禁止文字过滤功能。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

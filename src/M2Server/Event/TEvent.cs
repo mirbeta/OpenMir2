@@ -40,7 +40,7 @@
             m_OwnBaseObject = null;
             m_dwRunStart = HUtil32.GetTickCount();
             m_dwRunTick = 500;
-            if ((m_Envir != null) && m_boVisible)
+            if (m_Envir != null && m_boVisible)
             {
                 m_Envir.AddToMap(m_nX, m_nY, grobal2.OS_EVENTOBJECT, this);
             }
@@ -52,12 +52,12 @@
 
         public virtual void Run()
         {
-            if ((HUtil32.GetTickCount() - m_dwOpenStartTick) > m_dwContinueTime)
+            if (HUtil32.GetTickCount() - m_dwOpenStartTick > m_dwContinueTime)
             {
                 m_boClosed = true;
                 Close();
             }
-            if ((m_OwnBaseObject != null) && (m_OwnBaseObject.m_boGhost || m_OwnBaseObject.m_boDeath))
+            if (m_OwnBaseObject != null && (m_OwnBaseObject.m_boGhost || m_OwnBaseObject.m_boDeath))
             {
                 m_OwnBaseObject = null;
             }

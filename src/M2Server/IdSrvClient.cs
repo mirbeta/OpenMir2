@@ -82,7 +82,7 @@ namespace M2Server
             for (var i = m_SessionList.Count - 1; i >= 0; i--)
             {
                 var sessInfo = m_SessionList[i];
-                if ((sessInfo.nSessionID == nId) && (sessInfo.sAccount == sUserId))
+                if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId)
                 {
                     break;
                 }
@@ -95,7 +95,7 @@ namespace M2Server
             for (var i = m_SessionList.Count - 1; i >= 0; i--)
             {
                 var sessInfo = m_SessionList[i];
-                if ((sessInfo.nSessionID == nID) && (sessInfo.sAccount == sUserID))
+                if (sessInfo.nSessionID == nID && sessInfo.sAccount == sUserID)
                 {
                     break;
                 }
@@ -299,7 +299,7 @@ namespace M2Server
             for (var i = 0; i < m_SessionList.Count; i++)
             {
                 SessInfo = m_SessionList[i];
-                if ((SessInfo.nSessionID == nSessionID) && (SessInfo.sAccount == sAccount))
+                if (SessInfo.nSessionID == nSessionID && SessInfo.sAccount == sAccount)
                 {
                     switch (SessInfo.nPayMent)
                     {

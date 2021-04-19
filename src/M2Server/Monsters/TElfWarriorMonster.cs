@@ -63,13 +63,13 @@
                 {
                     boChangeFace = false;
                 }
-                if ((m_Master != null) && ((m_Master.m_TargetCret != null) || (m_Master.m_LastHiter != null)))
+                if (m_Master != null && (m_Master.m_TargetCret != null || m_Master.m_LastHiter != null))
                 {
                     boChangeFace = false;
                 }
                 if (boChangeFace)
                 {
-                    if ((HUtil32.GetTickCount() - dwDigDownTick) > 6 * 10 * 1000)
+                    if (HUtil32.GetTickCount() - dwDigDownTick > 6 * 10 * 1000)
                     {
                         ElfName = m_sCharName;
                         if (ElfName[ElfName.Length - 1] == '1')

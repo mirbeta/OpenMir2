@@ -335,11 +335,11 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new string[] { " ", "\09" });
                         sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new string[] { " ", "\09" });
-                        if ((sIdx == "") || (sGameGate == "") || (sSelGateIPaddr == ""))
+                        if (sIdx == "" || sGameGate == "" || sSelGateIPaddr == "")
                         {
                             continue;
                         }

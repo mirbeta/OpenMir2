@@ -256,10 +256,10 @@ namespace M2Server
             TSwitchDataInfo SwitchDataInfo;
             TUserCastle Castle;
             const string sExceptionMsg = "[Exception] TUserEngine::MakeNewHuman";
-            const string sChangeServerFail1 = "chg-server-fail-1 [%d] -> [%d] [%s]";
-            const string sChangeServerFail2 = "chg-server-fail-2 [%d] -> [%d] [%s]";
-            const string sChangeServerFail3 = "chg-server-fail-3 [%d] -> [%d] [%s]";
-            const string sChangeServerFail4 = "chg-server-fail-4 [%d] -> [%d] [%s]";
+            const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
+            const string sChangeServerFail2 = "chg-server-fail-2 [{0}] -> [{1}] [{2}]";
+            const string sChangeServerFail3 = "chg-server-fail-3 [{0}] -> [{1}] [{2}]";
+            const string sChangeServerFail4 = "chg-server-fail-4 [{0}] -> [{1}] [{2}]";
             const string sErrorEnvirIsNil = "[Error] PlayObject.PEnvir = nil";
             result = null;
             try
@@ -275,8 +275,7 @@ namespace M2Server
                 {
                     SwitchDataInfo = null;
                 }
-
-                SwitchDataInfo = null;
+                //SwitchDataInfo = null;
                 if (SwitchDataInfo == null)
                 {
                     GetHumData(PlayObject, ref UserOpenInfo.HumanRcd);
@@ -308,7 +307,6 @@ namespace M2Server
                             PlayObject.m_boNewHuman = true;
                         }
                     }
-
                     Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
@@ -328,7 +326,6 @@ namespace M2Server
                             }
                         }
                     }
-
                     PlayObject.m_MyGuild = M2Share.GuildManager.MemberOfGuild(PlayObject.m_sCharName);
                     Castle = M2Share.CastleManager.InCastleWarArea(Envir, PlayObject.m_nCurrX, PlayObject.m_nCurrY);
                     if (Envir != null && Castle != null && (Castle.m_MapPalace == Envir || Castle.m_boUnderWar))
@@ -399,7 +396,6 @@ namespace M2Server
                         //PlayObject.Free;
                         return result;
                     }
-
                     PlayObject.m_sMapFileName = Envir.m_sMapFileName;
                     nC = 0;
                     while (true)
@@ -410,7 +406,6 @@ namespace M2Server
                         nC++;
                         if (nC >= 5) break;
                     }
-
                     if (!Envir.CanWalk(PlayObject.m_nCurrX, PlayObject.m_nCurrY, true))
                     {
                         M2Share.MainOutMessage(string.Format(sChangeServerFail2,
@@ -420,7 +415,6 @@ namespace M2Server
                         PlayObject.m_nCurrX = M2Share.g_Config.nHomeX;
                         PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                     }
-
                     PlayObject.m_PEnvir = Envir;
                     if (PlayObject.m_PEnvir == null)
                         M2Share.MainOutMessage(sErrorEnvirIsNil);
@@ -525,7 +519,6 @@ namespace M2Server
                                 PlayObject = ProcessHumans_MakeNewHuman(UserOpenInfo);
                                 if (PlayObject != null)
                                 {
-                                    // PlayObject.m_boClientFlag:=UserOpenInfo.LoadUser.boClinetFlag; //将客户端标志传到人物数据中
                                     m_PlayObjectList.Add(PlayObject);
                                     m_NewHumanList.Add(PlayObject);
                                     SendServerGroupMsg(grobal2.ISM_USERLOGON, M2Share.nServerIndex, PlayObject.m_sCharName);
@@ -538,10 +531,8 @@ namespace M2Server
                                 m_ListOfGateIdx.Add(UserOpenInfo.LoadUser.nGateIdx);
                                 m_ListOfSocket.Add(UserOpenInfo.LoadUser.nSocket);
                             }
-
                             m_LoadPlayList[i] = null;
                         }
-
                         m_LoadPlayList.Clear();
                         for (var i = 0; i < m_ChangeHumanDBGoldList.Count; i++)
                         {
@@ -551,7 +542,6 @@ namespace M2Server
                                 PlayObject.GoldChange(GoldChangeInfo.sGetGoldUser, GoldChangeInfo.nGold);
                             GoldChangeInfo = null;
                         }
-
                         m_ChangeHumanDBGoldList.Clear();
                     }
                     finally
@@ -1075,7 +1065,6 @@ namespace M2Server
                 result = StdItemList[nItemIdx];
                 if (result.Name == "") result = null;
             }
-
             return result;
         }
 
@@ -1362,7 +1351,7 @@ namespace M2Server
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
             for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             {
-                if (m_OtherUserNameList[i].sCharName.ToLower().CompareTo(Name.ToLower()) == 0)
+                if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.Ordinal) == 0)
                 {
                     m_OtherUserNameList.RemoveAt(i);
                 }
@@ -1380,7 +1369,7 @@ namespace M2Server
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
             for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             {
-                if ((m_OtherUserNameList[i].sCharName.ToLower().CompareTo(Name.ToLower()) == 0) && (m_OtherUserNameList[i].nServerIdx == sNum))
+                if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.Ordinal) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
                 {
                     m_OtherUserNameList.RemoveAt(i);
                     break;
@@ -1677,10 +1666,13 @@ namespace M2Server
             return result;
         }
 
-        // ====================================================
-        // 功能:创建怪物对象
-        // 返回值：在指定时间内创建完对象，则返加TRUE，如果超过指定时间则返回FALSE
-        // ====================================================
+        /// <summary>
+        /// 创建怪物对象
+        /// 在指定时间内创建完对象，则返加TRUE，如果超过指定时间则返回FALSE
+        /// </summary>
+        /// <param name="MonGen"></param>
+        /// <param name="nCount"></param>
+        /// <returns></returns>
         private bool RegenMonsters(TMonGenInfo MonGen, int nCount)
         {
             TBaseObject Cert;
@@ -1740,7 +1732,6 @@ namespace M2Server
             {
                 M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
             }
-
             return result;
         }
 
@@ -1749,15 +1740,20 @@ namespace M2Server
             TPlayObject result = null;
             TPlayObject PlayObject = null;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
-                if (m_PlayObjectList[i].m_sCharName.ToLower().CompareTo(sName.ToLower()) == 0)
+            {
+                if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
                 {
                     PlayObject = m_PlayObjectList[i];
                     if (!PlayObject.m_boGhost)
+                    {
                         if (!(PlayObject.m_boPasswordLocked && PlayObject.m_boObMode && PlayObject.m_boAdminMode))
+                        {
                             result = PlayObject;
+                        }
+                    }
                     break;
                 }
-
+            }
             return result;
         }
 
@@ -1768,12 +1764,14 @@ namespace M2Server
             try
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
-                    if (m_PlayObjectList[i].m_sCharName.ToLower().CompareTo(sName.ToLower()) == 0)
+                {
+                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
                     {
                         PlayObject = m_PlayObjectList[i];
                         PlayObject.m_boEmergencyClose = true;
                         break;
                     }
+                }
             }
             finally
             {
@@ -1788,17 +1786,18 @@ namespace M2Server
             try
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
-                    if (m_PlayObjectList[i].m_sCharName.ToLower().CompareTo(sName.ToLower()) == 0)
+                {                    
+                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
                     {
                         result = m_PlayObjectList[i];
                         break;
                     }
+                }
             }
             finally
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
-
             return result;
         }
 
@@ -1810,11 +1809,11 @@ namespace M2Server
             {
                 return (T)Convert.ChangeType(npc, typeof(TMerchant));
             }
-            else if (type.Name.Equals("TGuildOfficial") && npc is TGuildOfficial)
+            if (type.Name.Equals("TGuildOfficial") && npc is TGuildOfficial)
             {
                 return (T)Convert.ChangeType(npc, typeof(TGuildOfficial));
             }
-            else if (type.Name.Equals("TNormNpc") && npc is TNormNpc)
+            if (type.Name.Equals("TNormNpc") && npc is TNormNpc)
             {
                 return (T)Convert.ChangeType(npc, typeof(TNormNpc));
             }
@@ -1839,8 +1838,12 @@ namespace M2Server
             {
                 PlayObject = m_PlayObjectList[i];
                 if (!PlayObject.m_boGhost && PlayObject.m_PEnvir == Envir)
+                {
                     if (Math.Abs(PlayObject.m_nCurrX - nX) < nRange && Math.Abs(PlayObject.m_nCurrY - nY) < nRange)
+                    {
                         result++;
+                    }
+                }
             }
             return result;
         }
@@ -1853,7 +1856,7 @@ namespace M2Server
             for (var i = 0; i < m_AdminList.Count; i++)
             {
                 AdminInfo = m_AdminList[i];
-                if (AdminInfo.sChrName.ToLower().CompareTo(sUserName.ToLower()) == 0)
+                if (string.Compare(AdminInfo.sChrName, sUserName, StringComparison.Ordinal) == 0)
                 {
                     btPermission = (byte)AdminInfo.nLv;
                     sIPaddr = AdminInfo.sIPaddr;
@@ -1861,7 +1864,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -1884,7 +1886,7 @@ namespace M2Server
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (PlayObject.m_sCharName.ToLower().CompareTo(sChrName.ToLower()) == 0)
+                if (string.Compare(PlayObject.m_sCharName, sChrName, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.m_boKickFlag = true;
                     break;
@@ -1990,13 +1992,12 @@ namespace M2Server
             for (var i = 0; i < m_ChangeServerList.Count; i++)
             {
                 SwitchData = m_ChangeServerList[i];
-                if (SwitchData.sChrName.ToLower().CompareTo(sChrName.ToLower()) == 0 && SwitchData.nCode == nCode)
+                if (string.Compare(SwitchData.sChrName, sChrName., StringComparison.Ordinal) == 0 && SwitchData.nCode == nCode)
                 {
                     result = SwitchData;
                     break;
                 }
             }
-
             return result;
         }
 
@@ -2297,34 +2298,35 @@ namespace M2Server
         private void SendDoorStatus(TEnvirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
             int nA, string sStr)
         {
-            int I;
-            int n10;
-            int n14;
-            int n1C;
-            int n20;
-            int n24;
-            int n28;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            n1C = nX - 12;
-            n24 = nX + 12;
-            n20 = nY - 12;
-            n28 = nY + 12;
-            for (n10 = n1C; n10 <= n24; n10++)
-                for (n14 = n20; n14 <= n28; n14++)
+            int n1C = nX - 12;
+            int n24 = nX + 12;
+            int n20 = nY - 12;
+            int n28 = nY + 12;
+            for (var n10 = n1C; n10 <= n24; n10++)
+            {
+                for (var n14 = n20; n14 <= n28; n14++)
+                {
                     if (Envir.GetMapCellInfo(n10, n14, ref MapCellInfo) && MapCellInfo.ObjList != null)
-                        for (I = 0; I < MapCellInfo.ObjList.Count; I++)
+                    {
+                        for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                         {
-                            OSObject = MapCellInfo.ObjList[I];
+                            OSObject = MapCellInfo.ObjList[i];
                             if (OSObject != null && OSObject.btType == grobal2.OS_MOVINGOBJECT)
                             {
-                                BaseObject = (TBaseObject)OSObject.CellObj;
+                                BaseObject = (TBaseObject) OSObject.CellObj;
                                 if (BaseObject != null && !BaseObject.m_boGhost &&
                                     BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
+                                }
                             }
                         }
+                    }
+                }
+            }
         }
 
         private void ProcessMapDoor()
@@ -2339,15 +2341,19 @@ namespace M2Server
                 {
                     Door = Envir.m_DoorList[j];
                     if (Door.Status.boOpened)
+                    {
                         if (HUtil32.GetTickCount() - Door.Status.dwOpenTick > 5 * 1000)
+                        {
                             CloseDoor(Envir, Door);
+                        }
+                    }
                 }
             }
         }
 
         private void ProcessEvents()
         {
-            int III;
+            int count;
             TMagicEvent MagicEvent;
             TBaseObject BaseObject;
             for (var i = m_MagicEventList.Count - 1; i >= 0; i--)
@@ -2361,21 +2367,17 @@ namespace M2Server
                         if (BaseObject.m_boDeath || BaseObject.m_boGhost || !BaseObject.m_boHolySeize)
                             MagicEvent.BaseObjectList.RemoveAt(j);
                     }
-
                     if (MagicEvent.BaseObjectList.Count <= 0 ||
                         HUtil32.GetTickCount() - MagicEvent.dwStartTick > MagicEvent.dwTime ||
                         HUtil32.GetTickCount() - MagicEvent.dwStartTick > 180000)
                     {
-                        //MagicEvent.BaseObjectList.Free;
-                        III = 0;
+                        count = 0;
                         while (true)
                         {
-                            if (MagicEvent.Events[III] != null) MagicEvent.Events[III].Close();
-                            III++;
-                            if (III >= 8) break;
+                            if (MagicEvent.Events[count] != null) MagicEvent.Events[count].Close();
+                            count++;
+                            if (count >= 8) break;
                         }
-
-                        //Dispose(MagicEvent);
                         MagicEvent = null;
                         m_MagicEventList.RemoveAt(i);
                     }
@@ -2457,7 +2459,6 @@ namespace M2Server
                 if (Npc.m_PEnvir == Envir && Math.Abs(Npc.m_nCurrX - nX) <= nRange &&
                     Math.Abs(Npc.m_nCurrY - nY) <= nRange) TmpList.Add(Npc);
             }
-
             result = TmpList.Count;
             return result;
         }
@@ -2502,12 +2503,12 @@ namespace M2Server
                     BaseObject = MonGen.CertList[j];
                     if (!BaseObject.m_boDeath && !BaseObject.m_boGhost && BaseObject.m_PEnvir == Envir)
                     {
-                        if (List != null) List.Add(BaseObject);
+                        if (List != null) 
+                            List.Add(BaseObject);
                         result++;
                     }
                 }
             }
-
             return result;
         }
 
@@ -2518,7 +2519,7 @@ namespace M2Server
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (PlayObject.m_sUserID.ToLower().CompareTo(sAccount.ToLower()) == 0)
+                if (string.Compare(PlayObject.m_sUserID, sAccount, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.m_boExpire = true;
                     break;
@@ -2685,7 +2686,6 @@ namespace M2Server
                 I++;
                 if (I >= StdItemList.Count) break;
             }
-
             ClearMerchantData();
         }
 

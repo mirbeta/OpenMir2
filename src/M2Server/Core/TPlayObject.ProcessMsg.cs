@@ -17,7 +17,7 @@ namespace M2Server
                 {
                     sData = sData.Substring(0, M2Share.g_Config.nSayMsgMaxLen); // 3 * 1000
                 }
-                if ((HUtil32.GetTickCount() - m_dwSayMsgTick) < M2Share.g_Config.dwSayMsgTime)
+                if (HUtil32.GetTickCount() - m_dwSayMsgTick < M2Share.g_Config.dwSayMsgTime)
                 {
                     m_nSayMsgCount++;// 2
                     if (m_nSayMsgCount >= M2Share.g_Config.nSayMsgCount)
@@ -107,7 +107,7 @@ namespace M2Server
                         }
                         if (!m_PEnvir.Flag.boQUIZ)
                         {
-                            if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
+                            if (HUtil32.GetTickCount() - m_dwShoutMsgTick > 10 * 1000)
                             {
                                 if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                 {
@@ -178,7 +178,7 @@ namespace M2Server
                 if (m_boSetStoragePwd)
                 {
                     m_boSetStoragePwd = false;
-                    if ((nLen > 3) && (nLen < 8))
+                    if (nLen > 3 && nLen < 8)
                     {
                         m_sTempPwd = sData;
                         m_boReConfigPwd = true;
@@ -809,10 +809,10 @@ namespace M2Server
                     CmdLockLogin(M2Share.g_GameCommand.LOCKLOGON);
                     return;
                 }
-                if ((m_btPermission >= 2) && (sData.Length > 2))
+                if (m_btPermission >= 2 && sData.Length > 2)
                 {
                     // if sData[2] = '!' then begin
-                    if ((m_btPermission >= 6) && (sData[2] == M2Share.g_GMRedMsgCmd))
+                    if (m_btPermission >= 6 && sData[2] == M2Share.g_GMRedMsgCmd)
                     {
                         if (HUtil32.GetTickCount() - m_dwSayMsgTick > 2000)
                         {
@@ -1395,7 +1395,7 @@ namespace M2Server
                         CmdChangeItemName(M2Share.g_GameCommand.CHANGEITEMNAME.sCmd, sParam1, sParam2, sParam3);
                         return;
                     }
-                    if ((m_btPermission >= 5) || M2Share.g_Config.boTestServer)
+                    if (m_btPermission >= 5 || M2Share.g_Config.boTestServer)
                     {
                         if (sCMD.ToLower().CompareTo(M2Share.g_GameCommand.FIREBURN.sCmd.ToLower()) == 0)
                         {

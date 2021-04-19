@@ -14,7 +14,7 @@ namespace M2Server.Command
         public void ContestPoint(string[] @Params, TPlayObject PlayObject)
         {
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";
-            if ((sGuildName == "") || ((sGuildName != "") && (sGuildName[0] == '?')))
+            if (sGuildName == "" || sGuildName != "" && sGuildName[0] == '?')
             {
                 PlayObject.SysMsg("查看行会战的得分数。", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(string.Format("命令格式: @{0} 行会名称", this.Attributes.Name), TMsgColor.c_Red, TMsgType.t_Hint);

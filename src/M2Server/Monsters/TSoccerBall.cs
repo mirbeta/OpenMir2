@@ -4,7 +4,7 @@ namespace M2Server
     {
         public int n548 = 0;
         public int n54C = 0;
-        public int n550 = 0;
+        private int n550 = 0;
 
         public TSoccerBall() : base()
         {
@@ -52,7 +52,6 @@ namespace M2Server
                                 m_btDirection = 1;
                                 break;
                         }
-                        // case
                         m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, n550, ref m_nTargetX, ref m_nTargetY);
                     }
                 }
@@ -64,7 +63,7 @@ namespace M2Server
             if (m_nTargetX != -1)
             {
                 GotoTargetXY();
-                if ((m_nTargetX == m_nCurrX) && (m_nTargetY == m_nCurrY))
+                if (m_nTargetX == m_nCurrX && m_nTargetY == m_nCurrY)
                 {
                     n550 = 0;
                 }

@@ -40,10 +40,10 @@
             short n8 = 0;
             short nC = 0;
             int n10;
-            if ((!m_boDeath) && (!bo554) && (!m_boGhost) && ((HUtil32.GetTickCount() - dw558) > 30 * 1000))
+            if (!m_boDeath && !bo554 && !m_boGhost && HUtil32.GetTickCount() - dw558 > 30 * 1000)
             {
                 dw558 = HUtil32.GetTickCount();
-                if ((m_TargetCret != null) && (sub_4C3538() >= 5))
+                if (m_TargetCret != null && sub_4C3538() >= 5)
                 {
                     m_TargetCret.GetBackPosition(ref n8, ref nC);
                     if (m_PEnvir.CanWalk(n8, nC, false))
@@ -56,14 +56,14 @@
                 }
                 n10 = n560;
                 n560 = 7 - m_WAbil.HP / (m_WAbil.MaxHP / 7);
-                if ((n560 >= 2) && (n560 != n10))
+                if (n560 >= 2 && n560 != n10)
                 {
                     bo55C = true;
                     dw564 = HUtil32.GetTickCount();
                 }
                 if (bo55C)
                 {
-                    if ((HUtil32.GetTickCount() - dw564) < 8000)
+                    if (HUtil32.GetTickCount() - dw564 < 8000)
                     {
                         m_nNextHitTime = 10000;
                     }
@@ -76,7 +76,7 @@
                 }
                 if (bo55D)
                 {
-                    if ((HUtil32.GetTickCount() - dw568) < 8000)
+                    if (HUtil32.GetTickCount() - dw568 < 8000)
                     {
                         m_nNextHitTime = 500;
                         m_nWalkSpeed = 400;

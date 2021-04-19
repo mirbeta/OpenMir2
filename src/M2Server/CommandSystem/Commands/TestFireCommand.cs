@@ -22,7 +22,7 @@ namespace M2Server
             {
                 for (var nY = nMinY; nY <= nMaxY; nY++)
                 {
-                    if (((nX < nMaxX) && (nY == nMinY)) || ((nY < nMaxY) && (nX == nMinX)) || (nX == nMaxX) || (nY == nMaxY))
+                    if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
                         FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                         M2Share.EventManager.AddEvent(FireBurnEvent);

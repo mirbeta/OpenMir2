@@ -19,7 +19,7 @@ namespace M2Server
             int nItemCount;
             TItem StdItem;
             TUserItem UserItem;
-            if ((sHumanName == "") || (sItemName == ""))
+            if (sHumanName == "" || sItemName == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 物品名称 数量)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -39,7 +39,7 @@ namespace M2Server
                 }
                 UserItem = m_PlayObject.m_ItemList[i];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if ((StdItem != null) && (sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0))
+                if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
                 {
                     m_PlayObject.SendDelItems(UserItem);
                     m_PlayObject.m_ItemList.RemoveAt(i);

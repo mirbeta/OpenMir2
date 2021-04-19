@@ -15,15 +15,15 @@ namespace M2Server.Command
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSex = @Params.Length > 1 ? @Params[1] : "";
             var nSex = -1;
-            if ((sSex == "Man") || (sSex == "男") || (sSex == "0"))
+            if (sSex == "Man" || sSex == "男" || sSex == "0")
             {
                 nSex = 0;
             }
-            if ((sSex == "WoMan") || (sSex == "女") || (sSex == "1"))
+            if (sSex == "WoMan" || sSex == "女" || sSex == "1")
             {
                 nSex = 1;
             }
-            if ((sHumanName == "") || (nSex == -1))
+            if (sHumanName == "" || nSex == -1)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 性别(男、女)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

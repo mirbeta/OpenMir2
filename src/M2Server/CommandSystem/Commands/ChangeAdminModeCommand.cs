@@ -19,7 +19,7 @@ namespace M2Server
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[0] == '?'))
+            if (sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

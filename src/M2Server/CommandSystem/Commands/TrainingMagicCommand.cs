@@ -20,7 +20,7 @@ namespace M2Server
             TMagic Magic;
             TUserMagic UserMagic = null;
             TPlayObject m_PlayObject;
-            if (((sHumanName != "") && (sHumanName[0] == '?')) || (sHumanName == "") || (sSkillName == "") || (nLevel < 0) || !(nLevel >= 0 && nLevel <= 3))
+            if (sHumanName != "" && sHumanName[0] == '?' || sHumanName == "" || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称  技能名称 修炼等级(0-3) hero", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

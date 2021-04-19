@@ -17,7 +17,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 PlayObject.SysMsg("此命令用于停止祈祷生效导致宝宝叛变。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

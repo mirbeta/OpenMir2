@@ -18,7 +18,7 @@ namespace M2Server.Command
             var nX = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
             var nY = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
             var nRange = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
-            if ((sMap == "") || (sItemName == "") || (nX < 0) || (nY < 0) || (nRange < 0) || ((sItemName != "") && (sItemName[0] == '?')))
+            if (sMap == "" || sItemName == "" || nX < 0 || nY < 0 || nRange < 0 || sItemName != "" && sItemName[0] == '?')
             {
                 //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

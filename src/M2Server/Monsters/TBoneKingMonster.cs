@@ -49,13 +49,13 @@ namespace M2Server
         public override void Run()
         {
             TBaseObject BaseObject;
-            if ((!m_boGhost) && (!m_boDeath) && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0) && ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed))
+            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
             {
-                if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000) || (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null)))
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
-                    if ((m_nDangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5) && (m_nDangerLevel > 0))
+                    if (m_nDangerLevel > m_WAbil.HP / m_WAbil.MaxHP * 5 && m_nDangerLevel > 0)
                     {
                         m_nDangerLevel -= 1;
                         CallSlave();

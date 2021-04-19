@@ -45,8 +45,8 @@ namespace M2Server
                 for (var II = i - 1; II >= 0; II--)
                 {
                     UserItem1 = TargerObject.m_ItemList[II];
-                    if ((M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14) &&
-                        (UserItem.MakeIndex == UserItem1.MakeIndex))
+                    if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 &&
+                        UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
                         PlayObject.m_ItemList.RemoveAt(II);
                         break;
@@ -66,8 +66,8 @@ namespace M2Server
                 for (var II = i - 1; II >= 0; II--)
                 {
                     UserItem1 = TargerObject.m_StorageItemList[II];
-                    if ((M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14) &&
-                        (UserItem.MakeIndex == UserItem1.MakeIndex))
+                    if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 &&
+                        UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
                         PlayObject.m_StorageItemList.RemoveAt(II);
                         break;

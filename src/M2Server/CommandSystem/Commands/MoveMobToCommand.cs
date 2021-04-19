@@ -26,7 +26,7 @@ namespace M2Server.CommandSystem.Command
             TEnvirnoment DenEnvir;
             ArrayList MonList;
             TBaseObject MoveMon;
-            if ((sMonName == "") || (OleMap == "") || (NewMap == "") || ((sMonName != "") && (sMonName[0] == '?')))
+            if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
                 //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMOVEMOBTOHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -54,7 +54,7 @@ namespace M2Server.CommandSystem.Command
             }
             SrcEnvir = M2Share.g_MapManager.FindMap(OleMap);// 原地图
             DenEnvir = M2Share.g_MapManager.FindMap(NewMap);// 新地图
-            if ((SrcEnvir == null) || (DenEnvir == null))
+            if (SrcEnvir == null || DenEnvir == null)
             {
                 return;
             }

@@ -16,7 +16,7 @@ namespace M2Server
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sMasterName = @Params.Length > 1 ? @Params[1] : "";
             var sIsMaster = @Params.Length > 2 ? @Params[2] : "";
-            if ((sHumanName == "") || (sMasterName == ""))
+            if (sHumanName == "" || sMasterName == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 师徒名称(如果为 无 则清除)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -34,7 +34,7 @@ namespace M2Server
                 else
                 {
                     m_PlayObject.m_sMasterName = sMasterName;
-                    if ((sIsMaster != "") && (sIsMaster[0] == '1'))
+                    if (sIsMaster != "" && sIsMaster[0] == '1')
                     {
                         m_PlayObject.m_boMaster = true;
                     }

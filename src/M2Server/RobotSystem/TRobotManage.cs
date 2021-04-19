@@ -33,10 +33,10 @@ namespace M2Server
             for (var i = 0; i < LoadList.Count; i++)
             {
                 var sLineText = LoadList[i];
-                if ((sLineText == "") || (sLineText[0] == ';')) continue;
+                if (sLineText == "" || sLineText[0] == ';') continue;
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new string[] { " ", "/", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new string[] { " ", "/", "\t" });
-                if ((sRobotName == "") || (sScriptFileName == "")) continue;
+                if (sRobotName == "" || sScriptFileName == "") continue;
                 var RobotHuman = new RobotObject();
                 RobotHuman.m_sCharName = sRobotName;
                 RobotHuman.m_sScriptFileName = sScriptFileName;

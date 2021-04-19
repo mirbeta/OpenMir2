@@ -20,7 +20,7 @@ namespace M2Server
                 {
                     m_nTargetX = m_TargetCret.m_nCurrX;
                     m_nTargetY = m_TargetCret.m_nCurrY;
-                    if ((m_WAbil.HP <= HUtil32.Round(m_WAbil.MaxHP / 2)) && (borunaway == false))
+                    if (m_WAbil.HP <= HUtil32.Round(m_WAbil.MaxHP / 2) && borunaway == false)
                     {
                         // if health less then 1/2
                         GetFrontPosition(ref nx, ref ny);
@@ -38,9 +38,9 @@ namespace M2Server
                     }
                     if (borunaway)
                     {
-                        if ((HUtil32.GetTickCount() - time1) > 5000)
+                        if (HUtil32.GetTickCount() - time1 > 5000)
                         {
-                            if ((Math.Abs(m_nTargetX - m_nCurrX) == 1) && (Math.Abs(m_nTargetY - m_nCurrY) == 1))
+                            if (Math.Abs(m_nTargetX - m_nCurrX) == 1 && Math.Abs(m_nTargetY - m_nCurrY) == 1)
                             {
                                 WalkTo((byte)M2Share.RandomNumber.Random(4), true);
                             }
@@ -55,7 +55,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000) || (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null)))
+                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();

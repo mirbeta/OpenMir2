@@ -11,7 +11,7 @@ namespace M2Server
         public void ReloadManage(string[] @params, TPlayObject PlayObject)
         {
             var sParam = @params.Length > 0 ? @params[0] : "";
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

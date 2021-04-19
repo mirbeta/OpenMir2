@@ -14,13 +14,13 @@ namespace M2Server
         {
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             var nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            if ((sHumName == "") || (nCount <= 0))
+            if (sHumName == "" || nCount <= 0)
             {
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             var nServerIndex = 0;
-            if ((sHumName == "") || (nCount <= 0))
+            if (sHumName == "" || nCount <= 0)
             {
                 return;
             }

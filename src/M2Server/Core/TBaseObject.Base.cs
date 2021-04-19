@@ -42,7 +42,7 @@ namespace M2Server
             KillFunc();
             try
             {
-                if ((m_btRaceServer != grobal2.RC_PLAYOBJECT) && (m_LastHiter != null))
+                if (m_btRaceServer != grobal2.RC_PLAYOBJECT && m_LastHiter != null)
                 {
                     if (M2Share.g_Config.boMonSayMsg)
                     {
@@ -69,7 +69,7 @@ namespace M2Server
                                     for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
                                     {
                                         GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
-                                        if (!GroupHuman.m_boDeath && (m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir) && (Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12) && (Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12) && (m_ExpHitter == GroupHuman))
+                                        if (!GroupHuman.m_boDeath && m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && m_ExpHitter == GroupHuman)
                                         {
                                             tCheck = false;
                                         }
@@ -120,7 +120,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (M2Share.g_Config.boMonSayMsg && (m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_LastHiter != null))
+                if (M2Share.g_Config.boMonSayMsg && m_btRaceServer == grobal2.RC_PLAYOBJECT && m_LastHiter != null)
                 {
                     m_LastHiter.MonsterSayMsg(this, TMonStatus.s_KillHuman);
                 }
@@ -134,12 +134,12 @@ namespace M2Server
             try
             {
                 boPK = false;
-                if ((!M2Share.g_Config.boVentureServer) && (!m_PEnvir.Flag.boFightZone) && (!m_PEnvir.Flag.boFight3Zone))
+                if (!M2Share.g_Config.boVentureServer && !m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone)
                 {
-                    if ((m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_LastHiter != null) && (PKLevel() < 2))
+                    if (m_btRaceServer == grobal2.RC_PLAYOBJECT && m_LastHiter != null && PKLevel() < 2)
                     {
                         // if (m_LastHiter.m_btRaceServer = RC_PLAYOBJECT) then
-                        if ((m_LastHiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_LastHiter.m_btRaceServer == grobal2.RC_NPC))
+                        if (m_LastHiter.m_btRaceServer == grobal2.RC_PLAYOBJECT || m_LastHiter.m_btRaceServer == grobal2.RC_NPC)
                         {
                             // 修改日期2004/07/21，允许NPC杀死人物
                             boPK = true;
@@ -154,10 +154,10 @@ namespace M2Server
                         }
                     }
                 }
-                if (boPK && (m_LastHiter != null))
+                if (boPK && m_LastHiter != null)
                 {
                     guildwarkill = false;
-                    if ((m_MyGuild != null) && (m_LastHiter.m_MyGuild != null))
+                    if (m_MyGuild != null && m_LastHiter.m_MyGuild != null)
                     {
                         if (GetGuildRelation(this, m_LastHiter) == 2)
                         {
@@ -165,14 +165,14 @@ namespace M2Server
                         }
                     }
                     Castle = M2Share.CastleManager.InCastleWarArea(this);
-                    if (((Castle != null) && Castle.m_boUnderWar) || m_boInFreePKArea)
+                    if (Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
                     {
                         guildwarkill = true;
                     }
                     // =================================================================
                     if (!guildwarkill)
                     {
-                        if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && (m_LastHiter.m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                        if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && m_LastHiter.m_btRaceServer == grobal2.RC_PLAYOBJECT)
                         {
                             (this as TPlayObject).PKDie(m_LastHiter as TPlayObject);
                         }
@@ -233,33 +233,33 @@ namespace M2Server
             }
             try
             {
-                if ((!m_PEnvir.Flag.boFightZone) && (!m_PEnvir.Flag.boFight3Zone) && !m_boAnimal)
+                if (!m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone && !m_boAnimal)
                 {
                     AttackBaseObject = m_ExpHitter;
-                    if ((m_ExpHitter != null) && (m_ExpHitter.m_Master != null))
+                    if (m_ExpHitter != null && m_ExpHitter.m_Master != null)
                     {
                         AttackBaseObject = m_ExpHitter.m_Master;
                     }
                     if (m_btRaceServer != grobal2.RC_PLAYOBJECT)
                     {
                         DropUseItems(AttackBaseObject);
-                        if ((m_Master == null) && (!m_boNoItem || (!m_PEnvir.Flag.boNODROPITEM)))
+                        if (m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
                         {
                             ScatterBagItems(AttackBaseObject);
                         }
-                        if ((m_btRaceServer >= grobal2.RC_ANIMAL) && (m_Master == null) && (!m_boNoItem || (!m_PEnvir.Flag.boNODROPITEM)))
+                        if (m_btRaceServer >= grobal2.RC_ANIMAL && m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
                         {
                             ScatterGolds(AttackBaseObject);
                         }
                     }
                     else
                     {
-                        if (!m_boNoItem || (!m_PEnvir.Flag.boNODROPITEM))
+                        if (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM)
                         {
                             // 修改日期2004/07/21，增加此行，允许设置 m_boNoItem 后人物死亡不掉物品
                             if (AttackBaseObject != null)
                             {
-                                if ((M2Share.g_Config.boKillByHumanDropUseItem && (AttackBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || (M2Share.g_Config.boKillByMonstDropUseItem && (AttackBaseObject.m_btRaceServer != grobal2.RC_PLAYOBJECT)))
+                                if (M2Share.g_Config.boKillByHumanDropUseItem && AttackBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT || M2Share.g_Config.boKillByMonstDropUseItem && AttackBaseObject.m_btRaceServer != grobal2.RC_PLAYOBJECT)
                                 {
                                     DropUseItems(null);
                                 }
@@ -289,7 +289,7 @@ namespace M2Server
                     }
                     if (m_LastHiter != null)
                     {
-                        if ((m_LastHiter.m_MyGuild != null) && (m_MyGuild != null))
+                        if (m_LastHiter.m_MyGuild != null && m_MyGuild != null)
                         {
                             m_LastHiter.m_MyGuild.TeamFightWhoWinPoint(m_LastHiter.m_sCharName, 100);
                             // matchpoint 刘啊, 俺牢己利 扁废
@@ -324,7 +324,7 @@ namespace M2Server
                     M2Share.AddGameDataLog("19" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + "FZ-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
                 }
                 // 减少地图上怪物计数
-                if ((m_Master == null) && !m_boDelFormMaped)
+                if (m_Master == null && !m_boDelFormMaped)
                 {
                     m_PEnvir.DelObjectCount(this);
                     m_boDelFormMaped = true;
@@ -360,8 +360,8 @@ namespace M2Server
                 {
                     if (m_Abil.Level > M2Share.g_Config.nPKProtectLevel)// 如果大于指定等级
                     {
-                        if (!BaseObject.m_boPKFlag && (BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel) && 
-                            (BaseObject.PKLevel() < 2))// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel && 
+                            BaseObject.PKLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                         {
                             result = false;
                             return result;
@@ -370,7 +370,7 @@ namespace M2Server
                     if (m_Abil.Level <= M2Share.g_Config.nPKProtectLevel)
                     {
                         // 如果小于指定等级
-                        if (!BaseObject.m_boPKFlag && (BaseObject.m_Abil.Level > M2Share.g_Config.nPKProtectLevel) && (BaseObject.PKLevel() < 2))
+                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
                         {
                             result = false;
                             return result;
@@ -378,24 +378,24 @@ namespace M2Server
                     }
                 }
                 // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if ((PKLevel() >= 2) && (m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel))
+                if (PKLevel() >= 2 && m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
                 {
-                    if ((BaseObject.m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel) && (BaseObject.PKLevel() < 2))
+                    if (BaseObject.m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && BaseObject.PKLevel() < 2)
                     {
                         result = false;
                         return result;
                     }
                 }
                 // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if ((m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel) && (PKLevel() < 2))
+                if (m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && PKLevel() < 2)
                 {
-                    if ((BaseObject.PKLevel() >= 2) && (BaseObject.m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel))
+                    if (BaseObject.PKLevel() >= 2 && BaseObject.m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
                     {
                         result = false;
                         return result;
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwMapMoveTick < 3000) || (HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick < 3000))
+                if (HUtil32.GetTickCount() - m_dwMapMoveTick < 3000 || HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick < 3000)
                 {
                     result = false;
                 }

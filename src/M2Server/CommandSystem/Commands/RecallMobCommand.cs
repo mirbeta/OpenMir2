@@ -27,7 +27,7 @@ namespace M2Server
             short n10 = 0;
             short n14 = 0;
             TBaseObject mon;
-            if ((sMonName == "") || ((sMonName != "") && (sMonName[0] == '?')))
+            if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandRecallMobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

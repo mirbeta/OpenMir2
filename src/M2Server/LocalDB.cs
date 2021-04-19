@@ -59,7 +59,7 @@ namespace M2Server
                 {
                     sLineText = LoadList[i];
                     nLv = -1;
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         if (sLineText[0] == '*')
                         {
@@ -106,7 +106,7 @@ namespace M2Server
                             sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new string[] { "/", "\\", " ", "\t" });
                             sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new string[] { "/", "\\", " ", "\t" });
                             sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new string[] { "/", "\\", " ", "\t" });
-                            if (string.IsNullOrEmpty(sCharName) || (sIPaddr == ""))
+                            if (string.IsNullOrEmpty(sCharName) || sIPaddr == "")
                             {
                                 continue;
                             }
@@ -219,10 +219,10 @@ namespace M2Server
                 for (var i = 0; i < tGuardList.Count; i++)
                 {
                     s14 = tGuardList[i];
-                    if ((s14 != "") && (s14[0] != ';'))
+                    if (s14 != "" && s14[0] != ';')
                     {
                         s14 = HUtil32.GetValidStrCap(s14, ref s1C, new string[] { " " });
-                        if ((s1C != "") && (s1C[0] == '\"'))
+                        if (s1C != "" && s1C[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(s1C, '\"', '\"', ref s1C);
                         }
@@ -230,7 +230,7 @@ namespace M2Server
                         s14 = HUtil32.GetValidStr3(s14, ref s24, new char[] { ' ', ',' });
                         s14 = HUtil32.GetValidStr3(s14, ref s28, new char[] { ' ', ',', ':' });
                         s14 = HUtil32.GetValidStr3(s14, ref s2C, new char[] { ' ', ':' });
-                        if ((s1C != "") && (s20 != "") && (s2C != ""))
+                        if (s1C != "" && s20 != "" && s2C != "")
                         {
                             tGuard = M2Share.UserEngine.RegenMonsterByName(s20, (short)HUtil32.Str_ToInt(s24, 0), (short)HUtil32.Str_ToInt(s28, 0), s1C);
                             if (tGuard != null)
@@ -424,7 +424,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
-                    if ((s18 != "") && (s18[0] != ';'))
+                    if (s18 != "" && s18[0] != ';')
                     {
                         if (s18[0] == '[')
                         {
@@ -621,24 +621,24 @@ namespace M2Server
                 for (var i = 0; i < tMapQuestList.Count; i++)
                 {
                     var tStr = tMapQuestList[i];
-                    if ((tStr != "") && (tStr[0] != ';'))
+                    if (tStr != "" && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMap, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s20, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref sMonName, new string[] { " ", "\t" });
-                        if ((sMonName != "") && (sMonName[0] == '\"'))
+                        if (sMonName != "" && sMonName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMonName, "\"", "\"", ref sMonName);
                         }
                         tStr = HUtil32.GetValidStr3(tStr, ref sItem, new string[] { " ", "\t" });
-                        if ((sItem != "") && (sItem[0] == '\"'))
+                        if (sItem != "" && sItem[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sItem, "\"", "\"", ref sItem);
                         }
                         tStr = HUtil32.GetValidStr3(tStr, ref sQuest, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, new string[] { " ", "\t" });
-                        if ((!string.IsNullOrEmpty(sMap)) && (!string.IsNullOrEmpty(sMonName)) && (!string.IsNullOrEmpty(sQuest)))
+                        if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
                             var Map = M2Share.g_MapManager.FindMap(sMap);
                             if (Map != null)
@@ -701,14 +701,14 @@ namespace M2Server
                 for (var i = 0; i < tMerchantList.Count; i++)
                 {
                     sLineText = tMerchantList[i].Trim();
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sName, new string[] { " ", "\t" });
-                        if ((sName != "") && (sName[0] == '\"'))
+                        if (sName != "" && sName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sName, '\"', '\"', ref sName);
                         }
@@ -717,7 +717,7 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIsCalste, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, new string[] { " ", "\t" });
-                        if ((sScript != "") && (sMapName != "") && (sAppr != ""))
+                        if (sScript != "" && sMapName != "" && sAppr != "")
                         {
                             var tMerchantNPC = new TMerchant
                             {
@@ -734,7 +734,7 @@ namespace M2Server
                             {
                                 tMerchantNPC.m_boCastle = true;
                             }
-                            if ((HUtil32.Str_ToInt(sCanMove, 0) != 0) && (tMerchantNPC.m_dwMoveTime > 0))
+                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && tMerchantNPC.m_dwMoveTime > 0)
                             {
                                 tMerchantNPC.m_boCanMove = true;
                             }
@@ -797,7 +797,7 @@ namespace M2Server
                 for (i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         MonGenInfo = new TMonGenInfo();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new string[] { " ", "\t" });
@@ -807,7 +807,7 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new string[] { " ", "\t" });
                         MonGenInfo.nY = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new string[] { " ", "\t" });
-                        if ((sData != "") && (sData[0] == '\"'))
+                        if (sData != "" && sData[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                         }
@@ -821,7 +821,7 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new string[] { " ", "\t" });
                         MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);
                         // 集中座标刷新机率 1 -100
-                        if ((MonGenInfo.sMapName != "") && (MonGenInfo.sMonName != "") && (MonGenInfo.dwZenTime != 0) && (M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null))
+                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 && M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
                             MonGenInfo.CertList = new List<TBaseObject>();
                             MonGenInfo.Envir = M2Share.g_MapManager.FindMap(MonGenInfo.sMapName);
@@ -945,7 +945,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var s28 = LoadList[i];
-                    if ((s28 != "") && (s28[0] != ';'))
+                    if (s28 != "" && s28[0] != ';')
                     {
                         s28 = HUtil32.GetValidStr3(s28, ref s30, new string[] { " ", "/", "\t" });
                         var n18 = HUtil32.Str_ToInt(s30, -1);
@@ -962,7 +962,7 @@ namespace M2Server
                         var s2C = s30;
                         s28 = HUtil32.GetValidStr3(s28, ref s30, new string[] { " ", "\t" });
                         var n20 = HUtil32.Str_ToInt(s30, 1);
-                        if ((n18 > 0) && (n1C > 0) && (s2C != ""))
+                        if (n18 > 0 && n1C > 0 && s2C != "")
                         {
                             if (ItemList == null)
                             {
@@ -1008,10 +1008,10 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
-                    if ((s18 != "") && (s18[0] != ';'))
+                    if (s18 != "" && s18[0] != ';')
                     {
                         s18 = HUtil32.GetValidStrCap(s18, ref s20, new string[] { " ", "\t" });
-                        if ((s20 != "") && (s20[0] == '\"'))
+                        if (s20 != "" && s20[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                         }
@@ -1021,7 +1021,7 @@ namespace M2Server
                         s18 = HUtil32.GetValidStr3(s18, ref s30, new string[] { " ", "\t" });
                         s18 = HUtil32.GetValidStr3(s18, ref s34, new string[] { " ", "\t" });
                         s18 = HUtil32.GetValidStr3(s18, ref s38, new string[] { " ", "\t" });
-                        if ((s20 != "") && (s28 != "") && (s38 != ""))
+                        if (s20 != "" && s28 != "" && s38 != "")
                         {
                             NPC = null;
                             switch (HUtil32.Str_ToInt(s24, 0))
@@ -1112,9 +1112,9 @@ namespace M2Server
                     for (i = 0; i < LoadList.Count; i++)
                     {
                         s1C = LoadList[i];
-                        if ((s1C != "") && (s1C[0] != ';'))
+                        if (s1C != "" && s1C[0] != ';')
                         {
-                            if ((s1C[0] == '[') && (s1C.Length > 2))
+                            if (s1C[0] == '[' && s1C.Length > 2)
                             {
                                 if (s18 == "")
                                 {
@@ -1202,7 +1202,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     tStr = LoadList[i].Trim();
-                    if ((tStr != "") && (tStr[0] != ';'))
+                    if (tStr != "" && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref s18, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new string[] { " ", "\t" });
@@ -1212,7 +1212,7 @@ namespace M2Server
                         tStr = HUtil32.GetValidStr3(tStr, ref s26, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s28, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, new string[] { " ", "\t" });
-                        if ((s18 != "") && (s1C != "") && (s20 != ""))
+                        if (s18 != "" && s1C != "" && s20 != "")
                         {
                             StartPoint = new TStartPoint
                             {
@@ -1249,11 +1249,11 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     tStr = LoadList[i];
-                    if ((tStr != "") && (tStr[0] != ';'))
+                    if (tStr != "" && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sData, new string[] { " ", "\t" });
                         tStr = HUtil32.GetValidStrCap(tStr, ref s20, new string[] { " ", "\t" });
-                        if ((s20 != "") && (s20[0] == '\"'))
+                        if (s20 != "" && s20[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                         }
@@ -1396,14 +1396,14 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var sLineText = LoadList[i].Trim();
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new string[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sCharName, new string[] { " ", "\t" });
-                        if ((sCharName != "") && (sCharName[0] == '\"'))
+                        if (sCharName != "" && sCharName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sCharName, '\"', '\"', ref sCharName);
                         }
@@ -1418,7 +1418,7 @@ namespace M2Server
                         for (ii = 0; ii < M2Share.UserEngine.m_MerchantList.Count; ii++)
                         {
                             Merchant = M2Share.UserEngine.m_MerchantList[ii];
-                            if ((Merchant.m_sMapName == sMapName) && (Merchant.m_nCurrX == nX) && (Merchant.m_nCurrY == nY))
+                            if (Merchant.m_sMapName == sMapName && Merchant.m_nCurrX == nX && Merchant.m_nCurrY == nY)
                             {
                                 boNewNpc = false;
                                 Merchant.m_sScript = sScript;
@@ -1434,7 +1434,7 @@ namespace M2Server
                                 {
                                     Merchant.m_boCastle = false;
                                 }
-                                if ((HUtil32.Str_ToInt(sCanMove, 0) != 0) && (Merchant.m_dwMoveTime > 0))
+                                if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                                 {
                                     Merchant.m_boCanMove = true;
                                 }
@@ -1465,7 +1465,7 @@ namespace M2Server
                                 {
                                     Merchant.m_boCastle = false;
                                 }
-                                if ((HUtil32.Str_ToInt(sCanMove, 0) != 0) && (Merchant.m_dwMoveTime > 0))
+                                if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
                                 {
                                     Merchant.m_boCanMove = true;
                                 }

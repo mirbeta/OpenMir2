@@ -12,11 +12,11 @@ namespace M2Server
             for (var i = 0; i < PlayObject.m_VisibleActors.Count; i++)
             {
                 var BaseObject = PlayObject.m_VisibleActors[i].BaseObject;
-                if ((Math.Abs(PlayObject.m_nCurrX - BaseObject.m_nCurrX) <= 1) && (Math.Abs(PlayObject.m_nCurrY - BaseObject.m_nCurrY) <= 1))
+                if (Math.Abs(PlayObject.m_nCurrX - BaseObject.m_nCurrX) <= 1 && Math.Abs(PlayObject.m_nCurrY - BaseObject.m_nCurrY) <= 1)
                 {
-                    if ((!BaseObject.m_boDeath) && (BaseObject != PlayObject))
+                    if (!BaseObject.m_boDeath && BaseObject != PlayObject)
                     {
-                        if ((PlayObject.m_Abil.Level > BaseObject.m_Abil.Level) && (!BaseObject.m_boStickMode))
+                        if (PlayObject.m_Abil.Level > BaseObject.m_Abil.Level && !BaseObject.m_boStickMode)
                         {
                             var levelgap = PlayObject.m_Abil.Level - BaseObject.m_Abil.Level;
                             if (M2Share.RandomNumber.Random(20) < 6 + nPushLevel * 3 + levelgap)
@@ -131,12 +131,12 @@ namespace M2Server
             {
                 return result;
             }
-            if ((Math.Abs(PlayObject.m_nCurrX - nTargetX) > M2Share.g_Config.nMagicAttackRage) || (Math.Abs(PlayObject.m_nCurrY - nTargetY) > M2Share.g_Config.nMagicAttackRage))
+            if (Math.Abs(PlayObject.m_nCurrX - nTargetX) > M2Share.g_Config.nMagicAttackRage || Math.Abs(PlayObject.m_nCurrY - nTargetY) > M2Share.g_Config.nMagicAttackRage)
             {
                 return result;
             }
             PlayObject.SendRefMsg(grobal2.RM_SPELL, UserMagic.MagicInfo.btEffect, nTargetX, nTargetY, UserMagic.MagicInfo.wMagicID, "");
-            if ((TargeTBaseObject != null) && TargeTBaseObject.m_boDeath)
+            if (TargeTBaseObject != null && TargeTBaseObject.m_boDeath)
             {
                 TargeTBaseObject = null;
             }
@@ -144,7 +144,7 @@ namespace M2Server
             boSpellFail = false;
             boSpellFire = true;
             nPower = 0;
-            if ((PlayObject.m_nSoftVersionDateEx == 0) && (PlayObject.m_dwClientTick == 0) && (UserMagic.MagicInfo.wMagicID > 40))
+            if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.MagicInfo.wMagicID > 40)
             {
                 return result;
             }
@@ -156,7 +156,7 @@ namespace M2Server
                     {
                         if (PlayObject.IsProperTarget(TargeTBaseObject))
                         {
-                            if ((TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10)) && (Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1) && (Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1))
+                            if (TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1)
                             {
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                                 PlayObject.SendDelayMsg(PlayObject, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
@@ -224,7 +224,7 @@ namespace M2Server
                                             TargeTBaseObject.SendDelayMsg(PlayObject, grobal2.RM_POISON, grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.g_Config.nAmyOunsulPoint)), "", 1000);
                                             break;
                                     }
-                                    if ((TargeTBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL))
+                                    if (TargeTBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT || TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL)
                                     {
                                         boTrain = true;
                                     }
@@ -311,7 +311,7 @@ namespace M2Server
                                     {
                                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
                                         {
-                                            if ((Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1) && (Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1))
+                                            if (Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1)
                                             {
                                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.SC), HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC) + 1);
                                                 PlayObject.SendDelayMsg(PlayObject, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 1200);
@@ -406,9 +406,9 @@ namespace M2Server
                     }
                     break;
                 case grobal2.SKILL_SHOWHP:
-                    if ((TargeTBaseObject != null) && !TargeTBaseObject.m_boShowHP)
+                    if (TargeTBaseObject != null && !TargeTBaseObject.m_boShowHP)
                     {
-                        if (M2Share.RandomNumber.Random(6) <= (UserMagic.btLevel + 3))
+                        if (M2Share.RandomNumber.Random(6) <= UserMagic.btLevel + 3)
                         {
                             TargeTBaseObject.m_dwShowHPTick = HUtil32.GetTickCount();
                             TargeTBaseObject.m_dwShowHPInterval = DoSpell_GetPower13(UserMagic, DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 2 + 30) * 1000;
@@ -647,7 +647,7 @@ namespace M2Server
                     PlayObject.SendRefMsg(grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ObjectId, "");
                 }
             }
-            if ((UserMagic.btLevel < 3) && boTrain)
+            if (UserMagic.btLevel < 3 && boTrain)
             {
                 if (UserMagic.MagicInfo.TrainLevel[UserMagic.btLevel] <= PlayObject.m_Abil.Level)
                 {
@@ -674,9 +674,9 @@ namespace M2Server
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var TargeTBaseObject = BaseObjectList[i];
-                if ((TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL) && (TargeTBaseObject.m_TargetCret == BaseObject))
+                if (TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL && TargeTBaseObject.m_TargetCret == BaseObject)
                 {
-                    if ((Math.Abs(TargeTBaseObject.m_nCurrX - BaseObject.m_nCurrX) > 1) || (Math.Abs(TargeTBaseObject.m_nCurrY - BaseObject.m_nCurrY) > 1) || (M2Share.RandomNumber.Random(2) == 0))
+                    if (Math.Abs(TargeTBaseObject.m_nCurrX - BaseObject.m_nCurrX) > 1 || Math.Abs(TargeTBaseObject.m_nCurrY - BaseObject.m_nCurrY) > 1 || M2Share.RandomNumber.Random(2) == 0)
                     {
                         TargeTBaseObject.m_TargetCret = null;
                     }
@@ -696,7 +696,7 @@ namespace M2Server
         {
             var result = false;
             int n14;
-            if ((TargeTBaseObject.m_btRaceServer != grobal2.RC_PLAYOBJECT) && M2Share.RandomNumber.Random(4 - nMagicLevel) == 0)
+            if (TargeTBaseObject.m_btRaceServer != grobal2.RC_PLAYOBJECT && M2Share.RandomNumber.Random(4 - nMagicLevel) == 0)
             {
                 TargeTBaseObject.m_TargetCret = null;
                 if (TargeTBaseObject.m_Master == BaseObject)
@@ -713,11 +713,11 @@ namespace M2Server
                             if (M2Share.RandomNumber.Random(3) == 0)
                             {
                                 // 10
-                                if (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level + 20 + (nMagicLevel * 5)) > (TargeTBaseObject.m_Abil.Level + M2Share.g_Config.nMagTammingTargetLevel))
+                                if (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.m_Abil.Level + M2Share.g_Config.nMagTammingTargetLevel)
                                 {
                                     // 50
                                     // (nMagicLevel + 2)
-                                    if (!TargeTBaseObject.m_boNoTame && (TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD) && (TargeTBaseObject.m_Abil.Level < M2Share.g_Config.nMagTammingLevel) && (BaseObject.m_SlaveList.Count < M2Share.g_Config.nMagTammingCount))
+                                    if (!TargeTBaseObject.m_boNoTame && TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD && TargeTBaseObject.m_Abil.Level < M2Share.g_Config.nMagTammingLevel && BaseObject.m_SlaveList.Count < M2Share.g_Config.nMagTammingCount)
                                     {
                                         // 100
                                         n14 = TargeTBaseObject.m_WAbil.MaxHP / M2Share.g_Config.nMagTammingHPRate;
@@ -729,7 +729,7 @@ namespace M2Server
                                         {
                                             n14 += n14;
                                         }
-                                        if ((TargeTBaseObject.m_Master != BaseObject) && (M2Share.RandomNumber.Random(n14) == 0))
+                                        if (TargeTBaseObject.m_Master != BaseObject && M2Share.RandomNumber.Random(n14) == 0)
                                         {
                                             TargeTBaseObject.BreakCrazyMode();
                                             if (TargeTBaseObject.m_Master != null)
@@ -737,18 +737,18 @@ namespace M2Server
                                                 TargeTBaseObject.m_WAbil.HP = (short)(TargeTBaseObject.m_WAbil.HP / 10);
                                             }
                                             TargeTBaseObject.m_Master = BaseObject;
-                                            TargeTBaseObject.m_dwMasterRoyaltyTick = ((M2Share.RandomNumber.Random(BaseObject.m_Abil.Level * 2) + (nMagicLevel << 2) * 5 + 20) * 60 * 1000) + HUtil32.GetTickCount();
+                                            TargeTBaseObject.m_dwMasterRoyaltyTick = (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level * 2) + (nMagicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();
                                             TargeTBaseObject.m_btSlaveMakeLevel = (byte)nMagicLevel;
                                             if (TargeTBaseObject.m_dwMasterTick == 0)
                                             {
                                                 TargeTBaseObject.m_dwMasterTick = HUtil32.GetTickCount();
                                             }
                                             TargeTBaseObject.BreakHolySeizeMode();
-                                            if ((1500 - nMagicLevel * 200) < TargeTBaseObject.m_nWalkSpeed)
+                                            if (1500 - nMagicLevel * 200 < TargeTBaseObject.m_nWalkSpeed)
                                             {
                                                 TargeTBaseObject.m_nWalkSpeed = 1500 - nMagicLevel * 200;
                                             }
-                                            if ((2000 - nMagicLevel * 200) < TargeTBaseObject.m_nNextHitTime)
+                                            if (2000 - nMagicLevel * 200 < TargeTBaseObject.m_nNextHitTime)
                                             {
                                                 TargeTBaseObject.m_nNextHitTime = 2000 - nMagicLevel * 200;
                                             }
@@ -765,7 +765,7 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        if ((TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD) && (M2Share.RandomNumber.Random(20) == 0))
+                                        if (TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
                                         {
                                             TargeTBaseObject.m_WAbil.HP = 0;
                                         }
@@ -773,7 +773,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if (!(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD) && (M2Share.RandomNumber.Random(20) == 0))
+                                    if (!(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD) && M2Share.RandomNumber.Random(20) == 0)
                                     {
                                         TargeTBaseObject.OpenCrazyMode(M2Share.RandomNumber.Random(20) + 10);
                                     }
@@ -820,12 +820,12 @@ namespace M2Server
                 ((TAnimalObject)TargeTBaseObject).m_dwRunAwayTime = 10 * 1000;
             }
             BaseObject.SetTargetCreat(TargeTBaseObject);
-            if ((M2Share.RandomNumber.Random(2) + (BaseObject.m_Abil.Level - 1)) > TargeTBaseObject.m_Abil.Level)
+            if (M2Share.RandomNumber.Random(2) + (BaseObject.m_Abil.Level - 1) > TargeTBaseObject.m_Abil.Level)
             {
                 if (TargeTBaseObject.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel)
                 {
                     var n14 = BaseObject.m_Abil.Level - TargeTBaseObject.m_Abil.Level;
-                    if (M2Share.RandomNumber.Random(100) < ((nLevel << 3) - nLevel + 15 + n14))
+                    if (M2Share.RandomNumber.Random(100) < (nLevel << 3) - nLevel + 15 + n14)
                     {
                         TargeTBaseObject.SetLastHiter(BaseObject);
                         TargeTBaseObject.m_WAbil.HP = 0;
@@ -840,9 +840,9 @@ namespace M2Server
         {
             var result = false;
             var PoseBaseObject = PlayObject.GetPoseCreate();
-            if ((PoseBaseObject != null) && (PoseBaseObject != PlayObject) && (!PoseBaseObject.m_boDeath) && (!PoseBaseObject.m_boGhost) && PlayObject.IsProperTarget(PoseBaseObject) && (!PoseBaseObject.m_boStickMode))
+            if (PoseBaseObject != null && PoseBaseObject != PlayObject && !PoseBaseObject.m_boDeath && !PoseBaseObject.m_boGhost && PlayObject.IsProperTarget(PoseBaseObject) && !PoseBaseObject.m_boStickMode)
             {
-                if ((Math.Abs(PlayObject.m_nCurrX - PoseBaseObject.m_nCurrX) <= 1) && (Math.Abs(PlayObject.m_nCurrY - PoseBaseObject.m_nCurrY) <= 1) && (PlayObject.m_Abil.Level > PoseBaseObject.m_Abil.Level))
+                if (Math.Abs(PlayObject.m_nCurrX - PoseBaseObject.m_nCurrX) <= 1 && Math.Abs(PlayObject.m_nCurrY - PoseBaseObject.m_nCurrY) <= 1 && PlayObject.m_Abil.Level > PoseBaseObject.m_Abil.Level)
                 {
                     if (M2Share.RandomNumber.Random(20) < UserMagic.btLevel * 6 + 6 + (PlayObject.m_Abil.Level - PoseBaseObject.m_Abil.Level))
                     {
@@ -864,7 +864,7 @@ namespace M2Server
                 {
                     var Envir = BaseObject.m_PEnvir;
                     BaseObject.MapRandomMove(BaseObject.m_sHomeMap, 1);
-                    if ((Envir != BaseObject.m_PEnvir) && (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                    if (Envir != BaseObject.m_PEnvir && BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
                     {
                         var PlayObject = (TPlayObject)BaseObject;
                         PlayObject.m_boTimeRecall = false;
@@ -884,7 +884,7 @@ namespace M2Server
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var BaseObject = BaseObjectList[i];
-                if (BaseObject.m_boDeath || BaseObject.m_boGhost || (PlayObject == BaseObject))
+                if (BaseObject.m_boDeath || BaseObject.m_boGhost || PlayObject == BaseObject)
                 {
                     continue;
                 }
@@ -910,7 +910,7 @@ namespace M2Server
                                         BaseObject.SendDelayMsg(PlayObject, grobal2.RM_POISON, grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.g_Config.nAmyOunsulPoint)), "", 1000);
                                         break;
                                 }
-                                if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_btRaceServer >= grobal2.RC_ANIMAL))
+                                if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT || BaseObject.m_btRaceServer >= grobal2.RC_ANIMAL)
                                 {
                                     result = true;
                                 }
@@ -935,7 +935,7 @@ namespace M2Server
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];
-                if (BaseObject.m_boDeath || BaseObject.m_boGhost || (PlayObject == BaseObject))
+                if (BaseObject.m_boDeath || BaseObject.m_boGhost || PlayObject == BaseObject)
                 {
                     continue;
                 }
@@ -976,7 +976,7 @@ namespace M2Server
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 var BaseObject = BaseObjectList[i];
-                if (BaseObject.m_boDeath || BaseObject.m_boGhost || (PlayObject == BaseObject))
+                if (BaseObject.m_boDeath || BaseObject.m_boGhost || PlayObject == BaseObject)
                 {
                     continue;
                 }
@@ -995,7 +995,7 @@ namespace M2Server
                             result = true;
                         }
                     }
-                    if ((BaseObject.m_nCurrX != nTargetX) || (BaseObject.m_nCurrY != nTargetY))
+                    if (BaseObject.m_nCurrX != nTargetX || BaseObject.m_nCurrY != nTargetY)
                     {
                         PlayObject.SendRefMsg(grobal2.RM_10205, 0, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 4, "");
                     }
@@ -1018,7 +1018,7 @@ namespace M2Server
                 TargetBaseObject = null;
                 return result;
             }
-            if ((TargetBaseObject.m_nAntiMagic > M2Share.RandomNumber.Random(10)) || (Math.Abs(TargetBaseObject.m_nCurrX - nTargetX) > 1) || (Math.Abs(TargetBaseObject.m_nCurrY - nTargetY) > 1))
+            if (TargetBaseObject.m_nAntiMagic > M2Share.RandomNumber.Random(10) || Math.Abs(TargetBaseObject.m_nCurrX - nTargetX) > 1 || Math.Abs(TargetBaseObject.m_nCurrY - nTargetY) > 1)
             {
                 TargetBaseObject = null;
                 return result;
@@ -1029,7 +1029,7 @@ namespace M2Server
             {
                 result = true;
             }
-            if ((PlayObject.m_Abil.Level > TargetBaseObject.m_Abil.Level) && (!TargetBaseObject.m_boStickMode))
+            if (PlayObject.m_Abil.Level > TargetBaseObject.m_Abil.Level && !TargetBaseObject.m_boStickMode)
             {
                 var levelgap = PlayObject.m_Abil.Level - TargetBaseObject.m_Abil.Level;
                 if (M2Share.RandomNumber.Random(20) < 6 + UserMagic.btLevel * 3 + levelgap)
@@ -1145,7 +1145,7 @@ namespace M2Server
                 for (var i = 0; i < BaseObjectList.Count; i++)
                 {
                     var TargeTBaseObject = BaseObjectList[i];
-                    if ((TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL) && ((M2Share.RandomNumber.Random(4) + (BaseObject.m_Abil.Level - 1)) > TargeTBaseObject.m_Abil.Level) && (TargeTBaseObject.m_Master == null))
+                    if (TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL && M2Share.RandomNumber.Random(4) + (BaseObject.m_Abil.Level - 1) > TargeTBaseObject.m_Abil.Level && TargeTBaseObject.m_Master == null)
                     {
                         TargeTBaseObject.OpenHolySeizeMode(nPower * 1000);
                         if (MagicEvent == null)
@@ -1166,7 +1166,7 @@ namespace M2Server
                     }
                 }
                 //BaseObjectList.Free;
-                if ((result > 0) && (MagicEvent != null))
+                if (result > 0 && MagicEvent != null)
                 {
                     var HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY - 2, grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
@@ -1246,13 +1246,13 @@ namespace M2Server
             {
                 if (BaseObject.IsProperTarget(TargeTBaseObject))
                 {
-                    if ((TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10)) && (Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1) && (Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1))
+                    if (TargeTBaseObject.m_nAntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(TargeTBaseObject.m_nCurrX - nTargetX) <= 1 && Math.Abs(TargeTBaseObject.m_nCurrY - nTargetY) <= 1)
                     {
                         BaseObject.SendDelayMsg(BaseObject, grobal2.RM_DELAYMAGIC, (short)(nPower / 3), HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
-                        if ((M2Share.RandomNumber.Random(2) + (BaseObject.m_Abil.Level - 1)) > TargeTBaseObject.m_Abil.Level)
+                        if (M2Share.RandomNumber.Random(2) + (BaseObject.m_Abil.Level - 1) > TargeTBaseObject.m_Abil.Level)
                         {
                             var nLv = BaseObject.m_Abil.Level - TargeTBaseObject.m_Abil.Level;
-                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nMabMabeHitRandRate) < HUtil32._MAX(M2Share.g_Config.nMabMabeHitMinLvLimit, (nLevel * 8) - nLevel + 15 + nLv))
+                            if (M2Share.RandomNumber.Random(M2Share.g_Config.nMabMabeHitRandRate) < HUtil32._MAX(M2Share.g_Config.nMabMabeHitMinLvLimit, nLevel * 8 - nLevel + 15 + nLv))
                             {
                                 if (M2Share.RandomNumber.Random(M2Share.g_Config.nMabMabeHitSucessRate) < nLevel * 2 + 4)
                                 {

@@ -19,7 +19,7 @@
             {
                 SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                 BaseObject = GetPoseCreate();
-                if ((BaseObject != null) && IsProperTarget(BaseObject) && (m_nAntiMagic >= 0))
+                if (BaseObject != null && IsProperTarget(BaseObject) && m_nAntiMagic >= 0)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);
                     if (n10 > 0)
@@ -41,7 +41,7 @@
             }
             if (GetAttackDir(m_TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
+                if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
                     m_dwHitTick = HUtil32.GetTickCount();
                     m_dwTargetFocusTick = HUtil32.GetTickCount();

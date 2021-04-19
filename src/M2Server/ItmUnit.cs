@@ -29,7 +29,7 @@ namespace M2Server
             for (var i = m_ItemNameList.Count - 1; i >= 0; i--)
             {
                 ItemName = m_ItemNameList[i];
-                if ((ItemName.nMakeIndex != nMakeIndex) || (ItemName.nItemIndex != nItemIndex)) continue;
+                if (ItemName.nMakeIndex != nMakeIndex || ItemName.nItemIndex != nItemIndex) continue;
                 result = ItemName.sItemName;
                 break;
             }
@@ -43,7 +43,7 @@ namespace M2Server
             for (var i = m_ItemNameList.Count - 1; i >= 0; i--)
             {
                 ItemName = m_ItemNameList[i];
-                if ((ItemName.nMakeIndex == nMakeIndex) && (ItemName.nItemIndex == nItemIndex))
+                if (ItemName.nMakeIndex == nMakeIndex && ItemName.nItemIndex == nItemIndex)
                 {
                     return result;
                 }
@@ -62,7 +62,7 @@ namespace M2Server
             for (var i = 0; i < m_ItemNameList.Count; i++)
             {
                 var ItemName = m_ItemNameList[i];
-                if ((ItemName.nMakeIndex == nMakeIndex) && (ItemName.nItemIndex == nItemIndex))
+                if (ItemName.nMakeIndex == nMakeIndex && ItemName.nItemIndex == nItemIndex)
                 {
                     ItemName = null;
                     m_ItemNameList.RemoveAt(i);
@@ -91,7 +91,7 @@ namespace M2Server
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "\t" });
                     var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-                    if ((nMakeIndex < 0) || (nItemIndex < 0)) continue;
+                    if (nMakeIndex < 0 || nItemIndex < 0) continue;
                     var ItemName = new TItemName();
                     ItemName.nMakeIndex = nMakeIndex;
                     ItemName.nItemIndex = nItemIndex;
@@ -189,7 +189,7 @@ namespace M2Server
                     StdItem.SC = HUtil32.MakeLong(SC, SC2 + UserItem.btValue[2]);
                     StdItem.AC = HUtil32.MakeLong(AC + UserItem.btValue[3], AC2 + UserItem.btValue[5]);
                     StdItem.MAC = HUtil32.MakeLong(MAC + UserItem.btValue[4], MAC2 + UserItem.btValue[6]);
-                    if ((UserItem.btValue[7] - 1) < 10)
+                    if (UserItem.btValue[7] - 1 < 10)
                     {
                         StdItem.Source = (sbyte)UserItem.btValue[7];
                     }

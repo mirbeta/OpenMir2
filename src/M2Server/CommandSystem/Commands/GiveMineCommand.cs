@@ -25,7 +25,7 @@ namespace M2Servers
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMINEName == "") || ((sMINEName != "") && (sMINEName[0] == '?')) || (nMineCount <= 0))
+            if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)
             {
                 //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandGIVEMINEHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -41,7 +41,7 @@ namespace M2Servers
                 if (M2Share.UserEngine.CopyToUserItemFromName(sMINEName, ref UserItem))
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if ((StdItem != null) && (StdItem.StdMode == 43))
+                    if (StdItem != null && StdItem.StdMode == 43)
                     {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount))
                         {

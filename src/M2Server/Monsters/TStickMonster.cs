@@ -5,9 +5,9 @@ namespace M2Server
     public class TStickMonster: TAnimalObject
     {
         public int n54C = 0;
-        public bool bo550 = false;
-        public int nComeOutValue = 0;
-        public int nAttackRange = 0;
+        private bool bo550 = false;
+        protected int nComeOutValue = 0;
+        protected int nAttackRange = 0;
 
         public TStickMonster() : base()
         {
@@ -33,7 +33,7 @@ namespace M2Server
             }
             if (this.GetAttackDir(this.m_TargetCret, ref btDir))
             {
-                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick =HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick =HUtil32.GetTickCount();
@@ -85,7 +85,7 @@ namespace M2Server
                 {
                     if (!BaseObject.m_boHideMode || this.m_boCoolEye)
                     {
-                        if ((Math.Abs(this.m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue) && (Math.Abs(this.m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue))
+                        if (Math.Abs(this.m_nCurrX - BaseObject.m_nCurrX) < nComeOutValue && Math.Abs(this.m_nCurrY - BaseObject.m_nCurrY) < nComeOutValue)
                         {
                             result = true;
                             break;
@@ -104,9 +104,9 @@ namespace M2Server
         public override void Run()
         {
             bool bo05;
-            if (!this.m_boGhost && !this.m_boDeath && (this.m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (!this.m_boGhost && !this.m_boDeath && this.m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
-                if ((HUtil32.GetTickCount() - this.m_dwWalkTick) > this.m_nWalkSpeed)
+                if (HUtil32.GetTickCount() - this.m_dwWalkTick > this.m_nWalkSpeed)
                 {
                     this.m_dwWalkTick =HUtil32.GetTickCount();
                     if (this.m_boFixedHideMode)
@@ -118,14 +118,14 @@ namespace M2Server
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
+                        if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
                         {
                             this.SearchTarget();
                         }
                         bo05 = false;
                         if (this.m_TargetCret != null)
                         {
-                            if ((Math.Abs(this.m_TargetCret.m_nCurrX - this.m_nCurrX) > nAttackRange) || (Math.Abs(this.m_TargetCret.m_nCurrY - this.m_nCurrY) > nAttackRange))
+                            if (Math.Abs(this.m_TargetCret.m_nCurrX - this.m_nCurrX) > nAttackRange || Math.Abs(this.m_TargetCret.m_nCurrY - this.m_nCurrY) > nAttackRange)
                             {
                                 bo05 = true;
                             }

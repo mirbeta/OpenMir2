@@ -20,7 +20,7 @@ namespace M2Server
             M2Share.g_DenyAccountList.__Lock();
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[0] == '1'))
+                if (sFixDeny != "" && sFixDeny[0] == '1')
                 {
                     //M2Share.g_DenyAccountList.Add(sAccount, ((1) as Object));
                     M2Share.SaveDenyAccountList();

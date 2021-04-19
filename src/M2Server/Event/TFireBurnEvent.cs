@@ -13,7 +13,7 @@ namespace M2Server
         {
             ArrayList BaseObjectList;
             TBaseObject TargeTBaseObject;
-            if ((HUtil32.GetTickCount() - m_dwRunTick) > 3000)
+            if (HUtil32.GetTickCount() - m_dwRunTick > 3000)
             {
                 m_dwRunTick = HUtil32.GetTickCount();
                 BaseObjectList = new ArrayList();
@@ -23,7 +23,7 @@ namespace M2Server
                     for (var i = 0; i < BaseObjectList.Count; i++)
                     {
                         TargeTBaseObject = (TBaseObject)BaseObjectList[i];
-                        if ((TargeTBaseObject != null) && (m_OwnBaseObject != null) && m_OwnBaseObject.IsProperTarget(TargeTBaseObject))
+                        if (TargeTBaseObject != null && m_OwnBaseObject != null && m_OwnBaseObject.IsProperTarget(TargeTBaseObject))
                         {
                             TargeTBaseObject.SendMsg(m_OwnBaseObject, grobal2.RM_MAGSTRUCK_MINE, 0, m_nDamage, 0, 0, "");
                         }

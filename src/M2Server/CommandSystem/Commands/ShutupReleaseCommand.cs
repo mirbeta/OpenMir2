@@ -13,7 +13,7 @@ namespace M2Server
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
 
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShutupReleaseHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);

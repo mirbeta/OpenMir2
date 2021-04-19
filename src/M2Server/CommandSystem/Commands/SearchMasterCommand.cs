@@ -18,7 +18,7 @@ namespace M2Server
             }
             var sParam = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject Human;
-            if ((sParam != "") && (sParam[0] == '?'))
+            if (sParam != "" && sParam[0] == '?')
             {
                 PlayObject.SysMsg("此命令用于查询师徒当前所在位置。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

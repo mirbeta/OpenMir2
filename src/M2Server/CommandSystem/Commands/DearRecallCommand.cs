@@ -17,7 +17,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam != "") && (sParam[0] == '?'))
+            if (sParam != "" && sParam[0] == '?')
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " (夫妻传送，将对方传送到自己身边，对方必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;

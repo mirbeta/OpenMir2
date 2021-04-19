@@ -45,7 +45,7 @@ namespace M2Server
         public override void Run()
         {
             TBaseObject BaseObject;
-            if ((!m_boGhost) && (!m_boDeath) && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0) && ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed))
+            if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
             {
                 if (m_boStoneMode)
                 {
@@ -60,7 +60,7 @@ namespace M2Server
                         {
                             if (!BaseObject.m_boHideMode || m_boCoolEye)
                             {
-                                if ((Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 2) && (Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 2))
+                                if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 2 && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 2)
                                 {
                                     MeltStoneAll();
                                     break;
@@ -71,7 +71,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000) || (((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000) && (m_TargetCret == null)))
+                    if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                     {
                         m_dwSearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();

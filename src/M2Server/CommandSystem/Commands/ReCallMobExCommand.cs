@@ -23,7 +23,7 @@ namespace M2Server
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMonName == "") || ((sMonName != "") && (sMonName[0] == '?')))
+            if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
                 //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandRecallMobExHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

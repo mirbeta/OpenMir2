@@ -19,7 +19,7 @@ namespace M2Server
             var sDenMap = @Params.Length > 1 ? @Params[1] : "";
             ArrayList HumanList;
             TPlayObject MoveHuman;
-            if ((sDenMap == "") || (sSrcMap == "") || ((sSrcMap != "") && (sSrcMap[0] == '?')))
+            if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMapMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

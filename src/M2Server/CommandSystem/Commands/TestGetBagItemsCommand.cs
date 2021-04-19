@@ -11,7 +11,7 @@ namespace M2Server
         public void TestGetBagItems(string[] @Params, TPlayObject PlayObject)
         {
             var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandTestGetBagItemsHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);

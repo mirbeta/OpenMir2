@@ -142,7 +142,7 @@ namespace M2Server
             var wWeek = DateTime.Now.DayOfWeek;
             if (nWeek >= 1 && nWeek<= 7 && nHour >= 0 && nHour<= 24 && nMin >= 0 && nMin<= 60)
             {
-                if (((int)wWeek == nWeek) && (wHour == nHour))
+                if ((int)wWeek == nWeek && wHour == nHour)
                 {
                     if (wMin == nMin)
                     {
@@ -199,7 +199,7 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new string[] { " ", "/", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new string[] { " ", "/", "\t" });

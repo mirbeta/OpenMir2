@@ -15,7 +15,7 @@ namespace M2Server
         {
             int dwValue;
             TPlayObject m_PlayObject;
-            if (PlayObject.m_boRecallSuite || (PlayObject.m_btPermission >= 6))
+            if (PlayObject.m_boRecallSuite || PlayObject.m_btPermission >= 6)
             {
                 dwValue = (HUtil32.GetTickCount() - PlayObject.m_dwGroupRcallTick) / 1000;
                 PlayObject.m_dwGroupRcallTick = PlayObject.m_dwGroupRcallTick + dwValue * 1000;

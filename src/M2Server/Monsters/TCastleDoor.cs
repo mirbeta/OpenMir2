@@ -69,7 +69,7 @@
                 return;
             }
             m_btDirection = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0));
-            if ((m_btDirection - 3) >= 0)
+            if (m_btDirection - 3 >= 0)
             {
                 m_btDirection = 0;
             }
@@ -90,7 +90,7 @@
         public override void Run()
         {
             int n08;
-            if (m_boDeath && (m_Castle != null))
+            if (m_boDeath && m_Castle != null)
             {
                 m_dwDeathTick = HUtil32.GetTickCount();
             }
@@ -101,7 +101,7 @@
             if (!m_boOpened)
             {
                 n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
-                if ((m_btDirection != n08) && (n08 < 3))
+                if (m_btDirection != n08 && n08 < 3)
                 {
                     m_btDirection = (byte)n08;
                     SendRefMsg(grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
@@ -113,7 +113,7 @@
         public void RefStatus()
         {
             var n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
-            if ((n08 - 3) >= 0)
+            if (n08 - 3 >= 0)
             {
                 n08 = 0;
             }
