@@ -1,0 +1,8 @@
+D:\Legend\src\M2Server\obj\Debug\ResolveAssemblyReference.cache
+D:\Legend\src\M2Server\obj\Debug\M2Servers.exe
+D:\Legend\src\M2Server\obj\Debug\M2Servers.pdb
+D:\MirServer\Mir200\M2Servers.exe
+D:\MirServer\Mir200\M2Servers.pdb
+D:\GameOfMir\src\M2Server\obj\Debug\ResolveAssemblyReference.cache
+D:\GameOfMir\src\M2Server\obj\Debug\M2Servers.exe
+D:\GameOfMir\src\M2Server\obj\Debug\M2Servers.pdb

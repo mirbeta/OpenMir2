@@ -1,0 +1,251 @@
+﻿using System.Collections;
+
+namespace M2Server
+{
+    public class TGuildOfficial: TNormNpc
+    {
+        public override void Click(TPlayObject PlayObject)
+        {
+            base.Click(PlayObject);
+        }
+
+        public override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        {
+            int II;
+            string sText;
+            ArrayList List;
+            base.GetVariableText(PlayObject, ref sMsg, sVariable);
+            if (sVariable == "$REQUESTCASTLELIST")
+            {
+                sText = "";
+                List = new ArrayList();
+                M2Share.CastleManager.GetCastleNameList(List);
+                for (var i = 0; i < List.Count; i ++ )
+                {
+                    II = i + 1;
+                    if (II / 2 * 2 == II)
+                    {
+                    }
+                    else
+                    {
+                    }
+                    //sText = sText + format("<%s/@requestcastlewarnow%d> %s", new string[] {List[I], I, sStr});
+                }
+                sText = sText + "\\ \\";
+                //List.Free;
+                sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);
+            }
+        }
+
+        public override void Run()
+        {
+            if (M2Share.RandomNumber.Random(40) == 0)
+            {
+                this.TurnTo((byte)M2Share.RandomNumber.Random(8));
+            }
+            else
+            {
+                if (M2Share.RandomNumber.Random(30) == 0)
+                {
+                    this.SendRefMsg(grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                }
+            }
+            base.Run();
+        }
+
+        public override void UserSelect(TPlayObject PlayObject, string sData)
+        {
+            var sMsg = string.Empty;
+            var sLabel = string.Empty;
+            bool boCanJmp;
+            const string sExceptionMsg = "[Exception] TGuildOfficial::UserSelect... ";
+            base.UserSelect(PlayObject, sData);
+            try
+            {
+                if ((sData != "") && (sData[0] == '@'))
+                {
+                    sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
+                    boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                    this.GotoLable(PlayObject, sLabel, !boCanJmp);
+                    if (!boCanJmp)
+                    {
+                        return;
+                    }
+                    if (sLabel.ToLower().CompareTo(M2Share.sBUILDGUILDNOW.ToLower()) == 0)
+                    {
+                        ReQuestBuildGuild(PlayObject, sMsg);
+                    }
+                    else if (sLabel.ToLower().CompareTo(M2Share.sSCL_GUILDWAR.ToLower()) == 0)
+                    {
+                        ReQuestGuildWar(PlayObject, sMsg);
+                    }
+                    else if (sLabel.ToLower().CompareTo(M2Share.sDONATE.ToLower()) == 0)
+                    {
+                        DoNate(PlayObject);
+                    }
+                    else if (HUtil32.CompareLStr(sLabel, M2Share.sREQUESTCASTLEWAR, M2Share.sREQUESTCASTLEWAR.Length))
+                    {
+                        ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length + 1 - 1, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
+                    }
+                    else if (sLabel.ToLower().CompareTo(M2Share.sEXIT.ToLower()) == 0)
+                    {
+                        PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
+                    }
+                    else if (sLabel.ToLower().CompareTo(M2Share.sBACK.ToLower()) == 0)
+                    {
+                        if (PlayObject.m_sScriptGoBackLable == "")
+                        {
+                            PlayObject.m_sScriptGoBackLable = M2Share.sMAIN;
+                        }
+                        this.GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+            }
+        }
+
+        private int ReQuestBuildGuild(TPlayObject PlayObject, string sGuildName)
+        {
+            var result = 0;
+            sGuildName = sGuildName.Trim();
+            TUserItem UserItem = null;
+            if (sGuildName == "")
+            {
+                result =  -4;
+            }
+            if (PlayObject.m_MyGuild == null)
+            {
+                if (PlayObject.m_nGold >= M2Share.g_Config.nBuildGuildPrice)
+                {
+                    UserItem = PlayObject.CheckItems(M2Share.g_Config.sWomaHorn);
+                    if (UserItem == null)
+                    {
+                        result =  -3;// '你没有准备好需要的全部物品。'
+                    }
+                }
+                else
+                {
+                    result =  -2;// '缺少创建费用。'
+                }
+            }
+            else
+            {
+                result =  -1;// '您已经加入其它行会。'
+            }
+            if (result == 0)
+            {
+                if (M2Share.GuildManager.AddGuild(sGuildName, PlayObject.m_sCharName))
+                {
+                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + PlayObject.m_sCharName);
+                    PlayObject.SendDelItems(UserItem);
+                    PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.g_Config.sWomaHorn);
+                    PlayObject.DecGold(M2Share.g_Config.nBuildGuildPrice);
+                    PlayObject.GoldChanged();
+                    PlayObject.m_MyGuild = M2Share.GuildManager.MemberOfGuild(PlayObject.m_sCharName);
+                    if (PlayObject.m_MyGuild != null)
+                    {
+                        PlayObject.m_sGuildRankName = PlayObject.m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
+                        this.RefShowName();
+                    }
+                }
+                else
+                {
+                    result =  -4;
+                }
+            }
+            if (result >= 0)
+            {
+                PlayObject.SendMsg(this, grobal2.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+            }
+            else
+            {
+                PlayObject.SendMsg(this, grobal2.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
+            }
+            return result;
+        }
+
+        private int ReQuestGuildWar(TPlayObject PlayObject, string sGuildName)
+        {
+            int result;
+            if (M2Share.GuildManager.FindGuild(sGuildName) != null)
+            {
+                if (PlayObject.m_nGold >= M2Share.g_Config.nGuildWarPrice)
+                {
+                    PlayObject.DecGold(M2Share.g_Config.nGuildWarPrice);
+                    PlayObject.GoldChanged();
+                    PlayObject.ReQuestGuildWar(sGuildName);
+                }
+                else
+                {
+                    PlayObject.SysMsg("你没有足够的金币！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                }
+            }
+            else
+            {
+                PlayObject.SysMsg("行会 " + sGuildName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            }
+            result = 1;
+            return result;
+        }
+
+        private void DoNate(TPlayObject PlayObject)
+        {
+            PlayObject.SendMsg(this, grobal2.RM_DONATE_OK, 0, 0, 0, 0, "");
+        }
+
+        private void ReQuestCastleWar(TPlayObject PlayObject, string sIndex)
+        {
+            var nIndex = HUtil32.Str_ToInt(sIndex, -1);
+            if (nIndex < 0)
+            {
+                nIndex = 0;
+            }
+            var Castle = M2Share.CastleManager.GetCastle(nIndex);
+            if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
+            {
+                var UserItem = PlayObject.CheckItems(M2Share.g_Config.sZumaPiece);
+                if (UserItem != null)
+                {
+                    if (Castle.AddAttackerInfo(PlayObject.m_MyGuild))
+                    {
+                        PlayObject.SendDelItems(UserItem);
+                        PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.g_Config.sZumaPiece);
+                        this.GotoLable(PlayObject, "~@request_ok", false);
+                    }
+                    else
+                    {
+                        PlayObject.SysMsg("你现在无法请求攻城！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    }
+                }
+                else
+                {
+                    PlayObject.SysMsg("你没有" + M2Share.g_Config.sZumaPiece + "！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                }
+            }
+            else
+            {
+                PlayObject.SysMsg("你的请求被取消！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            }
+        }
+
+        public TGuildOfficial() : base()
+        {
+            this.m_btRaceImg = grobal2.RCC_MERCHANT;
+            this.m_wAppr = 8;
+        }
+
+        ~TGuildOfficial()
+        {
+
+        }
+
+        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        {
+            base.SendCustemMsg(PlayObject, sMsg);
+        }
+    }
+}
+

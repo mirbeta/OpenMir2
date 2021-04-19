@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2Server", "src\M2Server\M2Server.csproj", "{EE6E8C87-7519-4F1F-AC4D-39E9B3038083}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mSystemModule", "src\mSystemModule\mSystemModule.csproj", "{C6D64CD1-692C-4DF6-A901-E35ED82E6E1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE6E8C87-7519-4F1F-AC4D-39E9B3038083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE6E8C87-7519-4F1F-AC4D-39E9B3038083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE6E8C87-7519-4F1F-AC4D-39E9B3038083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE6E8C87-7519-4F1F-AC4D-39E9B3038083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D64CD1-692C-4DF6-A901-E35ED82E6E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D64CD1-692C-4DF6-A901-E35ED82E6E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D64CD1-692C-4DF6-A901-E35ED82E6E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D64CD1-692C-4DF6-A901-E35ED82E6E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {425FF5BB-3CA9-4756-A222-E1BBF4218F66}
+	EndGlobalSection
+EndGlobal
