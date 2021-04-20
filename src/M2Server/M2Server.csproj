@@ -293,7 +293,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Map\Maps.cs" />
-    <Compile Include="Packages\Package.cs" />
+    <Compile Include="Package\Package.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -414,33 +414,33 @@
     <Compile Include="Core\TPlayCloneObject.cs" />
     <Compile Include="Core\TPlayObject.cs" />
     <Compile Include="ServerApp.cs" />
-    <Compile Include="Packages\TDefaultMessage.cs" />
-    <Compile Include="Packages\TOStdItem.cs" />
-    <Compile Include="Packages\TStdItem.cs" />
-    <Compile Include="Packages\TClientItem.cs" />
-    <Compile Include="Packages\TOClientItem.cs" />
-    <Compile Include="Packages\TUserStateInfo.cs" />
-    <Compile Include="Packages\TMagic.cs" />
-    <Compile Include="Packages\TOMagic.cs" />
-    <Compile Include="Packages\TClientMagic.cs" />
-    <Compile Include="Packages\TNakedAbility.cs" />
-    <Compile Include="Packages\TOAbility.cs" />
-    <Compile Include="Packages\TShortMessage.cs" />
-    <Compile Include="Packages\TMessageBodyW.cs" />
-    <Compile Include="Packages\TMessageBodyWL.cs" />
-    <Compile Include="Packages\TAbility.cs" />
-    <Compile Include="Packages\TRecordHeader.cs" />
-    <Compile Include="Packages\TUserItem.cs" />
-    <Compile Include="Packages\TCharDesc.cs" />
-    <Compile Include="Packages\TUserMagic.cs" />
-    <Compile Include="Packages\THumInfoData.cs" />
-    <Compile Include="Packages\THumDataInfo.cs" />
-    <Compile Include="Packages\TClientConf.cs" />
-    <Compile Include="Packages\TLoadHuman.cs" />
+    <Compile Include="Package\TDefaultMessage.cs" />
+    <Compile Include="Package\TOStdItem.cs" />
+    <Compile Include="Package\TStdItem.cs" />
+    <Compile Include="Package\TClientItem.cs" />
+    <Compile Include="Package\TOClientItem.cs" />
+    <Compile Include="Package\TUserStateInfo.cs" />
+    <Compile Include="Package\TMagic.cs" />
+    <Compile Include="Package\TOMagic.cs" />
+    <Compile Include="Package\TClientMagic.cs" />
+    <Compile Include="Package\TNakedAbility.cs" />
+    <Compile Include="Package\TOAbility.cs" />
+    <Compile Include="Package\TShortMessage.cs" />
+    <Compile Include="Package\TMessageBodyW.cs" />
+    <Compile Include="Package\TMessageBodyWL.cs" />
+    <Compile Include="Package\TAbility.cs" />
+    <Compile Include="Package\TRecordHeader.cs" />
+    <Compile Include="Package\TUserItem.cs" />
+    <Compile Include="Package\TCharDesc.cs" />
+    <Compile Include="Package\TUserMagic.cs" />
+    <Compile Include="Package\THumInfoData.cs" />
+    <Compile Include="Package\THumDataInfo.cs" />
+    <Compile Include="Package\TClientConf.cs" />
+    <Compile Include="Package\TLoadHuman.cs" />
     <Compile Include="UsrEngn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Packages\TMagicRcd.cs" />
+    <Compile Include="Package\TMagicRcd.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mSystemModule\mSystemModule.csproj">
