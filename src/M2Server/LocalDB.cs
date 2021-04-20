@@ -869,7 +869,7 @@ namespace M2Server
                     {
                         Monster = new TMonInfo
                         {
-                            ItemList = new ArrayList(),
+                            ItemList = new List<TMonItem>(),
                             sName = dr.GetString("NAME").Trim(),
                             btRace = dr.GetByte("Race"),
                             btRaceImg = dr.GetByte("RaceImg"),
@@ -924,7 +924,7 @@ namespace M2Server
             return result;
         }
 
-        public int LoadMonitems(string MonName, ref ArrayList ItemList)
+        public int LoadMonitems(string MonName, ref IList<TMonItem> ItemList)
         {
             StringList LoadList;
             var s30 = string.Empty;
@@ -966,7 +966,7 @@ namespace M2Server
                         {
                             if (ItemList == null)
                             {
-                                ItemList = new ArrayList();
+                                ItemList = new List<TMonItem>();
                             }
                             var MonItem = new TMonItem
                             {

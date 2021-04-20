@@ -1024,7 +1024,7 @@ namespace M2Server
                         nNY = (short)(m_nCurrY - 1);
                         break;
                 }
-                if ((nNX >= 0) && ((m_PEnvir.wWidth - 1) >= nNX) && (nNY >= 0) && ((m_PEnvir.wHeight - 1) >= nNY))
+                if (nNX >= 0 && m_PEnvir.wWidth - 1 >= nNX && nNY >= 0 && m_PEnvir.wHeight - 1 >= nNY)
                 {
                     bo29 = true;
                     if (bo2BA && !m_PEnvir.CanSafeWalk(nNX, nNY))
@@ -1034,7 +1034,7 @@ namespace M2Server
                     if (m_Master != null)
                     {
                         m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, 1, ref n20, ref n24);
-                        if ((nNX == n20) && (nNY == n24))
+                        if (nNX == n20 && nNY == n24)
                         {
                             bo29 = false;
                         }
@@ -1048,7 +1048,7 @@ namespace M2Server
                         }
                     }
                 }
-                if ((m_nCurrX != nOX) || (m_nCurrY != nOY))
+                if (m_nCurrX != nOX || m_nCurrY != nOY)
                 {
                     if (Walk(grobal2.RM_WALK))
                     {

@@ -51,7 +51,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumName == "") || (nPoint <= 0))
+            if (sHumName == "" || nPoint <= 0)
             {
                 SysMsg("命令格式: @" + sCmd + " 人物名称  金币数量", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -59,7 +59,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (PlayObject != null)
             {
-                if ((PlayObject.m_nGameGold + nPoint) < 2000000)
+                if (PlayObject.m_nGameGold + nPoint < 2000000)
                 {
                     PlayObject.m_nGameGold += nPoint;
                 }
@@ -86,7 +86,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumName == "") || (nPoint <= 0))
+            if (sHumName == "" || nPoint <= 0)
             {
                 return;
             }
@@ -127,7 +127,7 @@ namespace M2Server
             {
                 Ctr = sCtr[1];
             }
-            if ((sHumanName == "") || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || (nGold < 0) || (nGold > 200000000) || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nGold < 0 || nGold > 200000000 || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandGameGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -175,7 +175,7 @@ namespace M2Server
             {
                 Ctr = sCtr[1];
             }
-            if ((sHumanName == "") || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || (nPoint < 0) || (nPoint > 100000000) || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000 || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandGamePointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -224,7 +224,7 @@ namespace M2Server
             {
                 Ctr = sCtr[1];
             }
-            if ((sHumanName == "") || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || (nPoint < 0) || (nPoint > byte.MaxValue) || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > byte.MaxValue || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandCreditPointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -270,7 +270,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumName == "") || (nCount <= 0))
+            if (sHumName == "" || nCount <= 0)
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称  金币数量", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -278,7 +278,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (PlayObject != null)
             {
-                if ((PlayObject.m_nGold + nCount) < PlayObject.m_nGoldMax)
+                if (PlayObject.m_nGold + nCount < PlayObject.m_nGoldMax)
                 {
                     PlayObject.m_nGold += nCount;
                 }
@@ -322,7 +322,7 @@ namespace M2Server
                 SysMsg("这个命令只能使用在主服务器上", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sGuildName == "") || (sGuildChief == ""))
+            if (sGuildName == "" || sGuildChief == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 行会名称 掌门人名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -482,7 +482,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -501,7 +501,7 @@ namespace M2Server
 
         public void CmdChangeAttackMode(int nMode, string sParam1, string sParam2, string sParam3, string sParam4, string sParam5, string sParam6, string sParam7)
         {
-            if ((nMode >= M2Share.HAM_ALL) && (nMode <= M2Share.HAM_PKATTACK))
+            if (nMode >= M2Share.HAM_ALL && nMode <= M2Share.HAM_PKATTACK)
             {
                 m_btAttatckMode = (byte)nMode;
             }
@@ -516,7 +516,7 @@ namespace M2Server
                     m_btAttatckMode = M2Share.HAM_ALL;
                 }
             }
-            if ((nMode >= 0) && (nMode <= 4))
+            if (nMode >= 0 && nMode <= 4)
             {
                 m_btAttatckMode = (byte)nMode;
             }
@@ -573,7 +573,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sDearName == ""))
+            if (sHumanName == "" || sDearName == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 配偶名称(如果为 无 则清除)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -611,15 +611,15 @@ namespace M2Server
                 return;
             }
             nSex = -1;
-            if ((sSex == "Man") || (sSex == "Male") || (sSex == "0"))
+            if (sSex == "Man" || sSex == "Male" || sSex == "0")
             {
                 nSex = 0;
             }
-            if ((sSex == "Woman") || (sSex == "Female") || (sSex == "1"))
+            if (sSex == "Woman" || sSex == "Female" || sSex == "1")
             {
                 nSex = 1;
             }
-            if ((sHumanName == "") || (nSex == -1))
+            if (sHumanName == "" || nSex == -1)
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 性别(男、女)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -652,14 +652,14 @@ namespace M2Server
             {
                 return;
             }
-            if ((sMakeIndex == "") || (sItemIndex == "") || (sItemName == ""))
+            if (sMakeIndex == "" || sItemIndex == "" || sItemName == "")
             {
                 SysMsg("命令格式: @" + sCmd + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
             nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-            if ((nMakeIndex <= 0) || (nItemIndex < 0))
+            if (nMakeIndex <= 0 || nItemIndex < 0)
             {
                 SysMsg("命令格式: @" + sCmd + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -682,7 +682,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sJobName == ""))
+            if (sHumanName == "" || sJobName == "")
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandChangeJobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -724,7 +724,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -749,7 +749,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sMasterName == ""))
+            if (sHumanName == "" || sMasterName == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 师徒名称(如果为 无 则清除)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -792,7 +792,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -824,7 +824,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sCastleName == "") || (sGuildName == ""))
+            if (sCastleName == "" || sGuildName == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 城堡名称 行会名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -877,7 +877,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -902,7 +902,7 @@ namespace M2Server
                 return;
             }
             nCount = HUtil32.Str_ToInt(sUserCount, -1);
-            if ((sUserCount == "") || (nCount < 1) || ((sUserCount != "") && (sUserCount[1] == '?')))
+            if (sUserCount == "" || nCount < 1 || sUserCount != "" && sUserCount[1] == '?')
             {
                 SysMsg("设置服务器最高上线人数。", TMsgColor.c_Red, TMsgType.t_Hint);
                 SysMsg("命令格式: @" + sCmd + " 人数", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -921,7 +921,7 @@ namespace M2Server
                 return;
             }
             nFastStep = HUtil32.Str_ToInt(sFastStep, -1);
-            if ((sFastStep == "") || (nFastStep < 1) || ((sFastStep != "") && (sFastStep[1] == '?')))
+            if (sFastStep == "" || nFastStep < 1 || sFastStep != "" && sFastStep[1] == '?')
             {
                 SysMsg("设置怪物行动速度。", TMsgColor.c_Red, TMsgType.t_Hint);
                 SysMsg("命令格式: @" + sCmd + " 速度", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -943,7 +943,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -981,7 +981,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg("清除玩家的仓库密码！！！", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -1015,7 +1015,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMapName == "") || (sMonName == "") || (sItems == ""))
+            if (sMapName == "" || sMonName == "" || sItems == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1041,13 +1041,13 @@ namespace M2Server
             for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)
             {
                 Envir = M2Share.g_MapManager.Maps[i];
-                if ((Envir != null) && (boKillAllMap || (Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0)))
+                if (Envir != null && (boKillAllMap || Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0))
                 {
                     M2Share.UserEngine.GetMapMonster(Envir, MonList);
                     for (var j = 0; j < MonList.Count; j++)
                     {
                         BaseObject = MonList[j] as TBaseObject;
-                        if (boKillAll || (sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0))
+                        if (boKillAll || sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0)
                         {
                             BaseObject.m_boNoItem = boNotItem;
                             BaseObject.m_WAbil.HP = 0;
@@ -1102,7 +1102,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sGuildName == "") || ((sGuildName != "") && (sGuildName[1] == '?')))
+            if (sGuildName == "" || sGuildName != "" && sGuildName[1] == '?')
             {
                 SysMsg("查看行会战的得分数。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -1139,7 +1139,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("开始行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -1216,7 +1216,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("结束行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -1268,7 +1268,7 @@ namespace M2Server
 
         public void CmdAllowGroupReCall(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("此命令用于允许或禁止编组传送功能。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1294,7 +1294,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sGuildName == "") || ((sGuildName != "") && (sGuildName[1] == '?')))
+            if (sGuildName == "" || sGuildName != "" && sGuildName[1] == '?')
             {
                 SysMsg("查看行会争霸赛结果。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -1323,7 +1323,7 @@ namespace M2Server
 
         public void CmdDearRecall(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("命令格式: @" + sCmd + " (夫妻传送，将对方传送到自己身边，对方必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
@@ -1373,7 +1373,7 @@ namespace M2Server
         {
             int I;
             TPlayObject MasterHuman;
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("命令格式: @" + sCmd + " (师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
@@ -1450,7 +1450,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 点数(为空则查看)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1459,7 +1459,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                if ((nLevel >= 0) && (nLevel <= 255))
+                if (nLevel >= 0 && nLevel <= 255)
                 {
                     PlayObject.m_btReLevel = (byte)nLevel;
                     PlayObject.RefShowName();
@@ -1510,7 +1510,7 @@ namespace M2Server
 
         public void CmdSearchDear(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("此命令用于查询配偶当前所在位置。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1559,7 +1559,7 @@ namespace M2Server
         {
             int I;
             TPlayObject Human;
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("此命令用于查询师徒当前所在位置。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1610,7 +1610,7 @@ namespace M2Server
                 return;
             }
             nPerission = HUtil32.Str_ToInt(sPermission, 0);
-            if ((sHumanName == "") || !(nPerission >= 0 && nPerission <= 10))
+            if (sHumanName == "" || !(nPerission >= 0 && nPerission <= 10))
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 权限等级(0 - 10)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1640,7 +1640,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandShowHumanFlagHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -1675,7 +1675,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandShowHumanUnitHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -1710,7 +1710,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandShowHumanUnitHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -1743,7 +1743,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -1784,7 +1784,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sMapName == "") || (sMapMode == ""))
+            if (sMapName == "" || sMapMode == "")
             {
                 SysMsg("命令格式: @" + sCmd + " 地图号 模式", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -1947,7 +1947,7 @@ namespace M2Server
             }
             else if (sMapMode.ToLower().CompareTo("DECHP".ToLower()) == 0)
             {
-                if ((sParam1 != "") && (sParam2 != ""))
+                if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boDECHP = true;
                     Envir.Flag.nDECHPTIME = HUtil32.Str_ToInt(sParam1, -1);
@@ -1960,7 +1960,7 @@ namespace M2Server
             }
             else if (sMapMode.ToLower().CompareTo("DECGAMEGOLD".ToLower()) == 0)
             {
-                if ((sParam1 != "") && (sParam2 != ""))
+                if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boDECGAMEGOLD = true;
                     Envir.Flag.nDECGAMEGOLDTIME = HUtil32.Str_ToInt(sParam1, -1);
@@ -1973,7 +1973,7 @@ namespace M2Server
             }
             else if (sMapMode.ToLower().CompareTo("INCGAMEGOLD".ToLower()) == 0)
             {
-                if ((sParam1 != "") && (sParam2 != ""))
+                if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boINCGAMEGOLD = true;
                     Envir.Flag.nINCGAMEGOLDTIME = HUtil32.Str_ToInt(sParam1, -1);
@@ -1986,7 +1986,7 @@ namespace M2Server
             }
             else if (sMapMode.ToLower().CompareTo("INCGAMEPOINT".ToLower()) == 0)
             {
-                if ((sParam1 != "") && (sParam2 != ""))
+                if (sParam1 != "" && sParam2 != "")
                 {
                     Envir.Flag.boINCGAMEPOINT = true;
                     Envir.Flag.nINCGAMEPOINTTIME = HUtil32.Str_ToInt(sParam1, -1);
@@ -2201,7 +2201,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sItemName == ""))
+            if (sHumanName == "" || sItemName == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 物品名称 数量)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -2218,7 +2218,7 @@ namespace M2Server
             {
                 UserItem = PlayObject.m_ItemList[I];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if ((StdItem != null) && (sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0))
+                if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
                 {
                     PlayObject.SendDelItems(UserItem);
 
@@ -2242,7 +2242,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumName == "") || (nCount <= 0))
+            if (sHumName == "" || nCount <= 0)
             {
                 return;
             }
@@ -2318,7 +2318,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -2366,7 +2366,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (sSkillName == ""))
+            if (sHumanName == "" || sSkillName == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 技能名称)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -2428,7 +2428,7 @@ namespace M2Server
             }
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[1] == '1'))
+                if (sFixDeny != "" && sFixDeny[1] == '1')
                 {
                     //M2Share.g_DenyAccountList.Add(sAccount, ((1) as Object));
                     M2Share.SaveDenyAccountList();
@@ -2459,7 +2459,7 @@ namespace M2Server
             }
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[1] == '1'))
+                if (sFixDeny != "" && sFixDeny[1] == '1')
                 {
                     //M2Share.g_DenyChrNameList.Add(sCharName, ((1) as Object));
                     M2Share.SaveDenyChrNameList();
@@ -2490,7 +2490,7 @@ namespace M2Server
             }
             try
             {
-                if ((sFixDeny != "") && (sFixDeny[1] == '1'))
+                if (sFixDeny != "" && sFixDeny[1] == '1')
                 {
                     //M2Share.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
                     M2Share.SaveDenyIPAddrList();
@@ -2513,7 +2513,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("启用/禁止文字过滤功能。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -2812,7 +2812,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((nInt == 0) || (nTime == 0) || (nN == 0))
+            if (nInt == 0 || nTime == 0 || nN == 0)
             {
                 SysMsg("命令格式: @" + M2Share.g_GameCommand.FIREBURN.sCmd + " nInt nTime nN", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -2871,7 +2871,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName != "") && (sHumanName[1] == '?'))
+            if (sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandFreePKHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -2895,7 +2895,7 @@ namespace M2Server
         {
             short dwValue;
             TPlayObject PlayObject;
-            if (m_boRecallSuite || (m_btPermission >= 6))
+            if (m_boRecallSuite || m_btPermission >= 6)
             {
                 if (!m_PEnvir.Flag.boNORECALL)
                 {
@@ -2965,12 +2965,12 @@ namespace M2Server
             int nRecallCount;
             int nNoRecallCount;
             TUserCastle Castle;
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("命令功能: 行会传送，行会掌门人可以将整个行会成员全部集中。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (!m_boGuildMove && (m_btPermission < 6))
+            if (!m_boGuildMove && m_btPermission < 6)
             {
                 SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -2986,7 +2986,7 @@ namespace M2Server
                 return;
             }
             Castle = M2Share.CastleManager.InCastleWarArea(this);
-            if ((Castle != null) && Castle.m_boUnderWar)
+            if (Castle != null && Castle.m_boUnderWar)
             {
                 SysMsg("攻城区域不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3067,7 +3067,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || (nHair < 0))
+            if (sHumanName == "" || nHair < 0)
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 类型值", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3095,7 +3095,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandInfoHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3119,7 +3119,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandHumanLocalHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3144,7 +3144,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sHumanName == "") || (nHungerPoint < 0))
+            if (sHumanName == "" || nHungerPoint < 0)
             {
                 SysMsg("命令格式: @" + sCmd + " 人物名称 能量值", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3172,7 +3172,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName != "") && (sHumanName[1] == '?'))
+            if (sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandIncPkPointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3207,7 +3207,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumName == "") || ((sHumName != "") && (sHumName[1] == '?')))
+            if (sHumName == "" || sHumName != "" && sHumName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandKickHumanHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3291,7 +3291,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 == "") || ((sParam1 != "") && (sParam1[1] == '?')))
+            if (sParam1 == "" || sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3309,7 +3309,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandLuckPointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3338,7 +3338,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMapName == "") || ((sMapName != "") && (sMapName[1] == '?')))
+            if (sMapName == "" || sMapName != "" && sMapName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3352,7 +3352,7 @@ namespace M2Server
                 SysMsg(format(M2Share.g_sTheMapNotFound, sMapName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((m_btPermission >= Cmd.nPerMissionMax) || M2Share.CanMoveMap(sMapName))
+            if (m_btPermission >= Cmd.nPerMissionMax || M2Share.CanMoveMap(sMapName))
             {
                 SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 MapRandomMove(sMapName, 0);
@@ -3377,13 +3377,13 @@ namespace M2Server
                     SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-                if ((sMapName == "") || (sX == "") || (sY == "") || ((sMapName != "") && (sMapName[1] == '?')))
+                if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[1] == '?')
                 {
 
                     SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandPositionMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-                if ((m_btPermission >= Cmd.nPerMissionMax) || M2Share.CanMoveMap(sMapName))
+                if (m_btPermission >= Cmd.nPerMissionMax || M2Share.CanMoveMap(sMapName))
                 {
                     Envir = M2Share.g_MapManager.FindMap(sMapName);
                     if (Envir != null)
@@ -3426,7 +3426,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sDenMap == "") || (sSrcMap == "") || ((sSrcMap != "") && (sSrcMap[1] == '?')))
+            if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandMapMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3458,7 +3458,7 @@ namespace M2Server
 
         public void CmdMemberFunction(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("打开会员功能窗口.", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3471,7 +3471,7 @@ namespace M2Server
 
         public void CmdMemberFunctionEx(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("打开会员功能窗口.", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3492,7 +3492,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sX == "") || (sY == ""))
+            if (sX == "" || sY == "")
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3518,7 +3518,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMonName == "") || ((sMonName != "") && (sMonName[1] == '?')))
+            if (sMonName == "" || sMonName != "" && sMonName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandMobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3570,7 +3570,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMapName == "") || ((sMapName != "") && (sMapName[1] == '?')))
+            if (sMapName == "" || sMapName != "" && sMapName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandMobCountHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3594,7 +3594,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMapName == "") || ((sMapName != "") && (sMapName[1] == '?')))
+            if (sMapName == "" || sMapName != "" && sMapName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandHumanCountHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3626,7 +3626,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMap == "") || ((sMap != "") && (sMap[1] == '?')))
+            if (sMap == "" || sMap != "" && sMap[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandMobFireBurnHelpMsg, Cmd.sCmd, sMap, sX, sY, sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3641,7 +3641,7 @@ namespace M2Server
             {
                 nPoint = 1;
             }
-            if ((sMap == "") || (nX < 0) || (nY < 0) || (nType < 0) || (nTime < 0) || (nPoint < 0))
+            if (sMap == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
 
                 SysMsg(format(M2Share.g_sGameCommandMobFireBurnHelpMsg, Cmd.sCmd, sMap, sX, sY, sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3670,7 +3670,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((Param != "") && (Param[1] == '?'))
+            if (Param != "" && Param[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -3698,7 +3698,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 == "") || (sParam2 == "") || ((sParam1 != "") && (sParam1[1] == '?')))
+            if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandMobNpcHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3746,12 +3746,12 @@ namespace M2Server
             nX = (short)HUtil32.Str_ToInt(sX, 0);
             nY = (short)HUtil32.Str_ToInt(sY, 0);
             MEnvir = M2Share.g_MapManager.FindMap(M2Share.g_sMissionMap);
-            if ((nX <= 0) || (nY <= 0) || (sMonName == "") || (nCount <= 0))
+            if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
             {
                 SysMsg("命令格式: @" + Cmd.sCmd + " X  Y 怪物名称 怪物数量", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (!M2Share.g_boMission || (MEnvir == null))
+            if (!M2Share.g_boMission || MEnvir == null)
             {
                 SysMsg("还没有设定怪物集中点！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 SysMsg("请先用命令" + M2Share.g_GameCommand.MISSION.sCmd + "设置怪物的集中点。", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3789,7 +3789,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 == "") || ((sParam1 != "") && (sParam1[1] == '?')))
+            if (sParam1 == "" || sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandNpcScriptHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3881,7 +3881,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName != "") && (sHumanName[1] == '?'))
+            if (sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandPKPointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3905,7 +3905,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandPrvMsgHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3934,7 +3934,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandReAliveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3963,7 +3963,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandRecallHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3983,7 +3983,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sMonName == "") || ((sMonName != "") && (sMonName[1] == '?')))
+            if (sMonName == "" || sMonName != "" && sMonName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandRecallMobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4035,17 +4035,17 @@ namespace M2Server
             {
                 return;
             }
-            if ((sIPaddr != "") && (sIPaddr[1] == '?'))
+            if (sIPaddr != "" && sIPaddr[1] == '?')
             {
                 SysMsg("此命令用于改变客户端连接网关的IP及端口。", TMsgColor.c_Blue, TMsgType.t_Hint);
                 return;
             }
-            if ((sIPaddr == "") || (sPort == ""))
+            if (sIPaddr == "" || sPort == "")
             {
                 SysMsg("命令格式: @" + sCmd + " IP地址 端口", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sIPaddr != "") && (sPort != ""))
+            if (sIPaddr != "" && sPort != "")
             {
                 SendMsg(this, grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
@@ -4059,7 +4059,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandReGotoHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4082,7 +4082,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4109,7 +4109,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 == "") || ((sParam1 != "") && (sParam1[1] == '?')))
+            if (sParam1 == "" || sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandReloadGuildHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4149,7 +4149,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4172,7 +4172,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4312,7 +4312,7 @@ namespace M2Server
         public void CmdSearchHuman(string sCmd, string sHumanName)
         {
             TPlayObject PlayObject;
-            if (m_boProbeNecklace || (m_btPermission >= 6))
+            if (m_boProbeNecklace || m_btPermission >= 6)
             {
                 if (sHumanName == "")
                 {
@@ -4320,7 +4320,7 @@ namespace M2Server
                     return;
                 }
 
-                if (((HUtil32.GetTickCount() - m_dwProbeTick) > 10000) || (m_btPermission >= 3))
+                if (HUtil32.GetTickCount() - m_dwProbeTick > 10000 || m_btPermission >= 3)
                 {
 
                     m_dwProbeTick = HUtil32.GetTickCount();
@@ -4337,7 +4337,7 @@ namespace M2Server
                 else
                 {
 
-                    SysMsg(((HUtil32.GetTickCount() - m_dwProbeTick) / 1000 - 10) + " 秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg((HUtil32.GetTickCount() - m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
@@ -4358,7 +4358,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sCastleName != "") && (sCastleName[1] == '?'))
+            if (sCastleName != "" && sCastleName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4383,7 +4383,7 @@ namespace M2Server
             }
             Ctr = sCtr[1];
             nGold = HUtil32.Str_ToInt(sGold, -1);
-            if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || (nGold < 0) || (nGold > 100000000))
+            if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandSbkGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -4416,7 +4416,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandShowUseItemInfoHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4470,7 +4470,7 @@ namespace M2Server
             {
                 nBind = 2;
             }
-            if ((nItem < 0) || (nBind < 0) || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (nItem < 0 || nBind < 0 || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4501,7 +4501,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindAccount.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindAccount[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
 
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4532,7 +4532,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindCharName.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindCharName[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 return;
@@ -4562,7 +4562,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindIPaddr.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindIPaddr[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 return;
@@ -4616,7 +4616,7 @@ namespace M2Server
             {
                 nBind = 2;
             }
-            if ((nItem < 0) || (nBind < 0) || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (nItem < 0 || nBind < 0 || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4647,7 +4647,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindAccount.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindAccount[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
 
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4676,7 +4676,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindCharName.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindCharName[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
 
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4705,7 +4705,7 @@ namespace M2Server
                         for (I = 0; I < M2Share.g_ItemBindIPaddr.Count; I++)
                         {
                             ItemBind = M2Share.g_ItemBindIPaddr[I];
-                            if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
+                            if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
                             {
                                 SysMsg(format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
                                 return;
@@ -4739,7 +4739,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sTime == "") || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sTime == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandShutupHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -4773,7 +4773,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4809,7 +4809,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandShutupReleaseHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4899,7 +4899,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("此命令用于开始祈祷生效宝宝叛变。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -4915,7 +4915,7 @@ namespace M2Server
             }
 
             M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
-            SysMsg("祈祷叛变已开始。持续时长 " + (dwTime / 1000) + " 秒。", TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", TMsgColor.c_Green, TMsgType.t_Hint);
         }
 
         public void CmdSpirtStop(string sCmd, string sParam1)
@@ -4924,7 +4924,7 @@ namespace M2Server
             {
                 return;
             }
-            if ((sParam1 != "") && (sParam1[1] == '?'))
+            if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("此命令用于停止祈祷生效导致宝宝叛变。", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -4959,7 +4959,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sRange == "") || (sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sRange == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandSuperTingHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4989,7 +4989,7 @@ namespace M2Server
 
         public void CmdTakeOffHorse(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("下马命令，在骑马状态输入此命令下马。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -5006,7 +5006,7 @@ namespace M2Server
 
         public void CmdTakeOnHorse(string sCmd, string sParam)
         {
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg("上马命令，在戴好马牌后输入此命令就可以骑上马。", TMsgColor.c_Red, TMsgType.t_Hint);
 
@@ -5037,7 +5037,7 @@ namespace M2Server
             {
                 for (var nY = nMinY; nY <= nMaxY; nY++)
                 {
-                    if (((nX < nMaxX) && (nY == nMinY)) || ((nY < nMaxY) && (nX == nMinX)) || (nX == nMaxX) || (nY == nMaxY))
+                    if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
                         FireBurnEvent = new TFireBurnEvent(this, nX, nY, nType, nTime * 1000, nPoint);
                         M2Share.EventManager.AddEvent(FireBurnEvent);
@@ -5057,7 +5057,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sParam != "") && (sParam[1] == '?'))
+            if (sParam != "" && sParam[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandTestGetBagItemsHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -5114,7 +5114,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sHumanName == "") || ((sHumanName != "") && (sHumanName[1] == '?')))
+            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandTingHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -5151,7 +5151,7 @@ namespace M2Server
                     if (m_PEnvir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
                     {
                         // 10000
-                        if ((HUtil32.GetTickCount() - m_dwTeleportTick) > M2Share.g_Config.dwUserMoveTime * 1000)
+                        if (HUtil32.GetTickCount() - m_dwTeleportTick > M2Share.g_Config.dwUserMoveTime * 1000)
                         {
                             m_dwTeleportTick = HUtil32.GetTickCount();
                             SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -5160,7 +5160,7 @@ namespace M2Server
                         }
                         else
                         {
-                            SysMsg((M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - m_dwTeleportTick) / 1000) + "秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - m_dwTeleportTick) / 1000 + "秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                     else
@@ -5192,7 +5192,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if ((sCharName == "") || ((sCharName != "") && (sCharName[1] == '?')))
+            if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
 
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandViewWhisperHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);

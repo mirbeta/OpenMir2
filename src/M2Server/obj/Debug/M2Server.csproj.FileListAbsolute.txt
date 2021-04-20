@@ -1,8 +1,6 @@
 D:/Legend/src/M2Server/obj/Debug/ResolveAssemblyReference.cache
 D:/Legend/src/M2Server/obj/Debug/M2Servers.exe
 D:/Legend/src/M2Server/obj/Debug/M2Servers.pdb
-D:/MirServer/Mir200/M2Servers.exe
-D:/MirServer/Mir200/M2Servers.pdb
 D:/GameOfMir/src/M2Server/obj/Debug/ResolveAssemblyReference.cache
 D:/GameOfMir/src/M2Server/obj/Debug/M2Servers.exe
 D:/GameOfMir/src/M2Server/obj/Debug/M2Servers.pdb
@@ -13,3 +11,10 @@ D:/GameOfMir/src/M2Server/obj/Debug/M2Servers.pdb
 /Volumes/Data/Project/MirServer/Mir200/M2Servers.exe
 /Volumes/Data/Project/MirServer/Mir200/M2Servers.pdb
 /Volumes/Data/Project/HeroM2/src/M2Server/obj/Debug/M2Server.csproj.CopyComplete
+D:\MirServer\Mir200\M2Servers.exe
+D:\MirServer\Mir200\M2Servers.pdb
+D:\herom2\src\M2Server\obj\Debug\M2Server.csprojAssemblyReference.cache
+D:\herom2\src\M2Server\obj\Debug\M2Server.csproj.CoreCompileInputs.cache
+D:\herom2\src\M2Server\obj\Debug\M2Server.csproj.CopyComplete
+D:\herom2\src\M2Server\obj\Debug\M2Servers.exe
+D:\herom2\src\M2Server\obj\Debug\M2Servers.pdb

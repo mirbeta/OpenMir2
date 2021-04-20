@@ -5,13 +5,11 @@ namespace M2Server
     public class TStickMonster: TAnimalObject
     {
         public int n54C = 0;
-        private bool bo550 = false;
         protected int nComeOutValue = 0;
         protected int nAttackRange = 0;
 
         public TStickMonster() : base()
         {
-            bo550 = false;
             this.m_nViewRange = 7;
             this.m_nRunTime = 250;
             this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;

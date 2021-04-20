@@ -149,7 +149,6 @@ namespace M2Server
             {
                 result = HUtil32.SBytePtrToString((sbyte*) pb, 0, nLen);
             }
-
             return result;
         }
 
@@ -198,7 +197,6 @@ namespace M2Server
             {
                 result = HUtil32.SBytePtrToString((sbyte*) pb, 0, DestLen);
             }
-
             return result;
         }
 
@@ -227,10 +225,8 @@ namespace M2Server
                 {
                     result = "";
                 }
-
                 return result;
             }
-
             return result;
         }
 
@@ -258,7 +254,6 @@ namespace M2Server
             {
                 result = "";
             }
-
             return result;
         }
     }

@@ -40,3 +40,10 @@ D:/GameOfMir/src/mSystemModule/obj/Debug/mSystemModule.pdb
 /Volumes/Data/Project/HeroM2/src/mSystemModule/obj/Debug/mSystemModule.csproj.CopyComplete
 /Volumes/Data/Project/HeroM2/src/mSystemModule/obj/Debug/mSystemModule.dll
 /Volumes/Data/Project/HeroM2/src/mSystemModule/obj/Debug/mSystemModule.pdb
+D:\herom2\src\mSystemModule\bin\Debug\mSystemModule.dll
+D:\herom2\src\mSystemModule\bin\Debug\mSystemModule.pdb
+D:\herom2\src\mSystemModule\obj\Debug\mSystemModule.csprojAssemblyReference.cache
+D:\herom2\src\mSystemModule\obj\Debug\mSystemModule.csproj.CoreCompileInputs.cache
+D:\herom2\src\mSystemModule\obj\Debug\mSystemModule.csproj.CopyComplete
+D:\herom2\src\mSystemModule\obj\Debug\mSystemModule.dll
+D:\herom2\src\mSystemModule\obj\Debug\mSystemModule.pdb

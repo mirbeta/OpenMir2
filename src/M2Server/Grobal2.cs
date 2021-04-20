@@ -1592,7 +1592,7 @@ namespace M2Server
 
     public struct TMonInfo
     {
-        public ArrayList ItemList;
+        public IList<TMonItem> ItemList;
         public string sName;
         public byte btRace;
         public byte btRaceImg;
@@ -1620,7 +1620,7 @@ namespace M2Server
         public bool boTame;
     } 
 
-    public struct TMonItem
+    public class TMonItem
     {
         public int MaxPoint;
         public int SelPoint;
