@@ -26,14 +26,13 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject == null)
             {
-
-                SysMsg(format("%s不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(format("{0}不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
             {
                 UserMagic = PlayObject.m_MagicList[i];
-                if (UserMagic.MagicInfo.sMagicName.ToLower().CompareTo(sSkillName.ToLower()) == 0)
+                if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.Ordinal) == 0)
                 {
                     UserMagic.btLevel = (byte)nLevel;
                     PlayObject.SendMsg(PlayObject, grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
@@ -74,7 +73,6 @@ namespace M2Server
             }
             else
             {
-
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
@@ -108,7 +106,6 @@ namespace M2Server
             }
             else
             {
-
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
@@ -129,7 +126,6 @@ namespace M2Server
             }
             if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nGold < 0 || nGold > 200000000 || sHumanName != "" && sHumanName[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandGameGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -177,7 +173,6 @@ namespace M2Server
             }
             if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000 || sHumanName != "" && sHumanName[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandGamePointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -484,7 +479,6 @@ namespace M2Server
             }
             if (sParam1 != "" && sParam1[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -533,34 +527,27 @@ namespace M2Server
             }
             switch (m_btAttatckMode)
             {
-                case M2Share.HAM_ALL:
+                case M2Share.HAM_ALL:// [攻击模式: 全体攻击]
                     SysMsg(M2Share.sAttackModeOfAll, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_PEACE:
-                    // [攻击模式: 全体攻击]
+                case M2Share.HAM_PEACE: // [攻击模式: 和平攻击]
                     SysMsg(M2Share.sAttackModeOfPeaceful, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_DEAR:
-                    // [攻击模式: 和平攻击]
+                case M2Share.HAM_DEAR:// [攻击模式: 和平攻击]
                     SysMsg(M2Share.sAttackModeOfDear, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_MASTER:
-                    // [攻击模式: 和平攻击]
+                case M2Share.HAM_MASTER:// [攻击模式: 和平攻击]
                     SysMsg(M2Share.sAttackModeOfMaster, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_GROUP:
-                    // [攻击模式: 和平攻击]
+                case M2Share.HAM_GROUP:// [攻击模式: 编组攻击]
                     SysMsg(M2Share.sAttackModeOfGroup, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_GUILD:
-                    // [攻击模式: 编组攻击]
+                case M2Share.HAM_GUILD:// [攻击模式: 行会攻击]
                     SysMsg(M2Share.sAttackModeOfGuild, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                case M2Share.HAM_PKATTACK:
-                    // [攻击模式: 行会攻击]
+                case M2Share.HAM_PKATTACK:// [攻击模式: 红名攻击]
                     SysMsg(M2Share.sAttackModeOfRedWhite, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
-                    // [攻击模式: 红名攻击]
             }
             SendDefMessage(grobal2.SM_ATTACKMODE, m_btAttatckMode, 0, 0, 0, "");
         }
@@ -581,22 +568,21 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                //if ((sDearName).ToLower().CompareTo(('无').ToLower()) == 0)
-                //{
-                //    PlayObject.m_sDearName = "";
-                //    PlayObject.RefShowName();
-                //    this.SysMsg(sHumanName + " 的配偶名清除成功。", TMsgColor.c_Green, TMsgType.t_Hint);
-                //}
-                //else
-                //{
-                //    PlayObject.m_sDearName = sDearName;
-                //    PlayObject.RefShowName();
-                //    this.SysMsg(sHumanName + " 的配偶名更改成功。", TMsgColor.c_Green, TMsgType.t_Hint);
-                //}
+                if (string.Compare(sDearName.ToLower(), "无", StringComparison.Ordinal) == 0)
+                {
+                    PlayObject.m_sDearName = "";
+                    PlayObject.RefShowName();
+                    this.SysMsg(sHumanName + " 的配偶名清除成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                }
+                else
+                {
+                    PlayObject.m_sDearName = sDearName;
+                    PlayObject.RefShowName();
+                    this.SysMsg(sHumanName + " 的配偶名更改成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                }
             }
             else
             {
-
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
@@ -675,7 +661,6 @@ namespace M2Server
 
         public void CmdChangeJob(TGameCmd Cmd, string sHumanName, string sJobName)
         {
-            // 004CC714
             TPlayObject PlayObject;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
@@ -684,33 +669,30 @@ namespace M2Server
             }
             if (sHumanName == "" || sJobName == "")
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandChangeJobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                if (sJobName.ToLower().CompareTo(M2Share.sWarrior.ToLower()) == 0)
+                if (string.Compare(sJobName, M2Share.sWarrior, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jWarr;
                 }
-                if (sJobName.ToLower().CompareTo(M2Share.sWizard.ToLower()) == 0)
+                if (string.Compare(sJobName, M2Share.sWizard, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jWizard;
                 }
-                if (sJobName.ToLower().CompareTo(M2Share.sTaos.ToLower()) == 0)
+                if (string.Compare(sJobName, M2Share.sTaos, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jTaos;
                 }
                 PlayObject.HasLevelUp(1);
                 PlayObject.SysMsg(M2Share.g_sGameCommandChangeJobHumanMsg, TMsgColor.c_Green, TMsgType.t_Hint);
-
                 SysMsg(format(M2Share.g_sGameCommandChangeJobMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
             }
             else
             {
-
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
@@ -726,7 +708,6 @@ namespace M2Server
             }
             if (sParam1 != "" && sParam1[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -736,7 +717,6 @@ namespace M2Server
             HasLevelUp(1);
             if (M2Share.g_Config.boShowMakeItemMsg)
             {
-
                 M2Share.MainOutMessage(format(M2Share.g_sGameCommandLevelConsoleMsg, m_sCharName, nOLevel, m_Abil.Level));
             }
         }
@@ -757,27 +737,27 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                //if ((sMasterName).ToLower().CompareTo(('无').ToLower()) == 0)
-                //{
-                //    PlayObject.m_sMasterName = "";
-                //    PlayObject.RefShowName();
-                //    PlayObject.m_boMaster = false;
-                //    this.SysMsg(sHumanName + " 的师徒名清除成功。", TMsgColor.c_Green, TMsgType.t_Hint);
-                //}
-                //else
-                //{
-                //    PlayObject.m_sMasterName = sMasterName;
-                //    if ((sIsMaster != "") && (sIsMaster[1] == '1'))
-                //    {
-                //        PlayObject.m_boMaster = true;
-                //    }
-                //    else
-                //    {
-                //        PlayObject.m_boMaster = false;
-                //    }
-                //    PlayObject.RefShowName();
-                //    this.SysMsg(sHumanName + " 的师徒名更改成功。", TMsgColor.c_Green, TMsgType.t_Hint);
-                //}
+               if (string.Compare(sMasterName, "无", StringComparison.Ordinal) == 0)
+               {
+                   PlayObject.m_sMasterName = "";
+                   PlayObject.RefShowName();
+                   PlayObject.m_boMaster = false;
+                   this.SysMsg(sHumanName + " 的师徒名清除成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+               }
+               else
+               {
+                   PlayObject.m_sMasterName = sMasterName;
+                   if ((sIsMaster != "") && (sIsMaster[1] == '1'))
+                   {
+                       PlayObject.m_boMaster = true;
+                   }
+                   else
+                   {
+                       PlayObject.m_boMaster = false;
+                   }
+                   PlayObject.RefShowName();
+                   this.SysMsg(sHumanName + " 的师徒名更改成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+               }
             }
             else
             {
@@ -794,14 +774,12 @@ namespace M2Server
             }
             if (sParam1 != "" && sParam1[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (boFlag)
             {
-                SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                // 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
+                SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, ""); // 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
             }
             m_boObMode = boFlag;
             if (m_boObMode)
@@ -816,7 +794,6 @@ namespace M2Server
 
         public void CmdChangeSabukLord(TGameCmd Cmd, string sCastleName, string sGuildName, bool boFlag)
         {
-            // 004CFE1C
             TGuild Guild;
             TUserCastle Castle;
             if (m_btPermission < Cmd.nPerMissionMin)
@@ -832,14 +809,12 @@ namespace M2Server
             Castle = M2Share.CastleManager.Find(sCastleName);
             if (Castle == null)
             {
-
                 SysMsg(format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCastleName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild != null)
             {
-                // 4CFEC7
                 M2Share.AddGameDataLog("27" + "\t" + Castle.m_sOwnGuild + "\t" + '0' + "\t" + '1' + "\t" + "sGuildName" + "\t" + m_sCharName + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 Castle.GetCastle(Guild);
                 if (boFlag)
@@ -879,7 +854,6 @@ namespace M2Server
             }
             if (sParam1 != "" && sParam1[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -909,7 +883,6 @@ namespace M2Server
                 return;
             }
             M2Share.g_Config.nUserFull = nCount;
-
             SysMsg(format("服务器上线人数限制: %d", nCount), TMsgColor.c_Green, TMsgType.t_Hint);
         }
 
@@ -928,7 +901,6 @@ namespace M2Server
                 return;
             }
             M2Share.g_Config.nZenFastStep = nFastStep;
-
             SysMsg(format("怪物行动速度: %d", nFastStep), TMsgColor.c_Green, TMsgType.t_Hint);
         }
 
@@ -945,7 +917,6 @@ namespace M2Server
             }
             if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -984,7 +955,6 @@ namespace M2Server
             if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 SysMsg("清除玩家的仓库密码！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-
                 SysMsg(format("命令格式: @%s 人物名称", sCmd), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -997,7 +967,6 @@ namespace M2Server
             PlayObject.m_boUnLockStoragePwd = false;
             PlayObject.m_sStoragePwd = "";
             PlayObject.SysMsg("你的保护密码已被清除！！！", TMsgColor.c_Green, TMsgType.t_Hint);
-
             SysMsg(format("%s的保护密码已被清除！！！", sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
         }
 
@@ -1041,13 +1010,13 @@ namespace M2Server
             for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)
             {
                 Envir = M2Share.g_MapManager.Maps[i];
-                if (Envir != null && (boKillAllMap || Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0))
+                if (Envir != null && (boKillAllMap || string.Compare(Envir.sMapName.ToLower(), sMapName, StringComparison.Ordinal) == 0))
                 {
                     M2Share.UserEngine.GetMapMonster(Envir, MonList);
                     for (var j = 0; j < MonList.Count; j++)
                     {
                         BaseObject = MonList[j] as TBaseObject;
-                        if (boKillAll || sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0)
+                        if (boKillAll || string.Compare(sMonName.ToLower(), BaseObject.m_sCharName, StringComparison.Ordinal) == 0)
                         {
                             BaseObject.m_boNoItem = boNotItem;
                             BaseObject.m_WAbil.HP = 0;
@@ -1056,7 +1025,6 @@ namespace M2Server
                     }
                 }
             }
-            //MonList.Free;
             if (Envir == null)
             {
                 SysMsg("输入的地图不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -1086,7 +1054,6 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject == null)
             {
-
                 SysMsg(format("%s不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -1112,19 +1079,16 @@ namespace M2Server
             Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild != null)
             {
-
                 SysMsg(format("%s 的得分为: %d", sGuildName, Guild.nContestPoint), TMsgColor.c_Green, TMsgType.t_Hint);
             }
             else
             {
-
                 SysMsg(format("行会: %s 不存在！！！", sGuildName), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
         public void CmdStartContest(TGameCmd Cmd, string sParam1)
         {
-            // 004CF008
             int I;
             int II;
             ArrayList List10;
@@ -1795,7 +1759,7 @@ namespace M2Server
                 SysMsg(sMapName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sMapMode.ToLower().CompareTo("SAFE".ToLower()) == 0)
+            if (string.Compare(sMapMode.ToLower(), "SAFE".ToLower(), StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1806,7 +1770,7 @@ namespace M2Server
                     Envir.Flag.boSAFE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DARK".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "DARK", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1817,7 +1781,7 @@ namespace M2Server
                     Envir.Flag.boDarkness = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("FIGHT".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "FIGHT", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1828,7 +1792,7 @@ namespace M2Server
                     Envir.Flag.boFightZone = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("FIGHT3".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "FIGHT3", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1839,7 +1803,7 @@ namespace M2Server
                     Envir.Flag.boFight3Zone = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DAY".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "DAY", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1850,7 +1814,7 @@ namespace M2Server
                     Envir.Flag.boDayLight = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("QUIZ".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "QUIZ", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1861,7 +1825,7 @@ namespace M2Server
                     Envir.Flag.boQUIZ = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORECONNECT".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NORECONNECT", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1873,7 +1837,7 @@ namespace M2Server
                     Envir.Flag.boNORECONNECT = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MUSIC".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "MUSIC", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1885,7 +1849,7 @@ namespace M2Server
                     Envir.Flag.boMUSIC = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("EXPRATE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "EXPRATE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1897,7 +1861,7 @@ namespace M2Server
                     Envir.Flag.boEXPRATE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKWINLEVEL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "PKWINLEVEL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1909,7 +1873,7 @@ namespace M2Server
                     Envir.Flag.boPKWINLEVEL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKWINEXP".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "PKWINEXP", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1921,7 +1885,7 @@ namespace M2Server
                     Envir.Flag.boPKWINEXP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKLOSTLEVEL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "PKLOSTLEVEL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1933,7 +1897,7 @@ namespace M2Server
                     Envir.Flag.boPKLOSTLEVEL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKLOSTEXP".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "PKLOSTEXP", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1945,7 +1909,7 @@ namespace M2Server
                     Envir.Flag.boPKLOSTEXP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DECHP".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "DECHP", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1958,7 +1922,7 @@ namespace M2Server
                     Envir.Flag.boDECHP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DECGAMEGOLD".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "DECGAMEGOLD", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1971,7 +1935,7 @@ namespace M2Server
                     Envir.Flag.boDECGAMEGOLD = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("INCGAMEGOLD".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "INCGAMEGOLD", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1984,7 +1948,7 @@ namespace M2Server
                     Envir.Flag.boINCGAMEGOLD = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("INCGAMEPOINT".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "INCGAMEPOINT", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1997,7 +1961,7 @@ namespace M2Server
                     Envir.Flag.boINCGAMEGOLD = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("RUNHUMAN".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "RUNHUMAN", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2008,7 +1972,7 @@ namespace M2Server
                     Envir.Flag.boRUNHUMAN = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("RUNMON".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "RUNMON", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2019,7 +1983,7 @@ namespace M2Server
                     Envir.Flag.boRUNMON = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NEEDHOLE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NEEDHOLE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2030,7 +1994,7 @@ namespace M2Server
                     Envir.Flag.boNEEDHOLE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORECALL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NORECALL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2041,7 +2005,7 @@ namespace M2Server
                     Envir.Flag.boNORECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOGUILDRECALL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOGUILDRECALL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2052,7 +2016,7 @@ namespace M2Server
                     Envir.Flag.boNOGUILDRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODEARRECALL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NODEARRECALL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2063,7 +2027,7 @@ namespace M2Server
                     Envir.Flag.boNODEARRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOMASTERRECALL".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOMASTERRECALL", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2074,7 +2038,7 @@ namespace M2Server
                     Envir.Flag.boNOMASTERRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORANDOMMOVE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NORANDOMMOVE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2085,7 +2049,7 @@ namespace M2Server
                     Envir.Flag.boNORANDOMMOVE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODRUG".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NODRUG", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2096,7 +2060,7 @@ namespace M2Server
                     Envir.Flag.boNODRUG = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MINE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "MINE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2107,7 +2071,7 @@ namespace M2Server
                     Envir.Flag.boMINE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MINE2".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "MINE2", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2118,7 +2082,7 @@ namespace M2Server
                     Envir.Flag.boMINE2 = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOTHROWITEM".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOTHROWITEM", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2129,7 +2093,7 @@ namespace M2Server
                     Envir.Flag.boNOTHROWITEM = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODROPITEM".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NODROPITEM", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2140,7 +2104,7 @@ namespace M2Server
                     Envir.Flag.boNODROPITEM = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOPOSITIONMOVE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2151,7 +2115,7 @@ namespace M2Server
                     Envir.Flag.boNOPOSITIONMOVE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOHORSE".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOHORSE", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2162,7 +2126,7 @@ namespace M2Server
                     Envir.Flag.boNOHORSE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOCHAT".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOCHAT", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2173,7 +2137,7 @@ namespace M2Server
                     Envir.Flag.boNOCHAT = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOHUMNOMON".ToLower()) == 0)
+            else if (string.Compare(sMapMode, "NOHUMNOMON", StringComparison.Ordinal) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2190,8 +2154,6 @@ namespace M2Server
 
         public void CmdDeleteItem(TGameCmd Cmd, string sHumanName, string sItemName, int nCount)
         {
-            // 004CDFF8
-            int I;
             TPlayObject PlayObject;
             int nItemCount;
             TItem StdItem;
@@ -2214,16 +2176,15 @@ namespace M2Server
                 return;
             }
             nItemCount = 0;
-            for (I = PlayObject.m_ItemList.Count - 1; I <= 0; I++)
+            for (var i = PlayObject.m_ItemList.Count - 1; i <= 0; i++)
             {
-                UserItem = PlayObject.m_ItemList[I];
+                UserItem = PlayObject.m_ItemList[i];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
+                if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
                 {
                     PlayObject.SendDelItems(UserItem);
-
                     Dispose(UserItem);
-                    PlayObject.m_ItemList.RemoveAt(I);
+                    PlayObject.m_ItemList.RemoveAt(i);
                     nItemCount++;
                     if (nItemCount >= nCount)
                     {
@@ -2260,7 +2221,6 @@ namespace M2Server
                 }
                 PlayObject.GoldChanged();
                 SysMsg(sHumName + "的金币已减少" + nCount + '.', TMsgColor.c_Green, TMsgType.t_Hint);
-                // 004CD409
                 if (M2Share.g_boGameLogGold)
                 {
                     M2Share.AddGameDataLog("13" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nCount + "\t" + '1' + "\t" + sHumName);
@@ -2282,7 +2242,6 @@ namespace M2Server
 
         public void CmdDelGuild(TGameCmd Cmd, string sGuildName)
         {
-            // 004CEDEC
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -2371,7 +2330,7 @@ namespace M2Server
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 技能名称)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sSkillName.ToLower().CompareTo("All".ToLower()) == 0)
+            if (string.Compare(sSkillName.ToLower(), "All", StringComparison.Ordinal) == 0)
             {
                 boDelAll = true;
             }
@@ -2398,16 +2357,13 @@ namespace M2Server
                 }
                 else
                 {
-                    if (UserMagic.MagicInfo.sMagicName.ToLower().CompareTo(sSkillName.ToLower()) == 0)
+                    if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.Ordinal) == 0)
                     {
                         PlayObject.SendDelMagic(UserMagic);
-
                         Dispose(UserMagic);
                         PlayObject.m_MagicList.RemoveAt(I);
-
-                        PlayObject.SysMsg(format("技能%s已删除。", sSkillName), TMsgColor.c_Green, TMsgType.t_Hint);
-
-                        SysMsg(format("%s的技能%s已删除。", sHumanName, sSkillName), TMsgColor.c_Green, TMsgType.t_Hint);
+                        PlayObject.SysMsg(format("技能{0}已删除。", sSkillName), TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(format("%s的技能{0}已删除。", sHumanName, sSkillName), TMsgColor.c_Green, TMsgType.t_Hint);
                         break;
                     }
                 }
@@ -2547,7 +2503,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyAccountList.Count; I++)
                 //{
-                //    if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[I]).ToLower()) == 0)
+                //    if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[I]), StringComparison.Ordinal) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyAccountList.Values[I]) != 0)
                 //        {
@@ -2587,7 +2543,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyChrNameList.Count; I++)
                 //{
-                //    if ((sCharName).ToLower().CompareTo((M2Share.g_DenyChrNameList[I]).ToLower()) == 0)
+                //    if ((sCharName).ToLower().CompareTo((M2Share.g_DenyChrNameList[I]), StringComparison.Ordinal) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyChrNameList.Values[I]) != 0)
                 //        {
@@ -2627,7 +2583,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyIPAddrList.Count; I++)
                 //{
-                //    if ((sIPaddr).ToLower().CompareTo((M2Share.g_DenyIPAddrList[I]).ToLower()) == 0)
+                //    if ((sIPaddr).ToLower().CompareTo((M2Share.g_DenyIPAddrList[I]), StringComparison.Ordinal) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyIPAddrList.Values[I]) != 0)
                 //        {
@@ -2759,7 +2715,7 @@ namespace M2Server
             }
             //for (I = 0; I < M2Share.g_DisableSendMsgList.Count; I++)
             //{
-            //    if ((sHumanName).ToLower().CompareTo((M2Share.g_DisableSendMsgList[I]).ToLower()) == 0)
+            //    if ((sHumanName).ToLower().CompareTo((M2Share.g_DisableSendMsgList[I]), StringComparison.Ordinal) == 0)
             //    {
             //        PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             //        if (PlayObject != null)
@@ -3913,7 +3869,7 @@ namespace M2Server
             }
             //for (I = 0; I < this.m_BlockWhisperList.Count; I++)
             //{
-            //    if ((this.m_BlockWhisperList[I]).ToLower().CompareTo((sHumanName).ToLower()) == 0)
+            //    if ((this.m_BlockWhisperList[I]).ToLower().CompareTo((sHumanName), StringComparison.Ordinal) == 0)
             //    {
             //        this.m_BlockWhisperList.Remove(I);
 
@@ -4255,8 +4211,6 @@ namespace M2Server
 
         public void CmdReloadNpc(string sParam)
         {
-            // 004CFFF8
-            int I;
             ArrayList TmpList;
             TMerchant Merchant;
             TNormNpc Npc;
@@ -4264,7 +4218,7 @@ namespace M2Server
             {
                 return;
             }
-            if ("all".ToLower().CompareTo(sParam.ToLower()) == 0)
+            if (string.Compare("all", sParam, StringComparison.Ordinal) == 0)
             {
                 LocalDB.FrmDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
@@ -4273,18 +4227,16 @@ namespace M2Server
                 SysMsg("管理NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            // 004D0136
             TmpList = new ArrayList();
             if (M2Share.UserEngine.GetMerchantList(m_PEnvir, m_nCurrX, m_nCurrY, 9, TmpList) > 0)
             {
-                for (I = 0; I < TmpList.Count; I++)
+                for (var i = 0; i < TmpList.Count; i++)
                 {
-                    Merchant = (TMerchant)TmpList[I];
+                    Merchant = (TMerchant)TmpList[i];
                     Merchant.ClearScript();
                     Merchant.LoadNPCScript();
                     SysMsg(Merchant.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
-                // for
             }
             else
             {
@@ -4293,14 +4245,13 @@ namespace M2Server
             TmpList.Clear();
             if (M2Share.UserEngine.GetNpcList(m_PEnvir, m_nCurrX, m_nCurrY, 9, TmpList) > 0)
             {
-                for (I = 0; I < TmpList.Count; I++)
+                for (var i = 0; i < TmpList.Count; i++)
                 {
-                    Npc = (TNormNpc)TmpList[I];
+                    Npc = (TNormNpc)TmpList[i];
                     Npc.ClearScript();
                     Npc.LoadNPCScript();
                     SysMsg(Npc.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
-                // for
             }
             else
             {
@@ -4319,10 +4270,8 @@ namespace M2Server
                     SysMsg("命令格式: @" + sCmd + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-
                 if (HUtil32.GetTickCount() - m_dwProbeTick > 10000 || m_btPermission >= 3)
                 {
-
                     m_dwProbeTick = HUtil32.GetTickCount();
                     PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                     if (PlayObject != null)
@@ -4336,7 +4285,6 @@ namespace M2Server
                 }
                 else
                 {
-
                     SysMsg((HUtil32.GetTickCount() - m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
@@ -4348,7 +4296,6 @@ namespace M2Server
 
         public void CmdShowSbkGold(TGameCmd Cmd, string sCastleName, string sCtr, string sGold)
         {
-            int I;
             char Ctr;
             int nGold;
             TUserCastle Castle;
@@ -4360,7 +4307,6 @@ namespace M2Server
             }
             if (sCastleName != "" && sCastleName[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -4368,11 +4314,10 @@ namespace M2Server
             {
                 List = new ArrayList();
                 M2Share.CastleManager.GetCastleGoldInfo(List);
-                for (I = 0; I < List.Count; I++)
+                for (var i = 0; i < List.Count; i++)
                 {
                     //this.SysMsg(List[I], TMsgColor.c_Green, TMsgType.t_Hint);
                 }
-                //List.Free;
                 return;
             }
             Castle = M2Share.CastleManager.Find(sCastleName);
@@ -4408,7 +4353,6 @@ namespace M2Server
 
         public void CmdShowUseItemInfo(TGameCmd Cmd, string sHumanName)
         {
-            int I;
             TPlayObject PlayObject;
             TUserItem UserItem;
             if (m_btPermission < Cmd.nPerMissionMin)
@@ -4425,18 +4369,17 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject == null)
             {
-
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            for (I = PlayObject.m_UseItems.GetLowerBound(0); I <= PlayObject.m_UseItems.GetUpperBound(0); I++)
+            for (var i = PlayObject.m_UseItems.GetLowerBound(0); i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
             {
-                UserItem = PlayObject.m_UseItems[I];
+                UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.wIndex == 0)
                 {
                     continue;
                 }
-                SysMsg(format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", M2Share.GetUseItemName(I), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax), TMsgColor.c_Blue, TMsgType.t_Hint);
+                SysMsg(format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", M2Share.GetUseItemName(i), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax), TMsgColor.c_Blue, TMsgType.t_Hint);
             }
         }
 
@@ -4458,15 +4401,15 @@ namespace M2Server
             }
             nBind = -1;
             nItem = M2Share.GetUseItemIdx(sItem);
-            if (sType.ToLower().CompareTo("帐号".ToLower()) == 0)
+            if (string.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
             {
                 nBind = 0;
             }
-            if (sType.ToLower().CompareTo("人物".ToLower()) == 0)
+            if (string.Compare(sType, "人物", StringComparison.Ordinal) == 0)
             {
                 nBind = 1;
             }
-            if (sType.ToLower().CompareTo("IP".ToLower()) == 0)
+            if (string.Compare(sType, "IP", StringComparison.Ordinal) == 0)
             {
                 nBind = 2;
             }
@@ -4604,15 +4547,15 @@ namespace M2Server
             }
             nBind = -1;
             nItem = M2Share.GetUseItemIdx(sItem);
-            if (sType.ToLower().CompareTo("帐号".ToLower()) == 0)
+            if (string.Compare(sType.ToLower(), "帐号", StringComparison.Ordinal) == 0)
             {
                 nBind = 0;
             }
-            if (sType.ToLower().CompareTo("人物".ToLower()) == 0)
+            if (string.Compare(sType.ToLower(), "人物", StringComparison.Ordinal) == 0)
             {
                 nBind = 1;
             }
-            if (sType.ToLower().CompareTo("IP".ToLower()) == 0)
+            if (string.Compare(sType.ToLower(), "IP", StringComparison.Ordinal) == 0)
             {
                 nBind = 2;
             }
