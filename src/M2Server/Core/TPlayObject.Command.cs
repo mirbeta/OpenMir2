@@ -1401,7 +1401,7 @@ namespace M2Server
             }
             for (I = 0; I < m_MasterList.Count; I++)
             {
-                MasterHuman = m_MasterList[I] as TPlayObject;
+                MasterHuman = m_MasterList[I];
                 if (MasterHuman.m_boCanMasterRecall)
                 {
                     RecallHuman(MasterHuman.m_sCharName);
@@ -1579,7 +1579,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sYourMasterListNowLocateMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                 for (I = 0; I < m_MasterList.Count; I++)
                 {
-                    Human = m_MasterList[I] as TPlayObject;
+                    Human = m_MasterList[I];
                     SysMsg(Human.m_sCharName + ' ' + Human.m_PEnvir.sMapDesc + '(' + Human.m_nCurrX + ':' + Human.m_nCurrY + ')', TMsgColor.c_Green, TMsgType.t_Hint);
                     Human.SysMsg(M2Share.g_sYourMasterSearchLocateMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     Human.SysMsg(m_sCharName + ' ' + m_PEnvir.sMapDesc + '(' + m_nCurrX + ':' + m_nCurrY + ')', TMsgColor.c_Green, TMsgType.t_Hint);
@@ -3679,7 +3679,7 @@ namespace M2Server
             m_PEnvir.GetRangeBaseObject(m_nCurrX, m_nCurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
-                BaseObject = BaseObjectList[i] as TBaseObject;
+                BaseObject = BaseObjectList[i];
                 SysMsg(BaseObject.GeTBaseObjectInfo(), TMsgColor.c_Green, TMsgType.t_Hint);
             }
             BaseObjectList.Clear();

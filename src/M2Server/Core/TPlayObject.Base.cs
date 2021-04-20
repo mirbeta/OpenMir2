@@ -511,8 +511,8 @@ namespace M2Server
                         CharPushed((byte)M2Share.RandomNumber.Random(8), 1);
                     }
                 }
-                var Castle = M2Share.CastleManager.InCastleWarArea(this);
-                if (Castle != null && Castle.m_boUnderWar)
+                var castle = M2Share.CastleManager.InCastleWarArea(this);
+                if (castle != null && castle.m_boUnderWar)
                 {
                     ChangePKStatus(true);
                 }
@@ -544,21 +544,21 @@ namespace M2Server
                             }
                         }
                     }
-                    if (Castle != null && Castle.m_boUnderWar)
+                    if (castle != null && castle.m_boUnderWar)
                     {
-                        if (m_PEnvir == Castle.m_MapPalace && m_MyGuild != null)
+                        if (m_PEnvir == castle.m_MapPalace && m_MyGuild != null)
                         {
-                            if (!Castle.IsMember(this))
+                            if (!castle.IsMember(this))
                             {
-                                if (Castle.IsAttackGuild(m_MyGuild))
+                                if (castle.IsAttackGuild(m_MyGuild))
                                 {
-                                    if (Castle.CanGetCastle(m_MyGuild))
+                                    if (castle.CanGetCastle(m_MyGuild))
                                     {
-                                        Castle.GetCastle(m_MyGuild);
+                                        castle.GetCastle(m_MyGuild);
                                         M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_211, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                                        if (Castle.InPalaceGuildCount() <= 1)
+                                        if (castle.InPalaceGuildCount() <= 1)
                                         {
-                                            Castle.StopWallconquestWar();
+                                            castle.StopWallconquestWar();
                                         }
                                     }
                                 }
@@ -1009,7 +1009,7 @@ namespace M2Server
                     {
                         for (var i = m_MasterList.Count - 1; i >= 0; i--)
                         {
-                            var PlayObject = m_MasterList[i] as TPlayObject;
+                            var PlayObject = m_MasterList[i];
                             if (PlayObject.m_boDeath || PlayObject.m_boGhost)
                             {
                                 m_MasterList.RemoveAt(i);
@@ -3097,7 +3097,7 @@ namespace M2Server
                     {
                         for (var i = m_MasterList.Count - 1; i >= 0; i--)
                         {
-                            Human = m_MasterList[i] as TPlayObject;
+                            Human = m_MasterList[i];
                             sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", m_sCharName);
                             sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                             sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());

@@ -38,7 +38,7 @@ namespace M2Server
                 PlayObject.SysMsg(M2Share.g_sYourMasterListNowLocateMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                 for (var i = 0; i < PlayObject.m_MasterList.Count; i++)
                 {
-                    Human = PlayObject.m_MasterList[i] as TPlayObject;
+                    Human = PlayObject.m_MasterList[i];
                     PlayObject.SysMsg(Human.m_sCharName + " " + Human.m_PEnvir.sMapDesc + "(" + Human.m_nCurrX + ":" + Human.m_nCurrY + ")", TMsgColor.c_Green, TMsgType.t_Hint);
                     Human.SysMsg(M2Share.g_sYourMasterSearchLocateMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     Human.SysMsg(PlayObject.m_sCharName + " " + PlayObject.m_PEnvir.sMapDesc + "(" + PlayObject.m_nCurrX + ":" + PlayObject.m_nCurrY + ")", TMsgColor.c_Green, TMsgType.t_Hint);

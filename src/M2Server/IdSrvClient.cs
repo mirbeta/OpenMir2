@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace M2Server
 {
@@ -15,7 +16,7 @@ namespace M2Server
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
         private readonly IClientScoket IDSocket;
-        private System.Threading.Timer Timer1;
+        private Timer _heartTimer;
 
         public TFrmIDSoc()
         {
@@ -36,7 +37,6 @@ namespace M2Server
             IDSocket.OnDisconnected += IDSocketDisconnect;
             IDSocket.ReceivedDatagram += IdSocketRead;
         }
-
 
         private void Connected(object obj)
         {
@@ -66,7 +66,7 @@ namespace M2Server
         public void Initialize()
         {
             Connected(null);
-            Timer1 = new System.Threading.Timer(Connected, null, 1000, 60000);
+            _heartTimer = new System.Threading.Timer(Connected, null, 1000, 60000);
         }
 
         private void SendSocket(string sSendMsg)
@@ -220,11 +220,10 @@ namespace M2Server
         private void GetCancelAdmission(string sData)
         {
             var sC = string.Empty;
-            var sSessionID = string.Empty;
             const string sExceptionMsg = "[Exception] TFrmIdSoc::GetCancelAdmission";
             try
             {
-                sSessionID = HUtil32.GetValidStr3(sData, ref sC, "/");
+                var sSessionID = HUtil32.GetValidStr3(sData, ref sC, "/");
                 DelSession(HUtil32.Str_ToInt(sSessionID, 0));
             }
             catch (Exception e)
@@ -253,7 +252,7 @@ namespace M2Server
         {
             var sAccount = string.Empty;
             TSessInfo SessInfo;
-            const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession %d";
+            const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
             try
             {
                 for (var i = 0; i < m_SessionList.Count; i++)
@@ -267,14 +266,14 @@ namespace M2Server
                         break;
                     }
                 }
-                if (sAccount != "")
+                if (!string.IsNullOrEmpty(sAccount))
                 {
                     M2Share.RunSocket.KickUser(sAccount, nSessionID);
                 }
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(string.Format(sExceptionMsg, new int[] { 0 }));
+                M2Share.MainOutMessage(sExceptionMsg);
                 M2Share.MainOutMessage(e.Message, MessageType.Error);
             }
         }
@@ -333,14 +332,12 @@ namespace M2Server
 
         private void GetCancelAdmissionA(string sData)
         {
-            int nSessionID;
-            var sSessionID = string.Empty;
             var sAccount = string.Empty;
             const string sExceptionMsg = "[Exception] FrmIdSoc::GetCancelAdmissionA";
             try
             {
-                sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, "/");
-                nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
+                var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, "/");
+                var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
                 if (!M2Share.g_Config.boTestServer)
                 {
                     M2Share.UserEngine.HumanExpire(sAccount);
@@ -389,8 +386,8 @@ namespace M2Server
 
         public void Close()
         {
-            //Timer1.Enabled = false;
-            //IDSocket.Active = false;
+            _heartTimer.Dispose();
+            IDSocket.Disconnect();
         }
 
         public int GetSessionCount()
@@ -414,16 +411,6 @@ namespace M2Server
     {
         private static TFrmIDSoc instance = null;
 
-        public static TFrmIDSoc Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new TFrmIDSoc();
-                }
-                return instance;
-            }
-        }
+        public static TFrmIDSoc Instance => instance ?? (instance = new TFrmIDSoc());
     }
 }

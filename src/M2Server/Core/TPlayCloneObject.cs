@@ -3,12 +3,10 @@
     public class TPlayCloneObject: TPlayObject
     {
         private int m_dwRunTime = 0;
-        private int m_dwRunNextTick = 0;
 
         public TPlayCloneObject(TPlayObject PlayObject) : base()
         {
-            m_dwRunTime = HUtil32.GetTickCount();
-            m_dwRunNextTick = 5000;
+            this.m_dwRunTime = HUtil32.GetTickCount();
             this.m_sCharName = "Clone";
             this.m_nCurrX = PlayObject.m_nCurrX;
             this.m_nCurrY = PlayObject.m_nCurrY;

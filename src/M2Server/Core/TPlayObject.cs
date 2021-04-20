@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace M2Server
@@ -235,7 +236,7 @@ namespace M2Server
         public string m_sMasterName;
         // 师徒名称
         public TPlayObject m_MasterHuman = null;
-        public ArrayList m_MasterList = null;
+        public IList<TPlayObject> m_MasterList = null;
         public bool m_boMaster = false;
         public byte m_btCreditPoint = 0;
         // 声望点
@@ -410,7 +411,8 @@ namespace M2Server
                         SendRefMsg(grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + mapItem.Count.ToString() + "\t" + '1' + "\t" + '0');
+                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME 
+                                                   + "\t" + mapItem.Count.ToString() + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
                         Dispose(mapItem);
@@ -426,8 +428,7 @@ namespace M2Server
             {
                 if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, grobal2.OS_ITEMOBJECT, mapItem) == 1)
                 {
-                    var UserItem = new TUserItem();
-                    UserItem = mapItem.UserItem;
+                    var UserItem = mapItem.UserItem;
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
                     {
@@ -437,14 +438,14 @@ namespace M2Server
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name 
+                                                       + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
                             }
                         }
                         Dispose(mapItem);
                         if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                         {
-                            var PlayObject = this;
-                            PlayObject.SendAddItem(UserItem);
+                            this.SendAddItem(UserItem);
                         }
                         result = true;
                     }
@@ -458,7 +459,7 @@ namespace M2Server
             return result;
         }
 
-        public void WinExp(int dwExp)
+        private void WinExp(int dwExp)
         {
             if (m_Abil.Level > M2Share.g_Config.nLimitExpLevel)
             {
@@ -482,7 +483,7 @@ namespace M2Server
             }
         }
 
-        public void GetExp(int dwExp)
+        private void GetExp(int dwExp)
         {
             m_Abil.Exp += dwExp;
             AddBodyLuck(dwExp * 0.002);
@@ -512,24 +513,18 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 检查包裹是否满了
+        /// </summary>
+        /// <returns></returns>
         public bool IsEnoughBag()
         {
-            var result = false;
-            if (m_ItemList.Count < grobal2.MAXBAGITEM)
-            {
-                result = true;
-            }
-            return result;
+            return m_ItemList.Count < grobal2.MAXBAGITEM;
         }
 
         public bool IsAddWeightAvailable(int nWeight)
         {
-            var result = false;
-            if (m_WAbil.Weight + nWeight <= m_WAbil.MaxWeight)
-            {
-                result = true;
-            }
-            return result;
+            return m_WAbil.Weight + nWeight <= m_WAbil.MaxWeight;
         }
 
         public void SendAddItem(TUserItem UserItem)
@@ -606,7 +601,7 @@ namespace M2Server
             }
         }
 
-        public void Whisper(string whostr, string saystr)
+        private void Whisper(string whostr, string saystr)
         {
             var svidx = 0;
             var PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
@@ -674,36 +669,39 @@ namespace M2Server
 
         public void WhisperRe(string SayStr, byte MsgType)
         {
-            var sendwho=string.Empty;
-            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] { "[", " ", "=", ">" });
+            var sendwho = string.Empty;
+            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] {"[", " ", "=", ">"});
             if (m_boHearWhisper && !IsBlockWhisper(sendwho))
             {
                 switch (MsgType)
                 {
                     case 0:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, SayStr);
+                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor,
+                            M2Share.g_Config.btGMWhisperMsgBColor, 0, SayStr);
                         break;
                     case 1:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, SayStr);
+                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor,
+                            M2Share.g_Config.btWhisperMsgBColor, 0, SayStr);
                         break;
                     case 2:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btPurpleMsgFColor, M2Share.g_Config.btPurpleMsgBColor, 0, SayStr);
+                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btPurpleMsgFColor,
+                            M2Share.g_Config.btPurpleMsgBColor, 0, SayStr);
                         break;
                 }
             }
         }
 
-        public bool IsBlockWhisper(string sName)
+        private bool IsBlockWhisper(string sName)
         {
             var result = false;
-            //for (var I = 0; I < this.m_BlockWhisperList.Count; I++)
-            //{
-            //    if ((sName).CompareTo((this.m_BlockWhisperList[I])) == 0)
-            //    {
-            //        result = true;
-            //        break;
-            //    }
-            //}
+            for (var i = 0; i < this.m_BlockWhisperList.Count; i++)
+            {
+                if (string.Compare(sName, this.m_BlockWhisperList[i], StringComparison.Ordinal) == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
             return result;
         }
 
@@ -1182,8 +1180,8 @@ namespace M2Server
             }
             m_dwMoveTick = HUtil32.GetTickCount();
             m_bo316 = false;
-#if DEBUG
-            this.SysMsg(format("当前X:%d 当前Y:%d 目标X:%d 目标Y:%d", new object[] {this.m_nCurrX, this.m_nCurrY, nX, nY}), TMsgColor.c_Green, TMsgType.t_Hint);
+#if Debug
+            Debug.WriteLine(format("当前X:{0} 当前Y:{1} 目标X:{2} 目标Y:{3}", new object[] {this.m_nCurrX, this.m_nCurrY, nX, nY}), TMsgColor.c_Green, TMsgType.t_Hint);
 #endif
             n14 = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
             if (HorseRunTo(n14, false))
@@ -1454,14 +1452,12 @@ namespace M2Server
 
         private bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
         {
-            int nOldX;
-            int nOldY;
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             var result = false;
             try
             {
-                nOldX = m_nCurrX;
-                nOldY = m_nCurrY;
+                int nOldX = m_nCurrX;
+                int nOldY = m_nCurrY;
                 m_btDirection = btDir;
                 switch (btDir)
                 {
@@ -1518,7 +1514,6 @@ namespace M2Server
                         }
                         break;
                 }
-                // and ((m_nCurrX = nDestX) and (m_nCurrY = nDestY))
                 if (m_nCurrX != nOldX || m_nCurrY != nOldY)
                 {
                     if (Walk(grobal2.RM_RUN))
@@ -1715,7 +1710,6 @@ namespace M2Server
             int n14;
             int n18;
             int n1C;
-            int dwCheckTime;
             dwDelayTime = 0;
             if (!m_boCanWalk)
             {
@@ -1734,7 +1728,7 @@ namespace M2Server
                     return result;
                 }
                 m_boFilterAction = true;
-                dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
                 if (dwCheckTime < M2Share.g_Config.dwWalkIntervalTime)
                 {
                     m_dwMoveCount++;
@@ -1951,16 +1945,16 @@ namespace M2Server
             if (HUtil32.GetTickCount() - m_dwClickNpcTime > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                TNormNpc NormNpc = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
-                if (NormNpc == null)
+                TNormNpc normNpc = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
+                if (normNpc == null)
                 {
-                    NormNpc = M2Share.UserEngine.FindNPC(NPC);
+                    normNpc = M2Share.UserEngine.FindNPC(NPC);
                 }
-                if (NormNpc != null)
+                if (normNpc != null)
                 {
-                    if (NormNpc.m_PEnvir == m_PEnvir && Math.Abs(NormNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(NormNpc.m_nCurrY - m_nCurrY) <= 15)
+                    if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)
                     {
-                        NormNpc.Click(this);
+                        normNpc.Click(this);
                     }
                 }
             }
@@ -2107,7 +2101,7 @@ namespace M2Server
             m_nPayMentPoint = 0;
             m_DearHuman = null;
             m_MasterHuman = null;
-            m_MasterList = new ArrayList();
+            m_MasterList = new List<TPlayObject>();
             m_boSendMsgFlag = false;
             m_boChangeItemNameFlag = false;
             m_boCanMasterRecall = false;
@@ -2312,8 +2306,6 @@ namespace M2Server
         {
             TItem Item;
             string sSendMsg;
-            TClientItem ClientItem = null;
-            TOClientItem OClientItem = null;
             TStdItem StdItem = null;
             TUserItem UserItem;
             if (m_nSoftVersionDateEx == 0)
@@ -2328,6 +2320,7 @@ namespace M2Server
                         Item.GetStandardItem(ref StdItem);
                         Item.GetItemAddValue(UserItem, ref StdItem);
                         StdItem.Name = ItmUnit.GetItemName(UserItem);
+                        TOClientItem OClientItem = new TOClientItem();
                         M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
@@ -2354,7 +2347,7 @@ namespace M2Server
                     Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (Item != null)
                     {
-                        ClientItem = new TClientItem();
+                        TClientItem ClientItem = new TClientItem();
                         Item.GetStandardItem(ref ClientItem.S);
                         Item.GetItemAddValue(UserItem, ref ClientItem.S);
                         ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
@@ -2368,7 +2361,7 @@ namespace M2Server
                         sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
                     }
                 }
-                if (sSendMsg != "")
+                if (!string.IsNullOrEmpty(sSendMsg))
                 {
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_BAGITEMS, ObjectId, 0, 0, (short)m_ItemList.Count);
                     SendSocket(m_DefMsg, sSendMsg);
@@ -2475,30 +2468,28 @@ namespace M2Server
 
         private void ClientMerchantDlgSelect(int nParam1, string sMsg)
         {
-            TNormNpc Npc;
             if (m_boDeath || m_boGhost)
             {
                 return;
             }
-            Npc = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
-            if (Npc == null)
+            TNormNpc npc = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            if (npc == null)
             {
-                Npc = M2Share.UserEngine.FindNPC(nParam1);
+                npc = M2Share.UserEngine.FindNPC(nParam1);
             }
-            if (Npc == null)
+            if (npc == null)
             {
                 return;
             }
-            if (Npc.m_PEnvir == m_PEnvir && Math.Abs(Npc.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Npc.m_nCurrY - m_nCurrY) < 15 || Npc.m_boIsHide)
+            if (npc.m_PEnvir == m_PEnvir && Math.Abs(npc.m_nCurrX - m_nCurrX) < 15 && Math.Abs(npc.m_nCurrY - m_nCurrY) < 15 || npc.m_boIsHide)
             {
-                Npc.UserSelect(this, sMsg.Trim());
+                npc.UserSelect(this, sMsg.Trim());
             }
         }
 
         private void ClientMerchantQuerySellPrice(int nParam1, int nMakeIndex, string sMsg)
         {
             TUserItem UserItem;
-            TMerchant Merchant;
             string sUserItemName;
             TUserItem UserItem18 = null;
             for (var i = 0; i < m_ItemList.Count; i++)
@@ -2518,14 +2509,14 @@ namespace M2Server
             {
                 return;
             }
-            Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
-            if (Merchant == null)
+            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            if (merchant == null)
             {
                 return;
             }
-            if (Merchant.m_PEnvir == m_PEnvir && Merchant.m_boSell && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
+            if (merchant.m_PEnvir == m_PEnvir && merchant.m_boSell && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
-                Merchant.ClientQuerySellPrice(this, UserItem18);
+                merchant.ClientQuerySellPrice(this, UserItem18);
             }
         }
 
@@ -2552,7 +2543,7 @@ namespace M2Server
                                     M2Share.ItemUnit.DelCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
                                     UserItem.btValue[13] = 0;
                                 }
-                                // Dispose(UserItem); //物品加到NPC物品列表中了
+                                UserItem = null; //物品加到NPC物品列表中了
                                 m_ItemList.RemoveAt(i);
                                 WeightChanged();
                             }
@@ -2565,25 +2556,24 @@ namespace M2Server
 
         private void ClientUserBuyItem(int nIdent, int nParam1, int nInt, int nZz, string sMsg)
         {
-            TMerchant Merchant;
             try
             {
                 if (m_boDealing)
                 {
                     return;
                 }
-                Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
-                if (Merchant == null || !Merchant.m_boBuy || Merchant.m_PEnvir != m_PEnvir || Math.Abs(Merchant.m_nCurrX - m_nCurrX) > 15 || Math.Abs(Merchant.m_nCurrY - m_nCurrY) > 15)
+                TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+                if (merchant == null || !merchant.m_boBuy || merchant.m_PEnvir != m_PEnvir || Math.Abs(merchant.m_nCurrX - m_nCurrX) > 15 || Math.Abs(merchant.m_nCurrY - m_nCurrY) > 15)
                 {
                     return;
                 }
                 if (nIdent == grobal2.CM_USERBUYITEM)
                 {
-                    Merchant.ClientBuyItem(this, sMsg, nInt);
+                    merchant.ClientBuyItem(this, sMsg, nInt);
                 }
                 if (nIdent == grobal2.CM_USERGETDETAILITEM)
                 {
-                    Merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
+                    merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
                 }
             }
             catch (Exception e)
@@ -2751,10 +2741,8 @@ namespace M2Server
 
         private void ReadAllBook()
         {
-            TMagic Magic;
-            TUserMagic UserMagic;
-            UserMagic = null;
-            Magic = null;
+            TUserMagic UserMagic = null;
+            TMagic Magic = null;
             for (var i = 0; i < M2Share.UserEngine.m_MagicList.Count; i++)
             {
                 Magic = M2Share.UserEngine.m_MagicList[i];
@@ -2852,7 +2840,6 @@ namespace M2Server
             //this.SysMsg((HUtil32.CalcFileCRC(Application.ExeName)).ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
         }
 
-        // procedure SendUserName(PlayObject:TPlayObject;nX,nY:Integer);
         // 检查角色的座标是否在指定误差范围以内
         // TargeTBaseObject 为要检查的角色，nX,nY 为比较的座标
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
@@ -6683,7 +6670,7 @@ namespace M2Server
                 LoadList.LoadFromFile(sUnMarryFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    if ((LoadList[i]).CompareTo((this.m_sCharName)) == 0)
+                    if (LoadList[i].CompareTo(this.m_sCharName) == 0)
                     {
                         LoadList.RemoveAt(i);
                         boIsfound = true;

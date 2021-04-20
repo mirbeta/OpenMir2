@@ -1915,7 +1915,7 @@ namespace M2Server
 
             for (var i = 0; i < PlayObject.m_BlockWhisperList.Count; i++)
             {
-                SwitchData.BlockWhisperArr.Add(PlayObject.m_BlockWhisperList[i] as string);
+                SwitchData.BlockWhisperArr.Add(PlayObject.m_BlockWhisperList[i]);
             }
 
             TBaseObject BaseObject = null;

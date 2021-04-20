@@ -7973,8 +7973,7 @@ namespace M2Server
             {
                 sParam2 = PlayObject.m_sCharName;
             }
-
-            sData = format("@%s %s %s %s %s %s", new string[] { sParam1, sParam2, sParam3, sParam4, sParam5, sParam6 });
+            sData = format("@{0} {1} {2} {3} {4} {5}", new string[] { sParam1, sParam2, sParam3, sParam4, sParam5, sParam6 });
             btOldPermission = PlayObject.m_btPermission;
             try
             {

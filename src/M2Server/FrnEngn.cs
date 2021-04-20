@@ -177,11 +177,11 @@ namespace M2Server
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try
                         {
-                            for (var ii = 0; ii < m_SaveRcdList.Count; ii++)
+                            for (var j = 0; j < m_SaveRcdList.Count; j++)
                             {
-                                if (m_SaveRcdList[ii] == SaveRcd)
+                                if (m_SaveRcdList[j] == SaveRcd)
                                 {
-                                    m_SaveRcdList.RemoveAt(ii);
+                                    m_SaveRcdList.RemoveAt(j);
                                     DisPose(SaveRcd);
                                     break;
                                 }
@@ -376,8 +376,7 @@ namespace M2Server
 
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            TGoldChangeInfo GoldInfo;
-            GoldInfo = new TGoldChangeInfo
+            TGoldChangeInfo GoldInfo = new TGoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -447,7 +446,7 @@ namespace M2Server
             GetGameTime();
         }
 
-        public void DisPose(object obj)
+        private void DisPose(object obj)
         {
             obj = null;
         }

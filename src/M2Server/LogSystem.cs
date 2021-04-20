@@ -27,22 +27,15 @@ namespace M2Server
                     OutSuccessMessage(message.Message);
                     return;
                 }
-                else
-                {
-                    OutErrorMessage(message.Message);
-                    return;
-                }
+                OutErrorMessage(message.Message);
+                return;
             }
-            else if (message.MessageType == MessageType.Error)
+            if (message.MessageType == MessageType.Error)
             {
                 _logqueue.Enqueue(message);
                 return;
             }
-            else
-            {
-                OutSuccessMessage(message.Message);
-                return;
-            }
+            OutSuccessMessage(message.Message);
         }
 
         public void LogInfo(string message, MessageType messageType, MessageLevel messageLevel = MessageLevel.None)

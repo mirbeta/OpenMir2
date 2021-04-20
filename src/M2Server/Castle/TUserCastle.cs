@@ -10,96 +10,88 @@ namespace M2Server
     {
         public TObjUnit[] m_Archer = new TObjUnit[12];
         public ArrayList m_AttackGuildList;
-
         public IList<TAttackerInfo> m_AttackWarList;
-
-        // 0x41     是否正在攻城
         public bool m_boShowOverMsg;
-
-        // 0x38
+        /// <summary>
+        /// 是否开始攻城
+        /// </summary>
         public bool m_boStartWar;
-
-        // 攻城区域范围Y
+        // 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool m_boStatus = false;
-
-        // 0x40     是否开始攻城
         public bool m_boUnderWar;
-
         public TObjUnit m_CenterWall;
-
-        // 0x2C     行会回城点Y
         public DateTime m_ChangeDate;
-
-        // 0xC    密道所在地图
+        /// <summary>
+        /// 城门状态
+        /// </summary>
         public TDoorStatus m_DoorStatus;
-
+        /// <summary>
+        /// 是否已显示攻城结束信息
+        /// </summary>
         public int m_dwSaveTick;
-
-        // 0x42     是否已显示攻城结束信息
         public int m_dwStartCastleWarTick;
         public IList<string> m_EnvirList;
         public TObjUnit[] m_Guard = new TObjUnit[4];
         public DateTime m_IncomeToday;
         public TObjUnit m_LeftWall;
         public TObjUnit m_MainDoor;
-
+        /// <summary>
+        /// 城堡所在地图
+        /// </summary>
         public TEnvirnoment m_MapCastle;
-
-        // 0x4    城堡所在地图
+        ///
+        /// 皇宫所在地图 
         public TEnvirnoment m_MapPalace;
-
-        // 0x8    皇宫所在地图
         public TEnvirnoment m_MapSecret;
-
-        // 0x1C     所属行会名称
-        public TGuild m_MasterGuild;
-
-        // 0x24     行会回城点地图
+       /// <summary>
+       /// 所属行会名称
+       /// </summary>
+       public TGuild m_MasterGuild;
+       /// <summary>
+       /// 行会回城点X
+       /// </summary>
         public int m_nHomeX;
-
-        // 0x28     行会回城点X
+        /// <summary>
+        /// 行会回城点Y
+        /// </summary>
         public int m_nHomeY;
-
-        // 密道所在地图
         public int m_nPalaceDoorX;
-
-        // 皇宫座标X
+        /// <summary>
+        /// 科技等级
+        /// </summary>
         public int m_nPalaceDoorY;
-
-        // 科技等级
         public int m_nPower;
         public int m_nTechLevel;
         public int m_nTodayIncome;
         public int m_nTotalGold;
-
         public int m_nWarRangeX;
-
-        // 攻城区域范围X
         public int m_nWarRangeY;
-
         public TObjUnit m_RightWall;
-
-        // 皇宫座标Y
+        /// <summary>
+        /// 皇宫门状态
+        /// </summary>
         public string m_sConfigDir = string.Empty;
-
-        // 0x20     所属行会
+        /// <summary>
+        /// 行会回城点地图
+        /// </summary>
         public string m_sHomeMap = string.Empty;
-
-        // 0x10    皇宫门状态
+        /// <summary>
+        /// 城堡所在地图名
+        /// </summary>
         public string m_sMapName = string.Empty;
-
-        // 0x14     城堡所在地图名
+        /// <summary>
+        /// 城堡名称
+        /// </summary>
         public string m_sName = string.Empty;
-
-        // 0x18     城堡名称
         public string m_sOwnGuild = string.Empty;
-
+        /// <summary>
+        /// 皇宫所在地图
+        /// </summary>
         public string m_sPalaceMap = string.Empty;
-
-        // 皇宫所在地图
         public string m_sSecretMap = string.Empty;
-
-        // 0x30
         public DateTime m_WarDate;
 
         public TUserCastle(string sCastleDir)
@@ -127,14 +119,14 @@ namespace M2Server
 
         public int nTechLevel
         {
-            get { return m_nTechLevel; }
-            set { SetTechLevel(value); }
+            get => m_nTechLevel;
+            set => SetTechLevel(value);
         }
 
         public int nPower
         {
-            get { return m_nPower; }
-            set { SetPower(value); }
+            get => m_nPower;
+            set => SetPower(value);
         }
 
         public void Initialize()
@@ -146,9 +138,9 @@ namespace M2Server
             if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
             {
                 m_MapPalace = M2Share.g_MapManager.FindMap(m_sPalaceMap);
-                if (m_MapPalace == null) M2Share.MainOutMessage(string.Format("皇宫地图%s没找到！！！", new[] {m_sPalaceMap}));
+                if (m_MapPalace == null) M2Share.MainOutMessage(string.Format("皇宫地图{0}没找到！！！", m_sPalaceMap));
                 m_MapSecret = M2Share.g_MapManager.FindMap(m_sSecretMap);
-                if (m_MapSecret == null) M2Share.MainOutMessage(string.Format("密道地图%s没找到！！！", new[] {m_sSecretMap}));
+                if (m_MapSecret == null) M2Share.MainOutMessage(string.Format("密道地图{0}没找到！！！", m_sSecretMap));
                 m_MapCastle = M2Share.g_MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
@@ -163,9 +155,8 @@ namespace M2Server
                     }
                     else
                     {
-                        M2Share.MainOutMessage("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
+                        M2Share.ErrorMessage("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
                     }
-
                     m_LeftWall.BaseObject =
                         M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_LeftWall.nX, m_LeftWall.nY,
                             m_LeftWall.sName);
@@ -176,7 +167,7 @@ namespace M2Server
                     }
                     else
                     {
-                        M2Share.MainOutMessage("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + m_MainDoor.sName);
+                        M2Share.ErrorMessage("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + m_MainDoor.sName);
                     }
 
                     m_CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_CenterWall.nX,
@@ -188,7 +179,7 @@ namespace M2Server
                     }
                     else
                     {
-                        M2Share.MainOutMessage("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + m_LeftWall.sName);
+                        M2Share.ErrorMessage("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + m_LeftWall.sName);
                     }
 
                     m_RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_RightWall.nX,
@@ -200,7 +191,7 @@ namespace M2Server
                     }
                     else
                     {
-                        M2Share.MainOutMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
+                        M2Share.ErrorMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
                     }
 
                     for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
@@ -219,7 +210,7 @@ namespace M2Server
                         }
                         else
                         {
-                            M2Share.MainOutMessage("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
+                            M2Share.ErrorMessage("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
                         }
                     }
 
@@ -232,9 +223,8 @@ namespace M2Server
                         if (ObjUnit.BaseObject != null)
                             ObjUnit.BaseObject.m_WAbil.HP = m_Guard[i].nHP;
                         else
-                            M2Share.MainOutMessage("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
+                            M2Share.ErrorMessage("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
-
                     for (var i = 0; i < m_MapCastle.m_DoorList.Count; i++)
                     {
                         Door = m_MapCastle.m_DoorList[i];
@@ -244,7 +234,7 @@ namespace M2Server
                 }
                 else
                 {
-                    M2Share.MainOutMessage(string.Format("[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图%s的设置)", new[] {m_sMapName}));
+                    M2Share.ErrorMessage(string.Format("[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图{0}的设置)", m_sMapName));
                 }
             }
         }

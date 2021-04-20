@@ -147,7 +147,6 @@ namespace M2Server
                     InterMsgClient.Instance.ConnectMsgServer();
                 }
                 StartEngine();
-                M2Share.boStartReady = true;
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
                 base.Start();
             }
@@ -197,6 +196,7 @@ namespace M2Server
                 {
                     M2Share.MainOutMessage("当前服务器运行节点模式...");
                 }
+                M2Share.boStartReady = true;
             }
             catch (Exception ex)
             {

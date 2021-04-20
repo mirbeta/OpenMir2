@@ -41,7 +41,7 @@ namespace M2Server
             }
             for (var i = 0; i < PlayObject.m_MasterList.Count; i++)
             {
-                MasterHuman = PlayObject.m_MasterList[i] as TPlayObject;
+                MasterHuman = PlayObject.m_MasterList[i];
                 if (MasterHuman.m_boCanMasterRecall)
                 {
                     PlayObject.RecallHuman(MasterHuman.m_sCharName);

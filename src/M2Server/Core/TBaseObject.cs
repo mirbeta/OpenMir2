@@ -168,24 +168,39 @@ namespace M2Server
         public byte m_btLifeAttrib = 0;
         public byte m_btCoolEye = 0;
         public TBaseObject m_GroupOwner = null;
+        /// <summary>
+        /// 组成员
+        /// </summary>
         public IList<TPlayObject> m_GroupMembers = null;
-        // 0x278  组成员
+        /// <summary>
+        /// 允许私聊
+        /// </summary>
         public bool m_boHearWhisper = false;
-        // 0x27C  允许私聊
+        /// <summary>
+        /// 允许群聊
+        /// </summary>
         public bool m_boBanShout = false;
-        // 0x27D  允许群聊
+        /// <summary>
+        /// 拒绝行会聊天
+        /// </summary>
         public bool m_boBanGuildChat = false;
-        // 0x27E  拒绝行会聊天
+        /// <summary>
+        /// 是不允许交易
+        /// </summary>
         public bool m_boAllowDeal = false;
-        // 0x27F  是不允许交易
-        public ArrayList m_BlockWhisperList = null;
-        // 0x280  禁止私聊人员列表
+        /// <summary>
+        /// 禁止私聊人员列表
+        /// </summary>
+        public IList<string> m_BlockWhisperList = null;
         public int m_dwShoutMsgTick = 0;
-        // 0x284
+        /// <summary>
+        /// 是否被召唤(主人)
+        /// </summary>
         public TBaseObject m_Master = null;
-        // 0x288  是否被召唤(主人)
+       /// <summary>
+       /// 怪物叛变时间
+       /// </summary>
         public int m_dwMasterRoyaltyTick = 0;
-        // 0x28C  怪物叛变时间
         public int m_dwMasterTick = 0;
         /// <summary>
         /// 杀怪计数
@@ -636,7 +651,7 @@ namespace M2Server
             m_boBanGuildChat = true;
             m_boAllowDeal = true;
             m_boAllowGroupReCall = false;
-            m_BlockWhisperList = new ArrayList();
+            m_BlockWhisperList = new List<string>();
             m_SlaveList = new  List<TBaseObject>();
             m_WAbil = new TAbility();// FillChar(m_WAbil, sizeof(TAbility), '\0');
             m_QuestUnitOpen = new byte[128];//FillChar(m_QuestUnitOpen, sizeof(grobal2.byte), '\0');
@@ -708,7 +723,6 @@ namespace M2Server
             m_nPKDieLostLevel = 0;
             m_boAddToMaped = true;
             m_boAutoChangeColor = false;
-
             m_dwAutoChangeColorTick = HUtil32.GetTickCount();
             m_nAutoChangeIdx = 0;
             m_boFixColor = false;
@@ -823,7 +837,6 @@ namespace M2Server
                 MapItem.Reserved = 0;
                 MapItem.Count = 1;
                 MapItem.OfBaseObject = ItemOfCreat;
-
                 MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
                 MapItem.DropBaseObject = DropCreat;
                 GetDropPosition(m_nCurrX, m_nCurrY, nScatterRange, ref dx, ref dy);
@@ -843,7 +856,6 @@ namespace M2Server
                     {
                         if (StdItem.NeedIdentify == 1)
                         {
-                            // UserEngine.GetStdItemName(ui.wIndex) + #9 +
                             M2Share.AddGameDataLog(logcap + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
                     }
@@ -950,13 +962,7 @@ namespace M2Server
                     BonusPoint = GetLevelBonusSum(Job, Abil.Level);
                     FillChar(BonusAbil, sizeof(TNakedAbility), '\0');
                     FillChar(CurBonusAbil, sizeof(TNakedAbility), '\0');
-                    // if prevlevel <> 0 then begin
                     RecalcLevelAbilitys();
-                    // 饭骇俊 蝶弗 瓷仿摹甫 拌魂茄促.
-                    // end else begin
-                    // RecalcLevelAbilitys_old;
-                    // BonusPoint := 0;
-                    // end;
                     SendMsg(this, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 }
             }
@@ -1164,13 +1170,11 @@ namespace M2Server
         public bool DropGoldDown(int nGold, bool boFalg, TBaseObject GoldOfCreat, TBaseObject DropGoldCreat)
         {
             bool result = false;
-            TMapItem MapItem;
-            TMapItem MapItemA;
             int nX = 0;
             int nY = 0;
             string s20;
             int DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
-            MapItem = new TMapItem
+            TMapItem MapItem = new TMapItem
             {
                 Name = grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
@@ -1180,7 +1184,7 @@ namespace M2Server
                 DropBaseObject = DropGoldCreat
             };
             GetDropPosition(m_nCurrX, m_nCurrY, 3, ref nX, ref nY);
-            MapItemA = (TMapItem)m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+            TMapItem MapItemA = (TMapItem) m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
             if (MapItemA != null)
             {
                 if (MapItemA != MapItem)
@@ -1188,6 +1192,7 @@ namespace M2Server
                     MapItem = null;
                     MapItem = MapItemA;
                 }
+
                 SendRefMsg(grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, nX, nY, MapItem.Name);
                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                 {
@@ -1201,7 +1206,11 @@ namespace M2Server
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nGold.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" +
+                                               m_nCurrY.ToString() + "\t" + m_sCharName + "\t" +
+                                               grobal2.sSTRING_GOLDNAME + "\t" + nGold.ToString() + "\t" +
+                                               HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" +
+                                               '0');
                     }
                 }
                 result = true;
