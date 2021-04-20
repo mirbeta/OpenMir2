@@ -820,8 +820,7 @@ namespace M2Server
                             AddAbility.wHitPoint += AC2;
                             AddAbility.wSpeedPoint += MAC2;
                             break;
-                        case 52:
-                            // 原本与 20,24 一个属性，现在分开单独进行设置
+                        case 52:// 原本与 20,24 一个属性，现在分开单独进行设置
                             if (M2Share.g_Config.boAddUserItemNewValue)
                             {
                                 AddAbility.wHitPoint += AC2;

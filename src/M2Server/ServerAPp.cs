@@ -284,7 +284,7 @@ namespace M2Server
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<TQDDinfo>();
             M2Share.AbuseTextList = new ArrayList();
-            M2Share.g_MonSayMsgList = new ArrayList();
+            M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>();
             M2Share.g_ChatLoggingList = new List<string>();
             M2Share.g_DisableMakeItemList = new List<string>();
             M2Share.g_EnableMakeItemList = new List<string>();

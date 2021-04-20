@@ -4522,8 +4522,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -5485,65 +5485,54 @@ namespace M2Server
             TOSObject OSObject;
             TBaseObject BaseObject;
             TVisibleBaseObject VisibleBaseObject;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange Code:{0}";
+            const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
             const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-%d %s %s %d %d %d";
-            int nCheckCode = 0;
             if (m_PEnvir == null)
             {
                 M2Share.MainOutMessage("SearchViewRange nil PEnvir", MessageType.Error);
                 return;
             }
-            nCheckCode = 1;
+
             n24 = 0;
             m_boIsVisibleActive = false;// 先置为FALSE
             try
             {
-                nCheckCode = 4;
                 for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
                     m_VisibleActors[i].nVisibleFlag = 0;
                 }
-                nCheckCode = 5;
             }
             catch
             {
-                M2Share.ErrorMessage(format(sExceptionMsg1, nCheckCode), MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg1, MessageType.Error);
                 KickException();
             }
-            nCheckCode = 6;
+
             nStartX = m_nCurrX - m_nViewRange;
             nEndX = m_nCurrX + m_nViewRange;
             nStartY = m_nCurrY - m_nViewRange;
             nEndY = m_nCurrY + m_nViewRange;
             try
             {
-                nCheckCode = 7;
                 for (n18 = nStartX; n18 <= nEndX; n18++)
                 {
-                    nCheckCode = 8;
                     for (n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        nCheckCode = 9;
                         if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
                         {
-                            nCheckCode = 10;
                             n24 = 1;
                             nIdx = 0;
                             while (true)
                             {
-                                nCheckCode = 11;
                                 if (MapCellInfo.ObjList.Count <= nIdx)
                                 {
                                     break;
                                 }
                                 OSObject = MapCellInfo.ObjList[nIdx];
-                                nCheckCode = 12;
                                 if (OSObject != null)
                                 {
-                                    nCheckCode = 13;
                                     if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
                                     {
-                                        nCheckCode = 14;
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
                                             OSObject = null;
@@ -5555,19 +5544,15 @@ namespace M2Server
                                             MapCellInfo.ObjList = null;
                                             break;
                                         }
-                                        nCheckCode = 15;
+
                                         BaseObject = OSObject.CellObj as TBaseObject;
                                         if (BaseObject != null)
                                         {
-                                            nCheckCode = 16;
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                             {
-                                                nCheckCode = 17;
                                                 if ((m_btRaceServer < grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT))
                                                 {
-                                                    nCheckCode = 18;
                                                     UpdateVisibleGay(BaseObject);
-                                                    nCheckCode = 19;
                                                 }
                                             }
                                         }
@@ -5581,11 +5566,11 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }), MessageType.Error);
                 M2Share.ErrorMessage(e.Message, MessageType.Error);
                 KickException();
             }
-            nCheckCode = 40;
+
             n24 = 2;
             try
             {
@@ -5596,25 +5581,21 @@ namespace M2Server
                     {
                         break;
                     }
-                    nCheckCode = 41;
+
                     VisibleBaseObject = m_VisibleActors[n18];
-                    nCheckCode = 42;
                     if (VisibleBaseObject.nVisibleFlag == 0)
                     {
-                        nCheckCode = 43;
                         m_VisibleActors.RemoveAt(n18);
-                        nCheckCode = 48;
                         Dispose(VisibleBaseObject);
-                        nCheckCode = 49;
                         continue;
                     }
-                    nCheckCode = 50;
+
                     n18++;
                 }
             }
             catch
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }), MessageType.Error);
                 KickException();
             }
         }
@@ -5763,19 +5744,18 @@ namespace M2Server
             }
         }
 
-        // ==============================
-        // 取得怪物说话信息列表
+        /// <summary>
+        /// 取怪物说话信息列表
+        /// </summary>
         public void LoadSayMsg()
         {
-            //M2Share.MainOutMessage("TODO LoadSayMsg...");
-            //for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
-            //{
-            //    if ((M2Share.g_MonSayMsgList[i]).ToLower().CompareTo((m_sCharName).ToLower()) == 0)
-            //    {
-            //        m_SayMsgList = ((M2Share.g_MonSayMsgList[i]) as ArrayList);
-            //        break;
-            //    }
-            //}
+            for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
+            {
+                if (M2Share.g_MonSayMsgList.TryGetValue(m_sCharName, out m_SayMsgList))
+                {
+                    break;
+                }
+            }
         }
 
         public virtual void Disappear()
@@ -7157,19 +7137,14 @@ namespace M2Server
 
         public bool _Attack(ref short wHitMode, TBaseObject AttackTarget)
         {
-            bool result;
-            int nPower;
-            int nSecPwr;
-            int nWeaponDamage;
-            bool bo21;
             int n20;
-            result = false;
+            bool result = false;
             try
             {
-                bo21 = false;
-                nWeaponDamage = 0;
-                nPower = 0;
-                nSecPwr = 0;
+                bool bo21 = false;
+                int nWeaponDamage = 0;
+                int nPower = 0;
+                int nSecPwr = 0;
                 if (AttackTarget != null)
                 {
                     nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
@@ -7215,10 +7190,9 @@ namespace M2Server
                         m_dwLatestTwinHitTick = HUtil32.GetTickCount();// Jacky 禁止双烈火
                     }
                 }
-
                 if (wHitMode == 4)
                 {
-                    // 004C205A 刺杀
+                    // 刺杀
                     nSecPwr = 0;
                     if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                     {
@@ -7235,7 +7209,6 @@ namespace M2Server
                         }
                     }
                 }
-
                 if (wHitMode == 5)
                 {
                     nSecPwr = 0;
@@ -7294,7 +7267,6 @@ namespace M2Server
                 {
                     return result;
                 }
-
                 if (IsProperTarget(AttackTarget))
                 {
                     if (AttackTarget.m_btHitPoint > 0)
@@ -7320,10 +7292,8 @@ namespace M2Server
                 {
                     AttackTarget.StruckDamage(nPower);
                     AttackTarget.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (short)nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
-                    // 5
                     if (!AttackTarget.m_boUnParalysis && m_boParalysis && (M2Share.RandomNumber.Random(AttackTarget.m_btAntiPoison + M2Share.g_Config.nAttackPosionRate) == 0))
                     {
-                        // 5
                         AttackTarget.MakePosion(grobal2.POISON_STONE, M2Share.g_Config.nAttackPosionTime, 0);
                     }
                     // 虹魔，吸血
@@ -7536,14 +7506,11 @@ namespace M2Server
             {
                 nDamage = nDamage * M2Share.g_Config.nMonHum / 10;
             }
-            nDam = M2Share.RandomNumber.Random(10) + 5;
-            // 1 0x62
+            nDam = M2Share.RandomNumber.Random(10) + 5;  // 1 0x62
             if (m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] > 0)
             {
-                // 1.2
-                nDam = HUtil32.Round(nDam * (M2Share.g_Config.nPosionDamagarmor / 10));
-                // 1.2
-                nDamage = HUtil32.Round(nDamage * (M2Share.g_Config.nPosionDamagarmor / 10));
+                nDam = HUtil32.Round(nDam * (M2Share.g_Config.nPosionDamagarmor / 10));// 1.2
+                nDamage = HUtil32.Round(nDamage * (M2Share.g_Config.nPosionDamagarmor / 10));// 1.2
             }
             bo19 = false;
             if (m_UseItems[grobal2.U_DRESS] != null && m_UseItems[grobal2.U_DRESS].wIndex > 0)
@@ -7561,7 +7528,8 @@ namespace M2Server
                         if (StdItem.NeedIdentify == 1)
                         {
                             // UserEngine.GetStdItemName(m_UseItems[U_DRESS].wIndex) + #9 +
-                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[grobal2.U_DRESS].MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[grobal2.U_DRESS].MakeIndex.ToString() + "\t" 
+                                + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
                         m_UseItems[grobal2.U_DRESS].wIndex = 0;
                         FeatureChanged();
@@ -7595,7 +7563,8 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex.ToString() + "\t" 
+                                    + HUtil32.BoolToIntStr(m_btRaceServer == grobal2.RC_PLAYOBJECT) + "\t" + '0');
                             }
                             m_UseItems[i].wIndex = 0;
                             FeatureChanged();
@@ -7623,7 +7592,11 @@ namespace M2Server
 
         public string GeTBaseObjectInfo()
         {
-            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX.ToString() + '/' + m_nCurrY.ToString() + ' ' + "等级:" + m_Abil.Level.ToString() + ' ' + "经验:" + m_Abil.Exp.ToString() + ' ' + "生命值: " + m_WAbil.HP.ToString() + '-' + m_WAbil.MaxHP.ToString() + ' ' + "魔法值: " + m_WAbil.MP.ToString() + '-' + m_WAbil.MaxMP.ToString() + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC).ToString() + '-' + HUtil32.HiWord(m_WAbil.DC).ToString() + ' ' + "魔法力: " + HUtil32.LoWord(m_WAbil.MC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MC).ToString() + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC).ToString() + '-' + HUtil32.HiWord(m_WAbil.SC).ToString() + ' ' + "防御力: " + HUtil32.LoWord(m_WAbil.AC).ToString() + '-' + HUtil32.HiWord(m_WAbil.AC).ToString() + ' ' + "魔防力: " + HUtil32.LoWord(m_WAbil.MAC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MAC).ToString() + ' ' + "准确:" + m_btHitPoint.ToString() + ' ' + "敏捷:" + m_btSpeedPoint.ToString();
+            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX.ToString() + '/' + m_nCurrY.ToString() + ' ' + "等级:" + m_Abil.Level.ToString() + ' ' + "经验:" + m_Abil.Exp.ToString() + ' ' 
+                + "生命值: " + m_WAbil.HP.ToString() + '-' + m_WAbil.MaxHP.ToString() + ' ' + "魔法值: " + m_WAbil.MP.ToString() + '-' + m_WAbil.MaxMP.ToString() + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC).ToString() + '-' + HUtil32.HiWord(m_WAbil.DC).ToString() + ' ' 
+                + "魔法力: " + HUtil32.LoWord(m_WAbil.MC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MC).ToString() + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC).ToString() + '-' + HUtil32.HiWord(m_WAbil.SC).ToString() + ' ' 
+                + "防御力: " + HUtil32.LoWord(m_WAbil.AC).ToString() + '-' + HUtil32.HiWord(m_WAbil.AC).ToString() + ' ' + "魔防力: " + HUtil32.LoWord(m_WAbil.MAC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MAC).ToString() + ' ' + "准确:" + m_btHitPoint.ToString() + ' '
+                + "敏捷:" + m_btSpeedPoint.ToString();
             return result;
         }
 
@@ -7839,16 +7812,13 @@ namespace M2Server
         public bool MagCanHitTarget(short nX, short nY, TBaseObject TargeTBaseObject)
         {
             bool result = false;
-            int n14;
             int n18;
-            int n1C;
-            int n20;
             if (TargeTBaseObject == null)
             {
                 return result;
             }
-            n20 = Math.Abs(nX - TargeTBaseObject.m_nCurrX) + Math.Abs(nY - TargeTBaseObject.m_nCurrY);
-            n14 = 0;
+            int n20 = Math.Abs(nX - TargeTBaseObject.m_nCurrX) + Math.Abs(nY - TargeTBaseObject.m_nCurrY);
+            int n14 = 0;
             while (n14 < 13)
             {
                 n18 = M2Share.GetNextDirection(nX, nY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
@@ -7861,7 +7831,7 @@ namespace M2Server
                     }
                     else
                     {
-                        n1C = Math.Abs(nX - TargeTBaseObject.m_nCurrX) + Math.Abs(nY - TargeTBaseObject.m_nCurrY);
+                        int n1C = Math.Abs(nX - TargeTBaseObject.m_nCurrX) + Math.Abs(nY - TargeTBaseObject.m_nCurrY);
                         if (n1C > n20)
                         {
                             result = true;
@@ -8087,8 +8057,7 @@ namespace M2Server
                 result = true;
             }
             m_dwStatusArrTick[grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(format(M2Share.g_sDefenceUpTime, new object[] { nSec }), TMsgColor.c_Green, TMsgType.t_Hint);
-            // SysMsg('防御力增加' + IntToStr(nSec) + '秒',c_Green,t_Hint);
+            SysMsg(format(M2Share.g_sDefenceUpTime, nSec), TMsgColor.c_Green, TMsgType.t_Hint);
             RecalcAbilitys();
             SendMsg(this, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -8169,7 +8138,7 @@ namespace M2Server
                     continue;
                 }
                 sName = M2Share.UserEngine.GetStdItemName(m_UseItems[i].wIndex);
-                if (sName.ToLower().CompareTo(sItemName.ToLower()) == 0)
+                if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = m_UseItems[i];
                     nCount++;
@@ -8189,7 +8158,7 @@ namespace M2Server
                 {
                     continue;
                 }
-                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex).ToLower().CompareTo(sItemName.ToLower()) == 0)
+                if (string.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UserItem;
                     break;
@@ -8244,7 +8213,7 @@ namespace M2Server
             for (int i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
-                if ((UserItem.MakeIndex == nItemIndex) && (M2Share.UserEngine.GetStdItemName(UserItem.wIndex).ToLower().CompareTo(sItemName.ToLower()) == 0))
+                if ((UserItem.MakeIndex == nItemIndex) && string.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(UserItem);
                     m_ItemList.RemoveAt(i);

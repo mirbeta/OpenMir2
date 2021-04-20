@@ -64,7 +64,7 @@ namespace M2Server
         /// <summary>
         /// 怪物说话信息列表
         /// </summary>
-        public static ArrayList g_MonSayMsgList = null;
+        public static Dictionary<string, IList<TMonSayMsg>> g_MonSayMsgList = null;
         /// <summary>
         /// /禁止制造物品列表
         /// </summary>
