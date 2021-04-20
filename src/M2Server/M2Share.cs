@@ -2660,7 +2660,6 @@ namespace M2Server
 
         public static bool SaveChatLog()
         {
-            bool result;
             //if (File.Exists(sFileName))
             //{
             //    LoadList = new ArrayList();
@@ -2687,51 +2686,51 @@ namespace M2Server
             {
                 result = 0;
             }
-            else if (String.Compare(sName, U_WEAPONNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_WEAPONNAME, StringComparison.Ordinal) == 0)
             {
                 result = 1;
             }
-            else if (String.Compare(sName, U_RIGHTHANDNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RIGHTHANDNAME, StringComparison.Ordinal) == 0)
             {
                 result = 2;
             }
-            else if (String.Compare(sName, U_NECKLACENAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_NECKLACENAME, StringComparison.Ordinal) == 0)
             {
                 result = 3;
             }
-            else if (String.Compare(sName, U_HELMETNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_HELMETNAME, StringComparison.Ordinal) == 0)
             {
                 result = 4;
             }
-            else if (String.Compare(sName, U_ARMRINGLNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_ARMRINGLNAME, StringComparison.Ordinal) == 0)
             {
                 result = 5;
             }
-            else if (String.Compare(sName, U_ARMRINGRNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_ARMRINGRNAME, StringComparison.Ordinal) == 0)
             {
                 result = 6;
             }
-            else if (String.Compare(sName, U_RINGLNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RINGLNAME, StringComparison.Ordinal) == 0)
             {
                 result = 7;
             }
-            else if (String.Compare(sName, U_RINGRNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RINGRNAME, StringComparison.Ordinal) == 0)
             {
                 result = 8;
             }
-            else if (String.Compare(sName, U_BUJUKNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BUJUKNAME, StringComparison.Ordinal) == 0)
             {
                 result = 9;
             }
-            else if (String.Compare(sName, U_BELTNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BELTNAME, StringComparison.Ordinal) == 0)
             {
                 result = 10;
             }
-            else if (String.Compare(sName, U_BOOTSNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BOOTSNAME, StringComparison.Ordinal) == 0)
             {
                 result = 11;
             }
-            else if (String.Compare(sName, U_CHARMNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_CHARMNAME, StringComparison.Ordinal) == 0)
             {
                 result = 12;
             }

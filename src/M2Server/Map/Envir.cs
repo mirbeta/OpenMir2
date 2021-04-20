@@ -20,25 +20,22 @@ namespace M2Server
     public struct TMapUnitInfo
     {
         public short wBkImg;
-        // 32768 $8000 为禁止移动区域
         public short wMidImg;
         public short wFrImg;
         public byte btDoorIndex;
-        // $80 (巩娄), 巩狼 侥喊 牢郸胶
         public byte btDoorOffset;
-        // 摧腮 巩狼 弊覆狼 惑措 困摹, $80 (凯覆/摧塞(扁夯))
         public byte btAniFrame;
-        // $80(Draw Alpha) +  橇贰烙 荐
         public byte btAniTick;
         public byte btArea;
-        // 瘤开 沥焊
         public byte btLight;
     }
 
     public class TMapCellinfo
     {
+        /// <summary>
+        /// 为0的的时候可以表示该区域可以移动
+        /// </summary>
         public byte chFlag;
         public IList<TOSObject> ObjList;
     }
 }
-

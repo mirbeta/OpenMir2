@@ -142,7 +142,7 @@ namespace M2Server
             }
         }
 
-        private unsafe void ExecGateBuffers(int nGateIndex, TGateInfo Gate, byte[] Buffer, int nMsgLen)
+        private unsafe void ExecGateBuffers(int nGateIndex, TGateInfo GameGate, byte[] Buffer, int nMsgLen)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
@@ -155,29 +155,29 @@ namespace M2Server
                     IntPtr ip;
                     if (nMsgLen > 20)
                     {
-                        ip = (IntPtr)(Gate.nBuffLen + nMsgLen);
-                        if (Gate.Buffer != (IntPtr)0)
+                        ip = (IntPtr)(GameGate.nBuffLen + nMsgLen);
+                        if (GameGate.Buffer != (IntPtr)0)
                         {
-                            Gate.Buffer = Marshal.ReAllocHGlobal(Gate.Buffer, ip);
+                            GameGate.Buffer = Marshal.ReAllocHGlobal(GameGate.Buffer, ip);
                         }
                         else
                         {
-                            Gate.Buffer = Marshal.AllocHGlobal(ip);
+                            GameGate.Buffer = Marshal.AllocHGlobal(ip);
                         }
-                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)Gate.Buffer + Gate.nBuffLen), nMsgLen);
+                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)GameGate.Buffer + GameGate.nBuffLen), nMsgLen);
                     }
                     else
                     {
-                        ip = (IntPtr)(Gate.nBuffLen + nMsgLen);
-                        if (Gate.Buffer != (IntPtr)0)
+                        ip = (IntPtr)(GameGate.nBuffLen + nMsgLen);
+                        if (GameGate.Buffer != (IntPtr)0)
                         {
-                            Gate.Buffer = Marshal.ReAllocHGlobal(Gate.Buffer, ip);
+                            GameGate.Buffer = Marshal.ReAllocHGlobal(GameGate.Buffer, ip);
                         }
                         else
                         {
-                            Gate.Buffer = Marshal.AllocHGlobal(ip);
+                            GameGate.Buffer = Marshal.AllocHGlobal(ip);
                         }
-                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)Gate.Buffer + Gate.nBuffLen), nMsgLen);
+                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)GameGate.Buffer + GameGate.nBuffLen), nMsgLen);
                     }
                 }
             }
@@ -188,28 +188,24 @@ namespace M2Server
             byte* Buff = null;
             try
             {
-                nLen = Gate.nBuffLen + nMsgLen;
-                Buff = (byte*)Gate.Buffer;
+                nLen = GameGate.nBuffLen + nMsgLen;
+                Buff = (byte*)GameGate.Buffer;
                 if (nLen >= sizeof(TMsgHeader))
                 {
                     while (true)
                     {
-                        var MsgHeader = *(TMsgHeader*)Buff;
-                        var nCheckMsgLen = Math.Abs(MsgHeader.nLength) + sizeof(TMsgHeader);
-                        if (MsgHeader.dwCode == grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
+                        var msgHeader = *(TMsgHeader*)Buff;
+                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + sizeof(TMsgHeader);
+                        if (msgHeader.dwCode == grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
                             if (nLen < nCheckMsgLen)
                             {
                                 break;
                             }
-                            var MsgBuff = Buff + sizeof(TMsgHeader);
-                            // Jacky 1009 换上
-                            // MsgBuff:=@Buff[SizeOf(TMsgHeader)];
-                            ExecGateMsg(nGateIndex, Gate, MsgHeader, MsgBuff, MsgHeader.nLength);
-                            Buff = Buff + sizeof(TMsgHeader) + MsgHeader.nLength;
-                            // Jacky 1009 换上
-                            // Buff:=@Buff[SizeOf(TMsgHeader) + pMsg.nLength];
-                            nLen = nLen - (MsgHeader.nLength + sizeof(TMsgHeader));
+                            var msgBuff = Buff + sizeof(TMsgHeader);
+                            ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
+                            Buff = Buff + sizeof(TMsgHeader) + msgHeader.nLength;
+                            nLen = nLen - (msgHeader.nLength + sizeof(TMsgHeader));
                         }
                         else
                         {
@@ -231,32 +227,18 @@ namespace M2Server
             {
                 if (nLen > 0)
                 {
-                    var TempBuff = Marshal.AllocHGlobal(nLen);
-                    HUtil32.IntPtrToIntPtr((IntPtr)Buff, 0, TempBuff, 0, nLen);
-                    Marshal.FreeHGlobal(Gate.Buffer);
-                    Gate.Buffer = TempBuff;
-                    Gate.nBuffLen = nLen;
+                    var tempBuff = Marshal.AllocHGlobal(nLen);
+                    HUtil32.IntPtrToIntPtr((IntPtr)Buff, 0, tempBuff, 0, nLen);
+                    Marshal.FreeHGlobal(GameGate.Buffer);
+                    GameGate.Buffer = tempBuff;
+                    GameGate.nBuffLen = nLen;
                 }
                 else
                 {
-                    Marshal.FreeHGlobal(Gate.Buffer);
-                    Gate.Buffer = (IntPtr)0;
-                    Gate.nBuffLen = 0;
+                    Marshal.FreeHGlobal(GameGate.Buffer);
+                    GameGate.Buffer = (IntPtr)0;
+                    GameGate.nBuffLen = 0;
                 }
-                //if (nLen > 0)
-                //{
-                //    GetMem(TempBuff, nLen);
-                //    Move(Buff, TempBuff, nLen);
-                //    FreeMem(Gate.Buffer);
-                //    Gate.Buffer = TempBuff;
-                //    Gate.nBuffLen = nLen;
-                //}
-                //else
-                //{
-                //    FreeMem(Gate.Buffer);
-                //    Gate.Buffer = null;
-                //    Gate.nBuffLen = 0;
-                //}
             }
             catch
             {
@@ -419,7 +401,6 @@ namespace M2Server
 
         private void DoClientCertification(int GateIdx, TGateUserInfo GateUser, int nSocket, string sMsg)
         {
-            var nCheckCode = 0;
             var sData = string.Empty;
             var sAccount = string.Empty;
             var sChrName = string.Empty;
@@ -429,7 +410,7 @@ namespace M2Server
             var nPayMent = 0;
             var nPayMode = 0;
             TSessInfo SessInfo;
-            const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification CheckCode: ";
+            const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
             {
@@ -438,7 +419,7 @@ namespace M2Server
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
                         sData = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
-                        sMsg = sMsg.Substring(2 - 1, sMsg.Length - 1);
+                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
                         if (DoClientCertification_GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag))
                         {
                             SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
@@ -456,32 +437,28 @@ namespace M2Server
                                 }
                                 catch
                                 {
-                                    M2Share.MainOutMessage(string.Format(sExceptionMsg, new int[] { nCheckCode }));
+                                    M2Share.MainOutMessage(string.Format(sExceptionMsg));
                                 }
                             }
                             else
                             {
-                                nCheckCode = 2;
                                 GateUser.sAccount = sDisable;
                                 GateUser.boCertification = false;
                                 CloseUser(GateIdx, nSocket);
-                                nCheckCode = 3;
                             }
                         }
                         else
                         {
-                            nCheckCode = 4;
                             GateUser.sAccount = sDisable;
                             GateUser.boCertification = false;
                             CloseUser(GateIdx, nSocket);
-                            nCheckCode = 5;
                         }
                     }
                 }
             }
             catch
             {
-                M2Share.MainOutMessage(string.Format(sExceptionMsg, new int[] { nCheckCode }));
+                M2Share.MainOutMessage(sExceptionMsg);
             }
         }
 
@@ -575,7 +552,7 @@ namespace M2Server
                 while (MsgList.Count > 0)
                 {
                     BufferA = MsgList[0];
-                    if (BufferA == null)
+                    if (BufferA == IntPtr.Zero)
                     {
                         MsgList.RemoveAt(0);
                         continue;
@@ -792,7 +769,7 @@ namespace M2Server
             MsgHeader.wIdent = grobal2.GM_SERVERUSERINDEX;
             MsgHeader.wUserListIndex = (short)nUserIdex;
             MsgHeader.nLength = 0;
-            if (Socket != null && Socket.Connected)
+            if (Socket.Connected)
             {
                 var data = new byte[sizeof(TMsgHeader)];
                 fixed (byte* pb = data)
@@ -805,7 +782,6 @@ namespace M2Server
 
         private unsafe void ExecGateMsg(int GateIdx, TGateInfo Gate, TMsgHeader MsgHeader, byte* MsgBuff, int nMsgLen)
         {
-            var nCheckCode = 0;
             int nUserIdx;
             string sIPaddr;
             TGateUserInfo GateUser;
@@ -815,27 +791,22 @@ namespace M2Server
                 switch (MsgHeader.wIdent)
                 {
                     case grobal2.GM_OPEN:
-                        nCheckCode = 1;
                         sIPaddr = HUtil32.SBytePtrToString((sbyte*)MsgBuff, 0, nMsgLen);
                         nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
                         SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
                         break;
                     case grobal2.GM_CLOSE:
-                        nCheckCode = 2;
                         CloseUser(GateIdx, MsgHeader.nSocket);
                         break;
                     case grobal2.GM_CHECKCLIENT:
-                        nCheckCode = 3;
                         Gate.boSendKeepAlive = true;
                         break;
                     case grobal2.GM_RECEIVE_OK:
-                        nCheckCode = 4;
                         Gate.nSendChecked = 0;
                         Gate.nSendBlockCount = 0;
                         break;
                     case grobal2.GM_DATA:
-                        nCheckCode = 5;
                         GateUser = null;
                         if (MsgHeader.wUserListIndex >= 1)
                         {
@@ -864,22 +835,22 @@ namespace M2Server
                                 }
                             }
                         }
-                        nCheckCode = 6;
+
                         if (GateUser != null)
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
                             {
                                 if (GateUser.boCertification && nMsgLen >= sizeof(TDefaultMessage))
                                 {
-                                    var DefMsg = (TDefaultMessage*)MsgBuff;
+                                    var defMsg = (TDefaultMessage*)MsgBuff;
                                     if (nMsgLen == sizeof(TDefaultMessage))
                                     {
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *DefMsg, null);
+                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, null);
                                     }
                                     else
                                     {
                                         var sMsg = EncryptUnit.DeCodeString(HUtil32.StrPas(MsgBuff + sizeof(TDefaultMessage)), true);//解码
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *DefMsg, sMsg);
+                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, sMsg);
                                     }
                                 }
                             }
@@ -894,7 +865,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(string.Format(sExceptionMsg, new int[] { nCheckCode }));
+                M2Share.MainOutMessage(sExceptionMsg);
             }
         }
 
@@ -912,7 +883,7 @@ namespace M2Server
                 wIdent = (short)nIdent,
                 nLength = 0
             };
-            if (Socket != null && Socket.Connected)
+            if (Socket.Connected)
             {
                 var data = new byte[sizeof(TMsgHeader)];
                 fixed (byte* pb = data)
@@ -1033,10 +1004,9 @@ namespace M2Server
 
         private unsafe void SendScanMsg(TDefaultMessage* DefMsg, string sMsg, int nGateIdx, int nSocket, int nGsIdx)
         {
-            TMsgHeader MsgHdr;
             byte[] Buff = null;
             int nSendBytes;
-            MsgHdr = new TMsgHeader
+            TMsgHeader  MsgHdr = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = nSocket,
@@ -1132,9 +1102,9 @@ namespace M2Server
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
-                for (var I = 0; I < Gate.UserList.Count; I++)
+                for (var i = 0; i < Gate.UserList.Count; i++)
                 {
-                    GateUserInfo = Gate.UserList[I];
+                    GateUserInfo = Gate.UserList[i];
                     if (GateUserInfo != null && GateUserInfo.nSocket == nSocket)
                     {
                         GateUserInfo.FrontEngine = null;
@@ -1198,70 +1168,54 @@ namespace M2Server
         {
             TGateUserInfo GateUserInfo;
             TGateInfo Gate;
-            var nCheckCode = 0;
             const string sExceptionMsg = "[Exception] TRunSocket::KickUser";
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线！！！";
             try
             {
-                nCheckCode = 0;
                 for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
                 {
                     Gate = RunSock.g_GateArr[i];
-                    nCheckCode = 1;
                     if (Gate.boUsed && Gate.Socket != null && Gate.UserList != null)
                     {
-                        nCheckCode = 2;
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
                         try
                         {
-                            nCheckCode = 3;
                             for (var j = 0; j < Gate.UserList.Count; j++)
                             {
-                                nCheckCode = 4;
                                 GateUserInfo = Gate.UserList[j];
                                 if (GateUserInfo == null)
                                 {
                                     continue;
                                 }
-                                nCheckCode = 5;
                                 if (GateUserInfo.sAccount == sAccount || GateUserInfo.nSessionID == nSessionID)
                                 {
-                                    nCheckCode = 6;
                                     if (GateUserInfo.FrontEngine != null)
                                     {
-                                        nCheckCode = 7;
                                         ((TFrontEngine)GateUserInfo.FrontEngine).DeleteHuman(i, GateUserInfo.nSocket);
                                     }
-                                    nCheckCode = 8;
                                     if (GateUserInfo.PlayObject != null)
                                     {
-                                        nCheckCode = 9;
                                         ((TPlayObject)GateUserInfo.PlayObject).SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                                         ((TPlayObject)GateUserInfo.PlayObject).m_boEmergencyClose = true;
                                         ((TPlayObject)GateUserInfo.PlayObject).m_boSoftClose = true;
                                     }
-                                    nCheckCode = 10;
                                     GateUserInfo = null;
-                                    nCheckCode = 11;
                                     Gate.UserList[j] = null;
-                                    nCheckCode = 12;
                                     Gate.nUserCount -= 1;
                                     break;
                                 }
                             }
-                            nCheckCode = 13;
                         }
                         finally
                         {
                             HUtil32.LeaveCriticalSection(m_RunSocketSection);
                         }
-                        nCheckCode = 14;
                     }
                 }
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(string.Format(sExceptionMsg, new int[] { nCheckCode }));
+                M2Share.MainOutMessage(sExceptionMsg);
                 M2Share.MainOutMessage(e.Message, MessageType.Error);
             }
         }
@@ -1286,10 +1240,7 @@ namespace M2Server
 {
     public class RunSock
     {
-        public static TGateInfo[] g_GateArr = new TGateInfo[19 + 1];
-        public static int g_nGateRecvMsgLenMin = 0;
-        public static int g_nGateRecvMsgLenMax = 0;
-        public static int nRunSocketRun = -1;
+        public static TGateInfo[] g_GateArr = new TGateInfo[20];
     }
 }
 

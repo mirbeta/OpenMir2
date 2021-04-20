@@ -109,7 +109,6 @@ namespace M2Server
             {
                 Msg = *(TDefaultMessage*) pb;
             }
-
             return Msg;
         }
 

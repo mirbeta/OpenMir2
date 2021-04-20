@@ -6895,15 +6895,6 @@ namespace M2Server
                         ActionOfRecallmob(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nKICK:
-                        // 
-                        // nSC_RECALLMOB: begin
-                        // if QuestActionInfo.nParam3 <= 1 then begin
-                        // PlayObject.MakeSlave(QuestActionInfo.sParam1,3,Str_ToInt(QuestActionInfo.sParam2,0),100,10 * 24 * 60 * 60);
-                        // end else begin
-                        // PlayObject.MakeSlave(QuestActionInfo.sParam1,3,Str_ToInt(QuestActionInfo.sParam2,0),100,QuestActionInfo.nParam3 * 60)
-                        // end;
-                        // end;
-                        // 
                         PlayObject.m_boReconnection = true;
                         PlayObject.m_boSoftClose = true;
                         break;
@@ -8879,11 +8870,11 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKRANGEMONCOUNT);
                 return result;
             }
-            ArrayList MonList = new ArrayList();
+            IList<TBaseObject> MonList = new List<TBaseObject>();
             int nMapRangeCount = Envir.GetRangeBaseObject(nX, nY, nRange, true, MonList);
             for (var i = MonList.Count - 1; i >= 0; i--)
             {
-                BaseObject = (TBaseObject)MonList[i];
+                BaseObject = MonList[i];
                 if ((BaseObject.m_btRaceServer < grobal2.RC_ANIMAL) || (BaseObject.m_btRaceServer == grobal2.RC_ARCHERGUARD) || (BaseObject.m_Master != null))
                 {
                     MonList.RemoveAt(i);

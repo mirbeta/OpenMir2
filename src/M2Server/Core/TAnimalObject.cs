@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace M2Server
 {
@@ -173,14 +174,14 @@ namespace M2Server
         protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
         {
             int nDamage;
-            ArrayList BaseObjectList;
+            IList<TBaseObject> BaseObjectList;
             TBaseObject BaseObject;
             this.m_btDirection = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
-            BaseObjectList = new ArrayList();
+            BaseObjectList = new List<TBaseObject>();
             this.m_PEnvir.GetBaseObjects(TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i ++ )
             {
-                BaseObject = BaseObjectList[i] as TBaseObject;
+                BaseObject = BaseObjectList[i];
                 if (this.IsProperTarget(BaseObject))
                 {
                     nDamage = 0;
@@ -193,6 +194,7 @@ namespace M2Server
                     }
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             this.SendRefMsg(grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
         }

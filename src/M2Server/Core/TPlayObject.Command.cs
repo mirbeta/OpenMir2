@@ -1,6 +1,7 @@
 ﻿using mSystemModule;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace M2Server
@@ -3662,9 +3663,7 @@ namespace M2Server
 
         public void CmdMobLevel(TGameCmd Cmd, string Param)
         {
-            // 004CFD5C
-            int I;
-            ArrayList BaseObjectList;
+            IList<TBaseObject> BaseObjectList;
             TBaseObject BaseObject;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
@@ -3673,18 +3672,18 @@ namespace M2Server
             }
             if ((Param != "") && (Param[1] == '?'))
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            BaseObjectList = new ArrayList();
+            BaseObjectList = new List<TBaseObject>();
             m_PEnvir.GetRangeBaseObject(m_nCurrX, m_nCurrY, 2, true, BaseObjectList);
-            for (I = 0; I < BaseObjectList.Count; I++)
+            for (var i = 0; i < BaseObjectList.Count; i++)
             {
-                BaseObject = BaseObjectList[I] as TBaseObject;
+                BaseObject = BaseObjectList[i] as TBaseObject;
                 SysMsg(BaseObject.GeTBaseObjectInfo(), TMsgColor.c_Green, TMsgType.t_Hint);
             }
-            //BaseObjectList.Free;
+            BaseObjectList.Clear();
+            BaseObjectList = null;
         }
 
         public void CmdMobNpc(string sCmd, int nPermission, string sParam1, string sParam2, string sParam3, string sParam4)

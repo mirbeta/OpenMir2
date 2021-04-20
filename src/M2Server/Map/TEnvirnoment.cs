@@ -32,17 +32,15 @@ namespace M2Server
 
         public object AddToMap(int nX, int nY, byte btType, object pRemoveObject)
         {
-            object result;
+            object result = null;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TMapItem MapItem;
             int nGoldCount;
-            bool bo1E;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMap";
-            result = null;
             try
             {
-                bo1E = false;
+                var bo1E = false;
                 if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
                 {
                     if (MapCellInfo.ObjList == null)
@@ -136,7 +134,7 @@ namespace M2Server
             return result;
         }
 
-        public int MoveToMovingObject(int nCX, int nCY, object Cert, int nX, int nY, bool boFlag)
+        public int MoveToMovingObject(int nCX, int nCY, TBaseObject Cert, int nX, int nY, bool boFlag)
         {
             TMapCellinfo MapCellInfo = null;
             TBaseObject BaseObject;
@@ -196,7 +194,7 @@ namespace M2Server
                                 OSObject = MapCellInfo.ObjList[i];
                                 if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
                                 {
-                                    if ((TBaseObject)OSObject.CellObj == (TBaseObject)Cert)
+                                    if ((TBaseObject)OSObject.CellObj == Cert)
                                     {
                                         MapCellInfo.ObjList.RemoveAt(i);
                                         OSObject = null;
@@ -237,11 +235,13 @@ namespace M2Server
             return result;
         }
 
-        // ======================================================================
-        // 检查地图指定座标是否可以移动
-        // boFlag  如果为TRUE 则忽略座标上是否有角色
-        // 返回值 True 为可以移动，False 为不可以移动
-        // ======================================================================
+        /// <summary>
+        /// 检查地图指定座标是否可以移动
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="boFlag">如果为TRUE 则忽略座标上是否有角色</param>
+        /// <returns> 返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalk(int nX, int nY, bool boFlag)
         {
             TMapCellinfo MapCellInfo = null;
@@ -279,11 +279,14 @@ namespace M2Server
             return CanWalk(nX, nY, false);
         }
 
-        // ======================================================================
-        // 检查地图指定座标是否可以移动
-        // boFlag  如果为TRUE 则忽略座标上是否有角色
-        // 返回值 True 为可以移动，False 为不可以移动
-        // ======================================================================
+        /// <summary>
+        /// 检查地图指定座标是否可以移动
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="boFlag">如果为TRUE 则忽略座标上是否有角色</param>
+        /// <param name="boItem"></param>
+        /// <returns>返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalkOfItem(int nX, int nY, bool boFlag, bool boItem)
         {
             TMapCellinfo MapCellInfo = null;
@@ -364,7 +367,7 @@ namespace M2Server
                                         }
                                         else
                                         {
-                                            if (new ArrayList(new int[] { grobal2.RC_GUARD, grobal2.RC_ARCHERGUARD }).Contains(BaseObject.m_btRaceServer))
+                                            if (new ArrayList(new[] { grobal2.RC_GUARD, grobal2.RC_ARCHERGUARD }).Contains(BaseObject.m_btRaceServer))
                                             {
                                                 if (M2Share.g_Config.boRunGuard)
                                                 {
@@ -438,7 +441,6 @@ namespace M2Server
                                             {
                                                 continue;
                                             }
-                                            //MapCellInfo.ObjList.Free;
                                             MapCellInfo.ObjList = null;
                                             break;
                                         }
@@ -450,7 +452,6 @@ namespace M2Server
                                         {
                                             continue;
                                         }
-                                        //MapCellInfo.ObjList.Free;
                                         MapCellInfo.ObjList = null;
                                         break;
                                     }
@@ -1104,7 +1105,7 @@ namespace M2Server
             return result;
         }
 
-        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, ArrayList BaseObjectList)
+        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<TBaseObject> BaseObjectList)
         {
             int result;
             for (var nXX = nX - nRage; nXX <= nX + nRage; nXX++)
@@ -1118,10 +1119,15 @@ namespace M2Server
             return result;
         }
 
-        // boFlag 是否包括死亡对象
-        // FALSE 包括死亡对象
-        // TRUE  不包括死亡对象
-        public int GetBaseObjects(int nX, int nY, bool boFlag, ArrayList BaseObjectList)
+        /// <summary>
+        /// 获取指定坐标上的所有游戏对象
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
+        /// <param name="BaseObjectList"></param>
+        /// <returns></returns>
+        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<TBaseObject> BaseObjectList)
         {
             int result;
             TMapCellinfo MapCellInfo = null;

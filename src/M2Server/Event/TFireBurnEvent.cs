@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+
 namespace M2Server
 {
     public class TFireBurnEvent : TEvent
@@ -11,12 +12,12 @@ namespace M2Server
 
         public override void Run()
         {
-            ArrayList BaseObjectList;
+            IList<TBaseObject> BaseObjectList;
             TBaseObject TargeTBaseObject;
             if (HUtil32.GetTickCount() - m_dwRunTick > 3000)
             {
                 m_dwRunTick = HUtil32.GetTickCount();
-                BaseObjectList = new ArrayList();
+                BaseObjectList = new List<TBaseObject>();
                 if (m_Envir != null)
                 {
                     m_Envir.GetBaseObjects(m_nX, m_nY, true, BaseObjectList);
@@ -29,7 +30,8 @@ namespace M2Server
                         }
                     }
                 }
-                //BaseObjectList.Free;
+                BaseObjectList.Clear();
+                BaseObjectList = null;
             }
             base.Run();
         }

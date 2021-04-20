@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using M2Server.CommandSystem;
 using System.Collections;
+using System.Linq;
 
 namespace M2Server
 {
@@ -16,20 +17,21 @@ namespace M2Server
         public void MobLevel(string[] @Params, TPlayObject PlayObject)
         {
             var Param = @Params.Length > 0 ? @Params[0] : "";
-            ArrayList BaseObjectList;
+            IList<TBaseObject> BaseObjectList;
             TBaseObject BaseObject;
             if (Param != "" && Param[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, new string[] { this.Attributes.Name, "" }), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            BaseObjectList = new ArrayList();
+            BaseObjectList = new List<TBaseObject>();
             PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.m_nCurrX, PlayObject.m_nCurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
-                BaseObject = BaseObjectList[i] as TBaseObject;
+                BaseObject = BaseObjectList[i];
                 PlayObject.SysMsg(BaseObject.GeTBaseObjectInfo(), TMsgColor.c_Green, TMsgType.t_Hint);
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
         }
     }
