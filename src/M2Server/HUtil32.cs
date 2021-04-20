@@ -8,6 +8,8 @@ namespace M2Server
 {
     public class HUtil32
     {
+        private const int V = 0;
+
         /// <summary>
         /// 根据GUID获取唯一数字序列
         /// </summary>
@@ -287,22 +289,6 @@ namespace M2Server
             var result = def;
             int.TryParse(Str, out result);
             return result;
-
-            //int result = def;
-            //if (Str != "")
-            //{
-            //    if (((((short)Str[1]) >= (short)'0') && (((short)Str[1]) <= (short)'9')) || (Str[1] == '+') || (Str[1] == '-'))
-            //    {
-            //        try
-            //        {
-            //            result = Convert.ToInt32(Str);
-            //        }
-            //        catch
-            //        {
-            //        }
-            //    }
-            //}
-            //return result;
         }
 
         public static DateTime Str_ToDate(string Str)
@@ -543,10 +529,10 @@ namespace M2Server
                 }
                 else
                 {
-                    for (var I = 1; I <= srclen; I++)
-                        if (Source[I - 1].ToString() == SearchAfter)
+                    for (var i = 1; i <= srclen; i++)
+                        if (Source[i - 1].ToString() == SearchAfter)
                         {
-                            result = Source.Substring(I - 1, srclen - I + 1);
+                            result = Source.Substring(i - 1, srclen - i + 1);
                             break;
                         }
                 }
@@ -612,10 +598,10 @@ namespace M2Server
                 }
                 else
                 {
-                    for (var I = 1; I <= srclen; I++)
-                        if (Source[I - 1].ToString() == SearchAfter.ToString())
+                    for (var i = 1; i <= srclen; i++)
+                        if (Source[i - 1].ToString() == SearchAfter.ToString())
                         {
-                            result = Source.Substring(I - 1, srclen - I + 1);
+                            result = Source.Substring(i - 1, srclen - i + 1);
                             break;
                         }
                 }
@@ -626,48 +612,6 @@ namespace M2Server
                 result = "";
             }
 
-            return result;
-        }
-
-        public static string SkipStr(string Src, char[] Skips)
-        {
-            string result;
-            int I;
-            int Len;
-            int C;
-            bool NowSkip;
-            Len = Src.Length;
-            // Count := sizeof(Skips) div sizeof (Char);
-            for (I = 1; I <= Len; I++)
-            {
-                NowSkip = false;
-                for (C = Skips.GetLowerBound(0); C <= Skips.GetUpperBound(0); C++)
-                    if (Src[I] == Skips[C])
-                    {
-                        NowSkip = true;
-                        break;
-                    }
-
-                if (!NowSkip) break;
-            }
-
-            result = Src.Substring(I - 1, Len - I + 1);
-            return result;
-        }
-
-        public static string CombineDirFile(string SrcDir, string TargName)
-        {
-            string result;
-            if (SrcDir == "" || TargName == "")
-            {
-                result = SrcDir + TargName;
-                return result;
-            }
-
-            if (SrcDir[SrcDir.Length] == '\\')
-                result = SrcDir + TargName;
-            else
-                result = SrcDir + '\\' + TargName;
             return result;
         }
 
@@ -755,30 +699,24 @@ namespace M2Server
 
         public static bool IsUniformStr(string src, char ch)
         {
-            bool result;
-            int i;
-            int len;
-            result = true;
+            bool result = true;
             if (src != "")
             {
-                len = src.Length;
-                for (i = 0; i < len; i++)
+                int len = src.Length;
+                for (var i = 0; i < len; i++)
                     if (src[i] == ch)
                     {
                         result = false;
                         break;
                     }
             }
-
             return result;
         }
 
         public static string _StrPas(string dest)
         {
-            string result;
-            int i;
-            result = "";
-            for (i = 0; i < dest.Length; i++)
+            string result = "";
+            for (var i = 0; i < dest.Length; i++)
                 if (dest[i] != (char) 0)
                     result = result + dest[i];
                 else
@@ -813,7 +751,6 @@ namespace M2Server
 
                 pos++;
             }
-
             return result;
         }
 
@@ -852,7 +789,6 @@ namespace M2Server
                 result = source;
                 return result;
             }
-
             if (source[1] == cap)
             {
                 if (source[2] == cap)
@@ -876,7 +812,6 @@ namespace M2Server
                     result = source;
                 }
             }
-
             return result;
         }
 
@@ -1024,55 +959,6 @@ namespace M2Server
             return result;
         }
 
-        public static bool IsIPaddr(string IP)
-        {
-            bool result;
-            var Node = new int[3 + 1];
-            result = false;
-            //tIP = IP;
-            //tLen = tIP.Length;
-            //tPos = tIP.IndexOf('.');
-            //tNode = tIP.Substring(1, tPos - 1);
-            //tIP = tIP.Substring(tPos + 1, tLen - tPos);
-            //
-            //if (!TryStrToInt(tNode, Node[0]))
-            //{
-            //    return result;
-            //}
-            //tLen = tIP.Length;
-            //tPos = tIP.IndexOf('.');
-            //tNode = tIP.Substring(1, tPos - 1);
-            //tIP = tIP.Substring(tPos + 1, tLen - tPos);
-            //
-            //if (!TryStrToInt(tNode, Node[1]))
-            //{
-            //    return result;
-            //}
-            //tLen = tIP.Length;
-            //tPos = tIP.IndexOf('.');
-            //tNode = tIP.Substring(1, tPos - 1);
-            //tIP = tIP.Substring(tPos + 1, tLen - tPos);
-            //
-            //if (!TryStrToInt(tNode, Node[2]))
-            //{
-            //    return result;
-            //}
-            //
-            //if (!TryStrToInt(tIP, Node[3]))
-            //{
-            //    return result;
-            //}
-            //for (tLen = Node.GetLowerBound(0); tLen <= Node.GetUpperBound(0); tLen ++ )
-            //{
-            //    if ((Node[tLen] < 0) || (Node[tLen] > 255))
-            //    {
-            //        return result;
-            //    }
-            //}
-            result = true;
-            return result;
-        }
-
         public static string BoolToCStr(bool b)
         {
             string result;
@@ -1110,28 +996,20 @@ namespace M2Server
 
         public static int GetDayCount(DateTime MaxDate, DateTime MinDate)
         {
-            int result;
-            int YearMax;
-            int MonthMax;
-            int DayMax;
-            int YearMin;
-            int MonthMin;
-            int DayMin;
-            result = 0;
+            int result = V;
             if (MaxDate < MinDate) return result;
-            YearMax = MaxDate.Year;
-            MonthMax = MaxDate.Month;
-            DayMax = MaxDate.Day;
-            YearMin = MinDate.Year;
-            MonthMin = MinDate.Month;
-            DayMin = MinDate.Day;
+            int YearMax = MaxDate.Year;
+            int MonthMax = MaxDate.Month;
+            int DayMax = MaxDate.Day;
+            int YearMin = MinDate.Year;
+            int MonthMin = MinDate.Month;
+            int DayMin = MinDate.Day;
             YearMax -= YearMin;
             YearMin = 0;
             result = YearMax * 12 * 30 + MonthMax * 30 + DayMax - (YearMin * 12 * 30 + MonthMin * 30 + DayMin);
             return result;
         }
 
-        // Damian - These 2 functions are same, so use either
         public static int GetCodeMsgSize(double X)
         {
             int result;
@@ -1141,7 +1019,6 @@ namespace M2Server
                 result = Convert.ToInt32(X);
             return result;
         }
-
 
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
         {
