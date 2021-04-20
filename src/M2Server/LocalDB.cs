@@ -29,103 +29,86 @@ namespace M2Server
     {
         public bool LoadAdminList()
         {
-            bool result;
-            var sfilename = string.Empty;
+            bool result= false;
             var sLineText = string.Empty;
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
             var sData = string.Empty;
             StringList LoadList;
             TAdminInfo AdminInfo;
-            int i;
-            int nLv;
-            result = false;
-            sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
+            string  sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
             if (!File.Exists(sfilename))
             {
                 return result;
             }
-            //M2Share.UserEngine.m_AdminList.__Lock();
-            try
+            M2Share.UserEngine.m_AdminList.Clear();
+            LoadList = new StringList();
+            LoadList.LoadFromFile(sfilename);
+            for (var i = 0; i < LoadList.Count; i++)
             {
-                for (i = 0; i < M2Share.UserEngine.m_AdminList.Count; i++)
+                sLineText = LoadList[i];
+                var nLv = -1;
+                if (sLineText != "" && sLineText[0] != ';')
                 {
-                    //Dispose(((TAdminInfo)(M2Share.UserEngine.m_AdminList[i])));// 内存泄露
-                }
-                M2Share.UserEngine.m_AdminList.Clear();
-                LoadList = new StringList();
-                LoadList.LoadFromFile(sfilename);
-                for (i = 0; i < LoadList.Count; i++)
-                {
-                    sLineText = LoadList[i];
-                    nLv = -1;
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (sLineText[0] == '*')
                     {
-                        if (sLineText[0] == '*')
+                        nLv = 10;
+                    }
+                    else if (sLineText[0] == '1')
+                    {
+                        nLv = 9;
+                    }
+                    else if (sLineText[0] == '2')
+                    {
+                        nLv = 8;
+                    }
+                    else if (sLineText[0] == '3')
+                    {
+                        nLv = 7;
+                    }
+                    else if (sLineText[0] == '4')
+                    {
+                        nLv = 6;
+                    }
+                    else if (sLineText[0] == '5')
+                    {
+                        nLv = 5;
+                    }
+                    else if (sLineText[0] == '6')
+                    {
+                        nLv = 4;
+                    }
+                    else if (sLineText[0] == '7')
+                    {
+                        nLv = 3;
+                    }
+                    else if (sLineText[0] == '8')
+                    {
+                        nLv = 2;
+                    }
+                    else if (sLineText[0] == '9')
+                    {
+                        nLv = 1;
+                    }
+
+                    if (nLv > 0)
+                    {
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new string[] {"/", "\\", " ", "\t"});
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new string[] {"/", "\\", " ", "\t"});
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new string[] {"/", "\\", " ", "\t"});
+                        if (string.IsNullOrEmpty(sCharName) || sIPaddr == "")
                         {
-                            nLv = 10;
+                            continue;
                         }
-                        else if (sLineText[0] == '1')
+                        AdminInfo = new TAdminInfo
                         {
-                            nLv = 9;
-                        }
-                        else if (sLineText[0] == '2')
-                        {
-                            nLv = 8;
-                        }
-                        else if (sLineText[0] == '3')
-                        {
-                            nLv = 7;
-                        }
-                        else if (sLineText[0] == '4')
-                        {
-                            nLv = 6;
-                        }
-                        else if (sLineText[0] == '5')
-                        {
-                            nLv = 5;
-                        }
-                        else if (sLineText[0] == '6')
-                        {
-                            nLv = 4;
-                        }
-                        else if (sLineText[0] == '7')
-                        {
-                            nLv = 3;
-                        }
-                        else if (sLineText[0] == '8')
-                        {
-                            nLv = 2;
-                        }
-                        else if (sLineText[0] == '9')
-                        {
-                            nLv = 1;
-                        }
-                        if (nLv > 0)
-                        {
-                            sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new string[] { "/", "\\", " ", "\t" });
-                            sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new string[] { "/", "\\", " ", "\t" });
-                            sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new string[] { "/", "\\", " ", "\t" });
-                            if (string.IsNullOrEmpty(sCharName) || sIPaddr == "")
-                            {
-                                continue;
-                            }
-                            AdminInfo = new TAdminInfo
-                            {
-                                nLv = nLv,
-                                sChrName = sCharName,
-                                sIPaddr = sIPaddr
-                            };
-                            M2Share.UserEngine.m_AdminList.Add(AdminInfo);
-                        }
+                            nLv = nLv,
+                            sChrName = sCharName,
+                            sIPaddr = sIPaddr
+                        };
+                        M2Share.UserEngine.m_AdminList.Add(AdminInfo);
                     }
                 }
-
-                //LoadList.Free;
-            }
-            finally
-            {
-                //M2Share.UserEngine.m_AdminList.UnLock();
             }
             result = true;
             return result;
@@ -133,72 +116,69 @@ namespace M2Server
 
         public bool SaveAdminList()
         {
-            bool result;
-            string sfilename;
-            StringList Savelist;
             var sPermission = string.Empty;
             int nPermission;
             TAdminInfo AdminInfo;
-            sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
-            Savelist = new StringList();
-            //M2Share.UserEngine.m_AdminList.__Lock();
-            try
+            string  sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
+            StringList Savelist = new StringList();
+            for (var i = 0; i < M2Share.UserEngine.m_AdminList.Count; i++)
             {
-                for (var i = 0; i < M2Share.UserEngine.m_AdminList.Count; i++)
+                AdminInfo = M2Share.UserEngine.m_AdminList[i];
+                nPermission = AdminInfo.nLv;
+                if (nPermission == 10)
                 {
-                    AdminInfo = M2Share.UserEngine.m_AdminList[i];
-                    nPermission = AdminInfo.nLv;
-                    if (nPermission == 10)
-                    {
-                        sPermission = "*";
-                    }
-                    if (nPermission == 9)
-                    {
-                        sPermission = "1";
-                    }
-                    if (nPermission == 8)
-                    {
-                        sPermission = "2";
-                    }
-                    if (nPermission == 7)
-                    {
-                        sPermission = "3";
-                    }
-                    if (nPermission == 6)
-                    {
-                        sPermission = "4";
-                    }
-                    if (nPermission == 5)
-                    {
-                        sPermission = "5";
-                    }
-                    if (nPermission == 4)
-                    {
-                        sPermission = "6";
-                    }
-                    if (nPermission == 3)
-                    {
-                        sPermission = "7";
-                    }
-                    if (nPermission == 2)
-                    {
-                        sPermission = "8";
-                    }
-                    if (nPermission == 1)
-                    {
-                        sPermission = "9";
-                    }
-                    Savelist.Add(sPermission + "\t" + AdminInfo.sChrName + "\t" + AdminInfo.sIPaddr);
+                    sPermission = "*";
                 }
 
-                Savelist.SaveToFile(sfilename);
+                if (nPermission == 9)
+                {
+                    sPermission = "1";
+                }
+
+                if (nPermission == 8)
+                {
+                    sPermission = "2";
+                }
+
+                if (nPermission == 7)
+                {
+                    sPermission = "3";
+                }
+
+                if (nPermission == 6)
+                {
+                    sPermission = "4";
+                }
+
+                if (nPermission == 5)
+                {
+                    sPermission = "5";
+                }
+
+                if (nPermission == 4)
+                {
+                    sPermission = "6";
+                }
+
+                if (nPermission == 3)
+                {
+                    sPermission = "7";
+                }
+
+                if (nPermission == 2)
+                {
+                    sPermission = "8";
+                }
+
+                if (nPermission == 1)
+                {
+                    sPermission = "9";
+                }
+
+                Savelist.Add(sPermission + "\t" + AdminInfo.sChrName + "\t" + AdminInfo.sIPaddr);
             }
-            finally
-            {
-                //M2Share.UserEngine.m_AdminList.UnLock();
-            }
-            result = true;
-            return result;
+            Savelist.SaveToFile(sfilename);
+            return true;
         }
 
         public void LoadGuardList()
@@ -452,8 +432,6 @@ namespace M2Server
                 }
             }
         }
-
-
 
         private void QFunctionNPC()
         {
@@ -821,7 +799,8 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new string[] { " ", "\t" });
                         MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);
                         // 集中座标刷新机率 1 -100
-                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 && M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
+                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 && 
+                            M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
                             MonGenInfo.CertList = new List<TBaseObject>();
                             MonGenInfo.Envir = M2Share.g_MapManager.FindMap(MonGenInfo.sMapName);
@@ -858,10 +837,6 @@ namespace M2Server
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < M2Share.UserEngine.MonsterList.Count; i++)
-                {
-                    //Dispose(((TMonInfo)(M2Share.UserEngine.MonsterList[i])));
-                }
                 M2Share.UserEngine.MonsterList.Clear();
                 using (var dr = Sqlite.ExecuteReader(sSQLString))
                 {
