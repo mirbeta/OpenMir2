@@ -19,10 +19,6 @@ namespace M2Server
 
         public override void Run()
         {
-            int nAttackDir;
-            int nX;
-            int nY;
-            // 5 0x6A
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 // 血量低于一半时开始用魔法攻击
@@ -43,8 +39,8 @@ namespace M2Server
                 {
                     return;
                 }
-                nX = Math.Abs(m_nCurrX - m_Master.m_nCurrX);
-                nY = Math.Abs(m_nCurrY - m_Master.m_nCurrY);
+                var nX = Math.Abs(m_nCurrX - m_Master.m_nCurrX);
+                var nY = Math.Abs(m_nCurrY - m_Master.m_nCurrY);
                 if (nX <= 5 && nY <= 5)
                 {
                     if (m_boUseMagic || nX == 5 || nY == 5)
@@ -52,7 +48,7 @@ namespace M2Server
                         if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
-                            nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_Master.m_nCurrX, m_Master.m_nCurrY);
+                            int nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_Master.m_nCurrX, m_Master.m_nCurrY);
                             LightingAttack(nAttackDir);
                         }
                     }

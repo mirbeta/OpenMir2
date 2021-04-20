@@ -9,12 +9,10 @@
 
         private void sub_4A9F6C(byte btDir)
         {
-            TAbility WAbil;
-            int n10;
             TBaseObject BaseObject;
             m_btDirection = btDir;
-            WAbil = m_WAbil;
-            n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            var WAbil = m_WAbil;
+            var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
                 SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");

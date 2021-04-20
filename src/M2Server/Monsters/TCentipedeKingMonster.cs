@@ -95,7 +95,6 @@ namespace M2Server
         public override void Run()
         {
             TBaseObject BaseObject;
-            // 5 0x6A
             if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)

@@ -16,11 +16,10 @@ namespace M2Server
 
         private void sub_4A65C4()
         {
-            TAbility WAbil;
             int n10;
             TBaseObject BaseObject;
             m_WAbil.HP = 0;
-            WAbil = m_WAbil;
+            var WAbil = m_WAbil;
             var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             for (var i = 0; i < m_VisibleActors.Count; i++)
             {
@@ -56,12 +55,9 @@ namespace M2Server
             }
             if (GetAttackDir(m_TargetCret, ref btDir))
             {
-
                 if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
-
                     m_dwHitTick = HUtil32.GetTickCount();
-
                     m_dwTargetFocusTick = HUtil32.GetTickCount();
                     sub_4A65C4();
                 }
@@ -87,7 +83,6 @@ namespace M2Server
             {
                 if (HUtil32.GetTickCount() - dw558 > 60 * 1000)
                 {
-
                     dw558 = HUtil32.GetTickCount();
                     sub_4A65C4();
                 }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+
 namespace M2Server
 {
     public class TScultureKingMonster : TMonster
     {
         private int m_nDangerLevel = 0;
-        private readonly ArrayList m_SlaveObjectList = null;
+        private readonly IList<TBaseObject> m_SlaveObjectList = null;
 
         public TScultureKingMonster() : base()
         {
@@ -15,7 +17,7 @@ namespace M2Server
             m_nCharStatusEx = grobal2.STATE_STONE_MODE;
             m_btDirection = 5;
             m_nDangerLevel = 5;
-            m_SlaveObjectList = new ArrayList();
+            m_SlaveObjectList = new List<TBaseObject>();
         }
 
         private void MeltStone()
@@ -105,7 +107,7 @@ namespace M2Server
                 }
                 for (var i = m_SlaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    BaseObject = (TBaseObject)m_SlaveObjectList[i];
+                    BaseObject = m_SlaveObjectList[i];
                     if (BaseObject.m_boDeath || BaseObject.m_boGhost)
                     {
                         m_SlaveObjectList.RemoveAt(i);

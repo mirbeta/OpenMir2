@@ -35,12 +35,9 @@ namespace M2Server
 
         public override void Run()
         {
-            int nAbs;
-            int nRage;
-            TBaseObject BaseObject;
-            TBaseObject TargetBaseObject;
-            nRage = 9999;
-            TargetBaseObject = null;
+            int nRage= 9999;
+            TBaseObject BaseObject = null;
+            TBaseObject TargetBaseObject = null;
             if (!m_boDeath && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 if (HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
@@ -55,7 +52,7 @@ namespace M2Server
                         }
                         if (IsProperTarget(BaseObject))
                         {
-                            nAbs = Math.Abs(m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(m_nCurrY - BaseObject.m_nCurrY);
+                            var nAbs = Math.Abs(m_nCurrX - BaseObject.m_nCurrX) + Math.Abs(m_nCurrY - BaseObject.m_nCurrY);
                             if (nAbs < nRage)
                             {
                                 nRage = nAbs;

@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+
 namespace M2Server
 {
     public class TBeeQueen : TAnimalObject
     {
         public int n54C = 0;
-        public ArrayList BBList = null;
+        private IList<TBaseObject> BBList = null;
 
         public TBeeQueen() : base()
         {
@@ -13,7 +14,7 @@ namespace M2Server
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             m_dwSearchTick = HUtil32.GetTickCount();
             m_boStickMode = true;
-            BBList = new ArrayList();
+            BBList = new List<TBaseObject>();
         }
 
         private void MakeChildBee()
@@ -53,7 +54,6 @@ namespace M2Server
                     m_dwWalkTick = HUtil32.GetTickCount();
                     if (HUtil32.GetTickCount() - m_dwHitTick >= m_nNextHitTime)
                     {
-
                         m_dwHitTick = HUtil32.GetTickCount();
                         SearchTarget();
                         if (m_TargetCret != null)
@@ -63,7 +63,7 @@ namespace M2Server
                     }
                     for (var i = BBList.Count - 1; i >= 0; i--)
                     {
-                        BB = (TBaseObject)BBList[i];
+                        BB = BBList[i];
                         if (BB.m_boDeath || BB.m_boGhost)
                         {
                             BBList.RemoveAt(i);

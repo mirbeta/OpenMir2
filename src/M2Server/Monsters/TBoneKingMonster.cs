@@ -1,11 +1,12 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace M2Server
 {
     public class TBoneKingMonster : TMonster
     {
         private int m_nDangerLevel = 0;
-        private readonly ArrayList m_SlaveObjectList = null;
+        private readonly IList<TBaseObject> m_SlaveObjectList = null;
 
         public TBoneKingMonster() : base()
         {
@@ -13,7 +14,7 @@ namespace M2Server
             m_nViewRange = 8;
             m_btDirection = 5;
             m_nDangerLevel = 5;
-            m_SlaveObjectList = new ArrayList();
+            m_SlaveObjectList = new List<TBaseObject>();
         }
 
         private void CallSlave()

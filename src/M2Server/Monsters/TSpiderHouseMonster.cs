@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+
 namespace M2Server
 {
     public class TSpiderHouseMonster : TAnimalObject
     {
         public int n54C = 0;
-        public ArrayList BBList = null;
+        public IList<TBaseObject> BBList = null;
 
         public TSpiderHouseMonster() : base()
         {
@@ -13,7 +15,7 @@ namespace M2Server
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             m_dwSearchTick = 0;
             m_boStickMode = true;
-            BBList = new ArrayList();
+            BBList = new List<TBaseObject>();
         }
 
         private void GenBB()
@@ -69,7 +71,7 @@ namespace M2Server
                     }
                     for (var i = BBList.Count - 1; i >= 0; i--)
                     {
-                        BB = (TBaseObject)BBList[i];
+                        BB = BBList[i];
                         if (BB.m_boDeath || BB.m_boGhost)
                         {
                             BBList.RemoveAt(i);

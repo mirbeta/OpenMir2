@@ -10,10 +10,9 @@ namespace M2Server
 
         public override void Run()
         {
-            int time1;
             short nx = 0;
             short ny = 0;
-            time1 = -1;
+            var time1 = -1;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
             {
                 time1 = M2Share.RandomNumber.Random(2);

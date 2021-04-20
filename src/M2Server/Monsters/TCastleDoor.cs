@@ -1,5 +1,8 @@
 ﻿namespace M2Server
 {
+    /// <summary>
+    /// 沙巴克城门
+    /// </summary>
     public class TCastleDoor : TGuardUnit
     {
         public int dw55C = 0;
