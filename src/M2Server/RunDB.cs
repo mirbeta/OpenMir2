@@ -111,11 +111,11 @@ namespace M2Server
             {
                 if (boLoadRcd)
                 {
-                    M2Share.MainOutMessage(sLoadDBTimeOut);
+                    M2Share.ErrorMessage(sLoadDBTimeOut);
                 }
                 else
                 {
-                    M2Share.MainOutMessage(sSaveDBTimeOut);
+                    M2Share.ErrorMessage(sSaveDBTimeOut);
                 }
             }
             if (HUtil32.GetTickCount() - dwTimeOutTick > M2Share.dwRunDBTimeMax)
@@ -172,12 +172,13 @@ namespace M2Server
             {
                 if (nIdent == grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                 {
-                    Console.WriteLine("[RunDB] 保存人物({0})数据成功", sCharName);
+                    Debug.WriteLine("[RunDB] 保存人物({0})数据成功", sCharName);
                     result = true;
                 }
                 else
                 {
-                    Console.WriteLine("[RunDB] 保存人物({0})数据失败", sCharName);
+                    Debug.WriteLine("[RunDB] 保存人物({0})数据失败", sCharName);
+                    M2Share.ErrorMessage(string.Format("[RunDB] 保存人物({0})数据失败", sCharName));
                 }
             }
             return result;

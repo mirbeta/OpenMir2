@@ -46,7 +46,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage("Error in loading notice text. file name is " + fileName);
+                    M2Share.ErrorMessage("Error in loading notice text. file name is " + fileName);
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace M2Server
                     }
                     catch (Exception)
                     {
-                        M2Share.MainOutMessage("Error in loading notice text. file name is " + fileName);
+                        M2Share.ErrorMessage("Error in loading notice text. file name is " + fileName);
                     }
                     NoticeList[i].sMsg = sStr;
                     break;

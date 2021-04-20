@@ -279,15 +279,19 @@ namespace M2Server
         public int m_dwGhostTick = 0;
         public bool m_boDeath = false;
         public int m_dwDeathTick = 0;
+        /// <summary>
+        /// 怪物所拿的武器
+        /// </summary>
         public byte m_btMonsterWeapon = 0;
-        // 0x30C 怪物所拿的武器
         public int m_dwStruckTick = 0;
         public bool m_boWantRefMsg = false;
         public bool m_boAddtoMapSuccess = false;
         public bool m_bo316 = false;
         public bool m_boDealing = false;
+        /// <summary>
+        /// 交易最后操作时间
+        /// </summary>
         public int m_DealLastTick = 0;
-        // 0x318 交易最后操作时间
         public TBaseObject m_DealCreat = null;
         public TGuild m_MyGuild = null;
         public int m_nGuildRankNo = 0;
@@ -454,7 +458,7 @@ namespace M2Server
         /// </summary>
         public IList<TUserMagic> m_MagicList = null;
         public TUserItem[] m_UseItems;
-        public ArrayList m_SayMsgList = null;
+        public IList<TMonSayMsg> m_SayMsgList = null;
         public IList<TUserItem> m_StorageItemList = null;
         public int m_nWalkSpeed = 0;
         public int m_nWalkStep = 0;
@@ -1075,7 +1079,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -2672,8 +2676,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg0);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg0);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             try
             {
@@ -2753,8 +2757,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg1);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg1);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             try
             {
@@ -2855,7 +2859,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg2);
+                M2Share.ErrorMessage(sExceptionMsg2);
             }
             // 血气石处理开始
             try
@@ -2956,7 +2960,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg7);
+                M2Share.ErrorMessage(sExceptionMsg7);
             }
             // 血气石处理结束
             // TBaseObject.Run 3 清理目标对象
@@ -3104,7 +3108,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg3);
+                M2Share.ErrorMessage(sExceptionMsg3);
             }
             try
             {
@@ -3196,8 +3200,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg4);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg4);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             try
             {
@@ -3283,7 +3287,7 @@ namespace M2Server
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(sExceptionMsg5);
+                M2Share.ErrorMessage(sExceptionMsg5);
             }
             try
             {
@@ -3305,7 +3309,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg6);
+                M2Share.ErrorMessage(sExceptionMsg6);
             }
             M2Share.g_nBaseObjTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (M2Share.g_nBaseObjTimeMax < M2Share.g_nBaseObjTimeMin)
@@ -3696,8 +3700,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -3979,8 +3983,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -4037,7 +4041,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -4171,7 +4175,6 @@ namespace M2Server
                     m_btSpeedPoint = (byte)(M2Share.DEFSPEED + m_BonusAbil.Speed / BonusTick.Speed + 3);
                     break;
                 default:
-                    // 档荤绰 扁夯 刮酶捞 臭促.
                     m_btSpeedPoint = (byte)(M2Share.DEFSPEED + m_BonusAbil.Speed / BonusTick.Speed);
                     break;
             }
@@ -4192,16 +4195,14 @@ namespace M2Server
                 UserMagic = m_MagicList[i];
                 switch (UserMagic.wMagIdx)
                 {
-                    case grobal2.SKILL_ONESWORD:
-                        // 内功心法
+                    case grobal2.SKILL_ONESWORD:// 内功心法
                         m_MagicOneSwordSkill = UserMagic;
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
                         }
                         break;
-                    case grobal2.SKILL_YEDO:
-                        // 攻杀剑法
+                    case grobal2.SKILL_YEDO:// 攻杀剑法
                         m_MagicPowerHitSkill = UserMagic;
                         if (UserMagic.btLevel > 0)
                         {
@@ -4211,24 +4212,20 @@ namespace M2Server
                         m_btAttackSkillCount = (byte)(7 - UserMagic.btLevel);
                         m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
                         break;
-                    case grobal2.SKILL_ERGUM:
-                        // 刺杀剑法
+                    case grobal2.SKILL_ERGUM:// 刺杀剑法
                         m_MagicErgumSkill = UserMagic;
                         break;
-                    case grobal2.SKILL_BANWOL:
-                        // 半月弯刀
+                    case grobal2.SKILL_BANWOL:// 半月弯刀
                         m_MagicBanwolSkill = UserMagic;
                         break;
                     case grobal2.SKILL_REDBANWOL:
                         m_MagicRedBanwolSkill = UserMagic;
                         break;
-                    case grobal2.SKILL_FIRESWORD:
-                        // 烈火剑法
+                    case grobal2.SKILL_FIRESWORD:// 烈火剑法
                         m_MagicFireSwordSkill = UserMagic;
                         m_nHitDouble = (byte)(4 + UserMagic.btLevel * 4);
                         break;
-                    case grobal2.SKILL_ILKWANG:
-                        // 基本剑法
+                    case grobal2.SKILL_ILKWANG:// 基本剑法
                         m_MagicOneSwordSkill = UserMagic;
                         if (UserMagic.btLevel > 0)
                         {
@@ -4314,28 +4311,29 @@ namespace M2Server
             return (short)HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1));
         }
 
-        // 武器升级设置
+        /// <summary>
+        /// 武器升级设置
+        /// </summary>
+        /// <param name="UserItem"></param>
         public void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
         {
             if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
             {
-                switch (UserItem.btValue[10])
+                if (UserItem.btValue[10] == 1)
                 {
-                    case 1:
-                        UserItem.wIndex = 0;
-                        break;
-                    // Modify the A .. B: 10 .. 13
-                    case 10:
+                    UserItem.wIndex = 0;
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 10, 13))
+                { 
                         UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
-                        break;
-                    // Modify the A .. B: 20 .. 23
-                    case 20:
-                        UserItem.btValue[1] = (byte)(UserItem.btValue[1] + UserItem.btValue[10] - 19);
-                        break;
-                    // Modify the A .. B: 30 .. 33
-                    case 30:
-                        UserItem.btValue[2] = (byte)(UserItem.btValue[2] + UserItem.btValue[10] - 29);
-                        break;
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 20, 23))
+                {
+                    UserItem.btValue[1] = (byte)(UserItem.btValue[1] + UserItem.btValue[10] - 19);
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 30, 33))
+                {
+                    UserItem.btValue[2] = (byte)(UserItem.btValue[2] + UserItem.btValue[10] - 29);
                 }
             }
             else
@@ -4397,14 +4395,11 @@ namespace M2Server
             bool boTwinHit;
             bool bo43;
             short wIdent;
-            int nCheckCode;
-            const string sExceptionMsg = "[Exception] TBaseObject::AttackDir Code: %d";
-            nCheckCode = 0;
+            const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
             try
             {
-                if ((wHitMode == 5) && (m_MagicBanwolSkill != null))
+                if ((wHitMode == 5) && (m_MagicBanwolSkill != null)) // 半月
                 {
-                    // 半月
                     if (m_WAbil.MP > 0)
                     {
                         DamageSpell((short)(m_MagicBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicBanwolSkill)));
@@ -4439,11 +4434,10 @@ namespace M2Server
                         wHitMode = grobal2.RM_HIT;
                     }
                 }
-                nCheckCode = 4;
+
                 m_btDirection = nDir;
                 if (TargeTBaseObject == null)
                 {
-                    nCheckCode = 41;
                     AttackTarget = GetPoseCreate();
                 }
                 else
@@ -4452,10 +4446,9 @@ namespace M2Server
                 }
                 if ((AttackTarget != null) && (m_UseItems[grobal2.U_WEAPON] != null) && (m_UseItems[grobal2.U_WEAPON].wIndex > 0))
                 {
-                    nCheckCode = 42;
                     AttackDir_CheckWeaponUpgrade();
                 }
-                nCheckCode = 5;
+
                 boPowerHit = m_boPowerHit;
                 boFireHit = m_boFireHitSkill;
                 boCrsHit = m_boCrsHitkill;
@@ -4464,10 +4457,7 @@ namespace M2Server
                 bo43 = m_bo43kill;
                 if (_Attack(ref wHitMode, AttackTarget))
                 {
-                    nCheckCode = 6;
                     SetTargetCreat(AttackTarget);
-                    // $FFF2
-                    nCheckCode = 7;
                 }
                 wIdent = grobal2.RM_HIT;
                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
@@ -4527,13 +4517,12 @@ namespace M2Server
                             break;
                     }
                 }
-                nCheckCode = 8;
+
                 SendAttackMsg(wIdent, m_btDirection, m_nCurrX, m_nCurrY);
-                nCheckCode = 9;
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, nCheckCode));
+                M2Share.MainOutMessage(sExceptionMsg);
                 M2Share.MainOutMessage(e.Message, MessageType.Error);
             }
         }
@@ -4833,7 +4822,7 @@ namespace M2Server
 
         public void HearMsg(string sMsg)
         {
-            if (sMsg != "")
+            if (!string.IsNullOrEmpty(sMsg))
             {
                 SendMsg(null, grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, sMsg);
             }
@@ -5019,7 +5008,7 @@ namespace M2Server
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         dwDeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        //SendMessage.BaseObject = BaseObject;
+                        BaseObject = M2Share.ObjectSystem.Get(BaseObject),
                         boLateDelivery = true
                     };
                     if (!string.IsNullOrEmpty(sMsg))
@@ -5242,7 +5231,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return true;
         }
@@ -5260,10 +5249,10 @@ namespace M2Server
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = %s";
+            const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (m_PEnvir == null)
             {
-                M2Share.MainOutMessage(m_sCharName + " SendRefMsg nil PEnvir ");
+                M2Share.ErrorMessage(m_sCharName + " SendRefMsg nil PEnvir ");
                 return;
             }
             // 01/21 增加，原来直接不发信息，如果隐身模式则只发送信息给自己
@@ -5339,8 +5328,8 @@ namespace M2Server
                                                             //MapCellInfo.ObjList.Free;
                                                             MapCellInfo.ObjList = null;
                                                         }
-                                                        M2Share.MainOutMessage(format(sExceptionMsg, new string[] { m_sCharName }));
-                                                        M2Share.MainOutMessage(e.Message, MessageType.Error);
+                                                        M2Share.ErrorMessage(format(sExceptionMsg, m_sCharName));
+                                                        M2Share.ErrorMessage(e.Message, MessageType.Error);
                                                     }
                                                 }
                                             }
@@ -5518,7 +5507,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(format(sExceptionMsg1, nCheckCode), MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg1, nCheckCode), MessageType.Error);
                 KickException();
             }
             nCheckCode = 6;
@@ -5592,8 +5581,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
                 KickException();
             }
             nCheckCode = 40;
@@ -5625,7 +5614,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }), MessageType.Error);
                 KickException();
             }
         }
@@ -5844,7 +5833,7 @@ namespace M2Server
             nCheckCode = -1;
             if (m_PEnvir == null)
             {
-                M2Share.MainOutMessage("Walk nil PEnvir");
+                M2Share.ErrorMessage("Walk nil PEnvir");
                 return result;
             }
             try
@@ -5938,8 +5927,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg, new object[] { nCheckCode, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg, new object[] { nCheckCode, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -6002,7 +5991,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg1);
+                    M2Share.ErrorMessage(sExceptionMsg1);
                 }
                 try
                 {
@@ -6013,7 +6002,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg2);
+                    M2Share.ErrorMessage(sExceptionMsg2);
                 }
                 try
                 {
@@ -6021,7 +6010,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg3);
+                    M2Share.ErrorMessage(sExceptionMsg3);
                 }
                 try
                 {
@@ -6029,7 +6018,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg4);
+                    M2Share.ErrorMessage(sExceptionMsg4);
                 }
                 try
                 {
@@ -6040,7 +6029,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg5);
+                    M2Share.ErrorMessage(sExceptionMsg5);
                 }
                 try
                 {
@@ -6048,7 +6037,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg6);
+                    M2Share.ErrorMessage(sExceptionMsg6);
                 }
                 SendMsg(this, grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 m_PEnvir = Envir;
@@ -6085,7 +6074,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg7);
+                M2Share.ErrorMessage(sExceptionMsg7);
             }
             return result;
         }
@@ -6160,6 +6149,11 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 怪物说话
+        /// </summary>
+        /// <param name="AttackBaseObject"></param>
+        /// <param name="MonStatus"></param>
         public void MonsterSayMsg(TBaseObject AttackBaseObject, TMonStatus MonStatus)
         {
             string sAttackName = string.Empty;
@@ -6186,30 +6180,31 @@ namespace M2Server
                     sAttackName = AttackBaseObject.m_sCharName;
                 }
             }
-            M2Share.MainOutMessage("TODO MonsterSayMsg...");
-            //for (I = 0; I < m_SayMsgList.Count; I++)
-            //{
-            //    MonSayMsg = m_SayMsgList[I];
-            //    sMsg = MonSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(m_sCharName));
-            //    sMsg = sMsg.Replace("%d", sAttackName);
-            //    if ((MonSayMsg.State == MonStatus) && (M2Share.RandomNumber.Random(MonSayMsg.nRate) == 0))
-            //    {
-            //        if (MonStatus == TMonStatus.s_MonGen)
-            //        {
-            //            M2Share.UserEngine.SendBroadCastMsg(sMsg, TMsgType.t_Mon);
-            //            break;
-            //        }
-            //        if (MonSayMsg.Color == TMsgColor.c_White)
-            //        {
-            //            ProcessSayMsg(sMsg);
-            //        }
-            //        else
-            //        {
-            //            AttackBaseObject.SysMsg(sMsg, MonSayMsg.Color, TMsgType.t_Mon);
-            //        }
-            //        break;
-            //    }
-            //}
+            TMonSayMsg MonSayMsg = null;
+            string sMsg = string.Empty;
+            for (var i = 0; i < m_SayMsgList.Count; i++)
+            {
+                MonSayMsg = m_SayMsgList[i];
+                sMsg = MonSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(m_sCharName));
+                sMsg = sMsg.Replace("%d", sAttackName);
+                if ((MonSayMsg.State == MonStatus) && (M2Share.RandomNumber.Random(MonSayMsg.nRate) == 0))
+                {
+                    if (MonStatus == TMonStatus.s_MonGen)
+                    {
+                        M2Share.UserEngine.SendBroadCastMsg(sMsg, TMsgType.t_Mon);
+                        break;
+                    }
+                    if (MonSayMsg.Color == TMsgColor.c_White)
+                    {
+                        ProcessSayMsg(sMsg);
+                    }
+                    else
+                    {
+                        AttackBaseObject.SysMsg(sMsg, MonSayMsg.Color, TMsgType.t_Mon);
+                    }
+                    break;
+                }
+            }
         }
 
         public void SendGroupText(string sMsg)
@@ -6328,7 +6323,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -6473,7 +6468,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -6922,7 +6917,7 @@ namespace M2Server
         private void LeaveGroup()
         {
             const string sExitGropMsg = "{0} 已经退出了本组.";
-            SendGroupText(format(sExitGropMsg, new string[] { m_sCharName }));
+            SendGroupText(format(sExitGropMsg, m_sCharName));
             m_GroupOwner = null;
             SendMsg(this, grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
@@ -7910,9 +7905,9 @@ namespace M2Server
                         }
                         else if ((this as TPlayObject).m_boMaster)
                         {
-                            for (int I = 0; I < (this as TPlayObject).m_MasterList.Count; I++)
+                            for (int i = 0; i < (this as TPlayObject).m_MasterList.Count; i++)
                             {
-                                if ((this as TPlayObject).m_MasterList[I] == cret)
+                                if ((this as TPlayObject).m_MasterList[i] == cret)
                                 {
                                     result = true;
                                     break;
@@ -7921,9 +7916,9 @@ namespace M2Server
                         }
                         else if ((cret as TPlayObject).m_boMaster)
                         {
-                            for (int I = 0; I < (cret as TPlayObject).m_MasterList.Count; I++)
+                            for (int i = 0; i < (cret as TPlayObject).m_MasterList.Count; i++)
                             {
-                                if ((cret as TPlayObject).m_MasterList[I] == this)
+                                if ((cret as TPlayObject).m_MasterList[i] == this)
                                 {
                                     result = true;
                                     break;
@@ -8032,19 +8027,14 @@ namespace M2Server
 
         public int MagMakeDefenceArea(int nX, int nY, int nRange, int nSec, byte btState)
         {
-            int result;
-            int nStartX;
-            int nStartY;
-            int nEndX;
-            int nEndY;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            result = 0;
-            nStartX = nX - nRange;
-            nEndX = nX + nRange;
-            nStartY = nY - nRange;
-            nEndY = nY + nRange;
+            int result = 0;
+            int nStartX = nX - nRange;
+            int nEndX = nX + nRange;
+            int nStartY = nY - nRange;
+            int nEndY = nY + nRange;
             for (int i = nStartX; i <= nEndX; i++)
             {
                 for (int j = nStartY; j <= nEndY; j++)

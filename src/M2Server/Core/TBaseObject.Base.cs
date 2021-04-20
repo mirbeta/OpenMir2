@@ -128,8 +128,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg1);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg1);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             try
             {
@@ -229,7 +229,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg2);
+                M2Share.ErrorMessage(sExceptionMsg2);
             }
             try
             {
@@ -333,7 +333,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg3);
+                M2Share.ErrorMessage(sExceptionMsg3);
             }
         }
 

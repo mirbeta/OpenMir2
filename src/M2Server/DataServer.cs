@@ -73,7 +73,7 @@ namespace M2Server
 
         private void DbScoketDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
-            M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]断开连接...");
+            M2Share.ErrorMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]断开连接...");
         }
 
         private void DbScoketConnected(object sender, NetFramework.DSCClientConnectedEventArgs e)

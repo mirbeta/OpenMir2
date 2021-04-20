@@ -186,7 +186,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             if (HUtil32.GetTickCount() - _dwClearEmptySessionTick > 10000)
             {
@@ -213,7 +213,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -228,8 +228,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -273,8 +273,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -320,7 +320,7 @@ namespace M2Server
             }
             if (M2Share.g_Config.boViewAdmissionFailure && !boFound)
             {
-                M2Share.MainOutMessage(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
+                M2Share.ErrorMessage(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
             }
             return result;
         }
@@ -346,7 +346,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -381,7 +381,7 @@ namespace M2Server
             if (!M2Share.g_Config.boIDSocketConnected) return;
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
-            M2Share.MainOutMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]断开连接...");
+            M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]断开连接...");
         }
 
         public void Close()

@@ -84,8 +84,8 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(ex.StackTrace);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(ex.StackTrace);
             }
         }
 
