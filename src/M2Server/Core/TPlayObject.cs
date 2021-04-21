@@ -705,7 +705,7 @@ namespace M2Server
             return result;
         }
 
-        public unsafe void SendSocket(string sMsg)
+        internal unsafe void SendSocket(string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
@@ -742,24 +742,25 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
-        public void SendSocket(TDefaultMessage DefMsg)
+        private void SendSocket(TDefaultMessage DefMsg)
         {
             SendSocket(DefMsg, "");
         }
 
-        public virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        internal virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
-            if (m_boOffLineFlag && &DefMsg != null && DefMsg.Ident != grobal2.SM_OUTOFCONNECTION)
+            if (m_boOffLineFlag && DefMsg != null && DefMsg.Ident != grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
+            Console.WriteLine("todo TDefaultMessage...");
             byte[] Buff = null;
             try
             {
@@ -770,33 +771,33 @@ namespace M2Server
                     wGSocketIdx = (short)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
-                if (&DefMsg != null)
+                if (DefMsg != null)
                 {
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
-                        MsgHdr.nLength = bMsg.Length + sizeof(TDefaultMessage) + 1;
+                        MsgHdr.nLength = bMsg.Length + TDefaultMessage.PacketSize + 1;
                         nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
                         Buff = new byte[nSendBytes + sizeof(int)];
                         fixed (byte* pb = Buff)
                         {
                             *(int*)pb = nSendBytes;
                             *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                            Array.Copy(bMsg, 0, Buff, sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
+                            //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
+                            Array.Copy(bMsg, 0, Buff, TDefaultMessage.PacketSize + sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
                             Buff[Buff.Length - 1] = 0;
                         }
                     }
                     else
                     {
-                        MsgHdr.nLength = sizeof(TDefaultMessage);
+                        MsgHdr.nLength = TDefaultMessage.PacketSize;
                         nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
                         Buff = new byte[nSendBytes + sizeof(int)];
                         fixed (byte* pb = Buff)
                         {
                             *(int*)pb = nSendBytes;
                             *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
+                            //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
                         }
                     }
                 }
@@ -821,7 +822,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -1117,8 +1118,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }
@@ -1530,7 +1531,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }
@@ -1617,7 +1618,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }
@@ -2235,7 +2236,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -2579,7 +2580,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -4188,8 +4189,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -4721,7 +4722,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }

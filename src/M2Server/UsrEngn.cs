@@ -487,7 +487,7 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(ex.StackTrace);
             }
 
@@ -562,7 +562,7 @@ namespace M2Server
                 catch (Exception e)
                 {
                     M2Share.ErrorMessage(string.Format(sExceptionMsg1, new[] { 0 }));
-                    M2Share.ErrorMessage(e.Message, MessageType.Error);
+                    M2Share.ErrorMessage(e.Message);
                 }
             }
             try
@@ -780,7 +780,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             dwProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (dwProcessMerchantTimeMin > dwProcessMerchantTimeMax)
@@ -936,7 +936,7 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(e.StackTrace);
             }
         }
 
@@ -1043,8 +1043,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -1722,7 +1722,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }

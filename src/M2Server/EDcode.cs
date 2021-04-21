@@ -99,21 +99,16 @@ namespace M2Server
             return nBufPos;
         }
 
-        public static unsafe TDefaultMessage DecodeMessage(string str)
+        public static TDefaultMessage DecodeMessage(string str)
         {
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
-            TDefaultMessage Msg;
+            var encBuf = new byte[grobal2.BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            fixed (byte* pb = EncBuf)
-            {
-                Msg = *(TDefaultMessage*) pb;
-            }
-            return Msg;
+            Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            return new TDefaultMessage(encBuf);
         }
 
         /// <summary>
-        ///     解密字符串
+        /// 解密字符串
         /// </summary>
         /// <param name="str">密文</param>
         /// <param name="chinese">是否返回中文</param>
@@ -128,7 +123,6 @@ namespace M2Server
             {
                 result = chinese ? HUtil32.SBytePtrToString((sbyte*) pb, nLen) : HUtil32.SBytePtrToString((sbyte*) pb, 0, nLen);
             }
-
             return result;
         }
 
@@ -172,7 +166,7 @@ namespace M2Server
             var TempBuf = new byte[grobal2.BUFFERSIZE];
             fixed (byte* pb = TempBuf)
             {
-                *(TDefaultMessage*) pb = sMsg;
+                //*(TDefaultMessage*) pb = sMsg;
             }
             var DestLen = Encode6BitBuf(TempBuf, EncBuf, 20, grobal2.BUFFERSIZE);
             fixed (byte* pb = EncBuf)

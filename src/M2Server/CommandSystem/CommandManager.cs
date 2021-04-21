@@ -130,7 +130,7 @@ namespace M2Server.CommandSystem
             BaseCommond commond = null;
             if (CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(parameters, null);
+                output = commond.Handle(parameters);
                 found = true;
             }
 

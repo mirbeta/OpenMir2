@@ -79,7 +79,7 @@ namespace M2Server
             }
             catch(Exception ex)
             {
-                M2Share.ErrorMessage(ex.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(ex.StackTrace);
             }
         }
 
@@ -141,7 +141,7 @@ namespace M2Server
                 {
                     ServerMsgInfo.Socket = null;
                     ServerMsgInfo.SocData = "";
-                    M2Share.ErrorMessage("节点断开服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...", MessageType.Error);
+                    M2Share.ErrorMessage("节点断开服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
                     m_SrvArray[i] = null;
                     break;
                 }
@@ -184,7 +184,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
     } 

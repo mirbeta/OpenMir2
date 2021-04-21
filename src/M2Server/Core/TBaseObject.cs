@@ -1079,7 +1079,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }
@@ -2677,7 +2677,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg0);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             try
             {
@@ -2758,7 +2758,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg1);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             try
             {
@@ -3201,7 +3201,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg4);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             try
             {
@@ -3700,8 +3700,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }
@@ -3983,8 +3983,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }
@@ -4041,7 +4041,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -4523,7 +4523,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -5231,7 +5231,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return true;
         }
@@ -5329,7 +5329,7 @@ namespace M2Server
                                                             MapCellInfo.ObjList = null;
                                                         }
                                                         M2Share.ErrorMessage(format(sExceptionMsg, m_sCharName));
-                                                        M2Share.ErrorMessage(e.Message, MessageType.Error);
+                                                        M2Share.ErrorMessage(e.Message);
                                                     }
                                                 }
                                             }
@@ -5566,8 +5566,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }), MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.ErrorMessage(e.Message);
                 KickException();
             }
 
@@ -5595,7 +5595,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }), MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
         }
@@ -5908,7 +5908,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(format(sExceptionMsg, new object[] { nCheckCode, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }
@@ -6303,7 +6303,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -6448,7 +6448,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 

@@ -3365,7 +3365,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage("[Exceptioin] TPlayObject.CmdPositionMove");
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 

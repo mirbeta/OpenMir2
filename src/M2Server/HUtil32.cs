@@ -155,6 +155,32 @@ namespace M2Server
 
             return sb.ToString();
         }
+        
+        public static unsafe byte[] PointToBytes(byte* Buff)
+        {
+            var nLen = 0;
+            var pb = Buff;
+            while (*pb++ != 0) nLen++;
+            var sb = new byte[nLen];
+            pb = Buff;
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = *pb++;
+            }
+            return sb;
+        }
+        
+        public static string StrPas(byte[] buff)
+        {
+            var nLen = buff.Length;
+            var ret = new string('\0', nLen);
+            var sb = new StringBuilder(ret);
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = (char)buff[i];
+            }
+            return sb.ToString();
+        }
 
         /// <summary>
         /// 字符串转Byte数组

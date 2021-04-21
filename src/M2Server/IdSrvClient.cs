@@ -186,7 +186,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             if (HUtil32.GetTickCount() - _dwClearEmptySessionTick > 10000)
             {
@@ -213,7 +213,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -228,8 +228,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -274,7 +274,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -346,7 +346,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
