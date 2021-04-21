@@ -97,16 +97,16 @@ namespace M2Server
                     Guild = GuildList[i];
                     if (!Guild.LoadGuild())
                     {
-                        M2Share.MainOutMessage(Guild.sGuildName + " 读取出错！！！");
+                        M2Share.ErrorMessage(Guild.sGuildName + " 读取出错！！！");
                         GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
                 }
-                M2Share.MainOutMessage("已读取 " + GuildList.Count + "个行会信息...");
+                M2Share.MainOutMessage("已读取 " + GuildList.Count + "个行会信息...", messageColor: System.ConsoleColor.Green);
             }
             else
             {
-                M2Share.MainOutMessage("行会信息文件未找到！！！");
+                M2Share.ErrorMessage("行会信息文件未找到！！！");
             }
         }
 

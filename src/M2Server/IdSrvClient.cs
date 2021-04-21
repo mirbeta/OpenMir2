@@ -66,7 +66,7 @@ namespace M2Server
         public void Initialize()
         {
             Connected(null);
-            _heartTimer = new System.Threading.Timer(Connected, null, 1000, 60000);
+            _heartTimer = new Timer(Connected, null, 1000, 60000);
         }
 
         private void SendSocket(string sSendMsg)
@@ -372,7 +372,7 @@ namespace M2Server
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.g_Config.boIDSocketConnected = true;
-            M2Share.MainOutMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]连接成功...");
+            M2Share.MainOutMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
             SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
         }
 

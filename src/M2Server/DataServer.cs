@@ -78,7 +78,7 @@ namespace M2Server
 
         private void DbScoketConnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
-            M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...");
+            M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...", messageColor: System.ConsoleColor.Green);
         }
 
         private void DBSocketRead(object sender, NetFramework.DSCClientDataInEventArgs e)

@@ -207,8 +207,7 @@ namespace M2Server
                         m_CastleList.Add(Castle);
                     }
                 }
-
-                M2Share.MainOutMessage("已读取 " + m_CastleList.Count + "个城堡信息...");
+                M2Share.MainOutMessage("已读取 " + m_CastleList.Count + "个城堡信息...", messageColor: ConsoleColor.Green);
             }
             else
             {

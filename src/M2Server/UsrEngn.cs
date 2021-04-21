@@ -487,8 +487,8 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(ex.StackTrace);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(ex.StackTrace);
             }
 
             return result;
@@ -561,8 +561,8 @@ namespace M2Server
                 }
                 catch (Exception e)
                 {
-                    M2Share.MainOutMessage(string.Format(sExceptionMsg1, new[] { 0 }));
-                    M2Share.MainOutMessage(e.Message, MessageType.Error);
+                    M2Share.ErrorMessage(string.Format(sExceptionMsg1, new[] { 0 }));
+                    M2Share.ErrorMessage(e.Message, MessageType.Error);
                 }
             }
             try
@@ -780,7 +780,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             dwProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (dwProcessMerchantTimeMin > dwProcessMerchantTimeMax)
@@ -936,7 +936,7 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(e.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
             }
         }
 
@@ -1043,8 +1043,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -1722,7 +1722,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }

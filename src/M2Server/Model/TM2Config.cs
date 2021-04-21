@@ -46,7 +46,13 @@ namespace M2Server
         public int nDBPort;
         public string sIDSAddr;
         public int nIDSPort;
+        /// <summary>
+        /// Master节点服务器IP
+        /// </summary>
         public string sMsgSrvAddr;
+        /// <summary>
+        /// Master节点服务器端口
+        /// </summary>
         public int nMsgSrvPort;
         public string sLogServerAddr;
         public int nLogServerPort;

@@ -1588,7 +1588,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowMakeItemMsg)
             {
-
                 M2Share.MainOutMessage(format(sOutFormatMsg, m_sCharName, PlayObject.m_sCharName, PlayObject.m_btPermission, nPerission));
             }
             PlayObject.m_btPermission = (byte)nPerission;
@@ -3365,8 +3364,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage("[Exceptioin] TPlayObject.CmdPositionMove");
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage("[Exceptioin] TPlayObject.CmdPositionMove");
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 

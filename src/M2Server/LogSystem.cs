@@ -22,20 +22,11 @@ namespace M2Server
                     _logqueue.Enqueue(message);
                     return;
                 }
-                if (message.MessageType == MessageType.Success)
-                {
-                    OutSuccessMessage(message.Message);
-                    return;
-                }
-                OutErrorMessage(message.Message);
+                OutMessage(message.Message, message.MessageType, consoleColor: message.MessageColor);
                 return;
             }
-            if (message.MessageType == MessageType.Error)
-            {
-                _logqueue.Enqueue(message);
-                return;
-            }
-            OutSuccessMessage(message.Message);
+            _logqueue.Enqueue(message);
+            return;
         }
 
         public void LogInfo(string message, MessageType messageType, MessageLevel messageLevel = MessageLevel.None)
@@ -45,6 +36,17 @@ namespace M2Server
                 Message = message,
                 MessageType = messageType,
                 MessageLevel = messageLevel
+            });
+        }
+
+        public void LogInfo(string message, MessageType messageType, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.Black)
+        {
+            _logqueue.Enqueue(new LogInfo()
+            {
+                Message = message,
+                MessageType = messageType,
+                MessageLevel = messageLevel,
+                MessageColor = messageColor
             });
         }
 
@@ -58,19 +60,10 @@ namespace M2Server
             });
         }
 
-        private void OutSuccessMessage(string Msg, MessageType messageType = MessageType.Success)
+        private void OutMessage(string Msg, MessageType messageType = MessageType.Success, ConsoleColor consoleColor = ConsoleColor.Black)
         {
+            Console.ForegroundColor = consoleColor;
             Console.WriteLine('[' + DateTime.Now.ToString() + "] " + Msg);
-        }
-
-        /// <summary>
-        /// 显示错误的信息
-        /// </summary>
-        /// <param name="message"></param>
-        private void OutErrorMessage(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
             Console.ResetColor();
         }
     }
@@ -80,5 +73,6 @@ namespace M2Server
         public string Message;
         public MessageType MessageType;
         public MessageLevel MessageLevel;
+        public ConsoleColor MessageColor;
     }
 }

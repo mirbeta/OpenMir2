@@ -79,7 +79,7 @@ namespace M2Server
             }
             catch(Exception ex)
             {
-                M2Share.MainOutMessage(ex.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(ex.StackTrace, MessageType.Error);
             }
         }
 

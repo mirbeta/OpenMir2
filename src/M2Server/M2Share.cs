@@ -1606,14 +1606,19 @@ namespace M2Server
             return RouteInfo.sGameGateIP[nC];
         }
 
-        public static void MainOutMessage(string Msg, MessageType messageType = MessageType.Success)
+        public static void MainOutMessage(string Msg)
         {
-            LogSystem.LogInfo(Msg, messageType);
+            Console.WriteLine('[' + DateTime.Now.ToString() + "] " + Msg);
         }
 
-        public static void ErrorMessage(string Msg, MessageType messageType = MessageType.Error)
+        public static void MainOutMessage(string Msg, MessageType messageType = MessageType.Success, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.White)
         {
-            LogSystem.LogInfo(Msg, messageType);
+            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
+        }
+
+        public static void ErrorMessage(string Msg, MessageType messageType = MessageType.Error, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.Red)
+        {
+            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)

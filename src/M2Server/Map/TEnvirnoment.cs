@@ -104,7 +104,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -229,8 +229,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -568,7 +568,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -608,7 +608,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -947,7 +947,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }

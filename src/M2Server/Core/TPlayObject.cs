@@ -742,7 +742,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -821,7 +821,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -1117,8 +1117,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -1530,7 +1530,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -1617,7 +1617,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -2235,7 +2235,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -2578,8 +2578,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -4188,8 +4188,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -4720,8 +4720,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }

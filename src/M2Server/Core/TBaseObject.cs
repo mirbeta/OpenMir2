@@ -5489,7 +5489,7 @@ namespace M2Server
             const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-%d %s %s %d %d %d";
             if (m_PEnvir == null)
             {
-                M2Share.MainOutMessage("SearchViewRange nil PEnvir", MessageType.Error);
+                M2Share.ErrorMessage("SearchViewRange nil PEnvir");
                 return;
             }
 
@@ -5504,7 +5504,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg1, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg1);
                 KickException();
             }
 
@@ -7415,7 +7415,7 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }

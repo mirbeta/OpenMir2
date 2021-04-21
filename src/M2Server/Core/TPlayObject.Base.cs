@@ -63,7 +63,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                    M2Share.ErrorMessage(sExceptionMsg);
                 }
             }
         }
@@ -420,8 +420,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             // ReadAllBook();
         }
@@ -626,8 +626,8 @@ namespace M2Server
                 {
                     MakeGhost(); //用于处理 人物异常退出，但人物还在游戏中问题 提示 Ident0  错误
                 }
-                M2Share.MainOutMessage(format(sExceptionMsg2, m_sCharName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg2, m_sCharName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             var boTakeItem = false;
             // 检查身上的装备有没不符合
@@ -1027,8 +1027,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg4);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg4);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             if (!m_boClientFlag && m_nStep >= 9 && M2Share.g_Config.boCheckFail)
             {
@@ -2460,7 +2460,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
 
@@ -2834,7 +2834,7 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(e.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
                 KickException();
             }
 
@@ -2890,7 +2890,7 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.MainOutMessage(ex.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(ex.StackTrace, MessageType.Error);
                 KickException();
             }
             try
@@ -3030,8 +3030,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -3136,8 +3136,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
-                M2Share.MainOutMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             base.MakeGhost();
         }
@@ -3184,7 +3184,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
         }
     }

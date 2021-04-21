@@ -11,6 +11,13 @@ namespace M2Server
         Error = 1
     }
 
+    public enum MessageColor
+    {
+        Red = 0,
+        Black = 1,
+        Green = 2
+    }
+
     public enum MessageLevel
     {
         Hihg = 3,
@@ -73,16 +80,6 @@ namespace M2Server
         public string[] sChrName;
         public byte btCount;
         public TRecordHeader Header;
-    }
-
-    public struct TMsgHeader
-    {
-        public uint dwCode;
-        public int nSocket;
-        public short wGSocketIdx;
-        public short wIdent;
-        public short wUserListIndex;
-        public int nLength;
     }
 
     public class TMapItem
