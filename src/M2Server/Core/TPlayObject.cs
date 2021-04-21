@@ -728,13 +728,13 @@ namespace M2Server
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     MsgHdr.nLength = -(bMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PackageSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
-                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        Array.Copy(bMsg, 0, Buff, sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
+                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        Array.Copy(bMsg, 0, Buff, TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
                         Buff[Buff.Length - 1] = 0;
                     }
                 }
@@ -777,26 +777,26 @@ namespace M2Server
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
                         MsgHdr.nLength = bMsg.Length + TDefaultMessage.PacketSize + 1;
-                        nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                        nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
                         fixed (byte* pb = Buff)
                         {
                             *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                            //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
                             //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                            Array.Copy(bMsg, 0, Buff, TDefaultMessage.PacketSize + sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
+                            Array.Copy(bMsg, 0, Buff, TDefaultMessage.PacketSize + TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
                             Buff[Buff.Length - 1] = 0;
                         }
                     }
                     else
                     {
                         MsgHdr.nLength = TDefaultMessage.PacketSize;
-                        nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                        nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
                         fixed (byte* pb = Buff)
                         {
                             *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                            //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
                             //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
                         }
                     }
@@ -807,13 +807,13 @@ namespace M2Server
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
                         MsgHdr.nLength = -(bMsg.Length + 1);
-                        nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                        nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
                         fixed (byte* pb = Buff)
                         {
                             *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            Array.Copy(bMsg, 0, Buff, sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
+                            //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                            Array.Copy(bMsg, 0, Buff, TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
                             Buff[Buff.Length - 1] = 0;
                         }
                     }

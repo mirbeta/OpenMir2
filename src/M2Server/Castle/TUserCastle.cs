@@ -119,14 +119,14 @@ namespace M2Server
 
         public int nTechLevel
         {
-            get => m_nTechLevel;
-            set => SetTechLevel(value);
+            get { return m_nTechLevel; }
+            set { SetTechLevel(value); }
         }
 
         public int nPower
         {
-            get => m_nPower;
-            set => SetPower(value);
+            get { return m_nPower; }
+            set { SetPower(value); }
         }
 
         public void Initialize()

@@ -162,7 +162,6 @@ namespace M2Server
             var pb = Buff;
             while (*pb++ != 0) nLen++;
             var sb = new byte[nLen];
-            pb = Buff;
             for (var i = 0; i < nLen; i++)
             {
                 sb[i] = *pb++;

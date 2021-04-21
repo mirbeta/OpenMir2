@@ -411,6 +411,11 @@ namespace M2Server
     {
         private static TFrmIDSoc instance = null;
 
-        public static TFrmIDSoc Instance => instance ?? (instance = new TFrmIDSoc());
+        public static TFrmIDSoc Instance
+        {
+           get{
+               return instance ?? (instance = new TFrmIDSoc());
+           }
+        }
     }
 }

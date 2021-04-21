@@ -7,7 +7,13 @@ namespace M2Server
     {
         private readonly Dictionary<string, TEnvirnoment> m_MapList = new Dictionary<string, TEnvirnoment>();
 
-        public IList<TEnvirnoment> Maps => m_MapList.Values.ToList();
+        public IList<TEnvirnoment> Maps
+        {
+            get
+            {
+                return m_MapList.Values.ToList();
+            }
+        }
 
         public void MakeSafePkZone()
         {
