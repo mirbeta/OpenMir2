@@ -57,7 +57,7 @@ namespace M2Server
             }
             else
             {
-                M2Share.ErrorMessage(string.Format(sKickGate, new string[] { e.EndPoint.Address.ToString() }));
+                M2Share.ErrorMessage(string.Format(sKickGate, e.EndPoint.Address.ToString()));
                 e.Socket.Close();
             }
         }
@@ -109,8 +109,8 @@ namespace M2Server
                             {
                                 if (GateUser.PlayObject != null)
                                 {
-                                    ((TPlayObject)GateUser.PlayObject).m_boEmergencyClose = true;
-                                    if (!((TPlayObject)GateUser.PlayObject).m_boReconnection)
+                                    GateUser.PlayObject.m_boEmergencyClose = true;
+                                    if (!GateUser.PlayObject.m_boReconnection)
                                     {
                                         IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                     }
@@ -259,18 +259,18 @@ namespace M2Server
                 {
                     try
                     {
-                        var data = new byte[e.BytesReceived];
-                        Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
                         var nMsgLen = e.BytesReceived;
                         if (nMsgLen <= 0)
                         {
                             break;
                         }
+                        var data = new byte[nMsgLen];
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
                         ExecGateBuffers(GateIdx, Gate, data, nMsgLen);
                     }
                     catch
                     {
-                        M2Share.MainOutMessage(sExceptionMsg1);
+                        M2Share.ErrorMessage(sExceptionMsg1);
                     }
                 }
             }
@@ -387,7 +387,7 @@ namespace M2Server
                     {
                         boFlag = false;
                     }
-                    if (sAccount != "" && sChrName != "" && nSessionID >= 2)
+                    if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionID >= 2)
                     {
                         nClientVersion = HUtil32.Str_ToInt(sClientVersion, 0);
                         result = true;
@@ -439,7 +439,7 @@ namespace M2Server
                                 }
                                 catch
                                 {
-                                    M2Share.ErrorMessage(string.Format(sExceptionMsg));
+                                    M2Share.ErrorMessage(sExceptionMsg);
                                 }
                             }
                             else
@@ -528,17 +528,6 @@ namespace M2Server
                         BufferA = BufferC;
                         MsgList[I] = BufferA;
                         continue;
-                        //MsgList.RemoveAt(I + 1);
-                        //GetMem(BufferC, nBuffALen + sizeof(int) + nBuffBLen);
-                        //nBuffCLen = nBuffALen + nBuffBLen;
-                        //Move(nBuffCLen, BufferC, sizeof(int));
-                        //Move(BufferA[sizeof(int)], (BufferC + sizeof(int) as string), nBuffALen);
-                        //Move(BufferB[sizeof(int)], (BufferC + nBuffALen + sizeof(int) as string), nBuffBLen);
-                        //FreeMem(BufferA);
-                        //FreeMem(BufferB);
-                        //BufferA = BufferC;
-                        //MsgList[I] = BufferA;
-                        //continue;
                     }
                     I++;
                     BufferA = BufferB;
@@ -666,7 +655,7 @@ namespace M2Server
                                         {
                                             if (GateUser.FrontEngine != null)
                                             {
-                                                ((TFrontEngine)GateUser.FrontEngine).DeleteHuman(i, GateUser.nSocket);
+                                                GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
                                             }
                                         }
                                         catch
@@ -677,9 +666,9 @@ namespace M2Server
                                         {
                                             if (GateUser.PlayObject != null)
                                             {
-                                                if (!((TPlayObject)GateUser.PlayObject).m_boOffLineFlag)
+                                                if (!GateUser.PlayObject.m_boOffLineFlag)
                                                 {
-                                                    ((TPlayObject)GateUser.PlayObject).m_boSoftClose = true;
+                                                    GateUser.PlayObject.m_boSoftClose = true;
                                                 }
                                             }
                                         }
@@ -689,7 +678,7 @@ namespace M2Server
                                         }
                                         try
                                         {
-                                            if (GateUser.PlayObject != null && ((TPlayObject)GateUser.PlayObject).m_boGhost && !((TPlayObject)GateUser.PlayObject).m_boReconnection)
+                                            if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
                                             {
                                                 IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                             }
@@ -698,16 +687,9 @@ namespace M2Server
                                         {
                                             M2Share.ErrorMessage(sExceptionMsg3);
                                         }
-                                        try
-                                        {
-                                            GateUser = null;
-                                            Gate.UserList[i] = null;
-                                            Gate.nUserCount -= 1;
-                                        }
-                                        catch
-                                        {
-                                            M2Share.ErrorMessage(sExceptionMsg4);
-                                        }
+                                        GateUser = null;
+                                        Gate.UserList[i] = null;
+                                        Gate.nUserCount -= 1;
                                         break;
                                     }
                                 }
@@ -783,7 +765,7 @@ namespace M2Server
             int nUserIdx;
             string sIPaddr;
             TGateUserInfo GateUser;
-            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg %d";
+            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg {0}";
             try
             {
                 switch (MsgHeader.wIdent)
@@ -833,7 +815,6 @@ namespace M2Server
                                 }
                             }
                         }
-
                         if (GateUser != null)
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
@@ -843,12 +824,12 @@ namespace M2Server
                                     var defMsg = (TDefaultMessage*)MsgBuff;
                                     if (nMsgLen == sizeof(TDefaultMessage))
                                     {
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, null);
+                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, *defMsg, null);
                                     }
                                     else
                                     {
                                         var sMsg = EncryptUnit.DeCodeString(HUtil32.StrPas(MsgBuff + sizeof(TDefaultMessage)), true);//解码
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, sMsg);
+                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, *defMsg, sMsg);
                                     }
                                 }
                             }
@@ -981,7 +962,7 @@ namespace M2Server
         {
             byte[] Buff = null;
             int nSendBytes;
-            TMsgHeader  MsgHdr = new TMsgHeader
+            TMsgHeader MsgHdr = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = nSocket,
@@ -991,7 +972,7 @@ namespace M2Server
             };
             if (DefMsg != null)
             {
-                if (sMsg != "")
+                if (!string.IsNullOrEmpty(sMsg))
                 {
                     MsgHdr.nLength = sMsg.Length + sizeof(TDefaultMessage) + 1;
                     nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
@@ -1127,13 +1108,13 @@ namespace M2Server
                                 {
                                     if (GateUserInfo.FrontEngine != null)
                                     {
-                                        ((TFrontEngine)GateUserInfo.FrontEngine).DeleteHuman(i, GateUserInfo.nSocket);
+                                        GateUserInfo.FrontEngine.DeleteHuman(i, GateUserInfo.nSocket);
                                     }
                                     if (GateUserInfo.PlayObject != null)
                                     {
-                                        ((TPlayObject)GateUserInfo.PlayObject).SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                                        ((TPlayObject)GateUserInfo.PlayObject).m_boEmergencyClose = true;
-                                        ((TPlayObject)GateUserInfo.PlayObject).m_boSoftClose = true;
+                                        GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        GateUserInfo.PlayObject.m_boEmergencyClose = true;
+                                        GateUserInfo.PlayObject.m_boSoftClose = true;
                                     }
                                     GateUserInfo = null;
                                     Gate.UserList[j] = null;

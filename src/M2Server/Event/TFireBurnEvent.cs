@@ -23,7 +23,7 @@ namespace M2Server
                     m_Envir.GetBaseObjects(m_nX, m_nY, true, BaseObjectList);
                     for (var i = 0; i < BaseObjectList.Count; i++)
                     {
-                        TargeTBaseObject = (TBaseObject)BaseObjectList[i];
+                        TargeTBaseObject = BaseObjectList[i];
                         if (TargeTBaseObject != null && m_OwnBaseObject != null && m_OwnBaseObject.IsProperTarget(TargeTBaseObject))
                         {
                             TargeTBaseObject.SendMsg(m_OwnBaseObject, grobal2.RM_MAGSTRUCK_MINE, 0, m_nDamage, 0, 0, "");

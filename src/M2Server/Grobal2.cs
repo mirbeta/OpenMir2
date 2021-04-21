@@ -441,7 +441,7 @@ namespace M2Server
 
     public class TGateUserInfo
     {
-        public object PlayObject;
+        public TPlayObject PlayObject;
         public int nSessionID;
         public string sAccount;
         public int nGSocketIdx;
@@ -451,8 +451,8 @@ namespace M2Server
         public int nClientVersion;
         public TSessInfo SessInfo;
         public int nSocket;
-        public object FrontEngine;
-        public object UserEngine;
+        public TFrontEngine FrontEngine;
+        public TUserEngine UserEngine;
         public int dwNewUserTick;
     } 
 

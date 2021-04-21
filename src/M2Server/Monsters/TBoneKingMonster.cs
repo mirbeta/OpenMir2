@@ -68,7 +68,7 @@ namespace M2Server
                 }
                 for (var i = m_SlaveObjectList.Count - 1; i >= 0; i--)
                 {
-                    BaseObject = (TBaseObject)m_SlaveObjectList[i];
+                    BaseObject = m_SlaveObjectList[i];
                     if (BaseObject.m_boDeath || BaseObject.m_boGhost)
                     {
                         m_SlaveObjectList.RemoveAt(i);
