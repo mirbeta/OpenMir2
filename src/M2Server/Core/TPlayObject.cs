@@ -779,14 +779,28 @@ namespace M2Server
                         MsgHdr.nLength = bMsg.Length + TDefaultMessage.PacketSize + 1;
                         nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
-                        fixed (byte* pb = Buff)
-                        {
-                            *(int*)pb = nSendBytes;
-                            //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                            Array.Copy(bMsg, 0, Buff, TDefaultMessage.PacketSize + TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
-                            Buff[Buff.Length - 1] = 0;
-                        }
+
+                        var dstOffset = 0;
+                        var psize = BitConverter.GetBytes(nSendBytes);
+                        Buffer.BlockCopy(psize, 0, Buff, dstOffset, psize.Length);
+                        var headBuff = MsgHdr.ToByte();
+                        dstOffset = psize.Length + sizeof(int);
+                        Buffer.BlockCopy(headBuff, 0, Buff, dstOffset, headBuff.Length);
+                        var defBuff = DefMsg.ToByte();
+                        dstOffset = sizeof(int) + TMsgHeader.PackageSize;
+                        Buffer.BlockCopy(defBuff, 0, Buff, dstOffset, defBuff.Length);
+                        dstOffset = TDefaultMessage.PacketSize + TMsgHeader.PackageSize + sizeof(int);
+                        Buffer.BlockCopy(bMsg, 0, Buff, dstOffset, bMsg.Length);
+                        Buff[Buff.Length - 1] = 0;
+
+                        //fixed (byte* pb = Buff)
+                        //{
+                        //    *(int*)pb = nSendBytes;
+                        //    //*(byte*)(pb + sizeof(int)) = MsgHdr.ToByte();
+                        //    //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
+                        //    Array.Copy(bMsg, 0, Buff, TDefaultMessage.PacketSize + TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
+                        //    Buff[Buff.Length - 1] = 0;
+                        //}
                     }
                     else
                     {

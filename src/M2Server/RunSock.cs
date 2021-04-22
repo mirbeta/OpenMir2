@@ -46,7 +46,7 @@ namespace M2Server
                     Gate.nUserCount = 0;
                     Gate.Buffer = null;
                     Gate.nBuffLen = 0;
-                    Gate.BufferList = new List<IntPtr>();
+                    Gate.BufferList = new List<byte[]>();
                     Gate.boSendKeepAlive = false;
                     Gate.nSendChecked = 0;
                     Gate.nSendBlockCount = 0;
@@ -124,8 +124,9 @@ namespace M2Server
                         Gate.nBuffLen = 0;
                         for (var i = 0; i < Gate.BufferList.Count; i++)
                         {
-                            Gate.BufferList[i] = IntPtr.Zero;
+                            Gate.BufferList[i] = null;
                         }
+                        Gate.BufferList.Clear();
                         Gate.BufferList = null;
                         Gate.boUsed = false;
                         Gate.Socket = null;
@@ -203,6 +204,7 @@ namespace M2Server
                         else
                         {
                             //Buff++;
+                            M2Share.MainOutMessage("错误的消息处理");
                             nLen -= 1;
                         }
                         if (nLen < TMsgHeader.PackageSize)
@@ -456,7 +458,7 @@ namespace M2Server
             }
         }
 
-        private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<IntPtr> MsgList)
+        private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
         {
             int I;
             var nSendBuffLen = 0;
@@ -478,8 +480,8 @@ namespace M2Server
                 }
                 return result;
             }
-            IntPtr BufferA;
-            IntPtr BufferB;
+            byte[] BufferA;
+            byte[] BufferB;
             // 004E198F
             // 将小数据合并为一个指定大小的数据
             try
@@ -493,18 +495,18 @@ namespace M2Server
                         break;
                     }
                     BufferB = MsgList[I + 1];
-                    if (BufferA == IntPtr.Zero || BufferB == IntPtr.Zero)
+                    if (BufferA == null || BufferB == null)
                     {
                         continue;
                     }
-                    var nBuffALen = *(int*)BufferA;
+                    var nBuffALen = BufferA.Length;
                     //Move(BufferA, nBuffALen, sizeof(int));
-                    var nBuffBLen = *(int*)BufferB;
+                    var nBuffBLen = BufferB.Length;
                     //Move(BufferB, nBuffBLen, sizeof(int));
                     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
                     {
                         MsgList.RemoveAt(I + 1);
-                        var BufferC = Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
+                        var BufferC = new byte[nBuffALen + sizeof(int) + nBuffBLen]; //Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
                         //GetMem(BufferC, nBuffALen + sizeof(int) + nBuffBLen);
                         var nBuffCLen = nBuffALen + nBuffBLen;
                         *(int*)BufferC = nBuffCLen;
@@ -513,9 +515,9 @@ namespace M2Server
                         //Move(BufferA[sizeof(int)], (BufferC + sizeof(int) as string), nBuffALen);
                         HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen);
                         //Move(BufferB[sizeof(int)], (BufferC + nBuffALen + sizeof(int) as string), nBuffBLen);
-                        Marshal.FreeHGlobal(BufferA);
+                        BufferA = null;
                         //FreeMem(BufferA);
-                        Marshal.FreeHGlobal(BufferB);
+                        BufferB = null;
                         //FreeMem(BufferB);
                         BufferA = BufferC;
                         MsgList[I] = BufferA;
@@ -535,12 +537,12 @@ namespace M2Server
                 while (MsgList.Count > 0)
                 {
                     BufferA = MsgList[0];
-                    if (BufferA == IntPtr.Zero)
+                    if (BufferA == null)
                     {
                         MsgList.RemoveAt(0);
                         continue;
                     }
-                    nSendBuffLen = *(int*)BufferA;//Move(BufferA, nSendBuffLen, sizeof(int));
+                    nSendBuffLen = BufferA.Length + sizeof(int);//Move(BufferA, nSendBuffLen, sizeof(int));
                     if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock)
                     {
                         if (Gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock <= nSendBuffLen)
@@ -548,7 +550,7 @@ namespace M2Server
                             MsgList.RemoveAt(0);
                             // 如果数据大小超过指定大小则扔掉(编辑数据比较大，与此有点关系)
                             //FreeMem(BufferA);
-                            Marshal.FreeHGlobal(BufferA);
+                            BufferA = null;
                         }
                         else
                         {
@@ -571,7 +573,7 @@ namespace M2Server
                                     if (Gate.Socket.Connected)
                                     {
                                         var SendBy = new byte[M2Share.g_Config.nSendBlock];
-                                        Marshal.Copy(BufferB, SendBy, 0, M2Share.g_Config.nSendBlock);
+                                        Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
                                         Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
                                         //Gate.Socket.SendBuf(BufferB, M2Share.g_Config.nSendBlock);
                                     }
@@ -589,7 +591,7 @@ namespace M2Server
                                 if (Gate.Socket.Connected)
                                 {
                                     var SendBy = new byte[nSendBuffLen];
-                                    Marshal.Copy(BufferB, SendBy, 0, nSendBuffLen);
+                                    Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
                                     Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
                                     //Gate.Socket.SendBuf(BufferB, nSendBuffLen);
                                 }
@@ -601,7 +603,7 @@ namespace M2Server
                             break;
                         }
                     }
-                    BufferA = IntPtr.Zero;
+                    BufferA = null;
                     if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
                     {
                         result = false;
@@ -911,9 +913,9 @@ namespace M2Server
                     {
                         if (Gate.boUsed && Gate.Socket != null)
                         {
-                            var Ptr = Marshal.AllocHGlobal(Buffer.Length);
-                            Marshal.Copy(Buffer, 0, Ptr, Buffer.Length);
-                            Gate.BufferList.Add(Ptr);
+                            //var Ptr = Marshal.AllocHGlobal(Buffer.Length);
+                            //Marshal.Copy(Buffer, 0, Ptr, Buffer.Length);
+                            Gate.BufferList.Add(Buffer);
                             result = true;
                         }
                     }
