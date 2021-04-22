@@ -1045,6 +1045,35 @@ namespace M2Server
             return result;
         }
 
+        public static unsafe void IntPtrToIntPtr(byte[] Src, int SrcIndex, ref byte[] Dest, int DestIndex, int nLen)
+        {
+            var psrcIp = Marshal.AllocHGlobal(Src.Length);
+            var destIp = Marshal.AllocHGlobal(Dest.Length);
+            Marshal.Copy(Src, 0, psrcIp, Src.Length);
+            Marshal.Copy(Dest, 0, destIp, Dest.Length);
+            var pSrc = (byte*)psrcIp + SrcIndex;
+            var pDest = (byte*)destIp + DestIndex;
+            if (pDest > pSrc)
+            {
+                pDest = pDest + (nLen - 1);
+                pSrc = pSrc + (nLen - 1);
+                for (var i = 0; i < nLen; i++)
+                {
+                    *pDest-- = *pSrc--;
+                }
+            }
+            else
+            {
+                for (var i = 0; i < nLen; i++)
+                {
+                    *pDest++ = *pSrc++;
+                }
+            }
+            Marshal.Copy(destIp, Dest, 0, Dest.Length);
+            Marshal.FreeHGlobal(destIp);
+            Marshal.FreeHGlobal(psrcIp);
+        }
+        
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
         {
             var pSrc = (byte*) Src + SrcIndex;
