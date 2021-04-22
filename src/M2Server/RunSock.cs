@@ -499,26 +499,17 @@ namespace M2Server
                     {
                         continue;
                     }
-                    var nBuffALen = BufferA.Length;
-                    //Move(BufferA, nBuffALen, sizeof(int));
-                    var nBuffBLen = BufferB.Length;
-                    //Move(BufferB, nBuffBLen, sizeof(int));
+                    var nBuffALen = BufferA.Length + 4;
+                    var nBuffBLen = BufferB.Length + 4;
                     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
                     {
                         MsgList.RemoveAt(I + 1);
-                        var BufferC = new byte[nBuffALen + sizeof(int) + nBuffBLen]; //Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
-                        //GetMem(BufferC, nBuffALen + sizeof(int) + nBuffBLen);
+                        var BufferC = new byte[nBuffALen + nBuffBLen + sizeof(int)];
                         var nBuffCLen = nBuffALen + nBuffBLen;
-                        *(int*)BufferC = nBuffCLen;
-                        //Move(nBuffCLen, BufferC, sizeof(int));
-                        HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), BufferC, sizeof(int), nBuffALen);
-                        //Move(BufferA[sizeof(int)], (BufferC + sizeof(int) as string), nBuffALen);
-                        HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen);
-                        //Move(BufferB[sizeof(int)], (BufferC + nBuffALen + sizeof(int) as string), nBuffBLen);
+                        HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), ref BufferC, sizeof(int), nBuffALen);
+                        HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), ref BufferC, nBuffALen + sizeof(int), nBuffBLen);
                         BufferA = null;
-                        //FreeMem(BufferA);
                         BufferB = null;
-                        //FreeMem(BufferB);
                         BufferA = BufferC;
                         MsgList[I] = BufferA;
                         continue;
@@ -572,10 +563,7 @@ namespace M2Server
                                 {
                                     if (Gate.Socket.Connected)
                                     {
-                                        var SendBy = new byte[M2Share.g_Config.nSendBlock];
-                                        Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
-                                        Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
-                                        //Gate.Socket.SendBuf(BufferB, M2Share.g_Config.nSendBlock);
+                                        Gate.Socket.Send(BufferB, 0, M2Share.g_Config.nSendBlock, SocketFlags.None);
                                     }
                                     Gate.nSendCount++;
                                     Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
@@ -590,10 +578,7 @@ namespace M2Server
                             {
                                 if (Gate.Socket.Connected)
                                 {
-                                    var SendBy = new byte[nSendBuffLen];
-                                    Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
-                                    Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
-                                    //Gate.Socket.SendBuf(BufferB, nSendBuffLen);
+                                    Gate.Socket.Send(BufferB, 0, nSendBuffLen, SocketFlags.None);
                                 }
                                 Gate.nSendCount++;
                                 Gate.nSendBytesCount += nSendBuffLen;
