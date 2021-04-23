@@ -6,6 +6,7 @@ namespace M2Server
 {
     public class Program
     {
+        private static Thread serverThread = null;
         private static ServerApp serverApp = null;
 
         [STAThread]
@@ -13,10 +14,9 @@ namespace M2Server
         {
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
-            Thread.CurrentThread.IsBackground = true;
-
-            serverApp = new ServerApp();
-            serverApp.StartServer();
+            serverThread = new Thread(Start);
+            serverThread.IsBackground = true;
+            serverThread.Start();
 
             while (true)
             {
@@ -32,6 +32,12 @@ namespace M2Server
                         break;
                 }
             }
+        }
+
+        static void Start(object obj)
+        {
+            serverApp = new ServerApp();
+            serverApp.StartServer();
         }
     }
 }

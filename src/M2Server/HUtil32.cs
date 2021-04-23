@@ -169,7 +169,6 @@ namespace M2Server
             {
                 StringToBytePtr(str, pb, 0);
             }
-
             return ret;
         }
 
@@ -419,42 +418,6 @@ namespace M2Server
             return result;
         }
 
-        public static string IntToStr2(int n)
-        {
-            string result;
-            if (n < 10)
-                result = '0' + n.ToString();
-            else
-                result = n.ToString();
-            return result;
-        }
-
-        public static string IntToStrFill(int num, int len, char fill)
-        {
-            string result;
-            int i;
-            string str;
-            result = "";
-            str = num.ToString();
-            for (i = 1; i <= len - str.Length; i++) result = result + fill;
-            result = result + str;
-            return result;
-        }
-
-        public static bool IsInB(string Src, int Pos, string Targ)
-        {
-            bool result;
-            int TLen;
-            result = false;
-            TLen = Targ.Length;
-            if (Src.Length < Pos + TLen) return result;
-            for (var i = 0; i < TLen; i++)
-                if (char.ToUpper(Src[Pos + i]) != char.ToUpper(Targ[i + 1]))
-                    return result;
-            result = true;
-            return result;
-        }
-
         public static bool IsStringNumber(string str)
         {
             var result = true;
@@ -697,63 +660,6 @@ namespace M2Server
             return result;
         }
 
-        public static bool IsUniformStr(string src, char ch)
-        {
-            bool result = true;
-            if (src != "")
-            {
-                int len = src.Length;
-                for (var i = 0; i < len; i++)
-                    if (src[i] == ch)
-                    {
-                        result = false;
-                        break;
-                    }
-            }
-            return result;
-        }
-
-        public static string _StrPas(string dest)
-        {
-            string result = "";
-            for (var i = 0; i < dest.Length; i++)
-                if (dest[i] != (char) 0)
-                    result = result + dest[i];
-                else
-                    break;
-            return result;
-        }
-
-
-        public static string CutHalfCode(string Str)
-        {
-            string result;
-            int pos;
-            int Len;
-            result = "";
-            pos = 1;
-            Len = Str.Length;
-            while (true)
-            {
-                if (pos > Len) break;
-                if (Str[pos] > '')
-                {
-                    if (pos + 1 <= Len && Str[pos + 1] > '')
-                    {
-                        result = result + Str[pos] + Str[pos + 1];
-                        pos++;
-                    }
-                }
-                else
-                {
-                    result = result + Str[pos];
-                }
-
-                pos++;
-            }
-            return result;
-        }
-
         public static int TagCount(string source, char tag)
         {
             var result = 0;
@@ -762,170 +668,6 @@ namespace M2Server
                 if (source[i] == tag)
                     tcount++;
             result = tcount;
-            return result;
-        }
-
-        // "xxxxxx" => xxxxxx
-        public static string TakeOffTag(string src, char tag, ref string rstr)
-        {
-            string result;
-            int n2;
-            n2 = src.Substring(2 - 1, src.Length).IndexOf(tag);
-            rstr = src.Substring(2 - 1, n2 - 1);
-            result = src.Substring(n2 + 2 - 1, src.Length - n2);
-            return result;
-        }
-
-        // *
-        public static string CatchString(string source, char cap, ref string catched)
-        {
-            string result;
-            int n;
-            result = "";
-            catched = "";
-            if (source == "") return result;
-            if (source.Length < 2)
-            {
-                result = source;
-                return result;
-            }
-            if (source[1] == cap)
-            {
-                if (source[2] == cap)
-                    // ##abc#
-                    source = source.Substring(2 - 1, source.Length);
-                if (TagCount(source, cap) >= 2)
-                    result = TakeOffTag(source, cap, ref catched);
-                else
-                    result = source;
-            }
-            else
-            {
-                if (TagCount(source, cap) >= 2)
-                {
-                    n = source.IndexOf(cap);
-                    source = source.Substring(n - 1, source.Length);
-                    result = TakeOffTag(source, cap, ref catched);
-                }
-                else
-                {
-                    result = source;
-                }
-            }
-            return result;
-        }
-
-        // GetValidStr3客 崔府 侥喊磊啊 楷加栏肺 唱棵版快 贸府 救凳
-        // 侥喊磊啊 绝阑 版快, nil 府畔..
-        public static string DivString(string source, char cap, ref string sel)
-        {
-            string result;
-            int n;
-            if (source == "")
-            {
-                sel = "";
-                result = "";
-                return result;
-            }
-
-            n = source.IndexOf(cap);
-            if (n > 0)
-            {
-                sel = source.Substring(1 - 1, n - 1);
-                result = source.Substring(n + 1 - 1, source.Length);
-            }
-            else
-            {
-                sel = source;
-                result = "";
-            }
-
-            return result;
-        }
-
-        public static string DivTailString(string source, char cap, ref string sel)
-        {
-            string result;
-            int i;
-            int n;
-            if (source == "")
-            {
-                sel = "";
-                result = "";
-                return result;
-            }
-
-            n = 0;
-            for (i = source.Length; i >= 1; i--)
-                if (source[i] == cap)
-                {
-                    n = i;
-                    break;
-                }
-
-            if (n > 0)
-            {
-                sel = source.Substring(n + 1 - 1, source.Length);
-                result = source.Substring(1 - 1, n - 1);
-            }
-            else
-            {
-                sel = "";
-                result = source;
-            }
-
-            return result;
-        }
-
-        public static int SPos(string substr, string str)
-        {
-            int result;
-            int i;
-            int j;
-            int len;
-            int slen;
-            bool flag;
-            result = -1;
-            len = str.Length;
-            slen = substr.Length;
-            for (i = 0; i <= len - slen; i++)
-            {
-                flag = true;
-                for (j = 1; j <= slen; j++)
-                    if ((byte) str[i + j] >= 0xB0)
-                    {
-                        if (j < slen && i + j < len)
-                        {
-                            if (substr[j] != str[i + j])
-                            {
-                                flag = false;
-                                break;
-                            }
-
-                            if (substr[j + 1] != str[i + j + 1])
-                            {
-                                flag = false;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            flag = false;
-                        }
-                    }
-                    else if (substr[j] != str[i + j])
-                    {
-                        flag = false;
-                        break;
-                    }
-
-                if (flag)
-                {
-                    result = i + 1;
-                    break;
-                }
-            }
-
             return result;
         }
 
@@ -979,11 +721,6 @@ namespace M2Server
             return result;
         }
 
-        public static int CalcFileCRC(string FileName)
-        {
-            return 0;
-        }
-
         public static byte[] GetBytes(string str)
         {
             return Encoding.ASCII.GetBytes(str);
@@ -1018,6 +755,30 @@ namespace M2Server
             else
                 result = Convert.ToInt32(X);
             return result;
+        }
+
+        public static unsafe void IntPtrToIntPtr(byte[] Src, int SrcIndex, byte[] Dest, int DestIndex, int nLen)
+        {
+            var pSrc = new byte[Src.Length + SrcIndex];
+            var pDest = new byte[Dest.Length + DestIndex];
+            if (pDest.Length > pSrc.Length)
+            {
+                pDest = new byte[pDest.Length + (nLen - 1)]; // pDest + (nLen - 1);
+                pSrc = new byte[pSrc.Length + (nLen - 1)]; //pSrc + (nLen - 1);
+                for (var i = 0; i < nLen; i++)
+                {
+                    //*pDest-- = *pSrc--;
+                    pDest[i] = pSrc[i];
+                }
+            }
+            else
+            {
+                for (var i = 0; i < nLen; i++)
+                {
+                    pDest[i] = pSrc[i];
+                    //*pDest++ = *pSrc++;
+                }
+            }
         }
 
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
@@ -1269,58 +1030,5 @@ namespace M2Server
             return result;
         }
 
-        /// <summary>
-        /// 反序列化
-        /// </summary>
-        /// <param name="rawdatas"></param>
-        /// <param name="retType"></param>
-        /// <returns></returns>
-        public static object rawDeserialize(byte[] rawdatas, Type retType)
-        {
-            var retobj = Activator.CreateInstance(retType);
-            var rawsize = Marshal.SizeOf(retType);
-            if (rawsize > rawdatas.Length)
-                return retobj;
-            var buffer = Marshal.AllocHGlobal(rawsize);
-            try
-            {
-                Marshal.Copy(rawdatas, 0, buffer, rawsize);
-                retobj = Marshal.PtrToStructure(buffer, retType);
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(buffer);
-            }
-
-            return retobj;
-        }
-
-        /// <summary>
-        /// 反序列化地图信息
-        /// </summary>
-        /// <returns></returns>
-        public static TMapUnitInfo[] DeserializeMap(byte[] rawdatas, int nMapSize)
-        {
-            var rawsize = 12;
-            if (rawsize > rawdatas.Length)
-                return null;
-            var size = Math.Ceiling(rawdatas.Length / (decimal) rawsize);
-            var retObj = new TMapUnitInfo[nMapSize];
-            var buffer = Marshal.AllocHGlobal(rawsize);
-            try
-            {
-                for (var i = 0; i < size; i++)
-                {
-                    Marshal.Copy(rawdatas, i * rawsize, buffer, rawsize);
-                    retObj[i] = (TMapUnitInfo) Marshal.PtrToStructure(buffer, typeof(TMapUnitInfo));
-                }
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(buffer);
-            }
-
-            return retObj;
-        }
     }
 }

@@ -424,7 +424,7 @@ namespace M2Server
         public int nUserCount;
         public IntPtr Buffer;
         public int nBuffLen;
-        public IList<IntPtr> BufferList;
+        public IList<byte[]> BufferList;
         public bool boSendKeepAlive;
         public int nSendChecked;
         public int nSendBlockCount;
