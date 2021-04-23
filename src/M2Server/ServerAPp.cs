@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Mail;
 
 namespace M2Server
 {
@@ -398,6 +399,15 @@ namespace M2Server
                 result = true;
             }
             return result;
+        }
+
+        private void StatisticTime()
+        {
+            var sc = new System.Text.StringBuilder();
+            // LbUserCount.Caption := '(' + IntToStr(UserEngine.MonsterCount) + ')   ' + IntToStr(UserEngine.OnlinePlayObject) + '/' + IntToStr(UserEngine.PlayObjectCount) + '[' + IntToStr(UserEngine.LoadPlayCount) + '/' + IntToStr(UserEngine.m_PlayObjectFreeList.Count) + ']';
+            // Label1.Caption := format('Run:%d/%d Soc:%d/%d Usr:%d/%d', [nRunTimeMin, nRunTimeMax, g_nSockCountMin, g_nSockCountMax, g_nUsrTimeMin, g_nUsrTimeMax]);
+            // Label2.Caption := format('Hum:%d/%d UsrRot:%d/%d Merch:%d/%d Npc:%d/%d (%d)', [g_nHumCountMin, g_nHumCountMax, dwUsrRotCountMin, dwUsrRotCountMax, UserEngine.dwProcessMerchantTimeMin, UserEngine.dwProcessMerchantTimeMax, UserEngine.dwProcessNpcTimeMin, UserEngine.dwProcessNpcTimeMax, g_nProcessHumanLoopTime]);
+            // Label20.Caption := format('MonG:%d/%d/%d MonP:%d/%d/%d ObjRun:%d/%d', [g_nMonGenTime, g_nMonGenTimeMin, g_nMonGenTimeMax, g_nMonProcTime, g_nMonProcTimeMin, g_nMonProcTimeMax, g_nBaseObjTimeMin, g_nBaseObjTimeMax]);
         }
     }
 }

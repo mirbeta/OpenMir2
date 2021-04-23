@@ -485,7 +485,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage("[Exceptiion] TGuild.SendGuildMsg CheckCode: " + nCheckCode + " GuildName = " + sGuildName + " Msg = " + sMsg);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 

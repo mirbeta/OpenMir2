@@ -155,6 +155,31 @@ namespace M2Server
 
             return sb.ToString();
         }
+        
+        public static unsafe byte[] PointToBytes(byte* Buff)
+        {
+            var nLen = 0;
+            var pb = Buff;
+            while (*pb++ != 0) nLen++;
+            var sb = new byte[nLen];
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = *pb++;
+            }
+            return sb;
+        }
+        
+        public static string StrPas(byte[] buff)
+        {
+            var nLen = buff.Length;
+            var ret = new string('\0', nLen);
+            var sb = new StringBuilder(ret);
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = (char)buff[i];
+            }
+            return sb.ToString();
+        }
 
         /// <summary>
         /// 字符串转Byte数组
@@ -757,28 +782,34 @@ namespace M2Server
             return result;
         }
 
-        public static unsafe void IntPtrToIntPtr(byte[] Src, int SrcIndex, byte[] Dest, int DestIndex, int nLen)
+
+        public static unsafe void IntPtrToIntPtr(byte[] Src, int SrcIndex, ref byte[] Dest, int DestIndex, int nLen)
         {
-            var pSrc = new byte[Src.Length + SrcIndex];
-            var pDest = new byte[Dest.Length + DestIndex];
-            if (pDest.Length > pSrc.Length)
+            var psrcIp = Marshal.AllocHGlobal(Src.Length);
+            var destIp = Marshal.AllocHGlobal(Dest.Length);
+            Marshal.Copy(Src, 0, psrcIp, Src.Length);
+            Marshal.Copy(Dest, 0, destIp, Dest.Length);
+            var pSrc = (byte*)psrcIp + SrcIndex;
+            var pDest = (byte*)destIp + DestIndex;
+            if (pDest > pSrc)
             {
-                pDest = new byte[pDest.Length + (nLen - 1)]; // pDest + (nLen - 1);
-                pSrc = new byte[pSrc.Length + (nLen - 1)]; //pSrc + (nLen - 1);
+                pDest = pDest + (nLen - 1);
+                pSrc = pSrc + (nLen - 1);
                 for (var i = 0; i < nLen; i++)
                 {
-                    //*pDest-- = *pSrc--;
-                    pDest[i] = pSrc[i];
+                    *pDest-- = *pSrc--;
                 }
             }
             else
             {
                 for (var i = 0; i < nLen; i++)
                 {
-                    pDest[i] = pSrc[i];
-                    //*pDest++ = *pSrc++;
+                    *pDest++ = *pSrc++;
                 }
             }
+            Marshal.Copy(destIp, Dest, 0, Dest.Length);
+            Marshal.FreeHGlobal(destIp);
+            Marshal.FreeHGlobal(psrcIp);
         }
 
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)

@@ -206,7 +206,11 @@ namespace M2Server
             PlayObject.m_nAutoGetExpPoint = nPoint;
         }
 
-        // 增加挂机
+        /// <summary>
+        /// 增加挂机
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfOffLine(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nTime;
@@ -214,7 +218,6 @@ namespace M2Server
             int nKickOffLine;
             string sOffLineStartMsg;
             sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-
             PlayObject.m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SYSMESSAGE, PlayObject.ObjectId, HUtil32.MakeWord(M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.m_DefMsg, EDcode.EncodeString(sOffLineStartMsg));
             nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);

@@ -140,8 +140,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(format(sExceptionMsg, sData), MessageType.Error);
-                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
+                M2Share.ErrorMessage(format(sExceptionMsg, sData));
+                M2Share.ErrorMessage(e.StackTrace);
             }
         }
 
@@ -1589,7 +1589,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(format(sExceptionMsg, sData));
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
     }

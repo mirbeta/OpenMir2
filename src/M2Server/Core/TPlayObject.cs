@@ -705,7 +705,7 @@ namespace M2Server
             return result;
         }
 
-        public unsafe void SendSocket(string sMsg)
+        internal unsafe void SendSocket(string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
@@ -728,13 +728,13 @@ namespace M2Server
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     MsgHdr.nLength = -(bMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PackageSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
-                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        Array.Copy(bMsg, 0, Buff, sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
+                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        Array.Copy(bMsg, 0, Buff, TMsgHeader.PackageSize + sizeof(int), bMsg.Length);
                         Buff[Buff.Length - 1] = 0;
                     }
                 }
@@ -742,21 +742,21 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
-        public void SendSocket(TDefaultMessage DefMsg)
+        private void SendSocket(TDefaultMessage DefMsg)
         {
             SendSocket(DefMsg, "");
         }
 
-        public virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        internal virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
-            if (m_boOffLineFlag && &DefMsg != null && DefMsg.Ident != grobal2.SM_OUTOFCONNECTION)
+            if (m_boOffLineFlag && DefMsg != null && DefMsg.Ident != grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
@@ -770,34 +770,40 @@ namespace M2Server
                     wGSocketIdx = (short)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
-                if (&DefMsg != null)
+                if (DefMsg != null)
                 {
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
-                        MsgHdr.nLength = bMsg.Length + sizeof(TDefaultMessage) + 1;
-                        nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                        MsgHdr.nLength = bMsg.Length + TDefaultMessage.PacketSize + 1;
+                        nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
-                        fixed (byte* pb = Buff)
-                        {
-                            *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                            Array.Copy(bMsg, 0, Buff, sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
-                            Buff[Buff.Length - 1] = 0;
-                        }
+
+                        var dstOffset = 0;
+                        var psize = BitConverter.GetBytes(nSendBytes);
+                        Buffer.BlockCopy(psize, 0, Buff, dstOffset, psize.Length);
+                        var headBuff = MsgHdr.ToByte();
+                        dstOffset = psize.Length + sizeof(int);
+                        Buffer.BlockCopy(headBuff, 0, Buff, dstOffset, headBuff.Length);
+                        var defBuff = DefMsg.ToByte();
+                        dstOffset = sizeof(int) + TMsgHeader.PackageSize;
+                        Buffer.BlockCopy(defBuff, 0, Buff, dstOffset, defBuff.Length);
+                        dstOffset = TDefaultMessage.PacketSize + TMsgHeader.PackageSize + sizeof(int);
+                        Buffer.BlockCopy(bMsg, 0, Buff, dstOffset, bMsg.Length);
+                        Buff[Buff.Length - 1] = 0;
                     }
                     else
                     {
-                        MsgHdr.nLength = sizeof(TDefaultMessage);
-                        nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                        MsgHdr.nLength = TDefaultMessage.PacketSize;
+                        nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
-                        fixed (byte* pb = Buff)
-                        {
-                            *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                        }
+
+                        var dstOffset = 0;
+                        var psize = BitConverter.GetBytes(nSendBytes);
+                        Buffer.BlockCopy(psize, 0, Buff, dstOffset, psize.Length);
+                        var defBuff = DefMsg.ToByte();
+                        dstOffset = sizeof(int) + TMsgHeader.PackageSize;
+                        Buffer.BlockCopy(defBuff, 0, Buff, dstOffset, defBuff.Length);
                     }
                 }
                 else
@@ -806,22 +812,23 @@ namespace M2Server
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
                         MsgHdr.nLength = -(bMsg.Length + 1);
-                        nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                        nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PackageSize;
                         Buff = new byte[nSendBytes + sizeof(int)];
-                        fixed (byte* pb = Buff)
-                        {
-                            *(int*)pb = nSendBytes;
-                            *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                            Array.Copy(bMsg, 0, Buff, sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
-                            Buff[Buff.Length - 1] = 0;
-                        }
+
+                        var dstOffset = 0;
+                        var psize = BitConverter.GetBytes(nSendBytes);
+                        Buffer.BlockCopy(psize, 0, Buff, dstOffset, psize.Length);
+                        var defBuff = MsgHdr.ToByte();
+                        dstOffset = TMsgHeader.PackageSize + sizeof(int);
+                        Buffer.BlockCopy(defBuff, 0, Buff, dstOffset, defBuff.Length);
+                        Buff[Buff.Length - 1] = 0;
                     }
                 }
                 M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -1117,8 +1124,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }
@@ -1530,7 +1537,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }
@@ -1617,7 +1624,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
             return result;
         }
@@ -2235,7 +2242,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
             }
         }
 
@@ -2579,7 +2586,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -4188,8 +4195,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
             }
         }
 
@@ -4721,7 +4728,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", UserMagic.wMagIdx, nTargetX, nTargetY));
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.Message);
             }
             return result;
         }

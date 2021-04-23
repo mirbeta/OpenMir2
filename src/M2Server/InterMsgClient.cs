@@ -84,7 +84,7 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(ex.StackTrace);
             }
         }
@@ -104,12 +104,12 @@ namespace M2Server
 
         public void MsgClientError(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
-            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...", MessageType.Error);
+            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
 
         private void MsgClientDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
-            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...", MessageType.Error);
+            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
 
         public void MsgClientRead(object sender, NetFramework.DSCClientDataInEventArgs e)
