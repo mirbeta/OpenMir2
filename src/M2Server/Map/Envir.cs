@@ -33,7 +33,7 @@ namespace M2Server
     public class TMapCellinfo
     {
         /// <summary>
-        /// 为0的的时候可以表示该区域可以移动
+        /// ?0???????????????????????
         /// </summary>
         public byte chFlag;
         public IList<TOSObject> ObjList;
