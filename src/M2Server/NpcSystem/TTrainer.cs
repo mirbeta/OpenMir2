@@ -14,11 +14,6 @@
             n570 = 0;
         }
 
-        ~TTrainer()
-        {
-
-        }
-
         public override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;

@@ -51,17 +51,11 @@ namespace M2Server
 
     public class TQuestConditionInfo
     {
-        // 0x14
         public int nCmdCode;
-        // 0x00
         public string sParam1;
-        // 0x04
         public int nParam1;
-        // 0x08
         public string sParam2;
-        // 0x0C
         public int nParam2;
-        // 0x10
         public string sParam3;
         public int nParam3;
         public string sParam4;
@@ -70,7 +64,7 @@ namespace M2Server
         public int nParam5;
         public string sParam6;
         public int nParam6;
-    } // end TQuestConditionInfo
+    }
 
     public class TSayingProcedure
     {

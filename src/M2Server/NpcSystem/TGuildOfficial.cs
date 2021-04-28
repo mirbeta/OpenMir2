@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace M2Server
 {
@@ -13,14 +14,14 @@ namespace M2Server
         {
             int II;
             string sText;
-            ArrayList List;
+            IList<string> List;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (sVariable == "$REQUESTCASTLELIST")
             {
                 sText = "";
-                List = new ArrayList();
+                List = new List<string>();
                 M2Share.CastleManager.GetCastleNameList(List);
-                for (var i = 0; i < List.Count; i ++ )
+                for (var i = 0; i < List.Count; i++)
                 {
                     II = i + 1;
                     if (II / 2 * 2 == II)
@@ -29,10 +30,9 @@ namespace M2Server
                     else
                     {
                     }
-                    //sText = sText + format("<%s/@requestcastlewarnow%d> %s", new string[] {List[I], I, sStr});
+                    //sText = sText + format("<{0}/@requestcastlewarnow%d> {1}", new string[] { List[i], i.ToString(), sStr });
                 }
                 sText = sText + "\\ \\";
-                //List.Free;
                 sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);
             }
         }

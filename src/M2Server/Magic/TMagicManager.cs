@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace M2Server
 {
-    public class TMagicManager
+    public class MagicManager
     {
         private int MagPushArround(TBaseObject PlayObject, int nPushLevel)
         {

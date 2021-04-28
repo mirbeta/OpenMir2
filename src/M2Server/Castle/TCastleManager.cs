@@ -6,14 +6,14 @@ using mSystemModule;
 
 namespace M2Server
 {
-    public class TCastleManager
+    public class CastleManager
     {
         private readonly object _criticalSection;
-        private readonly IList<TUserCastle> m_CastleList;
+        private readonly IList<TUserCastle> _castleList;
 
-        public TCastleManager()
+        public CastleManager()
         {
-            m_CastleList = new List<TUserCastle>();
+            _castleList = new List<TUserCastle>();
             _criticalSection = new object();
         }
 
@@ -21,10 +21,10 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
-                if (string.Compare(Castle.m_sName.ToLower(), sCastleName.ToLower(), StringComparison.Ordinal) == 0)
+                Castle = _castleList[i];
+                if (string.Compare(Castle.m_sName, sCastleName, StringComparison.Ordinal) == 0)
                 {
                     result = Castle;
                     break;
@@ -39,9 +39,9 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 if (Castle.InCastleWarArea(BaseObject.m_PEnvir, BaseObject.m_nCurrX, BaseObject.m_nCurrY))
                 {
                     result = Castle;
@@ -55,9 +55,9 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 if (Castle.InCastleWarArea(Envir, nX, nY))
                 {
                     result = Castle;
@@ -71,10 +71,10 @@ namespace M2Server
         public void Initialize()
         {
             TUserCastle Castle;
-            if (m_CastleList.Count <= 0)
+            if (_castleList.Count <= 0)
             {
                 Castle = new TUserCastle(M2Share.g_Config.sCastleDir);
-                m_CastleList.Add(Castle);
+                _castleList.Add(Castle);
                 Castle.Initialize();
                 Castle.m_sConfigDir = "0";
                 Castle.m_EnvirList.Add("0151");
@@ -89,9 +89,9 @@ namespace M2Server
                 return;
             }
 
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 Castle.Initialize();
             }
         }
@@ -101,9 +101,9 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 if (Castle.m_MapPalace == Envir)
                 {
                     result = Castle;
@@ -119,9 +119,9 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 if (Castle.m_MapCastle == Envir)
                 {
                     result = Castle;
@@ -136,9 +136,9 @@ namespace M2Server
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 if (Castle.IsMember(BaseObject))
                 {
                     result = Castle;
@@ -152,29 +152,21 @@ namespace M2Server
         public void Run()
         {
             TUserCastle UserCastle;
-            __Lock();
-            try
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                for (var i = 0; i < m_CastleList.Count; i++)
-                {
-                    UserCastle = m_CastleList[i];
-                    UserCastle.Run();
-                }
-            }
-            finally
-            {
-                UnLock();
+                UserCastle = _castleList[i];
+                UserCastle.Run();
             }
         }
 
         public void GetCastleGoldInfo(ArrayList List)
         {
             TUserCastle Castle;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg,
-                    new object[] {Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome}));
+                    new {Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome}));
             }
         }
 
@@ -182,9 +174,9 @@ namespace M2Server
         {
             TUserCastle Castle;
             SaveCastleList();
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 Castle.Save();
             }
         }
@@ -204,10 +196,10 @@ namespace M2Server
                     if (sCastleDir != "")
                     {
                         Castle = new TUserCastle(sCastleDir);
-                        m_CastleList.Add(Castle);
+                        _castleList.Add(Castle);
                     }
                 }
-                M2Share.MainOutMessage("已读取 " + m_CastleList.Count + "个城堡信息...", messageColor: ConsoleColor.Green);
+                M2Share.MainOutMessage("已读取 " + _castleList.Count + "个城堡信息...", messageColor: ConsoleColor.Green);
             }
             else
             {
@@ -220,7 +212,7 @@ namespace M2Server
             ArrayList LoadList;
             if (!Directory.Exists(M2Share.g_Config.sCastleDir)) Directory.CreateDirectory(M2Share.g_Config.sCastleDir);
             LoadList = new ArrayList();
-            for (var i = 0; i < m_CastleList.Count; i++) LoadList.Add(i.ToString());
+            for (var i = 0; i < _castleList.Count; i++) LoadList.Add(i.ToString());
             //LoadList.SaveToFile(M2Share.g_Config.sCastleFile);
             //LoadList.Free;
         }
@@ -228,16 +220,16 @@ namespace M2Server
         public TUserCastle GetCastle(int nIndex)
         {
             TUserCastle result = null;
-            if (nIndex >= 0 && nIndex < m_CastleList.Count) result = m_CastleList[nIndex];
+            if (nIndex >= 0 && nIndex < _castleList.Count) result = _castleList[nIndex];
             return result;
         }
 
-        public void GetCastleNameList(ArrayList List)
+        public void GetCastleNameList(IList<string> List)
         {
             TUserCastle Castle;
-            for (var i = 0; i < m_CastleList.Count; i++)
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = m_CastleList[i];
+                Castle = _castleList[i];
                 List.Add(Castle.m_sName);
             }
         }
@@ -245,29 +237,11 @@ namespace M2Server
         public void IncRateGold(int nGold)
         {
             TUserCastle Castle;
-            __Lock();
-            try
+            for (var i = 0; i < _castleList.Count; i++)
             {
-                for (var i = 0; i < m_CastleList.Count; i++)
-                {
-                    Castle = m_CastleList[i];
-                    Castle.IncRateGold(nGold);
-                }
+                Castle = _castleList[i];
+                Castle.IncRateGold(nGold);
             }
-            finally
-            {
-                UnLock();
-            }
-        }
-
-        private void __Lock()
-        {
-            HUtil32.EnterCriticalSection(_criticalSection);
-        }
-
-        private void UnLock()
-        {
-            HUtil32.LeaveCriticalSection(_criticalSection);
         }
     }
 }

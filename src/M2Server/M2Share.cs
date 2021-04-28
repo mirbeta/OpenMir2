@@ -40,11 +40,11 @@ namespace M2Server
         public static ArrayList LogonCostLogList = null;
         public static TMapManager g_MapManager = null;
         public static TItemUnit ItemUnit = null;
-        public static TMagicManager MagicManager = null;
+        public static MagicManager MagicManager = null;
         public static TNoticeManager NoticeManager = null;
-        public static TGuildManager GuildManager = null;
-        public static TEventManager EventManager = null;
-        public static TCastleManager CastleManager = null;
+        public static GuildManager GuildManager = null;
+        public static EventManager EventManager = null;
+        public static CastleManager CastleManager = null;
         public static TFrontEngine FrontEngine = null;
         public static TUserEngine UserEngine = null;
         public static RobotManage RobotManage = null;
@@ -1444,7 +1444,7 @@ namespace M2Server
         public const string g_sGameCommandLevelConsoleMsg = "[等级调整] %s (%d -> %d)";
         public const string g_sGameCommandSbkGoldHelpMsg = "城堡名称 控制符(=、-、+) 金币数(1-100000000)";
         public const string g_sGameCommandSbkGoldCastleNotFoundMsg = "城堡%s未找到！！！";
-        public const string g_sGameCommandSbkGoldShowMsg = "%s的金币数为: %d 今天收入: %d";
+        public const string g_sGameCommandSbkGoldShowMsg = "{0}的金币数为: {1} 今天收入: {2}";
         public const string g_sGameCommandRecallHelpMsg = "人物名称";
         public const string g_sGameCommandReGotoHelpMsg = "人物名称";
         public const string g_sGameCommandShowHumanFlagHelpMsg = "人物名称 标识号";

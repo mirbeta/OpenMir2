@@ -2,17 +2,17 @@ using System.Collections.Generic;
 
 namespace M2Server
 {
-    public class TEventManager
+    public class EventManager
     {
-        private readonly IList<TEvent> m_EventList = null;
-        private readonly IList<TEvent> m_ClosedEventList = null;
+        private readonly IList<TEvent> _eventList = null;
+        private readonly IList<TEvent> _closedEventList = null;
 
         public void Run()
         {
             TEvent executeEvent;
-            for (var i = m_EventList.Count - 1; i >= 0; i--)
+            for (var i = _eventList.Count - 1; i >= 0; i--)
             {
-                executeEvent = m_EventList[i];
+                executeEvent = _eventList[i];
                 if (executeEvent.m_boActive &&
                     HUtil32.GetTickCount() - executeEvent.m_dwRunStart > executeEvent.m_dwRunTick)
                 {
@@ -20,18 +20,18 @@ namespace M2Server
                     executeEvent.Run();
                     if (executeEvent.m_boClosed)
                     {
-                        m_ClosedEventList.Add(executeEvent);
-                        m_EventList.RemoveAt(i);
+                        _closedEventList.Add(executeEvent);
+                        _eventList.RemoveAt(i);
                     }
                 }
             }
 
-            for (var i = m_ClosedEventList.Count - 1; i >= 0; i--)
+            for (var i = _closedEventList.Count - 1; i >= 0; i--)
             {
-                executeEvent = m_ClosedEventList[i];
+                executeEvent = _closedEventList[i];
                 if (HUtil32.GetTickCount() - executeEvent.m_dwCloseTick > 5 * 60 * 1000)
                 {
-                    m_ClosedEventList.RemoveAt(i);
+                    _closedEventList.RemoveAt(i);
                     executeEvent = null;
                 }
             }
@@ -41,9 +41,9 @@ namespace M2Server
         {
             TEvent result = null;
             TEvent currentEvent = null;
-            for (var i = m_EventList.Count - 1; i >= 0; i--)
+            for (var i = _eventList.Count - 1; i >= 0; i--)
             {
-                currentEvent = m_EventList[i];
+                currentEvent = _eventList[i];
                 if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY &&
                     currentEvent.m_nEventType == nType)
                 {
@@ -55,15 +55,15 @@ namespace M2Server
             return result;
         }
 
-        public void AddEvent(TEvent __Event)
+        public void AddEvent(TEvent @event)
         {
-            m_EventList.Add(__Event);
+            _eventList.Add(@event);
         }
 
-        public TEventManager()
+        public EventManager()
         {
-            m_EventList = new List<TEvent>();
-            m_ClosedEventList = new List<TEvent>();
+            _eventList = new List<TEvent>();
+            _closedEventList = new List<TEvent>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 
 namespace M2Server
 {
@@ -103,7 +103,7 @@ namespace M2Server
                     if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) && PlayObject.IsGuildMaster())
                     {
                         boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (sLabel.ToLower().CompareTo(M2Share.sSL_SENDMSG.ToLower()) == 0)
+                        if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.Ordinal) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -117,19 +117,19 @@ namespace M2Server
                         }
                         string s20;
                         // 增加挂机
-                        if (sLabel.ToLower().CompareTo(M2Share.sOFFLINEMSG.ToLower()) == 0)
+                        if (string.Compare(sLabel, M2Share.sOFFLINEMSG, StringComparison.Ordinal) == 0)
                         {
                             if (this.m_boOffLineMsg)
                             {
                                 this.SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sSL_SENDMSG.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.Ordinal) == 0)
                         {
                             SendCustemMsg(PlayObject, sMsg);
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sCASTLENAME.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sCASTLENAME, StringComparison.Ordinal) == 0)
                         {
                             sMsg = sMsg.Trim();
                             if (sMsg != "")
@@ -145,7 +145,7 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sWITHDRAWAL.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sWITHDRAWAL, StringComparison.Ordinal) == 0)
                         {
                             switch (this.m_Castle.WithDrawalGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
@@ -167,7 +167,7 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sRECEIPTS.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sRECEIPTS, StringComparison.Ordinal) == 0)
                         {
                             switch (this.m_Castle.ReceiptGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
@@ -189,30 +189,30 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sOPENMAINDOOR.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sOPENMAINDOOR, StringComparison.Ordinal) == 0)
                         {
                             this.m_Castle.MainDoorControl(false);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sCLOSEMAINDOOR.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sCLOSEMAINDOOR, StringComparison.Ordinal) == 0)
                         {
                             this.m_Castle.MainDoorControl(true);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sREPAIRDOORNOW.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRDOORNOW, StringComparison.Ordinal) == 0)
                         {
                             RepairDoor(PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sREPAIRWALLNOW1.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW1, StringComparison.Ordinal) == 0)
                         {
                             RepairWallNow(1, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sREPAIRWALLNOW2.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW2, StringComparison.Ordinal) == 0)
                         {
                             RepairWallNow(2, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sREPAIRWALLNOW3.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW3, StringComparison.Ordinal) == 0)
                         {
                             RepairWallNow(3, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
@@ -230,11 +230,11 @@ namespace M2Server
                             HireArcher(s20, PlayObject);
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sEXIT.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.Ordinal) == 0)
                         {
                             PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sBACK.ToLower()) == 0)
+                        else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.Ordinal) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {
@@ -408,11 +408,7 @@ namespace M2Server
 
         public TCastleOfficial() : base()
         {
-        }
-
-        ~TCastleOfficial()
-        {
-
+            
         }
 
         public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)

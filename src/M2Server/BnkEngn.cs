@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Threading;
 
 namespace M2Server
 {
@@ -19,18 +18,11 @@ namespace M2Server
         public ArrayList m_CompleteList = null;
         public object m_CS = null;
 
-        public TBankEngine(bool CreateSuspended)
+        public TBankEngine()
         {
             m_CS = new object();
             m_UserReQuestList = new ArrayList();
             m_CompleteList = new ArrayList();
-        }
-
-        ~TBankEngine()
-        {
-            //m_UserReQuestList.Free;
-            //m_CompleteList.Free;
-            //DeleteCriticalSection(m_CS);
         }
 
         public void Execute()

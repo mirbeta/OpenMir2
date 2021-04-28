@@ -1,10 +1,11 @@
-﻿using mSystemModule;
+﻿using System;
+using mSystemModule;
 using System.Collections.Generic;
 using System.IO;
 
 namespace M2Server
 {
-    public class TGuildManager
+    public class GuildManager
     {
         public IList<TGuild> GuildList = null;
 
@@ -30,7 +31,7 @@ namespace M2Server
             for (var i = 0; i < GuildList.Count; i++)
             {
                 Guild = GuildList[i];
-                if (Guild.sGuildName.ToLower().CompareTo(sGuildName.ToLower()) == 0)
+                if (String.Compare(Guild.sGuildName, sGuildName, StringComparison.Ordinal) == 0)
                 {
                     if (Guild.m_RankList.Count > 1)
                     {
@@ -55,7 +56,7 @@ namespace M2Server
             GuildList.Clear();
         }
 
-        public TGuildManager()
+        public GuildManager()
         {
             GuildList = new List<TGuild>();
         }
@@ -102,7 +103,7 @@ namespace M2Server
                         SaveGuildList();
                     }
                 }
-                M2Share.MainOutMessage("已读取 " + GuildList.Count + "个行会信息...", messageColor: System.ConsoleColor.Green);
+                M2Share.MainOutMessage("已读取 " + GuildList.Count + "个行会信息...", messageColor: ConsoleColor.Green);
             }
             else
             {
@@ -124,7 +125,7 @@ namespace M2Server
             return result;
         }
 
-        public void SaveGuildList()
+        private void SaveGuildList()
         {
             StringList SaveList;
             if (M2Share.nServerIndex != 0)

@@ -1,6 +1,6 @@
 namespace M2Server
 {
-    public class Magic
+    public static class Magic
     {
         public static int MPow(TUserMagic UserMagic)
         {
@@ -41,22 +41,28 @@ namespace M2Server
             return result;
         }
 
-        // nType ???????? 1 ??????? 2 ????
+        /// <summary>
+        /// 检查护身符
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="nCount"></param>
+        /// <param name="nType"></param>
+        /// <param name="Idx"></param>
+        /// <returns></returns>
         public static bool CheckAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
-            bool result;
-            TItem AmuletStdItem;
-            result = false;
+            TItem amuletStdItem = null;
+            var result = false;
             Idx = 0;
             if (PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
             {
-                AmuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex);
-                if (AmuletStdItem != null && AmuletStdItem.StdMode == 25)
+                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex);
+                if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if (AmuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_ARMRINGL;
                                 result = true;
@@ -64,7 +70,7 @@ namespace M2Server
                             }
                             break;
                         case 2:
-                            if (AmuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_ARMRINGL].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_ARMRINGL;
                                 result = true;
@@ -76,13 +82,13 @@ namespace M2Server
             }
             if (PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex > 0)
             {
-                AmuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex);
-                if (AmuletStdItem != null && AmuletStdItem.StdMode == 25)
+                amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex);
+                if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
                     {
                         case 1:
-                            if (AmuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_BUJUK;
                                 result = true;
@@ -90,7 +96,7 @@ namespace M2Server
                             }
                             break;
                         case 2:
-                            if (AmuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.m_UseItems[grobal2.U_BUJUK].Dura / 100) >= nCount)
                             {
                                 Idx = grobal2.U_BUJUK;
                                 result = true;
@@ -103,12 +109,19 @@ namespace M2Server
             return result;
         }
 
-        // nType ???????? 1 ??????? 2 ????
+        /// <summary>
+        /// 使用护身符
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="nCount"></param>
+        /// <param name="nType"></param>
+        /// <param name="Idx"></param>
         public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
-            if (PlayObject.m_UseItems[Idx].Dura > nCount * 100)
+            var dura = (short)(nCount * 100);
+            if (PlayObject.m_UseItems[Idx].Dura > dura)
             {
-                PlayObject.m_UseItems[Idx].Dura -= (short)(nCount * 100);
+                PlayObject.m_UseItems[Idx].Dura -= dura;//减少护身符持久即数量
                 PlayObject.SendMsg(PlayObject, grobal2.RM_DURACHANGE, Idx, PlayObject.m_UseItems[Idx].Dura, PlayObject.m_UseItems[Idx].DuraMax, 0, "");
             }
             else
