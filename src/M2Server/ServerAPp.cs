@@ -404,10 +404,15 @@ namespace M2Server
         private void StatisticTime()
         {
             var sc = new System.Text.StringBuilder();
-            // LbUserCount.Caption := '(' + IntToStr(UserEngine.MonsterCount) + ')   ' + IntToStr(UserEngine.OnlinePlayObject) + '/' + IntToStr(UserEngine.PlayObjectCount) + '[' + IntToStr(UserEngine.LoadPlayCount) + '/' + IntToStr(UserEngine.m_PlayObjectFreeList.Count) + ']';
-            // Label1.Caption := format('Run:%d/%d Soc:%d/%d Usr:%d/%d', [nRunTimeMin, nRunTimeMax, g_nSockCountMin, g_nSockCountMax, g_nUsrTimeMin, g_nUsrTimeMax]);
-            // Label2.Caption := format('Hum:%d/%d UsrRot:%d/%d Merch:%d/%d Npc:%d/%d (%d)', [g_nHumCountMin, g_nHumCountMax, dwUsrRotCountMin, dwUsrRotCountMax, UserEngine.dwProcessMerchantTimeMin, UserEngine.dwProcessMerchantTimeMax, UserEngine.dwProcessNpcTimeMin, UserEngine.dwProcessNpcTimeMax, g_nProcessHumanLoopTime]);
-            // Label20.Caption := format('MonG:%d/%d/%d MonP:%d/%d/%d ObjRun:%d/%d', [g_nMonGenTime, g_nMonGenTimeMin, g_nMonGenTimeMax, g_nMonProcTime, g_nMonProcTimeMin, g_nMonProcTimeMax, g_nBaseObjTimeMin, g_nBaseObjTimeMax]);
+            sc.AppendLine(
+                $"({M2Share.UserEngine.MonsterCount}) {M2Share.UserEngine.OnlinePlayObject} / {M2Share.UserEngine.PlayObjectCount}  [{M2Share.UserEngine.LoadPlayCount}/{M2Share.UserEngine.m_PlayObjectFreeList.Count}]");
+            //sc.AppendLine("Run:{0}/{1} Soc:{2}/{3} Usr:{4}/{5}",M2Share.nRunTimeMin, M2Share.nRunTimeMax, M2Share.g_nSockCountMin, M2Share.g_nSockCountMax,M2Share. g_nUsrTimeMin, M2Share.g_nUsrTimeMax);
+            sc.AppendLine(string.Format("Hum:{0}/{1} UsrRot:{2}/{3} Merch:{4}/{5} Npc:{6}/{7} ({8})", M2Share.g_nHumCountMin,
+                M2Share.g_nHumCountMax, M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax,
+                M2Share.UserEngine.dwProcessMerchantTimeMin, M2Share.UserEngine.dwProcessMerchantTimeMax,
+                M2Share.UserEngine.dwProcessNpcTimeMin, M2Share.UserEngine.dwProcessNpcTimeMax,
+                M2Share.g_nProcessHumanLoopTime));
+            //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
         }
     }
 }
