@@ -240,10 +240,10 @@
     <Compile Include="Configs\GameCmdConfig.cs" />
     <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Configs\StringConfig.cs" />
-    <Compile Include="Core\ObjectSystem.cs" />
-    <Compile Include="Core\TBaseObject.Base.cs" />
-    <Compile Include="Core\TPlayObject.Command.cs" />
-    <Compile Include="Core\TPlayObject.Base.cs" />
+    <Compile Include="Actors\ObjectSystem.cs" />
+    <Compile Include="Actors\TBaseObject.Base.cs" />
+    <Compile Include="Actors\TPlayObject.Command.cs" />
+    <Compile Include="Actors\TPlayObject.Base.cs" />
     <Compile Include="DataServer.cs" />
     <Compile Include="EDcode.cs">
       <SubType>Code</SubType>
@@ -409,10 +409,10 @@
     <Compile Include="ScriptSystem\ScriptDef.cs" />
     <Compile Include="ScriptSystem\ScriptEngine.cs" />
     <Compile Include="ScriptSystem\ScriptSystem.cs" />
-    <Compile Include="Core\TAnimalObject.cs" />
-    <Compile Include="Core\TBaseObject.cs" />
-    <Compile Include="Core\TPlayCloneObject.cs" />
-    <Compile Include="Core\TPlayObject.cs" />
+    <Compile Include="Actors\TAnimalObject.cs" />
+    <Compile Include="Actors\TBaseObject.cs" />
+    <Compile Include="Actors\TPlayCloneObject.cs" />
+    <Compile Include="Actors\TPlayObject.cs" />
     <Compile Include="ServerApp.cs" />
     <Compile Include="Package\TDefaultMessage.cs" />
     <Compile Include="Package\TOStdItem.cs" />
@@ -438,10 +438,10 @@
     <Compile Include="Package\TClientConf.cs" />
     <Compile Include="Package\TLoadHuman.cs" />
     <Compile Include="Package\TMsgHeader.cs" />
+    <Compile Include="Package\TMagicRcd.cs" />
     <Compile Include="UsrEngn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Package\TMagicRcd.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mSystemModule\mSystemModule.csproj">
@@ -450,7 +450,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\TPlayObject.ProcessMsg.cs" />
+    <Compile Include="Actors\TPlayObject.ProcessMsg.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

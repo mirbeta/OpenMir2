@@ -39,14 +39,14 @@ namespace M2Server
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static TMapManager g_MapManager = null;
-        public static TItemUnit ItemUnit = null;
+        public static ItemUnit ItemUnit = null;
         public static MagicManager MagicManager = null;
         public static TNoticeManager NoticeManager = null;
         public static GuildManager GuildManager = null;
         public static EventManager EventManager = null;
         public static CastleManager CastleManager = null;
         public static TFrontEngine FrontEngine = null;
-        public static TUserEngine UserEngine = null;
+        public static UserEngine UserEngine = null;
         public static RobotManage RobotManage = null;
         public static IList<string> g_MakeItemList = null;
         public static IList<TStartPoint> StartPointList = null;

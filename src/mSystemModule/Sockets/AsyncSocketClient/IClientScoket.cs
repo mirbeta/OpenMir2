@@ -7,24 +7,24 @@ namespace NetFramework.AsyncSocketClient
 {
     public class IClientScoket
     {
-        private readonly int buffersize = 0x10000;//»º³åÇø´óĞ¡
-        private Socket cli = null;//¿Í»§¶ËSocket
-        private readonly byte[] databuffer;//»º³åÇø
-        public bool IsConnected;//Á¬½ÓÊÇ·ñ³É¹¦
+        private readonly int buffersize = 0x10000;//ç¼“å†²åŒºå¤§å°
+        private Socket cli = null;//å®¢æˆ·ç«¯Socket
+        private readonly byte[] databuffer;//ç¼“å†²åŒº
+        public bool IsConnected;//è¿æ¥æ˜¯å¦æˆåŠŸ
         public string Address = string.Empty;
         public int Port = 0;
 
-        public event DSCClientOnConnectedHandler OnConnected;//Á¬½Ó³É¹¦ÊÂ¼ş
+        public event DSCClientOnConnectedHandler OnConnected;//è¿æ¥æˆåŠŸäº‹ä»¶
 
-        public event DSCClientOnErrorHandler OnError;//´íÎóÊÂ¼ş
+        public event DSCClientOnErrorHandler OnError;//é”™è¯¯äº‹ä»¶
 
-        public event DSCClientOnDataInHandler ReceivedDatagram;//½ÓÊÕµ½Êı¾İÊÂ¼ş
+        public event DSCClientOnDataInHandler ReceivedDatagram;//æ¥æ”¶åˆ°æ•°æ®äº‹ä»¶
 
-        public event DSCClientOnDisconnectedHandler OnDisconnected;//¶Ï¿ªÁ¬½ÓÊÂ¼ş
+        public event DSCClientOnDisconnectedHandler OnDisconnected;//æ–­å¼€è¿æ¥äº‹ä»¶
 
         public IClientScoket()
         {
-            this.databuffer = new byte[this.buffersize];//´´½¨»º³åÇø
+            this.databuffer = new byte[this.buffersize];//åˆ›å»ºç¼“å†²åŒº
         }
 
         public void Connect()
@@ -35,17 +35,17 @@ namespace NetFramework.AsyncSocketClient
             }
             else
             {
-                new Exception("IPµØÖ·»ò¶Ë¿ÚºÅ´íÎó");
+                new Exception("IPåœ°å€æˆ–ç«¯å£å·é”™è¯¯");
             }
         }
 
-        public void Connect(string ip, int port)//Á¬½Óµ½ÖÕ½áµã
+        public void Connect(string ip, int port)//è¿æ¥åˆ°ç»ˆç»“ç‚¹
         {
             this.cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(ip), port);
             try
             {
-                this.cli.BeginConnect(remoteEP, new AsyncCallback(this.HandleConnect), this.cli);//¿ªÊ¼Òì²½Á¬½Ó
+                this.cli.BeginConnect(remoteEP, new AsyncCallback(this.HandleConnect), this.cli);//å¼€å§‹å¼‚æ­¥è¿æ¥
             }
             catch (ObjectDisposedException)
             {
@@ -55,9 +55,9 @@ namespace NetFramework.AsyncSocketClient
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -66,13 +66,13 @@ namespace NetFramework.AsyncSocketClient
             Socket asyncState = (Socket)iar.AsyncState;
             try
             {
-                asyncState.EndConnect(iar);//½áÊøÒì²½Á¬½Ó
+                asyncState.EndConnect(iar);//ç»“æŸå¼‚æ­¥è¿æ¥
                 if (null != this.OnConnected)
                 {
-                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli));//Òı·¢Á¬½Ó³É¹¦ÊÂ¼ş
+                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli));//å¼•å‘è¿æ¥æˆåŠŸäº‹ä»¶
                     IsConnected = true;
                 }
-                this.StartWaitingForData(asyncState);//¿ªÊ¼½ÓÊÕÊı¾İ
+                this.StartWaitingForData(asyncState);//å¼€å§‹æ¥æ”¶æ•°æ®
             }
             catch (ObjectDisposedException)
             {
@@ -83,9 +83,9 @@ namespace NetFramework.AsyncSocketClient
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -93,7 +93,7 @@ namespace NetFramework.AsyncSocketClient
         {
             try
             {
-                //¿ªÊ¼Òì²½½ÓÊÕÊı¾İ
+                //å¼€å§‹å¼‚æ­¥æ¥æ”¶æ•°æ®
                 soc.BeginReceive(this.databuffer, 0, this.buffersize, SocketFlags.None, new AsyncCallback(this.HandleIncomingData), soc);
             }
             catch (ObjectDisposedException)
@@ -104,9 +104,9 @@ namespace NetFramework.AsyncSocketClient
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -115,34 +115,34 @@ namespace NetFramework.AsyncSocketClient
             Socket asyncState = (Socket)parameter.AsyncState;
             try
             {
-                int length = asyncState.EndReceive(parameter);//½áÊøÒì²½½ÓÊÕÊı¾İ
+                int length = asyncState.EndReceive(parameter);//ç»“æŸå¼‚æ­¥æ¥æ”¶æ•°æ®
                 if (0 == length)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
                 else
                 {
-                    byte[] destinationArray = new byte[length];//Ä¿µÄ×Ö½ÚÊı×é
+                    byte[] destinationArray = new byte[length];//ç›®çš„å­—èŠ‚æ•°ç»„
                     Array.Copy(this.databuffer, 0, destinationArray, 0, length);
                     if (null != this.ReceivedDatagram)
                     {
-                        //Òı·¢½ÓÊÕÊı¾İÊÂ¼ş
+                        //å¼•å‘æ¥æ”¶æ•°æ®äº‹ä»¶
                         this.ReceivedDatagram(this, new DSCClientDataInEventArgs(this.cli, destinationArray));
                     }
-                    this.StartWaitingForData(asyncState);//¼ÌĞø½ÓÊÕÊı¾İ
+                    this.StartWaitingForData(asyncState);//ç»§ç»­æ¥æ”¶æ•°æ®
                 }
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -155,20 +155,20 @@ namespace NetFramework.AsyncSocketClient
             var buffer = System.Text.Encoding.Default.GetBytes(str);
             try
             {
-                //¿ªÊ¼Òì²½·¢ËÍÊı¾İ
+                //å¼€å§‹å¼‚æ­¥å‘é€æ•°æ®
                 this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.HandleSendFinished), this.cli);
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -176,20 +176,20 @@ namespace NetFramework.AsyncSocketClient
         {
             try
             {
-                //¿ªÊ¼Òì²½·¢ËÍÊı¾İ
+                //å¼€å§‹å¼‚æ­¥å‘é€æ•°æ®
                 this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.HandleSendFinished), this.cli);
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
-                this.RaiseErrorEvent(exception);//Òı·¢´íÎóÊÂ¼ş
+                this.RaiseErrorEvent(exception);//å¼•å‘é”™è¯¯äº‹ä»¶
             }
         }
 
@@ -197,7 +197,7 @@ namespace NetFramework.AsyncSocketClient
         {
             try
             {
-                ((Socket)parameter.AsyncState).EndSend(parameter);//½áÊøÒì²½·¢ËÍÊı¾İ
+                ((Socket)parameter.AsyncState).EndSend(parameter);//ç»“æŸå¼‚æ­¥å‘é€æ•°æ®
             }
             catch (ObjectDisposedException)
             {
@@ -207,13 +207,13 @@ namespace NetFramework.AsyncSocketClient
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    this.RaiseDisconnectedEvent();//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
                 this.RaiseErrorEvent(exception);
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
             }
         }
 

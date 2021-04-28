@@ -1152,7 +1152,7 @@ namespace M2Server
                         {
                             MagicEvent = new TMagicEvent
                             {
-                                BaseObjectList = new ArrayList(),
+                                BaseObjectList = new List<TBaseObject>(),
                                 dwStartTick = HUtil32.GetTickCount(),
                                 dwTime = nPower * 1000
                             };

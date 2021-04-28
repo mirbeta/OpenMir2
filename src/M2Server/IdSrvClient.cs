@@ -11,8 +11,6 @@ namespace M2Server
 {
     public class TFrmIDSoc
     {
-        private readonly string IDSrvAddr = string.Empty;
-        private readonly int IDSrvPort = 0;
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
         private readonly IClientScoket IDSocket;
@@ -20,22 +18,22 @@ namespace M2Server
 
         public TFrmIDSoc()
         {
-            if (File.Exists(M2Share.sConfigFileName))
-            {
-                var conf = new IniFile(M2Share.sConfigFileName);
-                IDSrvAddr = conf.ReadString("Server", "IDSAddr", "127.0.0.1");
-                IDSrvPort = conf.ReadInteger("Server", "IDSPort", 5600);
-            }
-            else
-            {
-                M2Share.MainOutMessage("File not found... <" + M2Share.sConfigFileName + '>');
-            }
             m_SessionList = new List<TSessInfo>();
             M2Share.g_Config.boIDSocketConnected = false;
             IDSocket = new IClientScoket();
             IDSocket.OnConnected += IDSocketConnect;
             IDSocket.OnDisconnected += IDSocketDisconnect;
             IDSocket.ReceivedDatagram += IdSocketRead;
+            if (File.Exists(M2Share.sConfigFileName))
+            {
+                var conf = new IniFile(M2Share.sConfigFileName);
+                IDSocket.Address = conf.ReadString("Server", "IDSAddr", "127.0.0.1");
+                IDSocket.Port = conf.ReadInteger("Server", "IDSPort", 5600);
+            }
+            else
+            {
+                M2Share.MainOutMessage("File not found... <" + M2Share.sConfigFileName + '>');
+            }
         }
 
         private void Connected(object obj)
@@ -44,9 +42,7 @@ namespace M2Server
             {
                 return;
             }
-            IDSocket.Address = IDSrvAddr;
-            IDSocket.Port = IDSrvPort;
-            IDSocket.Connect(IDSrvAddr, IDSrvPort);
+            IDSocket.Connect();
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -413,9 +409,7 @@ namespace M2Server
 
         public static TFrmIDSoc Instance
         {
-           get{
-               return instance ?? (instance = new TFrmIDSoc());
-           }
+            get { return instance ?? (instance = new TFrmIDSoc()); }
         }
     }
 }

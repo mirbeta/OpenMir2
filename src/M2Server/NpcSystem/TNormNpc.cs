@@ -246,7 +246,7 @@ namespace M2Server
                     PlayObject.m_boDecGameGold = true;
                     return;
                 }
-            }
+            } 
             if (QuestActionInfo.sParam1.ToLower().CompareTo("STOP".ToLower()) == 0)
             {
                 PlayObject.m_boDecGameGold = false;
@@ -7991,10 +7991,9 @@ namespace M2Server
 
         private void ActionOfGuildAuraePoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nAuraePoint;
             char cMethod;
             TGuild Guild;
-            nAuraePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            int nAuraePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_AURAEPOINT);

@@ -24,7 +24,7 @@ namespace M2Server
             _msgServer.Start(M2Share.g_Config.sMsgSrvAddr, M2Share.g_Config.nMsgSrvPort);
         }
 
-        public void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)
+        private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)
         {
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
             {
@@ -109,7 +109,7 @@ namespace M2Server
             }
         }
 
-        public void MsgServerClientConnect(object sender, NetFramework.AsyncUserToken e)
+        private void MsgServerClientConnect(object sender, NetFramework.AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)

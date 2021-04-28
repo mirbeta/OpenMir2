@@ -267,14 +267,14 @@ namespace M2Server
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.g_MapManager = new TMapManager();
-            M2Share.ItemUnit = new TItemUnit();
+            M2Share.ItemUnit = new ItemUnit();
             M2Share.MagicManager = new MagicManager();
             M2Share.NoticeManager = new TNoticeManager();
             M2Share.GuildManager = new GuildManager();
             M2Share.EventManager = new EventManager();
             M2Share.CastleManager = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();
-            M2Share.UserEngine = new TUserEngine();
+            M2Share.UserEngine = new UserEngine();
             M2Share.RobotManage = new RobotManage();
             M2Share.g_MakeItemList = new List<string>();
             M2Share.StartPointList = new List<TStartPoint>();

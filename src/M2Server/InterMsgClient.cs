@@ -67,7 +67,7 @@ namespace M2Server
                 while (BufStr.IndexOf(')') > 0)
                 {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
-                    if (Str != "")
+                    if (!string.IsNullOrEmpty(Str))
                     {
                         Body = HUtil32.GetValidStr3(Str, ref Head, "/");
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, "/");
@@ -97,12 +97,12 @@ namespace M2Server
             }
         }
 
-        public void MsgClientConnect(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void MsgClientConnect(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
             M2Share.MainOutMessage("连接主服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")成功...");
         }
 
-        public void MsgClientError(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void MsgClientError(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
             M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
@@ -112,7 +112,7 @@ namespace M2Server
             M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
 
-        public void MsgClientRead(object sender, NetFramework.DSCClientDataInEventArgs e)
+        private void MsgClientRead(object sender, NetFramework.DSCClientDataInEventArgs e)
         {
             sRecvMsg = sRecvMsg + e.Data;
         }

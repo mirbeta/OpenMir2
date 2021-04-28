@@ -4,16 +4,16 @@ using System.IO;
 
 namespace M2Server
 {
-    public class TItemUnit
+    public class ItemUnit
     {
         private IList<TItemName> m_ItemNameList = null;
 
-        public TItemUnit()
+        public ItemUnit()
         {
             m_ItemNameList = new List<TItemName>();
         }
 
-        ~TItemUnit()
+        ~ItemUnit()
         {
             for (var i = 0; i < m_ItemNameList.Count; i ++ )
             {
@@ -61,10 +61,10 @@ namespace M2Server
         {
             for (var i = 0; i < m_ItemNameList.Count; i++)
             {
-                var ItemName = m_ItemNameList[i];
-                if (ItemName.nMakeIndex == nMakeIndex && ItemName.nItemIndex == nItemIndex)
+                var itemName = m_ItemNameList[i];
+                if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
                 {
-                    ItemName = null;
+                    itemName = null;
                     m_ItemNameList.RemoveAt(i);
                     return;
                 }

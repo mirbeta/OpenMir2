@@ -612,7 +612,6 @@ namespace M2Server
             const string sExceptionMsg1 = "[Exception] TRunSocket::CloseUser 1";
             const string sExceptionMsg2 = "[Exception] TRunSocket::CloseUser 2";
             const string sExceptionMsg3 = "[Exception] TRunSocket::CloseUser 3";
-            const string sExceptionMsg4 = "[Exception] TRunSocket::CloseUser 4";
             if (GateIdx <= RunSock.g_GateArr.GetUpperBound(0))
             {
                 Gate = RunSock.g_GateArr[GateIdx];

@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace M2Server
 {
-    public class TUserEngine
+    public sealed class UserEngine
     {
         public int dwProcessMapDoorTick;
         public int dwProcessMerchantTimeMax;
@@ -33,12 +33,11 @@ namespace M2Server
         public ArrayList m_MonFreeList;
         public IList<TMonGenInfo> m_MonGenList;
         public int m_nCurrMonGen;
-        public ArrayList m_NewHumanList;
+        public IList<TPlayObject> m_NewHumanList;
         /// <summary>
         /// 当前怪物列表刷新位置索引
         /// </summary>
         public int m_nMonGenCertListPosition;
-
         public int m_nMonGenListPosition;
         public int m_nProcHumIDx;
         public IList<TPlayObject> m_PlayObjectFreeList;
@@ -68,7 +67,7 @@ namespace M2Server
         public IList<TItem> StdItemList;
         private readonly Thread _userEngineThread;
 
-        public TUserEngine()
+        public UserEngine()
         {
             m_LoadPlaySection = new object();
             m_LoadPlayList = new List<TUserOpenInfo>();
@@ -102,7 +101,7 @@ namespace M2Server
             dwProcessMerchantTimeMax = 0;
             dwProcessNpcTimeMin = 0;
             dwProcessNpcTimeMax = 0;
-            m_NewHumanList = new ArrayList();
+            m_NewHumanList = new List<TPlayObject>();
             m_ListOfGateIdx = new ArrayList();
             m_ListOfSocket = new ArrayList();
             OldMagicList = new ArrayList();
@@ -496,7 +495,7 @@ namespace M2Server
 
         private void ProcessHumans()
         {
-            const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load... Code:=%d";
+            const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg2 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete - Free";
             const string sExceptionMsg3 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete";
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
@@ -550,7 +549,7 @@ namespace M2Server
                     }
                     for (var i = 0; i < m_NewHumanList.Count; i++)
                     {
-                        PlayObject = (TPlayObject)m_NewHumanList[i];
+                        PlayObject = m_NewHumanList[i];
                         M2Share.RunSocket.SetGateUserList(PlayObject.m_nGateIdx, PlayObject.m_nSocket, PlayObject);
                     }
                     m_NewHumanList.Clear();
@@ -561,7 +560,7 @@ namespace M2Server
                 }
                 catch (Exception e)
                 {
-                    M2Share.ErrorMessage(string.Format(sExceptionMsg1, new[] { 0 }));
+                    M2Share.ErrorMessage(sExceptionMsg1);
                     M2Share.ErrorMessage(e.Message);
                 }
             }
@@ -1126,7 +1125,7 @@ namespace M2Server
             for (var i = 0; i < MonsterList.Count; i++)
             {
                 var Monster = MonsterList[i];
-                if (string.Compare(Monster.sName.ToLower(), mon.m_sCharName.ToLower(), StringComparison.Ordinal) == 0)
+                if (string.Compare(Monster.sName, mon.m_sCharName, StringComparison.Ordinal) == 0)
                 {
                     ItemList = Monster.ItemList;
                     break;
@@ -1138,7 +1137,7 @@ namespace M2Server
                     var MonItem = ItemList[i];
                     if (M2Share.RandomNumber.Random(MonItem.MaxPoint) <= MonItem.SelPoint)
                     {
-                        if (string.Compare(MonItem.ItemName.ToLower(), grobal2.sSTRING_GOLDNAME.ToLower(),
+                        if (string.Compare(MonItem.ItemName, grobal2.sSTRING_GOLDNAME,
                                 StringComparison.Ordinal) == 0)
                         {
                             mon.m_nGold = mon.m_nGold + MonItem.Count / 2 + M2Share.RandomNumber.Random(MonItem.Count);
@@ -1503,8 +1502,7 @@ namespace M2Server
                 case 105:
                     Cert = new TGasMothMonster();
                     break;
-                case 106:
-                    // 楔蛾
+                case 106: // 楔蛾
                     Cert = new TGasDungMonster();
                     break;
                 case 107:
@@ -2228,7 +2226,7 @@ namespace M2Server
             for (var i = 0; i < MonsterList.Count; i++)
             {
                 Monster = MonsterList[i];
-                if (Monster.sName.Equals(sMonName, StringComparison.OrdinalIgnoreCase))
+                if(string.Compare(Monster.sName,sMonName,StringComparison.OrdinalIgnoreCase)==0)
                 {
                     BaseObject.m_btRaceServer = Monster.btRace;
                     BaseObject.m_btRaceImg = Monster.btRaceImg;
@@ -2355,7 +2353,7 @@ namespace M2Server
                 {
                     for (var j = MagicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
-                        BaseObject = (TBaseObject)MagicEvent.BaseObjectList[j];
+                        BaseObject = MagicEvent.BaseObjectList[j];
                         if (BaseObject.m_boDeath || BaseObject.m_boGhost || !BaseObject.m_boHolySeize)
                             MagicEvent.BaseObjectList.RemoveAt(j);
                     }
@@ -2570,25 +2568,19 @@ namespace M2Server
             return result;
         }
 
-        // ==========================================
-        // 向每个人物发送消息
-        // 线程安全
-        // ==========================================
+       /// <summary>
+       /// 向每个人物发送消息
+       /// </summary>
+       /// <param name="sMsg"></param>
+       /// <param name="MsgType"></param>
         public void SendBroadCastMsgExt(string sMsg, TMsgType MsgType)
         {
             TPlayObject PlayObject;
-            try
+            for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
-                HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (var i = 0; i < m_PlayObjectList.Count; i++)
-                {
-                    PlayObject = m_PlayObjectList[i];
-                    if (!PlayObject.m_boGhost) PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
+                PlayObject = m_PlayObjectList[i];
+                if (!PlayObject.m_boGhost) 
+                    PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
             }
         }
 
@@ -2598,24 +2590,16 @@ namespace M2Server
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (!PlayObject.m_boGhost) PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
+                if (!PlayObject.m_boGhost) 
+                    PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
             }
         }
 
         public void sub_4AE514(TGoldChangeInfo GoldChangeInfo)
         {
-            TGoldChangeInfo GoldChange;
-            GoldChange = new TGoldChangeInfo();
-            GoldChange = GoldChangeInfo;
+            var GoldChange = GoldChangeInfo;
             HUtil32.EnterCriticalSection(m_LoadPlaySection);
-            try
-            {
-                m_ChangeHumanDBGoldList.Add(GoldChange);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(m_LoadPlaySection);
-            }
+            m_ChangeHumanDBGoldList.Add(GoldChange);
         }
 
         public void ClearMonSayMsg()
@@ -2668,7 +2652,7 @@ namespace M2Server
             }
         }
 
-        public virtual void ClearItemList()
+        public void ClearItemList()
         {
             int I;
             I = 0;

@@ -473,7 +473,7 @@ namespace M2Server
         public TSessInfo SessInfo;
         public int nSocket;
         public TFrontEngine FrontEngine;
-        public TUserEngine UserEngine;
+        public UserEngine UserEngine;
         public int dwNewUserTick;
     } 
 
