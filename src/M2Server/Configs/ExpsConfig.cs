@@ -5,10 +5,12 @@ namespace M2Server.Configs
     public class ExpsConfig
     {
         private readonly IniFile ExpConf;
+        private readonly IniFile Config;
 
         public ExpsConfig()
         { 
             ExpConf = new IniFile(M2Share.sExpConfigFileName);
+            Config = new IniFile(M2Share.sConfigFileName);
         }
 
         public void LoadConfig()
@@ -44,8 +46,18 @@ namespace M2Server.Configs
                 LoadInteger = HUtil32.Str_ToInt(LoadString, 0);
                 if (LoadInteger == 0)
                 {
-                    ExpConf.WriteString("Exp", "Level" + i, M2Share.g_dwOldNeedExps[i]);
-                    M2Share.g_Config.dwNeedExps[i - 1] = M2Share.g_dwOldNeedExps[i];
+                    var oldNeedExp = M2Share.g_dwOldNeedExps[i];
+                    if (oldNeedExp <= 0)
+                    {
+                        oldNeedExp = Config.ReadInteger("Exp", "Level" + i, 0);
+                        ExpConf.WriteString("Exp", "Level" + i, oldNeedExp);
+                        M2Share.g_Config.dwNeedExps[i - 1] = oldNeedExp;
+                    }
+                    else
+                    {
+                        ExpConf.WriteString("Exp", "Level" + i, oldNeedExp);
+                        M2Share.g_Config.dwNeedExps[i - 1] = oldNeedExp;
+                    }
                 }
                 else
                 {

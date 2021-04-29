@@ -1680,7 +1680,6 @@ namespace M2Server
         public const int OS_MAPEVENT = 5;
         public const int OS_DOOR = 6;
         public const int OS_ROON = 7;
-        // 技能编号（正确）
         /// <summary>
         /// 火球术
         /// </summary>
@@ -1690,12 +1689,18 @@ namespace M2Server
         /// </summary>
         public const int SKILL_HEALLING = 2;
         public const int SKILL_ONESWORD = 3;
+        /// <summary>
+        /// 基本剑法
+        /// </summary>
         public const int SKILL_ILKWANG = 4;
         public const int SKILL_FIREBALL2 = 5;
         /// <summary>
         /// 施毒术
         /// </summary>
         public const int SKILL_AMYOUNSUL = 6;
+        /// <summary>
+        /// 攻杀剑法
+        /// </summary>
         public const int SKILL_YEDO = 7;
         /// <summary>
         /// 抗拒火环

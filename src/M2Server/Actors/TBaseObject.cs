@@ -4324,8 +4324,8 @@ namespace M2Server
                     UserItem.wIndex = 0;
                 }
                 if (HUtil32.RangeInDefined(UserItem.btValue[10], 10, 13))
-                { 
-                        UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
+                {
+                    UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
                 }
                 if (HUtil32.RangeInDefined(UserItem.btValue[10], 20, 23))
                 {
@@ -4517,7 +4517,6 @@ namespace M2Server
                             break;
                     }
                 }
-
                 SendAttackMsg(wIdent, m_btDirection, m_nCurrX, m_nCurrY);
             }
             catch (Exception e)
