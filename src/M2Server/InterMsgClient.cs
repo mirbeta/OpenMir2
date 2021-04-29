@@ -93,7 +93,8 @@ namespace M2Server
         {
             if (MsgClient.IsConnected)
             {
-                MsgClient.SendText("(" + sMsg + ")");
+                var buff = System.Text.Encoding.Default.GetBytes("(" + sMsg + ")");
+                MsgClient.Send(buff);
             }
         }
 
@@ -125,7 +126,6 @@ namespace M2Server
     {
         public static TFrmMsgClient instance = null;
 
-
         public static TFrmMsgClient Instance
         {
             get
@@ -137,7 +137,6 @@ namespace M2Server
                 return instance;
             }
         }
-
 
         public InterMsgClient()
         {

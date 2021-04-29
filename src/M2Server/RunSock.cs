@@ -75,11 +75,11 @@ namespace M2Server
             }
         }
 
-        public void CloseErrGate(Socket Socket)
+        public void CloseErrGate(Socket socket)
         {
-            if (Socket.Connected)
+            if (socket.Connected)
             {
-                Socket.Close();
+                socket.Close();
             }
         }
 

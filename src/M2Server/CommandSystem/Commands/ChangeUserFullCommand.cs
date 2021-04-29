@@ -27,7 +27,7 @@ namespace M2Server
                 return;
             }
             M2Share.g_Config.nUserFull = nCount;
-            PlayObject.SysMsg(string.Format("服务器上线人数限制: %d", nCount), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format("服务器上线人数限制: {0}", nCount), TMsgColor.c_Green, TMsgType.t_Hint);
         }
     }
 }

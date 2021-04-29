@@ -310,7 +310,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetGuildWarInfo(int sNum, string Body)
+        private void MsgGetGuildWarInfo(int sNum, string Body)
         {
             string Str;
             var gname = string.Empty;
