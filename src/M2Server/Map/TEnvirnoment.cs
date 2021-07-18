@@ -794,7 +794,7 @@ namespace M2Server
                 m_sCharName = sQuest,
                 m_nFlag = 0,
                 m_wAppr = 0,
-                m_sFilePath = "MapQuest_def\\",
+                m_sFilePath = "MapQuest_def",
                 m_boIsHide = true,
                 m_boIsQuest = false
             };

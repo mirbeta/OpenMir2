@@ -1043,7 +1043,7 @@ namespace M2Server
             }
         }
 
-        public override void LoadNPCScript()
+        public void LoadMerchantScript()
         {
             m_ItemTypeList.Clear();
             m_sPath = M2Share.sMarket_Def;

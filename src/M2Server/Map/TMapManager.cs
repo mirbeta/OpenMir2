@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace M2Server
@@ -113,7 +114,7 @@ namespace M2Server
             {
                 Envir.nMinMap = minMap;
             }
-            if (Envir.LoadMapData(M2Share.g_Config.sMapDir + m_sMapFileName + ".map"))
+            if (Envir.LoadMapData(Path.Combine(M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
             {
                 result = Envir;
                 if (!m_MapList.ContainsKey(sMapName.ToLower()))

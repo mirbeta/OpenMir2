@@ -171,7 +171,7 @@ namespace M2Server
                     }
                     else
                     {
-                        Merchant.LoadNPCScript();
+                        Merchant.LoadMerchantScript();
                         Merchant.LoadNPCData();
                     }
                 }

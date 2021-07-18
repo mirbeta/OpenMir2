@@ -58,7 +58,7 @@ namespace M2Server
         /// <summary>
         /// 游戏公告列表
         /// </summary>
-        public static IList<string> LineNoticeList = null;
+        public static StringList LineNoticeList = null;
         public static IList<TQDDinfo> QuestDiaryList = null;
         public static ArrayList AbuseTextList = null;
         /// <summary>
@@ -1399,8 +1399,8 @@ namespace M2Server
         public const string sHIREARCHERNOW = "@hirearchernow";
         public const string sHIREGUARDNOW = "@hireguardnow";
         public const string sHIREGUARDOK = "@hireguardok";
-        public const string sMarket_Def = "Market_Def\\";
-        public const string sNpc_def = "Npc_def\\";
+        public const string sMarket_Def = "Market_Def";
+        public const string sNpc_def = "Npc_def";
         public const string g_sGameLogMsg1 = "%d\09%s\09%d\09%d\09%s\09%s\09%d\09%s\09%s";
         public const string g_sHumanDieEvent = "人物死亡事件";
         public const string g_sHitOverSpeed = "[攻击超速] {0} 间隔:{1} 数量:{2}";
@@ -1545,7 +1545,7 @@ namespace M2Server
             string sText;
             if (File.Exists(FileName))
             {
-                //LineNoticeList.LoadFromFile(FileName);
+                LineNoticeList.LoadFromFile(FileName);
                 i = 0;
                 while (true)
                 {

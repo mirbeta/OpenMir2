@@ -10,7 +10,6 @@ namespace M2Server
         public int LoadNpcScript(TNormNpc NPC, string sPatch, string sScritpName)
         {
             int result;
-
             if (sPatch == "")
             {
                 sPatch = M2Share.sNpc_def;
@@ -1802,6 +1801,10 @@ namespace M2Server
             var result = -1;
             var n6C = 0;
             var n70 = 0;
+            if (sScritpName=="-4")
+            {
+                Console.WriteLine("asdasd");
+            }
             var sScritpFileName = Path.Combine(M2Share.g_Config.sEnvirDir, sPatch, string.Concat(sScritpName, ".txt"));
             if (File.Exists(sScritpFileName))
             {

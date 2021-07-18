@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 
 namespace mSystemModule
 {
@@ -16,12 +16,12 @@ namespace mSystemModule
         /// 获得连接对象
         /// </summary>
         /// <returns></returns>
-        public static SQLiteConnection GetSqLiteConnection()
+        public static SqliteConnection GetSqLiteConnection()
         {
-            return new SQLiteConnection(SqlConnctionString);
+            return new SqliteConnection(SqlConnctionString);
         }
 
-        private static void PrepareCommand(SQLiteCommand cmd, SQLiteConnection conn, string cmdText, params object[] p)
+        private static void PrepareCommand(SqliteCommand cmd, SqliteConnection conn, string cmdText, params object[] p)
         {
             if (conn.State != ConnectionState.Open)
                 conn.Open();
@@ -47,7 +47,7 @@ namespace mSystemModule
         /// <returns></returns>
         public static int ExecuteNonQuery(string cmdText, params object[] p)
         {
-            var command = new SQLiteCommand();
+            var command = new SqliteCommand();
             using (var connection = GetSqLiteConnection())
             {
                 PrepareCommand(command, connection, cmdText, p);
@@ -61,9 +61,9 @@ namespace mSystemModule
         /// <param name="cmdText"></param>
         /// <param name="commandParameters">传入的参数</param>
         /// <returns></returns>
-        public static SQLiteDataReader ExecuteReader(string cmdText, params object[] p)
+        public static SqliteDataReader ExecuteReader(string cmdText, params object[] p)
         {
-            var command = new SQLiteCommand();
+            var command = new SqliteCommand();
             var connection = GetSqLiteConnection();
             try
             {
@@ -86,7 +86,7 @@ namespace mSystemModule
         /// <returns></returns>
         public static object ExecuteScalar(string cmdText, params object[] p)
         {
-            var cmd = new SQLiteCommand();
+            var cmd = new SqliteCommand();
             using (var connection = GetSqLiteConnection())
             {
                 PrepareCommand(cmd, connection, cmdText, p);

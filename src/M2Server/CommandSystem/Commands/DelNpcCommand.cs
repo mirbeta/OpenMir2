@@ -46,7 +46,6 @@ namespace M2Server
                     if (M2Share.UserEngine.QuestNPCList[i] == BaseObject)
                     {
                         BaseObject.m_boGhost = true;
-
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
                         BaseObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);

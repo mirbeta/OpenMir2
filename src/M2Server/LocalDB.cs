@@ -483,7 +483,7 @@ namespace M2Server
         {
             try
             {
-                var sScriptFile = M2Share.g_Config.sEnvirDir + "MapQuest_def\\" + "QManage.txt";
+                var sScriptFile = Path.Combine(M2Share.g_Config.sEnvirDir, "MapQuest_def", "QManage.txt");
                 var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
                 var sScritpDir = M2Share.g_Config.sEnvirDir + "MapQuest_def\\";
                 if (!Directory.Exists(sScritpDir))
@@ -519,7 +519,7 @@ namespace M2Server
                         m_sCharName = "QManage",
                         m_nFlag = 0,
                         m_wAppr = 0,
-                        m_sFilePath = "MapQuest_def\\",
+                        m_sFilePath = "MapQuest_def",
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
@@ -563,7 +563,7 @@ namespace M2Server
                         m_sCharName = "RobotManage",
                         m_nFlag = 0,
                         m_wAppr = 0,
-                        m_sFilePath = "Robot_def\\",
+                        m_sFilePath = "Robot_def",
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
@@ -591,7 +591,7 @@ namespace M2Server
             var sQuest = string.Empty;
             var s30 = string.Empty;
             var s34 = string.Empty;
-            var sFileName = M2Share.g_Config.sEnvirDir + "MapQuest.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MapQuest.txt");
             if (File.Exists(sFileName))
             {
                 var tMapQuestList = new StringList();
@@ -962,7 +962,6 @@ namespace M2Server
 
         public void LoadNpcs()
         {
-            string sFileName;
             var s10 = string.Empty;
             var s18 = string.Empty;
             var s1C = string.Empty;
@@ -975,7 +974,7 @@ namespace M2Server
             var s38 = string.Empty;
             StringList LoadList;
             TNormNpc NPC;
-            sFileName = M2Share.g_Config.sEnvirDir + "Npcs.txt";
+            string sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Npcs.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -1077,7 +1076,7 @@ namespace M2Server
             while (true)
             {
                 QDDinfoList = null;
-                s14 = "QuestDiary\\" + LoadQuestDiary_sub_48978C(nC) + ".txt";
+                s14 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
                 if (File.Exists(s14))
                 {
                     s18 = "";

@@ -103,7 +103,7 @@ namespace M2Server
                         SaveGuildList();
                     }
                 }
-                M2Share.MainOutMessage("已读取 " + GuildList.Count + "个行会信息...", messageColor: ConsoleColor.Green);
+                M2Share.MainOutMessage($"已读取 [{GuildList.Count}] 个行会信息...", messageColor: ConsoleColor.Green);
             }
             else
             {

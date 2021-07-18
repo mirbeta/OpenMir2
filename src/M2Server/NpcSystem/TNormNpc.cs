@@ -7487,7 +7487,7 @@ namespace M2Server
             GotoLable(PlayObject, sLabel, boExtJmp, "");
         }
 
-        public virtual void LoadNPCScript()
+        public void LoadNPCScript()
         {
             string s08;
             if (m_boIsQuest)

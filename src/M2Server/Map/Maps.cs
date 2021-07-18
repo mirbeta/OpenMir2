@@ -21,7 +21,7 @@ namespace M2Server
                 m_sCharName = sName,
                 m_nFlag = 0,
                 m_wAppr = 0,
-                m_sFilePath = "MapQuest_def\\",
+                m_sFilePath = "MapQuest_def",
                 m_boIsHide = true,
                 m_boIsQuest = false
             };
@@ -33,9 +33,8 @@ namespace M2Server
         private static void LoadMapInfo_LoadSubMapInfo(StringList LoadList, string sFileName)
         {
             string sFilePatchName;
-            string sFileDir;
             StringList LoadMapList;
-            sFileDir = M2Share.g_Config.sEnvirDir + "MapInfo\\";
+            string sFileDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);
@@ -79,7 +78,6 @@ namespace M2Server
                 LoadList.LoadFromFile(sFileName);
                 if (LoadList.Count < 0)
                 {
-                    //LoadList.Free;
                     return result;
                 }
                 var count = 0;

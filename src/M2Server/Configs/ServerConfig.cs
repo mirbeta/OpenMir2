@@ -259,6 +259,7 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "GuildFile", "") == "")
                 Config.WriteString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
             M2Share.g_Config.sGuildFile = Config.ReadString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
+            M2Share.g_Config.sGuildFile = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sGuildFile);
             if (Config.ReadString("Share", "VentureDir", "") == "")
                 Config.WriteString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
             M2Share.g_Config.sVentureDir = Config.ReadString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
@@ -271,6 +272,7 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "CastleFile", "") == "")
                 Config.WriteString("Share", "CastleFile", M2Share.g_Config.sCastleDir + "List.txt");
             M2Share.g_Config.sCastleFile = Config.ReadString("Share", "CastleFile", M2Share.g_Config.sCastleFile);
+            M2Share.g_Config.sCastleFile = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sCastleFile);
 
             if (Config.ReadString("Share", "EnvirDir", "") == "")
             {
@@ -281,9 +283,11 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "MapDir", "") == "")
                 Config.WriteString("Share", "MapDir", M2Share.g_Config.sMapDir);
             M2Share.g_Config.sMapDir = Config.ReadString("Share", "MapDir", M2Share.g_Config.sMapDir);
+            M2Share.g_Config.sMapDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sMapDir);
             if (Config.ReadString("Share", "NoticeDir", "") == "")
                 Config.WriteString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
             M2Share.g_Config.sNoticeDir = Config.ReadString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
+            M2Share.g_Config.sNoticeDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sNoticeDir);
             sLoadString = Config.ReadString("Share", "LogDir", "");
             if (sLoadString == "")
                 Config.WriteString("Share", "LogDir", M2Share.g_Config.sLogDir);

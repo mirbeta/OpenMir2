@@ -126,7 +126,7 @@ namespace M2Server
                     M2Share.MainOutMessage("加载文字过滤信息成功...");
                 }
                 M2Share.MainOutMessage("正在加载公告提示信息...");
-                if (!M2Share.LoadLineNotice(M2Share.g_Config.sNoticeDir + "LineNotice.txt"))
+                if (!M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
                 {
                     M2Share.MainOutMessage("加载公告提示信息失败！！！");
                 }
@@ -282,7 +282,7 @@ namespace M2Server
             M2Share.g_DenySayMsgList = new ConcurrentDictionary<int, int>();
             M2Share.MiniMapList = new Dictionary<string, int>();
             M2Share.g_UnbindList = new Dictionary<int, string>();
-            M2Share.LineNoticeList = new List<string>();
+            M2Share.LineNoticeList = new StringList();
             M2Share.QuestDiaryList = new List<TQDDinfo>();
             M2Share.AbuseTextList = new ArrayList();
             M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>();
