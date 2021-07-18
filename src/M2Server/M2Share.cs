@@ -144,10 +144,10 @@ namespace M2Server
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
         public static string sBaseDir = "/Volumes/Data/MirServer/Mir200";
-        public const string sConfigFileName = ".\\!Setup.txt";
-        public const string sExpConfigFileName = ".\\Exps.ini";
-        public const string sCommandFileName = ".\\Command.ini";
-        public const string sStringFileName = ".\\String.ini";
+        public const string sConfigFileName = "!Setup.txt";
+        public const string sExpConfigFileName = "Exps.ini";
+        public const string sCommandFileName = "Command.ini";
+        public const string sStringFileName = "String.ini";
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static TNormNpc g_ManageNPC = null;
@@ -3287,25 +3287,17 @@ namespace M2Server
 
         public static bool LoadNoClearMonList()
         {
-            bool result;
-            StringList LoadList;
-            string sFileName;
-            result = false;
-            sFileName = g_Config.sEnvirDir + "NoClearMonList.txt";
-            LoadList = new StringList();
+            var result = false;
+            var sFileName = Path.Combine(g_Config.sEnvirDir, "NoClearMonList.txt");
+            StringList LoadList = null;
             if (File.Exists(sFileName))
             {
-                try
+                LoadList = new StringList();
+                g_NoClearMonLIst.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    g_NoClearMonLIst.Clear();
-                    LoadList.LoadFromFile(sFileName);
-                    for (var i = 0; i < LoadList.Count; i++)
-                    {
-                        g_NoClearMonLIst.Add(LoadList[i].Trim());
-                    }
-                }
-                finally
-                {
+                    g_NoClearMonLIst.Add(LoadList[i].Trim());
                 }
                 result = true;
             }
@@ -3313,7 +3305,6 @@ namespace M2Server
             {
                 LoadList.SaveToFile(sFileName);
             }
-            //LoadList.Free;
             return result;
         }
 

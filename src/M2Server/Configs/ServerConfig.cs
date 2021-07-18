@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using System.IO;
+using SystemModule;
 using mSystemModule;
 
 namespace M2Server.Configs
@@ -11,9 +12,9 @@ namespace M2Server.Configs
 
         public ServerConfig()
         {
-            StringConf = new IniFile(M2Share.sStringFileName);
-            Config = new IniFile(M2Share.sConfigFileName);
-            ExpConf = new IniFile(M2Share.sExpConfigFileName);
+            StringConf = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sStringFileName));
+            Config = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sConfigFileName));
+            ExpConf = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sExpConfigFileName));
             Config.Load();
             StringConf.Load();
             ExpConf.Load();
@@ -270,9 +271,13 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "CastleFile", "") == "")
                 Config.WriteString("Share", "CastleFile", M2Share.g_Config.sCastleDir + "List.txt");
             M2Share.g_Config.sCastleFile = Config.ReadString("Share", "CastleFile", M2Share.g_Config.sCastleFile);
+
             if (Config.ReadString("Share", "EnvirDir", "") == "")
+            {
                 Config.WriteString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
+            }
             M2Share.g_Config.sEnvirDir = Config.ReadString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
+            M2Share.g_Config.sEnvirDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sEnvirDir);
             if (Config.ReadString("Share", "MapDir", "") == "")
                 Config.WriteString("Share", "MapDir", M2Share.g_Config.sMapDir);
             M2Share.g_Config.sMapDir = Config.ReadString("Share", "MapDir", M2Share.g_Config.sMapDir);
