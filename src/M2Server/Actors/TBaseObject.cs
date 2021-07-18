@@ -7589,7 +7589,7 @@ namespace M2Server
             DamageHealth(nDamage);
         }
 
-        public string GeTBaseObjectInfo()
+        public virtual string GeTBaseObjectInfo()
         {
             string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX.ToString() + '/' + m_nCurrY.ToString() + ' ' + "等级:" + m_Abil.Level.ToString() + ' ' + "经验:" + m_Abil.Exp.ToString() + ' ' 
                 + "生命值: " + m_WAbil.HP.ToString() + '-' + m_WAbil.MaxHP.ToString() + ' ' + "魔法值: " + m_WAbil.MP.ToString() + '-' + m_WAbil.MaxMP.ToString() + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC).ToString() + '-' + HUtil32.HiWord(m_WAbil.DC).ToString() + ' ' 

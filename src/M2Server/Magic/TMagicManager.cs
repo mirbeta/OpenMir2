@@ -658,8 +658,7 @@ namespace M2Server
                     }
                 }
             }
-            result = true;
-            return result;
+            return true;
         }
 
         public bool MagMakePrivateTransparent(TBaseObject BaseObject, int nHTime)
@@ -773,7 +772,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if (!(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD) && M2Share.RandomNumber.Random(20) == 0)
+                                    if (TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD && M2Share.RandomNumber.Random(20) == 0)
                                     {
                                         TargeTBaseObject.OpenCrazyMode(M2Share.RandomNumber.Random(20) + 10);
                                     }
@@ -781,7 +780,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if (!(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD))
+                                if (TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD)
                                 {
                                     TargeTBaseObject.OpenCrazyMode(M2Share.RandomNumber.Random(20) + 10);// 变红
                                 }
@@ -808,7 +807,7 @@ namespace M2Server
         private bool MagTurnUndead(TBaseObject BaseObject, TBaseObject TargeTBaseObject, int nTargetX, int nTargetY, int nLevel)
         {
             var result = false;
-            if (TargeTBaseObject.m_boSuperMan || !(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD))
+            if (TargeTBaseObject.m_boSuperMan || TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD)
             {
                 return result;
             }
@@ -1115,7 +1114,7 @@ namespace M2Server
             {
                 var TargeTBaseObject = BaseObjectList[i];
                 int nPowerPoint;
-                if (!(TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD))
+                if (TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD)
                 {
                     nPowerPoint = nPower / 10;
                 }
@@ -1196,11 +1195,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if (MagicEvent != null)
-                    {
-                        //MagicEvent.BaseObjectList.Free;
-                        MagicEvent = null;
-                    }
+                    if (MagicEvent == null) return result;
+                    MagicEvent.BaseObjectList = null;
+                    MagicEvent = null;
                 }
             }
             return result;
@@ -1347,7 +1344,7 @@ namespace M2Server
 
         private bool MagMakeClone(TPlayObject PlayObject, TUserMagic UserMagic)
         {
-            var PlayClone = new TPlayCloneObject(PlayObject);
+            var playCloneObject = new TPlayCloneObject(PlayObject);
             return true;
         }
 

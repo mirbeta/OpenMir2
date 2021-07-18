@@ -59,7 +59,7 @@ namespace M2Server
                         nLen = s28.Length;
                         unsafe
                         {
-                            if (nLen >= TDefaultMessage.PacketSize && HUtil32.Str_ToInt(s2C, 0) == nQueryID) //sizeof(TDefaultMessage)
+                            if (nLen >= sizeof(TDefaultMessage) && HUtil32.Str_ToInt(s2C, 0) == nQueryID) //sizeof(TDefaultMessage)
                             {
                                 nCheckCode = HUtil32.MakeLong(HUtil32.Str_ToInt(s2C, 0) ^ 170, nLen);
                                 byte[] data = new byte[sizeof(int)];

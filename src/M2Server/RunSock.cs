@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace M2Server
 {
@@ -44,20 +42,20 @@ namespace M2Server
                     Gate.n520 = 1;
                     Gate.UserList = new List<TGateUserInfo>();
                     Gate.nUserCount = 0;
-                    Gate.Buffer = null;
+                    Gate.Buffer = IntPtr.Zero;
                     Gate.nBuffLen = 0;
-                    Gate.BufferList = new List<byte[]>();
+                    Gate.BufferList = new List<IntPtr>();
                     Gate.boSendKeepAlive = false;
                     Gate.nSendChecked = 0;
                     Gate.nSendBlockCount = 0;
                     Gate.dwStartTime = HUtil32.GetTickCount();
-                    M2Share.MainOutMessage(string.Format(sGateOpen, i, e.EndPoint.Address, Gate.nPort), messageColor: ConsoleColor.Green);
+                    M2Share.MainOutMessage(string.Format(sGateOpen, i, e.EndPoint.Address, Gate.nPort));
                     break;
                 }
             }
             else
             {
-                M2Share.ErrorMessage(string.Format(sKickGate, e.EndPoint.Address.ToString()));
+                M2Share.ErrorMessage(string.Format(sKickGate, new string[] { e.EndPoint.Address.ToString() }), MessageType.Error);
                 e.Socket.Close();
             }
         }
@@ -75,11 +73,11 @@ namespace M2Server
             }
         }
 
-        public void CloseErrGate(Socket socket)
+        public void CloseErrGate(Socket Socket)
         {
-            if (socket.Connected)
+            if (Socket.Connected)
             {
-                socket.Close();
+                Socket.Close();
             }
         }
 
@@ -109,8 +107,8 @@ namespace M2Server
                             {
                                 if (GateUser.PlayObject != null)
                                 {
-                                    GateUser.PlayObject.m_boEmergencyClose = true;
-                                    if (!GateUser.PlayObject.m_boReconnection)
+                                    ((TPlayObject)GateUser.PlayObject).m_boEmergencyClose = true;
+                                    if (!((TPlayObject)GateUser.PlayObject).m_boReconnection)
                                     {
                                         IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                     }
@@ -120,13 +118,16 @@ namespace M2Server
                             }
                         }
                         Gate.UserList = null;
-                        Gate.Buffer = null;
+                        if (Gate.Buffer != null)
+                        {
+                            Gate.Buffer = IntPtr.Zero;
+                        }
+                        Gate.Buffer = IntPtr.Zero;
                         Gate.nBuffLen = 0;
                         for (var i = 0; i < Gate.BufferList.Count; i++)
                         {
-                            Gate.BufferList[i] = null;
+                            Gate.BufferList[i] = IntPtr.Zero;
                         }
-                        Gate.BufferList.Clear();
                         Gate.BufferList = null;
                         Gate.boUsed = false;
                         Gate.Socket = null;
@@ -141,7 +142,7 @@ namespace M2Server
             }
         }
 
-        private unsafe void ExecGateBuffers(int nGateIndex, TGateInfo GameGate, byte[] data, int nMsgLen)
+        private unsafe void ExecGateBuffers(int nGateIndex, TGateInfo GameGate, byte[] Buffer, int nMsgLen)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
@@ -149,65 +150,69 @@ namespace M2Server
             var nLen = 0;
             try
             {
-                if (data != null)
+                if (Buffer != null)
                 {
-                    var size = GameGate.nBuffLen + nMsgLen;
-                    if (GameGate.Buffer != null && GameGate.Buffer.Length > 0)
+                    IntPtr ip;
+                    if (nMsgLen > 20)
                     {
-                        //GameGate.Buffer = new byte[GameGate.Buffer.Length + nMsgLen];
-                        Array.Resize(ref GameGate.Buffer, size);
+                        ip = (IntPtr)(GameGate.nBuffLen + nMsgLen);
+                        if (GameGate.Buffer != (IntPtr)0)
+                        {
+                            GameGate.Buffer = Marshal.ReAllocHGlobal(GameGate.Buffer, ip);
+                        }
+                        else
+                        {
+                            GameGate.Buffer = Marshal.AllocHGlobal(ip);
+                        }
+                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)GameGate.Buffer + GameGate.nBuffLen), nMsgLen);
                     }
                     else
                     {
-                        GameGate.Buffer = new byte[size];
+                        ip = (IntPtr)(GameGate.nBuffLen + nMsgLen);
+                        if (GameGate.Buffer != (IntPtr)0)
+                        {
+                            GameGate.Buffer = Marshal.ReAllocHGlobal(GameGate.Buffer, ip);
+                        }
+                        else
+                        {
+                            GameGate.Buffer = Marshal.AllocHGlobal(ip);
+                        }
+                        Marshal.Copy(Buffer, 0, (IntPtr)((byte*)GameGate.Buffer + GameGate.nBuffLen), nMsgLen);
                     }
-                    Buffer.BlockCopy(data, 0, GameGate.Buffer, GameGate.nBuffLen, nMsgLen);
                 }
             }
             catch
             {
                 M2Share.ErrorMessage(sExceptionMsg1);
             }
-            byte[] Buff = null;
+            byte* Buff = null;
             try
             {
                 nLen = GameGate.nBuffLen + nMsgLen;
-                Buff = GameGate.Buffer;
-                if (nLen >= TMsgHeader.PackageSize)
+                Buff = (byte*)GameGate.Buffer;
+                if (nLen >= sizeof(TMsgHeader))
                 {
                     while (true)
                     {
-                        var msgHeader = new TMsgHeader(Buff);
-                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + TMsgHeader.PackageSize;
+                        var msgHeader = *(TMsgHeader*)Buff;
+                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + sizeof(TMsgHeader);
                         if (msgHeader.dwCode == grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
                             if (nLen < nCheckMsgLen)
                             {
                                 break;
                             }
-                            if (msgHeader.nLength > 0)
-                            {
-                                var msgBuff = new byte[msgHeader.nLength];
-                                Buffer.BlockCopy(Buff, TMsgHeader.PackageSize, msgBuff, 0, msgBuff.Length);
-                                ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
-                            }
-                            else
-                            {
-                                ExecGateMsg(nGateIndex, GameGate, msgHeader, null, 0);
-                            }
-                            //Buff = Buff + TMsgHeader.PackageSize + msgHeader.nLength;
-                            var tempBuff = new byte[TMsgHeader.PackageSize + msgHeader.nLength];
-                            Buffer.BlockCopy(Buff, 0, tempBuff, 0, tempBuff.Length);
-                            Buff = tempBuff;
-                            nLen = nLen - (msgHeader.nLength + TMsgHeader.PackageSize);
+                            var msgBuff = Buff + sizeof(TMsgHeader);
+                            ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
+                            Buff = Buff + sizeof(TMsgHeader) + msgHeader.nLength;
+                            nLen = nLen - (msgHeader.nLength + sizeof(TMsgHeader));
                         }
                         else
                         {
-                            //Buff++;
-                            M2Share.MainOutMessage("错误的消息处理");
+                            Buff++;
                             nLen -= 1;
                         }
-                        if (nLen < TMsgHeader.PackageSize)
+                        if (nLen < sizeof(TMsgHeader))
                         {
                             break;
                         }
@@ -222,17 +227,16 @@ namespace M2Server
             {
                 if (nLen > 0)
                 {
-                    var tempBuff = new byte[nLen];
-                    Buffer.BlockCopy(Buff, 0, tempBuff, 0, nLen);
-                    //HUtil32.IntPtrToIntPtr((IntPtr)Buff, 0, tempBuff, 0, nLen);
-                    //Marshal.FreeHGlobal(GameGate.Buffer);
+                    var tempBuff = Marshal.AllocHGlobal(nLen);
+                    HUtil32.IntPtrToIntPtr((IntPtr)Buff, 0, tempBuff, 0, nLen);
+                    Marshal.FreeHGlobal(GameGate.Buffer);
                     GameGate.Buffer = tempBuff;
                     GameGate.nBuffLen = nLen;
                 }
                 else
                 {
-                    //Marshal.FreeHGlobal(GameGate.Buffer);
-                    GameGate.Buffer = null;
+                    Marshal.FreeHGlobal(GameGate.Buffer);
+                    GameGate.Buffer = (IntPtr)0;
                     GameGate.nBuffLen = 0;
                 }
             }
@@ -246,25 +250,25 @@ namespace M2Server
         {
             TGateInfo Gate;
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
-            for (var gateIdx = RunSock.g_GateArr.GetLowerBound(0); gateIdx <= RunSock.g_GateArr.GetUpperBound(0); gateIdx++)
+            for (var GateIdx = RunSock.g_GateArr.GetLowerBound(0); GateIdx <= RunSock.g_GateArr.GetUpperBound(0); GateIdx++)
             {
-                Gate = RunSock.g_GateArr[gateIdx];
+                Gate = RunSock.g_GateArr[GateIdx];
                 if (Gate.Socket == e.Socket)
                 {
                     try
                     {
+                        var data = new byte[e.BytesReceived];
+                        Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
                         var nMsgLen = e.BytesReceived;
                         if (nMsgLen <= 0)
                         {
                             break;
                         }
-                        var data = new byte[nMsgLen];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-                        ExecGateBuffers(gateIdx, Gate, data, nMsgLen);
+                        ExecGateBuffers(GateIdx, Gate, data, nMsgLen);
                     }
                     catch
                     {
-                        M2Share.ErrorMessage(sExceptionMsg1);
+                        M2Share.MainOutMessage(sExceptionMsg1);
                     }
                 }
             }
@@ -300,7 +304,7 @@ namespace M2Server
                     for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
                     {
                         Gate = RunSock.g_GateArr[i];
-                        if (Gate.BufferList != null && Gate.BufferList.Count > 0)
+                        if (Gate.BufferList != null)
                         {
                             HUtil32.EnterCriticalSection(m_RunSocketSection);
                             try
@@ -323,7 +327,7 @@ namespace M2Server
                     }
                     for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
                     {
-                        if (RunSock.g_GateArr[i].Socket != null && RunSock.g_GateArr[i].Socket.Connected)
+                        if (RunSock.g_GateArr[i].Socket != null)
                         {
                             Gate = RunSock.g_GateArr[i];
                             if (HUtil32.GetTickCount() - Gate.dwSendTick >= 1000)
@@ -344,8 +348,8 @@ namespace M2Server
                 }
                 catch (Exception e)
                 {
-                    M2Share.ErrorMessage(sExceptionMsg);
-                    M2Share.ErrorMessage(e.Message);
+                    M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                    M2Share.ErrorMessage(e.Message, MessageType.Error);
                 }
             }
             M2Share.g_nSockCountMin = HUtil32.GetTickCount() - dwRunTick;
@@ -364,7 +368,7 @@ namespace M2Server
             try
             {
                 var sData = EDcode.DeCodeString(sMsg, true);
-                if (sData.Length > 2 && sData.StartsWith("**"))
+                if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.Substring(2, sData.Length - 2);
                     sData = HUtil32.GetValidStr3(sData, ref sAccount, "/");
@@ -381,7 +385,7 @@ namespace M2Server
                     {
                         boFlag = false;
                     }
-                    if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionID >= 2)
+                    if (sAccount != "" && sChrName != "" && nSessionID >= 2)
                     {
                         nClientVersion = HUtil32.Str_ToInt(sClientVersion, 0);
                         result = true;
@@ -390,7 +394,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
             }
             return result;
         }
@@ -433,7 +437,7 @@ namespace M2Server
                                 }
                                 catch
                                 {
-                                    M2Share.ErrorMessage(sExceptionMsg);
+                                    M2Share.ErrorMessage(string.Format(sExceptionMsg));
                                 }
                             }
                             else
@@ -458,7 +462,7 @@ namespace M2Server
             }
         }
 
-        private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
+        private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<IntPtr> MsgList)
         {
             int I;
             var nSendBuffLen = 0;
@@ -480,8 +484,9 @@ namespace M2Server
                 }
                 return result;
             }
-            byte[] BufferA;
-            byte[] BufferB;
+            IntPtr BufferA;
+            IntPtr BufferB;
+            // 004E198F
             // 将小数据合并为一个指定大小的数据
             try
             {
@@ -494,24 +499,44 @@ namespace M2Server
                         break;
                     }
                     BufferB = MsgList[I + 1];
-                    if (BufferA == null || BufferB == null)
+                    if (BufferA == IntPtr.Zero || BufferB == IntPtr.Zero)
                     {
                         continue;
                     }
-                    var nBuffALen = BufferA.Length + 4;
-                    var nBuffBLen = BufferB.Length + 4;
+                    var nBuffALen = *(int*)BufferA;
+                    //Move(BufferA, nBuffALen, sizeof(int));
+                    var nBuffBLen = *(int*)BufferB;
+                    //Move(BufferB, nBuffBLen, sizeof(int));
                     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
                     {
                         MsgList.RemoveAt(I + 1);
-                        var BufferC = new byte[nBuffALen + nBuffBLen + sizeof(int)];
+                        var BufferC = Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
+                        //GetMem(BufferC, nBuffALen + sizeof(int) + nBuffBLen);
                         var nBuffCLen = nBuffALen + nBuffBLen;
-                        HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), ref BufferC, sizeof(int), nBuffALen);
-                        HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), ref BufferC, nBuffALen + sizeof(int), nBuffBLen);
-                        BufferA = null;
-                        BufferB = null;
+                        *(int*)BufferC = nBuffCLen;
+                        //Move(nBuffCLen, BufferC, sizeof(int));
+                        HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), BufferC, sizeof(int), nBuffALen);
+                        //Move(BufferA[sizeof(int)], (BufferC + sizeof(int) as string), nBuffALen);
+                        HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen);
+                        //Move(BufferB[sizeof(int)], (BufferC + nBuffALen + sizeof(int) as string), nBuffBLen);
+                        Marshal.FreeHGlobal(BufferA);
+                        //FreeMem(BufferA);
+                        Marshal.FreeHGlobal(BufferB);
+                        //FreeMem(BufferB);
                         BufferA = BufferC;
                         MsgList[I] = BufferA;
                         continue;
+                        //MsgList.RemoveAt(I + 1);
+                        //GetMem(BufferC, nBuffALen + sizeof(int) + nBuffBLen);
+                        //nBuffCLen = nBuffALen + nBuffBLen;
+                        //Move(nBuffCLen, BufferC, sizeof(int));
+                        //Move(BufferA[sizeof(int)], (BufferC + sizeof(int) as string), nBuffALen);
+                        //Move(BufferB[sizeof(int)], (BufferC + nBuffALen + sizeof(int) as string), nBuffBLen);
+                        //FreeMem(BufferA);
+                        //FreeMem(BufferB);
+                        //BufferA = BufferC;
+                        //MsgList[I] = BufferA;
+                        //continue;
                     }
                     I++;
                     BufferA = BufferB;
@@ -520,19 +545,19 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg1);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             try
             {
                 while (MsgList.Count > 0)
                 {
                     BufferA = MsgList[0];
-                    if (BufferA == null)
+                    if (BufferA == IntPtr.Zero)
                     {
                         MsgList.RemoveAt(0);
                         continue;
                     }
-                    nSendBuffLen = BufferA.Length + sizeof(int);
+                    nSendBuffLen = *(int*)BufferA;//Move(BufferA, nSendBuffLen, sizeof(int));
                     if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock)
                     {
                         if (Gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock <= nSendBuffLen)
@@ -540,7 +565,7 @@ namespace M2Server
                             MsgList.RemoveAt(0);
                             // 如果数据大小超过指定大小则扔掉(编辑数据比较大，与此有点关系)
                             //FreeMem(BufferA);
-                            BufferA = null;
+                            Marshal.FreeHGlobal(BufferA);
                         }
                         else
                         {
@@ -551,8 +576,7 @@ namespace M2Server
                         break;
                     }
                     MsgList.RemoveAt(0);
-                    BufferB = new byte[BufferA.Length + sizeof(int)];// + sizeof(int);
-                    Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
+                    BufferB = BufferA + sizeof(int);
                     if (nSendBuffLen > 0)
                     {
                         while (true)
@@ -563,14 +587,17 @@ namespace M2Server
                                 {
                                     if (Gate.Socket.Connected)
                                     {
-                                        Gate.Socket.Send(BufferB, 0, M2Share.g_Config.nSendBlock, SocketFlags.None);
+                                        var SendBy = new byte[M2Share.g_Config.nSendBlock];
+                                        Marshal.Copy(BufferB, SendBy, 0, M2Share.g_Config.nSendBlock);
+                                        Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
+                                        //Gate.Socket.SendBuf(BufferB, M2Share.g_Config.nSendBlock);
                                     }
                                     Gate.nSendCount++;
                                     Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
                                 }
                                 Gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
                                 //BufferB = BufferB[M2Share.g_Config.nSendBlock];
-                                BufferB = new byte[BufferB.Length + M2Share.g_Config.nSendBlock]; //(IntPtr)((byte*)BufferB + M2Share.g_Config.nSendBlock);
+                                BufferB = (IntPtr)((byte*)BufferB + M2Share.g_Config.nSendBlock);
                                 nSendBuffLen -= M2Share.g_Config.nSendBlock;
                                 continue;
                             }
@@ -578,7 +605,10 @@ namespace M2Server
                             {
                                 if (Gate.Socket.Connected)
                                 {
-                                    Gate.Socket.Send(BufferB, 0, nSendBuffLen, SocketFlags.None);
+                                    var SendBy = new byte[nSendBuffLen];
+                                    Marshal.Copy(BufferB, SendBy, 0, nSendBuffLen);
+                                    Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
+                                    //Gate.Socket.SendBuf(BufferB, nSendBuffLen);
                                 }
                                 Gate.nSendCount++;
                                 Gate.nSendBytesCount += nSendBuffLen;
@@ -588,7 +618,7 @@ namespace M2Server
                             break;
                         }
                     }
-                    BufferA = null;
+                    BufferA = IntPtr.Zero;
                     if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
                     {
                         result = false;
@@ -599,7 +629,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg2);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
             return result;
         }
@@ -612,6 +642,7 @@ namespace M2Server
             const string sExceptionMsg1 = "[Exception] TRunSocket::CloseUser 1";
             const string sExceptionMsg2 = "[Exception] TRunSocket::CloseUser 2";
             const string sExceptionMsg3 = "[Exception] TRunSocket::CloseUser 3";
+            const string sExceptionMsg4 = "[Exception] TRunSocket::CloseUser 4";
             if (GateIdx <= RunSock.g_GateArr.GetUpperBound(0))
             {
                 Gate = RunSock.g_GateArr[GateIdx];
@@ -633,7 +664,7 @@ namespace M2Server
                                         {
                                             if (GateUser.FrontEngine != null)
                                             {
-                                                GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
+                                                ((TFrontEngine)GateUser.FrontEngine).DeleteHuman(i, GateUser.nSocket);
                                             }
                                         }
                                         catch
@@ -644,9 +675,9 @@ namespace M2Server
                                         {
                                             if (GateUser.PlayObject != null)
                                             {
-                                                if (!GateUser.PlayObject.m_boOffLineFlag)
+                                                if (!((TPlayObject)GateUser.PlayObject).m_boOffLineFlag)
                                                 {
-                                                    GateUser.PlayObject.m_boSoftClose = true;
+                                                    ((TPlayObject)GateUser.PlayObject).m_boSoftClose = true;
                                                 }
                                             }
                                         }
@@ -656,7 +687,7 @@ namespace M2Server
                                         }
                                         try
                                         {
-                                            if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
+                                            if (GateUser.PlayObject != null && ((TPlayObject)GateUser.PlayObject).m_boGhost && !((TPlayObject)GateUser.PlayObject).m_boReconnection)
                                             {
                                                 IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                             }
@@ -665,9 +696,16 @@ namespace M2Server
                                         {
                                             M2Share.ErrorMessage(sExceptionMsg3);
                                         }
-                                        GateUser = null;
-                                        Gate.UserList[i] = null;
-                                        Gate.nUserCount -= 1;
+                                        try
+                                        {
+                                            GateUser = null;
+                                            Gate.UserList[i] = null;
+                                            Gate.nUserCount -= 1;
+                                        }
+                                        catch
+                                        {
+                                            M2Share.ErrorMessage(sExceptionMsg4);
+                                        }
                                         break;
                                     }
                                 }
@@ -733,23 +771,27 @@ namespace M2Server
             MsgHeader.nLength = 0;
             if (Socket.Connected)
             {
-                var data = MsgHeader.ToByte();
+                var data = new byte[sizeof(TMsgHeader)];
+                fixed (byte* pb = data)
+                {
+                    *(TMsgHeader*)pb = MsgHeader;
+                }
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
 
-        private void ExecGateMsg(int GateIdx, TGateInfo Gate, TMsgHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
+        private unsafe void ExecGateMsg(int GateIdx, TGateInfo Gate, TMsgHeader MsgHeader, byte* MsgBuff, int nMsgLen)
         {
             int nUserIdx;
             string sIPaddr;
             TGateUserInfo GateUser;
-            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg {0}";
+            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg %d";
             try
             {
                 switch (MsgHeader.wIdent)
                 {
                     case grobal2.GM_OPEN:
-                        sIPaddr = System.Text.Encoding.Default.GetString(MsgBuff, 0, nMsgLen);
+                        sIPaddr = HUtil32.SBytePtrToString((sbyte*)MsgBuff, 0, nMsgLen);
                         nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
                         SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
@@ -793,21 +835,22 @@ namespace M2Server
                                 }
                             }
                         }
+
                         if (GateUser != null)
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
                             {
-                                if (GateUser.boCertification && nMsgLen >= TDefaultMessage.PacketSize)
+                                if (GateUser.boCertification && nMsgLen >= sizeof(TDefaultMessage))
                                 {
-                                    var defMsg = new TDefaultMessage(MsgBuff);
-                                    if (nMsgLen == TDefaultMessage.PacketSize)
+                                    var defMsg = (TDefaultMessage*)MsgBuff;
+                                    if (nMsgLen == sizeof(TDefaultMessage))
                                     {
-                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);
+                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, null);
                                     }
                                     else
                                     {
-                                        var sMsg = EncryptUnit.DeCodeString(HUtil32.StrPas(MsgBuff), true);//解码 HUtil32.StrPas(MsgBuff + TDefaultMessage.PacketSize)
-                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, sMsg);
+                                        var sMsg = EncryptUnit.DeCodeString(HUtil32.StrPas(MsgBuff + sizeof(TDefaultMessage)), true);//解码
+                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, sMsg);
                                     }
                                 }
                             }
@@ -826,27 +869,29 @@ namespace M2Server
             }
         }
 
-        /// <summary>
-        /// 发送网关心跳包检测
-        /// </summary>
-        /// <param name="Socket"></param>
-        /// <param name="nIdent"></param>
-        private void SendCheck(Socket Socket, int nIdent)
+        private unsafe void SendCheck(Socket Socket, int nIdent)
         {
+            TMsgHeader MsgHeader;
             if (!Socket.Connected)
             {
                 return;
             }
-            var msgHeader = new TMsgHeader
+            MsgHeader = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = 0,
                 wIdent = (short)nIdent,
                 nLength = 0
             };
-            if (!Socket.Connected) return;
-            var data = msgHeader.ToByte();
-            Socket.Send(data, 0, data.Length, SocketFlags.None);
+            if (Socket.Connected)
+            {
+                var data = new byte[sizeof(TMsgHeader)];
+                fixed (byte* pb = data)
+                {
+                    *(TMsgHeader*)pb = MsgHeader;
+                }
+                Socket.Send(data, 0, data.Length, SocketFlags.None);
+            }
         }
 
         private void LoadRunAddr()
@@ -897,9 +942,9 @@ namespace M2Server
                     {
                         if (Gate.boUsed && Gate.Socket != null)
                         {
-                            //var Ptr = Marshal.AllocHGlobal(Buffer.Length);
-                            //Marshal.Copy(Buffer, 0, Ptr, Buffer.Length);
-                            Gate.BufferList.Add(Buffer);
+                            var Ptr = Marshal.AllocHGlobal(Buffer.Length);
+                            Marshal.Copy(Buffer, 0, Ptr, Buffer.Length);
+                            Gate.BufferList.Add(Ptr);
                             result = true;
                         }
                     }
@@ -914,67 +959,99 @@ namespace M2Server
 
         public unsafe void SendOutConnectMsg(int nGateIdx, int nSocket, int nGsIdx)
         {
-            Console.WriteLine("todo TDefaultMessage...");
-            TDefaultMessage DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            TDefaultMessage DefMsg;
             var MsgHeader = new TMsgHeader();
+            int nLen;
+            byte[] Buff;
+            DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             MsgHeader.dwCode = grobal2.RUNGATECODE;
             MsgHeader.nSocket = nSocket;
             MsgHeader.wGSocketIdx = (short)nGsIdx;
             MsgHeader.wIdent = grobal2.GM_DATA;
             MsgHeader.nLength = Marshal.SizeOf(typeof(TDefaultMessage));
-            int nLen = MsgHeader.nLength + Marshal.SizeOf(typeof(TMsgHeader));
-            byte[]  Buff = new byte[nLen + sizeof(int)]; //GetMem(Buff, nLen + sizeof(int));
+            nLen = MsgHeader.nLength + Marshal.SizeOf(typeof(TMsgHeader));
+            Buff = new byte[nLen + sizeof(int)]; //GetMem(Buff, nLen + sizeof(int));
             fixed (byte* pb = Buff)
             {
                 *(int*)pb = nLen;//Move(nLen, Buff, sizeof(int));
-                //*(TMsgHeader*)(pb + sizeof(int)) = MsgHeader;//Move(MsgHeader, Buff[sizeof(int)], Marshal.SizeOf(typeof(TMsgHeader)));
-                //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg; //Move(DefMsg, Buff[sizeof(int) + Marshal.SizeOf(typeof(TMsgHeader))], Marshal.SizeOf(typeof(TDefaultMessage)));
+                *(TMsgHeader*)(pb + sizeof(int)) = MsgHeader;//Move(MsgHeader, Buff[sizeof(int)], Marshal.SizeOf(typeof(TMsgHeader)));
+                *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg; //Move(DefMsg, Buff[sizeof(int) + Marshal.SizeOf(typeof(TMsgHeader))], Marshal.SizeOf(typeof(TDefaultMessage)));
             }
             if (!AddGateBuffer(nGateIdx, Buff))
             {
                 Buff = null;
             }
+            //TDefaultMessage DefMsg;
+            //TMsgHeader MsgHeader;
+            //int nLen;
+            //string Buff;
+            //DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            //MsgHeader.dwCode = grobal2.RUNGATECODE;
+            //MsgHeader.nSocket = nSocket;
+            //MsgHeader.wGSocketIdx = (short)nGsIdx;
+            //MsgHeader.wIdent = grobal2.GM_DATA;
+            //MsgHeader.nLength = sizeof(TDefaultMessage);
+            //nLen = MsgHeader.nLength + sizeof(TMsgHeader);
+            //GetMem(Buff, nLen + sizeof(int));
+            //Move(nLen, Buff, sizeof(int));
+            //Move(MsgHeader, Buff[sizeof(int)], sizeof(TMsgHeader));
+            //Move(DefMsg, Buff[sizeof(int) + sizeof(TMsgHeader)], sizeof(TDefaultMessage));
+            //if (!AddGateBuffer(nGateIdx, Buff))
+            //{
+            //    FreeMem(Buff);
+            //}
         }
 
-        private unsafe void SendScanMsg(TDefaultMessage DefMsg, string sMsg, int nGateIdx, int nSocket, int nGsIdx)
+        private unsafe void SendScanMsg(TDefaultMessage* DefMsg, string sMsg, int nGateIdx, int nSocket, int nGsIdx)
         {
             byte[] Buff = null;
             int nSendBytes;
-            Console.WriteLine("todo TDefaultMessage...");
-            var messageSize = TDefaultMessage.PacketSize;
-            TMsgHeader MsgHdr = new TMsgHeader
+            TMsgHeader  MsgHdr = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = nSocket,
                 wGSocketIdx = (short)nGsIdx,
                 wIdent = grobal2.GM_DATA,
-                nLength = messageSize
+                nLength = sizeof(TDefaultMessage)
             };
             if (DefMsg != null)
             {
-                if (!string.IsNullOrEmpty(sMsg))
+                if (sMsg != "")
                 {
-                    MsgHdr.nLength = sMsg.Length + messageSize + 1;
-                    nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
+                    //MsgHdr.nLength = sMsg.Length + sizeof(TDefaultMessage) + 1;
+                    //nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                    //GetMem(Buff, nSendBytes + sizeof(int));
+                    //Move(nSendBytes, Buff, sizeof(int));
+                    //Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
+                    //Move(DefMsg, Buff[sizeof(TMsgHeader) + sizeof(int)], sizeof(TDefaultMessage));
+                    //Move(sMsg[1], Buff[sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
+                    MsgHdr.nLength = sMsg.Length + sizeof(TDefaultMessage) + 1;
+                    nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
                     Buff = new byte[nSendBytes + sizeof(int)];//GetMem(Buff, nSendBytes + sizeof(int));
                     fixed (byte* pb = Buff)
                     {
-                        *(int*)pb = nSendBytes; 
-                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
-                        *(char*)(pb + messageSize + TMsgHeader.PackageSize + sizeof(int) + sMsg.Length + 1) = sMsg[0];//sMsg[1]
+                        *(int*)pb = nSendBytes;
+                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = *DefMsg;
+                        *(char*)(pb + sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int) + sMsg.Length + 1) = sMsg[0];//sMsg[1]
                     }
                 }
                 else
                 {
-                    MsgHdr.nLength = messageSize;
-                    nSendBytes = MsgHdr.nLength + TMsgHeader.PackageSize;
+                    //MsgHdr.nLength = sizeof(TDefaultMessage);
+                    //nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                    //GetMem(Buff, nSendBytes + sizeof(int));
+                    //Move(nSendBytes, Buff, sizeof(int));
+                    //Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
+                    //Move(DefMsg, Buff[sizeof(TMsgHeader) + sizeof(int)], sizeof(TDefaultMessage));
+                    MsgHdr.nLength = sizeof(TDefaultMessage);
+                    nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
-                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
+                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = *DefMsg;
                     }
                 }
             }
@@ -983,16 +1060,25 @@ namespace M2Server
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     MsgHdr.nLength = -(sMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PackageSize;
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
-                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        *(char*)(pb + TMsgHeader.PackageSize + sizeof(int) + sMsg.Length + 1) = sMsg[1];
+                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        *(char*)(pb + sizeof(TMsgHeader) + sizeof(int) + sMsg.Length + 1) = sMsg[1];
                     }
                     //Move(sMsg[1], Buff[sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
                 }
+                //if (sMsg != "")
+                //{
+                //    MsgHdr.nLength = -(sMsg.Length + 1);
+                //    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                //    GetMem(Buff, nSendBytes + sizeof(int));
+                //    Move(nSendBytes, Buff, sizeof(int));
+                //    Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
+                //    Move(sMsg[1], Buff[sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
+                //}
             }
             if (!M2Share.RunSocket.AddGateBuffer(nGateIdx, Buff))
             {
@@ -1036,27 +1122,46 @@ namespace M2Server
 
         private unsafe void SendGateTestMsg(int nIndex)
         {
-            Console.WriteLine("todo SendGateTestMsg...");
+            TMsgHeader MsgHdr;
+            byte[] Buff;
+            int nLen;
             var DefMsg = new TDefaultMessage();
-            TMsgHeader MsgHdr = new TMsgHeader
+            MsgHdr = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = 0,
                 wIdent = grobal2.GM_TEST,
                 nLength = 100
             };
-            int nLen = MsgHdr.nLength + TMsgHeader.PackageSize;
-            byte[] Buff = new byte[nLen + sizeof(int)];
+            nLen = MsgHdr.nLength + Marshal.SizeOf(typeof(TMsgHeader));
+            Buff = new byte[nLen + sizeof(int)];//GetMem(Buff, nLen + sizeof(int));
             fixed (byte* pb = Buff)
             {
                 *(int*)pb = nLen;
-                //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                //*(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
+                *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = DefMsg;
             }
             if (!AddGateBuffer(nIndex, Buff))
             {
                 Buff = null;
             }
+            //TMsgHeader MsgHdr;
+            //string Buff;
+            //int nLen;
+            //TDefaultMessage DefMsg;
+            //MsgHdr.dwCode = grobal2.RUNGATECODE;
+            //MsgHdr.nSocket = 0;
+            //MsgHdr.wIdent = grobal2.GM_TEST;
+            //MsgHdr.nLength = 100;
+            //nLen = MsgHdr.nLength + sizeof(TMsgHeader);
+            //GetMem(Buff, nLen + sizeof(int));
+            //Move(nLen, Buff, sizeof(int));
+            //Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
+            //Move(DefMsg, Buff[sizeof(TMsgHeader) + sizeof(int)], sizeof(TDefaultMessage));
+            //if (!AddGateBuffer(nIndex, Buff))
+            //{
+            //    FreeMem(Buff);
+            //}
         }
 
         public void KickUser(string sAccount, int nSessionID)
@@ -1086,13 +1191,13 @@ namespace M2Server
                                 {
                                     if (GateUserInfo.FrontEngine != null)
                                     {
-                                        GateUserInfo.FrontEngine.DeleteHuman(i, GateUserInfo.nSocket);
+                                        ((TFrontEngine)GateUserInfo.FrontEngine).DeleteHuman(i, GateUserInfo.nSocket);
                                     }
                                     if (GateUserInfo.PlayObject != null)
                                     {
-                                        GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                                        GateUserInfo.PlayObject.m_boEmergencyClose = true;
-                                        GateUserInfo.PlayObject.m_boSoftClose = true;
+                                        ((TPlayObject)GateUserInfo.PlayObject).SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        ((TPlayObject)GateUserInfo.PlayObject).m_boEmergencyClose = true;
+                                        ((TPlayObject)GateUserInfo.PlayObject).m_boSoftClose = true;
                                     }
                                     GateUserInfo = null;
                                     Gate.UserList[j] = null;
@@ -1111,7 +1216,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.ErrorMessage(e.Message, MessageType.Error);
             }
         }
 
@@ -1138,4 +1243,3 @@ namespace M2Server
         public static TGateInfo[] g_GateArr = new TGateInfo[20];
     }
 }
-

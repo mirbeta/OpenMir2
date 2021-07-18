@@ -56,7 +56,7 @@ namespace M2Server
             BreakHolySeizeMode();
         }
 
-        public virtual void Struck(TBaseObject hiter)
+        public override void Struck(TBaseObject hiter)
         {
             if (hiter == null)
             {

@@ -288,7 +288,7 @@ namespace M2Server
             ProcessAutoRun();
         }
 
-        internal override void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        public override void SendSocket(TDefaultMessage DefMsg, string sMsg)
         {
             
         }

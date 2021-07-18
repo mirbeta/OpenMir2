@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -11,964 +12,384 @@ namespace mSystemModule
     /// </summary>
     public class IniFile
     {
-        /// <summary>
-        /// The maximum size of a section in an ini file.
-        /// </summary>
-        /// <remarks>
-        /// This property defines the maximum size of the buffers
-        /// used to retreive data from an ini file.  This value is
-        /// the maximum allowed by the win32 functions
-        /// GetPrivateProfileSectionNames() or
-        /// GetPrivateProfileString().
-        /// </remarks>
-        public const int MaxSectionSize = 32767; // 32 KB
+        private string fileName;
+        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>();
+       
+        private bool largeCommentFlag = false;
 
-        //The path of the file we are operating on.
-        private readonly string m_path;
-
-        #region P/Invoke declares
-
-        /// <summary>
-        /// A static class that provides the win32 P/Invoke signatures
-        /// used by this class.
-        /// </summary>
-        /// <remarks>
-        /// Note:  In each of the declarations below, we explicitly set CharSet to
-        /// Auto.  By default in C#, CharSet is set to Ansi, which reduces
-        /// performance on windows 2000 and above due to needing to convert strings
-        /// from Unicode (the native format for all .Net strings) to Ansi before
-        /// marshalling.  Using Auto lets the marshaller select the Unicode version of
-        /// these functions when available.
-        /// </remarks>
-        [System.Security.SuppressUnmanagedCodeSecurity]
-        private static class NativeMethods
+        public IniFile(string fileName)
         {
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetPrivateProfileSectionNames(IntPtr lpszReturnBuffer,
-                                                                   uint nSize,
-                                                                   string lpFileName);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern uint GetPrivateProfileString(string lpAppName,
-                                                              string lpKeyName,
-                                                              string lpDefault,
-                                                              StringBuilder lpReturnedString,
-                                                              int nSize,
-                                                              string lpFileName);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern uint GetPrivateProfileString(string lpAppName,
-                                                              string lpKeyName,
-                                                              string lpDefault,
-                                                              [In, Out] char[] lpReturnedString,
-                                                              int nSize,
-                                                              string lpFileName);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetPrivateProfileString(string lpAppName,
-                                                             string lpKeyName,
-                                                             string lpDefault,
-                                                             IntPtr lpReturnedString,
-                                                             uint nSize,
-                                                             string lpFileName);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetPrivateProfileInt(string lpAppName,
-                                                          string lpKeyName,
-                                                          int lpDefault,
-                                                          string lpFileName);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-            public static extern int GetPrivateProfileSection(string lpAppName,
-                                                              IntPtr lpReturnedString,
-                                                              uint nSize,
-                                                              string lpFileName);
-
-            //We explicitly enable the SetLastError attribute here because
-            // WritePrivateProfileString returns errors via SetLastError.
-            // Failure to set this can result in errors being lost during
-            // the marshal back to managed code.
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern bool WritePrivateProfileString(string lpAppName,
-                                                                string lpKeyName,
-                                                                string lpString,
-                                                                string lpFileName);
+            
+               this.FileName = fileName;         
         }
 
-        #endregion P/Invoke declares
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IniFile"/> class.
-        /// </summary>
-        /// <param name="path">The ini file to read and write from.</param>
-        public IniFile(string path)
+        public bool ContainSectionName(string secName)
         {
-            // Convert to the full path.  Because of backward compatibility,
-            // the win32 functions tend to assume the path should be the
-            // root Windows directory if it is not specified.  By calling
-            // GetFullPath, we make sure we are always passing the full path
-            // the win32 functions.
-            m_path = System.IO.Path.GetFullPath(path);
+            return this.GetAllSectionName().Contains(secName);
         }
 
-        /// <summary>
-        /// Gets the full path of ini file this object instance is operating on.
-        /// </summary>
-        /// <value>A file path.</value>
-        public string Path
+        public ICollection<string> GetAllSectionName()
         {
-            get
+            return this.iniCahce.Keys;
+        }
+
+        public bool GetBool(string section, string key, bool defValue)
+        {
+            if (this.iniCahce.ContainsKey(section))
             {
-                return m_path;
-            }
-        }
-
-        #region Get Value Methods
-
-        /// <summary>
-        /// Gets the value of a setting in an ini file as a <see cref="T:System.String"/>.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to read from.</param>
-        /// <param name="keyName">The name of the key in section to read.</param>
-        /// <param name="defaultValue">The default value to return if the key
-        /// cannot be found.</param>
-        /// <returns>The value of the key, if found.  Otherwise, returns
-        /// <paramref name="defaultValue"/></returns>
-        /// <remarks>
-        /// The retreived value must be less than 32KB in length.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public string GetString(string sectionName, string keyName, string defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  defaultValue,
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return retval.ToString();
-        }
-
-        public string ReadString(string sectionName, string keyName, string defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  defaultValue,
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return retval.ToString();
-        }
-
-        public DateTime ReadDateTime(string sectionName, string keyName, DateTime defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  defaultValue.ToString(),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return Convert.ToDateTime(retval.ToString());
-        }
-
-        public short ReadInteger(string sectionName, string keyName, short defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            //修正如果参数是Boolean类型的话，返回值报错的BUG
-            if (string.Compare(retval.ToString(), "True", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(1);
-            }
-            else if (string.Compare(retval.ToString(), "False", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(0);
-            }
-
-            return Convert.ToInt16(retval.ToString() == "" ? defaultValue.ToString() : retval.ToString());
-        }
-
-        public int ReadInteger(string sectionName, string keyName, int defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            //修正如果参数是Boolean类型的话，返回值报错的BUG
-            if (string.Compare(retval.ToString(), "True", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(1);
-            }
-            else if (string.Compare(retval.ToString(), "False", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(0);
-            }
-
-            return Convert.ToInt32(retval.ToString() == "" ? defaultValue.ToString() : retval.ToString());
-        }
-
-        public double ReadInteger(string sectionName, string keyName, double defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            //修正如果参数是Boolean类型的话，返回值报错的BUG
-            if (string.Compare(retval.ToString(), "True", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(1);
-            }
-            else if (string.Compare(retval.ToString(), "False", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(0);
-            }
-
-            return Convert.ToInt32(retval.ToString() == "" ? defaultValue.ToString() : retval.ToString());
-        }
-
-        public long ReadInteger(string sectionName, string keyName, long defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            //修正如果参数是Boolean类型的话，返回值报错的BUG
-            if (string.Compare(retval.ToString(), "True", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(1);
-            }
-            else if (string.Compare(retval.ToString(), "False", true) == 0)
-            {
-                retval.Remove(0, retval.Length);
-                retval.Append(0);
-            }
-
-            return Convert.ToInt64(retval.ToString() == "" ? defaultValue.ToString() : retval.ToString());
-        }
-
-        public ushort ReadInteger(string sectionName, string keyName, ushort defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return (ushort)Convert.ToInt32(retval.ToString());
-        }
-
-        public byte ReadInteger(string sectionName, string keyName, byte defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return Convert.ToByte(retval.ToString());
-        }
-
-        public uint ReadInteger(string sectionName, string keyName, uint defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return Convert.ToUInt32(retval.ToString());
-        }
-
-        public bool ReadBool(string sectionName, string keyName, bool defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            //if (retval.ToString() == "0")
-            //{
-            //    return false;
-            //}
-            //else
-            //{
-            //    return true;
-            //}
-
-            return retval.ToString() == "0" ? false : true;
-        }
-
-        public double ReadDouble(string sectionName, string keyName, double defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return Convert.ToDouble(retval.ToString());
-        }
-
-        public double ReadFloat(string sectionName, string keyName, double defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            StringBuilder retval = new StringBuilder(IniFile.MaxSectionSize);
-
-            NativeMethods.GetPrivateProfileString(sectionName,
-                                                  keyName,
-                                                  Convert.ToString(defaultValue),
-                                                  retval,
-                                                  IniFile.MaxSectionSize,
-                                                  m_path);
-
-            return Convert.ToDouble(retval.ToString());
-        }
-
-        /// <summary>
-        /// Gets the value of a setting in an ini file as a <see cref="T:System.Int16"/>.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to read from.</param>
-        /// <param name="keyName">The name of the key in section to read.</param>
-        /// <param name="defaultValue">The default value to return if the key
-        /// cannot be found.</param>
-        /// <returns>The value of the key, if found.  Otherwise, returns
-        /// <paramref name="defaultValue"/>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public int GetInt16(string sectionName,
-                            string keyName,
-                            short defaultValue)
-        {
-            int retval = GetInt32(sectionName, keyName, defaultValue);
-
-            return Convert.ToInt16(retval);
-        }
-
-        /// <summary>
-        /// Gets the value of a setting in an ini file as a <see cref="T:System.Int32"/>.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to read from.</param>
-        /// <param name="keyName">The name of the key in section to read.</param>
-        /// <param name="defaultValue">The default value to return if the key
-        /// cannot be found.</param>
-        /// <returns>The value of the key, if found.  Otherwise, returns
-        /// <paramref name="defaultValue"/></returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public int GetInt32(string sectionName,
-                            string keyName,
-                            int defaultValue)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            return NativeMethods.GetPrivateProfileInt(sectionName, keyName, defaultValue, m_path);
-        }
-
-        /// <summary>
-        /// Gets the value of a setting in an ini file as a <see cref="T:System.Double"/>.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to read from.</param>
-        /// <param name="keyName">The name of the key in section to read.</param>
-        /// <param name="defaultValue">The default value to return if the key
-        /// cannot be found.</param>
-        /// <returns>The value of the key, if found.  Otherwise, returns
-        /// <paramref name="defaultValue"/></returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public double GetDouble(string sectionName,
-                                string keyName,
-                                double defaultValue)
-        {
-            string retval = GetString(sectionName, keyName, "");
-
-            if (retval == null || retval.Length == 0)
-            {
-                return defaultValue;
-            }
-
-            return Convert.ToDouble(retval, CultureInfo.InvariantCulture);
-        }
-
-        #endregion Get Value Methods
-
-        #region GetSectionValues Methods
-
-        /// <summary>
-        /// Gets all of the values in a section as a list.
-        /// </summary>
-        /// <param name="sectionName">
-        /// Name of the section to retrieve values from.
-        /// </param>
-        /// <returns>
-        /// A <see cref="List{T}"/> containing <see cref="KeyValuePair{T1, T2}"/> objects
-        /// that describe this section.  Use this verison if a section may contain
-        /// multiple items with the same key value.  If you know that a section
-        /// cannot contain multiple values with the same key name or you don't
-        /// care about the duplicates, use the more convenient
-        /// <see cref="GetSectionValues"/> function.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> is a null reference  (Nothing in VB)
-        /// </exception>
-        public List<KeyValuePair<string, string>> GetSectionValuesAsList(string sectionName)
-        {
-            List<KeyValuePair<string, string>> retval;
-            string[] keyValuePairs;
-            string key, value;
-            int equalSignPos;
-
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            //Allocate a buffer for the returned section names.
-            IntPtr ptr = Marshal.AllocCoTaskMem(IniFile.MaxSectionSize);
-
-            try
-            {
-                //Get the section key/value pairs into the buffer.
-                int len = NativeMethods.GetPrivateProfileSection(sectionName,
-                                                                 ptr,
-                                                                 IniFile.MaxSectionSize,
-                                                                 m_path);
-
-                keyValuePairs = ConvertNullSeperatedStringToStringArray(ptr, len);
-            }
-            finally
-            {
-                //Free the buffer
-                Marshal.FreeCoTaskMem(ptr);
-            }
-
-            //Parse keyValue pairs and add them to the list.
-            retval = new List<KeyValuePair<string, string>>(keyValuePairs.Length);
-
-            for (int i = 0; i < keyValuePairs.Length; ++i)
-            {
-                //Parse the "key=value" string into its constituent parts
-                equalSignPos = keyValuePairs[i].IndexOf('=');
-
-                key = keyValuePairs[i].Substring(0, equalSignPos);
-
-                value = keyValuePairs[i].Substring(equalSignPos + 1,
-                                                   keyValuePairs[i].Length - equalSignPos - 1);
-
-                retval.Add(new KeyValuePair<string, string>(key, value));
-            }
-
-            return retval;
-        }
-
-        /// <summary>
-        /// Gets all of the values in a section as a dictionary.
-        /// </summary>
-        /// <param name="sectionName">
-        /// Name of the section to retrieve values from.
-        /// </param>
-        /// <returns>
-        /// A <see cref="Dictionary{T, T}"/> containing the key/value
-        /// pairs found in this section.
-        /// </returns>
-        /// <remarks>
-        /// If a section contains more than one key with the same name,
-        /// this function only returns the first instance.  If you need to
-        /// get all key/value pairs within a section even when keys have the
-        /// same name, use <see cref="GetSectionValuesAsList"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> is a null reference  (Nothing in VB)
-        /// </exception>
-        public Dictionary<string, string> GetSectionValues(string sectionName)
-        {
-            List<KeyValuePair<string, string>> keyValuePairs;
-            Dictionary<string, string> retval;
-
-            keyValuePairs = GetSectionValuesAsList(sectionName);
-
-            //Convert list into a dictionary.
-            retval = new Dictionary<string, string>(keyValuePairs.Count);
-
-            foreach (KeyValuePair<string, string> keyValuePair in keyValuePairs)
-            {
-                //Skip any key we have already seen.
-                if (!retval.ContainsKey(keyValuePair.Key))
+                Dictionary<string, string> hash = this.iniCahce[section];
+                if (hash.ContainsKey(key))
                 {
-                    retval.Add(keyValuePair.Key, keyValuePair.Value);
+                    string str = hash[key].ToUpper();
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        return defValue;
+                    }
+                    return ((((str == "是") || (str == "YES")) || (str == "1")) || (str == "TRUE"));
                 }
             }
-
-            return retval;
+            return defValue;
         }
 
-        #endregion GetSectionValues Methods
-
-        #region Get Key/Section Names
-
-        /// <summary>
-        /// Gets the names of all keys under a specific section in the ini file.
-        /// </summary>
-        /// <param name="sectionName">
-        /// The name of the section to read key names from.
-        /// </param>
-        /// <returns>An array of key names.</returns>
-        /// <remarks>
-        /// The total length of all key names in the section must be
-        /// less than 32KB in length.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> is a null reference  (Nothing in VB)
-        /// </exception>
-        public string[] GetKeyNames(string sectionName)
+        public bool ReadBool(string section, string key, bool defValue)
         {
-            int len;
-            string[] retval;
+            return GetBool(section, key, defValue);
+        }
+        
+        public DateTime ReadDateTime(string section, string key, DateTime defValue)
+        {
+            if (this.iniCahce.ContainsKey(section))
+            {
+                Dictionary<string, string> hash = this.iniCahce[section];
+                if (hash.ContainsKey(key))
+                {
+                    string str = hash[key].ToUpper();
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        return defValue;
+                    }
+                    return DateTime.Parse(str);
+                }
+            }
+            return defValue;
+        }
 
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
+        public int ReadInteger(string section, string key, int defValue)
+        {
+            return GetInt(section, key, defValue);
+        }
+        
+        public T ReadInteger<T>(string section, string key, object defValue)
+        {
+            if (this.iniCahce.ContainsKey(section))
+            {
+                Dictionary<string, string> hash = this.iniCahce[section];
+                int ret;
+                if (hash.ContainsKey(key))
+                {
+                    string str = hash[key];
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        return (T)Convert.ChangeType(defValue, typeof(T));
+                    }
+                    return (T)Convert.ChangeType(str, typeof(T));
+                }
+            }
+            return (T)Convert.ChangeType(defValue, typeof(T));
+        }
+        
+        public int ReadInteger(string section, string key, byte defValue)
+        {
+            return GetInt(section, key, defValue);
+        }
+        
+        public int GetInt(string section, string key, int defValue)
+        {
+            if (this.iniCahce.ContainsKey(section))
+            {
+                Dictionary<string, string> hash = this.iniCahce[section];
+                int ret;
+                if (hash.ContainsKey(key))
+                {
+                    string str = hash[key];
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        return defValue;
+                    }
+                    if(int.TryParse(str,out ret))
+                    {
+                        return ret;
+                    }
+                }
+            }
+            return defValue;
+        }
 
-            //Allocate a buffer for the returned section names.
-            IntPtr ptr = Marshal.AllocCoTaskMem(IniFile.MaxSectionSize);
+        private static string GetSecString(string str)
+        {
+            int len = str.Length;
+            if (str[0] == '[')
+            {
+                int pos = str.IndexOf(']');
+                if (pos > 0)
+                {
+                    return str.Substring(1, pos - 1).Trim();
+                }
+            }
+            return "";
+        }
 
+        public ICollection<string> GetSectionItemName(string sectName)
+        {
+            if (this.iniCahce.ContainsKey(sectName))
+            {
+                Dictionary<string, string> tbl = this.iniCahce[sectName];
+                return tbl.Keys;
+            }
+            return new List<string>();
+        }
+
+        public ICollection<string> GetAllValues(string sectName)
+        {
+            if (this.iniCahce.ContainsKey(sectName))
+            {
+                Dictionary<string, string> tbl = this.iniCahce[sectName];
+                return tbl.Values;
+            }
+            return new List<String>();
+        }
+        
+        public string ReadString(string section, string key,string defval)
+        {
+            var result = GetString(section, key);
+            if (string.IsNullOrEmpty(result))
+            {
+                return defval;
+            }
+            return result;
+        }
+        
+        public string GetString(string section, string key)
+        {
+            if (this.iniCahce.ContainsKey(section))
+            {
+                Dictionary<string, string> hash = this.iniCahce[section];
+                if (hash.ContainsKey(key))
+                {
+                    return hash[key];
+                }
+            }
+            return "";
+        }
+
+        public bool Load()
+        {
+            if (!File.Exists(this.FileName))
+            {
+                File.Create(this.FileName).Close();
+                return false;
+            }
+            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default);
+            if (rd == null)
+            {
+                return false;
+            }
+            bool isCurSecComment = false;
+            Dictionary<string, string> curSec = null;
+            string str = "";
+        Label_02A6:
+            str = this.ReadLine(rd);
+            if (str != null)
+            {
+                str = str.Trim();
+                if (str != "")
+                {
+                    if (str.StartsWith("/*"))
+                    {
+                        this.largeCommentFlag = true;
+                    }
+                    else if (this.largeCommentFlag)
+                    {
+                        if (str.StartsWith("*/"))
+                        {
+                            this.largeCommentFlag = false;
+                        }
+                    }
+                    else if ((str.Length < 2) || ((str[0] != ';') || (str[1] != ';')))
+                    {
+                        string sec = GetSecString(str);
+                        if (sec != "")
+                        {
+                            if (sec.Length >= 2)
+                            {
+                                if ((sec[0] == ';') && (sec[1] == ';'))
+                                {
+                                    isCurSecComment = true;
+                                    goto Label_02A6;
+                                }
+                                isCurSecComment = false;
+                            }
+                            if (this.iniCahce.ContainsKey(sec))
+                            {
+                               // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件！");
+                                goto Label_02AE;
+                            }
+                            curSec = new Dictionary<string, string>();
+                            this.iniCahce.Add(sec, curSec);
+                        }
+                        else if (!isCurSecComment)
+                        {
+                            int index = str.IndexOf(";;");
+                            if (index >= 0)
+                            {
+                                str = str.Substring(0, index).Trim();
+                            }
+                            if (curSec == null)
+                            {
+                                curSec = new Dictionary<string, string>();
+                                this.iniCahce.Add("", curSec);
+                            }
+                            string[] substr = this.SplitKeyVal(str);
+                            if ((substr != null) && (substr.Length >= 2))
+                            {
+                                substr[0] = substr[0].Trim();
+                                substr[1] = substr[1].Trim();
+                                if (!curSec.ContainsKey(substr[0]))
+                                {
+                                    curSec.Add(substr[0], substr[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+                goto Label_02A6;
+            }
+        Label_02AE:
+            rd.Close();
+            return true;
+        }
+
+        private string ReadLine(StreamReader rd)
+        {
+            string str = "";
+            string s = rd.ReadLine();
+            if (s == null)
+            {
+                return null;
+            }
+            s = s.Trim();
+            if (!(s == ""))
+            {
+                str = str + s;
+            }
+            return str;
+        }
+
+        public void Save()
+        {
             try
             {
-                //Get the section names into the buffer.
-                len = NativeMethods.GetPrivateProfileString(sectionName,
-                                                            null,
-                                                            null,
-                                                            ptr,
-                                                            IniFile.MaxSectionSize,
-                                                            m_path);
-
-                retval = ConvertNullSeperatedStringToStringArray(ptr, len);
+                if (!File.Exists(this.FileName))
+                {
+                    File.Create(this.FileName).Close();
+                }
+                FileInfo fi = new FileInfo(this.FileName);
+                bool isRealOnly = fi.IsReadOnly;
+                if (!Directory.Exists(fi.Directory.FullName))
+                {
+                    Directory.CreateDirectory(fi.Directory.FullName);
+                }
+                if (isRealOnly && fi.Exists)
+                {
+                    fi.IsReadOnly = false;
+                }
+                StreamWriter sw = new StreamWriter(File.Open(this.FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.Default);
+                foreach (KeyValuePair<string, Dictionary<string, string>> pair in this.iniCahce)
+                {
+                    sw.WriteLine("[" + pair.Key + "]");
+                    Dictionary<string, string> tbl = pair.Value;
+                    foreach (KeyValuePair<string, string> pair2 in tbl)
+                    {
+                        sw.WriteLine(pair2.Key + "=" + pair2.Value);
+                    }
+                    sw.WriteLine("");
+                }
+                sw.Close();
+                if (isRealOnly)
+                {
+                    fi.IsReadOnly = true;
+                }
             }
-            finally
+            catch
             {
-                //Free the buffer
-                Marshal.FreeCoTaskMem(ptr);
             }
-
-            return retval;
         }
 
-        /// <summary>
-        /// Gets the names of all sections in the ini file.
-        /// </summary>
-        /// <returns>An array of section names.</returns>
-        /// <remarks>
-        /// The total length of all section names in the section must be
-        /// less than 32KB in length.
-        /// </remarks>
-        public string[] GetSectionNames()
+        private string[] SplitKeyVal(string str)
         {
-            string[] retval;
-            int len;
-
-            //Allocate a buffer for the returned section names.
-            IntPtr ptr = Marshal.AllocCoTaskMem(IniFile.MaxSectionSize);
-
-            try
+            int pos = -1;
+            for (int i = 0; i < str.Length; i++)
             {
-                //Get the section names into the buffer.
-                len = NativeMethods.GetPrivateProfileSectionNames(ptr,
-                    IniFile.MaxSectionSize, m_path);
-
-                retval = ConvertNullSeperatedStringToStringArray(ptr, len);
+                if (str[i] == '=')
+                {
+                    pos = i;
+                    break;
+                }
             }
-            finally
+            if ((pos > 0) && (pos < str.Length))
             {
-                //Free the buffer
-                Marshal.FreeCoTaskMem(ptr);
+                return new string[] { str.Substring(0, pos), str.Substring(pos + 1) };
             }
-
-            return retval;
+            return null;
         }
 
-        /// <summary>
-        /// Converts the null seperated pointer to a string into a string array.
-        /// </summary>
-        /// <param name="ptr">A pointer to string data.</param>
-        /// <param name="valLength">
-        /// Length of the data pointed to by <paramref name="ptr"/>.
-        /// </param>
-        /// <returns>
-        /// An array of strings; one for each null found in the array of characters pointed
-        /// at by <paramref name="ptr"/>.
-        /// </returns>
-        private static string[] ConvertNullSeperatedStringToStringArray(IntPtr ptr, int valLength)
+        public void WriteInt(string section, string key, int val)
         {
-            string[] retval;
-
-            if (valLength == 0)
-            {
-                //Return an empty array.
-                retval = new string[0];
-            }
-            else
-            {
-                //Convert the buffer into a string.  Decrease the length
-                //by 1 so that we remove the second null off the end.
-                string buff = Marshal.PtrToStringAuto(ptr, valLength - 1);
-
-                //Parse the buffer into an array of strings by searching for nulls.
-                retval = buff.Split('\0');
-            }
-
-            return retval;
+            this.WriteString(section, key, val.ToString());
+        }
+        
+        public void WriteBool(string section, string key, bool val)
+        {
+            Console.WriteLine("todo ini WriteBool");
         }
 
-        #endregion Get Key/Section Names
-
-        #region Write Methods
-
-        /// <summary>
-        /// Writes a <see cref="T:System.String"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The string value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        private void WriteValueInternal(string sectionName, string keyName, string value)
+        public void WriteInteger(string section, string key, object val)
         {
-            if (!NativeMethods.WritePrivateProfileString(sectionName, keyName, value, m_path))
-            {
-                throw new System.ComponentModel.Win32Exception();
-            }
+            Console.WriteLine("todo ini WriteInteger");
         }
 
-        /// <summary>
-        /// Writes a <see cref="T:System.String"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The string value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> or
-        /// <paramref name="value"/>  are a null reference  (Nothing in VB)
-        /// </exception>
-        public void WriteValue(string sectionName, string keyName, string value)
+        public void WriteDateTime(string section, string key, DateTime val)
         {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            if (value == null)
-                throw new ArgumentNullException("value");
-
-            WriteValueInternal(sectionName, keyName, value);
+            Console.WriteLine("todo ini WriteDateTime");
         }
 
-        /// <summary>
-        /// Writes an <see cref="T:System.Int16"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        public void WriteValue(string sectionName, string keyName, short value)
+        public void WriteString(string section, string key, object str)
         {
-            WriteValue(sectionName, keyName, (int)value);
-        }
-
-        /// <summary>
-        /// Writes an <see cref="T:System.Int32"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public void WriteValue(string sectionName, string keyName, int value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteString(string sectionName, string keyName, int value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteString(string sectionName, string keyName, string value)
-        {
-            if (string.IsNullOrEmpty(value))
+            if (str == null)
             {
                 return;
             }
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
+            if (!this.iniCahce.ContainsKey(section))
+            {
+                this.iniCahce.Add(section, new Dictionary<string, string>());
+            }
+            if (!string.IsNullOrEmpty(key))
+            {
+                Dictionary<string, string> secTbl = this.iniCahce[section];
+                secTbl[key] = str.ToString();
+            }
         }
 
-        public void WriteDateTime(string sectionName, string keyName, DateTime value)
+        public string FileName
         {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
+            get
+            {
+                return this.fileName;
+            }
+            set
+            {
+                this.fileName = value;
+            }
         }
-
-        public void WriteInteger(string sectionName, string keyName, int value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteInteger(string sectionName, string keyName, double value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteInteger(string sectionName, string keyName, long value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteInteger(string sectionName, string keyName, uint value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteBool(string sectionName, string keyName, bool value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public void WriteFloat(string sectionName, string keyName, double value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Writes an <see cref="T:System.Single"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public void WriteValue(string sectionName, string keyName, float value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Writes an <see cref="T:System.Double"/> value to the ini file.
-        /// </summary>
-        /// <param name="sectionName">The name of the section to write to .</param>
-        /// <param name="keyName">The name of the key to write to.</param>
-        /// <param name="value">The value to write</param>
-        /// <exception cref="T:System.ComponentModel.Win32Exception">
-        /// The write failed.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public void WriteValue(string sectionName, string keyName, double value)
-        {
-            WriteValue(sectionName, keyName, value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        #endregion Write Methods
-
-        #region Delete Methods
-
-        /// <summary>
-        /// Deletes the specified key from the specified section.
-        /// </summary>
-        /// <param name="sectionName">
-        /// Name of the section to remove the key from.
-        /// </param>
-        /// <param name="keyName">
-        /// Name of the key to remove.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> or <paramref name="keyName"/> are
-        /// a null reference  (Nothing in VB)
-        /// </exception>
-        public void DeleteKey(string sectionName, string keyName)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            if (keyName == null)
-                throw new ArgumentNullException("keyName");
-
-            WriteValueInternal(sectionName, keyName, null);
-        }
-
-        /// <summary>
-        /// Deletes a section from the ini file.
-        /// </summary>
-        /// <param name="sectionName">
-        /// Name of the section to delete.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="sectionName"/> is a null reference (Nothing in VB)
-        /// </exception>
-        public void DeleteSection(string sectionName)
-        {
-            if (sectionName == null)
-                throw new ArgumentNullException("sectionName");
-
-            WriteValueInternal(sectionName, null, null);
-        }
-
-        #endregion Delete Methods
     }
 }

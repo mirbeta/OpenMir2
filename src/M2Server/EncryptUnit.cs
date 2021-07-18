@@ -11,11 +11,11 @@ namespace M2Server
         /// <returns></returns>
         public static unsafe string DeCodeString(string str, bool chinese)
         {
-            var result = string.Empty;
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
+            string result;
+            var encBuf = new byte[grobal2.BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            var nLen = EDcode.Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            fixed (byte* pb = EncBuf)
+            var nLen = EDcode.Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            fixed (byte* pb = encBuf)
             {
                 if (chinese)
                 {

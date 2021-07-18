@@ -89,22 +89,24 @@ namespace M2Server
                         continue;
                     }
                 }
-
                 btTmp = Convert.ToByte((byte) (btCh << nBitPos) & masks[nBitPos - 2]);
                 nMadeBit += 8 - nBitPos;
             }
-
             pbuf[nBufPos] = 0;
-
             return nBufPos;
         }
 
-        public static TDefaultMessage DecodeMessage(string str)
+        public static unsafe TDefaultMessage DecodeMessage(string str)
         {
-            var encBuf = new byte[grobal2.BUFFERSIZE];
+            var EncBuf = new byte[grobal2.BUFFERSIZE];
+            TDefaultMessage Msg;
             var bSrc = HUtil32.StringToByteAry(str);
-            Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            return new TDefaultMessage(encBuf);
+            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            fixed (byte* pb = EncBuf)
+            {
+                Msg = *(TDefaultMessage*) pb;
+            }
+            return Msg;
         }
 
         /// <summary>

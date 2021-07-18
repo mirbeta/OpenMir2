@@ -143,6 +143,7 @@ namespace M2Server
         public static int g_dwSocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
+        public static string sBaseDir = "/Volumes/Data/MirServer/Mir200";
         public const string sConfigFileName = ".\\!Setup.txt";
         public const string sExpConfigFileName = ".\\Exps.ini";
         public const string sCommandFileName = ".\\Command.ini";

@@ -1,4 +1,5 @@
-﻿using mSystemModule;
+﻿using SystemModule;
+using mSystemModule;
 
 namespace M2Server.Configs
 {
@@ -13,6 +14,9 @@ namespace M2Server.Configs
             StringConf = new IniFile(M2Share.sStringFileName);
             Config = new IniFile(M2Share.sConfigFileName);
             ExpConf = new IniFile(M2Share.sExpConfigFileName);
+            Config.Load();
+            StringConf.Load();
+            ExpConf.Load();
         }
 
         public void LoadConfig()
@@ -428,7 +432,7 @@ namespace M2Server.Configs
                 if (Config.ReadInteger("Setup", "SlaveColor" + I, -1) < 0)
                     Config.WriteInteger("Setup", "SlaveColor" + I, M2Share.g_Config.SlaveColor[I]);
                 M2Share.g_Config.SlaveColor[I] =
-                    Config.ReadInteger("Setup", "SlaveColor" + I, M2Share.g_Config.SlaveColor[I]);
+                    Config.ReadInteger<byte>("Setup", "SlaveColor" + I, M2Share.g_Config.SlaveColor[I]);
             }
 
             if (Config.ReadString("Setup", "HomeMap", "") == "")
@@ -436,29 +440,29 @@ namespace M2Server.Configs
             M2Share.g_Config.sHomeMap = Config.ReadString("Setup", "HomeMap", M2Share.g_Config.sHomeMap);
             if (Config.ReadInteger("Setup", "HomeX", -1) < 0)
                 Config.WriteInteger("Setup", "HomeX", M2Share.g_Config.nHomeX);
-            M2Share.g_Config.nHomeX = Config.ReadInteger("Setup", "HomeX", M2Share.g_Config.nHomeX);
+            M2Share.g_Config.nHomeX = Config.ReadInteger<short>("Setup", "HomeX", M2Share.g_Config.nHomeX);
             if (Config.ReadInteger("Setup", "HomeY", -1) < 0)
                 Config.WriteInteger("Setup", "HomeY", M2Share.g_Config.nHomeY);
-            M2Share.g_Config.nHomeY = Config.ReadInteger("Setup", "HomeY", M2Share.g_Config.nHomeY);
+            M2Share.g_Config.nHomeY = Config.ReadInteger<short>("Setup", "HomeY", M2Share.g_Config.nHomeY);
             if (Config.ReadString("Setup", "RedHomeMap", "") == "")
                 Config.WriteString("Setup", "RedHomeMap", M2Share.g_Config.sRedHomeMap);
             M2Share.g_Config.sRedHomeMap = Config.ReadString("Setup", "RedHomeMap", M2Share.g_Config.sRedHomeMap);
             if (Config.ReadInteger("Setup", "RedHomeX", -1) < 0)
                 Config.WriteInteger("Setup", "RedHomeX", M2Share.g_Config.nRedHomeX);
-            M2Share.g_Config.nRedHomeX = Config.ReadInteger("Setup", "RedHomeX", M2Share.g_Config.nRedHomeX);
+            M2Share.g_Config.nRedHomeX = Config.ReadInteger<short>("Setup", "RedHomeX", M2Share.g_Config.nRedHomeX);
             if (Config.ReadInteger("Setup", "RedHomeY", -1) < 0)
                 Config.WriteInteger("Setup", "RedHomeY", M2Share.g_Config.nRedHomeY);
-            M2Share.g_Config.nRedHomeY = Config.ReadInteger("Setup", "RedHomeY", M2Share.g_Config.nRedHomeY);
+            M2Share.g_Config.nRedHomeY = Config.ReadInteger<short>("Setup", "RedHomeY", M2Share.g_Config.nRedHomeY);
             if (Config.ReadString("Setup", "RedDieHomeMap", "") == "")
                 Config.WriteString("Setup", "RedDieHomeMap", M2Share.g_Config.sRedDieHomeMap);
             M2Share.g_Config.sRedDieHomeMap =
                 Config.ReadString("Setup", "RedDieHomeMap", M2Share.g_Config.sRedDieHomeMap);
             if (Config.ReadInteger("Setup", "RedDieHomeX", -1) < 0)
                 Config.WriteInteger("Setup", "RedDieHomeX", M2Share.g_Config.nRedDieHomeX);
-            M2Share.g_Config.nRedDieHomeX = Config.ReadInteger("Setup", "RedDieHomeX", M2Share.g_Config.nRedDieHomeX);
+            M2Share.g_Config.nRedDieHomeX = Config.ReadInteger<short>("Setup", "RedDieHomeX", M2Share.g_Config.nRedDieHomeX);
             if (Config.ReadInteger("Setup", "RedDieHomeY", -1) < 0)
                 Config.WriteInteger("Setup", "RedDieHomeY", M2Share.g_Config.nRedDieHomeY);
-            M2Share.g_Config.nRedDieHomeY = Config.ReadInteger("Setup", "RedDieHomeY", M2Share.g_Config.nRedDieHomeY);
+            M2Share.g_Config.nRedDieHomeY = Config.ReadInteger<short>("Setup", "RedDieHomeY", M2Share.g_Config.nRedDieHomeY);
             if (Config.ReadInteger("Setup", "JobHomePointSystem", -1) < 0)
                 Config.WriteBool("Setup", "JobHomePointSystem", M2Share.g_Config.boJobHomePoint);
             M2Share.g_Config.boJobHomePoint =
@@ -470,31 +474,31 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "WarriorHomeX", -1) < 0)
                 Config.WriteInteger("Setup", "WarriorHomeX", M2Share.g_Config.nWarriorHomeX);
             M2Share.g_Config.nWarriorHomeX =
-                Config.ReadInteger("Setup", "WarriorHomeX", M2Share.g_Config.nWarriorHomeX);
+                Config.ReadInteger<short>("Setup", "WarriorHomeX", M2Share.g_Config.nWarriorHomeX);
             if (Config.ReadInteger("Setup", "WarriorHomeY", -1) < 0)
                 Config.WriteInteger("Setup", "WarriorHomeY", M2Share.g_Config.nWarriorHomeY);
             M2Share.g_Config.nWarriorHomeY =
-                Config.ReadInteger("Setup", "WarriorHomeY", M2Share.g_Config.nWarriorHomeY);
+                Config.ReadInteger<short>("Setup", "WarriorHomeY", M2Share.g_Config.nWarriorHomeY);
             if (Config.ReadString("Setup", "WizardHomeMap", "") == "")
                 Config.WriteString("Setup", "WizardHomeMap", M2Share.g_Config.sWizardHomeMap);
             M2Share.g_Config.sWizardHomeMap =
                 Config.ReadString("Setup", "WizardHomeMap", M2Share.g_Config.sWizardHomeMap);
             if (Config.ReadInteger("Setup", "WizardHomeX", -1) < 0)
                 Config.WriteInteger("Setup", "WizardHomeX", M2Share.g_Config.nWizardHomeX);
-            M2Share.g_Config.nWizardHomeX = Config.ReadInteger("Setup", "WizardHomeX", M2Share.g_Config.nWizardHomeX);
+            M2Share.g_Config.nWizardHomeX = Config.ReadInteger<short>("Setup", "WizardHomeX", M2Share.g_Config.nWizardHomeX);
             if (Config.ReadInteger("Setup", "WizardHomeY", -1) < 0)
                 Config.WriteInteger("Setup", "WizardHomeY", M2Share.g_Config.nWizardHomeY);
-            M2Share.g_Config.nWizardHomeY = Config.ReadInteger("Setup", "WizardHomeY", M2Share.g_Config.nWizardHomeY);
+            M2Share.g_Config.nWizardHomeY = Config.ReadInteger<short>("Setup", "WizardHomeY", M2Share.g_Config.nWizardHomeY);
             if (Config.ReadString("Setup", "TaoistHomeMap", "") == "")
                 Config.WriteString("Setup", "TaoistHomeMap", M2Share.g_Config.sTaoistHomeMap);
             M2Share.g_Config.sTaoistHomeMap =
                 Config.ReadString("Setup", "TaoistHomeMap", M2Share.g_Config.sTaoistHomeMap);
             if (Config.ReadInteger("Setup", "TaoistHomeX", -1) < 0)
                 Config.WriteInteger("Setup", "TaoistHomeX", M2Share.g_Config.nTaoistHomeX);
-            M2Share.g_Config.nTaoistHomeX = Config.ReadInteger("Setup", "TaoistHomeX", M2Share.g_Config.nTaoistHomeX);
+            M2Share.g_Config.nTaoistHomeX = Config.ReadInteger<short>("Setup", "TaoistHomeX", M2Share.g_Config.nTaoistHomeX);
             if (Config.ReadInteger("Setup", "TaoistHomeY", -1) < 0)
                 Config.WriteInteger("Setup", "TaoistHomeY", M2Share.g_Config.nTaoistHomeY);
-            M2Share.g_Config.nTaoistHomeY = Config.ReadInteger("Setup", "TaoistHomeY", M2Share.g_Config.nTaoistHomeY);
+            M2Share.g_Config.nTaoistHomeY = Config.ReadInteger<short>("Setup", "TaoistHomeY", M2Share.g_Config.nTaoistHomeY);
             nLoadInteger = Config.ReadInteger("Setup", "HealthFillTime", -1);
             if (nLoadInteger < 0)
                 Config.WriteInteger("Setup", "HealthFillTime", M2Share.g_Config.nHealthFillTime);
@@ -543,7 +547,7 @@ namespace M2Server.Configs
                 if (Config.ReadInteger("Setup", "ReNewNameColor" + I, -1) < 0)
                     Config.WriteInteger("Setup", "ReNewNameColor" + I, M2Share.g_Config.ReNewNameColor[I]);
                 M2Share.g_Config.ReNewNameColor[I] =
-                    Config.ReadInteger("Setup", "ReNewNameColor" + I, M2Share.g_Config.ReNewNameColor[I]);
+                    Config.ReadInteger<byte>("Setup", "ReNewNameColor" + I, M2Share.g_Config.ReNewNameColor[I]);
             }
 
             if (Config.ReadInteger("Setup", "ReNewNameColorTime", -1) < 0)
@@ -561,35 +565,35 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "BonusAbilofWarrDC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrDC", M2Share.g_Config.BonusAbilofWarr.DC);
             M2Share.g_Config.BonusAbilofWarr.DC =
-                Config.ReadInteger("Setup", "BonusAbilofWarrDC", M2Share.g_Config.BonusAbilofWarr.DC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrDC", M2Share.g_Config.BonusAbilofWarr.DC);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrMC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrMC", M2Share.g_Config.BonusAbilofWarr.MC);
             M2Share.g_Config.BonusAbilofWarr.MC =
-                Config.ReadInteger("Setup", "BonusAbilofWarrMC", M2Share.g_Config.BonusAbilofWarr.MC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrMC", M2Share.g_Config.BonusAbilofWarr.MC);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrSC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrSC", M2Share.g_Config.BonusAbilofWarr.SC);
             M2Share.g_Config.BonusAbilofWarr.SC =
-                Config.ReadInteger("Setup", "BonusAbilofWarrSC", M2Share.g_Config.BonusAbilofWarr.SC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrSC", M2Share.g_Config.BonusAbilofWarr.SC);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrAC", M2Share.g_Config.BonusAbilofWarr.AC);
             M2Share.g_Config.BonusAbilofWarr.AC =
-                Config.ReadInteger("Setup", "BonusAbilofWarrAC", M2Share.g_Config.BonusAbilofWarr.AC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrAC", M2Share.g_Config.BonusAbilofWarr.AC);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrMAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrMAC", M2Share.g_Config.BonusAbilofWarr.MAC);
             M2Share.g_Config.BonusAbilofWarr.MAC =
-                Config.ReadInteger("Setup", "BonusAbilofWarrMAC", M2Share.g_Config.BonusAbilofWarr.MAC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrMAC", M2Share.g_Config.BonusAbilofWarr.MAC);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrHP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrHP", M2Share.g_Config.BonusAbilofWarr.HP);
             M2Share.g_Config.BonusAbilofWarr.HP =
-                Config.ReadInteger("Setup", "BonusAbilofWarrHP", M2Share.g_Config.BonusAbilofWarr.HP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrHP", M2Share.g_Config.BonusAbilofWarr.HP);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrMP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrMP", M2Share.g_Config.BonusAbilofWarr.MP);
             M2Share.g_Config.BonusAbilofWarr.MP =
-                Config.ReadInteger("Setup", "BonusAbilofWarrMP", M2Share.g_Config.BonusAbilofWarr.MP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWarrMP", M2Share.g_Config.BonusAbilofWarr.MP);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrHit", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrHit", M2Share.g_Config.BonusAbilofWarr.Hit);
             M2Share.g_Config.BonusAbilofWarr.Hit =
-                Config.ReadInteger("Setup", "BonusAbilofWarrHit", M2Share.g_Config.BonusAbilofWarr.Hit);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofWarrHit", M2Share.g_Config.BonusAbilofWarr.Hit);
             if (Config.ReadInteger("Setup", "BonusAbilofWarrSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrSpeed", M2Share.g_Config.BonusAbilofWarr.Speed);
             M2Share.g_Config.BonusAbilofWarr.Speed = Config.ReadInteger("Setup", "BonusAbilofWarrSpeed",
@@ -597,38 +601,38 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "BonusAbilofWarrX2", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWarrX2", M2Share.g_Config.BonusAbilofWarr.X2);
             M2Share.g_Config.BonusAbilofWarr.X2 =
-                Config.ReadInteger("Setup", "BonusAbilofWarrX2", M2Share.g_Config.BonusAbilofWarr.X2);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofWarrX2", M2Share.g_Config.BonusAbilofWarr.X2);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardDC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardDC", M2Share.g_Config.BonusAbilofWizard.DC);
             M2Share.g_Config.BonusAbilofWizard.DC =
-                Config.ReadInteger("Setup", "BonusAbilofWizardDC", M2Share.g_Config.BonusAbilofWizard.DC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardDC", M2Share.g_Config.BonusAbilofWizard.DC);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardMC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardMC", M2Share.g_Config.BonusAbilofWizard.MC);
             M2Share.g_Config.BonusAbilofWizard.MC =
-                Config.ReadInteger("Setup", "BonusAbilofWizardMC", M2Share.g_Config.BonusAbilofWizard.MC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardMC", M2Share.g_Config.BonusAbilofWizard.MC);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardSC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardSC", M2Share.g_Config.BonusAbilofWizard.SC);
             M2Share.g_Config.BonusAbilofWizard.SC =
-                Config.ReadInteger("Setup", "BonusAbilofWizardSC", M2Share.g_Config.BonusAbilofWizard.SC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardSC", M2Share.g_Config.BonusAbilofWizard.SC);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardAC", M2Share.g_Config.BonusAbilofWizard.AC);
             M2Share.g_Config.BonusAbilofWizard.AC =
-                Config.ReadInteger("Setup", "BonusAbilofWizardAC", M2Share.g_Config.BonusAbilofWizard.AC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardAC", M2Share.g_Config.BonusAbilofWizard.AC);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardMAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardMAC", M2Share.g_Config.BonusAbilofWizard.MAC);
-            M2Share.g_Config.BonusAbilofWizard.MAC = Config.ReadInteger("Setup", "BonusAbilofWizardMAC",
+            M2Share.g_Config.BonusAbilofWizard.MAC = Config.ReadInteger<short>("Setup", "BonusAbilofWizardMAC",
                 M2Share.g_Config.BonusAbilofWizard.MAC);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardHP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardHP", M2Share.g_Config.BonusAbilofWizard.HP);
             M2Share.g_Config.BonusAbilofWizard.HP =
-                Config.ReadInteger("Setup", "BonusAbilofWizardHP", M2Share.g_Config.BonusAbilofWizard.HP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardHP", M2Share.g_Config.BonusAbilofWizard.HP);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardMP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardMP", M2Share.g_Config.BonusAbilofWizard.MP);
             M2Share.g_Config.BonusAbilofWizard.MP =
-                Config.ReadInteger("Setup", "BonusAbilofWizardMP", M2Share.g_Config.BonusAbilofWizard.MP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofWizardMP", M2Share.g_Config.BonusAbilofWizard.MP);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardHit", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardHit", M2Share.g_Config.BonusAbilofWizard.Hit);
-            M2Share.g_Config.BonusAbilofWizard.Hit = Config.ReadInteger("Setup", "BonusAbilofWizardHit",
+            M2Share.g_Config.BonusAbilofWizard.Hit = Config.ReadInteger<byte>("Setup", "BonusAbilofWizardHit",
                 M2Share.g_Config.BonusAbilofWizard.Hit);
             if (Config.ReadInteger("Setup", "BonusAbilofWizardSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardSpeed", M2Share.g_Config.BonusAbilofWizard.Speed);
@@ -637,79 +641,78 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "BonusAbilofWizardX2", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofWizardX2", M2Share.g_Config.BonusAbilofWizard.X2);
             M2Share.g_Config.BonusAbilofWizard.X2 =
-                Config.ReadInteger("Setup", "BonusAbilofWizardX2", M2Share.g_Config.BonusAbilofWizard.X2);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofWizardX2", M2Share.g_Config.BonusAbilofWizard.X2);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosDC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosDC", M2Share.g_Config.BonusAbilofTaos.DC);
             M2Share.g_Config.BonusAbilofTaos.DC =
-                Config.ReadInteger("Setup", "BonusAbilofTaosDC", M2Share.g_Config.BonusAbilofTaos.DC);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofTaosDC", M2Share.g_Config.BonusAbilofTaos.DC);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosMC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosMC", M2Share.g_Config.BonusAbilofTaos.MC);
             M2Share.g_Config.BonusAbilofTaos.MC =
-                Config.ReadInteger("Setup", "BonusAbilofTaosMC", M2Share.g_Config.BonusAbilofTaos.MC);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofTaosMC", M2Share.g_Config.BonusAbilofTaos.MC);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosSC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosSC", M2Share.g_Config.BonusAbilofTaos.SC);
             M2Share.g_Config.BonusAbilofTaos.SC =
-                Config.ReadInteger("Setup", "BonusAbilofTaosSC", M2Share.g_Config.BonusAbilofTaos.SC);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofTaosSC", M2Share.g_Config.BonusAbilofTaos.SC);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosAC", M2Share.g_Config.BonusAbilofTaos.AC);
             M2Share.g_Config.BonusAbilofTaos.AC =
-                Config.ReadInteger("Setup", "BonusAbilofTaosAC", M2Share.g_Config.BonusAbilofTaos.AC);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofTaosAC", M2Share.g_Config.BonusAbilofTaos.AC);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosMAC", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosMAC", M2Share.g_Config.BonusAbilofTaos.MAC);
             M2Share.g_Config.BonusAbilofTaos.MAC =
-                Config.ReadInteger("Setup", "BonusAbilofTaosMAC", M2Share.g_Config.BonusAbilofTaos.MAC);
+                Config.ReadInteger<short>("Setup", "BonusAbilofTaosMAC", M2Share.g_Config.BonusAbilofTaos.MAC);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosHP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosHP", M2Share.g_Config.BonusAbilofTaos.HP);
             M2Share.g_Config.BonusAbilofTaos.HP =
-                Config.ReadInteger("Setup", "BonusAbilofTaosHP", M2Share.g_Config.BonusAbilofTaos.HP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofTaosHP", M2Share.g_Config.BonusAbilofTaos.HP);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosMP", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosMP", M2Share.g_Config.BonusAbilofTaos.MP);
             M2Share.g_Config.BonusAbilofTaos.MP =
-                Config.ReadInteger("Setup", "BonusAbilofTaosMP", M2Share.g_Config.BonusAbilofTaos.MP);
+                Config.ReadInteger<short>("Setup", "BonusAbilofTaosMP", M2Share.g_Config.BonusAbilofTaos.MP);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosHit", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosHit", M2Share.g_Config.BonusAbilofTaos.Hit);
             M2Share.g_Config.BonusAbilofTaos.Hit =
-                Config.ReadInteger("Setup", "BonusAbilofTaosHit", M2Share.g_Config.BonusAbilofTaos.Hit);
+                Config.ReadInteger<byte>("Setup", "BonusAbilofTaosHit", M2Share.g_Config.BonusAbilofTaos.Hit);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosSpeed", M2Share.g_Config.BonusAbilofTaos.Speed);
             M2Share.g_Config.BonusAbilofTaos.Speed = Config.ReadInteger("Setup", "BonusAbilofTaosSpeed",
                 M2Share.g_Config.BonusAbilofTaos.Speed);
             if (Config.ReadInteger("Setup", "BonusAbilofTaosX2", -1) < 0)
                 Config.WriteInteger("Setup", "BonusAbilofTaosX2", M2Share.g_Config.BonusAbilofTaos.X2);
-            M2Share.g_Config.BonusAbilofTaos.X2 =
-                Config.ReadInteger("Setup", "BonusAbilofTaosX2", M2Share.g_Config.BonusAbilofTaos.X2);
+            M2Share.g_Config.BonusAbilofTaos.X2 = Config.ReadInteger<byte>("Setup", "BonusAbilofTaosX2", M2Share.g_Config.BonusAbilofTaos.X2);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrDC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrDC", M2Share.g_Config.NakedAbilofWarr.DC);
             M2Share.g_Config.NakedAbilofWarr.DC =
-                Config.ReadInteger("Setup", "NakedAbilofWarrDC", M2Share.g_Config.NakedAbilofWarr.DC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrDC", M2Share.g_Config.NakedAbilofWarr.DC);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrMC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrMC", M2Share.g_Config.NakedAbilofWarr.MC);
             M2Share.g_Config.NakedAbilofWarr.MC =
-                Config.ReadInteger("Setup", "NakedAbilofWarrMC", M2Share.g_Config.NakedAbilofWarr.MC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrMC", M2Share.g_Config.NakedAbilofWarr.MC);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrSC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrSC", M2Share.g_Config.NakedAbilofWarr.SC);
             M2Share.g_Config.NakedAbilofWarr.SC =
-                Config.ReadInteger("Setup", "NakedAbilofWarrSC", M2Share.g_Config.NakedAbilofWarr.SC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrSC", M2Share.g_Config.NakedAbilofWarr.SC);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrAC", M2Share.g_Config.NakedAbilofWarr.AC);
             M2Share.g_Config.NakedAbilofWarr.AC =
-                Config.ReadInteger("Setup", "NakedAbilofWarrAC", M2Share.g_Config.NakedAbilofWarr.AC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrAC", M2Share.g_Config.NakedAbilofWarr.AC);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrMAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrMAC", M2Share.g_Config.NakedAbilofWarr.MAC);
             M2Share.g_Config.NakedAbilofWarr.MAC =
-                Config.ReadInteger("Setup", "NakedAbilofWarrMAC", M2Share.g_Config.NakedAbilofWarr.MAC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrMAC", M2Share.g_Config.NakedAbilofWarr.MAC);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrHP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrHP", M2Share.g_Config.NakedAbilofWarr.HP);
             M2Share.g_Config.NakedAbilofWarr.HP =
-                Config.ReadInteger("Setup", "NakedAbilofWarrHP", M2Share.g_Config.NakedAbilofWarr.HP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrHP", M2Share.g_Config.NakedAbilofWarr.HP);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrMP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrMP", M2Share.g_Config.NakedAbilofWarr.MP);
             M2Share.g_Config.NakedAbilofWarr.MP =
-                Config.ReadInteger("Setup", "NakedAbilofWarrMP", M2Share.g_Config.NakedAbilofWarr.MP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWarrMP", M2Share.g_Config.NakedAbilofWarr.MP);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrHit", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrHit", M2Share.g_Config.NakedAbilofWarr.Hit);
             M2Share.g_Config.NakedAbilofWarr.Hit =
-                Config.ReadInteger("Setup", "NakedAbilofWarrHit", M2Share.g_Config.NakedAbilofWarr.Hit);
+                Config.ReadInteger<byte>("Setup", "NakedAbilofWarrHit", M2Share.g_Config.NakedAbilofWarr.Hit);
             if (Config.ReadInteger("Setup", "NakedAbilofWarrSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrSpeed", M2Share.g_Config.NakedAbilofWarr.Speed);
             M2Share.g_Config.NakedAbilofWarr.Speed = Config.ReadInteger("Setup", "NakedAbilofWarrSpeed",
@@ -717,38 +720,37 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "NakedAbilofWarrX2", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWarrX2", M2Share.g_Config.NakedAbilofWarr.X2);
             M2Share.g_Config.NakedAbilofWarr.X2 =
-                Config.ReadInteger("Setup", "NakedAbilofWarrX2", M2Share.g_Config.NakedAbilofWarr.X2);
+                Config.ReadInteger<byte>("Setup", "NakedAbilofWarrX2", M2Share.g_Config.NakedAbilofWarr.X2);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardDC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardDC", M2Share.g_Config.NakedAbilofWizard.DC);
             M2Share.g_Config.NakedAbilofWizard.DC =
-                Config.ReadInteger("Setup", "NakedAbilofWizardDC", M2Share.g_Config.NakedAbilofWizard.DC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardDC", M2Share.g_Config.NakedAbilofWizard.DC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardMC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardMC", M2Share.g_Config.NakedAbilofWizard.MC);
             M2Share.g_Config.NakedAbilofWizard.MC =
-                Config.ReadInteger("Setup", "NakedAbilofWizardMC", M2Share.g_Config.NakedAbilofWizard.MC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardMC", M2Share.g_Config.NakedAbilofWizard.MC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardSC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardSC", M2Share.g_Config.NakedAbilofWizard.SC);
             M2Share.g_Config.NakedAbilofWizard.SC =
-                Config.ReadInteger("Setup", "NakedAbilofWizardSC", M2Share.g_Config.NakedAbilofWizard.SC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardSC", M2Share.g_Config.NakedAbilofWizard.SC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardAC", M2Share.g_Config.NakedAbilofWizard.AC);
             M2Share.g_Config.NakedAbilofWizard.AC =
-                Config.ReadInteger("Setup", "NakedAbilofWizardAC", M2Share.g_Config.NakedAbilofWizard.AC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardAC", M2Share.g_Config.NakedAbilofWizard.AC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardMAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardMAC", M2Share.g_Config.NakedAbilofWizard.MAC);
-            M2Share.g_Config.NakedAbilofWizard.MAC = Config.ReadInteger("Setup", "NakedAbilofWizardMAC",
-                M2Share.g_Config.NakedAbilofWizard.MAC);
+            M2Share.g_Config.NakedAbilofWizard.MAC = Config.ReadInteger<short>("Setup", "NakedAbilofWizardMAC",  M2Share.g_Config.NakedAbilofWizard.MAC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardHP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardHP", M2Share.g_Config.NakedAbilofWizard.HP);
             M2Share.g_Config.NakedAbilofWizard.HP =
-                Config.ReadInteger("Setup", "NakedAbilofWizardHP", M2Share.g_Config.NakedAbilofWizard.HP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardHP", M2Share.g_Config.NakedAbilofWizard.HP);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardMP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardMP", M2Share.g_Config.NakedAbilofWizard.MP);
             M2Share.g_Config.NakedAbilofWizard.MP =
-                Config.ReadInteger("Setup", "NakedAbilofWizardMP", M2Share.g_Config.NakedAbilofWizard.MP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofWizardMP", M2Share.g_Config.NakedAbilofWizard.MP);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardHit", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardHit", M2Share.g_Config.NakedAbilofWizard.Hit);
-            M2Share.g_Config.NakedAbilofWizard.Hit = Config.ReadInteger("Setup", "NakedAbilofWizardHit",
+            M2Share.g_Config.NakedAbilofWizard.Hit = Config.ReadInteger<byte>("Setup", "NakedAbilofWizardHit",
                 M2Share.g_Config.NakedAbilofWizard.Hit);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardSpeed", M2Share.g_Config.NakedAbilofWizard.Speed);
@@ -757,39 +759,38 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "NakedAbilofWizardX2", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardX2", M2Share.g_Config.NakedAbilofWizard.X2);
             M2Share.g_Config.NakedAbilofWizard.X2 =
-                Config.ReadInteger("Setup", "NakedAbilofWizardX2", M2Share.g_Config.NakedAbilofWizard.X2);
+                Config.ReadInteger<byte>("Setup", "NakedAbilofWizardX2", M2Share.g_Config.NakedAbilofWizard.X2);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosDC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosDC", M2Share.g_Config.NakedAbilofTaos.DC);
             M2Share.g_Config.NakedAbilofTaos.DC =
-                Config.ReadInteger("Setup", "NakedAbilofTaosDC", M2Share.g_Config.NakedAbilofTaos.DC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosDC", M2Share.g_Config.NakedAbilofTaos.DC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosMC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosMC", M2Share.g_Config.NakedAbilofTaos.MC);
             M2Share.g_Config.NakedAbilofTaos.MC =
-                Config.ReadInteger("Setup", "NakedAbilofTaosMC", M2Share.g_Config.NakedAbilofTaos.MC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosMC", M2Share.g_Config.NakedAbilofTaos.MC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosSC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
-            M2Share.g_Config.NakedAbilofTaos.SC =
-                Config.ReadInteger("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
+            M2Share.g_Config.NakedAbilofTaos.SC =Config.ReadInteger<short>("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosAC", M2Share.g_Config.NakedAbilofTaos.AC);
             M2Share.g_Config.NakedAbilofTaos.AC =
-                Config.ReadInteger("Setup", "NakedAbilofTaosAC", M2Share.g_Config.NakedAbilofTaos.AC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosAC", M2Share.g_Config.NakedAbilofTaos.AC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosMAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosMAC", M2Share.g_Config.NakedAbilofTaos.MAC);
             M2Share.g_Config.NakedAbilofTaos.MAC =
-                Config.ReadInteger("Setup", "NakedAbilofTaosMAC", M2Share.g_Config.NakedAbilofTaos.MAC);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosMAC", M2Share.g_Config.NakedAbilofTaos.MAC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosHP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosHP", M2Share.g_Config.NakedAbilofTaos.HP);
             M2Share.g_Config.NakedAbilofTaos.HP =
-                Config.ReadInteger("Setup", "NakedAbilofTaosHP", M2Share.g_Config.NakedAbilofTaos.HP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosHP", M2Share.g_Config.NakedAbilofTaos.HP);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosMP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosMP", M2Share.g_Config.NakedAbilofTaos.MP);
             M2Share.g_Config.NakedAbilofTaos.MP =
-                Config.ReadInteger("Setup", "NakedAbilofTaosMP", M2Share.g_Config.NakedAbilofTaos.MP);
+                Config.ReadInteger<short>("Setup", "NakedAbilofTaosMP", M2Share.g_Config.NakedAbilofTaos.MP);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosHit", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosHit", M2Share.g_Config.NakedAbilofTaos.Hit);
             M2Share.g_Config.NakedAbilofTaos.Hit =
-                Config.ReadInteger("Setup", "NakedAbilofTaosHit", M2Share.g_Config.NakedAbilofTaos.Hit);
+                Config.ReadInteger<byte>("Setup", "NakedAbilofTaosHit", M2Share.g_Config.NakedAbilofTaos.Hit);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosSpeed", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosSpeed", M2Share.g_Config.NakedAbilofTaos.Speed);
             M2Share.g_Config.NakedAbilofTaos.Speed = Config.ReadInteger("Setup", "NakedAbilofTaosSpeed",
@@ -797,7 +798,7 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "NakedAbilofTaosX2", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosX2", M2Share.g_Config.NakedAbilofTaos.X2);
             M2Share.g_Config.NakedAbilofTaos.X2 =
-                Config.ReadInteger("Setup", "NakedAbilofTaosX2", M2Share.g_Config.NakedAbilofTaos.X2);
+                Config.ReadInteger<byte>("Setup", "NakedAbilofTaosX2", M2Share.g_Config.NakedAbilofTaos.X2);
             if (Config.ReadInteger("Setup", "GroupMembersMax", -1) < 0)
                 Config.WriteInteger("Setup", "GroupMembersMax", M2Share.g_Config.nGroupMembersMax);
             M2Share.g_Config.nGroupMembersMax =
@@ -1161,83 +1162,82 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "HearMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "HearMsgFColor", M2Share.g_Config.btHearMsgFColor);
             M2Share.g_Config.btHearMsgFColor =
-                Config.ReadInteger("Setup", "HearMsgFColor", M2Share.g_Config.btHearMsgFColor);
+                Config.ReadInteger<byte>("Setup", "HearMsgFColor", M2Share.g_Config.btHearMsgFColor);
             if (Config.ReadInteger("Setup", "HearMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "HearMsgBColor", M2Share.g_Config.btHearMsgBColor);
             M2Share.g_Config.btHearMsgBColor =
-                Config.ReadInteger("Setup", "HearMsgBColor", M2Share.g_Config.btHearMsgBColor);
+                Config.ReadInteger<byte>("Setup", "HearMsgBColor", M2Share.g_Config.btHearMsgBColor);
             if (Config.ReadInteger("Setup", "WhisperMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "WhisperMsgFColor", M2Share.g_Config.btWhisperMsgFColor);
             M2Share.g_Config.btWhisperMsgFColor =
-                Config.ReadInteger("Setup", "WhisperMsgFColor", M2Share.g_Config.btWhisperMsgFColor);
+                Config.ReadInteger<byte>("Setup", "WhisperMsgFColor", M2Share.g_Config.btWhisperMsgFColor);
             if (Config.ReadInteger("Setup", "WhisperMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "WhisperMsgBColor", M2Share.g_Config.btWhisperMsgBColor);
             M2Share.g_Config.btWhisperMsgBColor =
-                Config.ReadInteger("Setup", "WhisperMsgBColor", M2Share.g_Config.btWhisperMsgBColor);
+                Config.ReadInteger<byte>("Setup", "WhisperMsgBColor", M2Share.g_Config.btWhisperMsgBColor);
             if (Config.ReadInteger("Setup", "GMWhisperMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "GMWhisperMsgFColor", M2Share.g_Config.btGMWhisperMsgFColor);
             M2Share.g_Config.btGMWhisperMsgFColor =
-                Config.ReadInteger("Setup", "GMWhisperMsgFColor", M2Share.g_Config.btGMWhisperMsgFColor);
+                Config.ReadInteger<byte>("Setup", "GMWhisperMsgFColor", M2Share.g_Config.btGMWhisperMsgFColor);
             if (Config.ReadInteger("Setup", "GMWhisperMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "GMWhisperMsgBColor", M2Share.g_Config.btGMWhisperMsgBColor);
             M2Share.g_Config.btGMWhisperMsgBColor =
-                Config.ReadInteger("Setup", "GMWhisperMsgBColor", M2Share.g_Config.btGMWhisperMsgBColor);
+                Config.ReadInteger<byte>("Setup", "GMWhisperMsgBColor", M2Share.g_Config.btGMWhisperMsgBColor);
             if (Config.ReadInteger("Setup", "CryMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "CryMsgFColor", M2Share.g_Config.btCryMsgFColor);
             M2Share.g_Config.btCryMsgFColor =
-                Config.ReadInteger("Setup", "CryMsgFColor", M2Share.g_Config.btCryMsgFColor);
+                Config.ReadInteger<byte>("Setup", "CryMsgFColor", M2Share.g_Config.btCryMsgFColor);
             if (Config.ReadInteger("Setup", "CryMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "CryMsgBColor", M2Share.g_Config.btCryMsgBColor);
             M2Share.g_Config.btCryMsgBColor =
-                Config.ReadInteger("Setup", "CryMsgBColor", M2Share.g_Config.btCryMsgBColor);
+                Config.ReadInteger<byte>("Setup", "CryMsgBColor", M2Share.g_Config.btCryMsgBColor);
             if (Config.ReadInteger("Setup", "GreenMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "GreenMsgFColor", M2Share.g_Config.btGreenMsgFColor);
             M2Share.g_Config.btGreenMsgFColor =
-                Config.ReadInteger("Setup", "GreenMsgFColor", M2Share.g_Config.btGreenMsgFColor);
+                Config.ReadInteger<byte>("Setup", "GreenMsgFColor", M2Share.g_Config.btGreenMsgFColor);
             if (Config.ReadInteger("Setup", "GreenMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "GreenMsgBColor", M2Share.g_Config.btGreenMsgBColor);
             M2Share.g_Config.btGreenMsgBColor =
-                Config.ReadInteger("Setup", "GreenMsgBColor", M2Share.g_Config.btGreenMsgBColor);
+                Config.ReadInteger<byte>("Setup", "GreenMsgBColor", M2Share.g_Config.btGreenMsgBColor);
             if (Config.ReadInteger("Setup", "BlueMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "BlueMsgFColor", M2Share.g_Config.btBlueMsgFColor);
             M2Share.g_Config.btBlueMsgFColor =
-                Config.ReadInteger("Setup", "BlueMsgFColor", M2Share.g_Config.btBlueMsgFColor);
+                Config.ReadInteger<byte>("Setup", "BlueMsgFColor", M2Share.g_Config.btBlueMsgFColor);
             if (Config.ReadInteger("Setup", "BlueMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "BlueMsgBColor", M2Share.g_Config.btBlueMsgBColor);
             M2Share.g_Config.btBlueMsgBColor =
-                Config.ReadInteger("Setup", "BlueMsgBColor", M2Share.g_Config.btBlueMsgBColor);
+                Config.ReadInteger<byte>("Setup", "BlueMsgBColor", M2Share.g_Config.btBlueMsgBColor);
             if (Config.ReadInteger("Setup", "RedMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "RedMsgFColor", M2Share.g_Config.btRedMsgFColor);
             M2Share.g_Config.btRedMsgFColor =
-                Config.ReadInteger("Setup", "RedMsgFColor", M2Share.g_Config.btRedMsgFColor);
+                Config.ReadInteger<byte>("Setup", "RedMsgFColor", M2Share.g_Config.btRedMsgFColor);
             if (Config.ReadInteger("Setup", "RedMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "RedMsgBColor", M2Share.g_Config.btRedMsgBColor);
-            M2Share.g_Config.btRedMsgBColor =
-                Config.ReadInteger("Setup", "RedMsgBColor", M2Share.g_Config.btRedMsgBColor);
+            M2Share.g_Config.btRedMsgBColor = Config.ReadInteger<byte>("Setup", "RedMsgBColor", M2Share.g_Config.btRedMsgBColor);
             if (Config.ReadInteger("Setup", "GuildMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "GuildMsgFColor", M2Share.g_Config.btGuildMsgFColor);
             M2Share.g_Config.btGuildMsgFColor =
-                Config.ReadInteger("Setup", "GuildMsgFColor", M2Share.g_Config.btGuildMsgFColor);
+                Config.ReadInteger<byte>("Setup", "GuildMsgFColor", M2Share.g_Config.btGuildMsgFColor);
             if (Config.ReadInteger("Setup", "GuildMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "GuildMsgBColor", M2Share.g_Config.btGuildMsgBColor);
             M2Share.g_Config.btGuildMsgBColor =
-                Config.ReadInteger("Setup", "GuildMsgBColor", M2Share.g_Config.btGuildMsgBColor);
+                Config.ReadInteger<byte>("Setup", "GuildMsgBColor", M2Share.g_Config.btGuildMsgBColor);
             if (Config.ReadInteger("Setup", "GroupMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "GroupMsgFColor", M2Share.g_Config.btGroupMsgFColor);
             M2Share.g_Config.btGroupMsgFColor =
-                Config.ReadInteger("Setup", "GroupMsgFColor", M2Share.g_Config.btGroupMsgFColor);
+                Config.ReadInteger<byte>("Setup", "GroupMsgFColor", M2Share.g_Config.btGroupMsgFColor);
             if (Config.ReadInteger("Setup", "GroupMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "GroupMsgBColor", M2Share.g_Config.btGroupMsgBColor);
             M2Share.g_Config.btGroupMsgBColor =
-                Config.ReadInteger("Setup", "GroupMsgBColor", M2Share.g_Config.btGroupMsgBColor);
+                Config.ReadInteger<byte>("Setup", "GroupMsgBColor", M2Share.g_Config.btGroupMsgBColor);
             if (Config.ReadInteger("Setup", "CustMsgFColor", -1) < 0)
                 Config.WriteInteger("Setup", "CustMsgFColor", M2Share.g_Config.btCustMsgFColor);
             M2Share.g_Config.btCustMsgFColor =
-                Config.ReadInteger("Setup", "CustMsgFColor", M2Share.g_Config.btCustMsgFColor);
+                Config.ReadInteger<byte>("Setup", "CustMsgFColor", M2Share.g_Config.btCustMsgFColor);
             if (Config.ReadInteger("Setup", "CustMsgBColor", -1) < 0)
                 Config.WriteInteger("Setup", "CustMsgBColor", M2Share.g_Config.btCustMsgBColor);
             M2Share.g_Config.btCustMsgBColor =
-                Config.ReadInteger("Setup", "CustMsgBColor", M2Share.g_Config.btCustMsgBColor);
+                Config.ReadInteger<byte>("Setup", "CustMsgBColor", M2Share.g_Config.btCustMsgBColor);
             if (Config.ReadInteger("Setup", "MonRandomAddValue", -1) < 0)
                 Config.WriteInteger("Setup", "MonRandomAddValue", M2Share.g_Config.nMonRandomAddValue);
             M2Share.g_Config.nMonRandomAddValue =
@@ -1976,27 +1976,27 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "PKFlagNameColor", -1) < 0)
                 Config.WriteInteger("Setup", "PKFlagNameColor", M2Share.g_Config.btPKFlagNameColor);
             M2Share.g_Config.btPKFlagNameColor =
-                Config.ReadInteger("Setup", "PKFlagNameColor", M2Share.g_Config.btPKFlagNameColor);
+                Config.ReadInteger<byte>("Setup", "PKFlagNameColor", M2Share.g_Config.btPKFlagNameColor);
             if (Config.ReadInteger("Setup", "AllyAndGuildNameColor", -1) < 0)
                 Config.WriteInteger("Setup", "AllyAndGuildNameColor", M2Share.g_Config.btAllyAndGuildNameColor);
-            M2Share.g_Config.btAllyAndGuildNameColor = Config.ReadInteger("Setup", "AllyAndGuildNameColor",
+            M2Share.g_Config.btAllyAndGuildNameColor = Config.ReadInteger<byte>("Setup", "AllyAndGuildNameColor",
                 M2Share.g_Config.btAllyAndGuildNameColor);
             if (Config.ReadInteger("Setup", "WarGuildNameColor", -1) < 0)
                 Config.WriteInteger("Setup", "WarGuildNameColor", M2Share.g_Config.btWarGuildNameColor);
             M2Share.g_Config.btWarGuildNameColor =
-                Config.ReadInteger("Setup", "WarGuildNameColor", M2Share.g_Config.btWarGuildNameColor);
+                Config.ReadInteger<byte>("Setup", "WarGuildNameColor", M2Share.g_Config.btWarGuildNameColor);
             if (Config.ReadInteger("Setup", "InFreePKAreaNameColor", -1) < 0)
                 Config.WriteInteger("Setup", "InFreePKAreaNameColor", M2Share.g_Config.btInFreePKAreaNameColor);
-            M2Share.g_Config.btInFreePKAreaNameColor = Config.ReadInteger("Setup", "InFreePKAreaNameColor",
+            M2Share.g_Config.btInFreePKAreaNameColor = Config.ReadInteger<byte>("Setup", "InFreePKAreaNameColor",
                 M2Share.g_Config.btInFreePKAreaNameColor);
             if (Config.ReadInteger("Setup", "PKLevel1NameColor", -1) < 0)
                 Config.WriteInteger("Setup", "PKLevel1NameColor", M2Share.g_Config.btPKLevel1NameColor);
             M2Share.g_Config.btPKLevel1NameColor =
-                Config.ReadInteger("Setup", "PKLevel1NameColor", M2Share.g_Config.btPKLevel1NameColor);
+                Config.ReadInteger<byte>("Setup", "PKLevel1NameColor", M2Share.g_Config.btPKLevel1NameColor);
             if (Config.ReadInteger("Setup", "PKLevel2NameColor", -1) < 0)
                 Config.WriteInteger("Setup", "PKLevel2NameColor", M2Share.g_Config.btPKLevel2NameColor);
             M2Share.g_Config.btPKLevel2NameColor =
-                Config.ReadInteger("Setup", "PKLevel2NameColor", M2Share.g_Config.btPKLevel2NameColor);
+                Config.ReadInteger<byte>("Setup", "PKLevel2NameColor", M2Share.g_Config.btPKLevel2NameColor);
             if (Config.ReadInteger("Setup", "SpiritMutiny", -1) < 0)
                 Config.WriteBool("Setup", "SpiritMutiny", M2Share.g_Config.boSpiritMutiny);
             M2Share.g_Config.boSpiritMutiny = Config.ReadBool("Setup", "SpiritMutiny", M2Share.g_Config.boSpiritMutiny);
@@ -2052,7 +2052,7 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "DeathColorEffect", -1) < 0)
                 Config.WriteInteger("Setup", "DeathColorEffect", M2Share.g_Config.ClientConf.btDieColor);
             M2Share.g_Config.ClientConf.btDieColor =
-                Config.ReadInteger("Setup", "DeathColorEffect", M2Share.g_Config.ClientConf.btDieColor);
+                Config.ReadInteger<byte>("Setup", "DeathColorEffect", M2Share.g_Config.ClientConf.btDieColor);
             if (Config.ReadInteger("Setup", "ParalyCanRun", -1) < 0)
                 Config.WriteBool("Setup", "ParalyCanRun", M2Share.g_Config.ClientConf.boParalyCanRun);
             M2Share.g_Config.ClientConf.boParalyCanRun =
@@ -2338,7 +2338,7 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "ItemSpeedTime", -1) < 0)
                 Config.WriteInteger("Setup", "ItemSpeedTime", M2Share.g_Config.ClientConf.btItemSpeed);
             M2Share.g_Config.ClientConf.btItemSpeed =
-                Config.ReadInteger("Setup", "ItemSpeedTime", M2Share.g_Config.ClientConf.btItemSpeed);
+                Config.ReadInteger<byte>("Setup", "ItemSpeedTime", M2Share.g_Config.ClientConf.btItemSpeed);
             if (Config.ReadInteger("Setup", "MaxHitMsgCount", -1) < 0)
                 Config.WriteInteger("Setup", "MaxHitMsgCount", M2Share.g_Config.nMaxHitMsgCount);
             M2Share.g_Config.nMaxHitMsgCount =
@@ -2497,11 +2497,11 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "HPStoneStartRate", -1) < 0)
                 Config.WriteInteger("Setup", "HPStoneStartRate", M2Share.g_Config.HPStoneStartRate);
             M2Share.g_Config.HPStoneStartRate =
-                Config.ReadInteger("Setup", "HPStoneStartRate", M2Share.g_Config.HPStoneStartRate);
+                Config.ReadInteger<byte>("Setup", "HPStoneStartRate", M2Share.g_Config.HPStoneStartRate);
             if (Config.ReadInteger("Setup", "MPStoneStartRate", -1) < 0)
                 Config.WriteInteger("Setup", "MPStoneStartRate", M2Share.g_Config.MPStoneStartRate);
             M2Share.g_Config.MPStoneStartRate =
-                Config.ReadInteger("Setup", "MPStoneStartRate", M2Share.g_Config.MPStoneStartRate);
+                Config.ReadInteger<byte>("Setup", "MPStoneStartRate", M2Share.g_Config.MPStoneStartRate);
             if (Config.ReadInteger("Setup", "HPStoneIntervalTime", -1) < 0)
                 Config.WriteInteger("Setup", "HPStoneIntervalTime", M2Share.g_Config.HPStoneIntervalTime);
             M2Share.g_Config.HPStoneIntervalTime =
@@ -2513,11 +2513,11 @@ namespace M2Server.Configs
             if (Config.ReadInteger("Setup", "HPStoneAddRate", -1) < 0)
                 Config.WriteInteger("Setup", "HPStoneAddRate", M2Share.g_Config.HPStoneAddRate);
             M2Share.g_Config.HPStoneAddRate =
-                Config.ReadInteger("Setup", "HPStoneAddRate", M2Share.g_Config.HPStoneAddRate);
+                Config.ReadInteger<byte>("Setup", "HPStoneAddRate", M2Share.g_Config.HPStoneAddRate);
             if (Config.ReadInteger("Setup", "MPStoneAddRate", -1) < 0)
                 Config.WriteInteger("Setup", "MPStoneAddRate", M2Share.g_Config.MPStoneAddRate);
             M2Share.g_Config.MPStoneAddRate =
-                Config.ReadInteger("Setup", "MPStoneAddRate", M2Share.g_Config.MPStoneAddRate);
+                Config.ReadInteger<byte>("Setup", "MPStoneAddRate", M2Share.g_Config.MPStoneAddRate);
             if (Config.ReadInteger("Setup", "HPStoneDecDura", -1) < 0)
                 Config.WriteInteger("Setup", "HPStoneDecDura", M2Share.g_Config.HPStoneDecDura);
             M2Share.g_Config.HPStoneDecDura =
@@ -2567,9 +2567,9 @@ namespace M2Server.Configs
                 Config.WriteInteger("Setup", "LevelValueOfTaosHP", M2Share.g_Config.nLevelValueOfTaosHP);
             else
                 M2Share.g_Config.nLevelValueOfTaosHP = nLoadInteger;
-            var nLoadFloatRate = Config.ReadDouble("Setup", "LevelValueOfTaosHPRate", 0);
+            var nLoadFloatRate = Config.ReadInteger<double>("Setup", "LevelValueOfTaosHPRate", 0);
             if (nLoadFloatRate == 0)
-                Config.WriteFloat("Setup", "LevelValueOfTaosHPRate", M2Share.g_Config.nLevelValueOfTaosHPRate);
+                Config.WriteInteger("Setup", "LevelValueOfTaosHPRate", M2Share.g_Config.nLevelValueOfTaosHPRate);
             else
                 M2Share.g_Config.nLevelValueOfTaosHPRate = nLoadFloatRate;
             nLoadInteger = Config.ReadInteger("Setup", "LevelValueOfTaosMP", -1);
@@ -2582,9 +2582,9 @@ namespace M2Server.Configs
                 Config.WriteInteger("Setup", "LevelValueOfWizardHP", M2Share.g_Config.nLevelValueOfWizardHP);
             else
                 M2Share.g_Config.nLevelValueOfWizardHP = nLoadInteger;
-            nLoadFloatRate = Config.ReadDouble("Setup", "LevelValueOfWizardHPRate", 0);
+            nLoadFloatRate = Config.ReadInteger<double>("Setup", "LevelValueOfWizardHPRate", 0);
             if (nLoadFloatRate == 0)
-                Config.WriteFloat("Setup", "LevelValueOfWizardHPRate", M2Share.g_Config.nLevelValueOfWizardHPRate);
+                Config.WriteInteger("Setup", "LevelValueOfWizardHPRate", M2Share.g_Config.nLevelValueOfWizardHPRate);
             else
                 M2Share.g_Config.nLevelValueOfWizardHPRate = nLoadFloatRate;
             nLoadInteger = Config.ReadInteger("Setup", "LevelValueOfWarrHP", -1);
@@ -2592,9 +2592,9 @@ namespace M2Server.Configs
                 Config.WriteInteger("Setup", "LevelValueOfWarrHP", M2Share.g_Config.nLevelValueOfWarrHP);
             else
                 M2Share.g_Config.nLevelValueOfWarrHP = nLoadInteger;
-            nLoadFloatRate = Config.ReadDouble("Setup", "LevelValueOfWarrHPRate", 0);
+            nLoadFloatRate = Config.ReadInteger<double>("Setup", "LevelValueOfWarrHPRate", 0);
             if (nLoadFloatRate == 0)
-                Config.WriteFloat("Setup", "LevelValueOfWarrHPRate", M2Share.g_Config.nLevelValueOfWarrHPRate);
+                Config.WriteInteger("Setup", "LevelValueOfWarrHPRate", M2Share.g_Config.nLevelValueOfWarrHPRate);
             else
                 M2Share.g_Config.nLevelValueOfWarrHPRate = nLoadFloatRate;
             nLoadInteger = Config.ReadInteger("Setup", "ProcessMonsterInterval", -1);
@@ -2632,7 +2632,7 @@ namespace M2Server.Configs
                 Config.WriteInteger("Setup", "GuildWarTime", M2Share.g_Config.dwGuildWarTime);
             else
                 M2Share.g_Config.dwGuildWarTime = nLoadInteger;
-            for (var i = M2Share.g_Config.GlobalVal.GetLowerBound(0);i <= M2Share.g_Config.GlobalVal.GetUpperBound(0);i++)
+            for (var i = M2Share.g_Config.GlobalVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalVal.GetUpperBound(0); i++)
             {
                 nLoadInteger = Config.ReadInteger("Setup", "GlobalVal" + i, -1);
                 if (nLoadInteger < 0)

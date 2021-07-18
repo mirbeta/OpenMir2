@@ -3,7 +3,7 @@ using System.IO;
 
 namespace M2Server
 {
-    public class TMsgHeader : Package
+    public struct TMsgHeader
     {
         public uint dwCode;
         public int nSocket;
@@ -11,22 +11,6 @@ namespace M2Server
         public short wIdent;
         public int wUserListIndex;
         public int nLength;
-
-        public static byte PackageSize = 20;
-
-        public TMsgHeader()
-        { }
-
-        public TMsgHeader(byte[] buff)
-            : base(buff)
-        {
-            dwCode = ReadUInt32();
-            nSocket = ReadInt32();
-            wGSocketIdx = ReadInt16();
-            wIdent = ReadInt16();
-            wUserListIndex = ReadInt32();
-            nLength = ReadInt32();
-        }
 
         public byte[] ToByte()
         {
