@@ -3385,11 +3385,10 @@ namespace M2Server
 
         public bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
         {
-            bool result;
             int n14;
             short n18;
             int n1C;
-            result = false;
+            bool result = false;
             if (Envir.wWidth < 80)
             {
                 n18 = 3;
@@ -3561,7 +3560,7 @@ namespace M2Server
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(grobal2.RM_STRUCK_MAG, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.BaseObject);// M2Share.ObjectSystem.Get(ProcessMsg.BaseObject);
+                            TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.BaseObject);
                             if (M2Share.g_Config.boMonDelHptoExp)
                             {
                                 if (TargetBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
@@ -5912,6 +5911,13 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 切换地图
+        /// </summary>
+        /// <param name="Envir"></param>
+        /// <param name="nDMapX"></param>
+        /// <param name="nDMapY"></param>
+        /// <returns></returns>
         public bool EnterAnotherMap(TEnvirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;

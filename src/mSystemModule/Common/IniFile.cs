@@ -84,7 +84,6 @@ namespace mSystemModule
             if (this.iniCahce.ContainsKey(section))
             {
                 Dictionary<string, string> hash = this.iniCahce[section];
-                int ret;
                 if (hash.ContainsKey(key))
                 {
                     string str = hash[key];

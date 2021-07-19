@@ -196,8 +196,10 @@ namespace M2Server
         public short m_nMoveY = 0;
         public bool bo698 = false;
         public int n69C = 0;
+        /// <summary>
+        /// 保存人物数据时间间隔
+        /// </summary>
         public int m_dwSaveRcdTick = 0;
-        // 0x6A0 保存人物数据时间间隔
         public byte m_btBright = 0;
         public bool m_boNewHuman = false;
         public bool m_boSendNotice = false;
@@ -220,36 +222,56 @@ namespace M2Server
         public int m_dwTurnTick = 0;
         public short m_wOldIdent = 0;
         public byte m_btOldDir = 0;
+        /// <summary>
+        /// 第一个操作
+        /// </summary>
         public bool m_boFirstAction = false;
-        // 第一个操作
+        /// <summary>
+        /// 二次操作之间间隔时间
+        /// </summary>        
         public int m_dwActionTick = 0;
-        // 二次操作之间间隔时间
+        /// <summary>
+        /// 配偶名称
+        /// </summary>
         public string m_sDearName;
-        // 配偶名称
         public TPlayObject m_DearHuman = null;
+        /// <summary>
+        /// 是否允许夫妻传送
+        /// </summary>
         public bool m_boCanDearRecall = false;
-        // 是否允许夫妻传送
         public bool m_boCanMasterRecall = false;
+        /// <summary>
+        /// 夫妻传送时间
+        /// </summary>
         public int m_dwDearRecallTick = 0;
-        // 夫妻传送时间
         public int m_dwMasterRecallTick = 0;
+        /// <summary>
+        /// 师徒名称
+        /// </summary>
         public string m_sMasterName;
-        // 师徒名称
         public TPlayObject m_MasterHuman = null;
         public IList<TPlayObject> m_MasterList = null;
         public bool m_boMaster = false;
+        /// <summary>
+        /// 声望点
+        /// </summary>
         public byte m_btCreditPoint = 0;
-        // 声望点
+        /// <summary>
+        /// 离婚次数
+        /// </summary>        
         public byte m_btMarryCount = 0;
-        // 离婚次数
         public byte m_btReLevel = 0;
         // 转生等级
         public byte m_btReColorIdx = 0;
         public int m_dwReColorTick = 0;
+        /// <summary>
+        /// 杀怪经验倍数
+        /// </summary>
         public int m_nKillMonExpMultiple = 0;
-        // 杀怪经验倍数
+        /// <summary>
+        /// 处理消息循环时间控制
+        /// </summary>        
         public int m_dwGetMsgTick = 0;
-        // 处理消息循环时间控制
         public bool m_boSetStoragePwd = false;
         public bool m_boReConfigPwd = false;
         public bool m_boCheckOldPwd = false;
@@ -751,7 +773,7 @@ namespace M2Server
             SendSocket(DefMsg, "");
         }
 
-public virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        public virtual unsafe void SendSocket(TDefaultMessage DefMsg, string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;

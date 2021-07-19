@@ -121,7 +121,7 @@ namespace M2Server
                     ServerMsgInfo.Socket = e.Socket;
                     ServerMsgInfo.SocData = "";
                     ServerMsgInfo.SocketId = e.ConnectionId;
-                    M2Share.MainOutMessage("连接从服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")成功...");
+                    M2Share.MainOutMessage("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")链接成功...");
                     m_SrvArray[i] = ServerMsgInfo;
                     break;
                 }
@@ -141,7 +141,7 @@ namespace M2Server
                 {
                     ServerMsgInfo.Socket = null;
                     ServerMsgInfo.SocData = "";
-                    M2Share.ErrorMessage("节点断开服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
+                    M2Share.ErrorMessage("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
                     m_SrvArray[i] = null;
                     break;
                 }

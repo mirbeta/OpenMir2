@@ -107,8 +107,8 @@ namespace M2Server
                             {
                                 if (GateUser.PlayObject != null)
                                 {
-                                    ((TPlayObject)GateUser.PlayObject).m_boEmergencyClose = true;
-                                    if (!((TPlayObject)GateUser.PlayObject).m_boReconnection)
+                                    GateUser.PlayObject.m_boEmergencyClose = true;
+                                    if (!GateUser.PlayObject.m_boReconnection)
                                     {
                                         IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                     }
@@ -118,7 +118,7 @@ namespace M2Server
                             }
                         }
                         Gate.UserList = null;
-                        if (Gate.Buffer != null)
+                        if (Gate.Buffer != IntPtr.Zero)
                         {
                             Gate.Buffer = IntPtr.Zero;
                         }

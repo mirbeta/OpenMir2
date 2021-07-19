@@ -437,7 +437,7 @@ namespace M2Server
         public int nSendedMsgCount;
         public int nSendCount;
         public int dwSendCheckTick;
-    } 
+    }
 
     public class TGateUserInfo
     {

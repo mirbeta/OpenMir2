@@ -141,12 +141,12 @@ namespace M2Server
                 if (M2Share.nServerIndex == 0)
                 {
                     InterServerMsg.Instance.StartMsgServer();
-                    M2Share.MainOutMessage("当前服务器运行主机模式...");
+                    M2Share.MainOutMessage("当前服务器运行主节点模式...");
                 }
                 else
                 {
                     InterMsgClient.Instance.ConnectMsgServer();
-                    M2Share.MainOutMessage($"当前运行节点[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]模式...");
+                    M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
                 }
                 StartEngine();
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();

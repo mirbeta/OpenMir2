@@ -14,7 +14,7 @@ namespace M2Server
             MsgClient = new IClientScoket();
             MsgClient.OnConnected += MsgClientConnect;
             MsgClient.ReceivedDatagram += MsgClientRead;
-            MsgClient.OnDisconnected += MsgClientError;
+            MsgClient.OnError += MsgClientError;
             MsgClient.OnDisconnected += MsgClientDisconnected;
         }
 
@@ -41,7 +41,7 @@ namespace M2Server
             }
         }
 
-        public bool IsConnect()
+        private bool IsConnect()
         {
             return MsgClient.IsConnected;
         }
@@ -91,7 +91,7 @@ namespace M2Server
 
         public void SendSocket(string sMsg)
         {
-            if (MsgClient.IsConnected)
+            if (IsConnect())
             {
                 var buff = System.Text.Encoding.GetEncoding("gb2312").GetBytes("(" + sMsg + ")");
                 MsgClient.Send(buff);
@@ -103,9 +103,9 @@ namespace M2Server
             M2Share.MainOutMessage("连接主服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")成功...");
         }
 
-        private void MsgClientError(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void MsgClientError(object sender, NetFramework.DSCClientErrorEventArgs e)
         {
-            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
+            M2Share.MainOutMessage("无法连接主服务器(" + MsgClient.Address + ':' + MsgClient.Port + ")...");
         }
 
         private void MsgClientDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
@@ -124,7 +124,7 @@ namespace M2Server
 {
     public class InterMsgClient
     {
-        public static TFrmMsgClient instance = null;
+        private static TFrmMsgClient instance = null;
 
         public static TFrmMsgClient Instance
         {

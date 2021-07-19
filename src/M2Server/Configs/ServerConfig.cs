@@ -25,9 +25,9 @@ namespace M2Server.Configs
             }
             else
             {
-                StringConf = new IniFile(M2Share.sStringFileName);
-                Config = new IniFile(M2Share.sConfigFileName);
-                ExpConf = new IniFile(M2Share.sExpConfigFileName);
+                StringConf = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sStringFileName));
+                Config = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sExpConfigFileName));
             }
             Config.Load();
             StringConf.Load();
