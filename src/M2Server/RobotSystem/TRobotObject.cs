@@ -191,7 +191,7 @@ namespace M2Server
             var sParam3 = string.Empty;
             var sParam4 = string.Empty;
             AutoRunInfo AutoRunInfo;
-            var sFileName = M2Share.g_Config.sEnvirDir + "Robot_def\\" + m_sScriptFileName + ".txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Robot_def", $"{m_sScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();

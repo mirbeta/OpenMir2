@@ -448,7 +448,7 @@ namespace M2Server
         {
             try
             {
-                var sScriptFile = M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def + "QFunction-0.txt";
+                var sScriptFile = Path.Combine(M2Share.g_Config.sEnvirDir, M2Share.sMarket_Def, "QFunction-0.txt");
                 var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
                 var sScritpDir = M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def;
                 if (!Directory.Exists(sScritpDir))
@@ -496,7 +496,7 @@ namespace M2Server
             {
                 var sScriptFile = Path.Combine(M2Share.g_Config.sEnvirDir, "MapQuest_def", "QManage.txt");
                 var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
-                var sScritpDir = M2Share.g_Config.sEnvirDir + "MapQuest_def\\";
+                var sScritpDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MapQuest_def");
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -551,8 +551,8 @@ namespace M2Server
         {
             try
             {
-                var sScriptFile = M2Share.g_Config.sEnvirDir + "Robot_def\\" + "RobotManage.txt";
-                var sScritpDir = M2Share.g_Config.sEnvirDir + "Robot_def\\";
+                var sScriptFile = Path.Combine(M2Share.g_Config.sEnvirDir, "Robot_def", "RobotManage.txt");
+                var sScritpDir = Path.Combine(M2Share.g_Config.sEnvirDir, "Robot_def");
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
