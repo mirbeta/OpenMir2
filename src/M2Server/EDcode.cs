@@ -117,15 +117,20 @@ namespace M2Server
         /// <returns></returns>
         public static unsafe string DeCodeString(string str, bool chinese = false)
         {
-            string result;
             var encBuf = new byte[grobal2.BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
             var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            fixed (byte* pb = encBuf)
+            if (chinese)
             {
-                result = chinese ? HUtil32.SBytePtrToString((sbyte*) pb, nLen) : HUtil32.SBytePtrToString((sbyte*) pb, 0, nLen);
+                return Encoding.GetEncoding("gb2312").GetString(encBuf, 0, nLen);
             }
-            return result;
+            else
+            {
+                fixed (byte* pb = encBuf)
+                {
+                    return HUtil32.SBytePtrToString((sbyte*)pb, 0, nLen);
+                }
+            }
         }
 
         /// <summary>
@@ -139,7 +144,7 @@ namespace M2Server
         {
             string result;
             var encBuf = new byte[grobal2.BUFFERSIZE];
-            var bSrc = Encoding.Default.GetBytes(Src);
+            var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
             var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
             fixed (byte* pb = encBuf)
             {
@@ -151,7 +156,7 @@ namespace M2Server
         public unsafe static byte[] DecodeBuffer(string Src)
         {
             var EncBuf = new byte[grobal2.BUFFERSIZE];
-            var bSrc = Encoding.Default.GetBytes(Src);
+            var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
             return EncBuf;
         }

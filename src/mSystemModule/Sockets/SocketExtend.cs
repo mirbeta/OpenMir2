@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace mSystemModule.Sockets
 {
@@ -18,7 +15,7 @@ namespace mSystemModule.Sockets
             }
             if (socket.Connected)
             {
-                var buff = System.Text.Encoding.Default.GetBytes(str);
+                var buff = Encoding.GetEncoding("gb2312").GetBytes(str);
                 socket.Send(buff);
                 return true;
             }
@@ -33,7 +30,7 @@ namespace mSystemModule.Sockets
             }
             if (socket.Connected)
             {
-                var buff = System.Text.Encoding.Default.GetBytes(str);
+                var buff = Encoding.GetEncoding("gb2312").GetBytes(str);
                 socket.Send(buff);
                 return true;
             }

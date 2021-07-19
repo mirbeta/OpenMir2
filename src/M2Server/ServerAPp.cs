@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Mail;
 
 namespace M2Server
 {
@@ -142,10 +141,12 @@ namespace M2Server
                 if (M2Share.nServerIndex == 0)
                 {
                     InterServerMsg.Instance.StartMsgServer();
+                    M2Share.MainOutMessage("当前服务器运行主机模式...");
                 }
                 else
                 {
                     InterMsgClient.Instance.ConnectMsgServer();
+                    M2Share.MainOutMessage($"当前运行节点[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]模式...");
                 }
                 StartEngine();
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
@@ -153,7 +154,7 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage("StartTimer exception: " + e.StackTrace);
+                M2Share.MainOutMessage(e.StackTrace);
             }
         }
 
@@ -189,14 +190,6 @@ namespace M2Server
                 M2Share.MainOutMessage("游戏处理引擎初始化成功...");
                 M2Share.MainOutMessage(M2Share.g_sVersion);
                 M2Share.MainOutMessage(M2Share.g_sUpDateTime);
-                if (M2Share.nServerIndex == 0)
-                {
-                    M2Share.MainOutMessage("当前服务器运行主机模式...");
-                }
-                else
-                {
-                    M2Share.MainOutMessage("当前服务器运行节点模式...");
-                }
                 M2Share.boStartReady = true;
             }
             catch (Exception ex)
@@ -255,8 +248,6 @@ namespace M2Server
             M2Share.g_Config.nWinLotteryLevel6 = 0;
             M2Share.g_Config.GlobalVal=new int[20];
             M2Share.g_Config.GlobaDyMval = new short[100];
-            //FillChar(M2Share.g_Config.GlobalVal, sizeof(M2Share.g_Config.GlobalVal), '\0');
-            //FillChar(M2Share.g_Config.GlobaDyMval, sizeof(M2Share.g_Config.GlobaDyMval), '\0');
             M2Share.LoadConfig();
             M2Share.GroupServer = new GroupServer();
             M2Share.DataServer = new DataServer();
@@ -368,7 +359,6 @@ namespace M2Server
                         }
                     }
                 }
-                //LoadList.Free;
             }
         }
 
@@ -404,8 +394,7 @@ namespace M2Server
         private void StatisticTime()
         {
             var sc = new System.Text.StringBuilder();
-            sc.AppendLine(
-                $"({M2Share.UserEngine.MonsterCount}) {M2Share.UserEngine.OnlinePlayObject} / {M2Share.UserEngine.PlayObjectCount}  [{M2Share.UserEngine.LoadPlayCount}/{M2Share.UserEngine.m_PlayObjectFreeList.Count}]");
+            //sc.AppendLine($"({M2Share.UserEngine.MonsterCount}) {M2Share.UserEngine.OnlinePlayObject} / {M2Share.UserEngine.PlayObjectCount}  [{M2Share.UserEngine.LoadPlayCount}/{M2Share.UserEngine.m_PlayObjectFreeList.Count}]");
             //sc.AppendLine("Run:{0}/{1} Soc:{2}/{3} Usr:{4}/{5}",M2Share.nRunTimeMin, M2Share.nRunTimeMax, M2Share.g_nSockCountMin, M2Share.g_nSockCountMax,M2Share. g_nUsrTimeMin, M2Share.g_nUsrTimeMax);
             sc.AppendLine(string.Format("Hum:{0}/{1} UsrRot:{2}/{3} Merch:{4}/{5} Npc:{6}/{7} ({8})", M2Share.g_nHumCountMin,
                 M2Share.g_nHumCountMax, M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax,

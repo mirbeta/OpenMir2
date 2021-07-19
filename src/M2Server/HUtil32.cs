@@ -221,7 +221,7 @@ namespace M2Server
 
             var nLen = 0;
             if (bDecode)
-                nLen = Encoding.Default.GetByteCount(str);
+                nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
             else
                 nLen = str.Length;
             if (retby == null)
@@ -229,7 +229,7 @@ namespace M2Server
 
             if (bDecode)
             {
-                var by = Encoding.Default.GetBytes(str);
+                var by = Encoding.GetEncoding("gb2312").GetBytes(str);
                 var pb = retby + StartIndex;
                 for (var i = 0; i < by.Length; i++)
                     *pb++ = by[i];

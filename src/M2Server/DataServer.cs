@@ -66,18 +66,20 @@ namespace M2Server
             sCheckStr = EDcode.EncodeBuffer(by, by.Length);
             sSendMsg = "#" + nQueryID + "/" + sMsg + sCheckStr + "!";
             M2Share.g_Config.boDBSocketWorking = true;
-            var data = System.Text.Encoding.Default.GetBytes(sSendMsg);
+            var data = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sSendMsg);
             _clientScoket.Send(data);
         }
 
 
         private void DbScoketDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
+            _clientScoket.IsConnected = false;
             M2Share.ErrorMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]断开连接...");
         }
 
         private void DbScoketConnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
         {
+            _clientScoket.IsConnected = true;
             M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...", messageColor: System.ConsoleColor.Green);
         }
 

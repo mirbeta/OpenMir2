@@ -1012,9 +1012,12 @@ namespace M2Server
             {
                 var n18 = m_MonGenList.Count - 1;
                 if (n18 < 0) n18 = 0;
-                var MonGen = m_MonGenList[n18];
-                MonGen.CertList.Add(BaseObject);
-                MonGen.CertCount++;
+                if (m_MonGenList.Count > n18)
+                {
+                    var MonGen = m_MonGenList[n18];
+                    MonGen.CertList.Add(BaseObject);
+                    MonGen.CertCount++;
+                }
                 BaseObject.m_PEnvir.AddObject(BaseObject);
                 BaseObject.m_boAddToMaped = true;
             }

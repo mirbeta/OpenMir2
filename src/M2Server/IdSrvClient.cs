@@ -1,12 +1,9 @@
-using mSystemModule;
-using NetFramework;
-using NetFramework.AsyncSocketClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
-using SystemModule;
+using NetFramework;
+using NetFramework.AsyncSocketClient;
 
 namespace M2Server
 {
@@ -25,15 +22,10 @@ namespace M2Server
             IDSocket.OnConnected += IDSocketConnect;
             IDSocket.OnDisconnected += IDSocketDisconnect;
             IDSocket.ReceivedDatagram += IdSocketRead;
-            if (File.Exists(M2Share.sConfigFileName))
+            if (M2Share.g_Config != null)
             {
-                var conf = new IniFile(M2Share.sConfigFileName);
-                IDSocket.Address = conf.ReadString("Server", "IDSAddr", "127.0.0.1");
-                IDSocket.Port = conf.ReadInteger("Server", "IDSPort", 5600);
-            }
-            else
-            {
-                M2Share.MainOutMessage("File not found... <" + M2Share.sConfigFileName + '>');
+                IDSocket.Address = M2Share.ServerConf.Config.ReadString("Server", "IDSAddr", "127.0.0.1");
+                IDSocket.Port = M2Share.ServerConf.Config.ReadInteger("Server", "IDSPort", 5600);
             }
         }
 
@@ -51,7 +43,7 @@ namespace M2Server
             HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
             try
             {
-                var str = System.Text.Encoding.Default.GetString(e.Buff, 0, e.Buff.Length);
+                var str = System.Text.Encoding.GetEncoding("gb2312").GetString(e.Buff, 0, e.Buff.Length);
                 M2Share.g_Config.sIDSocketRecvText = M2Share.g_Config.sIDSocketRecvText + str;
             }
             finally
@@ -69,7 +61,7 @@ namespace M2Server
         private void SendSocket(string sSendMsg)
         {
             if (IDSocket == null || !IDSocket.IsConnected) return;
-            var data = System.Text.Encoding.Default.GetBytes(sSendMsg);
+            var data = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sSendMsg);
             IDSocket.Send(data);
         }
 
@@ -410,7 +402,14 @@ namespace M2Server
 
         public static TFrmIDSoc Instance
         {
-            get { return instance ?? (instance = new TFrmIDSoc()); }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new TFrmIDSoc();
+                }
+                return instance;
+            }
         }
     }
 }

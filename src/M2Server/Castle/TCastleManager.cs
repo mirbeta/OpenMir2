@@ -193,13 +193,13 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sCastleDir = LoadList[i].Trim();
-                    if (sCastleDir != "")
+                    if (!string.IsNullOrEmpty(sCastleDir))
                     {
                         Castle = new TUserCastle(sCastleDir);
                         _castleList.Add(Castle);
                     }
                 }
-                M2Share.MainOutMessage($"已读取 [{_castleList.Count}] 个城堡信息...", messageColor: ConsoleColor.Green);
+                M2Share.MainOutMessage(string.Format("已读取 [{0}] 个城堡信息...", _castleList.Count), messageColor: ConsoleColor.Green);
             }
             else
             {
@@ -210,9 +210,15 @@ namespace M2Server
         public void SaveCastleList()
         {
             ArrayList LoadList;
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir)) Directory.CreateDirectory(M2Share.g_Config.sCastleDir);
+            if (!Directory.Exists(M2Share.g_Config.sCastleDir))
+            {
+                Directory.CreateDirectory(M2Share.g_Config.sCastleDir);
+            }
             LoadList = new ArrayList();
-            for (var i = 0; i < _castleList.Count; i++) LoadList.Add(i.ToString());
+            for (var i = 0; i < _castleList.Count; i++)
+            {
+                LoadList.Add(i.ToString());
+            }
             //LoadList.SaveToFile(M2Share.g_Config.sCastleFile);
             //LoadList.Free;
         }
@@ -220,7 +226,10 @@ namespace M2Server
         public TUserCastle GetCastle(int nIndex)
         {
             TUserCastle result = null;
-            if (nIndex >= 0 && nIndex < _castleList.Count) result = _castleList[nIndex];
+            if (nIndex >= 0 && nIndex < _castleList.Count)
+            {
+                result = _castleList[nIndex];
+            }
             return result;
         }
 

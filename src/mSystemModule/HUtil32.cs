@@ -7,9 +7,6 @@ namespace SystemModule
 {
     public class HUtil32
     {
-        /// <summary>
-        /// ¸ù¾ÝGUID»ñÈ¡Î¨Ò»Êý×ÖÐòÁÐ
-        /// </summary>
         public static int Sequence()
         {
             var bytes = Guid.NewGuid().ToByteArray();
@@ -24,11 +21,11 @@ namespace SystemModule
             return sequence;
         }
 
-        [DllImport("winmm")]
-        public static extern uint timeGetTime();
 
-        [DllImport("kernel32")]
-        public static extern int GetTickCount();
+        public static int GetTickCount()
+        {
+            return System.Environment.TickCount;
+        }
 
 
         public static int MakeLong(int lowPart, int highPart)
@@ -107,7 +104,7 @@ namespace SystemModule
         }
         
         /// <summary>
-        /// ÅÐ¶ÏÊýÖµÊÇ·ñÔÚ·¶Î§Ö®ÄÚ
+        /// ï¿½Ð¶ï¿½ï¿½ï¿½Öµï¿½Ç·ï¿½ï¿½Ú·ï¿½Î§Ö®ï¿½ï¿½
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -118,7 +115,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// ÅÐ¶ÏÊýÖµÊÇ·ñÔÚ·¶Î§Ö®ÄÚ
+        /// ï¿½Ð¶ï¿½ï¿½ï¿½Öµï¿½Ç·ï¿½ï¿½Ú·ï¿½Î§Ö®ï¿½ï¿½
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -150,11 +147,6 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        /// <summary>
-        /// ×Ö·û´®×ªByteÊý×é
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
         public static unsafe byte[] StringToByteAry(string str)
         {
             var nLen = StringToBytePtr(str, null, 0);
@@ -167,17 +159,6 @@ namespace SystemModule
             return ret;
         }
 
-        /// <summary>
-        /// ×Ö·û´®×ªµ¤×Ö½Ú
-        /// Ë¼Â·£º¶ÔÓÚº¬ÓÐ¸ß×Ö½Ú²»Îª0µÄ£¬ËµÃ÷×Ö·û´®°üº¬ºº×Ö£¬ÓÃEncoding.Default.GetBytes
-        /// ÕâÑù»áµ¼ÖÂ·þÎñ¶Ëstring½á¹¹·¢Éú±ä»¯£¬µ«ÊÇ²»Ó°ÏìÍøÂç´«ÊäµÄÊý¾Ý
-        /// ¶ÔÓÚ¸ß×Ö½ÚÎª0µÄ£¬½ö´¦ÀíµÍ×Ö½Ú
-        /// retby Îª null ±íÊ¾½ö¼ÆËã³¤¶È²¢·µ»Ø
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="retby"></param>
-        /// <param name="StartIndex"></param>
-        /// <returns></returns>
         public static unsafe int StringToBytePtr(string str, byte* retby, int StartIndex)
         {
             var bDecode = false;
@@ -191,7 +172,7 @@ namespace SystemModule
 
             var nLen = 0;
             if (bDecode)
-                nLen = Encoding.Default.GetByteCount(str);
+                nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
             else
                 nLen = str.Length;
             if (retby == null)
@@ -199,7 +180,7 @@ namespace SystemModule
 
             if (bDecode)
             {
-                var by = Encoding.Default.GetBytes(str);
+                var by = Encoding.GetEncoding("gb2312").GetBytes(str);
                 var pb = retby + StartIndex;
                 for (var i = 0; i < by.Length; i++)
                     *pb++ = by[i];
@@ -361,13 +342,13 @@ namespace SystemModule
 
         public static string GetValidStr3(string Str, ref string Dest, char Divider)
         {
-            var Ary = Str.Split('/'); //·µ»Ø²»°üº¬¿ÕµÄÖµ
+            var Ary = Str.Split('/'); //ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½Öµ
             if (Ary.Length > 0)
-                Dest = Ary[0]; //Ä¿±êÖÃÎªµÚÒ»¸ö
+                Dest = Ary[0]; //Ä¿ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ò»ï¿½ï¿½
             else
                 Dest = "";
             if (Ary.Length > 1)
-                return Ary[1]; //·µ»ØµÚ¶þ¸ö
+                return Ary[1]; //ï¿½ï¿½ï¿½ØµÚ¶ï¿½ï¿½ï¿½
             else
                 return "";
         }
@@ -378,13 +359,13 @@ namespace SystemModule
             int i;
             for (i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i];
 
-            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //·µ»Ø²»°üº¬¿ÕµÄÖµ
+            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½Öµ
             if (Ary.Length > 0)
-                Dest = Ary[0]; //Ä¿±êÖÃÎªµÚÒ»¸ö
+                Dest = Ary[0]; //Ä¿ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ò»ï¿½ï¿½
             else
                 Dest = "";
             if (Ary.Length > 1)
-                return Ary[1]; //·µ»ØµÚ¶þ¸ö
+                return Ary[1]; //ï¿½ï¿½ï¿½ØµÚ¶ï¿½ï¿½ï¿½
             else
                 return "";
         }
@@ -393,7 +374,7 @@ namespace SystemModule
         {
             var Div = new char[DividerAry.Length];
             for (var i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i][0];
-            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //·µ»Ø²»°üº¬¿ÕµÄÖµ
+            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½Öµ
             Dest = Ary.Length > 0 ? Ary[0] : "";
             return Ary.Length > 1 ? Ary[1] : "";
         }
@@ -402,13 +383,11 @@ namespace SystemModule
         {
             var div = new char[DividerAry.Length];
             for (var i = 0; i < DividerAry.Length; i++) div[i] = DividerAry[i];
-            var Ary = Str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //·µ»Ø²»°üº¬¿ÕµÄÖµ
+            var Ary = Str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½Öµ
             Dest = Ary.Length > 0 ? Ary[0] : "";
             return Ary.Length > 1 ? Ary[1] : "";
         }
 
-        // " " capture => CaptureString (source: string; var rdstr: string): string;
-        // ** Ã³À½¿¡ " ´Â Ç×»ó ¸Ç Ã³À½¿¡ ÀÖ´Ù°í °¡Á¤
         public static string GetValidStrCap(string Str, ref string Dest, string[] Divider)
         {
             string result;
@@ -480,12 +459,12 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// ½ØÈ¡×Ö·û´® Àý ArrestStringEx('[1234]','[',']',str)    str=1234
+        /// ï¿½ï¿½È¡ï¿½Ö·ï¿½ï¿½ï¿½ ï¿½ï¿½ ArrestStringEx('[1234]','[',']',str)    str=1234
         /// </summary>
-        /// <param name="Source">Ô´×Ö·û´®</param>
-        /// <param name="SearchAfter">ÐèÒªÆ¥ÅäµÄ·ûºÅ</param>
-        /// <param name="ArrestBefore">ÐèÒªÆ¥ÅäµÄ·ûºÅ</param>
-        /// <param name="ArrestStr">½ØÈ¡Ö®ºóµÄ½á¹û</param>
+        /// <param name="Source">Ô´ï¿½Ö·ï¿½ï¿½ï¿½</param>
+        /// <param name="SearchAfter">ï¿½ï¿½ÒªÆ¥ï¿½ï¿½Ä·ï¿½ï¿½ï¿½</param>
+        /// <param name="ArrestBefore">ï¿½ï¿½ÒªÆ¥ï¿½ï¿½Ä·ï¿½ï¿½ï¿½</param>
+        /// <param name="ArrestStr">ï¿½ï¿½È¡Ö®ï¿½ï¿½Ä½ï¿½ï¿½</param>
         /// <returns></returns>
         public static string ArrestStringEx(string Source, string SearchAfter, string ArrestBefore,
             ref string ArrestStr)
@@ -877,8 +856,8 @@ namespace SystemModule
             return result;
         }
 
-        // GetValidStr3¿Í ´Þ¸® ½Äº°ÀÚ°¡ ¿¬¼ÓÀ¸·Î ³ª¿Ã°æ¿ì Ã³¸® ¾ÈµÊ
-        // ½Äº°ÀÚ°¡ ¾øÀ» °æ¿ì, nil ¸®ÅÏ..
+        // GetValidStr3ï¿½ï¿½ ï¿½Þ¸ï¿½ ï¿½Äºï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã°ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½Èµï¿½
+        // ï¿½Äºï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, nil ï¿½ï¿½ï¿½ï¿½..
         public static string DivString(string source, char cap, ref string sel)
         {
             string result;
@@ -1074,9 +1053,9 @@ namespace SystemModule
         {
             string result;
             if (b)
-                result = "ÊÇ";
+                result = "ï¿½ï¿½";
             else
-                result = "·ñ";
+                result = "ï¿½ï¿½";
             return result;
         }
 
@@ -1341,7 +1320,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// ×Ö·û´®×ªByte×Ö½ÚÊý×é
+        /// ï¿½Ö·ï¿½ï¿½ï¿½×ªByteï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="str"></param>
         /// <param name="strLength"></param>
@@ -1359,7 +1338,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// ·´ÐòÁÐ»¯
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½
         /// </summary>
         /// <param name="rawdatas"></param>
         /// <param name="retType"></param>

@@ -29,14 +29,14 @@ namespace M2Server
     {
         public bool LoadAdminList()
         {
-            bool result= false;
+            bool result = false;
             var sLineText = string.Empty;
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
             var sData = string.Empty;
             StringList LoadList;
             TAdminInfo AdminInfo;
-            string  sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
+            string sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
             if (!File.Exists(sfilename))
             {
                 return result;
@@ -93,9 +93,9 @@ namespace M2Server
 
                     if (nLv > 0)
                     {
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] {"/", "\\", " ", "\t"});
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new[] {"/", "\\", " ", "\t"});
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] {"/", "\\", " ", "\t"});
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sCharName, new[] { "/", "\\", " ", "\t" });
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] { "/", "\\", " ", "\t" });
                         if (string.IsNullOrEmpty(sCharName) || sIPaddr == "")
                         {
                             continue;
@@ -119,7 +119,7 @@ namespace M2Server
             var sPermission = string.Empty;
             int nPermission;
             TAdminInfo AdminInfo;
-            string  sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
+            string sfilename = Path.Combine(M2Share.g_Config.sEnvirDir, "AdminList.txt");
             StringList Savelist = new StringList();
             for (var i = 0; i < M2Share.UserEngine.m_AdminList.Count; i++)
             {
@@ -183,53 +183,60 @@ namespace M2Server
 
         public void LoadGuardList()
         {
-            var s14 = string.Empty;
-            var s1C = string.Empty;
-            var s20 = string.Empty;
-            var s24 = string.Empty;
-            var s28 = string.Empty;
-            var s2C = string.Empty;
-            StringList tGuardList;
-            TBaseObject tGuard;
-            var sfilename = M2Share.g_Config.sEnvirDir + "GuardList.txt";
-            if (File.Exists(sfilename))
+            try
             {
-                tGuardList = new StringList();
-                tGuardList.LoadFromFile(sfilename);
-                for (var i = 0; i < tGuardList.Count; i++)
+                var s14 = string.Empty;
+                var s1C = string.Empty;
+                var s20 = string.Empty;
+                var s24 = string.Empty;
+                var s28 = string.Empty;
+                var s2C = string.Empty;
+                StringList tGuardList;
+                TBaseObject tGuard;
+                var sfilename = Path.Combine(M2Share.g_Config.sEnvirDir, "GuardList.txt");
+                if (File.Exists(sfilename))
                 {
-                    s14 = tGuardList[i];
-                    if (s14 != "" && s14[0] != ';')
+                    tGuardList = new StringList();
+                    tGuardList.LoadFromFile(sfilename);
+                    for (var i = 0; i < tGuardList.Count; i++)
                     {
-                        s14 = HUtil32.GetValidStrCap(s14, ref s1C, new[] { " " });
-                        if (s1C != "" && s1C[0] == '\"')
+                        s14 = tGuardList[i];
+                        if (s14 != "" && s14[0] != ';')
                         {
-                            HUtil32.ArrestStringEx(s1C, '\"', '\"', ref s1C);
-                        }
-                        s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { ' ' });
-                        s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { ' ', ',' });
-                        s14 = HUtil32.GetValidStr3(s14, ref s28, new[] { ' ', ',', ':' });
-                        s14 = HUtil32.GetValidStr3(s14, ref s2C, new[] { ' ', ':' });
-                        if (s1C != "" && s20 != "" && s2C != "")
-                        {
-                            tGuard = M2Share.UserEngine.RegenMonsterByName(s20, (short)HUtil32.Str_ToInt(s24, 0), (short)HUtil32.Str_ToInt(s28, 0), s1C);
-                            if (tGuard != null)
+                            s14 = HUtil32.GetValidStrCap(s14, ref s1C, new[] { " " });
+                            if (s1C != "" && s1C[0] == '\"')
                             {
-                                tGuard.m_btDirection = (byte)HUtil32.Str_ToInt(s2C, 0);
+                                HUtil32.ArrestStringEx(s1C, '\"', '\"', ref s1C);
+                            }
+                            s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { ' ' });
+                            s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { ' ', ',' });
+                            s14 = HUtil32.GetValidStr3(s14, ref s28, new[] { ' ', ',', ':' });
+                            s14 = HUtil32.GetValidStr3(s14, ref s2C, new[] { ' ', ':' });
+                            if (s1C != "" && s20 != "" && s2C != "")
+                            {
+                                tGuard = M2Share.UserEngine.RegenMonsterByName(s20, (short)HUtil32.Str_ToInt(s24, 0), (short)HUtil32.Str_ToInt(s28, 0), s1C);
+                                if (tGuard != null)
+                                {
+                                    tGuard.m_btDirection = (byte)HUtil32.Str_ToInt(s2C, 0);
+                                }
                             }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
         }
 
         public int LoadItemsDB()
         {
-            int result;
+            int result = -1;
             int Idx;
             TItem Item;
             const string sSQLString = "SELECT * FROM STDITEMS";
-            HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
+            //HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
                 for (var i = 0; i < M2Share.UserEngine.StdItemList.Count; i++)
@@ -304,7 +311,6 @@ namespace M2Server
                                 Item.ItemType = grobal2.ITEM_ETC;
                                 break;
                         }
-
                         if (M2Share.UserEngine.StdItemList.Count == Idx)
                         {
                             M2Share.UserEngine.StdItemList.Add(Item);
@@ -322,6 +328,11 @@ namespace M2Server
                 M2Share.g_boGameLogHumanDie = M2Share.GetGameLogItemNameList(M2Share.g_sHumanDieEvent) == 1;
                 M2Share.g_boGameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGameGoldName) == 1;
                 M2Share.g_boGameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGamePointName) == 1;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return result;
             }
             finally
             {
@@ -395,7 +406,7 @@ namespace M2Server
             var s24 = string.Empty;
             StringList LoadList;
             ArrayList List28;
-            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir,"MakeItem.txt");
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MakeItem.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -799,7 +810,7 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);
                         // 集中座标刷新机率 1 -100
-                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 && 
+                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 &&
                             M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
                             MonGenInfo.CertList = new List<TBaseObject>();
@@ -1235,7 +1246,7 @@ namespace M2Server
                         {
                             if (M2Share.g_UnbindList.ContainsKey(n10))
                             {
-                                Console.WriteLine($"重复解包物品[{sItemName}]...");
+                                Console.WriteLine("重复解包物品[{0}]...", sItemName);
                                 continue;
                             }
                             M2Share.g_UnbindList.Add(n10, sItemName);

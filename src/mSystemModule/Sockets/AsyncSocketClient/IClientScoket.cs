@@ -152,7 +152,7 @@ namespace NetFramework.AsyncSocketClient
             {
                 return;
             }
-            var buffer = System.Text.Encoding.Default.GetBytes(str);
+            var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes(str);
             try
             {
                 //开始异步发送数据

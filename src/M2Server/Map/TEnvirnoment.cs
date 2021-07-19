@@ -637,89 +637,89 @@ namespace M2Server
             {
                 if (File.Exists(sMapFile))
                 {
-                    using (var fileStream = new FileStream(sMapFile, FileMode.Open, FileAccess.Read))
+                    using var fileStream = new FileStream(sMapFile, FileMode.Open, FileAccess.Read);
+                    using var binReader = new BinaryReader(fileStream);
+
+                    var bytData = new byte[52];
+                    binReader.Read(bytData, 0, bytData.Length);
+                    wWidth = BitConverter.ToInt16(bytData, 0);
+                    wHeight = BitConverter.ToInt16(bytData, 2);
+
+                    Initialize(wWidth, wHeight);
+
+                    var nMapSize = wWidth * muiSize * wHeight;
+                    buffer = new byte[nMapSize];
+                    binReader.Read(buffer, 0, nMapSize);
+                    var buffIndex = 0;
+
+                    for (var nW = 0; nW < wWidth; nW++)
                     {
-                        using (var binReader = new BinaryReader(fileStream))
+                        n24 = nW * wHeight;
+                        for (var nH = 0; nH < wHeight; nH++)
                         {
-                            var bytData = new byte[52];
-                            binReader.Read(bytData, 0, bytData.Length);
-                            wWidth = BitConverter.ToInt16(bytData, 0);
-                            wHeight = BitConverter.ToInt16(bytData, 2);
+                            MapCellArray[n24 + nH] = new TMapCellinfo();
 
-                            Initialize(wWidth, wHeight);
-                            var nMapSize = wWidth * muiSize * wHeight;
-                            buffer = new byte[nMapSize];
-                            binReader.Read(buffer, 0, nMapSize);
-                            var buffIndex = 0;
-                            for (var nW = 0; nW < wWidth; nW++)
+                            // wBkImg High
+                            if ((buffer[buffIndex + 1] & 0x80) != 0)
                             {
-                                n24 = nW * wHeight;
-                                for (var nH = 0; nH < wHeight; nH++)
+                                MapCellArray[n24 + nH].chFlag = 1;
+                            }
+                            // wFrImg High
+                            if ((buffer[buffIndex + 5] & 0x80) != 0)
+                            {
+                                MapCellArray[n24 + nH].chFlag = 2;
+                            }
+                            // btDoorIndex
+                            if ((buffer[buffIndex + 6] & 0x80) != 0)
+                            {
+                                Point = buffer[buffIndex + 6] & 0x7F;
+                                if (Point > 0)
                                 {
-                                    MapCellArray[n24 + nH] = new TMapCellinfo();
-
-                                    // wBkImg High
-                                    if ((buffer[buffIndex + 1] & 0x80) != 0)
+                                    Door = new TDoorInfo
                                     {
-                                        MapCellArray[n24 + nH].chFlag = 1;
-                                    }
-                                    // wFrImg High
-                                    if ((buffer[buffIndex + 5] & 0x80) != 0)
+                                        nX = nW,
+                                        nY = nH,
+                                        n08 = Point,
+                                        Status = null
+                                    };
+                                    for (var i = 0; i < m_DoorList.Count; i++)
                                     {
-                                        MapCellArray[n24 + nH].chFlag = 2;
-                                    }
-                                    // btDoorIndex
-                                    if ((buffer[buffIndex + 6] & 0x80) != 0)
-                                    {
-                                        Point = buffer[buffIndex + 6] & 0x7F;
-                                        if (Point > 0)
+                                        if (Math.Abs(m_DoorList[i].nX - Door.nX) <= 10)
                                         {
-                                            Door = new TDoorInfo
+                                            if (Math.Abs(m_DoorList[i].nY - Door.nY) <= 10)
                                             {
-                                                nX = nW,
-                                                nY = nH,
-                                                n08 = Point,
-                                                Status = null
-                                            };
-                                            for (var i = 0; i < m_DoorList.Count; i++)
-                                            {
-                                                if (Math.Abs(m_DoorList[i].nX - Door.nX) <= 10)
+                                                if (m_DoorList[i].n08 == Point)
                                                 {
-                                                    if (Math.Abs(m_DoorList[i].nY - Door.nY) <= 10)
-                                                    {
-                                                        if (m_DoorList[i].n08 == Point)
-                                                        {
-                                                            Door.Status = m_DoorList[i].Status;
-                                                            Door.Status.nRefCount++;
-                                                            break;
-                                                        }
-                                                    }
+                                                    Door.Status = m_DoorList[i].Status;
+                                                    Door.Status.nRefCount++;
+                                                    break;
                                                 }
                                             }
-                                            if (Door.Status == null)
-                                            {
-                                                Door.Status = new TDoorStatus
-                                                {
-                                                    boOpened = false,
-                                                    bo01 = false,
-                                                    n04 = 0,
-                                                    dwOpenTick = 0,
-                                                    nRefCount = 1
-                                                };
-                                            }
-                                            m_DoorList.Add(Door);
                                         }
                                     }
-                                    buffIndex += muiSize;
+                                    if (Door.Status == null)
+                                    {
+                                        Door.Status = new TDoorStatus
+                                        {
+                                            boOpened = false,
+                                            bo01 = false,
+                                            n04 = 0,
+                                            dwOpenTick = 0,
+                                            nRefCount = 1
+                                        };
+                                    }
+                                    m_DoorList.Add(Door);
                                 }
                             }
-                            binReader.Close();
-                            binReader.Dispose();
-                            fileStream.Close();
-                            fileStream.Dispose();
-                            result = true;
+                            buffIndex += muiSize;
                         }
                     }
+
+                    binReader.Close();
+                    binReader.Dispose();
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    result = true;
                 }
             }
             catch

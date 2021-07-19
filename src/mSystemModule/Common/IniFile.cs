@@ -189,7 +189,7 @@ namespace mSystemModule
                 File.Create(this.FileName).Close();
                 return false;
             }
-            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default);
+            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
             if (rd == null)
             {
                 return false;
@@ -303,7 +303,7 @@ namespace mSystemModule
                 {
                     fi.IsReadOnly = false;
                 }
-                StreamWriter sw = new StreamWriter(File.Open(this.FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.Default);
+                StreamWriter sw = new StreamWriter(File.Open(this.FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
                 foreach (KeyValuePair<string, Dictionary<string, string>> pair in this.iniCahce)
                 {
                     sw.WriteLine("[" + pair.Key + "]");
@@ -350,17 +350,17 @@ namespace mSystemModule
         
         public void WriteBool(string section, string key, bool val)
         {
-            Console.WriteLine("todo ini WriteBool");
+            //Console.WriteLine("todo ini WriteBool");
         }
 
         public void WriteInteger(string section, string key, object val)
         {
-            Console.WriteLine("todo ini WriteInteger");
+            //Console.WriteLine("todo ini WriteInteger");
         }
 
         public void WriteDateTime(string section, string key, DateTime val)
         {
-            Console.WriteLine("todo ini WriteDateTime");
+            //Console.WriteLine("todo ini WriteDateTime");
         }
 
         public void WriteString(string section, string key, object str)

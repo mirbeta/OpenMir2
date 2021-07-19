@@ -26,7 +26,7 @@ namespace M2Server
         {
             var packegeLen = binaryReader.ReadByte();
             var strbuff = binaryReader.ReadBytes(size);
-            return Encoding.Default.GetString(strbuff, 0, packegeLen);
+            return Encoding.GetEncoding("gb2312").GetString(strbuff, 0, packegeLen);
         }
 
         public int ReadInt32()

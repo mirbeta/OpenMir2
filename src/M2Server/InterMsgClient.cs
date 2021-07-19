@@ -93,7 +93,7 @@ namespace M2Server
         {
             if (MsgClient.IsConnected)
             {
-                var buff = System.Text.Encoding.Default.GetBytes("(" + sMsg + ")");
+                var buff = System.Text.Encoding.GetEncoding("gb2312").GetBytes("(" + sMsg + ")");
                 MsgClient.Send(buff);
             }
         }
@@ -136,11 +136,6 @@ namespace M2Server
                 }
                 return instance;
             }
-        }
-
-        public InterMsgClient()
-        {
-
         }
     }
 }

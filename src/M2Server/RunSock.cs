@@ -843,14 +843,14 @@ namespace M2Server
                                 if (GateUser.boCertification && nMsgLen >= sizeof(TDefaultMessage))
                                 {
                                     var defMsg = (TDefaultMessage*)MsgBuff;
-                                    if (nMsgLen == sizeof(TDefaultMessage))
+                                    if (nMsgLen == sizeof(TDefaultMessage)) 
                                     {
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, null);
+                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, *defMsg, null);
                                     }
                                     else
                                     {
-                                        var sMsg = EncryptUnit.DeCodeString(HUtil32.StrPas(MsgBuff + sizeof(TDefaultMessage)), true);//解码
-                                        M2Share.UserEngine.ProcessUserMessage((TPlayObject)GateUser.PlayObject, *defMsg, sMsg);
+                                        var sMsg = EDcode.DeCodeString(HUtil32.StrPas(MsgBuff + sizeof(TDefaultMessage)), true);
+                                        M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, *defMsg, sMsg);
                                     }
                                 }
                             }

@@ -1,20 +1,34 @@
 ﻿using System.IO;
-using SystemModule;
 using mSystemModule;
 
 namespace M2Server.Configs
 {
     public class ServerConfig
     {
-        private readonly IniFile Config;
-        private readonly IniFile ExpConf;
-        private readonly IniFile StringConf;
+        public readonly IniFile Config;
+        public readonly IniFile ExpConf;
+        public readonly IniFile StringConf;
 
         public ServerConfig()
         {
-            StringConf = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sStringFileName));
-            Config = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sConfigFileName));
-            ExpConf = new IniFile(Path.Combine(M2Share.sBaseDir,M2Share.sExpConfigFileName));
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix && System.Environment.OSVersion.Version.Major>=11)
+            {
+                StringConf = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sStringFileName));
+                Config = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sExpConfigFileName));
+            }
+            else if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
+            {
+                StringConf = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sStringFileName));
+                Config = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sExpConfigFileName));
+            }
+            else
+            {
+                StringConf = new IniFile(M2Share.sStringFileName);
+                Config = new IniFile(M2Share.sConfigFileName);
+                ExpConf = new IniFile(M2Share.sExpConfigFileName);
+            }
             Config.Load();
             StringConf.Load();
             ExpConf.Load();
@@ -259,7 +273,7 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "GuildFile", "") == "")
                 Config.WriteString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
             M2Share.g_Config.sGuildFile = Config.ReadString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
-            M2Share.g_Config.sGuildFile = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sGuildFile);
+            M2Share.g_Config.sGuildFile = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sGuildFile);
             if (Config.ReadString("Share", "VentureDir", "") == "")
                 Config.WriteString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
             M2Share.g_Config.sVentureDir = Config.ReadString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
@@ -272,22 +286,22 @@ namespace M2Server.Configs
             if (Config.ReadString("Share", "CastleFile", "") == "")
                 Config.WriteString("Share", "CastleFile", M2Share.g_Config.sCastleDir + "List.txt");
             M2Share.g_Config.sCastleFile = Config.ReadString("Share", "CastleFile", M2Share.g_Config.sCastleFile);
-            M2Share.g_Config.sCastleFile = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sCastleFile);
+            M2Share.g_Config.sCastleFile = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sCastleFile);
 
             if (Config.ReadString("Share", "EnvirDir", "") == "")
             {
                 Config.WriteString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
             }
             M2Share.g_Config.sEnvirDir = Config.ReadString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
-            M2Share.g_Config.sEnvirDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sEnvirDir);
+            M2Share.g_Config.sEnvirDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sEnvirDir);
             if (Config.ReadString("Share", "MapDir", "") == "")
                 Config.WriteString("Share", "MapDir", M2Share.g_Config.sMapDir);
             M2Share.g_Config.sMapDir = Config.ReadString("Share", "MapDir", M2Share.g_Config.sMapDir);
-            M2Share.g_Config.sMapDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sMapDir);
+            M2Share.g_Config.sMapDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sMapDir);
             if (Config.ReadString("Share", "NoticeDir", "") == "")
                 Config.WriteString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
             M2Share.g_Config.sNoticeDir = Config.ReadString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
-            M2Share.g_Config.sNoticeDir = Path.Combine(M2Share.sBaseDir, M2Share.g_Config.sNoticeDir);
+            M2Share.g_Config.sNoticeDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sNoticeDir);
             sLoadString = Config.ReadString("Share", "LogDir", "");
             if (sLoadString == "")
                 Config.WriteString("Share", "LogDir", M2Share.g_Config.sLogDir);
@@ -748,7 +762,7 @@ namespace M2Server.Configs
                 Config.ReadInteger<short>("Setup", "NakedAbilofWizardAC", M2Share.g_Config.NakedAbilofWizard.AC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardMAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardMAC", M2Share.g_Config.NakedAbilofWizard.MAC);
-            M2Share.g_Config.NakedAbilofWizard.MAC = Config.ReadInteger<short>("Setup", "NakedAbilofWizardMAC",  M2Share.g_Config.NakedAbilofWizard.MAC);
+            M2Share.g_Config.NakedAbilofWizard.MAC = Config.ReadInteger<short>("Setup", "NakedAbilofWizardMAC", M2Share.g_Config.NakedAbilofWizard.MAC);
             if (Config.ReadInteger("Setup", "NakedAbilofWizardHP", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofWizardHP", M2Share.g_Config.NakedAbilofWizard.HP);
             M2Share.g_Config.NakedAbilofWizard.HP =
@@ -779,7 +793,7 @@ namespace M2Server.Configs
                 Config.ReadInteger<short>("Setup", "NakedAbilofTaosMC", M2Share.g_Config.NakedAbilofTaos.MC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosSC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
-            M2Share.g_Config.NakedAbilofTaos.SC =Config.ReadInteger<short>("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
+            M2Share.g_Config.NakedAbilofTaos.SC = Config.ReadInteger<short>("Setup", "NakedAbilofTaosSC", M2Share.g_Config.NakedAbilofTaos.SC);
             if (Config.ReadInteger("Setup", "NakedAbilofTaosAC", -1) < 0)
                 Config.WriteInteger("Setup", "NakedAbilofTaosAC", M2Share.g_Config.NakedAbilofTaos.AC);
             M2Share.g_Config.NakedAbilofTaos.AC =

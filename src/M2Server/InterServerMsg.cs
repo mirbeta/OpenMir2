@@ -87,7 +87,7 @@ namespace M2Server
         {
             if (Socket.Connected)
             {
-                var buffer = System.Text.Encoding.Default.GetBytes("(" + sMsg + ")");
+                var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes("(" + sMsg + ")");
                 Socket.Send(buffer);
             }
         }
@@ -158,7 +158,7 @@ namespace M2Server
                 }
                 if (m_SrvArray[i].SocketId == e.ConnectionId)
                 {
-                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + System.Text.Encoding.Default.GetString(e.ReceiveBuffer, 0, e.BytesReceived);
+                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + System.Text.Encoding.GetEncoding("gb2312").GetString(e.ReceiveBuffer, 0, e.BytesReceived);
                 }
             }
         }

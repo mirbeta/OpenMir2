@@ -13,7 +13,7 @@ namespace NetFramework
         {
             this.socket = soc;
             this.Buff = datain;
-            this.Data = System.Text.Encoding.Default.GetString(datain, 0, datain.Length);
+            this.Data = System.Text.Encoding.GetEncoding("gb2312").GetString(datain, 0, datain.Length);
         }
     }
 }

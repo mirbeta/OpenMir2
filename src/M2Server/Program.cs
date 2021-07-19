@@ -1,5 +1,6 @@
 using System;
 using System.Runtime;
+using System.Text;
 using System.Threading;
 
 namespace M2Server
@@ -12,6 +13,7 @@ namespace M2Server
         [STAThread]
         public static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
             serverThread = new Thread(Start);
