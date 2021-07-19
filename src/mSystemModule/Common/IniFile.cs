@@ -188,7 +188,7 @@ namespace mSystemModule
                 File.Create(this.FileName).Close();
                 return false;
             }
-            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
+            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default);
             if (rd == null)
             {
                 return false;

@@ -35,7 +35,7 @@ namespace M2Server
             {
                 return;
             }
-            IDSocket.Connect();
+            IDSocket.Connect(IDSocket.Address, IDSocket.Port);
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -55,7 +55,7 @@ namespace M2Server
         public void Initialize()
         {
             Connected(null);
-            _heartTimer = new Timer(Connected, null, 1000, 60000);
+            _heartTimer = new Timer(Connected, null, 1000, 3000);
         }
 
         private void SendSocket(string sSendMsg)
@@ -370,6 +370,7 @@ namespace M2Server
             if (!M2Share.g_Config.boIDSocketConnected) return;
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
+            IDSocket.IsConnected = false;
             M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]断开连接...");
         }
 

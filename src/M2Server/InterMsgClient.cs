@@ -1,5 +1,6 @@
 using NetFramework.AsyncSocketClient;
 using System;
+using System.Threading;
 
 namespace M2Server
 {
@@ -8,6 +9,7 @@ namespace M2Server
         private int dw2D4Tick = 0;
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket MsgClient;
+        private Timer _heartTimer;
 
         public TFrmMsgClient()
         {
@@ -24,6 +26,7 @@ namespace M2Server
             MsgClient.Port = M2Share.g_Config.nMsgSrvPort;
             dw2D4Tick = HUtil32.GetTickCount();
             MsgClient.Connect();
+            _heartTimer = new Timer(Connected, null, 1000, 3000);
         }
 
         public void Run()
@@ -39,6 +42,15 @@ namespace M2Server
                     dw2D4Tick = HUtil32.GetTickCount();
                 }
             }
+        }
+
+        private void Connected(object obj)
+        {
+            if (MsgClient.IsConnected)
+            {
+                return;
+            }
+            MsgClient.Connect();
         }
 
         private bool IsConnect()

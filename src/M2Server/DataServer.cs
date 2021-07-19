@@ -18,7 +18,7 @@ namespace M2Server
 
         public void Start()
         { 
-            _connectTimer = new Timer(ConnectTimerTime, null, 0, 10000);
+            _connectTimer = new Timer(ConnectTimerTime, null, 5000, 3000);
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
 
@@ -32,7 +32,7 @@ namespace M2Server
         {
             if (!_clientScoket.IsConnected)
             {
-                _clientScoket.Connect();
+                _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
             }
         }
 
