@@ -8,7 +8,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>bin\Debug\</OutputPath>
+      <OutputPath>bin\Debug\net5.0</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
