@@ -39,7 +39,7 @@ namespace M2Server
                     M2Share.MainOutMessage("物品数据库加载失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("物品数据库加载成功({0})...", M2Share.UserEngine.StdItemList.Count));
+                M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
                 M2Share.MainOutMessage("正在加载数据图文件...");
                 nCode = Maps.LoadMinMap();
                 if (nCode < 0)
@@ -55,7 +55,7 @@ namespace M2Server
                     M2Share.MainOutMessage("地图数据加载失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("地图数据加载成功({0})...", M2Share.g_MapManager.Maps.Count));
+                M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
                 M2Share.MainOutMessage("正在加载怪物数据库...");
                 nCode = LocalDB.FrmDB.LoadMonsterDB();
                 if (nCode < 0)
@@ -63,7 +63,7 @@ namespace M2Server
                     M2Share.MainOutMessage("加载怪物数据库失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("加载怪物数据库成功({0})...", M2Share.UserEngine.MonsterList.Count ));
+                M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
                 M2Share.MainOutMessage("正在加载技能数据库...");
                 nCode = LocalDB.FrmDB.LoadMagicDB();
                 if (nCode < 0)
@@ -71,7 +71,7 @@ namespace M2Server
                     M2Share.MainOutMessage("加载技能数据库失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("加载技能数据库成功({0})...",  M2Share.UserEngine.m_MagicList.Count ));
+                M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
                 M2Share.MainOutMessage("正在加载怪物刷新配置信息...");
                 nCode = LocalDB.FrmDB.LoadMonGen();
                 if (nCode < 0)
@@ -79,10 +79,10 @@ namespace M2Server
                     M2Share.MainOutMessage("加载怪物刷新配置信息失败！！！" + "Code: " + nCode);
                     return;
                 }
-                M2Share.MainOutMessage(string.Format("加载怪物刷新配置信息成功({0})...",  M2Share.UserEngine.m_MonGenList.Count ));
+                M2Share.MainOutMessage($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
                 M2Share.MainOutMessage("正加载怪物说话配置信息...");
                 M2Share.LoadMonSayMsg();
-                M2Share.MainOutMessage(string.Format("加载怪物说话配置信息成功({0})...",  M2Share.g_MonSayMsgList.Count ));
+                M2Share.MainOutMessage($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
                 M2Share.LoadDisableTakeOffList();
                 M2Share.LoadMonDropLimitList();
                 M2Share.LoadDisableMakeItem();
@@ -396,11 +396,8 @@ namespace M2Server
             var sc = new System.Text.StringBuilder();
             //sc.AppendLine($"({M2Share.UserEngine.MonsterCount}) {M2Share.UserEngine.OnlinePlayObject} / {M2Share.UserEngine.PlayObjectCount}  [{M2Share.UserEngine.LoadPlayCount}/{M2Share.UserEngine.m_PlayObjectFreeList.Count}]");
             //sc.AppendLine("Run:{0}/{1} Soc:{2}/{3} Usr:{4}/{5}",M2Share.nRunTimeMin, M2Share.nRunTimeMax, M2Share.g_nSockCountMin, M2Share.g_nSockCountMax,M2Share. g_nUsrTimeMin, M2Share.g_nUsrTimeMax);
-            sc.AppendLine(string.Format("Hum:{0}/{1} UsrRot:{2}/{3} Merch:{4}/{5} Npc:{6}/{7} ({8})", M2Share.g_nHumCountMin,
-                M2Share.g_nHumCountMax, M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax,
-                M2Share.UserEngine.dwProcessMerchantTimeMin, M2Share.UserEngine.dwProcessMerchantTimeMax,
-                M2Share.UserEngine.dwProcessNpcTimeMin, M2Share.UserEngine.dwProcessNpcTimeMax,
-                M2Share.g_nProcessHumanLoopTime));
+            sc.AppendLine(
+                $"Hum:{M2Share.g_nHumCountMin}/{M2Share.g_nHumCountMax} UsrRot:{M2Share.dwUsrRotCountMin}/{M2Share.dwUsrRotCountMax} Merch:{M2Share.UserEngine.dwProcessMerchantTimeMin}/{M2Share.UserEngine.dwProcessMerchantTimeMax} Npc:{M2Share.UserEngine.dwProcessNpcTimeMin}/{M2Share.UserEngine.dwProcessNpcTimeMax} ({M2Share.g_nProcessHumanLoopTime})");
             //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
         }
     }

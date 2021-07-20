@@ -85,14 +85,14 @@ namespace M2Server.CommandSystem
         /// <param name="line">命令字符串</param>
         /// <param name="PlayObject">命令对象</param>
         /// <returns><see cref="bool"/></returns>
-        public bool ExecCmd(string line, TPlayObject PlayObject)
+        public bool ExecCmd(string line, TPlayObject playObject)
         {
             var output = string.Empty;
             string command;
             string parameters;
             var found = false;
 
-            if (PlayObject == null)
+            if (playObject == null)
                 throw new ArgumentException("PlayObject");
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return found;
@@ -100,7 +100,7 @@ namespace M2Server.CommandSystem
             BaseCommond commond = null;
             if(CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(parameters, PlayObject);
+                output = commond.Handle(parameters, playObject);
                 found = true;
             }
 
@@ -112,7 +112,7 @@ namespace M2Server.CommandSystem
             //把返回结果给玩家
             if (!string.IsNullOrEmpty(output))
             {
-                PlayObject.SysMsg(output, TMsgColor.c_Red, TMsgType.t_Hint);
+                playObject.SysMsg(output, TMsgColor.c_Red, TMsgType.t_Hint);
             }
             return found;
         }

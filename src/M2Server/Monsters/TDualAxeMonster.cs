@@ -29,7 +29,7 @@ namespace M2Server
             }
         }
 
-        public override bool AttackTarget()
+        protected override bool AttackTarget()
         {
             var result = false;
             if (m_TargetCret == null)

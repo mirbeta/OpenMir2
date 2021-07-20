@@ -1695,7 +1695,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.CM_SAY:
-                    if (ProcessMsg.sMsg != "")
+                    if (!string.IsNullOrEmpty(ProcessMsg.sMsg))
                     {
                         ProcessUserLineMsg(ProcessMsg.sMsg);
                     }

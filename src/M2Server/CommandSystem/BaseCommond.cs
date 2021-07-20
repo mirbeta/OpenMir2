@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using SystemModule;
 
 namespace M2Server
 {
     public class BaseCommond
     {
-        public GameCommandAttribute Attributes { get; private set; }
+        protected GameCommandAttribute Attributes { get; private set; }
 
         private readonly Dictionary<CommandAttribute, MethodInfo> _commands =
             new Dictionary<CommandAttribute, MethodInfo>();
@@ -40,7 +39,7 @@ namespace M2Server
                 }
                 else
                 {
-                    M2Share.ErrorMessage(string.Format("命令名称重复: {0}", attribute.Name));
+                    M2Share.ErrorMessage($"命令名称重复: {attribute.Name}");
                 }
             }
         }
@@ -64,21 +63,21 @@ namespace M2Server
         /// 处理命令
         /// </summary>
         /// <param name="parameters"></param>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <returns></returns>
-        public virtual string Handle(string parameters, TPlayObject PlayObject = null)
+        public virtual string Handle(string parameters, TPlayObject playObject = null)
         {
             // 检查用户是否有足够的权限来调用命令。
-            if (PlayObject != null && this.Attributes.nPermissionMin > PlayObject.m_btPermission)
+            if (playObject != null && this.Attributes.nPermissionMin > playObject.m_btPermission)
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足
             }
-            var result = string.Empty;
             string[] @params = null;
             CommandAttribute target = null;
-
             if (parameters == string.Empty)
+            {
                 target = this.GetDefaultSubcommand();
+            }
             else
             {
                 @params = parameters.Split(' ');
@@ -87,21 +86,20 @@ namespace M2Server
                 if (target != this.GetDefaultSubcommand())
                     @params = @params.Skip(1).ToArray();
             }
-
             // 检查用户是否有足够的权限来调用命令
-            if (PlayObject != null && target.MinUserLevel > PlayObject.m_btPermission)
+            if (playObject != null && target.MinUserLevel > playObject.m_btPermission)
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足
             }
-
-            var MethodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
-            if (MethodsParamsCount > 1) //默认参数为当前对象，即：PlayObject
+            string result;
+            var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
+            if (methodsParamsCount > 1) //默认参数为当前对象，即：PlayObject
             {
-                result = (string)this._commands[target].Invoke(this, new object[] { @params, PlayObject });
+                result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
             }
             else
             {
-                result = (string)this._commands[target].Invoke(this, new object[] { null, PlayObject });
+                result = (string)this._commands[target].Invoke(this, new object[] { null, playObject });
             }
             return result;
         }

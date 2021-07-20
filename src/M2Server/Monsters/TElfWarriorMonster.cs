@@ -1,5 +1,8 @@
 ﻿namespace M2Server
 {
+    /// <summary>
+    /// 神兽
+    /// </summary>
     public class TElfWarriorMonster : TSpitSpider
     {
         private bool boIsFirst = false;
@@ -39,9 +42,6 @@
 
         public override void Run()
         {
-            bool boChangeFace;
-            TBaseObject ElfMon = null;
-            string ElfName;
             if (boIsFirst)
             {
                 boIsFirst = false;
@@ -58,7 +58,7 @@
             }
             else
             {
-                boChangeFace = true;
+                bool boChangeFace = true;
                 if (m_TargetCret != null)
                 {
                     boChangeFace = false;
@@ -71,20 +71,21 @@
                 {
                     if (HUtil32.GetTickCount() - dwDigDownTick > 6 * 10 * 1000)
                     {
-                        ElfName = m_sCharName;
-                        if (ElfName[ElfName.Length - 1] == '1')
+                        TBaseObject elfMon = null;
+                        var ElfName = m_sCharName;
+                        if (ElfName[^1] == '1')
                         {
                             ElfName = ElfName.Substring(0, ElfName.Length - 1);
-                            ElfMon = MakeClone(ElfName, this);
+                            elfMon = MakeClone(ElfName, this);
                         }
-                        if (ElfMon != null)
+                        if (elfMon != null)
                         {
                             SendRefMsg(grobal2.RM_DIGDOWN, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
-                            SendRefMsg(grobal2.RM_CHANGEFACE, 0, ObjectId, ElfMon.ObjectId, 0, "");
-                            ElfMon.m_boAutoChangeColor = m_boAutoChangeColor;
-                            if (ElfMon is TElfMonster)
+                            SendRefMsg(grobal2.RM_CHANGEFACE, 0, ObjectId, elfMon.ObjectId, 0, "");
+                            elfMon.m_boAutoChangeColor = m_boAutoChangeColor;
+                            if (elfMon is TElfMonster)
                             {
-                                (ElfMon as TElfMonster).AppearNow();
+                                (elfMon as TElfMonster).AppearNow();
                             }
                             m_Master = null;
                             KickException();

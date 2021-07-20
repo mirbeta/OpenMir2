@@ -9,7 +9,7 @@ namespace M2Server
             m_boAnimal = false;
         }
 
-        public virtual bool AttackTarget()
+        protected virtual bool AttackTarget()
         {
             var result = false;
             TBaseObject BaseObject;

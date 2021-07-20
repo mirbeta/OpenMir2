@@ -530,15 +530,8 @@ namespace M2Server
                     }
                     break;
                 case grobal2.SKILL_43:
-                    // SKILL_41: begin  //狮子吼
-                    // if MagGroupMb(PlayObject,UserMagic,nTargetX, nTargetY,TargeTBaseObject) then
-                    // boTrain:=True;
-                    // end;
                     break;
                 case grobal2.SKILL_44:
-                    // 破空剑
-                    // 法师
-                    // 结冰掌
                     if (MagHbFireBall(PlayObject, UserMagic, nTargetX, nTargetY, ref TargeTBaseObject))
                     {
                         boTrain = true;

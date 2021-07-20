@@ -62,10 +62,6 @@ namespace M2Server
             {
                 return;
             }
-            // m_btDirection:=hiter.m_btDirection;
-            // n550:=Random(4) + (n550 + 4);
-            // n550:=_MIN(20,n550);
-            // m_PEnvir.GetNextPosition(m_nCurrX,m_nCurrY,m_btDirection,n550,m_nTargetX,m_nTargetY);
         }
 
         public override void Run()
@@ -73,10 +69,8 @@ namespace M2Server
             int nAttackDir;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000)
             {
-
                 if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
                 {
-
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
@@ -89,10 +83,8 @@ namespace M2Server
                     }
                     GetBackPosition(ref m_nTargetX, ref m_nTargetY);
                 }
-
                 if (m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6 && HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
                 {
-
                     m_dwHitTick = HUtil32.GetTickCount();
                     nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
                     LightingAttack(nAttackDir);

@@ -36,13 +36,11 @@ namespace M2Server
                 {
                     m_boDupMode = true;
                 }
-
                 if (!IsProperTarget(m_TargetCret))
                 {
                     m_TargetCret = null;
                 }
             }
-
             if (m_boDupMode)
             {
                 int nOldX = m_nCurrX;
@@ -52,11 +50,9 @@ namespace M2Server
                 {
                     return result;
                 }
-
                 m_boDupMode = false;
                 result = true;
             }
-
             return result;
         }
 

@@ -160,7 +160,7 @@ namespace M2Server
             int nFlag;
             int nValue;
             int nLen;
-            const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = %s";
+            const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = {0}";
             try
             {
                 nLen = sData.Length;

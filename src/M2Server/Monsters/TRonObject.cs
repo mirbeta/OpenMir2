@@ -11,7 +11,7 @@ namespace M2Server
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        public void AroundAttack()
+        private void AroundAttack()
         {
             TBaseObject BaseObject;
             short wHitMode = 0;
@@ -26,7 +26,6 @@ namespace M2Server
                     if (BaseObject != null)
                     {
                         _Attack(ref wHitMode, BaseObject);
-                        // CM_HIT
                         xTargetList.RemoveAt(i);
                     }
                 }

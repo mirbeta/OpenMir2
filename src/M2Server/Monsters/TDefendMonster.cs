@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace M2Server
+﻿namespace M2Server
 {
     public class TDefendMonster : TMonster
     {
