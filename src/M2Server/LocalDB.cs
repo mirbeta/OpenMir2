@@ -36,7 +36,7 @@ namespace M2Server
             var sData = string.Empty;
             StringList LoadList;
             TAdminInfo AdminInfo;
-            string sfilename = M2Share.g_Config.sEnvirDir + "AdminList.txt";
+            string sfilename = Path.Combine(M2Share.g_Config.sEnvirDir, "AdminList.txt");
             if (!File.Exists(sfilename))
             {
                 return result;
@@ -682,7 +682,7 @@ namespace M2Server
             var sIsCalste = string.Empty;
             var sCanMove = string.Empty;
             var sMoveTime = string.Empty;
-            var sFileName = M2Share.g_Config.sEnvirDir + "Merchant.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Merchant.txt");
             if (File.Exists(sFileName))
             {
                 var tMerchantList = new StringList();
@@ -759,7 +759,7 @@ namespace M2Server
             var sData = string.Empty;
             int i;
             var result = 0;
-            var sFileName = M2Share.g_Config.sEnvirDir + "MonGen.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MonGen.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -915,7 +915,7 @@ namespace M2Server
             StringList LoadList;
             var s30 = string.Empty;
             var result = 0;
-            var s24 = M2Share.g_Config.sEnvirDir + "MonItems\\" + MonName + ".txt";
+            var s24 = Path.Combine(M2Share.g_Config.sEnvirDir, "MonItems", $"{MonName}.txt");
             if (File.Exists(s24))
             {
                 if (ItemList != null)
@@ -1178,7 +1178,7 @@ namespace M2Server
             var s30 = string.Empty;
             StringList LoadList;
             TStartPoint StartPoint;
-            var sFileName = M2Share.g_Config.sEnvirDir + "StartPoint.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "StartPoint.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.StartPointList.Clear();
@@ -1225,7 +1225,7 @@ namespace M2Server
             var sItemName = string.Empty;
             StringList LoadList;
             int n10;
-            var sFileName = M2Share.g_Config.sEnvirDir + "UnbindList.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "UnbindList.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -1359,7 +1359,7 @@ namespace M2Server
             TMerchant Merchant;
             StringList LoadList;
             bool boNewNpc;
-            var sFileName = M2Share.g_Config.sEnvirDir + "Merchant.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Merchant.txt");
             if (!File.Exists(sFileName))
             {
                 return;
