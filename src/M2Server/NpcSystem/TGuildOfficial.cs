@@ -85,7 +85,7 @@ namespace M2Server
                     }
                     else if (HUtil32.CompareLStr(sLabel, M2Share.sREQUESTCASTLEWAR, M2Share.sREQUESTCASTLEWAR.Length))
                     {
-                        ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length + 1 - 1, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
+                        ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
                     }
                     else if (sLabel.ToLower().CompareTo(M2Share.sEXIT.ToLower()) == 0)
                     {

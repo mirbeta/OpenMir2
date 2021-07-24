@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace M2Server
 {
@@ -658,7 +659,6 @@ namespace M2Server
                         for (var nH = 0; nH < wHeight; nH++)
                         {
                             MapCellArray[n24 + nH] = new TMapCellinfo();
-
                             // wBkImg High
                             if ((buffer[buffIndex + 1] & 0x80) != 0)
                             {
@@ -714,7 +714,6 @@ namespace M2Server
                             buffIndex += muiSize;
                         }
                     }
-
                     binReader.Close();
                     binReader.Dispose();
                     fileStream.Close();
@@ -722,7 +721,7 @@ namespace M2Server
                     result = true;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 M2Share.MainOutMessage("[Exception] TEnvirnoment.LoadMapData");
             }

@@ -15,10 +15,12 @@ namespace M2Server
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
+            serverApp = new ServerApp();
+            serverApp.StartServer();
 
-            serverThread = new Thread(Start);
-            serverThread.IsBackground = true;
-            serverThread.Start();
+            //serverThread = new Thread(Start);
+            //serverThread.IsBackground = true;
+            //serverThread.Start();
 
             while (true)
             {
@@ -38,8 +40,6 @@ namespace M2Server
 
         static void Start(object obj)
         {
-            serverApp = new ServerApp();
-            serverApp.StartServer();
         }
     }
 }

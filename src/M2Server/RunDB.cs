@@ -78,7 +78,7 @@ namespace M2Server
                                     else
                                     {
                                         sDefMsg = s28.Substring(0, grobal2.DEFBLOCKSIZE);
-                                        s38 = s28.Substring(grobal2.DEFBLOCKSIZE + 1 - 1, s28.Length - grobal2.DEFBLOCKSIZE - 6);
+                                        s38 = s28.Substring(grobal2.DEFBLOCKSIZE, s28.Length - grobal2.DEFBLOCKSIZE - 6);
                                     }
                                     DefMsg = EDcode.DecodeMessage(sDefMsg);
                                     nIdent = DefMsg.Ident;

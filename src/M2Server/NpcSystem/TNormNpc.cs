@@ -7545,7 +7545,7 @@ namespace M2Server
             int n10 = sMsg.IndexOf(sStr);
             if (n10 > 0)
             {
-                s14 = sMsg.Substring(1 - 1, n10 - 1);
+                s14 = sMsg.Substring(0, n10 - 1);
                 s18 = sMsg.Substring(sStr.Length + n10 - 1, sMsg.Length);
                 result = s14 + sText + s18;
             }

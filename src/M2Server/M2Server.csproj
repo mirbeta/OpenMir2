@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>MirServer</AssemblyName>
         <RootNamespace>MirServer</RootNamespace>
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
@@ -8,10 +8,14 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>bin\Debug\net5.0</OutputPath>
+      <OutputPath>bin\Debug\net6.0</OutputPath>
+      <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+      <ExternalConsole>true</ExternalConsole>
     </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\mSystemModule\mSystemModule.csproj">

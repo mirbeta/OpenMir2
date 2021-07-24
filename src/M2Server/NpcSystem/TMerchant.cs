@@ -1774,7 +1774,7 @@ namespace M2Server
                 return;
             }
             PlayObject.m_boChangeItemNameFlag = false;
-            var sWhere = sLabel.Substring(M2Share.sUSEITEMNAME.Length + 1 - 1, sLabel.Length - M2Share.sUSEITEMNAME.Length);
+            var sWhere = sLabel.Substring(M2Share.sUSEITEMNAME.Length, sLabel.Length - M2Share.sUSEITEMNAME.Length);
             var btWhere = (byte)HUtil32.Str_ToInt(sWhere, -1);
             if (btWhere >= PlayObject.m_UseItems.GetLowerBound(0) && btWhere <= PlayObject.m_UseItems.GetUpperBound(0))
             {

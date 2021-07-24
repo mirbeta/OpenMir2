@@ -1879,7 +1879,7 @@ namespace M2Server
                                             {
                                                 break;
                                             }
-                                            s58 = s34.Substring(1 - 1, n24 - 1);
+                                            s58 = s34.Substring(0, n24 - 1);
                                             s5C = s34.Substring(DefineInfo.sName.Length + n24 - 1, 256);
                                             s34 = s58 + DefineInfo.sText + s5C;
                                             LoadList[I] = s34;
@@ -2221,8 +2221,7 @@ namespace M2Server
                 StringList[i] = sLine;
             }
         }
-
-
+        
         /// <summary>
         /// 初始化脚本标签数组
         /// </summary>

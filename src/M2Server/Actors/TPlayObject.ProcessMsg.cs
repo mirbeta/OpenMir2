@@ -809,7 +809,7 @@ namespace M2Server
                             sData = sData.Substring(3 - 1, sData.Length - 2);
                             if (sData.Length > M2Share.g_Config.nSayRedMsgMaxLen)
                             {
-                                sData = sData.Substring(1 - 1, M2Share.g_Config.nSayRedMsgMaxLen);
+                                sData = sData.Substring(0, M2Share.g_Config.nSayRedMsgMaxLen);
                             }
                             if (M2Share.g_Config.boShutRedMsgShowGMName)
                             {

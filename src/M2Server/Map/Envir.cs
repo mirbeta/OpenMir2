@@ -32,9 +32,6 @@ namespace M2Server
 
     public class TMapCellinfo
     {
-        /// <summary>
-        /// ?0???????????????????????
-        /// </summary>
         public byte chFlag;
         public IList<TOSObject> ObjList;
     }

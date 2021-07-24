@@ -363,7 +363,7 @@ namespace M2Server
             if (ext != "")
             {
                 extpos = fn.IndexOf(ext);
-                result = fn.Substring(1 - 1, extpos - 1);
+                result = fn.Substring(0, extpos - 1);
             }
             else
             {

@@ -229,7 +229,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetLoverWhisper(int sNum, string Body)
+        private void MsgGetLoverWhisper(int sNum, string Body)
         {
             var Str = string.Empty;
             var uname = string.Empty;

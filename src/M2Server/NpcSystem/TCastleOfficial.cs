@@ -219,14 +219,14 @@ namespace M2Server
                         }
                         else if (HUtil32.CompareLStr(sLabel, M2Share.sHIREGUARDNOW, M2Share.sHIREGUARDNOW.Length))
                         {
-                            s20 = sLabel.Substring(M2Share.sHIREGUARDNOW.Length + 1 - 1, sLabel.Length);
+                            s20 = sLabel.Substring(M2Share.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                             // GotoLable(PlayObject,sHIREGUARDOK,False);
                         }
                         else if (HUtil32.CompareLStr(sLabel, M2Share.sHIREARCHERNOW, M2Share.sHIREARCHERNOW.Length))
                         {
-                            s20 = sLabel.Substring(M2Share.sHIREARCHERNOW.Length + 1 - 1, sLabel.Length);
+                            s20 = sLabel.Substring(M2Share.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
                             PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                         }
