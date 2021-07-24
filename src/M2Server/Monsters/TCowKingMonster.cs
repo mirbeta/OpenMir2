@@ -2,14 +2,14 @@
 {
     public class TCowKingMonster : TATMonster
     {
-        public int dw558 = 0;
-        public bool bo55C = false;
-        public bool bo55D = false;
-        public int n560 = 0;
-        public int dw564 = 0;
-        public int dw568 = 0;
-        public int dw56C = 0;
-        public int dw570 = 0;
+        private int dw558 = 0;
+        private bool bo55C = false;
+        private bool bo55D = false;
+        private int n560 = 0;
+        private int dw564 = 0;
+        private int dw568 = 0;
+        private int dw56C = 0;
+        private int dw570 = 0;
 
         public TCowKingMonster() : base()
         {

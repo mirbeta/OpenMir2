@@ -11,11 +11,10 @@ namespace M2Server
             return true;
         }
 
-        public static bool GetDBSockMsg(int nQueryID, ref int nIdent, ref int nRecog, ref string sStr, int dwTimeOut, bool boLoadRcd)
+        private static bool GetDBSockMsg(int nQueryID, ref int nIdent, ref int nRecog, ref string sStr, int dwTimeOut, bool boLoadRcd)
         {
             bool result = false;
             bool boLoadDBOK = false;
-            int dwTimeOutTick;
             string s24 = string.Empty;
             string s28 = string.Empty;
             string s2C = string.Empty;
@@ -27,7 +26,7 @@ namespace M2Server
             TDefaultMessage DefMsg;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
-            dwTimeOutTick = HUtil32.GetTickCount();
+            int dwTimeOutTick = HUtil32.GetTickCount();
             while (true)
             {
                 if (HUtil32.GetTickCount() - dwTimeOutTick > dwTimeOut)
@@ -49,13 +48,13 @@ namespace M2Server
                 {
                     HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
                 }
-                if (s24 != "")
+                if (!string.IsNullOrEmpty(s24))
                 {
                     s28 = "";
                     s24 = HUtil32.ArrestStringEx(s24, '#', '!', ref s28);
                     if (s28 != "")
                     {
-                        s28 = HUtil32.GetValidStr3(s28, ref s2C, new string[] { "/" });
+                        s28 = HUtil32.GetValidStr3(s28, ref s2C, new[] { "/" });
                         nLen = s28.Length;
                         unsafe
                         {
@@ -159,7 +158,7 @@ namespace M2Server
             return result;
         }
 
-        public static bool SaveRcd(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
+        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
         {
             int nIdent = 0;
             int nRecog = 0;
@@ -184,22 +183,20 @@ namespace M2Server
             return result;
         }
 
-        public static bool LoadRcd(string sAccount, string sCharName, string sStr, int nCertCode, ref THumDataInfo HumanRcd)
+        private static bool LoadRcd(string sAccount, string sCharName, string sStr, int nCertCode, ref THumDataInfo HumanRcd)
         {
             bool result = true;
-            TDefaultMessage Defmsg;
-            TLoadHuman LoadHuman;
             int nIdent = 0;
             int nRecog = 0;
             string sHumanRcdStr = string.Empty;
             int nQueryID = GetQueryID(M2Share.g_Config);
-            Defmsg = grobal2.MakeDefaultMsg(grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            LoadHuman = new TLoadHuman();
-            LoadHuman.sAccount = sAccount;
-            LoadHuman.sChrName = sCharName;
-            LoadHuman.sUserAddr = sStr;
-            LoadHuman.nSessionID = nCertCode;
-            string sDBMsg = EDcode.EncodeBuffer(Defmsg) + EDcode.EncodeBuffer(LoadHuman);
+            TLoadHuman loadHuman = new TLoadHuman();
+            loadHuman.sAccount = sAccount;
+            loadHuman.sChrName = sCharName;
+            loadHuman.sUserAddr = sStr;
+            loadHuman.nSessionID = nCertCode;
+            TDefaultMessage defmsg = grobal2.MakeDefaultMsg(grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            string sDBMsg = EDcode.EncodeBuffer(defmsg) + EDcode.EncodeBuffer(loadHuman);
             M2Share.DataServer.SendMessage(nQueryID, sDBMsg);
             if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sHumanRcdStr, 5000, true))
             {
@@ -221,15 +218,14 @@ namespace M2Server
             return result;
         }
 
-        public static int GetQueryID(TM2Config Config)
+        private static int GetQueryID(TM2Config Config)
         {
             Config.nDBQueryID ++;
             if (Config.nDBQueryID > int.MaxValue - 1)
             {
                 Config.nDBQueryID = 1;
             }
-            int result = Config.nDBQueryID;
-            return result;
+            return Config.nDBQueryID;
         }
     } 
 }

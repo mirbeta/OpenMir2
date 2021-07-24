@@ -7,62 +7,66 @@ namespace M2Server
 {
     public sealed class UserEngine
     {
-        public int dwProcessMapDoorTick;
+        private int dwProcessMapDoorTick;
         public int dwProcessMerchantTimeMax;
         public int dwProcessMerchantTimeMin;
-        public int dwProcessMissionsTime;
+        private int dwProcessMissionsTime;
         public int dwProcessNpcTimeMax;
         public int dwProcessNpcTimeMin;
-        public int dwRegenMonstersTick;
-        public int dwSendOnlineHumTime;
-        public int dwShowOnlineTick;
+        private int dwRegenMonstersTick;
+        private int dwSendOnlineHumTime;
+        private int dwShowOnlineTick;
         public IList<TAdminInfo> m_AdminList;
-        public IList<TGoldChangeInfo> m_ChangeHumanDBGoldList;
-        public IList<TSwitchDataInfo> m_ChangeServerList;
-        public int m_dwProcessLoadPlayTick;
-        public ArrayList m_ListOfGateIdx;
-        public ArrayList m_ListOfSocket;
+        private IList<TGoldChangeInfo> m_ChangeHumanDBGoldList;
+        private IList<TSwitchDataInfo> m_ChangeServerList;
+        private int m_dwProcessLoadPlayTick;
+        private ArrayList m_ListOfGateIdx;
+        private ArrayList m_ListOfSocket;
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
-        public IList<TUserOpenInfo> m_LoadPlayList;
-        public object m_LoadPlaySection;
+        private IList<TUserOpenInfo> m_LoadPlayList;
+
+        private object m_LoadPlaySection;
         public IList<TMagicEvent> m_MagicEventList;
         public IList<TMagic> m_MagicList;
         public IList<TMerchant> m_MerchantList;
-        public ArrayList m_MonFreeList;
+        private ArrayList m_MonFreeList;
         public IList<TMonGenInfo> m_MonGenList;
-        public int m_nCurrMonGen;
-        public IList<TPlayObject> m_NewHumanList;
+        private int m_nCurrMonGen;
+        private IList<TPlayObject> m_NewHumanList;
         /// <summary>
         /// 当前怪物列表刷新位置索引
         /// </summary>
-        public int m_nMonGenCertListPosition;
-        public int m_nMonGenListPosition;
-        public int m_nProcHumIDx;
-        public IList<TPlayObject> m_PlayObjectFreeList;
-        public IList<ServerGruopInfo> m_OtherUserNameList;
-        public List<TPlayObject> m_PlayObjectList;
+        private int m_nMonGenCertListPosition;
+
+        private int m_nMonGenListPosition;
+        private int m_nProcHumIDx;
+        private IList<TPlayObject> m_PlayObjectFreeList;
+        private IList<ServerGruopInfo> m_OtherUserNameList;
+        private List<TPlayObject> m_PlayObjectList;
         public IList<TMonInfo> MonsterList;
-        public int nMerchantPosition;
+        private int nMerchantPosition;
         /// <summary>
         /// 怪物总数
         /// </summary>
-        public int nMonsterCount;
+        private int nMonsterCount;
         /// <summary>
         /// 处理怪物数，用于统计处理怪物个数
         /// </summary>
-        public int nMonsterProcessCount = 0;
+        private int nMonsterProcessCount = 0;
         /// <summary>
         /// 处理怪物总数位置，用于计算怪物总数
         /// </summary>
-        public int nMonsterProcessPostion;
-        public int nNpcPosition;
+        private int nMonsterProcessPostion;
+
+        private int nNpcPosition;
         /// <summary>
         /// 处理人物开始索引（每次处理人物数限制）
         /// </summary>
-        public int nProcessHumanLoopTime;
-        public ArrayList OldMagicList;
+        private int nProcessHumanLoopTime;
+
+        private ArrayList OldMagicList;
         public IList<TNormNpc> QuestNPCList;
         public IList<TItem> StdItemList;
         private readonly Thread _userEngineThread;

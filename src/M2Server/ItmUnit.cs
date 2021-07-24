@@ -92,11 +92,11 @@ namespace M2Server
                     var nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;
-                    var ItemName = new TItemName();
-                    ItemName.nMakeIndex = nMakeIndex;
-                    ItemName.nItemIndex = nItemIndex;
-                    ItemName.sItemName = sItemName;
-                    m_ItemNameList.Add(ItemName);
+                    var itemName = new TItemName();
+                    itemName.nMakeIndex = nMakeIndex;
+                    itemName.nItemIndex = nItemIndex;
+                    itemName.sItemName = sItemName;
+                    m_ItemNameList.Add(itemName);
                 }
             }
             else

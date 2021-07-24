@@ -6,7 +6,7 @@
     public class TCastleDoor : TGuardUnit
     {
         public int dw55C = 0;
-        public int dw560 = 0;
+        private int dw560 = 0;
         public bool m_boOpened = false;
         public bool bo565n = false;
         public bool bo566n = false;

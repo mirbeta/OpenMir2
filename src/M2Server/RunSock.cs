@@ -55,7 +55,7 @@ namespace M2Server
             }
             else
             {
-                M2Share.ErrorMessage(string.Format(sKickGate, new string[] { e.EndPoint.Address.ToString() }), MessageType.Error);
+                M2Share.ErrorMessage(string.Format(sKickGate, new object?[] { e.EndPoint.Address.ToString() }), MessageType.Error);
                 e.Socket.Close();
             }
         }
@@ -486,7 +486,6 @@ namespace M2Server
             }
             IntPtr BufferA;
             IntPtr BufferB;
-            // 004E198F
             // 将小数据合并为一个指定大小的数据
             try
             {

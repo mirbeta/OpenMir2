@@ -4079,7 +4079,7 @@ namespace M2Server
                             {
                                 PlayObject.m_MyGuild = null;
                                 PlayObject.RefRankInfo(0, "");
-                                PlayObject.RefShowName();// 10/31
+                                PlayObject.RefShowName();
                             }
                             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                             nC = 0;
@@ -4752,25 +4752,25 @@ namespace M2Server
         {
             var result = false;
             var s1C = string.Empty;
-            var __Event = (TEvent)m_PEnvir.GetEvent(nX, nY);
-            if (__Event != null && __Event.m_nEventType == grobal2.ET_MINE)
+            var mineEvent = (TStoneMineEvent)m_PEnvir.GetEvent(nX, nY);
+            if (mineEvent != null && mineEvent.m_nEventType == grobal2.ET_MINE)
             {
-                if (((TStoneMineEvent)__Event).m_nMineCount > 0)
+                if (mineEvent.m_nMineCount > 0)
                 {
-                    ((TStoneMineEvent)__Event).m_nMineCount -= 1;
+                    mineEvent.m_nMineCount -= 1;
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nMakeMineHitRate) == 0)
                     {
-                        var PileEvent = (TEvent)m_PEnvir.GetEvent(m_nCurrX, m_nCurrY);
-                        if (PileEvent == null)
+                        var pileEvent = (TPileStones)m_PEnvir.GetEvent(m_nCurrX, m_nCurrY);
+                        if (pileEvent == null)
                         {
-                            PileEvent = new TPileStones(m_PEnvir, m_nCurrX, m_nCurrY, grobal2.ET_PILESTONES, 5 * 60 * 1000);
-                            M2Share.EventManager.AddEvent(PileEvent);
+                            pileEvent = new TPileStones(m_PEnvir, m_nCurrX, m_nCurrY, grobal2.ET_PILESTONES, 5 * 60 * 1000);
+                            M2Share.EventManager.AddEvent(pileEvent);
                         }
                         else
                         {
-                            if (PileEvent.m_nEventType == grobal2.ET_PILESTONES)
+                            if (pileEvent.m_nEventType == grobal2.ET_PILESTONES)
                             {
-                                ((TPileStones)PileEvent).AddEventParam();
+                                pileEvent.AddEventParam();
                             }
                         }
                         if (M2Share.RandomNumber.Random(M2Share.g_Config.nMakeMineRate) == 0)
@@ -4791,9 +4791,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if (HUtil32.GetTickCount() - ((TStoneMineEvent)__Event).m_dwAddStoneMineTick > 10 * 60 * 1000)
+                    if (HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick > 10 * 60 * 1000)
                     {
-                        ((TStoneMineEvent)__Event).AddStoneMine();
+                        mineEvent.AddStoneMine();
                     }
                 }
             }
@@ -5210,7 +5210,6 @@ namespace M2Server
                     }
                     break;
                 case 7:
-                    // if (m_MyGuild <> nil) and (UserCastle.m_MasterGuild = m_MyGuild) then begin
                     if (m_MyGuild != null && Castle != null)
                     {
                         result = true;
@@ -5454,7 +5453,7 @@ namespace M2Server
 
         public void SendAddMagic(TUserMagic UserMagic)
         {
-            var ClientMagic = new TClientMagic
+            var clientMagic = new TClientMagic
             {
                 Key = (char)UserMagic.btKey,
                 Level = UserMagic.btLevel,
@@ -5462,10 +5461,10 @@ namespace M2Server
                 Def = UserMagic.MagicInfo
             };
             m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
-            SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientMagic));
+            SendSocket(m_DefMsg, EDcode.EncodeBuffer(clientMagic));
         }
 
-        public void SendDelMagic(TUserMagic UserMagic)
+        internal void SendDelMagic(TUserMagic UserMagic)
         {
             m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DELMAGIC, UserMagic.wMagIdx, 0, 0, 1);
             SendSocket(m_DefMsg);
@@ -5478,7 +5477,6 @@ namespace M2Server
         /// <returns></returns>
         private bool EatUseItems(int nShape)
         {
-            TUserCastle Castle;
             var result = false;
             switch (nShape)
             {
@@ -5518,7 +5516,7 @@ namespace M2Server
                     {
                         if (!m_boInFreePKArea)
                         {
-                            Castle = M2Share.CastleManager.IsCastleMember(this);
+                            TUserCastle Castle = M2Share.CastleManager.IsCastleMember(this);
                             if (Castle != null && Castle.IsMasterGuild(m_MyGuild))
                             {
                                 BaseObjectMove(Castle.m_sHomeMap, Castle.GetHomeX(), Castle.GetHomeY());
@@ -5584,7 +5582,7 @@ namespace M2Server
             }
         }
 
-        private void ChangeServerMakeSlave(TSlaveInfo SlaveInfo)
+        private void ChangeServerMakeSlave(TSlaveInfo slaveInfo)
         {
             int nSlavecount;
             if (m_btJob == M2Share.jTaos)
@@ -5595,21 +5593,21 @@ namespace M2Server
             {
                 nSlavecount = 5;
             }
-            var BaseObject = MakeSlave(SlaveInfo.sSlaveName, 3, SlaveInfo.btSlaveLevel, nSlavecount,
-                SlaveInfo.dwRoyaltySec);
+            var BaseObject = MakeSlave(slaveInfo.sSlaveName, 3, slaveInfo.btSlaveLevel, nSlavecount,
+                slaveInfo.dwRoyaltySec);
             if (BaseObject != null)
             {
-                BaseObject.m_nKillMonCount = SlaveInfo.nKillCount;
-                BaseObject.m_btSlaveExpLevel = SlaveInfo.btSlaveExpLevel;
-                BaseObject.m_WAbil.HP = (short) SlaveInfo.nHP;
-                BaseObject.m_WAbil.MP = (short) SlaveInfo.nMP;
-                if (1500 - SlaveInfo.btSlaveLevel * 200 < BaseObject.m_nWalkSpeed)
+                BaseObject.m_nKillMonCount = slaveInfo.nKillCount;
+                BaseObject.m_btSlaveExpLevel = slaveInfo.btSlaveExpLevel;
+                BaseObject.m_WAbil.HP = (short) slaveInfo.nHP;
+                BaseObject.m_WAbil.MP = (short) slaveInfo.nMP;
+                if (1500 - slaveInfo.btSlaveLevel * 200 < BaseObject.m_nWalkSpeed)
                 {
-                    BaseObject.m_nWalkSpeed = 1500 - SlaveInfo.btSlaveLevel * 200;
+                    BaseObject.m_nWalkSpeed = 1500 - slaveInfo.btSlaveLevel * 200;
                 }
-                if (2000 - SlaveInfo.btSlaveLevel * 200 < BaseObject.m_nNextHitTime)
+                if (2000 - slaveInfo.btSlaveLevel * 200 < BaseObject.m_nNextHitTime)
                 {
-                    BaseObject.m_nWalkSpeed = 2000 - SlaveInfo.btSlaveLevel * 200;
+                    BaseObject.m_nWalkSpeed = 2000 - slaveInfo.btSlaveLevel * 200;
                 }
                 RecalcAbilitys();
             }
@@ -5719,7 +5717,7 @@ namespace M2Server
             m_DealLastTick = HUtil32.GetTickCount();
         }
 
-        public void JoinGroup(TPlayObject PlayObject)
+        private void JoinGroup(TPlayObject PlayObject)
         {
             m_GroupOwner = PlayObject;
             SendGroupText(format(M2Share.g_sJoinGroup, m_sCharName));
@@ -5729,7 +5727,7 @@ namespace M2Server
         /// 随机矿石持久度
         /// </summary>
         /// <returns></returns>
-        public short MakeMineRandomDrua()
+        private short MakeMineRandomDrua()
         {
             var result = M2Share.RandomNumber.Random(M2Share.g_Config.nStoneGeneralDuraRate) + M2Share.g_Config.nStoneMinDura;
             if (M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraRate) == 0)
@@ -5839,61 +5837,61 @@ namespace M2Server
                 return;
             }
             var mineRate = M2Share.RandomNumber.Random(120);
-            var UserItem = new TUserItem();
+            TUserItem mineItem = null;
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone1, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone1, ref mineItem))
                 {
-                    UserItem.Dura = MakeMineRandomDrua();
-                    m_ItemList.Add(UserItem);
+                    mineItem.Dura = MakeMineRandomDrua();
+                    m_ItemList.Add(mineItem);
                     WeightChanged();
-                    SendAddItem(UserItem);
+                    SendAddItem(mineItem);
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(mineItem);
                 }
             }
             else if (HUtil32.RangeInDefined(mineRate, 3, 20))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone2, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone2, ref mineItem))
                 {
-                    UserItem.Dura = MakeMineRandomDrua();
-                    m_ItemList.Add(UserItem);
+                    mineItem.Dura = MakeMineRandomDrua();
+                    m_ItemList.Add(mineItem);
                     WeightChanged();
-                    SendAddItem(UserItem);
+                    SendAddItem(mineItem);
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(mineItem);
                 }
             }
             else if (HUtil32.RangeInDefined(mineRate, 21, 45))
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone3, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone3, ref mineItem))
                 {
-                    UserItem.Dura = MakeMineRandomDrua();
-                    m_ItemList.Add(UserItem);
+                    mineItem.Dura = MakeMineRandomDrua();
+                    m_ItemList.Add(mineItem);
                     WeightChanged();
-                    SendAddItem(UserItem);
+                    SendAddItem(mineItem);
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(mineItem);
                 }
             }
             else
             {
-                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone4, ref UserItem))
+                if (M2Share.UserEngine.CopyToUserItemFromName(M2Share.g_Config.sGemStone4, ref mineItem))
                 {
-                    UserItem.Dura = MakeMineRandomDrua();
-                    m_ItemList.Add(UserItem);
+                    mineItem.Dura = MakeMineRandomDrua();
+                    m_ItemList.Add(mineItem);
                     WeightChanged();
-                    SendAddItem(UserItem);
+                    SendAddItem(mineItem);
                 }
                 else
                 {
-                    Dispose(UserItem);
+                    Dispose(mineItem);
                 }
             }
         }
@@ -6460,8 +6458,7 @@ namespace M2Server
 
         private bool CheckActionStatus(short wIdent, ref int dwDelayTime)
         {
-            int dwCheckTime;
-            int dwActionIntervalTime;
+            int dwCheckTime = 0;
             var result = false;
             dwDelayTime = 0;
             // 检查人物弯腰停留时间
@@ -6490,7 +6487,7 @@ namespace M2Server
             {
                 return true;
             }
-            dwActionIntervalTime = m_dwActionIntervalTime;
+            int dwActionIntervalTime = m_dwActionIntervalTime;
             switch (wIdent)
             {
                 case grobal2.CM_LONGHIT:
@@ -7080,27 +7077,24 @@ namespace M2Server
                 {
                     m_sTempPwd = sData;
                     m_boReConfigPwd = true;
-                    SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
-                    // '请重复输入一次仓库密码：'
+                    SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);// '请重复输入一次仓库密码：'
                     SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                    // '输入的密码长度不正确！！！，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                    SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确！！！，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                 }
                 return;
             }
             if (m_boReConfigPwd)
             {
                 m_boReConfigPwd = false;
-                if (m_sTempPwd.CompareTo(sData) == 0)
+                if (String.Compare(m_sTempPwd, sData, StringComparison.Ordinal) == 0)
                 {
                     m_sStoragePwd = sData;
                     m_boPasswordLocked = true;
                     m_sTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
-                    // '密码设置成功！！，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
+                    SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);// '密码设置成功！！，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else
                 {
@@ -7111,7 +7105,7 @@ namespace M2Server
             }
             if (m_boUnLockPwd || m_boUnLockStoragePwd)
             {
-                if (m_sStoragePwd.CompareTo(sData) == 0)
+                if (String.Compare(m_sStoragePwd, sData, StringComparison.Ordinal) == 0)
                 {
                     m_boPasswordLocked = false;
                     if (m_boUnLockPwd)
@@ -7197,7 +7191,6 @@ namespace M2Server
                         m_boPasswordLocked = true;
                     }
                 }
-                return;
             }
         }
 

@@ -14,9 +14,9 @@ namespace M2Server
 
     public class TBankEngine
     {
-        public ArrayList m_UserReQuestList = null;
-        public ArrayList m_CompleteList = null;
-        public object m_CS = null;
+        private ArrayList m_UserReQuestList = null;
+        private ArrayList m_CompleteList = null;
+        private object m_CS = null;
 
         public TBankEngine()
         {

@@ -2,9 +2,9 @@
 {
     public class TZilKinZombi: TATMonster
     {
-        public int dw558 = 0;
-        public int nZilKillCount = 0;
-        public int dw560 = 0;
+        private int dw558 = 0;
+        private int nZilKillCount = 0;
+        private int dw560 = 0;
 
         public TZilKinZombi() : base()
         {

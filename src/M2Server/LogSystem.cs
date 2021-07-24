@@ -26,7 +26,6 @@ namespace M2Server
                 return;
             }
             _logqueue.Enqueue(message);
-            return;
         }
 
         public void LogInfo(string message, MessageType messageType, MessageLevel messageLevel = MessageLevel.None)

@@ -34,7 +34,7 @@ namespace M2Server
                 {
                     continue;
                 }
-                var fileName = M2Share.g_Config.sNoticeDir + NoticeList[i].sMsg + ".txt";
+                var fileName = Path.Combine(M2Share.g_Config.sNoticeDir, $"{NoticeList[i].sMsg}.txt");
                 if (!File.Exists(fileName)) continue;
                 try
                 {

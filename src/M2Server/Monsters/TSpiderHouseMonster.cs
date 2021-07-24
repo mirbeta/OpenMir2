@@ -6,7 +6,7 @@ namespace M2Server
     public class TSpiderHouseMonster : TAnimalObject
     {
         public int n54C = 0;
-        public IList<TBaseObject> BBList = null;
+        private IList<TBaseObject> BBList = null;
 
         public TSpiderHouseMonster() : base()
         {
@@ -29,7 +29,6 @@ namespace M2Server
 
         public override bool Operate(TProcessMessage ProcessMsg)
         {
-            bool result;
             TBaseObject BB;
             short n08 = 0;
             short n0C = 0;
@@ -47,8 +46,7 @@ namespace M2Server
                     }
                 }
             }
-            result = base.Operate(ProcessMsg);
-            return result;
+            return base.Operate(ProcessMsg);
         }
 
         public override void Run()
@@ -61,7 +59,6 @@ namespace M2Server
                     m_dwWalkTick = HUtil32.GetTickCount();
                     if (HUtil32.GetTickCount() - m_dwHitTick >= m_nNextHitTime)
                     {
-
                         m_dwHitTick = HUtil32.GetTickCount();
                         SearchTarget();
                         if (m_TargetCret != null)

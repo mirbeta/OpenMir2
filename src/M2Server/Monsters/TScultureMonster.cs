@@ -39,7 +39,6 @@ namespace M2Server
                     }
                 }
             }
-            //List10.Free;
         }
 
         public override void Run()

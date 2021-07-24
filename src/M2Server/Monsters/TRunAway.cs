@@ -22,11 +22,9 @@ namespace M2Server
                     m_nTargetY = m_TargetCret.m_nCurrY;
                     if (m_WAbil.HP <= HUtil32.Round(m_WAbil.MaxHP / 2) && borunaway == false)
                     {
-                        // if health less then 1/2
                         GetFrontPosition(ref nx, ref ny);
                         SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         SpaceMove(m_sMapName, (short)(nx - 2), (short)(ny - 2), 0);
-                        // move backwards 3 spaces
                         borunaway = true;
                     }
                     else

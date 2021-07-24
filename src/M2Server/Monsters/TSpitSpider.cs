@@ -55,7 +55,7 @@
             }
         }
 
-        public override bool AttackTarget()
+        protected override bool AttackTarget()
         {
             var result = false;
             byte btDir = 0;

@@ -5,9 +5,9 @@ namespace M2Server
     public class TMonster : TAnimalObject
     {
         public int n54C = 0;
-        public int m_dwThinkTick = 0;
-        public bool bo554 = false;
-        public bool m_boDupMode = false;
+        private int m_dwThinkTick = 0;
+        protected bool bo554 = false;
+        private bool m_boDupMode = false;
 
         public TMonster() : base()
         {
@@ -20,7 +20,7 @@ namespace M2Server
             m_dwSearchTick = HUtil32.GetTickCount();
         }
 
-        public TBaseObject MakeClone(string sMonName, TBaseObject OldMon)
+        protected TBaseObject MakeClone(string sMonName, TBaseObject OldMon)
         {
             TBaseObject result = null;
             var ElfMon = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, m_nCurrX, m_nCurrY, sMonName);
@@ -82,7 +82,7 @@ namespace M2Server
             return result;
         }
 
-        public virtual bool AttackTarget()
+        protected virtual bool AttackTarget()
         {
             var result = false;
             byte btDir = 0;
