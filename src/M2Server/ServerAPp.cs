@@ -1,10 +1,12 @@
 ﻿using M2Server.CommandSystem;
 using mSystemModule;
+using SystemModule;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace M2Server
 {
@@ -17,7 +19,7 @@ namespace M2Server
             M2Share.MainOutMessage("读取配置信息完成...");
         }
 
-        public void StartServer()
+        public void StartServer(CancellationToken token)
         {
             int nCode;
             LocalDB.FrmDB = new TFrmDB();
@@ -194,7 +196,7 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(ex.StackTrace);
+                M2Share.ErrorMessage(ex.Message);
             }
         }
 

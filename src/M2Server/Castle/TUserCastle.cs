@@ -16,14 +16,14 @@ namespace M2Server
         /// <summary>
         /// 是否开始攻城
         /// </summary>
-        public bool m_boStartWar;
+        private bool m_boStartWar;
         // 
         /// <summary>
         /// 
         /// </summary>
         public bool m_boStatus = false;
         public bool m_boUnderWar;
-        public TObjUnit m_CenterWall;
+        private TObjUnit m_CenterWall;
         public DateTime m_ChangeDate;
         /// <summary>
         /// 城门状态
@@ -43,7 +43,6 @@ namespace M2Server
         /// 城堡所在地图
         /// </summary>
         public TEnvirnoment m_MapCastle;
-        ///
         /// 皇宫所在地图 
         public TEnvirnoment m_MapPalace;
         public TEnvirnoment m_MapSecret;

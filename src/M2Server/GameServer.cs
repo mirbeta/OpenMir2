@@ -20,7 +20,7 @@ namespace M2Server
         /// </summary>
         private Timer _saveVariableTimer = null;
 
-        public ServerBase()
+        protected ServerBase()
         {
             _gateServer = new GateServer();
             _runServer = new Thread(Run) { IsBackground = true };

@@ -58,7 +58,7 @@ namespace M2Server
             Actors.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-                M2Share.MainOutMessage(string.Format("清理对象 名称:[{0}] 地图:{1} 坐标:{2}:{3}", ghostactor.m_sCharName, ghostactor.m_sMapName, ghostactor.m_nCurrX, ghostactor.m_nCurrY));
+                M2Share.MainOutMessage(string.Format("清理死亡对象 名称:[{0}] 地图:{1} 坐标:{2}:{3}", ghostactor.m_sCharName, ghostactor.m_sMapName, ghostactor.m_nCurrX, ghostactor.m_nCurrY));
             }
         }
 
@@ -68,7 +68,7 @@ namespace M2Server
             Ohter.TryRemove(actorId, out actor);
             if (actor != null)
             {
-                M2Share.MainOutMessage(string.Format("清理对象 [{0}]", actorId));
+                M2Share.MainOutMessage($"清理死亡对象 [{actorId}]");
             }
         }
 

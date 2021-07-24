@@ -771,7 +771,7 @@ namespace M2Server
             var s18 = string.Empty;
             var sMsg = string.Empty;
             var boCanJmp = false;
-            const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: %s";
+            const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
             base.UserSelect(PlayObject, sData);
             if (!(this is TMerchant))// 如果类名不是 TMerchant 则不执行以下处理函数
             {

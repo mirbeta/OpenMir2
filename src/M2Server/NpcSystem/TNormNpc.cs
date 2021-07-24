@@ -1,4 +1,5 @@
-﻿using mSystemModule;
+﻿using SystemModule;
+using mSystemModule;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5968,8 +5969,7 @@ namespace M2Server
 
         public bool GotoLable_JmpToLable(TPlayObject PlayObject, string sLabel)
         {
-            bool result;
-            result = false;
+            bool result = false;
             PlayObject.m_nScriptGotoCount++;
             if (PlayObject.m_nScriptGotoCount > M2Share.g_Config.nScriptGotoCountLimit)
             {

@@ -1,4 +1,4 @@
-﻿using mSystemModule;
+﻿using SystemModule;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,29 +18,25 @@ namespace M2Server
             return result;
         }
 
-        public bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
+        private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
         {
-            bool result;
-            int I;
-            StringList LoadStrList;
-            bool bo1D;
+            bool result = false;
             string s18;
-            result = false;
             if (File.Exists(sFileName))
             {
-                LoadStrList = new StringList();
+                var LoadStrList = new StringList();
                 LoadStrList.LoadFromFile(sFileName);
                 DeCodeStringList(LoadStrList);
                 sLabel = '[' + sLabel + ']';
-                bo1D = false;
-                for (I = 0; I < LoadStrList.Count; I++)
+                var bo1D = false;
+                for (var i = 0; i < LoadStrList.Count; i++)
                 {
-                    s18 = LoadStrList[I].Trim();
-                    if (s18 != "")
+                    s18 = LoadStrList[i].Trim();
+                    if (!string.IsNullOrEmpty(s18))
                     {
                         if (!bo1D)
                         {
-                            if (s18[0] == '[' && s18.ToLower().CompareTo(sLabel.ToLower()) == 0)
+                            if (s18[0] == '[' && string.Compare(s18, sLabel, StringComparison.Ordinal) == 0)
                             {
                                 bo1D = true;
                                 List.Add(s18);
@@ -48,7 +44,6 @@ namespace M2Server
                         }
                         else
                         {
-
                             if (s18[0] != '{')
                             {
                                 if (s18[0] == '}')
@@ -59,22 +54,17 @@ namespace M2Server
                                 }
                                 else
                                 {
-
                                     List.Add(s18);
                                 }
                             }
                         }
                     }
-
                 }
-                // for I := 0 to LoadStrList.Count - 1 do begin
-
-                //LoadStrList.Free;
             }
             return result;
         }
 
-        public void LoadScriptFile_LoadScriptcall(StringList LoadList)
+        private void LoadScriptFile_LoadScriptcall(StringList LoadList)
         {
             var s14 = string.Empty;
             var s18 = string.Empty;
@@ -89,7 +79,7 @@ namespace M2Server
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
                     s18 = s14.Trim();
-                    s34 = M2Share.g_Config.sEnvirDir + "QuestDiary\\" + s20;
+                    s34 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
                     if (LoadScriptFile_LoadCallScript(s34, s18, LoadList))
                     {
                         LoadList[i] = "#ACT";
@@ -103,7 +93,7 @@ namespace M2Server
             }
         }
 
-        public string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
+        private string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
         {
             var result = string.Empty;
             var s14 = string.Empty;
@@ -120,14 +110,14 @@ namespace M2Server
                 {
                     if (HUtil32.CompareLStr(s14, "#SETHOME", "#SETHOME".Length))
                     {
-                        result = HUtil32.GetValidStr3(s14, ref s1C, new string[] { " ", "\t" }).Trim();
+                        result = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
                         LoadList[i] = "";
                     }
                     if (HUtil32.CompareLStr(s14, "#DEFINE", "#DEFINE".Length))
                     {
-                        s14 = HUtil32.GetValidStr3(s14, ref s1C, new string[] { " ", "\t" });
-                        s14 = HUtil32.GetValidStr3(s14, ref s20, new string[] { " ", "\t" });
-                        s14 = HUtil32.GetValidStr3(s14, ref s24, new string[] { " ", "\t" });
+                        s14 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" });
+                        s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { " ", "\t" });
+                        s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { " ", "\t" });
                         DefineInfo = new TDefineInfo
                         {
                             sName = s20.ToUpper(),
@@ -138,14 +128,13 @@ namespace M2Server
                     }
                     if (HUtil32.CompareLStr(s14, "#INCLUDE", "#INCLUDE".Length))
                     {
-                        s28 = HUtil32.GetValidStr3(s14, ref s1C, new string[] { " ", "\t" }).Trim();
-                        s28 = M2Share.g_Config.sEnvirDir + "Defines\\" + s28;
+                        s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
+                        s28 = Path.Combine(M2Share.g_Config.sEnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
                             LoadStrList = new StringList();
                             LoadStrList.LoadFromFile(s28);
                             result = LoadScriptFile_LoadDefineInfo(LoadStrList, List);
-                            //LoadStrList.Free;
                         }
                         else
                         {
@@ -158,7 +147,7 @@ namespace M2Server
             return result;
         }
 
-        public TScript LoadScriptFile_MakeNewScript(TNormNpc NPC)
+        private TScript LoadScriptFile_MakeNewScript(TNormNpc NPC)
         {
             TScript result;
             TScript ScriptInfo;
@@ -174,7 +163,7 @@ namespace M2Server
             return result;
         }
 
-        public bool LoadScriptFile_QuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
+        private bool LoadScriptFile_QuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var sCmd = string.Empty;
@@ -185,13 +174,13 @@ namespace M2Server
             var sParam5 = string.Empty;
             var sParam6 = string.Empty;
             var nCMDCode = 0;
-            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new string[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
             sCmd = sCmd.ToUpper();
             if (sCmd == M2Share.sCHECK)
             {
@@ -899,7 +888,7 @@ namespace M2Server
             return result;
         }
 
-        public bool LoadScriptFile_QuestAction(string sText, TQuestActionInfo QuestActionInfo)
+        private bool LoadScriptFile_QuestAction(string sText, TQuestActionInfo QuestActionInfo)
         {
             bool result;
             var sCmd = string.Empty;
@@ -911,13 +900,13 @@ namespace M2Server
             var sParam6 = string.Empty;
             int nCMDCode;
             result = false;
-            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new string[] { " ", "\t" });
-            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new string[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sCmd, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam1, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam2, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam3, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam4, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
+            sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
             sCmd = sCmd.ToUpper();
             nCMDCode = 0;
             if (sCmd == M2Share.sSET)
@@ -1801,10 +1790,6 @@ namespace M2Server
             var result = -1;
             var n6C = 0;
             var n70 = 0;
-            if (sScritpName=="-4")
-            {
-                Console.WriteLine("asdasd");
-            }
             var sScritpFileName = Path.Combine(M2Share.g_Config.sEnvirDir, sPatch, string.Concat(sScritpName, ".txt"));
             if (File.Exists(sScritpFileName))
             {
@@ -1939,68 +1924,68 @@ namespace M2Server
                             {
                                 while (s34 != "")
                                 {
-                                    s34 = HUtil32.GetValidStr3(s34, ref s30, new string[] { " ", ",", "\t" });
+                                    s34 = HUtil32.GetValidStr3(s34, ref s30, new[] { " ", ",", "\t" });
                                     if (s30.Equals(M2Share.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boBuy = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sSELL, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boSell = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boMakeDrug = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sPRICES, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boPrices = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sSTORAGE, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boStorage = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sGETBACK, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boGetback = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boUpgradenow = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boGetBackupgnow = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boRepair = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boS_repair = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boSendmsg = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boUseItemName = true;
                                         continue;
                                     }
-                                    else if (s30.Equals(M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (s30.Equals(M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boOffLineMsg = true;
                                         continue;
@@ -2015,8 +2000,8 @@ namespace M2Server
                     {
                         if (HUtil32.CompareLStr(s34, "{Quest", "{Quest".Length))
                         {
-                            s38 = HUtil32.GetValidStr3(s34, ref s3C, new string[] { " ", "}", "\t" });
-                            HUtil32.GetValidStr3(s38, ref s3C, new string[] { " ", "}", "\t" });
+                            s38 = HUtil32.GetValidStr3(s34, ref s3C, new[] { " ", "}", "\t" });
+                            HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
                             n70 = HUtil32.Str_ToInt(s3C, 0);
                             Script = LoadScriptFile_MakeNewScript(NPC);
                             Script.nQuest = n70;
@@ -2029,13 +2014,13 @@ namespace M2Server
                     }
                     if (n6C == 1 && Script != null && s34.StartsWith("#"))
                     {
-                        s38 = HUtil32.GetValidStr3(s34, ref s3C, new string[] { "=", " ", "\t" });
+                        s38 = HUtil32.GetValidStr3(s34, ref s3C, new[] { "=", " ", "\t" });
                         Script.boQuest = true;
                         if (HUtil32.CompareLStr(s34, "#IF", "#IF".Length))
                         {
                             HUtil32.ArrestStringEx(s34, "[", "]", ref s40);
                             Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.Str_ToInt(s40, 0);
-                            HUtil32.GetValidStr3(s38, ref s44, new string[] { "=", " ", "\t" });
+                            HUtil32.GetValidStr3(s38, ref s44, new[] { "=", " ", "\t" });
                             n24 = HUtil32.Str_ToInt(s44, 0);
                             if (n24 != 0)
                             {
@@ -2068,7 +2053,7 @@ namespace M2Server
                             ProcedureList = new List<TSayingProcedure>(),
                             sLabel = s74
                         };
-                        s34 = HUtil32.GetValidStrCap(s34, ref s74, new string[] { " ", "\t" });
+                        s34 = HUtil32.GetValidStrCap(s34, ref s74, new[] { " ", "\t" });
                         if (s74.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                         {
                             SayingRecord.boExtJmp = true;
@@ -2168,9 +2153,9 @@ namespace M2Server
                     }
                     if (n6C == 20 && boFlag)
                     {
-                        s34 = HUtil32.GetValidStrCap(s34, ref s48, new string[] { " ", "\t" });
-                        s34 = HUtil32.GetValidStrCap(s34, ref s4C, new string[] { " ", "\t" });
-                        s34 = HUtil32.GetValidStrCap(s34, ref s50, new string[] { " ", "\t" });
+                        s34 = HUtil32.GetValidStrCap(s34, ref s48, new[] { " ", "\t" });
+                        s34 = HUtil32.GetValidStrCap(s34, ref s4C, new[] { " ", "\t" });
+                        s34 = HUtil32.GetValidStrCap(s34, ref s50, new[] { " ", "\t" });
                         if (s48 != "" && s50 != "")
                         {
                             if (s48[0] == '\"')
@@ -2225,7 +2210,7 @@ namespace M2Server
         /// <summary>
         /// 初始化脚本标签数组
         /// </summary>
-        internal void InitializeLabel(TNormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
+        private void InitializeLabel(TNormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
         {
             for (var i = NPC.FGotoLable.GetLowerBound(0); i <= NPC.FGotoLable.GetUpperBound(0); i++)
             {
@@ -2269,24 +2254,24 @@ namespace M2Server
             //}
             int nIdx;
             var boChange = false;
-            for (var i = 0; i < PlayDiceList.Count; i++)
-            {
-                QuestActionInfo = PlayDiceList[i];
-                nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam2, ref boChange));
-                QuestActionInfo.sParam2 = "@" + nIdx;
-            }
-            for (var i = 0; i < GotoList.Count; i++)
-            {
-                QuestActionInfo = GotoList[i];
-                nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam1, ref boChange));
-                QuestActionInfo.nParam1 = nIdx;
-            }
-            for (var i = 0; i < DelayGotoList.Count; i++)
-            {
-                QuestActionInfo = DelayGotoList[i];
-                nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam2, ref boChange));
-                QuestActionInfo.nParam2 = nIdx;
-            }
+            // for (var i = 0; i < PlayDiceList.Count; i++)
+            // {
+            //     QuestActionInfo = PlayDiceList[i];
+            //     nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam2, ref boChange));
+            //     QuestActionInfo.sParam2 = "@" + nIdx;
+            // }
+            // for (var i = 0; i < GotoList.Count; i++)
+            // {
+            //     QuestActionInfo = GotoList[i];
+            //     nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam1, ref boChange));
+            //     QuestActionInfo.nParam1 = nIdx;
+            // }
+            // for (var i = 0; i < DelayGotoList.Count; i++)
+            // {
+            //     QuestActionInfo = DelayGotoList[i];
+            //     nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam2, ref boChange));
+            //     QuestActionInfo.nParam2 = nIdx;
+            // }
             for (var i = 0; i < NPC.m_ScriptList.Count; i++)
             {
                 var RecordList = NPC.m_ScriptList[i];
@@ -2314,438 +2299,352 @@ namespace M2Server
         /// <summary>
         /// 初始化脚本标签
         /// </summary>
-        internal void InitializeAppendLabel(TNormNpc NPC, string sLabel, int nIdx)
+        private void InitializeAppendLabel(TNormNpc NPC, string sLabel, int nIdx)
         {
-            if (sLabel == SctiptDef.SPLAYOFFLINE)
-            {
-                NPC.FGotoLable[SctiptDef.NPLAYOFFLINE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMARRYERROR)
-            {
-                NPC.FGotoLable[SctiptDef.NMARRYERROR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMASTERERROR)
-            {
-                NPC.FGotoLable[SctiptDef.NMASTERERROR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMARRYCHECKDIR)
-            {
-                NPC.FGotoLable[SctiptDef.NMARRYCHECKDIR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SHUMANTYPEERR)
-            {
-                NPC.FGotoLable[SctiptDef.NHUMANTYPEERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMARRYSEXERR)
-            {
-                NPC.FGotoLable[SctiptDef.NMARRYSEXERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMARRYDIRERR)
-            {
-                NPC.FGotoLable[SctiptDef.NMARRYDIRERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SWATEMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NWATEMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SREVMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NREVMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SENDMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NENDMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SENDMARRYFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NENDMARRYFAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMASTERCHECKDIR)
-            {
-                NPC.FGotoLable[SctiptDef.NMASTERCHECKDIR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTGETMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTGETMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMASTERDIRERR)
-            {
-                NPC.FGotoLable[SctiptDef.NMASTERDIRERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SWATEMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NWATEMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SREVMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NREVMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SENDMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NENDMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SENDMASTERFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NENDMASTERFAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SEXEMARRYFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NEXEMARRYFAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMARRYCHECKDIR)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMARRYCHECKDIR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMARRYTYPEERR)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMARRYTYPEERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTUNMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTUNMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMARRYEND)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMARRYEND] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SWATEUNMARRY)
-            {
-                NPC.FGotoLable[SctiptDef.NWATEUNMARRY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SEXEMASTERFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NEXEMASTERFAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMASTERCHECKDIR)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMASTERCHECKDIR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMASTERTYPEERR)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMASTERTYPEERR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNISMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NUNISMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMASTERERROR)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMASTERERROR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTUNMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTUNMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SWATEUNMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NWATEUNMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUNMASTEREND)
-            {
-                NPC.FGotoLable[SctiptDef.NUNMASTEREND] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SREVUNMASTER)
-            {
-                NPC.FGotoLable[SctiptDef.NREVUNMASTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSUPREQUEST_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NSUPREQUEST_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMEMBER)
-            {
-                NPC.FGotoLable[SctiptDef.NMEMBER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SPLAYRECONNECTION)
-            {
-                NPC.FGotoLable[SctiptDef.NPLAYRECONNECTION] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SLOGIN)
-            {
-                NPC.FGotoLable[SctiptDef.NLOGIN] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SPLAYDIE)
-            {
-                NPC.FGotoLable[SctiptDef.NPLAYDIE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SKILLPLAY)
-            {
-                NPC.FGotoLable[SctiptDef.NKILLPLAY] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SPLAYLEVELUP)
-            {
-                NPC.FGotoLable[SctiptDef.NPLAYLEVELUP] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SKILLMONSTER)
-            {
-                NPC.FGotoLable[SctiptDef.NKILLMONSTER] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SCREATEECTYPE_IN)
-            {
-                NPC.FGotoLable[SctiptDef.NCREATEECTYPE_IN] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SCREATEECTYPE_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NCREATEECTYPE_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SCREATEECTYPE_FAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NCREATEECTYPE_FAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SRESUME)
-            {
-                NPC.FGotoLable[SctiptDef.NRESUME] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETLARGESSGOLD_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETLARGESSGOLD_FAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_FAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETLARGESSGOLD_ERROR)
-            {
-                NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_ERROR] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMASTERISPRENTICE)
-            {
-                NPC.FGotoLable[SctiptDef.NMASTERISPRENTICE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMASTERISFULL)
-            {
-                NPC.FGotoLable[SctiptDef.NMASTERISFULL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGROUPCREATE)
-            {
-                NPC.FGotoLable[SctiptDef.NGROUPCREATE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSTARTGROUP)
-            {
-                NPC.FGotoLable[SctiptDef.NSTARTGROUP] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SJOINGROUP)
-            {
-                NPC.FGotoLable[SctiptDef.NJOINGROUP] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SSPEEDCLOSE)
-            {
-                NPC.FGotoLable[SctiptDef.NSPEEDCLOSE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUPGRADENOW_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NUPGRADENOW_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUPGRADENOW_ING)
-            {
-                NPC.FGotoLable[SctiptDef.NUPGRADENOW_ING] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SUPGRADENOW_FAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NUPGRADENOW_FAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETBACKUPGNOW_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETBACKUPGNOW_ING)
-            {
-                NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_ING] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETBACKUPGNOW_FAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_FAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SGETBACKUPGNOW_BAGFULL)
-            {
-                NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_BAGFULL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.STAKEONITEMS)
-            {
-                NPC.FGotoLable[SctiptDef.NTAKEONITEMS] = nIdx;
-            }
-            else if (sLabel == SctiptDef.STAKEOFFITEMS)
-            {
-                NPC.FGotoLable[SctiptDef.NTAKEOFFITEMS] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SPLAYREVIVE)
-            {
-                NPC.FGotoLable[SctiptDef.NPLAYREVIVE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMOVEABILITY_OK)
-            {
-                NPC.FGotoLable[SctiptDef.NMOVEABILITY_OK] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SMOVEABILITY_FAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NMOVEABILITY_FAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEALL)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEALL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEWEAPON)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEWEAPON] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEDRESS)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEDRESS] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEHELMET)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEHELMET] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLENECKLACE)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLENECKLACE] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLERING)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLERING] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEARMRING)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEARMRING] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEBELT)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEBELT] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEBOOT)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEBOOT] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SASSEMBLEFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NASSEMBLEFAIL] = nIdx;
-            }
-            else if (sLabel == SctiptDef.SCREATEHEROFAILEX)
-            {
-                NPC.FGotoLable[SctiptDef.NCREATEHEROFAILEX] = nIdx;// 创建英雄失败  By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SLOGOUTHEROFIRST)
-            {
-                NPC.FGotoLable[SctiptDef.NLOGOUTHEROFIRST] = nIdx;// 请将英雄设置下线  By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SNOTHAVEHERO)
-            {
-                NPC.FGotoLable[SctiptDef.NNOTHAVEHERO] = nIdx;// 没有英雄   By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SHERONAMEFILTER)
-            {
-                NPC.FGotoLable[SctiptDef.NHERONAMEFILTER] = nIdx;// 英雄名字中包含禁用字符   By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SHAVEHERO)
-            {
-                NPC.FGotoLable[SctiptDef.NHAVEHERO] = nIdx;// 有英雄    By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SCREATEHEROOK)
-            {
-                NPC.FGotoLable[SctiptDef.NCREATEHEROOK] = nIdx;// 创建英雄OK   By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SHERONAMEEXISTS)
-            {
-                NPC.FGotoLable[SctiptDef.NHERONAMEEXISTS] = nIdx;// 英雄名字已经存在  By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SDELETEHEROOK)
-            {
-                NPC.FGotoLable[SctiptDef.NDELETEHEROOK] = nIdx;// 删除英雄成功    By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SDELETEHEROFAIL)
-            {
-                NPC.FGotoLable[SctiptDef.NDELETEHEROFAIL] = nIdx;// 删除英雄失败    By John 2012.08.04
-            }
-            else if (sLabel == SctiptDef.SHEROOVERCHRCOUNT)
-            {
-                NPC.FGotoLable[SctiptDef.NHEROOVERCHRCOUNT] = nIdx;// 你的帐号角色过多   By John 2012.08.04
-            }
-            else
-            {
-                //if (NPC.m_btNPCRaceServer == DataConst.NPC_RC_FUNMERCHANT)
-                //{
-                //    TFunMerchant FunMerchant = (TFunMerchant)NPC;
-                //    if (HUtil32.CompareLStr(sLabel, SctiptDef.SSTDMODEFUNC, SctiptDef.SSTDMODEFUNC.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SSTDMODEFUNC.Length + 1 - 1, SctiptDef.SSTDMODEFUNC.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FStdModeFunc.GetLowerBound(0) && nIndex <= FunMerchant.FStdModeFunc.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FStdModeFunc[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SPLAYLEVELUPEX, SctiptDef.SPLAYLEVELUPEX.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SPLAYLEVELUPEX.Length + 1 - 1, SctiptDef.SPLAYLEVELUPEX.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FPlayLevelUp.GetLowerBound(0) && nIndex <= FunMerchant.FPlayLevelUp.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FPlayLevelUp[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SUSERCMD, SctiptDef.SUSERCMD.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SUSERCMD.Length + 1 - 1, SctiptDef.SUSERCMD.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FUserCmd.GetLowerBound(0) && nIndex <= FunMerchant.FUserCmd.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FUserCmd[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SCLEARMISSION, SctiptDef.SCLEARMISSION.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SCLEARMISSION.Length + 1 - 1, SctiptDef.SCLEARMISSION.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FClearMission.GetLowerBound(0) && nIndex <= FunMerchant.FClearMission.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FClearMission[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGSELFFUNC, SctiptDef.SMAGSELFFUNC.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SMAGSELFFUNC.Length + 1 - 1, SctiptDef.SMAGSELFFUNC.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FMagSelfFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagSelfFunc.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FMagSelfFunc[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGTAGFUNC, SctiptDef.SMAGTAGFUNC.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNC.Length + 1 - 1, SctiptDef.SMAGTAGFUNC.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FMagTagFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFunc.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FMagTagFunc[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGTAGFUNCEX, SctiptDef.SMAGTAGFUNCEX.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNCEX.Length + 1 - 1, SctiptDef.SMAGTAGFUNCEX.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FMagTagFuncEx.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFuncEx.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FMagTagFuncEx[nIndex] = nIdx;
-                //        }
-                //    }
-                //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGMONFUNC, SctiptDef.SMAGMONFUNC.Length))
-                //    {
-                //        sIdx = sLabel.Substring(SctiptDef.SMAGMONFUNC.Length + 1 - 1, SctiptDef.SMAGMONFUNC.Length);
-                //        nIndex = Convert.ToInt32(sIdx);
-                //        if (nIndex >= FunMerchant.FMagMonFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagMonFunc.GetUpperBound(0))
-                //        {
-                //            FunMerchant.FMagMonFunc[nIndex] = nIdx;
-                //        }
-                //    }
-                //}
+            switch (sLabel)
+            {
+                case SctiptDef.SPLAYOFFLINE:
+                    NPC.FGotoLable[SctiptDef.NPLAYOFFLINE] = nIdx;
+                    break;
+                case SctiptDef.SMARRYERROR:
+                    NPC.FGotoLable[SctiptDef.NMARRYERROR] = nIdx;
+                    break;
+                case SctiptDef.SMASTERERROR:
+                    NPC.FGotoLable[SctiptDef.NMASTERERROR] = nIdx;
+                    break;
+                case SctiptDef.SMARRYCHECKDIR:
+                    NPC.FGotoLable[SctiptDef.NMARRYCHECKDIR] = nIdx;
+                    break;
+                case SctiptDef.SHUMANTYPEERR:
+                    NPC.FGotoLable[SctiptDef.NHUMANTYPEERR] = nIdx;
+                    break;
+                case SctiptDef.SSTARTMARRY:
+                    NPC.FGotoLable[SctiptDef.NSTARTMARRY] = nIdx;
+                    break;
+                case SctiptDef.SMARRYSEXERR:
+                    NPC.FGotoLable[SctiptDef.NMARRYSEXERR] = nIdx;
+                    break;
+                case SctiptDef.SMARRYDIRERR:
+                    NPC.FGotoLable[SctiptDef.NMARRYDIRERR] = nIdx;
+                    break;
+                case SctiptDef.SWATEMARRY:
+                    NPC.FGotoLable[SctiptDef.NWATEMARRY] = nIdx;
+                    break;
+                case SctiptDef.SREVMARRY:
+                    NPC.FGotoLable[SctiptDef.NREVMARRY] = nIdx;
+                    break;
+                case SctiptDef.SENDMARRY:
+                    NPC.FGotoLable[SctiptDef.NENDMARRY] = nIdx;
+                    break;
+                case SctiptDef.SENDMARRYFAIL:
+                    NPC.FGotoLable[SctiptDef.NENDMARRYFAIL] = nIdx;
+                    break;
+                case SctiptDef.SMASTERCHECKDIR:
+                    NPC.FGotoLable[SctiptDef.NMASTERCHECKDIR] = nIdx;
+                    break;
+                case SctiptDef.SSTARTGETMASTER:
+                    NPC.FGotoLable[SctiptDef.NSTARTGETMASTER] = nIdx;
+                    break;
+                case SctiptDef.SMASTERDIRERR:
+                    NPC.FGotoLable[SctiptDef.NMASTERDIRERR] = nIdx;
+                    break;
+                case SctiptDef.SWATEMASTER:
+                    NPC.FGotoLable[SctiptDef.NWATEMASTER] = nIdx;
+                    break;
+                case SctiptDef.SREVMASTER:
+                    NPC.FGotoLable[SctiptDef.NREVMASTER] = nIdx;
+                    break;
+                case SctiptDef.SENDMASTER:
+                    NPC.FGotoLable[SctiptDef.NENDMASTER] = nIdx;
+                    break;
+                case SctiptDef.SSTARTMASTER:
+                    NPC.FGotoLable[SctiptDef.NSTARTMASTER] = nIdx;
+                    break;
+                case SctiptDef.SENDMASTERFAIL:
+                    NPC.FGotoLable[SctiptDef.NENDMASTERFAIL] = nIdx;
+                    break;
+                case SctiptDef.SEXEMARRYFAIL:
+                    NPC.FGotoLable[SctiptDef.NEXEMARRYFAIL] = nIdx;
+                    break;
+                case SctiptDef.SUNMARRYCHECKDIR:
+                    NPC.FGotoLable[SctiptDef.NUNMARRYCHECKDIR] = nIdx;
+                    break;
+                case SctiptDef.SUNMARRYTYPEERR:
+                    NPC.FGotoLable[SctiptDef.NUNMARRYTYPEERR] = nIdx;
+                    break;
+                case SctiptDef.SSTARTUNMARRY:
+                    NPC.FGotoLable[SctiptDef.NSTARTUNMARRY] = nIdx;
+                    break;
+                case SctiptDef.SUNMARRYEND:
+                    NPC.FGotoLable[SctiptDef.NUNMARRYEND] = nIdx;
+                    break;
+                case SctiptDef.SWATEUNMARRY:
+                    NPC.FGotoLable[SctiptDef.NWATEUNMARRY] = nIdx;
+                    break;
+                case SctiptDef.SEXEMASTERFAIL:
+                    NPC.FGotoLable[SctiptDef.NEXEMASTERFAIL] = nIdx;
+                    break;
+                case SctiptDef.SUNMASTERCHECKDIR:
+                    NPC.FGotoLable[SctiptDef.NUNMASTERCHECKDIR] = nIdx;
+                    break;
+                case SctiptDef.SUNMASTERTYPEERR:
+                    NPC.FGotoLable[SctiptDef.NUNMASTERTYPEERR] = nIdx;
+                    break;
+                case SctiptDef.SUNISMASTER:
+                    NPC.FGotoLable[SctiptDef.NUNISMASTER] = nIdx;
+                    break;
+                case SctiptDef.SUNMASTERERROR:
+                    NPC.FGotoLable[SctiptDef.NUNMASTERERROR] = nIdx;
+                    break;
+                case SctiptDef.SSTARTUNMASTER:
+                    NPC.FGotoLable[SctiptDef.NSTARTUNMASTER] = nIdx;
+                    break;
+                case SctiptDef.SWATEUNMASTER:
+                    NPC.FGotoLable[SctiptDef.NWATEUNMASTER] = nIdx;
+                    break;
+                case SctiptDef.SUNMASTEREND:
+                    NPC.FGotoLable[SctiptDef.NUNMASTEREND] = nIdx;
+                    break;
+                case SctiptDef.SREVUNMASTER:
+                    NPC.FGotoLable[SctiptDef.NREVUNMASTER] = nIdx;
+                    break;
+                case SctiptDef.SSUPREQUEST_OK:
+                    NPC.FGotoLable[SctiptDef.NSUPREQUEST_OK] = nIdx;
+                    break;
+                case SctiptDef.SMEMBER:
+                    NPC.FGotoLable[SctiptDef.NMEMBER] = nIdx;
+                    break;
+                case SctiptDef.SPLAYRECONNECTION:
+                    NPC.FGotoLable[SctiptDef.NPLAYRECONNECTION] = nIdx;
+                    break;
+                case SctiptDef.SLOGIN:
+                    NPC.FGotoLable[SctiptDef.NLOGIN] = nIdx;
+                    break;
+                case SctiptDef.SPLAYDIE:
+                    NPC.FGotoLable[SctiptDef.NPLAYDIE] = nIdx;
+                    break;
+                case SctiptDef.SKILLPLAY:
+                    NPC.FGotoLable[SctiptDef.NKILLPLAY] = nIdx;
+                    break;
+                case SctiptDef.SPLAYLEVELUP:
+                    NPC.FGotoLable[SctiptDef.NPLAYLEVELUP] = nIdx;
+                    break;
+                case SctiptDef.SKILLMONSTER:
+                    NPC.FGotoLable[SctiptDef.NKILLMONSTER] = nIdx;
+                    break;
+                case SctiptDef.SCREATEECTYPE_IN:
+                    NPC.FGotoLable[SctiptDef.NCREATEECTYPE_IN] = nIdx;
+                    break;
+                case SctiptDef.SCREATEECTYPE_OK:
+                    NPC.FGotoLable[SctiptDef.NCREATEECTYPE_OK] = nIdx;
+                    break;
+                case SctiptDef.SCREATEECTYPE_FAIL:
+                    NPC.FGotoLable[SctiptDef.NCREATEECTYPE_FAIL] = nIdx;
+                    break;
+                case SctiptDef.SRESUME:
+                    NPC.FGotoLable[SctiptDef.NRESUME] = nIdx;
+                    break;
+                case SctiptDef.SGETLARGESSGOLD_OK:
+                    NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_OK] = nIdx;
+                    break;
+                case SctiptDef.SGETLARGESSGOLD_FAIL:
+                    NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_FAIL] = nIdx;
+                    break;
+                case SctiptDef.SGETLARGESSGOLD_ERROR:
+                    NPC.FGotoLable[SctiptDef.NGETLARGESSGOLD_ERROR] = nIdx;
+                    break;
+                case SctiptDef.SMASTERISPRENTICE:
+                    NPC.FGotoLable[SctiptDef.NMASTERISPRENTICE] = nIdx;
+                    break;
+                case SctiptDef.SMASTERISFULL:
+                    NPC.FGotoLable[SctiptDef.NMASTERISFULL] = nIdx;
+                    break;
+                case SctiptDef.SGROUPCREATE:
+                    NPC.FGotoLable[SctiptDef.NGROUPCREATE] = nIdx;
+                    break;
+                case SctiptDef.SSTARTGROUP:
+                    NPC.FGotoLable[SctiptDef.NSTARTGROUP] = nIdx;
+                    break;
+                case SctiptDef.SJOINGROUP:
+                    NPC.FGotoLable[SctiptDef.NJOINGROUP] = nIdx;
+                    break;
+                case SctiptDef.SSPEEDCLOSE:
+                    NPC.FGotoLable[SctiptDef.NSPEEDCLOSE] = nIdx;
+                    break;
+                case SctiptDef.SUPGRADENOW_OK:
+                    NPC.FGotoLable[SctiptDef.NUPGRADENOW_OK] = nIdx;
+                    break;
+                case SctiptDef.SUPGRADENOW_ING:
+                    NPC.FGotoLable[SctiptDef.NUPGRADENOW_ING] = nIdx;
+                    break;
+                case SctiptDef.SUPGRADENOW_FAIL:
+                    NPC.FGotoLable[SctiptDef.NUPGRADENOW_FAIL] = nIdx;
+                    break;
+                case SctiptDef.SGETBACKUPGNOW_OK:
+                    NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_OK] = nIdx;
+                    break;
+                case SctiptDef.SGETBACKUPGNOW_ING:
+                    NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_ING] = nIdx;
+                    break;
+                case SctiptDef.SGETBACKUPGNOW_FAIL:
+                    NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_FAIL] = nIdx;
+                    break;
+                case SctiptDef.SGETBACKUPGNOW_BAGFULL:
+                    NPC.FGotoLable[SctiptDef.NGETBACKUPGNOW_BAGFULL] = nIdx;
+                    break;
+                case SctiptDef.STAKEONITEMS:
+                    NPC.FGotoLable[SctiptDef.NTAKEONITEMS] = nIdx;
+                    break;
+                case SctiptDef.STAKEOFFITEMS:
+                    NPC.FGotoLable[SctiptDef.NTAKEOFFITEMS] = nIdx;
+                    break;
+                case SctiptDef.SPLAYREVIVE:
+                    NPC.FGotoLable[SctiptDef.NPLAYREVIVE] = nIdx;
+                    break;
+                case SctiptDef.SMOVEABILITY_OK:
+                    NPC.FGotoLable[SctiptDef.NMOVEABILITY_OK] = nIdx;
+                    break;
+                case SctiptDef.SMOVEABILITY_FAIL:
+                    NPC.FGotoLable[SctiptDef.NMOVEABILITY_FAIL] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEALL:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEALL] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEWEAPON:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEWEAPON] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEDRESS:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEDRESS] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEHELMET:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEHELMET] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLENECKLACE:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLENECKLACE] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLERING:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLERING] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEARMRING:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEARMRING] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEBELT:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEBELT] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEBOOT:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEBOOT] = nIdx;
+                    break;
+                case SctiptDef.SASSEMBLEFAIL:
+                    NPC.FGotoLable[SctiptDef.NASSEMBLEFAIL] = nIdx;
+                    break;
+                case SctiptDef.SCREATEHEROFAILEX:
+                    NPC.FGotoLable[SctiptDef.NCREATEHEROFAILEX] = nIdx;// 创建英雄失败  By John 2012.08.04
+                    break;
+                case SctiptDef.SLOGOUTHEROFIRST:
+                    NPC.FGotoLable[SctiptDef.NLOGOUTHEROFIRST] = nIdx;// 请将英雄设置下线  By John 2012.08.04
+                    break;
+                case SctiptDef.SNOTHAVEHERO:
+                    NPC.FGotoLable[SctiptDef.NNOTHAVEHERO] = nIdx;// 没有英雄   By John 2012.08.04
+                    break;
+                case SctiptDef.SHERONAMEFILTER:
+                    NPC.FGotoLable[SctiptDef.NHERONAMEFILTER] = nIdx;// 英雄名字中包含禁用字符   By John 2012.08.04
+                    break;
+                case SctiptDef.SHAVEHERO:
+                    NPC.FGotoLable[SctiptDef.NHAVEHERO] = nIdx;// 有英雄    By John 2012.08.04
+                    break;
+                case SctiptDef.SCREATEHEROOK:
+                    NPC.FGotoLable[SctiptDef.NCREATEHEROOK] = nIdx;// 创建英雄OK   By John 2012.08.04
+                    break;
+                case SctiptDef.SHERONAMEEXISTS:
+                    NPC.FGotoLable[SctiptDef.NHERONAMEEXISTS] = nIdx;// 英雄名字已经存在  By John 2012.08.04
+                    break;
+                case SctiptDef.SDELETEHEROOK:
+                    NPC.FGotoLable[SctiptDef.NDELETEHEROOK] = nIdx;// 删除英雄成功    By John 2012.08.04
+                    break;
+                case SctiptDef.SDELETEHEROFAIL:
+                    NPC.FGotoLable[SctiptDef.NDELETEHEROFAIL] = nIdx;// 删除英雄失败    By John 2012.08.04
+                    break;
+                case SctiptDef.SHEROOVERCHRCOUNT:
+                    NPC.FGotoLable[SctiptDef.NHEROOVERCHRCOUNT] = nIdx;// 你的帐号角色过多   By John 2012.08.04
+                    break;
+                default:
+                    //if (NPC.m_btNPCRaceServer == DataConst.NPC_RC_FUNMERCHANT)
+                    //{
+                    //    TFunMerchant FunMerchant = (TFunMerchant)NPC;
+                    //    if (HUtil32.CompareLStr(sLabel, SctiptDef.SSTDMODEFUNC, SctiptDef.SSTDMODEFUNC.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SSTDMODEFUNC.Length + 1 - 1, SctiptDef.SSTDMODEFUNC.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FStdModeFunc.GetLowerBound(0) && nIndex <= FunMerchant.FStdModeFunc.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FStdModeFunc[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SPLAYLEVELUPEX, SctiptDef.SPLAYLEVELUPEX.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SPLAYLEVELUPEX.Length + 1 - 1, SctiptDef.SPLAYLEVELUPEX.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FPlayLevelUp.GetLowerBound(0) && nIndex <= FunMerchant.FPlayLevelUp.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FPlayLevelUp[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SUSERCMD, SctiptDef.SUSERCMD.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SUSERCMD.Length + 1 - 1, SctiptDef.SUSERCMD.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FUserCmd.GetLowerBound(0) && nIndex <= FunMerchant.FUserCmd.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FUserCmd[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SCLEARMISSION, SctiptDef.SCLEARMISSION.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SCLEARMISSION.Length + 1 - 1, SctiptDef.SCLEARMISSION.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FClearMission.GetLowerBound(0) && nIndex <= FunMerchant.FClearMission.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FClearMission[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGSELFFUNC, SctiptDef.SMAGSELFFUNC.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SMAGSELFFUNC.Length + 1 - 1, SctiptDef.SMAGSELFFUNC.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FMagSelfFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagSelfFunc.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FMagSelfFunc[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGTAGFUNC, SctiptDef.SMAGTAGFUNC.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNC.Length + 1 - 1, SctiptDef.SMAGTAGFUNC.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FMagTagFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFunc.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FMagTagFunc[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGTAGFUNCEX, SctiptDef.SMAGTAGFUNCEX.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SMAGTAGFUNCEX.Length + 1 - 1, SctiptDef.SMAGTAGFUNCEX.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FMagTagFuncEx.GetLowerBound(0) && nIndex <= FunMerchant.FMagTagFuncEx.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FMagTagFuncEx[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //    else if (HUtil32.CompareLStr(sLabel, SctiptDef.SMAGMONFUNC, SctiptDef.SMAGMONFUNC.Length))
+                    //    {
+                    //        sIdx = sLabel.Substring(SctiptDef.SMAGMONFUNC.Length + 1 - 1, SctiptDef.SMAGMONFUNC.Length);
+                    //        nIndex = Convert.ToInt32(sIdx);
+                    //        if (nIndex >= FunMerchant.FMagMonFunc.GetLowerBound(0) && nIndex <= FunMerchant.FMagMonFunc.GetUpperBound(0))
+                    //        {
+                    //            FunMerchant.FMagMonFunc[nIndex] = nIdx;
+                    //        }
+                    //    }
+                    //}
+                    break;
             }
         }
 
@@ -2755,12 +2654,12 @@ namespace M2Server
         /// <param name="sLabel"></param>
         /// <param name="boChange"></param>
         /// <returns></returns>
-        internal string FormatLabelStr(string sLabel, ref bool boChange)
+        private string FormatLabelStr(string sLabel, ref bool boChange)
         {
             var result = sLabel;
             if (sLabel.IndexOf(")") > -1)
             {
-                HUtil32.GetValidStr3(sLabel, ref result, new string[] { "(" });
+                HUtil32.GetValidStr3(sLabel, ref result, new[] { "(" });
                 boChange = true;
             }
             return result;
@@ -2810,7 +2709,7 @@ namespace M2Server
         /// <param name="OldStringList">老标签列表</param>
         /// <param name="ScriptNameList">标签列表</param>
         /// <returns></returns>
-        internal string InitializeSayMsg(string sMsg, List<string> StringList, IList<string> OldStringList, IList<string> ScriptNameList)
+        private string InitializeSayMsg(string sMsg, List<string> StringList, IList<string> OldStringList, IList<string> ScriptNameList)
         {
             var nC = 0;
             var s10 = string.Empty;
@@ -2922,7 +2821,7 @@ namespace M2Server
         /// <summary>
         /// 初始化全局变量脚本
         /// </summary>
-        internal void InitializeVariable(string sLabel, ref string sMsg)
+        private void InitializeVariable(string sLabel, ref string sMsg)
         {
             var s14 = string.Empty;
             var sLabel2 = sLabel.ToUpper();

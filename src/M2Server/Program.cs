@@ -1,45 +1,49 @@
 using System;
-using System.Runtime;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace M2Server
 {
-    public class Program
+    class Program
     {
-        private static Thread serverThread = null;
-        private static ServerApp serverApp = null;
+        private static ServerApp? serverApp = null;
 
-        [STAThread]
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
+            //GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
+            
             serverApp = new ServerApp();
-            serverApp.StartServer();
+            var cts = new CancellationTokenSource();
+            var bgtask = Task.Factory.StartNew(() => { serverApp.StartServer(cts.Token); }, cts.Token);
 
-            //serverThread = new Thread(Start);
-            //serverThread.IsBackground = true;
-            //serverThread.Start();
-
-            while (true)
+            Console.CancelKeyPress += (s, e) =>
             {
-                var line = Console.ReadLine();
-                if (string.IsNullOrEmpty(line))
-                {
-                    return;
-                }
-                switch (line)
-                {
-                    case "info":
-                        Console.WriteLine("");
-                        break;
-                }
-            }
-        }
+                Console.WriteLine($"{DateTime.Now} 后台测试服务，准备进行资源清理！");
 
-        static void Start(object obj)
-        {
+                cts.Cancel();
+                bgtask.Wait(cts.Token);
+
+                Console.WriteLine($"{DateTime.Now} 恭喜，Test服务程序已正常退出！");
+            };
+
+            System.Console.ReadLine();
+
+            // while (true)
+            // {
+            //     var line = Console.ReadLine();
+            //     if (string.IsNullOrEmpty(line))
+            //     {
+            //         return;
+            //     }
+            //     switch (line)
+            //     {
+            //         case "info":
+            //             Console.WriteLine("");
+            //             break;
+            //     }
+            // }
         }
     }
 }

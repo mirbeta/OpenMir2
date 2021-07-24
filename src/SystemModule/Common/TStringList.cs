@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace mSystemModule
+namespace SystemModule
 {
     public sealed class StringList : IDisposable
     {

@@ -1,12 +1,7 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true
-  },
   "profiles": {
     "MirServer": {
       "commandName": "Project",
-      "applicationUrl": "http://localhost:50103",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
