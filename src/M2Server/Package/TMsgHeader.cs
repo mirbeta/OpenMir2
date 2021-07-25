@@ -7,8 +7,8 @@ namespace M2Server
     {
         public uint dwCode;
         public int nSocket;
-        public short wGSocketIdx;
-        public short wIdent;
+        public ushort wGSocketIdx;
+        public ushort wIdent;
         public int wUserListIndex;
         public int nLength;
 

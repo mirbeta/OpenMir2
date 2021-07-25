@@ -23,12 +23,12 @@ namespace M2Server
             return result;
         }
 
-        public static short GetRPow(int wInt)
+        public static ushort GetRPow(int wInt)
         {
-            short result;
+            ushort result;
             if (HUtil32.HiWord(wInt) > HUtil32.LoWord(wInt))
             {
-                result = (short)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
+                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
             }
             else
             {
@@ -114,7 +114,7 @@ namespace M2Server
         /// <param name="Idx"></param>
         public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
-            var dura = (short)(nCount * 100);
+            var dura = (ushort)(nCount * 100);
             if (PlayObject.m_UseItems[Idx].Dura > dura)
             {
                 PlayObject.m_UseItems[Idx].Dura -= dura;//减少护身符持久即数量

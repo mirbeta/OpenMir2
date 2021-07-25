@@ -6,8 +6,8 @@ namespace M2Server
     {
         public TOStdItem S;
         public int MakeIndex;
-        public short Dura;
-        public short DuraMax;
+        public ushort Dura;
+        public ushort DuraMax;
 
         public byte[] ToByte()
         {

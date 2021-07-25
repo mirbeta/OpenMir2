@@ -38,7 +38,7 @@ namespace M2Server
             Merchant.m_sCharName = sParam1;
             Merchant.m_sMapName = PlayObject.m_sMapName;
             Merchant.m_PEnvir = PlayObject.m_PEnvir;
-            Merchant.m_wAppr = (short)nAppr;
+            Merchant.m_wAppr = (ushort)nAppr;
             Merchant.m_nFlag = 0;
             Merchant.m_boCastle = boIsCastle;
             Merchant.m_sScript = sParam2;

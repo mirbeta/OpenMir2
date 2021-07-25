@@ -22,8 +22,8 @@ namespace M2Server
         public void StartServer(CancellationToken token)
         {
             int nCode;
-            LocalDB.FrmDB = new TFrmDB();
-            if (!LocalDB.FrmDB.CheckDataBase())
+            M2Share.LocalDB = new LocalDB();
+            if (!M2Share.LocalDB.CheckDataBase())
             {
                 return;
             }
@@ -35,7 +35,7 @@ namespace M2Server
                 M2Share.LoadDenyChrNameList();
                 M2Share.LoadNoClearMonList();
                 M2Share.MainOutMessage("正在加载物品数据库...");
-                nCode = LocalDB.FrmDB.LoadItemsDB();
+                nCode = M2Share.LocalDB.LoadItemsDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("物品数据库加载失败！！！" + "Code: " + nCode);
@@ -59,7 +59,7 @@ namespace M2Server
                 }
                 M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
                 M2Share.MainOutMessage("正在加载怪物数据库...");
-                nCode = LocalDB.FrmDB.LoadMonsterDB();
+                nCode = M2Share.LocalDB.LoadMonsterDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载怪物数据库失败！！！" + "Code: " + nCode);
@@ -67,7 +67,7 @@ namespace M2Server
                 }
                 M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
                 M2Share.MainOutMessage("正在加载技能数据库...");
-                nCode = LocalDB.FrmDB.LoadMagicDB();
+                nCode = M2Share.LocalDB.LoadMagicDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载技能数据库失败！！！" + "Code: " + nCode);
@@ -75,7 +75,7 @@ namespace M2Server
                 }
                 M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
                 M2Share.MainOutMessage("正在加载怪物刷新配置信息...");
-                nCode = LocalDB.FrmDB.LoadMonGen();
+                nCode = M2Share.LocalDB.LoadMonGen();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载怪物刷新配置信息失败！！！" + "Code: " + nCode);
@@ -99,7 +99,7 @@ namespace M2Server
                 M2Share.LoadUnMasterList();
                 M2Share.LoadUnForceMasterList();
                 M2Share.MainOutMessage("正在加载捆装物品信息...");
-                nCode = LocalDB.FrmDB.LoadUnbindList();
+                nCode = M2Share.LocalDB.LoadUnbindList();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载捆装物品信息失败！！！" + "Code: " + nCode);
@@ -107,7 +107,7 @@ namespace M2Server
                 }
                 M2Share.MainOutMessage("加载捆装物品信息成功...");
                 M2Share.MainOutMessage("正在加载任务地图信息...");
-                nCode = LocalDB.FrmDB.LoadMapQuest();
+                nCode = M2Share.LocalDB.LoadMapQuest();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载任务地图信息失败！！！");
@@ -115,7 +115,7 @@ namespace M2Server
                 }
                 M2Share.MainOutMessage("加载任务地图信息成功...");
                 M2Share.MainOutMessage("正在加载任务说明信息...");
-                nCode = LocalDB.FrmDB.LoadQuestDiary();
+                nCode = M2Share.LocalDB.LoadQuestDiary();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载任务说明信息失败！！！");
@@ -132,7 +132,7 @@ namespace M2Server
                     M2Share.MainOutMessage("加载公告提示信息失败！！！");
                 }
                 M2Share.MainOutMessage("加载公告提示信息成功...");
-                LocalDB.FrmDB.LoadAdminList();
+                M2Share.LocalDB.LoadAdminList();
                 M2Share.MainOutMessage("管理员列表加载成功...");
                 M2Share.GuildManager.LoadGuildInfo();
                 M2Share.MainOutMessage("行会列表加载成功...");
@@ -170,18 +170,18 @@ namespace M2Server
                 M2Share.MainOutMessage("地图环境加载成功...");
                 MakeStoneMines();
                 M2Share.MainOutMessage("矿物数据初始成功...");
-                LocalDB.FrmDB.LoadMerchant();
+                M2Share.LocalDB.LoadMerchant();
                 M2Share.MainOutMessage("交易NPC列表加载成功...");
                 if (!M2Share.g_Config.boVentureServer)
                 {
-                    LocalDB.FrmDB.LoadGuardList();
+                    M2Share.LocalDB.LoadGuardList();
                     M2Share.MainOutMessage("守卫列表加载成功...");
                 }
-                LocalDB.FrmDB.LoadNpcs();
+                M2Share.LocalDB.LoadNpcs();
                 M2Share.MainOutMessage("管理NPC列表加载成功...");
-                LocalDB.FrmDB.LoadMakeItem();
+                M2Share.LocalDB.LoadMakeItem();
                 M2Share.MainOutMessage("炼制物品信息加载成功...");
-                LocalDB.FrmDB.LoadStartPoint();
+                M2Share.LocalDB.LoadStartPoint();
                 M2Share.MainOutMessage("回城点配置加载成功...");
                 M2Share.MainOutMessage("正在初始安全区光圈...");
                 M2Share.g_MapManager.MakeSafePkZone();
@@ -269,7 +269,7 @@ namespace M2Server
             M2Share.FrontEngine = new TFrontEngine();
             M2Share.UserEngine = new UserEngine();
             M2Share.RobotManage = new RobotManage();
-            M2Share.g_MakeItemList = new List<string>();
+            M2Share.g_MakeItemList = new Dictionary<string, IList<TMakeItem>>();
             M2Share.StartPointList = new List<TStartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
             M2Share.g_DenySayMsgList = new ConcurrentDictionary<int, int>();

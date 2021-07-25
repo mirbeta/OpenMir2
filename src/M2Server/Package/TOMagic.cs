@@ -4,17 +4,17 @@ namespace M2Server
 {
     public class TOMagic
     {
-        public short wMagicID;
+        public ushort wMagicID;
         public byte btEffectType;
         public byte btEffect;
-        public short wSpell;
-        public short wPower;
+        public ushort wSpell;
+        public ushort wPower;
         public byte btTrainLv;
         public byte btJob;
         public int dwDelayTime;
         public byte btDefSpell;
         public byte btDefPower;
-        public short wMaxPower;
+        public ushort wMaxPower;
         public byte btDefMaxPower;
 
         public TOMagic()

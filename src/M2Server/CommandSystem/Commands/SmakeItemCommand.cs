@@ -30,7 +30,7 @@ namespace M2Server
                     PlayObject.  m_UseItems[nWhere].btValue[9] = (byte)HUtil32._MIN(255,PlayObject. m_UseItems[nWhere].btValue[9] + 1);// 累积升级次数
                     if (nValueType == 16 && StdItem.Shape == 188)// 吸伤属性
                     {
-                        PlayObject.  m_UseItems[nWhere].btValue[20] = Convert.ToByte(nValue);
+                        PlayObject.m_UseItems[nWhere].btValue[20] = Convert.ToByte(nValue);
                         if (PlayObject.m_UseItems[nWhere].btValue[20] > 100)
                         {
                             PlayObject.m_UseItems[nWhere].btValue[20] = 100;
@@ -41,11 +41,11 @@ namespace M2Server
                         nValue = HUtil32._MIN(65, nValue);
                         if (nValueType == 14)
                         {
-                            PlayObject.   m_UseItems[nWhere].Dura = Convert.ToInt16(nValue * 1000);
+                            PlayObject.m_UseItems[nWhere].Dura = Convert.ToUInt16(nValue * 1000);
                         }
                         if (nValueType == 15)
                         {
-                            PlayObject.  m_UseItems[nWhere].DuraMax = Convert.ToInt16(nValue * 1000);
+                            PlayObject.m_UseItems[nWhere].DuraMax = Convert.ToUInt16(nValue * 1000);
                         }
                     }
                     else

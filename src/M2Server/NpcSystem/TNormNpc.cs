@@ -436,20 +436,20 @@ namespace M2Server
                 case '=':
                     if ((nLevel > 0) && (nLevel <= grobal2.MAXLEVEL))
                     {
-                        PlayObject.m_Abil.Level = (short)nLevel;
+                        PlayObject.m_Abil.Level = (ushort)nLevel;
                         boChgOK = true;
                     }
                     break;
                 case '-':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level - nLevel);
                     nLv = HUtil32._MIN(grobal2.MAXLEVEL, nLv);
-                    PlayObject.m_Abil.Level = (short)nLv;
+                    PlayObject.m_Abil.Level = (ushort)nLv;
                     boChgOK = true;
                     break;
                 case '+':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level + nLevel);
                     nLv = HUtil32._MIN(grobal2.MAXLEVEL, nLv);
-                    PlayObject.m_Abil.Level = (short)nLv;
+                    PlayObject.m_Abil.Level = (ushort)nLv;
                     boChgOK = true;
                     break;
             }
@@ -3487,7 +3487,7 @@ namespace M2Server
                     case 0:
                         if (nParam3 >= 0)
                         {
-                            PlayObject.m_Abil.Level = (short)nParam3;
+                            PlayObject.m_Abil.Level = (ushort)nParam3;
                             PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         }
                         break;
@@ -3514,13 +3514,13 @@ namespace M2Server
                                 dwInt = nParam3;
                             }
                         }
-                        PlayObject.m_Abil.Level += (short)dwInt;
+                        PlayObject.m_Abil.Level += (ushort)dwInt;
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                     case 2:
                         if (PlayObject.m_Abil.Level > nParam3)
                         {
-                            PlayObject.m_Abil.Level -= (short)nParam3;
+                            PlayObject.m_Abil.Level -= (ushort)nParam3;
                         }
                         else
                         {
@@ -7346,10 +7346,8 @@ namespace M2Server
         public void GotoLable_SendMerChantSayMsg(TPlayObject PlayObject, string sMsg, bool boFlag)
         {
             string s10 = string.Empty;
-            string s14;
-            int nC;
-            s14 = sMsg;
-            nC = 0;
+            string s14 = sMsg;
+            int nC = 0;
             while (true)
             {
                 if (HUtil32.TagCount(s14, '>') < 1)
@@ -7439,7 +7437,7 @@ namespace M2Server
             {
                 if (Script.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
                 {
-                    if (boExtJmp && !SayingRecord.boExtJmp)
+                    if (boExtJmp && SayingRecord.boExtJmp == false)
                     {
                         return;
                     }
@@ -7546,7 +7544,7 @@ namespace M2Server
             if (n10 > 0)
             {
                 s14 = sMsg.Substring(0, n10 - 1);
-                s18 = sMsg.Substring(sStr.Length + n10 - 1, sMsg.Length);
+                s18 = sMsg.Substring(sStr.Length + n10, sMsg.Length - (sStr.Length + n10));
                 result = s14 + sText + s18;
             }
             else
@@ -7558,14 +7556,11 @@ namespace M2Server
 
         public virtual void UserSelect(TPlayObject PlayObject, string sData)
         {
-            string sMsg;
             string sLabel = string.Empty;
             PlayObject.m_nScriptGotoCount = 0;
-            // ==============================================
-            // 处理脚本命令 @back 返回上级标签内容
-            if ((sData != "") && (sData[0] == '@'))
+            if ((sData != "") && (sData[0] == '@'))// 处理脚本命令 @back 返回上级标签内容
             {
-                sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
                     if (sLabel != M2Share.sBACK)
@@ -7586,8 +7581,6 @@ namespace M2Server
                     }
                 }
             }
-            // ==============================================
-
         }
 
         private void ActionOfChangeNameColor(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -7651,7 +7644,7 @@ namespace M2Server
                 PlayObject.m_btReLevel += (byte)nReLevel;
                 if (nLevel > 0)
                 {
-                    PlayObject.m_Abil.Level = (short)nLevel;
+                    PlayObject.m_Abil.Level = (ushort)nLevel;
                 }
                 if (M2Share.g_Config.boReNewLevelClearExp)
                 {
@@ -7958,26 +7951,18 @@ namespace M2Server
 
         private void ActionOfGmExecute(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            string sData;
-            byte btOldPermission;
-            string sParam1;
-            string sParam2;
-            string sParam3;
-            string sParam4;
-            string sParam5;
-            string sParam6;
-            sParam1 = QuestActionInfo.sParam1;
-            sParam2 = QuestActionInfo.sParam2;
-            sParam3 = QuestActionInfo.sParam3;
-            sParam4 = QuestActionInfo.sParam4;
-            sParam5 = QuestActionInfo.sParam5;
-            sParam6 = QuestActionInfo.sParam6;
+            string sParam1 = QuestActionInfo.sParam1;
+            string sParam2 = QuestActionInfo.sParam2;
+            string sParam3 = QuestActionInfo.sParam3;
+            string sParam4 = QuestActionInfo.sParam4;
+            string sParam5 = QuestActionInfo.sParam5;
+            string sParam6 = QuestActionInfo.sParam6;
             if (sParam2.ToLower().CompareTo("Self".ToLower()) == 0)
             {
                 sParam2 = PlayObject.m_sCharName;
             }
-            sData = format("@{0} {1} {2} {3} {4} {5}", new string[] { sParam1, sParam2, sParam3, sParam4, sParam5, sParam6 });
-            btOldPermission = PlayObject.m_btPermission;
+            string sData = format("@{0} {1} {2} {3} {4} {5}", new string[] { sParam1, sParam2, sParam3, sParam4, sParam5, sParam6 });
+            byte btOldPermission = PlayObject.m_btPermission;
             try
             {
                 PlayObject.m_btPermission = 10;
@@ -8257,12 +8242,12 @@ namespace M2Server
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.m_WAbil.HP = (short)nHP;
+                    PlayObject.m_WAbil.HP = (ushort)nHP;
                     break;
                 case '-':
                     if (PlayObject.m_WAbil.HP >= nHP)
                     {
-                        PlayObject.m_WAbil.HP -= (short)nHP;
+                        PlayObject.m_WAbil.HP -= (ushort)nHP;
                     }
                     else
                     {
@@ -8270,7 +8255,7 @@ namespace M2Server
                     }
                     break;
                 case '+':
-                    PlayObject.m_WAbil.HP += (short)nHP;
+                    PlayObject.m_WAbil.HP += (ushort)nHP;
                     if (PlayObject.m_WAbil.HP > PlayObject.m_WAbil.MaxHP)
                     {
                         PlayObject.m_WAbil.HP = PlayObject.m_WAbil.MaxHP;
@@ -8280,7 +8265,7 @@ namespace M2Server
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
 
-                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanHPMsg, new short[] { PlayObject.m_WAbil.MaxHP }), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanHPMsg, new ushort[] { PlayObject.m_WAbil.MaxHP }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
@@ -8298,12 +8283,12 @@ namespace M2Server
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.m_WAbil.MP = (short)nMP;
+                    PlayObject.m_WAbil.MP = (ushort)nMP;
                     break;
                 case '-':
                     if (PlayObject.m_WAbil.MP >= nMP)
                     {
-                        PlayObject.m_WAbil.MP -= (short)nMP;
+                        PlayObject.m_WAbil.MP -= (ushort)nMP;
                     }
                     else
                     {
@@ -8311,7 +8296,7 @@ namespace M2Server
                     }
                     break;
                 case '+':
-                    PlayObject.m_WAbil.MP += (short)nMP;
+                    PlayObject.m_WAbil.MP += (ushort)nMP;
                     if (PlayObject.m_WAbil.MP > PlayObject.m_WAbil.MaxMP)
                     {
                         PlayObject.m_WAbil.MP = PlayObject.m_WAbil.MaxMP;
@@ -8321,7 +8306,7 @@ namespace M2Server
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
 
-                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanMPMsg, new short[] { PlayObject.m_WAbil.MaxMP }), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanMPMsg, new ushort[] { PlayObject.m_WAbil.MaxMP }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
@@ -9284,22 +9269,6 @@ namespace M2Server
                     }
                     break;
             }
-            // 
-            // Result:=False;
-            // nGold:=Str_ToInt(QuestConditionInfo.sParam2, -1);
-            // if nGold < 0 then begin
-            // ScriptConditionError(PlayObject,QuestConditionInfo,sSC_CHECKCASTLEGOLD);
-            // exit;
-            // end;
-            // cMethod:=QuestConditionInfo.sParam1[1];
-            // case cMethod of
-            // '=': if UserCastle.m_nTotalGold = nGold then Result:=True;
-            // '>': if UserCastle.m_nTotalGold > nGold then Result:=True;
-            // '<': if UserCastle.m_nTotalGold < nGold then Result:=True;
-            // else if UserCastle.m_nTotalGold >= nGold then Result:=True;
-            // end;
-            // 
-
             return result;
         }
 
@@ -9704,11 +9673,11 @@ namespace M2Server
             if (nValType == 14)
             {
                 nAddPoint = nPoint * 1000;
-                if (UserItem.DuraMax + nAddPoint > short.MaxValue)
+                if (UserItem.DuraMax + nAddPoint > ushort.MaxValue)
                 {
-                    nAddPoint = short.MaxValue - UserItem.DuraMax;
+                    nAddPoint = ushort.MaxValue - UserItem.DuraMax;
                 }
-                UserItem.DuraMax = (short)(UserItem.DuraMax + nAddPoint);
+                UserItem.DuraMax = (ushort)(UserItem.DuraMax + nAddPoint);
             }
             else
             {
@@ -9779,11 +9748,11 @@ namespace M2Server
             if (nValType == 14)
             {
                 nAddPoint = nPoint * 1000;
-                if (UserItem.DuraMax + nAddPoint > short.MaxValue)
+                if (UserItem.DuraMax + nAddPoint > ushort.MaxValue)
                 {
-                    nAddPoint = short.MaxValue - UserItem.DuraMax;
+                    nAddPoint = ushort.MaxValue - UserItem.DuraMax;
                 }
-                UserItem.DuraMax = (short)(UserItem.DuraMax + nAddPoint);
+                UserItem.DuraMax = (ushort)(UserItem.DuraMax + nAddPoint);
             }
             else
             {

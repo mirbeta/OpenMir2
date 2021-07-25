@@ -8,7 +8,7 @@ namespace M2Server
         /// <summary>
         /// 技能ID
         /// </summary>
-        public short wMagIdx;
+        public ushort wMagIdx;
         /// <summary>
         /// 等级
         /// </summary>
@@ -41,7 +41,7 @@ namespace M2Server
 
         public TMagicRcd(byte[] buff)
         {
-            this.wMagIdx = BitConverter.ToInt16(buff, 0);
+            this.wMagIdx = BitConverter.ToUInt16(buff, 0);
             this.btLevel = buff[2];
             this.btKey = buff[3];
             this.nTranPoint = BitConverter.ToInt16(buff, 4);

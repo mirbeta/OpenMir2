@@ -2202,7 +2202,6 @@ namespace M2Server
             for (var i = 0; i < StringList.Count; i++)
             {
                 sLine = StringList[i];
-                sLine = LocalDB.DeCodeString(sLine);
                 StringList[i] = sLine;
             }
         }
@@ -2278,18 +2277,18 @@ namespace M2Server
                 nIdx = 0;
                 foreach (var SayingRecord in RecordList.RecordList.Values)
                 {
-                    for (var k = 0; k < SayingRecord.ProcedureList.Count; k++)
-                    {
-                        var SayingProcedure = SayingRecord.ProcedureList[k];
-                        if (!string.IsNullOrEmpty(SayingProcedure.sSayMsg))
-                        {
-                            SayingProcedure.sSayMsg = InitializeSayMsg(SayingProcedure.sSayMsg, SayingProcedure.SayNewLabelList, SayingProcedure.SayOldLabelList, ScriptNameList);
-                        }
-                        if (!string.IsNullOrEmpty(SayingProcedure.sElseSayMsg))
-                        {
-                            SayingProcedure.sElseSayMsg = InitializeSayMsg(SayingProcedure.sElseSayMsg, SayingProcedure.ElseSayNewLabelList, SayingProcedure.ElseSayOldLabelList, ScriptNameList);
-                        }
-                    }
+                    // for (var k = 0; k < SayingRecord.ProcedureList.Count; k++)
+                    // {
+                    //     var SayingProcedure = SayingRecord.ProcedureList[k];
+                    //     if (!string.IsNullOrEmpty(SayingProcedure.sSayMsg))
+                    //     {
+                    //         SayingProcedure.sSayMsg = InitializeSayMsg(SayingProcedure.sSayMsg, SayingProcedure.SayNewLabelList, SayingProcedure.SayOldLabelList, ScriptNameList);
+                    //     }
+                    //     if (!string.IsNullOrEmpty(SayingProcedure.sElseSayMsg))
+                    //     {
+                    //         SayingProcedure.sElseSayMsg = InitializeSayMsg(SayingProcedure.sElseSayMsg, SayingProcedure.ElseSayNewLabelList, SayingProcedure.ElseSayOldLabelList, ScriptNameList);
+                    //     }
+                    // }
                     InitializeAppendLabel(NPC, SayingRecord.sLabel, nIdx);
                     nIdx++;
                 }

@@ -34,7 +34,7 @@ namespace M2Server
         /// <summary>
         /// 外观，即Items.WIL中的图片索引
         /// </summary>
-        public short Looks;
+        public ushort Looks;
         /// <summary>
         /// 持久力
         /// </summary>

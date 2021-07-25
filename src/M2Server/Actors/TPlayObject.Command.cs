@@ -402,7 +402,7 @@ namespace M2Server
             if (PlayObject != null)
             {
                 nOLevel = PlayObject.m_Abil.Level;
-                PlayObject.m_Abil.Level = (short)HUtil32._MAX(1, HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel));
+                PlayObject.m_Abil.Level = (ushort)HUtil32._MAX(1, HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel));
                 PlayObject.HasLevelUp(1);
                 SysMsg(sHumanName + " 等级调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
@@ -714,7 +714,7 @@ namespace M2Server
             }
             nLevel = HUtil32.Str_ToInt(sParam1, 1);
             nOLevel = m_Abil.Level;
-            m_Abil.Level = (short)HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel);
+            m_Abil.Level = (ushort)HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel);
             HasLevelUp(1);
             if (M2Share.g_Config.boShowMakeItemMsg)
             {
@@ -3672,7 +3672,7 @@ namespace M2Server
                 m_sCharName = sParam1,
                 m_sMapName = m_sMapName,
                 m_PEnvir = m_PEnvir,
-                m_wAppr = (short)nAppr,
+                m_wAppr = (ushort)nAppr,
                 m_nFlag = 0,
                 m_boCastle = boIsCastle,
                 m_sScript = sParam2
@@ -4052,7 +4052,7 @@ namespace M2Server
             {
                 return;
             }
-            LocalDB.FrmDB.LoadAdminList();
+            M2Share.LocalDB.LoadAdminList();
             M2Share.UserEngine.SendServerGroupMsg(213, M2Share.nServerIndex, "");
             SysMsg("管理员列表重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
         }
@@ -4199,7 +4199,7 @@ namespace M2Server
                 for (I = 0; I < M2Share.UserEngine.MonsterList.Count; I++)
                 {
                     Monster = M2Share.UserEngine.MonsterList[I];
-                    LocalDB.FrmDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
+                    M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
                 }
                 SysMsg("怪物爆物品列表重加载完成...", TMsgColor.c_Green, TMsgType.t_Hint);
             }
@@ -4220,7 +4220,7 @@ namespace M2Server
             }
             if (string.Compare("all", sParam, StringComparison.Ordinal) == 0)
             {
-                LocalDB.FrmDB.ReLoadMerchants();
+                M2Share.LocalDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
                 SysMsg("交易NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 M2Share.UserEngine.ReloadNpcList();
@@ -4807,11 +4807,11 @@ namespace M2Server
                         nValue = HUtil32._MIN(65, nValue);
                         if (nValueType == 14)
                         {
-                            m_UseItems[nWhere].Dura = (short)(nValue * 1000);
+                            m_UseItems[nWhere].Dura = (ushort)(nValue * 1000);
                         }
                         if (nValueType == 15)
                         {
-                            m_UseItems[nWhere].DuraMax = (short)(nValue * 1000);
+                            m_UseItems[nWhere].DuraMax = (ushort)(nValue * 1000);
                         }
                     }
                     else

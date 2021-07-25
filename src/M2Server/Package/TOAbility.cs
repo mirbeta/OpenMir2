@@ -4,21 +4,21 @@ namespace M2Server
 {
     public class TOAbility
     {
-        public short Level;
-        public short AC;
-        public short MAC;
-        public short DC;
-        public short MC;
-        public short SC;
-        public short HP;
-        public short MP;
-        public short MaxHP;
-        public short MaxMP;
+        public ushort Level;
+        public ushort AC;
+        public ushort MAC;
+        public ushort DC;
+        public ushort MC;
+        public ushort SC;
+        public ushort HP;
+        public ushort MP;
+        public ushort MaxHP;
+        public ushort MaxMP;
         public int dw1AC;
         public int Exp;
         public int MaxExp;
-        public short Weight;
-        public short MaxWeight;
+        public ushort Weight;
+        public ushort MaxWeight;
         public byte WearWeight;
         public byte MaxWearWeight;
         public byte HandWeight;

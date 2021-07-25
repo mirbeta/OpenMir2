@@ -44,6 +44,11 @@ namespace M2Server
             return binaryReader.ReadInt16();
         }
 
+        public ushort ReadUInt16()
+        {
+            return binaryReader.ReadUInt16();
+        }
+
         public double ReadDouble()
         {
             return binaryReader.ReadDouble();

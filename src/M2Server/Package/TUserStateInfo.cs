@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using SystemModule;
 
 namespace M2Server
 {
@@ -10,7 +9,7 @@ namespace M2Server
         public string UserName;
         public string GuildName;
         public string GuildRankName;
-        public short NameColor;
+        public ushort NameColor;
         public TClientItem[] UseItems;
 
         public TUserStateInfo()

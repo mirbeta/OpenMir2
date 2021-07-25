@@ -25,7 +25,7 @@ namespace M2Server
         public int nY;
         public TMapItem MapItem;
         public string sName;
-        public short wLooks;
+        public ushort wLooks;
         public int nVisibleFlag;
     } 
 }

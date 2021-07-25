@@ -416,7 +416,7 @@ namespace M2Server
 
         public void MsgGetReloadAdmin()
         {
-            LocalDB.FrmDB.LoadAdminList();
+            M2Share.LocalDB.LoadAdminList();
         }
 
         public void MsgGetReloadChatLog()
@@ -435,9 +435,11 @@ namespace M2Server
         }
 
         // procedure MsgGetRelationShipDelete(sNum: Integer; Body: string);
+
         public void MsgGetReloadMakeItemList()
         {
-            // FrmDB.LoadMakeItemList;
+            //M2Share.LocalDB.LoadMakeItemList();
+            M2Share.LocalDB.LoadMakeItem();
         }
 
         public void MsgGetGuildMemberRecall(int sNum, string Body)

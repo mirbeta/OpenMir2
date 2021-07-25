@@ -203,6 +203,18 @@ namespace M2Server
                                 break;
                             }
                             var msgBuff = Buff + sizeof(TMsgHeader);
+
+                            //if (msgHeader.wIdent == grobal2.GM_DATA && msgHeader.nLength > 12)
+                            //{
+                            //    var dataBuff = HUtil32.PointToBytes(msgBuff);
+                            //    var binaryReader = new BinaryReader(new MemoryStream(dataBuff));
+                            //    Console.WriteLine("Recog:" + binaryReader.ReadInt32());
+                            //    Console.WriteLine("Ident:" + binaryReader.ReadInt16());
+                            //    Console.WriteLine("Param:" + binaryReader.ReadInt16());
+                            //    Console.WriteLine("Tag:" + binaryReader.ReadInt16());
+                            //    Console.WriteLine("Series:" + binaryReader.ReadInt16());
+                            //}
+
                             ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
                             Buff = Buff + sizeof(TMsgHeader) + msgHeader.nLength;
                             nLen = nLen - (msgHeader.nLength + sizeof(TMsgHeader));
@@ -764,9 +776,9 @@ namespace M2Server
             MsgHeader = new TMsgHeader();
             MsgHeader.dwCode = grobal2.RUNGATECODE;
             MsgHeader.nSocket = nSocket;
-            MsgHeader.wGSocketIdx = (short)nSocketIndex;
+            MsgHeader.wGSocketIdx = (ushort)nSocketIndex;
             MsgHeader.wIdent = grobal2.GM_SERVERUSERINDEX;
-            MsgHeader.wUserListIndex = (short)nUserIdex;
+            MsgHeader.wUserListIndex = (ushort)nUserIdex;
             MsgHeader.nLength = 0;
             if (Socket.Connected)
             {
@@ -879,7 +891,7 @@ namespace M2Server
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = 0,
-                wIdent = (short)nIdent,
+                wIdent = (ushort)nIdent,
                 nLength = 0
             };
             if (Socket.Connected)
@@ -965,7 +977,7 @@ namespace M2Server
             DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             MsgHeader.dwCode = grobal2.RUNGATECODE;
             MsgHeader.nSocket = nSocket;
-            MsgHeader.wGSocketIdx = (short)nGsIdx;
+            MsgHeader.wGSocketIdx = (ushort)nGsIdx;
             MsgHeader.wIdent = grobal2.GM_DATA;
             MsgHeader.nLength = Marshal.SizeOf(typeof(TDefaultMessage));
             nLen = MsgHeader.nLength + Marshal.SizeOf(typeof(TMsgHeader));
@@ -1009,7 +1021,7 @@ namespace M2Server
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = nSocket,
-                wGSocketIdx = (short)nGsIdx,
+                wGSocketIdx = (ushort)nGsIdx,
                 wIdent = grobal2.GM_DATA,
                 nLength = sizeof(TDefaultMessage)
             };

@@ -4,8 +4,8 @@ namespace M2Server
 {
     public class TShortMessage
     {
-        public short Ident;
-        public short wMsg;
+        public ushort Ident;
+        public ushort wMsg;
 
         public byte[] ToByte()
         {

@@ -131,18 +131,18 @@ namespace M2Server
         public short Source = 0;
         public byte Reserved = 0;
         public byte NeedIdentify = 0;
-        public short Looks = 0;
-        public short DuraMax = 0;
-        public short AC = 0;
-        public short AC2 = 0;
-        public short MAC = 0;
-        public short MAC2 = 0;
-        public short DC = 0;
-        public short DC2 = 0;
-        public short MC = 0;
-        public short MC2 = 0;
-        public short SC = 0;
-        public short SC2 = 0;
+        public ushort Looks = 0;
+        public ushort DuraMax = 0;
+        public ushort AC = 0;
+        public ushort AC2 = 0;
+        public ushort MAC = 0;
+        public ushort MAC2 = 0;
+        public ushort DC = 0;
+        public ushort DC2 = 0;
+        public ushort MC = 0;
+        public ushort MC2 = 0;
+        public ushort SC = 0;
+        public ushort SC2 = 0;
         public int Need = 0;
         public int NeedLevel = 0;
         public int Price = 0;
@@ -773,7 +773,7 @@ namespace M2Server
                     AddAbility.wHitPoint += AC2;
                     if (MAC2 > 10)
                     {
-                        AddAbility.nHitSpeed += (short)(MAC2 - 10);
+                        AddAbility.nHitSpeed += (ushort)(MAC2 - 10);
                     }
                     else
                     {

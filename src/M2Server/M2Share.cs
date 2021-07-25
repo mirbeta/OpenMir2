@@ -31,6 +31,7 @@ namespace M2Server
         /// 游戏命令系统
         /// </summary>
         public static CommandManager CommandSystem = null;
+        public static LocalDB LocalDB = null;
         public static LogSystem LogSystem = null;
         public static RandomNumber RandomNumber = null;
         public static GroupServer GroupServer = null;
@@ -49,7 +50,7 @@ namespace M2Server
         public static TFrontEngine FrontEngine = null;
         public static UserEngine UserEngine = null;
         public static RobotManage RobotManage = null;
-        public static IList<string> g_MakeItemList = null;
+        public static Dictionary<string, IList<TMakeItem>> g_MakeItemList = null;
         public static IList<TStartPoint> StartPointList = null;
         public static TStartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
@@ -1527,7 +1528,7 @@ namespace M2Server
             OStdItem.Reserved = StdItem.reserved;
             OStdItem.NeedIdentify = StdItem.NeedIdentify;
             OStdItem.Looks = StdItem.Looks;
-            OStdItem.DuraMax = (short)StdItem.DuraMax;
+            OStdItem.DuraMax = (ushort)StdItem.DuraMax;
             OStdItem.AC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.AC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.AC)));
             OStdItem.MAC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MAC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MAC)));
             OStdItem.DC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.DC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.DC)));
@@ -1841,9 +1842,9 @@ namespace M2Server
             return result;
         }
 
-        public static short GetGoldShape(int nGold)
+        public static ushort GetGoldShape(int nGold)
         {
-            short result = 112;
+            ushort result = 112;
             if (nGold >= 30)
             {
                 result = 113;
@@ -2041,19 +2042,13 @@ namespace M2Server
             return result;
         }
 
-        public static IList<string> GetMakeItemInfo(string sItemName)
+        public static IList<TMakeItem> GetMakeItemInfo(string sItemName)
         {
-            M2Share.MainOutMessage("todo GetMakeItemInfo...");
-            IList<string> result = null;
-            for (var i = 0; i < g_MakeItemList.Count; i++)
-            {
-                if (g_MakeItemList[i] == sItemName)
-                {
-                    //result = g_MakeItemList[i];
-                    break;
-                }
+            if (g_MakeItemList.TryGetValue(sItemName, out var itemList))
+            { 
+                return itemList;
             }
-            return result;
+            return null;
         }
 
         public static string GetStartPointInfo(int nIndex, ref short nX, ref short nY)

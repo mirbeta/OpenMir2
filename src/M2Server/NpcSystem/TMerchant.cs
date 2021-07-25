@@ -48,13 +48,13 @@ namespace M2Server
                 nPrice = nPrice
             };
             m_ItemPriceList.Add(ItemPrice);
-            LocalDB.FrmDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
+            M2Share.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
         }
 
         private void CheckItemPrice(int nIndex)
         {
             TItemPrice ItemPrice;
-            int n10;
+            double n10;
             TItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
@@ -170,14 +170,14 @@ namespace M2Server
                             {
                                 CheckItemPrice(nIndex);
                                 RefillGoods_RefillItems(ref RefillList, Goods.sItemName, Goods.nCount - nRefillCount);
-                                LocalDB.FrmDB.SaveGoodRecord(this, m_sScript + '-' + m_sMapName);
-                                LocalDB.FrmDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
+                                M2Share.LocalDB.SaveGoodRecord(this, m_sScript + '-' + m_sMapName);
+                                M2Share.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
                             }
                             if (Goods.nCount < nRefillCount)
                             {
                                 RefillGoods_DelReFillItem(ref RefillList, nRefillCount - Goods.nCount);
-                                LocalDB.FrmDB.SaveGoodRecord(this, m_sScript + '-' + m_sMapName);
-                                LocalDB.FrmDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
+                                M2Share.LocalDB.SaveGoodRecord(this, m_sScript + '-' + m_sMapName);
+                                M2Share.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + m_sMapName);
                             }
                         }
                     }
@@ -229,9 +229,9 @@ namespace M2Server
             return result;
         }
 
-        private int GetItemPrice(int nIndex)
+        private double GetItemPrice(int nIndex)
         {
-            var result = -1;
+            double result = -1;
             TItemPrice ItemPrice;
             TItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
@@ -261,7 +261,7 @@ namespace M2Server
         {
             try
             {
-                LocalDB.FrmDB.SaveUpgradeWeaponRecord(m_sScript + '-' + m_sMapName, m_UpgradeWeaponList);
+                M2Share.LocalDB.SaveUpgradeWeaponRecord(m_sScript + '-' + m_sMapName, m_UpgradeWeaponList);
             }
             catch
             {
@@ -526,7 +526,7 @@ namespace M2Server
                     }
                     else
                     {
-                        UpgradeInfo.UserItem.DuraMax = (short)(UpgradeInfo.UserItem.DuraMax >> 1);
+                        UpgradeInfo.UserItem.DuraMax = (ushort)(UpgradeInfo.UserItem.DuraMax >> 1);
                     }
                     if (UpgradeInfo.UserItem.Dura > UpgradeInfo.UserItem.DuraMax)
                     {
@@ -659,7 +659,7 @@ namespace M2Server
             }
         }
 
-        private int GetUserPrice(TPlayObject PlayObject, int nPrice)
+        private int GetUserPrice(TPlayObject PlayObject, double nPrice)
         {
             int result;
             int n14;
@@ -988,16 +988,16 @@ namespace M2Server
         public void LoadNPCData()
         {
             var sFile = m_sScript + '-' + m_sMapName;
-            LocalDB.FrmDB.LoadGoodRecord(this, sFile);
-            LocalDB.FrmDB.LoadGoodPriceRecord(this, sFile);
+            M2Share.LocalDB.LoadGoodRecord(this, sFile);
+            M2Share.LocalDB.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
         }
 
         public void SaveNPCData()
         {
             var sFile = m_sScript + '-' + m_sMapName;
-            LocalDB.FrmDB.SaveGoodRecord(this, sFile);
-            LocalDB.FrmDB.SaveGoodPriceRecord(this, sFile);
+            M2Share.LocalDB.SaveGoodRecord(this, sFile);
+            M2Share.LocalDB.SaveGoodPriceRecord(this, sFile);
         }
 
         public TMerchant() : base()
@@ -1029,6 +1029,9 @@ namespace M2Server
             m_dwMoveTick = HUtil32.GetTickCount();
         }
 
+        /// <summary>
+        /// 清理武器升级过期数据
+        /// </summary>
         private void ClearExpreUpgradeListData()
         {
             TUpgradeInfo UpgradeInfo;
@@ -1084,9 +1087,9 @@ namespace M2Server
             }
         }
 
-        private int GetUserItemPrice(TUserItem UserItem)
+        private double GetUserItemPrice(TUserItem UserItem)
         {
-            int result;
+            double result;
             TItem StdItem;
             double n20;
             int nC;
@@ -1265,7 +1268,7 @@ namespace M2Server
 
         public void ClientGetDetailGoodsList(TPlayObject PlayObject, string sItemName, int nInt)
         {
-            int n18;
+            int nItemCount;
             IList<TUserItem> List20;
             TStdItem StdItem = null;
             TClientItem ClientItem = null;
@@ -1275,7 +1278,7 @@ namespace M2Server
             TUserItem UserItem;
             if (PlayObject.m_nSoftVersionDateEx == 0)
             {
-                n18 = 0;
+                nItemCount = 0;
                 for (var i = 0; i < m_GoodsList.Count; i++)
                 {
                     List20 = m_GoodsList[i];
@@ -1294,11 +1297,11 @@ namespace M2Server
                             Item.GetItemAddValue(UserItem, ref StdItem);
                             M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
                             OClientItem.Dura = UserItem.Dura;
-                            OClientItem.DuraMax = (short)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
+                            OClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             OClientItem.MakeIndex = UserItem.MakeIndex;
                             s1C = s1C + EDcode.EncodeBuffer(OClientItem) + '/';
-                            n18++;
-                            if (n18 >= 10)
+                            nItemCount++;
+                            if (nItemCount >= 10)
                             {
                                 break;
                             }
@@ -1306,11 +1309,11 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, n18, nInt, s1C);
+                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, s1C);
             }
             else
             {
-                n18 = 0;
+                nItemCount = 0;
                 for (var i = 0; i < m_GoodsList.Count; i++)
                 {
                     List20 = m_GoodsList[i];
@@ -1329,14 +1332,15 @@ namespace M2Server
                         for (var j  = List20.Count - 1; j >= 0; j--)
                         {
                             UserItem = List20[j];
+                            ClientItem = new TClientItem();
                             Item.GetStandardItem(ref ClientItem.S);
                             Item.GetItemAddValue(UserItem, ref ClientItem.S);
                             ClientItem.Dura = UserItem.Dura;
-                            ClientItem.DuraMax = (short)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
+                            ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             ClientItem.MakeIndex = UserItem.MakeIndex;
                             s1C = s1C + EDcode.EncodeBuffer(ClientItem) + '/';
-                            n18++;
-                            if (n18 >= 10)
+                            nItemCount++;
+                            if (nItemCount >= 10)
                             {
                                 break;
                             }
@@ -1344,7 +1348,7 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, n18, nInt, s1C);
+                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, s1C);
             }
         }
 
@@ -1361,7 +1365,7 @@ namespace M2Server
             }
         }
 
-        private int GetSellItemPrice(int nPrice)
+        private int GetSellItemPrice(double nPrice)
         {
             return HUtil32.Round(nPrice / 2.0);
         }
@@ -1442,7 +1446,7 @@ namespace M2Server
         public bool ClientMakeDrugItem_sub_4A28FC(TPlayObject PlayObject, string sItemName)
         {
             bool result = false;
-            IList<string> List10 = M2Share.GetMakeItemInfo(sItemName);
+            IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
             TUserItem UserItem = null;
             IList<int> List28;
             string s20 = string.Empty;
@@ -1454,8 +1458,8 @@ namespace M2Server
             result = true;
             for (var i = 0; i < List10.Count; i++)
             {
-                s20 = List10[i];
-                //n1C = List10[i];
+                s20 = List10[i].ItemName;
+                n1C = List10[i].ItemCount;
                 for (var j = 0; j < PlayObject.m_ItemList.Count; j++)
                 {
                     if (M2Share.UserEngine.GetStdItemName(PlayObject.m_ItemList[j].wIndex) == s20)
@@ -1474,8 +1478,8 @@ namespace M2Server
                 List28 = null;
                 for (var i  = 0; i < List10.Count; i++)
                 {
-                    s20 = List10[i];
-                    //n1C = List10[i];
+                    s20 = List10[i].ItemName;
+                    n1C = List10[i].ItemCount;
                     for (var j = PlayObject.m_ItemList.Count - 1; j >= 0; j--)
                     {
                         if (n1C <= 0)
@@ -1665,7 +1669,7 @@ namespace M2Server
                         }
                         else
                         {
-                            UserItem.DuraMax -= (short)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
+                            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
                             UserItem.Dura = UserItem.DuraMax;
                             PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.m_nGold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, M2Share.sREPAIROK, false);
@@ -1712,7 +1716,7 @@ namespace M2Server
             m_UpgradeWeaponList.Clear();
             try
             {
-                LocalDB.FrmDB.LoadUpgradeWeaponRecord(m_sScript + '-' + m_sMapName, m_UpgradeWeaponList);
+                M2Share.LocalDB.LoadUpgradeWeaponRecord(m_sScript + '-' + m_sMapName, m_UpgradeWeaponList);
             }
             catch
             {

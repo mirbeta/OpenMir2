@@ -45,7 +45,7 @@ namespace M2Servers
                     {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount))
                         {
-                            UserItem.Dura = Convert.ToInt16(nDura * 1000);
+                            UserItem.Dura = Convert.ToUInt16(nDura * 1000);
                             if (UserItem.Dura > UserItem.DuraMax)
                             {
                                 UserItem.Dura = UserItem.DuraMax;

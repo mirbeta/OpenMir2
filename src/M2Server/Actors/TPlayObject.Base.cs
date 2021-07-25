@@ -101,7 +101,7 @@ namespace M2Server
                 {
                     if (m_Abil.Level < M2Share.g_Config.nTestLevel)
                     {
-                        m_Abil.Level = (short)M2Share.g_Config.nTestLevel;
+                        m_Abil.Level = (ushort)M2Share.g_Config.nTestLevel;
                     }
                     if (m_nGold < M2Share.g_Config.nTestGold)
                     {
@@ -783,7 +783,7 @@ namespace M2Server
                 m_dwDecHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP > m_PEnvir.Flag.nDECHPPOINT)
                 {
-                    m_WAbil.HP -= (short)m_PEnvir.Flag.nDECHPPOINT;
+                    m_WAbil.HP -= (ushort)m_PEnvir.Flag.nDECHPPOINT;
                 }
                 else
                 {
@@ -796,7 +796,7 @@ namespace M2Server
                 m_dwIncHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP + m_PEnvir.Flag.nDECHPPOINT < m_WAbil.MaxHP)
                 {
-                    m_WAbil.HP += (short)m_PEnvir.Flag.nDECHPPOINT;
+                    m_WAbil.HP += (ushort)m_PEnvir.Flag.nDECHPPOINT;
                 }
                 else
                 {
@@ -831,7 +831,7 @@ namespace M2Server
                             m_nPerSpell -= 1;
                             if (m_WAbil.HP > m_WAbil.HP / 100)
                             {
-                                m_WAbil.HP -= (short)HUtil32._MAX(1, m_WAbil.HP / 100);
+                                m_WAbil.HP -= (ushort)HUtil32._MAX(1, m_WAbil.HP / 100);
                             }
                             else
                             {
@@ -2220,8 +2220,8 @@ namespace M2Server
                     if (M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
                     {
                         var MessageBodyW = new TMessageBodyW();
-                        MessageBodyW.Param1 = M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_nCurrX;
-                        MessageBodyW.Param2 = M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_nCurrY;
+                        MessageBodyW.Param1 = (ushort)M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_nCurrX;
+                        MessageBodyW.Param2 = (ushort)M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_nCurrY;
                         MessageBodyW.Tag1 = HUtil32.LoWord(ProcessMsg.nParam3);
                         MessageBodyW.Tag2 = HUtil32.HiWord(ProcessMsg.nParam3);
                         m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_FLYAXE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
@@ -2542,10 +2542,10 @@ namespace M2Server
             {
                 return false;
             }
-            UserItem.DuraMax -= (short)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
+            UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
             var nDura = HUtil32._MIN(5000, UserItem.DuraMax - UserItem.Dura);
             if (nDura <= 0) return false;
-            UserItem.Dura += (short)nDura;
+            UserItem.Dura += (ushort)nDura;
             SendMsg(this, grobal2.RM_DURACHANGE, 1, UserItem.Dura, UserItem.DuraMax, 0, "");// '武器修复成功...'
             SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
             return true;

@@ -109,9 +109,9 @@ namespace M2Server
         public int m_nViewRange = 0;
         public ushort[] m_wStatusTimeArr;
         public int[] m_dwStatusArrTick = new int[12];
-        public short[] m_wStatusArrValue = new short[6];
-        public int[] m_dwStatusArrTimeOutTick = new int[6];
-        public short m_wAppr = 0;
+        public ushort[] m_wStatusArrValue = null;
+        public int[] m_dwStatusArrTimeOutTick = null;
+        public ushort m_wAppr = 0;
         /// <summary>
         /// 角色类型
         /// </summary>
@@ -124,8 +124,8 @@ namespace M2Server
         /// 人物攻击准确度
         /// </summary>
         public byte m_btHitPoint = 0;
-        public short m_nHitPlus = 0;
-        public short m_nHitDouble = 0;
+        public ushort m_nHitPlus = 0;
+        public ushort m_nHitDouble = 0;
         /// <summary>
         /// 记忆使用间隔
         /// </summary>
@@ -135,11 +135,11 @@ namespace M2Server
         /// </summary>
         public bool m_boRecallSuite = false;
         public bool m_boRaceImg = false;
-        public short m_nHealthRecover = 0;
-        public short m_nSpellRecover = 0;
+        public ushort m_nHealthRecover = 0;
+        public ushort m_nSpellRecover = 0;
         public byte m_btAntiPoison = 0;
-        public short m_nPoisonRecover = 0;
-        public short m_nAntiMagic = 0;
+        public ushort m_nPoisonRecover = 0;
+        public ushort m_nAntiMagic = 0;
         /// <summary>
         /// 人物的幸运值
         /// </summary>
@@ -164,7 +164,7 @@ namespace M2Server
         /// 权限等级
         /// </summary>
         public byte m_btPermission = 0;
-        public short m_nHitSpeed = 0;
+        public ushort m_nHitSpeed = 0;
         public byte m_btLifeAttrib = 0;
         public byte m_btCoolEye = 0;
         public TBaseObject m_GroupOwner = null;
@@ -259,7 +259,7 @@ namespace M2Server
         public bool m_boNoAttackMode = false;
         public bool m_boNoTame = false;
         public bool m_boSkeleton = false;
-        public int m_nMeatQuality = 0;
+        public ushort m_nMeatQuality = 0;
         public int m_nBodyLeathery = 0;
         public bool m_boHolySeize = false;
         public int m_dwHolySeizeTick = 0;
@@ -591,7 +591,7 @@ namespace M2Server
             m_wStatusTimeArr = new ushort[12];// FillChar(m_wStatusTimeArr, sizeof(grobal2.short), '\0');
             m_BonusAbil = new TNakedAbility();// FillChar(m_BonusAbil, sizeof(TNakedAbility), '\0');
             m_CurBonusAbil = new TNakedAbility();// FillChar(m_CurBonusAbil, sizeof(TNakedAbility), '\0');
-            m_wStatusArrValue = new short[6];// FillChar(m_wStatusArrValue, sizeof(m_wStatusArrValue), 0);
+            m_wStatusArrValue = new ushort[6];// FillChar(m_wStatusArrValue, sizeof(m_wStatusArrValue), 0);
             m_dwStatusArrTimeOutTick = new int[6];// FillChar(m_dwStatusArrTimeOutTick, sizeof(m_dwStatusArrTimeOutTick), '\0');
             m_boAllowGroup = false;
             m_boAllowGuild = false;
@@ -825,7 +825,7 @@ namespace M2Server
                     {
                         idura = 0;
                     }
-                    UserItem.Dura = (short)idura;
+                    UserItem.Dura = (ushort)idura;
                 }
                 MapItem = new TMapItem
                 {
@@ -835,7 +835,7 @@ namespace M2Server
                 };
                 if (StdItem.StdMode == 45)
                 {
-                    MapItem.Looks = (short)M2Share.GetRandomLook(MapItem.Looks, StdItem.Shape);
+                    MapItem.Looks = (ushort)M2Share.GetRandomLook(MapItem.Looks, StdItem.Shape);
                 }
                 MapItem.AniCount = StdItem.AniCount;
                 MapItem.Reserved = 0;
@@ -896,11 +896,11 @@ namespace M2Server
             switch (m_btJob)
             {
                 case M2Share.jTaos:
-                    m_Abil.MaxHP = (short)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
-                    m_Abil.MaxMP = (short)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
-                    m_Abil.MaxWeight = (short)(50 + HUtil32.Round(nLevel / 4 * nLevel));
-                    m_Abil.MaxWearWeight = (short)(15 + HUtil32.Round(nLevel / 50 * nLevel));
-                    m_Abil.MaxHandWeight = (short)(12 + HUtil32.Round(nLevel / 42 * nLevel));
+                    m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
+                    m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
+                    m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
+                    m_Abil.MaxWearWeight = (ushort)(15 + HUtil32.Round(nLevel / 50 * nLevel));
+                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 42 * nLevel));
                     n = (int)(nLevel / 7);
                     m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     m_Abil.MC = 0;
@@ -910,11 +910,11 @@ namespace M2Server
                     m_Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
                     break;
                 case M2Share.jWizard:
-                    m_Abil.MaxHP = (short)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
-                    m_Abil.MaxMP = (short)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
-                    m_Abil.MaxWeight = (short)(50 + HUtil32.Round(nLevel / 5 * nLevel));
-                    m_Abil.MaxWearWeight = (short)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
-                    m_Abil.MaxHandWeight = (short)(12 + HUtil32.Round(nLevel / 90 * nLevel));
+                    m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
+                    m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
+                    m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
+                    m_Abil.MaxWearWeight = (ushort)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
+                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 90 * nLevel));
                     n = (int)(nLevel / 7);
                     m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     m_Abil.MC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
@@ -923,11 +923,11 @@ namespace M2Server
                     m_Abil.MAC = 0;
                     break;
                 case M2Share.jWarr:
-                    m_Abil.MaxHP = (short)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
-                    m_Abil.MaxMP = (short)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
-                    m_Abil.MaxWeight = (short)(50 + HUtil32.Round(nLevel / 3 * nLevel));
-                    m_Abil.MaxWearWeight = (short)(15 + HUtil32.Round(nLevel / 20 * nLevel));
-                    m_Abil.MaxHandWeight = (short)(12 + HUtil32.Round(nLevel / 13 * nLevel));
+                    m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
+                    m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
+                    m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
+                    m_Abil.MaxWearWeight = (ushort)(15 + HUtil32.Round(nLevel / 20 * nLevel));
+                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 13 * nLevel));
                     m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX((int)(nLevel / 5) - 1, 1), HUtil32._MAX(1, (int)(nLevel / 5)));
                     m_Abil.SC = 0;
                     m_Abil.MC = 0;
@@ -1388,7 +1388,7 @@ namespace M2Server
                 nSpdam = HUtil32.Round(nDamage * 1.5);
                 if (m_WAbil.MP >= nSpdam)
                 {
-                    m_WAbil.MP = (short)(m_WAbil.MP - nSpdam);
+                    m_WAbil.MP = (ushort)(m_WAbil.MP - nSpdam);
                     nSpdam = 0;
                 }
                 else
@@ -1403,7 +1403,7 @@ namespace M2Server
             {
                 if ((m_WAbil.HP - nDamage) > 0)
                 {
-                    m_WAbil.HP = (short)(m_WAbil.HP - nDamage);
+                    m_WAbil.HP = (ushort)(m_WAbil.HP - nDamage);
                 }
                 else
                 {
@@ -1414,7 +1414,7 @@ namespace M2Server
             {
                 if ((m_WAbil.HP - nDamage) < m_WAbil.MaxHP)
                 {
-                    m_WAbil.HP = (short)(m_WAbil.HP - nDamage);
+                    m_WAbil.HP = (ushort)(m_WAbil.HP - nDamage);
                 }
                 else
                 {
@@ -1553,8 +1553,8 @@ namespace M2Server
 
         public virtual void RecalcAbilitys()
         {
-           short wOldHP;
-            short wOldMP;
+            ushort wOldHP;
+            ushort wOldMP;
             bool boOldHideMode;
             int nOldLight;
             TItem StdItem;
@@ -2336,7 +2336,7 @@ namespace M2Server
             {
                 m_boFiveStringSet = true;
             }
-            m_WAbil.Weight = (short)RecalcBagWeight();
+            m_WAbil.Weight = (ushort)RecalcBagWeight();
             if (m_boTransparent && (m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] > 0))
             {
                 m_boHideMode = true;
@@ -2389,8 +2389,8 @@ namespace M2Server
             m_WAbil.MaxWeight += m_AddAbil.Weight;
             m_WAbil.MaxWearWeight += m_AddAbil.WearWeight;
             m_WAbil.MaxHandWeight += m_AddAbil.HandWeight;
-            m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_Abil.MaxHP + m_AddAbil.wHP);
-            m_WAbil.MaxMP = (short)HUtil32._MIN(short.MaxValue, m_Abil.MaxMP + m_AddAbil.wMP);
+            m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_Abil.MaxHP + m_AddAbil.wHP);
+            m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_Abil.MaxMP + m_AddAbil.wMP);
             m_WAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wAC) + HUtil32.LoWord(m_Abil.AC), HUtil32.HiWord(m_AddAbil.wAC) + HUtil32.HiWord(m_Abil.AC));
             m_WAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wMAC) + HUtil32.LoWord(m_Abil.MAC), HUtil32.HiWord(m_AddAbil.wMAC) + HUtil32.HiWord(m_Abil.MAC));
             m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wDC) + HUtil32.LoWord(m_Abil.DC), HUtil32.HiWord(m_AddAbil.wDC) + HUtil32.HiWord(m_Abil.DC));
@@ -2422,11 +2422,11 @@ namespace M2Server
             }
             if (m_wStatusArrValue[4] > 0)
             {
-                m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_wStatusArrValue[4]);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_wStatusArrValue[4]);
             }
             if (m_wStatusArrValue[5] > 0)
             {
-                m_WAbil.MaxMP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + m_wStatusArrValue[5]);
+                m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + m_wStatusArrValue[5]);
             }
             if (m_boFlameRing)
             {
@@ -2458,9 +2458,9 @@ namespace M2Server
                 {
                     m_nMoXieSuite = m_WAbil.MaxMP - 1;
                 }
-                m_WAbil.MaxMP -= (short)m_nMoXieSuite;
+                m_WAbil.MaxMP -= (ushort)m_nMoXieSuite;
                 // Inc(m_WAbil.MaxHP,m_nMoXieSuite);
-                m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_nMoXieSuite);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_nMoXieSuite);
             }
             if (m_bopirit)
             {
@@ -2490,23 +2490,23 @@ namespace M2Server
             if (m_boMundaneSet)
             {
                 // Bonus of Hp+50
-                m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + 50);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + 50);
             }
             if (m_boNokChiSet)
             {
                 // Bonus of Mp+50
-                m_WAbil.MaxMP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + 50);
+                m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + 50);
             }
             if (m_boTaoBuSet)
             {
                 // Bonus of Hp+30, Mp+30
-                m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + 30);
-                m_WAbil.MaxMP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + 30);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + 30);
+                m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + 30);
             }
             if (m_boFiveStringSet)
             {
                 // Bonus of Hp +30%, Ac+2
-                m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP / 100 * 30);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP / 100 * 30);
                 m_btHitPoint += 2;
             }
             if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
@@ -2583,7 +2583,7 @@ namespace M2Server
             }
             else
             {
-                m_WAbil.HP += (short)nHP;
+                m_WAbil.HP += (ushort)nHP;
             }
             if ((m_WAbil.MP + nMP) >= m_WAbil.MaxMP)
             {
@@ -2591,7 +2591,7 @@ namespace M2Server
             }
             else
             {
-                m_WAbil.MP += (short)nMP;
+                m_WAbil.MP += (ushort)nMP;
             }
             HealthSpellChanged();
         }
@@ -2599,8 +2599,8 @@ namespace M2Server
         public void ItemDamageRevivalRing()
         {
             TItem pSItem;
-            int nDura;
-            int tDura;
+            ushort nDura;
+            ushort tDura;
             TPlayObject PlayObject;
             for (int i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
             {
@@ -2612,12 +2612,12 @@ namespace M2Server
                         if (new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) || (((i == grobal2.U_WEAPON) || (i == grobal2.U_RIGHTHAND)) && new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
                         {
                             nDura = m_UseItems[i].Dura;
-                            tDura = HUtil32.Round(nDura / 1000);// 1.03
+                            tDura = (ushort)HUtil32.Round(nDura / 1000);// 1.03
                             nDura -= 1000;
                             if (nDura <= 0)
                             {
                                 nDura = 0;
-                                m_UseItems[i].Dura = (short)nDura;
+                                m_UseItems[i].Dura = nDura;
                                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                                 {
                                     PlayObject = this as TPlayObject;
@@ -2628,7 +2628,7 @@ namespace M2Server
                             }
                             else
                             {
-                                m_UseItems[i].Dura = (short)nDura;
+                                m_UseItems[i].Dura = nDura;
                             }
                             if (tDura != HUtil32.Round(nDura / 1000)) // 1.03
                             {
@@ -2698,7 +2698,7 @@ namespace M2Server
                         // nPlus = m_WAbility.MaxHP / 15 + 1;
                         if ((m_WAbil.HP + n18) < m_WAbil.MaxHP)
                         {
-                            m_WAbil.HP += (short)n18;
+                            m_WAbil.HP += (ushort)n18;
                         }
                         else
                         {
@@ -2711,7 +2711,7 @@ namespace M2Server
                         n18 = (m_WAbil.MaxMP / 18) + 1;
                         if ((m_WAbil.MP + n18) < m_WAbil.MaxMP)
                         {
-                            m_WAbil.MP += (short)n18;
+                            m_WAbil.MP += (ushort)n18;
                         }
                         else
                         {
@@ -2845,12 +2845,12 @@ namespace M2Server
                 if (m_WAbil.HP > m_WAbil.MaxHP)
                 {
                     boNeedRecalc = true;
-                    m_WAbil.HP = (short)(m_WAbil.MaxHP - 1);
+                    m_WAbil.HP = (ushort)(m_WAbil.MaxHP - 1);
                 }
                 if (m_WAbil.MP > m_WAbil.MaxMP)
                 {
                     boNeedRecalc = true;
-                    m_WAbil.MP = (short)(m_WAbil.MaxMP - 1);
+                    m_WAbil.MP = (ushort)(m_WAbil.MaxMP - 1);
                 }
                 if (boNeedRecalc)
                 {
@@ -2885,7 +2885,7 @@ namespace M2Server
                                 if (nCount > dCount)
                                 {
                                     m_nIncHealth += dCount;
-                                    m_UseItems[grobal2.U_CHARM].Dura -= (short)HUtil32.Round(dCount / 10);
+                                    m_UseItems[grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
                                 }
                                 else
                                 {
@@ -2929,7 +2929,7 @@ namespace M2Server
                                 {
                                     // Dec(nCount,dCount);
                                     m_nIncSpell += dCount;
-                                    m_UseItems[grobal2.U_CHARM].Dura -= (short)HUtil32.Round(dCount / 10);
+                                    m_UseItems[grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
                                 }
                                 else
                                 {
@@ -3151,7 +3151,7 @@ namespace M2Server
                                 }
                             }
                             m_Master = null;
-                            m_WAbil.HP = (short)(m_WAbil.HP / 10);
+                            m_WAbil.HP = (ushort)(m_WAbil.HP / 10);
                             RefShowName();
                         }
                         if (m_dwMasterTick != 0)
@@ -3591,7 +3591,7 @@ namespace M2Server
                             {
                                 if (m_boAnimal)
                                 {
-                                    m_nMeatQuality -= nDamage * 1000;
+                                    m_nMeatQuality -= (ushort)(nDamage * 1000);
                                 }
                                 SendMsg(this, grobal2.RM_STRUCK, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
                             }
@@ -3724,7 +3724,7 @@ namespace M2Server
                     MonObj.RecalcAbilitys();
                     if (MonObj.m_WAbil.HP < MonObj.m_WAbil.MaxHP)
                     {
-                        MonObj.m_WAbil.HP = (short)(MonObj.m_WAbil.HP + (MonObj.m_WAbil.MaxHP - MonObj.m_WAbil.HP) / 2);
+                        MonObj.m_WAbil.HP = (ushort)(MonObj.m_WAbil.HP + (MonObj.m_WAbil.MaxHP - MonObj.m_WAbil.HP) / 2);
                     }
                     MonObj.RefNameColor();
                     m_SlaveList.Add(MonObj);
@@ -4030,7 +4030,7 @@ namespace M2Server
                     }
                     else
                     {
-                        m_UseItems[grobal2.U_RIGHTHAND].Dura = (short)nDura;
+                        m_UseItems[grobal2.U_RIGHTHAND].Dura = (ushort)nDura;
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
@@ -4134,9 +4134,9 @@ namespace M2Server
             return result;
         }
 
-        private int RecalcBagWeight()
+        private ushort RecalcBagWeight()
         {
-            int result = 0;
+            ushort result = 0;
             TUserItem UserItem;
             TItem StdItem;
             for (int i = 0; i < m_ItemList.Count; i++)
@@ -4401,7 +4401,7 @@ namespace M2Server
                 {
                     if (m_WAbil.MP > 0)
                     {
-                        DamageSpell((short)(m_MagicBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicBanwolSkill)));
+                        DamageSpell((ushort)(m_MagicBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicBanwolSkill)));
                         HealthSpellChanged();
                     }
                     else
@@ -4413,7 +4413,7 @@ namespace M2Server
                 {
                     if (m_WAbil.MP > 0)
                     {
-                        DamageSpell((short)(m_MagicRedBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicRedBanwolSkill)));
+                        DamageSpell((ushort)(m_MagicRedBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicRedBanwolSkill)));
                         HealthSpellChanged();
                     }
                     else
@@ -4425,7 +4425,7 @@ namespace M2Server
                 {
                     if (m_WAbil.MP > 0)
                     {
-                        DamageSpell((short)(m_MagicCrsSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicCrsSkill)));
+                        DamageSpell((ushort)(m_MagicCrsSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicCrsSkill)));
                         HealthSpellChanged();
                     }
                     else
@@ -4538,7 +4538,7 @@ namespace M2Server
         /// 减少魔法值
         /// </summary>
         /// <param name="nSpellPoint"></param>
-        public void DamageSpell(short nSpellPoint)
+        public void DamageSpell(ushort nSpellPoint)
         {
             if (nSpellPoint > 0)
             {
@@ -4669,7 +4669,7 @@ namespace M2Server
             if (nDura <= 0)
             {
                 nDura = 0;
-                m_UseItems[grobal2.U_WEAPON].Dura = (short)nDura;
+                m_UseItems[grobal2.U_WEAPON].Dura = (ushort)nDura;
                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                 {
                     PlayObject = this as TPlayObject;
@@ -4686,7 +4686,7 @@ namespace M2Server
             }
             else
             {
-                m_UseItems[grobal2.U_WEAPON].Dura = (short)nDura;
+                m_UseItems[grobal2.U_WEAPON].Dura = (ushort)nDura;
             }
             if ((nDura / 1.03) != nDuraPoint)
             {
@@ -4869,7 +4869,7 @@ namespace M2Server
                 n8 = n8 + m_Abil.MaxHP;
                 if (m_btSlaveExpLevel > 0)
                 {
-                    m_WAbil.MaxHP = (short)n8;
+                    m_WAbil.MaxHP = (ushort)n8;
                 }
                 else
                 {
@@ -4881,7 +4881,7 @@ namespace M2Server
                 n8 = m_Abil.MaxHP;
                 m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round(m_btSlaveExpLevel * 2 + HUtil32.HiWord(m_WAbil.DC)));
                 n8 = n8 + HUtil32.Round(m_Abil.MaxHP * 0.15) * m_btSlaveExpLevel;
-                m_WAbil.MaxHP = (short)HUtil32._MIN(HUtil32.Round(m_Abil.MaxHP + m_btSlaveExpLevel * 60), n8);
+                m_WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(m_Abil.MaxHP + m_btSlaveExpLevel * 60), n8);
                 // m_WAbil.MAC:=0; 01/20 取消此行，防止怪物升级后魔防变0
             }
             // m_btHitPoint:=15; 01/20 取消此行，防止怪物升级后准确率变15
@@ -5603,9 +5603,9 @@ namespace M2Server
             return GetFeature(null);
         }
 
-        public short GetFeatureEx()
+        public ushort GetFeatureEx()
         {
-            short result;
+            ushort result;
             if (m_boOnHorse)
             {
                 result = HUtil32.MakeWord(m_btHorseType, m_btDressEffType);
@@ -6225,7 +6225,7 @@ namespace M2Server
                 {
                     if (StdItem.StdMode == 40)
                     {
-                        UserItem.Dura = (short)m_nMeatQuality;
+                        UserItem.Dura = m_nMeatQuality;
                     }
                 }
             }
@@ -6774,7 +6774,7 @@ namespace M2Server
 
         public void WeightChanged()
         {
-            m_WAbil.Weight = (short)RecalcBagWeight();
+            m_WAbil.Weight = RecalcBagWeight();
             SendUpdateMsg(this, grobal2.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
         }
 
@@ -7545,7 +7545,7 @@ namespace M2Server
                 }
                 else
                 {
-                    m_UseItems[grobal2.U_DRESS].Dura = (short)nDura;
+                    m_UseItems[grobal2.U_DRESS].Dura = (ushort)nDura;
                 }
                 if (nOldDura != HUtil32.Round(nDura / 1000))
                 {
@@ -7580,7 +7580,7 @@ namespace M2Server
                     }
                     else
                     {
-                        m_UseItems[i].Dura = (short)nDura;
+                        m_UseItems[i].Dura = (ushort)nDura;
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
@@ -8071,7 +8071,7 @@ namespace M2Server
         public bool AttPowerUp(int nPower, int nTime)
         {
             bool result = false;
-            m_wStatusArrValue[0] = (short)nPower;
+            m_wStatusArrValue[0] = (ushort)nPower;
             m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
             int nMin = nTime / 60;
             int nSec = nTime % 60;

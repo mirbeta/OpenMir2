@@ -21,7 +21,7 @@ namespace M2Server
     public struct TItemPrice
     {
         public short wIndex;
-        public int nPrice;
+        public double nPrice;
     }
 
     public struct TGoods

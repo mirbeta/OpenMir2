@@ -1156,9 +1156,7 @@ namespace M2Server
                             var UserItem = new TUserItem();
                             if (CopyToUserItemFromName(iname, ref UserItem))
                             {
-                                UserItem.Dura =
-                                    (short)HUtil32.Round(UserItem.DuraMax / 100 *
-                                                          (20 + M2Share.RandomNumber.Random(80)));
+                                UserItem.Dura = (ushort)HUtil32.Round(UserItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
                                 var StdItem = GetStdItem(UserItem.wIndex);
                                 if (StdItem == null) continue;
                                 if (M2Share.RandomNumber.Random(M2Share.g_Config.nMonRandomAddValue) == 0)
@@ -1188,7 +1186,7 @@ namespace M2Server
                 var StdItem = StdItemList[i];
                 if (!StdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
                 if (Item == null) Item = new TUserItem();
-                Item.wIndex = (short)(i + 1);
+                Item.wIndex = (ushort)(i + 1);
                 Item.MakeIndex = M2Share.GetItemNumber();
                 Item.Dura = StdItem.DuraMax;
                 Item.DuraMax = StdItem.DuraMax;
@@ -1400,7 +1398,7 @@ namespace M2Server
                     Cert = new TMonster
                     {
                         m_boAnimal = true,
-                        m_nMeatQuality = M2Share.RandomNumber.Random(3500) + 3000,
+                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
                         m_nBodyLeathery = 50
                     };
                     break;
@@ -1409,14 +1407,14 @@ namespace M2Server
                         Cert = new TChickenDeer
                         {
                             m_boAnimal = true,
-                            m_nMeatQuality = M2Share.RandomNumber.Random(20000) + 10000,
+                            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
                             m_nBodyLeathery = 150
                         };
                     else
                         Cert = new TMonster
                         {
                             m_boAnimal = true,
-                            m_nMeatQuality = M2Share.RandomNumber.Random(8000) + 8000,
+                            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
                             m_nBodyLeathery = 150
                         };
                     break;
@@ -1424,7 +1422,7 @@ namespace M2Server
                     Cert = new TATMonster
                     {
                         m_boAnimal = true,
-                        m_nMeatQuality = M2Share.RandomNumber.Random(8000) + 8000,
+                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
                         m_nBodyLeathery = 150
                     };
                     break;

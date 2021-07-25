@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace M2Server
 {
@@ -744,7 +745,7 @@ namespace M2Server
                 {
                     dwCode = grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
-                    wGSocketIdx = (short)m_nGSocketIdx,
+                    wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
                 if (!string.IsNullOrEmpty(sMsg))
@@ -790,7 +791,7 @@ namespace M2Server
                 {
                     dwCode = grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
-                    wGSocketIdx = (short)m_nGSocketIdx,
+                    wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
                 if (&DefMsg != null)
@@ -1302,7 +1303,7 @@ namespace M2Server
                 m_dwMagicAttackInterval = UserMagic.MagicInfo.dwDelayTime + M2Share.g_Config.dwMagicHitIntervalTime;
             }
             m_dwMagicAttackTick = HUtil32.GetTickCount();
-            short nSpellPoint;
+            ushort nSpellPoint;
             switch (UserMagic.wMagIdx)
             {
                 case grobal2.SKILL_ERGUM:
@@ -3422,7 +3423,7 @@ namespace M2Server
                         var n10 = M2Share.RandomNumber.Random(16) + 5;
                         var n14 = M2Share.RandomNumber.Random(201) + 100;
                         BaseObject.m_nBodyLeathery -= n10;
-                        BaseObject.m_nMeatQuality -= n14;
+                        BaseObject.m_nMeatQuality -= (ushort)n14;
                         if (BaseObject.m_nMeatQuality < 0)
                         {
                             BaseObject.m_nMeatQuality = 0;
@@ -4329,8 +4330,8 @@ namespace M2Server
             m_WAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC) + lsc, HUtil32.HiWord(m_WAbil.SC) + hsc);
             m_WAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.AC) + lac, HUtil32.HiWord(m_WAbil.AC) + hac);
             m_WAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MAC) + lmac, HUtil32.HiWord(m_WAbil.MAC) + hmac);
-            m_WAbil.MaxHP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_BonusAbil.HP / BonusTick.HP);
-            m_WAbil.MaxMP = (short)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + m_BonusAbil.MP / BonusTick.MP);
+            m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_BonusAbil.HP / BonusTick.HP);
+            m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + m_BonusAbil.MP / BonusTick.MP);
             // m_btSpeedPoint:=m_btSpeedPoint + m_BonusAbil.Speed div BonusTick.Speed;
             // m_btHitPoint:=m_btHitPoint + m_BonusAbil.Hit div BonusTick.Hit;
         }
@@ -4486,7 +4487,7 @@ namespace M2Server
             {
                 if (PlayObject.m_Abil.Level + nWinLevel <= M2Share.MAXUPLEVEL)
                 {
-                    PlayObject.m_Abil.Level += (short)nWinLevel;
+                    PlayObject.m_Abil.Level += (ushort)nWinLevel;
                 }
                 else
                 {
@@ -4499,14 +4500,14 @@ namespace M2Server
                     {
                         if (m_Abil.Level >= nLostLevel * 2)
                         {
-                            m_Abil.Level -= (short)(nLostLevel * 2);
+                            m_Abil.Level -= (ushort)(nLostLevel * 2);
                         }
                     }
                     else
                     {
                         if (m_Abil.Level >= nLostLevel)
                         {
-                            m_Abil.Level -= (short)nLostLevel;
+                            m_Abil.Level -= (ushort)nLostLevel;
                         }
                     }
                 }
@@ -4582,9 +4583,9 @@ namespace M2Server
             }
         }
 
-        private short GetSpellPoint(TUserMagic UserMagic)
+        private ushort GetSpellPoint(TUserMagic UserMagic)
         {
-            return (short)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
+            return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
 
         public bool DoMotaebo_CanMotaebo(TBaseObject BaseObject, int nMagicLevel)
@@ -4723,7 +4724,7 @@ namespace M2Server
         private bool DoSpell(TUserMagic UserMagic, short nTargetX, short nTargetY, TBaseObject BaseObject)
         {
             var result = false;
-            short nSpellPoint;
+            ushort nSpellPoint;
             try
             {
                 if (!M2Share.MagicManager.IsWarrSkill(UserMagic.wMagIdx))
@@ -5600,8 +5601,8 @@ namespace M2Server
             {
                 BaseObject.m_nKillMonCount = slaveInfo.nKillCount;
                 BaseObject.m_btSlaveExpLevel = slaveInfo.btSlaveExpLevel;
-                BaseObject.m_WAbil.HP = (short) slaveInfo.nHP;
-                BaseObject.m_WAbil.MP = (short) slaveInfo.nMP;
+                BaseObject.m_WAbil.HP = slaveInfo.nHP;
+                BaseObject.m_WAbil.MP = slaveInfo.nMP;
                 if (1500 - slaveInfo.btSlaveLevel * 200 < BaseObject.m_nWalkSpeed)
                 {
                     BaseObject.m_nWalkSpeed = 1500 - slaveInfo.btSlaveLevel * 200;
@@ -5728,14 +5729,14 @@ namespace M2Server
         /// 随机矿石持久度
         /// </summary>
         /// <returns></returns>
-        private short MakeMineRandomDrua()
+        private ushort MakeMineRandomDrua()
         {
             var result = M2Share.RandomNumber.Random(M2Share.g_Config.nStoneGeneralDuraRate) + M2Share.g_Config.nStoneMinDura;
             if (M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraRate) == 0)
             {
                 result = result + M2Share.RandomNumber.Random(M2Share.g_Config.nStoneAddDuraMax);
             }
-            return (short)result;
+            return (ushort)result;
         }
 
         /// <summary>
@@ -6578,21 +6579,26 @@ namespace M2Server
                 {
                     break;
                 }
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sText,"\\");
+                //<*@(\S*)>
+                //<?@(\S+?)>
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    var sData = string.Empty;
-                    while (sText.IndexOf("<", StringComparison.Ordinal) > 0 && sText.IndexOf(">", StringComparison.Ordinal) > 0 && !string.IsNullOrEmpty(sText))
+                    var matchCollection = Regex.Matches(sText, "<?@(\\w+?>)", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(3));
+
+                    foreach (Match match in matchCollection)
                     {
-                        if (sText[0] != '<')
+                        var sData = string.Empty;
+                        var line = match.Value.Remove(match.Value.Length - 1);
+                        //if (line[0] != '<')
+                        //{
+                        //    line = "<" + HUtil32.GetValidStr3(line, ref sData, "<");
+                        //}
+                        //sText = HUtil32.ArrestStringEx(line, "<", ">", ref sCmdStr);
+                        //var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
+                        if (!string.IsNullOrEmpty(line))
                         {
-                            sText = "<" + HUtil32.GetValidStr3(sText, ref sData,"<");
-                        }
-                        sText = HUtil32.ArrestStringEx(sText, "<", ">", ref sCmdStr);
-                        var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
-                        if (!string.IsNullOrEmpty(sLabel))
-                        {
-                            m_CanJmpScriptLableList.Add(sLabel);
+                            m_CanJmpScriptLableList.Add(line);
                         }
                     }
                 }

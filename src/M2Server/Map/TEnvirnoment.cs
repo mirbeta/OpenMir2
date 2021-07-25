@@ -66,7 +66,7 @@ namespace M2Server
                                             if (nGoldCount <= 2000)
                                             {
                                                 MapItem.Count = nGoldCount;
-                                                MapItem.Looks = M2Share.GetGoldShape(nGoldCount);
+                                                MapItem.Looks = (ushort)M2Share.GetGoldShape(nGoldCount);
                                                 MapItem.AniCount = 0;
                                                 MapItem.Reserved = 0;
                                                 OSObject.dwAddTime = HUtil32.GetTickCount();

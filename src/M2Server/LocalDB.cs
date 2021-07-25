@@ -26,7 +26,7 @@ namespace M2Server
         public int[] Resv;
     }
 
-    public class TFrmDB
+    public class LocalDB
     {
         public bool LoadAdminList()
         {
@@ -259,18 +259,18 @@ namespace M2Server
                         Item.AniCount = dr.GetByte("AniCount");
                         Item.Source = dr.GetInt16("Source");
                         Item.Reserved = dr.GetByte("Reserved");// 保留
-                        Item.Looks = dr.GetInt16("Looks");// 物品外观
-                        Item.DuraMax = (short)dr.GetInt32("DuraMax");// 持久
-                        Item.AC = (short)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.AC2 = (short)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.MAC = (short)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.MAC2 = (short)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.DC = (short)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.DC2 = (short)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.MC = (short)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.MC2 = (short)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.SC = (short)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.SC2 = (short)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Looks = dr.GetUInt16("Looks");// 物品外观
+                        Item.DuraMax = (ushort)dr.GetInt32("DuraMax");// 持久
+                        Item.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.AC2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.MAC2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.DC2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.MC2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.SC2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.g_Config.nItemsPowerRate / 10));
                         Item.Need = dr.GetInt32("Need");// 附加条件
                         Item.NeedLevel = dr.GetInt32("NeedLevel");// 需要等级
                         Item.Price = dr.GetInt32("Price");// 价格
@@ -357,13 +357,13 @@ namespace M2Server
                     {
                         Magic = new TMagic
                         {
-                            wMagicID = dr.GetInt16("MagId"),
+                            wMagicID = dr.GetUInt16("MagId"),
                             sMagicName = dr.GetString("MagName"),
                             btEffectType = dr.GetByte("EffectType"),
                             btEffect = dr.GetByte("Effect"),
-                            wSpell = dr.GetInt16("Spell"),
-                            wPower = dr.GetInt16("Power"),
-                            wMaxPower = dr.GetInt16("MaxPower"),
+                            wSpell = dr.GetUInt16("Spell"),
+                            wPower = dr.GetUInt16("Power"),
+                            wMaxPower = dr.GetUInt16("MaxPower"),
                             btJob = dr.GetByte("Job")
                         };
                         Magic.TrainLevel[0] = dr.GetByte("NeedL1");
@@ -399,14 +399,17 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 炼药列表
+        /// </summary>
         public void LoadMakeItem()
         {
-            int n14;
+            int nItemCount;
             var s18 = string.Empty;
-            var s20 = string.Empty;
+            var sItemName = string.Empty;
             var s24 = string.Empty;
             StringList LoadList;
-            ArrayList List28;
+            IList<TMakeItem> List28;
             var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MakeItem.txt");
             if (File.Exists(sFileName))
             {
@@ -416,31 +419,32 @@ namespace M2Server
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
-                    if (s18 != "" && s18[0] != ';')
+                    if (string.IsNullOrEmpty(s18) || s18.StartsWith(";"))
                     {
-                        if (s18[0] == '[')
+                        continue;
+                    }
+                    if (s18[0] == '[')
+                    {
+                        if (List28 != null)
                         {
-                            if (List28 != null)
-                            {
-                                //M2Share.g_MakeItemList.Add(s24, List28);
-                            }
-                            List28 = new ArrayList();
-                            HUtil32.ArrestStringEx(s18, '[', ']', ref s24);
+                            M2Share.g_MakeItemList.Add(s24, List28);
                         }
-                        else
+                        List28 = new List<TMakeItem>();
+                        HUtil32.ArrestStringEx(s18, '[', ']', ref s24);
+                    }
+                    else
+                    {
+                        if (List28 != null)
                         {
-                            if (List28 != null)
-                            {
-                                s18 = HUtil32.GetValidStr3(s18, ref s20, new[] { " ", "\t" });
-                                n14 = HUtil32.Str_ToInt(s18.Trim(), 1);
-                                //List28.Add(s20, ((n14) as Object));
-                            }
+                            s18 = HUtil32.GetValidStr3(s18, ref sItemName, new[] { " ", "\t" });
+                            nItemCount = HUtil32.Str_ToInt(s18.Trim(), 1);
+                            List28.Add(new TMakeItem() { ItemName = sItemName, ItemCount = nItemCount });
                         }
                     }
                 }
                 if (List28 != null)
                 {
-                    //M2Share.g_MakeItemList.Add(s24, List28);
+                    M2Share.g_MakeItemList.Add(s24, List28);
                 }
             }
         }
@@ -717,7 +721,7 @@ namespace M2Server
                                 m_nCurrY = (short)HUtil32.Str_ToInt(sY, 0),
                                 m_sCharName = sName,
                                 m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0),
-                                m_wAppr = (short)HUtil32.Str_ToInt(sAppr, 0),
+                                m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0),
                                 m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0)
                             };
                             if (HUtil32.Str_ToInt(sIsCalste, 0) != 0)
@@ -860,8 +864,8 @@ namespace M2Server
                             sName = dr.GetString("NAME").Trim(),
                             btRace = dr.GetByte("Race"),
                             btRaceImg = dr.GetByte("RaceImg"),
-                            wAppr = dr.GetInt16("Appr"),
-                            wLevel = dr.GetInt16("Lvl"),
+                            wAppr = dr.GetUInt16("Appr"),
+                            wLevel = dr.GetUInt16("Lvl"),
                             btLifeAttrib = dr.GetByte("Undead"),
                             wCoolEye = dr.GetInt16("CoolEye"),
                             dwExp = dr.GetInt32("Exp")
@@ -870,25 +874,25 @@ namespace M2Server
                         if (new ArrayList(new[] { 110, 111 }).Contains(Monster.btRace))
                         {
                             // 如果为城墙或城门由HP不加倍
-                            Monster.wHP = dr.GetInt16("HP");
+                            Monster.wHP = dr.GetUInt16("HP");
                         }
                         else
                         {
-                            Monster.wHP = (short)HUtil32.Round(dr.GetInt32("HP") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                            Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.g_Config.nMonsterPowerRate / 10));
                         }
-                        Monster.wMP = (short)HUtil32.Round(dr.GetInt32("MP") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wAC = (short)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wMAC = (short)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wDC = (short)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wMaxDC = (short)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wMC = (short)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wSC = (short)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                        Monster.wSpeed = dr.GetInt16("SPEED");
-                        Monster.wHitPoint = dr.GetInt16("HIT");
-                        Monster.wWalkSpeed = (short)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
-                        Monster.wWalkStep = (short)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
-                        Monster.wWalkWait = (short)dr.GetInt32("WalkWait");
-                        Monster.wAttackSpeed = (short)dr.GetInt32("ATTACK_SPD");
+                        Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wSpeed = dr.GetUInt16("SPEED");
+                        Monster.wHitPoint = dr.GetUInt16("HIT");
+                        Monster.wWalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
+                        Monster.wWalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
+                        Monster.wWalkWait = (ushort)dr.GetInt32("WalkWait");
+                        Monster.wAttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
                         if (Monster.wWalkSpeed < 200)
                         {
                             Monster.wWalkSpeed = 200;
@@ -1029,7 +1033,7 @@ namespace M2Server
                                 NPC.m_nCurrY = (short)HUtil32.Str_ToInt(s30, 0);
                                 NPC.m_sCharName = s20;
                                 NPC.m_nFlag = (short)HUtil32.Str_ToInt(s34, 0);
-                                NPC.m_wAppr = (short)HUtil32.Str_ToInt(s38, 0);
+                                NPC.m_wAppr = (ushort)HUtil32.Str_ToInt(s38, 0);
                                 M2Share.UserEngine.QuestNPCList.Add(NPC);
 
                             }
@@ -1409,7 +1413,7 @@ namespace M2Server
                                 Merchant.m_sScript = sScript;
                                 Merchant.m_sCharName = sCharName;
                                 Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                                Merchant.m_wAppr = (short)HUtil32.Str_ToInt(sAppr, 0);
+                                Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                                 Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                                 if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                                 {
@@ -1440,7 +1444,7 @@ namespace M2Server
                                 Merchant.m_nCurrY = (short)nY;
                                 Merchant.m_sCharName = sCharName;
                                 Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                                Merchant.m_wAppr = (short)HUtil32.Str_ToInt(sAppr, 0);
+                                Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
                                 Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
                                 if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                                 {
@@ -1633,11 +1637,6 @@ namespace M2Server
             return result;
         }
 
-        public TFrmDB()
-        {
-
-        }
-
         public bool CheckDataBase()
         {
             var dataPath = Path.Combine(M2Share.g_Config.sEnvirDir, "Data.db");
@@ -1653,34 +1652,3 @@ namespace M2Server
         }
     }
 }
-
-namespace M2Server
-{
-    public class LocalDB
-    {
-        public static TFrmDB FrmDB = null;
-        public static int nDeCryptString = -1;
-
-        public static string DeCodeString(string sSrc)
-        {
-            var result = string.Empty;
-            var Dest = new char[1024 + 1];
-            if (sSrc == "")
-            {
-                return result;
-            }
-            result = sSrc;
-            return result;
-        }
-
-        public void initialization()
-        {
-        }
-
-        public void finalization()
-        {
-        }
-
-    } // end LocalDB}
-}
-

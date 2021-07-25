@@ -5,9 +5,9 @@ namespace M2Server
     public class TUserItem : Package
     {
         public int MakeIndex;
-        public short wIndex;
-        public short Dura;
-        public short DuraMax;
+        public ushort wIndex;
+        public ushort Dura;
+        public ushort DuraMax;
         public byte[] btValue;
 
         public TUserItem()
@@ -19,9 +19,9 @@ namespace M2Server
             : base(buffer)
         {
             this.MakeIndex = ReadInt32();
-            this.wIndex = ReadInt16();
-            this.Dura = ReadInt16();
-            this.DuraMax = ReadInt16();
+            this.wIndex = ReadUInt16();
+            this.Dura = ReadUInt16();
+            this.DuraMax = ReadUInt16();
             this.btValue = ReadBytes(14);
         }
 

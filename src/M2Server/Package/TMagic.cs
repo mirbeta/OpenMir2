@@ -5,12 +5,12 @@ namespace M2Server
 {
     public class TMagic
     {
-        public short wMagicID;
+        public ushort wMagicID;
         public string sMagicName;
         public byte btEffectType;
         public byte btEffect;
-        public short wSpell;
-        public short wPower;
+        public ushort wSpell;
+        public ushort wPower;
         public byte[] TrainLevel;
         public int[] MaxTrain;
         public byte btTrainLv;
@@ -18,7 +18,7 @@ namespace M2Server
         public int dwDelayTime;
         public byte btDefSpell;
         public byte btDefPower;
-        public short wMaxPower;
+        public ushort wMaxPower;
         public byte btDefMaxPower;
         public string sDescr;
 

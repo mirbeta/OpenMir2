@@ -67,19 +67,19 @@ namespace M2Server
         //    return (ushort)(bLow | (bHigh << 8));
         //}
 
-        public static short MakeWord(int bLow, int bHigh)
+        public static ushort MakeWord(int bLow, int bHigh)
         {
-            return (short) (bLow | (bHigh << 8));
+            return (ushort) (bLow | (bHigh << 8));
         }
 
-        public static short HiWord(int dword)
+        public static ushort HiWord(int dword)
         {
-            return (short) (dword >> 16);
+            return (ushort) (dword >> 16);
         }
 
-        public static short LoWord(int dword)
+        public static ushort LoWord(int dword)
         {
-            return (short) dword;
+            return (ushort) dword;
         }
 
         public static byte HiByte(short W)

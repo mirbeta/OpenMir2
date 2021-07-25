@@ -90,12 +90,12 @@ namespace M2Server
             return result;
         }
 
-        public short DoSpell_GetRPow(int wInt)
+        public ushort DoSpell_GetRPow(int wInt)
         {
-            short result;
+            ushort result;
             if (HUtil32.HiWord(wInt) > HUtil32.LoWord(wInt))
             {
-                result = (short)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
+                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiWord(wInt) - HUtil32.LoWord(wInt) + 1) + HUtil32.LoWord(wInt));
             }
             else
             {
@@ -726,7 +726,7 @@ namespace M2Server
                                             TargeTBaseObject.BreakCrazyMode();
                                             if (TargeTBaseObject.m_Master != null)
                                             {
-                                                TargeTBaseObject.m_WAbil.HP = (short)(TargeTBaseObject.m_WAbil.HP / 10);
+                                                TargeTBaseObject.m_WAbil.HP = (ushort)(TargeTBaseObject.m_WAbil.HP / 10);
                                             }
                                             TargeTBaseObject.m_Master = BaseObject;
                                             TargeTBaseObject.m_dwMasterRoyaltyTick = (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level * 2) + (nMagicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();

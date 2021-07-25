@@ -215,7 +215,7 @@ namespace M2Server
                             {
                                 if (m_Abil.Level >= m_LastHiter.m_nPKDieLostLevel)
                                 {
-                                    m_Abil.Level -= (short)m_LastHiter.m_nPKDieLostLevel;
+                                    m_Abil.Level -= (ushort)m_LastHiter.m_nPKDieLostLevel;
                                 }
                                 else
                                 {

@@ -6,8 +6,8 @@ namespace M2Server
     {
         public TStdItem S;
         public int MakeIndex;
-        public short Dura;
-        public short DuraMax;
+        public ushort Dura;
+        public ushort DuraMax;
 
         public TClientItem()
         {
@@ -29,7 +29,6 @@ namespace M2Server
                 return stream.ToArray();
             }
         }
-
     }
 }
 

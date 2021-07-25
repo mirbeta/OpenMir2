@@ -138,6 +138,7 @@ namespace M2Server
         {
             bool result = false;
             //FillChar(HumanRcd, sizeof(THumDataInfo), '\0');
+            HumanRcd = new THumDataInfo();
             if (LoadRcd(sAccount, sCharName, sStr, nCertCode, ref HumanRcd))
             {
                 HumanRcd.Data.sChrName = sCharName;
@@ -212,6 +213,9 @@ namespace M2Server
                             HumanRcd = new THumDataInfo(dataBuff);
                             result = true;
                         }
+                    }
+                    else {
+                        result = false;
                     }
                 }
             }

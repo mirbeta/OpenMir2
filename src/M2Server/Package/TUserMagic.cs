@@ -8,7 +8,7 @@ namespace M2Server
     {
         public TMagic MagicInfo;
         public byte btLevel;
-        public short wMagIdx;
+        public ushort wMagIdx;
         public int nTranPoint;
         public byte btKey;
 

@@ -6,7 +6,7 @@
         public short nY;
         public string sName;
         public bool nStatus;
-        public short nHP;
+        public ushort nHP;
         public TBaseObject BaseObject;
     }
 }

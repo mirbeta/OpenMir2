@@ -5,13 +5,14 @@ namespace M2Server
     public struct TDefaultMessage
     {
         public int Recog;
-        public short Ident;
-        public short Param;
-        public short Tag;
-        public short Series;
-        
+        public ushort Ident;
+        public ushort Param;
+        public ushort Tag;
+        public ushort Series;
+
         public byte[] ToByte()
         {
+            //todo  需要验证delphi下int转ushort的问题
             using (var memoryStream = new MemoryStream())
             {
                 var backingStream = new BinaryWriter(memoryStream);
@@ -25,6 +26,5 @@ namespace M2Server
                 return stream.ToArray();
             }
         }
-
     }
 }

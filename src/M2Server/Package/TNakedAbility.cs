@@ -4,13 +4,13 @@ namespace M2Server
 {
     public class TNakedAbility : Package
     {
-        public short DC;
-        public short MC;
-        public short SC;
-        public short AC;
-        public short MAC;
-        public short HP;
-        public short MP;
+        public ushort DC;
+        public ushort MC;
+        public ushort SC;
+        public ushort AC;
+        public ushort MAC;
+        public ushort HP;
+        public ushort MP;
         public byte Hit;
         public int Speed;
         public byte X2;
@@ -20,13 +20,13 @@ namespace M2Server
         public TNakedAbility(byte[] buff)
             : base(buff)
         {
-            DC = ReadInt16(); //BitConverter.ToInt16(buff, 0);
-            MC = ReadInt16();//BitConverter.ToInt16(buff, 2);
-            SC = ReadInt16();//BitConverter.ToInt16(buff, 4);
-            AC = ReadInt16();//BitConverter.ToInt16(buff, 6);
-            MAC = ReadInt16();//BitConverter.ToInt16(buff, 8);
-            HP = ReadInt16();//BitConverter.ToInt16(buff, 10);
-            MP = ReadInt16();//BitConverter.ToInt16(buff, 12);
+            DC = ReadUInt16(); //BitConverter.ToInt16(buff, 0);
+            MC = ReadUInt16();//BitConverter.ToInt16(buff, 2);
+            SC = ReadUInt16();//BitConverter.ToInt16(buff, 4);
+            AC = ReadUInt16();//BitConverter.ToInt16(buff, 6);
+            MAC = ReadUInt16();//BitConverter.ToInt16(buff, 8);
+            HP = ReadUInt16();//BitConverter.ToInt16(buff, 10);
+            MP = ReadUInt16();//BitConverter.ToInt16(buff, 12);
             Hit = ReadByte(); //buff[13];
             Speed = ReadInt32(); //BitConverter.ToInt32(buff, 14);
             X2 = ReadByte(); //buff[20];

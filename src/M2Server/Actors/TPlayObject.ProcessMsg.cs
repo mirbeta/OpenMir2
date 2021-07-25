@@ -1450,7 +1450,7 @@ namespace M2Server
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADITEMDB.sCmd, StringComparison.Ordinal) == 0)
                         {
-                            LocalDB.FrmDB.LoadItemsDB();
+                            M2Share.LocalDB.LoadItemsDB();
                             SysMsg("物品数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }
@@ -1462,7 +1462,7 @@ namespace M2Server
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMONSTERDB.sCmd, StringComparison.Ordinal) == 0)
                         {
-                            LocalDB.FrmDB.LoadMonsterDB();
+                            M2Share.LocalDB.LoadMonsterDB();
                             SysMsg("怪物数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }

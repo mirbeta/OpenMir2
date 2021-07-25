@@ -27,7 +27,7 @@ namespace M2Server
                 btGetBackHP = HUtil32.LoByte(m_WAbil.MP);
                 if (btGetBackHP != 0)
                 {
-                    m_WAbil.HP += (short)(nDamage / btGetBackHP);
+                    m_WAbil.HP += (ushort)(nDamage / btGetBackHP);
                 }
                 m_TargetCret.StruckDamage(nDamage);
                 m_TargetCret.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (short)nDamage, m_TargetCret.m_WAbil.HP, m_TargetCret.m_WAbil.MaxHP, ObjectId, "", 200);

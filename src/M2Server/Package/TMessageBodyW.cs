@@ -4,10 +4,10 @@ namespace M2Server
 {
     public class TMessageBodyW
     {
-        public short Param1;
-        public short Param2;
-        public short Tag1;
-        public short Tag2;
+        public ushort Param1;
+        public ushort Param2;
+        public ushort Tag1;
+        public ushort Tag2;
 
         public byte[] ToByte()
         {

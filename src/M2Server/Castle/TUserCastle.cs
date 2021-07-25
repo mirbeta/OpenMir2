@@ -282,25 +282,25 @@ namespace M2Server
             m_MainDoor.nY = CastleConf.ReadInteger<short>("Defense", "MainDoorY", (short) 330);
             m_MainDoor.sName = CastleConf.ReadString("Defense", "MainDoorName", "MainDoor");
             m_MainDoor.nStatus = CastleConf.ReadBool("Defense", "MainDoorOpen", true);
-            m_MainDoor.nHP = CastleConf.ReadInteger<short>("Defense", "MainDoorHP", (short) 2000);
+            m_MainDoor.nHP = CastleConf.ReadInteger<ushort>("Defense", "MainDoorHP", (short) 2000);
             m_MainDoor.BaseObject = null;
             m_LeftWall = new TObjUnit();
             m_LeftWall.nX = CastleConf.ReadInteger<short>("Defense", "LeftWallX", (short) 624);
             m_LeftWall.nY = CastleConf.ReadInteger<short>("Defense", "LeftWallY", (short) 278);
             m_LeftWall.sName = CastleConf.ReadString("Defense", "LeftWallName", "LeftWall");
-            m_LeftWall.nHP = CastleConf.ReadInteger<short>("Defense", "LeftWallHP", (short) 2000);
+            m_LeftWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "LeftWallHP", (short) 2000);
             m_LeftWall.BaseObject = null;
             m_CenterWall = new TObjUnit();
             m_CenterWall.nX = CastleConf.ReadInteger<short>("Defense", "CenterWallX", (short) 627);
             m_CenterWall.nY = CastleConf.ReadInteger<short>("Defense", "CenterWallY", (short) 278);
             m_CenterWall.sName = CastleConf.ReadString("Defense", "CenterWallName", "CenterWall");
-            m_CenterWall.nHP = CastleConf.ReadInteger<short>("Defense", "CenterWallHP", (short) 2000);
+            m_CenterWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "CenterWallHP", (short) 2000);
             m_CenterWall.BaseObject = null;
             m_RightWall = new TObjUnit();
             m_RightWall.nX = CastleConf.ReadInteger<short>("Defense", "RightWallX", (short) 634);
             m_RightWall.nY = CastleConf.ReadInteger<short>("Defense", "RightWallY", (short) 271);
             m_RightWall.sName = CastleConf.ReadString("Defense", "RightWallName", "RightWall");
-            m_RightWall.nHP = CastleConf.ReadInteger<short>("Defense", "RightWallHP", (short) 2000);
+            m_RightWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "RightWallHP", (short) 2000);
             m_RightWall.BaseObject = null;
             for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
             {
@@ -308,7 +308,7 @@ namespace M2Server
                 objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_X", (short) 0);
                 objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_Y", (short) 0);
                 objUnit.sName = CastleConf.ReadString("Defense", "Archer_" + i + 1 + "_Name", "弓箭手");
-                objUnit.nHP = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_HP", (short) 2000);
+                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short) 2000);
                 objUnit.BaseObject = null;
                 m_Archer[i] = objUnit;
             }
@@ -319,7 +319,7 @@ namespace M2Server
                 objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_X", (short) 0);
                 objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_Y", (short) 0);
                 objUnit.sName = CastleConf.ReadString("Defense", "Guard_" + i + 1 + "_Name", "守卫");
-                objUnit.nHP = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_HP", (short) 2000);
+                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Guard_" + i + 1 + "_HP", (short) 2000);
                 objUnit.BaseObject = null;
                 m_Guard[i] = objUnit;
             }

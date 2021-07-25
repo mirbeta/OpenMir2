@@ -162,7 +162,7 @@ namespace M2Server
             }
             if (this.m_boAnimal)
             {
-                this.m_nMeatQuality = this.m_nMeatQuality - M2Share.RandomNumber.Random(300);
+                this.m_nMeatQuality = (ushort)(this.m_nMeatQuality - M2Share.RandomNumber.Random(300));
                 if (this.m_nMeatQuality < 0)
                 {
                     this.m_nMeatQuality = 0;

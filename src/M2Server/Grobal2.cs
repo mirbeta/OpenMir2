@@ -86,7 +86,7 @@ namespace M2Server
     {
         public int Id;
         public string Name;
-        public short Looks;
+        public ushort Looks;
         public byte AniCount;
         public int Reserved;
         public int Count;
@@ -179,28 +179,28 @@ namespace M2Server
 
     public class TAddAbility
     {
-        public short wHP;
-        public short wMP;
-        public short wHitPoint;
-        public short wSpeedPoint;
+        public ushort wHP;
+        public ushort wMP;
+        public ushort wHitPoint;
+        public ushort wSpeedPoint;
         public int wAC;
         public int wMAC;
         public int wDC;
         public int wMC;
         public int wSC;
-        public short wAntiPoison;
-        public short wPoisonRecover;
-        public short wHealthRecover;
-        public short wSpellRecover;
-        public short wAntiMagic;
+        public ushort wAntiPoison;
+        public ushort wPoisonRecover;
+        public ushort wHealthRecover;
+        public ushort wSpellRecover;
+        public ushort wAntiMagic;
         public byte btLuck;
         public byte btUnLuck;
         public byte btWeaponStrong;
-        public short nHitSpeed;
+        public ushort nHitSpeed;
         public byte btUndead;
-        public short Weight;
-        public short WearWeight;
-        public short HandWeight;
+        public ushort Weight;
+        public ushort WearWeight;
+        public ushort HandWeight;
 
         public TAddAbility()
         { }
@@ -335,26 +335,26 @@ namespace M2Server
         public string sName;
         public byte btRace;
         public byte btRaceImg;
-        public short wAppr;
-        public short wLevel;
+        public ushort wAppr;
+        public ushort wLevel;
         public byte btLifeAttrib;
         public short wCoolEye;
         public int dwExp;
-        public short wHP;
-        public short wMP;
-        public short wAC;
-        public short wMAC;
-        public short wDC;
-        public short wMaxDC;
-        public short wMC;
-        public short wSC;
-        public short wSpeed;
-        public short wHitPoint;
-        public short wWalkSpeed;
-        public short wWalkStep;
-        public short wWalkWait;
-        public short wAttackSpeed;
-        public short wAntiPush;
+        public ushort wHP;
+        public ushort wMP;
+        public ushort wAC;
+        public ushort wMAC;
+        public ushort wDC;
+        public ushort wMaxDC;
+        public ushort wMC;
+        public ushort wSC;
+        public ushort wSpeed;
+        public ushort wHitPoint;
+        public ushort wWalkSpeed;
+        public ushort wWalkStep;
+        public ushort wWalkWait;
+        public ushort wAttackSpeed;
+        public ushort wAntiPush;
         public bool boAggro;
         public bool boTame;
     } 
@@ -381,8 +381,8 @@ namespace M2Server
         public int nKillCount;
         public byte btSalveLevel;
         public byte btSlaveExpLevel;
-        public int nHP;
-        public int nMP;
+        public ushort nHP;
+        public ushort nMP;
     }
 
     public class TSwitchDataInfo
@@ -401,7 +401,7 @@ namespace M2Server
         public bool boObMode;
         public IList<string> BlockWhisperArr;
         public TSlaveInfo[] SlaveArr;
-        public short[] StatusValue;
+        public ushort[] StatusValue;
         public int[] StatusTimeOut;
         public int dwWaitTime;
     }
@@ -1875,15 +1875,15 @@ namespace M2Server
         public static TDefaultMessage MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {
             var result = new TDefaultMessage();
-            result.Ident = (short)msg;
-            result.Param = (short)param;
-            result.Tag = (short)tag;
-            result.Series = (short)series;
+            result.Ident = (ushort)msg;
+            result.Param = (ushort)param;
+            result.Tag = (ushort)tag;
+            result.Series = (ushort)series;
             result.Recog = Recog;
             return result;
         }
 
-        public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, short wAppr)
+        public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, ushort wAppr)
         {
             int result;
             result = HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), wAppr);
