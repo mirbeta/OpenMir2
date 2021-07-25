@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using mSystemModule;
 using SystemModule;
 
 namespace M2Server
@@ -85,7 +84,9 @@ namespace M2Server
                 Castle.m_EnvirList.Add("0155");
                 Castle.m_EnvirList.Add("0156");
                 for (var i = 0; i < Castle.m_EnvirList.Count; i++)
+                {
                     Castle.m_EnvirList[i] = M2Share.g_MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
+                }    
                 Save();
                 return;
             }
@@ -166,8 +167,7 @@ namespace M2Server
             for (var i = 0; i < _castleList.Count; i++)
             {
                 Castle = _castleList[i];
-                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg,
-                    new {Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome}));
+                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, new { Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome }));
             }
         }
 

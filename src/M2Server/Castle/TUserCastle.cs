@@ -46,13 +46,13 @@ namespace M2Server
         /// 皇宫所在地图 
         public TEnvirnoment m_MapPalace;
         public TEnvirnoment m_MapSecret;
-       /// <summary>
-       /// 所属行会名称
-       /// </summary>
-       public TGuild m_MasterGuild;
-       /// <summary>
-       /// 行会回城点X
-       /// </summary>
+        /// <summary>
+        /// 所属行会名称
+        /// </summary>
+        public TGuild m_MasterGuild;
+        /// <summary>
+        /// 行会回城点X
+        /// </summary>
         public int m_nHomeX;
         /// <summary>
         /// 行会回城点Y
@@ -144,22 +144,21 @@ namespace M2Server
                 m_MapCastle = M2Share.g_MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
-                    m_MainDoor.BaseObject =
-                        M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_MainDoor.nX, m_MainDoor.nY,
-                            m_MainDoor.sName);
+                    m_MainDoor.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_MainDoor.nX, m_MainDoor.nY, m_MainDoor.sName);
                     if (m_MainDoor.BaseObject != null)
                     {
                         m_MainDoor.BaseObject.m_WAbil.HP = m_MainDoor.nHP;
                         m_MainDoor.BaseObject.m_Castle = this;
-                        if (m_MainDoor.nStatus) ((TCastleDoor) m_MainDoor.BaseObject).Open();
+                        if (m_MainDoor.nStatus)
+                        {
+                            ((TCastleDoor)m_MainDoor.BaseObject).Open();
+                        }
                     }
                     else
                     {
                         M2Share.ErrorMessage("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
                     }
-                    m_LeftWall.BaseObject =
-                        M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_LeftWall.nX, m_LeftWall.nY,
-                            m_LeftWall.sName);
+                    m_LeftWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_LeftWall.nX, m_LeftWall.nY, m_LeftWall.sName);
                     if (m_LeftWall.BaseObject != null)
                     {
                         m_LeftWall.BaseObject.m_WAbil.HP = m_LeftWall.nHP;
@@ -169,9 +168,7 @@ namespace M2Server
                     {
                         M2Share.ErrorMessage("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + m_MainDoor.sName);
                     }
-
-                    m_CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_CenterWall.nX,
-                        m_CenterWall.nY, m_CenterWall.sName);
+                    m_CenterWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_CenterWall.nX, m_CenterWall.nY, m_CenterWall.sName);
                     if (m_CenterWall.BaseObject != null)
                     {
                         m_CenterWall.BaseObject.m_WAbil.HP = m_CenterWall.nHP;
@@ -181,9 +178,7 @@ namespace M2Server
                     {
                         M2Share.ErrorMessage("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + m_LeftWall.sName);
                     }
-
-                    m_RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_RightWall.nX,
-                        m_RightWall.nY, m_RightWall.sName);
+                    m_RightWall.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_RightWall.nX, m_RightWall.nY, m_RightWall.sName);
                     if (m_RightWall.BaseObject != null)
                     {
                         m_RightWall.BaseObject.m_WAbil.HP = m_RightWall.nHP;
@@ -193,7 +188,6 @@ namespace M2Server
                     {
                         M2Share.ErrorMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
                     }
-
                     for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
                     {
                         ObjUnit = m_Archer[i];
@@ -204,9 +198,9 @@ namespace M2Server
                         {
                             ObjUnit.BaseObject.m_WAbil.HP = m_Archer[i].nHP;
                             ObjUnit.BaseObject.m_Castle = this;
-                            ((TGuardUnit) ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
-                            ((TGuardUnit) ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
-                            ((TGuardUnit) ObjUnit.BaseObject).m_nDirection = 3;
+                            ((TGuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
+                            ((TGuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
+                            ((TGuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
                         }
                         else
                         {
@@ -241,13 +235,16 @@ namespace M2Server
 
         private void LoadConfig()
         {
-            var mapSplit = new[] {','};
+            var mapSplit = new[] { ',' };
             TObjUnit objUnit;
             var sMap = string.Empty;
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir + m_sConfigDir))
-                Directory.CreateDirectory(M2Share.g_Config.sCastleDir + m_sConfigDir);
+            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
             var sConfigFile = "SabukW.txt";
-            var sFileName = M2Share.g_Config.sCastleDir + m_sConfigDir + '\\' + sConfigFile;
+            var sFileName = Path.Combine(filePath, sConfigFile);
             var CastleConf = new IniFile(sFileName);
             m_sName = CastleConf.ReadString("Setup", "CastleName", m_sName);
             m_sOwnGuild = CastleConf.ReadString("Setup", "OwnGuild", "");
@@ -258,15 +255,18 @@ namespace M2Server
             m_nTodayIncome = CastleConf.ReadInteger("Setup", "TodayIncome", 0);
             var sMapList = CastleConf.ReadString("Defense", "CastleMapList", "");
             if (!string.IsNullOrEmpty(sMapList))
+            {
                 while (!string.IsNullOrEmpty(sMapList))
                 {
                     sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, mapSplit);
                     if (sMap == "") break;
                     m_EnvirList.Add(sMap);
                 }
-
+            }
             for (var i = 0; i < m_EnvirList.Count; i++)
+            {
                 m_EnvirList[i] = M2Share.g_MapManager.FindMap(m_EnvirList[i]).sMapName;
+            }
             m_sMapName = CastleConf.ReadString("Defense", "CastleMap", "3");
             m_sHomeMap = CastleConf.ReadString("Defense", "CastleHomeMap", m_sHomeMap);
             m_nHomeX = CastleConf.ReadInteger("Defense", "CastleHomeX", m_nHomeX);
@@ -278,37 +278,37 @@ namespace M2Server
             m_nPalaceDoorX = CastleConf.ReadInteger("Defense", "CastlePalaceDoorX", 631);
             m_nPalaceDoorY = CastleConf.ReadInteger("Defense", "CastlePalaceDoorY", 274);
             m_MainDoor = new TObjUnit();
-            m_MainDoor.nX = CastleConf.ReadInteger<short>("Defense", "MainDoorX", (short) 672);
-            m_MainDoor.nY = CastleConf.ReadInteger<short>("Defense", "MainDoorY", (short) 330);
+            m_MainDoor.nX = CastleConf.ReadInteger<short>("Defense", "MainDoorX", (short)672);
+            m_MainDoor.nY = CastleConf.ReadInteger<short>("Defense", "MainDoorY", (short)330);
             m_MainDoor.sName = CastleConf.ReadString("Defense", "MainDoorName", "MainDoor");
             m_MainDoor.nStatus = CastleConf.ReadBool("Defense", "MainDoorOpen", true);
-            m_MainDoor.nHP = CastleConf.ReadInteger<ushort>("Defense", "MainDoorHP", (short) 2000);
+            m_MainDoor.nHP = CastleConf.ReadInteger<ushort>("Defense", "MainDoorHP", (short)2000);
             m_MainDoor.BaseObject = null;
             m_LeftWall = new TObjUnit();
-            m_LeftWall.nX = CastleConf.ReadInteger<short>("Defense", "LeftWallX", (short) 624);
-            m_LeftWall.nY = CastleConf.ReadInteger<short>("Defense", "LeftWallY", (short) 278);
+            m_LeftWall.nX = CastleConf.ReadInteger<short>("Defense", "LeftWallX", (short)624);
+            m_LeftWall.nY = CastleConf.ReadInteger<short>("Defense", "LeftWallY", (short)278);
             m_LeftWall.sName = CastleConf.ReadString("Defense", "LeftWallName", "LeftWall");
-            m_LeftWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "LeftWallHP", (short) 2000);
+            m_LeftWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "LeftWallHP", (short)2000);
             m_LeftWall.BaseObject = null;
             m_CenterWall = new TObjUnit();
-            m_CenterWall.nX = CastleConf.ReadInteger<short>("Defense", "CenterWallX", (short) 627);
-            m_CenterWall.nY = CastleConf.ReadInteger<short>("Defense", "CenterWallY", (short) 278);
+            m_CenterWall.nX = CastleConf.ReadInteger<short>("Defense", "CenterWallX", (short)627);
+            m_CenterWall.nY = CastleConf.ReadInteger<short>("Defense", "CenterWallY", (short)278);
             m_CenterWall.sName = CastleConf.ReadString("Defense", "CenterWallName", "CenterWall");
-            m_CenterWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "CenterWallHP", (short) 2000);
+            m_CenterWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "CenterWallHP", (short)2000);
             m_CenterWall.BaseObject = null;
             m_RightWall = new TObjUnit();
-            m_RightWall.nX = CastleConf.ReadInteger<short>("Defense", "RightWallX", (short) 634);
-            m_RightWall.nY = CastleConf.ReadInteger<short>("Defense", "RightWallY", (short) 271);
+            m_RightWall.nX = CastleConf.ReadInteger<short>("Defense", "RightWallX", (short)634);
+            m_RightWall.nY = CastleConf.ReadInteger<short>("Defense", "RightWallY", (short)271);
             m_RightWall.sName = CastleConf.ReadString("Defense", "RightWallName", "RightWall");
-            m_RightWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "RightWallHP", (short) 2000);
+            m_RightWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "RightWallHP", (short)2000);
             m_RightWall.BaseObject = null;
             for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
             {
                 objUnit = new TObjUnit();
-                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_X", (short) 0);
-                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_Y", (short) 0);
+                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_X", (short)0);
+                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_Y", (short)0);
                 objUnit.sName = CastleConf.ReadString("Defense", "Archer_" + i + 1 + "_Name", "弓箭手");
-                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short) 2000);
+                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short)2000);
                 objUnit.BaseObject = null;
                 m_Archer[i] = objUnit;
             }
@@ -316,10 +316,10 @@ namespace M2Server
             for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
             {
                 objUnit = new TObjUnit();
-                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_X", (short) 0);
-                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_Y", (short) 0);
+                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_X", (short)0);
+                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_Y", (short)0);
                 objUnit.sName = CastleConf.ReadString("Defense", "Guard_" + i + 1 + "_Name", "守卫");
-                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Guard_" + i + 1 + "_HP", (short) 2000);
+                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Guard_" + i + 1 + "_HP", (short)2000);
                 objUnit.BaseObject = null;
                 m_Guard[i] = objUnit;
             }
@@ -330,15 +330,22 @@ namespace M2Server
 
         private void SaveConfigFile()
         {
+            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
             var sMapList = string.Empty;
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir + m_sConfigDir))
-                Directory.CreateDirectory(M2Share.g_Config.sCastleDir + m_sConfigDir);
+            if (!Directory.Exists(filePath))
+                Directory.CreateDirectory(filePath);
             if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) != M2Share.nServerIndex) return;
             var sConfigFile = "SabukW.txt";
-            var sFileName = M2Share.g_Config.sCastleDir + m_sConfigDir + '\\' + sConfigFile;
+            var sFileName = Path.Combine(filePath, sConfigFile);
             var castleConf = new IniFile(sFileName);
-            if (!string.IsNullOrEmpty(m_sName)) castleConf.WriteString("Setup", "CastleName", m_sName);
-            if (!string.IsNullOrEmpty(m_sOwnGuild)) castleConf.WriteString("Setup", "OwnGuild", m_sOwnGuild);
+            if (!string.IsNullOrEmpty(m_sName))
+            {
+                castleConf.WriteString("Setup", "CastleName", m_sName);
+            }
+            if (!string.IsNullOrEmpty(m_sOwnGuild))
+            {
+                castleConf.WriteString("Setup", "OwnGuild", m_sOwnGuild);
+            }
             castleConf.WriteDateTime("Setup", "ChangeDate", m_ChangeDate);
             castleConf.WriteDateTime("Setup", "WarDate", m_WarDate);
             castleConf.WriteDateTime("Setup", "IncomeToday", m_IncomeToday);
@@ -404,16 +411,16 @@ namespace M2Server
                 else
                     castleConf.WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", 0);
             }
-            castleConf = null;
         }
 
         private void LoadAttackSabukWall()
         {
+            var sabukwallPath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
             var guildName = string.Empty;
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir + m_sConfigDir))
-                Directory.CreateDirectory(M2Share.g_Config.sCastleDir + m_sConfigDir);
+            if (!Directory.Exists(sabukwallPath))
+                Directory.CreateDirectory(sabukwallPath);
             var sConfigFile = "AttackSabukWall.txt";
-            var sFileName = M2Share.g_Config.sCastleDir + m_sConfigDir + '\\' + sConfigFile;
+            var sFileName = Path.Combine(sabukwallPath, sConfigFile);
             if (!File.Exists(sFileName)) return;
             var loadList = new StringList();
             loadList.LoadFromFile(sFileName);
@@ -434,15 +441,15 @@ namespace M2Server
                 attackerInfo.Guild = guild;
                 m_AttackWarList.Add(attackerInfo);
             }
-            loadList = null;
         }
 
         private void SaveAttackSabukWall()
         {
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir + m_sConfigDir))
-                Directory.CreateDirectory(M2Share.g_Config.sCastleDir + m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            if (!Directory.Exists(sabukwallPath))
+                Directory.CreateDirectory(sabukwallPath);
             var sConfigFile = "AttackSabukWall.txt";
-            var sFileName = M2Share.g_Config.sCastleDir + m_sConfigDir + '\\' + sConfigFile;
+            var sFileName = Path.Combine(sabukwallPath, sConfigFile);
             var loadLis = new StringList();
             for (var i = 0; i < m_AttackWarList.Count; i++)
             {
@@ -505,7 +512,7 @@ namespace M2Server
                             StartWallconquestWar();
                             SaveAttackSabukWall();
                             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_212, M2Share.nServerIndex, "");
-                            s20 = string.Format(sWarStartMsg, new[] {m_sName});
+                            s20 = string.Format(sWarStartMsg, new[] { m_sName });
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
                             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
@@ -513,7 +520,6 @@ namespace M2Server
                         }
                     }
                 }
-
                 for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
                     if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.m_boGhost)
                         m_Guard[i].BaseObject = null;
@@ -526,17 +532,16 @@ namespace M2Server
                     if (m_CenterWall.BaseObject != null) m_CenterWall.BaseObject.m_boStoneMode = false;
                     if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.m_boStoneMode = false;
                     if (!m_boShowOverMsg)
-                        if (HUtil32.GetTickCount() - m_dwStartCastleWarTick > M2Share.g_Config.dwCastleWarTime -
-                            M2Share.g_Config.dwShowCastleWarEndMsgTime) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
+                    {
+                        if (HUtil32.GetTickCount() - m_dwStartCastleWarTick > M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            s20 = string.Format(sWarStopTimeMsg,
-                                new object[] {m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000)});
+                            s20 = string.Format(sWarStopTimeMsg, new object[] { m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000) });
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
                             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
                         }
-
+                    }
                     if (HUtil32.GetTickCount() - m_dwStartCastleWarTick > M2Share.g_Config.dwCastleWarTime)
                     {
                         StopWallconquestWar();
@@ -579,7 +584,6 @@ namespace M2Server
         public bool IsMember(TBaseObject cert)
         {
             return IsMasterGuild(cert.m_MyGuild);
-            ;
         }
 
         // 检查是否为攻城方行会的联盟行会
@@ -589,14 +593,13 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild) m_AttackGuildList[i];
+                AttackGuild = (TGuild)m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild.IsAllyGuild(Guild))
                 {
                     result = true;
                     break;
                 }
             }
-
             return result;
         }
 
@@ -607,7 +610,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild) m_AttackGuildList[i];
+                AttackGuild = (TGuild)m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild == Guild)
                 {
                     result = true;
@@ -627,7 +630,7 @@ namespace M2Server
             result = true;
             for (var i = 0; i < List14.Count; i++)
             {
-                var playObject = (TPlayObject) List14[i];
+                var playObject = (TPlayObject)List14[i];
                 if (!playObject.m_boDeath && playObject.m_MyGuild != guild)
                 {
                     result = false;
@@ -648,7 +651,7 @@ namespace M2Server
             SaveConfigFile();
             if (oldGuild != null) oldGuild.RefMemberName();
             if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
-            var s10 = string.Format(sGetCastleMsg, new object[] {m_sName, m_sOwnGuild});
+            var s10 = string.Format(sGetCastleMsg, new object[] { m_sName, m_sOwnGuild });
             M2Share.UserEngine.SendBroadCastMsgExt(s10, TMsgType.t_System);
             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s10);
             M2Share.MainOutMessage(s10);
@@ -661,11 +664,9 @@ namespace M2Server
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, m_nHomeX, m_nHomeY, 100, ListC);
             for (var i = 0; i < ListC.Count; i++)
             {
-                PlayObject = (TPlayObject) ListC[i];
+                PlayObject = (TPlayObject)ListC[i];
                 PlayObject.RefShowName();
             }
-
-            //ListC.Free;
         }
 
         public void StopWallconquestWar()
@@ -680,12 +681,11 @@ namespace M2Server
             M2Share.UserEngine.GetMapOfRangeHumanCount(m_MapCastle, m_nHomeX, m_nHomeY, 100);
             for (var i = 0; i < ListC.Count; i++)
             {
-                PlayObject = (TPlayObject) ListC[i];
+                PlayObject = (TPlayObject)ListC[i];
                 PlayObject.ChangePKStatus(false);
                 if (PlayObject.m_MyGuild != m_MasterGuild) PlayObject.MapRandomMove(PlayObject.m_sHomeMap, 0);
             }
-            //ListC.Free;
-            s14 = string.Format(sWallWarStop, new[] {m_sName});
+            s14 = string.Format(sWallWarStop, new[] { m_sName });
             M2Share.UserEngine.SendBroadCastMsgExt(s14, TMsgType.t_System);
             M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s14);
             M2Share.MainOutMessage(s14);
@@ -722,12 +722,12 @@ namespace M2Server
 
         public short GetHomeX()
         {
-            return (short) (m_nHomeX - 4 + M2Share.RandomNumber.Random(9));
+            return (short)(m_nHomeX - 4 + M2Share.RandomNumber.Random(9));
         }
 
         public short GetHomeY()
         {
-            return (short) (m_nHomeY - 4 + M2Share.RandomNumber.Random(9));
+            return (short)(m_nHomeY - 4 + M2Share.RandomNumber.Random(9));
         }
 
         public string GetMapName()
@@ -762,7 +762,7 @@ namespace M2Server
             var Year = AttackerInfo.AttackDate.Year;
             var Month = AttackerInfo.AttackDate.Month;
             var Day = AttackerInfo.AttackDate.Day;
-            result = string.Format(sMsg, new[] {Year, Month, Day});
+            result = string.Format(sMsg, new[] { Year, Month, Day });
             return result;
         }
 
@@ -782,9 +782,9 @@ namespace M2Server
                 var Day = AttackerInfo.AttackDate.Day;
                 if (Year != wYear || Month != wMonth || Day != wDay)
                 {
-                    wYear = (short) Year;
-                    wMonth = (short) Month;
-                    wDay = (short) Day;
+                    wYear = (short)Year;
+                    wMonth = (short)Month;
+                    wDay = (short)Day;
                     if (result != "") result = result + '\\';
                     result = result + wYear + '年' + wMonth + '月' + wDay + "日\\";
                     n10 = 0;
@@ -922,11 +922,11 @@ namespace M2Server
             {
                 if (boClose)
                 {
-                    if (((TCastleDoor) m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor) m_MainDoor.BaseObject).Close();
+                    if (((TCastleDoor)m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor)m_MainDoor.BaseObject).Close();
                 }
                 else
                 {
-                    if (!((TCastleDoor) m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor) m_MainDoor.BaseObject).Open();
+                    if (!((TCastleDoor)m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor)m_MainDoor.BaseObject).Open();
                 }
             }
         }
@@ -942,7 +942,7 @@ namespace M2Server
                 if (HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
-                    ((TCastleDoor) CastleDoor.BaseObject).RefStatus();
+                    ((TCastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
@@ -952,8 +952,8 @@ namespace M2Server
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
                     CastleDoor.BaseObject.m_boDeath = false;
-                    ((TCastleDoor) CastleDoor.BaseObject).m_boOpened = false;
-                    ((TCastleDoor) CastleDoor.BaseObject).RefStatus();
+                    ((TCastleDoor)CastleDoor.BaseObject).m_boOpened = false;
+                    ((TCastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
@@ -984,7 +984,7 @@ namespace M2Server
                 if (HUtil32.GetTickCount() - Wall.m_dwStruckTick > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
-                    ((TWallStructure) Wall).RefStatus();
+                    ((TWallStructure)Wall).RefStatus();
                     result = true;
                 }
             }
@@ -994,7 +994,7 @@ namespace M2Server
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
                     Wall.m_boDeath = false;
-                    ((TWallStructure) Wall).RefStatus();
+                    ((TWallStructure)Wall).RefStatus();
                     result = true;
                 }
             }

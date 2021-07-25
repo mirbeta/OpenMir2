@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Threading;
 
 namespace M2Server
 {

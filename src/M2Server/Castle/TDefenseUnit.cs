@@ -6,7 +6,7 @@
         public int nMainDoorY;
         public string sMainDoorName;
         public bool boXXX;
-        public short wMainDoorHP;
+        public ushort wMainDoorHP;
         public TBaseObject MainDoor;
         public TBaseObject LeftWall;
         public TBaseObject CenterWall;

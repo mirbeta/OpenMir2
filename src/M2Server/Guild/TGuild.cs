@@ -209,7 +209,7 @@ namespace M2Server
             TWarGuild GuildWar;
             TGuild Guild;
             TGuildRank GuildRank = null;
-            var sFileName = M2Share.g_Config.sGuildDir + sGuildFileName;
+            var sFileName = Path.Combine(M2Share.g_Config.sGuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
                 return false;
@@ -599,7 +599,7 @@ namespace M2Server
             TGuildRank GuildRank;
             if (M2Share.nServerIndex == 0)
             {
-                SaveGuildFile(M2Share.g_Config.sGuildDir + sGuildName + '.' + HUtil32.GetTickCount() + ".bak");
+                SaveGuildFile(Path.Combine(M2Share.g_Config.sGuildDir, sGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < m_RankList.Count; i++)
             {
