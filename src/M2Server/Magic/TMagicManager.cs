@@ -597,7 +597,6 @@ namespace M2Server
                         if (Magic.CheckAmulet(PlayObject, 1, 1, ref nAmuletIdx))
                         {
                             Magic.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
-                            // * 2
                             nPower = UserMagic.btLevel + 1 + M2Share.RandomNumber.Random(UserMagic.btLevel);
                             n14 = (short)PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.m_WAbil.SC) * 10, HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC) + 1);
                             if (TargeTBaseObject.AttPowerUp(nPower, n14))
@@ -608,20 +607,16 @@ namespace M2Server
                         }
                     }
                     break;
-                case grobal2.SKILL_51:
-                    // 灵魂召唤术
+                case grobal2.SKILL_51:// 灵魂召唤术
                     boTrain = true;
                     break;
-                case grobal2.SKILL_52:
-                    // 诅咒术
+                case grobal2.SKILL_52:// 诅咒术
                     boTrain = true;
                     break;
-                case grobal2.SKILL_53:
-                    // 灵魂召唤术
+                case grobal2.SKILL_53:// 灵魂召唤术
                     boTrain = true;
                     break;
-                case grobal2.SKILL_54:
-                    // 诅咒术
+                case grobal2.SKILL_54:// 诅咒术
                     boTrain = true;
                     break;
             }
@@ -704,14 +699,10 @@ namespace M2Server
                         {
                             if (M2Share.RandomNumber.Random(3) == 0)
                             {
-                                // 10
                                 if (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level + 20 + nMagicLevel * 5) > TargeTBaseObject.m_Abil.Level + M2Share.g_Config.nMagTammingTargetLevel)
                                 {
-                                    // 50
-                                    // (nMagicLevel + 2)
                                     if (!TargeTBaseObject.m_boNoTame && TargeTBaseObject.m_btLifeAttrib != grobal2.LA_UNDEAD && TargeTBaseObject.m_Abil.Level < M2Share.g_Config.nMagTammingLevel && BaseObject.m_SlaveList.Count < M2Share.g_Config.nMagTammingCount)
                                     {
-                                        // 100
                                         n14 = TargeTBaseObject.m_WAbil.MaxHP / M2Share.g_Config.nMagTammingHPRate;
                                         if (n14 <= 2)
                                         {
@@ -906,15 +897,12 @@ namespace M2Server
                                 {
                                     result = true;
                                 }
-                                // BaseObject.SetLastHiter(PlayObject);
-                                // PlayObject.SetTargetCreat(BaseObject);
                             }
                         }
                         PlayObject.SetTargetCreat(BaseObject);
                     }
                 }
             }
-            //BaseObjectList.Free;
             return result;
         }
 
@@ -1117,7 +1105,6 @@ namespace M2Server
                 }
                 if (BaseObject.IsProperTarget(TargeTBaseObject))
                 {
-                    // BaseObject.SetTargetCreat(TargeTBaseObject);
                     TargeTBaseObject.SendMsg(BaseObject, grobal2.RM_MAGSTRUCK, 0, nPowerPoint, 0, 0, "");
                     result = true;
                 }

@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using mSystemModule;
+﻿using mSystemModule;
 
 namespace M2Server.Configs
 {

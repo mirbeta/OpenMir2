@@ -112,7 +112,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -130,7 +129,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -147,7 +145,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
