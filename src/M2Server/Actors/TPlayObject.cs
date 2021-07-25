@@ -215,7 +215,7 @@ namespace M2Server
         public int m_dwShowLineNoticeTick = 0;
         public int m_nShowLineNoticeIdx = 0;
         public int m_nSoftVersionDateEx = 0;
-        public IList<string> m_CanJmpScriptLableList = null;
+        public Hashtable m_CanJmpScriptLableList = null;
         public int m_nScriptGotoCount = 0;
         public string m_sScriptCurrLable = string.Empty;
         // 用于处理 @back 脚本命令
@@ -2085,7 +2085,7 @@ namespace M2Server
             m_dwShowLineNoticeTick = HUtil32.GetTickCount();
             m_nShowLineNoticeIdx = 0;
             m_nSoftVersionDateEx = 0;
-            m_CanJmpScriptLableList = new List<string>();
+            m_CanJmpScriptLableList = new Hashtable();
             m_nKillMonExpMultiple = 1;
             m_nKillMonExpRate = 100;
             m_dwRateTick = HUtil32.GetTickCount();
@@ -6561,7 +6561,7 @@ namespace M2Server
         public void SetScriptLabel(string sLabel)
         {
             m_CanJmpScriptLableList.Clear();
-            m_CanJmpScriptLableList.Add(sLabel);
+            m_CanJmpScriptLableList.Add(sLabel, sLabel);
         }
 
         /// <summary>
@@ -6571,24 +6571,19 @@ namespace M2Server
         public void GetScriptLabel(string sMsg)
         {
             var sText = string.Empty;
-            var sCmdStr = string.Empty;
             m_CanJmpScriptLableList.Clear();
             while (true)
             {
-                if (sMsg == "")
+                if (string.IsNullOrEmpty(sMsg))
                 {
                     break;
                 }
-                //<*@(\S*)>
-                //<?@(\S+?)>
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
                     var matchCollection = Regex.Matches(sText, "<?@(\\w+?>)", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(3));
-
                     foreach (Match match in matchCollection)
                     {
-                        var sData = string.Empty;
                         var line = match.Value.Remove(match.Value.Length - 1);
                         //if (line[0] != '<')
                         //{
@@ -6598,7 +6593,7 @@ namespace M2Server
                         //var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
                         if (!string.IsNullOrEmpty(line))
                         {
-                            m_CanJmpScriptLableList.Add(line);
+                            m_CanJmpScriptLableList.Add(line, line);
                         }
                     }
                 }
@@ -6613,13 +6608,10 @@ namespace M2Server
                 result = true;
                 return result;
             }
-            for (var i = 0; i < m_CanJmpScriptLableList.Count; i++)
+            if (m_CanJmpScriptLableList.ContainsKey(sLabel.ToLower()))
             {
-                if (sLabel.ToLower().CompareTo(m_CanJmpScriptLableList[i].ToLower()) == 0)
-                {
-                    result = true;
-                    break;
-                }
+                result = true;
+                return result;
             }
             if (string.Compare(sLabel, m_sPlayDiceLabel, StringComparison.Ordinal) == 0)
             {

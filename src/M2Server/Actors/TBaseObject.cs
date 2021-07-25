@@ -4990,7 +4990,7 @@ namespace M2Server
             }
         }
 
-        public void SendDelayMsg(int BaseObject, short wIdent, short wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendDelayMsg(int BaseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             SendMessage SendMessage;
             try
@@ -7296,7 +7296,7 @@ namespace M2Server
                 if (nPower > 0)
                 {
                     AttackTarget.StruckDamage(nPower);
-                    AttackTarget.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (short)nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
+                    AttackTarget.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, nPower, AttackTarget.m_WAbil.HP, AttackTarget.m_WAbil.MaxHP, ObjectId, "", 200);
                     if (!AttackTarget.m_boUnParalysis && m_boParalysis && (M2Share.RandomNumber.Random(AttackTarget.m_btAntiPoison + M2Share.g_Config.nAttackPosionRate) == 0))
                     {
                         AttackTarget.MakePosion(grobal2.POISON_STONE, M2Share.g_Config.nAttackPosionTime, 0);

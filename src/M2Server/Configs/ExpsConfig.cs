@@ -1,4 +1,5 @@
 ﻿using mSystemModule;
+using System.IO;
 
 namespace M2Server.Configs
 {
@@ -9,8 +10,23 @@ namespace M2Server.Configs
 
         public ExpsConfig()
         { 
-            ExpConf = new IniFile(M2Share.sExpConfigFileName);
-            Config = new IniFile(M2Share.sConfigFileName);
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix && System.Environment.OSVersion.Version.Major >= 11)
+            {
+                Config = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sExpConfigFileName));
+            }
+            else if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
+            {
+                Config = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sExpConfigFileName));
+            }
+            else
+            {
+                Config = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sConfigFileName));
+                ExpConf = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sExpConfigFileName));
+            }
+            Config.Load();
+            ExpConf.Load();
         }
 
         public void LoadConfig()

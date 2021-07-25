@@ -10,21 +10,25 @@ namespace M2Server
     public class TNormNpc : TAnimalObject
     {
         public int n54C = 0;
+        /// <summary>
+        /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
+        /// </summary>
         public short m_nFlag = 0;
         public int[] FGotoLable;
-        // 0x550 //用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         public IList<TScript> m_ScriptList = null;
         public string m_sFilePath = string.Empty;
-        // 0x558 脚本文件所在目录
+        /// <summary>
+        /// 此NPC是否是隐藏的，不显示在地图中
+        /// </summary>
         public bool m_boIsHide = false;
-        // 0x55C 此NPC是否是隐藏的，不显示在地图中
+        /// <summary>
+        ///  NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
+        /// </summary>
         public bool m_boIsQuest = false;
-        // 0x55D NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         public string m_sPath = string.Empty;
 
         private void ActionOfAddNameDateList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
             StringList LoadList;
             bool boFound;
             string sListFileName;
@@ -46,7 +50,7 @@ namespace M2Server
                 }
             }
             boFound = false;
-            for (I = 0; I < LoadList.Count; I++)
+            for (var I = 0; I < LoadList.Count; I++)
             {
                 sLineText = LoadList[I].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
@@ -500,12 +504,11 @@ namespace M2Server
         {
             ArrayList MonList;
             TBaseObject Mon;
-            int II;
             MonList = new ArrayList();
             M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), MonList);
-            for (II = 0; II < MonList.Count; II++)
+            for (var i = 0; i < MonList.Count; i++)
             {
-                Mon = (TBaseObject)MonList[II];
+                Mon = (TBaseObject)MonList[i];
                 if (Mon.m_Master != null)
                 {
                     continue;
@@ -7477,7 +7480,6 @@ namespace M2Server
                     }
                 }
             }
-            //List1C.Free;
         }
 
         public void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp)
@@ -7917,7 +7919,6 @@ namespace M2Server
                             PlayObject.m_ItemList.Add(UserItem);
                             PlayObject.SendAddItem(UserItem);
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                            // 0049D46B
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
@@ -7925,7 +7926,6 @@ namespace M2Server
                         }
                         else
                         {
-
                             Dispose(UserItem);
                         }
                     }
@@ -7935,14 +7935,12 @@ namespace M2Server
                         if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                            // 0049D5A5
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
-
                         Dispose(UserItem);
                     }
                 }
