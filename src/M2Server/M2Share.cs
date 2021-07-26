@@ -1,12 +1,12 @@
 using M2Server.CommandSystem;
 using M2Server.Configs;
-using mSystemModule;
 using SystemModule;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -54,7 +54,7 @@ namespace M2Server
         public static IList<TStartPoint> StartPointList = null;
         public static TStartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
-        public static ConcurrentDictionary<int, int> g_DenySayMsgList = null;
+        public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
         public static Dictionary<string,int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
         /// <summary>

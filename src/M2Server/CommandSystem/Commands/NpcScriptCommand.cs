@@ -1,12 +1,12 @@
 ﻿using SystemModule;
 using System;
 using System.IO;
+using SystemModule.Common;
 using M2Server.CommandSystem;
-using mSystemModule;
 
 namespace M2Server
 {
-    [GameCommand("NpcScript", "不知道做什么的", 10)]
+    [GameCommand("NpcScript", "重新读取面对面NPC脚本", 10)]
     public class NpcScriptCommand : BaseCommond
     {
         [DefaultCommand]

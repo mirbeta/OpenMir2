@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace NetFramework
+namespace SystemModule.Sockets.Event
 {
     public class DSCClientConnectedEventArgs : EventArgs
     {

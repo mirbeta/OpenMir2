@@ -3,7 +3,6 @@ namespace M2Server
 {
     public class TArcherGuard : TGuardUnit
     {
-
         public TArcherGuard() : base()
         {
             m_nViewRange = 12;
@@ -14,11 +13,9 @@ namespace M2Server
 
         private void sub_4A6B30(TBaseObject TargeTBaseObject)
         {
-            int nPower;
-            TAbility WAbil;
             m_btDirection = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
-            WAbil = m_WAbil;
-            nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            TAbility WAbil = m_WAbil;
+            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nPower > 0)
             {
                 nPower = TargeTBaseObject.GetHitStruckDamage(this, nPower);

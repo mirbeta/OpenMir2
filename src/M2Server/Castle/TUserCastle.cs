@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using mSystemModule;
 using SystemModule;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -17,7 +17,6 @@ namespace M2Server
         /// 是否开始攻城
         /// </summary>
         private bool m_boStartWar;
-        // 
         /// <summary>
         /// 
         /// </summary>

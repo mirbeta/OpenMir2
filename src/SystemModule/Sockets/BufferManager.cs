@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace NetFramework
+namespace SystemModule.Sockets
 {
     /// <summary>
     /// 这个类创建一个可以被划分和分配给SocketAsyncEventArgs对象每次操作可以使用的单独的打的缓冲区

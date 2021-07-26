@@ -173,25 +173,25 @@ namespace M2Server
             }
         }
 
-        public void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
+        private void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
         {
             var ufilename = Body;
             M2Share.UserEngine.GetISMChangeServerReceive(ufilename);
         }
 
-        public void MsgGetUserLogon(int sNum, string Body)
+        private void MsgGetUserLogon(int sNum, string Body)
         {
             var uname = Body;
             M2Share.UserEngine.OtherServerUserLogon(sNum, uname);
         }
 
-        public void MsgGetUserLogout(int sNum, string Body)
+        private void MsgGetUserLogout(int sNum, string Body)
         {
             var uname = Body;
             M2Share.UserEngine.OtherServerUserLogout(sNum, uname);
         }
 
-        public void MsgGetWhisper(int sNum, string Body)
+        private void MsgGetWhisper(int sNum, string Body)
         {
             string Str;
             var uname = string.Empty;
@@ -210,7 +210,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetGMWhisper(int sNum, string Body)
+        private void MsgGetGMWhisper(int sNum, string Body)
         {
             string Str;
             var uname = string.Empty;
@@ -248,26 +248,26 @@ namespace M2Server
             }
         }
 
-        public void MsgGetSysopMsg(int sNum, string Body)
+        private void MsgGetSysopMsg(int sNum, string Body)
         {
             M2Share.UserEngine.SendBroadCastMsg(Body, TMsgType.t_System);
         }
 
-        public void MsgGetAddGuild(int sNum, string Body)
+        private void MsgGetAddGuild(int sNum, string Body)
         {
             var gname = string.Empty;
             var mname = HUtil32.GetValidStr3(Body, ref gname, "/");
             M2Share.GuildManager.AddGuild(gname, mname);
         }
 
-        public void MsgGetDelGuild(int sNum, string Body)
+        private void MsgGetDelGuild(int sNum, string Body)
         {
             var gname = string.Empty;
             gname = Body;
             M2Share.GuildManager.DelGuild(gname);
         }
 
-        public void MsgGetReloadGuild(int sNum, string Body)
+        private void MsgGetReloadGuild(int sNum, string Body)
         {
             var gname = Body;
             TGuild guild;
@@ -292,7 +292,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetGuildMsg(int sNum, string Body)
+        private void MsgGetGuildMsg(int sNum, string Body)
         {
             var gname = string.Empty;
             TGuild g;
@@ -372,7 +372,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetChatProhibition(int sNum, string Body)
+        private void MsgGetChatProhibition(int sNum, string Body)
         {
             byte obtPermission;
             var Str = string.Empty;
@@ -390,7 +390,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetChatProhibitionCancel(int sNum, string Body)
+        private void MsgGetChatProhibitionCancel(int sNum, string Body)
         {
             byte obtPermission;
             string whostr;
@@ -404,27 +404,27 @@ namespace M2Server
             }
         }
 
-        public void MsgGetChangeCastleOwner(int sNum, string Body)
+        private void MsgGetChangeCastleOwner(int sNum, string Body)
         {
             throw new Exception("TODO MsgGetChangeCastleOwner...");
         }
 
-        public void MsgGetReloadCastleAttackers(int sNum)
+        private void MsgGetReloadCastleAttackers(int sNum)
         {
             M2Share.CastleManager.Initialize();
         }
 
-        public void MsgGetReloadAdmin()
+        private void MsgGetReloadAdmin()
         {
             M2Share.LocalDB.LoadAdminList();
         }
 
-        public void MsgGetReloadChatLog()
+        private void MsgGetReloadChatLog()
         {
             // FrmDB.LoadChatLogFiles;
         }
 
-        public void MsgGetUserMgr(int sNum, string Body, int Ident_)
+        private void MsgGetUserMgr(int sNum, string Body, int Ident_)
         {
             var UserName = string.Empty;
             var msgbody = string.Empty;
@@ -436,13 +436,13 @@ namespace M2Server
 
         // procedure MsgGetRelationShipDelete(sNum: Integer; Body: string);
 
-        public void MsgGetReloadMakeItemList()
+        private void MsgGetReloadMakeItemList()
         {
             //M2Share.LocalDB.LoadMakeItemList();
             M2Share.LocalDB.LoadMakeItem();
         }
 
-        public void MsgGetGuildMemberRecall(int sNum, string Body)
+        private void MsgGetGuildMemberRecall(int sNum, string Body)
         {
             TPlayObject hum;
             short dx;
@@ -471,14 +471,13 @@ namespace M2Server
             }
         }
 
-        public void MsgGetReloadGuildAgit(int sNum, string Body)
+        private void MsgGetReloadGuildAgit(int sNum, string Body)
         {
             // GuildAgitMan.ClearGuildAgitList;
             // GuildAgitMan.LoadGuildAgitList;
-
         }
 
-        public void MsgGetLoverLogin(int sNum, string Body)
+        private void MsgGetLoverLogin(int sNum, string Body)
         {
             TPlayObject humlover;
             string Str;
@@ -499,7 +498,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetLoverLogout(int sNum, string Body)
+        private void MsgGetLoverLogout(int sNum, string Body)
         {
             TPlayObject hum;
             string Str;
@@ -519,12 +518,12 @@ namespace M2Server
             }
         }
 
-        public void MsgGetLoverLoginReply(int sNum, string Body)
+        private void MsgGetLoverLoginReply(int sNum, string Body)
         {
             var uname = string.Empty;
         }
 
-        public void MsgGetLoverKilledMsg(int sNum, string Body)
+        private void MsgGetLoverKilledMsg(int sNum, string Body)
         {
             TPlayObject hum;
             string Str;
@@ -541,7 +540,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetRecall(int sNum, string Body)
+        private void MsgGetRecall(int sNum, string Body)
         {
             TPlayObject hum;
             short dx;
@@ -567,7 +566,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetRequestRecall(int sNum, string Body)
+        private void MsgGetRequestRecall(int sNum, string Body)
         {
             TPlayObject hum;
             string Str;
@@ -584,7 +583,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetRequestLoverRecall(int sNum, string Body)
+        private void MsgGetRequestLoverRecall(int sNum, string Body)
         {
             TPlayObject hum;
             string Str;
@@ -604,7 +603,7 @@ namespace M2Server
             }
         }
 
-        public void MsgGetMarketOpen(bool WantOpen)
+        private void MsgGetMarketOpen(bool WantOpen)
         {
             // SQLEngine.Open(WantOpen);
         }

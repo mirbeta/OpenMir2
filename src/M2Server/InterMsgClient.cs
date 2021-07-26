@@ -1,6 +1,7 @@
-using NetFramework.AsyncSocketClient;
 using System;
 using System.Threading;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
 namespace M2Server
 {
@@ -110,22 +111,22 @@ namespace M2Server
             }
         }
 
-        private void MsgClientConnect(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.MainOutMessage("连接主服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")成功...");
         }
 
-        private void MsgClientError(object sender, NetFramework.DSCClientErrorEventArgs e)
+        private void MsgClientError(object sender, DSCClientErrorEventArgs e)
         {
             M2Share.MainOutMessage("无法连接主服务器(" + MsgClient.Address + ':' + MsgClient.Port + ")...");
         }
 
-        private void MsgClientDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
 
-        private void MsgClientRead(object sender, NetFramework.DSCClientDataInEventArgs e)
+        private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
             sRecvMsg = sRecvMsg + e.Data;
         }

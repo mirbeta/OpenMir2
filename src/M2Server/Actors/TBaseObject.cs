@@ -1325,7 +1325,7 @@ namespace M2Server
             }
         }
 
-        public int GetAttackPower(int nBasePower, int nPower)
+        public ushort GetAttackPower(int nBasePower, int nPower)
         {
             int result;
             TPlayObject PlayObject;
@@ -1373,7 +1373,7 @@ namespace M2Server
             {
                 result = result * m_nFixColorIdx + 1;
             }
-            return result;
+            return (ushort)result;
         }
 
         /// <summary>
@@ -7430,7 +7430,7 @@ namespace M2Server
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");
         }
 
-        public int GetHitStruckDamage(TBaseObject Target, int nDamage)
+        public ushort GetHitStruckDamage(TBaseObject Target, int nDamage)
         {
             int result;
             int nArmor;
@@ -7457,7 +7457,7 @@ namespace M2Server
                 }
             }
             result = nDamage;
-            return result;
+            return (ushort)result;
         }
 
         public int GetMagStruckDamage(TBaseObject BaseObject, int nDamage)
@@ -8000,7 +8000,7 @@ namespace M2Server
             return result;
         }
 
-        public int MagMakeDefenceArea(int nX, int nY, int nRange, int nSec, byte btState)
+        public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
         {
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
@@ -8082,20 +8082,20 @@ namespace M2Server
             return result;
         }
 
-        public bool MagDefenceUp(int nSec)
+        public bool MagDefenceUp(ushort nSec)
         {
             bool result = false;
             if (m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] > 0)
             {
                 if (m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] < nSec)
                 {
-                    m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] = (ushort)nSec;
+                    m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] = (ushort)nSec;
+                m_wStatusTimeArr[grobal2.STATE_MAGDEFENCEUP] = nSec;
                 result = true;
             }
             m_dwStatusArrTick[grobal2.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
@@ -8109,16 +8109,15 @@ namespace M2Server
         /// 魔法盾
         /// </summary>
         /// <returns></returns>
-        public bool MagBubbleDefenceUp(int nLevel, int nSec)
+        public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            bool result = false;
             int nOldStatus;
             if (m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] != 0)
             {
-                return result;
+                return false;
             }
             nOldStatus = m_nCharStatus;
-            m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] = (ushort)nSec;
+            m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
             m_dwStatusArrTick[grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             m_nCharStatus = GetCharStatus();
             if (nOldStatus != m_nCharStatus)
@@ -8126,9 +8125,8 @@ namespace M2Server
                 StatusChanged();
             }
             m_boAbilMagBubbleDefence = true;
-            m_btMagBubbleDefenceLevel = (byte)nLevel;
-            result = true;
-            return result;
+            m_btMagBubbleDefenceLevel = nLevel;
+            return true;
         }
 
         public TUserItem sub_4C4CD4(string sItemName, ref int nCount)

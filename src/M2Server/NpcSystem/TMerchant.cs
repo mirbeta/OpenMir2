@@ -634,7 +634,6 @@ namespace M2Server
                         UpgradeInfo.UserItem.btValue[10] = 1;
                     }
                 }
-                UserItem = new TUserItem();
                 UserItem = UpgradeInfo.UserItem;
                 DisPose(UpgradeInfo);
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -682,12 +681,12 @@ namespace M2Server
             return result;
         }
 
-        public void UserSelect_SuperRepairItem(TPlayObject User)
+        private void UserSelect_SuperRepairItem(TPlayObject User)
         {
             User.SendMsg(this, grobal2.RM_SENDUSERSREPAIR, 0, ObjectId, 0, 0, "");
         }
 
-        public void UserSelect_BuyItem(TPlayObject User, int nInt)
+        private void UserSelect_BuyItem(TPlayObject User, int nInt)
         {
             var sSendMsg = string.Empty;
             var n10 = 0;
@@ -718,17 +717,17 @@ namespace M2Server
             User.SendMsg(this, grobal2.RM_SENDGOODSLIST, 0, ObjectId, n10, 0, sSendMsg);
         }
 
-        public void UserSelect_SellItem(TPlayObject User)
+        private void UserSelect_SellItem(TPlayObject User)
         {
             User.SendMsg(this, grobal2.RM_SENDUSERSELL, 0, ObjectId, 0, 0, "");
         }
 
-        public void UserSelect_RepairItem(TPlayObject User)
+        private void UserSelect_RepairItem(TPlayObject User)
         {
             User.SendMsg(this, grobal2.RM_SENDUSERREPAIR, 0, ObjectId, 0, 0, "");
         }
 
-        public void UserSelect_MakeDurg(TPlayObject User)
+        private void UserSelect_MakeDurg(TPlayObject User)
         {
             IList<TUserItem> List14;
             TUserItem UserItem;

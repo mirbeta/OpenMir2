@@ -169,7 +169,6 @@ namespace M2Server
                     {
                         guildwarkill = true;
                     }
-                    // =================================================================
                     if (!guildwarkill)
                     {
                         if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && m_LastHiter.m_btRaceServer == grobal2.RC_PLAYOBJECT)
@@ -224,7 +223,6 @@ namespace M2Server
                             }
                         }
                     }
-                    // =================================================================
                 }
             }
             catch
@@ -292,7 +290,6 @@ namespace M2Server
                         if (m_LastHiter.m_MyGuild != null && m_MyGuild != null)
                         {
                             m_LastHiter.m_MyGuild.TeamFightWhoWinPoint(m_LastHiter.m_sCharName, 100);
-                            // matchpoint 刘啊, 俺牢己利 扁废
                             tStr = m_LastHiter.m_MyGuild.sGuildName + ':' + m_LastHiter.m_MyGuild.nContestPoint + "  " + m_MyGuild.sGuildName + ':' + m_MyGuild.nContestPoint;
                             M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- " + tStr);
                         }
@@ -300,11 +297,9 @@ namespace M2Server
                 }
                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                 {
-                    // Jacky 2004/09/05
-                    // 人物死亡立即退组，以防止组队刷经验
                     if (m_GroupOwner != null)
                     {
-                        m_GroupOwner.DelMember(this);
+                        m_GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
                     }
                     if (m_LastHiter != null)
                     {

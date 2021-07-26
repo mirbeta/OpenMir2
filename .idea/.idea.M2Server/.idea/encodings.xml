@@ -3,5 +3,9 @@
   <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
     <file url="file://$PROJECT_DIR$/README.md" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/M2Server/RobotSystem/ObjRobot.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketErrorEventArgs.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/SystemModule/Sockets/BufferManager.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/SystemModule/Sockets/SocketAsyncEventArgPool.cs" charset="GBK" />
   </component>
 </project>

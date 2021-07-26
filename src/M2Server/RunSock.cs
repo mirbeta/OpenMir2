@@ -1,10 +1,11 @@
-using NetFramework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using SystemModule;
+using SystemModule.Common;
+using SystemModule.Sockets;
 
 namespace M2Server
 {

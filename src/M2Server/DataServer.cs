@@ -1,5 +1,6 @@
-﻿using NetFramework.AsyncSocketClient;
-using System.Threading;
+﻿using System.Threading;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
 namespace M2Server
 {
@@ -71,19 +72,19 @@ namespace M2Server
         }
 
 
-        private void DbScoketDisconnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = false;
             M2Share.ErrorMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]断开连接...");
         }
 
-        private void DbScoketConnected(object sender, NetFramework.DSCClientConnectedEventArgs e)
+        private void DbScoketConnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = true;
             M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...", messageColor: System.ConsoleColor.Green);
         }
 
-        private void DBSocketRead(object sender, NetFramework.DSCClientDataInEventArgs e)
+        private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try

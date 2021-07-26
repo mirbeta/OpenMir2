@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
-namespace mSystemModule
+namespace SystemModule.Common
 {
     /// <summary>
     /// Provides methods for reading and writing to an INI file.

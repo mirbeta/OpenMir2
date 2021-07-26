@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NetFramework
+namespace SystemModule.Sockets
 {
     /// <summary>
     /// 这个类被设计用来作为被分配给SocketAsyncEventArgs.UserToken属性的类.

@@ -29,7 +29,6 @@ namespace M2Server
 
         public override bool Operate(TProcessMessage ProcessMsg)
         {
-            bool result;
             TBaseObject BB;
             if (ProcessMsg.wIdent == grobal2.RM_ZEN_BEE)
             {
@@ -40,8 +39,7 @@ namespace M2Server
                     BBList.Add(BB);
                 }
             }
-            result = base.Operate(ProcessMsg);
-            return result;
+            return base.Operate(ProcessMsg);
         }
 
         public override void Run()

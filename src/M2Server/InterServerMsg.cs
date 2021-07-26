@@ -1,18 +1,19 @@
-using NetFramework.AsyncSocketServer;
 using System;
 using System.Net.Sockets;
+using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
 namespace M2Server
 {
     public class TFrmSrvMsg
     {
         private readonly TServerMsgInfo[] m_SrvArray;
-        private readonly IServerSocket _msgServer;
+        private readonly ISocketServer _msgServer;
 
         public TFrmSrvMsg()
         {
             m_SrvArray = new TServerMsgInfo[10];
-            _msgServer = new IServerSocket(10, 512);
+            _msgServer = new ISocketServer(10, 512);
             _msgServer.OnClientConnect += MsgServerClientConnect;
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;
@@ -21,7 +22,7 @@ namespace M2Server
 
         public void StartMsgServer()
         {
-            _msgServer.Start(M2Share.g_Config.sMsgSrvAddr, M2Share.g_Config.nMsgSrvPort);
+            _msgServer.Start(M2Share.g_Config.nMsgSrvPort);
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)
@@ -109,7 +110,7 @@ namespace M2Server
             }
         }
 
-        private void MsgServerClientConnect(object sender, NetFramework.AsyncUserToken e)
+        private void MsgServerClientConnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
@@ -128,7 +129,7 @@ namespace M2Server
             }
         }
 
-        private void MsgServerClientDisconnect(object sender, NetFramework.AsyncUserToken e)
+        private void MsgServerClientDisconnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
@@ -148,7 +149,7 @@ namespace M2Server
             }
         }
 
-        private void MsgServerClientRead(object sender, NetFramework.AsyncUserToken e)
+        private void MsgServerClientRead(object sender, AsyncUserToken e)
         {
             for (var i = 0; i < m_SrvArray.Length; i++)
             {

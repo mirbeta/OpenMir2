@@ -63,34 +63,33 @@ namespace M2Server
         public bool IsWarrSkill(int wMagIdx)
         {
             var result = false;
-            if (new ArrayList(new int[] { grobal2.SKILL_ONESWORD, grobal2.SKILL_ILKWANG, grobal2.SKILL_YEDO, grobal2.SKILL_ERGUM, grobal2.SKILL_BANWOL, grobal2.SKILL_FIRESWORD, grobal2.SKILL_MOOTEBO, grobal2.SKILL_CROSSMOON, grobal2.SKILL_TWINBLADE }).Contains(wMagIdx))
+            if (new ArrayList(new[] { grobal2.SKILL_ONESWORD, grobal2.SKILL_ILKWANG, grobal2.SKILL_YEDO, grobal2.SKILL_ERGUM, grobal2.SKILL_BANWOL, grobal2.SKILL_FIRESWORD, grobal2.SKILL_MOOTEBO, grobal2.SKILL_CROSSMOON, grobal2.SKILL_TWINBLADE }).Contains(wMagIdx))
             {
                 result = true;
             }
             return result;
         }
 
-        public int DoSpell_MPow(TUserMagic UserMagic)
+        private ushort DoSpell_MPow(TUserMagic UserMagic)
         {
-            var result = UserMagic.MagicInfo.wPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.wMaxPower - UserMagic.MagicInfo.wPower);
-            return result;
+            return (ushort)(UserMagic.MagicInfo.wPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.wMaxPower - UserMagic.MagicInfo.wPower));
         }
 
-        public int DoSpell_GetPower(TUserMagic UserMagic, int nPower)
+        private ushort DoSpell_GetPower(TUserMagic UserMagic, ushort nPower)
         {
-            var result = HUtil32.Round(nPower / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower);
-            return result;
+            return (ushort)(HUtil32.Round(nPower / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefPower +
+                            M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower));
         }
 
-        public int DoSpell_GetPower13(TUserMagic UserMagic, int nInt)
+        private ushort DoSpell_GetPower13(TUserMagic UserMagic, int nInt)
         {
             var d10 = nInt / 3.0;
             var d18 = nInt - d10;
-            var result = HUtil32.Round(d18 / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1) + d10 + (UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower)));
+            var result = (ushort)HUtil32.Round(d18 / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1) + d10 + (UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower)));
             return result;
         }
 
-        public ushort DoSpell_GetRPow(int wInt)
+        private ushort DoSpell_GetRPow(int wInt)
         {
             ushort result;
             if (HUtil32.HiWord(wInt) > HUtil32.LoWord(wInt))
@@ -124,7 +123,7 @@ namespace M2Server
             short n14 = 0;
             short n18 = 0;
             int n1C;
-            int nPower;
+            ushort nPower = 0;
             TItem StdItem;
             short nAmuletIdx = 0;
             if (IsWarrSkill(UserMagic.wMagIdx))
@@ -143,7 +142,6 @@ namespace M2Server
             boTrain = false;
             boSpellFail = false;
             boSpellFire = true;
-            nPower = 0;
             if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.MagicInfo.wMagicID > 40)
             {
                 return result;
@@ -216,11 +214,11 @@ namespace M2Server
                                     switch (StdItem.Shape)
                                     {
                                         case 1:
-                                            nPower = DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 2;// 中毒类型 - 绿毒
+                                            nPower = (ushort)(DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 2);// 中毒类型 - 绿毒
                                             TargeTBaseObject.SendDelayMsg(PlayObject, grobal2.RM_POISON, grobal2.POISON_DECHEALTH, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.g_Config.nAmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
-                                            nPower = DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 2;// 中毒类型 - 红毒
+                                            nPower = (ushort)(DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 2);// 中毒类型 - 红毒
                                             TargeTBaseObject.SendDelayMsg(PlayObject, grobal2.RM_POISON, grobal2.POISON_DAMAGEARMOR, nPower, PlayObject.ObjectId, HUtil32.Round(UserMagic.btLevel / 3 * (nPower / M2Share.g_Config.nAmyOunsulPoint)), "", 1000);
                                             break;
                                     }
@@ -258,7 +256,7 @@ namespace M2Server
                     if (PlayObject.m_PEnvir.GetNextPosition(PlayObject.m_nCurrX, PlayObject.m_nCurrY, n1C, 1, ref n14, ref n18))
                     {
                         PlayObject.m_PEnvir.GetNextPosition(PlayObject.m_nCurrX, PlayObject.m_nCurrY, n1C, 8, ref nTargetX, ref nTargetY);
-                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
+                        nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), (ushort)(HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1));
                         if (PlayObject.MagPassThroughMagic(n14, n18, nTargetX, nTargetY, n1C, nPower, true) > 0)
                         {
                             boTrain = true;
@@ -273,7 +271,7 @@ namespace M2Server
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                             if (TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD)
                             {
-                                nPower = HUtil32.Round(nPower * 1.5);
+                                nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
                             PlayObject.SendDelayMsg(PlayObject, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
                             if (TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL)
@@ -388,7 +386,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.SKILL_EARTHFIRE:
-                    if (MagMakeFireCross(PlayObject, (short)PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.m_WAbil.MC) >> 1), nTargetX, nTargetY) > 0)
+                    if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.m_WAbil.MC) >> 1), nTargetX, nTargetY) > 0)
                     {
                         boTrain = true;
                     }
@@ -400,7 +398,8 @@ namespace M2Server
                     }
                     break;
                 case grobal2.SKILL_LIGHTFLOWER:
-                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1)))
+                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), 
+                        HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1)))
                     {
                         boTrain = true;
                     }
@@ -449,7 +448,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.SKILL_SHIELD:
-                    if (PlayObject.MagBubbleDefenceUp(UserMagic.btLevel, DoSpell_GetPower(UserMagic, DoSpell_GetRPow(PlayObject.m_WAbil.MC) + 15)))
+                    if (PlayObject.MagBubbleDefenceUp(UserMagic.btLevel, DoSpell_GetPower(UserMagic, (ushort)(DoSpell_GetRPow(PlayObject.m_WAbil.MC) + 15))))
                     {
                         boTrain = true;
                     }
@@ -545,7 +544,7 @@ namespace M2Server
                             nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                             if (TargeTBaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD)
                             {
-                                nPower = HUtil32.Round(nPower * 1.5);
+                                nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
                             PlayObject.SendDelayMsg(PlayObject, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ObjectId, "", 600);
                             if (TargeTBaseObject.m_btRaceServer >= grobal2.RC_ANIMAL)
@@ -597,7 +596,7 @@ namespace M2Server
                         if (Magic.CheckAmulet(PlayObject, 1, 1, ref nAmuletIdx))
                         {
                             Magic.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
-                            nPower = UserMagic.btLevel + 1 + M2Share.RandomNumber.Random(UserMagic.btLevel);
+                            nPower = (ushort)(UserMagic.btLevel + 1 + M2Share.RandomNumber.Random(UserMagic.btLevel));
                             n14 = (short)PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.m_WAbil.SC) * 10, HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC) + 1);
                             if (TargeTBaseObject.AttPowerUp(nPower, n14))
                             {
@@ -967,7 +966,7 @@ namespace M2Server
                         var nPower = PlayObject.GetAttackPower(Magic.GetPower(Magic.MPow(UserMagic), UserMagic) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                         if (BaseObject.m_btLifeAttrib == grobal2.LA_UNDEAD)
                         {
-                            nPower = HUtil32.Round(nPower * 1.5);
+                            nPower = (ushort)HUtil32.Round(nPower * 1.5);
                         }
                         PlayObject.SendDelayMsg(PlayObject, grobal2.RM_DELAYMAGIC, (short)nPower, HUtil32.MakeLong(BaseObject.m_nCurrX, BaseObject.m_nCurrY), 2, BaseObject.ObjectId, "", 600);
                         if (BaseObject.m_btRaceServer >= grobal2.RC_ANIMAL)

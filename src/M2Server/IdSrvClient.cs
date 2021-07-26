@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using NetFramework;
-using NetFramework.AsyncSocketClient;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
 namespace M2Server
 {

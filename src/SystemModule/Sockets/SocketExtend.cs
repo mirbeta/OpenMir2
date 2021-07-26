@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace mSystemModule.Sockets
+namespace SystemModule.Sockets
 {
     public static class SocketExtend
     {

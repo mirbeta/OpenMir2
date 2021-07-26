@@ -90,7 +90,7 @@ namespace M2Server
                     _runTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildManager.Run();
                     M2Share.CastleManager.Run();
-                    var denyList = new List<int>(M2Share.g_DenySayMsgList.Count);
+                    var denyList = new List<string>(M2Share.g_DenySayMsgList.Count);
                     foreach (var item in M2Share.g_DenySayMsgList)
                     {
                         if (HUtil32.GetTickCount() > item.Value)
@@ -100,10 +100,9 @@ namespace M2Server
                     }
                     for (var i = 0; i < denyList.Count; i++)
                     {
-                        var deny = 0;
-                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i], out deny))
+                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i],out var denyName))
                         {
-                            M2Share.MainOutMessage(string.Format("解除玩家[{0}]禁言", denyList[i]));
+                            M2Share.MainOutMessage($"解除玩家[{denyList[i]}]禁言");
                         }
                     }
                 }

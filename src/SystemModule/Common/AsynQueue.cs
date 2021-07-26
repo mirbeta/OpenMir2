@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace mSystemModule
+namespace SystemModule.Common
 {
     [Serializable]
     public class EventArgs<T> : System.EventArgs

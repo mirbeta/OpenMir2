@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mSystemModule
+namespace SystemModule
 {
     /// <summary>
     /// 生成随机数类

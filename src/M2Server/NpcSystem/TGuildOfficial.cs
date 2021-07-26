@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace M2Server
@@ -29,8 +30,9 @@ namespace M2Server
                     }
                     else
                     {
+                        
                     }
-                    //sText = sText + format("<{0}/@requestcastlewarnow%d> {1}", new string[] { List[i], i.ToString(), sStr });
+                    sText = sText + format("<{0}/@requestcastlewarnow%d> {1}", new string[] { List[i], i.ToString(), sText });
                 }
                 sText = sText + "\\ \\";
                 sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);
@@ -71,15 +73,15 @@ namespace M2Server
                     {
                         return;
                     }
-                    if (sLabel.ToLower().CompareTo(M2Share.sBUILDGUILDNOW.ToLower()) == 0)
+                    if (string.Compare(sLabel.ToLower(), M2Share.sBUILDGUILDNOW.ToLower(), StringComparison.Ordinal) == 0)
                     {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (sLabel.ToLower().CompareTo(M2Share.sSCL_GUILDWAR.ToLower()) == 0)
+                    else if (string.Compare(sLabel.ToLower(), M2Share.sSCL_GUILDWAR.ToLower(), StringComparison.Ordinal) == 0)
                     {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (sLabel.ToLower().CompareTo(M2Share.sDONATE.ToLower()) == 0)
+                    else if (string.Compare(sLabel.ToLower(), M2Share.sDONATE.ToLower(), StringComparison.Ordinal) == 0)
                     {
                         DoNate(PlayObject);
                     }
@@ -87,11 +89,11 @@ namespace M2Server
                     {
                         ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
                     }
-                    else if (sLabel.ToLower().CompareTo(M2Share.sEXIT.ToLower()) == 0)
+                    else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.Ordinal) == 0)
                     {
                         PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                     }
-                    else if (sLabel.ToLower().CompareTo(M2Share.sBACK.ToLower()) == 0)
+                    else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.Ordinal) == 0)
                     {
                         if (PlayObject.m_sScriptGoBackLable == "")
                         {

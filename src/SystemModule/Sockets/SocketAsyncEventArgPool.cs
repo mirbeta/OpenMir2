@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace NetFramework
+namespace SystemModule.Sockets
 {
     /// <summary>
     /// 呈现一个可重用的SocketAsyncEventArgs对象集合.

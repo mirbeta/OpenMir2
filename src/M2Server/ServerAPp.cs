@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using SystemModule;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -271,7 +272,7 @@ namespace M2Server
             M2Share.g_MakeItemList = new Dictionary<string, IList<TMakeItem>>();
             M2Share.StartPointList = new List<TStartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
-            M2Share.g_DenySayMsgList = new ConcurrentDictionary<int, int>();
+            M2Share.g_DenySayMsgList = new ConcurrentDictionary<string, long>();
             M2Share.MiniMapList = new Dictionary<string, int>();
             M2Share.g_UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new StringList();

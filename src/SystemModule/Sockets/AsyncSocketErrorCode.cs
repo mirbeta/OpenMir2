@@ -1,4 +1,4 @@
-﻿namespace NetFramework
+﻿namespace SystemModule.Sockets
 {
     /// <summary>
     /// 异步Socket错误码

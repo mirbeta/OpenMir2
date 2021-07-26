@@ -6,160 +6,86 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace NetFramework.AsyncSocketServer
+namespace SystemModule.Sockets.AsyncSocketServer
 {
     /// <summary>
-    /// Òì²½SocketÍ¨Ñ¶·şÎñÆ÷Àà
+    /// å¼‚æ­¥Socketé€šè®¯æœåŠ¡å™¨ç±»
     /// </summary>
-    public class IServerSocket
+    public class ISocketServer
     {
-        #region Fileds
-        // »º³åÇøÍ¬²½¶ÔÏó
-        private readonly Object m_bufferLock = new Object();
+        // ç¼“å†²åŒºåŒæ­¥å¯¹è±¡
+        private Object m_bufferLock = new Object();
+        // è¯»å¯¹è±¡æ± åŒæ­¥å¯¹è±¡
+        private Object m_readPoolLock = new Object();
+        // å†™å¯¹è±¡æ± åŒæ­¥å¯¹è±¡
+        private Object m_writePoolLock = new Object();
+        // æ¥æ”¶æ•°æ®äº‹ä»¶å¯¹è±¡é›†åˆ
+        Dictionary<string, AsyncUserToken> m_tokens;
 
-        // ¶Á¶ÔÏó³ØÍ¬²½¶ÔÏó
-        private readonly Object m_readPoolLock = new Object();
+        // æ·»åŠ åŠŸèƒ½
+        int m_numConnections;           // è®¾è®¡åŒæ—¶å¤„ç†çš„è¿æ¥æœ€å¤§æ•°
+        int m_BufferSize;               // ç”¨äºæ¯ä¸€ä¸ªSocket I/Oæ“ä½œä½¿ç”¨çš„ç¼“å†²åŒºå¤§å°
+        BufferManager m_bufferManager;  // ä¸ºæ‰€æœ‰Socketæ“ä½œå‡†å¤‡çš„ä¸€ä¸ªå¤§çš„å¯é‡ç”¨çš„ç¼“å†²åŒºé›†åˆ        
+        const int opsToPreAlloc = 2;    // éœ€è¦åˆ†é…ç©ºé—´çš„æ“ä½œæ•°ç›®:ä¸º è¯»ã€å†™ã€æ¥æ”¶ç­‰ æ“ä½œé¢„åˆ†é…ç©ºé—´(æ¥å—æ“ä½œå¯ä»¥ä¸åˆ†é…)
+        Socket listenSocket;            // ç”¨æ¥ä¾¦å¬åˆ°è¾¾çš„è¿æ¥è¯·æ±‚çš„Socket
+        // è¯»Socketæ“ä½œçš„SocketAsyncEventArgså¯é‡ç”¨å¯¹è±¡æ±         
+        SocketAsyncEventArgsPool m_readPool;
+        // å†™Socketæ“ä½œçš„SocketAsyncEventArgså¯é‡ç”¨å¯¹è±¡æ± 
+        SocketAsyncEventArgsPool m_writePool;
 
-        // Ğ´¶ÔÏó³ØÍ¬²½¶ÔÏó
-        private readonly Object m_writePoolLock = new Object();
+        // æµ‹è¯•ç”¨
+        long m_totalBytesRead;          // æœåŠ¡å™¨æ¥æ”¶åˆ°çš„æ€»å­—èŠ‚æ•°è®¡æ•°å™¨
+        long m_totalBytesWrite;         // æœåŠ¡å™¨å‘é€çš„å­—èŠ‚æ€»æ•°
 
-        // ½ÓÊÕÊı¾İÊÂ¼ş¶ÔÏó¼¯ºÏ
-        private readonly Dictionary<string, AsyncUserToken> m_tokens;
-
+        long m_numConnectedSockets;      // è¿æ¥åˆ°æœåŠ¡å™¨çš„Socketæ€»æ•°
+        Semaphore m_maxNumberAcceptedClients;//æœ€å¤§æ¥å—è¯·æ±‚æ•°ä¿¡å·é‡
         /// <summary>
-        /// ÊÇ·ñÕıÔÚ¼àÌı
-        /// </summary>
-        private bool m_active;
-
-        /// <summary>
-        /// Éè¼ÆÍ¬Ê±´¦ÀíµÄÁ¬½Ó×î´óÊı
-        /// </summary>
-        private readonly int m_numConnections;           
-
-        /// <summary>
-        /// ÓÃÓÚÃ¿Ò»¸öSocket I/O²Ù×÷Ê¹ÓÃµÄ»º³åÇø´óĞ¡
-        /// </summary>
-        private readonly int m_BufferSize;              
-        /// <summary>
-        ///  ÎªËùÓĞSocket²Ù×÷×¼±¸µÄÒ»¸ö´óµÄ¿ÉÖØÓÃµÄ»º³åÇø¼¯ºÏ
-        /// </summary>
-        private readonly BufferManager m_bufferManager;  
-        /// <summary>
-        ///  ĞèÒª·ÖÅä¿Õ¼äµÄ²Ù×÷ÊıÄ¿:Îª ¶Á¡¢Ğ´¡¢½ÓÊÕµÈ ²Ù×÷Ô¤·ÖÅä¿Õ¼ä(½ÓÊÜ²Ù×÷¿ÉÒÔ²»·ÖÅä)
-        /// </summary>
-        private const int opsToPreAlloc = 2;   
-        /// <summary>
-        /// ÓÃÀ´ÕìÌıµ½´ïµÄÁ¬½ÓÇëÇóµÄSocket
-        /// </summary>
-        private Socket listenSocket;
-
-        /// <summary>
-        /// ¶ÁSocket²Ù×÷µÄSocketAsyncEventArgs¿ÉÖØÓÃ¶ÔÏó³Ø
-        /// </summary>
-        private readonly SocketAsyncEventArgsPool m_readPool;
-
-        /// <summary>
-        /// Ğ´Socket²Ù×÷µÄSocketAsyncEventArgs¿ÉÖØÓÃ¶ÔÏó³Ø
-        /// </summary>
-        private readonly SocketAsyncEventArgsPool m_writePool;
-
-        /// <summary>
-        /// ·şÎñÆ÷½ÓÊÕµ½µÄ×Ü×Ö½ÚÊı¼ÆÊıÆ÷
-        /// </summary>
-        private long m_totalBytesRead;        
-
-        /// <summary>
-        /// ·şÎñÆ÷·¢ËÍµÄ×Ö½Ú×ÜÊı
-        /// </summary>
-        private long m_totalBytesWrite;        
-
-        /// <summary>
-        /// Á¬½Óµ½·şÎñÆ÷µÄSocket×ÜÊı
-        /// </summary>
-        private long m_numConnectedSockets;      
-        /// <summary>
-        /// ×î´ó½ÓÊÜÇëÇóÊıĞÅºÅÁ¿
-        /// </summary>
-        private readonly Semaphore m_maxNumberAcceptedClients;
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// ÊÇ·ñÕıÔÚ¼àÌı
-        /// </summary>
-        public bool Active
-        {
-            get { return this.m_active; }
-            set { m_active = value; }
-        }
-
-        /// <summary>
-        /// »ñÈ¡ÒÑ¾­Á¬½ÓµÄSocket×ÜÊı
+        /// è·å–å·²ç»è¿æ¥çš„Socketæ€»æ•°
         /// </summary>
         public long NumConnectedSockets
         {
             get { return m_numConnectedSockets; }
         }
-
         /// <summary>
-        /// »ñÈ¡½ÓÊÕµ½µÄ×Ö½Ú×ÜÊı
+        /// è·å–æ¥æ”¶åˆ°çš„å­—èŠ‚æ€»æ•°
         /// </summary>
         public long TotalBytesRead
         {
             get { return m_totalBytesRead; }
         }
-
         /// <summary>
-        /// »ñÈ¡·¢ËÍµÄ×Ö½Ú×ÜÊı
+        /// è·å–å‘é€çš„å­—èŠ‚æ€»æ•°
         /// </summary>
         public long TotalBytesWrite
         {
             get { return m_totalBytesWrite; }
         }
-
         /// <summary>
-        /// »ñÈ¡Á¬½Ó¶ÔÏó
+        /// å®¢æˆ·ç«¯å·²ç»è¿æ¥äº‹ä»¶
         /// </summary>
-        public Dictionary<string, AsyncUserToken> Connections
-        {
-            get { return this.m_tokens; }
-        }
-        #endregion
-
-        #region Events
+        public event EventHandler<AsyncUserToken> OnClientConnect;        // å®¢æˆ·ç«¯å·²ç»è¿æ¥äº‹ä»¶        
         /// <summary>
-        /// ¿Í»§¶ËÒÑ¾­Á¬½ÓÊÂ¼ş
+        /// å®¢æˆ·ç«¯é”™è¯¯äº‹ä»¶
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientConnect;        // ¿Í»§¶ËÒÑ¾­Á¬½ÓÊÂ¼ş
-
+        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;     // å®¢æˆ·ç«¯é”™è¯¯äº‹ä»¶       
         /// <summary>
-        /// ¿Í»§¶Ë´íÎóÊÂ¼ş
+        /// æ¥æ”¶åˆ°æ•°æ®äº‹ä»¶
         /// </summary>
-        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;     // ¿Í»§¶Ë´íÎóÊÂ¼ş
-
+        public event EventHandler<AsyncUserToken> OnClientRead;           // æ¥æ”¶åˆ°æ•°æ®äº‹ä»¶
         /// <summary>
-        /// ½ÓÊÕµ½Êı¾İÊÂ¼ş
+        /// æ•°æ®å‘é€å®Œæˆ
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientRead;           // ½ÓÊÕµ½Êı¾İÊÂ¼ş
-
+        public event EventHandler<AsyncUserToken> OnDataSendCompleted;// æ•°æ®å‘é€å®Œæˆ
         /// <summary>
-        /// Êı¾İ·¢ËÍÍê³É
+        /// å®¢æˆ·ç«¯æ–­å¼€è¿æ¥äº‹ä»¶
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnDataSendCompleted;// Êı¾İ·¢ËÍÍê³É
-
+        public event EventHandler<AsyncUserToken> OnClientDisconnect;     // å®¢æˆ·ç«¯æ–­å¼€è¿æ¥äº‹ä»¶
+        
         /// <summary>
-        /// ¿Í»§¶Ë¶Ï¿ªÁ¬½ÓÊÂ¼ş
-        /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientDisconnect;     // ¿Í»§¶Ë¶Ï¿ªÁ¬½ÓÊÂ¼ş
-
-        #endregion
-
-        /// <summary>
-        /// ¿Í»§¶ËÊÇ·ñÔÚÏß
+        /// å®¢æˆ·ç«¯æ˜¯å¦åœ¨çº¿
         /// </summary>
         /// <param name="connectionId"></param>
-        /// <returns>ÔÚÏß·µ»Øtrue£¬·ñÔò·µ»Øfalse</returns>
+        /// <returns>åœ¨çº¿è¿”å›trueï¼Œå¦åˆ™è¿”å›false</returns>
         public bool IsOnline(string connectionId)
         {
             lock (((ICollection)this.m_tokens).SyncRoot)
@@ -175,162 +101,111 @@ namespace NetFramework.AsyncSocketServer
             }
         }
 
-        public void CloseClientSocket(string connectionId)
-        {
-            lock (((ICollection)this.m_tokens).SyncRoot)
-            {
-                foreach (var item in this.m_tokens.Values)
-                {
-                    var ipAddress = (IPEndPoint)(item.Socket.RemoteEndPoint);
-                    if (ipAddress.ToString() == connectionId)
-                    {
-                        item.Socket.Close();
-                    }
-                }
-            }
-        }
-
         /// <summary>
-        /// ¹Ø±ÕÌ×½Ó×ÖÁ¬½Ó
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <returns></returns>
-        public bool CloseConnectSocket(string connectionId)
+        /// <param name="numConnections">æœåŠ¡å™¨å…è®¸è¿æ¥çš„å®¢æˆ·ç«¯æ€»æ•°</param>
+        /// <param name="receiveBufferSize">æ¥æ”¶ç¼“å†²åŒºå¤§å°</param>
+        public ISocketServer(int numConnections, int BufferSize)//æ„é€ å‡½æ•°
         {
-            if (IsOnline(connectionId))
-            {
-                AsyncUserToken token = null;
-                if (!this.m_tokens.TryGetValue(connectionId, out token))
-                {
-                    token.Socket.Close();
-                    return true;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// ¹¹Ôìº¯Êı
-        /// </summary>
-        /// <param name="numConnections">·şÎñÆ÷ÔÊĞíÁ¬½ÓµÄ¿Í»§¶Ë×ÜÊı</param>
-        /// <param name="receiveBufferSize">½ÓÊÕ»º³åÇø´óĞ¡</param>
-        public IServerSocket(int numConnections, int BufferSize)//¹¹Ôìº¯Êı
-        {
-            // ÖØÖÃ½ÓÊÕºÍ·¢ËÍ×Ö½Ú×ÜÊı
+            // é‡ç½®æ¥æ”¶å’Œå‘é€å­—èŠ‚æ€»æ•°
             m_totalBytesRead = 0;
             m_totalBytesWrite = 0;
-
-            // ÒÑ¾­Á¬½ÓµÄ¿Í»§¶Ë×ÜÊı
+            // å·²??æ‹¥ç›®çªĞ¤ä¿—è‹?
             m_numConnectedSockets = 0;
-
-            // Êı¾İ¿âÉè¼ÆÁ¬½ÓÈİÁ¿
+            // æ•°æ®åº“è®¾è®¡è¿æ¥å®¹é‡
             m_numConnections = numConnections;
-
-            // ½ÓÊÕ»º³åÇø´óĞ¡
+            // æ¥æ”¶ç¼“å†²åŒºå¤§å°
             m_BufferSize = BufferSize;
 
-            // Îª×î´óÊıÄ¿Socket Í¬Ê±ÄÜÓµÓĞ¸ßĞÔÄÜµÄ¶Á¡¢Ğ´Í¨Ñ¶±íÏÖ¶ø·ÖÅä»º³åÇø¿Õ¼ä
+            // ä¸ºæœ€å¤§æ•°ç›®Socket åŒæ—¶èƒ½æ‹¥æœ‰é«˜æ€§èƒ½çš„è¯»ã€å†™é€šè®¯è¡¨ç°è€Œåˆ†é…ç¼“å†²åŒºç©ºé—´
 
             m_bufferManager = new BufferManager(BufferSize * numConnections * opsToPreAlloc,
                 BufferSize);
-
-            // ¶ÁĞ´³Ø
+            // è¯»å†™æ± 
             m_readPool = new SocketAsyncEventArgsPool(numConnections);
             m_writePool = new SocketAsyncEventArgsPool(numConnections);
 
-            // ½ÓÊÕÊı¾İÊÂ¼ş²ÎÊı¶ÔÏó¼¯ºÏ
+            // æ¥æ”¶æ•°æ®äº‹ä»¶å‚æ•°å¯¹è±¡é›†åˆ
             m_tokens = new Dictionary<string, AsyncUserToken>();
 
-            // ³õÊ¼ĞÅºÅÁ¿
+            // åˆå§‹ä¿¡å·é‡
             m_maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
         }
 
         /// <summary>
-        /// ÓÃÔ¤·ÖÅäµÄ¿ÉÖØÓÃ»º³åÇøºÍÉÏÏÂÎÄ¶ÔÏó³õÊ¼»¯·şÎñÆ÷.
+        /// ç”¨é¢„åˆ†é…çš„å¯é‡ç”¨ç¼“å†²åŒºå’Œä¸Šä¸‹æ–‡å¯¹è±¡åˆå§‹åŒ–æœåŠ¡å™¨.        
         /// </summary>
         public void Init()
         {
-            // ÎªËùÓĞµÄI/O²Ù×÷·ÖÅäÒ»¸ö´óµÄ×Ö½Ú»º³åÇø.Ä¿µÄÊÇ·ÀÖ¹ÄÚ´æËéÆ¬µÄ²úÉú
+            // ä¸ºæ‰€æœ‰çš„I/Oæ“ä½œåˆ†é…ä¸€ä¸ªå¤§çš„å­—èŠ‚ç¼“å†²åŒº.ç›®çš„æ˜¯é˜²æ­¢å†…å­˜ç¢ç‰‡çš„äº§ç”Ÿ             
             m_bufferManager.InitBuffer();
 
-            // ¿ÉÖØÓÃµÄSocketAsyncEventArgs,ÓÃÓÚÖØ¸´½ÓÊÜ¿Í»§¶ËÊ¹ÓÃ
+            // å¯é‡ç”¨çš„SocketAsyncEventArgs,ç”¨äºé‡å¤æ¥å—å®¢æˆ·ç«¯ä½¿ç”¨
             SocketAsyncEventArgs readWriteEventArg;
             AsyncUserToken token;
+            // é¢„åˆ†é…ä¸€ä¸ª SocketAsyncEventArgs å¯¹è±¡æ± 
 
-            // Ô¤·ÖÅäÒ»¸ö SocketAsyncEventArgs ¶ÔÏó³Ø
-
-            // Ô¤·ÖÅäSocketAsyncEventArgs¶Á¶ÔÏó³Ø
+            // é¢„åˆ†é…SocketAsyncEventArgsè¯»å¯¹è±¡æ± 
             for (int i = 0; i < m_numConnections; i++)
             {
-                // Ô¤·ÖÅäÒ»¸ö ¿ÉÖØÓÃµÄSocketAsyncEventArgs ¶ÔÏó
+                // é¢„åˆ†é…ä¸€ä¸ª å¯é‡ç”¨çš„SocketAsyncEventArgs å¯¹è±¡
                 //readWriteEventArg = new SocketAsyncEventArgs();
-                // ´´½¨tokenÊ±Í¬Ê±´´½¨ÁËÒ»¸öºÍtoken¹ØÁªµÄÓÃÓÚ¶ÁÊı¾İµÄSocketAsyncEventArgs¶ÔÏó,
-                // ²¢ÇÒ´´½¨µÄSocketAsyncEventArgs¶ÔÏóµÄUserTokenÊôĞÔÖµÎª¸Ãtoken
+                // åˆ›å»ºtokenæ—¶åŒæ—¶åˆ›å»ºäº†ä¸€ä¸ªå’Œtokenå…³è”çš„ç”¨äºè¯»æ•°æ®çš„SocketAsyncEventArgså¯¹è±¡,
+                // å¹¶ä¸”åˆ›å»ºçš„SocketAsyncEventArgså¯¹è±¡çš„UserTokenå±æ€§å€¼ä¸ºè¯¥token
                 token = new AsyncUserToken();
-
                 //token.ReadEventArgs = readWriteEventArg;
                 //readWriteEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
-                // ×¢²áÒ»¸öSocketAsyncEventArgsÍê³ÉÊÂ¼ş
+                // æ³¨å†Œä¸€ä¸ªSocketAsyncEventArgså®Œæˆäº‹ä»¶
                 token.ReadEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
-
                 //readWriteEventArg.UserToken = new AsyncUserToken();
 
-                // ´Ó»º³åÇø³ØÖĞ·ÖÅäÒ»¸ö×Ö½Ú»º³åÇø¸ø SocketAsyncEventArg ¶ÔÏó
+                // ä»ç¼“å†²åŒºæ± ä¸­åˆ†é…ä¸€ä¸ªå­—èŠ‚ç¼“å†²åŒºç»™ SocketAsyncEventArg å¯¹è±¡
                 //m_bufferManager.SetBuffer(readWriteEventArg);
                 m_bufferManager.SetBuffer(token.ReadEventArgs);
-
                 //((AsyncUserToken)readWriteEventArg.UserToken).SetReceivedBytes(readWriteEventArg.Buffer, readWriteEventArg.Offset, 0);
-                //Éè¶¨½ÓÊÕ»º³åÇø¼°Æ«ÒÆÁ¿
+                //è®¾å®šæ¥æ”¶ç¼“å†²åŒºåŠåç§»é‡
                 token.SetBuffer(token.ReadEventArgs.Buffer, token.ReadEventArgs.Offset, token.ReadEventArgs.Count);
-
-                // Ìí¼ÓÒ»¸ö SocketAsyncEventArg µ½³ØÖĞ
+                // æ·»åŠ ä¸€ä¸ª SocketAsyncEventArg åˆ°æ± ä¸­
                 //m_readPool.Push(readWriteEventArg);
                 m_readPool.Push(token.ReadEventArgs);
             }
-
-            // Ô¤·ÖÅäSocketAsyncEventArgsĞ´¶ÔÏó³Ø
+            // é¢„åˆ†é…SocketAsyncEventArgså†™å¯¹è±¡æ± 
             for (int i = 0; i < m_numConnections; i++)
             {
-                // Ô¤·ÖÅäÒ»¸ö ¿ÉÖØÓÃµÄSocketAsyncEventArgs ¶ÔÏó
+                // é¢„åˆ†é…ä¸€ä¸ª å¯é‡ç”¨çš„SocketAsyncEventArgs å¯¹è±¡
                 readWriteEventArg = new SocketAsyncEventArgs();
                 readWriteEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
                 readWriteEventArg.UserToken = null;
 
-                // ´Ó»º³åÇø³ØÖĞ·ÖÅäÒ»¸ö×Ö½Ú»º³åÇø¸ø SocketAsyncEventArg ¶ÔÏó
+                // ä»ç¼“å†²åŒºæ± ä¸­åˆ†é…ä¸€ä¸ªå­—èŠ‚ç¼“å†²åŒºç»™ SocketAsyncEventArg å¯¹è±¡
                 m_bufferManager.SetBuffer(readWriteEventArg);
-
                 //readWriteEventArg.SetBuffer(null, 0, 0);
 
-                // Ìí¼ÓÒ»¸ö SocketAsyncEventArg µ½³ØÖĞ
+                // æ·»åŠ ä¸€ä¸ª SocketAsyncEventArg åˆ°æ± ä¸­
                 m_writePool.Push(readWriteEventArg);
             }
         }
 
+
         /// <summary>
-        /// Æô¶¯Òì²½Socket·şÎñÆ÷
+        /// å¯åŠ¨å¼‚æ­¥SocketæœåŠ¡å™¨
         /// </summary>
-        public void Start(string listenIp,int listenPort)
+        /// <param name="Port"></param>
+        public void Start(int Port)
         {
-            if (string.IsNullOrEmpty(listenIp))
-            {
-                return;
-            }
-            Start(new IPEndPoint(IPAddress.Parse(listenIp), listenPort));
+            Start(new IPEndPoint(IPAddress.Parse("0.0.0.0"), Port));
         }
 
         /// <summary>
-        /// Æô¶¯Òì²½Socket·şÎñÆ÷
+        /// å¯åŠ¨å¼‚æ­¥SocketæœåŠ¡å™¨
         /// </summary>
-        /// <param name="localEndPoint">Òª°ó¶¨µÄ±¾µØÖÕ½áµã</param>
-        internal void Start(IPEndPoint localEndPoint)// Æô¶¯
+        /// <param name="localEndPoint">è¦ç»‘å®šçš„æœ¬åœ°ç»ˆç»“ç‚¹</param>
+        public void Start(IPEndPoint localEndPoint)// å¯åŠ¨
         {
             try
             {
-                // ´´½¨Ò»¸öÕìÌıµ½´ïÁ¬½ÓµÄSocket
+                // åˆ›å»ºä¸€ä¸ªä¾¦å¬åˆ°è¾¾è¿æ¥çš„Socket
                 if (null != listenSocket)
                 {
                     listenSocket.Close();
@@ -340,34 +215,33 @@ namespace NetFramework.AsyncSocketServer
                     listenSocket = new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                     listenSocket.Bind(localEndPoint);
                 }
-                m_active = true;
-                // ÓÃÒ»¸öÕìÌı100¸öÁ¬½ÓµÄ¶ÓÁĞÆô¶¯·şÎñÆ÷
-                listenSocket.Listen(100);
+                // ç”¨ä¸€ä¸ªä¾¦å¬1000ä¸ªè¿æ¥çš„é˜Ÿåˆ—å¯åŠ¨æœåŠ¡å™¨
+                listenSocket.Listen(1000);
             }
             catch (ObjectDisposedException)
             {
+
             }
             catch (SocketException)
             {
                 //RaiseErrorEvent(null, exception);
-                // Æô¶¯Ê§°ÜÅ×³öÆô¶¯Ê§°ÜÒì³£
-                throw new AsyncSocketException("·şÎñÆ÷Æô¶¯Ê§°Ü", AsyncSocketErrorCode.ServerStartFailure);
+                // å¯åŠ¨å¤±è´¥æŠ›å‡ºå¯åŠ¨å¤±è´¥å¼‚å¸¸
+                throw new AsyncSocketException("æœåŠ¡å™¨å¯åŠ¨å¤±è´¥", AsyncSocketErrorCode.ServerStartFailure);
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 throw exception_debug;
             }
+            // åœ¨ä¾¦å¬Socketä¸ŠæŠ›å‡ºæ¥å—å§”æ‰˜.      
 
-            // ÔÚÕìÌıSocketÉÏÅ×³ö½ÓÊÜÎ¯ÍĞ.
+            StartAccept(null); // (ç¬¬ä¸€æ¬¡ä¸é‡‡ç”¨å¯é‡ç”¨çš„SocketAsyncEventArgså¯¹è±¡æ¥æ¥å—è¯·æ±‚çš„Socketçš„Acceptæ–¹å¼)
 
-            StartAccept(null); // (µÚÒ»´Î²»²ÉÓÃ¿ÉÖØÓÃµÄSocketAsyncEventArgs¶ÔÏóÀ´½ÓÊÜÇëÇóµÄSocketµÄAccept·½Ê½)
-
-            Debug.WriteLine("·şÎñÆ÷Æô¶¯³É¹¦....");
+            Debug.WriteLine("æœåŠ¡å™¨å¯åŠ¨æˆåŠŸ....");
         }
 
         /// <summary>
-        /// ¿ªÊ¼½ÓÊÜÁ¬½ÓÇëÇó
+        /// å¼€å§‹æ¥å—è¿æ¥è¯·æ±‚
         /// </summary>
         /// <param name="acceptEventArg"></param>
         private void StartAccept(SocketAsyncEventArgs acceptEventArg)
@@ -379,12 +253,12 @@ namespace NetFramework.AsyncSocketServer
             }
             else
             {
-                // ÓÉÓÚÉÏÏÂÎÄ¶ÔÏóÕıÔÚ±»Ê¹ÓÃSocket±ØĞë±»ÇåÀí
+                // ç”±äºä¸Šä¸‹æ–‡å¯¹è±¡æ­£åœ¨è¢«ä½¿ç”¨Socketå¿…é¡»è¢«æ¸…ç†
                 acceptEventArg.AcceptSocket = null;
             }
             try
             {
-                m_maxNumberAcceptedClients.WaitOne();// ¶ÔĞÅºÅÁ¿½øĞĞÒ»´ÎP²Ù×÷
+                m_maxNumberAcceptedClients.WaitOne();// å¯¹ä¿¡å·é‡è¿›è¡Œä¸€æ¬¡Pæ“ä½œ
 
                 bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArg);
                 if (!willRaiseEvent)
@@ -397,22 +271,21 @@ namespace NetFramework.AsyncSocketServer
             }
             catch (SocketException socketException)
             {
-                RaiseErrorEvent(null, new AsyncSocketException("·şÎñÆ÷½ÓÊÜ¿Í»§¶ËÇëÇó·¢ÉúÒ»´ÎÒì³£", socketException));
-
-                // ½ÓÊÜ¿Í»§¶Ë·¢ÉúÒì³£
-                //throw new AsyncSocketException("·şÎñÆ÷½ÓÊÜ¿Í»§¶ËÇëÇó·¢ÉúÒ»´ÎÒì³£", AsyncSocketErrorCode.ServerAcceptFailure);
+                RaiseErrorEvent(null, new AsyncSocketException("æœåŠ¡å™¨æ¥å—å®¢æˆ·ç«¯è¯·æ±‚å‘ç”Ÿä¸€æ¬¡å¼‚å¸¸", socketException));
+                // æ¥å—å®¢æˆ·ç«¯å‘ç”Ÿå¼‚å¸¸
+                //throw new AsyncSocketException("æœåŠ¡å™¨æ¥å—å®¢æˆ·ç«¯è¯·æ±‚å‘ç”Ÿä¸€æ¬¡å¼‚å¸¸", AsyncSocketErrorCode.ServerAcceptFailure);
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 throw exception_debug;
             }
         }
 
         /// <summary>
-        /// Õâ¸ö·½·¨ÊÇ¹ØÁªÒì²½½ÓÊÜ²Ù×÷µÄ»Øµ÷·½·¨²¢ÇÒµ±½ÓÊÕ²Ù×÷Íê³ÉÊ±±»µ÷ÓÃ
+        /// è¿™ä¸ªæ–¹æ³•æ˜¯å…³è”å¼‚æ­¥æ¥å—æ“ä½œçš„å›è°ƒæ–¹æ³•å¹¶ä¸”å½“æ¥æ”¶æ“ä½œå®Œæˆæ—¶è¢«è°ƒç”¨        
         /// </summary>
-        private void AcceptEventArg_Completed(object sender, SocketAsyncEventArgs e)
+        void AcceptEventArg_Completed(object sender, SocketAsyncEventArgs e)
         {
             ProcessAccept(e);
         }
@@ -421,40 +294,36 @@ namespace NetFramework.AsyncSocketServer
         {
             AsyncUserToken token;
             Interlocked.Increment(ref m_numConnectedSockets);
-            Debug.WriteLine(string.Format("¿Í»§¶ËÁ¬½ÓÇëÇó±»½ÓÊÜ. ÓĞ {0} ¸ö¿Í»§¶ËÁ¬½Óµ½·şÎñÆ÷",
+            Debug.WriteLine(string.Format("å®¢æˆ·ç«¯è¿æ¥è¯·æ±‚è¢«æ¥å—. æœ‰ {0} ä¸ªå®¢æˆ·ç«¯è¿æ¥åˆ°æœåŠ¡å™¨",
                 m_numConnectedSockets.ToString()));
             SocketAsyncEventArgs readEventArg;
-
-            // »ñµÃÒÑ¾­½ÓÊÜµÄ¿Í»§¶ËÁ¬½ÓSocket²¢°ÑËü·Åµ½ReadEventArg¶ÔÏóµÄuser tokenÖĞ
+            // è·å¾—å·²ç»æ¥å—çš„å®¢æˆ·ç«¯è¿æ¥Socketå¹¶æŠŠå®ƒæ”¾åˆ°ReadEventArgå¯¹è±¡çš„user tokenä¸­
             lock (m_readPool)
             {
                 readEventArg = m_readPool.Pop();
             }
 
             token = (AsyncUserToken)readEventArg.UserToken;
-
-            // °ÑËü·Åµ½ReadEventArg¶ÔÏóµÄuser tokenÖĞ
+            // æŠŠå®ƒæ”¾åˆ°ReadEventArgå¯¹è±¡çš„user tokenä¸­
             token.Socket = e.AcceptSocket;
-
-            // »ñµÃÒ»¸öĞÂµÄGuid 32Î» "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            // è·å¾—ä¸€ä¸ªæ–°çš„Guid 32ä½ "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
             token.ConnectionId = Guid.NewGuid().ToString("N");
 
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
-                this.m_tokens.Add(token.ConnectionId, token);// Ìí¼Óµ½¼¯ºÏÖĞ
+                this.m_tokens.Add(token.ConnectionId, token);// æ·»åŠ åˆ°é›†åˆä¸­
             }
 
             EventHandler<AsyncUserToken> handler = OnClientConnect;
-
-            // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+            // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
             if (handler != null)
             {
-                handler(this, token);// Å×³ö¿Í»§¶ËÁ¬½ÓÊÂ¼ş
+                handler(this, token);// æŠ›å‡ºå®¢æˆ·ç«¯è¿æ¥äº‹ä»¶
             }
 
             try
             {
-                // ¿Í»§¶ËÒ»Á¬½ÓÉÏ¾ÍÅ×³öÒ»¸ö½ÓÊÕÎ¯ÍĞ¸øÁ¬½ÓµÄSocket¿ªÊ¼½ÓÊÕÊı¾İ
+                // å®¢æˆ·ç«¯ä¸€è¿æ¥ä¸Šå°±æŠ›å‡ºä¸€ä¸ªæ¥æ”¶å§”æ‰˜ç»™è¿æ¥çš„Socketå¼€å§‹æ¥æ”¶æ•°æ®
                 bool willRaiseEvent = token.Socket.ReceiveAsync(readEventArg);
                 if (!willRaiseEvent)
                 {
@@ -467,80 +336,76 @@ namespace NetFramework.AsyncSocketServer
             }
             catch (SocketException socketException)
             {
-                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)// 10054Ò»¸ö½¨Á¢µÄÁ¬½Ó±»Ô¶³ÌÖ÷»úÇ¿ĞĞ¹Ø±Õ
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)// 10054ä¸€ä¸ªå»ºç«‹çš„è¿æ¥è¢«è¿œç¨‹ä¸»æœºå¼ºè¡Œå…³é—­
                 {
-                    RaiseDisconnectedEvent(token);// Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    RaiseDisconnectedEvent(token);// å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
                 else
                 {
-                    RaiseErrorEvent(token, new AsyncSocketException("ÔÚSocketAsyncEventArgs¶ÔÏóÉÏÖ´ĞĞÒì²½½ÓÊÕÊı¾İ²Ù×÷Ê±·¢ÉúSocketExceptionÒì³£", socketException));
+                    RaiseErrorEvent(token, new AsyncSocketException("åœ¨SocketAsyncEventArgså¯¹è±¡ä¸Šæ‰§è¡Œå¼‚æ­¥æ¥æ”¶æ•°æ®æ“ä½œæ—¶å‘ç”ŸSocketExceptionå¼‚å¸¸", socketException));
                 }
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 throw exception_debug;
             }
             finally
             {
-                // ½ÓÊÜÏÂÒ»¸öÁ¬½ÓÇëÇó
+                // æ¥å—ä¸‹ä¸€ä¸ªè¿æ¥è¯·æ±‚
                 StartAccept(e);
             }
         }
 
         /// <summary>
-        /// Õâ¸ö·½·¨ÔÚÒ»¸öSocket¶Á»òÕß·¢ËÍ²Ù×÷Íê³ÉÊ±±»µ÷ÓÃ
-        /// </summary>
-        /// <param name="e">ºÍÍê³ÉµÄ½ÓÊÜ²Ù×÷¹ØÁªµÄSocketAsyncEventArg¶ÔÏó</param>
-        private void IO_Completed(object sender, SocketAsyncEventArgs e)
+        /// è¿™ä¸ªæ–¹æ³•åœ¨ä¸€ä¸ªSocketè¯»æˆ–è€…å‘é€æ“ä½œå®Œæˆæ—¶è¢«è°ƒç”¨
+        /// </summary> 
+        /// <param name="e">å’Œå®Œæˆçš„æ¥å—æ“ä½œå…³è”çš„SocketAsyncEventArgå¯¹è±¡</param>
+        void IO_Completed(object sender, SocketAsyncEventArgs e)
         {
-            // È·¶¨¸Õ¸ÕÍê³ÉµÄ²Ù×÷ÀàĞÍ²¢µ÷ÓÃ¹ØÁªµÄ¾ä±ú
+            // ç¡®å®šåˆšåˆšå®Œæˆçš„æ“ä½œç±»å‹å¹¶è°ƒç”¨å…³è”çš„å¥æŸ„
             switch (e.LastOperation)
             {
                 case SocketAsyncOperation.Receive:
                     ProcessReceive(e);
                     break;
-
                 case SocketAsyncOperation.Send:
                     ProcessSend(e);
                     break;
-
                 default:
-                    throw new ArgumentException("×îºóÒ»´ÎÔÚSocketÉÏµÄ²Ù×÷²»ÊÇ½ÓÊÕ»òÕß·¢ËÍ²Ù×÷");
+                    throw new ArgumentException("æœ€åä¸€æ¬¡åœ¨Socketä¸Šçš„æ“ä½œä¸æ˜¯æ¥æ”¶æˆ–è€…å‘é€æ“ä½œ");
             }
         }
 
         /// <summary>
-        /// Õâ¸ö·½·¨ÔÚÒì²½½ÓÊÕ²Ù×÷Íê³ÉÊ±µ÷ÓÃ.
-        /// Èç¹ûÔ¶³ÌÖ÷»ú¹Ø±ÕÁ¬½ÓSocket½«¹Ø±Õ
+        /// è¿™ä¸ªæ–¹æ³•åœ¨å¼‚æ­¥æ¥æ”¶æ“ä½œå®Œæˆæ—¶è°ƒç”¨.  
+        /// å¦‚æœè¿œç¨‹ä¸»æœºå…³é—­è¿æ¥Socketå°†å…³é—­        
         /// </summary>
         private void ProcessReceive(SocketAsyncEventArgs e)
         {
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
-
-            // ¼ì²éÔ¶³ÌÖ÷»úÊÇ·ñ¹Ø±ÕÁ¬½Ó
+            // æ£€æŸ¥è¿œç¨‹ä¸»æœºæ˜¯å¦å…³é—­è¿æ¥
 
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
-                // Ôö¼Ó½ÓÊÕµ½µÄ×Ö½Ú×ÜÊı
+                // å¢åŠ æ¥æ”¶åˆ°çš„å­—èŠ‚æ€»æ•°
                 Interlocked.Add(ref m_totalBytesRead, e.BytesTransferred);
-                Debug.WriteLine(string.Format("·şÎñÆ÷¶ÁÈ¡×Ö½Ú×ÜÊı:{0}", m_totalBytesRead));
+                Debug.WriteLine(string.Format("æœåŠ¡å™¨è¯»å–å­—èŠ‚æ€»æ•°:{0}", m_totalBytesRead.ToString()));
 
-                //byte[] destinationArray = new byte[e.BytesTransferred];// Ä¿µÄ×Ö½ÚÊı×é
+                //byte[] destinationArray = new byte[e.BytesTransferred];// ç›®çš„å­—èŠ‚æ•°ç»„
                 //Array.Copy(e.Buffer, 0, destinationArray, 0, e.BytesTransferred);
                 token.SetBytesReceived(e.BytesTransferred);
 
                 EventHandler<AsyncUserToken> handler = OnClientRead;
-
-                // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+                // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
                 if (handler != null)
                 {
-                    handler(this, token);// Å×³ö½ÓÊÕµ½Êı¾İÊÂ¼ş
+                    handler(this, token);// æŠ›å‡ºæ¥æ”¶åˆ°æ•°æ®äº‹ä»¶                                                   
                 }
 
                 try
                 {
-                    // ¼ÌĞø½ÓÊÕÊı¾İ
+                    // ç»§ç»­æ¥æ”¶æ•°æ®
                     bool willRaiseEvent = token.Socket.ReceiveAsync(e);
                     if (!willRaiseEvent)
                     {
@@ -553,18 +418,18 @@ namespace NetFramework.AsyncSocketServer
                 }
                 catch (SocketException socketException)
                 {
-                    if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054Ò»¸ö½¨Á¢µÄÁ¬½Ó±»Ô¶³ÌÖ÷»úÇ¿ĞĞ¹Ø±Õ
+                    if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054ä¸€ä¸ªå»ºç«‹çš„è¿æ¥è¢«è¿œç¨‹ä¸»æœºå¼ºè¡Œå…³é—­
                     {
-                        RaiseDisconnectedEvent(token);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                        RaiseDisconnectedEvent(token);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                     }
                     else
                     {
-                        RaiseErrorEvent(token, new AsyncSocketException("ÔÚSocketAsyncEventArgs¶ÔÏóÉÏÖ´ĞĞÒì²½½ÓÊÕÊı¾İ²Ù×÷Ê±·¢ÉúSocketExceptionÒì³£", socketException));
+                        RaiseErrorEvent(token, new AsyncSocketException("åœ¨SocketAsyncEventArgså¯¹è±¡ä¸Šæ‰§è¡Œå¼‚æ­¥æ¥æ”¶æ•°æ®æ“ä½œæ—¶å‘ç”ŸSocketExceptionå¼‚å¸¸", socketException));
                     }
                 }
                 catch (Exception exception_debug)
                 {
-                    Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                    Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                     throw exception_debug;
                 }
             }
@@ -577,27 +442,25 @@ namespace NetFramework.AsyncSocketServer
         public void Send(string connectionId, byte[] buffer)
         {
             AsyncUserToken token;
-
             //SocketAsyncEventArgs token;
 
             //if (buffer.Length <= m_receiveSendBufferSize)
             //{
-            //    throw new ArgumentException("Êı¾İ°ü³¤¶È³¬¹ı»º³åÇø´óĞ¡", "buffer");
+            //    throw new ArgumentException("æ•°æ®åŒ…é•¿åº¦è¶…è¿‡ç¼“å†²åŒºå¤§å°", "buffer");
             //}
 
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}ÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
-
+                    throw new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
                     //return;
                 }
             }
             SocketAsyncEventArgs writeEventArgs;
             lock (m_writePool)
             {
-                writeEventArgs = m_writePool.Pop();// ·ÖÅäÒ»¸öĞ´SocketAsyncEventArgs¶ÔÏó
+                writeEventArgs = m_writePool.Pop();// åˆ†é…ä¸€ä¸ªå†™SocketAsyncEventArgså¯¹è±¡
             }
             writeEventArgs.UserToken = token;
             if (buffer.Length <= m_BufferSize)
@@ -617,7 +480,7 @@ namespace NetFramework.AsyncSocketServer
             //writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
             try
             {
-                // Òì²½·¢ËÍÊı¾İ
+                // å¼‚æ­¥å‘é€æ•°æ®
                 bool willRaiseEvent = token.Socket.SendAsync(writeEventArgs);
                 if (!willRaiseEvent)
                 {
@@ -630,55 +493,53 @@ namespace NetFramework.AsyncSocketServer
             }
             catch (SocketException socketException)
             {
-                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054Ò»¸ö½¨Á¢µÄÁ¬½Ó±»Ô¶³ÌÖ÷»úÇ¿ĞĞ¹Ø±Õ
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054ä¸€ä¸ªå»ºç«‹çš„?é¢–è¾‰å†»è®¨éª°?å•ƒæ³„ä¹‡è•´
                 {
-                    RaiseDisconnectedEvent(token);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    RaiseDisconnectedEvent(token);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
                 else
                 {
-                    RaiseErrorEvent(token, new AsyncSocketException("ÔÚSocketAsyncEventArgs¶ÔÏóÉÏÖ´ĞĞÒì²½·¢ËÍÊı¾İ²Ù×÷Ê±·¢ÉúSocketExceptionÒì³£", socketException)); ;
+                    RaiseErrorEvent(token, new AsyncSocketException("åœ¨SocketAsyncEventArgså¯¹è±¡ä¸Šæ‰§è¡Œå¼‚æ­¥å‘é€æ•°æ®æ“ä½œæ—¶å‘ç”ŸSocketExceptionå¼‚å¸¸", socketException)); ;
                 }
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 throw exception_debug;
             }
         }
 
         /// <summary>
-        /// ·¢ËÍÊı¾İ,¿ÉÒÔĞ¯´ø²Ù×÷ÀàĞÍ(Ê¹ÓÃ×Ô¶¨ÒåÃ¶¾ÙÀ´±íÊ¾)
+        /// å‘é€æ•°æ®,å¯ä»¥æºå¸¦æ“ä½œç±»å‹(ä½¿ç”¨è‡ªå®šä¹‰æšä¸¾æ¥è¡¨ç¤º)
         /// </summary>
-        /// <param name="connectionId">Á¬½ÓµÄIDºÅ</param>
-        /// <param name="buffer">»º³åÇø´óĞ¡</param>
-        /// <param name="operation">²Ù×÷×Ô¶¨ÒåÃ¶¾Ù</param>
+        /// <param name="connectionId">è¿æ¥çš„IDå·</param>
+        /// <param name="buffer">ç¼“å†²åŒºå¤§å°</param>
+        /// <param name="operation">æ“ä½œè‡ªå®šä¹‰æšä¸¾</param>
         public void Send(string connectionId, byte[] buffer, object operation)
         {
             AsyncUserToken token;
-
             //SocketAsyncEventArgs token;
 
             //if (buffer.Length <= m_receiveSendBufferSize)
             //{
-            //    throw new ArgumentException("Êı¾İ°ü³¤¶È³¬¹ı»º³åÇø´óĞ¡", "buffer");
+            //    throw new ArgumentException("æ•°æ®åŒ…é•¿åº¦è¶…è¿‡ç¼“å†²åŒºå¤§å°", "buffer");
             //}
 
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}ÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
-
+                    throw new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
                     //return;
                 }
             }
             SocketAsyncEventArgs writeEventArgs;
             lock (m_writePool)
             {
-                writeEventArgs = m_writePool.Pop();// ·ÖÅäÒ»¸öĞ´SocketAsyncEventArgs¶ÔÏó
+                writeEventArgs = m_writePool.Pop();// åˆ†é…ä¸€ä¸ªå†™SocketAsyncEventArgså¯¹è±¡
             }
             writeEventArgs.UserToken = token;
-            token.Operation = operation;// ÉèÖÃ²Ù×÷±êÖ¾
+            token.Operation = operation;// è®¾ç½®æ“ä½œæ ‡å¿—
             if (buffer.Length <= m_BufferSize)
             {
                 Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
@@ -695,7 +556,7 @@ namespace NetFramework.AsyncSocketServer
             //writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
             try
             {
-                // Òì²½·¢ËÍÊı¾İ
+                // å¼‚æ­¥å‘é€æ•°æ®
                 bool willRaiseEvent = token.Socket.SendAsync(writeEventArgs);
                 if (!willRaiseEvent)
                 {
@@ -708,77 +569,72 @@ namespace NetFramework.AsyncSocketServer
             }
             catch (SocketException socketException)
             {
-                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054Ò»¸ö½¨Á¢µÄÁ¬½Ó±»Ô¶³ÌÖ÷»úÇ¿ĞĞ¹Ø±Õ
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054ä¸€ä¸ªå»ºç«‹çš„è¿æ¥è¢«è¿œç¨‹ä¸»æœºå¼ºè¡Œå…³é—­
                 {
-                    RaiseDisconnectedEvent(token);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                    RaiseDisconnectedEvent(token);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 }
                 else
                 {
-                    RaiseErrorEvent(token, new AsyncSocketException("ÔÚSocketAsyncEventArgs¶ÔÏóÉÏÖ´ĞĞÒì²½·¢ËÍÊı¾İ²Ù×÷Ê±·¢ÉúSocketExceptionÒì³£", socketException)); ;
+                    RaiseErrorEvent(token, new AsyncSocketException("åœ¨SocketAsyncEventArgså¯¹è±¡ä¸Šæ‰§è¡Œå¼‚æ­¥å‘é€æ•°æ®æ“ä½œæ—¶å‘ç”ŸSocketExceptionå¼‚å¸¸", socketException)); ;
                 }
             }
             catch (Exception exception_debug)
             {
-                Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 throw exception_debug;
             }
         }
-
+        
         /// <summary>
-        /// Õâ¸ö·½·¨µ±Ò»¸öÒì²½·¢ËÍ²Ù×÷Íê³ÉÊ±±»µ÷ÓÃ.
+        /// è¿™ä¸ªæ–¹æ³•å½“ä¸€ä¸ªå¼‚æ­¥å‘é€æ“ä½œå®Œæˆæ—¶è¢«è°ƒç”¨.         
         /// </summary>
         /// <param name="e"></param>
         private void ProcessSend(SocketAsyncEventArgs e)
         {
             //SocketAsyncEventArgs token;
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
-
-            // Ôö¼Ó·¢ËÍ¼ÆÊıÆ÷
+            // å¢åŠ å‘é€è®¡æ•°å™¨
             Interlocked.Add(ref m_totalBytesWrite, e.BytesTransferred);
 
             if (e.Count > m_BufferSize)
             {
                 lock (m_bufferLock)
                 {
-                    m_bufferManager.SetBuffer(e);// »Ö¸´Ä¬ÈÏ´óĞ¡»º³åÇø
+                    m_bufferManager.SetBuffer(e);// æ¢å¤é»˜è®¤å¤§å°ç¼“å†²åŒº
                 }
-
-                //e.SetBuffer(null, 0, 0);// Çå³ı·¢ËÍ»º³åÇø
+                //e.SetBuffer(null, 0, 0);// æ¸…é™¤å‘é€ç¼“å†²åŒº
             }
             lock (m_writePool)
             {
-                // »ØÊÕSocketAsyncEventArgsÒÔ±¸ÔÙ´Î±»ÀûÓÃ
+                // å›æ”¶SocketAsyncEventArgsä»¥å¤‡å†æ¬¡è¢«åˆ©ç”¨
                 m_writePool.Push(e);
             }
-
-            // Çå³ıUserToken¶ÔÏóÒıÓÃ
+            // æ¸…é™¤UserTokenå¯¹è±¡å¼•ç”¨  
             e.UserToken = null;
 
             if (e.SocketError == SocketError.Success)
             {
-                Debug.WriteLine(string.Format("·¢ËÍ ×Ö½ÚÊı:{0}", e.BytesTransferred));
-
+                Debug.WriteLine(string.Format("å‘é€ å­—èŠ‚æ•°:{0}", e.BytesTransferred.ToString()));
                 //lock (((ICollection)this.m_tokens).SyncRoot)
                 //{
                 //    if (!this.m_tokens.TryGetValue(token.ConnectionId, out token))
                 //    {
-                //        RaiseErrorEvent(token,new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}»òÕßÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist));
-                //        //throw new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}»òÕßÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                //        RaiseErrorEvent(token,new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}æˆ–è€…å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist));
+                //        //throw new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}æˆ–è€…å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist);
                 //        //return;
                 //    }
                 //}
 
                 EventHandler<AsyncUserToken> handler = OnDataSendCompleted;
-
-                // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+                // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
                 if (handler != null)
                 {
-                    handler(this, token);//Å×³ö¿Í»§¶Ë·¢ËÍÍê³ÉÊÂ¼ş
+                    handler(this, token);//æŠ›å‡ºå®¢æˆ·ç«¯å‘é€å®Œæˆäº‹ä»¶
                 }
 
                 //try
                 //{
-                //    // ¶ÁÈ¡ÏÂÒ»¿é´Ó¿Í»§¶Ë·¢ËÍÀ´µÄÊı¾İ
+                //    // è¯»å–ä¸‹ä¸€å—ä»å®¢æˆ·ç«¯å‘é€æ¥çš„æ•°æ®
                 //    bool willRaiseEvent = ((AsyncUserToken)connection.UserToken).Socket.ReceiveAsync(connection);
                 //    if (!willRaiseEvent)
                 //    {
@@ -791,18 +647,18 @@ namespace NetFramework.AsyncSocketServer
                 //}
                 //catch (SocketException exception)
                 //{
-                //    if (exception.ErrorCode == (int)SocketError.ConnectionReset)//10054Ò»¸ö½¨Á¢µÄÁ¬½Ó±»Ô¶³ÌÖ÷»úÇ¿ĞĞ¹Ø±Õ
+                //    if (exception.ErrorCode == (int)SocketError.ConnectionReset)//10054ä¸€ä¸ªå»ºç«‹çš„è¿æ¥è¢«è¿œç¨‹ä¸»æœºå¼ºè¡Œå…³é—­
                 //    {
-                //        RaiseDisconnectedEvent(connection);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                //        RaiseDisconnectedEvent(connection);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 //    }
                 //    else
                 //    {
-                //        RaiseErrorEvent(connection, exception);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                //        RaiseErrorEvent(connection, exception);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
                 //    }
                 //}
                 //catch (Exception exception_debug)
                 //{
-                //    Debug.WriteLine("µ÷ÊÔ£º" + exception_debug.Message);
+                //    Debug.WriteLine("è°ƒè¯•ï¼š" + exception_debug.Message);
                 //    throw exception_debug;
                 //}
             }
@@ -812,16 +668,16 @@ namespace NetFramework.AsyncSocketServer
                 //{
                 //    if (!this.m_tokens.TryGetValue(token.ConnectionId, out token))
                 //    {
-                //        throw new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}»òÕßÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                //        throw new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}æˆ–è€…å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", token.ConnectionId), AsyncSocketErrorCode.ClientSocketNoExist);
                 //        //return;
                 //    }
                 //}
 
-                RaiseDisconnectedEvent(token);//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+                RaiseDisconnectedEvent(token);//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
             }
         }
-
-        public void Disconnect(string connectionId)//¶Ï¿ªÁ¬½Ó(ĞÎ²Î Á¬½ÓID)
+        
+        public void Disconnect(string connectionId)//æ–­å¼€è¿æ¥(å½¢å‚ è¿æ¥ID)
         {
             AsyncUserToken token;
 
@@ -829,16 +685,15 @@ namespace NetFramework.AsyncSocketServer
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("¿Í»§¶Ë:{0}ÒÑ¾­¹Ø±Õ»òÕßÎ´Á¬½Ó", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
-
-                    //return;//²»´æÔÚ¸ÃID¿Í»§¶Ë
+                    throw new AsyncSocketException(string.Format("å®¢æˆ·ç«¯:{0}å·²ç»å…³é—­æˆ–è€…æœªè¿æ¥", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                    //return;//ä¸å­˜åœ¨è¯¥IDå®¢æˆ·ç«¯
                 }
             }
 
-            RaiseDisconnectedEvent(token);//Å×³ö¶Ï¿ªÁ¬½ÓÊÂ¼ş
+            RaiseDisconnectedEvent(token);//æŠ›å‡ºæ–­å¼€è¿æ¥äº‹ä»¶            
         }
-
-        private void RaiseDisconnectedEvent(AsyncUserToken token)//Òı·¢¶Ï¿ªÁ¬½ÓÊÂ¼ş
+        
+        private void RaiseDisconnectedEvent(AsyncUserToken token)//å¼•å‘æ–­å¼€è¿æ¥äº‹ä»¶
         {
             if (null != token)
             {
@@ -849,11 +704,10 @@ namespace NetFramework.AsyncSocketServer
                         this.m_tokens.Remove(token.ConnectionId);
                         CloseClientSocket(token);
                         EventHandler<AsyncUserToken> handler = OnClientDisconnect;
-
-                        // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+                        // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
                         if ((handler != null) && (null != token))
                         {
-                            handler(this, token);//Å×³öÁ¬½Ó¶Ï¿ªÊÂ¼ş
+                            handler(this, token);//æŠ›å‡ºè¿æ¥æ–­å¼€äº‹ä»¶
                         }
                     }
                 }
@@ -864,14 +718,13 @@ namespace NetFramework.AsyncSocketServer
         {
             //AsyncUserToken token = e.UserToken as AsyncUserToken;
 
-            // ¹Ø±ÕÏà¹ØÁªµÄ¿Í»§¶Ë
+            // å…³é—­ç›¸å…³è”çš„å®¢æˆ·ç«¯
             try
             {
                 token.Socket.Shutdown(SocketShutdown.Both);
                 token.Socket.Close();
             }
-
-            // Å×³ö¿Í»§´¦ÀíÒÑ¾­±»¹Ø±Õ
+            // æŠ›å‡ºå®¢æˆ·å¤„ç†å·²ç»è¢«å…³é—­
             catch (ObjectDisposedException)
             {
             }
@@ -882,45 +735,48 @@ namespace NetFramework.AsyncSocketServer
             catch (Exception exception_debug)
             {
                 token.Socket.Close();
-                Debug.WriteLine("µ÷ÊÔ:" + exception_debug.Message);
+                Debug.WriteLine("è°ƒè¯•:" + exception_debug.Message);
                 throw exception_debug;
             }
             finally
             {
-                // ¼õÉÙÁ¬½Óµ½·şÎñÆ÷¿Í»§¶Ë×ÜÊıµÄ¼ÆÊıÆ÷µÄÖµ
+                // å‡å°‘è¿æ¥åˆ°æœåŠ¡å™¨å®¢æˆ·ç«¯æ€»æ•°çš„è®¡æ•°å™¨çš„å€¼
                 Interlocked.Decrement(ref m_numConnectedSockets);
                 m_maxNumberAcceptedClients.Release();
 
-                Debug.WriteLine(string.Format("Ò»¸ö¿Í»§¶Ë±»´Ó·şÎñÆ÷¶Ï¿ª. ÓĞ {0} ¸ö¿Í»§¶ËÁ¬½Óµ½·şÎñÆ÷", m_numConnectedSockets));
+                Debug.WriteLine(string.Format("ä¸€ä¸ªå®¢æˆ·ç«¯è¢«ä»æœåŠ¡å™¨æ–­å¼€. æœ‰ {0} ä¸ªå®¢æˆ·ç«¯è¿æ¥åˆ°æœåŠ¡å™¨", m_numConnectedSockets.ToString()));
                 lock (m_readPool)
                 {
-                    // ÊÍ·ÅÒÔÊ¹ËüÃÇ¿ÉÒÔ±»ÆäËû¿Í»§¶ËÖØĞÂÀûÓÃ
+                    // é‡Šæ”¾ä»¥ä½¿å®ƒä»¬å¯ä»¥è¢«å…¶ä»–å®¢æˆ·ç«¯é‡æ–°åˆ©ç”¨
                     m_readPool.Push(token.ReadEventArgs);
                 }
             }
-        }
 
+        }
+        
         private void RaiseErrorEvent(AsyncUserToken token, AsyncSocketException exception)
         {
             EventHandler<AsyncSocketErrorEventArgs> handler = OnClientError;
-
-            // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+            // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
             if (handler != null)
             {
                 if (null != token)
                 {
-                    handler(token, new AsyncSocketErrorEventArgs(exception));//Å×³ö¿Í»§¶Ë´íÎóÊÂ¼ş
+                    handler(token, new AsyncSocketErrorEventArgs(exception));//æŠ›å‡ºå®¢æˆ·ç«¯é”™è¯¯äº‹ä»¶
                 }
                 else
                 {
-                    handler(null, new AsyncSocketErrorEventArgs(exception));//Å×³ö·şÎñÆ÷´íÎóÊÂ¼ş
+                    handler(null, new AsyncSocketErrorEventArgs(exception));//æŠ›å‡ºæœåŠ¡å™¨é”™è¯¯äº‹ä»¶
                 }
             }
         }
 
         public void Shutdown()
         {
-            this.listenSocket.Close();//Í£Ö¹ÕìÌı
+            if (null != this.listenSocket)
+            {
+                this.listenSocket.Close();//åœæ­¢ä¾¦å¬
+            }
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
                 foreach (AsyncUserToken token in this.m_tokens.Values)
@@ -928,23 +784,21 @@ namespace NetFramework.AsyncSocketServer
                     try
                     {
                         CloseClientSocket(token);
-                        m_active = false;
-                        EventHandler<AsyncUserToken> handler = OnClientDisconnect;
 
-                        // Èç¹û¶©»§ÊÂ¼ş½«Îª¿Õ(null)
+                        EventHandler<AsyncUserToken> handler = OnClientDisconnect;
+                        // å¦‚æœè®¢æˆ·äº‹ä»¶å°†ä¸ºç©º(null)
                         if ((handler != null) && (null != token))
                         {
-                            handler(this, token);//Å×³öÁ¬½Ó¶Ï¿ªÊÂ¼ş
+                            handler(this, token);//æŠ›å‡ºè¿æ¥æ–­å¼€äº‹ä»¶
                         }
                     }
-
-                    // ±àÒëÊ±´ò¿ª×¢ÊÍµ÷ÊÔÊ±¹Ø±Õ
+                    // ç¼–è¯‘æ—¶æ‰“å¼€æ³¨é‡Šè°ƒè¯•æ—¶å…³é—­
                     //catch(Exception){ }
 
-                    // ±àÒëÊ±¹Ø±Õµ÷ÊÔÊ±´ò¿ª
+                    // ç¼–è¯‘æ—¶å…³é—­è°ƒè¯•æ—¶æ‰“å¼€
                     catch (Exception exception_debug)
                     {
-                        Debug.WriteLine("µ÷ÊÔ:" + exception_debug.Message);
+                        Debug.WriteLine("è°ƒè¯•:" + exception_debug.Message);
                         throw exception_debug;
                     }
                 }

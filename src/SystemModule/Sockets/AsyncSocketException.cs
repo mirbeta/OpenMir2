@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace NetFramework
+namespace SystemModule.Sockets
 {
     /// <summary>
     /// 通讯中发生的通讯相关异常

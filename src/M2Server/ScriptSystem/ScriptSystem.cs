@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -9,13 +10,11 @@ namespace M2Server
     {
         public int LoadNpcScript(TNormNpc NPC, string sPatch, string sScritpName)
         {
-            int result;
             if (sPatch == "")
             {
                 sPatch = M2Share.sNpc_def;
             }
-            result = LoadScriptFile(NPC, sPatch, sScritpName, false);
-            return result;
+            return LoadScriptFile(NPC, sPatch, sScritpName, false);;
         }
 
         private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
@@ -2656,7 +2655,7 @@ namespace M2Server
         private string FormatLabelStr(string sLabel, ref bool boChange)
         {
             var result = sLabel;
-            if (sLabel.IndexOf(")") > -1)
+            if (sLabel.IndexOf(")", StringComparison.Ordinal) > -1)
             {
                 HUtil32.GetValidStr3(sLabel, ref result, new[] { "(" });
                 boChange = true;
@@ -2675,7 +2674,7 @@ namespace M2Server
             var tempstr = sMsg;
             while (true)
             {
-                if (tempstr.IndexOf(">") < -1)
+                if (tempstr.IndexOf(">", StringComparison.Ordinal) < -1)
                 {
                     break;
                 }
@@ -3569,6 +3568,5 @@ namespace M2Server
                 sMsg = sMsg.Replace("<" + sLabel + ">", "????");
             }
         }
-
     }
 }

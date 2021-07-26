@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace GameFramework
+namespace SystemModule.Common
 {
     [Serializable]
     [DebuggerDisplay("Count = {Count}")]

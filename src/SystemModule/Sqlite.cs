@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SQLite;
 
-namespace mSystemModule
+namespace SystemModule
 {
     public class Sqlite
     {

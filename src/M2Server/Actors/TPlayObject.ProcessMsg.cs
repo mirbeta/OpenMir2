@@ -38,8 +38,7 @@ namespace M2Server
                     m_boDisableSayMsg = false;
                 }
                 boDisableSayMsg = m_boDisableSayMsg;
-                var value = 0;
-                if (M2Share.g_DenySayMsgList.TryGetValue(this.m_sCharName.GetHashCode(), out value))
+                if (M2Share.g_DenySayMsgList.ContainsKey(this.m_sCharName))
                 {
                     boDisableSayMsg = true;
                 }

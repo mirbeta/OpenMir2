@@ -1,5 +1,6 @@
 ﻿using SystemModule;
 using System;
+using System.IO;
 using M2Server.CommandSystem;
 
 namespace M2Server
@@ -26,7 +27,7 @@ namespace M2Server
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (M2Share.LoadLineNotice(M2Share.g_Config.sNoticeDir + "LineNotice.txt"))
+            if (M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir,"LineNotice.txt")))
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);
             }

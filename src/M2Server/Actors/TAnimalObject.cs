@@ -174,10 +174,9 @@ namespace M2Server
         protected void HitMagAttackTarget(TBaseObject TargeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
         {
             int nDamage;
-            IList<TBaseObject> BaseObjectList;
             TBaseObject BaseObject;
+            IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             this.m_btDirection = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
-            BaseObjectList = new List<TBaseObject>();
             this.m_PEnvir.GetBaseObjects(TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i ++ )
             {
@@ -190,7 +189,7 @@ namespace M2Server
                     if (nDamage > 0)
                     {
                         BaseObject.StruckDamage(nDamage);
-                        BaseObject.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (short)nDamage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, this.ObjectId, "", 200);
+                        BaseObject.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (ushort)nDamage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, this.ObjectId, "", 200);
                     }
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace mSystemModule
+namespace SystemModule
 {
     public static class DataReaderExtension
     {
