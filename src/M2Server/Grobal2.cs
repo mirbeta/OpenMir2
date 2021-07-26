@@ -688,6 +688,7 @@ namespace M2Server
         public const int POISON_LOCKSPELL = 2;
         public const int POISON_DONTMOVE = 4;
         public const int POISON_STONE = 5;
+        public const int STATE_LOCKRUN = 3;//不能跑动(中蛛网)
         public const int POISON_68 = 68;
         public const int STATE_TRANSPARENT = 8;
         public const int STATE_DEFENCEUP = 9;

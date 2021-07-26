@@ -738,6 +738,22 @@ namespace M2Server
         public int nProcessTime;
         public int nDBSocketSendLen;
         public bool PermissionSystem;
+        /// <summary>
+        /// 假人自动拾取物品
+        /// </summary>
+        public bool boAutoPickUpItem;
+        /// <summary>
+        /// 道22后是否物理攻击
+        /// </summary>
+        public bool boHeroAttackTao;
+        /// <summary>
+        /// 道法22前是否物理攻击
+        /// </summary>
+        public bool boHeroAttackTarget;
+        /// <summary>
+        /// 安全区不受控制
+        /// </summary>
+        public bool boSafeAreaLimited;
 
         public TM2Config()
         {

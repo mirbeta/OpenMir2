@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -30,7 +31,7 @@ namespace M2Server
         public int m_dwWhisperTick = 0;
         private int m_nMonCount = 0;
         private int m_nHumCount = 0;
-        public IList<int> m_PointList;
+        public IList<PointInfo> m_PointList;
 
 
         public bool AllowMagics(string magicName)
@@ -737,6 +738,35 @@ namespace M2Server
                     fileStream.Close();
                     fileStream.Dispose();
                     result = true;
+                }
+
+                var pointFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Point", $"{sMapFile}.txt");
+                if (File.Exists(pointFileName))
+                {
+                    var loadList = new StringList();
+                    loadList.LoadFromFile(pointFileName);
+                    string sX = string.Empty;
+                    string sY = string.Empty;
+                    for (int i = 0; i < loadList.Count; i++)
+                    {
+                        var line = loadList[i];
+                        if (string.IsNullOrEmpty(line) || line.StartsWith(";"))
+                        {
+                            continue;
+                        }
+                        line = HUtil32.GetValidStr3(line, ref sX, new[] { ",", "\t" });
+                        line = HUtil32.GetValidStr3(line, ref sY, new[] { ",", "\t" });
+                        var nX = (short)HUtil32.Str_ToInt(sX, -1);
+                        var nY = (short)HUtil32.Str_ToInt(sY, -1);
+                        if (nX >= 0 && nY >= 0 && nX < wWidth && nY < wHeight)
+                        {
+                            m_PointList.Add(new PointInfo()
+                            {
+                                nX = nX,
+                                nY = nX
+                            });
+                        }
+                    }
                 }
             }
             catch(Exception ex)

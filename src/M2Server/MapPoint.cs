@@ -141,7 +141,6 @@ namespace M2Server
         public bool GetPoint(ref short nX, ref short nY)
         {
             bool result;
-            int I;
             short nMX = 0;
             short nMY = 0;
             int nC;
@@ -154,7 +153,7 @@ namespace M2Server
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
-            int Pt;
+            PointInfo Pt;
             int nX1;
             int nY1;
             int nX2;
@@ -166,9 +165,9 @@ namespace M2Server
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 m_btDirection = FBaseObject.m_btDirection;
-                for (I = 2; I >= 1; I--)
+                for (var i = 2; i >= 1; i--)
                 {
-                    if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, I, ref nMX, ref nMY))
+                    if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY))
                     {
                         if (FBaseObject.CanMove(nMX, nMY, false))
                         {
@@ -185,9 +184,9 @@ namespace M2Server
                 while (true)
                 {
                     btDir = GetPoint_GetNextDir(btDir);
-                    for (I = 2; I >= 1; I--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, I, ref nMX, ref nMY))
+                        if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
                             if (FBaseObject.CanMove(nMX, nMY, false))
                             {
@@ -222,19 +221,19 @@ namespace M2Server
                 {
                     m_nPostion = 0;
                 }
-                for (I = m_nPostion; I < m_PEnvir.m_PointList.Count; I++)
+                for (var i = m_nPostion; i < m_PEnvir.m_PointList.Count; i++)
                 {
-                    Pt = (int)m_PEnvir.m_PointList[I];
-                    nCurrX = (short)HUtil32.LoWord(Pt);
-                    nCurrY = (short)HUtil32.HiWord(Pt);
+                    Pt = m_PEnvir.m_PointList[i];
+                    nCurrX = Pt.nX;
+                    nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
                     if (nC < n10)
                     {
                         n10 = nC;
                         nMX = nCurrX;
                         nMY = nCurrY;
-                        nIndex = I;
-                        m_nPostion = I;
+                        nIndex = i;
+                        m_nPostion = i;
                         result = true;
                         if (n10 <= 0)
                         {
@@ -251,17 +250,17 @@ namespace M2Server
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (I = m_nPostion + 1; I < m_PEnvir.m_PointList.Count; I++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
                         {
-                            Pt = (int)m_PEnvir.m_PointList[I];
-                            nCurrX = (short)HUtil32.LoWord(Pt);
-                            nCurrY = (short)HUtil32.HiWord(Pt);
+                            Pt = m_PEnvir.m_PointList[i];
+                            nCurrX = Pt.nX;
+                            nCurrY = Pt.nY;
                             if (nStep == 0)
                             {
                                 btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
-                                m_nPostion = I;
+                                m_nPostion = i;
                             }
                             else
                             {
@@ -269,7 +268,7 @@ namespace M2Server
                                 {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
-                                    m_nPostion = I;
+                                    m_nPostion = i;
                                 }
                                 else
                                 {
@@ -285,12 +284,12 @@ namespace M2Server
                     }
                     if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (I = m_nPostion + 1; I < m_PEnvir.m_PointList.Count; I++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
                         {
-                            Pt = (int)m_PEnvir.m_PointList[I];
-                            nCurrX = (short)HUtil32.LoWord(Pt);
-                            nCurrY = (short)HUtil32.HiWord(Pt);
-                            m_nPostion = I;
+                            Pt = m_PEnvir.m_PointList[i];
+                            nCurrX = Pt.nX;
+                            nCurrY = Pt.nY;
+                            m_nPostion = i;
                             if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
                             {
                                 nMX = nCurrX;
@@ -455,8 +454,7 @@ namespace M2Server
 
         public bool GetPoint1(ref short nX, ref short nY)
         {
-            bool result;
-            int I;
+            bool result = false;
             short nMX = 0;
             short nMY = 0;
             int nC;
@@ -469,13 +467,12 @@ namespace M2Server
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
-            int Pt;
+            PointInfo Pt;
             int nX1;
             int nY1;
             int nX2;
             int nY2;
             int nStep;
-            result = false;
             if (FPathType == TPathType.t_Dynamic)
             {
                 m_nCurrX = nX;
@@ -485,9 +482,9 @@ namespace M2Server
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);
-                    for (I = 2; I >= 1; I--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (((TPlayObject)FBaseObject).m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, I, ref nMX, ref nMY))
+                        if (((TPlayObject)FBaseObject).m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
                             if (((TPlayObject)FBaseObject).CanMove(nMX, nMY, false))
                             {
@@ -522,19 +519,19 @@ namespace M2Server
                 {
                     m_nPostion = 0;
                 }
-                for (I = m_nPostion; I < m_PEnvir.m_PointList.Count; I++)
+                for (var i = m_nPostion; i < m_PEnvir.m_PointList.Count; i++)
                 {
-                    Pt = (int)m_PEnvir.m_PointList[I];
-                    nCurrX = (short)HUtil32.LoWord(Pt);
-                    nCurrY = (short)HUtil32.HiWord(Pt);
+                    Pt = m_PEnvir.m_PointList[i];
+                    nCurrX = Pt.nX;
+                    nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
                     if (nC < n10)
                     {
                         n10 = nC;
                         nMX = nCurrX;
                         nMY = nCurrY;
-                        nIndex = I;
-                        m_nPostion = I;
+                        nIndex = i;
+                        m_nPostion = i;
                         result = true;
                         if (n10 <= 0)
                         {
@@ -551,17 +548,17 @@ namespace M2Server
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (I = m_nPostion + 1; I < m_PEnvir.m_PointList.Count; I++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
                         {
-                            Pt = (int)m_PEnvir.m_PointList[I];
-                            nCurrX = (short)HUtil32.LoWord(Pt);
-                            nCurrY = (short)HUtil32.HiWord(Pt);
+                            Pt = m_PEnvir.m_PointList[i];
+                            nCurrX = Pt.nX;
+                            nCurrY = Pt.nY;
                             if (nStep == 0)
                             {
                                 btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
-                                m_nPostion = I;
+                                m_nPostion = i;
                             }
                             else
                             {
@@ -569,7 +566,7 @@ namespace M2Server
                                 {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
-                                    m_nPostion = I;
+                                    m_nPostion = i;
                                 }
                                 else
                                 {
@@ -585,12 +582,12 @@ namespace M2Server
                     }
                     if (!((TPlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (I = m_nPostion + 1; I < m_PEnvir.m_PointList.Count; I++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
                         {
-                            Pt = (int)m_PEnvir.m_PointList[I];
-                            nCurrX = (short)HUtil32.LoWord(Pt);
-                            nCurrY = (short)HUtil32.HiWord(Pt);
-                            m_nPostion = I;
+                            Pt = m_PEnvir.m_PointList[i];
+                            nCurrX = Pt.nX;
+                            nCurrY = Pt.nY;
+                            m_nPostion = i;
                             if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
                             {
                                 nMX = nCurrX;

@@ -715,7 +715,7 @@ namespace M2Server
             }
         }
 
-        protected bool IsBlockWhisper(string sName)
+        public bool IsBlockWhisper(string sName)
         {
             var result = false;
             for (var i = 0; i < this.m_BlockWhisperList.Count; i++)

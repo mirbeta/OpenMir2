@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.IO;
-using System.Drawing;
-using SystemModule.Common;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using SystemModule.Common;
 
 namespace M2Server
 {
@@ -25,15 +25,14 @@ namespace M2Server
         public Point[] m_Path;
         public int m_nPostion = 0;
         public int m_nMoveFailCount = 0;
-        public string m_sConfigListFileName = String.Empty;
-        public string m_sHeroConfigListFileName = String.Empty;
-        public string m_sFilePath = String.Empty;
-        public string m_sConfigFileName = String.Empty;
-        public string m_sHeroConfigFileName = String.Empty;
+        public string m_sConfigListFileName = string.Empty;
+        public string m_sHeroConfigListFileName = string.Empty;
+        public string m_sFilePath = string.Empty;
+        public string m_sConfigFileName = string.Empty;
+        public string m_sHeroConfigFileName = string.Empty;
         public IList<string> m_BagItemNames = null;
         public string[] m_UseItemNames;
         public TRunPos m_RunPos = null;
-        // 79
         /// <summary>
         /// 魔法使用间隔
         /// </summary>
@@ -62,37 +61,66 @@ namespace M2Server
         public bool m_boProtectStatus = false;
         public short m_nProtectTargetX = 0;
         public short m_nProtectTargetY = 0;
-        // 守护坐标
+        /// <summary>
+        /// 到达守护坐标
+        /// </summary>
         public bool m_boProtectOK = false;
-        // 到达守护坐标
+        /// <summary>
+        /// 是向守护坐标的累计数
+        /// </summary>
         public int m_nGotoProtectXYCount = 0;
-        // 是向守护坐标的累计数
         public long m_dwPickUpItemTick = 0;
         public TMapItem m_SelMapItem = null;
+        /// <summary>
+        /// 使用合击间隔
+        /// </summary>
         public long m_dwHeroUseSpellTick = 0;
-        // 使用合击间隔
+        /// <summary>
+        /// 跑步计时
+        /// </summary>
         public long dwTick5F4 = 0;
-        // 跑步计时
+        /// <summary>
+        /// 连击技能列表
+        /// </summary>
         public ArrayList m_BatterMagicList = null;
-        // 连击技能列表
+        /// <summary>
+        /// 受攻击说话列表
+        /// </summary>
         public ArrayList m_AISayMsgList = null;
-        // 受攻击说话列表
+        /// <summary>
+        /// 自动召唤英雄
+        /// </summary>
         public bool m_boAutoRecallHero = false;
-        // 自动召唤英雄
+        /// <summary>
+        /// 绿红毒标识
+        /// </summary>
         public byte n_AmuletIndx = 0;
-        // 绿红毒标识
         public bool m_boCanPickIng = false;
+        /// <summary>
+        /// 查询魔法
+        /// </summary>
         public short m_nSelectMagic = 0;
-        // 查询魔法
+        /// <summary>
+        /// 是否可以使用的魔法(True才可能躲避)
+        /// </summary>
         public bool m_boIsUseMagic = false;
-        // 是否可以使用的魔法(True才可能躲避)
+        /// <summary>
+        /// 是否可以使用的攻击魔法
+        /// </summary>
         public bool m_boIsUseAttackMagic = false;
-        // 是否可以使用的攻击魔法
+        /// <summary>
+        /// 最后的方向
+        /// </summary>
         public byte m_btLastDirection = 0;
-        // 最后的方向
+        /// <summary>
+        /// 自动躲避间隔
+        /// </summary>
         public long m_dwAutoAvoidTick = 0;
-        // 自动躲避间隔
         public bool m_boIsNeedAvoid = false;
+        /// <summary>
+        /// 假人掉装备机率
+        /// </summary>
+        public int m_nDropUseItemRate;
 
         public TAIPlayObject() : base()
         {
@@ -161,22 +189,19 @@ namespace M2Server
             if (!m_boGhost && !m_boDeath && !m_boAIStart)
             {
                 m_ManagedEnvir = m_PEnvir;
-                m_nProtectTargetX = m_nCurrX;
-                // 守护坐标
-                m_nProtectTargetY = m_nCurrY;
-                // 守护坐标
+                m_nProtectTargetX = m_nCurrX;// 守护坐标
+                m_nProtectTargetY = m_nCurrY;// 守护坐标
                 m_boProtectOK = false;
-                m_nGotoProtectXYCount = 0;
-                // 是向守护坐标的累计数
+                m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                 m_PointManager.PathType = PathType;
                 m_PointManager.Initialize(m_PEnvir);
                 m_boAIStart = true;
                 m_nMoveFailCount = 0;
-                if (g_FunctionNPC != null)
-                {
+                //if (g_FunctionNPC != null)
+                //{
                     m_nScriptGotoCount = 0;
-                    g_FunctionNPC.GotoLable(this, "@AIStart", false, false);
-                }
+                    //g_FunctionNPC.GotoLable(this, "@AIStart", false, false);
+                //}
             }
         }
 
@@ -188,11 +213,11 @@ namespace M2Server
                 m_nMoveFailCount = 0;
                 m_Path = null;
                 m_nPostion = -1;
-                if (g_FunctionNPC != null)
-                {
+                //if (g_FunctionNPC != null)
+                //{
                     m_nScriptGotoCount = 0;
-                    g_FunctionNPC.GotoLable(this, "@AIStop", false, false);
-                }
+                    //g_FunctionNPC.GotoLable(this, "@AIStop", false, false);
+                //}
             }
         }
 
@@ -234,14 +259,14 @@ namespace M2Server
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, m_btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
+                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
                     if ((m_GetWhisperHuman != null) && (!m_GetWhisperHuman.m_boGhost))
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, m_btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                     if ((PlayObject.m_GetWhisperHuman != null) && (!PlayObject.m_GetWhisperHuman.m_boGhost))
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, m_btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                 }
             }
@@ -260,7 +285,7 @@ namespace M2Server
             {
                 if (sData.Length > M2Share.g_Config.nSayMsgMaxLen)
                 {
-                    sData = sData.Substring(1 - 1, M2Share.g_Config.nSayMsgMaxLen);
+                    sData = sData.Substring(0, M2Share.g_Config.nSayMsgMaxLen);
                 }
                 if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                 {
@@ -276,7 +301,7 @@ namespace M2Server
                 if (!boDisableSayMsg)
                 {
                     string SC;
-                    if (sData[1] == '/')
+                    if (sData[0] == '/')
                     {
                         SC = sData.Substring(2 - 1, sData.Length - 1);
                         SC = HUtil32.GetValidStr3(SC, ref sParam1, new char[] { ' ' });
@@ -286,21 +311,21 @@ namespace M2Server
                         }
                         return;
                     }
-                    if (sData[1] == '!')
+                    if (sData[0] == '!')
                     {
                         if (sData.Length >= 2)
                         {
-                            if (sData[2] == '!')
+                            if (sData[1] == '!')
                             {
-                                SC = sData.Substring(3 - 1, sData.Length - 2);
+                                SC = sData.Substring(2, sData.Length - 2);
                                 SendGroupText(m_sCharName + ": " + SC);
                                 return;
                             }
-                            if (sData[2] == '~')
+                            if (sData[1] == '~')
                             {
                                 if (m_MyGuild != null)
                                 {
-                                    SC = sData.Substring(3 - 1, sData.Length - 2);
+                                    SC = sData.Substring(2, sData.Length - 2);
                                     m_MyGuild.SendGuildMsg(m_sCharName + ": " + SC);
                                 }
                                 return;
@@ -331,13 +356,11 @@ namespace M2Server
                             SysMsg(format(g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
                             return;
                         }
-                        // '本地图不允许喊话！！！'
                         SysMsg(g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }
                     if (!m_boFilterSendMsg)
                     {
-                        // 如果禁止发信息，则只向自己发信息
                         SendRefMsg(grobal2.RM_HEAR, 0, m_btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);
                     }
                 }
@@ -352,9 +375,9 @@ namespace M2Server
         {
             TUserMagic result = null;
             TUserMagic UserMagic;
-            for (var I = 0; I < m_MagicList.Count; I++)
+            for (var i = 0; i < m_MagicList.Count; i++)
             {
-                UserMagic = m_MagicList[I];
+                UserMagic = m_MagicList[i];
                 if (UserMagic.MagicInfo.wMagicID == wMagIdx)
                 {
                     result = UserMagic;
@@ -367,9 +390,9 @@ namespace M2Server
         public TUserMagic FindMagic(string sMagicName)
         {
             TUserMagic result = null;
-            for (var I = 0; I < m_MagicList.Count; I++)
+            for (var i = 0; i < m_MagicList.Count; i++)
             {
-                TUserMagic UserMagic = m_MagicList[I];
+                TUserMagic UserMagic = m_MagicList[i];
                 if ((UserMagic.MagicInfo.sMagicName).ToLower().CompareTo((sMagicName).ToLower()) == 0)
                 {
                     result = UserMagic;
@@ -386,7 +409,7 @@ namespace M2Server
             {
                 result = RunTo1(M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY), false, nX, nY);
                 dwTick5F4 = HUtil32.GetTickCount();
-                m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
+                //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
             }
             return result;
         }
@@ -401,7 +424,7 @@ namespace M2Server
                 {
                     dwTick3F4 = HUtil32.GetTickCount();
                 }
-                m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
+                //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
             }
             return result;
         }
@@ -453,7 +476,8 @@ namespace M2Server
                         {
                             sChrName = sMsg.Substring(1 - 1, nPos - 1);
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
-                            Whisper(sChrName, m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
+                            //Whisper(sChrName, m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
+                            Console.WriteLine("TODO Hear...");
                         }
                     }
                     break;
@@ -632,7 +656,7 @@ namespace M2Server
                                         {
                                             UserMagic = new TUserMagic();
                                             UserMagic.MagicInfo = Magic;
-                                            UserMagic.wMagIdx = Magic.wMagicId;
+                                            UserMagic.wMagIdx = Magic.wMagicID;
                                             UserMagic.btLevel = 3;
                                             UserMagic.btKey = 0;
                                             UserMagic.nTranPoint = Magic.MaxTrain[3];
@@ -650,14 +674,13 @@ namespace M2Server
                     sLineText = ItemIni.ReadString("Info", "InitItems", "");
                     if (sLineText != "")
                     {
-                        TempList = new ArrayList();
+                        TempList = new List<string>();
                         try
                         {
-                            ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText,
-                                TempList);
-                            for (var I = 0; I < TempList.Count; I++)
+                            ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
+                            for (var i = 0; i < TempList.Count; i++)
                             {
-                                sItemName = TempList[I].Trim();
+                                sItemName = TempList[i].Trim();
                                 StdItem = M2Share.UserEngine.GetStdItem(sItemName);
                                 if (StdItem != null)
                                 {
@@ -690,9 +713,9 @@ namespace M2Server
                             //TempList.Free;
                         }
                     }
-                    for (var I = 0; I <= 9; I++)
+                    for (var i = 0; i <= 9; i++)
                     {
-                        sSayMsg = ItemIni.ReadString("MonSay", (I).ToString(), "");
+                        sSayMsg = ItemIni.ReadString("MonSay", (i).ToString(), "");
                         if (sSayMsg != "")
                         {
                             m_AISayMsgList.Add(sSayMsg);
@@ -770,7 +793,7 @@ namespace M2Server
             {
                 return result;
             }
-            if ((MapItem.Name).ToLower().CompareTo((grobal2.sSTRING_GOLDNAME).ToLower()) == 0)
+            if (MapItem.Name.ToLower().CompareTo((grobal2.sSTRING_GOLDNAME).ToLower()) == 0)
             {
                 if (m_PEnvir.DeleteFromMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem) == 1)
                 {
@@ -921,14 +944,14 @@ namespace M2Server
                             VisibleMapItem = m_VisibleItems[i];
                             if ((VisibleMapItem != null))
                             {
-                                if ((VisibleMapItem.nVisibleFlag > 0))
+                                if (VisibleMapItem.nVisibleFlag > 0)
                                 {
                                     TMapItem MapItem = VisibleMapItem.MapItem;
                                     if (MapItem != null)
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)) && (MapItem.UserItem.AddValue[0] != 2) && (MapItem.UserItem.AddValue[0] != 3))
                                         {
-                                            if ((MapItem.OfBaseObject == null) || (MapItem.OfBaseObject == this) || (MapItem.OfBaseObject.m_Master == this))
+                                            if ((MapItem.OfBaseObject == null) || (MapItem.OfBaseObject == this) || (((TBaseObject)MapItem.OfBaseObject).m_Master == this))
                                             {
                                                 if ((Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5) && (Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5))
                                                 {
@@ -946,7 +969,6 @@ namespace M2Server
                             }
                         }
                     }
-
                     if (SelVisibleMapItem != null)
                     {
                         m_SelMapItem = SelVisibleMapItem.MapItem;
@@ -982,6 +1004,11 @@ namespace M2Server
             return result;
         }
 
+        private bool IsAllowAIPickUpItem(string sName)
+        {
+            return true;
+        }
+
         private bool WalkToTargetXY2(int nTargetX, int nTargetY)
         {
             int I;
@@ -997,7 +1024,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!g_ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
             {
                 return result;
             }
@@ -1151,7 +1178,7 @@ namespace M2Server
                 nOldY = m_nCurrY;
                 if ((Math.Abs(m_nCurrX - m_nProtectTargetX) >= 3) || (Math.Abs(m_nCurrY - m_nProtectTargetY) >= 3))
                 {
-                    m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
+                    //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     if (!RunTo1(nDir, false, m_nProtectTargetX, m_nProtectTargetY))
                     {
                         WalkTo(nDir, false);
@@ -1184,7 +1211,7 @@ namespace M2Server
                 else
                 {
                     WalkTo(nDir, false);
-                    m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
+                    //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     n20 = (new System.Random(3)).Next();
                     for (I = grobal2.DR_UP; I <= grobal2.DR_UPLEFT; I++)
                     {
@@ -1283,9 +1310,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if (((new System.Random(2)).Next() == 1))
+                    if (((new Random(2)).Next() == 1))
                     {
-                        TurnTo((byte)(new System.Random(8)).Next());
+                        TurnTo((byte)(new Random(8)).Next());
                     }
                     else
                     {
@@ -1298,9 +1325,9 @@ namespace M2Server
             }
             if (m_nMoveFailCount >= 3)
             {
-                if (((new System.Random(2)).Next() == 1))
+                if (((new Random(2)).Next() == 1))
                 {
-                    TurnTo((byte)(new System.Random(8)).Next());
+                    TurnTo((byte)(new Random(8)).Next());
                 }
                 else
                 {
@@ -1370,7 +1397,7 @@ namespace M2Server
                 }
                 if ((hiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) && (!hiter.m_boAI) && (m_TargetCret == hiter))
                 {
-                    if (((new System.Random(8)).Next() == 0) && (m_AISayMsgList.Count > 0))
+                    if (((new Random(8)).Next() == 0) && (m_AISayMsgList.Count > 0))
                     {
                         if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                         {
@@ -1406,7 +1433,7 @@ namespace M2Server
             if (((m_TargetCret == null) || (HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000)) && m_boAIStart)
             {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if ((m_TargetCret == null) || (!((m_TargetCret != null) && (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || ((m_TargetCret.m_Master != null) && (m_TargetCret.Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || (HUtil32.GetTickCount() - m_dwStruckTick > 15000)))
+                if ((m_TargetCret == null) || (!((m_TargetCret != null) && (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || ((m_TargetCret.m_Master != null) && (m_TargetCret.m_Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || (HUtil32.GetTickCount() - m_dwStruckTick > 15000)))
                 {
                     base.SearchTarget();
                 }
@@ -1692,9 +1719,8 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             int nStep;
-            bool boNeed;
+            bool boNeed = false;
             bool result = false;
-            boNeed = false;
             if ((!m_Master.m_boSlaveRelax))
             {
                 if ((m_PEnvir != m_Master.m_PEnvir) || (Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20) || (Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20))
@@ -1728,7 +1754,6 @@ namespace M2Server
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if ((m_TargetCret == null) && (!m_Master.m_boSlaveRelax))
             {
-                // if not m_boProtectStatus then begin
                 for (I = 1; I <= 2; I++)
                 {
                     // 判断主人是否在英雄对面
@@ -1796,6 +1821,7 @@ namespace M2Server
             }
             return result;
         }
+
         private bool FindVisibleActors(TBaseObject ActorObject)
         {
             bool result = false;
@@ -1809,6 +1835,7 @@ namespace M2Server
             }
             return result;
         }
+
         private bool AllowUseMagic(short wMagIdx)
         {
             bool result = false;
@@ -1965,24 +1992,17 @@ namespace M2Server
             int result = 0;
             TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
-            try
+            if (m_PEnvir.GetMapBaseObjects(nX, nY, nRange, BaseObjectList))
             {
-                if (m_PEnvir.GetMapBaseObjects(nX, nY, nRange, BaseObjectList))
+                for (var i = BaseObjectList.Count - 1; i >= 0; i--)
                 {
-                    for (var I = BaseObjectList.Count - 1; I >= 0; I--)
+                    BaseObject = BaseObjectList[i];
+                    if ((BaseObject.m_boHideMode && !m_boCoolEye) || (!IsProperTarget(BaseObject)))
                     {
-                        BaseObject = BaseObjectList[I];
-                        if ((BaseObject.m_boHideMode && !m_boCoolEye) || (!IsProperTarget(BaseObject)))
-                        {
-                            BaseObjectList.RemoveAt(I);
-                        }
+                        BaseObjectList.RemoveAt(i);
                     }
-                    result = BaseObjectList.Count;
                 }
-            }
-            finally
-            {
-                //BaseObjectList.Free;
+                result = BaseObjectList.Count;
             }
             return result;
         }
@@ -2021,7 +2041,7 @@ namespace M2Server
             short nX = m_nCurrX;
             short nY = m_nCurrY;
             byte btDir = M2Share.GetNextDirection(nX, nY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-            for (var I = 1; I <= nStep; I++)
+            for (var i = 1; i <= nStep; i++)
             {
                 if ((m_TargetCret.m_nCurrX == nX) && (m_TargetCret.m_nCurrY == nY))
                 {
@@ -2064,14 +2084,13 @@ namespace M2Server
 
         private bool CanAttack(TBaseObject BaseObject, int nRange, ref byte btDir)
         {
-            int I;
             short nX = 0;
             short nY = 0;
             bool result = false;
             btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
-            for (I = 1; I <= nRange; I++)
+            for (var i = 1; i <= nRange; i++)
             {
-                if (!m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, I, ref nX, ref nY))
+                if (!m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nX, ref nY))
                 {
                     break;
                 }
@@ -2083,12 +2102,12 @@ namespace M2Server
             }
             return result;
         }
+
         // 1 为护身符 2 为毒药
         private bool IsUseAttackMagic()
         {
             // 检测是否可以使用攻击魔法
             TUserMagic UserMagic;
-            int I;
             bool result = false;
             switch (m_btJob)
             {
@@ -2096,9 +2115,9 @@ namespace M2Server
                     result = true;
                     break;
                 case 1:
-                    for (I = 0; I < m_MagicList.Count; I++)
+                    for (var i = 0; i < m_MagicList.Count; i++)
                     {
-                        UserMagic = m_MagicList[I];
+                        UserMagic = m_MagicList[i];
                         switch (UserMagic.wMagIdx)
                         {
                             case grobal2.SKILL_FIREBALL:
@@ -2123,9 +2142,9 @@ namespace M2Server
                     }
                     break;
                 case 2:
-                    for (I = 0; I < m_MagicList.Count; I++)
+                    for (var i = 0; i < m_MagicList.Count; i++)
                     {
-                        UserMagic = m_MagicList[I];
+                        UserMagic = m_MagicList[i];
                         if (new ArrayList(new int[] { 2, 99 }).Contains(UserMagic.MagicInfo.btJob))
                         {
                             switch (UserMagic.wMagIdx)
@@ -2133,8 +2152,7 @@ namespace M2Server
                                 // 6 施毒术
                                 // 38 群体施毒术
                                 case grobal2.SKILL_AMYOUNSUL:
-                                case grobal2.SKILL_GROUPAMYOUNSUL:
-                                    // 需要毒药
+                                case grobal2.SKILL_GROUPAMYOUNSUL:// 需要毒药
                                     result = CheckUserItem(1, 2) || CheckUserItem(2, 2);
                                     if (result)
                                     {
@@ -2145,8 +2163,7 @@ namespace M2Server
                                         break;
                                     }
                                     break;
-                                case grobal2.SKILL_FIRECHARM:
-                                    // 需要符
+                                case grobal2.SKILL_FIRECHARM:// 需要符
                                     result = CheckUserItem(5, 1);
                                     if (result)
                                     {
@@ -2193,12 +2210,9 @@ namespace M2Server
                 return result;
             }
             // 防麻
-            if (UserMagic.wMagIdx != grobal2.SKILL_102)
+            if ((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && !M2Share.g_Config.ClientConf.boParalyCanSpell)
             {
-                if ((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && !g_ClientConf.boParalyCanSpell)
-                {
-                    return result;
-                }
+                return result;
             }
             // 防麻
             if (m_PEnvir != null)
@@ -2218,7 +2232,6 @@ namespace M2Server
             switch (UserMagic.wMagIdx)
             {
                 case grobal2.SKILL_ERGUM:
-                    // 刺杀剑法
                     if (m_MagicErgumSkill != null)
                     {
                         if (!m_boUseThrusting)
@@ -2232,7 +2245,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_BANWOL: // 半月弯刀
+                case grobal2.SKILL_BANWOL:
                     if (m_MagicBanwolSkill != null)
                     {
                         if (!m_boUseHalfMoon)
@@ -2246,13 +2259,13 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_FIRESWORD: // 烈火剑法
+                case grobal2.SKILL_FIRESWORD:
                     if (m_MagicFireSwordSkill != null)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.SKILL_MOOTEBO: // 野蛮冲撞
+                case grobal2.SKILL_MOOTEBO:
                     result = true;
                     if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3000)
                     {
@@ -2263,7 +2276,7 @@ namespace M2Server
                         }
                     }
                     break;
-                case grobal2.SKILL_43: // 龙影剑法
+                case grobal2.SKILL_43:
                     result = true;
                     break;
                 default:
@@ -2341,7 +2354,7 @@ namespace M2Server
             {
                 if (BaseObject != null)
                 {
-                    if ((BaseObject.m_boGhost) || (BaseObject.m_boDeath) || (BaseObject.m_WAbil.HP <= 0))
+                    if (BaseObject.m_boGhost || BaseObject.m_boDeath || (BaseObject.m_WAbil.HP <= 0))
                     {
                         return result;
                     }
@@ -2362,46 +2375,36 @@ namespace M2Server
         public int DoThink_CheckTargetXYCount(int nX, int nY, int nRange)
         {
             TBaseObject BaseObject;
-            int I;
             int nC;
-            int n10;
+            int n10 = nRange;
             int result = 0;
-            try
+            if (m_VisibleActors.Count > 0)
             {
-                n10 = nRange;
-                if (m_VisibleActors.Count > 0)
+                for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
-                    for (I = 0; I < m_VisibleActors.Count; I++)
+                    BaseObject = m_VisibleActors[i].BaseObject;
+                    if (BaseObject != null)
                     {
-                        BaseObject = m_VisibleActors[I].BaseObject;
-                        if (BaseObject != null)
+                        if (!BaseObject.m_boDeath)
                         {
-                            if (!BaseObject.m_boDeath)
+                            if (IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || m_boCoolEye))
                             {
-                                if (IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || m_boCoolEye))
+                                nC = Math.Abs(nX - BaseObject.m_nCurrX) + Math.Abs(nY - BaseObject.m_nCurrY);
+                                if (nC <= n10)
                                 {
-                                    nC = Math.Abs(nX - BaseObject.m_nCurrX) + Math.Abs(nY - BaseObject.m_nCurrY);
-                                    if (nC <= n10)
-                                    {
-                                        result++;
-                                    }
+                                    result++;
                                 }
                             }
                         }
                     }
                 }
             }
-            catch
-            {
-            }
             return result;
         }
 
         public bool DoThink_TargetNeedRunPos()
         {
-            bool result = false;
-            result = (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_btRaceServer == 108) || (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYMOSTER);
-            return result;
+            return (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_btRaceServer == 108);
         }
 
         public bool DoThink_CanRunPos(int nAttackCount)
@@ -2489,7 +2492,7 @@ namespace M2Server
                     else
                     {
                         nRange = 1;
-                        if (((wMagicID == 43) && (m_n42kill == 2)))
+                        if (wMagicID == 43)
                         {
                             nRange = 4;
                         }
@@ -2597,7 +2600,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if ((!GetAttackDir(m_TargetCret, 1, btDir)))
+                        if ((!GetAttackDir(m_TargetCret, 1, ref btDir)))
                         {
                             result = 4;
                         }
@@ -2606,6 +2609,7 @@ namespace M2Server
             }
             return result;
         }
+
         public TMapWalkXY ActThink_FindGoodPathA(TMapWalkXY[] WalkStep, int nRange, int nType)
         {
             TMapWalkXY result = null;
@@ -2964,7 +2968,7 @@ namespace M2Server
                 if ((m_btJob == 0) || (wMagicID <= 0))
                 {
                     nRange = 1;
-                    if (((wMagicID == 43) && (m_n42kill == 2)))
+                    if (wMagicID == 43)
                     {
                         nRange = 4;
                     }
@@ -3203,7 +3207,7 @@ namespace M2Server
             return result;
         }
 
-        public bool ActThink_MotaeboPos()
+        public bool ActThink_MotaeboPos(short wMagicID)
         {
             bool result = false;
             short nTargetX = 0;
@@ -3225,7 +3229,7 @@ namespace M2Server
                     }
                 }
             }
-            result = ActThink_WalkToRightPos();
+            result = ActThink_WalkToRightPos(wMagicID);
             return result;
         }
 
@@ -3550,12 +3554,10 @@ namespace M2Server
                         result = true;
                     }
                 }
-
                 if ((m_Master != null) && (m_Master.m_boGhost))
                 {
                     return result;
                 }
-
                 if (m_Master.InSafeZone() && InSafeZone())
                 {
                     if ((Math.Abs(m_nCurrX - m_Master.m_nCurrX) <= 3) && (Math.Abs(m_nCurrY - m_Master.m_nCurrY) <= 3))
@@ -3564,7 +3566,6 @@ namespace M2Server
                         return result;
                     }
                 }
-
                 if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3000)
                 {
                     m_dwThinkTick = HUtil32.GetTickCount();
@@ -3580,13 +3581,12 @@ namespace M2Server
                         }
                     }
                 }
-
                 if (m_boDupMode)
                 {
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
                     WalkTo((byte)(new System.Random(8)).Next(), false);
-                    m_dwStationTick = HUtil32.GetTickCount(); // 增加检测人物站立时间
+                    //m_dwStationTick = HUtil32.GetTickCount(); // 增加检测人物站立时间
                     if ((nOldX != m_nCurrX) || (nOldY != m_nCurrY))
                     {
                         m_boDupMode = false;
@@ -3649,7 +3649,6 @@ namespace M2Server
                                 m_nProtectTargetX = m_nCurrX;// 守护坐标
                                 m_nProtectTargetY = m_nCurrY;// 守护坐标
                             }
-
                             if (!m_boProtectOK && (m_ManagedEnvir != null) && (m_TargetCret == null))
                             {
                                 GotoProtect();
@@ -3658,10 +3657,8 @@ namespace M2Server
                                 {
                                     m_btDirection = (byte)(new System.Random(8)).Next();
                                     m_boProtectOK = true;
-                                    m_nGotoProtectXYCount = 0;
-                                    // 是向守护坐标的累计数
+                                    m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
-
                                 if ((m_nGotoProtectXYCount > 20) && !m_boProtectOK)
                                 {
                                     // 20次还没有走到守护坐标，则飞回坐标上
@@ -3670,26 +3667,22 @@ namespace M2Server
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
                                         m_btDirection = (byte)(new System.Random(8)).Next();
                                         m_boProtectOK = true;
-                                        m_nGotoProtectXYCount = 0;
-                                        // 是向守护坐标的累计数 20090203
+                                        m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                     }
                                 }
                                 base.Run();
                                 return;
                             }
                         }
-
-                        if ((m_TargetCret != null))
+                        if (m_TargetCret != null)
                         {
-                            if (AttackTarget())
+                            if (AttackTarget())// 攻击
                             {
-                                // 攻击
                                 base.Run();
                                 return;
                             }
-                            else if (IsNeedAvoid())
+                            else if (IsNeedAvoid()) // 自动躲避
                             {
-                                // 自动躲避
                                 m_dwActionTick = HUtil32.GetTickCount() - 10;
                                 AutoAvoid();
                                 base.Run();
@@ -3924,16 +3917,17 @@ namespace M2Server
             }
             base.Run();
         }
+
         public override bool IsProtectTarget(TBaseObject BaseObject)
         {
-            bool result = base.IsProtectTarget(BaseObject);
-            return result;
+            return base.IsProtectTarget(BaseObject);
         }
+
         public override bool IsAttackTarget(TBaseObject BaseObject)
         {
-            bool result = base.IsAttackTarget(BaseObject);
-            return result;
+            return base.IsAttackTarget(BaseObject);
         }
+        
         public override bool IsProperTarget(TBaseObject BaseObject)
         {
             bool result = false;
@@ -3957,8 +3951,7 @@ namespace M2Server
                     switch (BaseObject.m_btRaceServer)
                     {
                         case grobal2.RC_ARCHERGUARD:
-                        case 55:
-                            // 不主动攻击练功师 弓箭手
+                        case 55:// 不主动攻击练功师 弓箭手
                             if (BaseObject.m_TargetCret != this)
                             {
                                 result = false;
@@ -3966,16 +3959,14 @@ namespace M2Server
                             break;
                         case 10:
                         case 11:
-                        case 12:
+                        case 12: // 不攻击大刀卫士
                             result = false;
                             break;
                         case 110:
                         case 111:
-                        case 158:
-                            // 不攻击大刀卫士
+                        case 158: // 沙巴克城门,沙巴克左城墙,宠物类
                             result = false;
                             break;
-                            // 沙巴克城门,沙巴克左城墙,宠物类
                     }
                 }
                 else
@@ -4055,8 +4046,7 @@ namespace M2Server
                         switch (BaseObject.m_btRaceServer)
                         {
                             case grobal2.RC_ARCHERGUARD:
-                            case 55:
-                                // 不主动攻击练功师 弓箭手
+                            case 55:// 不主动攻击练功师 弓箭手
                                 if (BaseObject.m_TargetCret != this)
                                 {
                                     result = false;
@@ -4064,16 +4054,14 @@ namespace M2Server
                                 break;
                             case 10:
                             case 11:
-                            case 12:
+                            case 12:// 不攻击大刀卫士
                                 result = false;
                                 break;
                             case 110:
                             case 111:
-                            case 158:
-                                // 不攻击大刀卫士
+                            case 158:// 沙巴克城门,沙巴克左城墙,宠物类
                                 result = false;
                                 break;
-                                // 沙巴克城门,沙巴克左城墙,宠物类
                         }
                     }
                 }
@@ -4083,8 +4071,7 @@ namespace M2Server
 
         public override bool IsProperFriend(TBaseObject BaseObject)
         {
-            bool result = base.IsProperFriend(BaseObject);
-            return result;
+            return base.IsProperFriend(BaseObject);
         }
 
         public override void SearchViewRange()
@@ -4128,7 +4115,6 @@ namespace M2Server
                 M2Share.MainOutMessage(sExceptionMsg1);
                 KickException();
             }
-
             try
             {
                 nStartX = m_nCurrX - m_nViewRange;
@@ -4145,7 +4131,7 @@ namespace M2Server
                             nIdx = 0;
                             while (true)
                             {
-                                if (((HUtil32.GetTickCount() - dwRunTick) > 500))
+                                if ((HUtil32.GetTickCount() - dwRunTick) > 500)
                                 {
                                     break;
                                 }
@@ -4210,16 +4196,10 @@ namespace M2Server
                                                         {
                                                             Dispose(((TMapItem)(OSObject.CellObj)));
                                                         }
-                                                        try
+                                                        if (OSObject != null)
                                                         {
-                                                            if (OSObject != null)
-                                                            {
-                                                                OSObject.boObjectDisPose = true;
-                                                                Dispose(OSObject);
-                                                            }
-                                                        }
-                                                        catch
-                                                        {
+                                                            OSObject.boObjectDisPose = true;
+                                                            Dispose(OSObject);
                                                         }
                                                         MapCellInfo.ObjList.RemoveAt(nIdx);
                                                         if (MapCellInfo.ObjList.Count <= 0)
@@ -4322,15 +4302,9 @@ namespace M2Server
                                     }
                                 }
                                 m_VisibleActors.RemoveAt(n18);
-                                try
+                                if (VisibleBaseObject != null)
                                 {
-                                    if (VisibleBaseObject != null)
-                                    {
-                                        Dispose(VisibleBaseObject);
-                                    }
-                                }
-                                catch
-                                {
+                                    Dispose(VisibleBaseObject);
                                 }
                                 continue;
                             case 2:
@@ -4392,7 +4366,6 @@ namespace M2Server
                         {
                             break;
                         }
-
                         try
                         {
                             VisibleMapItem = m_VisibleItems[I];
@@ -4407,7 +4380,6 @@ namespace M2Server
                             }
                             break;
                         }
-
                         if (VisibleMapItem.nVisibleFlag == 0)
                         {
                             m_VisibleItems.RemoveAt(I);
@@ -4434,7 +4406,6 @@ namespace M2Server
                         {
                             break;
                         }
-
                         try
                         {
                             MapEvent = m_VisibleEvents[I];
@@ -4503,13 +4474,13 @@ namespace M2Server
                     boHit = GetAttackDir(m_TargetCret, ref bt06);
                     if (!boHit && ((wHitMode == 4) || (wHitMode == 15)))
                     {
-                        boHit = GetAttackDir(m_TargetCret, 2, bt06);
+                        boHit = GetAttackDir(m_TargetCret, 2, ref bt06);
                     }
                     // 防止隔位刺杀无效果 20110521
                     if (boHit)
                     {
                         m_dwTargetFocusTick = HUtil32.GetTickCount();
-                        AttackDir(m_TargetCret, wHitMode, bt06, 0);
+                        AttackDir(m_TargetCret, wHitMode, bt06);
                         m_dwActionTick = HUtil32.GetTickCount();
                         BreakHolySeizeMode();
                         result = true;
@@ -4717,64 +4688,55 @@ namespace M2Server
         private bool TaoistAttackTarget1()
         {
             bool result = false;
-            // 道士攻击 20071218
             TUserMagic UserMagic;
             int n14;
-            result = false;
             try
             {
                 m_wHitMode = 0;
                 if (m_TargetCret != null)
                 {
-                    // 20090507 增加
-                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 
                     {
-                        // 22级砍血量的怪 20090108
-                        if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
                         {
-                            SearchMagic();
-                            // 查询魔法
+                            SearchMagic();// 查询魔法
                         }
                         else
                         {
-                            if ((HUtil32.GetTickCount() - m_dwSearchMagic > 1300))
+                            if (HUtil32.GetTickCount() - m_dwSearchMagic > 1300) // 增加查询魔法的间隔
                             {
-                                // 20090108 增加查询魔法的间隔
-                                SearchMagic();
-                                // 查询魔法
+                                SearchMagic();// 查询魔法
                                 m_dwSearchMagic = HUtil32.GetTickCount();
                             }
                             else
                             {
-                                m_boIsUseAttackMagic = false;
+                                m_boIsUseAttackMagic = false;// 可以走向目标
                             }
-                            // 可以走向目标
                         }
                     }
                     else
                     {
-                        SearchMagic();
+                        SearchMagic(); // 查询魔法
                     }
-                    // 查询魔法
                 }
                 if (m_nSelectMagic == 0)
                 {
                     m_boIsUseMagic = true;
                 }
-                // 是否能躲避 20080715
+                // 是否能躲避 
                 if (m_nSelectMagic > 0)
                 {
                     if ((m_TargetCret != null))
                     {
                         if ((!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
                         {
-                            // 魔法不能打到怪 20080420                //20090112
+                            // 魔法不能打到怪
                             if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
                             {
-                                // 22级砍血量的怪 20090108
-                                if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                // 22级砍血量的怪
+                                if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                 {
-                                    GetGotoXY(m_TargetCret, 3); // 20080712 道只走向目标3格范围
+                                    GetGotoXY(m_TargetCret, 3); // 道只走向目标3格范围
                                     GotoTargetXY(m_nTargetX, m_nTargetY, 0);
                                 }
                             }
@@ -4787,8 +4749,7 @@ namespace M2Server
                     }
                     switch (m_nSelectMagic)
                     {
-                        case grobal2.SKILL_HEALLING:
-                            // 治愈术 20080426
+                        case grobal2.SKILL_HEALLING:// 治愈术 
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -4797,14 +4758,11 @@ namespace M2Server
                                     // 技能打开状态才能使用
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, null);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
                                     {
-                                        // 22级砍血量的怪 20090108
                                         if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                         {
-                                            // 20090106
                                             m_boIsUseMagic = true;
-                                            // 能躲避 20080916
                                             return result;
                                         }
                                         else
@@ -4815,31 +4773,26 @@ namespace M2Server
                                     else
                                     {
                                         m_boIsUseMagic = true;
-                                        // 能躲避 20080916
                                         return result;
                                     }
                                 }
                             }
                             break;
-                        case grobal2.SKILL_BIGHEALLING:
-                            // 群体治疗术  20080713
+                        case grobal2.SKILL_BIGHEALLING:// 群体治疗术
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
                                 if ((UserMagic != null) && (UserMagic.btKey == 0))
                                 {
                                     // 技能打开状态才能使用
-                                    // Result :=
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                     m_dwHitTick = HUtil32.GetTickCount();
                                     if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
                                     {
-                                        // 22级砍血量的怪 20090108
+                                        // 22级砍血量的怪 
                                         if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                         {
-                                            // 20090106
-                                            m_boIsUseMagic = true;
-                                            // 能躲避 20080916
+                                            m_boIsUseMagic = true;// 能躲避
                                             return result;
                                         }
                                         else
@@ -4849,15 +4802,13 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        m_boIsUseMagic = true;
-                                        // 能躲避 20080916
+                                        m_boIsUseMagic = true;// 能躲避
                                         return result;
                                     }
                                 }
                             }
                             break;
-                        case grobal2.SKILL_FIRECHARM:
-                            // 灵符火符,打不到目标时,移动 20080711
+                        case grobal2.SKILL_FIRECHARM:// 灵符火符
                             if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret))
                             {
                                 GetGotoXY(m_TargetCret, 3);
@@ -4866,22 +4817,15 @@ namespace M2Server
                             break;
                         case grobal2.SKILL_AMYOUNSUL:
                         case grobal2.SKILL_GROUPAMYOUNSUL:
-                            // 换毒
                             if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0))
                             {
-                                // 绿毒
                                 n_AmuletIndx = 1;
-                                // 20080412  绿毒标识
                             }
                             else if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0))
                             {
-                                // 红毒
                                 n_AmuletIndx = 2;
-                                // 20080412 红毒标识
                             }
                             break;
-                        // 18
-                        // 19
                         case grobal2.SKILL_CLOAK:
                         case grobal2.SKILL_BIGCLOAK:
                             // 集体隐身术  隐身术
@@ -4893,12 +4837,10 @@ namespace M2Server
                                 m_dwHitTick = HUtil32.GetTickCount();
                                 if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
                                 {
-                                    // 22级砍血量的怪 20090108
-                                    if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                    // 22级砍血量的怪 
+                                    if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                     {
-                                        // 20090106
                                         m_boIsUseMagic = false;
-                                        // 能躲避 20080916
                                         return result;
                                     }
                                     else
@@ -4909,13 +4851,10 @@ namespace M2Server
                                 else
                                 {
                                     m_boIsUseMagic = false;
-                                    // 能躲避 20080916
                                     return result;
                                 }
                             }
                             break;
-                        // 气功波时，并进行躲避 20080828
-                        // 召唤圣兽
                         case grobal2.SKILL_SKELLETON:
                         case grobal2.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
@@ -4963,14 +4902,14 @@ namespace M2Server
                 {
                     m_boIsUseMagic = true;
                 }
-                // 是否能躲避 20080715
-                // 20090529 增加人形条件
-                if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || ((m_TargetCret.m_WAbil.MaxHP < 700) && M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT) && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYMOSTER)))
+                // 是否能躲避 
+                // 增加人形条件
+                if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || ((m_TargetCret.m_WAbil.MaxHP < 700) && M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)))
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
                     if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
                     {
-                        // 道走近目标砍 20090212
+                        // 道走近目标砍 
                         GotoTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 0);
                     }
                     m_boIsUseMagic = false;// 是否能躲避
@@ -4992,18 +4931,16 @@ namespace M2Server
             {
                 if ((m_TargetCret != null))
                 {
-                    if (InSafeZone())
+                    if (InSafeZone())// 英雄进入安全区内就不打PK目标
                     {
-                        // 英雄进入安全区内就不打PK目标
                         if ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))
                         {
                             m_TargetCret = null;
                             return result;
                         }
                     }
-                    if (m_TargetCret == this)
+                    if (m_TargetCret == this) // 防止英雄自己打自己
                     {
-                        // 防止英雄自己打自己
                         m_TargetCret = null;
                         return result;
                     }
@@ -5105,9 +5042,7 @@ namespace M2Server
         /// <returns></returns>
         private bool IsNeedAvoid()
         {
-            byte nCode;
             bool result = false;
-            nCode = 0;
             try
             {
                 if (((HUtil32.GetTickCount() - m_dwAutoAvoidTick) > 1100) && m_boIsUseMagic && !m_boDeath)
@@ -5116,13 +5051,10 @@ namespace M2Server
                     if ((m_btJob > 0) && ((m_nSelectMagic == 0) || (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15))))
                     {
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
-                        nCode = 1;
                         if (M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) // 22级前道法不躲避
                         {
-                            if ((m_btJob == 1))
+                            if (m_btJob == 1)// 法放魔法后要躲
                             {
-                                // 法放魔法后要躲
-                                nCode = 2;
                                 if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                 {
                                     result = true;
@@ -5132,11 +5064,9 @@ namespace M2Server
                         }
                         else
                         {
-                            nCode = 3;
                             switch (m_btJob)
                             {
                                 case 1:
-                                    nCode = 4;
                                     if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                     {
                                         result = true;
@@ -5144,10 +5074,8 @@ namespace M2Server
                                     }
                                     break;
                                 case 2:
-                                    nCode = 5;
                                     if (m_TargetCret != null)
                                     {
-                                        nCode = 6;
                                         if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 20090108
                                         {
                                             if ((m_TargetCret.m_WAbil.MaxHP >= 700))
@@ -5161,8 +5089,7 @@ namespace M2Server
                                         }
                                         else
                                         {
-                                            nCode = 7;
-                                            if ((CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0))
+                                            if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                             {
                                                 result = true;
                                                 return result;
@@ -5171,8 +5098,7 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        nCode = 8;
-                                        if ((CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0))
+                                        if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                         {
                                             result = true;
                                             return result;
@@ -5186,7 +5112,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(format("{%s} TAIPlayObject.IsNeedAvoid Code:%d", new byte[] { nCode }));
+                M2Share.MainOutMessage("TAIPlayObject.IsNeedAvoid");
             }
             return result;
         }
@@ -5199,9 +5125,9 @@ namespace M2Server
             TBaseObject BaseObject;
             if (m_VisibleActors.Count > 0)
             {
-                for (var I = 0; I < m_VisibleActors.Count; I++)
+                for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
-                    BaseObject = m_VisibleActors[I].BaseObject;
+                    BaseObject = m_VisibleActors[i].BaseObject;
                     if (BaseObject != null)
                     {
                         if (!BaseObject.m_boDeath)
@@ -5266,7 +5192,11 @@ namespace M2Server
             }
             return result;
         }
-        // 自动躲避
+
+        /// <summary>
+        /// 自动躲避
+        /// </summary>
+        /// <returns></returns>
         public int AutoAvoid_GetAvoidDir()
         {
             int n10;
@@ -5314,59 +5244,48 @@ namespace M2Server
             }
             return result;
         }
+
         public byte AutoAvoid_GetDirXY(int nTargetX, int nTargetY)
         {
-            byte result;
-            int n10;
-            int n14;
-            n10 = nTargetX;
-            n14 = nTargetY;
-            result = grobal2.DR_DOWN;
-            // 南
+            int n10 = nTargetX;
+            int n14 = nTargetY;
+            byte result = grobal2.DR_DOWN;
             if (n10 > m_nCurrX)
             {
                 result = grobal2.DR_RIGHT;
-                // 东
                 if (n14 > m_nCurrY)
                 {
                     result = grobal2.DR_DOWNRIGHT;
                 }
-                // 东南向
                 if (n14 < m_nCurrY)
                 {
                     result = grobal2.DR_UPRIGHT;
                 }
-                // 东北向
             }
             else
             {
                 if (n10 < m_nCurrX)
                 {
                     result = grobal2.DR_LEFT;
-                    // 西
                     if (n14 > m_nCurrY)
                     {
                         result = grobal2.DR_DOWNLEFT;
                     }
-                    // 西南向
                     if (n14 < m_nCurrY)
                     {
                         result = grobal2.DR_UPLEFT;
                     }
-                    // 西北向
                 }
                 else
                 {
                     if (n14 > m_nCurrY)
                     {
-                        // 南
                         result = grobal2.DR_DOWN;
                     }
                     else if (n14 < m_nCurrY)
                     {
                         result = grobal2.DR_UP;
                     }
-                    // 正北
                 }
             }
             return result;
@@ -5551,7 +5470,10 @@ namespace M2Server
             return result;
         }
 
-        // 是否需要躲避
+        /// <summary>
+        /// 是否需要躲避
+        /// </summary>
+        /// <returns></returns>
         private bool AutoAvoid()
         {
             bool result = true;
@@ -5565,11 +5487,13 @@ namespace M2Server
             return result;
         }
 
-        // 自动躲避
+        /// <summary>
+        /// 是否走向目标
+        /// </summary>
+        /// <returns></returns>
         private bool IsNeedGotoXY()
         {
             bool result = false;
-            // 是否走向目标
             long dwAttackTime;
             if ((m_TargetCret != null) && (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100) && (!m_boIsUseAttackMagic || (m_btJob == 0)))
             {
@@ -5577,13 +5501,12 @@ namespace M2Server
                 {
                     if (!m_boIsUseMagic && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 3) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 3)))
                     {
-                        // 20081214修改
                         result = true;
                         return result;
                     }
                     if (((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT) && (m_btJob == 2))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
                     {
-                        // 20081218 道法22前是否物理攻击 20090210 大于1格时才走向目标
+                        // 道法22前是否物理攻击 20090210 大于1格时才走向目标
                         result = true;
                         return result;
                     }
@@ -5593,11 +5516,11 @@ namespace M2Server
                     switch (m_nSelectMagic)
                     {
                         case grobal2.SKILL_ERGUM:
-                            if ((AllowUseMagic(12)) && (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY)))
+                            if (AllowUseMagic(12) && (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY)))
                             {
                                 if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)))
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * g_ClientConf.btItemSpeed); // 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed); // 防止负数出错
                                     if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
                                     {
                                         m_wHitMode = 4;
@@ -5611,7 +5534,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
+                                    if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
                                     {
                                         result = true;
                                         return result;
@@ -5634,12 +5557,11 @@ namespace M2Server
                             }
                             break;
                         case 43:
-                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (m_n42kill == 2))
+                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
                             {
                                 if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))))
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * g_ClientConf.btItemSpeed);
-                                    // 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);// 防止负数出错
                                     if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
                                     {
                                         m_wHitMode = 9;
@@ -5669,11 +5591,11 @@ namespace M2Server
                                 }
                             }
                             m_nSelectMagic = 0;
-                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY) && (new ArrayList(new int[] { 1, 2 }).Contains(m_n42kill)))
+                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY))
                             {
                                 if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0) || (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2) || (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2))
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * g_ClientConf.btItemSpeed);
+                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
                                     // 防止负数出错
                                     if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
                                     {
@@ -5688,7 +5610,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
+                                    if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
                                     {
                                         result = true;
                                         return result;
@@ -5745,6 +5667,7 @@ namespace M2Server
             }
             return result;
         }
+
         // 是否走向目标
         // 取刺杀位
         private bool GetGotoXY(TBaseObject BaseObject, byte nCode)
@@ -5866,6 +5789,7 @@ namespace M2Server
             }
             return result;
         }
+
         // 检测指定方向和范围内坐标的怪物数量
         // 跑到目标坐标
         private bool RunToTargetXY(int nTargetX, int nTargetY)
@@ -5879,7 +5803,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!g_ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
             {
                 return result;
             }
@@ -5889,9 +5813,8 @@ namespace M2Server
                 return result;
             }
             // 禁止跑,则退出
-            if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime)
+            if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime) // 跑步使用单独的变量计数
             {
-                // 跑步使用单独的变量计数
                 n10 = nTargetX;
                 n14 = nTargetY;
                 byte nDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, n10, n14);
@@ -5914,6 +5837,7 @@ namespace M2Server
             }
             return result;
         }
+
         // 跑到目标坐标
         // 走向目标
         private bool WalkToTargetXY(int nTargetX, int nTargetY)
@@ -5931,7 +5855,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!g_ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
             {
                 return result;
             }
@@ -6027,16 +5951,14 @@ namespace M2Server
             }
             return result;
         }
-        // 取刺杀位 20080604
+
+        // 取刺杀位
         private bool GotoTargetXY(int nTargetX, int nTargetY, int nCode)
         {
             bool result = false;
             switch (nCode)
             {
-                case 0:
-                    // 正常模式
-                    // 1
-                    // 1
+                case 0:// 正常模式
                     if ((Math.Abs(m_nCurrX - nTargetX) > 2) || (Math.Abs(m_nCurrY - nTargetY) > 2))
                     {
                         if (m_wStatusTimeArr[grobal2.STATE_LOCKRUN] == 0)
@@ -6045,19 +5967,15 @@ namespace M2Server
                         }
                         else
                         {
-                            result = WalkToTargetXY2(nTargetX, nTargetY);
-                            // 转向
+                            result = WalkToTargetXY2(nTargetX, nTargetY);// 转向
                         }
                     }
                     else
                     {
-                        result = WalkToTargetXY2(nTargetX, nTargetY);
-                        // 转向
+                        result = WalkToTargetXY2(nTargetX, nTargetY);// 转向
                     }
                     break;
-                case 1:
-                    // 0
-                    // 躲避模式
+                case 1:// 躲避模式
                     if ((Math.Abs(m_nCurrX - nTargetX) > 1) || (Math.Abs(m_nCurrY - nTargetY) > 1))
                     {
                         if (m_wStatusTimeArr[grobal2.STATE_LOCKRUN] == 0)
@@ -6066,55 +5984,45 @@ namespace M2Server
                         }
                         else
                         {
-                            result = WalkToTargetXY2(nTargetX, nTargetY);
-                            // 转向
+                            result = WalkToTargetXY2(nTargetX, nTargetY);// 转向
                         }
                     }
                     else
                     {
-                        result = WalkToTargetXY2(nTargetX, nTargetY);
-                        // 转向
+                        result = WalkToTargetXY2(nTargetX, nTargetY);// 转向
                     }
                     break;
-                    // 1
             }
             return result;
         }
+
         private void SearchMagic()
         {
             TUserMagic UserMagic;
-            byte nCode;
             m_nSelectMagic = 0;
-            nCode = 0;
             try
             {
                 m_nSelectMagic = SelectMagic1();
-                nCode = 1;
                 if (m_nSelectMagic > 0)
                 {
-                    nCode = 2;
                     UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
-                        nCode = 3;
-                        // 需要毒符的魔法
                         m_boIsUseAttackMagic = IsUseAttackMagic();
                     }
                     else
                     {
-                        nCode = 5;
                         m_boIsUseAttackMagic = false;
                     }
                 }
                 else
                 {
-                    nCode = 4;
                     m_boIsUseAttackMagic = false;
                 }
             }
             catch
             {
-                M2Share.MainOutMessage(format("{%s} TAIPlayObject.SearchMagic Code:%d", new byte[] { nCode }));
+                M2Share.MainOutMessage("TAIPlayObject.SearchMagic");
             }
         }
 
@@ -6133,7 +6041,7 @@ namespace M2Server
                     }
                     if (AllowUseMagic(42) && (HUtil32.GetTickCount() - m_dwLatest43Tick > M2Share.g_Config.nKill42UseTime * 1000))
                     {
-                        // 龙影剑法 20080619
+                        // 龙影剑法 
                         m_bo43kill = true;
                         result = 42;
                         return result;
@@ -6144,7 +6052,7 @@ namespace M2Server
                         // 10 * 1000
                         if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000))
                         {
-                            // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  20080203
+                            // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
@@ -6152,7 +6060,7 @@ namespace M2Server
                     }
                     else
                     {
-                        // 打怪使用 20080323
+                        // 打怪使用 
                         // 10 * 1000
                         if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.85)))
                         {
@@ -6165,17 +6073,14 @@ namespace M2Server
                     {
                         m_ExpHitter = m_TargetCret.m_Master;
                     }
-                    // 20080924
                     if (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1)
                     {
                         switch ((new System.Random(3)).Next())
                         {
-                            case 0:
-                                // 被怪物包围   //20080924
+                            case 0:// 被怪物包围
                                 if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
-                                    m_SkillUseTick[41] = HUtil32.GetTickCount();
-                                    // 狮子吼
+                                    m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
@@ -6184,22 +6089,19 @@ namespace M2Server
                                 {
                                     // 攻杀剑术 20071213
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
-                                    m_boPowerHit = true;
-                                    // 20080401 开启攻杀
+                                    m_boPowerHit = true;// 开启攻杀
                                     result = 7;
                                     return result;
                                 }
                                 // 10 * 1000
                                 if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
                                 {
-                                    m_SkillUseTick[39] = HUtil32.GetTickCount();
-                                    // 英雄彻地钉
+                                    m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))
+                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    // 英雄半月弯刀
                                     if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
@@ -6295,26 +6197,21 @@ namespace M2Server
                             case 2:
                                 if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
-                                    m_SkillUseTick[41] = HUtil32.GetTickCount();
-                                    // 狮子吼
+                                    m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                // 10 * 1000
                                 if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
                                 {
-                                    m_SkillUseTick[39] = HUtil32.GetTickCount();
-                                    // 英雄彻地钉
+                                    m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                // 10 * 1000
                                 if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))
                                 {
-                                    // 攻杀剑术 20071213
+                                    // 攻杀剑术
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
-                                    m_boPowerHit = true;
-                                    // 20080401 开启攻杀
+                                    m_boPowerHit = true;//  开启攻杀
                                     result = 7;
                                     return result;
                                 }
@@ -6394,8 +6291,7 @@ namespace M2Server
                         {
                             // 攻杀剑术
                             m_SkillUseTick[7] = HUtil32.GetTickCount();
-                            m_boPowerHit = true;
-                            // 20080401 开启攻杀
+                            m_boPowerHit = true;// 开启攻杀
                             result = 7;
                             return result;
                         }
@@ -6414,7 +6310,7 @@ namespace M2Server
                             }
                         }
                     }
-                    // 从高到低使用魔法,20080710
+                    // 从高到低使用魔法
                     if (AllowUseMagic(26) && (HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000))
                     {
                         // 烈火
@@ -6433,18 +6329,16 @@ namespace M2Server
                         result = 40;
                         return result;
                     }
-                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 3000))
+                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 3000)) // 英雄彻地钉
                     {
-                        // 英雄彻地钉
                         m_SkillUseTick[39] = HUtil32.GetTickCount();
                         result = 39;
                         return result;
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[25] > 3000))
                     {
-                        if (AllowUseMagic(grobal2.SKILL_BANWOL))
+                        if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
                         {
-                            // 英雄半月弯刀
                             if (!m_boUseHalfMoon)
                             {
                                 HalfMoonOnOff(true);
@@ -6456,9 +6350,8 @@ namespace M2Server
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[12] > 3000))
                     {
-                        if (AllowUseMagic(12))
+                        if (AllowUseMagic(12))// 英雄刺杀剑术
                         {
-                            // 英雄刺杀剑术
                             if (!m_boUseThrusting)
                             {
                                 ThrustingOnOff(true);
@@ -6488,7 +6381,6 @@ namespace M2Server
                     }
                     else
                     {
-                        // 打怪使用 20080323
                         if (AllowUseMagic(27) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6)) && (HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000))
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
@@ -6496,11 +6388,9 @@ namespace M2Server
                             return result;
                         }
                     }
-                    // 10 * 1000
                     if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                     {
-                        m_SkillUseTick[41] = HUtil32.GetTickCount();
-                        // 狮子吼
+                        m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                         result = 41;
                         return result;
                     }
@@ -6510,9 +6400,8 @@ namespace M2Server
                     // 使用 魔法盾
                     if ((m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence)
                     {
-                        if (AllowUseMagic(66))
+                        if (AllowUseMagic(66)) // 4级魔法盾
                         {
-                            // 4级魔法盾
                             result = 66;
                             return result;
                         }
@@ -6556,8 +6445,7 @@ namespace M2Server
                     if (AllowUseMagic(45) && (HUtil32.GetTickCount() - m_SkillUseTick[45] > 3000))
                     {
                         m_SkillUseTick[45] = HUtil32.GetTickCount();
-                        result = 45;
-                        // 英雄灭天火
+                        result = 45;// 英雄灭天火
                         return result;
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
@@ -6567,15 +6455,13 @@ namespace M2Server
                             if (AllowUseMagic(10))
                             {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 10;
-                                // 英雄疾光电影  20080421
+                                result = 10;// 英雄疾光电影 
                                 return result;
                             }
                             else if (AllowUseMagic(9))
                             {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 9;
-                                // 地狱火
+                                result = 9;// 地狱火
                                 return result;
                             }
                         }
@@ -6584,15 +6470,13 @@ namespace M2Server
                             if (AllowUseMagic(10))
                             {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 10;
-                                // 英雄疾光电影  20080421
+                                result = 10;// 英雄疾光电影 
                                 return result;
                             }
                             else if (AllowUseMagic(9))
                             {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 9;
-                                // 地狱火
+                                result = 9;// 地狱火
                                 return result;
                             }
                         }
@@ -6601,8 +6485,7 @@ namespace M2Server
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
-                        result = 32;
-                        // 圣言术
+                        result = 32;// 圣言术
                         return result;
                     }
                     if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 1)
@@ -6612,10 +6495,9 @@ namespace M2Server
                         {
                             if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))
                             {
-                                // 除祖玛怪,才放火墙 20081217
+                                // 除祖玛怪,才放火墙
                                 m_SkillUseTick[22] = HUtil32.GetTickCount();
-                                result = 22;
-                                // 火墙
+                                result = 22;// 火墙
                                 return result;
                             }
                         }
@@ -6627,26 +6509,22 @@ namespace M2Server
                             if (AllowUseMagic(24) && (HUtil32.GetTickCount() - m_SkillUseTick[24] > 4000) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                             {
                                 m_SkillUseTick[24] = HUtil32.GetTickCount();
-                                result = 24;
-                                // 地狱雷光
+                                result = 24;// 地狱雷光
                                 return result;
                             }
                             else if (AllowUseMagic(91))
                             {
-                                result = 91;
-                                // 四级雷电术
+                                result = 91;// 四级雷电术
                                 return result;
                             }
                             else if (AllowUseMagic(11))
                             {
-                                result = 11;
-                                // 英雄雷电术
+                                result = 11;// 英雄雷电术
                                 return result;
                             }
                             else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 2) > 2))
                             {
-                                result = 33;
-                                // 英雄冰咆哮
+                                result = 33;// 英雄冰咆哮
                                 return result;
                             }
                             else if ((HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
@@ -6654,15 +6532,13 @@ namespace M2Server
                                 if (AllowUseMagic(92))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;
-                                    // 四级流星火雨
+                                    result = 92;// 四级流星火雨
                                     return result;
                                 }
                                 if (AllowUseMagic(58))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;
-                                    // 流星火雨 20080528
+                                    result = 58;// 流星火雨
                                     return result;
                                 }
                             }
@@ -6675,69 +6551,58 @@ namespace M2Server
                                 if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;
-                                    // 四级流星火雨
+                                    result = 92;// 四级流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;
-                                    // 流星火雨
+                                    result = 58;// 流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
-                                    result = 33;
-                                    // 英雄冰咆哮
+                                    result = 33;// 英雄冰咆哮
                                     return result;
                                 }
                                 else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 英雄雷电术
+                                    result = 11;// 英雄雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    // 英雄群体雷电
+                                    result = 37;// 英雄群体雷电
                                     return result;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    // 火龙焰
+                                    result = 47;// 火龙焰
                                     return result;
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    // 寒冰掌
+                                    result = 44;// 寒冰掌
                                     return result;
                                 }
                                 break;
@@ -6754,59 +6619,50 @@ namespace M2Server
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    // 寒冰掌
+                                    result = 44;// 寒冰掌
                                     return result;
                                 }
                                 if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;
-                                    // 四级流星火雨
+                                    result = 92;// 四级流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;
-                                    // 流星火雨
+                                    result = 58;// 流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰,冰咆哮  从高到低选择
-                                    result = 33;
-                                    // 冰咆哮
+                                    result = 33;// 冰咆哮
                                     return result;
                                 }
                                 else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 英雄雷电术
+                                    result = 11;// 英雄雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 break;
@@ -6818,22 +6674,19 @@ namespace M2Server
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    // 寒冰掌
+                                    result = 44;// 寒冰掌
                                     return result;
                                 }
                                 if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;
-                                    // 四级流星火雨
+                                    result = 92;// 四级流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;
-                                    // 流星火雨
+                                    result = 58;// 流星火雨
                                     return result;
                                 }
                                 else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
@@ -6844,32 +6697,27 @@ namespace M2Server
                                 }
                                 else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 英雄雷电术
+                                    result = 11;// 英雄雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
@@ -6907,32 +6755,27 @@ namespace M2Server
                                 }
                                 else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 英雄雷电术
+                                    result = 11;// 英雄雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
@@ -6963,18 +6806,15 @@ namespace M2Server
                         }
                         switch ((new System.Random(4)).Next())
                         {
-                            case 0:
-                                // 随机选择魔法
+                            case 0:// 随机选择魔法
                                 if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 雷电术
+                                    result = 11;// 雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(33))
@@ -6982,23 +6822,19 @@ namespace M2Server
                                     result = 33;
                                     return result;
                                 }
-                                else if (AllowUseMagic(23))
+                                else if (AllowUseMagic(23)) // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                 {
-                                    // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
@@ -7035,14 +6871,12 @@ namespace M2Server
                                 }
                                 if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 雷电术
+                                    result = 11;// 雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(33))
@@ -7052,20 +6886,17 @@ namespace M2Server
                                 }
                                 else if (AllowUseMagic(23))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 break;
@@ -7082,14 +6913,12 @@ namespace M2Server
                                 }
                                 if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 雷电术
+                                    result = 11;// 雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(33))
@@ -7099,20 +6928,17 @@ namespace M2Server
                                 }
                                 else if (AllowUseMagic(23))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
@@ -7129,14 +6955,12 @@ namespace M2Server
                                 }
                                 if (AllowUseMagic(91))
                                 {
-                                    result = 91;
-                                    // 四级雷电术
+                                    result = 91;// 四级雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(11))
                                 {
-                                    result = 11;
-                                    // 雷电术
+                                    result = 11;// 雷电术
                                     return result;
                                 }
                                 else if (AllowUseMagic(33))
@@ -7146,20 +6970,17 @@ namespace M2Server
                                 }
                                 else if (AllowUseMagic(23))
                                 {
-                                    result = 23;
-                                    // 爆裂火焰
+                                    result = 23;// 爆裂火焰
                                     return result;
                                 }
                                 else if (AllowUseMagic(5))
                                 {
-                                    result = 5;
-                                    // 大火球
+                                    result = 5;// 大火球
                                     return result;
                                 }
                                 else if (AllowUseMagic(1))
                                 {
-                                    result = 1;
-                                    // 火球术
+                                    result = 1;// 火球术
                                     return result;
                                 }
                                 if (AllowUseMagic(37))
@@ -7178,16 +6999,14 @@ namespace M2Server
                     // 从高到低使用魔法 20080710
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500))
                     {
-                        if (AllowUseMagic(92))
+                        if (AllowUseMagic(92))// 四级流星火雨
                         {
-                            // 四级流星火雨
                             m_SkillUseTick[58] = HUtil32.GetTickCount();
                             result = 92;
                             return result;
                         }
-                        if (AllowUseMagic(58))
+                        if (AllowUseMagic(58)) // 流星火雨
                         {
-                            // 流星火雨
                             m_SkillUseTick[58] = HUtil32.GetTickCount();
                             result = 58;
                             return result;
@@ -7225,20 +7044,17 @@ namespace M2Server
                     if (AllowUseMagic(32) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
                     {
                         // 目标为不死系
-                        result = 32;
-                        // 圣言术
+                        result = 32;// 圣言术
                         return result;
                     }
                     if (AllowUseMagic(24) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
                     {
-                        // 地狱雷光
-                        result = 24;
+                        result = 24;// 地狱雷光
                         return result;
                     }
                     if (AllowUseMagic(23))
                     {
-                        // 爆裂火焰
-                        result = 23;
+                        result = 23;// 爆裂火焰
                         return result;
                     }
                     if (AllowUseMagic(91))
@@ -7248,8 +7064,7 @@ namespace M2Server
                     }
                     if (AllowUseMagic(11))
                     {
-                        // 英雄雷电术
-                        result = 11;
+                        result = 11;// 英雄雷电术
                         return result;
                     }
                     if (AllowUseMagic(10) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
@@ -7274,38 +7089,32 @@ namespace M2Server
                     }
                     if (AllowUseMagic(22))
                     {
-                        if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))
+                        if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))// 除祖玛怪,才放火墙
                         {
-                            // 除祖玛怪,才放火墙 20081217
-                            result = 22;
-                            // 火墙
+                            result = 22;// 火墙
                             return result;
                         }
                     }
                     break;
-                case 2:
-                    // 道士
+                case 2:// 道士
                     if ((m_SlaveList.Count == 0) && CheckHeroAmulet(1, 5) && (HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000) && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && (m_WAbil.MP > 20))
                     {
                         m_SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
-                        if (AllowUseMagic(104))
+                        if (AllowUseMagic(104)) // 召唤火灵
                         {
-                            // 召唤火灵
                             result = 104;
                         }
-                        else if (AllowUseMagic(72))
+                        else if (AllowUseMagic(72)) // 召唤月灵
                         {
-                            // 召唤月灵
                             result = 72;
                         }
-                        else if (AllowUseMagic(30))
+                        else if (AllowUseMagic(30))// 召唤神兽
                         {
-                            // 召唤神兽
                             result = 30;
                         }
-                        else if (AllowUseMagic(17))
+                        else if (AllowUseMagic(17)) // 召唤骷髅
                         {
-                            result = 17; // 召唤骷髅
+                            result = 17;
                         }
                         return result;
                     }
@@ -7342,30 +7151,26 @@ namespace M2Server
                     // 无极真气 20091204 移动位置
                     if (AllowUseMagic(50) && (HUtil32.GetTickCount() - m_SkillUseTick[50] > M2Share.g_Config.nAbilityUpTick * 1000) && (m_wStatusArrValue[2] == 0) && ((M2Share.g_Config.btHeroSkillMode50) || (!M2Share.g_Config.btHeroSkillMode50 && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))))
                     {
-                        // 20080827
                         m_SkillUseTick[50] = HUtil32.GetTickCount();
                         result = 50;
                         return result;
                     }
                     // 绿毒
-                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (!m_TargetCret.m_boUnPosion) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
                     {
                         // 对于血量超过800的怪用  修改距离 20080704 不毒城墙
                         n_AmuletIndx = 0;
                         switch ((new System.Random(2)).Next())
                         {
                             case 0:
-                                // 20080413
                                 if (AllowUseMagic(38) && (HUtil32.GetTickCount() - m_SkillUseTick[38] > 1000))
                                 {
-                                    if (m_PEnvir != null)
+                                    if (m_PEnvir != null)// 判断地图是否禁用
                                     {
-                                        // 判断地图是否禁用
                                         if (m_PEnvir.AllowMagics(grobal2.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = grobal2.SKILL_GROUPAMYOUNSUL;
-                                            // 英雄群体施毒
+                                            result = grobal2.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
                                             return result;
                                         }
                                     }
@@ -7380,8 +7185,7 @@ namespace M2Server
                                             if (m_PEnvir.AllowMagics(grobal2.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = grobal2.SKILL_AMYOUNSUL;
-                                                // 英雄施毒术
+                                                result = grobal2.SKILL_AMYOUNSUL;// 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -7408,7 +7212,7 @@ namespace M2Server
                                 break;
                         }
                     }
-                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] == 0) && (!m_TargetCret.m_boUnPosion) && (GetUserItemList(2, 2) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
                     {
                         // 对于血量超过100的怪用 不毒城墙
                         n_AmuletIndx = 0;
@@ -7465,9 +7269,8 @@ namespace M2Server
                                 break;
                         }
                     }
-                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - m_SkillUseTick[51] > 5000))
+                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - m_SkillUseTick[51] > 5000))// 英雄飓风破 
                     {
-                        // 英雄飓风破 20080917
                         m_SkillUseTick[51] = HUtil32.GetTickCount();
                         result = 51;
                         return result;
@@ -7493,125 +7296,96 @@ namespace M2Server
                                 // 1000
                                 if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
                                 {
-                                    // 20090106
-                                    result = 13;
-                                    // 英雄灵魂火符
+                                    result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
-                                    // 20080714
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))
+                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)) // 诅咒术
                                 {
-                                    // 诅咒术 20090403 +6
-                                    result = 52;
-                                    // 英雄诅咒术
+                                    result = 52;// 英雄诅咒术
                                     return result;
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))
+                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)) // 诅咒术
                                 {
-                                    // 诅咒术 20090403 +6
                                     result = 52;
                                     return result;
                                 }
                                 if (AllowUseMagic(94))
                                 {
-                                    result = 94;
-                                    // 英雄四级噬血术
+                                    result = 94;// 英雄四级噬血术
                                     return result;
                                 }
                                 if (AllowUseMagic(59))
                                 {
-                                    result = 59;
-                                    // 英雄噬血术
+                                    result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                // 1000
                                 if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
                                 {
-                                    // 20080401修改判断符的方法 //20090106
-                                    result = 13;
-                                    // 英雄灵魂火符
+                                    result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
-                                    // 20080714
                                     return result;
                                 }
                                 break;
                             case 2:
-                                // 1
-                                // 1000
                                 if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
                                 {
-                                    // 20090106
-                                    result = 13;
-                                    // 英雄灵魂火符
+                                    result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
-                                    // 20080714
                                     return result;
                                 }
                                 if (AllowUseMagic(94))
                                 {
-                                    result = 94;
-                                    // 英雄四级噬血术
+                                    result = 94;// 英雄四级噬血术
                                     return result;
                                 }
                                 if (AllowUseMagic(59))
                                 {
-                                    result = 59;
-                                    // 英雄噬血术
+                                    result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))
+                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))// 诅咒术
                                 {
-                                    // 诅咒术  20090403 +6
                                     result = 52;
                                     return result;
                                 }
                                 break;
-                                // 2
                         }
-                        // case Random(3) of 道
-                        // 技能从高到低选择 20080710
+                        // 技能从高到低选择 
                         if (AllowUseMagic(94))
                         {
-                            result = 94;
-                            // 英雄四级噬血术
+                            result = 94;// 英雄四级噬血术
                             return result;
                         }
-                        if (AllowUseMagic(59))
+                        if (AllowUseMagic(59))// 英雄噬血术
                         {
-                            // 英雄噬血术
                             result = 59;
                             return result;
                         }
-                        if (AllowUseMagic(54))
+                        if (AllowUseMagic(54)) // 英雄骷髅咒
                         {
-                            // 英雄骷髅咒 20080917
                             result = 54;
                             return result;
                         }
-                        if (AllowUseMagic(53))
+                        if (AllowUseMagic(53))// 英雄血咒
                         {
-                            // 英雄血咒 20080917
                             result = 53;
                             return result;
                         }
-                        if (AllowUseMagic(51))
+                        if (AllowUseMagic(51))// 英雄飓风破
                         {
-                            // 英雄飓风破 20080917
                             result = 51;
                             return result;
                         }
-                        if (AllowUseMagic(13))
+                        if (AllowUseMagic(13))// 英雄灵魂火符
                         {
-                            // 英雄灵魂火符
                             result = 13;
                             return result;
                         }
-                        if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))
+                        if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))// 诅咒术
                         {
-                            // 诅咒术 20090403 +6
                             result = 52;
                             return result;
                         }
@@ -7625,14 +7399,13 @@ namespace M2Server
         private int CheckTargetXYCount1(int nX, int nY, int nRange)
         {
             TBaseObject BaseObject;
-            int n10;
             int result = 0;
-            n10 = nRange;
+            int n10 = nRange;
             if (m_VisibleActors.Count > 0)
             {
-                for (var I = 0; I < m_VisibleActors.Count; I++)
+                for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
-                    BaseObject = m_VisibleActors[I].BaseObject;
+                    BaseObject = m_VisibleActors[i].BaseObject;
                     if (BaseObject != null)
                     {
                         if (!BaseObject.m_boDeath)
@@ -7699,14 +7472,13 @@ namespace M2Server
             }
             return result;
         }
-        // 半月弯刀判断目标函数
+
         // 气功波，抗拒火环使用
         private int CheckTargetXYCount3(int nX, int nY, int nRange, int nCount)
         {
             TBaseObject BaseObject;
-            int n10;
             int result = 0;
-            n10 = nRange;
+            int n10 = nRange;
             if (m_VisibleActors.Count > 0)
             {
                 for (var i = 0; i < m_VisibleActors.Count; i++)
@@ -7739,7 +7511,6 @@ namespace M2Server
         private bool CheckHeroAmulet(int nType, int nCount)
         {
             bool result = false;
-            int I;
             TUserItem UserItem;
             TItem AmuletStdItem;
             try
@@ -7775,7 +7546,7 @@ namespace M2Server
                 if (m_UseItems[grobal2.U_BUJUK].wIndex > 0)
                 {
                     AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_BUJUK].wIndex);
-                    if ((AmuletStdItem != null))
+                    if (AmuletStdItem != null)
                     {
                         if ((AmuletStdItem.StdMode == 25))
                         {
@@ -7802,16 +7573,16 @@ namespace M2Server
                 // 检测人物包裹是否存在毒,护身符
                 if (m_ItemList.Count > 0)
                 {
-                    for (I = 0; I < m_ItemList.Count; I++)
+                    for (var i = 0; i < m_ItemList.Count; i++)
                     {
                         // 人物包裹不为空
-                        UserItem = m_ItemList[I];
+                        UserItem = m_ItemList[i];
                         if (UserItem != null)
                         {
                             AmuletStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                            if ((AmuletStdItem != null))
+                            if (AmuletStdItem != null)
                             {
-                                if ((AmuletStdItem.StdMode == 25))
+                                if (AmuletStdItem.StdMode == 25)
                                 {
                                     switch (nType)
                                     {
@@ -7841,6 +7612,11 @@ namespace M2Server
                 M2Share.MainOutMessage("TAIPlayObject.CheckHeroAmulet");
             }
             return result;
+        }
+
+        public int GetDirBaseObjectsCount(int m_btDirection, int rang)
+        {
+            return 0;
         }
     }
 }

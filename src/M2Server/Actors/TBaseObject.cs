@@ -526,6 +526,11 @@ namespace M2Server
         public int m_nAutoAddHPMPMode = 0;
         // 气血石
         public int m_dwCheckHPMPTick = 0;
+        public long dwTick3F4 = 0;
+        /// <summary>
+        /// 是否机器人
+        /// </summary>
+        public bool m_boAI;
 
         public TBaseObject()
         {
@@ -4105,6 +4110,18 @@ namespace M2Server
                 btDir = 0;
             }
             return result;
+        }
+
+        public bool GetAttackDir(TBaseObject BaseObject, int nRange, ref byte btDir)
+        {
+            short nX = 0;
+            short nY = 0;
+            btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
+            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, nRange, ref nX, ref nY))
+            {
+                return BaseObject == (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
+            }
+            return false;
         }
 
         public bool TargetInSpitRange(TBaseObject BaseObject, ref byte btDir)
@@ -8225,6 +8242,99 @@ namespace M2Server
                 WeightChanged();
             }
             return result;
+        }
+
+        public bool CanMove(short nX, short nY, bool boFlag)
+        {
+            if (Math.Abs(m_nCurrX - nX) <= 1 && Math.Abs(m_nCurrX - nY) <= 1)
+            {
+                return m_PEnvir.CanWalkEx(nX, nY, boFlag);
+            }
+            return CanRun(nX, nY, boFlag);
+        }
+
+        public bool CanRun(short nX, short nY, bool boFlag)
+        {
+            var result = false;
+            var btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
+            switch (btDir)
+            {
+                case grobal2.DR_UP:
+                    if (m_nCurrY > 1) {
+                        if ((m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))
+                                && (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                        {
+                            result = true;
+                            return result;
+                        }
+                    }
+                    break;
+                case grobal2.DR_UPRIGHT:
+                    if (m_nCurrX < m_PEnvir.wWidth - 2 && m_nCurrY > 1)
+                    {
+                        if ((m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                            (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                        {
+                            result = true;
+                            return result;
+                        }
+                    }
+                    break;
+                case grobal2.DR_RIGHT:
+                    if (m_nCurrX < m_PEnvir.wWidth - 2)
+                    {
+                        if (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                         (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                        {
+                            result = true;
+                            return result;
+                        }
+                    }
+                    break;
+                case grobal2.DR_DOWNRIGHT:
+                    if ((m_nCurrX < m_PEnvir.wWidth - 2) && (m_nCurrY < m_PEnvir.wHeight - 2) && (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) ||
+                        M2Share.g_Config.boSafeAreaLimited && InSafeZone()) && (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    {
+                        result = true;
+                        return result;
+                    }
+                    break;
+                case grobal2.DR_DOWN:
+                    if ((m_nCurrY < m_PEnvir.wHeight - 2) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))))
+                    {
+                        result = true;
+                        return result;
+                    }
+                    break;
+                case grobal2.DR_DOWNLEFT:
+                    if ((m_nCurrX > 1) && (m_nCurrY < m_PEnvir.wHeight - 2) && (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) ||(M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    {
+                        result = true;
+                        return result;
+                    }
+                    break;
+                case grobal2.DR_LEFT:
+                    if ((m_nCurrX > 1) && (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    {
+                        result = true;
+                        return result;
+                    }
+                    break;
+                case grobal2.DR_UPLEFT:
+                    if ((m_nCurrX > 1) && (m_nCurrY > 1) && (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll))
+                    || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) && (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) ||
+                    (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    {
+                        result = true;
+                        return result;
+                    }
+                    break;
+            }
+            return false;
         }
 
         internal void Dispose(object obj)

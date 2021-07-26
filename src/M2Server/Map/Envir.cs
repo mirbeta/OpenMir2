@@ -35,4 +35,10 @@ namespace M2Server
         public byte chFlag;
         public IList<TOSObject> ObjList;
     }
+
+    public class PointInfo
+    {
+        public short nX;
+        public short nY;
+    }
 }
