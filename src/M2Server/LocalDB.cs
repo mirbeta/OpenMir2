@@ -405,46 +405,45 @@ namespace M2Server
         public void LoadMakeItem()
         {
             int nItemCount;
-            var s18 = string.Empty;
+            var sLine = string.Empty;
+            var sSubName = string.Empty;
             var sItemName = string.Empty;
-            var s24 = string.Empty;
             StringList LoadList;
-            IList<TMakeItem> List28;
+            IList<TMakeItem> List28 = null;
             var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MakeItem.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                List28 = null;
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    s18 = LoadList[i].Trim();
-                    if (string.IsNullOrEmpty(s18) || s18.StartsWith(";"))
+                    sLine = LoadList[i].Trim();
+                    if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(";"))
                     {
                         continue;
                     }
-                    if (s18[0] == '[')
+                    if (sLine.StartsWith("["))
                     {
                         if (List28 != null)
                         {
-                            M2Share.g_MakeItemList.Add(s24, List28);
+                            M2Share.g_MakeItemList.Add(sItemName, List28);
                         }
                         List28 = new List<TMakeItem>();
-                        HUtil32.ArrestStringEx(s18, '[', ']', ref s24);
+                        HUtil32.ArrestStringEx(sLine, '[', ']', ref sItemName);
                     }
                     else
                     {
                         if (List28 != null)
                         {
-                            s18 = HUtil32.GetValidStr3(s18, ref sItemName, new[] { " ", "\t" });
-                            nItemCount = HUtil32.Str_ToInt(s18.Trim(), 1);
-                            List28.Add(new TMakeItem() { ItemName = sItemName, ItemCount = nItemCount });
+                            sLine = HUtil32.GetValidStr3(sLine, ref sSubName, new[] { " ", "\t" });
+                            nItemCount = HUtil32.Str_ToInt(sLine.Trim(), 1);
+                            List28.Add(new TMakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
                     }
                 }
                 if (List28 != null)
                 {
-                    M2Share.g_MakeItemList.Add(s24, List28);
+                    M2Share.g_MakeItemList.Add(sItemName, List28);
                 }
             }
         }
@@ -742,7 +741,7 @@ namespace M2Server
 
         private void LoadMonGen_LoadMapGen(StringList MonGenList, string sFileName)
         {
-            var sFileDir = M2Share.g_Config.sEnvirDir + "MonGen\\";
+            var sFileDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MonGen");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);

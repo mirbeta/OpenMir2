@@ -558,7 +558,9 @@ namespace M2Server
                     }
                     m_NewHumanList.Clear();
                     for (var i = 0; i < m_ListOfGateIdx.Count; i++)
+                    {
                         M2Share.RunSocket.CloseUser((int)m_ListOfGateIdx[i], (int)m_ListOfSocket[i]);
+                    }
                     m_ListOfGateIdx.Clear();
                     m_ListOfSocket.Clear();
                 }
@@ -575,14 +577,7 @@ namespace M2Server
                     PlayObject = m_PlayObjectFreeList[i];
                     if (HUtil32.GetTickCount() - PlayObject.m_dwGhostTick > M2Share.g_Config.dwHumanFreeDelayTime)// 5 * 60 * 1000
                     {
-                        try
-                        {
-                            m_PlayObjectFreeList[i] = null;
-                        }
-                        catch
-                        {
-                            M2Share.MainOutMessage(sExceptionMsg2);
-                        }
+                        m_PlayObjectFreeList[i] = null;
                         m_PlayObjectFreeList.RemoveAt(i);
                         break;
                     }

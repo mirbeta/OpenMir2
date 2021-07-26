@@ -7312,7 +7312,6 @@ namespace M2Server
                             DamageHealth(-n20);
                         }
                     }
-
                     if ((m_MagicOneSwordSkill != null) && (m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_MagicOneSwordSkill.btLevel < 3) && (m_MagicOneSwordSkill.MagicInfo.TrainLevel[m_MagicOneSwordSkill.btLevel] <= m_Abil.Level))
                     {
                         (this as TPlayObject).TrainSkill(m_MagicOneSwordSkill, M2Share.RandomNumber.Random(3) + 1);
@@ -7329,7 +7328,6 @@ namespace M2Server
                             SendDelayMsg(this, grobal2.RM_MAGIC_LVEXP, 0, m_MagicPowerHitSkill.MagicInfo.wMagicID, m_MagicPowerHitSkill.btLevel, m_MagicPowerHitSkill.nTranPoint, "", 3000);
                         }
                     }
-
                     if ((wHitMode == 4) && (m_MagicErgumSkill != null) && (m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_MagicErgumSkill.btLevel < 3) && (m_MagicErgumSkill.MagicInfo.TrainLevel[m_MagicErgumSkill.btLevel] <= m_Abil.Level))
                     {
                         (this as TPlayObject).TrainSkill(m_MagicErgumSkill, 1);
@@ -7338,7 +7336,6 @@ namespace M2Server
                             SendDelayMsg(this, grobal2.RM_MAGIC_LVEXP, 0, m_MagicErgumSkill.MagicInfo.wMagicID, m_MagicErgumSkill.btLevel, m_MagicErgumSkill.nTranPoint, "", 3000);
                         }
                     }
-
                     if ((wHitMode == 5) && (m_MagicBanwolSkill != null) && (m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_MagicBanwolSkill.btLevel < 3) && (m_MagicBanwolSkill.MagicInfo.TrainLevel[m_MagicBanwolSkill.btLevel] <= m_Abil.Level))
                     {
                         (this as TPlayObject).TrainSkill(m_MagicBanwolSkill, 1);
@@ -7355,7 +7352,6 @@ namespace M2Server
                             SendDelayMsg(this, grobal2.RM_MAGIC_LVEXP, 0, m_MagicRedBanwolSkill.MagicInfo.wMagicID, m_MagicRedBanwolSkill.btLevel, m_MagicRedBanwolSkill.nTranPoint, "", 3000);
                         }
                     }
-
                     if ((wHitMode == 7) && (m_MagicFireSwordSkill != null) && (m_btRaceServer == grobal2.RC_PLAYOBJECT) && (m_MagicFireSwordSkill.btLevel < 3) && (m_MagicFireSwordSkill.MagicInfo.TrainLevel[m_MagicFireSwordSkill.btLevel] <= m_Abil.Level))
                     {
                         (this as TPlayObject).TrainSkill(m_MagicFireSwordSkill, 1);
@@ -7584,7 +7580,7 @@ namespace M2Server
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
-                        SendMsg(this, grobal2.RM_DURACHANGE, (short)i, nDura, m_UseItems[i].DuraMax, 0, "");
+                        SendMsg(this, grobal2.RM_DURACHANGE, i, nDura, m_UseItems[i].DuraMax, 0, "");
                     }
                 }
             }
