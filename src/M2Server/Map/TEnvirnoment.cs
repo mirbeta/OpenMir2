@@ -30,6 +30,24 @@ namespace M2Server
         public int m_dwWhisperTick = 0;
         private int m_nMonCount = 0;
         private int m_nHumCount = 0;
+        public IList<int> m_PointList;
+
+
+        public bool AllowMagics(string magicName)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 判断地图是否禁用技能
+        /// </summary>
+        /// <param name="magicId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool AllowMagics(short magicId, int type)
+        {
+            return true;
+        }
 
         public object AddToMap(int nX, int nY, byte btType, object pRemoveObject)
         {

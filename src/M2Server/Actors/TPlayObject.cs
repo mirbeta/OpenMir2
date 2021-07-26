@@ -715,7 +715,7 @@ namespace M2Server
             }
         }
 
-        private bool IsBlockWhisper(string sName)
+        protected bool IsBlockWhisper(string sName)
         {
             var result = false;
             for (var i = 0; i < this.m_BlockWhisperList.Count; i++)
@@ -1878,7 +1878,7 @@ namespace M2Server
             }
         }
 
-        private void RedHalfMoonOnOff(bool boSwitch)
+        protected void RedHalfMoonOnOff(bool boSwitch)
         {
             m_boRedUseHalfMoon = boSwitch;
             if (m_boRedUseHalfMoon)
@@ -1891,7 +1891,7 @@ namespace M2Server
             }
         }
 
-        private void SkillCrsOnOff(bool boSwitch)
+        protected void SkillCrsOnOff(bool boSwitch)
         {
             m_boCrsHitkill = boSwitch;
             if (m_boCrsHitkill)
@@ -1904,7 +1904,7 @@ namespace M2Server
             }
         }
 
-        private void SkillTwinOnOff(bool boSwitch)
+        protected void SkillTwinOnOff(bool boSwitch)
         {
             m_boTwinHitSkill = boSwitch;
             if (m_boTwinHitSkill)
@@ -4583,7 +4583,7 @@ namespace M2Server
             }
         }
 
-        private ushort GetSpellPoint(TUserMagic UserMagic)
+        protected ushort GetSpellPoint(TUserMagic UserMagic)
         {
             return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
@@ -4605,7 +4605,7 @@ namespace M2Server
             return result;
         }
 
-        private bool DoMotaebo(byte nDir, int nMagicLevel)
+        protected bool DoMotaebo(byte nDir, int nMagicLevel)
         {
             int nDmg;
             TBaseObject BaseObject_30 = null;
@@ -5555,7 +5555,7 @@ namespace M2Server
             return result;
         }
 
-        private void MoveToHome()
+        protected void MoveToHome()
         {
             SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             BaseObjectMove(m_sHomeMap, m_nHomeX, m_nHomeY);

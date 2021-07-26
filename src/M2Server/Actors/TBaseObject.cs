@@ -4134,7 +4134,7 @@ namespace M2Server
             return result;
         }
 
-        private ushort RecalcBagWeight()
+        protected ushort RecalcBagWeight()
         {
             ushort result = 0;
             TUserItem UserItem;

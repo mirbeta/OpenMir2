@@ -35,8 +35,8 @@ namespace M2Server
         // 怪范围
         public int nMastrRange;
         // 主体范围
-        public int nX;
-        public int nY;
+        public short nX;
+        public short nY;
     }
     
     public enum TPathType
