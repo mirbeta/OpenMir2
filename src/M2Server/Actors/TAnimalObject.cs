@@ -205,7 +205,7 @@ namespace M2Server
             m_nTargetY =  -1;
         }
 
-        protected void SearchTarget()
+        protected virtual void SearchTarget()
         {
             TBaseObject BaseObject = null;
             TBaseObject BaseObject18 = null;

@@ -24,6 +24,33 @@ namespace M2Server
         Low = 2,
         None = 1
     }
+    
+    public class TMapWalkXY
+    {
+        public int nWalkStep;
+        // 走步长
+        public int nMonCount;
+        // 怪数量
+        public int nMonRange;
+        // 怪范围
+        public int nMastrRange;
+        // 主体范围
+        public int nX;
+        public int nY;
+    }
+    
+    public enum TPathType
+    {
+        t_Dynamic,
+        t_Fixed
+    } 
+    
+    public class TRunPos
+    {
+        public byte btDirection;
+        // 1顺时针 2逆时针
+        public int nAttackCount;
+    }
 
     public struct TChrMsg
     {
@@ -1299,6 +1326,9 @@ namespace M2Server
         /// 基本剑法
         /// </summary>
         public const int SKILL_ILKWANG = 4;
+        /// <summary>
+        /// 未知
+        /// </summary>
         public const int SKILL_FIREBALL2 = 5;
         /// <summary>
         /// 施毒术
@@ -1473,6 +1503,7 @@ namespace M2Server
         public const int SKILL_57 = 57;
         public const int SKILL_58 = 58;
         public const int SKILL_59 = 59;
+        
         public const int LA_UNDEAD = 1;
         public const string sENCYPTSCRIPTFLAG = "不知道是什么字符串";
         public const string sSTATUS_FAIL = "+FAIL/";

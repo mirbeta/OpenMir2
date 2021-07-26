@@ -625,7 +625,7 @@ namespace M2Server
             }
         }
 
-        private void Whisper(string whostr, string saystr)
+        protected virtual void Whisper(string whostr, string saystr)
         {
             var svidx = 0;
             var PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
@@ -1852,7 +1852,7 @@ namespace M2Server
             return result;
         }
 
-        private void ThrustingOnOff(bool boSwitch)
+        protected void ThrustingOnOff(bool boSwitch)
         {
             m_boUseThrusting = boSwitch;
             if (m_boUseThrusting)
@@ -1865,7 +1865,7 @@ namespace M2Server
             }
         }
 
-        private void HalfMoonOnOff(bool boSwitch)
+        protected void HalfMoonOnOff(bool boSwitch)
         {
             m_boUseHalfMoon = boSwitch;
             if (m_boUseHalfMoon)
@@ -2867,7 +2867,7 @@ namespace M2Server
         // 检查角色的座标是否在指定误差范围以内
         // TargeTBaseObject 为要检查的角色，nX,nY 为比较的座标
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
-        private bool CretInNearXY(TBaseObject TargeTBaseObject, int nX, int nY)
+        protected bool CretInNearXY(TBaseObject TargeTBaseObject, int nX, int nY)
         {
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
