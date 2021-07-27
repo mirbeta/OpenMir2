@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using SystemModule.Common;
 
@@ -22,7 +21,7 @@ namespace M2Server
         /// </summary>
         public TEnvirnoment m_ManagedEnvir = null;
         public TPointManager m_PointManager = null;
-        public Point[] m_Path;
+        public PointInfo[] m_Path;
         public int m_nPostion = 0;
         public int m_nMoveFailCount = 0;
         public string m_sConfigListFileName = string.Empty;
@@ -141,10 +140,12 @@ namespace M2Server
             m_sHeroConfigFileName = "";
             m_sConfigListFileName = "";
             m_sHeroConfigListFileName = "";
+            m_UseItemNames = new string[13];
             //FillChar(m_UseItemNames, sizeof(Grobal2.string), '\0');
             //FillChar(m_RunPos, sizeof(TRunPos), '\0');
             m_BagItemNames = new List<string>();
             m_PointManager = new TPointManager(this);
+            m_SkillUseTick = new long[59];
             //FillChar(m_SkillUseTick, sizeof(m_SkillUseTick), 0);
             // 魔法使用间隔
             m_nSelItemType = 1;
@@ -174,6 +175,8 @@ namespace M2Server
             m_boIsNeedAvoid = false;// 是否需要躲避
             m_dwWalkTick = HUtil32.GetTickCount();
             m_nWalkSpeed = 300;
+            m_RunPos = new TRunPos();
+            m_Path = new PointInfo[0];
         }
 
         ~TAIPlayObject()
@@ -331,13 +334,13 @@ namespace M2Server
                                 return;
                             }
                         }
-                        if (!m_PEnvir.m_boQUIZ)
+                        if (!m_PEnvir.Flag.boQUIZ)
                         {
                             if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
                             {
                                 if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                 {
-                                    SysMsg(format(g_sYouNeedLevelMsg, new object[] { M2Share.g_Config.nCanShoutMsgLevel + 1 }), TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg(format(M2Share.g_sYouNeedLevelMsg, new object[] { M2Share.g_Config.nCanShoutMsgLevel + 1 }), TMsgColor.c_Red, TMsgType.t_Hint);
                                     return;
                                 }
                                 m_dwShoutMsgTick = HUtil32.GetTickCount();
@@ -353,15 +356,15 @@ namespace M2Server
                                 }
                                 return;
                             }
-                            SysMsg(format(g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
                             return;
                         }
-                        SysMsg(g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }
                     if (!m_boFilterSendMsg)
                     {
-                        SendRefMsg(grobal2.RM_HEAR, 0, m_btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);
+                        SendRefMsg(grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);
                     }
                 }
             }
@@ -402,7 +405,7 @@ namespace M2Server
             return result;
         }
 
-        private bool RunToNext(int nX, int nY)
+        private bool RunToNext(short nX, short nY)
         {
             bool result = false;
             if (HUtil32.GetTickCount() - dwTick5F4 > M2Share.g_Config.nAIRunIntervalTime)
@@ -429,7 +432,7 @@ namespace M2Server
             return result;
         }
 
-        protected bool GotoNextOne(int nX, int nY, bool boRun)
+        protected bool GotoNextOne(short nX, short nY, bool boRun)
         {
             bool result = false;
             if ((Math.Abs(nX - m_nCurrX) <= 2) && (Math.Abs(nY - m_nCurrY) <= 2))
@@ -643,10 +646,10 @@ namespace M2Server
                         TempList = new List<string>();
                         try
                         {
-                            HUtil32.ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
-                            for (var I = 0; I < TempList.Count; I++)
+                            //HUtil32.ArrestStringEx(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
+                            for (var i = 0; i < TempList.Count; i++)
                             {
-                                sMagicName = TempList[I].Trim();
+                                sMagicName = TempList[i].Trim();
                                 if (FindMagic(sMagicName) == null)
                                 {
                                     Magic = M2Share.UserEngine.FindMagic(sMagicName);
@@ -677,7 +680,7 @@ namespace M2Server
                         TempList = new List<string>();
                         try
                         {
-                            ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
+                            //ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
                             for (var i = 0; i < TempList.Count; i++)
                             {
                                 sItemName = TempList[i].Trim();
@@ -691,7 +694,7 @@ namespace M2Server
                                         {
                                             if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
                                             {
-                                                M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                                //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                             }
                                         }
                                         if (!AddItemToBag(UserItem))
@@ -752,7 +755,7 @@ namespace M2Server
                                     {
                                         if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
                                         {
-                                            M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                            //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                         }
                                     }
                                 }
@@ -769,9 +772,9 @@ namespace M2Server
         public void SearchPickUpItem_SetHideItem(TMapItem MapItem)
         {
             TVisibleMapItem VisibleMapItem;
-            for (var I = 0; I < m_VisibleItems.Count; I++)
+            for (var i = 0; i < m_VisibleItems.Count; i++)
             {
-                VisibleMapItem = m_VisibleItems[I];
+                VisibleMapItem = m_VisibleItems[i];
                 if ((VisibleMapItem != null) && (VisibleMapItem.nVisibleFlag > 0))
                 {
                     if (VisibleMapItem.MapItem == MapItem)
@@ -818,10 +821,10 @@ namespace M2Server
             else
             {
                 // 捡物品
-                if (new ArrayList(new int[] { 2, 3 }).Contains(MapItem.UserItem.AddValue[0]))
+                /*if (new ArrayList(new int[] { 2, 3 }).Contains(MapItem.UserItem.AddValue[0]))
                 {
                     return result;
-                }
+                }*/
                 // 绑定物品不能捡 20110528
                 StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
@@ -949,7 +952,7 @@ namespace M2Server
                                     TMapItem MapItem = VisibleMapItem.MapItem;
                                     if (MapItem != null)
                                     {
-                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)) && (MapItem.UserItem.AddValue[0] != 2) && (MapItem.UserItem.AddValue[0] != 3))
+                                        if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)))
                                         {
                                             if ((MapItem.OfBaseObject == null) || (MapItem.OfBaseObject == this) || (((TBaseObject)MapItem.OfBaseObject).m_Master == this))
                                             {
@@ -1024,7 +1027,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result;
             }
@@ -1248,9 +1251,9 @@ namespace M2Server
             {
                 nX = m_nCurrX;
                 nY = m_nCurrY;
-                if ((m_Path.Length > 0) && (m_nPostion < m_Path.Length))
+                if ((m_Path != null) && (m_Path.Length > 0) && (m_nPostion < m_Path.Length))
                 {
-                    if (!GotoNextOne(m_Path[m_nPostion].X, m_Path[m_nPostion].Y, true))
+                    if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
                     {
                         m_Path = null;
                         m_nPostion = -1;
@@ -1272,11 +1275,11 @@ namespace M2Server
                 {
                     if ((Math.Abs(nX - m_nCurrX) > 2) || (Math.Abs(nY - m_nCurrY) > 2))
                     {
-                        m_Path = g_FindPath.FindPath(m_PEnvir, m_nCurrX, m_nCurrY, nX, nY, true);
+                        m_Path = M2Share.g_FindPath.FindPath(m_PEnvir, m_nCurrX, m_nCurrY, nX, nY, true);
                         m_nPostion = 0;
                         if ((m_Path.Length > 0) && (m_nPostion < m_Path.Length))
                         {
-                            if (!GotoNextOne(m_Path[m_nPostion].X, m_Path[m_nPostion].Y, true))
+                            if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
                             {
                                 m_Path = null;
                                 m_nPostion = -1;
@@ -1286,6 +1289,7 @@ namespace M2Server
                             {
                                 m_nMoveFailCount = 0;
                                 m_nPostion++;
+                 
                                 return;
                             }
                         }
@@ -1367,9 +1371,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if ((hiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((hiter.m_Master != null) && (hiter.Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)))
+                    if ((hiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((hiter.m_Master != null) && (hiter.GetMaster().m_btRaceServer == grobal2.RC_PLAYOBJECT)))
                     {
-                        if ((m_TargetCret != null) && ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((m_TargetCret.m_Master != null) && (m_TargetCret.Master.m_btRaceServer == grobal2.RC_PLAYOBJECT))))
+                        if ((m_TargetCret != null) && ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((m_TargetCret.m_Master != null) && (m_TargetCret.GetMaster().m_btRaceServer == grobal2.RC_PLAYOBJECT))))
                         {
                             if ((Struck_MINXY(m_TargetCret, hiter) == hiter) || ((new System.Random(6)).Next() == 0))
                             {
@@ -1412,7 +1416,7 @@ namespace M2Server
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(grobal2.RM_HEAR, 0, m_btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
+                            SendRefMsg(grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
                         }
                     }
                 }
@@ -1447,6 +1451,19 @@ namespace M2Server
                 m_boAIStart = false;
             }
             base.Die();
+            //制造一个人工智障
+            M2Share.UserEngine.AddAILogon(new TAILogon()
+            {
+                sCharName = this.m_sCharName,
+                sMapName = "0",
+                sConfigFileName = "",
+                sHeroConfigFileName = "",
+                sFilePath = M2Share.g_Config.sEnvirDir,
+                sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
+                sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
+                nX = 285,
+                nY = 608
+            });
         }
 
         private bool CanWalk(short nCurrX, short nCurrY, int nTargetX, int nTargetY, byte nDir, ref int nStep, bool boFlag)
@@ -1509,11 +1526,11 @@ namespace M2Server
         {
             bool result = false;
             int nStep = 0;
-            Point[] Path;
+            PointInfo[] Path;
             //0代替-1
             if (!CanWalk(X1, Y1, X2, Y2, 0, ref nStep, m_btRaceServer != 108))
             {
-                Path = g_FindPath.FindPath(m_PEnvir, X1, Y1, X2, Y2, false);
+                Path = M2Share.g_FindPath.FindPath(m_PEnvir, X1, Y1, X2, Y2, false);
                 if (Path.Length <= 0)
                 {
                     return result;
@@ -1528,11 +1545,11 @@ namespace M2Server
             return result;
         }
 
-        private bool GotoNext(int nX, int nY, bool boRun)
+        private bool GotoNext(short nX, short nY, bool boRun)
         {
             bool result = false;
             int nStep = 0;
-            Point[] Path;
+            PointInfo[] Path;
             if ((Math.Abs(nX - m_nCurrX) <= 2) && (Math.Abs(nY - m_nCurrY) <= 2))
             {
                 if ((Math.Abs(nX - m_nCurrX) <= 1) && (Math.Abs(nY - m_nCurrY) <= 1))
@@ -1547,20 +1564,20 @@ namespace M2Server
             }
             if (!result)
             {
-                Path = g_FindPath.FindPath(m_PEnvir, m_nCurrX, m_nCurrY, nX, nY, boRun);
+                Path = M2Share.g_FindPath.FindPath(m_PEnvir, m_nCurrX, m_nCurrY, nX, nY, boRun);
                 if (Path.Length > 0)
                 {
                     for (var i = 0; i < Path.Length; i++)
                     {
-                        if ((Path[i].X != m_nCurrX) || (Path[i].Y != m_nCurrY))
+                        if ((Path[i].nX != m_nCurrX) || (Path[i].nY != m_nCurrY))
                         {
-                            if ((Math.Abs(Path[i].X - m_nCurrX) >= 2) || (Math.Abs(Path[i].Y - m_nCurrY) >= 2))
+                            if ((Math.Abs(Path[i].nX - m_nCurrX) >= 2) || (Math.Abs(Path[i].nY - m_nCurrY) >= 2))
                             {
-                                result = RunToNext(Path[i].X, Path[i].Y);
+                                result = RunToNext(Path[i].nX, Path[i].nY);
                             }
                             else
                             {
-                                result = WalkToNext(Path[i].X, Path[i].Y);
+                                result = WalkToNext(Path[i].nX, Path[i].nY);
                             }
                             if (result)
                             {
@@ -1591,7 +1608,7 @@ namespace M2Server
             {
                 if (ProcessMsg.wIdent == grobal2.RM_STRUCK)
                 {
-                    if (((object)(ProcessMsg.BaseObject)) == this)
+                    if (ProcessMsg.BaseObject == this.ObjectId)
                     {
                         AttackBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
@@ -1605,13 +1622,11 @@ namespace M2Server
                             Struck(AttackBaseObject);
                             BreakHolySeizeMode();
                         }
-
-                        if ((M2Share.CastleManager.IsCastleMember(this) != null) && (AttackBaseObject != null))
+                        if (M2Share.CastleManager.IsCastleMember(this) != null && AttackBaseObject != null)
                         {
                             AttackBaseObject.bo2B0 = true;
                             AttackBaseObject.m_dw2B4Tick = HUtil32.GetTickCount();
                         }
-
                         m_nHealthTick = 0;
                         m_nSpellTick = 0;
                         m_nPerHealth -= 1;
@@ -1638,7 +1653,7 @@ namespace M2Server
             TBaseObject BaseObject;
             short nCurrX = nX;
             short nCurrY = nY;
-            for (var I = 1; I <= nRange; I++)
+            for (var i = 1; i <= nRange; i++)
             {
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
@@ -1711,9 +1726,6 @@ namespace M2Server
 
         private bool FollowMaster()
         {
-            int I;
-            int II;
-            int III;
             short nX = 0;
             short nY = 0;
             short nCurrX = 0;
@@ -1733,9 +1745,9 @@ namespace M2Server
                 m_Master.GetBackPosition(ref nX, ref nY);
                 if (!m_Master.m_PEnvir.CanWalk(nX, nY, true))
                 {
-                    for (I = 0; I <= 7; I++)
+                    for (var i = 0; i <= 7; i++)
                     {
-                        if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, I, 1, ref nX, ref nY))
+                        if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, i, 1, ref nX, ref nY))
                         {
                             if (m_Master.m_PEnvir.CanWalk(nX, nY, true))
                             {
@@ -1754,7 +1766,7 @@ namespace M2Server
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if ((m_TargetCret == null) && (!m_Master.m_boSlaveRelax))
             {
-                for (I = 1; I <= 2; I++)
+                for (var I = 1; I <= 2; I++)
                 {
                     // 判断主人是否在英雄对面
                     if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, I, ref nX, ref nY))
@@ -1766,13 +1778,13 @@ namespace M2Server
                                 result = true;
                                 return result;
                             }
-                            for (III = 1; III <= 2; III++)
+                            for (var k = 1; k <= 2; k++)
                             {
-                                for (II = 0; II <= 7; II++)
+                                for (var j = 0; j <= 7; j++)
                                 {
-                                    if (II != m_Master.m_btDirection)
+                                    if (j != m_Master.m_btDirection)
                                     {
-                                        if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, II, III, ref nX, ref nY) && GotoNext(nX, nY, true))
+                                        if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
                                         {
                                             result = true;
                                             return result;
@@ -1803,13 +1815,13 @@ namespace M2Server
                     {
                         return result;
                     }
-                    for (III = 1; III <= 2; III++)
+                    for (var j = 1; j <= 2; j++)
                     {
-                        for (II = 0; II <= 7; II++)
+                        for (var k = 0; k <= 7; k++)
                         {
-                            if (II != m_Master.m_btDirection)
+                            if (k != m_Master.m_btDirection)
                             {
-                                if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, II, III, ref nX, ref nY) && GotoNextOne(nX, nY, true))
+                                if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
                                 {
                                     result = true;
                                     return result;
@@ -1987,7 +1999,7 @@ namespace M2Server
             return result;
         }
 
-        private int GetRangeTargetCount(int nX, int nY, int nRange)
+        private int GetRangeTargetCount(short nX, short nY, int nRange)
         {
             int result = 0;
             TBaseObject BaseObject;
@@ -2205,7 +2217,7 @@ namespace M2Server
                 return result;
             }
             // 7
-            if (m_boDeath || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (m_boDeath || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result;
             }
@@ -2217,10 +2229,10 @@ namespace M2Server
             // 防麻
             if (m_PEnvir != null)
             {
-                if (m_PEnvir.m_boNOSKILL)
+                /*if (m_PEnvir.m_boNOSKILL)
                 {
                     return result;
-                }
+                }*/
                 if (!m_PEnvir.AllowMagics(UserMagic.MagicInfo.sMagicName))
                 {
                     return result;
@@ -2483,8 +2495,7 @@ namespace M2Server
             int result = -1;
             switch (m_btJob)
             {
-                case 0:
-                    // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
+                case 0: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
                     if (DoThink_MotaeboPos(wMagicID))
                     {
                         result = 1;
@@ -3547,7 +3558,7 @@ namespace M2Server
             int nOldY;
             try
             {
-                if (M2Share.g_Config.boAutoPickUpItem && (g_AllowAIPickUpItemList.Count > 0))
+                if (M2Share.g_Config.boAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
                 {
                     if (SearchPickUpItem(500))
                     {
@@ -3558,7 +3569,7 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (m_Master.InSafeZone() && InSafeZone())
+                if ((m_Master != null) && m_Master.InSafeZone() && InSafeZone())
                 {
                     if ((Math.Abs(m_nCurrX - m_Master.m_nCurrX) <= 3) && (Math.Abs(m_nCurrY - m_Master.m_nCurrY) <= 3))
                     {
@@ -3604,8 +3615,6 @@ namespace M2Server
         public override void Run()
         {
             int nSelectMagic;
-            int I;
-            int II;
             int nWhere;
             int nPercent;
             int nValue;
@@ -3662,7 +3671,7 @@ namespace M2Server
                                 if ((m_nGotoProtectXYCount > 20) && !m_boProtectOK)
                                 {
                                     // 20次还没有走到守护坐标，则飞回坐标上
-                                    if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 13) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 13) && (!InMag113LockRect(m_nCurrX, m_nCurrY)))
+                                    if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 13) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 13))
                                     {
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
                                         m_btDirection = (byte)(new System.Random(8)).Next();
@@ -3735,7 +3744,7 @@ namespace M2Server
                                     // 低血时回城或回守护点 20110512
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
-                                    if (m_boProtectStatus && (!InMag113LockRect(m_nCurrX, m_nCurrY))) // 守护状态
+                                    if (m_boProtectStatus) // 守护状态
                                     {
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
                                         m_btDirection = (byte)(new System.Random(8)).Next();
@@ -3755,7 +3764,7 @@ namespace M2Server
                                 {
                                     m_dwAutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
-                                    for (nWhere = Grobal2.TUserItem.GetLowerBound(0); nWhere <= Grobal2.TUserItem.GetUpperBound(0); nWhere++)
+                                    for (nWhere = m_UseItemNames.GetLowerBound(0); nWhere <= m_UseItemNames.GetUpperBound(0); nWhere++)
                                     {
                                         if ((m_UseItemNames[nWhere] != "") && (m_UseItems[nWhere].wIndex <= 0))
                                         {
@@ -3770,31 +3779,29 @@ namespace M2Server
                                                     {
                                                         if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
                                                         {
-                                                            M2Share.UserEngine.GetUnknowItemValue(UserItem);
+                                                            //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                                         }
                                                     }
                                                 }
-
                                                 m_UseItems[nWhere] = UserItem;
                                                 Dispose(UserItem);
                                             }
                                         }
                                     }
-
                                     if (m_BagItemNames.Count > 0)
                                     {
-                                        for (I = 0; I < m_BagItemNames.Count; I++)
+                                        for (var i = 0; i < m_BagItemNames.Count; i++)
                                         {
-                                            for (II = 0; II < m_ItemList.Count; II++)
+                                            for (var j = 0; j < m_ItemList.Count; j++)
                                             {
-                                                UserItem = m_ItemList[II];
+                                                UserItem = m_ItemList[j];
                                                 if (UserItem != null)
                                                 {
                                                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                                     if (StdItem != null)
                                                     {
                                                         boFind = false;
-                                                        if ((StdItem.Name).ToLower().CompareTo((m_BagItemNames[I]).ToLower()) == 0)
+                                                        if ((StdItem.Name).ToLower().CompareTo((m_BagItemNames[i]).ToLower()) == 0)
                                                         {
                                                             boFind = true;
                                                             break;
@@ -3806,7 +3813,7 @@ namespace M2Server
                                             if (!boFind)
                                             {
                                                 UserItem = new TUserItem();
-                                                if (M2Share.UserEngine.CopyToUserItemFromName(m_BagItemNames[I], ref UserItem))
+                                                if (M2Share.UserEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
                                                 {
                                                     if (!AddItemToBag(UserItem))
                                                     {
@@ -3822,32 +3829,30 @@ namespace M2Server
                                         }
                                     }
 
-                                    for (nWhere = Grobal2.TUserItem.GetLowerBound(0); nWhere <= Grobal2.TUserItem.GetUpperBound(0); nWhere++)
+                                    for (nWhere = m_UseItems.GetLowerBound(0); nWhere <= m_UseItems.GetUpperBound(0); nWhere++)
                                     {
-                                        if (m_UseItems[nWhere].wIndex > 0)
+                                        if (m_UseItems[nWhere] != null && m_UseItems[nWhere].wIndex > 0)
                                         {
                                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nWhere].wIndex);
                                             if (StdItem != null)
                                             {
                                                 if ((m_UseItems[nWhere].DuraMax > m_UseItems[nWhere].Dura) && (StdItem.StdMode != 43))
                                                 {
-                                                    if (PlugOfCheckCanItem(3, StdItem.Name, false, 0, 0))
+                                                    /*if (PlugOfCheckCanItem(3, StdItem.Name, false, 0, 0))
                                                     {
                                                         continue;
-                                                    }
+                                                    }*/
                                                     m_UseItems[nWhere].Dura = m_UseItems[nWhere].DuraMax;
                                                 }
                                             }
                                         }
                                     }
-
                                     if (boRecalcAbilitys)
                                     {
                                         RecalcAbilitys();
                                     }
                                 }
                             }
-
                             if (M2Share.g_Config.boRenewHealth)
                             {
                                 // 自动增加HP MP
@@ -3867,7 +3872,6 @@ namespace M2Server
                                             m_WAbil.HP += (ushort)nValue;
                                         }
                                     }
-
                                     nValue = m_WAbil.MaxMP / 10;
                                     nPercent = m_WAbil.MP * 100 / m_WAbil.MaxMP;
                                     if (nPercent < M2Share.g_Config.nRenewPercent)
@@ -3896,7 +3900,6 @@ namespace M2Server
                                 m_boProtectOK = false;
                             }
                         }
-
                         if ((m_TargetCret == null))
                         {
                             if ((m_Master != null))
@@ -3911,8 +3914,9 @@ namespace M2Server
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 // M2Share.MainOutMessage(format("{%s} TAIPlayObject.Run Code:%d", new byte[] { nCode }));
             }
             base.Run();
@@ -3971,7 +3975,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (m_btAttatckMode == HAM_PKATTACK)
+                    if (m_btAttatckMode == M2Share.HAM_PKATTACK)
                     {
                         // 红名模式，除红名目标外，受人攻击时才还击
                         if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
@@ -4097,7 +4101,7 @@ namespace M2Server
             const string sExceptionMsg1 = "{%s} TAIPlayObject::SearchViewRange Code:%d";
             try
             {
-                if (m_boNotOnlineAddExp || m_boGhost)
+                if (m_boGhost)
                 {
                     return;
                 }
@@ -4190,7 +4194,7 @@ namespace M2Server
                                             case grobal2.OS_ITEMOBJECT:
                                                 if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime) || ((((TMapItem)(OSObject.CellObj)).UserItem.AddValue[0] == 1) && (HUtil32.GetHoursCount(((TMapItem)(OSObject.CellObj)).UserItem.MaxDate, DateTime.Now) <= 0)))
+                                                    if (((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime))
                                                     {
                                                         if (((TMapItem)(OSObject.CellObj)) != null)
                                                         {
@@ -4464,7 +4468,6 @@ namespace M2Server
         private bool WarrAttackTarget1(short wHitMode)
         {
             bool result = false;
-            // 物理攻击
             byte bt06 = 0;
             bool boHit;
             try
@@ -4474,9 +4477,8 @@ namespace M2Server
                     boHit = GetAttackDir(m_TargetCret, ref bt06);
                     if (!boHit && ((wHitMode == 4) || (wHitMode == 15)))
                     {
-                        boHit = GetAttackDir(m_TargetCret, 2, ref bt06);
+                        boHit = GetAttackDir(m_TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
                     }
-                    // 防止隔位刺杀无效果 20110521
                     if (boHit)
                     {
                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -4498,7 +4500,7 @@ namespace M2Server
                     }
                 }
             }
-            catch (Exception E)
+            catch
             {
                 M2Share.MainOutMessage("TAIPlayObject.WarrAttackTarget");
             }
@@ -4667,9 +4669,7 @@ namespace M2Server
                 m_dwHitTick = HUtil32.GetTickCount();
                 if (M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22))
                 {
-                    // 法师22级前是否物理攻击
-                    m_boIsUseMagic = false;
-                    // 是否能躲避
+                    m_boIsUseMagic = false;// 是否能躲避
                     nCode = 7;
                     result = WarrAttackTarget1(m_wHitMode);
                 }
@@ -5792,7 +5792,7 @@ namespace M2Server
 
         // 检测指定方向和范围内坐标的怪物数量
         // 跑到目标坐标
-        private bool RunToTargetXY(int nTargetX, int nTargetY)
+        private bool RunToTargetXY(short nTargetX, short nTargetY)
         {
             int n10;
             int n14;
@@ -5803,7 +5803,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))// || (m_wStatusArrValue[23] != 0)
             {
                 return result;
             }
@@ -5838,6 +5838,120 @@ namespace M2Server
             return result;
         }
 
+        public bool RunTo1(byte btDir, bool boFlag,short nDestX, short nDestY)
+        {
+            const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
+            var result = false;
+            try
+            {
+                int nOldX = m_nCurrX;
+                int nOldY = m_nCurrY;
+                m_btDirection = btDir;
+                switch (btDir)
+                {
+                    case grobal2.DR_UP:
+                        if ((m_nCurrY > 1) &&
+                          (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                        (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY - 2, true) > 0))
+                        {
+                            m_nCurrY -= 2;
+                        }
+                        break;
+                    case grobal2.DR_UPRIGHT:
+                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
+                          (m_nCurrY > 1) &&
+                          (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+                        (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY - 2, true) > 0))
+                        {
+                            m_nCurrX += 2;
+                            m_nCurrY -= 2;
+                        }
+                        break;
+                    case grobal2.DR_RIGHT:
+                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0))
+                        {
+                            m_nCurrX += 2;
+                        }
+                        break;
+                    case grobal2.DR_DOWNRIGHT:
+                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
+  (m_nCurrY < m_PEnvir.wHeight - 2) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0))
+                        {
+                            m_nCurrX += 2;
+                            m_nCurrY += 2;
+                        }
+                        break;
+                    case grobal2.DR_DOWN:
+                        if ((m_nCurrY < m_PEnvir.wHeight - 2) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0))
+                        {
+                            m_nCurrY += 2;
+
+                        }
+                        break;
+                    case grobal2.DR_DOWNLEFT:
+                        if ((m_nCurrX > 1) &&
+  (m_nCurrY < m_PEnvir.wHeight - 2) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0))
+                        {
+                            m_nCurrX -= 2;
+                            m_nCurrY += 2;
+                        }
+
+                        break;
+                    case grobal2.DR_LEFT:
+                        if ((m_nCurrX > 1) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY, true) > 0))
+                        {
+                            m_nCurrX -= 2;
+                        }
+                        break;
+                    case grobal2.DR_UPLEFT:
+                        if ((m_nCurrX > 1) && (m_nCurrY > 1) &&
+ (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
+    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY - 2, true) > 0))
+                        {
+                            m_nCurrX -= 2;
+                            m_nCurrY -= 2;
+                        }
+                        break;
+                }
+                if (m_nCurrX != nOldX || m_nCurrY != nOldY)
+                {
+                    if (Walk(grobal2.RM_RUN))
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        m_nCurrX = (short)nOldX;
+                        m_nCurrY = (short)nOldY;
+                        m_PEnvir.MoveToMovingObject(nOldX, nOldY, this, m_nCurrX, m_nCurrX, true);
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+            }
+            return result;
+        }
+
         // 跑到目标坐标
         // 走向目标
         private bool WalkToTargetXY(int nTargetX, int nTargetY)
@@ -5855,7 +5969,7 @@ namespace M2Server
             }
             // 隐身,一动就显身
             // 7
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0) || (m_wStatusArrValue[23] != 0))
+            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result;
             }
@@ -5953,7 +6067,7 @@ namespace M2Server
         }
 
         // 取刺杀位
-        private bool GotoTargetXY(int nTargetX, int nTargetY, int nCode)
+        private bool GotoTargetXY(short nTargetX, short nTargetY, int nCode)
         {
             bool result = false;
             switch (nCode)
@@ -6032,18 +6146,10 @@ namespace M2Server
             switch (m_btJob)
             {
                 case 0:
-                    if (AllowUseMagic(26) && ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 9000))
+                    if (AllowUseMagic(26) && ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 9000))// 烈火
                     {
-                        // 烈火  20080112 修正
                         m_boFireHitSkill = true;
                         result = 26;
-                        return result;
-                    }
-                    if (AllowUseMagic(42) && (HUtil32.GetTickCount() - m_dwLatest43Tick > M2Share.g_Config.nKill42UseTime * 1000))
-                    {
-                        // 龙影剑法 
-                        m_bo43kill = true;
-                        result = 42;
                         return result;
                     }
                     if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level))
@@ -6408,16 +6514,6 @@ namespace M2Server
                         if (AllowUseMagic(31))
                         {
                             result = 31;
-                            return result;
-                        }
-                    }
-                    // 分身不存在,则使用分身术 20080206
-                    // 召唤分身间隔
-                    if ((m_SlaveList.Count == 0) && AllowUseMagic(46) && ((HUtil32.GetTickCount() - m_dwLatest46Tick) > M2Share.g_Config.nCopyHumanTick * 1000) && ((M2Share.g_Config.btHeroSkillMode46) || (m_LastHiter != null) || (m_ExpHitter != null)))
-                    {
-                        if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * (M2Share.g_Config.nHeroSkill46MaxHP_3 / 100))))
-                        {
-                            result = 46;
                             return result;
                         }
                     }
@@ -7147,13 +7243,6 @@ namespace M2Server
                             result = 48;
                             return result;
                         }
-                    }
-                    // 无极真气 20091204 移动位置
-                    if (AllowUseMagic(50) && (HUtil32.GetTickCount() - m_SkillUseTick[50] > M2Share.g_Config.nAbilityUpTick * 1000) && (m_wStatusArrValue[2] == 0) && ((M2Share.g_Config.btHeroSkillMode50) || (!M2Share.g_Config.btHeroSkillMode50 && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))))
-                    {
-                        m_SkillUseTick[50] = HUtil32.GetTickCount();
-                        result = 50;
-                        return result;
                     }
                     // 绿毒
                     if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))

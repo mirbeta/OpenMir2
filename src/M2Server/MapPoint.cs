@@ -164,6 +164,9 @@ namespace M2Server
             {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
+                if (FBaseObject.m_btDirection > 8) {
+                    FBaseObject.m_btDirection = 4;
+                }
                 m_btDirection = FBaseObject.m_btDirection;
                 for (var i = 2; i >= 1; i--)
                 {

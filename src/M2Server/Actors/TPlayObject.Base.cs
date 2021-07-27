@@ -2401,6 +2401,10 @@ namespace M2Server
                 TItem StdItem;
                 for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
                 {
+                    if (m_UseItems[i] == null)
+                    {
+                        continue;
+                    }
                     StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                     if (StdItem != null)
                     {

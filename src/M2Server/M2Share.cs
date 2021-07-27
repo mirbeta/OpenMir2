@@ -27,6 +27,7 @@ namespace M2Server
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;
         public static ExpsConfig ExpConf = null;
+        public static TFindPath g_FindPath;//寻路类
         /// <summary>
         /// 游戏命令系统
         /// </summary>
@@ -455,6 +456,9 @@ namespace M2Server
         public const int HAM_MASTER = 3;
         public const int HAM_GROUP = 4;
         public const int HAM_GUILD = 5;
+        /// <summary>
+        /// 红名攻击模式
+        /// </summary>
         public const int HAM_PKATTACK = 6;
         public const int DEFHIT = 5;
         public const int DEFSPEED = 15;

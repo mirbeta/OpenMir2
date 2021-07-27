@@ -754,6 +754,38 @@ namespace M2Server
         /// 安全区不受控制
         /// </summary>
         public bool boSafeAreaLimited;
+        /// <summary>
+        /// 机器人运行间隔时间
+        /// </summary>
+        public long nAIRunIntervalTime;
+        /// <summary>
+        /// 机器人走路间隔时间
+        /// </summary>
+        public long nAIWalkIntervalTime;
+        /// <summary>
+        /// 机器人血量低于多少开始回血（百分比）
+        /// </summary>
+        public int nRenewPercent;
+
+        public string sAIHomeMap;
+        public short nAIHomeX;
+        public short nAIHomeY;
+     public bool boHPAutoMoveMap;//低血回城
+     public bool boAutoRepairItem;
+     public bool boRenewHealth;
+        public long nAIWarrorAttackTime;
+        public long nAIWizardAttackTime;
+        public long nAITaoistAttackTime;
+        /// <summary>
+        /// 不管目标血值,全部可以使用施毒术否则目标血值达700时使用
+        /// </summary>
+        public bool btHeroSkillMode;
+        
+        public long dwHeroWarrorAttackTime;//战士英雄的攻击速度
+        public long dwHeroWizardAttackTime;//法师英雄的攻击速度
+        public long dwHeroTaoistAttackTime;//道士英雄的攻击速度
+       public string sAIConfigListFileName;
+       public string sHeroAIConfigListFileName;
 
         public TM2Config()
         {
@@ -1430,6 +1462,26 @@ namespace M2Server
             nProcessMonsterInterval = 2;
             nDBSocketSendLen = 0;
             PermissionSystem = false;
+            nRenewPercent = 60;
+            nAIRunIntervalTime = 550;
+            nAIWalkIntervalTime = 400;
+            nAIWarrorAttackTime = 780;
+            nAIWizardAttackTime = 850;
+            nAITaoistAttackTime = 850;
+            sAIHomeMap= "3";
+            nAIHomeX= 330;
+            nAIHomeY= 330;
+            boHPAutoMoveMap = false;//低血回城
+            boAutoRepairItem = true;
+            boAutoPickUpItem = false;
+            boRenewHealth = true;
+            btHeroSkillMode = true;
+            dwHeroWarrorAttackTime = 660;
+            dwHeroWizardAttackTime = 880;
+            dwHeroTaoistAttackTime = 880;
+            sAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
+            sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
+            boHeroAttackTarget = true;
         }
     }
 }

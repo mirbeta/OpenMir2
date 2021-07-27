@@ -760,11 +760,7 @@ namespace M2Server
                         var nY = (short)HUtil32.Str_ToInt(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < wWidth && nY < wHeight)
                         {
-                            m_PointList.Add(new PointInfo()
-                            {
-                                nX = nX,
-                                nY = nX
-                            });
+                            m_PointList.Add(new PointInfo(nX,nY));
                         }
                     }
                 }
@@ -1164,6 +1160,20 @@ namespace M2Server
             }
             result = BaseObjectList.Count;
             return result;
+        }
+
+        public bool GetMapBaseObjects(short nX,short nY,int nRage, IList<TBaseObject> BaseObjectList, byte btType = grobal2.OS_MOVINGOBJECT)
+        {
+            if (BaseObjectList.Count == 0)
+            {
+                return false;
+            }
+            var nStartX = nX - nRage;
+            var nEndX = nX + nRage;
+            var nStartY = nY - nRage;
+            var nEndY = nY + nRage;
+            Console.WriteLine("todo GetMapBaseObjects");
+            return true;
         }
 
         /// <summary>

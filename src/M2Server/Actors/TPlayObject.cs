@@ -1474,7 +1474,7 @@ namespace M2Server
             return result;
         }
 
-        private bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
+        public bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             var result = false;

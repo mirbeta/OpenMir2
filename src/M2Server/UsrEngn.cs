@@ -69,6 +69,8 @@ namespace M2Server
         private ArrayList OldMagicList;
         public IList<TNormNpc> QuestNPCList;
         public IList<TItem> StdItemList;
+        public long m_dwAILogonTick;//处理假人间隔
+        public IList<TAILogon> m_UserLogonList;//假人列表
         private readonly Thread _userEngineThread;
 
         public UserEngine()
@@ -110,6 +112,7 @@ namespace M2Server
             m_ListOfSocket = new ArrayList();
             OldMagicList = new ArrayList();
             m_OtherUserNameList = new List<ServerGruopInfo>();
+            m_UserLogonList = new List<TAILogon>();
             _userEngineThread = new Thread(PrcocessData);
         }
 
@@ -570,6 +573,22 @@ namespace M2Server
                     M2Share.ErrorMessage(e.Message);
                 }
             }
+
+            //人工智障开始登陆
+            if (m_UserLogonList.Count > 0)
+            {
+                if (HUtil32.GetTickCount() - m_dwAILogonTick > 3000)
+                {
+                    m_dwAILogonTick = HUtil32.GetTickCount();
+                    if (m_UserLogonList.Count > 0)
+                    {
+                        var AI = m_UserLogonList[0];
+                        RegenAIObject(AI);
+                        m_UserLogonList.RemoveAt(0);
+                    }
+                }
+            }
+
             try
             {
                 for (var i = 0; i < m_PlayObjectFreeList.Count; i++)
@@ -2132,7 +2151,6 @@ namespace M2Server
                 nX = M2Share.g_Config.nHomeX;
                 nX = M2Share.g_Config.nHomeY;
             }
-
             return result;
         }
 
@@ -2639,6 +2657,158 @@ namespace M2Server
                 }
                 Thread.Sleep(20);
             }
+        }
+
+        public string GetHomeInfo(short nX,short nY)
+        {
+            string result;
+            int I;
+            if (M2Share.StartPointList.Count > 0)
+            {
+                if (M2Share.StartPointList.Count > M2Share.g_Config.nStartPointSize)
+                    I = M2Share.RandomNumber.Random(M2Share.g_Config.nStartPointSize);
+                else
+                    I = 0;
+                result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
+            }
+            else
+            {
+                result = M2Share.g_Config.sHomeMap;
+                nX = M2Share.g_Config.nHomeX;
+                nX = M2Share.g_Config.nHomeY;
+            }
+            return result;
+        }
+
+        public void AddAILogon(TAILogon AI)
+        {
+            m_UserLogonList.Add(AI);
+        }
+
+        public bool RegenAIObject(TAILogon AI)
+        {
+            var PlayObject = AddAIPlayObject(AI);
+            if (PlayObject != null)
+            {
+                PlayObject.m_sHomeMap = GetHomeInfo(PlayObject.m_nHomeX, PlayObject.m_nHomeY);
+                PlayObject.m_sUserID = "假人";
+                PlayObject.Start(TPathType.t_Dynamic);
+                m_PlayObjectList.Add(PlayObject);
+                return true;
+            }
+            return false;
+        }
+
+        private TAIPlayObject AddAIPlayObject(TAILogon AI)
+        {
+            TAIPlayObject result;
+            TEnvirnoment Map;
+            TAIPlayObject Cert;
+            int n1C;
+            int n20;
+            int n24;
+            object p28;
+            result = null;
+            Cert = null;
+            Map = M2Share.g_MapManager.FindMap(AI.sMapName);
+            if (Map == null)
+            {
+                return result;
+            }
+            Cert = new TAIPlayObject();
+            if (Cert != null)
+            {
+                Cert.m_PEnvir = Map;
+                Cert.m_sMapName = AI.sMapName;
+                Cert.m_nCurrX = AI.nX;
+                Cert.m_nCurrY = AI.nY;
+                Cert.m_btDirection = (byte)(new System.Random(8)).Next();
+                Cert.m_sCharName = AI.sCharName;
+                Cert.m_WAbil = Cert.m_Abil;
+                if ((new System.Random(100)).Next() < Cert.m_btCoolEye)
+                {
+                    Cert.m_boCoolEye = true;
+                }
+                //Cert.m_sIPaddr = GetIPAddr;// Mac问题
+                //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
+                Cert.m_sConfigFileName = AI.sConfigFileName;
+                Cert.m_sHeroConfigFileName = AI.sHeroConfigFileName;
+                Cert.m_sFilePath = AI.sFilePath;
+                Cert.m_sConfigListFileName = AI.sConfigListFileName;
+                Cert.m_sHeroConfigListFileName = AI.sHeroConfigListFileName;
+                // 英雄配置列表目录
+                Cert.Initialize();
+                Cert.RecalcLevelAbilitys();
+                Cert.RecalcAbilitys();
+                Cert.m_WAbil.HP = Cert.m_WAbil.MaxHP;
+                Cert.m_WAbil.MP = Cert.m_WAbil.MaxMP;
+                if (Cert.m_boAddtoMapSuccess)
+                {
+                    p28 = null;
+                    if (Cert.m_PEnvir.wWidth < 50)
+                    {
+                        n20 = 2;
+                    }
+                    else
+                    {
+                        n20 = 3;
+                    }
+                    if ((Cert.m_PEnvir.wHeight < 250))
+                    {
+                        if ((Cert.m_PEnvir.wHeight < 30))
+                        {
+                            n24 = 2;
+                        }
+                        else
+                        {
+                            n24 = 20;
+                        }
+                    }
+                    else
+                    {
+                        n24 = 50;
+                    }
+                    n1C = 0;
+                    while (true)
+                    {
+                        if (!Cert.m_PEnvir.CanWalk(Cert.m_nCurrX, Cert.m_nCurrY, false))
+                        {
+                            if ((Cert.m_PEnvir.wWidth - n24 - 1) > Cert.m_nCurrX)
+                            {
+                                Cert.m_nCurrX += (short)n20;
+                            }
+                            else
+                            {
+                                Cert.m_nCurrX = (byte)((new System.Random(Cert.m_PEnvir.wWidth / 2)).Next() + n24);
+                                if (Cert.m_PEnvir.wHeight - n24 - 1 > Cert.m_nCurrY)
+                                {
+                                    Cert.m_nCurrY += (short)n20;
+                                }
+                                else
+                                {
+                                    Cert.m_nCurrY = (byte)((new System.Random(Cert.m_PEnvir.wHeight / 2)).Next() + n24);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, grobal2.OS_MOVINGOBJECT, Cert);
+                            break;
+                        }
+                        n1C++;
+                        if (n1C >= 31)
+                        {
+                            break;
+                        }
+                    }
+                    if (p28 == null)
+                    {
+                        Cert = null;
+                    }
+                }
+            }
+            result = Cert;
+            return result;
         }
 
         public void SendQuestMsg(string sQuestName)

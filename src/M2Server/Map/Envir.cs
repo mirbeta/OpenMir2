@@ -8,6 +8,7 @@ namespace M2Server
         public byte btType;
         public object CellObj;
         public double dwAddTime;
+        public bool boObjectDisPose;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -40,5 +41,27 @@ namespace M2Server
     {
         public short nX;
         public short nY;
+
+        public PointInfo(short x,short y)
+        {
+            nX = x;
+            nY = y;
+        }
+    }
+
+    public class TRect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+
+        public TRect(int left,int top,int right,int bottom)
+        {
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+        }
     }
 }
