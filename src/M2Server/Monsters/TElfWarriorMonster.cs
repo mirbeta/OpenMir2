@@ -73,7 +73,7 @@
                     {
                         TBaseObject elfMon = null;
                         var ElfName = m_sCharName;
-                        if (ElfName[^1] == '1')
+                        if (ElfName[ElfName.Length -1] == '1')
                         {
                             ElfName = ElfName.Substring(0, ElfName.Length - 1);
                             elfMon = MakeClone(ElfName, this);
