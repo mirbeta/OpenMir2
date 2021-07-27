@@ -16,14 +16,14 @@ namespace M2Server
             
             serverApp = new ServerApp();
             var cts = new CancellationTokenSource();
-            var bgtask = Task.Factory.StartNew(() => { serverApp.StartServer(cts.Token); }, cts.Token);
+            serverApp.StartServer(cts.Token);
 
             Console.CancelKeyPress += (s, e) =>
             {
                 Console.WriteLine($"{DateTime.Now} 后台测试服务，准备进行资源清理！");
 
                 cts.Cancel();
-                bgtask.Wait(cts.Token);
+               // bgtask.Wait(cts.Token);
 
                 Console.WriteLine($"{DateTime.Now} 恭喜，Test服务程序已正常退出！");
             };

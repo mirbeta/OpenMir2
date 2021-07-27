@@ -497,20 +497,24 @@ namespace M2Server
             }
         }
 
-        // 取随机配置
+        /// <summary>
+        /// 取随机配置
+        /// </summary>
+        /// <param name="sName"></param>
+        /// <param name="nType"></param>
+        /// <returns></returns>
         public string GetRandomConfigFileName(string sName, byte nType)
         {
-            string result;
+            string result = string.Empty;
             int nIndex;
             string sFileName;
             string Str;
             StringList LoadList;
-            result = "";
             if (!Directory.Exists(m_sFilePath + "RobotIni"))
             {
                 Directory.CreateDirectory(m_sFilePath + "RobotIni");
             }
-            sFileName = m_sFilePath + "RobotIni\\" + sName + ".txt";
+            sFileName = Path.Combine(m_sFilePath, "RobotIni", sName + ".txt");
             if (File.Exists(sFileName))
             {
                 result = sFileName;
@@ -522,34 +526,27 @@ namespace M2Server
                     if ((m_sConfigListFileName != "") && File.Exists(m_sConfigListFileName))
                     {
                         LoadList = new StringList();
-                        try
+                        LoadList.LoadFromFile(m_sConfigListFileName);
+                        nIndex = (new System.Random(LoadList.Count)).Next();
+                        if ((nIndex >= 0) && (nIndex < LoadList.Count))
                         {
-                            LoadList.LoadFromFile(m_sConfigListFileName);
-                            nIndex = (new System.Random(LoadList.Count)).Next();
-                            if ((nIndex >= 0) && (nIndex < LoadList.Count))
+                            Str = LoadList[nIndex];
+                            if (Str != "")
                             {
-                                Str = LoadList[nIndex];
-                                if (Str != "")
+                                if (Str[1] == '\\')
                                 {
-                                    if (Str[1] == '\\')
-                                    {
-                                        Str = Str.Substring(2 - 1, Str.Length - 1);
-                                    }
-                                    if (Str[2] == '\\')
-                                    {
-                                        Str = Str.Substring(3 - 1, Str.Length - 2);
-                                    }
-                                    if (Str[3] == '\\')
-                                    {
-                                        Str = Str.Substring(4 - 1, Str.Length - 3);
-                                    }
+                                    Str = Str.Substring(1, Str.Length - 1);
                                 }
-                                result = m_sFilePath + Str;
+                                if (Str[2] == '\\')
+                                {
+                                    Str = Str.Substring(2, Str.Length - 2);
+                                }
+                                if (Str[3] == '\\')
+                                {
+                                    Str = Str.Substring(3, Str.Length - 3);
+                                }
                             }
-                        }
-                        finally
-                        {
-                            //LoadList.Free;
+                            result = m_sFilePath + Str;
                         }
                     }
                     break;
@@ -557,40 +554,27 @@ namespace M2Server
                     if ((m_sHeroConfigListFileName != "") && File.Exists(m_sHeroConfigListFileName))
                     {
                         LoadList = new StringList();
-                        try
+                        LoadList.LoadFromFile(m_sHeroConfigListFileName);
+                        nIndex = (new System.Random(LoadList.Count)).Next();
+                        if ((nIndex >= 0) && (nIndex < LoadList.Count))
                         {
-                            try
+                            Str = LoadList[nIndex];
+                            if (Str != "")
                             {
-                                LoadList.LoadFromFile(m_sHeroConfigListFileName);
-                            }
-                            catch
-                            {
-                            }
-                            nIndex = (new System.Random(LoadList.Count)).Next();
-                            if ((nIndex >= 0) && (nIndex < LoadList.Count))
-                            {
-                                Str = LoadList[nIndex];
-                                if (Str != "")
+                                if (Str[1] == '\\')
                                 {
-                                    if (Str[1] == '\\')
-                                    {
-                                        Str = Str.Substring(2 - 1, Str.Length - 1);
-                                    }
-                                    if (Str[2] == '\\')
-                                    {
-                                        Str = Str.Substring(3 - 1, Str.Length - 2);
-                                    }
-                                    if (Str[3] == '\\')
-                                    {
-                                        Str = Str.Substring(4 - 1, Str.Length - 3);
-                                    }
+                                    Str = Str.Substring(1, Str.Length - 1);
                                 }
-                                result = m_sFilePath + Str;
+                                if (Str[2] == '\\')
+                                {
+                                    Str = Str.Substring(2, Str.Length - 2);
+                                }
+                                if (Str[3] == '\\')
+                                {
+                                    Str = Str.Substring(3, Str.Length - 3);
+                                }
                             }
-                        }
-                        finally
-                        {
-                            //LoadList.Free;
+                            result = m_sFilePath + Str;
                         }
                     }
                     break;
@@ -601,7 +585,6 @@ namespace M2Server
         public override void Initialize()
         {
             byte nAttatckMode;
-            string sFileName;
             string sLineText;
             string sMagicName;
             string sItemName;
@@ -612,7 +595,7 @@ namespace M2Server
             TMagic Magic;
             TUserMagic UserMagic;
             TItem StdItem;
-            sFileName = GetRandomConfigFileName(m_sCharName, 0);
+            var sFileName = GetRandomConfigFileName(m_sCharName, 0);
             if ((sFileName == "") || (!File.Exists(sFileName)))
             {
                 if ((m_sConfigFileName != "") && File.Exists(m_sConfigFileName))
@@ -737,10 +720,6 @@ namespace M2Server
                     m_UseItemNames[grobal2.U_ARMRINGR] = ItemIni.ReadString("UseItems", "UseItems6", ""); // '右手镯';
                     m_UseItemNames[grobal2.U_RINGL] = ItemIni.ReadString("UseItems", "UseItems7", ""); // '左戒指';
                     m_UseItemNames[grobal2.U_RINGR] = ItemIni.ReadString("UseItems", "UseItems8", ""); // '右戒指';
-                    m_UseItemNames[grobal2.U_BUJUK] = ItemIni.ReadString("UseItems", "UseItems9", ""); // '物品';
-                    m_UseItemNames[grobal2.U_BELT] = ItemIni.ReadString("UseItems", "UseItems10", ""); // '腰带';
-                    m_UseItemNames[grobal2.U_BOOTS] = ItemIni.ReadString("UseItems", "UseItems11", ""); // '鞋子';
-                    m_UseItemNames[grobal2.U_CHARM] = ItemIni.ReadString("UseItems", "UseItems12", ""); // '宝石';
                     for (var i = grobal2.U_DRESS; i <= grobal2.U_CHARM; i++)
                     {
                         if (m_UseItemNames[i] != "")
@@ -911,7 +890,6 @@ namespace M2Server
                     {
                         m_SelMapItem = null;
                     }
-
                     if (m_SelMapItem != null)
                     {
                         if (SearchPickUpItem_PickUpItem(m_nCurrX, m_nCurrY))
@@ -1014,7 +992,6 @@ namespace M2Server
 
         private bool WalkToTargetXY2(int nTargetX, int nTargetY)
         {
-            int I;
             int n10;
             int n14;
             int n20;
@@ -1023,20 +1000,16 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;
+                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            // 隐身,一动就显身
-            // 7
             if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
-                return result;
+                return result;// 麻痹不能跑动 
             }
-            // 麻痹不能跑动 20080915
             if ((nTargetX != m_nCurrX) || (nTargetY != m_nCurrY))
             {
-                if (HUtil32.GetTickCount() - dwTick3F4 > m_dwTurnIntervalTime)
+                if (HUtil32.GetTickCount() - dwTick3F4 > m_dwTurnIntervalTime)// 转向间隔
                 {
-                    // 转向间隔
                     n10 = nTargetX;
                     n14 = nTargetY;
                     byte nDir = grobal2.DR_DOWN;
@@ -1089,7 +1062,7 @@ namespace M2Server
                     if (!result)
                     {
                         n20 = (new System.Random(3)).Next();
-                        for (I = grobal2.DR_UP; I <= grobal2.DR_UPLEFT; I++)
+                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -1126,7 +1099,6 @@ namespace M2Server
 
         private void GotoProtect()
         {
-            int I;
             byte nDir;
             int n10;
             int n14;
@@ -1186,7 +1158,7 @@ namespace M2Server
                     {
                         WalkTo(nDir, false);
                         n20 = (new System.Random(3)).Next();
-                        for (I = grobal2.DR_UP; I <= grobal2.DR_UPLEFT; I++)
+                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -1216,7 +1188,7 @@ namespace M2Server
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     n20 = (new System.Random(3)).Next();
-                    for (I = grobal2.DR_UP; I <= grobal2.DR_UPLEFT; I++)
+                    for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
                     {
                         if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                         {
@@ -5766,20 +5738,16 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;
+                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            // 隐身,一动就显身
-            // 7
             if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))// || (m_wStatusArrValue[23] != 0)
             {
-                return result;
+                return result; // 麻痹不能跑动 
             }
-            // 麻痹不能跑动 20090526
-            if (!m_boCanRun)
+            if (!m_boCanRun) // 禁止跑,则退出
             {
                 return result;
             }
-            // 禁止跑,则退出
             if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime) // 跑步使用单独的变量计数
             {
                 n10 = nTargetX;
@@ -5863,7 +5831,6 @@ namespace M2Server
     (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0))
                         {
                             m_nCurrY += 2;
-
                         }
                         break;
                     case grobal2.DR_DOWNLEFT:
@@ -5919,11 +5886,14 @@ namespace M2Server
             return result;
         }
 
-        // 跑到目标坐标
-        // 走向目标
+        /// <summary>
+        /// 走向目标
+        /// </summary>
+        /// <param name="nTargetX"></param>
+        /// <param name="nTargetY"></param>
+        /// <returns></returns>
         private bool WalkToTargetXY(int nTargetX, int nTargetY)
         {
-            int I;
             int n10;
             int n14;
             int n20;
@@ -5932,20 +5902,16 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;
+                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            // 隐身,一动就显身
-            // 7
             if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
-                return result;
+                return result;// 麻痹不能跑动
             }
-            // 麻痹不能跑动 20080915
             if ((Math.Abs(nTargetX - m_nCurrX) > 1) || (Math.Abs(nTargetY - m_nCurrY) > 1))
             {
                 if (HUtil32.GetTickCount() - dwTick3F4 > m_dwWalkIntervalTime)
                 {
-                    // 增加走间隔
                     n10 = nTargetX;
                     n14 = nTargetY;
                     byte nDir = grobal2.DR_DOWN;
@@ -5998,7 +5964,7 @@ namespace M2Server
                     if (!result)
                     {
                         n20 = (new System.Random(3)).Next();
-                        for (I = grobal2.DR_UP; I <= grobal2.DR_UPLEFT; I++)
+                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -6079,35 +6045,26 @@ namespace M2Server
 
         private void SearchMagic()
         {
-            TUserMagic UserMagic;
-            m_nSelectMagic = 0;
-            try
+            m_nSelectMagic = SelectMagic();
+            if (m_nSelectMagic > 0)
             {
-                m_nSelectMagic = SelectMagic1();
-                if (m_nSelectMagic > 0)
+                TUserMagic UserMagic = FindMagic(m_nSelectMagic);
+                if (UserMagic != null)
                 {
-                    UserMagic = FindMagic(m_nSelectMagic);
-                    if (UserMagic != null)
-                    {
-                        m_boIsUseAttackMagic = IsUseAttackMagic();
-                    }
-                    else
-                    {
-                        m_boIsUseAttackMagic = false;
-                    }
+                    m_boIsUseAttackMagic = IsUseAttackMagic();
                 }
                 else
                 {
                     m_boIsUseAttackMagic = false;
                 }
             }
-            catch
+            else
             {
-                M2Share.MainOutMessage("TAIPlayObject.SearchMagic");
+                m_boIsUseAttackMagic = false;
             }
         }
 
-        private short SelectMagic1()
+        private short SelectMagic()
         {
             short result = 0;
             switch (m_btJob)
@@ -6122,7 +6079,6 @@ namespace M2Server
                     if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level))
                     {
                         // PK时,使用野蛮冲撞  20080826 血低于800时使用
-                        // 10 * 1000
                         if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000))
                         {
                             // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
@@ -6134,7 +6090,6 @@ namespace M2Server
                     else
                     {
                         // 打怪使用 
-                        // 10 * 1000
                         if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.85)))
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
@@ -6157,16 +6112,13 @@ namespace M2Server
                                     result = 41;
                                     return result;
                                 }
-                                // 10 * 1000
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))
+                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术 
                                 {
-                                    // 攻杀剑术 20071213
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;// 开启攻杀
                                     result = 7;
                                     return result;
                                 }
-                                // 10 * 1000
                                 if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
                                 {
                                     m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
@@ -6185,9 +6137,8 @@ namespace M2Server
                                         return result;
                                     }
                                 }
-                                if (AllowUseMagic(40))
+                                if (AllowUseMagic(40))// 英雄抱月刀法
                                 {
-                                    // 英雄抱月刀法
                                     if (!m_boCrsHitkill)
                                     {
                                         SkillCrsOnOff(true);
@@ -6195,9 +6146,8 @@ namespace M2Server
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(12))
+                                if (AllowUseMagic(12))// 英雄刺杀剑术
                                 {
-                                    // 英雄刺杀剑术
                                     if (!m_boUseThrusting)
                                     {
                                         ThrustingOnOff(true);
@@ -6207,35 +6157,27 @@ namespace M2Server
                                 }
                                 break;
                             case 1:
-                                // 10 * 1000
                                 if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
-                                    m_SkillUseTick[41] = HUtil32.GetTickCount();
-                                    // 狮子吼
+                                    m_SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                // 10 * 1000
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))
+                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术 
                                 {
-                                    // 攻杀剑术 20071213
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;
-                                    // 20080401 开启攻杀
                                     result = 7;
                                     return result;
                                 }
-                                // 10 * 1000
                                 if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
                                 {
-                                    m_SkillUseTick[39] = HUtil32.GetTickCount();
-                                    // 英雄彻地钉
+                                    m_SkillUseTick[39] = HUtil32.GetTickCount(); // 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(40))
+                                if (AllowUseMagic(40))// 英雄抱月刀法
                                 {
-                                    // 英雄抱月刀法
                                     if (!m_boCrsHitkill)
                                     {
                                         SkillCrsOnOff(true);
@@ -6243,9 +6185,8 @@ namespace M2Server
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))
+                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    // 英雄半月弯刀
                                     if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
@@ -6256,9 +6197,8 @@ namespace M2Server
                                         return result;
                                     }
                                 }
-                                if (AllowUseMagic(12))
+                                if (AllowUseMagic(12))// 英雄刺杀剑术
                                 {
-                                    // 英雄刺杀剑术
                                     if (!m_boUseThrusting)
                                     {
                                         ThrustingOnOff(true);
@@ -6280,17 +6220,15 @@ namespace M2Server
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))
+                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术
                                 {
-                                    // 攻杀剑术
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;//  开启攻杀
                                     result = 7;
                                     return result;
                                 }
-                                if (AllowUseMagic(40))
+                                if (AllowUseMagic(40))// 英雄抱月刀法
                                 {
-                                    // 英雄抱月刀法
                                     if (!m_boCrsHitkill)
                                     {
                                         SkillCrsOnOff(true);
@@ -6298,9 +6236,8 @@ namespace M2Server
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))
+                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    // 英雄半月弯刀
                                     if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
@@ -6328,7 +6265,7 @@ namespace M2Server
                     {
                         if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1))
                         {
-                            // PK 20080915 身边超过2个目标才使用
+                            // PK  身边超过2个目标才使用
                             if (AllowUseMagic(40) && (HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000))
                             {
                                 // 英雄抱月刀法
@@ -6468,10 +6405,8 @@ namespace M2Server
                         return result;
                     }
                     break;
-                case 1:
-                    // 法师
-                    // 使用 魔法盾
-                    if ((m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence)
+                case 1: // 法师
+                    if ((m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -6487,7 +6422,6 @@ namespace M2Server
                     if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level))
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
-                        // 3 * 1000
                         if (AllowUseMagic(8) && ((HUtil32.GetTickCount() - m_SkillUseTick[8]) > 3000))
                         {
                             m_SkillUseTick[8] = HUtil32.GetTickCount();
@@ -7335,21 +7269,17 @@ namespace M2Server
                     {
                         switch ((new System.Random(3)).Next())
                         {
-                            case 0:
-                                // 使用符的魔法
+                            case 0: // 使用符的魔法
                                 if (AllowUseMagic(94))
                                 {
-                                    result = 94;
-                                    // 英雄四级噬血术
+                                    result = 94; // 英雄四级噬血术
                                     return result;
                                 }
                                 if (AllowUseMagic(59))
                                 {
-                                    result = 59;
-                                    // 英雄噬血术
+                                    result = 59; // 英雄噬血术
                                     return result;
                                 }
-                                // 1000
                                 if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
                                 {
                                     result = 13;// 英雄灵魂火符
@@ -7480,7 +7410,6 @@ namespace M2Server
             return result;
         }
 
-        // 战士判断使用
         // 半月弯刀判断目标函数
         private int CheckTargetXYCount2(short nMode)
         {
@@ -7529,7 +7458,14 @@ namespace M2Server
             return result;
         }
 
-        // 气功波，抗拒火环使用
+        /// <summary>
+        /// 气功波，抗拒火环使用
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="nRange"></param>
+        /// <param name="nCount"></param>
+        /// <returns></returns>
         private int CheckTargetXYCount3(int nX, int nY, int nRange, int nCount)
         {
             TBaseObject BaseObject;

@@ -27,7 +27,10 @@ namespace M2Server
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;
         public static ExpsConfig ExpConf = null;
-        public static TFindPath g_FindPath;//寻路类
+        /// <summary>
+        /// 寻路
+        /// </summary>
+        public static TFindPath g_FindPath;
         /// <summary>
         /// 游戏命令系统
         /// </summary>

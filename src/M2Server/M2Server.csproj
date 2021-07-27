@@ -10,7 +10,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>bin\Debug\net5.0\net5.0\net5.0</OutputPath>
+      <OutputPath>bin\Debug\</OutputPath>
       <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
       <PlatformTarget>AnyCPU</PlatformTarget>
       <Prefer32bit>false</Prefer32bit>

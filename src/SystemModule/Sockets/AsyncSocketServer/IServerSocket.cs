@@ -194,7 +194,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// <param name="Port"></param>
         public void Start(int Port)
         {
-            Start(new IPEndPoint(IPAddress.Parse("0.0.0.0"), Port));
+            Start(new IPEndPoint(IPAddress.Any, Port));
         }
 
         /// <summary>

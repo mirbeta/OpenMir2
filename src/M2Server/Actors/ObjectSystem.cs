@@ -9,11 +9,11 @@ namespace M2Server
         /// <summary>
         /// 精灵对象列表
         /// </summary>
-        private readonly ConcurrentDictionary<int, TBaseObject> Actors = new ConcurrentDictionary<int, TBaseObject>();
+        private readonly ConcurrentDictionary<int, TBaseObject> _actors = new ConcurrentDictionary<int, TBaseObject>();
         /// <summary>
         /// 其他对象
         /// </summary>
-        private readonly ConcurrentDictionary<int, object> Ohter = new ConcurrentDictionary<int, object>();
+        private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
         private readonly Timer _actorTime = null;
 
         public ObjectSystem()
@@ -24,18 +24,18 @@ namespace M2Server
 
         public void Add(int actorId, TBaseObject actor)
         {
-            Actors.TryAdd(actorId, actor);
+            _actors.TryAdd(actorId, actor);
         }
 
         public void AddOhter(int objectId, object obj)
         {
-            Ohter.TryAdd(objectId, obj);
+            _ohter.TryAdd(objectId, obj);
         }
 
         public object GetOhter(int objectId)
         {
             object obj = null;
-            if (Ohter.TryGetValue(objectId, out obj))
+            if (_ohter.TryGetValue(objectId, out obj))
             {
                 return obj;
             }
@@ -45,7 +45,7 @@ namespace M2Server
         public TBaseObject Get(int actorId)
         {
             TBaseObject actor = null;
-            if (Actors.TryGetValue(actorId, out actor))
+            if (_actors.TryGetValue(actorId, out actor))
             {
                 return actor;
             }
@@ -55,17 +55,17 @@ namespace M2Server
         public void Revome(int actorId)
         {
             TBaseObject ghostactor = null;
-            Actors.TryRemove(actorId, out ghostactor);
+            _actors.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-                M2Share.MainOutMessage(string.Format("清理死亡对象 名称:[{0}] 地图:{1} 坐标:{2}:{3}", ghostactor.m_sCharName, ghostactor.m_sMapName, ghostactor.m_nCurrX, ghostactor.m_nCurrY));
+                M2Share.MainOutMessage($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
             }
         }
 
         public void RevomeOhter(int actorId)
         {
             object actor = null;
-            Ohter.TryRemove(actorId, out actor);
+            _ohter.TryRemove(actorId, out actor);
             if (actor != null)
             {
                 M2Share.MainOutMessage($"清理死亡对象 [{actorId}]");
@@ -74,11 +74,11 @@ namespace M2Server
 
         private void DoWork(object obj)
         {
-            var actorIds = Actors.Keys;
+            var actorIds = _actors.Keys;
             TBaseObject actor = null;
             foreach (var actorId in actorIds)
             {
-                if (Actors.TryGetValue(actorId, out actor))
+                if (_actors.TryGetValue(actorId, out actor))
                 {
                     if (actor.m_boGhost && actor.m_dwGhostTick > 0)
                     {
