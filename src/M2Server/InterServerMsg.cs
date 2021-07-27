@@ -62,7 +62,7 @@ namespace M2Server
                 while (BufStr.IndexOf(')') > 0)
                 {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
-                    if (Str != "")
+                    if (!string.IsNullOrEmpty(Str))
                     {
                         DecodeSocStr_SendOtherServer(ps, Str);
                         Body = HUtil32.GetValidStr3(Str, ref Head, "/");

@@ -129,10 +129,8 @@ namespace M2Server
             m_btAttatckMode = 0;
             m_boAI = true;
             m_boLoginNoticeOK = true;
-            m_boAIStart = false;
-            // 开始挂机
-            m_ManagedEnvir = null;
-            // 挂机地图
+            m_boAIStart = false; // 开始挂机
+            m_ManagedEnvir = null; // 挂机地图
             m_Path = null;
             m_nPostion = -1;
             m_sFilePath = "";
@@ -141,12 +139,9 @@ namespace M2Server
             m_sConfigListFileName = "";
             m_sHeroConfigListFileName = "";
             m_UseItemNames = new string[13];
-            //FillChar(m_UseItemNames, sizeof(Grobal2.string), '\0');
-            //FillChar(m_RunPos, sizeof(TRunPos), '\0');
             m_BagItemNames = new List<string>();
             m_PointManager = new TPointManager(this);
             m_SkillUseTick = new long[59];
-            //FillChar(m_SkillUseTick, sizeof(m_SkillUseTick), 0);
             // 魔法使用间隔
             m_nSelItemType = 1;
             m_nIncSelfHealthCount = 0;
@@ -280,7 +275,7 @@ namespace M2Server
             bool boDisableSayMsg;
             string sParam1 = string.Empty;
             const string sExceptionMsg = "TAIPlayObject.ProcessSayMsg Msg:%s";
-            if (sData == "")
+            if (string.IsNullOrEmpty(sData))
             {
                 return;
             }
@@ -306,7 +301,7 @@ namespace M2Server
                     string SC;
                     if (sData[0] == '/')
                     {
-                        SC = sData.Substring(2 - 1, sData.Length - 1);
+                        SC = sData.Substring(1, sData.Length - 1);
                         SC = HUtil32.GetValidStr3(SC, ref sParam1, new char[] { ' ' });
                         if (!m_boFilterSendMsg)
                         {
@@ -531,7 +526,7 @@ namespace M2Server
                         if ((nIndex >= 0) && (nIndex < LoadList.Count))
                         {
                             Str = LoadList[nIndex];
-                            if (Str != "")
+                            if (!string.IsNullOrEmpty(Str))
                             {
                                 if (Str[1] == '\\')
                                 {
@@ -603,7 +598,7 @@ namespace M2Server
                     sFileName = m_sConfigFileName;
                 }
             }
-            if ((sFileName != "") && File.Exists(sFileName))
+            if ((!string.IsNullOrEmpty(sFileName)) && File.Exists(sFileName))
             {
                 ItemIni = new IniFile(sFileName);
                 ItemIni.Load();
@@ -2188,17 +2183,14 @@ namespace M2Server
             {
                 return result;
             }
-            // 7
             if (m_boDeath || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
             {
-                return result;
+                return result; // 防麻
             }
-            // 防麻
             if ((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && !M2Share.g_Config.ClientConf.boParalyCanSpell)
             {
-                return result;
+                return result;// 防麻
             }
-            // 防麻
             if (m_PEnvir != null)
             {
                 /*if (m_PEnvir.m_boNOSKILL)
@@ -2270,7 +2262,6 @@ namespace M2Server
                     // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     if (UserMagic.wMagIdx >= 60 && UserMagic.wMagIdx <= 65)
                     {
-                        // 如果是合击锁定目标
                         if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY))
                         {
                             BaseObject = TargeTBaseObject;
@@ -2351,7 +2342,7 @@ namespace M2Server
             }
             catch (Exception E)
             {
-                M2Share.MainOutMessage(format("{%s} TAIPlayObject.AutoSpell MagID:%d X:%d Y:%d", new int[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
+                M2Share.MainOutMessage(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
             }
             return result;
         }
@@ -2483,13 +2474,12 @@ namespace M2Server
                         {
                             nRange = 2;
                         }
-                        // 连击技能
-                        if ((new ArrayList(new int[] { 60 }).Contains(wMagicID)))
+                        if (wMagicID == 60)
                         {
                             nRange = 6;
                         }
                         result = 2;
-                        if ((new ArrayList(new int[] { 61, 62 }).Contains(wMagicID)) || CanAttack(m_TargetCret, nRange, ref btDir))
+                        if(wMagicID==61 || wMagicID==62 || CanAttack(m_TargetCret, nRange, ref btDir))
                         {
                             result = 0;
                         }
@@ -2527,7 +2517,6 @@ namespace M2Server
                     // 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
                     if (IsUseAttackMagic())
                     {
-                        // GetNearTargetCount
                         if (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0)
                         {
                             result = 1;
@@ -2540,7 +2529,6 @@ namespace M2Server
                         {
                             result = 3;
                         }
-                        // GetNearTargetCount
                         else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0))
                         {
                             result = 5;
@@ -2562,7 +2550,6 @@ namespace M2Server
                     // 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
                     if (IsUseAttackMagic())
                     {
-                        // GetNearTargetCount
                         if (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0)
                         {
                             result = 1;
@@ -2575,7 +2562,6 @@ namespace M2Server
                         {
                             result = 3;
                         }
-                        // GetNearTargetCount
                         else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0))
                         {
                             result = 5;
@@ -4609,8 +4595,7 @@ namespace M2Server
                         if ((UserMagic.btKey == 0))// 技能打开状态才能使用
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
-                            result = UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret);// 使用魔法
-                            return result;
+                            return UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret);
                         }
                     }
                 }
@@ -4632,7 +4617,7 @@ namespace M2Server
         /// 道士攻击
         /// </summary>
         /// <returns></returns>
-        private bool TaoistAttackTarget1()
+        private bool TaoistAttackTarget()
         {
             bool result = false;
             TUserMagic UserMagic;
@@ -4884,7 +4869,6 @@ namespace M2Server
                         return result;
                     }
                 }
-                byte nCode = 2;
                 m_dwTargetFocusTick = HUtil32.GetTickCount();
                 if (m_boDeath || m_boGhost)
                 {
@@ -4905,18 +4889,14 @@ namespace M2Server
                         if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWarrorAttackTime))
                         {
                             m_boIsUseMagic = false;// 是否能躲避
-                            nCode = 8;
                             result = WarrorAttackTarget1();
                         }
                         break;
                     case 1:
-                        nCode = 4;
                         if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWizardAttackTime))// 连击也不受间隔控制
                         {
-                            nCode = 41;
                             m_dwHitTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false;// 是否能躲避
-                            nCode = 7;
                             result = WizardAttackTarget1();
                             m_nSelectMagic = 0;
                             return result;
@@ -4926,11 +4906,9 @@ namespace M2Server
                     case 2:
                         if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAITaoistAttackTime))
                         {
-                            // 连击也不受间隔控制 20100408
                             m_dwHitTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false; // 是否能躲避
-                            nCode = 6;
-                            result = TaoistAttackTarget1();
+                            result = TaoistAttackTarget();
                             m_nSelectMagic = 0;
                             return result;
                         }
