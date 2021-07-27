@@ -2624,13 +2624,11 @@ namespace M2Server
         public TMapWalkXY ActThink_FindGoodPathA(TMapWalkXY[] WalkStep, int nRange, int nType)
         {
             TMapWalkXY result = null;
-            int n10;
+            int n10= Int32.MaxValue;
             int nMastrRange;
             int nMonCount;
-            TMapWalkXY MapWalkXY;
-            TMapWalkXY MapWalkXYA;
-            n10 = Int32.MaxValue;
-            MapWalkXY = null;
+            TMapWalkXY MapWalkXY= null;
+            TMapWalkXY MapWalkXYA= null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
             {
@@ -2725,13 +2723,11 @@ namespace M2Server
         public TMapWalkXY ActThink_FindMinRange(TMapWalkXY[] WalkStep)
         {
             TMapWalkXY result = null;
-            int n10;
+            int n10 = Int32.MaxValue;
             int n1C;
             int nMonCount;
-            TMapWalkXY MapWalkXY;
-            TMapWalkXY MapWalkXYA;
-            n10 = Int32.MaxValue;
-            MapWalkXY = null;
+            TMapWalkXY MapWalkXY= null;
+            TMapWalkXY MapWalkXYA= null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
             {
@@ -2967,7 +2963,6 @@ namespace M2Server
 
         public bool ActThink_WalkToRightPos(int wMagicID)
         {
-            int I;
             bool boFlag;
             int nRange;
             TMapWalkXY[] WalkStep = null;
@@ -2991,10 +2986,9 @@ namespace M2Server
                     {
                         nRange = 6;
                     }
-
-                    for (I = nRange; I >= 1; I--)
+                    for (var i = nRange; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, I, boFlag))
+                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             if ((MapWalkXY.nWalkStep > 0))
@@ -3009,10 +3003,9 @@ namespace M2Server
                             }
                         }
                     }
-
-                    for (I = 2; I >= 1; I--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfSelf(WalkStep, I, boFlag))
+                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                         {
                             if (m_Master != null)
                             {
@@ -3022,7 +3015,6 @@ namespace M2Server
                             {
                                 MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             }
-
                             if ((MapWalkXY.nWalkStep > 0))
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
@@ -3047,9 +3039,9 @@ namespace M2Server
                         nRange = 1;
                     }
                     boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (nRange == 1);
-                    for (I = 2; I >= 1; I--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfSelf(WalkStep, I, boFlag))
+                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathA(WalkStep, nRange, 0);
                             if ((MapWalkXY.nWalkStep > 0))
@@ -3063,9 +3055,9 @@ namespace M2Server
                             }
                         }
                     }
-                    for (I = 2; I >= 1; I--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (ActThink__FindPosOfSelf(WalkStep, I, boFlag))
+                        if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindMinRange(WalkStep);
                             if ((MapWalkXY.nWalkStep > 0))
@@ -3079,9 +3071,9 @@ namespace M2Server
                             }
                         }
                     }
-                    for (I = nRange; I >= 1; I--)
+                    for (var i = nRange; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, I, boFlag))
+                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             if ((MapWalkXY.nWalkStep > 0))
@@ -3116,9 +3108,9 @@ namespace M2Server
             boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
             byte btDir;
             TMapWalkXY MapWalkXY;
-            for (var I = nRange; I >= 1; I--)
+            for (var i = nRange; i >= 1; i--)
             {
-                if (ActThink_FindPosOfSelf(WalkStep, I, boFlag))
+                if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                     if ((MapWalkXY.nWalkStep > 0))
@@ -3128,10 +3120,10 @@ namespace M2Server
                         {
                             if ((m_btRaceServer != 108))
                             {
-                                for (var II = nRange; II >= 1; II--)
+                                for (var j = nRange; j >= 1; j--)
                                 {
                                     // 再跑1次
-                                    if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, II, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
+                                    if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
                                     {
                                         GotoNextOne(nX, nY, m_btRaceServer != 108);
                                         break;
@@ -3145,9 +3137,9 @@ namespace M2Server
                     }
                 }
             }
-            for (var I = nRange; I >= 1; I--)
+            for (var i = nRange; i >= 1; i--)
             {
-                if (ActThink__FindPosOfSelf(WalkStep, I, boFlag))
+                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                     if ((MapWalkXY.nWalkStep > 0))
@@ -3155,10 +3147,10 @@ namespace M2Server
                         btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, MapWalkXY.nX, MapWalkXY.nY);
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                         {
-                            for (var II = nRange; II >= 1; II--)
+                            for (var j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
-                                if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, II, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
+                                if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
                                 {
                                     MapWalkXY.nX = nX;
                                     MapWalkXY.nY = nY;
@@ -3546,7 +3538,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(format("TAIPlayObject::ActThink Name:%s Code:%d Error:%d", new object[] { m_sCharName, nCode, nError }));
+                M2Share.MainOutMessage(format("TAIPlayObject::ActThink Name:%s Code:%d ", new object[] { m_sCharName, nCode }));
             }
             return result;
         }
@@ -3699,9 +3691,8 @@ namespace M2Server
                             }
                             else
                             {
-                                if (IsNeedGotoXY())
+                                if (IsNeedGotoXY())// 是否走向目标
                                 {
-                                    // 是否走向目标
                                     m_dwActionTick = HUtil32.GetTickCount();
                                     m_nTargetX = m_TargetCret.m_nCurrX;
                                     m_nTargetY = m_TargetCret.m_nCurrY;
@@ -3713,7 +3704,7 @@ namespace M2Server
                                     {
                                         if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_btJob == 2) && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)))
                                         {
-                                            // 20081218 道法22前是否物理攻击
+                                            // 道法22前是否物理攻击
                                             if (m_Master != null)
                                             {
                                                 if ((Math.Abs(m_Master.m_nCurrX - m_nCurrX) > 6) || (Math.Abs(m_Master.m_nCurrY - m_nCurrY) > 6))
@@ -4105,7 +4096,6 @@ namespace M2Server
                 {
                     return;
                 }
-
                 if (m_VisibleItems.Count > 0)
                 {
                     for (I = 0; I < m_VisibleItems.Count; I++)
@@ -4513,7 +4503,6 @@ namespace M2Server
         /// <returns></returns>
         private bool WarrorAttackTarget1()
         {
-            // 战士攻击
             TUserMagic UserMagic;
             bool result = false;
             try
@@ -4528,7 +4517,7 @@ namespace M2Server
                             // 注释,战不躲避
                             if (AllowUseMagic(12))
                             {
-                                // 血少时或目标疯狂模式时，做隔位刺杀 20080827
+                                // 血少时或目标疯狂模式时，做隔位刺杀 
                                 if (!(((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))))
                                 {
                                     GetGotoXY(m_TargetCret, 2);
@@ -4568,30 +4557,25 @@ namespace M2Server
                                     case 12:
                                         m_wHitMode = 4;
                                         break;
-                                    case 25:
-                                        // 四级刺杀
+                                    case 25: // 四级刺杀
                                         m_wHitMode = 5;
                                         break;
-                                    case 26:
-                                        // 圆月弯刀(四级半月弯刀)
+                                    case 26: // 圆月弯刀(四级半月弯刀)
                                         if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
                                         {
                                             m_wHitMode = 7;
                                         }
                                         break;
-                                    case 40:
-                                        // 使用烈火
+                                    case 40: // 使用烈火
                                         m_wHitMode = 8;
                                         break;
-                                    case 43:
-                                        // 抱月刀法
+                                    case 43: // 抱月刀法
                                         if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
                                         {
                                             m_wHitMode = 9;
                                         }
                                         break;
-                                    case 42:
-                                        // 开天斩  20100910 修改
+                                    case 42: // 开天斩
                                         if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
                                         {
                                             m_wHitMode = 12;
@@ -4622,27 +4606,21 @@ namespace M2Server
         /// <returns></returns>
         private bool WizardAttackTarget1()
         {
-            // 法师攻击
             TUserMagic UserMagic;
             int n14;
-            byte nCode;
             bool result = false;
-            nCode = 0;
             try
             {
                 m_wHitMode = 0;
-                SearchMagic();
-                // 查询魔法
+                SearchMagic(); // 查询魔法
                 if (m_nSelectMagic == 0)
                 {
-                    m_boIsUseMagic = true;
+                    m_boIsUseMagic = true;// 是否能躲避
                 }
-                // 是否能躲避
                 if (m_nSelectMagic > 0)
                 {
                     if ((m_TargetCret != null))
                     {
-                        nCode = 4;
                         if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
                         {
                             // 魔法不能打到怪
@@ -4653,7 +4631,6 @@ namespace M2Server
                             }
                         }
                     }
-                    nCode = 5;
                     UserMagic = FindMagic(m_nSelectMagic);
                     if ((UserMagic != null))
                     {
@@ -4665,18 +4642,16 @@ namespace M2Server
                         }
                     }
                 }
-                nCode = 6;
                 m_dwHitTick = HUtil32.GetTickCount();
                 if (M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22))
                 {
                     m_boIsUseMagic = false;// 是否能躲避
-                    nCode = 7;
                     result = WarrAttackTarget1(m_wHitMode);
                 }
             }
             catch
             {
-                M2Share.MainOutMessage(format("{%s} TAIPlayObject.WizardAttackTarget Code:%d", new byte[] { nCode }));
+                M2Share.MainOutMessage("TAIPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -4721,9 +4696,8 @@ namespace M2Server
                 }
                 if (m_nSelectMagic == 0)
                 {
-                    m_boIsUseMagic = true;
+                    m_boIsUseMagic = true;// 是否能躲避 
                 }
-                // 是否能躲避 
                 if (m_nSelectMagic > 0)
                 {
                     if ((m_TargetCret != null))
@@ -4731,9 +4705,8 @@ namespace M2Server
                         if ((!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
                         {
                             // 魔法不能打到怪
-                            if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                            if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
                             {
-                                // 22级砍血量的怪
                                 if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                 {
                                     GetGotoXY(m_TargetCret, 3); // 道只走向目标3格范围
@@ -4753,9 +4726,8 @@ namespace M2Server
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if ((UserMagic != null) && (UserMagic.btKey == 0))
+                                if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
                                 {
-                                    // 技能打开状态才能使用
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, null);
                                     m_dwHitTick = HUtil32.GetTickCount();
                                     if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
@@ -4782,14 +4754,12 @@ namespace M2Server
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if ((UserMagic != null) && (UserMagic.btKey == 0))
+                                if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
                                 {
-                                    // 技能打开状态才能使用
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
                                     {
-                                        // 22级砍血量的怪 
                                         if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                         {
                                             m_boIsUseMagic = true;// 能躲避
@@ -4827,17 +4797,14 @@ namespace M2Server
                             }
                             break;
                         case grobal2.SKILL_CLOAK:
-                        case grobal2.SKILL_BIGCLOAK:
-                            // 集体隐身术  隐身术
+                        case grobal2.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if ((UserMagic != null) && (UserMagic.btKey == 0))
+                            if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
                             {
-                                // 技能打开状态才能使用
                                 UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                 m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
                                 {
-                                    // 22级砍血量的怪 
                                     if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = false;
