@@ -48,6 +48,7 @@ namespace M2Server
             while (M2Share.boStartReady)
             {
                 M2Share.RunSocket.Run();
+
                 IdSrvClient.Instance.Run();
                 M2Share.UserEngine.Run();
                 ProcessGameRun();

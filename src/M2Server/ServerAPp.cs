@@ -194,7 +194,7 @@ namespace M2Server
                 M2Share.MainOutMessage(M2Share.g_sUpDateTime);
                 M2Share.boStartReady = true;
                 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 2000; i++)
                 {
                     M2Share.UserEngine.AddAILogon(new TAILogon()
                     {

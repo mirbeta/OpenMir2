@@ -299,20 +299,14 @@ namespace M2Server
                                 Gate.nSendMsgCount = Gate.BufferList.Count;
                                 if (Gate.nSendMsgCount > 0)
                                 {
-                                    //Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}] 需要发送的消息数[{Gate.nSendMsgCount}]");
-                                    var sw = new Stopwatch();
-                                    sw.Start();
-                                    var result = SendGateBuffers(i, Gate, Gate.BufferList);
-                                    sw.Stop();
-                                    Console.WriteLine($"发送消息耗时:{sw.Elapsed}");
-                                    if (result)
-                                    {
-                                        Gate.nSendRemainCount = Gate.BufferList.Count;
-                                    }
-                                    else
-                                    {
-                                        Gate.nSendRemainCount = Gate.BufferList.Count;
-                                    }
+                                    // if (SendGateBuffers(i, Gate, Gate.BufferList))
+                                    // {
+                                    //     Gate.nSendRemainCount = Gate.BufferList.Count;
+                                    // }
+                                    // else
+                                    // {
+                                    //     Gate.nSendRemainCount = Gate.BufferList.Count;
+                                    // }
                                 }
                             }
                             finally
@@ -573,7 +567,7 @@ namespace M2Server
                                         var SendBy = new byte[M2Share.g_Config.nSendBlock];
                                         Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
                                         Gate.Socket.SendTimeout = 10000;//1000毫秒
-                                        Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
+                                        //Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
                                         Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-合并发送");
                                     }
                                     Gate.nSendCount++;
@@ -591,7 +585,7 @@ namespace M2Server
                                     var SendBy = new byte[nSendBuffLen];
                                     Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
                                     Gate.Socket.SendTimeout = 10000;//1000毫秒
-                                    Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
+                                    //Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
                                     Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-普通发送");
                                 }
                                 Gate.nSendCount++;
@@ -671,7 +665,7 @@ namespace M2Server
                                         }
                                         try
                                         {
-                                            if (GateUser.PlayObject != null && ((TPlayObject)GateUser.PlayObject).m_boGhost && !((TPlayObject)GateUser.PlayObject).m_boReconnection)
+                                            if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
                                             {
                                                 IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                             }
@@ -1123,13 +1117,13 @@ namespace M2Server
                                 {
                                     if (GateUserInfo.FrontEngine != null)
                                     {
-                                        ((TFrontEngine)GateUserInfo.FrontEngine).DeleteHuman(i, GateUserInfo.nSocket);
+                                        GateUserInfo.FrontEngine.DeleteHuman(i, GateUserInfo.nSocket);
                                     }
                                     if (GateUserInfo.PlayObject != null)
                                     {
-                                        ((TPlayObject)GateUserInfo.PlayObject).SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                                        ((TPlayObject)GateUserInfo.PlayObject).m_boEmergencyClose = true;
-                                        ((TPlayObject)GateUserInfo.PlayObject).m_boSoftClose = true;
+                                        GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        GateUserInfo.PlayObject.m_boEmergencyClose = true;
+                                        GateUserInfo.PlayObject.m_boSoftClose = true;
                                     }
                                     GateUserInfo = null;
                                     Gate.UserList[j] = null;

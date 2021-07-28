@@ -12,16 +12,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/EDcode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/GateServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GateServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,8 +97,8 @@
       <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
     </changedPaths>
   </component>
@@ -233,7 +226,8 @@
       <workItem from="1627440581312" duration="5034000" />
       <workItem from="1627447866073" duration="18346000" />
       <workItem from="1627477019152" duration="3186000" />
-      <workItem from="1627480828735" duration="6407000" />
+      <workItem from="1627480828735" duration="7095000" />
+      <workItem from="1627489061744" duration="317000" />
     </task>
     <servers />
   </component>
