@@ -293,25 +293,25 @@ namespace M2Server
                         Gate = RunSock.g_GateArr[i];
                         if (Gate.BufferList != null)
                         {
-                            //HUtil32.EnterCriticalSection(m_RunSocketSection);
+                            HUtil32.EnterCriticalSection(m_RunSocketSection);
                             try
                             {
                                 Gate.nSendMsgCount = Gate.BufferList.Count;
                                 if (Gate.nSendMsgCount > 0)
                                 {
-                                    // if (SendGateBuffers(i, Gate, Gate.BufferList))
-                                    // {
-                                    //     Gate.nSendRemainCount = Gate.BufferList.Count;
-                                    // }
-                                    // else
-                                    // {
-                                    //     Gate.nSendRemainCount = Gate.BufferList.Count;
-                                    // }
+                                     if (SendGateBuffers(i, Gate, Gate.BufferList))
+                                     {
+                                         Gate.nSendRemainCount = Gate.BufferList.Count;
+                                     }
+                                     else
+                                     {
+                                         Gate.nSendRemainCount = Gate.BufferList.Count;
+                                     }
                                 }
                             }
                             finally
                             {
-                                //HUtil32.LeaveCriticalSection(m_RunSocketSection);
+                                HUtil32.LeaveCriticalSection(m_RunSocketSection);
                             }
                         }
                     }
@@ -478,37 +478,34 @@ namespace M2Server
             // 将小数据合并为一个指定大小的数据
             try
             {
-                var msgIdx = 0;
-                BufferA = MsgList[msgIdx];//得到第一个消息
-                while (true)
-                {
-                    if (msgIdx + 1 >= MsgList.Count)
-                    {
-                        break;
-                    }
-                    BufferB = MsgList[msgIdx + 1];//取得下一个消息
-                    if (BufferA ==null || BufferB == null)
-                    {
-                        continue;
-                    }
-                    var nBuffALen = BufferA.Length;
-                    var nBuffBLen = BufferB.Length;
-                    if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
-                    {
-                        MsgList.RemoveAt(msgIdx + 1);
-                        using var memoryStream = new MemoryStream();
-                        var backingStream = new BinaryWriter(memoryStream);
-                        backingStream.Write(BufferA);
-                        backingStream.Write(BufferB);
-                        var stream = backingStream.BaseStream as MemoryStream;
-                        var BufferC = stream.ToArray();
-                        BufferA = BufferC;
-                        MsgList[msgIdx] = BufferA;
-                        continue;
-                    }
-                    msgIdx++;
-                    BufferA = BufferB;
-                }
+                // var msgIdx = 0;
+                // BufferA = MsgList[msgIdx];//得到第一个消息
+                // while (true)
+                // {
+                //     if (msgIdx + 1 >= MsgList.Count)
+                //     {
+                //         break;
+                //     }
+                //     BufferB = MsgList[msgIdx + 1];//取得下一个消息
+                //     if (BufferA ==null || BufferB == null)
+                //     {
+                //         continue;
+                //     }
+                //     var nBuffALen = BufferA.Length;
+                //     var nBuffBLen = BufferB.Length;
+                //     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
+                //     {
+                //         MsgList.RemoveAt(msgIdx + 1);
+                //         var BufferC = new byte[nBuffALen + nBuffBLen];
+                //         Buffer.BlockCopy(BufferA, 0, BufferC, 0, BufferA.Length);
+                //         Buffer.BlockCopy(BufferB, 0, BufferC, BufferA.Length, BufferB.Length);
+                //         BufferA = BufferC;
+                //         MsgList[msgIdx] = BufferA;
+                //         continue;
+                //     }
+                //     msgIdx++;
+                //     BufferA = BufferB;
+                // }
             }
             catch (Exception e)
             {
@@ -546,56 +543,56 @@ namespace M2Server
                     }
                     MsgList.RemoveAt(0);
                     BufferB = new byte[BufferA.Length + 4];
-                    if (BufferA.Length > BufferB.Length)
-                    {
-                        Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferB.Length);
-                    }
-                    else
-                    {
-                        Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
-                    }
-                    if (nSendBuffLen > 0)
-                    {
-                        while (true)
-                        {
-                            if (M2Share.g_Config.nSendBlock <= nSendBuffLen)
-                            {
-                                if (Gate.Socket != null)
-                                {
-                                    if (Gate.Socket.Connected)
-                                    {
-                                        var SendBy = new byte[M2Share.g_Config.nSendBlock];
-                                        Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
-                                        Gate.Socket.SendTimeout = 10000;//1000毫秒
-                                        //Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
-                                        Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-合并发送");
-                                    }
-                                    Gate.nSendCount++;
-                                    Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
-                                }
-                                Gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
-                                Array.Resize(ref BufferB, BufferB.Length + M2Share.g_Config.nSendBlock);
-                                nSendBuffLen -= M2Share.g_Config.nSendBlock;
-                                continue;
-                            }
-                            if (Gate.Socket != null)
-                            {
-                                if (Gate.Socket.Connected)
-                                {
-                                    var SendBy = new byte[nSendBuffLen];
-                                    Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
-                                    Gate.Socket.SendTimeout = 10000;//1000毫秒
-                                    //Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
-                                    Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-普通发送");
-                                }
-                                Gate.nSendCount++;
-                                Gate.nSendBytesCount += nSendBuffLen;
-                                Gate.nSendBlockCount += nSendBuffLen;
-                            }
-                            nSendBuffLen = 0;
-                            break;
-                        }
-                    }
+                     if (BufferA.Length > BufferB.Length)
+                     {
+                         Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferB.Length);
+                     }
+                     else
+                     {
+                         Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
+                     }
+                     if (nSendBuffLen > 0)
+                     {
+                         while (true)
+                         {
+                             if (M2Share.g_Config.nSendBlock <= nSendBuffLen)
+                             {
+                                 if (Gate.Socket != null)
+                                 {
+                                     if (Gate.Socket.Connected)
+                                     {
+                                         var SendBy = new byte[M2Share.g_Config.nSendBlock];
+                                         Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
+                                         Gate.Socket.SendTimeout = 10000;//1000毫秒
+                                         Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
+                                         //Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-合并发送");
+                                     }
+                                     Gate.nSendCount++;
+                                     Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
+                                 }
+                                 Gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
+                                 Array.Resize(ref BufferB, BufferB.Length + M2Share.g_Config.nSendBlock);
+                                 nSendBuffLen -= M2Share.g_Config.nSendBlock;
+                                 continue;
+                             }
+                             if (Gate.Socket != null)
+                             {
+                                 if (Gate.Socket.Connected)
+                                 {
+                                     var SendBy = new byte[nSendBuffLen];
+                                     Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
+                                     Gate.Socket.SendTimeout = 10000;//1000毫秒
+                                     Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
+                                     //Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-普通发送");
+                                 }
+                                 Gate.nSendCount++;
+                                 Gate.nSendBytesCount += nSendBuffLen;
+                                 Gate.nSendBlockCount += nSendBuffLen;
+                             }
+                             nSendBuffLen = 0;
+                             break;
+                         }
+                     }
                     BufferA = null;
                     if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
                     {
