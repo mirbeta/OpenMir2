@@ -193,20 +193,6 @@ namespace M2Server
                 M2Share.MainOutMessage(M2Share.g_sVersion);
                 M2Share.MainOutMessage(M2Share.g_sUpDateTime);
                 M2Share.boStartReady = true;
-
-                //制造一个人工智障
-                M2Share.UserEngine.AddAILogon(new TAILogon()
-                {
-                    sCharName = "我是人工智障",
-                    sMapName = "0",
-                    sConfigFileName = "",
-                    sHeroConfigFileName = "",
-                    sFilePath = M2Share.g_Config.sEnvirDir,
-                    sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
-                    sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
-                    nX = 285,
-                    nY = 608
-                });
             }
             catch (Exception ex)
             {

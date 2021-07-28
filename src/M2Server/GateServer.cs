@@ -22,7 +22,7 @@ namespace M2Server
 
         public void Start()
         {
-            _gateSocket.Start(M2Share.g_Config.nGatePort);
+            _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
         }
 
         private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)

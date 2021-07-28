@@ -22,7 +22,7 @@ namespace M2Server
 
         public void StartMsgServer()
         {
-            _msgServer.Start(M2Share.g_Config.nMsgSrvPort);
+            _msgServer.Start(M2Share.g_Config.sMsgSrvAddr, M2Share.g_Config.nMsgSrvPort);
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)

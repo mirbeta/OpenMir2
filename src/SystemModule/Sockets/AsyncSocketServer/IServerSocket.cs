@@ -192,9 +192,9 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// 启动异步Socket服务器
         /// </summary>
         /// <param name="Port"></param>
-        public void Start(int Port)
+        public void Start(string ip,int port)
         {
-            Start(new IPEndPoint(IPAddress.Any, Port));
+            Start(new IPEndPoint(IPAddress.Parse(ip), port));
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
             {
 
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
                 //RaiseErrorEvent(null, exception);
                 // 启动失败抛出启动失败异常

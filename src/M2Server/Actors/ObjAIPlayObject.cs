@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SystemModule.Common;
 
 namespace M2Server
@@ -515,6 +516,7 @@ namespace M2Server
                 result = sFileName;
                 return result;
             }
+            result = sFileName = Path.Combine(m_sFilePath, "RobotIni", "默认.txt");
             switch (nType)
             {
                 case 0:
@@ -625,6 +627,7 @@ namespace M2Server
                         try
                         {
                             //HUtil32.ArrestStringEx(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
+                            TempList = sLineText.Split(",").ToList();
                             for (var i = 0; i < TempList.Count; i++)
                             {
                                 sMagicName = TempList[i].Trim();
@@ -659,6 +662,7 @@ namespace M2Server
                         try
                         {
                             //ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
+                            TempList = sLineText.Split(",").ToList();
                             for (var i = 0; i < TempList.Count; i++)
                             {
                                 sItemName = TempList[i].Trim();
@@ -706,8 +710,8 @@ namespace M2Server
                             break;
                         }
                     }
-                    m_UseItemNames[grobal2.U_DRESS] = ItemIni.ReadString("UseItems", "UseItems0", ""); // '衣服';
-                    m_UseItemNames[grobal2.U_WEAPON] = ItemIni.ReadString("UseItems", "UseItems1", ""); // '武器';
+                    m_UseItemNames[grobal2.U_DRESS] = ItemIni.ReadString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
+                    m_UseItemNames[grobal2.U_WEAPON] = ItemIni.ReadString("UseItems", "UseItems1", "木剑"); // '武器';
                     m_UseItemNames[grobal2.U_RIGHTHAND] = ItemIni.ReadString("UseItems", "UseItems2", ""); // '照明物';
                     m_UseItemNames[grobal2.U_NECKLACE] = ItemIni.ReadString("UseItems", "UseItems3", ""); // '项链';
                     m_UseItemNames[grobal2.U_HELMET] = ItemIni.ReadString("UseItems", "UseItems4", ""); // '头盔';
@@ -717,7 +721,7 @@ namespace M2Server
                     m_UseItemNames[grobal2.U_RINGR] = ItemIni.ReadString("UseItems", "UseItems8", ""); // '右戒指';
                     for (var i = grobal2.U_DRESS; i <= grobal2.U_CHARM; i++)
                     {
-                        if (m_UseItemNames[i] != "")
+                        if (!string.IsNullOrEmpty(m_UseItemNames[i]))
                         {
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[i]);
                             if (StdItem != null)
@@ -795,18 +799,12 @@ namespace M2Server
             else
             {
                 // 捡物品
-                /*if (new ArrayList(new int[] { 2, 3 }).Contains(MapItem.UserItem.AddValue[0]))
-                {
-                    return result;
-                }*/
-                // 绑定物品不能捡 20110528
                 StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
                 {
                     if (m_PEnvir.DeleteFromMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem) == 1)
                     {
                         UserItem = new TUserItem();
-                        //FillChar(UserItem, sizeof(TUserItem), '\0');
                         UserItem = MapItem.UserItem;
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                         if ((StdItem != null) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
@@ -1422,12 +1420,12 @@ namespace M2Server
             M2Share.UserEngine.AddAILogon(new TAILogon()
             {
                 sCharName = this.m_sCharName,
-                sMapName = "0",
                 sConfigFileName = "",
                 sHeroConfigFileName = "",
                 sFilePath = M2Share.g_Config.sEnvirDir,
                 sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
                 sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
+                sMapName = "0",
                 nX = 285,
                 nY = 608
             });
@@ -1584,7 +1582,6 @@ namespace M2Server
                             {
                                 SetPKFlag(AttackBaseObject);
                             }
-
                             SetLastHiter(AttackBaseObject);
                             Struck(AttackBaseObject);
                             BreakHolySeizeMode();
@@ -1607,9 +1604,10 @@ namespace M2Server
                     result = base.Operate(ProcessMsg);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                //M2Share.MainOutMessage(format(sExceptionMsg0, new int[] { m_sCharName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg, nError }));
+                M2Share.MainOutMessage(ex.Message);
+                //M2Share.MainOutMessage(format(sExceptionMsg0, new object[] { m_sCharName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg }));
             }
             return result;
         }
@@ -1733,10 +1731,10 @@ namespace M2Server
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if ((m_TargetCret == null) && (!m_Master.m_boSlaveRelax))
             {
-                for (var I = 1; I <= 2; I++)
+                for (var i = 1; i <= 2; i++)
                 {
                     // 判断主人是否在英雄对面
-                    if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, I, ref nX, ref nY))
+                    if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, i, ref nX, ref nY))
                     {
                         if ((m_nCurrX == nX) && (m_nCurrY == nY))
                         {
@@ -1763,7 +1761,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (m_btRaceServer == 108)
+                if (m_btRaceServer == 108) // 是否为月灵
                 {
                     nStep = 0;
                 }
@@ -1771,7 +1769,6 @@ namespace M2Server
                 {
                     nStep = 1;
                 }
-                // 是否为月灵
                 if ((Math.Abs(m_nCurrX - nCurrX) > nStep) || (Math.Abs(m_nCurrY - nCurrY) > nStep))
                 {
                     if (GotoNextOne(nCurrX, nCurrY, true))
@@ -1875,10 +1872,9 @@ namespace M2Server
         private bool CheckUserItemType(int nItemType, int nCount)
         {
             bool result = false;
-            TItem StdItem;
             if ((m_UseItems[grobal2.U_ARMRINGL].wIndex > 0) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
             {
-                StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_ARMRINGL].wIndex);
+                TItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -2124,12 +2120,10 @@ namespace M2Server
                     for (var i = 0; i < m_MagicList.Count; i++)
                     {
                         UserMagic = m_MagicList[i];
-                        if (new ArrayList(new int[] { 2, 99 }).Contains(UserMagic.MagicInfo.btJob))
+                        if(UserMagic.MagicInfo.btJob==2 ||UserMagic.MagicInfo.btJob==99)
                         {
                             switch (UserMagic.wMagIdx)
                             {
-                                // 6 施毒术
-                                // 38 群体施毒术
                                 case grobal2.SKILL_AMYOUNSUL:
                                 case grobal2.SKILL_GROUPAMYOUNSUL:// 需要毒药
                                     result = CheckUserItem(1, 2) || CheckUserItem(2, 2);
@@ -3056,13 +3050,12 @@ namespace M2Server
 
         public bool ActThink_AvoidTarget(short wMagicID)
         {
-            int nRange;
             short nX = 0;
             short nY = 0;
             bool boFlag;
             TMapWalkXY[] WalkStep = null;
             bool result = false;
-            nRange = HUtil32._MAX((new System.Random(3)).Next(), 2);
+            int nRange = HUtil32._MAX((new System.Random(3)).Next(), 2);
             boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
             byte btDir;
             TMapWalkXY MapWalkXY;
@@ -3202,6 +3195,7 @@ namespace M2Server
             //FillChar(result, sizeof(TMapWalkXY), 0);
             if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && ((boFlag && CanLineAttack(nCurrX, nCurrY)) || !boFlag) && IsGotoXY(m_nCurrX, m_nCurrY, nCurrX, nCurrY))
             {
+                result = new TMapWalkXY();
                 result.nWalkStep = nRange;
                 result.nX = nCurrX;
                 result.nY = nCurrY;
@@ -3280,17 +3274,15 @@ namespace M2Server
 
         public bool ActThink_RunPosAttack(int wMagicID)
         {
-            TMapWalkXY[] WalkStep = new TMapWalkXY[1 + 1];
+            TMapWalkXY[] WalkStep = new TMapWalkXY[2];
             TMapWalkXY MapWalkXY;
-            byte btNewDir1;
-            byte btNewDir2;
             int nRange;
             bool boFlag;
             int nNearTargetCount;
             bool result = false;
             byte btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-            btNewDir1 = ActThink_RunPosAttack_GetNextRunPos(btDir, true);
-            btNewDir2 = ActThink_RunPosAttack_GetNextRunPos(btDir, false);
+            byte btNewDir1 = ActThink_RunPosAttack_GetNextRunPos(btDir, true);
+            byte btNewDir2 = ActThink_RunPosAttack_GetNextRunPos(btDir, false);
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 2, 0);
             if (m_btJob == 0)
             {
@@ -3496,7 +3488,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(format("TAIPlayObject::ActThink Name:%s Code:%d ", new object[] { m_sCharName, nCode }));
+                M2Share.MainOutMessage(format("TAIPlayObject::ActThink Name:{0} Code:{1} ", new object[] { m_sCharName, nCode }));
             }
             return result;
         }
@@ -3715,7 +3707,11 @@ namespace M2Server
                                     boRecalcAbilitys = false;
                                     for (nWhere = m_UseItemNames.GetLowerBound(0); nWhere <= m_UseItemNames.GetUpperBound(0); nWhere++)
                                     {
-                                        if ((m_UseItemNames[nWhere] != "") && (m_UseItems[nWhere].wIndex <= 0))
+                                        if (string.IsNullOrEmpty(m_UseItemNames[nWhere]))
+                                        {
+                                            continue;
+                                        }
+                                        if ((m_UseItems[nWhere].wIndex <= 0))
                                         {
                                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
@@ -3865,7 +3861,7 @@ namespace M2Server
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
                 // M2Share.MainOutMessage(format("{%s} TAIPlayObject.Run Code:%d", new byte[] { nCode }));
             }
             base.Run();
@@ -7513,7 +7509,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (m_UseItems[grobal2.U_BUJUK].wIndex > 0)
+                if (m_UseItems[grobal2.U_BUJUK] != null && m_UseItems[grobal2.U_BUJUK].wIndex > 0)
                 {
                     AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_BUJUK].wIndex);
                     if (AmuletStdItem != null)

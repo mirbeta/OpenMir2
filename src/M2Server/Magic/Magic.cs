@@ -50,7 +50,7 @@ namespace M2Server
             TItem amuletStdItem = null;
             var result = false;
             Idx = 0;
-            if (PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
+            if (PlayObject.m_UseItems[grobal2.U_ARMRINGL]!=null && PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
             {
                 amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_ARMRINGL].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
@@ -76,7 +76,7 @@ namespace M2Server
                     }
                 }
             }
-            if (PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex > 0)
+            if (PlayObject.m_UseItems[grobal2.U_BUJUK] !=null && PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex > 0)
             {
                 amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[grobal2.U_BUJUK].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)

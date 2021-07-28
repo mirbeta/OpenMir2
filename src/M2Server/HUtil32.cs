@@ -29,7 +29,7 @@ namespace M2Server
 
         public static int GetTickCount()
         {
-            return System.Environment.TickCount;
+            return Environment.TickCount;
         }
 
         public static int MakeLong(int lowPart, int highPart)

@@ -1719,7 +1719,6 @@ namespace M2Server
                     }
                     if (StdItem.AniCount == 111)
                     {
-                        // 8 0x70
                         m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 6 * 10 * 1000;
                         m_boHideMode = true;
                     }
@@ -1894,7 +1893,6 @@ namespace M2Server
                     {
                         // PK 死亡掉经验
                         m_dwPKDieLostExp = StdItem.DuraMax * M2Share.g_Config.dwPKDieLostExpRate;
-                        // m_nPKDieLostLevel:=1;
                     }
                     if (StdItem.AniCount == 181)
                     {
@@ -2083,7 +2081,6 @@ namespace M2Server
                 {
                     // PK 死亡掉经验
                     m_dwPKDieLostExp = StdItem.DuraMax * M2Share.g_Config.dwPKDieLostExpRate;
-                    // m_nPKDieLostLevel:=1;
                 }
                 if (StdItem.Shape == 181)
                 {
@@ -2091,7 +2088,6 @@ namespace M2Server
                     m_nPKDieLostLevel = StdItem.DuraMax / M2Share.g_Config.nPKDieLostLevelRate;
                 }
                 // 新增结束
-                // if (i = U_NECKLACE) then begin
                 if (StdItem.Shape == 120)
                 {
                     m_boFastTrain = true;
@@ -2221,8 +2217,6 @@ namespace M2Server
                 {
                     boFiveString2 = true;
                 }
-                // end;
-                // if (i = U_ARMRINGL) or (i = U_ARMRINGR) then begin
                 if ((StdItem.Source <= -1) && (StdItem.Source >= -50))
                 {
                     // -1 to -50
@@ -2285,8 +2279,6 @@ namespace M2Server
                 {
                     boFiveString3 = true;
                 }
-                // end;
-                // if (i = U_HELMET) then begin
                 if (StdItem.Shape == 125)
                 {
                     boRecallSuite[3] = true;
@@ -2295,7 +2287,6 @@ namespace M2Server
                 {
                     boSpirit[3] = true;
                 }
-                // end;
             }
             if (boRecallSuite[0] && boRecallSuite[1] && boRecallSuite[2] && boRecallSuite[3])
             {
@@ -2617,7 +2608,7 @@ namespace M2Server
                         if (new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) || (((i == grobal2.U_WEAPON) || (i == grobal2.U_RIGHTHAND)) && new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
                         {
                             nDura = m_UseItems[i].Dura;
-                            tDura = (ushort)HUtil32.Round(nDura / 1000);// 1.03
+                            tDura = (ushort)HUtil32.Round(nDura / 1000.0);// 1.03
                             nDura -= 1000;
                             if (nDura <= 0)
                             {
@@ -2635,9 +2626,9 @@ namespace M2Server
                             {
                                 m_UseItems[i].Dura = nDura;
                             }
-                            if (tDura != HUtil32.Round(nDura / 1000)) // 1.03
+                            if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
                             {
-                                SendMsg(this, grobal2.RM_DURACHANGE, (short)i, nDura, m_UseItems[i].DuraMax, 0, "");
+                                SendMsg(this, grobal2.RM_DURACHANGE, i, nDura, m_UseItems[i].DuraMax, 0, "");
                             }
                         }
                     }
@@ -2657,7 +2648,6 @@ namespace M2Server
             int dwInChsTime;
             TProcessMessage ProcessMsg = null;
             TBaseObject BaseObject;
-            int dwRunTick;
             int nInteger;
             TItem StdItem;
             int nCount;
@@ -2671,7 +2661,7 @@ namespace M2Server
             const string sExceptionMsg5 = "[Exception] TBaseObject::Run 5";
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
             const string sExceptionMsg7 = "[Exception] TBaseObject::Run 7";
-            dwRunTick = HUtil32.GetTickCount();
+            int dwRunTick = HUtil32.GetTickCount();
             try
             {
                 while (GetMessage(ref ProcessMsg))
