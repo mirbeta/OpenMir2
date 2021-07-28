@@ -99,14 +99,15 @@ namespace M2Server
         public static unsafe TDefaultMessage DecodeMessage(string str)
         {
             var EncBuf = new byte[grobal2.BUFFERSIZE];
-            TDefaultMessage Msg;
+            TDefaultMessage msg;
             var bSrc = HUtil32.StringToByteAry(str);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            fixed (byte* pb = EncBuf)
-            {
-                Msg = *(TDefaultMessage*) pb;
-            }
-            return Msg;
+            return new TDefaultMessage(EncBuf);
+            // fixed (byte* pb = EncBuf)
+            // {
+            //     msg = *(TDefaultMessage*) pb;
+            // }
+            //return msg;
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace M2Server
             var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
             if (chinese)
             {
-                return Encoding.GetEncoding("gb2312").GetString(encBuf, 0, nLen);
+                return HUtil32.GetString(encBuf, 0, nLen);
             }
             else
             {
@@ -133,54 +134,12 @@ namespace M2Server
             }
         }
 
-        /// <summary>
-        /// 解密Byte数组
-        /// </summary>
-        /// <param name="Src"></param>
-        /// <param name="Buf"></param>
-        /// <param name="bufsize"></param>
-        /// <returns></returns>
-        public static unsafe string DecodeBuffer(string Src, byte[] Buf, int bufsize)
-        {
-            string result;
-            var encBuf = new byte[grobal2.BUFFERSIZE];
-            var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
-            var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
-            fixed (byte* pb = encBuf)
-            {
-                result = HUtil32.SBytePtrToString((sbyte*) pb, 0, nLen);
-            }
-            return result;
-        }
-
-        public unsafe static byte[] DecodeBuffer(string Src)
+        public static byte[] DecodeBuffer(string Src)
         {
             var EncBuf = new byte[grobal2.BUFFERSIZE];
             var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
             return EncBuf;
-        }
-
-        /// <summary>
-        /// 加密消息
-        /// </summary>
-        /// <param name="sMsg"></param>
-        /// <returns></returns>
-        public static unsafe string EncodeMessage(TDefaultMessage sMsg)
-        {
-            var result = string.Empty;
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
-            var TempBuf = new byte[grobal2.BUFFERSIZE];
-            fixed (byte* pb = TempBuf)
-            {
-                //*(TDefaultMessage*) pb = sMsg;
-            }
-            var DestLen = Encode6BitBuf(TempBuf, EncBuf, 20, grobal2.BUFFERSIZE);
-            fixed (byte* pb = EncBuf)
-            {
-                result = HUtil32.SBytePtrToString((sbyte*) pb, 0, DestLen);
-            }
-            return result;
         }
 
         /// <summary>

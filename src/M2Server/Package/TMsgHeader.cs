@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace M2Server
 {
@@ -27,5 +26,16 @@ namespace M2Server
                 return stream.ToArray();
             }
         }
+
+         public TMsgHeader(byte[] buff)
+         {
+             var binaryReader = new BinaryReader(new MemoryStream(buff));
+             dwCode = binaryReader.ReadUInt32();
+             nSocket = binaryReader.ReadInt32();
+             wGSocketIdx = binaryReader.ReadUInt16();
+             wIdent = binaryReader.ReadUInt16();
+             wUserListIndex = binaryReader.ReadInt32();
+             nLength = binaryReader.ReadInt32();
+         }
     }
 }

@@ -10,7 +10,7 @@ namespace M2Server
     public class TrainingMagicCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void TrainingMagic(string[] @Params, TPlayObject PlayObject)
+        public void TrainingMagic(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSkillName = @Params.Length > 1 ? @Params[1] : "";

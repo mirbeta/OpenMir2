@@ -11,7 +11,7 @@ namespace M2Servers
     public class HeroLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void HeroLevel(string[] @Params, TPlayObject PlayObject)
+        public void HeroLevel(string[] @Params, TPlayObject PlayObject)
         {
             //string sHeroName = @Params.Length > 0 ? @Params[0] : "";
             //int nLevel = @Params.Length > 1 ? System.Convert.ToInt32(@Params[1]) : 0;

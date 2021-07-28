@@ -12,7 +12,7 @@ namespace M2Server
     public class GetUserItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void GetUserItems(string[] @Params, TPlayObject PlayObject)
+        public void GetUserItems(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sItemName = @Params.Length > 1 ? @Params[1] : "";

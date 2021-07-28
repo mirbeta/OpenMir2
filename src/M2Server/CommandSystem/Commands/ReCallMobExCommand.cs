@@ -11,7 +11,7 @@ namespace M2Server
     public class ReCallMobExCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void ReCallMobEx(string[] @Params, TPlayObject PlayObject)
+        public void ReCallMobEx(string[] @Params, TPlayObject PlayObject)
         {
             var sMonName = @Params.Length > 0 ? @Params[0] : "";
             var nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;

@@ -11,7 +11,7 @@ namespace M2Server
     public class UnBindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void UnBindUseItem(string[] @Params, TPlayObject PlayObject)
+        public void UnBindUseItem(string[] @Params, TPlayObject PlayObject)
         {
             if (@Params == null)
             {

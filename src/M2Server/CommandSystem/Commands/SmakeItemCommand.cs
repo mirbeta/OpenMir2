@@ -11,7 +11,7 @@ namespace M2Server
     public class SmakeItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void SmakeItem(string[] @Params, TPlayObject PlayObject)
+        public void SmakeItem(string[] @Params, TPlayObject PlayObject)
         {
             var nWhere = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var nValueType = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;//参数16为吸伤属性

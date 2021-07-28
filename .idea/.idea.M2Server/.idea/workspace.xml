@@ -12,15 +12,25 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/GateServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GateServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GetUserItemsCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GetUserItemsCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HeroLevelCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HeroLevelCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReCallMobExCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReCallMobExCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ShowUseItemInfoCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ShowUseItemInfoCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UserMoveXYCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UserMoveXYCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/EDcode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/HUtil32.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/HUtil32.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunDB.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,49 +49,41 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ConsoleApp1/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Immediate Window" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/03/73c756d3/Encoding.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/EncryptUnit.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Monsters/TSoccerBall.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Monsters/TClone.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Configs/StringConfig.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Configs/ExpsConfig.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Guild/TGuild.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Configs/GameCmdConfig.cs" />
-      <option value="$PROJECT_DIR$/src/mSystemModule/Common/IniFile.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Configs/ServerConfig.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/RobotSystem/TRobotManage.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RobotSystem/TRobotObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/InterMsgClient.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GroupServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/RunDB.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Properties/launchSettings.json" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" />
@@ -91,7 +93,6 @@
       <option value="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" />
       <option value="$PROJECT_DIR$/ConsoleApp1/Program.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/Envir.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" />
@@ -99,11 +100,9 @@
       <option value="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/LocalDB.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjectSystem.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/M2Share.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/M2Server.csproj" />
       <option value="$PROJECT_DIR$/src/M2Server/Monsters/TElfWarriorMonster.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/HUtil32.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
@@ -112,6 +111,24 @@
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReCallMobExCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GetUserItemsCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ShowUseItemInfoCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UserMoveXYCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HeroLevelCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/HUtil32.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/RunDB.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -125,7 +142,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.3503363" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35022116" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -235,7 +252,8 @@
       <workItem from="1627399221807" duration="1221000" />
       <workItem from="1627434467353" duration="2830000" />
       <workItem from="1627437595239" duration="320000" />
-      <workItem from="1627440581312" duration="4027000" />
+      <workItem from="1627440581312" duration="5034000" />
+      <workItem from="1627447866073" duration="12188000" />
     </task>
     <servers />
   </component>
@@ -274,19 +292,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/GateServer.cs</url>
-          <line>24</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/GateServer.cs" initialLine="24" containingFunctionPresentation="method 'Start'">
-            <startOffsets>
-              <option value="706" />
-            </startOffsets>
-            <endOffsets>
-              <option value="779" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
@@ -339,6 +344,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="42" containingFunctionPresentation="method 'RunNotice'">
+            <startOffsets>
+              <option value="1307" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1320" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

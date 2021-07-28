@@ -2,7 +2,7 @@
 
 namespace M2Server
 {
-    public struct TDefaultMessage
+    public class TDefaultMessage
     {
         public int Recog;
         public ushort Ident;
@@ -12,19 +12,30 @@ namespace M2Server
 
         public byte[] ToByte()
         {
-            //todo  需要验证delphi下int转ushort的问题
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(Recog);
-                backingStream.Write(Ident);
-                backingStream.Write(Param);
-                backingStream.Write(Tag);
-                backingStream.Write(Series);
+            using var memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
+            backingStream.Write(Recog);
+            backingStream.Write(Ident);
+            backingStream.Write(Param);
+            backingStream.Write(Tag);
+            backingStream.Write(Series);
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
+        }
+        
+        public TDefaultMessage()
+        {
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+        }
+        
+        public TDefaultMessage(byte[] buff)
+        {
+            var binaryReader = new BinaryReader(new MemoryStream(buff));
+            Recog = binaryReader.ReadInt32();
+            Ident = binaryReader.ReadUInt16();
+            Param = binaryReader.ReadUInt16();
+            Tag = binaryReader.ReadUInt16();
+            Series = binaryReader.ReadUInt16();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace M2Server
     public class UserMoveXYCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void UserMoveXY(string[] @Params, TPlayObject PlayObject)
+        public void UserMoveXY(string[] @Params, TPlayObject PlayObject)
         {
             var sX = @Params.Length > 0 ? @Params[0] : "";
             var sY = @Params.Length > 1 ? @Params[1] : "";

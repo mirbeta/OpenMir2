@@ -472,7 +472,7 @@ namespace M2Server
         public int n520;
         public IList<TGateUserInfo> UserList;
         public int nUserCount;
-        public IntPtr Buffer;
+        public byte[] Buffer;
         public int nBuffLen;
         public IList<IntPtr> BufferList;
         public bool boSendKeepAlive;

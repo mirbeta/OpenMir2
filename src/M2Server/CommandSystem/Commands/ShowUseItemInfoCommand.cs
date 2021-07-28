@@ -11,7 +11,7 @@ namespace M2Server
     public class ShowUseItemInfoCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void ShowUseItem(string[] @Params, TPlayObject PlayObject)
+        public void ShowUseItem(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             TUserItem UserItem = null;

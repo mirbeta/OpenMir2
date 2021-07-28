@@ -142,33 +142,11 @@ namespace M2Server
         {
         }
 
-        public static unsafe string StrPas(byte* Buff)
+        public static string GetString(byte[] bytes, int index, int count)
         {
-            var nLen = 0;
-            var pb = Buff;
-            while (*pb++ != 0) nLen++;
-
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-            pb = Buff;
-            for (var i = 0; i < nLen; i++) sb[i] = (char) *pb++;
-
-            return sb.ToString();
+            return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);
         }
-        
-        public static unsafe byte[] PointToBytes(byte* Buff)
-        {
-            var nLen = 0;
-            var pb = Buff;
-            while (*pb++ != 0) nLen++;
-            var sb = new byte[nLen];
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = *pb++;
-            }
-            return sb;
-        }
-        
+
         public static string StrPas(byte[] buff)
         {
             var nLen = buff.Length;
@@ -782,36 +760,6 @@ namespace M2Server
             return result;
         }
 
-
-        public static unsafe void IntPtrToIntPtr(byte[] Src, int SrcIndex, ref byte[] Dest, int DestIndex, int nLen)
-        {
-            var psrcIp = Marshal.AllocHGlobal(Src.Length);
-            var destIp = Marshal.AllocHGlobal(Dest.Length);
-            Marshal.Copy(Src, 0, psrcIp, Src.Length);
-            Marshal.Copy(Dest, 0, destIp, Dest.Length);
-            var pSrc = (byte*)psrcIp + SrcIndex;
-            var pDest = (byte*)destIp + DestIndex;
-            if (pDest > pSrc)
-            {
-                pDest = pDest + (nLen - 1);
-                pSrc = pSrc + (nLen - 1);
-                for (var i = 0; i < nLen; i++)
-                {
-                    *pDest-- = *pSrc--;
-                }
-            }
-            else
-            {
-                for (var i = 0; i < nLen; i++)
-                {
-                    *pDest++ = *pSrc++;
-                }
-            }
-            Marshal.Copy(destIp, Dest, 0, Dest.Length);
-            Marshal.FreeHGlobal(destIp);
-            Marshal.FreeHGlobal(psrcIp);
-        }
-
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
         {
             var pSrc = (byte*) Src + SrcIndex;
@@ -829,73 +777,6 @@ namespace M2Server
                     *pDest++ = *pSrc++;
             }
         }
-
-        public static unsafe byte[] BytePtrToByteArray(byte* pb, int pbSize)
-        {
-            var ret = new byte[pbSize];
-            for (var i = 0; i < pbSize; i++) ret[i] = pb[i];
-            return ret;
-        }
-
-        public static unsafe int ByteArrayToBytePtr(byte* pb, int pbSize, byte[] ByteAry)
-        {
-            int nLen;
-            if (ByteAry.Length > pbSize)
-            {
-                for (var i = 0; i < pbSize; i++)
-                    pb[i] = ByteAry[i];
-
-                nLen = pbSize;
-            }
-            else
-            {
-                for (var i = 0; i < ByteAry.Length; i++) pb[i] = ByteAry[i];
-
-                nLen = ByteAry.Length;
-            }
-
-            return nLen;
-        }
-
-        public static unsafe ushort[] ushortPrtToushortArray(ushort* pb, int pbSize)
-        {
-            var ret = new ushort[pbSize];
-            for (var i = 0; i < pbSize; i++) ret[i] = pb[i];
-            return ret;
-        }
-
-        public static unsafe int UShortArrayToUShortPtr(ushort[] pb, int pbSize, ushort[] ByteAry)
-        {
-            var nLen = 0;
-            for (var i = 0; i < pbSize; i++)
-            {
-                pb[i] = ByteAry[i];
-                nLen = pbSize;
-            }
-
-            return nLen;
-        }
-
-        public static unsafe int UShortArrayToUShortPtr(ushort* pb, int pbSize, ushort[] ByteAry)
-        {
-            int nLen;
-            if (ByteAry.Length > pbSize)
-            {
-                for (var i = 0; i < pbSize; i++)
-                    pb[i] = ByteAry[i];
-
-                nLen = pbSize;
-            }
-            else
-            {
-                for (var i = 0; i < ByteAry.Length; i++) pb[i] = ByteAry[i];
-
-                nLen = ByteAry.Length;
-            }
-
-            return nLen;
-        }
-
 
         /// <summary>
         /// SByte转string
@@ -915,92 +796,7 @@ namespace M2Server
                 throw new Exception(ex.Message);
             }
         }
-
-        /// <summary>
-        /// SByte转string
-        /// </summary>
-        /// <param name="by"></param>
-        /// <param name="StartIndex"></param>
-        /// <param name="Len"></param>
-        /// <returns></returns>
-        public static unsafe string SBytePtrToString(byte* by, int StartIndex, int Len)
-        {
-            try
-            {
-                return BytePtrToString(by, StartIndex, Len);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// SByte转String
-        /// </summary>
-        /// <param name="by"></param>
-        /// <param name="Len"></param>
-        /// <returns></returns>
-        public static unsafe string SBytePtrToString(sbyte* by, int Len)
-        {
-            try
-            {
-                return Marshal.PtrToStringAnsi((IntPtr) by, Len);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static unsafe int StringToSBytePtr(string str, sbyte* retby, int StartIndex)
-        {
-            var nLen = StringToBytePtr(str, null, 0);
-            if (retby == null)
-                return nLen;
-
-            return StringToBytePtr(str, (byte*) retby, StartIndex);
-        }
-
-        public static unsafe string IntPtrToString(IntPtr by, int StartIndex, int Len)
-        {
-            return BytePtrToString((byte*) by, StartIndex, Len);
-        }
-
-        public static unsafe int StringToIntPtr(string str, IntPtr retby, int StartIndex)
-        {
-            return StringToBytePtr(str, (byte*) retby, StartIndex);
-        }
-
-        public static unsafe string IntPtrPlusLenToString(IntPtr by, int StartIndex)
-        {
-            var pb = (byte*) by + StartIndex;
-            var nLen = *(int*) pb;
-
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-
-            pb += sizeof(int);
-            for (var i = 0; i < nLen; i++)
-                sb[i] = (char) pb[i];
-
-            return sb.ToString();
-        }
-
-        public static unsafe int StringToIntPtrPlusLen(string str, IntPtr retby, int StartIndex)
-        {
-            var nLen = StringToBytePtr(str, null, 0);
-            if (retby == (IntPtr) 0)
-                return nLen + sizeof(int);
-
-            var pb = (byte*) retby + StartIndex;
-            *(int*) pb = nLen;
-            pb += sizeof(int);
-            StringToBytePtr(str, pb, 0);
-
-            return nLen + sizeof(int);
-        }
-
+        
         public static unsafe string BytePtrToString(byte* by, int StartIndex, int Len)
         {
             var ret = new string('\0', Len);

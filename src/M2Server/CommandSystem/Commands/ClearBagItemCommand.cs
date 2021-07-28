@@ -10,7 +10,7 @@ namespace M2Server
     public class ClearBagItemCommand : BaseCommond
     {
         [DefaultCommand]
-        public unsafe void ClearBagItem(string[] @Params, TPlayObject PlayObject)
+        public void ClearBagItem(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? Params[0] : "";
             TUserItem UserItem;
