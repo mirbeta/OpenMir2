@@ -9,6 +9,8 @@ namespace M2Server
     class Program
     {
         private static ServerApp? serverApp = null;
+        private static Thread serverThread = null;
+        private static CancellationTokenSource _cancellation;
 
         static void Main(string[] args)
         {
@@ -16,19 +18,22 @@ namespace M2Server
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
             serverApp = new ServerApp();
-            var cts = new CancellationTokenSource();
-            serverApp.StartServer(cts.Token);
+            _cancellation = new CancellationTokenSource();
+            
+            serverThread = new Thread(AppStart);
+            serverThread.IsBackground = true;
+            serverThread.Start();
 
             Console.CancelKeyPress += (s, e) =>
             {
                 Console.WriteLine($"{DateTime.Now} 后台测试服务，准备进行资源清理！");
 
-                cts.Cancel();
+                _cancellation.Cancel();
                 // bgtask.Wait(cts.Token);
 
                 Console.WriteLine($"{DateTime.Now} 恭喜，Test服务程序已正常退出！");
             };
-
+            
             while (true)
             {
                 var line = Console.ReadLine();
@@ -70,6 +75,11 @@ namespace M2Server
                         break;
                 }
             }
+        }
+
+        static void AppStart()
+        {
+            serverApp.StartServer(_cancellation.Token);
         }
     }
 }

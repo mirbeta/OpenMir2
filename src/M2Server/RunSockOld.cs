@@ -3,12 +3,14 @@
 // using System.IO;
 // using System.Net.Sockets;
 // using System.Runtime.InteropServices;
+// using System.Text;
+// using SystemModule;
 // using SystemModule.Common;
 // using SystemModule.Sockets;
 //
 // namespace M2Server
 // {
-//     public class TRunSocketOld
+//     public class TRunSocket
 //     {
 //         public object m_RunSocketSection = null;
 //         public StringList m_RunAddrList = null;
@@ -452,15 +454,8 @@
 //                 M2Share.ErrorMessage(sExceptionMsg);
 //             }
 //         }
-//
-//         /// <summary>
-//         /// 发送数据到游戏网关
-//         /// </summary>
-//         /// <param name="GateIdx"></param>
-//         /// <param name="Gate"></param>
-//         /// <param name="MsgList"></param>
-//         /// <returns></returns>
-//         private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
+//         
+//         private bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
 //         {
 //             var nSendBuffLen = 0;
 //             const string sExceptionMsg1 = "[Exception] TRunSocket::SendGateBuffers -> ProcessBuff";
@@ -495,22 +490,23 @@
 //                         break;
 //                     }
 //                     BufferB = MsgList[msgIdx + 1];//取得下一个消息
-//                     if (BufferA == null || BufferB == null)
+//                     if (BufferA ==null || BufferB == null)
 //                     {
 //                         continue;
 //                     }
 //                     var nBuffALen = BufferA.Length;
+//                     //Move(BufferA, nBuffALen, sizeof(int));
 //                     var nBuffBLen = BufferB.Length;
+//                     //Move(BufferB, nBuffBLen, sizeof(int));
 //                     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
 //                     {
 //                         MsgList.RemoveAt(msgIdx + 1);
-//                         var BufferC = new byte[nBuffALen + sizeof(int) + nBuffBLen];
-//                         var nBuffCLen = nBuffALen + nBuffBLen;
-//                         BufferC =  new byte[nBuffCLen];
-//                         
-//                         HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), BufferC, sizeof(int), nBuffALen);
-//                         HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen);
-//                         
+//                         using var memoryStream = new MemoryStream();
+//                         var backingStream = new BinaryWriter(memoryStream);
+//                         backingStream.Write(BufferA);
+//                         backingStream.Write(BufferB);
+//                         var stream = backingStream.BaseStream as MemoryStream;
+//                         var BufferC = stream.ToArray();
 //                         BufferA = BufferC;
 //                         MsgList[msgIdx] = BufferA;
 //                         continue;
@@ -555,7 +551,15 @@
 //                         break;
 //                     }
 //                     MsgList.RemoveAt(0);
-//                     BufferB = BufferA + sizeof(int);
+//                     BufferB = new byte[BufferA.Length + 4];
+//                     if (BufferA.Length > BufferB.Length)
+//                     {
+//                         Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferB.Length);
+//                     }
+//                     else
+//                     {
+//                         Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
+//                     }
 //                     if (nSendBuffLen > 0)
 //                     {
 //                         while (true)
@@ -574,7 +578,26 @@
 //                                     Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
 //                                 }
 //                                 Gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
-//                                 BufferB = (IntPtr)((byte*)BufferB + M2Share.g_Config.nSendBlock);
+//                                 //BufferB = BufferB[M2Share.g_Config.nSendBlock];
+//
+//                                 var ip = Marshal.AllocHGlobal(BufferB.Length);
+//                                 Marshal.Copy(BufferB, 0, ip, BufferB.Length);
+//
+//                                 unsafe
+//                                 {
+//                                     var testBuff = (IntPtr) ((byte*) ip + M2Share.g_Config.nSendBlock);
+//                                     var asdasd = new byte[BufferB.Length + M2Share.g_Config.nSendBlock];
+//                                     Marshal.Copy(testBuff, asdasd, 0, asdasd.Length);
+//                                 }
+//                                 
+//                                 //BufferB = (IntPtr)((byte*)BufferB + M2Share.g_Config.nSendBlock);
+//                                 
+//                                 //BufferB = new byte[BufferB.Length + M2Share.g_Config.nSendBlock];
+//                                 var tempBuff = new byte[BufferB.Length + M2Share.g_Config.nSendBlock];
+//                                 Buffer.BlockCopy(BufferB, 0, tempBuff, 0, tempBuff.Length);
+//                                 
+//                                 
+//                                 Console.WriteLine("来看这里，这里有问题");
 //                                 nSendBuffLen -= M2Share.g_Config.nSendBlock;
 //                                 continue;
 //                             }
@@ -582,9 +605,9 @@
 //                             {
 //                                 if (Gate.Socket.Connected)
 //                                 {
-//                                     var sendBuff = new byte[nSendBuffLen];
-//                                     Buffer.BlockCopy(BufferB, 0, sendBuff, 0, nSendBuffLen);
-//                                     Gate.Socket.Send(sendBuff, 0, nSendBuffLen, SocketFlags.None);
+//                                     var SendBy = new byte[nSendBuffLen];
+//                                     Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
+//                                     Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
 //                                 }
 //                                 Gate.nSendCount++;
 //                                 Gate.nSendBytesCount += nSendBuffLen;
@@ -605,7 +628,7 @@
 //             catch (Exception e)
 //             {
 //                 M2Share.ErrorMessage(sExceptionMsg2);
-//                 M2Share.ErrorMessage(e.Message, MessageType.Error);
+//                 M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
 //             }
 //             return result;
 //         }
@@ -640,7 +663,7 @@
 //                                         {
 //                                             if (GateUser.FrontEngine != null)
 //                                             {
-//                                                 ((TFrontEngine)GateUser.FrontEngine).DeleteHuman(i, GateUser.nSocket);
+//                                                 GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
 //                                             }
 //                                         }
 //                                         catch
@@ -870,7 +893,7 @@
 //             }
 //         }
 //
-//         public TRunSocketOld()
+//         public TRunSocket()
 //         {
 //             TGateInfo Gate;
 //             m_RunAddrList = new StringList();
@@ -910,6 +933,7 @@
 //                         {
 //                             Gate.BufferList.Add(Buffer);
 //                             result = true;
+//                             //Marshal.FreeHGlobal(Ptr);
 //                         }
 //                     }
 //                 }
@@ -1159,3 +1183,10 @@
 //     }
 // }
 //
+// namespace M2Server
+// {
+//     public class RunSock
+//     {
+//         public static TGateInfo[] g_GateArr = new TGateInfo[20];
+//     }
+// }

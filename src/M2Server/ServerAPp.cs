@@ -193,6 +193,22 @@ namespace M2Server
                 M2Share.MainOutMessage(M2Share.g_sVersion);
                 M2Share.MainOutMessage(M2Share.g_sUpDateTime);
                 M2Share.boStartReady = true;
+                
+                for (int i = 0; i < 10; i++)
+                {
+                    M2Share.UserEngine.AddAILogon(new TAILogon()
+                    {
+                        sCharName = "玩家" + SystemModule.RandomNumber.GetInstance().Random() + "号",
+                        sMapName = "0",
+                        sConfigFileName = "",
+                        sHeroConfigFileName = "",
+                        sFilePath = M2Share.g_Config.sEnvirDir,
+                        sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
+                        sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
+                        nX = 285,
+                        nY = 608
+                    });
+                }
             }
             catch (Exception ex)
             {

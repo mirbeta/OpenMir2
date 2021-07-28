@@ -577,7 +577,7 @@ namespace M2Server
             //人工智障开始登陆
             if (m_UserLogonList.Count > 0)
             {
-                if (HUtil32.GetTickCount() - m_dwAILogonTick > 3000)
+                if (HUtil32.GetTickCount() - m_dwAILogonTick > 500)
                 {
                     m_dwAILogonTick = HUtil32.GetTickCount();
                     if (m_UserLogonList.Count > 0)

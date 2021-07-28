@@ -729,7 +729,7 @@ namespace M2Server
             return result;
         }
 
-        public unsafe void SendSocket(string sMsg)
+        public void SendSocket(string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
@@ -752,15 +752,19 @@ namespace M2Server
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     MsgHdr.nLength = -(bMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
-                    Buff = new byte[nSendBytes + sizeof(int)];
-                    fixed (byte* pb = Buff)
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
+                    //Buff = new byte[nSendBytes + sizeof(int)];
+                    using var memoryStream = new MemoryStream();
+                    var backingStream = new BinaryWriter(memoryStream);
+                    backingStream.Write(nSendBytes);
+                    backingStream.Write(MsgHdr.ToByte());
+                    if (!string.IsNullOrEmpty(sMsg))
                     {
-                        *(int*)pb = nSendBytes;
-                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        Array.Copy(bMsg, 0, Buff, sizeof(TMsgHeader) + sizeof(int), bMsg.Length);
-                        Buff[Buff.Length - 1] = 0;
+                        backingStream.Write(bMsg);
+                        backingStream.Write((byte)0);
                     }
+                    var stream = backingStream.BaseStream as MemoryStream;
+                    Buff = stream.ToArray();
                 }
                 M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
             }

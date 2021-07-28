@@ -11,7 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/EDcode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GateServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GateServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,44 +40,24 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/RunSock.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Data/Project/HeroM21/src/M2Server/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/SystemModule/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/a3/7701ef20/Marshal.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5A8C9BBA-81C1-47A4-BBD2-496BBB8C58A2/94/fb47fd6a/Socket.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/03/73c756d3/Encoding.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ConsoleApp1/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Data/Project/HeroM2/src/M2Server/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/SystemModule/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/03/73c756d3/Encoding.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Properties/launchSettings.json" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" />
       <option value="$PROJECT_DIR$/ConsoleApp2/Program.cs" />
@@ -79,7 +69,6 @@
       <option value="$PROJECT_DIR$/src/M2Server/Map/Envir.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/LocalDB.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjectSystem.cs" />
@@ -87,13 +76,10 @@
       <option value="$PROJECT_DIR$/src/M2Server/M2Server.csproj" />
       <option value="$PROJECT_DIR$/src/M2Server/Monsters/TElfWarriorMonster.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" />
@@ -106,16 +92,21 @@
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HeroLevelCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/HUtil32.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunDB.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" />
-      <option value="$PROJECT_DIR$/README.md" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock_old.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" />
       <option value="$PROJECT_DIR$/../../Data/Project/HeroM2/src/M2Server/HUtil32.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
+      <option value="$PROJECT_DIR$/README.md" />
+      <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -240,7 +231,9 @@
       <workItem from="1627434467353" duration="2830000" />
       <workItem from="1627437595239" duration="320000" />
       <workItem from="1627440581312" duration="5034000" />
-      <workItem from="1627447866073" duration="18238000" />
+      <workItem from="1627447866073" duration="18346000" />
+      <workItem from="1627477019152" duration="3186000" />
+      <workItem from="1627480828735" duration="6407000" />
     </task>
     <servers />
   </component>

@@ -96,7 +96,7 @@ namespace M2Server
             return nBufPos;
         }
 
-        public static unsafe TDefaultMessage DecodeMessage(string str)
+        public static TDefaultMessage DecodeMessage(string str)
         {
             var EncBuf = new byte[grobal2.BUFFERSIZE];
             TDefaultMessage msg;
@@ -191,7 +191,7 @@ namespace M2Server
         }
 
         /// <summary>
-        ///     加密Byte数组
+        /// 加密Byte数组
         /// </summary>
         /// <param name="Buf"></param>
         /// <param name="bufsize"></param>
