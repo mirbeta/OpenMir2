@@ -455,58 +455,6 @@ namespace M2Server
             }
         }
         
-        public static unsafe string StrPas(byte* Buff)
-        {
-            var nLen = 0;
-            var pb = Buff;
-            while (*pb++ != 0)
-            {
-                nLen++;
-            }
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-            pb = Buff;
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = (char)*pb++;
-            }
-            return sb.ToString();
-        }
-
-        public unsafe byte[] PointToBytes(byte* Buff)
-        {
-            var nLen = 0;
-            var pb = Buff;
-            while (*pb++ != 0) nLen++;
-            var sb = new byte[nLen];
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = *pb++;
-            }
-            return sb;
-        }
-        
-        public unsafe void Move(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
-        {
-            byte* pSrc = (byte*)Src + SrcIndex;
-            byte* pDest = (byte*)Dest + DestIndex;
-            if (pDest > pSrc)
-            {
-                pDest = pDest + (nLen - 1);
-                pSrc = pSrc + (nLen - 1);
-                for (int i = 0; i < nLen; i++)
-                    *pDest-- = *pSrc--;
-            }
-            else
-            {
-                for (int i = 0; i < nLen; i++)
-                    *pDest++ = *pSrc++;
-            }
-            var ccc = StrPas(pDest);
-            var aaaa = PointToBytes(pSrc);
-            var bbbb = PointToBytes(pDest);
-        }
-        
         private unsafe bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
         {
             var nSendBuffLen = 0;
@@ -553,39 +501,14 @@ namespace M2Server
                     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
                     {
                         MsgList.RemoveAt(msgIdx + 1);
-                        //var BufferC = Marshal.AllocHGlobal(nBuffALen + sizeof(int) + nBuffBLen);
-                        //var nBuffCLen = nBuffALen + nBuffBLen;
-                        //*(int*)BufferC = nBuffCLen;
-
-                        //var BufferC = new byte[nBuffCLen];
-                        
-                        //HUtil32.IntPtrToIntPtr(BufferA, sizeof(int), BufferC, sizeof(int), nBuffALen);
-                        //HUtil32.IntPtrToIntPtr(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen);
-                        
-                        
-                        //byte[] managedArraya = new byte[nBuffALen];
-                        //Marshal.Copy(BufferA, managedArraya, 0, nBuffALen);
-                        //byte[] managedArrayb = new byte[nBuffBLen];
-                        //Marshal.Copy(BufferB, managedArrayb, 0, nBuffBLen);
-
                         using var memoryStream = new MemoryStream();
                         var backingStream = new BinaryWriter(memoryStream);
                         backingStream.Write(BufferA);
                         backingStream.Write(BufferB);
                         var stream = backingStream.BaseStream as MemoryStream;
                         var BufferC = stream.ToArray();
-                        
-                        //Move(BufferA, sizeof(int), BufferC, sizeof(int), nBuffALen); //Move(BufferA[sizeof(int)], BufferC[sizeof(int)], nBuffALen);
-                        //Move(BufferB, sizeof(int), BufferC, nBuffALen + sizeof(int), nBuffBLen); //Move(BufferB[sizeof(int)], BufferC[nBuffALen + sizeof(int)], nBuffBLen);
-                        
-                        //Marshal.FreeHGlobal(BufferA);
-                        //Marshal.FreeHGlobal(BufferB);
                         BufferA = BufferC;
                         MsgList[msgIdx] = BufferA;
-                        
-                        //byte[] oldBuff = new byte[nBuffCLen];
-                        //Marshal.Copy(BufferA, oldBuff, 0, nBuffCLen);
-
                         continue;
                     }
                     msgIdx++;
@@ -628,14 +551,15 @@ namespace M2Server
                         break;
                     }
                     MsgList.RemoveAt(0);
-                    //BufferB = BufferA + sizeof(int);
-                    //BufferB = BufferA;
                     BufferB = new byte[BufferA.Length + 4];
-                    Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
-                    //var ddddddd = BufferA.Length;
-                    //byte[] managedArrayb = new byte[ddddddd + 4];
-                    //Marshal.Copy(BufferB, managedArrayb, 0, ddddddd + 4);
-                    
+                    if (BufferA.Length > BufferB.Length)
+                    {
+                        Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferB.Length);
+                    }
+                    else
+                    {
+                        Buffer.BlockCopy(BufferA, 0, BufferB, 0, BufferA.Length);
+                    }
                     if (nSendBuffLen > 0)
                     {
                         while (true)
@@ -687,7 +611,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg2);
-                M2Share.ErrorMessage(e.Message, MessageType.Error);
+                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
             }
             return result;
         }

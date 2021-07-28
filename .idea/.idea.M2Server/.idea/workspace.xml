@@ -11,9 +11,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -243,7 +240,7 @@
       <workItem from="1627434467353" duration="2830000" />
       <workItem from="1627437595239" duration="320000" />
       <workItem from="1627440581312" duration="5034000" />
-      <workItem from="1627447866073" duration="17839000" />
+      <workItem from="1627447866073" duration="18238000" />
     </task>
     <servers />
   </component>
