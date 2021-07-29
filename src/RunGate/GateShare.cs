@@ -39,7 +39,7 @@ namespace RunGate
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static ArrayList AbuseList = null;
+        public static IList<string> AbuseList = null;
         public static TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION - 1 + 1];
         /// <summary>
         /// 连接会话数
@@ -63,7 +63,7 @@ namespace RunGate
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-        public static string SocketBuffer = String.Empty;
+        public static byte[] SocketBuffer = null;
         public static int nBuffLen = 0;
         public static ArrayList List_45AA58 = null;
         public static bool boDecodeMsgLock = false;
@@ -141,7 +141,7 @@ namespace RunGate
                 try
                 {
                     HUtil32.EnterCriticalSection(CS_FilterMsg);
-                    AbuseList.LoadFromFile(sFileName);
+                    //AbuseList.LoadFromFile(sFileName);
                 }
                 finally
                 {
@@ -158,12 +158,12 @@ namespace RunGate
             sFileName = ".\\BlockIPList.txt";
             if (File.Exists(sFileName))
             {
-                BlockIPList.LoadFromFile(sFileName);
+                //BlockIPList.LoadFromFile(sFileName);
             }
             AddMainLogMsg("IP过滤配置信息加载完成...", 4);
         }
 
-        public void initialization()
+        public static void Initialization()
         {
             Conf = new IniFile(sConfigFileName);
             Conf.Load();
@@ -171,7 +171,7 @@ namespace RunGate
             CS_MainLog = new object();
             CS_FilterMsg = new object();
             MainLogMsgList = new ArrayList();
-            AbuseList = new ArrayList();
+            AbuseList = new List<string>();
             ReviceMsgList = new List<TSendUserData>();
             SendMsgList = new List<TSendUserData>();
             List_45AA58 = new ArrayList();

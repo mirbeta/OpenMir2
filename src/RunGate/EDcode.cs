@@ -3,7 +3,7 @@ using System.Text;
 using SystemModule;
 using SystemModule.Packages;
 
-namespace M2Server
+namespace RunGate
 {
     public class EDcode
     {
@@ -100,10 +100,10 @@ namespace M2Server
 
         public static TDefaultMessage DecodeMessage(string str)
         {
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
+            var EncBuf = new byte[Grobal2.BUFFERSIZE];
             TDefaultMessage msg;
             var bSrc = HUtil32.StringToByteAry(str);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, Grobal2.BUFFERSIZE);
             return new TDefaultMessage(EncBuf);
             // fixed (byte* pb = EncBuf)
             // {
@@ -120,9 +120,9 @@ namespace M2Server
         /// <returns></returns>
         public static unsafe string DeCodeString(string str, bool chinese = false)
         {
-            var encBuf = new byte[grobal2.BUFFERSIZE];
+            var encBuf = new byte[Grobal2.BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, Grobal2.BUFFERSIZE);
             if (chinese)
             {
                 return HUtil32.GetString(encBuf, 0, nLen);
@@ -138,9 +138,9 @@ namespace M2Server
 
         public static byte[] DecodeBuffer(string Src)
         {
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
+            var EncBuf = new byte[Grobal2.BUFFERSIZE];
             var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, Grobal2.BUFFERSIZE);
             return EncBuf;
         }
 
@@ -152,9 +152,9 @@ namespace M2Server
         public static unsafe string EncodeString(string str)
         {
             string result;
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
+            var EncBuf = new byte[Grobal2.BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            var DestLen = Encode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
+            var DestLen = Encode6BitBuf(bSrc, EncBuf, bSrc.Length, Grobal2.BUFFERSIZE);
             fixed (byte* pb = EncBuf)
             {
                 result = HUtil32.SBytePtrToString((sbyte*) pb, 0, DestLen);
@@ -172,12 +172,12 @@ namespace M2Server
             var buffSize = methordResult.Length;
             if (buffSize > 0)
             {
-                if (buffSize < grobal2.BUFFERSIZE)
+                if (buffSize < Grobal2.BUFFERSIZE)
                 {
-                    var encBuf = new byte[grobal2.BUFFERSIZE];
-                    var tempBuf = new byte[grobal2.BUFFERSIZE];
+                    var encBuf = new byte[Grobal2.BUFFERSIZE];
+                    var tempBuf = new byte[Grobal2.BUFFERSIZE];
                     Buffer.BlockCopy(methordResult, 0, tempBuf, 0, buffSize);
-                    var destLen = Encode6BitBuf(tempBuf, encBuf, buffSize, grobal2.BUFFERSIZE);
+                    var destLen = Encode6BitBuf(tempBuf, encBuf, buffSize, Grobal2.BUFFERSIZE);
                     fixed (byte* pb = encBuf)
                     {
                         result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
@@ -201,12 +201,12 @@ namespace M2Server
         public static unsafe string EncodeBuffer(byte[] Buf, int bufsize)
         {
             string result;
-            var EncBuf = new byte[grobal2.BUFFERSIZE];
-            var TempBuf = new byte[grobal2.BUFFERSIZE];
-            if (bufsize < grobal2.BUFFERSIZE)
+            var EncBuf = new byte[Grobal2.BUFFERSIZE];
+            var TempBuf = new byte[Grobal2.BUFFERSIZE];
+            if (bufsize < Grobal2.BUFFERSIZE)
             {
                 Array.Copy(Buf, 0, TempBuf, 0, bufsize);
-                var destLen = Encode6BitBuf(TempBuf, EncBuf, bufsize, grobal2.BUFFERSIZE);
+                var destLen = Encode6BitBuf(TempBuf, EncBuf, bufsize, Grobal2.BUFFERSIZE);
                 fixed (byte* pb = EncBuf)
                 {
                     result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
@@ -215,6 +215,19 @@ namespace M2Server
             else
             {
                 result = "";
+            }
+            return result;
+        }
+        
+        public static unsafe string EncodeMessage(TDefaultMessage smsg)
+        {
+            string result = string.Empty;
+            byte[] EncBuf = new byte[Grobal2.BUFFERSIZE];
+            byte[] TempBuf = smsg.ToByte();
+            int DestLen = Encode6BitBuf(TempBuf, EncBuf, 12, Grobal2.BUFFERSIZE);
+            fixed (byte* pb = EncBuf)
+            {
+                result = HUtil32.SBytePtrToString((sbyte*)pb, 0, DestLen);
             }
             return result;
         }

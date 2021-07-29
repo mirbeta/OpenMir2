@@ -675,25 +675,6 @@ namespace RunGate
         public const string sSTATUS_FAIL = "+FAIL/";
         public const string sSTATUS_GOOD = "+GOOD/";
     }
-    
-    public struct TDefaultMessage
-    {
-        public int Recog;
-        public short Ident;
-        public short Param;
-        public short Tag;
-        public short Series;
-    }
-
-    public struct TMsgHeader
-    {
-        public double dwCode;
-        public int nSocket;
-        public short wGSocketIdx;
-        public short wIdent;
-        public short wUserListIndex;
-        public int nLength;
-    } 
 
     public class TSessionInfo
     {
