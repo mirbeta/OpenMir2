@@ -5,16 +5,24 @@
     <projectFile>123/123.csproj</projectFile>
     <projectFile>ConsoleApp1/ConsoleApp1.csproj</projectFile>
     <projectFile>ConsoleApp2/ConsoleApp2.csproj</projectFile>
+    <projectFile>src/RunGate/RunGate.csproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/M2Server.sln" beforeDir="false" afterPath="$PROJECT_DIR$/M2Server.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,23 +41,15 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/29B9D97A-B9AA-4D0B-8EBD-B9B197A9612D/11/35a51e02/HashSet`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/29B9D97A-B9AA-4D0B-8EBD-B9B197A9612D/3f/52ec18f6/ConcurrentQueue`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ConsoleApp1/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/29B9D97A-B9AA-4D0B-8EBD-B9B197A9612D/66/4ef50594/Hashtable.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/F2518D2B-A689-4BB6-8940-4D5BFB0F334C/06/94c53b9e/ConcurrentBag`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/691B81D2-51BD-4F2A-B4CB-E21C809ADED4/fa/810f69cc/ChannelReader`1.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Properties/launchSettings.json" />
-      <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" />
-      <option value="$PROJECT_DIR$/ConsoleApp2/Program.cs" />
-      <option value="$PROJECT_DIR$/M2Server.sln" />
       <option value="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" />
@@ -89,13 +89,18 @@
       <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
       <option value="$PROJECT_DIR$/README.md" />
       <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/GateShare.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -141,6 +146,24 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="RunGate" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/src/RunGate/RunGate.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="PROJECT_TFM" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <configuration name="M2Server: MirServer" type="LaunchSettings" factoryName=".NET Launch Settings Profile" temporary="true">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/src/M2Server/M2Server.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net5.0" />
@@ -159,6 +182,7 @@
     <list>
       <item itemvalue=".NET Launch Settings Profile.M2Server: MirServer" />
       <item itemvalue=".NET Project.M2Server" />
+      <item itemvalue=".NET Project.RunGate" />
     </list>
     <recent_temporary>
       <list>
@@ -226,6 +250,7 @@
       <workItem from="1627489061744" duration="730000" />
       <workItem from="1627512611964" duration="3411000" />
       <workItem from="1627546261209" duration="1687000" />
+      <workItem from="1627555064726" duration="12566000" />
     </task>
     <servers />
   </component>
@@ -322,6 +347,32 @@
           <line>607</line>
           <properties documentPath="$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/RunSock.cs" initialLine="607" containingFunctionPresentation="method 'SendGateBuffers'" />
           <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/ServerAPp.cs</url>
+          <line>155</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" initialLine="155" containingFunctionPresentation="method 'StartServer'">
+            <startOffsets>
+              <option value="6541" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6560" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Program.cs</url>
+          <line>35</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Program.cs" initialLine="36" containingFunctionPresentation="method 'Main'">
+            <startOffsets>
+              <option value="1025" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1055" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

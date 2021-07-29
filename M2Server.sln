@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "M2Server", "src\M2Server\M2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemModule", "src\SystemModule\SystemModule.csproj", "{E3BF2C1F-AB70-476F-900E-C84BD3FFC633}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunGate", "src\RunGate\RunGate.csproj", "{B876E513-35B7-40E5-BE53-6651A21DFBC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{E3BF2C1F-AB70-476F-900E-C84BD3FFC633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3BF2C1F-AB70-476F-900E-C84BD3FFC633}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3BF2C1F-AB70-476F-900E-C84BD3FFC633}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B876E513-35B7-40E5-BE53-6651A21DFBC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B876E513-35B7-40E5-BE53-6651A21DFBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B876E513-35B7-40E5-BE53-6651A21DFBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B876E513-35B7-40E5-BE53-6651A21DFBC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

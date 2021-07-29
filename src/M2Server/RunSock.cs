@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
-using SystemModule;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using SystemModule.Common;
 using SystemModule.Sockets;
 
@@ -47,7 +46,6 @@ namespace M2Server
                     Gate.nUserCount = 0;
                     Gate.Buffer = null;
                     Gate.nBuffLen = 0;
-                    Gate.BufferList = new List<byte[]>();
                     Gate.boSendKeepAlive = false;
                     Gate.nSendChecked = 0;
                     Gate.nSendBlockCount = 0;
@@ -129,11 +127,7 @@ namespace M2Server
                         }
                         Gate.Buffer = null;
                         Gate.nBuffLen = 0;
-                        for (var i = 0; i < Gate.BufferList.Count; i++)
-                        {
-                            Gate.BufferList[i] = null;
-                        }
-                        Gate.BufferList = null;
+                        Gate.BufferChannel = null;
                         Gate.boUsed = false;
                         Gate.Socket = null;
                         M2Share.ErrorMessage(string.Format(sGateClose, GateIdx, e.EndPoint.Address, e.EndPoint.Port));
@@ -264,95 +258,7 @@ namespace M2Server
                 }
             }
         }
-
-        public void Run()
-        {
-            TGateInfo Gate;
-            const string sExceptionMsg = "[Exception] TRunSocket::Run ";
-            var dwRunTick = HUtil32.GetTickCount();
-            if (M2Share.boStartReady)
-            {
-                try
-                {
-                    if (M2Share.g_Config.nGateLoad > 0)
-                    {
-                        if (HUtil32.GetTickCount() - dwSendTestMsgTick >= 100)
-                        {
-                            dwSendTestMsgTick = HUtil32.GetTickCount();
-                            for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
-                            {
-                                Gate = RunSock.g_GateArr[i];
-                                if (Gate.BufferList != null)
-                                {
-                                    for (var nG = 0; nG < M2Share.g_Config.nGateLoad; nG++)
-                                    {
-                                        SendGateTestMsg(i);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
-                    {
-                        Gate = RunSock.g_GateArr[i];
-                        if (Gate.BufferList != null)
-                        {
-                            HUtil32.EnterCriticalSection(m_RunSocketSection);
-                            try
-                            {
-                                Gate.nSendMsgCount = Gate.BufferList.Count;
-                                if (Gate.nSendMsgCount > 0)
-                                {
-                                     if (SendGateBuffers(i, Gate, Gate.BufferList))
-                                     {
-                                         Gate.nSendRemainCount = Gate.BufferList.Count;
-                                     }
-                                     else
-                                     {
-                                         Gate.nSendRemainCount = Gate.BufferList.Count;
-                                     }
-                                }
-                            }
-                            finally
-                            {
-                                HUtil32.LeaveCriticalSection(m_RunSocketSection);
-                            }
-                        }
-                    }
-                    for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
-                    {
-                        if (RunSock.g_GateArr[i].Socket != null)
-                        {
-                            Gate = RunSock.g_GateArr[i];
-                            if (HUtil32.GetTickCount() - Gate.dwSendTick >= 1000)
-                            {
-                                Gate.dwSendTick = HUtil32.GetTickCount();
-                                Gate.nSendMsgBytes = Gate.nSendBytesCount;
-                                Gate.nSendedMsgCount = Gate.nSendCount;
-                                Gate.nSendBytesCount = 0;
-                                Gate.nSendCount = 0;
-                            }
-                            if (Gate.boSendKeepAlive)
-                            {
-                                Gate.boSendKeepAlive = false;
-                                SendCheck(Gate.Socket, grobal2.GM_CHECKSERVER);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
-                    M2Share.ErrorMessage(e.Message, MessageType.Error);
-                }
-            }
-            M2Share.g_nSockCountMin = HUtil32.GetTickCount() - dwRunTick;
-            if (M2Share.g_nSockCountMin > M2Share.g_nSockCountMax)
-            {
-                M2Share.g_nSockCountMax = M2Share.g_nSockCountMin;
-            }
-        }
-
+        
         private bool DoClientCertification_GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionID, ref int nClientVersion, ref bool boFlag)
         {
             var result = false;
@@ -455,7 +361,7 @@ namespace M2Server
                 M2Share.ErrorMessage(sExceptionMsg);
             }
         }
-        
+
         private bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
         {
             var nSendBuffLen = 0;
@@ -912,12 +818,13 @@ namespace M2Server
                 if (GateIdx < grobal2.RUNGATEMAX)
                 {
                     Gate = RunSock.g_GateArr[GateIdx];
-                    if (Gate.BufferList != null && Buffer != null)
+                    if (Gate.BufferChannel != null && Buffer != null)
                     {
                         if (Gate.boUsed && Gate.Socket != null)
                         {
-                            Gate.BufferList.Add(Buffer);
+                            Gate.BufferChannel.Writer.TryWrite(Buffer);
                             result = true;
+                            M2Share.MainOutMessage($"待消费数量:[{Gate.BufferChannel.Reader.Count}]");
                         }
                     }
                 }
@@ -1169,6 +1076,230 @@ namespace M2Server
             }
             return result;
         }
+        
+        public void Run()
+        {
+            TGateInfo Gate;
+            const string sExceptionMsg = "[Exception] TRunSocket::Run ";
+            var dwRunTick = HUtil32.GetTickCount();
+            if (M2Share.boStartReady)
+            {
+                try
+                {
+                    if (M2Share.g_Config.nGateLoad > 0)
+                    {
+                        if (HUtil32.GetTickCount() - dwSendTestMsgTick >= 100)
+                        {
+                            dwSendTestMsgTick = HUtil32.GetTickCount();
+                            for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
+                            {
+                                Gate = RunSock.g_GateArr[i];
+                                if (Gate.BufferChannel != null)
+                                {
+                                    for (var nG = 0; nG < M2Share.g_Config.nGateLoad; nG++)
+                                    {
+                                        SendGateTestMsg(i);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
+                    {
+                        if (RunSock.g_GateArr[i].Socket != null)
+                        {
+                            Gate = RunSock.g_GateArr[i];
+                            if (HUtil32.GetTickCount() - Gate.dwSendTick >= 1000)
+                            {
+                                Gate.dwSendTick = HUtil32.GetTickCount();
+                                Gate.nSendMsgBytes = Gate.nSendBytesCount;
+                                Gate.nSendedMsgCount = Gate.nSendCount;
+                                Gate.nSendBytesCount = 0;
+                                Gate.nSendCount = 0;
+                            }
+                            if (Gate.boSendKeepAlive)
+                            {
+                                Gate.boSendKeepAlive = false;
+                                SendCheck(Gate.Socket, grobal2.GM_CHECKSERVER);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    M2Share.ErrorMessage(sExceptionMsg, MessageType.Error);
+                    M2Share.ErrorMessage(e.Message, MessageType.Error);
+                }
+            }
+            M2Share.g_nSockCountMin = HUtil32.GetTickCount() - dwRunTick;
+            if (M2Share.g_nSockCountMin > M2Share.g_nSockCountMax)
+            {
+                M2Share.g_nSockCountMax = M2Share.g_nSockCountMin;
+            }
+        }
+
+        public async Task Start()
+        {
+            var gTasks = new Task[3];
+            // for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
+            // {
+            //     var consumer = new GateConsumer(RunSock.g_GateArr[i], RunSock.g_GateArr[i].BufferChannel.Reader, i);
+            //     var consumerTask = consumer.ConsumeData();
+            //     gTasks[i] = consumerTask;
+            // }
+            
+            var consumer1 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 0);
+            var consumerTask1 = consumer1.ConsumeData();
+            gTasks[0] = consumerTask1;
+            
+            var consumer2 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 1);
+            var consumerTask2 = consumer2.ConsumeData();
+            gTasks[1] = consumerTask2;
+            
+            var consumer3 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 2);
+            var consumerTask3 = consumer3.ConsumeData();
+            gTasks[2] = consumerTask3;
+            
+            await Task.WhenAll(gTasks);
+        }
+    }
+
+    /// <summary>
+    /// 网关消费者
+    /// </summary>
+    public class GateConsumer
+    {
+        private readonly ChannelReader<byte[]> _reader;
+        private readonly int _identifier;
+        private readonly TGateInfo _gate;
+
+        public GateConsumer(TGateInfo gate,ChannelReader<byte[]> reader,int identifier)
+        {
+            _reader = reader;
+            _identifier = identifier;
+            _gate = gate;
+        }
+        
+        public async Task ConsumeData()
+        {
+            Console.WriteLine($"GateConsumer ({_identifier}): Starting");
+
+            while (await _reader.WaitToReadAsync())
+            {
+                if (_reader.TryRead(out var buff))
+                {
+                    SendGateBuffers(buff);
+                }
+                M2Share.MainOutMessage("待处理数量:" + _reader.Count);
+            }
+        }
+        
+        private void SendGateBuffers(byte[] buffer)
+        {
+            const string sExceptionMsg1 = "[Exception] TRunSocket::SendGateBuffers -> ProcessBuff";
+            const string sExceptionMsg2 = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
+            var dwRunTick = HUtil32.GetTickCount();
+            if (_gate.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
+            {
+                if (HUtil32.GetTickCount() - _gate.dwSendCheckTick > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
+                {
+                    _gate.nSendChecked = 0;
+                    _gate.nSendBlockCount = 0;
+                }
+                return;
+            }
+            try
+            {
+                var nSendBuffLen = buffer.Length; 
+                if (_gate.nSendChecked == 0 && _gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
+                {
+                    if (_gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
+                    {
+                        return;
+                    }
+                    SendCheck(_gate.Socket, grobal2.GM_RECEIVE_OK);
+                    _gate.nSendChecked = 1;
+                    _gate.dwSendCheckTick = HUtil32.GetTickCount();
+                }
+                var sendBuffer = new byte[buffer.Length + 4];
+                if (buffer.Length > sendBuffer.Length)
+                {
+                    Buffer.BlockCopy(buffer, 0, sendBuffer, 0, sendBuffer.Length);
+                }
+                else
+                {
+                    Buffer.BlockCopy(buffer, 0, sendBuffer, 0, buffer.Length);
+                }
+
+                if (nSendBuffLen > 0)
+                {
+                    while (true)
+                    {
+                        if (M2Share.g_Config.nSendBlock <= nSendBuffLen)
+                        {
+                            if (_gate.Socket != null)
+                            {
+                                if (_gate.Socket.Connected)
+                                {
+                                    var sendBuff = new byte[M2Share.g_Config.nSendBlock];
+                                    Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, M2Share.g_Config.nSendBlock);
+                                    _gate.Socket.Send(sendBuff, 0, sendBuff.Length, SocketFlags.None);
+                                }
+                                _gate.nSendCount++;
+                                _gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
+                            }
+                            _gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
+                            Array.Resize(ref sendBuffer, sendBuffer.Length + M2Share.g_Config.nSendBlock);
+                            nSendBuffLen -= M2Share.g_Config.nSendBlock;
+                            continue;
+                        }
+                        if (_gate.Socket != null)
+                        {
+                            if (_gate.Socket.Connected)
+                            {
+                                var sendBuff = new byte[nSendBuffLen];
+                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, nSendBuffLen);
+                                _gate.Socket.Send(sendBuff, 0, nSendBuffLen, SocketFlags.None);
+                            }
+                            _gate.nSendCount++;
+                            _gate.nSendBytesCount += nSendBuffLen;
+                            _gate.nSendBlockCount += nSendBuffLen;
+                        }
+                        nSendBuffLen = 0;
+                        break;
+                    }
+                }
+                if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
+                {
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.ErrorMessage(sExceptionMsg2);
+                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
+            }
+        }
+        
+        private void SendCheck(Socket Socket, int nIdent)
+        {
+            if (!Socket.Connected)
+            {
+                return;
+            }
+            var MsgHeader = new TMsgHeader
+            {
+                dwCode = grobal2.RUNGATECODE,
+                nSocket = 0,
+                wIdent = (ushort)nIdent,
+                nLength = 0
+            };
+            if (Socket.Connected)
+            {
+                var data = MsgHeader.ToByte();
+                Socket.Send(data, 0, data.Length, SocketFlags.None);
+            }
+        }
     }
 }
 
@@ -1176,6 +1307,9 @@ namespace M2Server
 {
     public class RunSock
     {
-        public static TGateInfo[] g_GateArr = new TGateInfo[20];
+        /// <summary>
+        /// 最大6个游戏网关
+        /// </summary>
+        public static TGateInfo[] g_GateArr = new TGateInfo[6];
     }
 }

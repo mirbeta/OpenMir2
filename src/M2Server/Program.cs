@@ -9,20 +9,17 @@ namespace M2Server
     class Program
     {
         private static ServerApp? serverApp = null;
-        private static Thread serverThread = null;
         private static CancellationTokenSource _cancellation;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
 
             serverApp = new ServerApp();
             _cancellation = new CancellationTokenSource();
-            
-            serverThread = new Thread(AppStart);
-            serverThread.IsBackground = true;
-            serverThread.Start();
+
+            await Task.Run(AppStart);
 
             Console.CancelKeyPress += (s, e) =>
             {
@@ -47,39 +44,13 @@ namespace M2Server
                     case "info":
                         Console.WriteLine("");
                         break;
-                    case "robot":
-                        //制造一个人工智障
-                        line = Console.ReadLine();
-                        if (int.TryParse(line, out var count))
-                        {
-                            if (count == 0)
-                            {
-                                count = 1;
-                            }
-                            for (int i = 0; i < count; i++)
-                            {
-                                M2Share.UserEngine.AddAILogon(new TAILogon()
-                                {
-                                    sCharName = "玩家" + SystemModule.RandomNumber.GetInstance().Random() + "号",
-                                    sMapName = "0",
-                                    sConfigFileName = "",
-                                    sHeroConfigFileName = "",
-                                    sFilePath = M2Share.g_Config.sEnvirDir,
-                                    sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
-                                    sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
-                                    nX = 285,
-                                    nY = 608
-                                });
-                            }
-                        }
-                        break;
                 }
             }
         }
 
-        static void AppStart()
+        static Task AppStart()
         {
-            serverApp.StartServer(_cancellation.Token);
+            return serverApp.StartServer(_cancellation.Token);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
 
@@ -19,7 +20,7 @@ namespace M2Server
             M2Share.MainOutMessage("读取配置信息完成...");
         }
 
-        public void StartServer(CancellationToken token)
+        public async Task StartServer(CancellationToken token)
         {
             int nCode;
             M2Share.LocalDB = new LocalDB();
@@ -152,7 +153,7 @@ namespace M2Server
                 }
                 StartEngine();
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
-                base.Start();
+                await base.Start();
             }
             catch (Exception e)
             {

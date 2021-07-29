@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace M2Server
 {
@@ -27,12 +28,13 @@ namespace M2Server
             _runServer = new Thread(Run) { IsBackground = true };
         }
 
-        protected void Start()
+        protected async Task Start()
         {
             _runServer.Start();
             _gateServer.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
+            M2Share.RunSocket.Start();
             _gamenoticeTimer = new Timer(ProcessGameNotice, null, 5000, 5000);
             _saveVariableTimer = new Timer(SaveItemNumber, null, 15000, 20000);
         }
@@ -48,7 +50,6 @@ namespace M2Server
             while (M2Share.boStartReady)
             {
                 M2Share.RunSocket.Run();
-
                 IdSrvClient.Instance.Run();
                 M2Share.UserEngine.Run();
                 ProcessGameRun();
