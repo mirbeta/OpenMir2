@@ -153,6 +153,10 @@ namespace M2Server
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
             const string sExceptionMsg3 = "[Exception] TRunSocket::ExecGateBuffers -> FreeMem";
             var nLen = 0;
+            if (data == null || data.Length <= 0 || nMsgLen <= 0)
+            {
+                return;
+            }
             try
             {
                 if (data != null && data.Length > 0)
@@ -475,37 +479,40 @@ namespace M2Server
             }
             byte[] BufferA;
             byte[] BufferB;
+            
+            //todo 当有大量小包需要合并的时候会导致程序处理不过来从而程序处于假死状态
+            
             // 将小数据合并为一个指定大小的数据
             try
             {
-                // var msgIdx = 0;
-                // BufferA = MsgList[msgIdx];//得到第一个消息
-                // while (true)
-                // {
-                //     if (msgIdx + 1 >= MsgList.Count)
-                //     {
-                //         break;
-                //     }
-                //     BufferB = MsgList[msgIdx + 1];//取得下一个消息
-                //     if (BufferA ==null || BufferB == null)
-                //     {
-                //         continue;
-                //     }
-                //     var nBuffALen = BufferA.Length;
-                //     var nBuffBLen = BufferB.Length;
-                //     if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
-                //     {
-                //         MsgList.RemoveAt(msgIdx + 1);
-                //         var BufferC = new byte[nBuffALen + nBuffBLen];
-                //         Buffer.BlockCopy(BufferA, 0, BufferC, 0, BufferA.Length);
-                //         Buffer.BlockCopy(BufferB, 0, BufferC, BufferA.Length, BufferB.Length);
-                //         BufferA = BufferC;
-                //         MsgList[msgIdx] = BufferA;
-                //         continue;
-                //     }
-                //     msgIdx++;
-                //     BufferA = BufferB;
-                // }
+                var msgIdx = 0;
+                BufferA = MsgList[msgIdx];// 
+                while (true)
+                {
+                    if (msgIdx + 1 >= MsgList.Count)
+                    {
+                        break;
+                    }
+                    BufferB = MsgList[msgIdx + 1];//取得下一个消息
+                    if (BufferA ==null || BufferB == null)
+                    {
+                        continue;
+                    }
+                    var nBuffALen = BufferA.Length;
+                    var nBuffBLen = BufferB.Length;
+                    if (nBuffALen + nBuffBLen < M2Share.g_Config.nSendBlock)
+                    {
+                        MsgList.RemoveAt(msgIdx + 1);
+                        var newBuffer = new byte[nBuffALen + nBuffBLen];
+                        Buffer.BlockCopy(BufferA, 0, newBuffer, 0, BufferA.Length);
+                        Buffer.BlockCopy(BufferB, 0, newBuffer, BufferA.Length, BufferB.Length);
+                        BufferA = newBuffer;
+                        MsgList[msgIdx] = BufferA;
+                        continue;
+                    }
+                    msgIdx++;
+                    BufferA = BufferB;
+                }
             }
             catch (Exception e)
             {
@@ -515,9 +522,6 @@ namespace M2Server
             try
             {
                 //todo 需要优化发送逻辑
-                //这里要优化，这里无法多线程发送数据，优化这里会对游戏体验提升比较大
-                //当只有一个网关或多个网关的时候当MsgList内容数据比较多的时候会进入当线程处理，
-                //会导致其他网关或者用户收到的消息会需要等待当前处理完才能处理其他玩家数据,正确的做法应该是一个网关对应一个MsgList
                 while (MsgList.Count > 0) 
                 {
                     BufferA = MsgList[0];
@@ -527,11 +531,17 @@ namespace M2Server
                         continue;
                     }
                     nSendBuffLen = BufferA.Length;//Move(BufferA, nSendBuffLen, sizeof(int));
-                    if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock)
+                    if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
                     {
-                        if (Gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock <= nSendBuffLen)
+                        //Move(DefMsg, BufferA[SizeOf(Integer) + SizeOf(TMsgHeader)], SizeOf(TDefaultMessage));
+                        var DefMsg = new TDefaultMessage(BufferA);
+                        M2Share.MainOutMessage(string.Format("消息 Ident:{0} Ident:{1}", DefMsg.Ident, DefMsg.Ident));
+                        M2Share.MainOutMessage(string.Format("数据大小 Block:{0} sMsg:{1} {2}",M2Share.g_Config.nCheckBlock, Gate.nSendBlockCount + nSendBuffLen, nSendBuffLen));
+                        
+                        if (Gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
                         {
-                            MsgList.RemoveAt(0);
+                            MsgList.RemoveAt(0); //如果数据大小超过指定大小则扔掉(编辑数据比较大，与此有点关系)
+                            BufferA = null;
                         }
                         else
                         {
@@ -593,8 +603,7 @@ namespace M2Server
                              break;
                          }
                      }
-                    BufferA = null;
-                    if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
+                     if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwSocLimit)
                     {
                         result = false;
                         break;
@@ -909,7 +918,6 @@ namespace M2Server
                         {
                             Gate.BufferList.Add(Buffer);
                             result = true;
-                            //Marshal.FreeHGlobal(Ptr);
                         }
                     }
                 }
@@ -1031,13 +1039,11 @@ namespace M2Server
 
         public void SetGateUserList(int nGateIdx, int nSocket, TPlayObject PlayObject)
         {
-            TGateUserInfo GateUserInfo;
-            TGateInfo Gate;
             if (nGateIdx > RunSock.g_GateArr.GetUpperBound(0))
             {
                 return;
             }
-            Gate = RunSock.g_GateArr[nGateIdx];
+            var Gate = RunSock.g_GateArr[nGateIdx];
             if (Gate.UserList == null)
             {
                 return;
@@ -1047,12 +1053,12 @@ namespace M2Server
             {
                 for (var i = 0; i < Gate.UserList.Count; i++)
                 {
-                    GateUserInfo = Gate.UserList[i];
-                    if (GateUserInfo != null && GateUserInfo.nSocket == nSocket)
+                    var gateUserInfo = Gate.UserList[i];
+                    if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
-                        GateUserInfo.FrontEngine = null;
-                        GateUserInfo.UserEngine = M2Share.UserEngine;
-                        GateUserInfo.PlayObject = PlayObject;
+                        gateUserInfo.FrontEngine = null;
+                        gateUserInfo.UserEngine = M2Share.UserEngine;
+                        gateUserInfo.PlayObject = PlayObject;
                         break;
                     }
                 }
@@ -1065,20 +1071,20 @@ namespace M2Server
 
         private void SendGateTestMsg(int nIndex)
         {
-            var DefMsg = new TDefaultMessage();
-            var MsgHdr = new TMsgHeader
+            var defMsg = new TDefaultMessage();
+            var msgHdr = new TMsgHeader
             {
                 dwCode = grobal2.RUNGATECODE,
                 nSocket = 0,
                 wIdent = grobal2.GM_TEST,
                 nLength = 100
             };
-            var nLen = MsgHdr.nLength + Marshal.SizeOf(typeof(TMsgHeader));
+            var nLen = msgHdr.nLength + Marshal.SizeOf(typeof(TMsgHeader));
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
-            backingStream.Write(MsgHdr.ToByte());
-            backingStream.Write(DefMsg.ToByte());
+            backingStream.Write(msgHdr.ToByte());
+            backingStream.Write(defMsg.ToByte());
             var stream = backingStream.BaseStream as MemoryStream;
             var buff = stream.ToArray();
             if (!AddGateBuffer(nIndex, buff))
@@ -1087,7 +1093,7 @@ namespace M2Server
             }
         }
 
-        public void KickUser(string sAccount, int nSessionID)
+        public void KickUser(string sAccount, int nSessionID,int payMode)
         {
             TGateUserInfo GateUserInfo;
             TGateInfo Gate;
@@ -1118,7 +1124,14 @@ namespace M2Server
                                     }
                                     if (GateUserInfo.PlayObject != null)
                                     {
-                                        GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        if (payMode == 0)
+                                        {
+                                            GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        }
+                                        else
+                                        {
+                                            GateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏！", TMsgColor.c_Red, TMsgType.t_Hint);
+                                        }
                                         GateUserInfo.PlayObject.m_boEmergencyClose = true;
                                         GateUserInfo.PlayObject.m_boSoftClose = true;
                                     }

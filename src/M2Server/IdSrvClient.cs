@@ -240,7 +240,7 @@ namespace M2Server
         private void DelSession(int nSessionID)
         {
             var sAccount = string.Empty;
-            TSessInfo SessInfo;
+            TSessInfo SessInfo = null;
             const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
             try
             {
@@ -257,7 +257,7 @@ namespace M2Server
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.RunSocket.KickUser(sAccount, nSessionID);
+                    M2Share.RunSocket.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.nPayMode);
                 }
             }
             catch (Exception e)
