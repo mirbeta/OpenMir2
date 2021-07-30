@@ -72,25 +72,13 @@ namespace M2Server
         public long m_dwPickUpItemTick = 0;
         public TMapItem m_SelMapItem = null;
         /// <summary>
-        /// 使用合击间隔
-        /// </summary>
-        public long m_dwHeroUseSpellTick = 0;
-        /// <summary>
         /// 跑步计时
         /// </summary>
         public long dwTick5F4 = 0;
         /// <summary>
-        /// 连击技能列表
-        /// </summary>
-        public ArrayList m_BatterMagicList = null;
-        /// <summary>
         /// 受攻击说话列表
         /// </summary>
         public ArrayList m_AISayMsgList = null;
-        /// <summary>
-        /// 自动召唤英雄
-        /// </summary>
-        public bool m_boAutoRecallHero = false;
         /// <summary>
         /// 绿红毒标识
         /// </summary>
@@ -158,9 +146,7 @@ namespace M2Server
             m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
             m_SelMapItem = null;
             m_dwPickUpItemTick = HUtil32.GetTickCount();
-            m_dwHeroUseSpellTick = HUtil32.GetTickCount();// 使用合击间隔
             m_AISayMsgList = new ArrayList();// 受攻击说话列表
-            m_boAutoRecallHero = false;// 自动召唤英雄
             n_AmuletIndx = 0;
             m_boCanPickIng = false;
             m_nSelectMagic = 0;
@@ -1416,19 +1402,6 @@ namespace M2Server
                 m_boAIStart = false;
             }
             base.Die();
-            //制造一个人工智障
-            M2Share.UserEngine.AddAILogon(new TAILogon()
-            {
-                sCharName = this.m_sCharName,
-                sConfigFileName = "",
-                sHeroConfigFileName = "",
-                sFilePath = M2Share.g_Config.sEnvirDir,
-                sConfigListFileName = M2Share.g_Config.sAIConfigListFileName,
-                sHeroConfigListFileName = M2Share.g_Config.sHeroAIConfigListFileName,
-                sMapName = "0",
-                nX = 285,
-                nY = 608
-            });
         }
 
         private bool CanWalk(short nCurrX, short nCurrY, int nTargetX, int nTargetY, byte nDir, ref int nStep, bool boFlag)
@@ -3594,9 +3567,8 @@ namespace M2Server
                         }
                         if (m_boProtectStatus) // 守护状态
                         {
-                            if ((m_nProtectTargetX == 0) || (m_nProtectTargetY == 0))
+                            if ((m_nProtectTargetX == 0) || (m_nProtectTargetY == 0))// 取守护坐标
                             {
-                                // 取守护坐标
                                 m_nProtectTargetX = m_nCurrX;// 守护坐标
                                 m_nProtectTargetY = m_nCurrY;// 守护坐标
                             }
@@ -3610,9 +3582,8 @@ namespace M2Server
                                     m_boProtectOK = true;
                                     m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
-                                if ((m_nGotoProtectXYCount > 20) && !m_boProtectOK)
+                                if ((m_nGotoProtectXYCount > 20) && !m_boProtectOK)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
-                                    // 20次还没有走到守护坐标，则飞回坐标上
                                     if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 13) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 13))
                                     {
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
@@ -3680,9 +3651,8 @@ namespace M2Server
                         {
                             if (M2Share.g_Config.boHPAutoMoveMap)
                             {
-                                if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3)) && (HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000))
+                                if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3)) && (HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000)) // 低血时回城或回守护点 
                                 {
-                                    // 低血时回城或回守护点 20110512
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
                                     if (m_boProtectStatus) // 守护状态
@@ -3694,8 +3664,7 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        // 不是守护状态，直接回城
-                                        MoveToHome(); // 移动到回城点
+                                        MoveToHome(); // 不是守护状态，直接回城
                                     }
                                 }
                             }
@@ -3754,7 +3723,6 @@ namespace M2Server
                                                     }
                                                 }
                                             }
-
                                             if (!boFind)
                                             {
                                                 UserItem = new TUserItem();
@@ -3773,7 +3741,6 @@ namespace M2Server
                                             }
                                         }
                                     }
-
                                     for (nWhere = m_UseItems.GetLowerBound(0); nWhere <= m_UseItems.GetUpperBound(0); nWhere++)
                                     {
                                         if (m_UseItems[nWhere] != null && m_UseItems[nWhere].wIndex > 0)
@@ -3798,9 +3765,8 @@ namespace M2Server
                                     }
                                 }
                             }
-                            if (M2Share.g_Config.boRenewHealth)
+                            if (M2Share.g_Config.boRenewHealth) // 自动增加HP MP
                             {
-                                // 自动增加HP MP
                                 if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
                                 {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
@@ -3837,9 +3803,8 @@ namespace M2Server
 
                     if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
                     {
-                        if (m_boProtectStatus && (m_TargetCret == null))
+                        if (m_boProtectStatus && (m_TargetCret == null))// 守护状态
                         {
-                            // 守护状态
                             if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 50) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 50))
                             {
                                 m_boProtectOK = false;
@@ -3862,7 +3827,6 @@ namespace M2Server
             catch(Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
-                // M2Share.MainOutMessage(format("{%s} TAIPlayObject.Run Code:%d", new byte[] { nCode }));
             }
             base.Run();
         }
@@ -3892,11 +3856,10 @@ namespace M2Server
                             result = false;
                         }
                     }
-                    if (BaseObject.m_boAI && !m_boInFreePKArea)
+                    if (BaseObject.m_boAI && !m_boInFreePKArea)// 假人不攻击假人,行会战除外
                     {
                         result = false;
                     }
-                    // 假人不攻击假人,行会战除外
                     switch (BaseObject.m_btRaceServer)
                     {
                         case grobal2.RC_ARCHERGUARD:
@@ -3920,9 +3883,8 @@ namespace M2Server
                 }
                 else
                 {
-                    if (m_btAttatckMode == M2Share.HAM_PKATTACK)
+                    if (m_btAttatckMode == M2Share.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        // 红名模式，除红名目标外，受人攻击时才还击
                         if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
                         {
                             if (PKLevel() >= 2)
@@ -3975,9 +3937,8 @@ namespace M2Server
                                 }
                             }
                         }
-                        if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))
+                        if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))// 安全区不能打人物和英雄
                         {
-                            // 安全区不能打人物和英雄
                             if (BaseObject.InSafeZone() || InSafeZone())
                             {
                                 result = false;
@@ -3987,11 +3948,10 @@ namespace M2Server
                         {
                             result = false;
                         }
-                        if (BaseObject.m_boAI && (!m_boInFreePKArea || (BaseObject.PKLevel() < 2)))
+                        if (BaseObject.m_boAI && (!m_boInFreePKArea || (BaseObject.PKLevel() < 2)))// 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
-                        // 假人不攻击假人,行会战除外
                         switch (BaseObject.m_btRaceServer)
                         {
                             case grobal2.RC_ARCHERGUARD:
@@ -4868,15 +4828,6 @@ namespace M2Server
                 m_dwTargetFocusTick = HUtil32.GetTickCount();
                 if (m_boDeath || m_boGhost)
                 {
-                    return result;
-                }
-                if (m_boAI && (m_TargetCret != null) && (HUtil32.GetTickCount() - m_dwHeroUseSpellTick > 12000))
-                {
-                    // 英雄连击停止后才使用合击
-                    m_dwHeroUseSpellTick = HUtil32.GetTickCount();// 自动使用合击间隔
-                    //ClientHeroUseSpell();
-                    m_boIsUseMagic = false;// 是否能躲避
-                    result = true;
                     return result;
                 }
                 switch (m_btJob)

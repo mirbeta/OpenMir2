@@ -247,7 +247,9 @@
       <workItem from="1627603319581" duration="1671000" />
       <workItem from="1627605770993" duration="2989000" />
       <workItem from="1627630031727" duration="1897000" />
-      <workItem from="1627647703905" duration="624000" />
+      <workItem from="1627647703905" duration="1799000" />
+      <workItem from="1627658173635" duration="884000" />
+      <workItem from="1627661323365" duration="484000" />
     </task>
     <servers />
   </component>
@@ -328,13 +330,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>
-          <line>7576</line>
+          <line>7541</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" initialLine="7577" containingFunctionPresentation="method 'CheckHeroAmulet'">
             <startOffsets>
-              <option value="344511" />
+              <option value="343256" />
             </startOffsets>
             <endOffsets>
-              <option value="344567" />
+              <option value="343312" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="34" />
@@ -357,19 +359,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="113" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Program.cs</url>
-          <line>35</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Program.cs" initialLine="36" containingFunctionPresentation="method 'Main'">
-            <startOffsets>
-              <option value="1025" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1055" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
