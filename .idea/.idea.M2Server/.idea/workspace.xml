@@ -13,11 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/UserClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +48,6 @@
       <option value="$PROJECT_DIR$/src/M2Server/Monsters/TElfWarriorMonster.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" />
@@ -98,6 +93,7 @@
       <option value="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" />
       <option value="$PROJECT_DIR$/src/RunGate/RunGate.csproj" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -250,7 +246,8 @@
       <workItem from="1627555064726" duration="16896000" />
       <workItem from="1627603319581" duration="1671000" />
       <workItem from="1627605770993" duration="2989000" />
-      <workItem from="1627630031727" duration="1506000" />
+      <workItem from="1627630031727" duration="1897000" />
+      <workItem from="1627647703905" duration="624000" />
     </task>
     <servers />
   </component>
@@ -331,13 +328,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>
-          <line>7577</line>
+          <line>7576</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" initialLine="7577" containingFunctionPresentation="method 'CheckHeroAmulet'">
             <startOffsets>
-              <option value="344479" />
+              <option value="344511" />
             </startOffsets>
             <endOffsets>
-              <option value="344535" />
+              <option value="344567" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="34" />

@@ -4025,7 +4025,6 @@ namespace M2Server
 
         public override void SearchViewRange()
         {
-            int I;
             int nStartX;
             int nEndX;
             int nStartY;
@@ -4043,7 +4042,8 @@ namespace M2Server
             TVisibleMapItem VisibleMapItem;
             int nVisibleFlag;
             long dwRunTick;
-            const string sExceptionMsg1 = "{%s} TAIPlayObject::SearchViewRange Code:%d";
+            const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
+            const string  sExceptionMsg2 = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             try
             {
                 if (m_boGhost)
@@ -4052,9 +4052,9 @@ namespace M2Server
                 }
                 if (m_VisibleItems.Count > 0)
                 {
-                    for (I = 0; I < m_VisibleItems.Count; I++)
+                    for (var i = 0; i < m_VisibleItems.Count; i++)
                     {
-                        m_VisibleItems[I].nVisibleFlag = 0;
+                        m_VisibleItems[i].nVisibleFlag = 0;
                     }
                 }
             }
@@ -4207,7 +4207,7 @@ namespace M2Server
             }
             catch (Exception E)
             {
-                // M2Share.MainOutMessage(format(sExceptionMsg2, new byte[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }));
+                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] {  m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
@@ -4300,28 +4300,28 @@ namespace M2Server
             }
             catch (Exception E)
             {
-                // M2Share.MainOutMessage(format(sExceptionMsg2, new byte[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY, nCheckCode }));
+                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
             {
-                I = 0;
+                var position = 0;
                 while (true)
                 {
                     try
                     {
-                        if (m_VisibleItems.Count <= I)
+                        if (m_VisibleItems.Count <= position)
                         {
                             break;
                         }
                         try
                         {
-                            VisibleMapItem = m_VisibleItems[I];
+                            VisibleMapItem = m_VisibleItems[position];
                             nVisibleFlag = VisibleMapItem.nVisibleFlag;
                         }
                         catch
                         {
-                            m_VisibleItems.RemoveAt(I);
+                            m_VisibleItems.RemoveAt(position);
                             if (m_VisibleItems.Count > 0)
                             {
                                 continue;
@@ -4330,7 +4330,7 @@ namespace M2Server
                         }
                         if (VisibleMapItem.nVisibleFlag == 0)
                         {
-                            m_VisibleItems.RemoveAt(I);
+                            m_VisibleItems.RemoveAt(position);
                             VisibleMapItem = null;
                             if (m_VisibleItems.Count > 0)
                             {
@@ -4343,25 +4343,25 @@ namespace M2Server
                     {
                         break;
                     }
-                    I++;
+                    position++;
                 }
-                I = 0;
+                position = 0;
                 while (true)
                 {
                     try
                     {
-                        if (m_VisibleEvents.Count <= I)
+                        if (m_VisibleEvents.Count <= position)
                         {
                             break;
                         }
                         try
                         {
-                            MapEvent = m_VisibleEvents[I];
+                            MapEvent = m_VisibleEvents[position];
                             nVisibleFlag = MapEvent.nVisibleFlag;
                         }
                         catch
                         {
-                            m_VisibleEvents.RemoveAt(I);
+                            m_VisibleEvents.RemoveAt(position);
                             if (m_VisibleEvents.Count > 0)
                             {
                                 continue;
@@ -4374,7 +4374,7 @@ namespace M2Server
                             {
                                 case 0:
                                     SendMsg(this, grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
-                                    m_VisibleEvents.RemoveAt(I);
+                                    m_VisibleEvents.RemoveAt(position);
                                     if (m_VisibleEvents.Count > 0)
                                     {
                                         continue;
@@ -4394,12 +4394,12 @@ namespace M2Server
                     {
                         break;
                     }
-                    I++;
+                    position++;
                 }
             }
             catch
             {
-                //M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + (m_nCurrX).ToString() + ',' + (m_nCurrY).ToString() + ',' + " SearchViewRange 3 CheckCode:" + (nCheckCode).ToString());
+                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + (m_nCurrX).ToString() + ',' + (m_nCurrY).ToString() + ',' + " SearchViewRange 3");
                 KickException();
             }
         }
