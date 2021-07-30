@@ -12,25 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/RunGate/EDcode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/EDcode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMsgHeader.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RobotSystem/TRobotObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RobotSystem/TRobotObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RunDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunDB.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +44,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/Map/Envir.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" />
@@ -108,8 +91,9 @@
       <option value="$PROJECT_DIR$/src/SystemModule/Packages/TMsgHeader.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/EDcode.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/GateShare.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
+      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
     </changedPaths>
   </component>
@@ -260,7 +244,8 @@
       <workItem from="1627489061744" duration="730000" />
       <workItem from="1627512611964" duration="3411000" />
       <workItem from="1627546261209" duration="1687000" />
-      <workItem from="1627555064726" duration="16817000" />
+      <workItem from="1627555064726" duration="16896000" />
+      <workItem from="1627603319581" duration="390000" />
     </task>
     <servers />
   </component>
@@ -383,58 +368,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="135" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/Program.cs</url>
-          <line>10</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/Program.cs" initialLine="10" containingFunctionPresentation="method 'Main'">
-            <startOffsets>
-              <option value="175" />
-            </startOffsets>
-            <endOffsets>
-              <option value="204" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="139" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/GateShare.cs</url>
-          <line>120</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" initialLine="120" containingFunctionPresentation="method 'AddMainLogMsg'">
-            <startOffsets>
-              <option value="4580" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4621" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="141" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>538</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="538" containingFunctionPresentation="method 'StartService'">
-            <startOffsets>
-              <option value="26519" />
-            </startOffsets>
-            <endOffsets>
-              <option value="26546" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="142" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>749</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="749" containingFunctionPresentation="method 'RestSessionArray'">
-            <startOffsets>
-              <option value="36579" />
-            </startOffsets>
-            <endOffsets>
-              <option value="36616" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="143" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

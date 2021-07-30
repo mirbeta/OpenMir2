@@ -578,9 +578,9 @@ namespace RunGate
                 decodeTimer = new Timer(DecodeTimer, null, 0, 10);
                 
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
-                // GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
-                // GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);
-                // GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
+                GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
+                GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);
+                GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
             }
             catch (Exception E)
             {
@@ -746,7 +746,6 @@ namespace RunGate
                 {
                     GateShare.SessionArray[i] = new TSessionInfo();
                 }
-
                 tSession = GateShare.SessionArray[i];
                 tSession.Socket = null;
                 tSession.sSocData = "";
@@ -769,9 +768,9 @@ namespace RunGate
             }
         }
 
-        public void ServerSocketClientConnect(object Sender,AsyncUserToken e)
+        private void ServerSocketClientConnect(object Sender,AsyncUserToken e)
         {
-            int nSockIdx;
+            ushort nSockIdx = (ushort)e.nIndex;
             TSessionInfo UserSession;
             string sRemoteAddress = e.RemoteIPaddr;
             if (GateShare.boGateReady)
@@ -812,7 +811,7 @@ namespace RunGate
                 }
                 if (nSockIdx < GateShare.GATEMAXSESSION)
                 {
-                    //SendServerMsg(Grobal2.GM_OPEN, nSockIdx, Socket.SocketHandle, 0, Socket.RemoteAddress.Length + 1, (Socket.RemoteAddress as string));
+                    SendServerMsg(Grobal2.GM_OPEN, nSockIdx, e.nIndex, 0, e.RemoteIPaddr.Length + 1, e.RemoteIPaddr);
                     //Socket.nIndex = nSockIdx;
                     GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 }
@@ -831,35 +830,34 @@ namespace RunGate
             }
         }
 
-        public void ServerSocketClientDisconnect(object Sender, AsyncUserToken e)
+        private void ServerSocketClientDisconnect(object Sender, AsyncUserToken e)
         {
-            int nSockIndex;
             TSessionInfo UserSession;
-            // string sRemoteAddr = Socket.RemoteAddress;
-            // nSockIndex = Socket.nIndex;
-            // if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
-            // {
-            //     UserSession = GateShare.SessionArray[nSockIndex];
-            //     UserSession.Socket = null;
-            //     UserSession.nSckHandle =  -1;
-            //     UserSession.sSocData = "";
-            //     UserSession.sSendData = "";
-            //     Socket.nIndex =  -1;
-            //     GateShare.SessionCount -= 1;
-            //     if (GateShare.boGateReady)
-            //     {
-            //         SendServerMsg(Grobal2.GM_CLOSE, 0, Socket.SocketHandle, 0, 0, null);
-            //         GateShare.AddMainLogMsg("断开连接: " + Socket.RemoteAddress, 5);
-            //     }
-            // }
+            string sRemoteAddr = e.RemoteIPaddr;
+            int  nSockIndex = e.nIndex;
+            if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
+            {
+                UserSession = GateShare.SessionArray[nSockIndex];
+                UserSession.Socket = null;
+                UserSession.nSckHandle = -1;
+                UserSession.sSocData = "";
+                UserSession.sSendData = "";
+                //Socket.nIndex =  -1;
+                GateShare.SessionCount -= 1;
+                if (GateShare.boGateReady)
+                {
+                    SendServerMsg(Grobal2.GM_CLOSE, 0, e.nIndex, 0, 0, null);
+                    GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
+                }
+            }
         }
 
-        public void ServerSocketClientError(object Sender, AsyncSocketErrorEventArgs e)
+        private void ServerSocketClientError(object Sender, AsyncSocketErrorEventArgs e)
         {
             
         }
 
-        public void ServerSocketClientRead(object Sender, AsyncUserToken token)
+        private void ServerSocketClientRead(object Sender, AsyncUserToken token)
         {
             long dwProcessMsgTick = 0;
             long dwProcessMsgTime= 0;
@@ -871,7 +869,8 @@ namespace RunGate
             TSendUserData UserData = null;
             var nMsgCount= 0;
             TSessionInfo UserSession = null;
-            try {
+            try
+            {
                 dwProcessMsgTick = HUtil32.GetTickCount();
                 sRemoteAddress = token.RemoteIPaddr;
                 sReviceMsg = HUtil32.GetString(token.ReceiveBuffer, 0, token.BytesReceived);
@@ -885,7 +884,7 @@ namespace RunGate
                         {
                             if (GateShare.bokickOverPacketSize)
                             {
-                                switch(GateShare.BlockMethod)
+                                switch (GateShare.BlockMethod)
                                 {
                                     case TBlockIPMethod.mDisconnect:
                                         break;
@@ -898,7 +897,7 @@ namespace RunGate
                                         CloseConnect(sRemoteAddress);
                                         break;
                                 }
-                                GateShare.AddMainLogMsg("踢除连接: IP(" + sRemoteAddress + "),信息数量(" + (nMsgCount).ToString() + "),数据包长度(" + (nReviceLen).ToString() + ")", 1);
+                                GateShare.AddMainLogMsg("踢除连接: IP(" + sRemoteAddress + "),信息数量(" + nMsgCount + "),数据包长度(" + nReviceLen + ")", 1);
                                 token.Socket.Close();
                             }
                             return;
@@ -919,7 +918,7 @@ namespace RunGate
                             UserSession.boSendCheck = false;
                             UserSession.nCheckSendLength = 0;
                             UserSession.dwReceiveTick = HUtil32.GetTickCount();
-                            sReviceMsg = sReviceMsg.Substring(1 - 1 ,nPos - 1) + sReviceMsg.Substring(nPos + 1 - 1 ,sReviceMsg.Length);
+                            sReviceMsg = sReviceMsg.Substring(1 - 1, nPos - 1) + sReviceMsg.Substring(nPos + 1 - 1, sReviceMsg.Length);
                         }
                         if ((sReviceMsg != "") && GateShare.boGateReady && !GateShare.boCheckServerFail)
                         {
@@ -937,7 +936,8 @@ namespace RunGate
                     dwProcessClientMsgTime = dwProcessMsgTime;
                 }
             }
-            catch {
+            catch
+            {
                 GateShare.AddMainLogMsg("[Exception] ClientRead", 1);
             }
         }
@@ -976,6 +976,7 @@ namespace RunGate
                     //ClientSocket.Active = false;
                     ClientSocket.Address = GateShare.ServerAddr;
                     ClientSocket.Port = GateShare.ServerPort;
+                    ClientSocket.Connect();
                     //ClientSocket.Active = true;
                 }
             }
@@ -1000,7 +1001,7 @@ namespace RunGate
             }
         }
 
-        public void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateShare.boGateReady = true;
             GateShare.dwCheckServerTick = HUtil32.GetTickCount();
@@ -1011,7 +1012,7 @@ namespace RunGate
             GateShare.dwCheckServerTimeMax = 0;
         }
 
-        public void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             TSessionInfo UserSession;
             for (var i = 0; i < GateShare.GATEMAXSESSION; i ++ )
@@ -1039,7 +1040,7 @@ namespace RunGate
             boServerReady = false;
         }
 
-        public void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             long dwTime10;
             long dwTick14;
@@ -1257,8 +1258,7 @@ namespace RunGate
 
         private bool CheckDefMsg(TDefaultMessage DefMsg, TSessionInfo SessionInfo)
         {
-            bool result;
-            result = true;
+            var result = true;
             switch(DefMsg.Ident)
             {
                 case Grobal2.CM_WALK:
