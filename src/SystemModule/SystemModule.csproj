@@ -18,5 +18,6 @@
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="System.Data.SQLite.Core" Version="1.0.114.3" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0-preview.6.21352.12" />
     </ItemGroup>
 </Project>

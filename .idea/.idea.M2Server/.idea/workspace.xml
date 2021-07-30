@@ -12,9 +12,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/RunGate/UserClient.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +49,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/LocalDB.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjectSystem.cs" />
@@ -80,7 +83,6 @@
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
-      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Packages/TDefaultMessage.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
@@ -92,8 +94,11 @@
       <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/EDcode.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/GateShare.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" />
+      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" />
+      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/UserClient.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
     </changedPaths>
   </component>
@@ -245,7 +250,8 @@
       <workItem from="1627512611964" duration="3411000" />
       <workItem from="1627546261209" duration="1687000" />
       <workItem from="1627555064726" duration="16896000" />
-      <workItem from="1627603319581" duration="390000" />
+      <workItem from="1627603319581" duration="1671000" />
+      <workItem from="1627605770993" duration="2775000" />
     </task>
     <servers />
   </component>
@@ -313,13 +319,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs</url>
-          <line>242</line>
+          <line>240</line>
           <properties documentPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" initialLine="228" containingFunctionPresentation="method 'Start'">
             <startOffsets>
-              <option value="8545" />
+              <option value="8429" />
             </startOffsets>
             <endOffsets>
-              <option value="8628" />
+              <option value="8512" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="21" />
@@ -368,6 +374,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="135" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
+          <line>180</line>
+          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="217" containingFunctionPresentation="method 'DecodeTimer'">
+            <startOffsets>
+              <option value="8501" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8526" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
+          <line>124</line>
+          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="161" containingFunctionPresentation="method 'DecodeTimer'">
+            <startOffsets>
+              <option value="5649" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5685" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="144" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
+          <line>101</line>
+          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="138" containingFunctionPresentation="method 'DecodeTimer'">
+            <startOffsets>
+              <option value="4603" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4641" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="146" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

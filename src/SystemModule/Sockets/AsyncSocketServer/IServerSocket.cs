@@ -21,7 +21,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
         private Object m_writePoolLock = new Object();
         // 接收数据事件对象集合
         Dictionary<string, AsyncUserToken> m_tokens;
-        private Dictionary<string, AsyncUserToken> m_sockets;
 
         // 添加功能
         int m_numConnections;           // 设计同时处理的连接最大数
@@ -108,10 +107,10 @@ namespace SystemModule.Sockets.AsyncSocketServer
             {
                 return null;
             }
-            if (m_sockets.ContainsKey(ipAddr))
-            {
-                return m_sockets[ipAddr];
-            }
+            // if (m_sockets.ContainsKey(ipAddr))
+            // {
+            //     return m_sockets[ipAddr];
+            // }
             return null;
         }
 
@@ -142,7 +141,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
 
             // 接收数据事件参数对象集合
             m_tokens = new Dictionary<string, AsyncUserToken>();
-            m_sockets = new Dictionary<string, AsyncUserToken>();
 
             // 初始信号量
             m_maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
@@ -326,7 +324,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
                 this.m_tokens.Add(token.ConnectionId, token);// 添加到集合中
-                this.m_sockets.Add(token.RemoteIPaddr, token);
             }
 
             EventHandler<AsyncUserToken> handler = OnClientConnect;

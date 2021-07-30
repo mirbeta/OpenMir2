@@ -75,7 +75,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 this.StartWaitingForData(asyncState);//开始接收数据
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
                 RaiseDisconnectedEvent();
                 IsConnected = false;
@@ -123,7 +123,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
-                    byte[] destinationArray = new byte[length];//目的字节数组
+                    var destinationArray = new byte[length];//目的字节数组
                     Array.Copy(this.databuffer, 0, destinationArray, 0, length);
                     if (null != this.ReceivedDatagram)
                     {
