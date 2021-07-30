@@ -19,7 +19,7 @@ namespace RunGate
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
-            ClientSocket.Address = "10.10.0.188";//GateShare.ServerAddr;
+            ClientSocket.Address = GateShare.ServerAddr;
             ClientSocket.Port = GateShare.ServerPort;
         }
 

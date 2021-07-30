@@ -42,7 +42,7 @@ namespace RunGate
             _userClient = new UserClient();
         }
 
-        public void DecodeTimer(object obj)
+        private void DecodeTimer(object obj)
         {
             long dwLoopProcessTime;
             long dwProcessReviceMsgLimiTick;

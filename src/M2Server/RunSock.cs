@@ -810,23 +810,23 @@ namespace M2Server
             n4F8 = 0;
         }
 
-        public bool AddGateBuffer(int GateIdx, byte[] Buffer)
+        public bool AddGateBuffer(int gateIdx, byte[] Buffer)
         {
             var result = false;
             TGateInfo Gate;
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
-                if (GateIdx < grobal2.RUNGATEMAX)
+                if (gateIdx < grobal2.RUNGATEMAX)
                 {
-                    Gate = RunSock.g_GateArr[GateIdx];
+                    Gate = RunSock.g_GateArr[gateIdx];
                     if (Gate.BufferChannel != null && Buffer != null)
                     {
+                        M2Share.MainOutMessage($"待消费数量:[{Gate.BufferChannel.Reader.Count}]");
                         if (Gate.boUsed && Gate.Socket != null)
                         {
                             Gate.BufferChannel.Writer.TryWrite(Buffer);
                             result = true;
-                            M2Share.MainOutMessage($"待消费数量:[{Gate.BufferChannel.Reader.Count}]");
                         }
                     }
                 }
@@ -1192,7 +1192,7 @@ namespace M2Server
                 {
                     SendGateBuffers(buff);
                 }
-                M2Share.MainOutMessage("待处理数量:" + _reader.Count);
+                //M2Share.MainOutMessage("待处理数量:" + _reader.Count);
             }
         }
         
