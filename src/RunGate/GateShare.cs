@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
 
@@ -12,15 +14,16 @@ namespace RunGate
         public static object CS_MainLog = null;
         public static object CS_FilterMsg = null;
         public static ArrayList MainLogMsgList = null;
-        public static int nShowLogLevel = 3;
+        public static int nShowLogLevel = 0;
         public static string GateClass = "GameGate";
         public static string GateName = "游戏网关";
         public static string TitleName = "SKY引擎";
-        public static string ServerAddr = "127.0.0.1";
+        public static string ServerAddr = "10.10.0.58";
         public static int ServerPort = 5000;
-        public static string GateAddr = "0.0.0.0";
+        public static string GateAddr = "10.10.0.101";
         public static int GatePort = 7200;
         public static bool boStarted = false;
+        public static bool boServerReady;
         public static bool boClose = false;
         /// <summary>
         /// 显示B 或 KB
@@ -40,7 +43,8 @@ namespace RunGate
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
         public static IList<string> AbuseList = null;
-        public static TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION - 1 + 1];
+        public static TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION];
+        public static ConcurrentDictionary<string, int> SessionIndex;
         /// <summary>
         /// 连接会话数
         /// </summary>
@@ -50,8 +54,14 @@ namespace RunGate
         /// </summary>
         public static bool boShowSckData = false;
         public static string sReplaceWord = "*";
-        public static IList<TSendUserData> ReviceMsgList = null;
-        public static IList<TSendUserData> SendMsgList = null;
+        /// <summary>
+        /// 接收封包（数据引擎-》网关）
+        /// </summary>
+        public static Channel<TSendUserData> ReviceMsgList = null;
+        /// <summary>
+        /// 发送封包（网关-》客户端）
+        /// </summary>
+        public static Channel<TSendUserData> SendMsgList = null;
         public static int nCurrConnCount = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
@@ -123,6 +133,7 @@ namespace RunGate
                 {
                     tMsg = "[" + DateTime.Now.ToString() + "] " + Msg;
                     MainLogMsgList.Add(tMsg);
+                    Console.WriteLine(tMsg);
                 }
             }
             finally
@@ -163,6 +174,26 @@ namespace RunGate
             AddMainLogMsg("IP过滤配置信息加载完成...", 4);
         }
 
+        public static int GetSocketIndex(string connectionId)
+        {
+            var socketIndex = 0;
+            if (GateShare.SessionIndex.TryGetValue(connectionId, out socketIndex))
+            {
+                return socketIndex;
+            }
+            return socketIndex;
+        }
+
+        public static int DelSocketIndex(string connectionId)
+        {
+            var socketIndex = 0;
+            if (GateShare.SessionIndex.TryRemove(connectionId, out socketIndex))
+            {
+                return socketIndex;
+            }
+            return socketIndex;
+        }
+
         public static void Initialization()
         {
             Conf = new IniFile(sConfigFileName);
@@ -172,12 +203,13 @@ namespace RunGate
             CS_FilterMsg = new object();
             MainLogMsgList = new ArrayList();
             AbuseList = new List<string>();
-            ReviceMsgList = new List<TSendUserData>();
-            SendMsgList = new List<TSendUserData>();
+            ReviceMsgList = Channel.CreateUnbounded<TSendUserData>();
+            SendMsgList = Channel.CreateUnbounded<TSendUserData>();
             List_45AA58 = new ArrayList();
             boShowSckData = false;
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();
+            SessionIndex = new ConcurrentDictionary<string, int>();
         }
     } 
 }

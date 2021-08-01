@@ -1,24 +1,32 @@
 ﻿using System;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace RunGate
 {
     class Program
     {
-        private static ServerApp _serverApp;
-        private static Thread _appThread;
-        
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            _serverApp = new ServerApp();
-            _appThread = new Thread(Run);
-            _appThread.IsBackground = true;
-            _appThread.Start();
-            
-            Console.WriteLine("Hello World!");
+            var builder = new HostBuilder()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddSingleton<ServerApp>();
+                    services.AddSingleton<UserClientService>();
+                    services.AddSingleton<ServerService>();
+                    services.AddHostedService<AppService>();
+                });
+
+            await builder.RunConsoleAsync();
 
             while (true)
             {
@@ -26,11 +34,6 @@ namespace RunGate
                 
                 Console.WriteLine(line);
             }
-        }
-
-        static void Run(object obj)
-        {
-            _serverApp.StartService();
         }
     }
 }

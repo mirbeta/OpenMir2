@@ -8,7 +8,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
 {
     public class IClientScoket
     {
-        private readonly int buffersize = 0x10000;//缓冲区大小
+        private readonly int buffersize = 1024;//缓冲区大小
         private Socket cli = null;//客户端Socket
         private readonly byte[] databuffer;//缓冲区
         public bool IsConnected;//连接是否成功
@@ -46,7 +46,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(ip), port);
             try
             {
-                this.cli.BeginConnect(remoteEP, new AsyncCallback(this.HandleConnect), this.cli);//开始异步连接
+                this.cli.BeginConnect(remoteEP, this.HandleConnect, this.cli);//开始异步连接
             }
             catch (ObjectDisposedException)
             {
@@ -95,7 +95,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 //开始异步接收数据
-                soc.BeginReceive(this.databuffer, 0, this.buffersize, SocketFlags.None, new AsyncCallback(this.HandleIncomingData), soc);
+                soc.BeginReceive(this.databuffer, 0, this.buffersize, SocketFlags.None, this.HandleIncomingData, soc);
             }
             catch (ObjectDisposedException)
             {
@@ -113,10 +113,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
 
         private void HandleIncomingData(IAsyncResult parameter)
         {
-            Socket asyncState = (Socket)parameter.AsyncState;
+            var asyncState = (Socket)parameter.AsyncState;
             try
             {
-                int length = asyncState.EndReceive(parameter);//结束异步接收数据
+                var length = asyncState.EndReceive(parameter);//结束异步接收数据
                 if (0 == length)
                 {
                     this.RaiseDisconnectedEvent();//引发断开连接事件
@@ -124,12 +124,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 else
                 {
                     var destinationArray = new byte[length];//目的字节数组
-                    Array.Copy(this.databuffer, 0, destinationArray, 0, length);
-                    if (null != this.ReceivedDatagram)
-                    {
-                        //引发接收数据事件
-                        this.ReceivedDatagram(this, new DSCClientDataInEventArgs(this.cli, destinationArray));
-                    }
+                    Buffer.BlockCopy(this.databuffer, 0, destinationArray, 0, length);
+                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(this.cli, destinationArray)); //引发接收数据事件
                     this.StartWaitingForData(asyncState);//继续接收数据
                 }
             }
@@ -157,7 +153,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 //开始异步发送数据
-                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.HandleSendFinished), this.cli);
+                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, this.HandleSendFinished, this.cli);
             }
             catch (ObjectDisposedException)
             {
@@ -178,7 +174,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 //开始异步发送数据
-                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(this.HandleSendFinished), this.cli);
+                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, this.HandleSendFinished, this.cli);
             }
             catch (ObjectDisposedException)
             {
@@ -192,6 +188,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 this.RaiseErrorEvent(exception);//引发错误事件
             }
+        }
+
+        public void SendBuff(byte[] buffer)
+        {
+            this.cli.Send(buffer);
         }
 
         private void HandleSendFinished(IAsyncResult parameter)

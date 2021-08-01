@@ -157,6 +157,17 @@ namespace SystemModule
             return sb.ToString();
         }
 
+        public static string StrPasTest(byte[] buff)
+        {
+            var nLen = buff.Length - 1;
+            var sb = new char[nLen];
+            for (var i = 0; i < nLen; i++)
+            {
+                sb[i] = (char)buff[i];
+            }
+            return new string(sb);
+        }
+
         /// <summary>
         /// 字符串转Byte数组
         /// </summary>
