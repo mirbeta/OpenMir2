@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
 
 namespace RunGate
 {
@@ -124,6 +122,8 @@ namespace RunGate
                     if (HUtil32.GetTickCount() - dwRefConsoleMsgTick >= 10000)
                     {
                         dwRefConsoleMsgTick = HUtil32.GetTickCount();
+                        Console.WriteLine("待处理消息:" + GateShare.ReviceMsgList.Reader.Count);
+
                         if (!GateShare.boShowBite)
                         {
                            //Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize / 1024 + " KB");

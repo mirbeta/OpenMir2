@@ -12,17 +12,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/RunGate/AppService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsoleApp1/ConsoleApp1.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsoleApp1/Program.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GateServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GateServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/AppService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/UserClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,42 +45,22 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/691B81D2-51BD-4F2A-B4CB-E21C809ADED4/fa/810f69cc/ChannelReader`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/ConsoleApp1/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/EDcode.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EE21247B-04A3-4E4D-BAD4-1648272A3851/3f/d372ce1f/Socket.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EB5B981F-DE43-45AA-B9D6-337D29C4C9E1/ae/ede6d5a5/ServiceCollectionHostedServiceExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/HUtil32.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/48/c033f9cb/Thread.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/691B81D2-51BD-4F2A-B4CB-E21C809ADED4/fa/810f69cc/ChannelReader`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/d8/ce0d3ee7/UInt16.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/d5/9c5595b3/Task.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EE21247B-04A3-4E4D-BAD4-1648272A3851/46/728299b5/SocketAsyncEventArgs.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/EDcode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EE21247B-04A3-4E4D-BAD4-1648272A3851/3f/d372ce1f/Socket.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/UnBindUseItemCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" />
@@ -95,17 +79,12 @@
       <option value="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
       <option value="$PROJECT_DIR$/README.md" />
-      <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Packages/TDefaultMessage.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/EDcode.cs" />
-      <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunDB.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Packages/TMsgHeader.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/EDcode.cs" />
@@ -113,18 +92,26 @@
       <option value="$PROJECT_DIR$/src/M2Server/M2Server.csproj" />
       <option value="$PROJECT_DIR$/src/SystemModule/SystemModule.csproj" />
       <option value="$PROJECT_DIR$/src/RunGate/RunGate.csproj" />
-      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/UserClient.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/AppService.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/AppService.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Program.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/AppService.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/GameServer.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/GateShare.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/UserClientService.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/ServerService.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" />
+      <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -283,6 +270,7 @@
       <workItem from="1627661323365" duration="1237000" />
       <workItem from="1627703816320" duration="10111000" />
       <workItem from="1627715543818" duration="12945000" />
+      <workItem from="1627816961425" duration="3605000" />
     </task>
     <servers />
   </component>
@@ -381,32 +369,6 @@
           <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/ServerAPp.cs</url>
-          <line>155</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" initialLine="155" containingFunctionPresentation="method 'StartServer'">
-            <startOffsets>
-              <option value="6541" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6560" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="113" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerService.cs</url>
-          <line>225</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" initialLine="216" containingFunctionPresentation="method 'CloseConnect'">
-            <startOffsets>
-              <option value="9803" />
-            </startOffsets>
-            <endOffsets>
-              <option value="9852" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
           <line>342</line>
           <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="340" containingFunctionPresentation="method 'ProcessUserPacket'">
@@ -420,32 +382,6 @@
           <option name="timeStamp" value="233" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>328</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="326" containingFunctionPresentation="method 'ProcessUserPacket'">
-            <startOffsets>
-              <option value="15562" />
-            </startOffsets>
-            <endOffsets>
-              <option value="15594" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="237" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>283</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="283" containingFunctionPresentation="method 'ProcessUserPacket'">
-            <startOffsets>
-              <option value="12358" />
-            </startOffsets>
-            <endOffsets>
-              <option value="12398" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="254" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/IdSrvClient.cs</url>
           <line>362</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'">
@@ -457,6 +393,253 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/ServerAPp.cs</url>
+          <line>153</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/ServerAPp.cs" initialLine="153" containingFunctionPresentation="method 'StartServer'">
+            <startOffsets>
+              <option value="6434" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6448" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RunGate/UserClientService.cs</url>
+          <line>223</line>
+          <properties documentPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" initialLine="223" containingFunctionPresentation="method 'ProcReceiveBuffer'">
+            <startOffsets>
+              <option value="9232" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9253" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="264" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
+          <line>300</line>
+          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="300" containingFunctionPresentation="method 'ProcessUserPacket'">
+            <startOffsets>
+              <option value="13527" />
+            </startOffsets>
+            <endOffsets>
+              <option value="13548" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="268" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>696</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="696" containingFunctionPresentation="method 'ExecGateMsg'">
+            <startOffsets>
+              <option value="29759" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29775" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="276" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>686</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="686" containingFunctionPresentation="method 'ExecGateMsg'">
+            <startOffsets>
+              <option value="29314" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29352" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="278" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>692</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="692" containingFunctionPresentation="method 'ExecGateMsg'">
+            <startOffsets>
+              <option value="29589" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29611" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="280" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>318</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="318" containingFunctionPresentation="method 'DoClientCertification'">
+            <startOffsets>
+              <option value="12272" />
+            </startOffsets>
+            <endOffsets>
+              <option value="12316" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="286" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>271</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="271" containingFunctionPresentation="method 'DoClientCertification_GetCertification'">
+            <startOffsets>
+              <option value="10385" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10429" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>729</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="729" containingFunctionPresentation="method 'ExecGateMsg'">
+            <startOffsets>
+              <option value="31258" />
+            </startOffsets>
+            <endOffsets>
+              <option value="31304" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="288" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/UsrEngn.cs</url>
+          <line>646</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" initialLine="646" containingFunctionPresentation="method 'ProcessHumans'">
+            <startOffsets>
+              <option value="29544" />
+            </startOffsets>
+            <endOffsets>
+              <option value="29567" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="289" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="42" containingFunctionPresentation="method 'RunNotice'">
+            <startOffsets>
+              <option value="1307" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1320" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="290" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
+          <line>229</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="229" containingFunctionPresentation="method 'ProcessGameDate'">
+            <startOffsets>
+              <option value="7290" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7340" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="293" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
+          <line>224</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="224" containingFunctionPresentation="method 'ProcessGameDate'">
+            <startOffsets>
+              <option value="7133" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7167" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="294" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
+          <line>40</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="40" containingFunctionPresentation="method 'RunNotice'">
+            <startOffsets>
+              <option value="1240" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1260" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="295" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
+          <line>10</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="10" containingFunctionPresentation="method 'SendNotice'">
+            <startOffsets>
+              <option value="195" />
+            </startOffsets>
+            <endOffsets>
+              <option value="229" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="296" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
+          <line>21</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="21" containingFunctionPresentation="method 'SendNotice'">
+            <startOffsets>
+              <option value="612" />
+            </startOffsets>
+            <endOffsets>
+              <option value="702" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="297" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs</url>
+          <line>860</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" initialLine="860" containingFunctionPresentation="method 'SendSocket'">
+            <startOffsets>
+              <option value="32712" />
+            </startOffsets>
+            <endOffsets>
+              <option value="32762" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="298" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>1190</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="1192" containingFunctionPresentation="method 'ConsumeData'">
+            <startOffsets>
+              <option value="50414" />
+            </startOffsets>
+            <endOffsets>
+              <option value="50436" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="300" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
+          <line>1201</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" initialLine="1203" containingFunctionPresentation="method 'SendGateBuffers'">
+            <startOffsets>
+              <option value="50879" />
+            </startOffsets>
+            <endOffsets>
+              <option value="50906" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="301" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

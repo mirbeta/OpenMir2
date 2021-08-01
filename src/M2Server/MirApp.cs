@@ -5,22 +5,20 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
-using SystemModule;
 using SystemModule.Common;
 
 namespace M2Server
 {
-    public class ServerApp : ServerBase
+    public class MirApp : ServerBase
     {
-        public ServerApp()
+        public MirApp()
         {
             M2Share.MainOutMessage("正在读取配置信息...");
             InitializeServer();
             M2Share.MainOutMessage("读取配置信息完成...");
         }
 
-        public async Task StartServer(CancellationToken token)
+        public void StartServer(CancellationToken token)
         {
             int nCode;
             M2Share.LocalDB = new LocalDB();
@@ -152,15 +150,15 @@ namespace M2Server
                     M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
                 }
                 StartEngine();
+                base.Start();
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
-                await base.Start();
             }
             catch (Exception e)
             {
-                M2Share.MainOutMessage(e.StackTrace);
+                Console.WriteLine(e.StackTrace);
             }
         }
-
+        
         private void StartEngine()
         {
             try
@@ -259,6 +257,7 @@ namespace M2Server
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
             M2Share.RunSocket = new TRunSocket();
+            M2Share.GateServer = new GateServer();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.g_MapManager = new TMapManager();

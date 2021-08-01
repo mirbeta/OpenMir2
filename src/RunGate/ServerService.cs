@@ -66,15 +66,11 @@ namespace RunGate
                             UserSession.nPacketErrCount = 0;
                             UserSession.boStartLogon = true;
                             UserSession.boSendLock = false;
-                            UserSession.dwSendLatestTime = HUtil32.GetTickCount();
                             UserSession.boSendAvailable = true;
                             UserSession.boSendCheck = false;
                             UserSession.nCheckSendLength = 0;
-                            UserSession.nReceiveLength = 0;
                             UserSession.dwReceiveTick = HUtil32.GetTickCount();
                             UserSession.sRemoteAddr = sRemoteAddress;
-                            UserSession.boOverNomSize = false;
-                            UserSession.nOverNomSizeCount = 0;
                             UserSession.dwSayMsgTick = HUtil32.GetTickCount();
                             UserSession.nSckHandle = (int)e.Socket.Handle;
                             nSockIdx = nIdx;
@@ -141,30 +137,20 @@ namespace RunGate
         /// <param name="token"></param>
         private void ServerSocketClientRead(object Sender, AsyncUserToken token)
         {
-            long dwProcessMsgTick = 0;
-            long dwProcessMsgTime= 0;
-            var nReviceLen= 0;
-            var sReviceMsg = string.Empty;
-            var sRemoteAddress = string.Empty;
             var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
-            var nPos= 0;
-            TSendUserData UserData = null;
-            var nMsgCount= 0;
-            TSessionInfo UserSession = null;
             try
             {
-                dwProcessMsgTick = HUtil32.GetTickCount();
-                sRemoteAddress = token.RemoteIPaddr;
+                long dwProcessMsgTick = HUtil32.GetTickCount();
+                string sRemoteAddress = token.RemoteIPaddr;
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, token.BytesReceived);
-                sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                nReviceLen = token.BytesReceived;
-                Console.WriteLine("nSocketIndex:" + nSocketIndex);
+                string sReviceMsg = HUtil32.GetString(data, 0, data.Length);
+                int nReviceLen = token.BytesReceived;
                 if (nSocketIndex is >= 0 and < GateShare.GATEMAXSESSION && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                 {
                     if (nReviceLen > GateShare.nNomClientPacketSize)
                     {
-                        nMsgCount = HUtil32.TagCount(sReviceMsg, '!');
+                        int nMsgCount = HUtil32.TagCount(sReviceMsg, '!');
                         if (nMsgCount > GateShare.nMaxClientMsgCount || nReviceLen > GateShare.nMaxClientPacketSize)
                         {
                             if (GateShare.bokickOverPacketSize)
@@ -193,10 +179,10 @@ namespace RunGate
                     {
                         GateShare.AddMainLogMsg(sReviceMsg, 0);
                     }
-                    UserSession = GateShare.SessionArray[nSocketIndex];
+                    TSessionInfo UserSession = GateShare.SessionArray[nSocketIndex];
                     if (UserSession.Socket == token.Socket)
                     {
-                        nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
+                        int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                         if (nPos > -1)
                         {
                             UserSession.boSendAvailable = true;
@@ -206,9 +192,9 @@ namespace RunGate
                             sReviceMsg = sReviceMsg.Substring(0, nPos);
                             //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                         }
-                        if (sReviceMsg != "" && GateShare.boGateReady && !GateShare.boCheckServerFail)
+                        if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady && !GateShare.boCheckServerFail)
                         {
-                            UserData = new TSendUserData();
+                            TSendUserData UserData = new TSendUserData();
                             UserData.nSocketIdx = nSocketIndex;
                             UserData.nSocketHandle = (int)token.Socket.Handle;
                             UserData.sMsg = sReviceMsg;
@@ -216,7 +202,7 @@ namespace RunGate
                         }
                     }
                 }
-                dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
+                long dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
                 if (dwProcessMsgTime > dwProcessClientMsgTime)
                 {
                     dwProcessClientMsgTime = dwProcessMsgTime;

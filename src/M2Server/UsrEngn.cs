@@ -579,7 +579,7 @@ namespace M2Server
             //人工智障开始登陆
             if (m_UserLogonList.Count > 0)
             {
-                if (HUtil32.GetTickCount() - m_dwAILogonTick > 500)
+                if (HUtil32.GetTickCount() - m_dwAILogonTick > 1)
                 {
                     m_dwAILogonTick = HUtil32.GetTickCount();
                     if (m_UserLogonList.Count > 0)
@@ -617,8 +617,7 @@ namespace M2Server
                             PlayObject.m_nWriteChgDataErrCount++;
                         }
                     }
-                    if (PlayObject.m_boSwitchDataSended &&
-                        HUtil32.GetTickCount() - PlayObject.m_dwChgDataWritedTick > 100)
+                    if (PlayObject.m_boSwitchDataSended && HUtil32.GetTickCount() - PlayObject.m_dwChgDataWritedTick > 100)
                     {
                         PlayObject.m_boSwitchDataSended = false;
                         SendChangeServer(PlayObject, (byte)PlayObject.m_nServerIndex);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
-using SystemModule.Sockets;
 
 namespace M2Server
 {
@@ -38,12 +38,12 @@ namespace M2Server
                     {
                         continue;
                     }
+                    Gate.GateIndex = i;
                     Gate.boUsed = true;
                     Gate.SocketId = e.ConnectionId;
                     Gate.Socket = e.Socket;
                     Gate.sAddr = GetGateAddr(e.EndPoint.Address.ToString());
                     Gate.nPort = e.EndPoint.Port;
-                    Gate.n520 = 1;
                     Gate.UserList = new List<TGateUserInfo>();
                     Gate.nUserCount = 0;
                     Gate.Buffer = null;
@@ -51,9 +51,7 @@ namespace M2Server
                     Gate.boSendKeepAlive = false;
                     Gate.nSendChecked = 0;
                     Gate.nSendBlockCount = 0;
-                    Gate.dwStartTime = HUtil32.GetTickCount();
-                    Gate.Socket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReceiveTimeout,true);
-                    Gate.Socket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.SendTimeout,true);
+                    RunSock.GataSocket.TryAdd(e.ConnectionId, Gate);
                     M2Share.MainOutMessage(string.Format(sGateOpen, i, e.EndPoint.Address, Gate.nPort));
                     break;
                 }
@@ -129,13 +127,13 @@ namespace M2Server
                         }
                         Gate.Buffer = null;
                         Gate.nBuffLen = 0;
-                        Gate.BufferChannel = null;
                         Gate.boUsed = false;
                         Gate.Socket = null;
                         M2Share.ErrorMessage(string.Format(sGateClose, GateIdx, e.EndPoint.Address, e.EndPoint.Port));
                         break;
                     }
                 }
+                RunSock.GataSocket.TryRemove(e.ConnectionId, out Gate);
             }
             finally
             {
@@ -149,6 +147,7 @@ namespace M2Server
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
             const string sExceptionMsg3 = "[Exception] TRunSocket::ExecGateBuffers -> FreeMem";
             var nLen = 0;
+            var BuffIndex = 0;
             if (data == null || data.Length <= 0 || nMsgLen <= 0)
             {
                 return;
@@ -160,13 +159,16 @@ namespace M2Server
                     int buffSize = GameGate.nBuffLen + nMsgLen;
                     if (GameGate.Buffer != null && buffSize > GameGate.nBuffLen)
                     {
-                        Array.Resize(ref GameGate.Buffer, buffSize);
+                        var tempBuff = new byte[buffSize];
+                        Buffer.BlockCopy(GameGate.Buffer, 0, tempBuff, 0, GameGate.nBuffLen);
+                        Buffer.BlockCopy(data, 0, tempBuff, GameGate.nBuffLen, nMsgLen);
+                        GameGate.Buffer = tempBuff;
                     }
                     else
                     {
                         GameGate.Buffer = new byte[buffSize];
+                        Buffer.BlockCopy(data, 0, GameGate.Buffer, 0, nMsgLen);
                     }
-                    Buffer.BlockCopy(data, 0, GameGate.Buffer, 0, nMsgLen);
                 }
             }
             catch
@@ -190,16 +192,35 @@ namespace M2Server
                             {
                                 break;
                             }
-                            var msgBuff = new byte[msgHeader.nLength];
-                            Buffer.BlockCopy(Buff, 20, msgBuff, 0, msgHeader.nLength);
-                            ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
-                            nLen = nLen - (msgHeader.nLength + 20);
+                            if (msgHeader.nLength == 0)
+                            {
+                                ExecGateMsg(nGateIndex, GameGate, msgHeader, null, msgHeader.nLength);
+                            }
+                            else
+                            {
+                                //var msgBuff = new byte[msgHeader.nLength];
+                                //Buffer.BlockCopy(Buff, 20, msgBuff, 0, msgHeader.nLength);
+                                //ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
+
+                                byte[] MsgBuff = new byte[msgHeader.nLength];
+                                Buffer.BlockCopy(Buff, 20, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
+                                ExecGateMsg(nGateIndex, GameGate, msgHeader, MsgBuff, msgHeader.nLength);
+                            }
+
+                            var newLen = 20 + msgHeader.nLength;
+                            var tempBuff = new byte[Buff.Length - newLen];
+                            Buffer.BlockCopy(Buff, newLen, tempBuff, 0, tempBuff.Length);
+                            Buff = tempBuff;
+                            BuffIndex = 0;
+                            nLen -= (msgHeader.nLength + 20);
                         }
                         else
                         {
-                            //Buff++; //buff大小-1
+                            BuffIndex++;
+                            var messageBuff = new byte[Buff.Length - 1];
+                            Array.Copy(Buff, BuffIndex, messageBuff, 0, 20);
+                            Buff = messageBuff;
                             nLen -= 1;
-                            Console.WriteLine("看这里，看这里。。。");
                         }
                         if (nLen < 20)
                         {
@@ -233,30 +254,21 @@ namespace M2Server
             }
         }
 
-        public void SocketRead(AsyncUserToken e)
+        
+        
+        public void SocketRead(GateData data)
         {
             TGateInfo Gate;
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
-            for (var GateIdx = RunSock.g_GateArr.GetLowerBound(0); GateIdx <= RunSock.g_GateArr.GetUpperBound(0); GateIdx++)
+            if (RunSock.GataSocket.TryGetValue(data.ConnectionId, out Gate))
             {
-                Gate = RunSock.g_GateArr[GateIdx];
-                if (Gate.Socket == e.Socket)
+                try
                 {
-                    try
-                    {
-                        var data = new byte[e.BytesReceived];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
-                        var nMsgLen = e.BytesReceived;
-                        if (nMsgLen <= 0)
-                        {
-                            break;
-                        }
-                        ExecGateBuffers(GateIdx, Gate, data, nMsgLen);
-                    }
-                    catch
-                    {
-                        M2Share.MainOutMessage(sExceptionMsg1);
-                    }
+                    ExecGateBuffers(Gate.GateIndex, Gate, data.Buffer, data.Buffer.Length);
+                }
+                catch
+                {
+                    M2Share.MainOutMessage(sExceptionMsg1);
                 }
             }
         }
@@ -339,7 +351,7 @@ namespace M2Server
                                 }
                                 catch
                                 {
-                                    M2Share.ErrorMessage(string.Format(sExceptionMsg));
+                                    M2Share.ErrorMessage(sExceptionMsg);
                                 }
                             }
                             else
@@ -364,6 +376,8 @@ namespace M2Server
             }
         }
 
+        
+        
         private bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
         {
             var nSendBuffLen = 0;
@@ -672,7 +686,7 @@ namespace M2Server
             int nUserIdx;
             string sIPaddr;
             TGateUserInfo GateUser;
-            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg %d";
+            const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";
             try
             {
                 switch (MsgHeader.wIdent)
@@ -802,7 +816,8 @@ namespace M2Server
                     nSendRemainCount = 0,
                     dwSendTick = HUtil32.GetTickCount(),
                     nSendMsgBytes = 0,
-                    nSendedMsgCount = 0
+                    nSendedMsgCount = 0,
+                    BufferChannel = Channel.CreateUnbounded<byte[]>()
                 };
                 RunSock.g_GateArr[i] = Gate;
             }
@@ -813,19 +828,17 @@ namespace M2Server
         public bool AddGateBuffer(int gateIdx, byte[] Buffer)
         {
             var result = false;
-            TGateInfo Gate;
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
                 if (gateIdx < grobal2.RUNGATEMAX)
                 {
-                    Gate = RunSock.g_GateArr[gateIdx];
-                    if (Gate.BufferChannel != null && Buffer != null)
+                    var gameGate = RunSock.g_GateArr[gateIdx];
+                    if (gameGate.BufferChannel != null && Buffer != null)
                     {
-                        M2Share.MainOutMessage($"待消费数量:[{Gate.BufferChannel.Reader.Count}]");
-                        if (Gate.boUsed && Gate.Socket != null)
+                        if (gameGate.boUsed && gameGate.Socket != null)
                         {
-                            Gate.BufferChannel.Writer.TryWrite(Buffer);
+                            gameGate.BufferChannel.Writer.TryWrite(Buffer);
                             result = true;
                         }
                     }
@@ -1223,16 +1236,8 @@ namespace M2Server
                     _gate.nSendChecked = 1;
                     _gate.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                var sendBuffer = new byte[buffer.Length + 4];
-                if (buffer.Length > sendBuffer.Length)
-                {
-                    Buffer.BlockCopy(buffer, 0, sendBuffer, 0, sendBuffer.Length);
-                }
-                else
-                {
-                    Buffer.BlockCopy(buffer, 0, sendBuffer, 0, buffer.Length);
-                }
-
+                var sendBuffer = new byte[buffer.Length - 4];
+                Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
                 if (nSendBuffLen > 0)
                 {
                     while (true)
@@ -1259,9 +1264,9 @@ namespace M2Server
                         {
                             if (_gate.Socket.Connected)
                             {
-                                var sendBuff = new byte[nSendBuffLen];
-                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, nSendBuffLen);
-                                _gate.Socket.Send(sendBuff, 0, nSendBuffLen, SocketFlags.None);
+                               // var sendBuff = new byte[nSendBuffLen];
+                                //Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, sendBuff.Length);
+                                _gate.Socket.Send(sendBuffer, 0, sendBuffer.Length, SocketFlags.None);
                             }
                             _gate.nSendCount++;
                             _gate.nSendBytesCount += nSendBuffLen;
@@ -1313,5 +1318,7 @@ namespace M2Server
         /// 最大6个游戏网关
         /// </summary>
         public static TGateInfo[] g_GateArr = new TGateInfo[6];
+
+        public static ConcurrentDictionary<string, TGateInfo> GataSocket = new ConcurrentDictionary<string, TGateInfo>();
     }
 }

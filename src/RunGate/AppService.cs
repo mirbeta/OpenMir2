@@ -8,7 +8,7 @@ namespace RunGate
     public class AppService : BackgroundService
     {
         private readonly ILogger<AppService> _logger;
-        private ServerApp _serverApp;
+        private readonly ServerApp _serverApp;
 
         public AppService(ILogger<AppService> logger, ServerApp serverApp)
         {

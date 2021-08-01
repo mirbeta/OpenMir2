@@ -1724,7 +1724,7 @@ namespace M2Server
                     }
                     break;
                 case grobal2.RM_RUN:
-                    if (ProcessMsg.BaseObject != this.ObjectId)
+                    if (ProcessMsg.BaseObject != this.ObjectId && BaseObject != null)
                     {
                         m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.m_nLight));
                         CharDesc = new TCharDesc();

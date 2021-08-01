@@ -91,8 +91,8 @@ namespace RunGate
                 GateShare.AddMainLogMsg("[Exception] ClientSocketRead", 1);
             }
         }
-        
-        public void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+
+        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             Console.WriteLine(e.exception);
             GateShare.boServerReady = false;
@@ -116,13 +116,9 @@ namespace RunGate
                 tSession.nPacketErrCount = 0;
                 tSession.boStartLogon = true;
                 tSession.boSendLock = false;
-                tSession.boOverNomSize = false;
-                tSession.nOverNomSizeCount = 0;
-                tSession.dwSendLatestTime = HUtil32.GetTickCount();
                 tSession.boSendAvailable = true;
                 tSession.boSendCheck = false;
                 tSession.nCheckSendLength = 0;
-                tSession.nReceiveLength = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
                 tSession.nSckHandle =  0;
                 tSession.dwSayMsgTick = HUtil32.GetTickCount();
@@ -149,7 +145,7 @@ namespace RunGate
             GateMsg.nSocket = nSocket;
             GateMsg.wGSocketIdx = (ushort)wSocketIndex;
             GateMsg.wIdent = nIdent;
-            GateMsg.wUserListIndex = nUserListIndex;
+            GateMsg.wUserListIndex = (ushort)nUserListIndex;
             GateMsg.nLength = nLen;
             var SendBuffer = GateMsg.ToByte();
             if (Data != null && Data.Length > 0)
@@ -168,7 +164,6 @@ namespace RunGate
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             TMsgHeader pMsg;
-            TMsgHeader oldMsg = new TMsgHeader();
             var BuffIndex = 0;
             const int HeaderMessageSize = 20;
             try
@@ -193,7 +188,6 @@ namespace RunGate
                         pMsg = new TMsgHeader(Buff);
                         if (pMsg.dwCode == Grobal2.RUNGATECODE)
                         {
-                            oldMsg = pMsg;
                             if ((Math.Abs(pMsg.nLength) + HeaderMessageSize) > nLen)
                             {
                                 break;
@@ -248,7 +242,6 @@ namespace RunGate
                         }
                         else
                         {
-                            Console.WriteLine(oldMsg.dwCode);
                             BuffIndex++;
                             var messageBuff = new byte[Buff.Length - 1];
                             Array.Copy(Buff, BuffIndex, messageBuff, 0, HeaderMessageSize);
@@ -297,10 +290,6 @@ namespace RunGate
                             pDefMsg = new TDefaultMessage(buffer);
                             if (nMsgLen > 12)
                             {
-                                if (pDefMsg.Ident == Grobal2.SM_NEWMAP)
-                                {
-                                    Console.WriteLine("asdasd");
-                                }
                                 var nLen = nMsgLen - 12;
                                 var sb = new System.Text.StringBuilder();
                                 sb.Append("#");

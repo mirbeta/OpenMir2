@@ -5,7 +5,7 @@ namespace RunGate
 {
     public class Grobal2
     {
- public const string VERSION_NUMBER_STR = "当前版本：20161001";
+        public const string VERSION_NUMBER_STR = "当前版本：20161001";
         public const int VERSION_NUMBER = 20020522;
         public const int CLIENT_VERSION_NUMBER = 120040918;
         public const int CM_POWERBLOCK = 0;
@@ -689,14 +689,10 @@ namespace RunGate
         public int nPacketErrCount;
         public bool boStartLogon;
         public bool boSendLock;
-        public bool boOverNomSize;
-        public short nOverNomSizeCount;
-        public long dwSendLatestTime;
         public int nCheckSendLength;
         public bool boSendAvailable;
         public bool boSendCheck;
         public long dwTimeOutTime;
-        public int nReceiveLength;
         public long dwReceiveTick;
         public int nSckHandle;
         public string sRemoteAddr;
@@ -704,7 +700,6 @@ namespace RunGate
         /// 发言间隔控制
         /// </summary>
         public long dwSayMsgTick;
-        public long dwHitTick;
     }
 
     public class TSendUserData

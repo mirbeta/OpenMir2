@@ -18,7 +18,7 @@ namespace RunGate
         public static string GateClass = "GameGate";
         public static string GateName = "游戏网关";
         public static string TitleName = "SKY引擎";
-        public static string ServerAddr = "10.10.0.58";
+        public static string ServerAddr = "10.10.0.101";
         public static int ServerPort = 5000;
         public static string GateAddr = "10.10.0.101";
         public static int GatePort = 7200;

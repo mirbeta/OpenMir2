@@ -4051,6 +4051,10 @@ namespace M2Server
                                         break;
                                     }
                                 }
+                                if (MapCellInfo.ObjList == null)
+                                {
+                                    break;
+                                }
                                 if (MapCellInfo.ObjList.Count <= nIdx)
                                 {
                                     break;

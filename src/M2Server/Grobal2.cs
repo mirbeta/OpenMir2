@@ -473,6 +473,7 @@ namespace M2Server
         public bool boUsed;
         public Socket Socket;
         public string SocketId;
+        public int GateIndex;
         /// <summary>
         /// 网关IP
         /// </summary>
@@ -481,7 +482,6 @@ namespace M2Server
         /// 端口
         /// </summary>
         public int nPort;
-        public int n520;
         /// <summary>
         /// 玩家列表
         /// </summary>
@@ -496,7 +496,6 @@ namespace M2Server
         public bool boSendKeepAlive;
         public int nSendChecked;
         public int nSendBlockCount;
-        public int dwStartTime;
         /// <summary>
         /// 列队数据
         /// </summary>
@@ -509,6 +508,9 @@ namespace M2Server
         /// 发送间隔
         /// </summary>
         public int dwSendTick;
+        /// <summary>
+        /// 发送消息字节
+        /// </summary>
         public int nSendMsgBytes;
         /// <summary>
         /// 发送的字节数量
@@ -526,11 +528,6 @@ namespace M2Server
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
-
-        public TGateInfo()
-        {
-            BufferChannel = Channel.CreateUnbounded<byte[]>();
-        }
     }
 
     public class TGateUserInfo

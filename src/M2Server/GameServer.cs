@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace M2Server
 {
     public class ServerBase
     {
-        private readonly GateServer _gateServer;
         private readonly Thread _runServer;
         /// <summary>
         /// 运行时间
@@ -24,17 +21,15 @@ namespace M2Server
 
         protected ServerBase()
         {
-            _gateServer = new GateServer();
             _runServer = new Thread(Run) { IsBackground = true };
         }
 
-        protected async Task Start()
+        protected void Start()
         {
             _runServer.Start();
-            _gateServer.Start();
+            M2Share.GateServer.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
-            M2Share.RunSocket.Start();
             _gamenoticeTimer = new Timer(ProcessGameNotice, null, 5000, 5000);
             _saveVariableTimer = new Timer(SaveItemNumber, null, 15000, 20000);
         }
