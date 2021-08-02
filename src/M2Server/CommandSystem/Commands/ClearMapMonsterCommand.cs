@@ -21,7 +21,7 @@ namespace M2Server
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             var sMonName = @Params.Length > 1 ? @Params[1] : "";
             var sItems = @Params.Length > 2 ? @Params[2] : "";
-            ArrayList MonList;
+            IList<TBaseObject> MonList;
             TEnvirnoment Envir;
             int nMonCount;
             bool boKillAll;
@@ -50,7 +50,7 @@ namespace M2Server
             {
                 boNotItem = false;
             }
-            MonList = new ArrayList();
+            MonList = new List<TBaseObject>();
             try
             {
                 for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)

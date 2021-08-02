@@ -148,13 +148,13 @@ namespace M2Server
             const string sExceptionMsg3 = "[Exception] TRunSocket::ExecGateBuffers -> FreeMem";
             var nLen = 0;
             var BuffIndex = 0;
-            if (data == null || data.Length <= 0 || nMsgLen <= 0)
+            if (data is not {Length: > 0} || nMsgLen <= 0)
             {
                 return;
             }
             try
             {
-                if (data != null && data.Length > 0)
+                if (data.Length > 0)
                 {
                     int buffSize = GameGate.nBuffLen + nMsgLen;
                     if (GameGate.Buffer != null && buffSize > GameGate.nBuffLen)
@@ -258,13 +258,12 @@ namespace M2Server
         
         public void SocketRead(GateData data)
         {
-            TGateInfo Gate;
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
-            if (RunSock.GataSocket.TryGetValue(data.ConnectionId, out Gate))
+            if (RunSock.GataSocket.TryGetValue(data.ConnectionId, out var gate))
             {
                 try
                 {
-                    ExecGateBuffers(Gate.GateIndex, Gate, data.Buffer, data.Buffer.Length);
+                    ExecGateBuffers(gate.GateIndex, gate, data.Buffer, data.Buffer.Length);
                 }
                 catch
                 {

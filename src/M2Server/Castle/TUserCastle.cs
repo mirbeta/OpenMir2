@@ -624,7 +624,7 @@ namespace M2Server
         {
             var result = false;
             if (HUtil32.GetTickCount() - m_dwStartCastleWarTick <= M2Share.g_Config.dwGetCastleTime) return result;
-            var List14 = new ArrayList();
+            var List14 = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, 0, 0, 1000, List14);
             result = true;
             for (var i = 0; i < List14.Count; i++)
@@ -659,7 +659,7 @@ namespace M2Server
         public void StartWallconquestWar()
         {
             TPlayObject PlayObject;
-            var ListC = new ArrayList();
+            var ListC = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(m_MapPalace, m_nHomeX, m_nHomeY, 100, ListC);
             for (var i = 0; i < ListC.Count; i++)
             {

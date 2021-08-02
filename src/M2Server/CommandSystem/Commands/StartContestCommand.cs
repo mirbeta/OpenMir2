@@ -16,7 +16,7 @@ namespace M2Server
         public void StartContest(string[] @Params, TPlayObject PlayObject)
         {
             var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            ArrayList List10;
+            IList<TBaseObject> List10;
             ArrayList List14;
             TPlayObject m_PlayObject;
             TPlayObject PlayObjectA;
@@ -32,7 +32,7 @@ namespace M2Server
             //    PlayObject.SysMsg("此命令不能在当前地图中使用！！！", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            List10 = new ArrayList();
+            List10 = new List<TBaseObject>();
             List14 = new ArrayList();
             M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, List10);
             for (var i = 0; i < List10.Count; i++)

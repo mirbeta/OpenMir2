@@ -17,7 +17,7 @@ namespace M2Server
         {
             var sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             var sDenMap = @Params.Length > 1 ? @Params[1] : "";
-            ArrayList HumanList;
+            IList<TBaseObject> HumanList;
             TPlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
@@ -36,11 +36,11 @@ namespace M2Server
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sDenMap), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            HumanList = new ArrayList();
+            HumanList = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.wWidth / 2, SrcEnvir.wHeight / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {
-                MoveHuman = HumanList[i] as TPlayObject;
+                MoveHuman = (TPlayObject)HumanList[i];
                 if (MoveHuman != PlayObject)
                 {
                     MoveHuman.MapRandomMove(sDenMap, 0);

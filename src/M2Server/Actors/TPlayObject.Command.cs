@@ -973,7 +973,7 @@ namespace M2Server
 
         public void CmdClearMapMonster(TGameCmd Cmd, string sMapName, string sMonName, string sItems)
         {
-            ArrayList MonList;
+            IList<TBaseObject> MonList;
             TEnvirnoment Envir;
             int nMonCount;
             bool boKillAll;
@@ -1007,7 +1007,7 @@ namespace M2Server
             {
                 boNotItem = false;
             }
-            MonList = new ArrayList();
+            MonList = new List<TBaseObject>();
             for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)
             {
                 Envir = M2Share.g_MapManager.Maps[i];
@@ -1092,7 +1092,7 @@ namespace M2Server
         {
             int I;
             int II;
-            ArrayList List10;
+            IList<TBaseObject> List10;
             ArrayList List14;
             TPlayObject PlayObject;
             TPlayObject PlayObjectA;
@@ -1116,7 +1116,7 @@ namespace M2Server
                 SysMsg("此命令不能在当前地图中使用！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            List10 = new ArrayList();
+            List10 = new List<TBaseObject>();
             List14 = new ArrayList();
             M2Share.UserEngine.GetMapRageHuman(m_PEnvir, m_nCurrX, m_nCurrY, 1000, List10);
             for (I = 0; I < List10.Count; I++)
@@ -1170,7 +1170,7 @@ namespace M2Server
         {
             int I;
             int II;
-            ArrayList List10;
+            IList<TBaseObject> List10;
             ArrayList List14;
             TPlayObject PlayObject;
             TPlayObject PlayObjectA;
@@ -1193,7 +1193,7 @@ namespace M2Server
                 SysMsg("此命令不能在当前地图中使用！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            List10 = new ArrayList();
+            List10 = new List<TBaseObject>();
             List14 = new ArrayList();
             M2Share.UserEngine.GetMapRageHuman(m_PEnvir, m_nCurrX, m_nCurrY, 1000, List10);
             for (I = 0; I < List10.Count; I++)
@@ -3374,7 +3374,7 @@ namespace M2Server
         {
             TEnvirnoment SrcEnvir;
             TEnvirnoment DenEnvir;
-            ArrayList HumanList;
+            IList<TBaseObject> HumanList;
             int I;
             TPlayObject MoveHuman;
             if (m_btPermission < Cmd.nPerMissionMin)
@@ -3399,7 +3399,7 @@ namespace M2Server
                 SysMsg(format(M2Share.g_sGameCommandMapMoveMapNotFound, sDenMap), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            HumanList = new ArrayList();
+            HumanList = new List<TBaseObject>();
             M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.wWidth / 2, SrcEnvir.wHeight / 2, 1000, HumanList);
             for (I = 0; I < HumanList.Count; I++)
             {
@@ -4211,7 +4211,7 @@ namespace M2Server
 
         public void CmdReloadNpc(string sParam)
         {
-            ArrayList TmpList;
+            IList<TBaseObject> TmpList;
             TMerchant Merchant;
             TNormNpc Npc;
             if (m_btPermission < 6)
@@ -4227,7 +4227,7 @@ namespace M2Server
                 SysMsg("管理NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            TmpList = new ArrayList();
+            TmpList = new List<TBaseObject>();
             if (M2Share.UserEngine.GetMerchantList(m_PEnvir, m_nCurrX, m_nCurrY, 9, TmpList) > 0)
             {
                 for (var i = 0; i < TmpList.Count; i++)
@@ -4896,7 +4896,7 @@ namespace M2Server
             TPlayObject PlayObject;
             TPlayObject MoveHuman;
             int nRange;
-            ArrayList HumanList;
+            IList<TBaseObject> HumanList;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4912,7 +4912,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                HumanList = new ArrayList();
+                HumanList = new List<TBaseObject>();
                 M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, nRange, HumanList);
                 for (var i = 0; i < HumanList.Count; i++)
                 {

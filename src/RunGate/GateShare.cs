@@ -15,6 +15,7 @@ namespace RunGate
         public static object CS_FilterMsg = null;
         public static ArrayList MainLogMsgList = null;
         public static int nShowLogLevel = 0;
+        public static int ServerCount = 1;
         public static string GateClass = "GameGate";
         public static string GateName = "游戏网关";
         public static string TitleName = "SKY引擎";
@@ -43,7 +44,6 @@ namespace RunGate
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
         public static IList<string> AbuseList = null;
-        public static TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION];
         public static ConcurrentDictionary<string, int> SessionIndex;
         /// <summary>
         /// 连接会话数
@@ -118,7 +118,6 @@ namespace RunGate
         /// </summary>
         public static long dwHitTime = 300;
         public static long dwSessionTimeOutTime = 60 * 60 * 1000;
-        public const int GATEMAXSESSION = 1000;
         public const int MSGMAXLENGTH = 20000;
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;

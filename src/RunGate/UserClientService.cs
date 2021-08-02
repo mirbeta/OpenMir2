@@ -14,16 +14,24 @@ namespace RunGate
         private IClientScoket ClientSocket;
         public int nBufferOfM2Size = 0;
         private long dwProcessServerMsgTime = 0;
+        /// <summary>
+        /// 最大用户数
+        /// </summary>
+        private const int GATEMAXSESSION = 1000;
+        /// <summary>
+        /// 用户会话
+        /// </summary>
+        public TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION];
 
-        public UserClientService()
+        public UserClientService(string serverAddr, int serverPort)
         {
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address = GateShare.ServerAddr;
-            ClientSocket.Port = GateShare.ServerPort;
+            ClientSocket.Address =serverAddr;
+            ClientSocket.Port = serverPort;
         }
 
         public void Start()
@@ -34,6 +42,11 @@ namespace RunGate
         public void Stop()
         {
             ClientSocket.Disconnect();
+        }
+
+        public TSessionInfo[] GetSession()
+        {
+            return SessionArray;
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -50,9 +63,9 @@ namespace RunGate
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             TSessionInfo UserSession;
-            for (var i = 0; i < GateShare.GATEMAXSESSION; i++)
+            for (var i = 0; i < GATEMAXSESSION; i++)
             {
-                UserSession = GateShare.SessionArray[i];
+                UserSession = SessionArray[i];
                 if (UserSession.Socket != null)
                 {
                     UserSession.Socket.Close();
@@ -101,13 +114,13 @@ namespace RunGate
         public void RestSessionArray()
         {
             TSessionInfo tSession;
-            for (var i = 0; i < GateShare.GATEMAXSESSION; i ++ )
+            for (var i = 0; i < GATEMAXSESSION; i ++ )
             {
-                if (GateShare.SessionArray[i] == null)
+                if (SessionArray[i] == null)
                 {
-                    GateShare.SessionArray[i] = new TSessionInfo();
+                    SessionArray[i] = new TSessionInfo();
                 }
-                tSession = GateShare.SessionArray[i];
+                tSession = SessionArray[i];
                 tSession.Socket = null;
                 tSession.sSocData = "";
                 tSession.sSendData = "";
@@ -199,9 +212,9 @@ namespace RunGate
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
-                                    if (pMsg.wGSocketIdx < GateShare.GATEMAXSESSION && pMsg.nSocket == GateShare.SessionArray[pMsg.wGSocketIdx].nSckHandle)
+                                    if (pMsg.wGSocketIdx < GATEMAXSESSION && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
                                     {
-                                        GateShare.SessionArray[pMsg.wGSocketIdx].nUserListIndex = pMsg.wUserListIndex;
+                                        SessionArray[pMsg.wGSocketIdx].nUserListIndex = pMsg.wUserListIndex;
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
@@ -307,7 +320,7 @@ namespace RunGate
                             break;
                         }
                 }
-                if (nSocketIndex >= 0 && nSocketIndex < GateShare.GATEMAXSESSION && !string.IsNullOrEmpty(sSendMsg))
+                if (nSocketIndex >= 0 && nSocketIndex < GATEMAXSESSION && !string.IsNullOrEmpty(sSendMsg))
                 {
                     var UserData = new TSendUserData();
                     UserData.nSocketIdx = nSocketIndex;

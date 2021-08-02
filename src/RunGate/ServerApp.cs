@@ -321,7 +321,6 @@ namespace RunGate
                                             sData = "#" + nPacketIdx + sData + "!";
                                             _userClient.SendServerMsg(Grobal2.GM_DATA, UserData.nSocketIdx, (int)GateShare.SessionArray[UserData.nSocketIdx].Socket.Handle,
                                                 GateShare.SessionArray[UserData.nSocketIdx].nUserListIndex, sData.Length, sData);
-                                            //Console.WriteLine("发送玩家登录封包:" + sData);
                                         }
                                         else
                                         {
@@ -787,8 +786,6 @@ namespace RunGate
             }
             return result;
         }
-
-
 
         private bool CheckDefMsg(TDefaultMessage DefMsg, TSessionInfo SessionInfo)
         {

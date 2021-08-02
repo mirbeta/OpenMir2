@@ -19,7 +19,7 @@ namespace M2Server
             var sRange = @Params.Length > 1 ? @Params[1] : "";
             TPlayObject m_PlayObject;
             TPlayObject MoveHuman;
-            ArrayList HumanList;
+            IList<TBaseObject> HumanList;
             if (sRange == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandSuperTingHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -29,7 +29,7 @@ namespace M2Server
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                HumanList = new ArrayList();
+                HumanList = new List<TBaseObject>();
                 M2Share.UserEngine.GetMapRageHuman(m_PlayObject.m_PEnvir, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, nRange, HumanList);
                 for (var i = 0; i < HumanList.Count; i++)
                 {

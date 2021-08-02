@@ -24,7 +24,7 @@ namespace M2Server.CommandSystem.Command
             var OnY =  @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
             TEnvirnoment SrcEnvir;
             TEnvirnoment DenEnvir;
-            ArrayList MonList;
+            IList<TBaseObject> MonList;
             TBaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
@@ -58,7 +58,7 @@ namespace M2Server.CommandSystem.Command
             {
                 return;
             }
-            MonList = new ArrayList();
+            MonList = new List<TBaseObject>();
             if (!boMoveAll)// 指定名称的怪移动
             {
                 M2Share.UserEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪

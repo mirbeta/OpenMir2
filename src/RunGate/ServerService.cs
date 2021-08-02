@@ -16,11 +16,13 @@ namespace RunGate
         public long dwProcessClientMsgTime = 0;
         private readonly UserClientService _userClient;
         private readonly ILogger<AppService> _logger;
+        private readonly GateService _gateService;
         
-        public ServerService(ILogger<AppService> logger,UserClientService userClient)
+        public ServerService(ILogger<AppService> logger,UserClientService userClient, GateService gateService)
         {
             _logger = logger;
             _userClient = userClient;
+            _gateService = gateService;
             ServerSocket = new ISocketServer(20, 2048);
             ServerSocket.OnClientConnect += ServerSocketClientConnect;
             ServerSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -44,56 +46,51 @@ namespace RunGate
         /// </summary>
         /// <param name="Sender"></param>
         /// <param name="e"></param>
-        private void ServerSocketClientConnect(object Sender,AsyncUserToken e)
+        private void ServerSocketClientConnect(object Sender, AsyncUserToken e)
         {
             TSessionInfo UserSession;
             var sRemoteAddress = e.RemoteIPaddr;
             var nSockIdx = 0;
-            if (GateShare.boGateReady)
+            //todo 新玩家链接的时候要随机分配一个可用网关客户端
+            //根据配置文件有三种模式
+            //1.轮询分配
+            //2.总是分配到最小资源 即网关在线人数最小的那个
+            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
+
+            //先获取gateSer
+            var sessionArray = _gateService.GetGateSessionInfo("1");
+
+            for (var nIdx = 0; nIdx < sessionArray.Length; nIdx++)
             {
-                try
+                UserSession = sessionArray[nIdx];
+                if (UserSession.Socket == null)
                 {
-                    for (var nIdx = 0; nIdx < GateShare.GATEMAXSESSION; nIdx++)
-                    {
-                        UserSession = GateShare.SessionArray[nIdx];
-                        if (UserSession.Socket == null)
-                        {
-                            UserSession.Socket = e.Socket;
-                            UserSession.sSocData = "";
-                            UserSession.sSendData = "";
-                            UserSession.nUserListIndex = 0;
-                            UserSession.nPacketIdx = -1;
-                            UserSession.nPacketErrCount = 0;
-                            UserSession.boStartLogon = true;
-                            UserSession.boSendLock = false;
-                            UserSession.boSendAvailable = true;
-                            UserSession.boSendCheck = false;
-                            UserSession.nCheckSendLength = 0;
-                            UserSession.dwReceiveTick = HUtil32.GetTickCount();
-                            UserSession.sRemoteAddr = sRemoteAddress;
-                            UserSession.dwSayMsgTick = HUtil32.GetTickCount();
-                            UserSession.nSckHandle = (int)e.Socket.Handle;
-                            nSockIdx = nIdx;
-                            GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
-                            GateShare.SessionCount++;
-                            break;
-                        }
-                    }
+                    UserSession.Socket = e.Socket;
+                    UserSession.sSocData = "";
+                    UserSession.sSendData = "";
+                    UserSession.nUserListIndex = 0;
+                    UserSession.nPacketIdx = -1;
+                    UserSession.nPacketErrCount = 0;
+                    UserSession.boStartLogon = true;
+                    UserSession.boSendLock = false;
+                    UserSession.boSendAvailable = true;
+                    UserSession.boSendCheck = false;
+                    UserSession.nCheckSendLength = 0;
+                    UserSession.dwReceiveTick = HUtil32.GetTickCount();
+                    UserSession.sRemoteAddr = sRemoteAddress;
+                    UserSession.dwSayMsgTick = HUtil32.GetTickCount();
+                    UserSession.nSckHandle = (int) e.Socket.Handle;
+                    nSockIdx = nIdx;
+                    GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
+                    GateShare.SessionCount++;
+                    break;
                 }
-                finally
-                {
-                }
-                if (nSockIdx < GateShare.GATEMAXSESSION)
-                {
-                    _userClient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int)e.Socket.Handle, 0, e.RemoteIPaddr.Length, e.RemoteIPaddr);//通知M2有新玩家进入游戏
-                    GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
-                }
-                else
-                {
-                    GateShare.DelSocketIndex(e.ConnectionId);
-                    e.Socket.Close();
-                    GateShare.AddMainLogMsg("禁止连接: " + sRemoteAddress, 1);
-                }
+            }
+            if (nSockIdx < sessionArray.Length)
+            {
+                _userClient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int) e.Socket.Handle, 0, e.RemoteIPaddr.Length,
+                    e.RemoteIPaddr); //通知M2有新玩家进入游戏
+                GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
             }
             else
             {
@@ -194,7 +191,7 @@ namespace RunGate
                         }
                         if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady && !GateShare.boCheckServerFail)
                         {
-                            TSendUserData UserData = new TSendUserData();
+                            var UserData = new TSendUserData();
                             UserData.nSocketIdx = nSocketIndex;
                             UserData.nSocketHandle = (int)token.Socket.Handle;
                             UserData.sMsg = sReviceMsg;

@@ -20,8 +20,8 @@ namespace M2Server
             {
                 sParam = @Params.Length > 0 ? @Params[0] : "";
             }
-            ArrayList TmpMerList = null;
-            ArrayList TmpNorList = null;
+            IList<TBaseObject> TmpMerList = null;
+            IList<TBaseObject> TmpNorList = null;
             TMerchant Merchant;
             TNormNpc NPC;
             if (PlayObject.m_btPermission < 6)
@@ -37,14 +37,14 @@ namespace M2Server
                 PlayObject.SysMsg("管理NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            TmpMerList = new ArrayList();
+            TmpMerList = new List<TBaseObject>();
             try
             {
                 if (M2Share.UserEngine.GetMerchantList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpMerList) > 0)
                 {
                     for (var i = 0; i < TmpMerList.Count; i++)
                     {
-                        Merchant = TmpMerList[i] as TMerchant;
+                        Merchant = (TMerchant)TmpMerList[i];
                         Merchant.ClearScript();
                         Merchant.LoadNPCScript();
                         PlayObject.SysMsg(Merchant.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -54,7 +54,7 @@ namespace M2Server
                 {
                     PlayObject.SysMsg("附近未发现任何交易NPC！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
-                TmpNorList = new ArrayList();
+                TmpNorList = new List<TBaseObject>();
                 if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpNorList) > 0)
                 {
                     for (var i = 0; i < TmpNorList.Count; i++)

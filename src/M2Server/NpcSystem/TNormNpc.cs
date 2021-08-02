@@ -502,9 +502,9 @@ namespace M2Server
 
         private void ActionOfClearMapMon(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            ArrayList MonList;
+            IList<TBaseObject> MonList;
             TBaseObject Mon;
-            MonList = new ArrayList();
+            MonList = new List<TBaseObject>();
             M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), MonList);
             for (var i = 0; i < MonList.Count; i++)
             {
@@ -6441,7 +6441,7 @@ namespace M2Server
             string s44 = string.Empty;
             string s48 = string.Empty;
             TEnvirnoment Envir;
-            ArrayList List58;
+            IList<TBaseObject> List58;
             TPlayObject User;
             result = true;
             n18 = 0;
@@ -6555,7 +6555,7 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nMONCLEAR:
-                        List58 = new ArrayList();
+                        List58 = new List<TBaseObject>();
                         M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), List58);
                         for (II = 0; II < List58.Count; II++)
                         {
@@ -6945,7 +6945,7 @@ namespace M2Server
                         Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
-                            List58 = new ArrayList();
+                            List58 = new List<TBaseObject>();
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             if (List58.Count > 0)
                             {
@@ -6965,7 +6965,7 @@ namespace M2Server
                         Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
-                            List58 = new ArrayList();
+                            List58 = new List<TBaseObject>();
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
                             for (II = 0; II < List58.Count; II++)
                             {
