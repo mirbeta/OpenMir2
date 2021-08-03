@@ -21,8 +21,9 @@ namespace RunGate
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<ServerApp>();
-                    services.AddSingleton<UserClientService>();
                     services.AddSingleton<ServerService>();
+                    services.AddSingleton<GateService>();
+                    services.AddTransient<RunGateClient>();
                     services.AddHostedService<AppService>();
                 });
 

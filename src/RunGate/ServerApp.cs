@@ -121,28 +121,26 @@ namespace RunGate
                     if (HUtil32.GetTickCount() - dwRefConsoleMsgTick >= 10000)
                     {
                         dwRefConsoleMsgTick = HUtil32.GetTickCount();
-                        Console.WriteLine("待处理消息:" + GateShare.ReviceMsgList.Reader.Count);
-
                         if (!GateShare.boShowBite)
                         {
-                           //Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize / 1024 + " KB");
+                           Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize / 1024 + " KB");
                            //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
-                           //Debug.WriteLine( "编码: " + nProcessMsgSize / 1024 + " KB");
-                           //Debug.WriteLine( "登录: " + nHumLogonMsgSize / 1024 + " KB");
-                           //Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
-                           //Debug.WriteLine( "解码: " + nDeCodeMsgSize / 1024 + " KB");
-                           //Debug.WriteLine( "发送: " + nSendBlockSize / 1024 + " KB");
+                           Debug.WriteLine( "编码: " + nProcessMsgSize / 1024 + " KB");
+                           Debug.WriteLine( "登录: " + nHumLogonMsgSize / 1024 + " KB");
+                           Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
+                           Debug.WriteLine( "解码: " + nDeCodeMsgSize / 1024 + " KB");
+                           Debug.WriteLine( "发送: " + nSendBlockSize / 1024 + " KB");
                         }
                         else
                         {
-                            //Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize + " B");
+                            Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize + " B");
                             //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size + " B");
-                            //Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
-                            //Debug.WriteLine( "编码: " + nProcessMsgSize + " B");
-                            //Debug.WriteLine("登录: " + nHumLogonMsgSize + " B");
-                            //Debug.WriteLine( "普通: " + nHumPlayMsgSize + " B");
-                            //Debug.WriteLine( "解码: " + nDeCodeMsgSize + " B");
-                            //Debug.WriteLine( "发送: " + nSendBlockSize + " B");
+                            Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
+                            Debug.WriteLine( "编码: " + nProcessMsgSize + " B");
+                            Debug.WriteLine("登录: " + nHumLogonMsgSize + " B");
+                            Debug.WriteLine( "普通: " + nHumPlayMsgSize + " B");
+                            Debug.WriteLine( "解码: " + nDeCodeMsgSize + " B");
+                            Debug.WriteLine( "发送: " + nSendBlockSize + " B");
                             if (GateShare.dwCheckServerTimeMax > 1)
                             {
                                 GateShare.dwCheckServerTimeMax -= 1;
@@ -193,15 +191,20 @@ namespace RunGate
                             var  clientList= _runGateClient.GetAllClient();
                             for (var i = 0; i < clientList.Count; i++)
                             {
-                                for (var j = 0; j < clientList[j].GetMaxSession(); j++)
+                                if (clientList[i] == null)
                                 {
-                                    UserSession = clientList[j].SessionArray[j];
-                                    if (UserSession.Socket != null && UserSession.sSendData != "")
+                                    continue;
+                                }
+                                for (var j = 0; j < clientList[i].GetMaxSession(); j++)
+                                {
+                                    UserSession = clientList[i].SessionArray[j];
+                                    if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
                                     {
                                         tUserData = new TSendUserData();
                                         tUserData.nSocketIdx = j;
                                         tUserData.nSocketHandle = UserSession.nSckHandle;
                                         tUserData.sMsg = "";
+                                        tUserData.UserClient = clientList[i];
                                         ProcessPacket(tUserData);
                                         if (HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick > 20)
                                         {
@@ -263,7 +266,6 @@ namespace RunGate
             {
                 n14 = 0;
                 nProcessMsgSize += UserData.sMsg.Length;
-                
                 //Console.WriteLine("处理游戏引擎封包:" + nProcessMsgSize);
                 if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
                 {
@@ -498,15 +500,15 @@ namespace RunGate
                 GateShare.boGateReady = false;
                 //GateShare.boCheckServerFail = false;
                 GateShare.boSendHoldTimeOut = false;
-                GateShare.SessionCount = 0;
+                GateShare.SessionCount = 1;
                 LoadConfig();
-                //_userClient.RestSessionArray();
                 GateShare.dwProcessReviceMsgTimeLimit = 50;
                 GateShare.dwProcessSendMsgTimeLimit = 50;
                 GateShare.boServerReady = false;
                 dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
                 dwRefConsolMsgTick = HUtil32.GetTickCount();
-                
+
+                _runGateClient.LoadConfig();
                 _serverService.Start();
                 _runGateClient.Start();
                 
@@ -666,6 +668,9 @@ namespace RunGate
                 var  clientList= _runGateClient.GetAllClient();
                 for (var i = 0; i < clientList.Count; i++)
                 {
+                    if (clientList[i] == null) {
+                        continue;
+                    }
                     for (var j = 0; j < clientList[i].GetMaxSession(); j ++ )
                     {
                         UserSession = clientList[i].SessionArray[j];

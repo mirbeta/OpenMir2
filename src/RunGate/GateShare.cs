@@ -129,7 +129,6 @@ namespace RunGate
                 {
                     tMsg = "[" + DateTime.Now.ToString() + "] " + Msg;
                     MainLogMsgList.Add(tMsg);
-                    Console.WriteLine(tMsg);
                 }
             }
             finally

@@ -15,14 +15,12 @@ namespace RunGate
         private ISocketServer ServerSocket;
         public int nReviceMsgSize = 0;
         public long dwProcessClientMsgTime = 0;
-        private readonly UserClientService _userClient;
         private readonly ILogger<AppService> _logger;
         private readonly GateService _gateService;
         
-        public ServerService(ILogger<AppService> logger,UserClientService userClient, GateService gateService)
+        public ServerService(ILogger<AppService> logger, GateService gateService)
         {
             _logger = logger;
-            _userClient = userClient;
             _gateService = gateService;
             ServerSocket = new ISocketServer(20, 2048);
             ServerSocket.OnClientConnect += ServerSocketClientConnect;
@@ -92,7 +90,7 @@ namespace RunGate
             }
             if (nSockIdx < gateclient.GetMaxSession())
             {
-                _userClient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int) e.Socket.Handle, 0, e.RemoteIPaddr.Length,
+                gateclient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int) e.Socket.Handle, 0, e.RemoteIPaddr.Length,
                     e.RemoteIPaddr); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
@@ -123,7 +121,7 @@ namespace RunGate
                     GateShare.SessionCount -= 1;
                     if (GateShare.boGateReady)
                     {
-                        _userClient.SendServerMsg(Grobal2.GM_CLOSE, 0, (int) e.Socket.Handle, 0, 0, ""); //发送消息给M2断开链接
+                        userClinet.SendServerMsg(Grobal2.GM_CLOSE, 0, (int) e.Socket.Handle, 0, 0, ""); //发送消息给M2断开链接
                         GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
                     }
                     GateShare.DelSocketIndex(e.ConnectionId);
@@ -168,7 +166,7 @@ namespace RunGate
                 string sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 int nReviceLen = token.BytesReceived;
 
-                if (nSocketIndex > 0 && nSocketIndex < userClinet.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
+                if (nSocketIndex >= 0 && nSocketIndex < userClinet.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                 {
                     if (nReviceLen > GateShare.nNomClientPacketSize)
                     {
@@ -220,6 +218,7 @@ namespace RunGate
                             UserData.nSocketIdx = nSocketIndex;
                             UserData.nSocketHandle = (int)token.Socket.Handle;
                             UserData.sMsg = sReviceMsg;
+                            UserData.UserCientId = token.ConnectionId;
                             UserData.UserClient = userClinet;
                             GateShare.ReviceMsgList.Writer.TryWrite(UserData);
                         }

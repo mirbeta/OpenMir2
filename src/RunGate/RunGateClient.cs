@@ -24,14 +24,14 @@ namespace RunGate
                 Console.WriteLine("获取网关配置文件错误.");
                 return;
             }
-            GateShare.ServerCount = GateShare.Conf.ReadInteger<int>("Servers", "ServerCount", GateShare.ServerAddr);
+            GateShare.ServerCount = GateShare.Conf.ReadInteger<int>("Servers", "ServerCount", GateShare.ServerCount);
             if (GateShare.ServerCount > _gateClient.Length)
             {
                 GateShare.ServerCount = _gateClient.Length;//最大不能超过10个网关
             }
             var serverAddr = string.Empty;
             var serverPort = 0;
-            for (int i = 0; i < _gateClient.Length; i++)
+            for (int i = 0; i < GateShare.ServerCount; i++)
             {
                 serverAddr = GateShare.Conf.GetString("Servers", $"ServerAddr{i}");
                 serverPort = GateShare.Conf.ReadInteger<int>("Servers", $"ServerPort{i}", 80);
@@ -41,7 +41,6 @@ namespace RunGate
                     return;
                 }
                 _gateClient[i] = new UserClientService(serverAddr, serverPort);
-
                 _gateService.Add(serverAddr, _gateClient[i]);
             }
         }
@@ -50,7 +49,12 @@ namespace RunGate
         {
             for (int i = 0; i < _gateClient.Length; i++)
             {
+                if (_gateClient[i] == null)
+                {
+                    continue;
+                }
                 _gateClient[i].Start();
+                _gateClient[i].RestSessionArray();
             }
         }
 
@@ -58,6 +62,10 @@ namespace RunGate
         {
             for (int i = 0; i < _gateClient.Length; i++)
             {
+                if (_gateClient[i] == null)
+                {
+                    continue;
+                }
                 _gateClient[i].Stop();
             }
         }

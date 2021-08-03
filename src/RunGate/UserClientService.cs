@@ -346,6 +346,7 @@ namespace RunGate
                     UserData.nSocketIdx = nSocketIndex;
                     UserData.nSocketHandle = nSocket;
                     UserData.sMsg = sSendMsg;
+                    UserData.UserClient = this;
                     GateShare.SendMsgList.Writer.TryWrite(UserData);
                 }
             }
