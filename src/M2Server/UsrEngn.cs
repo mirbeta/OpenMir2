@@ -1974,7 +1974,7 @@ namespace M2Server
             MakeSwitchData(PlayObject, ref SwitchData);
             var flName = "$_" + M2Share.nServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
             PlayObject.m_sSwitchDataTempFile = flName;
-            SendServerGroupMsg(grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);
+            SendServerGroupMsg(grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;
             return true;
         }
@@ -2239,6 +2239,7 @@ namespace M2Server
             TSlaveInfo SlaveInfo;
             if (SwitchData.boC70)
             {
+
             }
             PlayObject.m_boBanShout = SwitchData.boBanShout;
             PlayObject.m_boHearWhisper = SwitchData.boHearWhisper;
@@ -2274,6 +2275,13 @@ namespace M2Server
                 nCount++;
                 if (nCount >= 6) break;
             }
+        }
+
+
+        public void AddSwitchData(TSwitchDataInfo SwitchData)
+        {
+            SwitchData.dwWaitTime = HUtil32.GetTickCount();
+            m_ChangeServerList.Add(SwitchData);
         }
 
         private void DelSwitchData(TSwitchDataInfo SwitchData)

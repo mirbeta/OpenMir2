@@ -350,7 +350,7 @@ namespace M2Server
                     }
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 M2Share.MainOutMessage(format(sExceptionMsg, new object[] { sData }));
             }
@@ -2141,7 +2141,6 @@ namespace M2Server
 
         private bool UseSpell(TUserMagic UserMagic, short nTargetX, short nTargetY, TBaseObject TargeTBaseObject)
         {
-            int nSpellPoint;
             int n14;
             TBaseObject BaseObject;
             bool boIsWarrSkill;
@@ -2307,7 +2306,7 @@ namespace M2Server
                     m_dwHitTick = HUtil32.GetTickCount();
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 M2Share.MainOutMessage(format("TAIPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.wMagIdx, nTargetX, nTargetY }));
             }
@@ -3347,7 +3346,6 @@ namespace M2Server
         {
             bool result = false;
             int nCode = 0;
-            int nError = 0;
             int nThinkCount = 0;
             try
             {
@@ -3359,39 +3357,32 @@ namespace M2Server
                     }
                     nThinkCount = nThinkCount + 1;
                     nCode = DoThink(wMagicID);
-                    nError = 1;
                     switch (m_btJob)
                     {
                         case 0:
                             switch (nCode)
                             {
                                 case 2:
-                                    nError = 2;
                                     if (ActThink_WalkToRightPos(wMagicID))
                                     {
                                         result = true;
                                     }
                                     else
                                     {
-                                        // 无法走到正确的攻击坐标
-                                        nError = 3;
                                         DelTargetCreat();
                                         if (nThinkCount < 2)
                                         {
-                                            nError = 4;
                                             SearchTarget();
-                                            nError = 5;
                                             continue;
                                         }
                                     }
                                     break;
                                 case 5:
-                                    nError = 6;
                                     if (ActThink_RunPosAttack(wMagicID))
                                     {
                                         result = true;
                                     }
-                                    nError = 7;
+
                                     break;
                             }
                             break;
@@ -3400,58 +3391,42 @@ namespace M2Server
                             switch (nCode)
                             {
                                 case 1:
-                                    nError = 8;
                                     result = ActThink_AvoidTarget(wMagicID);
-                                    nError = 9;
                                     break;
                                 case 2:
-                                    nError = 10;
                                     if (ActThink_FollowTarget(wMagicID))
                                     {
-                                        nError = 11;
                                         result = true;
                                     }
                                     else
                                     {
-                                        // 无法走到正确的攻击坐标
-                                        nError = 12;
                                         DelTargetCreat();
-                                        nError = 13;
                                         if (nThinkCount < 2)
                                         {
-                                            nError = 14;
                                             SearchTarget();
-                                            nError = 15;
                                             continue;
                                         }
                                     }
                                     break;
                                 case 3:
                                 case 4:
-                                    nError = 16;
                                     if (ActThink_WalkToRightPos(wMagicID))
                                     {
                                         result = true;
                                     }
                                     else
                                     {
-                                        // 无法走到正确的攻击坐标
-                                        nError = 3;
                                         DelTargetCreat();
                                         if (nThinkCount < 2)
                                         {
-                                            nError = 4;
                                             SearchTarget();
-                                            nError = 5;
                                             continue;
                                         }
                                     }
-                                    nError = 17;
+
                                     break;
                                 case 5:
-                                    nError = 24;
                                     result = ActThink_RunPosAttack(wMagicID);
-                                    nError = 25;
                                     break;
                             }
                             break;
@@ -3529,7 +3504,6 @@ namespace M2Server
 
         public override void Run()
         {
-            int nSelectMagic;
             int nWhere;
             int nPercent;
             int nValue;
@@ -3992,7 +3966,6 @@ namespace M2Server
             int n18;
             int n1C;
             int nIdx;
-            int n25;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
@@ -4169,7 +4142,7 @@ namespace M2Server
                     }
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 M2Share.MainOutMessage(format(sExceptionMsg2, new object[] {  m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
@@ -4262,7 +4235,7 @@ namespace M2Server
                     n18++;
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
@@ -4525,7 +4498,6 @@ namespace M2Server
         private bool WizardAttackTarget1()
         {
             TUserMagic UserMagic;
-            int n14;
             bool result = false;
             try
             {
@@ -4581,7 +4553,6 @@ namespace M2Server
         {
             bool result = false;
             TUserMagic UserMagic;
-            int n14;
             try
             {
                 m_wHitMode = 0;
@@ -4809,7 +4780,6 @@ namespace M2Server
 
         private bool AttackTarget()
         {
-            long dwAttackTime;
             bool result = false;
             try
             {
@@ -7528,7 +7498,7 @@ namespace M2Server
                     }
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 M2Share.MainOutMessage("TAIPlayObject.CheckHeroAmulet");
             }

@@ -1576,6 +1576,13 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 随机获取其他服务器
+        /// </summary>
+        /// <param name="btServerIndex"></param>
+        /// <param name="sIPaddr"></param>
+        /// <param name="nPort"></param>
+        /// <returns></returns>
         public static bool GetMultiServerAddrPort(byte btServerIndex, ref string sIPaddr, ref int nPort)
         {
             TRouteInfo RouteInfo;
@@ -1597,6 +1604,13 @@ namespace M2Server
             return result;
         }
 
+        public static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
+        {
+            var nC = M2Share.RandomNumber.Random(RouteInfo.nGateCount);
+            nGatePort = RouteInfo.nGameGatePort[nC];
+            return RouteInfo.sGameGateIP[nC];
+        }
+
         static M2Share()
         {
             ServerConf = new ServerConfig();
@@ -1606,13 +1620,6 @@ namespace M2Server
             RandomNumber = RandomNumber.GetInstance();
             LogSystem = new LogSystem();
             g_Config = new TM2Config();
-        }
-
-        public static string GetRandpmRoute(TRouteInfo RouteInfo,ref int nGatePort)
-        {
-            var nC = M2Share.RandomNumber.Random(RouteInfo.nGateCount);
-            nGatePort = RouteInfo.nGameGatePort[nC];
-            return RouteInfo.sGameGateIP[nC];
         }
 
         public static void MainOutMessage(string Msg)

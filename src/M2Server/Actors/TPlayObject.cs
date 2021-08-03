@@ -84,6 +84,9 @@ namespace M2Server
         /// 断线标志(@kick 命令)
         /// </summary>
         public bool m_boKickFlag = false;
+        /// <summary>
+        /// 是否重连
+        /// </summary>
         public bool m_boReconnection = false;
         public bool m_boRcdSaved = false;
         public bool m_boSwitchData = false;

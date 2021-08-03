@@ -146,18 +146,10 @@ namespace M2Server
             int nC;
             int n10;
             int nIndex;
-            int nPostion;
-            TMapPoint MapPoint;
-            TMapPoint MapPoint10;
-            bool boFind;
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
             PointInfo Pt;
-            int nX1;
-            int nY1;
-            int nX2;
-            int nY2;
             int nStep;
             result = false;
             if (FPathType == TPathType.t_Dynamic)
@@ -463,18 +455,10 @@ namespace M2Server
             int nC;
             int n10;
             int nIndex;
-            int nPostion;
-            TMapPoint MapPoint;
-            TMapPoint MapPoint10;
-            bool boFind;
             short nCurrX;
             short nCurrY;
             byte btDir = 0;
             PointInfo Pt;
-            int nX1;
-            int nY1;
-            int nX2;
-            int nY2;
             int nStep;
             if (FPathType == TPathType.t_Dynamic)
             {

@@ -132,39 +132,18 @@ namespace M2Server
 
         public void MsgGetUserServerChange(int sNum, string Body)
         {
-            string ufilename;
-            int shifttime;
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::MsgGetUserServerChange";
-            shifttime = HUtil32.GetTickCount();
-            ufilename = Body;
+            int shifttime = HUtil32.GetTickCount();
+            string ufilename = Body;
             if (M2Share.nServerIndex == sNum)
             {
                 try
                 {
-                    //fHandle = File.Open(M2Share.g_Config.sBaseDir + ufilename, (FileMode)FileAccess.Read | FileShare.ReadWrite);
-                    //if (fHandle > 0)
-                    //{
-                    //    psui = new TSwitchDataInfo();
-                    //    FileRead(fHandle, psui, sizeof(TSwitchDataInfo));
-                    //    FileRead(fHandle, FileCheckSum, sizeof(int));
-                    //    fHandle.Close();
-                    //    File.Delete((M2Share.g_Config.sBaseDir + ufilename as string));
-                    //    CheckSum = 0;
-                    //    for (i = 0; i < sizeof(TSwitchDataInfo); i++)
-                    //    {
-                    //        CheckSum = CheckSum + ((byte)psui + i);
-                    //    }
-                    //    if (CheckSum == FileCheckSum)
-                    //    {
-                    //        M2Share.UserEngine.AddSwitchData(psui);
-                    //        M2Share.UserEngine.SendInterMsg(grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.nServerIndex, ufilename);
-                    //        // MainOutMessageAPI('DeleteFile: ' + g_Config.sBaseDir + ufilename);
-                    //    }
-                    //    else
-                    //    {
-                    //        this.Dispose(psui);
-                    //    }
-                    //}
+                    M2Share.UserEngine.AddSwitchData(new TSwitchDataInfo()
+                    {
+
+                    });
+                    M2Share.UserEngine.SendServerGroupMsg(grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.nServerIndex, ufilename);
                 }
                 catch
                 {
