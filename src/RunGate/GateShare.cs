@@ -36,10 +36,6 @@ namespace RunGate
         /// </summary>
         public static bool boGateReady = false;
         /// <summary>
-        ///  网关 <->游戏服务器之间检测是否失败（超时）
-        /// </summary>
-        public static bool boCheckServerFail = false;
-        /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
@@ -121,6 +117,7 @@ namespace RunGate
         public const int MSGMAXLENGTH = 20000;
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
+        public static ConcurrentDictionary<string, UserClientService> _ClientGateMap;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -176,21 +173,36 @@ namespace RunGate
         public static int GetSocketIndex(string connectionId)
         {
             var socketIndex = 0;
-            if (GateShare.SessionIndex.TryGetValue(connectionId, out socketIndex))
+            if (SessionIndex.TryGetValue(connectionId, out socketIndex))
             {
                 return socketIndex;
             }
             return socketIndex;
         }
 
-        public static int DelSocketIndex(string connectionId)
+        public static void DelSocketIndex(string connectionId)
         {
             var socketIndex = 0;
-            if (GateShare.SessionIndex.TryRemove(connectionId, out socketIndex))
-            {
-                return socketIndex;
-            }
-            return socketIndex;
+            SessionIndex.TryRemove(connectionId, out socketIndex);
+        }
+
+        /// <summary>
+        /// 获取用户链接对应网关
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <returns></returns>
+        public static UserClientService GetUserClient(string connectionId)
+        {
+            return _ClientGateMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
+        }
+        
+        /// <summary>
+        /// 从字典删除用户和网关对应关系
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public static void DeleteUserClient(string connectionId)
+        {
+            _ClientGateMap.TryRemove(connectionId, out var userClinet);
         }
 
         public static void Initialization()
@@ -209,6 +221,7 @@ namespace RunGate
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();
             SessionIndex = new ConcurrentDictionary<string, int>();
+            _ClientGateMap = new ConcurrentDictionary<string, UserClientService>();
         }
     } 
 }

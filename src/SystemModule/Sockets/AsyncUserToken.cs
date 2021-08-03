@@ -5,18 +5,18 @@ using System.Net.Sockets;
 namespace SystemModule
 {
     /// <summary>
-    /// 这个类被设计用来作为被分配给SocketAsyncEventArgs.UserToken属性的类.
+    /// ??????????????????????SocketAsyncEventArgs.UserToken???????.
     /// </summary>
     public class AsyncUserToken : EventArgs
     {
         private Socket m_socket;//Socket
-        private string m_connectionId;//内部连接ID
-        private IPEndPoint m_endPoint;//终结点
-        private byte[] m_receiveBuffer;//缓冲区
+        private string m_connectionId;//???????ID
+        private IPEndPoint m_endPoint;//????
+        private byte[] m_receiveBuffer;//??????
         private int m_count;
-        private int m_offset;//偏移量
-        private int m_bytesReceived;//已经接收到的字节数
-        private SocketAsyncEventArgs m_readEventArgs;// SocketAsyncEventArgs读对象
+        private int m_offset;//?????
+        private int m_bytesReceived;//???????????????
+        private SocketAsyncEventArgs m_readEventArgs;// SocketAsyncEventArgs??????
         private object m_operation;
 
         public AsyncUserToken()
@@ -25,7 +25,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 预留的操作标志 用于发送某些操作数据后的成功反馈(建议用法 使用自定义枚举来表示操作)
+        /// ??????????? ????????Щ????????????????(?????÷? ????????????????????)
         /// </summary>
         public object Operation
         {
@@ -34,7 +34,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取缓冲区
+        /// ?????????
         /// </summary>
         public byte[] ReceiveBuffer
         {
@@ -42,7 +42,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取相对缓冲区偏移量
+        /// ????????????????
         /// </summary>
         public int Offset
         {
@@ -50,7 +50,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取接收数据字节数
+        /// ????????????????
         /// </summary>
         public int BytesReceived
         {
@@ -66,7 +66,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取或设置SocketAsyncEventArgs读对象
+        /// ?????????SocketAsyncEventArgs??????
         /// </summary>
         public SocketAsyncEventArgs ReadEventArgs
         {
@@ -75,9 +75,9 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 携带的Scoket上下文
+        /// Я????Scoket??????
         /// </summary>
-        /// <param name="socket">Socket上下文</param>
+        /// <param name="socket">Socket??????</param>
         public AsyncUserToken(Socket socket)
         {
             m_readEventArgs = new SocketAsyncEventArgs();
@@ -90,7 +90,7 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取或设置携带的Socket上下文
+        /// ?????????Я????Socket??????
         /// </summary>
         public Socket Socket
         {
@@ -106,37 +106,37 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 获取或设置通讯中使用的连接ID号
+        /// ?????????????????????ID??
         /// </summary>
-        public string ConnectionId//内部连接ID
+        public string ConnectionId//???????ID
         {
             get { return this.m_connectionId; }
             set { this.m_connectionId = value; }
         }
 
         /// <summary>
-        /// 获取正在连接的对端客户端终结点
+        /// ??????????????????????
         /// </summary>
-        public IPEndPoint EndPoint//对端终结点
+        public IPEndPoint EndPoint//???????
         {
             get { return this.m_endPoint; }
         }
 
         /// <summary>
-        /// 设置需要通知外部类接收到的数据缓冲区位置
+        /// ????????????????????????????λ??
         /// </summary>
-        /// <param name="bytesReceived">接收到的字节数</param>
+        /// <param name="bytesReceived">????????????</param>
         public void SetBytesReceived(int bytesReceived)
         {
             m_bytesReceived = bytesReceived;
         }
 
         /// <summary>
-        /// 设置需要通知外部类接收到的数据缓冲区位置
+        /// ????????????????????????????λ??
         /// </summary>
-        /// <param name="buffer">接收到的数据缓冲区位置</param>
-        /// <param name="offset">相对于缓冲区的偏移量</param>
-        /// <param name="bytesReceived">接收到的字节数</param>
+        /// <param name="buffer">????????????????λ??</param>
+        /// <param name="offset">?????????????????</param>
+        /// <param name="bytesReceived">????????????</param>
         public void SetBuffer(byte[] buffer, int offset, int count)
         {
             m_receiveBuffer = buffer;

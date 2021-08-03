@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -15,13 +16,25 @@ namespace RunGate
         public int nBufferOfM2Size = 0;
         private long dwProcessServerMsgTime = 0;
         /// <summary>
+        /// 网关编号（初始化的时候进行分配）
+        /// </summary>
+        public int GateIdx = 0;
+        /// <summary>
         /// 最大用户数
         /// </summary>
-        private const int GATEMAXSESSION = 1000;
+        public const int GATEMAXSESSION = 1000;
         /// <summary>
         /// 用户会话
         /// </summary>
-        public TSessionInfo[] SessionArray = new TSessionInfo[GATEMAXSESSION];
+        public TSessionInfo[] SessionArray;
+        /// <summary>
+        /// 心跳线程
+        /// </summary>
+        private Timer _heartTimer;
+        /// <summary>
+        ///  网关 <->游戏服务器之间检测是否失败（超时）
+        /// </summary>
+        public bool boCheckServerFail = false;
 
         public UserClientService(string serverAddr, int serverPort)
         {
@@ -30,13 +43,20 @@ namespace RunGate
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address =serverAddr;
+            ClientSocket.Address = serverAddr;
             ClientSocket.Port = serverPort;
+            SessionArray = new TSessionInfo[GATEMAXSESSION];
+        }
+
+        public int GetMaxSession()
+        {
+            return GATEMAXSESSION;
         }
 
         public void Start()
         {
             ClientSocket.Connect();
+            _heartTimer = new Timer(Heart, null, 5000, 2000);
         }
 
         public void Stop()
@@ -114,7 +134,7 @@ namespace RunGate
         public void RestSessionArray()
         {
             TSessionInfo tSession;
-            for (var i = 0; i < GATEMAXSESSION; i ++ )
+            for (var i = 0; i < GATEMAXSESSION; i++)
             {
                 if (SessionArray[i] == null)
                 {
@@ -125,7 +145,7 @@ namespace RunGate
                 tSession.sSocData = "";
                 tSession.sSendData = "";
                 tSession.nUserListIndex = 0;
-                tSession.nPacketIdx =  -1;
+                tSession.nPacketIdx = -1;
                 tSession.nPacketErrCount = 0;
                 tSession.boStartLogon = true;
                 tSession.boSendLock = false;
@@ -133,7 +153,7 @@ namespace RunGate
                 tSession.boSendCheck = false;
                 tSession.nCheckSendLength = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
-                tSession.nSckHandle =  0;
+                tSession.nSckHandle = 0;
                 tSession.dwSayMsgTick = HUtil32.GetTickCount();
             }
         }
@@ -150,7 +170,7 @@ namespace RunGate
                 SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, new byte[0]);
             }
         }
-        
+
         public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new TMsgHeader();
@@ -173,7 +193,7 @@ namespace RunGate
                 SendSocket(SendBuffer);
             }
         }
-        
+
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             TMsgHeader pMsg;
@@ -208,7 +228,7 @@ namespace RunGate
                             switch (pMsg.wIdent)
                             {
                                 case Grobal2.GM_CHECKSERVER:
-                                    GateShare.boCheckServerFail = false;
+                                    boCheckServerFail = false;
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
@@ -341,6 +361,37 @@ namespace RunGate
             {
                 ClientSocket.Send(SendBuffer);
             }
+        }
+
+        /// <summary>
+        /// 每二秒向游戏服务器发送一个检查信号
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Heart(object obj)
+        {
+            if (GateShare.boGateReady)
+            {
+                SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
+            }
+            if (HUtil32.GetTickCount() - GateShare.dwCheckServerTick > GateShare.dwCheckServerTimeOutTime)
+            {
+                boCheckServerFail = true;
+                //ClientSocket.Disconnect();
+                Console.WriteLine("与服务器断开连接.");
+            }
+            //if (dwLoopTime > 30)
+            //{
+            //    dwLoopTime -= 20;
+            //}
+            //if (dwProcessServerMsgTime > 1)
+            //{
+            //    dwProcessServerMsgTime -= 1;
+            //}
+            //if (_serverService.dwProcessClientMsgTime > 1)
+            //{
+            //    _serverService.dwProcessClientMsgTime -= 1;
+            //}
+            GateShare.boDecodeMsgLock = false;
         }
     }
 }

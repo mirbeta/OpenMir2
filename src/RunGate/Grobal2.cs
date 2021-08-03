@@ -707,6 +707,7 @@ namespace RunGate
         public int nSocketIdx;
         public int nSocketHandle;
         public string sMsg;
+        public UserClientService UserClient;
     }
 
     public enum TBlockIPMethod

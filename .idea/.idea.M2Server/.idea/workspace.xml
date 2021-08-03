@@ -12,22 +12,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearMapMonsterCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearMapMonsterCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MapMoveHumanCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MapMoveHumanCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MoveMobToCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MoveMobToCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReloadNpcCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReloadNpcCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/StartContestCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/StartContestCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SuperTingCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SuperTingCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/RunSock.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/ServerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +55,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReCallMobExCommand.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" />
@@ -95,10 +87,7 @@
       <option value="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/UserClient.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/Program.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
-      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" />
       <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketClient/IClientScoket.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/AppService.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/GateServer.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" />
@@ -109,10 +98,14 @@
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/ServerService.cs" />
-      <option value="$PROJECT_DIR$/src/RunGate/UserClientService.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/GateService.cs" />
+      <option value="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/GateShare.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/UserClientService.cs" />
       <option value="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/ServerService.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/Grobal2.cs" />
+      <option value="$PROJECT_DIR$/src/RunGate/ServerApp.cs" />
     </changedPaths>
   </component>
   <component name="JsBowerSettings">
@@ -273,7 +266,8 @@
       <workItem from="1627715543818" duration="12945000" />
       <workItem from="1627816961425" duration="3605000" />
       <workItem from="1627868980515" duration="3450000" />
-      <workItem from="1627917564412" duration="1279000" />
+      <workItem from="1627917564412" duration="2858000" />
+      <workItem from="1627958519451" duration="2342000" />
     </task>
     <servers />
   </component>
@@ -372,19 +366,6 @@
           <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>342</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="340" containingFunctionPresentation="method 'ProcessUserPacket'">
-            <startOffsets>
-              <option value="16561" />
-            </startOffsets>
-            <endOffsets>
-              <option value="16596" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="233" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/IdSrvClient.cs</url>
           <line>362</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'">
@@ -396,19 +377,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="256" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/ServerApp.cs</url>
-          <line>300</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" initialLine="300" containingFunctionPresentation="method 'ProcessUserPacket'">
-            <startOffsets>
-              <option value="13548" />
-            </startOffsets>
-            <endOffsets>
-              <option value="13569" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="268" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/RunSock.cs</url>
