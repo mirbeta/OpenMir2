@@ -22,7 +22,7 @@ namespace RunGate
         /// <summary>
         /// 最大用户数
         /// </summary>
-        public const int GATEMAXSESSION = 1000;
+        private const int GATEMAXSESSION = 1000;
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -35,6 +35,12 @@ namespace RunGate
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
         private bool boCheckServerFail = false;
+        /// <summary>
+        /// 独立Buffer分区
+        /// </summary>
+        private byte[] SocketBuffer = null;
+
+        private int nBuffLen = 0;
 
         public UserClientService(string serverAddr, int serverPort)
         {
@@ -75,7 +81,7 @@ namespace RunGate
             GateShare.dwCheckServerTick = HUtil32.GetTickCount();
             GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            GateShare.boServerReady = true;
+            //GateShare.boServerReady = true;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
         }
@@ -94,10 +100,10 @@ namespace RunGate
                 }
             }
             RestSessionArray();
-            GateShare.SocketBuffer = null;
+            SocketBuffer = null;
             GateShare.List_45AA58.Clear();
             GateShare.boGateReady = false;
-            GateShare.boServerReady = false;
+            //GateShare.boServerReady = false;
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace RunGate
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             Console.WriteLine(e.exception);
-            GateShare.boServerReady = false;
+            //GateShare.boServerReady = false;
         }
 
         public void RestSessionArray()
@@ -180,17 +186,17 @@ namespace RunGate
             GateMsg.wIdent = nIdent;
             GateMsg.wUserListIndex = (ushort)nUserListIndex;
             GateMsg.nLength = nLen;
-            var SendBuffer = GateMsg.ToByte();
-            if (Data != null && Data.Length > 0)
+            var sendBuffer = GateMsg.ToByte();
+            if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];
-                Buffer.BlockCopy(SendBuffer, 0, tempBuff, 0, SendBuffer.Length);
-                Buffer.BlockCopy(Data, 0, tempBuff, SendBuffer.Length, Data.Length);
+                Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+                Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
                 SendSocket(tempBuff);
             }
             else
             {
-                SendSocket(SendBuffer);
+                SendSocket(sendBuffer);
             }
         }
 
@@ -201,19 +207,19 @@ namespace RunGate
             const int HeaderMessageSize = 20;
             try
             {
-                if (GateShare.nBuffLen > 0) //有位处理完成的buff
+                if (nBuffLen > 0) //有位处理完成的buff
                 {
-                    var tempBuff = new byte[GateShare.nBuffLen + nMsgLen];
-                    Buffer.BlockCopy(GateShare.SocketBuffer, 0, tempBuff, 0, GateShare.nBuffLen);
-                    Buffer.BlockCopy(tBuffer, 0, tempBuff, GateShare.nBuffLen, tBuffer.Length);
-                    GateShare.SocketBuffer = tempBuff;
+                    var tempBuff = new byte[nBuffLen + nMsgLen];
+                    Buffer.BlockCopy(SocketBuffer, 0, tempBuff, 0, nBuffLen);
+                    Buffer.BlockCopy(tBuffer, 0, tempBuff, nBuffLen, tBuffer.Length);
+                    SocketBuffer = tempBuff;
                 }
                 else
                 {
-                    GateShare.SocketBuffer = tBuffer;
+                    SocketBuffer = tBuffer;
                 }
-                var nLen = GateShare.nBuffLen + nMsgLen;
-                var Buff = GateShare.SocketBuffer;
+                var nLen = nBuffLen + nMsgLen;
+                var Buff = SocketBuffer;
                 if (nLen >= HeaderMessageSize)
                 {
                     while (true)
@@ -284,18 +290,17 @@ namespace RunGate
                         }
                     }
                 }
-
                 if (nLen > 0)
                 {
                     var tempBuff = new byte[nLen];
                     Buffer.BlockCopy(Buff, 0, tempBuff, 0, nLen);
-                    GateShare.SocketBuffer = tempBuff;
-                    GateShare.nBuffLen = nLen;
+                    SocketBuffer = tempBuff;
+                    nBuffLen = nLen;
                 }
                 else
                 {
-                    GateShare.SocketBuffer = null;
-                    GateShare.nBuffLen = 0;
+                    SocketBuffer = null;
+                    nBuffLen = 0;
                 }
             }
             catch (Exception E)
@@ -339,12 +344,12 @@ namespace RunGate
                 }
                 if (nSocketIndex >= 0 && nSocketIndex < GATEMAXSESSION && !string.IsNullOrEmpty(sSendMsg))
                 {
-                    var UserData = new TSendUserData();
-                    UserData.nSocketIdx = nSocketIndex;
-                    UserData.nSocketHandle = nSocket;
-                    UserData.sMsg = sSendMsg;
-                    UserData.UserClient = this;
-                    GateShare.SendMsgList.Writer.TryWrite(UserData);
+                    var userData = new TSendUserData();
+                    userData.nSocketIdx = nSocketIndex;
+                    userData.nSocketHandle = nSocket;
+                    userData.sMsg = sSendMsg;
+                    userData.UserClient = this;
+                    GateShare.SendMsgList.Writer.TryWrite(userData);
                 }
             }
             catch (Exception E)
@@ -353,11 +358,11 @@ namespace RunGate
             }
         }
 
-        private void SendSocket(byte[] SendBuffer)
+        private void SendSocket(byte[] sendBuffer)
         {
             if (ClientSocket.IsConnected)
             {
-                ClientSocket.Send(SendBuffer);
+                ClientSocket.Send(sendBuffer);
             }
         }
 

@@ -14,27 +14,12 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Guild/TGuildManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Guild/TGuildManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/MirApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MirApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NetWorks/GateServer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SystemModule/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/EDcode.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,10 +190,10 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue=".NET Launch Settings Profile.RunGate" />
       <item itemvalue=".NET Launch Settings Profile.M2Server: MirServer" />
       <item itemvalue=".NET Project.M2Server" />
       <item itemvalue=".NET Project.RunGate" />
-      <item itemvalue=".NET Launch Settings Profile.RunGate" />
     </list>
     <recent_temporary>
       <list>
@@ -290,7 +275,8 @@
       <workItem from="1627917564412" duration="2858000" />
       <workItem from="1627958519451" duration="2342000" />
       <workItem from="1628047757604" duration="217000" />
-      <workItem from="1628048030953" duration="13337000" />
+      <workItem from="1628048030953" duration="13531000" />
+      <workItem from="1628067175257" duration="1278000" />
     </task>
     <servers />
   </component>
@@ -340,14 +326,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs</url>
           <line>363</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'">
-            <startOffsets>
-              <option value="13294" />
-            </startOffsets>
-            <endOffsets>
-              <option value="13338" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'" />
           <option name="timeStamp" value="256" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">

@@ -69,8 +69,7 @@ namespace RunGate
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-        public static byte[] SocketBuffer = null;
-        public static int nBuffLen = 0;
+       
         public static ArrayList List_45AA58 = null;
         public static bool boDecodeMsgLock = false;
         public static long dwProcessReviceMsgTimeLimit = 0;
@@ -100,7 +99,7 @@ namespace RunGate
         /// </summary>
         public static long dwClientTimeOutTime = 5000;
         public static IniFile Conf = null;
-        public static string sConfigFileName = "Config.ini";
+        private static string sConfigFileName = "Config.ini";
         /// <summary>
         /// 发言字符长度
         /// </summary>
@@ -118,7 +117,8 @@ namespace RunGate
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
         public static ConcurrentDictionary<string, UserClientService> _ClientGateMap;
-        public static ConcurrentDictionary<int, bool> Magic_Attack_Array;
+        private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
+        private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -140,9 +140,8 @@ namespace RunGate
 
         public static void LoadAbuseFile()
         {
-            string sFileName;
             AddMainLogMsg("正在加载文字过滤配置信息...", 4);
-            sFileName = ".\\WordFilter.txt";
+            var sFileName = ".\\WordFilter.txt";
             if (File.Exists(sFileName))
             {
                 try
@@ -160,9 +159,8 @@ namespace RunGate
 
         public static void LoadBlockIPFile()
         {
-            string sFileName;
             AddMainLogMsg("正在加载IP过滤配置信息...", 4);
-            sFileName = ".\\BlockIPList.txt";
+            var sFileName = ".\\BlockIPList.txt";
             if (File.Exists(sFileName))
             {
                 //BlockIPList.LoadFromFile(sFileName);
@@ -223,11 +221,52 @@ namespace RunGate
             SessionIndex = new ConcurrentDictionary<string, int>();
             _ClientGateMap = new ConcurrentDictionary<string, UserClientService>();
             Magic_Attack_Array = new ConcurrentDictionary<int, bool>();
+            MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
         }
 
         public static void InitMagicAttackMap()
         {
             //Magic_Attack_Array.TryAdd();
+        }
+
+        public static void InitMagicDelayTimeMap()
+        {
+            MagicDelayTimeMap[1] = 1000; //火球术
+            MagicDelayTimeMap[2] = 1000; //治愈术
+            MagicDelayTimeMap[5] = 1000; //大火球
+            MagicDelayTimeMap[6] = 1000; //施毒术
+            MagicDelayTimeMap[8] = 960; //抗拒火环
+            MagicDelayTimeMap[9] = 1000; //地狱火
+            MagicDelayTimeMap[10] = 1000; //疾光电影
+            MagicDelayTimeMap[11] = 1000; //雷电术
+            MagicDelayTimeMap[13] = 1000; //灵魂火符
+            MagicDelayTimeMap[14] = 1000; //幽灵盾
+            MagicDelayTimeMap[15] = 1000; //神圣战甲术
+            MagicDelayTimeMap[16] = 1000; //困魔咒
+            MagicDelayTimeMap[17] = 1000; //召唤骷髅
+            MagicDelayTimeMap[18] = 1000; //隐身术
+            MagicDelayTimeMap[19] = 1000; //集体隐身术
+            MagicDelayTimeMap[20] = 1000; //诱惑之光
+            MagicDelayTimeMap[21] = 1000; //瞬息移动
+            MagicDelayTimeMap[22] = 1000; //火墙
+            MagicDelayTimeMap[23] = 1000; //爆裂火焰
+            MagicDelayTimeMap[24] = 1000; //地狱雷光
+            MagicDelayTimeMap[28] = 1000; //心灵启示
+            MagicDelayTimeMap[29] = 1000; //群体治疗术
+            MagicDelayTimeMap[30] = 1000; //召唤神兽
+            MagicDelayTimeMap[32] = 1000; //圣言术
+            MagicDelayTimeMap[33] = 950; //冰咆哮
+            MagicDelayTimeMap[34] = 1000; //解毒术
+            MagicDelayTimeMap[35] = 1000; //狮吼功
+            MagicDelayTimeMap[36] = 1000; //火焰冰
+            MagicDelayTimeMap[37] = 1000; //群体雷电术
+            MagicDelayTimeMap[38] = 1000; //群体施毒术
+            MagicDelayTimeMap[39] = 960; //彻地钉
+            MagicDelayTimeMap[41] = 960; //狮子吼
+            MagicDelayTimeMap[44] = 1000; //寒冰掌
+            MagicDelayTimeMap[45] = 1000; //灭天火
+            MagicDelayTimeMap[46] = 1000; //分身术
+            MagicDelayTimeMap[47] = 1000; //火龙焰
         }
     } 
 }

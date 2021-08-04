@@ -60,10 +60,6 @@ namespace RunGate
             {
                 while (await GateShare.ReviceMsgList.Reader.WaitToReadAsync())
                 {
-                    if (GateShare.ReviceMsgList.Reader.Count <= 0)
-                    {
-                        break;
-                    }
                     if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
                     {
                         ProcessUserPacket(message);
@@ -85,10 +81,6 @@ namespace RunGate
             {
                 while (await GateShare.SendMsgList.Reader.WaitToReadAsync())
                 {
-                    if (GateShare.SendMsgList.Reader.Count <= 0)
-                    {
-                        break;
-                    }
                     if (GateShare.SendMsgList.Reader.TryRead(out var message))
                     {
                         ProcessPacket(message);
@@ -317,45 +309,47 @@ namespace RunGate
                                             DefMsg = EDcode.DecodeMessage(sDefMsg); // 检查数据
                                             if (!string.IsNullOrEmpty(sDataMsg))
                                             {
-                                                if (DefMsg.Ident == Grobal2.CM_SPELL) //使用技能
+                                                switch (DefMsg.Ident)
                                                 {
-                                                    //检查技能是否超速
-                                                }
-
-                                                if (DefMsg.Ident == Grobal2.CM_EAT) //使用物品
-                                                { 
-                                                    // var dwTime = HUtil32.GetTickCount();
-                                                    // if (dwTime - LastEat > dwEatTime)
-                                                    // {
-                                                    //     LastEat = dwTime;
-                                                    // }
-                                                    // else
-                                                    // {
-                                                    //    GateShare.AddMainLogMsg(string.Format("超速封包(药品):{0}",[dwTime - LastEat]), 1);
-                                                    // }
-                                                }
-
-                                                if (DefMsg.Ident == Grobal2.CM_SAY) // 控制发言间隔时间
-                                                {
-                                                    sDataText = EDcode.DeCodeString(sDataMsg);
-                                                    if (sDataText != "")
+                                                    case Grobal2.CM_SPELL://使用技能
+                                                        //检查技能是否超速
+                                                        
+                                                        break;
+                                                    case Grobal2.CM_EAT: //使用物品
+                                                        // var dwTime = HUtil32.GetTickCount();
+                                                        // if (dwTime - LastEat > dwEatTime)
+                                                        // {
+                                                        //     LastEat = dwTime;
+                                                        // }
+                                                        // else
+                                                        // {
+                                                        //    GateShare.AddMainLogMsg(string.Format("超速封包(药品):{0}",[dwTime - LastEat]), 1);
+                                                        // }
+                                                        break;
+                                                    case Grobal2.CM_SAY: // 控制发言间隔时间
                                                     {
-                                                        if (sDataText[1] == '/')
+                                                        sDataText = EDcode.DeCodeString(sDataMsg);
+                                                        if (sDataText != "")
                                                         {
-                                                            sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { " " }); // 限制最长可发字符长度
-                                                            FilterSayMsg(ref sDataText);
-                                                            sDataText = sHumName + " " + sDataText;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (sDataText[1] != '@')
+                                                            if (sDataText[1] == '/')
                                                             {
-                                                                FilterSayMsg(ref sDataText);// 限制最长可发字符长度
+                                                                sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { " " }); // 限制最长可发字符长度
+                                                                FilterSayMsg(ref sDataText);
+                                                                sDataText = sHumName + " " + sDataText;
+                                                            }
+                                                            else
+                                                            {
+                                                                if (sDataText[1] != '@')
+                                                                {
+                                                                    FilterSayMsg(ref sDataText);// 限制最长可发字符长度
+                                                                }
                                                             }
                                                         }
+                                                        sDataMsg = EDcode.EncodeString(sDataText);
+                                                        break;
                                                     }
-                                                    sDataMsg = EDcode.EncodeString(sDataText);
                                                 }
+
                                                 DataBuffer = new byte[sDataMsg.Length + 12 + 1]; //GetMem(Buffer, sDataMsg.Length + 12 + 1);
                                                 Buffer.BlockCopy(DefMsg.ToByte(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
                                                 var msgBuff = HUtil32.GetBytes(sDataMsg);
@@ -520,18 +514,20 @@ namespace RunGate
                 dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
                 dwRefConsolMsgTick = HUtil32.GetTickCount();
 
-                _runGateClient.LoadConfig();
                 _serverService.Start();
+                _runGateClient.LoadConfig();
                 _runGateClient.Start();
-                
+                GateShare.boServerReady = true;
                 sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
                 decodeTimer = new Timer(DecodeTimer, null, 3000, 200);
-
                 
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
                 GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
                 GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);
                 GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
+                
+                GateShare.AddMainLogMsg("智能反外挂程序云端已启动...",0);
+                GateShare.AddMainLogMsg("智能反外挂程序云端已连接...",0);
             }
             catch (Exception E)
             {
@@ -544,9 +540,6 @@ namespace RunGate
             GateShare.AddMainLogMsg("正在停止服务...", 2);
             GateShare.boServiceStart = false;
             GateShare.boGateReady = false;
-            
-            Console.WriteLine("asdasd");
-            
             // for (var nSockIdx = 0; nSockIdx < GateShare.GATEMAXSESSION; nSockIdx ++ )
             // {
             //     if (GateShare.SessionArray[nSockIdx].Socket != null)

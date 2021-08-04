@@ -14,7 +14,7 @@ namespace RunGate
     {
         private ISocketServer ServerSocket;
         public int nReviceMsgSize = 0;
-        public long dwProcessClientMsgTime = 0;
+        private long dwProcessClientMsgTime = 0;
         private readonly ILogger<AppService> _logger;
         private readonly GateService _gateService;
         
@@ -161,7 +161,7 @@ namespace RunGate
             try
             {
                 long dwProcessMsgTick = HUtil32.GetTickCount();
-                int nReviceLen = token.BytesReceived;
+                var nReviceLen = token.BytesReceived;
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
                 var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
@@ -169,7 +169,7 @@ namespace RunGate
                 {
                     if (nReviceLen > GateShare.nNomClientPacketSize)
                     {
-                        int nMsgCount = HUtil32.TagCount(sReviceMsg, '!');
+                        var nMsgCount = HUtil32.TagCount(sReviceMsg, '!');
                         if (nMsgCount > GateShare.nMaxClientMsgCount || nReviceLen > GateShare.nMaxClientPacketSize)
                         {
                             if (GateShare.bokickOverPacketSize)
@@ -201,7 +201,7 @@ namespace RunGate
                     var userSession = userClinet.SessionArray[nSocketIndex];
                     if (userSession.Socket == token.Socket)
                     {
-                        int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
+                        var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                         if (nPos > -1)
                         {
                             userSession.boSendAvailable = true;

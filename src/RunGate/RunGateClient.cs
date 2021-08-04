@@ -31,7 +31,7 @@ namespace RunGate
             }
             var serverAddr = string.Empty;
             var serverPort = 0;
-            for (int i = 0; i < GateShare.ServerCount; i++)
+            for (var i = 0; i < GateShare.ServerCount; i++)
             {
                 serverAddr = GateShare.Conf.GetString("Servers", $"ServerAddr{i}");
                 serverPort = GateShare.Conf.ReadInteger<int>("Servers", $"ServerPort{i}", 80);
@@ -47,7 +47,7 @@ namespace RunGate
 
         public void Start()
         {
-            for (int i = 0; i < _gateClient.Length; i++)
+            for (var i = 0; i < _gateClient.Length; i++)
             {
                 if (_gateClient[i] == null)
                 {
@@ -60,7 +60,7 @@ namespace RunGate
 
         public void Stop()
         {
-            for (int i = 0; i < _gateClient.Length; i++)
+            for (var i = 0; i < _gateClient.Length; i++)
             {
                 if (_gateClient[i] == null)
                 {

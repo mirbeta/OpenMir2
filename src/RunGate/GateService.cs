@@ -15,7 +15,6 @@ namespace RunGate
             _gateList = new ConcurrentDictionary<string, UserClientService>();
         }
 
-
         public void Add(string name, UserClientService userClientService)
         {
             if (_gateList.ContainsKey(name))
