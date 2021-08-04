@@ -1237,6 +1237,7 @@ namespace M2Server
                 }
                 var sendBuffer = new byte[buffer.Length - 4];
                 Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
+                nSendBuffLen = sendBuffer.Length;
                 if (nSendBuffLen > 0)
                 {
                     while (true)
@@ -1255,17 +1256,17 @@ namespace M2Server
                                 _gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
                             }
                             _gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
-                            Array.Resize(ref sendBuffer, sendBuffer.Length + M2Share.g_Config.nSendBlock);
                             nSendBuffLen -= M2Share.g_Config.nSendBlock;
+                            var tempBuff = new byte[nSendBuffLen];
+                            Array.Copy(sendBuffer, nSendBuffLen, tempBuff, 0, nSendBuffLen);
+                            sendBuffer = tempBuff;
                             continue;
                         }
                         if (_gate.Socket != null)
                         {
-                            if (_gate.Socket.Connected)
+                            if (_gate.Socket.Connected) //发送剩下的
                             {
-                               // var sendBuff = new byte[nSendBuffLen];
-                                //Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, sendBuff.Length);
-                                _gate.Socket.Send(sendBuffer, 0, sendBuffer.Length, SocketFlags.None);
+                                _gate.Socket.Send(sendBuffer, 0, nSendBuffLen, SocketFlags.None);
                             }
                             _gate.nSendCount++;
                             _gate.nSendBytesCount += nSendBuffLen;

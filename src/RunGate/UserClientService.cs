@@ -56,7 +56,7 @@ namespace RunGate
         public void Start()
         {
             ClientSocket.Connect();
-            _heartTimer = new Timer(Heart, null, 5000, 2000);
+            //_heartTimer = new Timer(Heart, null, 5000, 60000);
         }
 
         public void Stop()
@@ -316,7 +316,7 @@ namespace RunGate
                 switch (nMsgLen)
                 {
                     case < 0:
-                        sSendMsg = "#" + HUtil32.GetString(buffer, 0, buffer.Length) + "!";
+                        sSendMsg = "#" + HUtil32.GetString(buffer, 0, buffer.Length - 1) + "!";
                         break;
                     case >= 12:
                         {

@@ -1272,7 +1272,7 @@ namespace M2Server
             TStdItem StdItem = null;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
-            var s1C = string.Empty;
+            var sSendMsg = string.Empty;
             TItem Item;
             TUserItem UserItem;
             if (PlayObject.m_nSoftVersionDateEx == 0)
@@ -1298,7 +1298,7 @@ namespace M2Server
                             OClientItem.Dura = UserItem.Dura;
                             OClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             OClientItem.MakeIndex = UserItem.MakeIndex;
-                            s1C = s1C + EDcode.EncodeBuffer(OClientItem) + '/';
+                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(OClientItem) + '/';
                             nItemCount++;
                             if (nItemCount >= 10)
                             {
@@ -1308,7 +1308,7 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, s1C);
+                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
             }
             else
             {
@@ -1337,7 +1337,7 @@ namespace M2Server
                             ClientItem.Dura = UserItem.Dura;
                             ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             ClientItem.MakeIndex = UserItem.MakeIndex;
-                            s1C = s1C + EDcode.EncodeBuffer(ClientItem) + '/';
+                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
                             nItemCount++;
                             if (nItemCount >= 10)
                             {
@@ -1347,7 +1347,7 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, s1C);
+                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
             }
         }
 

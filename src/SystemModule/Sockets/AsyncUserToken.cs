@@ -61,7 +61,7 @@ namespace SystemModule
         {
             get
             {
-                return m_endPoint.Address.ToString();
+                return m_endPoint?.Address.ToString();
             }
         }
 

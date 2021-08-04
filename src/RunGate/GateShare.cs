@@ -100,7 +100,7 @@ namespace RunGate
         /// </summary>
         public static long dwClientTimeOutTime = 5000;
         public static IniFile Conf = null;
-        public static string sConfigFileName = ".\\Config.ini";
+        public static string sConfigFileName = "Config.ini";
         /// <summary>
         /// 发言字符长度
         /// </summary>
@@ -206,7 +206,7 @@ namespace RunGate
 
         public static void Initialization()
         {
-            Conf = new IniFile(sConfigFileName);
+            Conf = new IniFile(Path.Combine(AppContext.BaseDirectory, sConfigFileName));
             Conf.Load();
             nShowLogLevel = Conf.ReadInteger(GateClass, "ShowLogLevel", nShowLogLevel);
             CS_MainLog = new object();

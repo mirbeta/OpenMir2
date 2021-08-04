@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-
 namespace M2Server
 {
     public class TMagicRcd
@@ -48,4 +47,3 @@ namespace M2Server
         }
     }
 }
-
