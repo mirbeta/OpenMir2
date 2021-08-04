@@ -5,7 +5,7 @@ namespace M2Server
     public class TStoneMineEvent : TEvent
     {
         public int m_nMineCount = 0;
-        public int m_nAddStoneCount = 0;
+        private int m_nAddStoneCount = 0;
         public int m_dwAddStoneMineTick = 0;
 
         public TStoneMineEvent(TEnvirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)

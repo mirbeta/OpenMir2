@@ -12,7 +12,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="" />
+    <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GameServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GameServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Guild/TGuildManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Guild/TGuildManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MirApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MirApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NetWorks/GateServer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/EDcode.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,7 +53,7 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
@@ -267,7 +290,7 @@
       <workItem from="1627917564412" duration="2858000" />
       <workItem from="1627958519451" duration="2342000" />
       <workItem from="1628047757604" duration="217000" />
-      <workItem from="1628048030953" duration="8113000" />
+      <workItem from="1628048030953" duration="13337000" />
     </task>
     <servers />
   </component>
@@ -296,32 +319,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/DataSystem/FrnEngn.cs</url>
-          <line>435</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="434" containingFunctionPresentation="method 'ChangeUserGoldInDB'">
-            <startOffsets>
-              <option value="14370" />
-            </startOffsets>
-            <endOffsets>
-              <option value="14416" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/DataSystem/FrnEngn.cs</url>
-          <line>427</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="426" containingFunctionPresentation="method 'ChangeUserGoldInDB'">
-            <startOffsets>
-              <option value="13887" />
-            </startOffsets>
-            <endOffsets>
-              <option value="13906" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>
           <line>7458</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" initialLine="7577" containingFunctionPresentation="method 'CheckHeroAmulet'">
@@ -345,10 +342,10 @@
           <line>363</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'">
             <startOffsets>
-              <option value="13364" />
+              <option value="13294" />
             </startOffsets>
             <endOffsets>
-              <option value="13408" />
+              <option value="13338" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="256" />

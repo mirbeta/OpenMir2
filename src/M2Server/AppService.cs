@@ -21,7 +21,7 @@ namespace M2Server
             stoppingToken.Register(() => _logger.LogDebug($"M2Server is stopping."));
             Task.Run(async () =>
             {
-                await M2Share.RunSocket.Start();
+                await M2Share.RunSocket.StartConsumer();
             }, stoppingToken);
             return Task.CompletedTask;
         }

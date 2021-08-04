@@ -68,7 +68,7 @@ namespace M2Server
             sCheckStr = EDcode.EncodeBuffer(by, by.Length);
             sSendMsg = "#" + nQueryID + "/" + sMsg + sCheckStr + "!";
             M2Share.g_Config.boDBSocketWorking = true;
-            var data = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sSendMsg);
+            var data = HUtil32.GetBytes(sSendMsg);
             _clientScoket.Send(data);
         }
 

@@ -42,7 +42,6 @@ namespace M2Server
         public static DataServer DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GateSystem RunSocket = null;
-        public static GateServer GateServer = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static TMapManager g_MapManager = null;

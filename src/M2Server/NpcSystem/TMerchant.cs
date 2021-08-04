@@ -382,7 +382,7 @@ namespace M2Server
                             DelItemList.Add(UserItem.MakeIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog("26" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX.ToString() + "\t" + User.m_nCurrY.ToString() + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog("26" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                             DisPose(UserItem);
                             ItemList.RemoveAt(i);
@@ -462,7 +462,7 @@ namespace M2Server
                 StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[Grobal2.U_WEAPON].wIndex);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("25" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX.ToString() + "\t" + User.m_nCurrY.ToString() + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + User.m_UseItems[Grobal2.U_WEAPON].MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("25" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + User.m_UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.SendDelItems(User.m_UseItems[Grobal2.U_WEAPON]);
                 User.m_UseItems[Grobal2.U_WEAPON].wIndex = 0;
@@ -638,7 +638,7 @@ namespace M2Server
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("24" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX.ToString() + "\t" + User.m_nCurrY.ToString() + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("24" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.AddItemToBag(UserItem);
                 User.SendAddItem(UserItem);
@@ -1224,7 +1224,7 @@ namespace M2Server
                                             PlayObject.SendAddItem(UserItem);
                                             if (StdItem.NeedIdentify == 1)
                                             {
-                                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + m_sCharName);
+                                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
                                             }
                                             List20.RemoveAt(j);
                                             if (List20.Count <= 0)
@@ -1407,7 +1407,7 @@ namespace M2Server
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + m_sCharName);
+                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
                     }
                     result = true;
                 }
@@ -1535,7 +1535,7 @@ namespace M2Server
                                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('2' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + m_sCharName);
+                                    M2Share.AddGameDataLog('2' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
                                 }
                                 n14 = 0;
                                 break;

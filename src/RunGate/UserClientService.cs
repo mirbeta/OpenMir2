@@ -162,7 +162,7 @@ namespace RunGate
         {
             if (!string.IsNullOrEmpty(Data))
             {
-                var strBuff = System.Text.Encoding.GetEncoding("gb2312").GetBytes(Data);
+                var strBuff = HUtil32.GetBytes(Data);
                 SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, strBuff);
             }
             else

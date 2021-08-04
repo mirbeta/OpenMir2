@@ -10,11 +10,17 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
 namespace M2Server
 {
     public class GateSystem
     {
+        /// <summary>
+        /// 游戏网关
+        /// </summary>
+        private readonly ISocketServer _gateSocket = null;
+        
         public object m_RunSocketSection = null;
         public StringList m_RunAddrList = null;
         public int n8 = 0;
@@ -22,7 +28,7 @@ namespace M2Server
         public int n4F8 = 0;
         public int dwSendTestMsgTick = 0;
 
-        public void AddGate(AsyncUserToken e)
+        private void AddGate(AsyncUserToken e)
         {
             const string sGateOpen = "游戏网关[{0}]({1}:{2})已打开...";
             const string sKickGate = "服务器未就绪: {0}";
@@ -250,7 +256,7 @@ namespace M2Server
             }
         }
 
-        public void SocketRead(string connectionId,byte[] buffer)
+        private void SocketRead(string connectionId,byte[] buffer)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
             if (RunSock.GataSocket.TryGetValue(connectionId, out var gate))
@@ -392,8 +398,6 @@ namespace M2Server
             }
             byte[] BufferA;
             byte[] BufferB;
-            
-            //todo 当有大量小包需要合并的时候会导致程序处理不过来从而程序处于假死状态
             
             // 将小数据合并为一个指定大小的数据
             try
@@ -810,6 +814,13 @@ namespace M2Server
             }
             LoadRunAddr();
             n4F8 = 0;
+            
+            _gateSocket = new ISocketServer(20, 2048);
+            _gateSocket.OnClientConnect += GateSocketClientConnect;
+            _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
+            _gateSocket.OnClientRead += GateSocketClientRead;
+            _gateSocket.OnClientError += GateSocketClientError;
+            _gateSocket.Init();
         }
 
         public bool AddGateBuffer(int gateIdx, byte[] buffer)
@@ -1140,8 +1151,40 @@ namespace M2Server
                 M2Share.g_nSockCountMax = M2Share.g_nSockCountMin;
             }
         }
+        
+        public void Start()
+        {
+            _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
+        }
 
-        public async Task Start()
+        private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        {
+            //M2Share.RunSocket.CloseErrGate();
+        }
+
+        private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
+        {
+            CloseGate(e);
+        }
+
+        private void GateSocketClientConnect(object sender, AsyncUserToken e)
+        {
+           AddGate(e);
+        }
+
+        private void GateSocketClientRead(object sender, AsyncUserToken e)
+        {
+            var data = new byte[e.BytesReceived];
+            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
+            var nMsgLen = e.BytesReceived;
+            if (nMsgLen <= 0)
+            {
+                return;
+            }
+            SocketRead(e.ConnectionId, data);
+        }
+        
+        public async Task StartConsumer()
         {
             var gTasks = new Task[RunSock.g_GateArr.Length];
             for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)

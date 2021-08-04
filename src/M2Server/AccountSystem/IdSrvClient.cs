@@ -44,7 +44,7 @@ namespace M2Server
             HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
             try
             {
-                var str = System.Text.Encoding.GetEncoding("gb2312").GetString(e.Buff, 0, e.Buff.Length);
+                var str = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
                 M2Share.g_Config.sIDSocketRecvText = M2Share.g_Config.sIDSocketRecvText + str;
             }
             finally
@@ -62,7 +62,7 @@ namespace M2Server
         private void SendSocket(string sSendMsg)
         {
             if (IDSocket == null || !IDSocket.IsConnected) return;
-            var data = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sSendMsg);
+            var data = HUtil32.GetBytes(sSendMsg);
             IDSocket.Send(data);
         }
 

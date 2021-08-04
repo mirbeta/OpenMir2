@@ -30,7 +30,6 @@ namespace M2Server
         /// 从DB读取人物数据
         /// </summary>
         private IList<TUserOpenInfo> m_LoadPlayList;
-
         private object m_LoadPlaySection;
         public IList<TMagicEvent> m_MagicEventList;
         public IList<TMagic> m_MagicList;
@@ -77,7 +76,6 @@ namespace M2Server
         public IList<TAILogon> m_UserLogonList;//假人列表
         private readonly Thread _userEngineThread;
         private readonly Thread _processTheread;
-        private readonly Channel<TPlayObject> _channelPlayobject = null;
 
         public UserEngine()
         {
@@ -121,7 +119,6 @@ namespace M2Server
             m_UserLogonList = new List<TAILogon>();
             _userEngineThread = new Thread(PrcocessData);
             _processTheread = new Thread(ProcessPlayObjectData);
-            _channelPlayobject = Channel.CreateUnbounded<TPlayObject>();
         }
 
         public int MonsterCount { get { return nMonsterCount; } }
@@ -133,18 +130,6 @@ namespace M2Server
         {
             _userEngineThread.Start();
             _processTheread.Start();
-            Task.Factory.StartNew(async () =>
-            {
-                await PlayObjectConsumer();
-            });
-            Task.Factory.StartNew(async () =>
-            {
-                await PlayObjectConsumer1();
-            });
-            Task.Factory.StartNew(async () =>
-            {
-                await PlayObjectConsumer2();
-            });
         }
 
         public void Stop()
@@ -177,7 +162,6 @@ namespace M2Server
                 result = MonsterList[i].btRace;
                 break;
             }
-
             return result;
         }
 
@@ -665,7 +649,6 @@ namespace M2Server
         private void ProcessPlayObjectData()
         {
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
-
             try
             {
                 while (true)
@@ -732,8 +715,7 @@ namespace M2Server
                                                 PlayObject.m_nShowLineNoticeIdx = 0;
                                             }
                                         }
-                                        //PlayObject.Run();
-                                        _channelPlayobject.Writer.TryWrite(PlayObject);
+                                        PlayObject.Run();
                                         if (!M2Share.FrontEngine.IsFull() && HUtil32.GetTickCount() - PlayObject.m_dwSaveRcdTick > M2Share.g_Config.dwSaveHumanRcdTime)
                                         {
                                             PlayObject.m_dwSaveRcdTick = HUtil32.GetTickCount();
@@ -771,42 +753,6 @@ namespace M2Server
             catch
             {
                 M2Share.MainOutMessage(sExceptionMsg8);
-            }
-        }
-
-        private async Task PlayObjectConsumer()
-        {
-            Console.WriteLine("PlayObjectConsumer 1 Start");
-            while (await _channelPlayobject.Reader.WaitToReadAsync())
-            {
-                if (_channelPlayobject.Reader.TryRead(out var playObject))
-                {
-                    playObject.Run();
-                }
-            }
-        }
-
-        private async Task PlayObjectConsumer1()
-        {
-            Console.WriteLine("PlayObjectConsumer 2 Start");
-            while (await _channelPlayobject.Reader.WaitToReadAsync())
-            {
-                if (_channelPlayobject.Reader.TryRead(out var playObject))
-                {
-                    playObject.Run();
-                }
-            }
-        }
-
-        private async Task PlayObjectConsumer2()
-        {
-            Console.WriteLine("PlayObjectConsumer 3 Start");
-            while (await _channelPlayobject.Reader.WaitToReadAsync())
-            {
-                if (_channelPlayobject.Reader.TryRead(out var playObject))
-                {
-                    playObject.Run();
-                }
             }
         }
 

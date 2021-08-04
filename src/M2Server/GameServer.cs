@@ -28,7 +28,7 @@ namespace M2Server
         protected void Start()
         {
             _runServer.Start();
-            M2Share.GateServer.Start();
+            M2Share.RunSocket.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
             _gamenoticeTimer = new Timer(ProcessGameNotice, null, 5000, 5000);

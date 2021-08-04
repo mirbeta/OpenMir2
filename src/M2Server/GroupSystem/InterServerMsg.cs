@@ -160,7 +160,7 @@ namespace M2Server
                 }
                 if (m_SrvArray[i].SocketId == e.ConnectionId)
                 {
-                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + System.Text.Encoding.GetEncoding("gb2312").GetString(e.ReceiveBuffer, 0, e.BytesReceived);
+                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + HUtil32.GetString(e.ReceiveBuffer, 0, e.BytesReceived);
                 }
             }
         }

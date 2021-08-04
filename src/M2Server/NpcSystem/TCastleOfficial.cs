@@ -3,6 +3,9 @@ using SystemModule;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 沙巴克NPC
+    /// </summary>
     public class TCastleOfficial : TMerchant
     {
         public override void Click(TPlayObject PlayObject)

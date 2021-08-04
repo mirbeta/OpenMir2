@@ -258,7 +258,6 @@ namespace M2Server
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
             M2Share.RunSocket = new GateSystem();
-            M2Share.GateServer = new GateServer();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.g_MapManager = new TMapManager();

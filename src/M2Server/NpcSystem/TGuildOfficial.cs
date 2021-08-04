@@ -240,11 +240,6 @@ namespace M2Server
             this.m_wAppr = 8;
         }
 
-        ~TGuildOfficial()
-        {
-
-        }
-
         public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);

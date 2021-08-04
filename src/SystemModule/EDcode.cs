@@ -134,7 +134,7 @@ namespace SystemModule
         public static byte[] DecodeBuffer(string Src)
         {
             var EncBuf = new byte[BUFFERSIZE];
-            var bSrc = Encoding.GetEncoding("gb2312").GetBytes(Src);
+            var bSrc = HUtil32.GetBytes(Src);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
             return EncBuf;
         }

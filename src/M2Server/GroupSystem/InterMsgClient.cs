@@ -107,7 +107,7 @@ namespace M2Server
         {
             if (IsConnect())
             {
-                var buff = System.Text.Encoding.GetEncoding("gb2312").GetBytes("(" + sMsg + ")");
+                var buff = HUtil32.GetBytes("(" + sMsg + ")");
                 MsgClient.Send(buff);
             }
         }

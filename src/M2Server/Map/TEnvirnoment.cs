@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
 
@@ -10,14 +9,14 @@ namespace M2Server
 {
     public class TEnvirnoment
     {
-        public int MonCount{get{return m_nMonCount;}}
-        public int HumCount {get{return m_nHumCount;}}
+        public int MonCount => m_nMonCount;
+        public int HumCount => m_nHumCount;
         public short wWidth;
         public short wHeight;
         public string m_sMapFileName = string.Empty;
         public string sMapName = string.Empty;
         public string sMapDesc = string.Empty;
-        public TMapCellinfo[] MapCellArray;
+        private TMapCellinfo[] MapCellArray;
         public int nMinMap = 0;
         public int nServerIndex = 0;
         /// <summary>
@@ -33,7 +32,6 @@ namespace M2Server
         private int m_nMonCount = 0;
         private int m_nHumCount = 0;
         public IList<PointInfo> m_PointList;
-
 
         public bool AllowMagics(string magicName)
         {
@@ -86,7 +84,7 @@ namespace M2Server
                                             if (nGoldCount <= 2000)
                                             {
                                                 MapItem.Count = nGoldCount;
-                                                MapItem.Looks = (ushort)M2Share.GetGoldShape(nGoldCount);
+                                                MapItem.Looks = M2Share.GetGoldShape(nGoldCount);
                                                 MapItem.AniCount = 0;
                                                 MapItem.Reserved = 0;
                                                 OSObject.dwAddTime = HUtil32.GetTickCount();
@@ -1151,7 +1149,6 @@ namespace M2Server
 
         public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<TBaseObject> BaseObjectList)
         {
-            int result;
             for (var nXX = nX - nRage; nXX <= nX + nRage; nXX++)
             {
                 for (var nYY = nY - nRage; nYY <= nY + nRage; nYY++)
@@ -1159,8 +1156,7 @@ namespace M2Server
                     GetBaseObjects(nXX, nYY, boFlag, BaseObjectList);
                 }
             }
-            result = BaseObjectList.Count;
-            return result;
+            return BaseObjectList.Count;
         }
 
         public bool GetMapBaseObjects(short nX,short nY,int nRage, IList<TBaseObject> BaseObjectList, byte btType = Grobal2.OS_MOVINGOBJECT)
@@ -1254,16 +1250,12 @@ namespace M2Server
 
         public bool CanFly(int nsX, int nsY, int ndX, int ndY)
         {
-            bool result;
-            double r28;
-            double r30;
-            int n14;
             int n18;
             int n1C;
-            result = true;
-            r28 = (ndX - nsX) / 1.0e1;
-            r30 = (ndY - ndX) / 1.0e1;
-            n14 = 0;
+            var result = true;
+            var r28 = (ndX - nsX) / 1.0e1;
+            var r30 = (ndY - ndX) / 1.0e1;
+            var n14 = 0;
             while (true)
             {
                 n18 = HUtil32.Round(nsX + r28);
@@ -1320,12 +1312,18 @@ namespace M2Server
 
         public string GetEnvirInfo()
         {
-            string result;
             string sMsg;
             sMsg = "Map:%s(%s) DAY:%s DARK:%s SAFE:%s FIGHT:%s FIGHT3:%s QUIZ:%s NORECONNECT:%s(%s) MUSIC:%s(%d) EXPRATE:%s(%f) PKWINLEVEL:%s(%d) PKLOSTLEVEL:%s(%d) PKWINEXP:%s(%d) PKLOSTEXP:%s(%d) DECHP:%s(%d/%d) INCHP:%s(%d/%d)";
             sMsg = sMsg + " DECGAMEGOLD:%s(%d/%d) INCGAMEGOLD:%s(%d/%d) INCGAMEPOINT:%s(%d/%d) RUNHUMAN:%s RUNMON:%s NEEDHOLE:%s NORECALL:%s NOGUILDRECALL:%s NODEARRECALL:%s NOMASTERRECALL:%s NODRUG:%s MINE:%s MINE2:%s NODROPITEM:%s";
             sMsg = sMsg + " NOTHROWITEM:%s NOPOSITIONMOVE:%s NOHORSE:%s NOHUMNOMON:%s NOCHAT:%s ";
-            result = string.Format(sMsg, sMapName, sMapDesc, HUtil32.BoolToStr(Flag.boDayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.boSAFE), HUtil32.BoolToStr(Flag.boFightZone), HUtil32.BoolToStr(Flag.boFight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.boMUSIC), Flag.nMUSICID, HUtil32.BoolToStr(Flag.boEXPRATE), Flag.nEXPRATE / 100, HUtil32.BoolToStr(Flag.boPKWINLEVEL), Flag.nPKWINLEVEL, HUtil32.BoolToStr(Flag.boPKLOSTLEVEL), Flag.nPKLOSTLEVEL, HUtil32.BoolToStr(Flag.boPKWINEXP), Flag.nPKWINEXP, HUtil32.BoolToStr(Flag.boPKLOSTEXP), Flag.nPKLOSTEXP, HUtil32.BoolToStr(Flag.boDECHP), Flag.nDECHPTIME, Flag.nDECHPPOINT, HUtil32.BoolToStr(Flag.boINCHP), Flag.nINCHPTIME, Flag.nINCHPPOINT, HUtil32.BoolToStr(Flag.boDECGAMEGOLD), Flag.nDECGAMEGOLDTIME, Flag.nDECGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEGOLD), Flag.nINCGAMEGOLDTIME, Flag.nINCGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEPOINT), Flag.nINCGAMEPOINTTIME, Flag.nINCGAMEPOINT, HUtil32.BoolToStr(Flag.boRUNHUMAN), HUtil32.BoolToStr(Flag.boRUNMON), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.boNORECALL), HUtil32.BoolToStr(Flag.boNOGUILDRECALL), HUtil32.BoolToStr(Flag.boNODEARRECALL), HUtil32.BoolToStr(Flag.boNOMASTERRECALL), HUtil32.BoolToStr(Flag.boNODRUG), HUtil32.BoolToStr(Flag.boMINE), HUtil32.BoolToStr(Flag.boMINE2), HUtil32.BoolToStr(Flag.boNODROPITEM), HUtil32.BoolToStr(Flag.boNOTHROWITEM), HUtil32.BoolToStr(Flag.boNOPOSITIONMOVE), HUtil32.BoolToStr(Flag.boNOHORSE), HUtil32.BoolToStr(Flag.boNOHUMNOMON), HUtil32.BoolToStr(Flag.boNOCHAT));
+            var result = string.Format(sMsg, sMapName, sMapDesc, HUtil32.BoolToStr(Flag.boDayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.boSAFE), HUtil32.BoolToStr(Flag.boFightZone), 
+                HUtil32.BoolToStr(Flag.boFight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.boMUSIC), Flag.nMUSICID, HUtil32.BoolToStr(Flag.boEXPRATE),
+                Flag.nEXPRATE / 100, HUtil32.BoolToStr(Flag.boPKWINLEVEL), Flag.nPKWINLEVEL, HUtil32.BoolToStr(Flag.boPKLOSTLEVEL), Flag.nPKLOSTLEVEL, HUtil32.BoolToStr(Flag.boPKWINEXP), Flag.nPKWINEXP, HUtil32.BoolToStr(Flag.boPKLOSTEXP), 
+                Flag.nPKLOSTEXP, HUtil32.BoolToStr(Flag.boDECHP), Flag.nDECHPTIME, Flag.nDECHPPOINT, HUtil32.BoolToStr(Flag.boINCHP), Flag.nINCHPTIME, Flag.nINCHPPOINT, HUtil32.BoolToStr(Flag.boDECGAMEGOLD), Flag.nDECGAMEGOLDTIME, 
+                Flag.nDECGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEGOLD), Flag.nINCGAMEGOLDTIME, Flag.nINCGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEPOINT), Flag.nINCGAMEPOINTTIME, Flag.nINCGAMEPOINT, HUtil32.BoolToStr(Flag.boRUNHUMAN), 
+                HUtil32.BoolToStr(Flag.boRUNMON), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.boNORECALL), HUtil32.BoolToStr(Flag.boNOGUILDRECALL), HUtil32.BoolToStr(Flag.boNODEARRECALL), HUtil32.BoolToStr(Flag.boNOMASTERRECALL),
+                HUtil32.BoolToStr(Flag.boNODRUG), HUtil32.BoolToStr(Flag.boMINE), HUtil32.BoolToStr(Flag.boMINE2), HUtil32.BoolToStr(Flag.boNODROPITEM), HUtil32.BoolToStr(Flag.boNOTHROWITEM), HUtil32.BoolToStr(Flag.boNOPOSITIONMOVE), 
+                HUtil32.BoolToStr(Flag.boNOHORSE), HUtil32.BoolToStr(Flag.boNOHUMNOMON), HUtil32.BoolToStr(Flag.boNOCHAT));
             return result;
         }
 
@@ -1347,11 +1345,11 @@ namespace M2Server
             var btRaceServer = ((TBaseObject)BaseObject).m_btRaceServer;
             if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                m_nHumCount++;
+                m_nHumCount--;
             }
             if (btRaceServer >= Grobal2.RC_ANIMAL)
             {
-                m_nMonCount++;
+                m_nMonCount--;
             }
         }
     }
