@@ -89,7 +89,7 @@ namespace M2Server
         {
             if (Socket.Connected)
             {
-                var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes("(" + sMsg + ")");
+                var buffer = SystemModule.HUtil32.GetBytes("(" + sMsg + ")");
                 Socket.Send(buffer);
             }
         }

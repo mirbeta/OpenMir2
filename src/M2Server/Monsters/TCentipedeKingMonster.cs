@@ -1,4 +1,6 @@
 ﻿using System;
+using SystemModule;
+
 namespace M2Server
 {
     public class TCentipedeKingMonster : TStickMonster

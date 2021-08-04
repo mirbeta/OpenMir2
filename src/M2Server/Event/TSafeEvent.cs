@@ -1,4 +1,6 @@
-﻿namespace M2Server
+﻿using SystemModule;
+
+namespace M2Server
 {
     /// <summary>
     /// 安全区光环

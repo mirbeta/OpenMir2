@@ -101,15 +101,9 @@ namespace M2Server
         public static TDefaultMessage DecodeMessage(string str)
         {
             var EncBuf = new byte[grobal2.BUFFERSIZE];
-            TDefaultMessage msg;
             var bSrc = HUtil32.StringToByteAry(str);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, grobal2.BUFFERSIZE);
             return new TDefaultMessage(EncBuf);
-            // fixed (byte* pb = EncBuf)
-            // {
-            //     msg = *(TDefaultMessage*) pb;
-            // }
-            //return msg;
         }
 
         /// <summary>
@@ -185,7 +179,7 @@ namespace M2Server
                 }
                 else
                 {
-                    result = "";
+                    result = string.Empty;
                 }
                 return result;
             }

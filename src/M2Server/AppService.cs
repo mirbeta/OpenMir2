@@ -19,20 +19,10 @@ namespace M2Server
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"M2Server is stopping."));
-            var runTask = Task.Factory.StartNew(async () =>
-              {
-                  await M2Share.RunSocket.Start();
-              }
-            );
-
-            var socketTask = Task.Factory.StartNew(async () =>
+            Task.Run(async () =>
             {
-                await M2Share.GateServer.StartProduct();
-            }
-            );
-
-            Task.WaitAll(runTask, socketTask);
-
+                await M2Share.RunSocket.Start();
+            }, stoppingToken);
             return Task.CompletedTask;
         }
         

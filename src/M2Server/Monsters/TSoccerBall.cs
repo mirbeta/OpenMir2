@@ -1,3 +1,5 @@
+using SystemModule;
+
 namespace M2Server
 {
     public class TSoccerBall : TAnimalObject

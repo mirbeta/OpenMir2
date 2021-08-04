@@ -14,8 +14,6 @@ namespace M2Server
         /// 游戏网关
         /// </summary>
         private readonly ISocketServer _gateSocket = null;
-        private readonly Channel<GateData> _gateChannel;
-        private readonly Timer timer;
 
         public GateServer()
         {
@@ -25,13 +23,6 @@ namespace M2Server
             _gateSocket.OnClientRead += GateSocketClientRead;
             _gateSocket.OnClientError += GateSocketClientError;
             _gateSocket.Init();
-            _gateChannel = Channel.CreateUnbounded<GateData>();
-            timer = new Timer(Test, null, 2000, 10000);
-        }
-
-        private void Test(object obj)
-        {
-            Console.WriteLine("待处理消息:" + _gateChannel.Reader.Count);
         }
 
         public void Start()
@@ -56,8 +47,6 @@ namespace M2Server
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
         {
-            //M2Share.RunSocket.SocketRead(e);
-
             var data = new byte[e.BytesReceived];
             Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
             var nMsgLen = e.BytesReceived;
@@ -65,53 +54,7 @@ namespace M2Server
             {
                 return;
             }
-            _gateChannel.Writer.TryWrite(new GateData()
-            {
-                ConnectionId = e.ConnectionId,
-                Buffer = data
-            });
+            M2Share.RunSocket.SocketRead(e.ConnectionId, data);
         }
-
-        public async Task StartProduct()
-        {
-            var gTasks = new Task[1];
-            var consumer1 = new GateProduct(_gateChannel.Reader);
-            var consumerTask1 = consumer1.ConsumeData();
-            gTasks[0] = consumerTask1;
-
-            await Task.WhenAll(gTasks);
-        }
-    }
-
-    /// <summary>
-    /// 网关消费者
-    /// </summary>
-    public class GateProduct
-    {
-        private readonly ChannelReader<GateData> _reader;
-
-        public GateProduct(ChannelReader<GateData> reader)
-        {
-            _reader = reader;
-        }
-
-        public async Task ConsumeData()
-        {
-            Console.WriteLine($"GateProduct Starting");
-
-            while (await _reader.WaitToReadAsync())
-            {
-                if (_reader.TryRead(out var token))
-                {
-                    M2Share.RunSocket.SocketRead(token);
-                }
-            }
-        }
-    }
-
-    public class GateData
-    {
-        public string ConnectionId;
-        public byte[] Buffer;
     }
 }

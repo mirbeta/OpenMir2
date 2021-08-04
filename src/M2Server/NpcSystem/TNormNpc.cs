@@ -233,7 +233,6 @@ namespace M2Server
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
             PlayObject.m_nAutoGetExpPoint = nPoint;
             PlayObject.m_boOffLineFlag = true;
-
             PlayObject.m_dwKickOffLineTick = HUtil32.GetTickCount() + (nKickOffLine * 60 * 1000);
             IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.m_sUserID, PlayObject.m_nSessionID);
             PlayObject.SendDefMessage(grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");

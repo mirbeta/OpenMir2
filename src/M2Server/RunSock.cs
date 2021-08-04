@@ -147,7 +147,7 @@ namespace M2Server
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
             const string sExceptionMsg3 = "[Exception] TRunSocket::ExecGateBuffers -> FreeMem";
             var nLen = 0;
-            var BuffIndex = 0;
+            var buffIndex = 0;
             if (data is not {Length: > 0} || nMsgLen <= 0)
             {
                 return;
@@ -198,27 +198,22 @@ namespace M2Server
                             }
                             else
                             {
-                                //var msgBuff = new byte[msgHeader.nLength];
-                                //Buffer.BlockCopy(Buff, 20, msgBuff, 0, msgHeader.nLength);
-                                //ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
-
-                                byte[] MsgBuff = new byte[msgHeader.nLength];
-                                Buffer.BlockCopy(Buff, 20, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                ExecGateMsg(nGateIndex, GameGate, msgHeader, MsgBuff, msgHeader.nLength);
+                                byte[] msgBuff = new byte[msgHeader.nLength];
+                                Buffer.BlockCopy(Buff, 20, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
+                                ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
                             }
-
                             var newLen = 20 + msgHeader.nLength;
                             var tempBuff = new byte[Buff.Length - newLen];
                             Buffer.BlockCopy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
-                            BuffIndex = 0;
+                            buffIndex = 0;
                             nLen -= (msgHeader.nLength + 20);
                         }
                         else
                         {
-                            BuffIndex++;
+                            buffIndex++;
                             var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, BuffIndex, messageBuff, 0, 20);
+                            Array.Copy(Buff, buffIndex, messageBuff, 0, 20);
                             Buff = messageBuff;
                             nLen -= 1;
                         }
@@ -254,16 +249,14 @@ namespace M2Server
             }
         }
 
-        
-        
-        public void SocketRead(GateData data)
+        public void SocketRead(string connectionId,byte[] buffer)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
-            if (RunSock.GataSocket.TryGetValue(data.ConnectionId, out var gate))
+            if (RunSock.GataSocket.TryGetValue(connectionId, out var gate))
             {
                 try
                 {
-                    ExecGateBuffers(gate.GateIndex, gate, data.Buffer, data.Buffer.Length);
+                    ExecGateBuffers(gate.GateIndex, gate, buffer, buffer.Length);
                 }
                 catch
                 {
@@ -374,8 +367,6 @@ namespace M2Server
                 M2Share.ErrorMessage(sExceptionMsg);
             }
         }
-
-        
         
         private bool SendGateBuffers(int GateIdx, TGateInfo Gate, IList<byte[]> MsgList)
         {
@@ -494,9 +485,7 @@ namespace M2Server
                                      {
                                          var SendBy = new byte[M2Share.g_Config.nSendBlock];
                                          Buffer.BlockCopy(BufferB, 0, SendBy, 0, M2Share.g_Config.nSendBlock);
-                                         Gate.Socket.SendTimeout = 10000;//1000毫秒
                                          Gate.Socket.Send(SendBy, 0, SendBy.Length, SocketFlags.None);
-                                         //Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-合并发送");
                                      }
                                      Gate.nSendCount++;
                                      Gate.nSendBytesCount += M2Share.g_Config.nSendBlock;
@@ -510,11 +499,9 @@ namespace M2Server
                              {
                                  if (Gate.Socket.Connected)
                                  {
-                                     var SendBy = new byte[nSendBuffLen];
-                                     Buffer.BlockCopy(BufferB, 0, SendBy, 0, nSendBuffLen);
-                                     Gate.Socket.SendTimeout = 10000;//1000毫秒
-                                     Gate.Socket.Send(SendBy, 0, nSendBuffLen, SocketFlags.None);
-                                     //Console.WriteLine($"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}]发送消息给网关-普通发送");
+                                     var sendBy = new byte[nSendBuffLen];
+                                     Buffer.BlockCopy(BufferB, 0, sendBy, 0, nSendBuffLen);
+                                     Gate.Socket.Send(sendBy, 0, nSendBuffLen, SocketFlags.None);
                                  }
                                  Gate.nSendCount++;
                                  Gate.nSendBytesCount += nSendBuffLen;
@@ -824,7 +811,7 @@ namespace M2Server
             n4F8 = 0;
         }
 
-        public bool AddGateBuffer(int gateIdx, byte[] Buffer)
+        public bool AddGateBuffer(int gateIdx, byte[] buffer)
         {
             var result = false;
             HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -833,11 +820,11 @@ namespace M2Server
                 if (gateIdx < grobal2.RUNGATEMAX)
                 {
                     var gameGate = RunSock.g_GateArr[gateIdx];
-                    if (gameGate.BufferChannel != null && Buffer != null)
+                    if (gameGate.BufferChannel != null && buffer != null)
                     {
                         if (gameGate.boUsed && gameGate.Socket != null)
                         {
-                            gameGate.BufferChannel.Writer.TryWrite(Buffer);
+                            gameGate.BufferChannel.Writer.TryWrite(buffer);
                             result = true;
                         }
                     }
@@ -885,7 +872,8 @@ namespace M2Server
                 wIdent = grobal2.GM_DATA,
                 nLength = 12
             };
-            if (DefMsg != null)
+            TDefaultMessage? sendDefMsg = DefMsg;
+            if (sendDefMsg != null)
             {
                 if (!string.IsNullOrEmpty(sMsg))
                 {
@@ -1154,26 +1142,13 @@ namespace M2Server
 
         public async Task Start()
         {
-            var gTasks = new Task[3];
-            // for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
-            // {
-            //     var consumer = new GateConsumer(RunSock.g_GateArr[i], RunSock.g_GateArr[i].BufferChannel.Reader, i);
-            //     var consumerTask = consumer.ConsumeData();
-            //     gTasks[i] = consumerTask;
-            // }
-            
-            var consumer1 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 0);
-            var consumerTask1 = consumer1.ConsumeData();
-            gTasks[0] = consumerTask1;
-            
-            var consumer2 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 1);
-            var consumerTask2 = consumer2.ConsumeData();
-            gTasks[1] = consumerTask2;
-            
-            var consumer3 = new GateConsumer(RunSock.g_GateArr[0], RunSock.g_GateArr[0].BufferChannel.Reader, 2);
-            var consumerTask3 = consumer3.ConsumeData();
-            gTasks[2] = consumerTask3;
-            
+            var gTasks = new Task[RunSock.g_GateArr.Length];
+            for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
+            {
+                var consumer = new GateConsumer(RunSock.g_GateArr[i], i);
+                var consumerTask = consumer.ConsumeData();
+                gTasks[i] = consumerTask;
+            }
             await Task.WhenAll(gTasks);
         }
     }
@@ -1187,24 +1162,22 @@ namespace M2Server
         private readonly int _identifier;
         private readonly TGateInfo _gate;
 
-        public GateConsumer(TGateInfo gate,ChannelReader<byte[]> reader,int identifier)
+        public GateConsumer(TGateInfo gate,int identifier)
         {
-            _reader = reader;
+            _reader = gate.BufferChannel.Reader;
             _identifier = identifier;
             _gate = gate;
         }
         
         public async Task ConsumeData()
         {
-            Console.WriteLine($"GateConsumer ({_identifier}): Starting");
-
+            Console.WriteLine($"RunGate Consumer ({_identifier}): Starting");
             while (await _reader.WaitToReadAsync())
             {
                 if (_reader.TryRead(out var buff))
                 {
                     SendGateBuffers(buff);
                 }
-                //M2Share.MainOutMessage("待处理数量:" + _reader.Count);
             }
         }
         
@@ -1235,7 +1208,7 @@ namespace M2Server
                     _gate.nSendChecked = 1;
                     _gate.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                var sendBuffer = new byte[buffer.Length - 4];
+                var sendBuffer = new byte[buffer.Length - 4];//todo 这里为啥要减4?
                 Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
                 nSendBuffLen = sendBuffer.Length;
                 if (nSendBuffLen > 0)

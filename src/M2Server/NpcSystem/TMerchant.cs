@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using SystemModule;
 
 namespace M2Server
 {
@@ -750,16 +751,16 @@ namespace M2Server
             }
         }
 
-        public void UserSelect_ItemPrices(TPlayObject User)
+        private void UserSelect_ItemPrices(TPlayObject User)
         {
         }
 
-        public void UserSelect_Storage(TPlayObject User)
+        private void UserSelect_Storage(TPlayObject User)
         {
             User.SendMsg(this, grobal2.RM_USERSTORAGEITEM, 0, ObjectId, 0, 0, "");
         }
 
-        public void UserSelect_GetBack(TPlayObject User)
+        private void UserSelect_GetBack(TPlayObject User)
         {
             User.SendMsg(this, grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
         }
@@ -786,7 +787,7 @@ namespace M2Server
                         s18 = "";
                         PlayObject.m_sScriptLable = sData;
                         boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (sLabel.ToLower().CompareTo(M2Share.sSL_SENDMSG.ToLower()) == 0)
+                        if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -798,98 +799,98 @@ namespace M2Server
                         {
                             return;
                         }
-                        if (sLabel.ToLower().CompareTo(M2Share.sOFFLINEMSG.ToLower()) == 0)// 增加挂机
+                        if (String.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.Ordinal) == 0)// 增加挂机
                         {
                             if (m_boOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sSL_SENDMSG.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boSendmsg)
                             {
                                 SendCustemMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sSUPERREPAIR.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boS_repair)
                             {
                                 UserSelect_SuperRepairItem(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sBUY.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boBuy)
                             {
                                 UserSelect_BuyItem(PlayObject, 0);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sSELL.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boSell)
                             {
                                 UserSelect_SellItem(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sREPAIR.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boRepair)
                             {
                                 UserSelect_RepairItem(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sMAKEDURG.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boMakeDrug)
                             {
                                 UserSelect_MakeDurg(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sPRICES.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boPrices)
                             {
                                 UserSelect_ItemPrices(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sSTORAGE.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boStorage)
                             {
                                 UserSelect_Storage(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sGETBACK.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boGetback)
                             {
                                 UserSelect_GetBack(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sUPGRADENOW.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boUpgradenow)
                             {
                                 UpgradeWapon(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sGETBACKUPGNOW.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boGetBackupgnow)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sGETMARRY.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boGetMarry)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sGETMASTER.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (m_boGetMaster)
                             {
@@ -903,11 +904,11 @@ namespace M2Server
                                 ChangeUseItemName(PlayObject, sLabel, sMsg);
                             }
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sEXIT.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
                         }
-                        else if (sLabel.ToLower().CompareTo(M2Share.sBACK.ToLower()) == 0)
+                        else if (String.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.Ordinal) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {
@@ -1337,7 +1338,7 @@ namespace M2Server
                             ClientItem.Dura = UserItem.Dura;
                             ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             ClientItem.MakeIndex = UserItem.MakeIndex;
-                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
+                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + "/";
                             nItemCount++;
                             if (nItemCount >= 10)
                             {

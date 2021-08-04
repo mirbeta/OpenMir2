@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
 
@@ -437,8 +438,8 @@ namespace M2Server
                         SendRefMsg(grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME 
-                                                   + "\t" + mapItem.Count.ToString() + "\t" + '1' + "\t" + '0');
+                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME 
+                                                   + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
                         Dispose(mapItem);
@@ -464,8 +465,8 @@ namespace M2Server
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name 
-                                                       + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name 
+                                                       + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         Dispose(mapItem);
@@ -523,7 +524,7 @@ namespace M2Server
                 }
                 HasLevelUp(m_Abil.Level - 1);
                 AddBodyLuck(100);
-                M2Share.AddGameDataLog("12" + "\t" + m_sMapName + "\t" + m_Abil.Level.ToString() + "\t" + m_Abil.Exp.ToString() + "\t" + m_sCharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                M2Share.AddGameDataLog("12" + "\t" + m_sMapName + "\t" + m_Abil.Level + "\t" + m_Abil.Exp + "\t" + m_sCharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
                 IncHealthSpell(2000, 2000);
             }
         }
@@ -717,7 +718,7 @@ namespace M2Server
             }
         }
 
-        public bool IsBlockWhisper(string sName)
+        internal bool IsBlockWhisper(string sName)
         {
             var result = false;
             for (var i = 0; i < this.m_BlockWhisperList.Count; i++)
@@ -731,7 +732,7 @@ namespace M2Server
             return result;
         }
 
-        public void SendSocket(string sMsg)
+        private void SendSocket(string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
@@ -750,12 +751,12 @@ namespace M2Server
                     wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
+                //todo 注意下这里
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     MsgHdr.nLength = -(bMsg.Length + 1);
                     nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
-                    //Buff = new byte[nSendBytes + sizeof(int)];
                     using var memoryStream = new MemoryStream();
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
@@ -766,7 +767,7 @@ namespace M2Server
                         backingStream.Write((byte)0);
                     }
                     var stream = backingStream.BaseStream as MemoryStream;
-                    Buff = stream.ToArray();
+                    Buff = stream?.ToArray();
                 }
                 M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
             }
@@ -781,12 +782,13 @@ namespace M2Server
             SendSocket(DefMsg, "");
         }
 
-        public virtual void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        internal virtual void SendSocket(TDefaultMessage defMsg, string sMsg)
         {
             TMsgHeader MsgHdr;
             int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
-            if (m_boOffLineFlag && DefMsg != null && DefMsg.Ident != grobal2.SM_OUTOFCONNECTION)
+            TDefaultMessage? sendDefMsg = defMsg;
+            if (m_boOffLineFlag && defMsg.Ident != grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
@@ -800,7 +802,7 @@ namespace M2Server
                     wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = grobal2.GM_DATA
                 };
-                if (DefMsg != null)
+                if (sendDefMsg != null)
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     if (!string.IsNullOrEmpty(sMsg))
@@ -816,14 +818,14 @@ namespace M2Server
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
                     backingStream.Write(MsgHdr.ToByte());
-                    backingStream.Write(DefMsg.ToByte());
+                    backingStream.Write(defMsg.ToByte());
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         backingStream.Write(bMsg);
                         backingStream.Write((byte)0);
                     }
                     var stream = backingStream.BaseStream as MemoryStream;
-                    Buff = stream.ToArray();
+                    Buff = stream?.ToArray();
                 }
                 else
                 {
@@ -866,15 +868,15 @@ namespace M2Server
             }
         }
 
-        private void ClientQueryUserName(int target, int x, int y)
+        private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var BaseObject = M2Share.ObjectSystem.Get(target);
+            var BaseObject = M2Share.ObjectSystem.Get(targetId);
             if (CretInNearXY(BaseObject, x, y))
             {
-                int TagColor = GetCharColor(BaseObject);
-                var Def = grobal2.MakeDefaultMsg(grobal2.SM_USERNAME, BaseObject.ObjectId, (short)TagColor, 0, 0);
+                int tagColor = GetCharColor(BaseObject);
+                var defMsg = grobal2.MakeDefaultMsg(grobal2.SM_USERNAME, BaseObject.ObjectId, (short)tagColor, 0, 0);
                 var uname = BaseObject.GetShowName();
-                SendSocket(Def, EDcode.EncodeString(uname));
+                SendSocket(defMsg, EDcode.EncodeString(uname));
             }
             else
             {
@@ -983,7 +985,7 @@ namespace M2Server
             {
                 n08 = 0;
             }
-            sC = m_sIPaddr + "\t" + m_sUserID + "\t" + m_sCharName + "\t" + n08.ToString() + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode.ToString();
+            sC = m_sIPaddr + "\t" + m_sUserID + "\t" + m_sCharName + "\t" + n08 + "\t" + m_dLogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + m_nPayMode;
             M2Share.AddLogonCostLog(sC);
             if (m_nPayMode == 2)
             {
@@ -2293,18 +2295,18 @@ namespace M2Server
 
         public override string GeTBaseObjectInfo()
         {
-            return this.m_sCharName + " 标识:" + this.ObjectId.ToString() + " 权限等级: " + this.m_btPermission.ToString() + " 管理模式: " + HUtil32.BoolToStr(this.m_boAdminMode)
+            return this.m_sCharName + " 标识:" + this.ObjectId + " 权限等级: " + this.m_btPermission + " 管理模式: " + HUtil32.BoolToStr(this.m_boAdminMode)
                 + " 隐身模式: " + HUtil32.BoolToStr(this.m_boObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.m_boSuperMan) + " 地图:" + this.m_sMapName + '(' + this.m_PEnvir.sMapDesc + ')'
-                + " 座标:" + this.m_nCurrX.ToString() + ':' + this.m_nCurrY.ToString() + " 等级:" + this.m_Abil.Level.ToString() + " 转生等级:" + m_btReLevel.ToString()
-                + " 经验:" + this.m_Abil.Exp.ToString() + " 生命值: " + this.m_WAbil.HP.ToString() + '-' + this.m_WAbil.MaxHP.ToString() + " 魔法值: " + this.m_WAbil.MP.ToString() + '-' + this.m_WAbil.MaxMP.ToString()
-                + " 攻击力: " + HUtil32.LoWord(this.m_WAbil.DC).ToString() + '-' + HUtil32.HiWord(this.m_WAbil.DC).ToString() + " 魔法力: " + HUtil32.LoWord(this.m_WAbil.MC).ToString() + '-'
-                + HUtil32.HiWord(this.m_WAbil.MC).ToString() + " 道术: " + HUtil32.LoWord(this.m_WAbil.SC).ToString() + '-' + HUtil32.HiWord(this.m_WAbil.SC).ToString()
-                + " 防御力: " + HUtil32.LoWord(this.m_WAbil.AC).ToString() + '-' + HUtil32.HiWord(this.m_WAbil.AC).ToString() + " 魔防力: " + HUtil32.LoWord(this.m_WAbil.MAC).ToString()
-                + '-' + HUtil32.HiWord(this.m_WAbil.MAC).ToString() + " 准确:" + this.m_btHitPoint.ToString() + " 敏捷:" + this.m_btSpeedPoint.ToString() + " 速度:" + this.m_nHitSpeed.ToString()
-                + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + m_sUserID + " 登录时间:" + m_dLogonTime.ToString()
-                + " 在线时长(分钟):" + ((HUtil32.GetTickCount() - m_dwLogonTick) / 60000).ToString() + " 登录模式:" + m_nPayMent.ToString() + ' ' + M2Share.g_Config.sGameGoldName + ':' + m_nGameGold.ToString()
-                + ' ' + M2Share.g_Config.sGamePointName + ':' + m_nGamePoint.ToString() + ' ' + M2Share.g_Config.sPayMentPointName + ':' + m_nPayMentPoint.ToString() + " 会员类型:" + m_nMemberType.ToString()
-                + " 会员等级:" + m_nMemberLevel.ToString() + " 经验倍数:" + (m_nKillMonExpRate / 100).ToString() + " 攻击倍数:" + (m_nPowerRate / 100).ToString() + " 声望值:" + m_btCreditPoint.ToString();
+                + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 等级:" + this.m_Abil.Level + " 转生等级:" + m_btReLevel
+                + " 经验:" + this.m_Abil.Exp + " 生命值: " + this.m_WAbil.HP + '-' + this.m_WAbil.MaxHP + " 魔法值: " + this.m_WAbil.MP + '-' + this.m_WAbil.MaxMP
+                + " 攻击力: " + HUtil32.LoWord(this.m_WAbil.DC) + '-' + HUtil32.HiWord(this.m_WAbil.DC) + " 魔法力: " + HUtil32.LoWord(this.m_WAbil.MC) + '-'
+                + HUtil32.HiWord(this.m_WAbil.MC) + " 道术: " + HUtil32.LoWord(this.m_WAbil.SC) + '-' + HUtil32.HiWord(this.m_WAbil.SC)
+                + " 防御力: " + HUtil32.LoWord(this.m_WAbil.AC) + '-' + HUtil32.HiWord(this.m_WAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.m_WAbil.MAC)
+                + '-' + HUtil32.HiWord(this.m_WAbil.MAC) + " 准确:" + this.m_btHitPoint + " 敏捷:" + this.m_btSpeedPoint + " 速度:" + this.m_nHitSpeed
+                + " 仓库密码:" + m_sStoragePwd + " 登录IP:" + m_sIPaddr + '(' + m_sIPLocal + ')' + " 登录帐号:" + m_sUserID + " 登录时间:" + m_dLogonTime
+                + " 在线时长(分钟):" + ((HUtil32.GetTickCount() - m_dwLogonTick) / 60000) + " 登录模式:" + m_nPayMent + ' ' + M2Share.g_Config.sGameGoldName + ':' + m_nGameGold
+                + ' ' + M2Share.g_Config.sGamePointName + ':' + m_nGamePoint + ' ' + M2Share.g_Config.sPayMentPointName + ':' + m_nPayMentPoint + " 会员类型:" + m_nMemberType
+                + " 会员等级:" + m_nMemberLevel + " 经验倍数:" + (m_nKillMonExpRate / 100) + " 攻击倍数:" + (m_nPowerRate / 100) + " 声望值:" + m_btCreditPoint;
         }
 
         public int GetDigUpMsgCount()
@@ -2732,7 +2734,7 @@ namespace M2Server
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, TMsgColor.c_Green, TMsgType.t_Hint);
             if (M2Share.g_boGameLogGold)
             {
-                M2Share.AddGameDataLog(s10 + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nGold.ToString() + "\t" + '1' + "\t" + sChrName);
+                M2Share.AddGameDataLog(s10 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 
@@ -3386,7 +3388,7 @@ namespace M2Server
                 SendDefMessage(grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("11" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem34.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("11" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem34.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
             }
             else
@@ -3828,7 +3830,7 @@ namespace M2Server
                             {
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
                                 }
                             }
                         }
@@ -3839,7 +3841,7 @@ namespace M2Server
                         m_DealCreat.GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_nGold.ToString() + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
+                            M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_nGold + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
                         }
                     }
                     for (var i = 0; i < m_DealCreat.m_DealItemList.Count; i++)
@@ -3854,7 +3856,7 @@ namespace M2Server
                             {
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX.ToString() + "\t" + m_DealCreat.m_nCurrY.ToString() + "\t" + m_DealCreat.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + m_sCharName);
+                                    M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + m_sCharName);
                                 }
                             }
                         }
@@ -3865,7 +3867,7 @@ namespace M2Server
                         GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX.ToString() + "\t" + m_DealCreat.m_nCurrY.ToString() + "\t" + m_DealCreat.m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold.ToString() + "\t" + '1' + "\t" + m_sCharName);
+                            M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold + "\t" + '1' + "\t" + m_sCharName);
                         }
                     }
                     PlayObject = m_DealCreat as TPlayObject;
@@ -5628,7 +5630,7 @@ namespace M2Server
             SendDefMessage(grobal2.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
-                if ((m_DealCreat as TPlayObject).m_nSoftVersionDateEx == 0)
+                if (((TPlayObject)m_DealCreat).m_nSoftVersionDateEx == 0)
                 {
                     pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (pStdItem != null)
@@ -5643,7 +5645,7 @@ namespace M2Server
                         OClientItem.DuraMax = UserItem.DuraMax;
                     }
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
-                    (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
+                    (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
                 }
                 else
                 {
@@ -5658,7 +5660,7 @@ namespace M2Server
                         ClientItem.DuraMax = UserItem.DuraMax;
                     }
                     m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
-                    (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                 }
                 m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                 m_DealLastTick = HUtil32.GetTickCount();
@@ -6050,7 +6052,7 @@ namespace M2Server
                             if (StdItem.NeedIdentify == 1)
                             {
                                 // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
-                                M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                                M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         else
@@ -6110,7 +6112,7 @@ namespace M2Server
                                 if (StdItem.NeedIdentify == 1)
                                 {
                                     // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
-                                    M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                                    M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
                             else

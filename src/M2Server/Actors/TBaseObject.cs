@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SystemModule;
 
 namespace M2Server
 {
@@ -3927,13 +3928,13 @@ namespace M2Server
             SendRefMsg(grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, m_nCharStatus, 0, 0, "");
         }
 
-        public void DisappearA()
+        protected void DisappearA()
         {
             m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, grobal2.OS_MOVINGOBJECT, this);
             SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
-        public void KickException()
+        protected void KickException()
         {
             TPlayObject PlayObject;
             if (m_btRaceServer == grobal2.RC_PLAYOBJECT)

@@ -5,6 +5,7 @@
         <IsPackable>false</IsPackable>
         <Company />
         <Product />
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
