@@ -46,9 +46,9 @@ namespace M2Server
                         continue;
                     }
                     bo19 = false;
-                    for (var II = 0; II < List14.Count; II++)
+                    for (var j = 0; j < List14.Count; j++)
                     {
-                        PlayObjectA = List14[II] as TPlayObject;
+                        PlayObjectA = List14[j] as TPlayObject;
                         if (m_PlayObject.m_MyGuild == PlayObjectA.m_MyGuild)
                         {
                             bo19 = true;

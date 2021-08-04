@@ -1090,8 +1090,6 @@ namespace M2Server
 
         public void CmdStartContest(TGameCmd Cmd, string sParam1)
         {
-            int I;
-            int II;
             IList<TBaseObject> List10;
             ArrayList List14;
             TPlayObject PlayObject;
@@ -1107,7 +1105,6 @@ namespace M2Server
             if (sParam1 != "" && sParam1[1] == '?')
             {
                 SysMsg("开始行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
-
                 SysMsg(format("命令格式: @%s", Cmd.sCmd), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -1119,9 +1116,9 @@ namespace M2Server
             List10 = new List<TBaseObject>();
             List14 = new ArrayList();
             M2Share.UserEngine.GetMapRageHuman(m_PEnvir, m_nCurrX, m_nCurrY, 1000, List10);
-            for (I = 0; I < List10.Count; I++)
+            for (var i = 0; i < List10.Count; i++)
             {
-                PlayObject = List10[I] as TPlayObject;
+                PlayObject = List10[i] as TPlayObject;
                 if (!PlayObject.m_boObMode || !PlayObject.m_boAdminMode)
                 {
                     PlayObject.m_nFightZoneDieCount = 0;
@@ -1130,9 +1127,9 @@ namespace M2Server
                         continue;
                     }
                     bo19 = false;
-                    for (II = 0; II < List14.Count; II++)
+                    for (var j = 0; j < List14.Count; j++)
                     {
-                        PlayObjectA = List14[II] as TPlayObject;
+                        PlayObjectA = List14[j] as TPlayObject;
                         if (PlayObject.m_MyGuild == PlayObjectA.m_MyGuild)
                         {
                             bo19 = true;
@@ -1147,13 +1144,13 @@ namespace M2Server
             SysMsg("行会争霸赛已经开始。", TMsgColor.c_Green, TMsgType.t_Hint);
             M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
             s20 = "";
-            for (I = 0; I < List14.Count; I++)
+            for (var i = 0; i < List14.Count; i++)
             {
-                Guild = (TGuild)List14[I];
+                Guild = (TGuild)List14[i];
                 Guild.StartTeamFight();
-                for (II = 0; II < List10.Count; II++)
+                for (var j = 0; j < List10.Count; j++)
                 {
-                    PlayObject = List10[I] as TPlayObject;
+                    PlayObject = List10[i] as TPlayObject;
                     if (PlayObject.m_MyGuild == Guild)
                     {
                         Guild.AddTeamFightMember(PlayObject.m_sCharName);
@@ -1168,8 +1165,6 @@ namespace M2Server
 
         public void CmdEndContest(TGameCmd Cmd, string sParam1)
         {
-            int I;
-            int II;
             IList<TBaseObject> List10;
             ArrayList List14;
             TPlayObject PlayObject;
@@ -1196,9 +1191,9 @@ namespace M2Server
             List10 = new List<TBaseObject>();
             List14 = new ArrayList();
             M2Share.UserEngine.GetMapRageHuman(m_PEnvir, m_nCurrX, m_nCurrY, 1000, List10);
-            for (I = 0; I < List10.Count; I++)
+            for (var i = 0; i < List10.Count; i++)
             {
-                PlayObject = List10[I] as TPlayObject;
+                PlayObject = List10[i] as TPlayObject;
                 if (!PlayObject.m_boObMode || !PlayObject.m_boAdminMode)
                 {
                     if (PlayObject.m_MyGuild == null)
@@ -1206,9 +1201,9 @@ namespace M2Server
                         continue;
                     }
                     bo19 = false;
-                    for (II = 0; II < List14.Count; II++)
+                    for (var j = 0; j < List14.Count; j++)
                     {
-                        PlayObjectA = List14[II] as TPlayObject;
+                        PlayObjectA = List14[j] as TPlayObject;
                         if (PlayObject.m_MyGuild == PlayObjectA.m_MyGuild)
                         {
                             bo19 = true;
@@ -1220,11 +1215,10 @@ namespace M2Server
                     }
                 }
             }
-            for (I = 0; I < List14.Count; I++)
+            for (var i = 0; i < List14.Count; i++)
             {
-                Guild = (TGuild)List14[I];
+                Guild = (TGuild)List14[i];
                 Guild.EndTeamFight();
-
                 M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - %s 行会争霸赛已结束。", Guild.sGuildName));
             }
             //List10.Free;
@@ -3464,8 +3458,6 @@ namespace M2Server
 
         public void CmdMob(TGameCmd Cmd, string sMonName, int nCount, int nLevel, int nExpRatio)
         {
-            // 004CC7F4
-            int I;
             short nX = 0;
             short nY = 0;
             TBaseObject Monster;
@@ -3476,7 +3468,6 @@ namespace M2Server
             }
             if (sMonName == "" || sMonName != "" && sMonName[1] == '?')
             {
-
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandMobHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -3490,7 +3481,7 @@ namespace M2Server
             }
             nCount = HUtil32._MIN(64, nCount);
             GetFrontPosition(ref nX, ref nY);
-            for (I = 0; I < nCount; I++)
+            for (var i = 0; i < nCount; i++)
             {
                 Monster = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, nX, nY, sMonName);
                 if (Monster != null)

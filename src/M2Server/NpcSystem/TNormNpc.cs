@@ -7576,9 +7576,9 @@ namespace M2Server
         private void ActionOfKillSlave(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             TBaseObject Slave;
-            for (var I = 0; I < PlayObject.m_SlaveList.Count; I++)
+            for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
             {
-                Slave = PlayObject.m_SlaveList[I];
+                Slave = PlayObject.m_SlaveList[i];
                 Slave.m_WAbil.HP = 0;
             }
         }
@@ -7614,7 +7614,7 @@ namespace M2Server
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_MONGENEX);
                 return;
             }
-            for (var I = 0; I < nCount; I++)
+            for (var i = 0; i < nCount; i++)
             {
                 int nRandX = M2Share.RandomNumber.Random(nRange * 2 + 1) + (nMapX - nRange);
                 int nRandY = M2Share.RandomNumber.Random(nRange * 2 + 1) + (nMapY - nRange);
