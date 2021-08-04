@@ -53,14 +53,14 @@ namespace M2Server
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
                 if (sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0)
                 {
-                    LoadList[i] = PlayObject.m_sCharName + "\t" + DateTime.Today.ToString();
+                    LoadList[i] = PlayObject.m_sCharName + "\t" + DateTime.Today;
                     boFound = true;
                     break;
                 }
             }
             if (!boFound)
             {
-                LoadList.Add(PlayObject.m_sCharName + "\t" + DateTime.Today.ToString());
+                LoadList.Add(PlayObject.m_sCharName + "\t" + DateTime.Today);
             }
             try
             {
@@ -3374,7 +3374,7 @@ namespace M2Server
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.m_Abil.Exp.ToString() + '/' + PlayObject.m_Abil.MaxExp.ToString(), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.m_Abil.Exp + '/' + PlayObject.m_Abil.MaxExp, TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
             // ================================================
@@ -3433,7 +3433,7 @@ namespace M2Server
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前等级为: " + PlayObject.m_Abil.Level.ToString(), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("您当前等级为: " + PlayObject.m_Abil.Level, TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
             // ================================================
@@ -3949,7 +3949,7 @@ namespace M2Server
             }
             if (sVariable == "$GOLDCOUNT")
             {
-                sText = PlayObject.m_nGold.ToString() + '/' + PlayObject.m_nGoldMax.ToString();
+                sText = PlayObject.m_nGold.ToString() + '/' + PlayObject.m_nGoldMax;
                 sMsg = sub_49ADB8(sMsg, "<$GOLDCOUNT>", sText);
                 return;
             }
@@ -3979,7 +3979,7 @@ namespace M2Server
             }
             if (sVariable == "$LOGINLONG")
             {
-                sText = ((HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000).ToString() + "分钟";
+                sText = ((HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000) + "分钟";
                 sMsg = sub_49ADB8(sMsg, "<$LOGINLONG>", sText);
                 return;
             }
@@ -6087,7 +6087,7 @@ namespace M2Server
                 PlayObject.GoldChanged();
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                    M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
                 }
                 return;
             }
@@ -6103,7 +6103,7 @@ namespace M2Server
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                        M2Share.AddGameDataLog("10" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
                     }
                     PlayObject.SendDelItems(UserItem);
                     sC = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
@@ -6127,7 +6127,7 @@ namespace M2Server
                 // 0049D2FE
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
                 }
                 return;
             }
@@ -6153,7 +6153,7 @@ namespace M2Server
                             // 0049D46B
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
                             }
                         }
                         else
@@ -6171,7 +6171,7 @@ namespace M2Server
                             // 0049D5A5
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -6952,7 +6952,7 @@ namespace M2Server
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
                         {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
-                            M2Share.MainOutMessage("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX.ToString() + ':' + this.m_nCurrY.ToString() + ')' + " 命令:" + M2Share.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            M2Share.MainOutMessage("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX + ':' + this.m_nCurrY + ')' + " 命令:" + M2Share.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -7421,15 +7421,15 @@ namespace M2Server
         private void ScriptActionError(TPlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
             string sMsg;
-            const string sOutMessage = "[脚本错误] %s 脚本命令:%s NPC名称:%s 地图:%s(%d:%d) 参数1:%s 参数2:%s 参数3:%s 参数4:%s 参数5:%s 参数6:%s";
-            sMsg = format(sOutMessage, new object[] { sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6 });
+            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
+            sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.MainOutMessage(sMsg);
         }
 
         private void ScriptConditionError(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
             string sMsg;
-            sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX.ToString() + ':' + this.m_nCurrY.ToString() + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.MainOutMessage("[脚本参数不正确] " + sMsg);
         }
 
@@ -7562,8 +7562,7 @@ namespace M2Server
 
         private void ActionOfChangeGender(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nGender;
-            nGender = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nGender = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (!new ArrayList(new int[] { 0, 1 }).Contains(nGender))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEGENDER);
@@ -7628,7 +7627,6 @@ namespace M2Server
 
         private void ActionOfOpenMagicBox(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject Monster;
             short nX = 0;
             short nY = 0;
             string sMonName = QuestActionInfo.sParam1;
@@ -7638,7 +7636,7 @@ namespace M2Server
                 return;
             }
             PlayObject.GetFrontPosition(ref nX, ref nY);
-            Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
+            var Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
             if (Monster == null)
             {
                 return;
@@ -7782,7 +7780,7 @@ namespace M2Server
                 // 0049D2FE
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                    M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
                 }
                 return;
             }
@@ -7807,7 +7805,7 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
                             }
                         }
                         else
@@ -7823,7 +7821,7 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX.ToString() + "\t" + PlayObject.m_nCurrY.ToString() + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex.ToString() + "\t" + '1' + "\t" + this.m_sCharName);
+                                M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + this.m_sCharName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
                         }
@@ -8951,7 +8949,7 @@ namespace M2Server
         private bool ConditionOfHaveMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;
-            if (PlayObject.m_sMasterName != "")
+            if (!string.IsNullOrEmpty(PlayObject.m_sMasterName))
             {
                 result = true;
             }
@@ -8974,14 +8972,13 @@ namespace M2Server
 
         private void ActionOfUnMaster(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TPlayObject PoseHuman;
             string sMsg;
             if (PlayObject.m_sMasterName == "")
             {
                 GotoLable(PlayObject, "@ExeMasterFail", false);
                 return;
             }
-            PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
+            var PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
             if (PoseHuman == null)
             {
                 GotoLable(PlayObject, "@UnMasterCheckDir", false);
@@ -9064,14 +9061,8 @@ namespace M2Server
                         }
                         else
                         {
-                            try
-                            {
-                                M2Share.g_UnForceMasterList.Add(PlayObject.m_sMasterName);
-                                M2Share.SaveUnForceMasterList();
-                            }
-                            finally
-                            {
-                            }
+                            M2Share.g_UnForceMasterList.Add(PlayObject.m_sMasterName);
+                            M2Share.SaveUnForceMasterList();
                         }
                         PlayObject.m_sMasterName = "";
                         GotoLable(PlayObject, "@UnMasterEnd", false);
@@ -9500,7 +9491,7 @@ namespace M2Server
             }
             PlayObject.SendUpdateItem(UserItem);
             PlayObject.SysMsg("装备升级成功", TMsgColor.c_Green, TMsgType.t_Hint);
-            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax.ToString() + '/' + UserItem.btValue[0].ToString() + '/' + UserItem.btValue[1].ToString() + '/' + UserItem.btValue[2].ToString() + '/' + UserItem.btValue[3].ToString() + '/' + UserItem.btValue[4].ToString() + '/' + UserItem.btValue[5].ToString() + '/' + UserItem.btValue[6].ToString() + '/' + UserItem.btValue[7].ToString() + '/' + UserItem.btValue[8].ToString() + '/' + UserItem.btValue[9].ToString() + '/' + UserItem.btValue[10].ToString() + '/' + UserItem.btValue[11].ToString() + '/' + UserItem.btValue[12].ToString() + '/' + UserItem.btValue[13].ToString(), TMsgColor.c_Blue, TMsgType.t_Hint);
+            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '/' + UserItem.btValue[0] + '/' + UserItem.btValue[1] + '/' + UserItem.btValue[2] + '/' + UserItem.btValue[3] + '/' + UserItem.btValue[4] + '/' + UserItem.btValue[5] + '/' + UserItem.btValue[6] + '/' + UserItem.btValue[7] + '/' + UserItem.btValue[8] + '/' + UserItem.btValue[9] + '/' + UserItem.btValue[10] + '/' + UserItem.btValue[11] + '/' + UserItem.btValue[12] + '/' + UserItem.btValue[13], TMsgColor.c_Blue, TMsgType.t_Hint);
         }
 
         private void ActionOfUpgradeItemsEx(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -9569,7 +9560,7 @@ namespace M2Server
             }
             PlayObject.SendUpdateItem(UserItem);
             PlayObject.SysMsg("装备升级成功", TMsgColor.c_Green, TMsgType.t_Hint);
-            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax.ToString() + '-' + UserItem.btValue[0].ToString() + '/' + UserItem.btValue[1].ToString() + '/' + UserItem.btValue[2].ToString() + '/' + UserItem.btValue[3].ToString() + '/' + UserItem.btValue[4].ToString() + '/' + UserItem.btValue[5].ToString() + '/' + UserItem.btValue[6].ToString() + '/' + UserItem.btValue[7].ToString() + '/' + UserItem.btValue[8].ToString() + '/' + UserItem.btValue[9].ToString() + '/' + UserItem.btValue[10].ToString() + '/' + UserItem.btValue[11].ToString() + '/' + UserItem.btValue[12].ToString() + '/' + UserItem.btValue[13].ToString(), TMsgColor.c_Blue, TMsgType.t_Hint);
+            PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '-' + UserItem.btValue[0] + '/' + UserItem.btValue[1] + '/' + UserItem.btValue[2] + '/' + UserItem.btValue[3] + '/' + UserItem.btValue[4] + '/' + UserItem.btValue[5] + '/' + UserItem.btValue[6] + '/' + UserItem.btValue[7] + '/' + UserItem.btValue[8] + '/' + UserItem.btValue[9] + '/' + UserItem.btValue[10] + '/' + UserItem.btValue[11] + '/' + UserItem.btValue[12] + '/' + UserItem.btValue[13], TMsgColor.c_Blue, TMsgType.t_Hint);
         }
 
         // 声明变量
