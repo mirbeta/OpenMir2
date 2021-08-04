@@ -29,14 +29,11 @@ namespace M2Server
 
         private void ActionOfAddNameDateList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            StringList LoadList;
-            bool boFound;
-            string sListFileName;
             string sLineText;
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
-            LoadList = new StringList();
+            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 try
@@ -49,15 +46,15 @@ namespace M2Server
                     M2Share.MainOutMessage("loading fail.... => " + sListFileName);
                 }
             }
-            boFound = false;
-            for (var I = 0; I < LoadList.Count; I++)
+            var boFound = false;
+            for (var i = 0; i < LoadList.Count; i++)
             {
-                sLineText = LoadList[I].Trim();
+                sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
                 if (sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0)
                 {
-                    LoadList[I] = PlayObject.m_sCharName + "\t" + DateTime.Today.ToString();
+                    LoadList[i] = PlayObject.m_sCharName + "\t" + DateTime.Today.ToString();
                     boFound = true;
                     break;
                 }
@@ -68,33 +65,26 @@ namespace M2Server
             }
             try
             {
-
                 LoadList.SaveToFile(sListFileName);
             }
             catch
             {
                 M2Share.MainOutMessage("saving fail.... => " + sListFileName);
             }
-
             //LoadList.Free;
         }
 
         private void ActionOfDelNameDateList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
-            StringList LoadList;
             string sLineText;
-            string sListFileName;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            bool boFound;
-            sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
-            LoadList = new StringList();
+            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 try
                 {
-
                     LoadList.LoadFromFile(sListFileName);
                 }
                 catch
@@ -102,15 +92,15 @@ namespace M2Server
                     M2Share.MainOutMessage("loading fail.... => " + sListFileName);
                 }
             }
-            boFound = false;
-            for (I = 0; I < LoadList.Count; I++)
+            var boFound = false;
+            for (var i = 0; i < LoadList.Count; i++)
             {
-                sLineText = LoadList[I].Trim();
+                sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
                 if (sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0)
                 {
-                    LoadList.RemoveAt(I);
+                    LoadList.RemoveAt(i);
                     boFound = true;
                     break;
                 }
@@ -131,11 +121,9 @@ namespace M2Server
 
         private void ActionOfAddSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TMagic Magic;
             TUserMagic UserMagic;
-            int nLevel;
-            nLevel = HUtil32._MIN(3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0));
-            Magic = M2Share.UserEngine.FindMagic(QuestActionInfo.sParam1);
+            var nLevel = HUtil32._MIN(3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0));
+            var Magic = M2Share.UserEngine.FindMagic(QuestActionInfo.sParam1);
             if (Magic != null)
             {
                 if (!PlayObject.IsTrainingSkill(Magic.wMagicID))
@@ -186,16 +174,11 @@ namespace M2Server
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
         private void ActionOfAutoGetExp(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nTime;
-            int nPoint;
-            bool boIsSafeZone;
-            string sMap;
-            TEnvirnoment Envir;
-            Envir = null;
-            nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            boIsSafeZone = QuestActionInfo.sParam3[1] == '1';
-            sMap = QuestActionInfo.sParam4;
+            TEnvirnoment Envir = null;
+            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var boIsSafeZone = QuestActionInfo.sParam3[1] == '1';
+            var sMap = QuestActionInfo.sParam4;
             if (sMap != "")
             {
                 Envir = M2Share.g_MapManager.FindMap(sMap);
@@ -218,16 +201,12 @@ namespace M2Server
         /// <param name="QuestActionInfo"></param>
         private void ActionOfOffLine(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nTime;
-            int nPoint;
-            int nKickOffLine;
-            string sOffLineStartMsg;
-            sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
+            var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             PlayObject.m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SYSMESSAGE, PlayObject.ObjectId, HUtil32.MakeWord(M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.m_DefMsg, EDcode.EncodeString(sOffLineStartMsg));
-            nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
-            nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
-            nKickOffLine = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 1440 * 15);
+            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, 5);
+            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, 500);
+            var nKickOffLine = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 1440 * 15);
             PlayObject.m_boAutoGetExpInSafeZone = true;
             PlayObject.m_AutoGetExpEnvir = PlayObject.m_PEnvir;
             PlayObject.m_nAutoGetExpTime = nTime * 1000;
@@ -312,10 +291,9 @@ namespace M2Server
 
         private void ActionOfChangeExp(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nExp;
             char cMethod;
             int dwInt;
-            nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nExp < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEEXP);
@@ -373,8 +351,7 @@ namespace M2Server
 
         private void ActionOfChangeHairStyle(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nHair;
-            nHair = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nHair = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if ((QuestActionInfo.sParam1 != "") && (nHair >= 0))
             {
                 PlayObject.m_btHair = (byte)nHair;
@@ -388,8 +365,7 @@ namespace M2Server
 
         private void ActionOfChangeJob(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nJob;
-            nJob = -1;
+            var nJob = -1;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, M2Share.sWarrior, M2Share.sWarrior.Length))
             {
                 nJob = M2Share.jWarr;
@@ -420,20 +396,16 @@ namespace M2Server
 
         private void ActionOfChangeLevel(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            bool boChgOK;
-            int nLevel;
             int nLv;
-            int nOldLevel;
-            char cMethod;
-            boChgOK = false;
-            nOldLevel = PlayObject.m_Abil.Level;
-            nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var boChgOK = false;
+            int nOldLevel = PlayObject.m_Abil.Level;
+            var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGELEVEL);
                 return;
             }
-            cMethod = QuestActionInfo.sParam1[1];
+            var cMethod = QuestActionInfo.sParam1[1];
             switch (cMethod)
             {
                 case '=':
@@ -464,18 +436,15 @@ namespace M2Server
 
         private void ActionOfChangePkPoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nPKPoint;
             int nPoint;
-            int nOldPKLevel;
-            char cMethod;
-            nOldPKLevel = PlayObject.PKLevel();
-            nPKPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nOldPKLevel = PlayObject.PKLevel();
+            var nPKPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nPKPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEPKPOINT);
                 return;
             }
-            cMethod = QuestActionInfo.sParam1[1];
+            var cMethod = QuestActionInfo.sParam1[1];
             switch (cMethod)
             {
                 case '=':
@@ -501,9 +470,8 @@ namespace M2Server
 
         private void ActionOfClearMapMon(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            IList<TBaseObject> MonList;
             TBaseObject Mon;
-            MonList = new List<TBaseObject>();
+            IList<TBaseObject> MonList = new List<TBaseObject>();
             M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), MonList);
             for (var i = 0; i < MonList.Count; i++)
             {
@@ -519,15 +487,12 @@ namespace M2Server
                 Mon.m_boNoItem = true;
                 Mon.MakeGhost();
             }
-            //MonList.Free;
         }
 
         private void ActionOfClearNameList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            StringList LoadList;
-            string sListFileName;
-            sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
-            LoadList = new StringList();
+            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var LoadList = new StringList();
             LoadList.Clear();
             try
             {
@@ -542,57 +507,49 @@ namespace M2Server
 
         private void ActionOfClearSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
             TUserMagic UserMagic;
-            for (I = PlayObject.m_MagicList.Count - 1; I >= 0; I--)
+            for (var i = PlayObject.m_MagicList.Count - 1; i >= 0; i--)
             {
-                UserMagic = PlayObject.m_MagicList[I];
+                UserMagic = PlayObject.m_MagicList[i];
                 PlayObject.SendDelMagic(UserMagic);
-
                 Dispose(UserMagic);
-                PlayObject.m_MagicList.RemoveAt(I);
+                PlayObject.m_MagicList.RemoveAt(i);
             }
             PlayObject.RecalcAbilitys();
         }
 
         private void ActionOfDelNoJobSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
             TUserMagic UserMagic;
-            for (I = PlayObject.m_MagicList.Count - 1; I >= 0; I--)
+            for (var i = PlayObject.m_MagicList.Count - 1; i >= 0; i--)
             {
-                UserMagic = PlayObject.m_MagicList[I];
+                UserMagic = PlayObject.m_MagicList[i];
                 if (UserMagic.MagicInfo.btJob != PlayObject.m_btJob)
                 {
                     PlayObject.SendDelMagic(UserMagic);
-
                     Dispose(UserMagic);
-                    PlayObject.m_MagicList.RemoveAt(I);
+                    PlayObject.m_MagicList.RemoveAt(i);
                 }
             }
         }
 
         private void ActionOfDelSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
-            string sMagicName;
-            TMagic Magic;
             TUserMagic UserMagic;
-            sMagicName = QuestActionInfo.sParam1;
-            Magic = M2Share.UserEngine.FindMagic(sMagicName);
+            var sMagicName = QuestActionInfo.sParam1;
+            var Magic = M2Share.UserEngine.FindMagic(sMagicName);
             if (Magic == null)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_DELSKILL);
                 return;
             }
-            for (I = 0; I < PlayObject.m_MagicList.Count; I++)
+            for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
             {
-                UserMagic = PlayObject.m_MagicList[I];
+                UserMagic = PlayObject.m_MagicList[i];
                 if (UserMagic.MagicInfo == Magic)
                 {
-                    PlayObject.m_MagicList.RemoveAt(I);
+                    PlayObject.m_MagicList.RemoveAt(i);
                     PlayObject.SendDelMagic(UserMagic);
-
                     Dispose(UserMagic);
                     PlayObject.RecalcAbilitys();
                     break;
@@ -602,17 +559,14 @@ namespace M2Server
 
         private void ActionOfGameGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nGameGold;
-            int nOldGameGold;
-            char cMethod;
-            nOldGameGold = PlayObject.m_nGameGold;
-            nGameGold = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nOldGameGold = PlayObject.m_nGameGold;
+            var nGameGold = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GAMEGOLD);
                 return;
             }
-            cMethod = QuestActionInfo.sParam1[1];
+            var cMethod = QuestActionInfo.sParam1[1];
             switch (cMethod)
             {
                 case '=':
@@ -642,17 +596,14 @@ namespace M2Server
 
         private void ActionOfGamePoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nGamePoint;
-            int nOldGamePoint;
-            char cMethod;
-            nOldGamePoint = PlayObject.m_nGamePoint;
-            nGamePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nOldGamePoint = PlayObject.m_nGamePoint;
+            var nGamePoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GAMEPOINT);
                 return;
             }
-            cMethod = QuestActionInfo.sParam1[1];
+            var cMethod = QuestActionInfo.sParam1[1];
             switch (cMethod)
             {
                 case '=':
@@ -682,8 +633,7 @@ namespace M2Server
 
         private void ActionOfGetMarry(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject PoseBaseObject;
-            PoseBaseObject = PlayObject.GetPoseCreate();
+            var PoseBaseObject = PlayObject.GetPoseCreate();
             if ((PoseBaseObject != null) && (PoseBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) && (PoseBaseObject.m_btGender != PlayObject.m_btGender))
             {
                 PlayObject.m_sDearName = PoseBaseObject.m_sCharName;
@@ -698,8 +648,7 @@ namespace M2Server
 
         private void ActionOfGetMaster(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TBaseObject PoseBaseObject;
-            PoseBaseObject = PlayObject.GetPoseCreate();
+            var PoseBaseObject = PlayObject.GetPoseCreate();
             if ((PoseBaseObject != null) && (PoseBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) && (PoseBaseObject.m_btGender != PlayObject.m_btGender))
             {
                 PlayObject.m_sMasterName = PoseBaseObject.m_sCharName;
@@ -714,8 +663,7 @@ namespace M2Server
 
         private void ActionOfLineMsg(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            string sMsg;
-            sMsg = GetLineVariableText(PlayObject, QuestActionInfo.sParam2);
+            var sMsg = GetLineVariableText(PlayObject, QuestActionInfo.sParam2);
             sMsg = sMsg.Replace("%s", PlayObject.m_sCharName);
             sMsg = sMsg.Replace("%d", this.m_sCharName);
             switch (QuestActionInfo.nParam1)
@@ -766,13 +714,12 @@ namespace M2Server
 
         private void ActionOfMarry(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TPlayObject PoseHuman;
             string sSayMsg;
             if (PlayObject.m_sDearName != "")
             {
                 return;
             }
-            PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
+            var PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
             if (PoseHuman == null)
             {
                 GotoLable(PlayObject, "@MarryCheckDir", false);
@@ -904,12 +851,11 @@ namespace M2Server
 
         private void ActionOfMaster(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TPlayObject PoseHuman;
             if (PlayObject.m_sMasterName != "")
             {
                 return;
             }
-            PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
+            var PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
             if (PoseHuman == null)
             {
                 GotoLable(PlayObject, "@MasterCheckDir", false);
@@ -1008,32 +954,23 @@ namespace M2Server
         // MOBFIREBURN MAP X Y TYPE TIME POINT
         private void ActionOfMobFireBurn(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            string sMap;
-            int nX;
-            int nY;
-            int nType;
-            int nTime;
-            int nPoint;
-            TFireBurnEvent FireBurnEvent;
-            TEnvirnoment Envir;
-            TEnvirnoment OldEnvir;
-            sMap = QuestActionInfo.sParam1;
-            nX = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
-            nY = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
-            nType = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
-            nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam5, -1);
-            nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam6, -1);
+            var sMap = QuestActionInfo.sParam1;
+            var nX = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nY = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
+            var nType = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
+            var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam5, -1);
+            var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam6, -1);
             if ((sMap == "") || (nX < 0) || (nY < 0) || (nType < 0) || (nTime < 0) || (nPoint < 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_MOBFIREBURN);
                 return;
             }
-            Envir = M2Share.g_MapManager.FindMap(sMap);
+            var Envir = M2Share.g_MapManager.FindMap(sMap);
             if (Envir != null)
             {
-                OldEnvir = PlayObject.m_PEnvir;
+                var OldEnvir = PlayObject.m_PEnvir;
                 PlayObject.m_PEnvir = Envir;
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                var FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
                 PlayObject.m_PEnvir = OldEnvir;
                 return;
@@ -1046,7 +983,7 @@ namespace M2Server
             short nRandX;
             short nRandY;
             TBaseObject Mon;
-            for (var I = 0; I < nCount; I++)
+            for (var i = 0; i < nCount; i++)
             {
                 nRandX = (short)(M2Share.RandomNumber.Random(nRange * 2 + 1) + (nX - nRange));
                 nRandY = (short)(M2Share.RandomNumber.Random(nRange * 2 + 1) + (nY - nRange));
@@ -1071,8 +1008,7 @@ namespace M2Server
 
         private void ActionOfSetRankLevelName(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            string sRankLevelName;
-            sRankLevelName = QuestActionInfo.sParam1;
+            var sRankLevelName = QuestActionInfo.sParam1;
             if (sRankLevelName == "")
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SKILLLEVEL);
@@ -1084,10 +1020,8 @@ namespace M2Server
 
         private void ActionOfSetScriptFlag(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            bool boFlag;
-            int nWhere;
-            nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            boFlag = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1) == 1;
+            var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var boFlag = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1) == 1;
             switch (nWhere)
             {
                 case 0:
@@ -1104,24 +1038,20 @@ namespace M2Server
 
         private void ActionOfSkillLevel(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
-            TMagic Magic;
             TUserMagic UserMagic;
-            int nLevel;
-            char cMethod;
-            nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 0);
+            var nLevel = HUtil32.Str_ToInt(QuestActionInfo.sParam3, 0);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SKILLLEVEL);
                 return;
             }
-            cMethod = QuestActionInfo.sParam2[1];
-            Magic = M2Share.UserEngine.FindMagic(QuestActionInfo.sParam1);
+            var cMethod = QuestActionInfo.sParam2[1];
+            var Magic = M2Share.UserEngine.FindMagic(QuestActionInfo.sParam1);
             if (Magic != null)
             {
-                for (I = 0; I < PlayObject.m_MagicList.Count; I++)
+                for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
                 {
-                    UserMagic = PlayObject.m_MagicList[I];
+                    UserMagic = PlayObject.m_MagicList[i];
                     if (UserMagic.MagicInfo == Magic)
                     {
                         switch (cMethod)
@@ -1163,8 +1093,7 @@ namespace M2Server
 
         private void ActionOfTakeCastleGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nGold;
-            nGold = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
+            var nGold = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if ((nGold < 0) || (this.m_Castle == null))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_TAKECASTLEGOLD);
@@ -1182,13 +1111,12 @@ namespace M2Server
 
         private void ActionOfUnMarry(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TPlayObject PoseHuman;
             if (PlayObject.m_sDearName == "")
             {
                 GotoLable(PlayObject, "@ExeMarryFail", false);
                 return;
             }
-            PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
+            var PoseHuman = (TPlayObject)PlayObject.GetPoseCreate();
             if (PoseHuman == null)
             {
                 GotoLable(PlayObject, "@UnMarryCheckDir", false);
@@ -1329,7 +1257,7 @@ namespace M2Server
 
         private bool ConditionOfCheckAccountIPList(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
+            bool result = false;
             int I;
             StringList LoadList;
             string sCharName;
@@ -1338,7 +1266,6 @@ namespace M2Server
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            result = false;
             try
             {
                 sCharName = PlayObject.m_sCharName;
@@ -1347,7 +1274,6 @@ namespace M2Server
                 LoadList = new StringList();
                 if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
                 {
-
                     LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
                     for (I = 0; I < LoadList.Count; I++)
                     {
@@ -1379,10 +1305,8 @@ namespace M2Server
 
         private bool ConditionOfCheckBagSize(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            int nSize;
-            result = false;
-            nSize = QuestConditionInfo.nParam1;
+            var result = false;
+            var nSize = QuestConditionInfo.nParam1;
             if ((nSize <= 0) || (nSize > grobal2.MAXBAGITEM))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKBAGSIZE);
@@ -1397,13 +1321,10 @@ namespace M2Server
 
         private bool ConditionOfCheckBonusPoint(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            int nTotlePoint;
-            char cMethod;
-            result = false;
-            nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
+            var result = false;
+            var nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
             nTotlePoint = nTotlePoint + this.m_nBonusPoint;
-            cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[1];
             switch (cMethod)
             {
                 case '=':
@@ -1436,8 +1357,7 @@ namespace M2Server
 
         public bool ConditionOfCheckHP_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
         {
-            bool result;
-            result = false;
+            var result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -1470,16 +1390,11 @@ namespace M2Server
 
         private bool ConditionOfCheckHP(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            char cMethodMin;
-            char cMethodMax;
-            int nMin;
-            int nMax;
-            result = false;
-            cMethodMin = QuestConditionInfo.sParam1[1];
-            cMethodMax = QuestConditionInfo.sParam1[3];
-            nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
+            var result = false;
+            var cMethodMin = QuestConditionInfo.sParam1[1];
+            var cMethodMax = QuestConditionInfo.sParam1[3];
+            var nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
+            var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKHP);
@@ -1517,8 +1432,7 @@ namespace M2Server
 
         public bool ConditionOfCheckMP_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
         {
-            bool result;
-            result = false;
+            var result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -1551,16 +1465,11 @@ namespace M2Server
 
         private bool ConditionOfCheckMP(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            char cMethodMin;
-            char cMethodMax;
-            int nMin;
-            int nMax;
-            result = false;
-            cMethodMin = QuestConditionInfo.sParam1[1];
-            cMethodMax = QuestConditionInfo.sParam1[3];
-            nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
+            var result = false;
+            var cMethodMin = QuestConditionInfo.sParam1[1];
+            var cMethodMax = QuestConditionInfo.sParam1[3];
+            var nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
+            var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKMP);
@@ -1598,8 +1507,7 @@ namespace M2Server
 
         public bool ConditionOfCheckDC_CheckHigh(TPlayObject PlayObject, char cMethodMax, int nMax)
         {
-            bool result;
-            result = false;
+            var result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -1636,16 +1544,11 @@ namespace M2Server
 
         private bool ConditionOfCheckDC(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            char cMethodMin;
-            char cMethodMax;
-            int nMin;
-            int nMax;
-            result = false;
-            cMethodMin = QuestConditionInfo.sParam1[1];
-            cMethodMax = QuestConditionInfo.sParam1[3];
-            nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
+            var result = false;
+            var cMethodMin = QuestConditionInfo.sParam1[1];
+            var cMethodMax = QuestConditionInfo.sParam1[3];
+            var nMin = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
+            var nMax = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKDC);

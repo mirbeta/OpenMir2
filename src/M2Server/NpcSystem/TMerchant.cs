@@ -488,15 +488,13 @@ namespace M2Server
 
         private void GetBackupgWeapon(TPlayObject User)
         {
-            TUpgradeInfo UpgradeInfo;
-            int n10;
-            int n18;
-            int n1C;
-            int n90;
+            TUpgradeInfo UpgradeInfo = null;
+            int n10 = 0;
+            int n18 = 0;
+            int n1C = 0;
+            int n90 = 0;
             TUserItem UserItem;
             TItem StdItem;
-            n18 = 0;
-            UpgradeInfo = null;
             if (!User.IsEnoughBag())
             {
                 GotoLable(User, M2Share.sGETBACKUPGFULL, false);
@@ -1544,7 +1542,6 @@ namespace M2Server
                             }
                             else
                             {
-
                                 DisPose(UserItem);
                                 n14 = 2;
                             }
@@ -1707,7 +1704,7 @@ namespace M2Server
             base.ClearScript();
         }
 
-        public void LoadUpgradeList()
+        private void LoadUpgradeList()
         {
             for (var i = 0; i < m_UpgradeWeaponList.Count; i++)
             {
