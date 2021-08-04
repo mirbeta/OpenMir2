@@ -113,8 +113,8 @@ namespace M2Server
 
         public TAIPlayObject() : base()
         {
-            m_nSoftVersionDate = grobal2.CLIENT_VERSION_NUMBER;
-            m_nSoftVersionDateEx = M2Share.GetExVersionNO(grobal2.CLIENT_VERSION_NUMBER, ref m_nSoftVersionDate);
+            m_nSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
+            m_nSoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref m_nSoftVersionDate);
             AbilCopyToWAbil();
             m_btAttatckMode = 0;
             m_boAI = true;
@@ -231,28 +231,28 @@ namespace M2Server
                 }
                 if (m_btPermission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
                     if ((m_GetWhisperHuman != null) && (!m_GetWhisperHuman.m_boGhost))
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                     if ((PlayObject.m_GetWhisperHuman != null) && (!PlayObject.m_GetWhisperHuman.m_boGhost))
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
                     if ((m_GetWhisperHuman != null) && (!m_GetWhisperHuman.m_boGhost))
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                     if ((PlayObject.m_GetWhisperHuman != null) && (!PlayObject.m_GetWhisperHuman.m_boGhost))
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
                 }
             }
@@ -331,11 +331,11 @@ namespace M2Server
                                 string sCryCryMsg = "(!)" + m_sCharName + ": " + SC;
                                 if (m_boFilterSendMsg)
                                 {
-                                    SendMsg(null, grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
+                                    SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                 }
                                 else
                                 {
-                                    M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
+                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
                                 }
                                 return;
                             }
@@ -347,7 +347,7 @@ namespace M2Server
                     }
                     if (!m_boFilterSendMsg)
                     {
-                        SendRefMsg(grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);
+                        SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);
                     }
                 }
             }
@@ -441,9 +441,9 @@ namespace M2Server
             string sSendMsg;
             switch (nIndex)
             {
-                case grobal2.RM_HEAR:
+                case Grobal2.RM_HEAR:
                     break;
-                case grobal2.RM_WHISPER:
+                case Grobal2.RM_WHISPER:
                     if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                     {
                         m_boDisableSayMsg = false;
@@ -467,15 +467,15 @@ namespace M2Server
                         }
                     }
                     break;
-                case grobal2.RM_CRY:
+                case Grobal2.RM_CRY:
                     break;
-                case grobal2.RM_SYSMESSAGE:
+                case Grobal2.RM_SYSMESSAGE:
                     break;
-                case grobal2.RM_GROUPMESSAGE:
+                case Grobal2.RM_GROUPMESSAGE:
                     break;
-                case grobal2.RM_GUILDMESSAGE:
+                case Grobal2.RM_GUILDMESSAGE:
                     break;
-                case grobal2.RM_MERCHANTSAY:
+                case Grobal2.RM_MERCHANTSAY:
                     break;
             }
         }
@@ -578,7 +578,7 @@ namespace M2Server
             TUserItem UserItem;
             TMagic Magic;
             TUserMagic UserMagic;
-            TItem StdItem;
+            MirItem StdItem;
             var sFileName = GetRandomConfigFileName(m_sCharName, 0);
             if ((sFileName == "") || (!File.Exists(sFileName)))
             {
@@ -697,16 +697,16 @@ namespace M2Server
                             break;
                         }
                     }
-                    m_UseItemNames[grobal2.U_DRESS] = ItemIni.ReadString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
-                    m_UseItemNames[grobal2.U_WEAPON] = ItemIni.ReadString("UseItems", "UseItems1", "木剑"); // '武器';
-                    m_UseItemNames[grobal2.U_RIGHTHAND] = ItemIni.ReadString("UseItems", "UseItems2", ""); // '照明物';
-                    m_UseItemNames[grobal2.U_NECKLACE] = ItemIni.ReadString("UseItems", "UseItems3", ""); // '项链';
-                    m_UseItemNames[grobal2.U_HELMET] = ItemIni.ReadString("UseItems", "UseItems4", ""); // '头盔';
-                    m_UseItemNames[grobal2.U_ARMRINGL] = ItemIni.ReadString("UseItems", "UseItems5", ""); // '左手镯';
-                    m_UseItemNames[grobal2.U_ARMRINGR] = ItemIni.ReadString("UseItems", "UseItems6", ""); // '右手镯';
-                    m_UseItemNames[grobal2.U_RINGL] = ItemIni.ReadString("UseItems", "UseItems7", ""); // '左戒指';
-                    m_UseItemNames[grobal2.U_RINGR] = ItemIni.ReadString("UseItems", "UseItems8", ""); // '右戒指';
-                    for (var i = grobal2.U_DRESS; i <= grobal2.U_CHARM; i++)
+                    m_UseItemNames[Grobal2.U_DRESS] = ItemIni.ReadString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
+                    m_UseItemNames[Grobal2.U_WEAPON] = ItemIni.ReadString("UseItems", "UseItems1", "木剑"); // '武器';
+                    m_UseItemNames[Grobal2.U_RIGHTHAND] = ItemIni.ReadString("UseItems", "UseItems2", ""); // '照明物';
+                    m_UseItemNames[Grobal2.U_NECKLACE] = ItemIni.ReadString("UseItems", "UseItems3", ""); // '项链';
+                    m_UseItemNames[Grobal2.U_HELMET] = ItemIni.ReadString("UseItems", "UseItems4", ""); // '头盔';
+                    m_UseItemNames[Grobal2.U_ARMRINGL] = ItemIni.ReadString("UseItems", "UseItems5", ""); // '左手镯';
+                    m_UseItemNames[Grobal2.U_ARMRINGR] = ItemIni.ReadString("UseItems", "UseItems6", ""); // '右手镯';
+                    m_UseItemNames[Grobal2.U_RINGL] = ItemIni.ReadString("UseItems", "UseItems7", ""); // '左戒指';
+                    m_UseItemNames[Grobal2.U_RINGR] = ItemIni.ReadString("UseItems", "UseItems8", ""); // '右戒指';
+                    for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
                     {
                         if (!string.IsNullOrEmpty(m_UseItemNames[i]))
                         {
@@ -755,19 +755,19 @@ namespace M2Server
         {
             bool result = false;
             TUserItem UserItem = null;
-            TItem StdItem;
+            MirItem StdItem;
             TMapItem MapItem = m_PEnvir.GetItem(nX, nY);
             if (MapItem == null)
             {
                 return result;
             }
-            if (MapItem.Name.ToLower().CompareTo((grobal2.sSTRING_GOLDNAME).ToLower()) == 0)
+            if (MapItem.Name.ToLower().CompareTo((Grobal2.sSTRING_GOLDNAME).ToLower()) == 0)
             {
-                if (m_PEnvir.DeleteFromMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem) == 1)
                 {
                     if (this.IncGold(MapItem.Count))
                     {
-                        SendRefMsg(grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
+                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
                         result = true;
                         GoldChanged();
                         SearchPickUpItem_SetHideItem(MapItem);
@@ -775,12 +775,12 @@ namespace M2Server
                     }
                     else
                     {
-                        m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
                     }
                 }
                 else
                 {
-                    m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+                    m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
                 }
             }
             else
@@ -789,7 +789,7 @@ namespace M2Server
                 StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    if (m_PEnvir.DeleteFromMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem) == 1)
+                    if (m_PEnvir.DeleteFromMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem) == 1)
                     {
                         UserItem = new TUserItem();
                         UserItem = MapItem.UserItem;
@@ -804,7 +804,7 @@ namespace M2Server
                             //}
                             if (AddItemToBag(UserItem))
                             {
-                                SendRefMsg(grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
+                                SendRefMsg(Grobal2.RM_ITEMHIDE, 0, MapItem.Id, nX, nY, "");
                                 this.SendAddItem(UserItem);
                                 m_WAbil.Weight = RecalcBagWeight();
                                 result = true;
@@ -814,19 +814,19 @@ namespace M2Server
                             else
                             {
                                 Dispose(UserItem);
-                                m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+                                m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
                             }
                         }
                         else
                         {
                             Dispose(UserItem);
-                            m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+                            m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
                         }
                     }
                     else
                     {
                         Dispose(UserItem);
-                        m_PEnvir.AddToMap(nX, nY, grobal2.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
                     }
                 }
             }
@@ -980,9 +980,9 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
+            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result;// 麻痹不能跑动 
             }
@@ -992,42 +992,42 @@ namespace M2Server
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
-                    byte nDir = grobal2.DR_DOWN;
+                    byte nDir = Grobal2.DR_DOWN;
                     if (n10 > m_nCurrX)
                     {
-                        nDir = grobal2.DR_RIGHT;
+                        nDir = Grobal2.DR_RIGHT;
                         if (n14 > m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWNRIGHT;
+                            nDir = Grobal2.DR_DOWNRIGHT;
                         }
                         if (n14 < m_nCurrY)
                         {
-                            nDir = grobal2.DR_UPRIGHT;
+                            nDir = Grobal2.DR_UPRIGHT;
                         }
                     }
                     else
                     {
                         if (n10 < m_nCurrX)
                         {
-                            nDir = grobal2.DR_LEFT;
+                            nDir = Grobal2.DR_LEFT;
                             if (n14 > m_nCurrY)
                             {
-                                nDir = grobal2.DR_DOWNLEFT;
+                                nDir = Grobal2.DR_DOWNLEFT;
                             }
                             if (n14 < m_nCurrY)
                             {
-                                nDir = grobal2.DR_UPLEFT;
+                                nDir = Grobal2.DR_UPLEFT;
                             }
                         }
                         else
                         {
                             if (n14 > m_nCurrY)
                             {
-                                nDir = grobal2.DR_DOWN;
+                                nDir = Grobal2.DR_DOWN;
                             }
                             else if (n14 < m_nCurrY)
                             {
-                                nDir = grobal2.DR_UP;
+                                nDir = Grobal2.DR_UP;
                             }
                         }
                     }
@@ -1042,7 +1042,7 @@ namespace M2Server
                     if (!result)
                     {
                         n20 = (new System.Random(3)).Next();
-                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -1056,11 +1056,11 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    nDir = grobal2.DR_UPLEFT;
+                                    nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > grobal2.DR_UPLEFT))
+                                if ((nDir > Grobal2.DR_UPLEFT))
                                 {
-                                    nDir = grobal2.DR_UP;
+                                    nDir = Grobal2.DR_UP;
                                 }
                                 WalkTo(nDir, false);
                                 if ((nTargetX == m_nCurrX) && (nTargetY == m_nCurrY))
@@ -1090,42 +1090,42 @@ namespace M2Server
                 n10 = m_nProtectTargetX;
                 n14 = m_nProtectTargetY;
                 dwTick3F4 = HUtil32.GetTickCount();
-                nDir = grobal2.DR_DOWN;
+                nDir = Grobal2.DR_DOWN;
                 if (n10 > m_nCurrX)
                 {
-                    nDir = grobal2.DR_RIGHT;
+                    nDir = Grobal2.DR_RIGHT;
                     if (n14 > m_nCurrY)
                     {
-                        nDir = grobal2.DR_DOWNRIGHT;
+                        nDir = Grobal2.DR_DOWNRIGHT;
                     }
                     if (n14 < m_nCurrY)
                     {
-                        nDir = grobal2.DR_UPRIGHT;
+                        nDir = Grobal2.DR_UPRIGHT;
                     }
                 }
                 else
                 {
                     if (n10 < m_nCurrX)
                     {
-                        nDir = grobal2.DR_LEFT;
+                        nDir = Grobal2.DR_LEFT;
                         if (n14 > m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWNLEFT;
+                            nDir = Grobal2.DR_DOWNLEFT;
                         }
                         if (n14 < m_nCurrY)
                         {
-                            nDir = grobal2.DR_UPLEFT;
+                            nDir = Grobal2.DR_UPLEFT;
                         }
                     }
                     else
                     {
                         if (n14 > m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWN;
+                            nDir = Grobal2.DR_DOWN;
                         }
                         else if (n14 < m_nCurrY)
                         {
-                            nDir = grobal2.DR_UP;
+                            nDir = Grobal2.DR_UP;
                         }
                     }
                 }
@@ -1138,7 +1138,7 @@ namespace M2Server
                     {
                         WalkTo(nDir, false);
                         n20 = (new System.Random(3)).Next();
-                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -1152,11 +1152,11 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    nDir = grobal2.DR_UPLEFT;
+                                    nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > grobal2.DR_UPLEFT))
+                                if ((nDir > Grobal2.DR_UPLEFT))
                                 {
-                                    nDir = grobal2.DR_UP;
+                                    nDir = Grobal2.DR_UP;
                                 }
                                 WalkTo(nDir, false);
                             }
@@ -1168,7 +1168,7 @@ namespace M2Server
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     n20 = (new System.Random(3)).Next();
-                    for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                    for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                     {
                         if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                         {
@@ -1182,11 +1182,11 @@ namespace M2Server
                             }
                             else
                             {
-                                nDir = grobal2.DR_UPLEFT;
+                                nDir = Grobal2.DR_UPLEFT;
                             }
-                            if ((nDir > grobal2.DR_UPLEFT))
+                            if ((nDir > Grobal2.DR_UPLEFT))
                             {
-                                nDir = grobal2.DR_UP;
+                                nDir = Grobal2.DR_UP;
                             }
                             WalkTo(nDir, false);
                         }
@@ -1199,7 +1199,7 @@ namespace M2Server
         {
             short nX = 0;
             short nY = 0;
-            if (m_boAIStart && (m_TargetCret == null) && !m_boCanPickIng && !m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+            if (m_boAIStart && (m_TargetCret == null) && !m_boCanPickIng && !m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
             {
                 nX = m_nCurrX;
                 nY = m_nCurrY;
@@ -1323,9 +1323,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if ((hiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((hiter.m_Master != null) && (hiter.GetMaster().m_btRaceServer == grobal2.RC_PLAYOBJECT)))
+                    if ((hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || ((hiter.m_Master != null) && (hiter.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT)))
                     {
-                        if ((m_TargetCret != null) && ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || ((m_TargetCret.m_Master != null) && (m_TargetCret.GetMaster().m_btRaceServer == grobal2.RC_PLAYOBJECT))))
+                        if ((m_TargetCret != null) && ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || ((m_TargetCret.m_Master != null) && (m_TargetCret.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT))))
                         {
                             if ((Struck_MINXY(m_TargetCret, hiter) == hiter) || ((new System.Random(6)).Next() == 0))
                             {
@@ -1351,7 +1351,7 @@ namespace M2Server
                         }
                     }
                 }
-                if ((hiter.m_btRaceServer == grobal2.RC_PLAYOBJECT) && (!hiter.m_boAI) && (m_TargetCret == hiter))
+                if ((hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (!hiter.m_boAI) && (m_TargetCret == hiter))
                 {
                     if (((new Random(8)).Next() == 0) && (m_AISayMsgList.Count > 0))
                     {
@@ -1368,7 +1368,7 @@ namespace M2Server
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
+                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
                         }
                     }
                 }
@@ -1389,7 +1389,7 @@ namespace M2Server
             if (((m_TargetCret == null) || (HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000)) && m_boAIStart)
             {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if ((m_TargetCret == null) || (!((m_TargetCret != null) && (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || ((m_TargetCret.m_Master != null) && (m_TargetCret.m_Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)) || (HUtil32.GetTickCount() - m_dwStruckTick > 15000)))
+                if ((m_TargetCret == null) || (!((m_TargetCret != null) && (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT)) || ((m_TargetCret.m_Master != null) && (m_TargetCret.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT)) || (HUtil32.GetTickCount() - m_dwStruckTick > 15000)))
                 {
                     base.SearchTarget();
                 }
@@ -1545,14 +1545,14 @@ namespace M2Server
             TBaseObject AttackBaseObject;
             try
             {
-                if (ProcessMsg.wIdent == grobal2.RM_STRUCK)
+                if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
                 {
                     if (ProcessMsg.BaseObject == this.ObjectId)
                     {
                         AttackBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
-                            if (AttackBaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                            if (AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                             {
                                 SetPKFlag(AttackBaseObject);
                             }
@@ -1809,7 +1809,7 @@ namespace M2Server
             return CheckUserItemType(nItemType, nCount) || (GetUserItemList(nItemType, nCount) >= 0);
         }
 
-        private bool CheckItemType(int nItemType, TItem StdItem)
+        private bool CheckItemType(int nItemType, MirItem StdItem)
         {
             bool result = false;
             switch (nItemType)
@@ -1846,9 +1846,9 @@ namespace M2Server
         private bool CheckUserItemType(int nItemType, int nCount)
         {
             bool result = false;
-            if ((m_UseItems[grobal2.U_ARMRINGL].wIndex > 0) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+            if ((m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
             {
-                TItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_ARMRINGL].wIndex);
+                MirItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -1863,7 +1863,7 @@ namespace M2Server
         {
             int result = -1;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -1885,14 +1885,14 @@ namespace M2Server
         {
             TUserItem UserItem;
             TUserItem AddUserItem;
-            TItem StdItem;
+            MirItem StdItem;
             bool result = false;
             if ((nIndex >= 0) && (nIndex < m_ItemList.Count))
             {
                 UserItem = m_ItemList[nIndex];
-                if (m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
+                if (m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_ARMRINGL].wIndex);
+                    StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                     if (StdItem != null)
                     {
                         if (CheckItemType(nItemType, StdItem))
@@ -1903,10 +1903,10 @@ namespace M2Server
                         {
                             m_ItemList.RemoveAt(nIndex);
                             AddUserItem = new TUserItem();
-                            AddUserItem = m_UseItems[grobal2.U_ARMRINGL];
+                            AddUserItem = m_UseItems[Grobal2.U_ARMRINGL];
                             if (AddItemToBag(AddUserItem))
                             {
-                                m_UseItems[grobal2.U_ARMRINGL] = UserItem;
+                                m_UseItems[Grobal2.U_ARMRINGL] = UserItem;
                                 Dispose(UserItem);
                                 result = true;
                             }
@@ -1920,7 +1920,7 @@ namespace M2Server
                     else
                     {
                         m_ItemList.RemoveAt(nIndex);
-                        m_UseItems[grobal2.U_ARMRINGL] = UserItem;
+                        m_UseItems[Grobal2.U_ARMRINGL] = UserItem;
                         Dispose(UserItem);
                         result = true;
                     }
@@ -1928,7 +1928,7 @@ namespace M2Server
                 else
                 {
                     m_ItemList.RemoveAt(nIndex);
-                    m_UseItems[grobal2.U_ARMRINGL] = UserItem;
+                    m_UseItems[Grobal2.U_ARMRINGL] = UserItem;
                     Dispose(UserItem);
                     result = true;
                 }
@@ -2069,18 +2069,18 @@ namespace M2Server
                         UserMagic = m_MagicList[i];
                         switch (UserMagic.wMagIdx)
                         {
-                            case grobal2.SKILL_FIREBALL:
-                            case grobal2.SKILL_FIREBALL2:
-                            case grobal2.SKILL_FIRE:
-                            case grobal2.SKILL_SHOOTLIGHTEN:
-                            case grobal2.SKILL_LIGHTENING:
-                            case grobal2.SKILL_EARTHFIRE:
-                            case grobal2.SKILL_FIREBOOM:
-                            case grobal2.SKILL_LIGHTFLOWER:
-                            case grobal2.SKILL_SNOWWIND:
-                            case grobal2.SKILL_GROUPLIGHTENING:
-                            case grobal2.SKILL_47:
-                            case grobal2.SKILL_58:
+                            case Grobal2.SKILL_FIREBALL:
+                            case Grobal2.SKILL_FIREBALL2:
+                            case Grobal2.SKILL_FIRE:
+                            case Grobal2.SKILL_SHOOTLIGHTEN:
+                            case Grobal2.SKILL_LIGHTENING:
+                            case Grobal2.SKILL_EARTHFIRE:
+                            case Grobal2.SKILL_FIREBOOM:
+                            case Grobal2.SKILL_LIGHTFLOWER:
+                            case Grobal2.SKILL_SNOWWIND:
+                            case Grobal2.SKILL_GROUPLIGHTENING:
+                            case Grobal2.SKILL_47:
+                            case Grobal2.SKILL_58:
                                 if (GetSpellPoint(UserMagic) <= m_WAbil.MP)
                                 {
                                     result = true;
@@ -2098,34 +2098,34 @@ namespace M2Server
                         {
                             switch (UserMagic.wMagIdx)
                             {
-                                case grobal2.SKILL_AMYOUNSUL:
-                                case grobal2.SKILL_GROUPAMYOUNSUL:// 需要毒药
+                                case Grobal2.SKILL_AMYOUNSUL:
+                                case Grobal2.SKILL_GROUPAMYOUNSUL:// 需要毒药
                                     result = CheckUserItem(1, 2) || CheckUserItem(2, 2);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(grobal2.SKILL_AMYOUNSUL) || AllowUseMagic(grobal2.SKILL_GROUPAMYOUNSUL);
+                                        result = AllowUseMagic(Grobal2.SKILL_AMYOUNSUL) || AllowUseMagic(Grobal2.SKILL_GROUPAMYOUNSUL);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case grobal2.SKILL_FIRECHARM:// 需要符
+                                case Grobal2.SKILL_FIRECHARM:// 需要符
                                     result = CheckUserItem(5, 1);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(grobal2.SKILL_FIRECHARM);
+                                        result = AllowUseMagic(Grobal2.SKILL_FIRECHARM);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case grobal2.SKILL_59:// 需要符
+                                case Grobal2.SKILL_59:// 需要符
                                     result = CheckUserItem(5, 5);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(grobal2.SKILL_59);
+                                        result = AllowUseMagic(Grobal2.SKILL_59);
                                     }
                                     if (result)
                                     {
@@ -2150,11 +2150,11 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
+            if (m_boDeath || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result; // 防麻
             }
-            if ((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && !M2Share.g_Config.ClientConf.boParalyCanSpell)
+            if ((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && !M2Share.g_Config.ClientConf.boParalyCanSpell)
             {
                 return result;// 防麻
             }
@@ -2174,7 +2174,7 @@ namespace M2Server
             m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
             switch (UserMagic.wMagIdx)
             {
-                case grobal2.SKILL_ERGUM:
+                case Grobal2.SKILL_ERGUM:
                     if (m_MagicErgumSkill != null)
                     {
                         if (!m_boUseThrusting)
@@ -2188,7 +2188,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_BANWOL:
+                case Grobal2.SKILL_BANWOL:
                     if (m_MagicBanwolSkill != null)
                     {
                         if (!m_boUseHalfMoon)
@@ -2202,13 +2202,13 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_FIRESWORD:
+                case Grobal2.SKILL_FIRESWORD:
                     if (m_MagicFireSwordSkill != null)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.SKILL_MOOTEBO:
+                case Grobal2.SKILL_MOOTEBO:
                     result = true;
                     if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3000)
                     {
@@ -2219,7 +2219,7 @@ namespace M2Server
                         }
                     }
                     break;
-                case grobal2.SKILL_43:
+                case Grobal2.SKILL_43:
                     result = true;
                     break;
                 default:
@@ -2240,13 +2240,13 @@ namespace M2Server
                     {
                         switch (UserMagic.wMagIdx)
                         {
-                            case grobal2.SKILL_HEALLING:
-                            case grobal2.SKILL_HANGMAJINBUB:
-                            case grobal2.SKILL_DEJIWONHO:
-                            case grobal2.SKILL_BIGHEALLING:
-                            case grobal2.SKILL_SINSU:
-                            case grobal2.SKILL_UNAMYOUNSUL:
-                            case grobal2.SKILL_46:
+                            case Grobal2.SKILL_HEALLING:
+                            case Grobal2.SKILL_HANGMAJINBUB:
+                            case Grobal2.SKILL_DEJIWONHO:
+                            case Grobal2.SKILL_BIGHEALLING:
+                            case Grobal2.SKILL_SINSU:
+                            case Grobal2.SKILL_UNAMYOUNSUL:
+                            case Grobal2.SKILL_46:
                                 if (m_boSelSelf)
                                 {
                                     BaseObject = this;
@@ -2281,7 +2281,7 @@ namespace M2Server
                     }
                     if (!AutoSpell(UserMagic, nTargetX, nTargetY, BaseObject))
                     {
-                        SendRefMsg(grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
+                        SendRefMsg(Grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
                     }
                     result = true;
                     break;
@@ -2346,7 +2346,7 @@ namespace M2Server
 
         public bool DoThink_TargetNeedRunPos()
         {
-            return (m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_btRaceServer == 108);
+            return (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_btRaceServer == 108);
         }
 
         public bool DoThink_CanRunPos(int nAttackCount)
@@ -2492,7 +2492,7 @@ namespace M2Server
                         {
                             result = 2;
                         }
-                        else if ((new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2 }).Contains(wMagicID)) && (!CanAttack(m_TargetCret, 10, ref btDir)))
+                        else if ((new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2 }).Contains(wMagicID)) && (!CanAttack(m_TargetCret, 10, ref btDir)))
                         {
                             result = 3;
                         }
@@ -2525,7 +2525,7 @@ namespace M2Server
                         {
                             result = 2;
                         }
-                        else if ((wMagicID == grobal2.SKILL_FIRECHARM) && (!CanAttack(m_TargetCret, 10, ref btDir)))
+                        else if ((wMagicID == Grobal2.SKILL_FIRECHARM) && (!CanAttack(m_TargetCret, 10, ref btDir)))
                         {
                             result = 3;
                         }
@@ -2555,7 +2555,7 @@ namespace M2Server
             TMapWalkXY MapWalkXY= null;
             TMapWalkXY MapWalkXYA= null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if ((WalkStep[i].nWalkStep > 0) && (Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange) && (Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange))
                 {
@@ -2573,7 +2573,7 @@ namespace M2Server
                 n10 = Int32.MaxValue;
                 MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount) && (Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange) && (Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange))
                     {
@@ -2604,7 +2604,7 @@ namespace M2Server
             TMapWalkXY MapWalkXY = null;
             int n10 = Int32.MaxValue;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if ((WalkStep[i].nWalkStep > 0))
                 {
@@ -2622,7 +2622,7 @@ namespace M2Server
                 n10 = Int32.MaxValue;
                 TMapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount))
                     {
@@ -2654,7 +2654,7 @@ namespace M2Server
             TMapWalkXY MapWalkXY= null;
             TMapWalkXY MapWalkXYA= null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if ((WalkStep[i].nWalkStep > 0))
                 {
@@ -2671,7 +2671,7 @@ namespace M2Server
                 nMonCount = MapWalkXY.nMonCount;
                 MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount))
                     {
@@ -2721,7 +2721,7 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2747,7 +2747,7 @@ namespace M2Server
             short nCurrY = 0;
             bool result = false;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2773,7 +2773,7 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
                 {
@@ -2799,7 +2799,7 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2820,7 +2820,7 @@ namespace M2Server
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2846,7 +2846,7 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2867,7 +2867,7 @@ namespace M2Server
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+            for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -2895,7 +2895,7 @@ namespace M2Server
             bool result = false;
             try
             {
-                boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (m_btJob == 0);
+                boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (m_btJob == 0);
                 if ((m_btJob == 0) || (wMagicID <= 0))
                 {
                     nRange = 1;
@@ -2963,7 +2963,7 @@ namespace M2Server
                     {
                         nRange = 1;
                     }
-                    boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (nRange == 1);
+                    boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (nRange == 1);
                     for (var i = 2; i >= 1; i--)
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -3029,7 +3029,7 @@ namespace M2Server
             TMapWalkXY[] WalkStep = null;
             bool result = false;
             int nRange = HUtil32._MAX((new System.Random(3)).Next(), 2);
-            boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
+            boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
             byte btDir;
             TMapWalkXY MapWalkXY;
             for (var i = nRange; i >= 1; i--)
@@ -3098,7 +3098,7 @@ namespace M2Server
             TMapWalkXY[] WalkStep = null;
             TMapWalkXY MapWalkXY;
             bool result = false;
-            bool boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { grobal2.SKILL_FIREBALL, grobal2.SKILL_FIREBALL2, grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
+            bool boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
             for (var i = nRange; i >= 1; i--)
             {
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -3186,29 +3186,29 @@ namespace M2Server
             {
                 switch (btDir)
                 {
-                    case grobal2.DR_UP:
-                        result = grobal2.DR_RIGHT;
+                    case Grobal2.DR_UP:
+                        result = Grobal2.DR_RIGHT;
                         break;
-                    case grobal2.DR_UPRIGHT:
-                        result = grobal2.DR_DOWNRIGHT;
+                    case Grobal2.DR_UPRIGHT:
+                        result = Grobal2.DR_DOWNRIGHT;
                         break;
-                    case grobal2.DR_RIGHT:
-                        result = grobal2.DR_DOWN;
+                    case Grobal2.DR_RIGHT:
+                        result = Grobal2.DR_DOWN;
                         break;
-                    case grobal2.DR_DOWNRIGHT:
-                        result = grobal2.DR_DOWNLEFT;
+                    case Grobal2.DR_DOWNRIGHT:
+                        result = Grobal2.DR_DOWNLEFT;
                         break;
-                    case grobal2.DR_DOWN:
-                        result = grobal2.DR_LEFT;
+                    case Grobal2.DR_DOWN:
+                        result = Grobal2.DR_LEFT;
                         break;
-                    case grobal2.DR_DOWNLEFT:
-                        result = grobal2.DR_UPLEFT;
+                    case Grobal2.DR_DOWNLEFT:
+                        result = Grobal2.DR_UPLEFT;
                         break;
-                    case grobal2.DR_LEFT:
-                        result = grobal2.DR_UP;
+                    case Grobal2.DR_LEFT:
+                        result = Grobal2.DR_UP;
                         break;
-                    case grobal2.DR_UPLEFT:
-                        result = grobal2.DR_UPRIGHT;
+                    case Grobal2.DR_UPLEFT:
+                        result = Grobal2.DR_UPRIGHT;
                         break;
                 }
             }
@@ -3216,29 +3216,29 @@ namespace M2Server
             {
                 switch (btDir)
                 {
-                    case grobal2.DR_UP:
-                        result = grobal2.DR_LEFT;
+                    case Grobal2.DR_UP:
+                        result = Grobal2.DR_LEFT;
                         break;
-                    case grobal2.DR_UPRIGHT:
-                        result = grobal2.DR_UPLEFT;
+                    case Grobal2.DR_UPRIGHT:
+                        result = Grobal2.DR_UPLEFT;
                         break;
-                    case grobal2.DR_RIGHT:
-                        result = grobal2.DR_UP;
+                    case Grobal2.DR_RIGHT:
+                        result = Grobal2.DR_UP;
                         break;
-                    case grobal2.DR_DOWNRIGHT:
-                        result = grobal2.DR_UPRIGHT;
+                    case Grobal2.DR_DOWNRIGHT:
+                        result = Grobal2.DR_UPRIGHT;
                         break;
-                    case grobal2.DR_DOWN:
-                        result = grobal2.DR_RIGHT;
+                    case Grobal2.DR_DOWN:
+                        result = Grobal2.DR_RIGHT;
                         break;
-                    case grobal2.DR_DOWNLEFT:
-                        result = grobal2.DR_DOWNRIGHT;
+                    case Grobal2.DR_DOWNLEFT:
+                        result = Grobal2.DR_DOWNRIGHT;
                         break;
-                    case grobal2.DR_LEFT:
-                        result = grobal2.DR_DOWN;
+                    case Grobal2.DR_LEFT:
+                        result = Grobal2.DR_DOWN;
                         break;
-                    case grobal2.DR_UPLEFT:
-                        result = grobal2.DR_DOWNLEFT;
+                    case Grobal2.DR_UPLEFT:
+                        result = Grobal2.DR_DOWNLEFT;
                         break;
                 }
             }
@@ -3508,13 +3508,13 @@ namespace M2Server
             int nWhere;
             int nPercent;
             int nValue;
-            TItem StdItem;
+            MirItem StdItem;
             TUserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;
             try
             {
-                if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+                if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
                 {
                     if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
                     {
@@ -3598,7 +3598,7 @@ namespace M2Server
                                     }
                                     if ((m_btJob > 0))
                                     {
-                                        if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_btJob == 2) && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)))
+                                        if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_btJob == 2) && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)))
                                         {
                                             // 道法22前是否物理攻击
                                             if (m_Master != null)
@@ -3776,7 +3776,7 @@ namespace M2Server
                         }
                     }
 
-                    if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[grobal2.POISON_STONE] == 0))
+                    if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
                     {
                         if (m_boProtectStatus && (m_TargetCret == null))// 守护状态
                         {
@@ -3837,7 +3837,7 @@ namespace M2Server
                     }
                     switch (BaseObject.m_btRaceServer)
                     {
-                        case grobal2.RC_ARCHERGUARD:
+                        case Grobal2.RC_ARCHERGUARD:
                         case 55:// 不主动攻击练功师 弓箭手
                             if (BaseObject.m_TargetCret != this)
                             {
@@ -3860,7 +3860,7 @@ namespace M2Server
                 {
                     if (m_btAttatckMode == M2Share.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                        if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             if (PKLevel() >= 2)
                             {
@@ -3887,7 +3887,7 @@ namespace M2Server
                         }
                         if (m_boAI && !result)
                         {
-                            if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))
+                            if ((BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))
                             {
                                 if (BaseObject.m_TargetCret != null)
                                 {
@@ -3912,7 +3912,7 @@ namespace M2Server
                                 }
                             }
                         }
-                        if ((BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))// 安全区不能打人物和英雄
+                        if ((BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))// 安全区不能打人物和英雄
                         {
                             if (BaseObject.InSafeZone() || InSafeZone())
                             {
@@ -3929,7 +3929,7 @@ namespace M2Server
                         }
                         switch (BaseObject.m_btRaceServer)
                         {
-                            case grobal2.RC_ARCHERGUARD:
+                            case Grobal2.RC_ARCHERGUARD:
                             case 55:// 不主动攻击练功师 弓箭手
                                 if (BaseObject.m_TargetCret != this)
                                 {
@@ -4048,7 +4048,7 @@ namespace M2Server
                                     {
                                         switch (OSObject.btType)
                                         {
-                                            case grobal2.OS_MOVINGOBJECT:
+                                            case Grobal2.OS_MOVINGOBJECT:
                                                 if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60000)
                                                 {
                                                     OSObject.boObjectDisPose = true;
@@ -4066,15 +4066,15 @@ namespace M2Server
                                                 {
                                                     if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                                     {
-                                                        if ((m_btRaceServer < grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                                                        if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                                                         {
                                                             UpdateVisibleGay(BaseObject);
                                                         }
                                                     }
                                                 }
                                                 break;
-                                            case grobal2.OS_ITEMOBJECT:
-                                                if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                            case Grobal2.OS_ITEMOBJECT:
+                                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime))
                                                     {
@@ -4124,8 +4124,8 @@ namespace M2Server
                                                     }
                                                 }
                                                 break;
-                                            case grobal2.OS_EVENTOBJECT:
-                                                if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                            case Grobal2.OS_EVENTOBJECT:
+                                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (OSObject.CellObj != null)
                                                     {
@@ -4176,14 +4176,14 @@ namespace M2Server
                         switch (VisibleBaseObject.nVisibleFlag)
                         {
                             case 0:
-                                if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject = VisibleBaseObject.BaseObject;
                                     if (BaseObject != null)
                                     {
                                         if ((!BaseObject.m_boFixedHideMode) && (!BaseObject.m_boGhost))
                                         {
-                                            SendMsg(BaseObject, grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                                            SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                                         }
                                     }
                                 }
@@ -4194,7 +4194,7 @@ namespace M2Server
                                 }
                                 continue;
                             case 2:
-                                if ((m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                                if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                                 {
                                     BaseObject = VisibleBaseObject.BaseObject;
                                     if ((BaseObject != null))
@@ -4205,18 +4205,18 @@ namespace M2Server
                                             {
                                                 if (BaseObject.m_boSkeleton)
                                                 {
-                                                    SendMsg(BaseObject, grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                                 }
                                                 else
                                                 {
-                                                    SendMsg(BaseObject, grobal2.RM_DEATH, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                                 }
                                             }
                                             else
                                             {
                                                 if (BaseObject != null)
                                                 {
-                                                    SendMsg(BaseObject, grobal2.RM_TURN, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
+                                                    SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
                                                 }
                                             }
                                         }
@@ -4311,7 +4311,7 @@ namespace M2Server
                             switch (MapEvent.nVisibleFlag)
                             {
                                 case 0:
-                                    SendMsg(this, grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
+                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
                                     m_VisibleEvents.RemoveAt(position);
                                     if (m_VisibleEvents.Count > 0)
                                     {
@@ -4322,7 +4322,7 @@ namespace M2Server
                                     MapEvent.nVisibleFlag = 0;
                                     break;
                                 case 2:
-                                    SendMsg(this, grobal2.RM_SHOWEVENT, MapEvent.m_nEventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
+                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.m_nEventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
                                     MapEvent.nVisibleFlag = 0;
                                     break;
                             }
@@ -4559,7 +4559,7 @@ namespace M2Server
                 m_wHitMode = 0;
                 if (m_TargetCret != null)
                 {
-                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 
+                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 
                     {
                         if (m_TargetCret.m_WAbil.MaxHP >= 700)
                         {
@@ -4594,7 +4594,7 @@ namespace M2Server
                         if ((!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
                         {
                             // 魔法不能打到怪
-                            if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
+                            if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
                             {
                                 if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                 {
@@ -4611,7 +4611,7 @@ namespace M2Server
                     }
                     switch (m_nSelectMagic)
                     {
-                        case grobal2.SKILL_HEALLING:// 治愈术 
+                        case Grobal2.SKILL_HEALLING:// 治愈术 
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -4619,7 +4619,7 @@ namespace M2Server
                                 {
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, null);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
+                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
                                     {
                                         if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                         {
@@ -4639,7 +4639,7 @@ namespace M2Server
                                 }
                             }
                             break;
-                        case grobal2.SKILL_BIGHEALLING:// 群体治疗术
+                        case Grobal2.SKILL_BIGHEALLING:// 群体治疗术
                             if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -4647,7 +4647,7 @@ namespace M2Server
                                 {
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
+                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
                                     {
                                         if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                         {
@@ -4667,32 +4667,32 @@ namespace M2Server
                                 }
                             }
                             break;
-                        case grobal2.SKILL_FIRECHARM:// 灵符火符
+                        case Grobal2.SKILL_FIRECHARM:// 灵符火符
                             if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret))
                             {
                                 GetGotoXY(m_TargetCret, 3);
                                 GotoTargetXY(m_nTargetX, m_nTargetY, 1);
                             }
                             break;
-                        case grobal2.SKILL_AMYOUNSUL:
-                        case grobal2.SKILL_GROUPAMYOUNSUL:
-                            if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0))
+                        case Grobal2.SKILL_AMYOUNSUL:
+                        case Grobal2.SKILL_GROUPAMYOUNSUL:
+                            if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0))
                             {
                                 n_AmuletIndx = 1;
                             }
-                            else if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0))
+                            else if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0))
                             {
                                 n_AmuletIndx = 2;
                             }
                             break;
-                        case grobal2.SKILL_CLOAK:
-                        case grobal2.SKILL_BIGCLOAK: // 集体隐身术  隐身术
+                        case Grobal2.SKILL_CLOAK:
+                        case Grobal2.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
                             if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
                             {
                                 UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                 m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
+                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
                                 {
                                     if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                     {
@@ -4711,14 +4711,14 @@ namespace M2Server
                                 }
                             }
                             break;
-                        case grobal2.SKILL_SKELLETON:
-                        case grobal2.SKILL_SINSU:
+                        case Grobal2.SKILL_SKELLETON:
+                        case Grobal2.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
                             if ((UserMagic != null) && (UserMagic.btKey == 0))
                             {
                                 UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 使用魔法
                                 m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT))
+                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
                                 {
                                     // 22级砍血量的怪
                                     if ((m_TargetCret.m_WAbil.MaxHP >= 700))
@@ -4760,7 +4760,7 @@ namespace M2Server
                 }
                 // 是否能躲避 
                 // 增加人形条件
-                if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || ((m_TargetCret.m_WAbil.MaxHP < 700) && M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)))
+                if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || ((m_TargetCret.m_WAbil.MaxHP < 700) && M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)))
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
                     if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
@@ -4788,7 +4788,7 @@ namespace M2Server
                 {
                     if (InSafeZone())// 英雄进入安全区内就不打PK目标
                     {
-                        if ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))
+                        if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                         {
                             m_TargetCret = null;
                             return result;
@@ -4915,7 +4915,7 @@ namespace M2Server
                                 case 2:
                                     if (m_TargetCret != null)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 20090108
+                                        if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 20090108
                                         {
                                             if ((m_TargetCret.m_WAbil.MaxHP >= 700))
                                             {
@@ -4975,49 +4975,49 @@ namespace M2Server
                             {
                                 switch (nDir)
                                 {
-                                    case grobal2.DR_UP:
+                                    case Grobal2.DR_UP:
                                         if ((Math.Abs(nX - BaseObject.m_nCurrX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_UPRIGHT:
+                                    case Grobal2.DR_UPRIGHT:
                                         if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_RIGHT:
+                                    case Grobal2.DR_RIGHT:
                                         if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && (Math.Abs(nY - BaseObject.m_nCurrY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_DOWNRIGHT:
+                                    case Grobal2.DR_DOWNRIGHT:
                                         if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_DOWN:
+                                    case Grobal2.DR_DOWN:
                                         if ((Math.Abs(nX - BaseObject.m_nCurrX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_DOWNLEFT:
+                                    case Grobal2.DR_DOWNLEFT:
                                         if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_LEFT:
+                                    case Grobal2.DR_LEFT:
                                         if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && (Math.Abs(nY - BaseObject.m_nCurrY) <= nRange))
                                         {
                                             result++;
                                         }
                                         break;
-                                    case grobal2.DR_UPLEFT:
+                                    case Grobal2.DR_UPLEFT:
                                         if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
                                         {
                                             result++;
@@ -5042,42 +5042,42 @@ namespace M2Server
             int n14;
             n10 = m_TargetCret.m_nCurrX;
             n14 = m_TargetCret.m_nCurrY;
-            int result = grobal2.DR_DOWN;
+            int result = Grobal2.DR_DOWN;
             if (n10 > m_nCurrX)
             {
-                result = grobal2.DR_LEFT;
+                result = Grobal2.DR_LEFT;
                 if (n14 > m_nCurrY)
                 {
-                    result = grobal2.DR_DOWNLEFT;
+                    result = Grobal2.DR_DOWNLEFT;
                 }
                 if (n14 < m_nCurrY)
                 {
-                    result = grobal2.DR_UPLEFT;
+                    result = Grobal2.DR_UPLEFT;
                 }
             }
             else
             {
                 if (n10 < m_nCurrX)
                 {
-                    result = grobal2.DR_RIGHT;
+                    result = Grobal2.DR_RIGHT;
                     if (n14 > m_nCurrY)
                     {
-                        result = grobal2.DR_DOWNRIGHT;
+                        result = Grobal2.DR_DOWNRIGHT;
                     }
                     if (n14 < m_nCurrY)
                     {
-                        result = grobal2.DR_UPRIGHT;
+                        result = Grobal2.DR_UPRIGHT;
                     }
                 }
                 else
                 {
                     if (n14 > m_nCurrY)
                     {
-                        result = grobal2.DR_UP;
+                        result = Grobal2.DR_UP;
                     }
                     else if (n14 < m_nCurrY)
                     {
-                        result = grobal2.DR_DOWN;
+                        result = Grobal2.DR_DOWN;
                     }
                 }
             }
@@ -5088,42 +5088,42 @@ namespace M2Server
         {
             int n10 = nTargetX;
             int n14 = nTargetY;
-            byte result = grobal2.DR_DOWN;
+            byte result = Grobal2.DR_DOWN;
             if (n10 > m_nCurrX)
             {
-                result = grobal2.DR_RIGHT;
+                result = Grobal2.DR_RIGHT;
                 if (n14 > m_nCurrY)
                 {
-                    result = grobal2.DR_DOWNRIGHT;
+                    result = Grobal2.DR_DOWNRIGHT;
                 }
                 if (n14 < m_nCurrY)
                 {
-                    result = grobal2.DR_UPRIGHT;
+                    result = Grobal2.DR_UPRIGHT;
                 }
             }
             else
             {
                 if (n10 < m_nCurrX)
                 {
-                    result = grobal2.DR_LEFT;
+                    result = Grobal2.DR_LEFT;
                     if (n14 > m_nCurrY)
                     {
-                        result = grobal2.DR_DOWNLEFT;
+                        result = Grobal2.DR_DOWNLEFT;
                     }
                     if (n14 < m_nCurrY)
                     {
-                        result = grobal2.DR_UPLEFT;
+                        result = Grobal2.DR_UPLEFT;
                     }
                 }
                 else
                 {
                     if (n14 > m_nCurrY)
                     {
-                        result = grobal2.DR_DOWN;
+                        result = Grobal2.DR_DOWN;
                     }
                     else if (n14 < m_nCurrY)
                     {
-                        result = grobal2.DR_UP;
+                        result = Grobal2.DR_UP;
                     }
                 }
             }
@@ -5137,7 +5137,7 @@ namespace M2Server
             {
                 switch (nDir)
                 {
-                    case grobal2.DR_UP:
+                    case Grobal2.DR_UP:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetY -= 2;
@@ -5153,7 +5153,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_UPRIGHT:
+                    case Grobal2.DR_UPRIGHT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX += 2;
@@ -5171,7 +5171,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_RIGHT:
+                    case Grobal2.DR_RIGHT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX += 2;
@@ -5187,7 +5187,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_DOWNRIGHT:
+                    case Grobal2.DR_DOWNRIGHT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX += 2;
@@ -5205,7 +5205,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_DOWN:
+                    case Grobal2.DR_DOWN:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetY += 2;
@@ -5221,7 +5221,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_DOWNLEFT:
+                    case Grobal2.DR_DOWNLEFT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX -= 2;
@@ -5239,7 +5239,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_LEFT:
+                    case Grobal2.DR_LEFT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX -= 2;
@@ -5255,7 +5255,7 @@ namespace M2Server
                             n01 += 2;
                             continue;
                         }
-                    case grobal2.DR_UPLEFT:
+                    case Grobal2.DR_UPLEFT:
                         if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
                         {
                             nTargetX -= 2;
@@ -5343,7 +5343,7 @@ namespace M2Server
                         result = true;
                         return result;
                     }
-                    if (((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT) && (m_btJob == 2))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
+                    if (((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) && (m_btJob == 2))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
                     {
                         // 道法22前是否物理攻击 20090210 大于1格时才走向目标
                         result = true;
@@ -5354,7 +5354,7 @@ namespace M2Server
                 {
                     switch (m_nSelectMagic)
                     {
-                        case grobal2.SKILL_ERGUM:
+                        case Grobal2.SKILL_ERGUM:
                             if (AllowUseMagic(12) && (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY)))
                             {
                                 if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)))
@@ -5638,9 +5638,9 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))// || (m_wStatusArrValue[23] != 0)
+            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))// || (m_wStatusArrValue[23] != 0)
             {
                 return result; // 麻痹不能跑动 
             }
@@ -5684,7 +5684,7 @@ namespace M2Server
                 m_btDirection = btDir;
                 switch (btDir)
                 {
-                    case grobal2.DR_UP:
+                    case Grobal2.DR_UP:
                         if ((m_nCurrY > 1) &&
                           (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
                         (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5693,7 +5693,7 @@ namespace M2Server
                             m_nCurrY -= 2;
                         }
                         break;
-                    case grobal2.DR_UPRIGHT:
+                    case Grobal2.DR_UPRIGHT:
                         if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
                           (m_nCurrY > 1) &&
                           (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5704,7 +5704,7 @@ namespace M2Server
                             m_nCurrY -= 2;
                         }
                         break;
-                    case grobal2.DR_RIGHT:
+                    case Grobal2.DR_RIGHT:
                         if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5713,7 +5713,7 @@ namespace M2Server
                             m_nCurrX += 2;
                         }
                         break;
-                    case grobal2.DR_DOWNRIGHT:
+                    case Grobal2.DR_DOWNRIGHT:
                         if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
   (m_nCurrY < m_PEnvir.wHeight - 2) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5724,7 +5724,7 @@ namespace M2Server
                             m_nCurrY += 2;
                         }
                         break;
-                    case grobal2.DR_DOWN:
+                    case Grobal2.DR_DOWN:
                         if ((m_nCurrY < m_PEnvir.wHeight - 2) &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5733,7 +5733,7 @@ namespace M2Server
                             m_nCurrY += 2;
                         }
                         break;
-                    case grobal2.DR_DOWNLEFT:
+                    case Grobal2.DR_DOWNLEFT:
                         if ((m_nCurrX > 1) &&
   (m_nCurrY < m_PEnvir.wHeight - 2) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5745,7 +5745,7 @@ namespace M2Server
                         }
 
                         break;
-                    case grobal2.DR_LEFT:
+                    case Grobal2.DR_LEFT:
                         if ((m_nCurrX > 1) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5754,7 +5754,7 @@ namespace M2Server
                             m_nCurrX -= 2;
                         }
                         break;
-                    case grobal2.DR_UPLEFT:
+                    case Grobal2.DR_UPLEFT:
                         if ((m_nCurrX > 1) && (m_nCurrY > 1) &&
  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
@@ -5767,7 +5767,7 @@ namespace M2Server
                 }
                 if (m_nCurrX != nOldX || m_nCurrY != nOldY)
                 {
-                    if (Walk(grobal2.RM_RUN))
+                    if (Walk(Grobal2.RM_RUN))
                     {
                         result = true;
                     }
@@ -5802,9 +5802,9 @@ namespace M2Server
             bool result = false;
             if (m_boTransparent && m_boHideMode)
             {
-                m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
+                m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[grobal2.POISON_LOCKSPELL] != 0))
+            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
             {
                 return result;// 麻痹不能跑动
             }
@@ -5814,42 +5814,42 @@ namespace M2Server
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
-                    byte nDir = grobal2.DR_DOWN;
+                    byte nDir = Grobal2.DR_DOWN;
                     if (n10 > m_nCurrX)
                     {
-                        nDir = grobal2.DR_RIGHT;
+                        nDir = Grobal2.DR_RIGHT;
                         if (n14 > m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWNRIGHT;
+                            nDir = Grobal2.DR_DOWNRIGHT;
                         }
                         if (n14 < m_nCurrY)
                         {
-                            nDir = grobal2.DR_UPRIGHT;
+                            nDir = Grobal2.DR_UPRIGHT;
                         }
                     }
                     else
                     {
                         if (n10 < m_nCurrX)
                         {
-                            nDir = grobal2.DR_LEFT;
+                            nDir = Grobal2.DR_LEFT;
                             if (n14 > m_nCurrY)
                             {
-                                nDir = grobal2.DR_DOWNLEFT;
+                                nDir = Grobal2.DR_DOWNLEFT;
                             }
                             if (n14 < m_nCurrY)
                             {
-                                nDir = grobal2.DR_UPLEFT;
+                                nDir = Grobal2.DR_UPLEFT;
                             }
                         }
                         else
                         {
                             if (n14 > m_nCurrY)
                             {
-                                nDir = grobal2.DR_DOWN;
+                                nDir = Grobal2.DR_DOWN;
                             }
                             else if (n14 < m_nCurrY)
                             {
-                                nDir = grobal2.DR_UP;
+                                nDir = Grobal2.DR_UP;
                             }
                         }
                     }
@@ -5864,7 +5864,7 @@ namespace M2Server
                     if (!result)
                     {
                         n20 = (new System.Random(3)).Next();
-                        for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i++)
+                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
                             {
@@ -5878,11 +5878,11 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    nDir = grobal2.DR_UPLEFT;
+                                    nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > grobal2.DR_UPLEFT))
+                                if ((nDir > Grobal2.DR_UPLEFT))
                                 {
-                                    nDir = grobal2.DR_UP;
+                                    nDir = Grobal2.DR_UP;
                                 }
                                 WalkTo(nDir, false);
                                 if ((Math.Abs(nTargetX - m_nCurrX) <= 1) && (Math.Abs(nTargetY - m_nCurrY) <= 1))
@@ -5908,7 +5908,7 @@ namespace M2Server
                 case 0:// 正常模式
                     if ((Math.Abs(m_nCurrX - nTargetX) > 2) || (Math.Abs(m_nCurrY - nTargetY) > 2))
                     {
-                        if (m_wStatusTimeArr[grobal2.STATE_LOCKRUN] == 0)
+                        if (m_wStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -5925,7 +5925,7 @@ namespace M2Server
                 case 1:// 躲避模式
                     if ((Math.Abs(m_nCurrX - nTargetX) > 1) || (Math.Abs(m_nCurrY - nTargetY) > 1))
                     {
-                        if (m_wStatusTimeArr[grobal2.STATE_LOCKRUN] == 0)
+                        if (m_wStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
                             result = RunToTargetXY(nTargetX, nTargetY);
                         }
@@ -5976,7 +5976,7 @@ namespace M2Server
                         result = 26;
                         return result;
                     }
-                    if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level))
+                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level))
                     {
                         // PK时,使用野蛮冲撞  20080826 血低于800时使用
                         if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000))
@@ -6006,7 +6006,7 @@ namespace M2Server
                         switch ((new System.Random(3)).Next())
                         {
                             case 0:// 被怪物包围
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
@@ -6025,15 +6025,15 @@ namespace M2Server
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = grobal2.SKILL_BANWOL;
+                                        result = Grobal2.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -6057,7 +6057,7 @@ namespace M2Server
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
                                     result = 41;
@@ -6085,15 +6085,15 @@ namespace M2Server
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = grobal2.SKILL_BANWOL;
+                                        result = Grobal2.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -6108,7 +6108,7 @@ namespace M2Server
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
@@ -6136,15 +6136,15 @@ namespace M2Server
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = grobal2.SKILL_BANWOL;
+                                        result = Grobal2.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -6163,7 +6163,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1))
+                        if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1))
                         {
                             // PK  身边超过2个目标才使用
                             if (AllowUseMagic(40) && (HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000))
@@ -6179,17 +6179,17 @@ namespace M2Server
                             }
                             if ((HUtil32.GetTickCount() - m_SkillUseTick[25] > 1500))
                             {
-                                if (AllowUseMagic(grobal2.SKILL_BANWOL))
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))
                                 {
                                     // 英雄半月弯刀
-                                    if (CheckTargetXYCount2(grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
                                         m_SkillUseTick[25] = HUtil32.GetTickCount();
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = grobal2.SKILL_BANWOL;
+                                        result = Grobal2.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -6247,14 +6247,14 @@ namespace M2Server
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[25] > 3000))
                     {
-                        if (AllowUseMagic(grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                        if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
                         {
                             if (!m_boUseHalfMoon)
                             {
                                 HalfMoonOnOff(true);
                             }
                             m_SkillUseTick[25] = HUtil32.GetTickCount();
-                            result = grobal2.SKILL_BANWOL;
+                            result = Grobal2.SKILL_BANWOL;
                             return result;
                         }
                     }
@@ -6279,7 +6279,7 @@ namespace M2Server
                         result = 7;
                         return result;
                     }
-                    if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6)))
+                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6)))
                     {
                         // PK时,使用野蛮冲撞
                         if (AllowUseMagic(27) && (HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000))
@@ -6298,7 +6298,7 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                    if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
                     {
                         m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                         result = 41;
@@ -6306,7 +6306,7 @@ namespace M2Server
                     }
                     break;
                 case 1: // 法师
-                    if ((m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence) // 使用 魔法盾
+                    if ((m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -6319,7 +6319,7 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level))
+                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level))
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
                         if (AllowUseMagic(8) && ((HUtil32.GetTickCount() - m_SkillUseTick[8]) > 3000))
@@ -6347,7 +6347,7 @@ namespace M2Server
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
                     {
-                        if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (GetDirBaseObjectsCount(m_btDirection, 5) > 0) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
+                        if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (GetDirBaseObjectsCount(m_btDirection, 5) > 0) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
                         {
                             if (AllowUseMagic(10))
                             {
@@ -6378,7 +6378,7 @@ namespace M2Server
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && (HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
+                    if (AllowUseMagic(32) && (HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
@@ -6938,7 +6938,7 @@ namespace M2Server
                         result = 33;
                         return result;
                     }
-                    if (AllowUseMagic(32) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
+                    if (AllowUseMagic(32) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
                     {
                         // 目标为不死系
                         result = 32;// 圣言术
@@ -7015,7 +7015,7 @@ namespace M2Server
                         }
                         return result;
                     }
-                    if ((m_wStatusTimeArr[grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence)
+                    if ((m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -7023,7 +7023,7 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level <= m_WAbil.Level))
+                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level <= m_WAbil.Level))
                     {
                         // PK时,旁边有人贴身,使用气功波
                         // 3 * 1000
@@ -7046,7 +7046,7 @@ namespace M2Server
                         }
                     }
                     // 绿毒
-                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
                     {
                         // 对于血量超过800的怪用  修改距离 20080704 不毒城墙
                         n_AmuletIndx = 0;
@@ -7057,25 +7057,25 @@ namespace M2Server
                                 {
                                     if (m_PEnvir != null)// 判断地图是否禁用
                                     {
-                                        if (m_PEnvir.AllowMagics(grobal2.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (m_PEnvir.AllowMagics(Grobal2.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = grobal2.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
+                                            result = Grobal2.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
                                 {
-                                    if (AllowUseMagic(grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = grobal2.SKILL_AMYOUNSUL;// 英雄施毒术
+                                                result = Grobal2.SKILL_AMYOUNSUL;// 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -7085,15 +7085,15 @@ namespace M2Server
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
                                 {
-                                    if (AllowUseMagic(grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -7102,7 +7102,7 @@ namespace M2Server
                                 break;
                         }
                     }
-                    if ((m_TargetCret.m_wStatusTimeArr[grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
                     {
                         // 对于血量超过100的怪用 不毒城墙
                         n_AmuletIndx = 0;
@@ -7114,25 +7114,25 @@ namespace M2Server
                                     if (m_PEnvir != null)
                                     {
                                         // 判断地图是否禁用
-                                        if (m_PEnvir.AllowMagics(grobal2.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (m_PEnvir.AllowMagics(Grobal2.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = grobal2.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
+                                            result = Grobal2.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
                                 {
-                                    if (AllowUseMagic(grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -7142,15 +7142,15 @@ namespace M2Server
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
                                 {
-                                    if (AllowUseMagic(grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -7325,7 +7325,7 @@ namespace M2Server
                 {
                     switch (nMode)
                     {
-                        case grobal2.SKILL_BANWOL:
+                        case Grobal2.SKILL_BANWOL:
                             n10 = (m_btDirection + M2Share.g_Config.WideAttack[nC]) % 8;
                             break;
                     }
@@ -7346,7 +7346,7 @@ namespace M2Server
                     nC++;
                     switch (nMode)
                     {
-                        case grobal2.SKILL_BANWOL:
+                        case Grobal2.SKILL_BANWOL:
                             if (nC >= 3)
                             {
                                 break;
@@ -7404,13 +7404,13 @@ namespace M2Server
         {
             bool result = false;
             TUserItem UserItem;
-            TItem AmuletStdItem;
+            MirItem AmuletStdItem;
             try
             {
                 result = false;
-                if (m_UseItems[grobal2.U_ARMRINGL].wIndex > 0)
+                if (m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
-                    AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_ARMRINGL].wIndex);
+                    AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                     if ((AmuletStdItem != null))
                     {
                         if ((AmuletStdItem.StdMode == 25))
@@ -7418,14 +7418,14 @@ namespace M2Server
                             switch (nType)
                             {
                                 case 1:
-                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2:
-                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
                                     {
                                         result = true;
                                         return result;
@@ -7435,9 +7435,9 @@ namespace M2Server
                         }
                     }
                 }
-                if (m_UseItems[grobal2.U_BUJUK] != null && m_UseItems[grobal2.U_BUJUK].wIndex > 0)
+                if (m_UseItems[Grobal2.U_BUJUK] != null && m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
                 {
-                    AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_BUJUK].wIndex);
+                    AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_BUJUK].wIndex);
                     if (AmuletStdItem != null)
                     {
                         if ((AmuletStdItem.StdMode == 25))
@@ -7445,14 +7445,14 @@ namespace M2Server
                             switch (nType)
                             {
                                 case 1: // 符
-                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_BUJUK].Dura / 100)) >= nCount))
+                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount))
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2: // 毒
-                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[grobal2.U_BUJUK].Dura / 100)) >= nCount))
+                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount))
                                     {
                                         result = true;
                                         return result;

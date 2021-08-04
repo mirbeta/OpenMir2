@@ -26,7 +26,7 @@ namespace M2Server
             }
             if (M2Share.GuildManager.DelGuild(sGuildName))
             {
-                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_206, M2Share.nServerIndex, sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.nServerIndex, sGuildName);
             }
             else
             {

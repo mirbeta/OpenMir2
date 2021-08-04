@@ -26,7 +26,7 @@ namespace M2Server
                 nTotleUsePoint = m_PlayObject.m_BonusAbil.DC + m_PlayObject.m_BonusAbil.MC + m_PlayObject.m_BonusAbil.SC + m_PlayObject.m_BonusAbil.AC + m_PlayObject.m_BonusAbil.MAC
                     + m_PlayObject.m_BonusAbil.HP + m_PlayObject.m_BonusAbil.MP + m_PlayObject.m_BonusAbil.Hit + m_PlayObject.m_BonusAbil.Speed + m_PlayObject.m_BonusAbil.X2;
                 m_PlayObject.m_nBonusPoint += nTotleUsePoint;
-                m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 m_PlayObject.HasLevelUp(0);
                 m_PlayObject.SysMsg("分配点数已复位！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(sHumName + " 的分配点数已复位.", TMsgColor.c_Green, TMsgType.t_Hint);

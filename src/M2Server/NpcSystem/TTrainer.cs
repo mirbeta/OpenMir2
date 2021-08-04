@@ -19,7 +19,7 @@ namespace M2Server
         public override bool Operate(TProcessMessage ProcessMsg)
         {
             var result = false;
-            if (ProcessMsg.wIdent == grobal2.RM_STRUCK || ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK)
+            if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
             {
                 if (ProcessMsg.BaseObject == this.ObjectId)
                 {
@@ -29,7 +29,7 @@ namespace M2Server
                     this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + n56C / n570);
                 }
             }
-            if (ProcessMsg.wIdent == grobal2.RM_MAGSTRUCK)
+            if (ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
             {
                 result = base.Operate(ProcessMsg);
             }

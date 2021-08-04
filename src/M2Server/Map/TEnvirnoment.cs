@@ -70,17 +70,17 @@ namespace M2Server
                     }
                     else
                     {
-                        if (btType == grobal2.OS_ITEMOBJECT)
+                        if (btType == Grobal2.OS_ITEMOBJECT)
                         {
-                            if (((TMapItem)pRemoveObject).Name == grobal2.sSTRING_GOLDNAME)
+                            if (((TMapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
                             {
                                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                                 {
                                     OSObject = MapCellInfo.ObjList[i];
-                                    if (OSObject.btType == grobal2.OS_ITEMOBJECT)
+                                    if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                                     {
                                         MapItem = (TMapItem)MapCellInfo.ObjList[i].CellObj;
-                                        if (MapItem.Name == grobal2.sSTRING_GOLDNAME)
+                                        if (MapItem.Name == Grobal2.sSTRING_GOLDNAME)
                                         {
                                             nGoldCount = MapItem.Count + ((TMapItem)pRemoveObject).Count;
                                             if (nGoldCount <= 2000)
@@ -114,7 +114,7 @@ namespace M2Server
                         };
                         MapCellInfo.ObjList.Add(OSObject);
                         result = pRemoveObject;
-                        if (btType == grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boAddToMaped)
+                        if (btType == Grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boAddToMaped)
                         {
                             ((TBaseObject)pRemoveObject).m_boDelFormMaped = false;
                             ((TBaseObject)pRemoveObject).m_boAddToMaped = true;
@@ -136,7 +136,7 @@ namespace M2Server
             for (var i = 0; i < m_DoorList.Count; i++)
             {
                 Door = m_DoorList[i];
-                AddToMap(Door.nX, Door.nY, grobal2.OS_DOOR, Door);
+                AddToMap(Door.nX, Door.nY, Grobal2.OS_DOOR, Door);
             }
         }
 
@@ -174,7 +174,7 @@ namespace M2Server
                         {
                             for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                             {
-                                if (MapCellInfo.ObjList[i].btType == grobal2.OS_MOVINGOBJECT)
+                                if (MapCellInfo.ObjList[i].btType == Grobal2.OS_MOVINGOBJECT)
                                 {
                                     BaseObject = (TBaseObject)MapCellInfo.ObjList[i].CellObj;
                                     if (BaseObject != null)
@@ -213,7 +213,7 @@ namespace M2Server
                                     break;
                                 }
                                 OSObject = MapCellInfo.ObjList[i];
-                                if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                                if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                                 {
                                     if ((TBaseObject)OSObject.CellObj == Cert)
                                     {
@@ -238,7 +238,7 @@ namespace M2Server
                             }
                             OSObject = new TOSObject
                             {
-                                btType = grobal2.OS_MOVINGOBJECT,
+                                btType = Grobal2.OS_MOVINGOBJECT,
                                 CellObj = Cert,
                                 dwAddTime = HUtil32.GetTickCount()
                             };
@@ -277,7 +277,7 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                        if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (BaseObject != null)
@@ -321,7 +321,7 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (!boFlag && OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                        if (!boFlag && OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (BaseObject != null)
@@ -333,7 +333,7 @@ namespace M2Server
                                 }
                             }
                         }
-                        if (!boItem && OSObject.btType == grobal2.OS_ITEMOBJECT)
+                        if (!boItem && OSObject.btType == Grobal2.OS_ITEMOBJECT)
                         {
                             result = false;
                             break;
@@ -359,7 +359,7 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                        if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (BaseObject != null)
@@ -370,7 +370,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                    if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                     {
                                         if (M2Share.g_Config.boRunHuman || Flag.boRUNHUMAN)
                                         {
@@ -379,7 +379,7 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        if (BaseObject.m_btRaceServer == grobal2.RC_NPC)
+                                        if (BaseObject.m_btRaceServer == Grobal2.RC_NPC)
                                         {
                                             if (M2Share.g_Config.boRunNpc)
                                             {
@@ -388,7 +388,7 @@ namespace M2Server
                                         }
                                         else
                                         {
-                                            if (new ArrayList(new[] { grobal2.RC_GUARD, grobal2.RC_ARCHERGUARD }).Contains(BaseObject.m_btRaceServer))
+                                            if (new ArrayList(new[] { Grobal2.RC_GUARD, Grobal2.RC_ARCHERGUARD }).Contains(BaseObject.m_btRaceServer))
                                             {
                                                 if (M2Share.g_Config.boRunGuard)
                                                 {
@@ -452,7 +452,7 @@ namespace M2Server
                                             OSObject = null;
                                             result = 1;
                                             // 减地图人物怪物计数
-                                            if (btType == grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boDelFormMaped)
+                                            if (btType == Grobal2.OS_MOVINGOBJECT && !((TBaseObject)pRemoveObject).m_boDelFormMaped)
                                             {
                                                 ((TBaseObject)pRemoveObject).m_boDelFormMaped = true;
                                                 ((TBaseObject)pRemoveObject).m_boAddToMaped = false;
@@ -522,16 +522,16 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == grobal2.OS_ITEMOBJECT)
+                        if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                         {
                             result = (TMapItem)OSObject.CellObj;
                             return result;
                         }
-                        if (OSObject.btType == grobal2.OS_GATEOBJECT)
+                        if (OSObject.btType == Grobal2.OS_GATEOBJECT)
                         {
                             bo2C = false;
                         }
-                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                        if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (!BaseObject.m_boDeath)
@@ -614,7 +614,7 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT && OSObject.CellObj == BaseObject)
+                        if (OSObject.btType == Grobal2.OS_MOVINGOBJECT && OSObject.CellObj == BaseObject)
                         {
                             OSObject.dwAddTime = HUtil32.GetTickCount();
                             boVerify = true;
@@ -624,7 +624,7 @@ namespace M2Server
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, grobal2.OS_MOVINGOBJECT, BaseObject);
+                    AddToMap(nX, nY, Grobal2.OS_MOVINGOBJECT, BaseObject);
                 }
             }
             catch
@@ -860,7 +860,7 @@ namespace M2Server
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                     {
                         BaseObject = (TBaseObject)OSObject.CellObj;
                         if (BaseObject != null)
@@ -883,52 +883,52 @@ namespace M2Server
             sny = sy;
             switch (ndir)
             {
-                case grobal2.DR_UP:
+                case Grobal2.DR_UP:
                     if (sny > nFlag - 1)
                     {
                         sny -= (short)nFlag;
                     }
                     break;
-                case grobal2.DR_DOWN:
+                case Grobal2.DR_DOWN:
                     if (sny < wWidth - nFlag)
                     {
                         sny += (short)nFlag;
                     }
                     break;
-                case grobal2.DR_LEFT:
+                case Grobal2.DR_LEFT:
                     if (snx > nFlag - 1)
                     {
                         snx -= (short)nFlag;
                     }
                     break;
-                case grobal2.DR_RIGHT:
+                case Grobal2.DR_RIGHT:
                     if (snx < wWidth - nFlag)
                     {
                         snx += (short)nFlag;
                     }
                     break;
-                case grobal2.DR_UPLEFT:
+                case Grobal2.DR_UPLEFT:
                     if (snx > nFlag - 1 && sny > nFlag - 1)
                     {
                         snx -= (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
-                case grobal2.DR_UPRIGHT:
+                case Grobal2.DR_UPRIGHT:
                     if (snx > nFlag - 1 && sny < wHeight - nFlag)
                     {
                         snx += (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
-                case grobal2.DR_DOWNLEFT:
+                case Grobal2.DR_DOWNLEFT:
                     if (snx < wWidth - nFlag && sny > nFlag - 1)
                     {
                         snx -= (short)nFlag;
                         sny += (short)nFlag;
                     }
                     break;
-                case grobal2.DR_DOWNRIGHT:
+                case Grobal2.DR_DOWNRIGHT:
                     if (snx < wWidth - nFlag && sny < wHeight - nFlag)
                     {
                         snx += (short)nFlag;
@@ -957,7 +957,7 @@ namespace M2Server
                 for (var i = MapCellInfo.ObjList.Count - 1; i >= 0; i--)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_EVENTOBJECT)
+                    if (OSObject.btType == Grobal2.OS_EVENTOBJECT)
                     {
                         if (((TEvent)OSObject.CellObj).m_nDamage > 0)
                         {
@@ -1007,7 +1007,7 @@ namespace M2Server
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                     {
                         BaseObject = (TBaseObject)OSObject.CellObj;
                         if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.bo2B9 && (!boFlag || !BaseObject.m_boDeath))
@@ -1084,16 +1084,16 @@ namespace M2Server
                     for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == grobal2.OS_ITEMOBJECT)
+                        if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                         {
                             result = OSObject.CellObj;
                             nCount++;
                         }
-                        if (OSObject.btType == grobal2.OS_GATEOBJECT)
+                        if (OSObject.btType == Grobal2.OS_GATEOBJECT)
                         {
                             bo2C = false;
                         }
-                        if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                        if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                         {
                             BaseObject = (TBaseObject)OSObject.CellObj;
                             if (!BaseObject.m_boDeath)
@@ -1163,7 +1163,7 @@ namespace M2Server
             return result;
         }
 
-        public bool GetMapBaseObjects(short nX,short nY,int nRage, IList<TBaseObject> BaseObjectList, byte btType = grobal2.OS_MOVINGOBJECT)
+        public bool GetMapBaseObjects(short nX,short nY,int nRage, IList<TBaseObject> BaseObjectList, byte btType = Grobal2.OS_MOVINGOBJECT)
         {
             if (BaseObjectList.Count == 0)
             {
@@ -1196,7 +1196,7 @@ namespace M2Server
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                     {
                         BaseObject = (TBaseObject)OSObject.CellObj;
                         if (BaseObject != null)
@@ -1227,7 +1227,7 @@ namespace M2Server
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_EVENTOBJECT)
+                    if (OSObject.btType == Grobal2.OS_EVENTOBJECT)
                     {
                         result = OSObject.CellObj;
                     }
@@ -1293,10 +1293,10 @@ namespace M2Server
                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                 {
                     OSObject = MapCellInfo.ObjList[i];
-                    if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                     {
                         BaseObject = (TBaseObject)OSObject.CellObj;
-                        if (BaseObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                        if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             result = true;
                             break;
@@ -1332,11 +1332,11 @@ namespace M2Server
         public void AddObject(object BaseObject)
         {
             var btRaceServer = ((TBaseObject)BaseObject).m_btRaceServer;
-            if (btRaceServer == grobal2.RC_PLAYOBJECT)
+            if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 m_nHumCount++;
             }
-            if (btRaceServer >= grobal2.RC_ANIMAL)
+            if (btRaceServer >= Grobal2.RC_ANIMAL)
             {
                 m_nMonCount++;
             }
@@ -1345,11 +1345,11 @@ namespace M2Server
         public void DelObjectCount(object BaseObject)
         {
             var btRaceServer = ((TBaseObject)BaseObject).m_btRaceServer;
-            if (btRaceServer == grobal2.RC_PLAYOBJECT)
+            if (btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 m_nHumCount++;
             }
-            if (btRaceServer >= grobal2.RC_ANIMAL)
+            if (btRaceServer >= Grobal2.RC_ANIMAL)
             {
                 m_nMonCount++;
             }

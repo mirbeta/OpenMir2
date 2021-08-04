@@ -55,7 +55,7 @@ namespace M2Server
             TUserItem UserItem = null;
             for (var i = 0; i < nCount; i++)
             {
-                if (PlayObject.m_ItemList.Count >= grobal2.MAXBAGITEM) return;
+                if (PlayObject.m_ItemList.Count >= Grobal2.MAXBAGITEM) return;
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -84,11 +84,11 @@ namespace M2Server
                     {
                         M2Share.AddGameDataLog("5" + "\09" + PlayObject.m_sMapName + "\09" + PlayObject.m_nCurrX +
                            "\09" + PlayObject.m_nCurrY + "\09" + PlayObject.m_sCharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
-                           HUtil32.LoWord(StdItem.DC) + "/" + HUtil32.HiWord(StdItem.DC) + ")" +
-                           "(" + HUtil32.LoWord(StdItem.MC) + "/" + HUtil32.HiWord(StdItem.MC) + ")" + "(" +
-                           HUtil32.LoWord(StdItem.SC) + "/" + HUtil32.HiWord(StdItem.SC) + ")" + "(" + HUtil32.LoWord(StdItem.AC) + "/" +
-                           HUtil32.HiWord(StdItem.AC) + ")" + "(" + HUtil32.LoWord(StdItem.MAC) +
-                           "/" + HUtil32.HiWord(StdItem.MAC) + ")" + UserItem.btValue[0]
+                           HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" +
+                           "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
+                           HUtil32.LoWord(StdItem.Sc) + "/" + HUtil32.HiWord(StdItem.Sc) + ")" + "(" + HUtil32.LoWord(StdItem.Ac) + "/" +
+                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) +
+                           "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.btValue[0]
                            + "/" + UserItem.btValue[1] + "/" + UserItem.btValue[2] + "/" + UserItem.btValue[3]
                            + "/" + UserItem.btValue[4] + "/" + UserItem.btValue[5] + "/" + UserItem.btValue[6]
                            + "/" + UserItem.btValue[7] + "/" + UserItem.btValue[8] + "/" + UserItem.btValue[14] + "\09" + PlayObject.m_sCharName);

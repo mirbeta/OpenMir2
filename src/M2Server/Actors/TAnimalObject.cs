@@ -23,7 +23,7 @@ namespace M2Server
         {
             m_nNotProcessCount = 0;
             m_nTargetX =  -1;
-            this.m_btRaceServer = grobal2.RC_ANIMAL;
+            this.m_btRaceServer = Grobal2.RC_ANIMAL;
             this.m_dwHitTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.m_dwWalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.m_dwSearchEnemyTick = HUtil32.GetTickCount();
@@ -44,42 +44,42 @@ namespace M2Server
             {
                 n10 = m_nTargetX;
                 n14 = m_nTargetY;
-                nDir = grobal2.DR_DOWN;
+                nDir = Grobal2.DR_DOWN;
                 if (n10 > this.m_nCurrX)
                 {
-                    nDir = grobal2.DR_RIGHT;
+                    nDir = Grobal2.DR_RIGHT;
                     if (n14 > this.m_nCurrY)
                     {
-                        nDir = grobal2.DR_DOWNRIGHT;
+                        nDir = Grobal2.DR_DOWNRIGHT;
                     }
                     if (n14 < this.m_nCurrY)
                     {
-                        nDir = grobal2.DR_UPRIGHT;
+                        nDir = Grobal2.DR_UPRIGHT;
                     }
                 }
                 else
                 {
                     if (n10 < this.m_nCurrX)
                     {
-                        nDir = grobal2.DR_LEFT;
+                        nDir = Grobal2.DR_LEFT;
                         if (n14 > this.m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWNLEFT;
+                            nDir = Grobal2.DR_DOWNLEFT;
                         }
                         if (n14 < this.m_nCurrY)
                         {
-                            nDir = grobal2.DR_UPLEFT;
+                            nDir = Grobal2.DR_UPLEFT;
                         }
                     }
                     else
                     {
                         if (n14 > this.m_nCurrY)
                         {
-                            nDir = grobal2.DR_DOWN;
+                            nDir = Grobal2.DR_DOWN;
                         }
                         else if (n14 < this.m_nCurrY)
                         {
-                            nDir = grobal2.DR_UP;
+                            nDir = Grobal2.DR_UP;
                         }
                     }
                 }
@@ -87,7 +87,7 @@ namespace M2Server
                 nOldY = this.m_nCurrY;
                 this.WalkTo(nDir, false);
                 n20 = M2Share.RandomNumber.Random(3);
-                for (var i = grobal2.DR_UP; i <= grobal2.DR_UPLEFT; i ++ )
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i ++ )
                 {
                     if (nOldX == this.m_nCurrX && nOldY == this.m_nCurrY)
                     {
@@ -101,11 +101,11 @@ namespace M2Server
                         }
                         else
                         {
-                            nDir = grobal2.DR_UPLEFT;
+                            nDir = Grobal2.DR_UPLEFT;
                         }
-                        if (nDir > grobal2.DR_UPLEFT)
+                        if (nDir > Grobal2.DR_UPLEFT)
                         {
-                            nDir = grobal2.DR_UP;
+                            nDir = Grobal2.DR_UP;
                         }
                         this.WalkTo(nDir, false);
                     }
@@ -116,14 +116,14 @@ namespace M2Server
         public override bool Operate(TProcessMessage ProcessMsg)
         {
             bool result;
-            if (ProcessMsg.wIdent == grobal2.RM_STRUCK)
+            if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {
                 if (ProcessMsg.BaseObject == this.ObjectId && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
                 {
                     this.SetLastHiter(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     Struck(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     this.BreakHolySeizeMode();
-                    if (this.m_Master != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != this.m_Master && M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                    if (this.m_Master != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != this.m_Master && M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
                         this.m_Master.SetPKFlag(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                     }
@@ -189,13 +189,13 @@ namespace M2Server
                     if (nDamage > 0)
                     {
                         BaseObject.StruckDamage(nDamage);
-                        BaseObject.SendDelayMsg(grobal2.RM_STRUCK, grobal2.RM_10101, (ushort)nDamage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, this.ObjectId, "", 200);
+                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (ushort)nDamage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, this.ObjectId, "", 200);
                     }
                 }
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            this.SendRefMsg(grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
         }
 
         public override void DelTargetCreat()

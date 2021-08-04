@@ -22,7 +22,7 @@ namespace M2Server
             int nItemCount;
             int nCount;
             int nType;
-            TItem StdItem;
+            MirItem StdItem;
             TUserItem UserItem = null;
             if (sHumanName == "" || sItemName == "" || sItemCount == "" || sType == "")
             {

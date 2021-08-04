@@ -510,10 +510,10 @@ namespace M2Server
                             m_AttackGuildList.Add(m_MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_212, M2Share.nServerIndex, "");
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
                             s20 = string.Format(sWarStartMsg, new[] { m_sName });
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
-                            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
                             MainDoorControl(true);
                         }
@@ -537,7 +537,7 @@ namespace M2Server
                             m_boShowOverMsg = true;
                             s20 = string.Format(sWarStopTimeMsg, new object[] { m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000) });
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
-                            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
                         }
                     }
@@ -652,7 +652,7 @@ namespace M2Server
             if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
             var s10 = string.Format(sGetCastleMsg, new object[] { m_sName, m_sOwnGuild });
             M2Share.UserEngine.SendBroadCastMsgExt(s10, TMsgType.t_System);
-            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s10);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
             M2Share.MainOutMessage(s10);
         }
 
@@ -686,7 +686,7 @@ namespace M2Server
             }
             s14 = string.Format(sWallWarStop, new[] { m_sName });
             M2Share.UserEngine.SendBroadCastMsgExt(s14, TMsgType.t_System);
-            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s14);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s14);
             M2Share.MainOutMessage(s14);
         }
 
@@ -836,7 +836,7 @@ namespace M2Server
                 m_dwSaveTick = HUtil32.GetTickCount();
                 if (M2Share.g_boGameLogGold)
                     M2Share.AddGameDataLog("23" + "\t" + '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" +
-                                           grobal2.sSTRING_GOLDNAME + "\t" + m_nTotalGold + "\t" + '1' + "\t" + '0');
+                                           Grobal2.sSTRING_GOLDNAME + "\t" + m_nTotalGold + "\t" + '1' + "\t" + '0');
             }
         }
 
@@ -859,7 +859,7 @@ namespace M2Server
                         if (M2Share.g_boGameLogGold)
                             M2Share.AddGameDataLog("22" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX +
                                                    "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" +
-                                                   grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                                                   Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
                         result = 1;
                     }
@@ -897,7 +897,7 @@ namespace M2Server
                         if (M2Share.g_boGameLogGold)
                             M2Share.AddGameDataLog("23" + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX +
                                                    "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" +
-                                                   grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                                                   Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         PlayObject.GoldChanged();
                         result = 1;
                     }
@@ -1011,7 +1011,7 @@ namespace M2Server
             AttackerInfo.Guild = Guild;
             m_AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_212, M2Share.nServerIndex, "");
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
             result = true;
             return result;
         }

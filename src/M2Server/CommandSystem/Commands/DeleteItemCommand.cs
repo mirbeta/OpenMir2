@@ -17,7 +17,7 @@ namespace M2Server
             var sItemName = @Params.Length > 1 ? @Params[1] : "";//物品名称
             var nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;//数量
             int nItemCount;
-            TItem StdItem;
+            MirItem StdItem;
             TUserItem UserItem;
             if (sHumanName == "" || sItemName == "")
             {

@@ -29,7 +29,7 @@ namespace M2Server
             if (m_PlayObject != null)
             {
                 m_PlayObject.m_nHungerStatus = nHungerPoint;
-                m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
                 m_PlayObject.RefMyStatus();
                 PlayObject.SysMsg(sHumanName + " 的能量值已改变。", TMsgColor.c_Green, TMsgType.t_Hint);
             }

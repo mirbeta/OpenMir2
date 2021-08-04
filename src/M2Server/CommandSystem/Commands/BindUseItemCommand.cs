@@ -100,7 +100,7 @@ namespace M2Server
                         M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
                     m_PlayObject.SysMsg(string.Format("你的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex),
                         sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-                    m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
 
                 case 1:
@@ -143,7 +143,7 @@ namespace M2Server
                         sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
 
                     // PlayObject.SendUpdateItem(UserItem);
-                    m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
 
                 case 2:
@@ -186,7 +186,7 @@ namespace M2Server
                         sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
 
                     // PlayObject.SendUpdateItem(UserItem);
-                    m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
                 //case 3:// 人物装备死亡不爆绑定
                 //    sBindName = PlayObject.m_sCharName;

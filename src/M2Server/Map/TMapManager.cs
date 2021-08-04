@@ -148,7 +148,7 @@ namespace M2Server
                     nDMapX = (short)nDMapX,
                     nDMapY = (short)nDMapY
                 };
-                SEnvir.AddToMap(nSMapX, nSMapY, grobal2.OS_GATEOBJECT, GateObj);
+                SEnvir.AddToMap(nSMapX, nSMapY, Grobal2.OS_GATEOBJECT, GateObj);
                 result = true;
             }
             return result;

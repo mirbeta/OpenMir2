@@ -36,7 +36,7 @@ namespace M2Server
                 if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.Ordinal) == 0)
                 {
                     UserMagic.btLevel = (byte)nLevel;
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
                     PlayObject.SysMsg(format("%s的修改炼等级为%d", sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
                     SysMsg(format("%s的技能%s修炼等级为%d", sHumanName, sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
@@ -151,7 +151,7 @@ namespace M2Server
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, grobal2.LOG_GAMEGOLD, PlayObject.m_sMapName, PlayObject.m_nCurrX, PlayObject.m_nCurrY, PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], m_sCharName));
+                M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, PlayObject.m_sMapName, PlayObject.m_nCurrX, PlayObject.m_nCurrY, PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], m_sCharName));
             }
             GameGoldChanged();
             PlayObject.SysMsg(format(M2Share.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), TMsgColor.c_Green, TMsgType.t_Hint);
@@ -198,7 +198,7 @@ namespace M2Server
             }
             if (M2Share.g_boGameLogGamePoint)
             {
-                M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, grobal2.LOG_GAMEPOINT, PlayObject.m_sMapName, PlayObject.m_nCurrX, PlayObject.m_nCurrY, PlayObject.m_sCharName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_sCharName));
+                M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, Grobal2.LOG_GAMEPOINT, PlayObject.m_sMapName, PlayObject.m_nCurrX, PlayObject.m_nCurrY, PlayObject.m_sCharName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_sCharName));
             }
             GameGoldChanged();
             PlayObject.SysMsg(format(M2Share.g_sGameCommandGamePointHumanMsg, nPoint, PlayObject.m_nGamePoint), TMsgColor.c_Green, TMsgType.t_Hint);
@@ -287,7 +287,7 @@ namespace M2Server
                 SysMsg(sHumName + "的金币已增加" + nCount + '.', TMsgColor.c_Green, TMsgType.t_Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("14" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nCount + "\t" + '1' + "\t" + sHumName);
+                    M2Share.AddGameDataLog("14" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nCount + "\t" + '1' + "\t" + sHumName);
                 }
             }
             else
@@ -334,7 +334,7 @@ namespace M2Server
             {
                 if (M2Share.GuildManager.AddGuild(sGuildName, sGuildChief))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + sGuildChief);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + sGuildChief);
                     SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, TMsgColor.c_Green, TMsgType.t_Hint);
                     boAddState = true;
                 }
@@ -464,7 +464,7 @@ namespace M2Server
             if (nCount > 0)
             {
                 PlayObject.m_nBonusPoint = nCount;
-                PlayObject.SendMsg(this, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 return;
             }
             sMsg = format("未分配点数:%d 已分配点数:(DC:%d MC:%d SC:%d AC:%d MAC:%d HP:%d MP:%d HIT:%d SPEED:%d)", PlayObject.m_nBonusPoint, PlayObject.m_BonusAbil.DC, PlayObject.m_BonusAbil.MC, PlayObject.m_BonusAbil.SC, PlayObject.m_BonusAbil.AC, PlayObject.m_BonusAbil.MAC, PlayObject.m_BonusAbil.HP, PlayObject.m_BonusAbil.MP, PlayObject.m_BonusAbil.Hit, PlayObject.m_BonusAbil.Speed);
@@ -550,7 +550,7 @@ namespace M2Server
                     SysMsg(M2Share.sAttackModeOfRedWhite, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
             }
-            SendDefMessage(grobal2.SM_ATTACKMODE, m_btAttatckMode, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_ATTACKMODE, m_btAttatckMode, 0, 0, 0, "");
         }
 
         public void CmdChangeDearName(TGameCmd Cmd, string sHumanName, string sDearName)
@@ -780,7 +780,7 @@ namespace M2Server
             }
             if (boFlag)
             {
-                SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, ""); // 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
+                SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, ""); // 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
             }
             m_boObMode = boFlag;
             if (m_boObMode)
@@ -820,7 +820,7 @@ namespace M2Server
                 Castle.GetCastle(Guild);
                 if (boFlag)
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_211, M2Share.nServerIndex, sGuildName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.nServerIndex, sGuildName);
                 }
                 SysMsg(Castle.m_sName + " 所属行会已经更改为 " + sGuildName, TMsgColor.c_Green, TMsgType.t_Hint);
             }
@@ -942,7 +942,7 @@ namespace M2Server
             {
                 var ObjectId = HUtil32.Sequence();
                 M2Share.ObjectSystem.AddOhter(ObjectId, DelList);
-                PlayObject.SendMsg(PlayObject, grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }
         }
 
@@ -1145,7 +1145,7 @@ namespace M2Server
                 }
             }
             SysMsg("行会争霸赛已经开始。", TMsgColor.c_Green, TMsgType.t_Hint);
-            M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
             s20 = "";
             for (I = 0; I < List14.Count; I++)
             {
@@ -1161,7 +1161,7 @@ namespace M2Server
                 }
                 s20 = s20 + Guild.sGuildName + ' ';
             }
-            M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
             //List10.Free;
             //List14.Free;
         }
@@ -1225,7 +1225,7 @@ namespace M2Server
                 Guild = (TGuild)List14[I];
                 Guild.EndTeamFight();
 
-                M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - %s 行会争霸赛已结束。", Guild.sGuildName));
+                M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - %s 行会争霸赛已结束。", Guild.sGuildName));
             }
             //List10.Free;
             //List14.Free;
@@ -1282,8 +1282,8 @@ namespace M2Server
             //        M2Share.UserEngine.CryCry(grobal2.RM_CRY, this.m_PEnvir, this.m_nCurrX, this.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - %s  : %d 分/死亡%d次。 ", new object[] { sHumanName, HUtil32.HiWord(nPoint), HUtil32.LoWord(nPoint) }));
             //    }
             //}
-            M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
-            M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "------------------------------------");
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "------------------------------------");
         }
 
         public void CmdDearRecall(string sCmd, string sParam)
@@ -1396,7 +1396,7 @@ namespace M2Server
             {
                 //FillChar(PlayObject.m_BonusAbil, '\0');
                 PlayObject.m_nBonusPoint = 0;
-                PlayObject.SendMsg(PlayObject, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 PlayObject.HasLevelUp(0);
                 PlayObject.SysMsg("分配点数已清除！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 SysMsg(sHumName + " 的分配点数已清除.", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -1457,7 +1457,7 @@ namespace M2Server
                 nTotleUsePoint = PlayObject.m_BonusAbil.DC + PlayObject.m_BonusAbil.MC + PlayObject.m_BonusAbil.SC + PlayObject.m_BonusAbil.AC + PlayObject.m_BonusAbil.MAC + PlayObject.m_BonusAbil.HP + PlayObject.m_BonusAbil.MP + PlayObject.m_BonusAbil.Hit + PlayObject.m_BonusAbil.Speed + PlayObject.m_BonusAbil.X2;
                 //FillChar(PlayObject.m_BonusAbil, '\0');
                 PlayObject.m_nBonusPoint += nTotleUsePoint;
-                PlayObject.SendMsg(PlayObject, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 PlayObject.HasLevelUp(0);
                 PlayObject.SysMsg("分配点数已复位！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 SysMsg(sHumName + " 的分配点数已复位.", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -2156,7 +2156,7 @@ namespace M2Server
         {
             TPlayObject PlayObject;
             int nItemCount;
-            TItem StdItem;
+            MirItem StdItem;
             TUserItem UserItem;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
@@ -2223,7 +2223,7 @@ namespace M2Server
                 SysMsg(sHumName + "的金币已减少" + nCount + '.', TMsgColor.c_Green, TMsgType.t_Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("13" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nCount + "\t" + '1' + "\t" + sHumName);
+                    M2Share.AddGameDataLog("13" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nCount + "\t" + '1' + "\t" + sHumName);
                 }
             }
             else
@@ -2259,7 +2259,7 @@ namespace M2Server
             }
             if (M2Share.GuildManager.DelGuild(sGuildName))
             {
-                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_206, M2Share.nServerIndex, sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.nServerIndex, sGuildName);
             }
             else
             {
@@ -2293,7 +2293,7 @@ namespace M2Server
                         BaseObject.m_boGhost = true;
 
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }
@@ -2305,7 +2305,7 @@ namespace M2Server
                         BaseObject.m_boGhost = true;
 
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }
@@ -2742,7 +2742,7 @@ namespace M2Server
                 {
                     if (m_MyGuild.IsMember(m_sCharName) && m_MyGuild.DelMember(m_sCharName))
                     {
-                        M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                         m_MyGuild = null;
                         RefRankInfo(0, "");
                         RefShowName();
@@ -2800,10 +2800,10 @@ namespace M2Server
 
                     Castle.m_dwStartCastleWarTick = HUtil32.GetTickCount();
                     Castle.StartWallconquestWar();
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_212, M2Share.nServerIndex, "");
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
                     s20 = '[' + Castle.m_sName + "攻城战已经开始]";
                     M2Share.UserEngine.SendBroadCastMsg(s20, TMsgType.t_System);
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
                 else
@@ -3109,7 +3109,7 @@ namespace M2Server
             if (PlayObject != null)
             {
                 PlayObject.m_nHungerStatus = nHungerPoint;
-                PlayObject.SendMsg(PlayObject, grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
                 PlayObject.RefMyStatus();
                 SysMsg(sHumanName + " 的能量值已改变。", TMsgColor.c_Green, TMsgType.t_Hint);
             }
@@ -3310,7 +3310,7 @@ namespace M2Server
             }
             if (m_btPermission >= Cmd.nPerMissionMax || M2Share.CanMoveMap(sMapName))
             {
-                SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 MapRandomMove(sMapName, 0);
             }
             else
@@ -3905,7 +3905,7 @@ namespace M2Server
             }
             PlayObject.ReAlive();
             PlayObject.m_WAbil.HP = PlayObject.m_WAbil.MaxHP;
-            PlayObject.SendMsg(PlayObject, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
 
             SysMsg(format(M2Share.g_sGameCommandReAliveMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
             SysMsg(sHumanName + " 已获重生。", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -4003,7 +4003,7 @@ namespace M2Server
             }
             if (sIPaddr != "" && sPort != "")
             {
-                SendMsg(this, grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
+                SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
 
@@ -4086,7 +4086,7 @@ namespace M2Server
             Guild.LoadGuild();
 
             SysMsg(format(M2Share.g_sGameCommandReloadGuildSuccessMsg, sParam1), TMsgColor.c_Red, TMsgType.t_Hint);
-            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, sParam1);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, sParam1);
         }
 
         public void CmdReloadGuildAll()
@@ -4787,7 +4787,7 @@ namespace M2Server
         public void CmdSmakeItem(TGameCmd Cmd, int nWhere, int nValueType, int nValue)
         {
             string sShowMsg;
-            TItem StdItem;
+            MirItem StdItem;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -5097,7 +5097,7 @@ namespace M2Server
                         if (HUtil32.GetTickCount() - m_dwTeleportTick > M2Share.g_Config.dwUserMoveTime * 1000)
                         {
                             m_dwTeleportTick = HUtil32.GetTickCount();
-                            SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                            SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             // BaseObjectMove('',sX,sY);
                             SpaceMove(m_sMapName, nX, nY, 0);
                         }

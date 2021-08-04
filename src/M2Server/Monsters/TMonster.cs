@@ -117,7 +117,7 @@ namespace M2Server
 
         public override void Run()
         {
-            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[grobal2.POISON_STONE] == 0)
+            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {

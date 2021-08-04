@@ -18,7 +18,7 @@ namespace M2Server
                 {
                     if (PlayObject.m_MyGuild.IsMember(PlayObject.m_sCharName) && PlayObject.m_MyGuild.DelMember(PlayObject.m_sCharName))
                     {                        
-                        M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, PlayObject.m_MyGuild.sGuildName);
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, PlayObject.m_MyGuild.sGuildName);
                         PlayObject.m_MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();

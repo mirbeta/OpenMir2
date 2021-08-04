@@ -21,18 +21,18 @@ namespace M2Server
             {
                 return;
             }
-            if (PlayObject.m_UseItems[grobal2.U_WEAPON] == null && PlayObject.m_UseItems[grobal2.U_WEAPON].wIndex <= 0)
+            if (PlayObject.m_UseItems[Grobal2.U_WEAPON] == null && PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return;
             }
-            PlayObject.m_UseItems[grobal2.U_WEAPON].btValue[0] = (byte)nDc;
-            PlayObject.m_UseItems[grobal2.U_WEAPON].btValue[1] = (byte)nMc;
-            PlayObject.m_UseItems[grobal2.U_WEAPON].btValue[2] = (byte)nSc;
-            PlayObject.m_UseItems[grobal2.U_WEAPON].btValue[5] = (byte)nHit;
-            PlayObject.SendUpdateItem(PlayObject.m_UseItems[grobal2.U_WEAPON]);
+            PlayObject.m_UseItems[Grobal2.U_WEAPON].btValue[0] = (byte)nDc;
+            PlayObject.m_UseItems[Grobal2.U_WEAPON].btValue[1] = (byte)nMc;
+            PlayObject.m_UseItems[Grobal2.U_WEAPON].btValue[2] = (byte)nSc;
+            PlayObject.m_UseItems[Grobal2.U_WEAPON].btValue[5] = (byte)nHit;
+            PlayObject.SendUpdateItem(PlayObject.m_UseItems[Grobal2.U_WEAPON]);
             PlayObject.RecalcAbilitys();
-            PlayObject.SendMsg(PlayObject, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-            PlayObject.SendMsg(PlayObject, grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
             M2Share.MainOutMessage("[武器调整]" + PlayObject.m_sCharName + " DC:" + nDc + " MC" + nMc + " SC" + nSc
                 + " HIT:" + nHit);
         }

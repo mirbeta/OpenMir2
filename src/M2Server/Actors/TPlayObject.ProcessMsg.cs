@@ -93,7 +93,7 @@ namespace M2Server
                                 {
                                     sC = sData.Substring(2, sData.Length - 2);
                                     m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
-                                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
                                 }
                                 return;
                             }
@@ -112,11 +112,11 @@ namespace M2Server
                                 sCryCryMsg = "(!)" + m_sCharName + ": " + sC;
                                 if (m_boFilterSendMsg)
                                 {
-                                    SendMsg(null, grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
+                                    SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                 }
                                 else
                                 {
-                                    M2Share.UserEngine.CryCry(grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
+                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
                                 }
                                 return;
                             }
@@ -128,7 +128,7 @@ namespace M2Server
                     }
                     if (m_boFilterSendMsg)
                     {
-                        SendMsg(this, grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);// 如果禁止发信息，则只向自己发信息
+                        SendMsg(this, Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + sData);// 如果禁止发信息，则只向自己发信息
                     }
                     else
                     {
@@ -176,7 +176,7 @@ namespace M2Server
                         m_sTempPwd = sData;
                         m_boReConfigPwd = true;
                         SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     }
                     else
                     {
@@ -276,7 +276,7 @@ namespace M2Server
                     m_boCheckOldPwd = false;
                     if (m_sStoragePwd == sData)
                     {
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                         m_boSetStoragePwd = true;
                     }
@@ -337,7 +337,7 @@ namespace M2Server
                     }
                     if (m_sStoragePwd == "")
                     {
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boSetStoragePwd = true;
                         SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                         return;
@@ -350,7 +350,7 @@ namespace M2Server
                     }
                     if (m_sStoragePwd != "")
                     {
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boCheckOldPwd = true;
                         SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                         return;
@@ -371,7 +371,7 @@ namespace M2Server
                     }
                     if (m_sStoragePwd == "")
                     {
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boSetStoragePwd = true;
                         SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
@@ -414,7 +414,7 @@ namespace M2Server
                     }
                     if (m_sStoragePwd != "")
                     {
-                        SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boCheckOldPwd = true;
                         SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
@@ -441,7 +441,7 @@ namespace M2Server
                     {
                         if (!m_boUnLockStoragePwd)
                         {
-                            SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                            SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                             SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                             m_boUnLockStoragePwd = true;
                         }
@@ -473,7 +473,7 @@ namespace M2Server
                     {
                         if (!m_boUnLockPwd)
                         {
-                            SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                            SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                             SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                             m_boUnLockPwd = true;
                         }

@@ -36,7 +36,7 @@ namespace M2Server
                         BaseObject.m_boGhost = true;
 
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }
@@ -47,7 +47,7 @@ namespace M2Server
                     {
                         BaseObject.m_boGhost = true;
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
                         return;
                     }

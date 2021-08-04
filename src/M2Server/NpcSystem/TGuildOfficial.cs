@@ -50,7 +50,7 @@ namespace M2Server
             {
                 if (M2Share.RandomNumber.Random(30) == 0)
                 {
-                    this.SendRefMsg(grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                    this.SendRefMsg(Grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
                 }
             }
             base.Run();
@@ -92,7 +92,7 @@ namespace M2Server
                     }
                     else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.Ordinal) == 0)
                     {
-                        PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
+                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                     }
                     else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.Ordinal) == 0)
                     {
@@ -142,7 +142,7 @@ namespace M2Server
             {
                 if (M2Share.GuildManager.AddGuild(sGuildName, PlayObject.m_sCharName))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + PlayObject.m_sCharName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + PlayObject.m_sCharName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.g_Config.sWomaHorn);
                     PlayObject.DecGold(M2Share.g_Config.nBuildGuildPrice);
@@ -161,11 +161,11 @@ namespace M2Server
             }
             if (result >= 0)
             {
-                PlayObject.SendMsg(this, grobal2.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
             }
             return result;
         }
@@ -196,7 +196,7 @@ namespace M2Server
 
         private void DoNate(TPlayObject PlayObject)
         {
-            PlayObject.SendMsg(this, grobal2.RM_DONATE_OK, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(this, Grobal2.RM_DONATE_OK, 0, 0, 0, 0, "");
         }
 
         private void ReQuestCastleWar(TPlayObject PlayObject, string sIndex)
@@ -236,7 +236,7 @@ namespace M2Server
 
         public TGuildOfficial() : base()
         {
-            this.m_btRaceImg = grobal2.RCC_MERCHANT;
+            this.m_btRaceImg = Grobal2.RCC_MERCHANT;
             this.m_wAppr = 8;
         }
 

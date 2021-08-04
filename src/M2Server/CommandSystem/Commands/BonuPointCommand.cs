@@ -30,7 +30,7 @@ namespace M2Server
             if (nCount > 0)
             {
                 m_PlayObject.m_nBonusPoint = nCount;
-                m_PlayObject.SendMsg(PlayObject, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 return;
             }
             sMsg = string.Format("未分配点数:%d 已分配点数:(DC:%d MC:%d SC:%d AC:%d MAC:%d HP:%d MP:%d HIT:%d SPEED:%d)", m_PlayObject.m_nBonusPoint,

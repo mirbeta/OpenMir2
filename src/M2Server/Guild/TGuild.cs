@@ -456,7 +456,7 @@ namespace M2Server
                         }
                         if (BaseObject.m_boBanGuildChat)
                         {
-                            BaseObject.SendMsg(BaseObject, grobal2.RM_GUILDMESSAGE, 0, M2Share.g_Config.btGuildMsgFColor, M2Share.g_Config.btGuildMsgBColor, 0, sMsg);
+                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.g_Config.btGuildMsgFColor, M2Share.g_Config.btGuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
@@ -502,7 +502,7 @@ namespace M2Server
                         nRankNo = GuildRank.nRankNo;
                         result = GuildRank.sRankName;
                         // PlayObject.RefShowName();
-                        PlayObject.SendMsg(PlayObject, grobal2.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+                        PlayObject.SendMsg(PlayObject, Grobal2.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
                         return result;
                     }
                 }

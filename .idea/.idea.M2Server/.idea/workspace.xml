@@ -13,8 +13,172 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/M2Server/ItemSystem/MirItem.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/Map/TGateObj.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/Map/TMapItem.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/Monsters/TMonGenInfo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/TGateInfo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/TGateUserInfo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/Notices/TNoticeManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/ScriptSystem/TScript.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/ScriptSystem/TScriptQuestInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayCloneObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayCloneObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/BindUseItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/BindUseItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/BonuPointCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/BonuPointCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearMapMonsterCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearMapMonsterCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelBonuPointCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelBonuPointCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelGuildCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelGuildCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelNpcCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DelNpcCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DeleteItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/DeleteItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/EndGuildCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/EndGuildCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ForcedWallconquestWarCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ForcedWallconquestWarCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GetUserItemsCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GetUserItemsCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GiveMineCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GiveMineCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HungerCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/HungerCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MakeItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MakeItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MapMoveCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MapMoveCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReAliveCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReAliveCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReconnectionCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ReconnectionCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/RefineWeaponCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/RefineWeaponCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/RestBonuPointCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/RestBonuPointCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/SmakeItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingMagicCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/TGameCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/TGameCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/EDcode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/EDcode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TStoneMineEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/FrnEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GateServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/GateServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Grobal2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/GroupServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/GroupServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Guild/TGuild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Guild/TGuild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/InterMsgClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/InterServerMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ItmUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ItemSystem/ItmUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/LogSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/LogSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Magic/Magic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/Magic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Magic/TMagicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TMapManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TMapManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MapPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/MapPoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MirApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MirApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Model/TM2Config.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TATMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TATMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TArcherGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TArcherGuard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TArcherMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TArcherMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TArcherPolice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TArcherPolice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TBeeQueen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBeeQueen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TBigHeartMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TBigPoisionSpider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigPoisionSpider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TBoneKingMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBoneKingMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TCastleDoor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TCastleDoor.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TCentipedeKingMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TCentipedeKingMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TChickenDeer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TChickenDeer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TClone.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TClone.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TCowKingMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TCowKingMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TCowMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TCowMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TDefendMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDefendMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TDigOutZombi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDigOutZombi.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TDoubleCriticalMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDoubleCriticalMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TDualAxeMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TElectronicScolpionMon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TElfMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElfMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TElfWarriorMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElfWarriorMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TExplosionSpider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TExplosionSpider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TFireMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TFireballMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireballMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TFrostTiger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFrostTiger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TGasAttackMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TGasAttackMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TGasDungMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TGasDungMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TGasMothMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TGasMothMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TGreenMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TGreenMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TGuardUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TGuardUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/THighRiskSpider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/THighRiskSpider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TKhazard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TKhazard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TLightingZombi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TLightingZombi.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TMagCowMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TMagCowMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TMagicMonObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TMagicMonObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TMagicMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TMagicMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TMinorNumaObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TMinorNumaObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/TMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TPercentMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TPercentMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TPetSuperGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TPetSuperGuard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TRedMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TRedMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TRockManObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TRockManObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TRonObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TRonObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TRunAway.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TRunAway.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSandMobObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSandMobObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TScorpion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TScorpion.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TScultureKingMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TScultureKingMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TScultureMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TScultureMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSlowATMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSlowATMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSoccerBall.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSoccerBall.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSpiderHouseMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpiderHouseMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSpitSpider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpitSpider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TStickMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TStickMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TSuperGuard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSuperGuard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TTeleMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TTeleMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TThornDarkMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TThornDarkMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TWallStructure.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TWallStructure.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TWhiteSkeleton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TWhiteSkeleton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/TZilKinZombi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TZilKinZombi.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NoticeM.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Notices/TNoticeMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TTrainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TTrainer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/Package.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TAbility.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TCharDesc.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TClientConf.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TClientItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TClientMagic.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/THumDataInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/THumInfoData.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TLoadHuman.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMagic.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMagicRcd.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMessageBodyW.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TMessageBodyWL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TNakedAbility.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TOAbility.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TOClientItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TOMagic.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TOStdItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TRecordHeader.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TShortMessage.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TStdItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TUserItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TUserMagic.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/TUserStateInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/RunDB.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/RunSock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/RunSock.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/EDcode.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/Grobal2.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncUserToken.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -270,7 +434,7 @@
       <workItem from="1627917564412" duration="2858000" />
       <workItem from="1627958519451" duration="2342000" />
       <workItem from="1628047757604" duration="217000" />
-      <workItem from="1628048030953" duration="5814000" />
+      <workItem from="1628048030953" duration="7770000" />
     </task>
     <servers />
   </component>
@@ -299,7 +463,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
+          <url>file://$PROJECT_DIR$/src/M2Server/DataSystem/FrnEngn.cs</url>
           <line>435</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="434" containingFunctionPresentation="method 'ChangeUserGoldInDB'">
             <startOffsets>
@@ -312,7 +476,7 @@
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
+          <url>file://$PROJECT_DIR$/src/M2Server/DataSystem/FrnEngn.cs</url>
           <line>427</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="426" containingFunctionPresentation="method 'ChangeUserGoldInDB'">
             <startOffsets>
@@ -344,7 +508,7 @@
           <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/IdSrvClient.cs</url>
+          <url>file://$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs</url>
           <line>363</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/IdSrvClient.cs" initialLine="362" containingFunctionPresentation="method 'IDSocketConnect'">
             <startOffsets>
@@ -368,32 +532,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="290" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
-          <line>230</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="229" containingFunctionPresentation="method 'ProcessGameDate'">
-            <startOffsets>
-              <option value="7310" />
-            </startOffsets>
-            <endOffsets>
-              <option value="7360" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="293" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/FrnEngn.cs</url>
-          <line>225</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/FrnEngn.cs" initialLine="224" containingFunctionPresentation="method 'ProcessGameDate'">
-            <startOffsets>
-              <option value="7153" />
-            </startOffsets>
-            <endOffsets>
-              <option value="7187" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="294" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>

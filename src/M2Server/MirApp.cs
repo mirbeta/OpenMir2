@@ -211,7 +211,7 @@ namespace M2Server
                 {
                     for (var nH = 0; nH < Envir.wHeight; nH++)
                     {
-                        new TStoneMineEvent(Envir, nW, nH, grobal2.ET_MINE);
+                        new TStoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
                     }
                 }
             }
@@ -257,7 +257,7 @@ namespace M2Server
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
-            M2Share.RunSocket = new TRunSocket();
+            M2Share.RunSocket = new GateSystem();
             M2Share.GateServer = new GateServer();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();

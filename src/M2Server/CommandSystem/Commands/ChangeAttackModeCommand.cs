@@ -52,7 +52,7 @@ namespace M2Server
                     PlayObject.SysMsg(M2Share.sAttackModeOfRedWhite, TMsgColor.c_Green, TMsgType.t_Hint);
                     break;
             }
-            PlayObject.SendDefMessage(grobal2.SM_ATTACKMODE, PlayObject.m_btAttatckMode, 0, 0, 0, "");
+            PlayObject.SendDefMessage(Grobal2.SM_ATTACKMODE, PlayObject.m_btAttatckMode, 0, 0, 0, "");
         }
     }
 }

@@ -29,10 +29,10 @@ namespace M2Server
                     Castle.m_WarDate = DateTime.Now;
                     Castle.m_dwStartCastleWarTick = HUtil32.GetTickCount();
                     Castle.StartWallconquestWar();
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_212, M2Share.nServerIndex, "");
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
                     var s20 = "[" + Castle.m_sName + " 攻城战已经开始]";
                     M2Share.UserEngine.SendBroadCastMsg(s20, TMsgType.t_System);
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_204, M2Share.nServerIndex, s20);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
                 else

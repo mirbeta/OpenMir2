@@ -48,7 +48,7 @@ namespace M2Server
                 {
                     var ObjectId = HUtil32.Sequence();
                     M2Share.ObjectSystem.AddOhter(ObjectId, DelList);
-                    m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
             finally

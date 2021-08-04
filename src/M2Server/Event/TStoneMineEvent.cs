@@ -10,7 +10,7 @@ namespace M2Server
 
         public TStoneMineEvent(TEnvirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
         {
-            m_Envir.AddToMapMineEvent(nX, nY, grobal2.OS_EVENTOBJECT, this);
+            m_Envir.AddToMapMineEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this);
             m_boVisible = false;
             m_nMineCount = M2Share.RandomNumber.Random(200);
             m_dwAddStoneMineTick = HUtil32.GetTickCount();

@@ -70,7 +70,7 @@ namespace M2Server
                                     {
                                         if (BaseObject.m_Master != null && BaseObject.m_btRaceServer != 135)// 除135怪外，其它宝宝不清除
                                         {
-                                            if (BaseObject.m_Master.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                                            if (BaseObject.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                             {
                                                 continue;
                                             }

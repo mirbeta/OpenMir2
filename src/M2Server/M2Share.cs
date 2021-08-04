@@ -36,12 +36,12 @@ namespace M2Server
         /// </summary>
         public static CommandManager CommandSystem = null;
         public static LocalDB LocalDB = null;
-        public static LogSystem LogSystem = null;
+        public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
         public static GroupServer GroupServer = null;
         public static DataServer DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static TRunSocket RunSocket = null;
+        public static GateSystem RunSocket = null;
         public static GateServer GateServer = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
@@ -176,7 +176,7 @@ namespace M2Server
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
         public static TM2Config g_Config = null;
-        public static int[] g_dwOldNeedExps = new int[grobal2.MAXCHANGELEVEL];
+        public static int[] g_dwOldNeedExps = new int[Grobal2.MAXCHANGELEVEL];
         public static TGameCommand g_GameCommand = new TGameCommand();
 
         public static string sClientSoftVersionError = "游戏版本错误！！！";
@@ -1618,7 +1618,7 @@ namespace M2Server
             StringConf = new StringConfig();
             ExpConf = new ExpsConfig();
             RandomNumber = RandomNumber.GetInstance();
-            LogSystem = new LogSystem();
+            LogSystem = new MirLog();
             g_Config = new TM2Config();
         }
 
@@ -1659,7 +1659,7 @@ namespace M2Server
             byte result;
             int flagx;
             int flagy;
-            result = grobal2.DR_DOWN;
+            result = Grobal2.DR_DOWN;
             if (sx < dx)
             {
                 flagx = 1;
@@ -1700,112 +1700,112 @@ namespace M2Server
             }
             if (flagx == 0 && flagy == -1)
             {
-                result = grobal2.DR_UP;
+                result = Grobal2.DR_UP;
             }
             if (flagx == 1 && flagy == -1)
             {
-                result = grobal2.DR_UPRIGHT;
+                result = Grobal2.DR_UPRIGHT;
             }
             if (flagx == 1 && flagy == 0)
             {
-                result = grobal2.DR_RIGHT;
+                result = Grobal2.DR_RIGHT;
             }
             if (flagx == 1 && flagy == 1)
             {
-                result = grobal2.DR_DOWNRIGHT;
+                result = Grobal2.DR_DOWNRIGHT;
             }
             if (flagx == 0 && flagy == 1)
             {
-                result = grobal2.DR_DOWN;
+                result = Grobal2.DR_DOWN;
             }
             if (flagx == -1 && flagy == 1)
             {
-                result = grobal2.DR_DOWNLEFT;
+                result = Grobal2.DR_DOWNLEFT;
             }
             if (flagx == -1 && flagy == 0)
             {
-                result = grobal2.DR_LEFT;
+                result = Grobal2.DR_LEFT;
             }
             if (flagx == -1 && flagy == -1)
             {
-                result = grobal2.DR_UPLEFT;
+                result = Grobal2.DR_UPLEFT;
             }
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, TItem StdItem)
+        public static bool CheckUserItems(int nIdx, MirItem StdItem)
         {
             var result = false;
             switch (nIdx)
             {
-                case grobal2.U_DRESS:
+                case Grobal2.U_DRESS:
                     if (new ArrayList(new byte[] { 10, 11 }).Contains(StdItem.StdMode))
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_WEAPON:
+                case Grobal2.U_WEAPON:
                     if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_RIGHTHAND:
+                case Grobal2.U_RIGHTHAND:
                     if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_NECKLACE:
+                case Grobal2.U_NECKLACE:
                     if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_HELMET:
+                case Grobal2.U_HELMET:
                     if (StdItem.StdMode == 15)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_ARMRINGL:
+                case Grobal2.U_ARMRINGL:
                     if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_ARMRINGR:
+                case Grobal2.U_ARMRINGR:
                     if (StdItem.StdMode == 24 || StdItem.StdMode == 26)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_RINGL:
-                case grobal2.U_RINGR:
+                case Grobal2.U_RINGL:
+                case Grobal2.U_RINGR:
                     if (StdItem.StdMode == 22 || StdItem.StdMode == 23)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_BUJUK:
+                case Grobal2.U_BUJUK:
                     if (StdItem.StdMode == 25 || StdItem.StdMode == 51)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_BELT:
+                case Grobal2.U_BELT:
                     if (StdItem.StdMode == 54 || StdItem.StdMode == 64)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_BOOTS:
+                case Grobal2.U_BOOTS:
                     if (StdItem.StdMode == 52 || StdItem.StdMode == 62)
                     {
                         result = true;
                     }
                     break;
-                case grobal2.U_CHARM:
+                case Grobal2.U_CHARM:
                     if (StdItem.StdMode == 53 || StdItem.StdMode == 63)
                     {
                         result = true;

@@ -27,7 +27,7 @@ namespace M2Server
                         TargeTBaseObject = BaseObjectList[i];
                         if (TargeTBaseObject != null && m_OwnBaseObject != null && m_OwnBaseObject.IsProperTarget(TargeTBaseObject))
                         {
-                            TargeTBaseObject.SendMsg(m_OwnBaseObject, grobal2.RM_MAGSTRUCK_MINE, 0, m_nDamage, 0, 0, "");
+                            TargeTBaseObject.SendMsg(m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, m_nDamage, 0, 0, "");
                         }
                     }
                 }

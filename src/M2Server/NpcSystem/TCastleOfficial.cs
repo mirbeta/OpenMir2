@@ -128,7 +128,7 @@ namespace M2Server
                         else if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.Ordinal) == 0)
                         {
                             SendCustemMsg(PlayObject, sMsg);
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, M2Share.sCASTLENAME, StringComparison.Ordinal) == 0)
                         {
@@ -144,7 +144,7 @@ namespace M2Server
                             {
                                 s18 = "城堡名称更改失败！！！";
                             }
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, M2Share.sWITHDRAWAL, StringComparison.Ordinal) == 0)
                         {
@@ -166,7 +166,7 @@ namespace M2Server
                                     this.GotoLable(PlayObject, M2Share.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, M2Share.sRECEIPTS, StringComparison.Ordinal) == 0)
                         {
@@ -188,7 +188,7 @@ namespace M2Server
                                     this.GotoLable(PlayObject, M2Share.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, M2Share.sOPENMAINDOOR, StringComparison.Ordinal) == 0)
                         {
@@ -222,18 +222,18 @@ namespace M2Server
                         {
                             s20 = sLabel.Substring(M2Share.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                             // GotoLable(PlayObject,sHIREGUARDOK,False);
                         }
                         else if (HUtil32.CompareLStr(sLabel, M2Share.sHIREARCHERNOW, M2Share.sHIREARCHERNOW.Length))
                         {
                             s20 = sLabel.Substring(M2Share.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
-                            PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.Ordinal) == 0)
                         {
-                            PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.Ordinal) == 0)
                         {
@@ -248,7 +248,7 @@ namespace M2Server
                 else
                 {
                     s18 = "你没有权利使用.";
-                    PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
+                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                 }
             }
             catch

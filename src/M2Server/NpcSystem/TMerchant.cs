@@ -56,7 +56,7 @@ namespace M2Server
         {
             TItemPrice ItemPrice;
             double n10;
-            TItem StdItem;
+            MirItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
                 ItemPrice = m_ItemPriceList[i];
@@ -234,7 +234,7 @@ namespace M2Server
         {
             double result = -1;
             TItemPrice ItemPrice;
-            TItem StdItem;
+            MirItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
                 ItemPrice = m_ItemPriceList[i];
@@ -275,7 +275,7 @@ namespace M2Server
             int II;
             ArrayList DuraList;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             TStdItem StdItem80 = null;
             ArrayList DelItemList;
             int nDc;
@@ -417,7 +417,7 @@ namespace M2Server
             {
                 var ObjectId = HUtil32.Sequence();
                 M2Share.ObjectSystem.AddOhter(ObjectId, DelItemList);
-                User.SendMsg(this, grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }
             if (DuraList != null)
             {
@@ -429,7 +429,7 @@ namespace M2Server
         {
             var bo0D = false;
             TUpgradeInfo UpgradeInfo;
-            TItem StdItem;
+            MirItem StdItem;
             for (var i = 0; i < m_UpgradeWeaponList.Count; i++)
             {
                 UpgradeInfo = m_UpgradeWeaponList[i];
@@ -439,7 +439,7 @@ namespace M2Server
                     return;
                 }
             }
-            if (User.m_UseItems[grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
+            if (User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
             {
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
                 if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
@@ -457,18 +457,18 @@ namespace M2Server
                 UpgradeInfo = new TUpgradeInfo
                 {
                     sUserName = User.m_sCharName,
-                    UserItem = User.m_UseItems[grobal2.U_WEAPON]
+                    UserItem = User.m_UseItems[Grobal2.U_WEAPON]
                 };
-                StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[grobal2.U_WEAPON].wIndex);
+                StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[Grobal2.U_WEAPON].wIndex);
                 if (StdItem.NeedIdentify == 1)
                 {
-                    M2Share.AddGameDataLog("25" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX.ToString() + "\t" + User.m_nCurrY.ToString() + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + User.m_UseItems[grobal2.U_WEAPON].MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                    M2Share.AddGameDataLog("25" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX.ToString() + "\t" + User.m_nCurrY.ToString() + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + User.m_UseItems[Grobal2.U_WEAPON].MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
                 }
-                User.SendDelItems(User.m_UseItems[grobal2.U_WEAPON]);
-                User.m_UseItems[grobal2.U_WEAPON].wIndex = 0;
+                User.SendDelItems(User.m_UseItems[Grobal2.U_WEAPON]);
+                User.m_UseItems[Grobal2.U_WEAPON].wIndex = 0;
                 User.RecalcAbilitys();
                 User.FeatureChanged();
-                User.SendMsg(User, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 UpgradeWapon_sub_4A0218(User, User.m_ItemList, ref UpgradeInfo.btDc, ref UpgradeInfo.btSc, ref UpgradeInfo.btMc, ref UpgradeInfo.btDura);
                 UpgradeInfo.dtTime = DateTime.Now;
                 UpgradeInfo.dwGetBackTick = HUtil32.GetTickCount();
@@ -494,7 +494,7 @@ namespace M2Server
             int n1C = 0;
             int n90 = 0;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             if (!User.IsEnoughBag())
             {
                 GotoLable(User, M2Share.sGETBACKUPGFULL, false);
@@ -682,7 +682,7 @@ namespace M2Server
 
         private void UserSelect_SuperRepairItem(TPlayObject User)
         {
-            User.SendMsg(this, grobal2.RM_SENDUSERSREPAIR, 0, ObjectId, 0, 0, "");
+            User.SendMsg(this, Grobal2.RM_SENDUSERSREPAIR, 0, ObjectId, 0, 0, "");
         }
 
         private void UserSelect_BuyItem(TPlayObject User, int nInt)
@@ -713,24 +713,24 @@ namespace M2Server
                     n10++;
                 }
             }
-            User.SendMsg(this, grobal2.RM_SENDGOODSLIST, 0, ObjectId, n10, 0, sSendMsg);
+            User.SendMsg(this, Grobal2.RM_SENDGOODSLIST, 0, ObjectId, n10, 0, sSendMsg);
         }
 
         private void UserSelect_SellItem(TPlayObject User)
         {
-            User.SendMsg(this, grobal2.RM_SENDUSERSELL, 0, ObjectId, 0, 0, "");
+            User.SendMsg(this, Grobal2.RM_SENDUSERSELL, 0, ObjectId, 0, 0, "");
         }
 
         private void UserSelect_RepairItem(TPlayObject User)
         {
-            User.SendMsg(this, grobal2.RM_SENDUSERREPAIR, 0, ObjectId, 0, 0, "");
+            User.SendMsg(this, Grobal2.RM_SENDUSERREPAIR, 0, ObjectId, 0, 0, "");
         }
 
         private void UserSelect_MakeDurg(TPlayObject User)
         {
             IList<TUserItem> List14;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             var sSendMsg = string.Empty;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -745,7 +745,7 @@ namespace M2Server
             }
             if (sSendMsg != "")
             {
-                User.SendMsg(this, grobal2.RM_USERMAKEDRUGITEMLIST, 0, ObjectId, 0, 0, sSendMsg);
+                User.SendMsg(this, Grobal2.RM_USERMAKEDRUGITEMLIST, 0, ObjectId, 0, 0, sSendMsg);
             }
         }
 
@@ -755,12 +755,12 @@ namespace M2Server
 
         private void UserSelect_Storage(TPlayObject User)
         {
-            User.SendMsg(this, grobal2.RM_USERSTORAGEITEM, 0, ObjectId, 0, 0, "");
+            User.SendMsg(this, Grobal2.RM_USERSTORAGEITEM, 0, ObjectId, 0, 0, "");
         }
 
         private void UserSelect_GetBack(TPlayObject User)
         {
-            User.SendMsg(this, grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
+            User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
         }
 
         public override void UserSelect(TPlayObject PlayObject, string sData)
@@ -904,7 +904,7 @@ namespace M2Server
                         }
                         else if (String.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.Ordinal) == 0)
                         {
-                            PlayObject.SendMsg(this, grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
                         }
                         else if (String.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.Ordinal) == 0)
                         {
@@ -945,14 +945,14 @@ namespace M2Server
                 {
                     if (M2Share.RandomNumber.Random(50) == 0)
                     {
-                        SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                        SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
                 if (m_boCastle && m_Castle != null && m_Castle.m_boUnderWar)
                 {
                     if (!m_boFixedHideMode)
                     {
-                        SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         m_boFixedHideMode = true;
                     }
                 }
@@ -961,13 +961,13 @@ namespace M2Server
                     if (m_boFixedHideMode)
                     {
                         m_boFixedHideMode = false;
-                        SendRefMsg(grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                        SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
                 if (m_boCanMove && HUtil32.GetTickCount() - m_dwMoveTick > m_dwMoveTime * 1000)
                 {
                     m_dwMoveTick = HUtil32.GetTickCount();
-                    SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     MapRandomMove(m_sMapName, 0);
                 }
             }
@@ -1000,7 +1000,7 @@ namespace M2Server
 
         public TMerchant() : base()
         {
-            m_btRaceImg = grobal2.RCC_MERCHANT;
+            m_btRaceImg = Grobal2.RCC_MERCHANT;
             m_wAppr = 0;
             m_nPriceRate = 100;
             m_boCastle = false;
@@ -1073,9 +1073,9 @@ namespace M2Server
             }
             if (sVariable == "$USERWEAPON")
             {
-                if (PlayObject.m_UseItems[grobal2.U_WEAPON].wIndex != 0)
+                if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
                 {
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[grobal2.U_WEAPON].wIndex);
+                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
                 }
                 else
                 {
@@ -1088,7 +1088,7 @@ namespace M2Server
         private double GetUserItemPrice(TUserItem UserItem)
         {
             double result;
-            TItem StdItem;
+            MirItem StdItem;
             double n20;
             int nC;
             int n14;
@@ -1177,7 +1177,7 @@ namespace M2Server
         {
             IList<TUserItem> List20;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             int nPrice;
             string sUserItemName;
             var bo29 = false;
@@ -1256,11 +1256,11 @@ namespace M2Server
             }
             if (n1C == 0)
             {
-                PlayObject.SendMsg(this, grobal2.RM_BUYITEM_SUCCESS, 0, PlayObject.m_nGold, nInt, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_BUYITEM_SUCCESS, 0, PlayObject.m_nGold, nInt, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
             }
         }
 
@@ -1272,7 +1272,7 @@ namespace M2Server
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
             var sSendMsg = string.Empty;
-            TItem Item;
+            MirItem Item;
             TUserItem UserItem;
             if (PlayObject.m_nSoftVersionDateEx == 0)
             {
@@ -1307,7 +1307,7 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
+                PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
             }
             else
             {
@@ -1346,7 +1346,7 @@ namespace M2Server
                         break;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
+                PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
             }
         }
 
@@ -1355,11 +1355,11 @@ namespace M2Server
             var nC = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nC >= 0)
             {
-                PlayObject.SendMsg(this, grobal2.RM_SENDBUYPRICE, 0, nC, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_SENDBUYPRICE, 0, nC, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_SENDBUYPRICE, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_SENDBUYPRICE, 0, 0, 0, 0, "");
             }
         }
 
@@ -1385,7 +1385,7 @@ namespace M2Server
         public bool ClientSellItem(TPlayObject PlayObject, TUserItem UserItem)
         {
             var result = false;
-            TItem StdItem;
+            MirItem StdItem;
             var nPrice = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nPrice > 0 && !bo574 && ClientSellItem_sub_4A1C84(UserItem))
             {
@@ -1402,7 +1402,7 @@ namespace M2Server
                             M2Share.CastleManager.IncRateGold(M2Share.g_Config.nUpgradeWeaponPrice);
                         }
                     }
-                    PlayObject.SendMsg(this, grobal2.RM_USERSELLITEM_OK, 0, PlayObject.m_nGold, 0, 0, "");
+                    PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_OK, 0, PlayObject.m_nGold, 0, 0, "");
                     AddItemToGoodsList(UserItem);
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
@@ -1413,12 +1413,12 @@ namespace M2Server
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
                 }
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
             }
             return result;
         }
@@ -1502,7 +1502,7 @@ namespace M2Server
                 {
                     var ObjectId = HUtil32.Sequence();
                     M2Share.ObjectSystem.AddOhter(ObjectId, List28);
-                    PlayObject.SendMsg(this, grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                    PlayObject.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
             return result;
@@ -1513,7 +1513,7 @@ namespace M2Server
             IList<TUserItem> List1C;
             TUserItem MakeItem;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             var n14 = 1;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -1559,11 +1559,11 @@ namespace M2Server
             }
             if (n14 == 0)
             {
-                PlayObject.SendMsg(this, grobal2.RM_MAKEDRUG_SUCCESS, 0, PlayObject.m_nGold, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_MAKEDRUG_SUCCESS, 0, PlayObject.m_nGold, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_MAKEDRUG_FAIL, 0, n14, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_MAKEDRUG_FAIL, 0, n14, 0, 0, "");
             }
         }
 
@@ -1599,18 +1599,18 @@ namespace M2Server
                         nRepairPrice = -1;
                     }
                 }
-                PlayObject.SendMsg(this, grobal2.RM_SENDREPAIRCOST, 0, nRepairPrice, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_SENDREPAIRCOST, 0, nRepairPrice, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, grobal2.RM_SENDREPAIRCOST, 0, -1, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_SENDREPAIRCOST, 0, -1, 0, 0, "");
             }
         }
 
         public bool ClientRepairItem(TPlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
-            TItem StdItem;
+            MirItem StdItem;
             var result = false;
             var boCanRepair = true;
             if (PlayObject.m_sScriptLable == M2Share.sSUPERREPAIR && !m_boS_repair)
@@ -1624,7 +1624,7 @@ namespace M2Server
             if (PlayObject.m_sScriptLable == "@fail_s_repair")
             {
                 SendMsgToUser(PlayObject, "对不起！我不能帮你修理这个物品。\\ \\ \\<返回/@main>");
-                PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                 return result;
             }
             var nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
@@ -1661,26 +1661,26 @@ namespace M2Server
                         if (PlayObject.m_sScriptLable == M2Share.sSUPERREPAIR)
                         {
                             UserItem.Dura = UserItem.DuraMax;
-                            PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.m_nGold, UserItem.Dura, UserItem.DuraMax, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.m_nGold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, M2Share.sSUPERREPAIROK, false);
                         }
                         else
                         {
                             UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.g_Config.nRepairItemDecDura);
                             UserItem.Dura = UserItem.DuraMax;
-                            PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.m_nGold, UserItem.Dura, UserItem.DuraMax, "");
+                            PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.m_nGold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, M2Share.sREPAIROK, false);
                         }
                         result = true;
                     }
                     else
                     {
-                        PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                        PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                 }
             }
             return result;
@@ -1783,7 +1783,7 @@ namespace M2Server
                 if (UserItem.wIndex == 0)
                 {
                     var sMsg = format(M2Share.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
-                    PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, sMsg);
+                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, sMsg);
                     return;
                 }
                 if (UserItem.btValue[13] == 1)
@@ -1801,8 +1801,8 @@ namespace M2Server
                     UserItem.btValue[13] = 0;
                 }
                 M2Share.ItemUnit.SaveCustomItemName();
-                PlayObject.SendMsg(PlayObject, grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
-                PlayObject.SendMsg(this, grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "");
             }
         }
 

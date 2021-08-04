@@ -235,7 +235,7 @@ namespace M2Server
         {
             int result = -1;
             int Idx;
-            TItem Item;
+            MirItem Item;
             const string sSQLString = "SELECT * FROM STDITEMS";
             //HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -250,7 +250,7 @@ namespace M2Server
                 {
                     while (dr.Read())
                     {
-                        Item = new TItem();
+                        Item = new MirItem();
                         Idx = dr.GetInt32("Idx");// 序号
                         Item.Name = dr.GetString("Name");// 名称
                         Item.StdMode = dr.GetByte("StdMode");// 分类号
@@ -261,16 +261,16 @@ namespace M2Server
                         Item.Reserved = dr.GetByte("Reserved");// 保留
                         Item.Looks = dr.GetUInt16("Looks");// 物品外观
                         Item.DuraMax = (ushort)dr.GetInt32("DuraMax");// 持久
-                        Item.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.AC2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.MAC2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
-                        Item.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.DC2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.MC2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.SC2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Ac = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.Ac2 = (ushort)HUtil32.Round(dr.GetInt32("AC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.Mac = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.Mac2 = (ushort)HUtil32.Round(dr.GetInt32("MAC2") * (M2Share.g_Config.nItemsACPowerRate / 10));
+                        Item.Dc = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Dc2 = (ushort)HUtil32.Round(dr.GetInt32("DC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Mc = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Mc2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Sc = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nItemsPowerRate / 10));
+                        Item.Sc2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.g_Config.nItemsPowerRate / 10));
                         Item.Need = dr.GetInt32("Need");// 附加条件
                         Item.NeedLevel = dr.GetInt32("NeedLevel");// 需要等级
                         Item.Price = dr.GetInt32("Price");// 价格
@@ -280,15 +280,15 @@ namespace M2Server
                             case 0:
                             case 55:
                             case 58: // 药品
-                                Item.ItemType = grobal2.ITEM_LEECHDOM;
+                                Item.ItemType = Grobal2.ITEM_LEECHDOM;
                                 break;
                             case 5:
                             case 6: // 武器
-                                Item.ItemType = grobal2.ITEM_WEAPON;
+                                Item.ItemType = Grobal2.ITEM_WEAPON;
                                 break;
                             case 10:
                             case 11: // 衣服
-                                Item.ItemType = grobal2.ITEM_ARMOR;
+                                Item.ItemType = Grobal2.ITEM_ARMOR;
                                 break;
                             case 15:
                             case 19:
@@ -306,10 +306,10 @@ namespace M2Server
                             case 63:
                             case 64:
                             case 30: // 辅助物品
-                                Item.ItemType = grobal2.ITEM_ACCESSORY;
+                                Item.ItemType = Grobal2.ITEM_ACCESSORY;
                                 break;
                             default: // 其它物品
-                                Item.ItemType = grobal2.ITEM_ETC;
+                                Item.ItemType = Grobal2.ITEM_ETC;
                                 break;
                         }
                         if (M2Share.UserEngine.StdItemList.Count == Idx)
@@ -325,7 +325,7 @@ namespace M2Server
                         }
                     }
                 }
-                M2Share.g_boGameLogGold = M2Share.GetGameLogItemNameList(grobal2.sSTRING_GOLDNAME) == 1;
+                M2Share.g_boGameLogGold = M2Share.GetGameLogItemNameList(Grobal2.sSTRING_GOLDNAME) == 1;
                 M2Share.g_boGameLogHumanDie = M2Share.GetGameLogItemNameList(M2Share.g_sHumanDieEvent) == 1;
                 M2Share.g_boGameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGameGoldName) == 1;
                 M2Share.g_boGameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.g_Config.sGamePointName) == 1;

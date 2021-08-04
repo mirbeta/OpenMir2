@@ -36,11 +36,6 @@ namespace M2Server
     {
         public const int gMan = 0;
         public const int gWoMan = 1;
-
-        public static void AddUserLog(string sMsg)
-        {
-            M2Share.MainOutMessage(sMsg);
-        }
     }
 }
 

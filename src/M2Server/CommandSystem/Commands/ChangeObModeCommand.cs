@@ -24,7 +24,7 @@ namespace M2Server
             }
             if (boFlag)
             {
-                PlayObject.SendRefMsg(grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
+                PlayObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 01/21 强行发送刷新数据到客户端，解决GM登录隐身有影子问题
             }
             PlayObject.m_boObMode = boFlag;
             if (PlayObject.m_boObMode)

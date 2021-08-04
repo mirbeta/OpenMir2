@@ -27,7 +27,7 @@ namespace M2Server
             }
             m_PlayObject.ReAlive();
             m_PlayObject.m_WAbil.HP = m_PlayObject.m_WAbil.MaxHP;
-            m_PlayObject.SendMsg(m_PlayObject, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandReAliveMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
             PlayObject.SysMsg(sHumanName + " 已获重生。", TMsgColor.c_Green, TMsgType.t_Hint);
         }

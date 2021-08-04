@@ -2193,7 +2193,7 @@ namespace M2Server
             if (StringList.Count > 0)
             {
                 sLine = StringList[0];
-                if (!HUtil32.CompareLStr(sLine, grobal2.sENCYPTSCRIPTFLAG, grobal2.sENCYPTSCRIPTFLAG.Length))
+                if (!HUtil32.CompareLStr(sLine, Grobal2.sENCYPTSCRIPTFLAG, Grobal2.sENCYPTSCRIPTFLAG.Length))
                 {
                     return;
                 }

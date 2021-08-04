@@ -429,16 +429,16 @@ namespace M2Server
                 SysMsg(M2Share.g_sCanotPickUpItem, TMsgColor.c_Red, TMsgType.t_Hint);
                 return result;
             }
-            if (mapItem.Name.Equals(grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
+            if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
             {
-                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, grobal2.OS_ITEMOBJECT, mapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem) == 1)
                 {
                     if (IncGold(mapItem.Count))
                     {
-                        SendRefMsg(grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
+                        SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME 
+                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME 
                                                    + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
@@ -446,20 +446,20 @@ namespace M2Server
                     }
                     else
                     {
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, grobal2.OS_ITEMOBJECT, mapItem);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem);
                     }
                 }
                 return result;
             }
             if (IsEnoughBag())
             {
-                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, grobal2.OS_ITEMOBJECT, mapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem) == 1)
                 {
                     var UserItem = mapItem.UserItem;
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
                     {
-                        SendMsg(this, grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
+                        SendMsg(this, Grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
                         AddItemToBag(UserItem);
                         if (!M2Share.IsCheapStuff(StdItem.StdMode))
                         {
@@ -470,7 +470,7 @@ namespace M2Server
                             }
                         }
                         Dispose(mapItem);
-                        if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                        if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             this.SendAddItem(UserItem);
                         }
@@ -479,7 +479,7 @@ namespace M2Server
                     else
                     {
                         Dispose(UserItem);
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, grobal2.OS_ITEMOBJECT, mapItem);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem);
                     }
                 }
             }
@@ -514,7 +514,7 @@ namespace M2Server
         {
             m_Abil.Exp += dwExp;
             AddBodyLuck(dwExp * 0.002);
-            SendMsg(this, grobal2.RM_WINEXP, 0, dwExp, 0, 0, "");
+            SendMsg(this, Grobal2.RM_WINEXP, 0, dwExp, 0, 0, "");
             if (m_Abil.Exp >= m_Abil.MaxExp)
             {
                 m_Abil.Exp -= m_Abil.MaxExp;
@@ -546,7 +546,7 @@ namespace M2Server
         /// <returns></returns>
         public bool IsEnoughBag()
         {
-            return m_ItemList.Count < grobal2.MAXBAGITEM;
+            return m_ItemList.Count < Grobal2.MAXBAGITEM;
         }
 
         public bool IsAddWeightAvailable(int nWeight)
@@ -556,7 +556,7 @@ namespace M2Server
 
         public void SendAddItem(TUserItem UserItem)
         {
-            TItem Item;
+            MirItem Item;
             TStdItem StdItem = null;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
@@ -590,7 +590,7 @@ namespace M2Server
                         OClientItem.S.Shape = 130;
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
                 SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
             }
             else
@@ -623,7 +623,7 @@ namespace M2Server
                         ClientItem.S.Shape = 130;
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
                 SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
             }
         }
@@ -658,26 +658,26 @@ namespace M2Server
                 }
                 if (m_btPermission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
                     if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
                     }
                     if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
                     if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
                     }
                     if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
                     }
                 }
             }
@@ -685,7 +685,7 @@ namespace M2Server
             {
                 if (M2Share.UserEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
                 }
                 else
                 {
@@ -703,15 +703,15 @@ namespace M2Server
                 switch (MsgType)
                 {
                     case 0:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor,
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor,
                             M2Share.g_Config.btGMWhisperMsgBColor, 0, SayStr);
                         break;
                     case 1:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor,
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor,
                             M2Share.g_Config.btWhisperMsgBColor, 0, SayStr);
                         break;
                     case 2:
-                        SendMsg(this, grobal2.RM_WHISPER, 0, M2Share.g_Config.btPurpleMsgFColor,
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btPurpleMsgFColor,
                             M2Share.g_Config.btPurpleMsgBColor, 0, SayStr);
                         break;
                 }
@@ -746,10 +746,10 @@ namespace M2Server
             {
                 MsgHdr = new TMsgHeader
                 {
-                    dwCode = grobal2.RUNGATECODE,
+                    dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
                     wGSocketIdx = (ushort)m_nGSocketIdx,
-                    wIdent = grobal2.GM_DATA
+                    wIdent = Grobal2.GM_DATA
                 };
                 //todo 注意下这里
                 if (!string.IsNullOrEmpty(sMsg))
@@ -788,7 +788,7 @@ namespace M2Server
             int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
             TDefaultMessage? sendDefMsg = defMsg;
-            if (m_boOffLineFlag && defMsg.Ident != grobal2.SM_OUTOFCONNECTION)
+            if (m_boOffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
@@ -797,10 +797,10 @@ namespace M2Server
             {
                 MsgHdr = new TMsgHeader
                 {
-                    dwCode = grobal2.RUNGATECODE,
+                    dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
                     wGSocketIdx = (ushort)m_nGSocketIdx,
-                    wIdent = grobal2.GM_DATA
+                    wIdent = Grobal2.GM_DATA
                 };
                 if (sendDefMsg != null)
                 {
@@ -857,7 +857,7 @@ namespace M2Server
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
         {
-            m_DefMsg = grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
+            m_DefMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 SendSocket(m_DefMsg, EDcode.EncodeString(sMsg));
@@ -874,13 +874,13 @@ namespace M2Server
             if (CretInNearXY(BaseObject, x, y))
             {
                 int tagColor = GetCharColor(BaseObject);
-                var defMsg = grobal2.MakeDefaultMsg(grobal2.SM_USERNAME, BaseObject.ObjectId, (short)tagColor, 0, 0);
+                var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, BaseObject.ObjectId, (short)tagColor, 0, 0);
                 var uname = BaseObject.GetShowName();
                 SendSocket(defMsg, EDcode.EncodeString(uname));
             }
             else
             {
-                SendDefMessage(grobal2.SM_GHOST, BaseObject.ObjectId, x, y, 0, "");
+                SendDefMessage(Grobal2.SM_GHOST, BaseObject.ObjectId, x, y, 0, "");
             }
         }
 
@@ -925,13 +925,13 @@ namespace M2Server
             {
                 n8 = n8 | 4;
             }
-            SendDefMessage(grobal2.SM_AREASTATE, n8, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_AREASTATE, n8, 0, 0, 0, "");
         }
 
         public void RefMyStatus()
         {
             RecalcAbilitys();
-            SendMsg(this, grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
+            SendMsg(this, Grobal2.RM_MYSTATUS, 0, 0, 0, 0, "");
         }
 
         /// <summary>
@@ -939,7 +939,7 @@ namespace M2Server
         /// </summary>
         private void ProcessSpiritSuite()
         {
-            TItem StdItem;
+            MirItem StdItem;
             TUserItem UseItem;
             if (!M2Share.g_Config.boSpiritMutiny || !m_bopirit)
             {
@@ -998,7 +998,7 @@ namespace M2Server
             var result = false;
             short n14 = 0;
             short n18 = 0;
-            TItem StdItem;
+            MirItem StdItem;
             int dwAttackTime;
             int dwCheckTime;
             const string sExceptionMsg = "[Exception] TPlayObject::ClientHitXY";
@@ -1009,7 +1009,7 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)
+                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)
                 {
                     return result;
                 }
@@ -1060,11 +1060,11 @@ namespace M2Server
                 {
                     result = true;
                     m_dwAttackTick = HUtil32.GetTickCount();
-                    if (wIdent == grobal2.CM_HEAVYHIT && m_UseItems[grobal2.U_WEAPON] != null && m_UseItems[grobal2.U_WEAPON].Dura > 0)// 挖矿
+                    if (wIdent == Grobal2.CM_HEAVYHIT && m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !m_PEnvir.CanWalk(n14, n18, false))
                         {
-                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[grobal2.U_WEAPON].wIndex);
+                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -1080,51 +1080,51 @@ namespace M2Server
                             }
                         }
                     }
-                    if (wIdent == grobal2.CM_HIT)
+                    if (wIdent == Grobal2.CM_HIT)
                     {
                         AttackDir(null, 0, nDir);
                     }
-                    if (wIdent == grobal2.CM_HEAVYHIT)
+                    if (wIdent == Grobal2.CM_HEAVYHIT)
                     {
                         AttackDir(null, 1, nDir);
                     }
-                    if (wIdent == grobal2.CM_BIGHIT)
+                    if (wIdent == Grobal2.CM_BIGHIT)
                     {
                         AttackDir(null, 2, nDir);
                     }
-                    if (wIdent == grobal2.CM_POWERHIT)
+                    if (wIdent == Grobal2.CM_POWERHIT)
                     {
                         AttackDir(null, 3, nDir);
                     }
-                    if (wIdent == grobal2.CM_LONGHIT)
+                    if (wIdent == Grobal2.CM_LONGHIT)
                     {
                         AttackDir(null, 4, nDir);
                     }
-                    if (wIdent == grobal2.CM_WIDEHIT)
+                    if (wIdent == Grobal2.CM_WIDEHIT)
                     {
                         AttackDir(null, 5, nDir);
                     }
-                    if (wIdent == grobal2.CM_FIREHIT)
+                    if (wIdent == Grobal2.CM_FIREHIT)
                     {
                         AttackDir(null, 7, nDir);
                     }
-                    if (wIdent == grobal2.CM_CRSHIT)
+                    if (wIdent == Grobal2.CM_CRSHIT)
                     {
                         AttackDir(null, 8, nDir);
                     }
-                    if (wIdent == grobal2.CM_TWINHIT)
+                    if (wIdent == Grobal2.CM_TWINHIT)
                     {
                         AttackDir(null, 9, nDir);
                     }
-                    if (wIdent == grobal2.CM_42HIT)
+                    if (wIdent == Grobal2.CM_42HIT)
                     {
                         AttackDir(null, 10, nDir);
                     }
-                    if (wIdent == grobal2.CM_42HIT)
+                    if (wIdent == Grobal2.CM_42HIT)
                     {
                         AttackDir(null, 11, nDir);
                     }
-                    if (m_MagicPowerHitSkill != null && m_UseItems[grobal2.U_WEAPON].Dura > 0)
+                    if (m_MagicPowerHitSkill != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
                     {
                         m_btAttackSkillCount -= 1;
                         if (m_btAttackSkillPointCount == m_btAttackSkillCount)
@@ -1163,7 +1163,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)// 防麻
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)// 防麻
             {
                 return result;
             }
@@ -1218,7 +1218,7 @@ namespace M2Server
             {
                 if (m_boTransparent && m_boHideMode)
                 {
-                    m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;
+                    m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
                 if (m_bo316 || m_nCurrX == nX && m_nCurrY == nY)
                 {
@@ -1246,7 +1246,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell)// 防麻
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell)// 防麻
             {
                 return result;
             }
@@ -1312,7 +1312,7 @@ namespace M2Server
             ushort nSpellPoint;
             switch (UserMagic.wMagIdx)
             {
-                case grobal2.SKILL_ERGUM:
+                case Grobal2.SKILL_ERGUM:
                     if (m_MagicErgumSkill != null)
                     {
                         if (!m_boUseThrusting)
@@ -1328,7 +1328,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_BANWOL:
+                case Grobal2.SKILL_BANWOL:
                     if (m_MagicBanwolSkill != null)
                     {
                         if (!m_boUseHalfMoon)
@@ -1344,7 +1344,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_REDBANWOL:
+                case Grobal2.SKILL_REDBANWOL:
                     if (m_MagicRedBanwolSkill != null)
                     {
                         if (!m_boRedUseHalfMoon)
@@ -1360,7 +1360,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_FIRESWORD:
+                case Grobal2.SKILL_FIRESWORD:
                     if (m_MagicFireSwordSkill != null)
                     {
                         if (AllowFireHitSkill())
@@ -1379,7 +1379,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_MOOTEBO:
+                case Grobal2.SKILL_MOOTEBO:
                     result = true;
                     if (HUtil32.GetTickCount() - m_dwDoMotaeboTick > 3 * 1000)
                     {
@@ -1402,7 +1402,7 @@ namespace M2Server
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelup(UserMagic))
                                         {
-                                            SendDelayMsg(this, grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 1000);
+                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 1000);
                                         }
                                     }
                                 }
@@ -1410,7 +1410,7 @@ namespace M2Server
                         }
                     }
                     break;
-                case grobal2.SKILL_CROSSMOON:
+                case Grobal2.SKILL_CROSSMOON:
                     if (m_MagicCrsSkill != null)
                     {
                         if (!m_boCrsHitkill)
@@ -1426,7 +1426,7 @@ namespace M2Server
                     }
                     result = true;
                     break;
-                case grobal2.SKILL_TWINBLADE:// 狂风斩
+                case Grobal2.SKILL_TWINBLADE:// 狂风斩
                     if (m_MagicTwnHitSkill != null)
                     {
                         if (AllowTwinHitSkill())
@@ -1472,7 +1472,7 @@ namespace M2Server
                     }
                     if (!DoSpell(UserMagic, (short)nTargetX, (short)nTargetY, BaseObject))
                     {
-                        SendRefMsg(grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
+                        SendRefMsg(Grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
                     }
                     result = true;
                     break;
@@ -1491,52 +1491,52 @@ namespace M2Server
                 m_btDirection = btDir;
                 switch (btDir)
                 {
-                    case grobal2.DR_UP:
+                    case Grobal2.DR_UP:
                         if (m_nCurrY > 1 && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrY -= 2;
                         }
                         break;
-                    case grobal2.DR_UPRIGHT:
+                    case Grobal2.DR_UPRIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 2 && m_nCurrY > 1 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrX += 2;
                             m_nCurrY -= 2;
                         }
                         break;
-                    case grobal2.DR_RIGHT:
+                    case Grobal2.DR_RIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 2 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0)
                         {
                             m_nCurrX += 2;
                         }
                         break;
-                    case grobal2.DR_DOWNRIGHT:
+                    case Grobal2.DR_DOWNRIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 2 && m_nCurrY < m_PEnvir.wHeight - 2 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrX += 2;
                             m_nCurrY += 2;
                         }
                         break;
-                    case grobal2.DR_DOWN:
+                    case Grobal2.DR_DOWN:
                         if (m_nCurrY < m_PEnvir.wHeight - 2 && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrY += 2;
                         }
                         break;
-                    case grobal2.DR_DOWNLEFT:
+                    case Grobal2.DR_DOWNLEFT:
                         if (m_nCurrX > 1 && m_nCurrY < m_PEnvir.wHeight - 2 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrX -= 2;
                             m_nCurrY += 2;
                         }
                         break;
-                    case grobal2.DR_LEFT:
+                    case Grobal2.DR_LEFT:
                         if (m_nCurrX > 1 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY, true) > 0)
                         {
                             m_nCurrX -= 2;
                         }
                         break;
-                    case grobal2.DR_UPLEFT:
+                    case Grobal2.DR_UPLEFT:
                         if (m_nCurrX > 1 && m_nCurrY > 1 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrX -= 2;
@@ -1546,7 +1546,7 @@ namespace M2Server
                 }
                 if (m_nCurrX != nOldX || m_nCurrY != nOldY)
                 {
-                    if (Walk(grobal2.RM_RUN))
+                    if (Walk(Grobal2.RM_RUN))
                     {
                         result = true;
                     }
@@ -1578,52 +1578,52 @@ namespace M2Server
                 m_btDirection = btDir;
                 switch (btDir)
                 {
-                    case grobal2.DR_UP:
+                    case Grobal2.DR_UP:
                         if (m_nCurrY > 2 && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY - 3, true) > 0)
                         {
                             m_nCurrY -= 3;
                         }
                         break;
-                    case grobal2.DR_UPRIGHT:
+                    case Grobal2.DR_UPRIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 3 && m_nCurrY > 2 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 3, m_nCurrY - 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 3, m_nCurrY - 3, true) > 0)
                         {
                             m_nCurrX += 3;
                             m_nCurrY -= 3;
                         }
                         break;
-                    case grobal2.DR_RIGHT:
+                    case Grobal2.DR_RIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 3 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 3, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 3, m_nCurrY, true) > 0)
                         {
                             m_nCurrX += 3;
                         }
                         break;
-                    case grobal2.DR_DOWNRIGHT:
+                    case Grobal2.DR_DOWNRIGHT:
                         if (m_nCurrX < m_PEnvir.wWidth - 3 && m_nCurrY < m_PEnvir.wHeight - 3 && m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX + 3, m_nCurrY + 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 3, m_nCurrY + 3, true) > 0)
                         {
                             m_nCurrX += 3;
                             m_nCurrY += 3;
                         }
                         break;
-                    case grobal2.DR_DOWN:
+                    case Grobal2.DR_DOWN:
                         if (m_nCurrY < m_PEnvir.wHeight - 3 && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 3, true) > 0)
                         {
                             m_nCurrY += 3;
                         }
                         break;
-                    case grobal2.DR_DOWNLEFT:
+                    case Grobal2.DR_DOWNLEFT:
                         if (m_nCurrX > 2 && m_nCurrY < m_PEnvir.wHeight - 3 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 3, m_nCurrY + 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 3, m_nCurrY + 3, true) > 0)
                         {
                             m_nCurrX -= 3;
                             m_nCurrY += 3;
                         }
                         break;
-                    case grobal2.DR_LEFT:
+                    case Grobal2.DR_LEFT:
                         if (m_nCurrX > 2 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 3, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 3, m_nCurrY, true) > 0)
                         {
                             m_nCurrX -= 3;
                         }
                         break;
-                    case grobal2.DR_UPLEFT:
+                    case Grobal2.DR_UPLEFT:
                         if (m_nCurrX > 2 && m_nCurrY > 2 && m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.CanWalkEx(m_nCurrX - 3, m_nCurrY - 3, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) && m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 3, m_nCurrY - 3, true) > 0)
                         {
                             m_nCurrX -= 3;
@@ -1633,7 +1633,7 @@ namespace M2Server
                 }
                 if (m_nCurrX != n10 || m_nCurrY != n14)
                 {
-                    if (Walk(grobal2.RM_HORSERUN))
+                    if (Walk(Grobal2.RM_HORSERUN))
                     {
                         result = true;
                     }
@@ -1661,7 +1661,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
             {
                 return result;
             }
@@ -1714,7 +1714,7 @@ namespace M2Server
             {
                 if (m_boTransparent && m_boHideMode)
                 {
-                    m_wStatusTimeArr[grobal2.STATE_TRANSPARENT] = 1;
+                    m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
                 }
                 if (m_bo316 || m_nCurrX == nX && m_nCurrY == nY)
                 {
@@ -1745,7 +1745,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
             {
                 return result;
             }
@@ -1965,7 +1965,7 @@ namespace M2Server
         {
             if (!m_boCanDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
             }
             if (m_boDeath || m_boGhost)
@@ -2025,7 +2025,7 @@ namespace M2Server
 
         public TPlayObject() : base()
         {
-            m_btRaceServer = grobal2.RC_PLAYOBJECT;
+            m_btRaceServer = Grobal2.RC_PLAYOBJECT;
             m_boEmergencyClose = false;
             m_boSwitchData = false;
             m_boReconnection = false;
@@ -2180,7 +2180,7 @@ namespace M2Server
                 return;
             }
             m_boDealing = false;
-            SendDefMessage(grobal2.SM_DEALCANCEL, 0, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_DEALCANCEL, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
                 (m_DealCreat as TPlayObject).DealCancel();
@@ -2232,7 +2232,7 @@ namespace M2Server
                     }
                     if (sumlv > 0 && n > 1)
                     {
-                        if (n >= 0 && n <= grobal2.GROUPMAX)
+                        if (n >= 0 && n <= Grobal2.GROUPMAX)
                         {
                             dwExp = HUtil32.Round(dwExp * bonus[n]);
                         }
@@ -2274,7 +2274,7 @@ namespace M2Server
             if (m_btBright != M2Share.g_nGameTime)
             {
                 m_btBright = (byte)M2Share.g_nGameTime;
-                SendMsg(this, grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
+                SendMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
             }
         }
 
@@ -2319,7 +2319,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_BUTCH)
+                    if (SendMessage.wIdent == Grobal2.CM_BUTCH)
                     {
                         result++;
                     }
@@ -2334,7 +2334,7 @@ namespace M2Server
 
         public void ClientQueryBagItems()
         {
-            TItem Item;
+            MirItem Item;
             string sSendMsg;
             TStdItem StdItem = null;
             TUserItem UserItem;
@@ -2364,7 +2364,7 @@ namespace M2Server
                 }
                 if (sSendMsg != "")
                 {
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_BAGITEMS, ObjectId, 0, 0, (short)m_ItemList.Count);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ObjectId, 0, 0, (short)m_ItemList.Count);
                     SendSocket(m_DefMsg, sSendMsg);
                 }
             }
@@ -2393,7 +2393,7 @@ namespace M2Server
                 }
                 if (!string.IsNullOrEmpty(sSendMsg))
                 {
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_BAGITEMS, ObjectId, 0, 0, (short)m_ItemList.Count);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ObjectId, 0, 0, (short)m_ItemList.Count);
                     SendSocket(m_DefMsg, sSendMsg);
                 }
             }
@@ -2413,7 +2413,7 @@ namespace M2Server
 
         private void ClientQueryUserState(int charId, int nX, int nY)
         {
-            TItem StdItem = null;
+            MirItem StdItem = null;
             TStdItem StdItem24 = null;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
@@ -2454,7 +2454,7 @@ namespace M2Server
                         OUserState.UseItems[i] = OClientItem;
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
                 SendSocket(m_DefMsg, EDcode.EncodeBuffer(OUserState));
             }
             else
@@ -2491,7 +2491,7 @@ namespace M2Server
                         UserState.UseItems[i] = ClientItem;
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
                 SendSocket(m_DefMsg, EDcode.EncodeBuffer(UserState));
             }
         }
@@ -2597,11 +2597,11 @@ namespace M2Server
                 {
                     return;
                 }
-                if (nIdent == grobal2.CM_USERBUYITEM)
+                if (nIdent == Grobal2.CM_USERBUYITEM)
                 {
                     merchant.ClientBuyItem(this, sMsg, nInt);
                 }
-                if (nIdent == grobal2.CM_USERGETDETAILITEM)
+                if (nIdent == Grobal2.CM_USERGETDETAILITEM)
                 {
                     merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
                 }
@@ -2618,17 +2618,17 @@ namespace M2Server
             var result = false;
             if (M2Share.g_Config.boInSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return result;
             }
             if (M2Share.g_Config.boControlDropItem && nGold < M2Share.g_Config.nCanDropGold)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropGoldMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return result;
             }
             if (!m_boCanDrop || m_PEnvir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return result;
             }
             if (nGold >= m_nGold)
@@ -2648,7 +2648,7 @@ namespace M2Server
         private bool ClientDropItem(string sItemName, int nItemIdx)
         {
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             string sUserItemName;
             var result = false;
             if (!m_boClientFlag)
@@ -2664,12 +2664,12 @@ namespace M2Server
             }
             if (M2Share.g_Config.boInSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return result;
             }
             if (!m_boCanDrop || m_PEnvir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return result;
             }
             if (sItemName.IndexOf(' ') > 0)
@@ -2734,7 +2734,7 @@ namespace M2Server
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, TMsgColor.c_Green, TMsgType.t_Hint);
             if (M2Share.g_boGameLogGold)
             {
-                M2Share.AddGameDataLog(s10 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
+                M2Share.AddGameDataLog(s10 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 
@@ -2750,7 +2750,7 @@ namespace M2Server
             {
                 nMUSICID = m_PEnvir.Flag.nMUSICID;
             }
-            SendDefMessage(grobal2.SM_MAPDESCRIPTION, nMUSICID, 0, 0, 0, m_PEnvir.sMapDesc);
+            SendDefMessage(Grobal2.SM_MAPDESCRIPTION, nMUSICID, 0, 0, 0, m_PEnvir.sMapDesc);
         }
 
         public void SendWhisperMsg(TPlayObject PlayObject)
@@ -2801,7 +2801,7 @@ namespace M2Server
             {
                 sMsg = M2Share.g_Config.sGameGoldName + '\r' + M2Share.g_Config.sGamePointName;
             }
-            SendDefMessage(grobal2.SM_GAMEGOLDNAME, m_nGameGold, HUtil32.LoWord(m_nGamePoint), HUtil32.HiWord(m_nGamePoint), 0, sMsg);
+            SendDefMessage(Grobal2.SM_GAMEGOLDNAME, m_nGameGold, HUtil32.LoWord(m_nGamePoint), HUtil32.HiWord(m_nGamePoint), 0, sMsg);
         }
 
         private void SendServerConfig()
@@ -2858,7 +2858,7 @@ namespace M2Server
             sMsg = EDcode.EncodeBuffer(ClientConf);
             nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             nParam = HUtil32.MakeWord(5, 0);
-            SendDefMessage(grobal2.SM_SERVERCONFIG, nRecog, (short)nParam, 0, 0, sMsg);
+            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, (short)nParam, 0, 0, sMsg);
         }
 
         private void SendServerStatus()
@@ -2893,7 +2893,7 @@ namespace M2Server
                         for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                         {
                             OSObject = MapCellInfo.ObjList[i];
-                            if (OSObject.btType == grobal2.OS_MOVINGOBJECT)
+                            if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                             {
                                 BaseObject = OSObject.CellObj as TBaseObject;
                                 if (BaseObject != null)
@@ -2914,7 +2914,7 @@ namespace M2Server
 
         internal void SendUseitems()
         {
-            TItem Item;
+            MirItem Item;
             string sSendMsg;
             TStdItem StdItem = null;
             if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
@@ -2941,7 +2941,7 @@ namespace M2Server
                 }
                 if (sSendMsg != "")
                 {
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
                     SendSocket(m_DefMsg, sSendMsg);
                 }
             }
@@ -2968,7 +2968,7 @@ namespace M2Server
                 }
                 if (sSendMsg != "")
                 {
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
                     SendSocket(m_DefMsg, sSendMsg);
                 }
             }
@@ -2991,7 +2991,7 @@ namespace M2Server
             }
             if (sSendMsg != "")
             {
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDMYMAGIC, 0, 0, 0, (short)m_MagicList.Count);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDMYMAGIC, 0, 0, 0, (short)m_MagicList.Count);
                 SendSocket(m_DefMsg, sSendMsg);
             }
         }
@@ -3000,7 +3000,7 @@ namespace M2Server
         {
             int dwCheckTime;
             var result = false;
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0) // 防麻
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) // 防麻
             {
                 return result;
             }
@@ -3019,7 +3019,7 @@ namespace M2Server
             if (nX == m_nCurrX && nY == m_nCurrY)
             {
                 m_btDirection = (byte)nDir;
-                if (Walk(grobal2.RM_TURN))
+                if (Walk(Grobal2.RM_TURN))
                 {
                     m_dwTurnTick = HUtil32.GetTickCount();
                     result = true;
@@ -3031,7 +3031,7 @@ namespace M2Server
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
         {
             int dwCheckTime;
-            if (m_boDeath || m_wStatusTimeArr[grobal2.POISON_STONE] != 0)// 防麻
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
@@ -3042,7 +3042,7 @@ namespace M2Server
                 return false;
             }
             m_dwTurnTick = HUtil32.GetTickCount();
-            SendRefMsg(grobal2.RM_POWERHIT, 0, 0, 0, 0, "");
+            SendRefMsg(Grobal2.RM_POWERHIT, 0, 0, 0, 0, "");
             return true;
         }
 
@@ -3055,7 +3055,7 @@ namespace M2Server
                 return;
             }
             Castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
-            if (Castle == null || Castle.m_DoorStatus != door.Status || m_btRaceServer != grobal2.RC_PLAYOBJECT || Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
+            if (Castle == null || Castle.m_DoorStatus != door.Status || m_btRaceServer != Grobal2.RC_PLAYOBJECT || Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
             {
                 M2Share.UserEngine.OpenDoor(m_PEnvir, nX, nY);
             }
@@ -3067,8 +3067,8 @@ namespace M2Server
             var n18 = 0;
             TUserItem UserItem = null;
             TUserItem TakeOffItem = null;
-            TItem StdItem = null;
-            TItem StdItem20 = null;
+            MirItem StdItem = null;
+            MirItem StdItem20 = null;
             TStdItem StdItem58 = null;
             string sUserItemName;
             for (var i = 0; i < m_ItemList.Count; i++)
@@ -3149,9 +3149,9 @@ namespace M2Server
                                 SendAddItem(TakeOffItem);
                             }
                             RecalcAbilitys();
-                            SendMsg(this, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                            SendMsg(this, grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                            SendDefMessage(grobal2.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                            SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                            SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                            SendDefMessage(Grobal2.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                             FeatureChanged();
                             n18 = 1;
                         }
@@ -3169,14 +3169,14 @@ namespace M2Server
         FailExit:
             if (n18 <= 0)
             {
-                SendDefMessage(grobal2.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
             }
         }
 
         private void ClientTakeOffItems(byte btWhere, int nItemIdx, string sItemName)
         {
             var n10 = 0;
-            TItem StdItem = null;
+            MirItem StdItem = null;
             TUserItem UserItem= null;
             string sUserItemName;
             if (!m_boDealing && btWhere < 13)
@@ -3226,9 +3226,9 @@ namespace M2Server
                                 SendAddItem(UserItem);
                                 m_UseItems[btWhere].wIndex = 0;
                                 RecalcAbilitys();
-                                SendMsg(this, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                                SendMsg(this, grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                                SendDefMessage(grobal2.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                                SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                                SendDefMessage(Grobal2.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                                 FeatureChanged();
                                 if (M2Share.g_FunctionNPC != null)
                                 {
@@ -3255,7 +3255,7 @@ namespace M2Server
         FailExit:
             if (n10 <= 0)
             {
-                SendDefMessage(grobal2.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");
             }
         }
 
@@ -3279,7 +3279,7 @@ namespace M2Server
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     m_ItemList.Add(UserItem);
-                    if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
                         SendAddItem(UserItem);
                     }
@@ -3299,7 +3299,7 @@ namespace M2Server
         {
             var boEatOK = false;
             TUserItem UserItem = null;
-            TItem StdItem = null;
+            MirItem StdItem = null;
             TUserItem UserItem34 = null;
             if (m_boCanUseItem)
             {
@@ -3353,7 +3353,7 @@ namespace M2Server
                                     case 31: // 解包物品
                                         if (StdItem.AniCount == 0)
                                         {
-                                            if (m_ItemList.Count + 6 - 1 <= grobal2.MAXBAGITEM)
+                                            if (m_ItemList.Count + 6 - 1 <= Grobal2.MAXBAGITEM)
                                             {
                                                 Dispose(UserItem);
                                                 m_ItemList.RemoveAt(i);
@@ -3380,12 +3380,12 @@ namespace M2Server
             }
             else
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotUseItemMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotUseItemMsg);
             }
             if (boEatOK)
             {
                 WeightChanged();
-                SendDefMessage(grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
                 if (StdItem.NeedIdentify == 1)
                 {
                     M2Share.AddGameDataLog("11" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem34.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -3393,11 +3393,11 @@ namespace M2Server
             }
             else
             {
-                SendDefMessage(grobal2.SM_EAT_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_EAT_FAIL, 0, 0, 0, 0, "");
             }
         }
 
-        private bool UseStdmodeFunItem(TItem StdItem)
+        private bool UseStdmodeFunItem(MirItem StdItem)
         {
             var result = false;
             if (M2Share.g_FunctionNPC != null)
@@ -3436,11 +3436,11 @@ namespace M2Server
                         }
                         if (BaseObject.m_nBodyLeathery <= 0)
                         {
-                            if (BaseObject.m_btRaceServer >= grobal2.RC_ANIMAL && BaseObject.m_btRaceServer < grobal2.RC_MONSTER)
+                            if (BaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL && BaseObject.m_btRaceServer < Grobal2.RC_MONSTER)
                             {
                                 BaseObject.m_boSkeleton = true;
                                 ApplyMeatQuality();
-                                BaseObject.SendRefMsg(grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                BaseObject.SendRefMsg(Grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                             }
                             if (!TakeBagItems(BaseObject))
                             {
@@ -3453,7 +3453,7 @@ namespace M2Server
                 }
                 m_btDirection = btDir;
             }
-            SendRefMsg(grobal2.RM_BUTCH, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_BUTCH, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
             return result;
         }
 
@@ -3498,22 +3498,22 @@ namespace M2Server
             var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != null)
             {
-                SendDefMessage(grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (PlayObject == null || PlayObject == this || PlayObject.m_boDeath || PlayObject.m_boGhost)
             {
-                SendDefMessage(grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (PlayObject.m_GroupOwner != null)
             {
-                SendDefMessage(grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             if (!PlayObject.m_boAllowGroup)
             {
-                SendDefMessage(grobal2.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
                 return;
             }
             m_GroupMembers.Clear();
@@ -3522,7 +3522,7 @@ namespace M2Server
             JoinGroup(this);
             PlayObject.JoinGroup(this);
             m_boAllowGroup = true;
-            SendDefMessage(grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.g_FunctionNPC != null)
             {
@@ -3535,32 +3535,32 @@ namespace M2Server
             var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != this)
             {
-                SendDefMessage(grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (m_GroupMembers.Count > M2Share.g_Config.nGroupMembersMax)
             {
-                SendDefMessage(grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
                 return;
             }
             if (PlayObject == null || PlayObject == this || PlayObject.m_boDeath || PlayObject.m_boGhost)
             {
-                SendDefMessage(grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (PlayObject.m_GroupOwner != null)
             {
-                SendDefMessage(grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             if (!PlayObject.m_boAllowGroup)
             {
-                SendDefMessage(grobal2.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
                 return;
             }
             this.m_GroupMembers.Add(PlayObject);
             PlayObject.JoinGroup(this);
-            SendDefMessage(grobal2.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.g_FunctionNPC != null)
             {
@@ -3573,21 +3573,21 @@ namespace M2Server
             var PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (m_GroupOwner != this)
             {
-                SendDefMessage(grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (PlayObject == null)
             {
-                SendDefMessage(grobal2.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (!IsGroupMember(PlayObject))
             {
-                SendDefMessage(grobal2.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             DelMember(PlayObject);
-            SendDefMessage(grobal2.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
+            SendDefMessage(Grobal2.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
             if (M2Share.g_FunctionNPC != null)
             {
                 M2Share.g_FunctionNPC.GotoLable(this, "@GroupDelMember", false);
@@ -3599,7 +3599,7 @@ namespace M2Server
             TPlayObject TargetPlayObject;
             if (M2Share.g_Config.boDisableDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDisableDealItemsMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDisableDealItemsMsg);
                 return;
             }
             if (m_boDealing)
@@ -3608,12 +3608,12 @@ namespace M2Server
             }
             if (HUtil32.GetTickCount() - m_DealLastTick < M2Share.g_Config.dwTryDealTime)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
             }
             if (!m_boCanDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
             }
             TargetPlayObject = (TPlayObject)GetPoseCreate();
@@ -3621,7 +3621,7 @@ namespace M2Server
             {
                 if (TargetPlayObject.GetPoseCreate() == this && !TargetPlayObject.m_boDealing)
                 {
-                    if (TargetPlayObject.m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                    if (TargetPlayObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
                         if (TargetPlayObject.m_boAllowDeal && TargetPlayObject.m_boCanDeal)
                         {
@@ -3638,12 +3638,12 @@ namespace M2Server
                 }
                 else
                 {
-                    SendDefMessage(grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                    SendDefMessage(Grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
                 }
             }
             else
             {
-                SendDefMessage(grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -3683,7 +3683,7 @@ namespace M2Server
             }
             if (!bo11)
             {
-                SendDefMessage(grobal2.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -3693,8 +3693,8 @@ namespace M2Server
             string sUserItemName;
             if (M2Share.g_Config.boCanNotGetBackDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
-                SendDefMessage(grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
+                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
             if (m_DealCreat == null || !m_boDealing)
@@ -3729,7 +3729,7 @@ namespace M2Server
             }
             if (!bo11)
             {
-                SendDefMessage(grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -3743,13 +3743,13 @@ namespace M2Server
             bool bo09;
             if (m_nDealGolds > 0 && M2Share.g_Config.boCanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
-                SendMsg(M2Share.g_ManageNPC, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
-                SendDefMessage(grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
+                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
             if (nGold < 0)
             {
-                SendDefMessage(grobal2.SM_DEALCHGGOLD_FAIL, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
+                SendDefMessage(Grobal2.SM_DEALCHGGOLD_FAIL, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
                 return;
             }
             bo09 = false;
@@ -3761,8 +3761,8 @@ namespace M2Server
                     {
                         m_nGold = m_nGold + m_nDealGolds - nGold;
                         m_nDealGolds = nGold;
-                        SendDefMessage(grobal2.SM_DEALCHGGOLD_OK, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
-                        (m_DealCreat as TPlayObject).SendDefMessage(grobal2.SM_DEALREMOTECHGGOLD, m_nDealGolds, 0, 0, 0, "");
+                        SendDefMessage(Grobal2.SM_DEALCHGGOLD_OK, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
+                        (m_DealCreat as TPlayObject).SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, m_nDealGolds, 0, 0, 0, "");
                         m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                         bo09 = true;
                         m_DealLastTick = HUtil32.GetTickCount();
@@ -3771,7 +3771,7 @@ namespace M2Server
             }
             if (!bo09)
             {
-                SendDefMessage(grobal2.SM_DEALCHGGOLD_FAIL, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
+                SendDefMessage(Grobal2.SM_DEALCHGGOLD_FAIL, m_nDealGolds, HUtil32.LoWord(m_nGold), HUtil32.HiWord(m_nGold), 0, "");
             }
         }
 
@@ -3779,7 +3779,7 @@ namespace M2Server
         {
             bool bo11;
             TUserItem UserItem;
-            TItem StdItem;
+            MirItem StdItem;
             TPlayObject PlayObject;
             m_boDealOK = true;
             if (m_DealCreat == null)
@@ -3796,7 +3796,7 @@ namespace M2Server
             if (m_DealCreat.m_boDealOK)
             {
                 bo11 = true;
-                if (grobal2.MAXBAGITEM - m_ItemList.Count < m_DealCreat.m_DealItemList.Count)
+                if (Grobal2.MAXBAGITEM - m_ItemList.Count < m_DealCreat.m_DealItemList.Count)
                 {
                     bo11 = false;
                     SysMsg(M2Share.g_sYourBagSizeTooSmall, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -3806,7 +3806,7 @@ namespace M2Server
                     SysMsg(M2Share.g_sYourGoldLargeThenLimit, TMsgColor.c_Red, TMsgType.t_Hint);
                     bo11 = false;
                 }
-                if (grobal2.MAXBAGITEM - m_DealCreat.m_ItemList.Count < m_DealItemList.Count)
+                if (Grobal2.MAXBAGITEM - m_DealCreat.m_ItemList.Count < m_DealItemList.Count)
                 {
                     SysMsg(M2Share.g_sDealHumanBagSizeTooSmall, TMsgColor.c_Red, TMsgType.t_Hint);
                     bo11 = false;
@@ -3841,7 +3841,7 @@ namespace M2Server
                         m_DealCreat.GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_nGold + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
+                            M2Share.AddGameDataLog('8' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + m_nGold + "\t" + '1' + "\t" + m_DealCreat.m_sCharName);
                         }
                     }
                     for (var i = 0; i < m_DealCreat.m_DealItemList.Count; i++)
@@ -3867,18 +3867,18 @@ namespace M2Server
                         GoldChanged();
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold + "\t" + '1' + "\t" + m_sCharName);
+                            M2Share.AddGameDataLog('8' + "\t" + m_DealCreat.m_sMapName + "\t" + m_DealCreat.m_nCurrX + "\t" + m_DealCreat.m_nCurrY + "\t" + m_DealCreat.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + m_DealCreat.m_nGold + "\t" + '1' + "\t" + m_sCharName);
                         }
                     }
                     PlayObject = m_DealCreat as TPlayObject;
-                    PlayObject.SendDefMessage(grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    PlayObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     PlayObject.SysMsg(M2Share.g_sDealSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     PlayObject.m_DealCreat = null;
                     PlayObject.m_boDealing = false;
                     PlayObject.m_DealItemList.Clear();
                     PlayObject.m_nDealGolds = 0;
                     PlayObject.m_boDealOK = false;
-                    SendDefMessage(grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     SysMsg(M2Share.g_sDealSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     m_DealCreat = null;
                     m_boDealing = false;
@@ -3903,11 +3903,11 @@ namespace M2Server
             var nMinMap = m_PEnvir.nMinMap;
             if (nMinMap > 0)
             {
-                SendDefMessage(grobal2.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");
+                SendDefMessage(Grobal2.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");
             }
             else
             {
-                SendDefMessage(grobal2.SM_READMINIMAP_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_READMINIMAP_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -3965,12 +3965,12 @@ namespace M2Server
                     }
                     sC = sC + m_MyGuild.GuildAllList[i] + '\r';
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
                 SendSocket(m_DefMsg, EDcode.EncodeString(sC));
             }
             else
             {
-                SendDefMessage(grobal2.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -4000,7 +4000,7 @@ namespace M2Server
                     sSendMsg = sSendMsg + GuildRank.MemberList[j] + '/';
                 }
             }
-            m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
             SendSocket(m_DefMsg, EDcode.EncodeString(sSendMsg));
         }
 
@@ -4021,7 +4021,7 @@ namespace M2Server
                                 if (PlayObject.m_MyGuild == null && m_MyGuild.m_RankList.Count < 400)
                                 {
                                     m_MyGuild.AddMember(PlayObject);
-                                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex,
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex,
                                         m_MyGuild.sGuildName);
                                     PlayObject.m_MyGuild = m_MyGuild;
                                     PlayObject.m_sGuildRankName =
@@ -4061,11 +4061,11 @@ namespace M2Server
             }
             if (nC == 0)
             {
-                SendDefMessage(grobal2.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(grobal2.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0, "");
             }
         }
 
@@ -4089,7 +4089,7 @@ namespace M2Server
                                 PlayObject.RefRankInfo(0, "");
                                 PlayObject.RefShowName();
                             }
-                            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                             nC = 0;
                         }
                         else
@@ -4104,7 +4104,7 @@ namespace M2Server
                         if (m_MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildManager.DelGuild(s14);
-                            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_206, M2Share.nServerIndex, s14);
+                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.nServerIndex, s14);
                             m_MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -4120,11 +4120,11 @@ namespace M2Server
             }
             if (nC == 0)
             {
-                SendDefMessage(grobal2.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(grobal2.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0, "");
             }
         }
 
@@ -4142,7 +4142,7 @@ namespace M2Server
                 m_MyGuild.NoticeList.Add(sC);
             }
             m_MyGuild.SaveGuildInfoFile();
-            M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
             ClientOpenGuildDlg();
         }
 
@@ -4155,14 +4155,14 @@ namespace M2Server
             var nC = m_MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                 ClientGuildMemberList();
             }
             else
             {
                 if (nC <= -2)
                 {
-                    SendDefMessage(grobal2.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0, "");
+                    SendDefMessage(Grobal2.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0, "");
                 }
             }
         }
@@ -4174,7 +4174,7 @@ namespace M2Server
             {
                 var n8 = -1;
                 TBaseObject BaseObjectC = GetPoseCreate();
-                if (BaseObjectC != null && BaseObjectC.m_MyGuild != null && BaseObjectC.m_btRaceServer == grobal2.RC_PLAYOBJECT && BaseObjectC.GetPoseCreate() == this)
+                if (BaseObjectC != null && BaseObjectC.m_MyGuild != null && BaseObjectC.m_btRaceServer == Grobal2.RC_PLAYOBJECT && BaseObjectC.GetPoseCreate() == this)
                 {
                     if (BaseObjectC.m_MyGuild.m_boEnableAuthAlly)
                     {
@@ -4188,8 +4188,8 @@ namespace M2Server
                                 BaseObjectC.m_MyGuild.SendGuildMsg(m_MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                 m_MyGuild.RefMemberName();
                                 BaseObjectC.m_MyGuild.RefMemberName();
-                                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, BaseObjectC.m_MyGuild.sGuildName);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, BaseObjectC.m_MyGuild.sGuildName);
                                 n8 = 0;
                             }
                             else
@@ -4209,11 +4209,11 @@ namespace M2Server
                 }
                 if (n8 == 0)
                 {
-                    SendDefMessage(grobal2.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0, "");
+                    SendDefMessage(Grobal2.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0, "");
                 }
                 else
                 {
-                    SendDefMessage(grobal2.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0, "");
+                    SendDefMessage(Grobal2.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0, "");
                 }
             }
             catch (Exception e)
@@ -4241,8 +4241,8 @@ namespace M2Server
                     guild.SendGuildMsg(m_MyGuild.sGuildName + " 行会解除了与您行会的联盟！！！");
                     m_MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                    M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, guild.sGuildName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, guild.sGuildName);
                     n10 = 0;
                 }
                 else
@@ -4256,11 +4256,11 @@ namespace M2Server
             }
             if (n10 == 0)
             {
-                SendDefMessage(grobal2.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(grobal2.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -4363,8 +4363,8 @@ namespace M2Server
                 m_BonusAbil.Speed += BonusAbil.Speed;
                 m_BonusAbil.X2 += BonusAbil.X2;
                 RecalcAbilitys();
-                SendMsg(this, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(this, grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
             }
             else
             {
@@ -4397,7 +4397,7 @@ namespace M2Server
                     sSendMsg = EDcode.EncodeBuffer(M2Share.g_Config.BonusAbilofTaos) + '/' + EDcode.EncodeBuffer(m_BonusAbil) + '/' + EDcode.EncodeBuffer(M2Share.g_Config.NakedAbilofTaos);
                     break;
             }
-            m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ADJUST_BONUS, m_nBonusPoint, 0, 0, 0);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADJUST_BONUS, m_nBonusPoint, 0, 0, 0);
             SendSocket(m_DefMsg, sSendMsg);
         }
 
@@ -4585,7 +4585,7 @@ namespace M2Server
             for (var i = 0; i < m_GroupMembers.Count; i++)
             {
                 PlayObject = m_GroupMembers[i];
-                PlayObject.SendDefMessage(grobal2.SM_GROUPMEMBERS, 0, 0, 0, 0, sSendMsg);
+                PlayObject.SendDefMessage(Grobal2.SM_GROUPMEMBERS, 0, 0, 0, 0, sSendMsg);
             }
         }
 
@@ -4657,7 +4657,7 @@ namespace M2Server
                         {
                             m_nCurrX = nX;
                             m_nCurrY = nY;
-                            SendRefMsg(grobal2.RM_RUSH, nDir, m_nCurrX, m_nCurrY, 0, "");
+                            SendRefMsg(Grobal2.RM_RUSH, nDir, m_nCurrX, m_nCurrY, 0, "");
                             bo35 = false;
                             result = true;
                         }
@@ -4675,7 +4675,7 @@ namespace M2Server
                     {
                         m_nCurrX = nX;
                         m_nCurrY = nY;
-                        SendRefMsg(grobal2.RM_RUSH, nDir, m_nCurrX, m_nCurrY, 0, "");
+                        SendRefMsg(Grobal2.RM_RUSH, nDir, m_nCurrX, m_nCurrY, 0, "");
                         n28 -= 1;
                     }
                     else
@@ -4701,16 +4701,16 @@ namespace M2Server
                 nDmg = M2Share.RandomNumber.Random((n24 + 1) * 10) + (n24 + 1) * 10;
                 nDmg = BaseObject_34.GetHitStruckDamage(this, nDmg);
                 BaseObject_34.StruckDamage(nDmg);
-                BaseObject_34.SendRefMsg(grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.m_WAbil.HP, BaseObject_34.m_WAbil.MaxHP, ObjectId, "");
-                if (BaseObject_34.m_btRaceServer != grobal2.RC_PLAYOBJECT)
+                BaseObject_34.SendRefMsg(Grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.m_WAbil.HP, BaseObject_34.m_WAbil.MaxHP, ObjectId, "");
+                if (BaseObject_34.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
                 {
-                    BaseObject_34.SendMsg(BaseObject_34, grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.m_WAbil.HP, BaseObject_34.m_WAbil.MaxHP, ObjectId, "");
+                    BaseObject_34.SendMsg(BaseObject_34, Grobal2.RM_STRUCK, (short)nDmg, BaseObject_34.m_WAbil.HP, BaseObject_34.m_WAbil.MaxHP, ObjectId, "");
                 }
             }
             if (bo35)
             {
                 GetFrontPosition(ref nX, ref nY);
-                SendRefMsg(grobal2.RM_RUSHKUNG, m_btDirection, nX, nY, 0, "");
+                SendRefMsg(Grobal2.RM_RUSHKUNG, m_btDirection, nX, nY, 0, "");
                 SysMsg(M2Share.sMateDoTooweak, TMsgColor.c_Red, TMsgType.t_Hint);
             }
             if (n28 > 0)
@@ -4722,7 +4722,7 @@ namespace M2Server
                 nDmg = M2Share.RandomNumber.Random(n24 * 10) + (n24 + 1) * 3;
                 nDmg = GetHitStruckDamage(this, nDmg);
                 StruckDamage(nDmg);
-                SendRefMsg(grobal2.RM_STRUCK, (short)nDmg, m_WAbil.HP, m_WAbil.MaxHP, 0, "");
+                SendRefMsg(Grobal2.RM_STRUCK, (short)nDmg, m_WAbil.HP, m_WAbil.MaxHP, 0, "");
             }
             return result;
         }
@@ -4761,7 +4761,7 @@ namespace M2Server
             var result = false;
             var s1C = string.Empty;
             var mineEvent = (TStoneMineEvent)m_PEnvir.GetEvent(nX, nY);
-            if (mineEvent != null && mineEvent.m_nEventType == grobal2.ET_MINE)
+            if (mineEvent != null && mineEvent.m_nEventType == Grobal2.ET_MINE)
             {
                 if (mineEvent.m_nMineCount > 0)
                 {
@@ -4771,12 +4771,12 @@ namespace M2Server
                         var pileEvent = (TPileStones)m_PEnvir.GetEvent(m_nCurrX, m_nCurrY);
                         if (pileEvent == null)
                         {
-                            pileEvent = new TPileStones(m_PEnvir, m_nCurrX, m_nCurrY, grobal2.ET_PILESTONES, 5 * 60 * 1000);
+                            pileEvent = new TPileStones(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_PILESTONES, 5 * 60 * 1000);
                             M2Share.EventManager.AddEvent(pileEvent);
                         }
                         else
                         {
-                            if (pileEvent.m_nEventType == grobal2.ET_PILESTONES)
+                            if (pileEvent.m_nEventType == Grobal2.ET_PILESTONES)
                             {
                                 pileEvent.AddEventParam();
                             }
@@ -4805,13 +4805,13 @@ namespace M2Server
                     }
                 }
             }
-            SendRefMsg(grobal2.RM_HEAVYHIT, m_btDirection, m_nCurrX, m_nCurrY, 0, s1C);
+            SendRefMsg(Grobal2.RM_HEAVYHIT, m_btDirection, m_nCurrX, m_nCurrY, 0, s1C);
             return result;
         }
 
         private void SendSaveItemList(int nBaseObject)
         {
-            TItem Item;
+            MirItem Item;
             string sSendMsg;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
@@ -4836,7 +4836,7 @@ namespace M2Server
                         sSendMsg = sSendMsg + EDcode.EncodeBuffer(OClientItem) + '/';
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
                 SendSocket(m_DefMsg, sSendMsg);
             }
             else
@@ -4857,7 +4857,7 @@ namespace M2Server
                         sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
                     }
                 }
-                m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
                 SendSocket(m_DefMsg, sSendMsg);
             }
         }
@@ -4866,11 +4866,11 @@ namespace M2Server
         {
             if (m_MyGuild != null)
             {
-                SendDefMessage(grobal2.SM_CHANGEGUILDNAME, 0, 0, 0, 0, m_MyGuild.sGuildName + '/' + m_sGuildRankName);
+                SendDefMessage(Grobal2.SM_CHANGEGUILDNAME, 0, 0, 0, 0, m_MyGuild.sGuildName + '/' + m_sGuildRankName);
             }
             else
             {
-                SendDefMessage(grobal2.SM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
             }
         }
 
@@ -4881,13 +4881,13 @@ namespace M2Server
             {
                 s10 = s10 + ItemList[i] + '/' + ItemList[i] + '/';
             }
-            m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
             SendSocket(m_DefMsg, EDcode.EncodeString(s10));
         }
 
         public void SendDelItems(TUserItem UserItem)
         {
-            TItem StdItem = null;
+            MirItem StdItem = null;
             TStdItem StdItem80 = null;
             if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
             {
@@ -4906,7 +4906,7 @@ namespace M2Server
                     {
                         OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
                 }
             }
@@ -4926,7 +4926,7 @@ namespace M2Server
                     {
                         ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                 }
             }
@@ -4934,7 +4934,7 @@ namespace M2Server
 
         public void SendUpdateItem(TUserItem UserItem)
         {
-            TItem StdItem;
+            MirItem StdItem;
             TStdItem StdItem80 = null;
             if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
             {
@@ -4953,7 +4953,7 @@ namespace M2Server
                     {
                         OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
                 }
             }
@@ -4973,7 +4973,7 @@ namespace M2Server
                     {
                         ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                 }
             }
@@ -5282,7 +5282,7 @@ namespace M2Server
         {
             int result;
             var n14 = 0;
-            TItem StdItem;
+            MirItem StdItem;
             for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
             {
                 if (nWhere == -1 || !(i == nWhere) && !(i == 1) && !(i == 2))
@@ -5302,7 +5302,7 @@ namespace M2Server
             return result;
         }
 
-        private bool EatItems(TItem StdItem, TUserItem Useritem)
+        private bool EatItems(MirItem StdItem, TUserItem Useritem)
         {
             var result = false;
             bool boNeedRecalc;
@@ -5318,7 +5318,7 @@ namespace M2Server
                     switch (StdItem.Shape)
                     {
                         case 1:
-                            IncHealthSpell(StdItem.AC, StdItem.MAC);
+                            IncHealthSpell(StdItem.Ac, StdItem.Mac);
                             result = true;
                             break;
                         case 2:
@@ -5326,17 +5326,17 @@ namespace M2Server
                             result = true;
                             break;
                         case 3:
-                            IncHealthSpell(HUtil32.Round(m_WAbil.MaxHP / 100 * StdItem.AC), HUtil32.Round(m_WAbil.MaxMP / 100 * StdItem.MAC));
+                            IncHealthSpell(HUtil32.Round(m_WAbil.MaxHP / 100 * StdItem.Ac), HUtil32.Round(m_WAbil.MaxMP / 100 * StdItem.Mac));
                             result = true;
                             break;
                         default:
-                            if (StdItem.AC > 0)
+                            if (StdItem.Ac > 0)
                             {
-                                m_nIncHealth += StdItem.AC;
+                                m_nIncHealth += StdItem.Ac;
                             }
-                            if (StdItem.MAC > 0)
+                            if (StdItem.Mac > 0)
                             {
-                                m_nIncSpell += StdItem.MAC;
+                                m_nIncSpell += StdItem.Mac;
                             }
                             result = true;
                             break;
@@ -5360,52 +5360,52 @@ namespace M2Server
                     {
                         case 12:
                             boNeedRecalc = false;
-                            if (StdItem.DC > 0)
+                            if (StdItem.Dc > 0)
                             {
-                                m_wStatusArrValue[0] = StdItem.DC;
-                                m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("攻击力增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[0] = StdItem.Dc;
+                                m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("攻击力增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
-                            if (StdItem.MC > 0)
+                            if (StdItem.Mc > 0)
                             {
-                                m_wStatusArrValue[1] = StdItem.MC;
-                                m_dwStatusArrTimeOutTick[1] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("魔法力增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[1] = StdItem.Mc;
+                                m_dwStatusArrTimeOutTick[1] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("魔法力增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
-                            if (StdItem.SC > 0)
+                            if (StdItem.Sc > 0)
                             {
-                                m_wStatusArrValue[2] = StdItem.SC;
-                                m_dwStatusArrTimeOutTick[2] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("道术增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[2] = StdItem.Sc;
+                                m_dwStatusArrTimeOutTick[2] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("道术增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
-                            if (StdItem.AC2 > 0)
+                            if (StdItem.Ac2 > 0)
                             {
-                                m_wStatusArrValue[3] = StdItem.AC2;
-                                m_dwStatusArrTimeOutTick[3] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("攻击速度增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[3] = StdItem.Ac2;
+                                m_dwStatusArrTimeOutTick[3] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("攻击速度增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
-                            if (StdItem.AC > 0)
+                            if (StdItem.Ac > 0)
                             {
-                                m_wStatusArrValue[4] = StdItem.AC;
-                                m_dwStatusArrTimeOutTick[4] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("生命值增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[4] = StdItem.Ac;
+                                m_dwStatusArrTimeOutTick[4] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("生命值增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
-                            if (StdItem.MAC > 0)
+                            if (StdItem.Mac > 0)
                             {
-                                m_wStatusArrValue[5] = StdItem.MAC;
-                                m_dwStatusArrTimeOutTick[5] = HUtil32.GetTickCount() + StdItem.MAC2 * 1000;
-                                SysMsg("魔法值增加" + StdItem.MAC2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_wStatusArrValue[5] = StdItem.Mac;
+                                m_dwStatusArrTimeOutTick[5] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
+                                SysMsg("魔法值增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
                                 boNeedRecalc = true;
                             }
                             if (boNeedRecalc)
                             {
                                 RecalcAbilitys();
-                                SendMsg(this, grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                                 result = true;
                             }
                             break;
@@ -5422,7 +5422,7 @@ namespace M2Server
             return result;
         }
 
-        private bool ReadBook(TItem StdItem)
+        private bool ReadBook(MirItem StdItem)
         {
             TUserMagic UserMagic;
             TPlayObject PlayObject;
@@ -5446,7 +5446,7 @@ namespace M2Server
                             };
                             m_MagicList.Add(UserMagic);
                             RecalcAbilitys();
-                            if (m_btRaceServer == grobal2.RC_PLAYOBJECT)
+                            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                             {
                                 PlayObject = this;
                                 PlayObject.SendAddMagic(UserMagic);
@@ -5468,13 +5468,13 @@ namespace M2Server
                 CurTrain = UserMagic.nTranPoint,
                 Def = UserMagic.MagicInfo
             };
-            m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
             SendSocket(m_DefMsg, EDcode.EncodeBuffer(clientMagic));
         }
 
         internal void SendDelMagic(TUserMagic UserMagic)
         {
-            m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DELMAGIC, UserMagic.wMagIdx, 0, 0, 1);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, UserMagic.wMagIdx, 0, 0, 1);
             SendSocket(m_DefMsg);
         }
 
@@ -5489,20 +5489,20 @@ namespace M2Server
             switch (nShape)
             {
                 case 1:
-                    SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     BaseObjectMove(m_sHomeMap, 0, 0);
                     result = true;
                     break;
                 case 2:
                     if (!m_PEnvir.Flag.boNORANDOMMOVE)
                     {
-                        SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         BaseObjectMove(m_sMapName, 0, 0);
                         result = true;
                     }
                     break;
                 case 3:
-                    SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     if (PKLevel() < 2)
                     {
                         BaseObjectMove(m_sHomeMap, m_nHomeX, m_nHomeY);
@@ -5563,7 +5563,7 @@ namespace M2Server
 
         protected void MoveToHome()
         {
-            SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+            SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             BaseObjectMove(m_sHomeMap, m_nHomeX, m_nHomeY);
         }
 
@@ -5584,7 +5584,7 @@ namespace M2Server
                 MapRandomMove(sMap, 0);
             }
             var envir = m_PEnvir;
-            if (envir != m_PEnvir && m_btRaceServer == grobal2.RC_PLAYOBJECT)
+            if (envir != m_PEnvir && m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 m_boTimeRecall = false;
             }
@@ -5623,11 +5623,11 @@ namespace M2Server
 
         private void SendDelDealItem(TUserItem UserItem)
         {
-            TItem pStdItem;
+            MirItem pStdItem;
             TStdItem StdItem = null;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
-            SendDefMessage(grobal2.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
                 if (((TPlayObject)m_DealCreat).m_nSoftVersionDateEx == 0)
@@ -5644,7 +5644,7 @@ namespace M2Server
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
                     (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
                 }
                 else
@@ -5659,7 +5659,7 @@ namespace M2Server
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;
                     }
-                    m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
                     (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                 }
                 m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
@@ -5669,11 +5669,11 @@ namespace M2Server
 
         private void SendAddDealItem(TUserItem UserItem)
         {
-            TItem StdItem;
+            MirItem StdItem;
             TStdItem StdItem80 = null;
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
-            SendDefMessage(grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
                 if ((m_DealCreat as TPlayObject).m_nSoftVersionDateEx == 0)
@@ -5689,7 +5689,7 @@ namespace M2Server
                         OClientItem.MakeIndex = UserItem.MakeIndex;
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
-                        m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
                         (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
                         m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                         m_DealLastTick = HUtil32.GetTickCount();
@@ -5707,7 +5707,7 @@ namespace M2Server
                         ClientItem.MakeIndex = UserItem.MakeIndex;
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;
-                        m_DefMsg = grobal2.MakeDefaultMsg(grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
                         (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
                         m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
                         m_DealLastTick = HUtil32.GetTickCount();
@@ -5721,7 +5721,7 @@ namespace M2Server
             m_boDealing = true;
             m_DealCreat = BaseObject;
             GetBackDealItems();
-            SendDefMessage(grobal2.SM_DEALMENU, 0, 0, 0, 0, m_DealCreat.m_sCharName);
+            SendDefMessage(Grobal2.SM_DEALMENU, 0, 0, 0, 0, m_DealCreat.m_sCharName);
             m_DealLastTick = HUtil32.GetTickCount();
         }
 
@@ -5752,7 +5752,7 @@ namespace M2Server
         {
             TUserItem UserItem;
             int nRandom;
-            if (m_ItemList.Count >= grobal2.MAXBAGITEM)
+            if (m_ItemList.Count >= Grobal2.MAXBAGITEM)
             {
                 return;
             }
@@ -5840,7 +5840,7 @@ namespace M2Server
         /// </summary>
         private void MakeMine2()
         {
-            if (m_ItemList.Count >= grobal2.MAXBAGITEM)
+            if (m_ItemList.Count >= Grobal2.MAXBAGITEM)
             {
                 return;
             }
@@ -6019,7 +6019,7 @@ namespace M2Server
 
         private void ClientStorageItem(int ObjectId, int nItemIdx, string sMsg)
         {
-            TItem StdItem;
+            MirItem StdItem;
             var bo19 = false;
             TUserItem UserItem = null;
             string sUserItemName;
@@ -6047,7 +6047,7 @@ namespace M2Server
                             m_StorageItemList.Add(UserItem);
                             m_ItemList.RemoveAt(i);
                             WeightChanged();
-                            SendDefMessage(grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
+                            SendDefMessage(Grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
@@ -6057,7 +6057,7 @@ namespace M2Server
                         }
                         else
                         {
-                            SendDefMessage(grobal2.SM_STORAGE_FULL, 0, 0, 0, 0, "");
+                            SendDefMessage(Grobal2.SM_STORAGE_FULL, 0, 0, 0, 0, "");
                         }
                         bo19 = true;
                     }
@@ -6066,13 +6066,13 @@ namespace M2Server
             }
             if (!bo19)
             {
-                SendDefMessage(grobal2.SM_STORAGE_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_STORAGE_FAIL, 0, 0, 0, 0, "");
             }
         }
 
         private void ClientTakeBackStorageItem(int NPC, int nItemIdx, string sMsg)
         {
-            TItem StdItem;
+            MirItem StdItem;
             string sUserItemName;
             var bo19 = false;
             TUserItem UserItem = null;
@@ -6089,7 +6089,7 @@ namespace M2Server
             }
             if (!m_boCanGetBackItem)
             {
-                SendMsg(merchant, grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + M2Share.g_GameCommand.UNLOCKSTORAGE.sCmd + '\\' + "仓库加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
+                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + M2Share.g_GameCommand.UNLOCKSTORAGE.sCmd + '\\' + "仓库加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
                 return;
             }
             for (var i = 0; i < m_StorageItemList.Count; i++)
@@ -6107,7 +6107,7 @@ namespace M2Server
                             {
                                 SendAddItem(UserItem);
                                 m_StorageItemList.RemoveAt(i);
-                                SendDefMessage(grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
+                                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
                                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                 if (StdItem.NeedIdentify == 1)
                                 {
@@ -6117,7 +6117,7 @@ namespace M2Server
                             }
                             else
                             {
-                                SendDefMessage(grobal2.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0, "");
+                                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0, "");
                             }
                             bo19 = true;
                         }
@@ -6132,7 +6132,7 @@ namespace M2Server
             }
             if (!bo19)
             {
-                SendDefMessage(grobal2.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -6217,19 +6217,19 @@ namespace M2Server
             {
                 HumItems = new TUserItem[13];
             }
-            HumItems[grobal2.U_DRESS] = m_UseItems[grobal2.U_DRESS];
-            HumItems[grobal2.U_WEAPON] = m_UseItems[grobal2.U_WEAPON];
-            HumItems[grobal2.U_RIGHTHAND] = m_UseItems[grobal2.U_RIGHTHAND];
-            HumItems[grobal2.U_HELMET] = m_UseItems[grobal2.U_NECKLACE];
-            HumItems[grobal2.U_NECKLACE] = m_UseItems[grobal2.U_HELMET];
-            HumItems[grobal2.U_ARMRINGL] = m_UseItems[grobal2.U_ARMRINGL];
-            HumItems[grobal2.U_ARMRINGR] = m_UseItems[grobal2.U_ARMRINGR];
-            HumItems[grobal2.U_RINGL] = m_UseItems[grobal2.U_RINGL];
-            HumItems[grobal2.U_RINGR] = m_UseItems[grobal2.U_RINGR];
-            HumItems[grobal2.U_BUJUK] = m_UseItems[grobal2.U_BUJUK];
-            HumItems[grobal2.U_BELT] = m_UseItems[grobal2.U_BELT];
-            HumItems[grobal2.U_BOOTS] = m_UseItems[grobal2.U_BOOTS];
-            HumItems[grobal2.U_CHARM] = m_UseItems[grobal2.U_CHARM];
+            HumItems[Grobal2.U_DRESS] = m_UseItems[Grobal2.U_DRESS];
+            HumItems[Grobal2.U_WEAPON] = m_UseItems[Grobal2.U_WEAPON];
+            HumItems[Grobal2.U_RIGHTHAND] = m_UseItems[Grobal2.U_RIGHTHAND];
+            HumItems[Grobal2.U_HELMET] = m_UseItems[Grobal2.U_NECKLACE];
+            HumItems[Grobal2.U_NECKLACE] = m_UseItems[Grobal2.U_HELMET];
+            HumItems[Grobal2.U_ARMRINGL] = m_UseItems[Grobal2.U_ARMRINGL];
+            HumItems[Grobal2.U_ARMRINGR] = m_UseItems[Grobal2.U_ARMRINGR];
+            HumItems[Grobal2.U_RINGL] = m_UseItems[Grobal2.U_RINGL];
+            HumItems[Grobal2.U_RINGR] = m_UseItems[Grobal2.U_RINGR];
+            HumItems[Grobal2.U_BUJUK] = m_UseItems[Grobal2.U_BUJUK];
+            HumItems[Grobal2.U_BELT] = m_UseItems[Grobal2.U_BELT];
+            HumItems[Grobal2.U_BOOTS] = m_UseItems[Grobal2.U_BOOTS];
+            HumItems[Grobal2.U_CHARM] = m_UseItems[Grobal2.U_CHARM];
             BagItems = HumanRcd.Data.BagItems;
             if (BagItems == null)
             {
@@ -6237,7 +6237,7 @@ namespace M2Server
             }
             for (var i = 0; i < m_ItemList.Count; i++)
             {
-                if (i >= grobal2.MAXBAGITEM)
+                if (i >= Grobal2.MAXBAGITEM)
                 {
                     break;
                 }
@@ -6250,7 +6250,7 @@ namespace M2Server
             }
             for (var i = 0; i < m_MagicList.Count; i++)
             {
-                if (i >= grobal2.MAXMAGIC)
+                if (i >= Grobal2.MAXMAGIC)
                 {
                     break;
                 }
@@ -6283,7 +6283,7 @@ namespace M2Server
         {
             m_nGuildRankNo = nRankNo;
             m_sGuildRankName = sRankName;
-            SendMsg(this, grobal2.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+            SendMsg(this, Grobal2.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
         }
 
         private void GetOldAbil(ref TOAbility OAbility)
@@ -6323,8 +6323,8 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_HIT || SendMessage.wIdent == grobal2.CM_HEAVYHIT || SendMessage.wIdent == grobal2.CM_BIGHIT || SendMessage.wIdent == grobal2.CM_POWERHIT 
-                        || SendMessage.wIdent == grobal2.CM_LONGHIT || SendMessage.wIdent == grobal2.CM_WIDEHIT || SendMessage.wIdent == grobal2.CM_FIREHIT)
+                    if (SendMessage.wIdent == Grobal2.CM_HIT || SendMessage.wIdent == Grobal2.CM_HEAVYHIT || SendMessage.wIdent == Grobal2.CM_BIGHIT || SendMessage.wIdent == Grobal2.CM_POWERHIT 
+                        || SendMessage.wIdent == Grobal2.CM_LONGHIT || SendMessage.wIdent == Grobal2.CM_WIDEHIT || SendMessage.wIdent == Grobal2.CM_FIREHIT)
                     {
                         result++;
                     }
@@ -6351,7 +6351,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_SPELL)
+                    if (SendMessage.wIdent == Grobal2.CM_SPELL)
                     {
                         result++;
                     }
@@ -6378,7 +6378,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_RUN)
+                    if (SendMessage.wIdent == Grobal2.CM_RUN)
                     {
                         result++;
                     }
@@ -6405,7 +6405,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_WALK)
+                    if (SendMessage.wIdent == Grobal2.CM_WALK)
                     {
                         result++;
                     }
@@ -6428,7 +6428,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_TURN)
+                    if (SendMessage.wIdent == Grobal2.CM_TURN)
                     {
                         result++;
                     }
@@ -6451,7 +6451,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == grobal2.CM_SITDOWN)
+                    if (SendMessage.wIdent == Grobal2.CM_SITDOWN)
                     {
                         result++;
                     }
@@ -6498,57 +6498,57 @@ namespace M2Server
             int dwActionIntervalTime = m_dwActionIntervalTime;
             switch (wIdent)
             {
-                case grobal2.CM_LONGHIT:
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                case Grobal2.CM_LONGHIT:
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
-                case grobal2.CM_HIT:
-                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == grobal2.CM_WALK && m_btOldDir != m_btDirection)
+                case Grobal2.CM_HIT:
+                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_WALK && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwWalkHitIntervalTime; // 走位攻击
                     }
-                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunHitIntervalTime;// 跑位攻击
                     }
                     break;
-                case grobal2.CM_RUN:
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
+                case Grobal2.CM_RUN:
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
-                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == grobal2.CM_HIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunHitIntervalTime;// 跑位攻击
                     }
-                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == grobal2.CM_SPELL && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_SPELL && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunMagicIntervalTime;// 跑位魔法
                     }
                     break;
-                case grobal2.CM_WALK:
-                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == grobal2.CM_HIT && m_btOldDir != m_btDirection)
+                case Grobal2.CM_WALK:
+                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwWalkHitIntervalTime;// 走位攻击
                     }
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
-                case grobal2.CM_SPELL: 
-                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                case Grobal2.CM_SPELL: 
+                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunMagicIntervalTime;// 跑位魔法
                     }
                     break;
             }
             // 将几个攻击操作合并成一个攻击操作代码
-            if (wIdent == grobal2.CM_HIT || wIdent == grobal2.CM_HEAVYHIT || wIdent == grobal2.CM_BIGHIT || wIdent == grobal2.CM_POWERHIT || wIdent == grobal2.CM_WIDEHIT || wIdent == grobal2.CM_FIREHIT)
+            if (wIdent == Grobal2.CM_HIT || wIdent == Grobal2.CM_HEAVYHIT || wIdent == Grobal2.CM_BIGHIT || wIdent == Grobal2.CM_POWERHIT || wIdent == Grobal2.CM_WIDEHIT || wIdent == Grobal2.CM_FIREHIT)
             {
-                wIdent = grobal2.CM_HIT;
+                wIdent = Grobal2.CM_HIT;
             }
             if (dwCheckTime >= dwActionIntervalTime)
             {
@@ -6628,7 +6628,7 @@ namespace M2Server
             return result;
         }
 
-        private bool CheckItemsNeed(TItem StdItem)
+        private bool CheckItemsNeed(MirItem StdItem)
         {
             var result = true;
             var castle = M2Share.CastleManager.IsCastleMember(this);
@@ -6832,7 +6832,7 @@ namespace M2Server
                             Human.m_btCreditPoint += (byte)M2Share.g_Config.nMasterOKCreditPoint;
                         }
                         Human.m_nBonusPoint += M2Share.g_Config.nMasterOKBonusPoint;
-                        Human.SendMsg(Human, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                        Human.SendMsg(Human, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     }
                     else
                     {
@@ -6894,7 +6894,7 @@ namespace M2Server
                     m_btCreditPoint += (byte)M2Share.g_Config.nMasterOKCreditPoint;
                 }
                 m_nBonusPoint += M2Share.g_Config.nMasterOKBonusPoint;
-                SendMsg(this, grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                SendMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             }
             if (string.IsNullOrEmpty(m_sMasterName))
             {
@@ -7083,7 +7083,7 @@ namespace M2Server
                     m_sTempPwd = sData;
                     m_boReConfigPwd = true;
                     SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);// '请重复输入一次仓库密码：'
-                    SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                    SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 }
                 else
                 {
@@ -7182,7 +7182,7 @@ namespace M2Server
                 m_boCheckOldPwd = false;
                 if (m_sStoragePwd == sData)
                 {
-                    SendMsg(this, grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                    SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     m_boSetStoragePwd = true;
                 }
@@ -7212,7 +7212,7 @@ namespace M2Server
                 {
                     if (sub_4C5370(nX, nY, 3, ref n18, ref n1C))
                     {
-                        PlayObject.SendRefMsg(grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.SpaceMove(m_sMapName, n18, n1C, 0);
                     }
                 }
@@ -7263,8 +7263,8 @@ namespace M2Server
             }
             if (boReQuestOK)
             {
-                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
-                M2Share.UserEngine.SendServerGroupMsg(grobal2.SS_207, M2Share.nServerIndex, Guild.sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
+                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, Guild.sGuildName);
             }
         }
 
