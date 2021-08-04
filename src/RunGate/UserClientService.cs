@@ -13,7 +13,7 @@ namespace RunGate
     public class UserClientService
     {
         private IClientScoket ClientSocket;
-        public int nBufferOfM2Size = 0;
+        private int nBufferOfM2Size = 0;
         private long dwProcessServerMsgTime = 0;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
@@ -32,9 +32,9 @@ namespace RunGate
         /// </summary>
         private Timer _heartTimer;
         /// <summary>
-        ///  网关 <->游戏服务器之间检测是否失败（超时）
+        ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
-        public bool boCheckServerFail = false;
+        private bool boCheckServerFail = false;
 
         public UserClientService(string serverAddr, int serverPort)
         {
@@ -247,9 +247,6 @@ namespace RunGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    //byte[] MsgBuff = new byte[Buff.Length - HeaderMessageSize];
-                                    //Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                    //ProcessMakeSocketStr(pMsg.nSocket, pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     if (pMsg.nLength > 0)
                                     {
                                         byte[] MsgBuff = new byte[pMsg.nLength];
@@ -325,12 +322,12 @@ namespace RunGate
                             {
                                 var nLen = nMsgLen - 12;
                                 var sb = new System.Text.StringBuilder();
-                                sb.Append("#");
+                                sb.Append('#');
                                 sb.Append(EDcode.EncodeMessage(pDefMsg));
                                 var strBuff = new byte[nLen];
                                 Buffer.BlockCopy(buffer, 12, strBuff, 0, strBuff.Length);
                                 sb.Append(HUtil32.StrPasTest(strBuff));
-                                sb.Append("!");
+                                sb.Append('!');
                                 sSendMsg = sb.ToString();
                             }
                             else

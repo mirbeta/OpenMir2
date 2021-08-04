@@ -161,11 +161,10 @@ namespace RunGate
             try
             {
                 long dwProcessMsgTick = HUtil32.GetTickCount();
-                var data = new byte[token.BytesReceived];
-                Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, token.BytesReceived);
-                string sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 int nReviceLen = token.BytesReceived;
-
+                var data = new byte[nReviceLen];
+                Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
+                var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 if (nSocketIndex >= 0 && nSocketIndex < userClinet.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                 {
                     if (nReviceLen > GateShare.nNomClientPacketSize)
@@ -199,16 +198,16 @@ namespace RunGate
                     {
                         GateShare.AddMainLogMsg(sReviceMsg, 0);
                     }
-                    TSessionInfo UserSession = userClinet.SessionArray[nSocketIndex];
-                    if (UserSession.Socket == token.Socket)
+                    var userSession = userClinet.SessionArray[nSocketIndex];
+                    if (userSession.Socket == token.Socket)
                     {
                         int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                         if (nPos > -1)
                         {
-                            UserSession.boSendAvailable = true;
-                            UserSession.boSendCheck = false;
-                            UserSession.nCheckSendLength = 0;
-                            UserSession.dwReceiveTick = HUtil32.GetTickCount();
+                            userSession.boSendAvailable = true;
+                            userSession.boSendCheck = false;
+                            userSession.nCheckSendLength = 0;
+                            userSession.dwReceiveTick = HUtil32.GetTickCount();
                             sReviceMsg = sReviceMsg.Substring(0, nPos);
                             //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                         }

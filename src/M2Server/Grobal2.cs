@@ -7,7 +7,6 @@ using SystemModule.Packages;
 
 namespace M2Server
 {
-
     /// <summary>
     /// 假人登陆结构
     /// </summary>
@@ -23,7 +22,6 @@ namespace M2Server
         public short nX;//X坐标
         public short nY;//Y坐标
     }
-
 
     public enum MessageType
     {
@@ -1587,9 +1585,7 @@ namespace M2Server
 
         public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, ushort wAppr)
         {
-            int result;
-            result = HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), wAppr);
-            return result;
+            return HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), wAppr);
         }
 
         public static int MakeHumanFeature(byte btRaceImg, byte btDress, byte btWeapon, byte btHair)

@@ -118,6 +118,7 @@ namespace RunGate
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
         public static ConcurrentDictionary<string, UserClientService> _ClientGateMap;
+        public static ConcurrentDictionary<int, bool> Magic_Attack_Array;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -221,6 +222,12 @@ namespace RunGate
             TempBlockIPList = new List<string>();
             SessionIndex = new ConcurrentDictionary<string, int>();
             _ClientGateMap = new ConcurrentDictionary<string, UserClientService>();
+            Magic_Attack_Array = new ConcurrentDictionary<int, bool>();
+        }
+
+        public static void InitMagicAttackMap()
+        {
+            //Magic_Attack_Array.TryAdd();
         }
     } 
 }

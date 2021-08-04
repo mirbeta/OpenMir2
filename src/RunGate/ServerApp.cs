@@ -51,11 +51,13 @@ namespace RunGate
             await Task.WhenAll(gTasks);
         }
 
+        /// <summary>
+        /// 处理客户端发过来的消息
+        /// </summary>
         private async Task ProcessReviceMessage()
         {
             try
             {
-                //long dwProcessReviceMsgLimiTick = 0;
                 while (await GateShare.ReviceMsgList.Reader.WaitToReadAsync())
                 {
                     if (GateShare.ReviceMsgList.Reader.Count <= 0)
@@ -64,12 +66,7 @@ namespace RunGate
                     }
                     if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
                     {
-                        //dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
                         ProcessUserPacket(message);
-                        // if (HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick > GateShare.dwProcessReviceMsgTimeLimit)
-                        // {
-                        //     continue;
-                        // }
                     }
                 }
             }
@@ -79,14 +76,15 @@ namespace RunGate
             }
         }
 
+        /// <summary>
+        /// 处理M2发过来的消息
+        /// </summary>
         private async Task ProcessSendMessage()
         {
             try
             {
-                //long dwProcessReviceMsgLimiTick = 0;
                 while (await GateShare.SendMsgList.Reader.WaitToReadAsync())
                 {
-                    //dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
                     if (GateShare.SendMsgList.Reader.Count <= 0)
                     {
                         break;
@@ -94,10 +92,6 @@ namespace RunGate
                     if (GateShare.SendMsgList.Reader.TryRead(out var message))
                     {
                         ProcessPacket(message);
-                        // if (HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick > GateShare.dwProcessSendMsgTimeLimit)
-                        // {
-                        //     break;
-                        // }
                     }
                 }
             }
@@ -323,6 +317,24 @@ namespace RunGate
                                             DefMsg = EDcode.DecodeMessage(sDefMsg); // 检查数据
                                             if (!string.IsNullOrEmpty(sDataMsg))
                                             {
+                                                if (DefMsg.Ident == Grobal2.CM_SPELL) //使用技能
+                                                {
+                                                    //检查技能是否超速
+                                                }
+
+                                                if (DefMsg.Ident == Grobal2.CM_EAT) //使用物品
+                                                { 
+                                                    // var dwTime = HUtil32.GetTickCount();
+                                                    // if (dwTime - LastEat > dwEatTime)
+                                                    // {
+                                                    //     LastEat = dwTime;
+                                                    // }
+                                                    // else
+                                                    // {
+                                                    //    GateShare.AddMainLogMsg(string.Format("超速封包(药品):{0}",[dwTime - LastEat]), 1);
+                                                    // }
+                                                }
+
                                                 if (DefMsg.Ident == Grobal2.CM_SAY) // 控制发言间隔时间
                                                 {
                                                     sDataText = EDcode.DeCodeString(sDataMsg);
