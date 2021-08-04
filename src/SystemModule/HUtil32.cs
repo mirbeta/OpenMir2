@@ -159,7 +159,15 @@ namespace SystemModule
 
         public static string StrPasTest(byte[] buff)
         {
-            var nLen = buff.Length - 1;
+            var nLen = 0;
+            if (buff[buff.Length - 1] == 0)
+            {
+                nLen = buff.Length - 1;
+            }
+            else
+            {
+                nLen = buff.Length;
+            }
             var sb = new char[nLen];
             for (var i = 0; i < nLen; i++)
             {
@@ -735,12 +743,12 @@ namespace SystemModule
 
         public static byte[] GetBytes(string str)
         {
-            return Encoding.ASCII.GetBytes(str);
+            return Encoding.GetEncoding("gb2312").GetBytes(str);
         }
 
         public static byte[] GetBytes(int str)
         {
-            return Encoding.ASCII.GetBytes(str.ToString());
+            return Encoding.GetEncoding("gb2312").GetBytes(str.ToString());
         }
 
         public static int GetDayCount(DateTime MaxDate, DateTime MinDate)

@@ -1275,7 +1275,7 @@ namespace M2Server
                             _gate.nSendBlockCount += M2Share.g_Config.nSendBlock;
                             nSendBuffLen -= M2Share.g_Config.nSendBlock;
                             var tempBuff = new byte[nSendBuffLen];
-                            Array.Copy(sendBuffer, nSendBuffLen, tempBuff, 0, nSendBuffLen);
+                            Array.Copy(sendBuffer, M2Share.g_Config.nSendBlock, tempBuff, 0, nSendBuffLen);
                             sendBuffer = tempBuff;
                             continue;
                         }

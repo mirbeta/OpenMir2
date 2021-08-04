@@ -6590,7 +6590,7 @@ namespace M2Server
                     var matchCollection = Regex.Matches(sText, "<?@(\\w+?>)", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(3));
                     foreach (Match match in matchCollection)
                     {
-                        var line = match.Value.Remove(match.Value.Length - 1);
+                        var line = match.Value.Remove(match.Value.Length - 1).ToLower();
                         //if (line[0] != '<')
                         //{
                         //    line = "<" + HUtil32.GetValidStr3(line, ref sData, "<");

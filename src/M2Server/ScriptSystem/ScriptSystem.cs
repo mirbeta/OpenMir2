@@ -1776,7 +1776,7 @@ namespace M2Server
             var s54 = string.Empty;
             var s58 = string.Empty;
             var s5C = string.Empty;
-            var s74 = string.Empty;
+            var slabName = string.Empty;
             TDefineInfo DefineInfo;
             var bo8D = false;
             TScript Script = null;
@@ -2046,14 +2046,14 @@ namespace M2Server
                             n6C = 20;
                             continue;
                         }
-                        s34 = HUtil32.ArrestStringEx(s34, "[", "]", ref s74);
+                        s34 = HUtil32.ArrestStringEx(s34, "[", "]", ref slabName);
                         SayingRecord = new TSayingRecord
                         {
                             ProcedureList = new List<TSayingProcedure>(),
-                            sLabel = s74
+                            sLabel = slabName.ToLower()
                         };
-                        s34 = HUtil32.GetValidStrCap(s34, ref s74, new[] { " ", "\t" });
-                        if (s74.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
+                        s34 = HUtil32.GetValidStrCap(s34, ref slabName, new[] { " ", "\t" });
+                        if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                         {
                             SayingRecord.boExtJmp = true;
                         }

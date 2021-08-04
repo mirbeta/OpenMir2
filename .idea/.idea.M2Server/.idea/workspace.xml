@@ -6,16 +6,13 @@
     <projectFile>ConsoleApp1/ConsoleApp1.csproj</projectFile>
     <projectFile>ConsoleApp2/ConsoleApp2.csproj</projectFile>
     <projectFile>src/RunGate/RunGate.csproj</projectFile>
-    <projectFile profileName="RunGate">src/RunGate/RunGate.csproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/StartContestCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/StartContestCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,10 +31,10 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -273,6 +270,8 @@
       <workItem from="1628047757604" duration="217000" />
       <workItem from="1628048030953" duration="13531000" />
       <workItem from="1628067175257" duration="1618000" />
+      <workItem from="1628084087136" duration="28000" />
+      <workItem from="1628084174982" duration="635000" />
     </task>
     <servers />
   </component>
@@ -327,7 +326,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
-          <line>43</line>
+          <line>44</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="42" containingFunctionPresentation="method 'RunNotice'">
             <startOffsets>
               <option value="1327" />
@@ -340,7 +339,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
-          <line>41</line>
+          <line>42</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="40" containingFunctionPresentation="method 'RunNotice'">
             <startOffsets>
               <option value="1260" />
@@ -353,7 +352,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
-          <line>11</line>
+          <line>12</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="10" containingFunctionPresentation="method 'SendNotice'">
             <startOffsets>
               <option value="215" />
@@ -366,7 +365,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs</url>
-          <line>22</line>
+          <line>23</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" initialLine="21" containingFunctionPresentation="method 'SendNotice'">
             <startOffsets>
               <option value="632" />
