@@ -3853,6 +3853,10 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 转换有问题
+        /// </summary>
+        /// <returns></returns>
         public int GetCharStatus()
         {
             int result = 0;
