@@ -32,7 +32,7 @@ namespace M2Server
             for (var i = 0; i < GuildList.Count; i++)
             {
                 Guild = GuildList[i];
-                if (String.Compare(Guild.sGuildName, sGuildName, StringComparison.Ordinal) == 0)
+                if (String.Compare(Guild.sGuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (Guild.m_RankList.Count > 1)
                     {

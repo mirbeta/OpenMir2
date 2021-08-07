@@ -35,7 +35,13 @@ namespace M2Server
         public bool boDropLargeBlock;
         public int nAvailableBlock;
         public int nGateLoad;
+        /// <summary>
+        /// 服务器上线人数（默认1000）
+        /// </summary>
         public int nUserFull;
+        /// <summary>
+        /// 怪物行动速度(默认300)
+        /// </summary>
         public int nZenFastStep;
         public string sGateAddr;
         public int nGatePort;

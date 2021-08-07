@@ -687,6 +687,7 @@ namespace M2Server
                         nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
                         SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
+                        Console.WriteLine("有新玩家进入" + sIPaddr);
                         break;
                     case Grobal2.GM_CLOSE:
                         CloseUser(GateIdx, MsgHeader.nSocket);

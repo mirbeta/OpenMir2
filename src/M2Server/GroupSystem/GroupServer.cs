@@ -182,7 +182,7 @@ namespace M2Server
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (!hum.m_boHearWhisper)
+                    if (hum.m_boHearWhisper)
                     {
                         hum.WhisperRe(Str, 1);
                     }
@@ -201,7 +201,7 @@ namespace M2Server
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (!hum.m_boHearWhisper)
+                    if (hum.m_boHearWhisper)
                     {
                         hum.WhisperRe(Str, 0);
                     }
@@ -220,7 +220,7 @@ namespace M2Server
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (!hum.m_boHearWhisper)
+                    if (hum.m_boHearWhisper)
                     {
                         hum.WhisperRe(Str, 2);
                     }

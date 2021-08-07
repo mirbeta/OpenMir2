@@ -46,7 +46,7 @@ namespace M2Server
         private int m_nMonGenListPosition;
         private int m_nProcHumIDx;
         private IList<TPlayObject> m_PlayObjectFreeList;
-        private IList<ServerGruopInfo> m_OtherUserNameList;
+        private Dictionary<string,ServerGruopInfo> m_OtherUserNameList;
         private List<TPlayObject> m_PlayObjectList;
         public IList<TMonInfo> MonsterList;
         private int nMerchantPosition;
@@ -115,7 +115,7 @@ namespace M2Server
             m_ListOfGateIdx = new ArrayList();
             m_ListOfSocket = new ArrayList();
             OldMagicList = new ArrayList();
-            m_OtherUserNameList = new List<ServerGruopInfo>();
+            m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>();
             m_UserLogonList = new List<TAILogon>();
             _userEngineThread = new Thread(PrcocessData);
             _processTheread = new Thread(ProcessPlayObjectData);
@@ -125,6 +125,8 @@ namespace M2Server
         public int OnlinePlayObject { get { return GetOnlineHumCount(); } }
         public int PlayObjectCount { get { return GetUserCount(); } }
         public int LoadPlayCount { get { return GetLoadPlayCount(); } }
+
+        public IEnumerable<TPlayObject> PlayObjects => m_PlayObjectList;
 
         public void Start()
         {
@@ -412,8 +414,8 @@ namespace M2Server
                     while (true)
                     {
                         if (Envir.CanWalk(PlayObject.m_nCurrX, PlayObject.m_nCurrY, true)) break;
-                        PlayObject.m_nCurrX = (byte)(PlayObject.m_nCurrX - 3 + M2Share.RandomNumber.Random(6));
-                        PlayObject.m_nCurrY = (byte)(PlayObject.m_nCurrY - 3 + M2Share.RandomNumber.Random(6));
+                        PlayObject.m_nCurrX = (short)(PlayObject.m_nCurrX - 3 + M2Share.RandomNumber.Random(6));
+                        PlayObject.m_nCurrY = (short)(PlayObject.m_nCurrY - 3 + M2Share.RandomNumber.Random(6));
                         nC++;
                         if (nC >= 5) break;
                     }
@@ -750,9 +752,10 @@ namespace M2Server
                     Thread.Sleep(10);
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 M2Share.MainOutMessage(sExceptionMsg8);
+                M2Share.MainOutMessage(ex.StackTrace);
             }
         }
 
@@ -884,11 +887,11 @@ namespace M2Server
                 // 刷新怪物结束
                 var dwMonProcTick = HUtil32.GetTickCount();
                 nMonsterProcessCount = 0;
-                var i = 0;
+                var currentMongen = 0;
                 var monGenTotal = m_MonGenList.Count;
-                for (i = m_nMonGenListPosition; i < monGenTotal; i++)
+                for (currentMongen = m_nMonGenListPosition; currentMongen < monGenTotal; currentMongen++)
                 {
-                    MonGen = m_MonGenList[i];
+                    MonGen = m_MonGenList[currentMongen];
                     int nProcessPosition;
                     if (m_nMonGenCertListPosition < MonGen.CertCount) //TODO 耗CPU MonGen.CertList.Count, 修改为计数
                         nProcessPosition = m_nMonGenCertListPosition;
@@ -946,7 +949,7 @@ namespace M2Server
                     }
                     if (boProcessLimit) break;
                 }
-                if (monGenTotal <= i)
+                if (monGenTotal <= currentMongen)
                 {
                     m_nMonGenListPosition = 0;
                     nMonsterCount = nMonsterProcessPostion;
@@ -955,7 +958,7 @@ namespace M2Server
                 if (!boProcessLimit)
                     m_nMonGenListPosition = 0;
                 else
-                    m_nMonGenListPosition = i;
+                    m_nMonGenListPosition = currentMongen;
             }
             catch (Exception e)
             {
@@ -963,6 +966,11 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 获取刷怪数量
+        /// </summary>
+        /// <param name="MonGen"></param>
+        /// <returns></returns>
         private int GetGenMonCount(TMonGenInfo MonGen)
         {
             var nCount = 0;
@@ -1094,7 +1102,7 @@ namespace M2Server
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 StdItem = StdItemList[i];
-                if (string.Compare(StdItem.Name.ToLower(), sItemName.ToLower(), StringComparison.Ordinal) == 0)
+                if (string.Compare(StdItem.Name.ToLower(), sItemName.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = StdItem;
                     break;
@@ -1127,19 +1135,23 @@ namespace M2Server
 
         public bool FindOtherServerUser(string sName, ref int nServerIndex)
         {
+            if (m_OtherUserNameList.TryGetValue(sName, out var groupServer))
+            {
+                nServerIndex = groupServer.nServerIdx;
+                Console.WriteLine($"玩家在[{nServerIndex}]服务器上.");
+                return true;
+            }
             return false;
         }
 
-        public void CryCry(short wIdent, TEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor,
-            string sMsg)
+        public void CryCry(short wIdent, TEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
             TPlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
                 if (!PlayObject.m_boGhost && PlayObject.m_PEnvir == pMap && PlayObject.m_boBanShout &&
-                    Math.Abs(PlayObject.m_nCurrX - nX) < nWide &&
-                    Math.Abs(PlayObject.m_nCurrY - nY) < nWide)
+                    Math.Abs(PlayObject.m_nCurrX - nX) < nWide && Math.Abs(PlayObject.m_nCurrY - nY) < nWide)
                     PlayObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
             }
         }
@@ -1152,7 +1164,7 @@ namespace M2Server
             for (var i = 0; i < MonsterList.Count; i++)
             {
                 var Monster = MonsterList[i];
-                if (string.Compare(Monster.sName, mon.m_sCharName, StringComparison.Ordinal) == 0)
+                if (string.Compare(Monster.sName, mon.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     ItemList = Monster.ItemList;
                     break;
@@ -1164,8 +1176,7 @@ namespace M2Server
                     var MonItem = ItemList[i];
                     if (M2Share.RandomNumber.Random(MonItem.MaxPoint) <= MonItem.SelPoint)
                     {
-                        if (string.Compare(MonItem.ItemName, Grobal2.sSTRING_GOLDNAME,
-                                StringComparison.Ordinal) == 0)
+                        if (string.Compare(MonItem.ItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             mon.m_nGold = mon.m_nGold + MonItem.Count / 2 + M2Share.RandomNumber.Random(MonItem.Count);
                         }
@@ -1173,22 +1184,24 @@ namespace M2Server
                         {
                             // 蜡聪农 酒捞袍 捞亥飘....
                             if (string.IsNullOrEmpty(iname)) iname = MonItem.ItemName;
-                            var UserItem = new TUserItem();
+                            TUserItem UserItem = null;
                             if (CopyToUserItemFromName(iname, ref UserItem))
                             {
                                 UserItem.Dura = (ushort)HUtil32.Round(UserItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
                                 var StdItem = GetStdItem(UserItem.wIndex);
                                 if (StdItem == null) continue;
                                 if (M2Share.RandomNumber.Random(M2Share.g_Config.nMonRandomAddValue) == 0)
+                                {
                                     StdItem.RandomUpgradeItem(UserItem);
+                                }
                                 if (new ArrayList(new[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                {
                                     if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
+                                    {
                                         StdItem.RandomUpgradeUnknownItem(UserItem);
+                                    }
+                                }
                                 mon.m_ItemList.Add(UserItem);
-                            }
-                            else
-                            {
-                                UserItem = null;
                             }
                         }
                     }
@@ -1307,7 +1320,6 @@ namespace M2Server
                         sMsg);
                     break;
             }
-
             if (!PlayObject.m_boReadyRun) return;
             switch (DefMsg.Ident)
             {
@@ -1371,14 +1383,8 @@ namespace M2Server
         {
             var Name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
-            for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
-            {
-                if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.Ordinal) == 0)
-                {
-                    m_OtherUserNameList.RemoveAt(i);
-                }
-            }
-            m_OtherUserNameList.Add(new ServerGruopInfo()
+            m_OtherUserNameList.Remove(Name.ToLower());
+            m_OtherUserNameList.Add(Name.ToLower(), new ServerGruopInfo()
             {
                 nServerIdx = sNum,
                 sCharName = uname
@@ -1389,14 +1395,15 @@ namespace M2Server
         {
             var Name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
-            for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
-            {
-                if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.Ordinal) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
-                {
-                    m_OtherUserNameList.RemoveAt(i);
-                    break;
-                }
-            }
+            m_OtherUserNameList.Remove(Name.ToLower());
+            // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
+            // {
+            //     if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.OrdinalIgnoreCase) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)
+            //     {
+            //         m_OtherUserNameList.RemoveAt(i);
+            //         break;
+            //     }
+            // }
         }
 
         private TBaseObject AddBaseObject(string sMapName, short nX, short nY, int nMonRace, string sMonName)
@@ -1730,10 +1737,8 @@ namespace M2Server
                     {
                         for (var i = 0; i < nCount; i++)
                         {
-                            nX = (short)(MonGen.nX - MonGen.nRange +
-                                          M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1));
-                            nY = (short)(MonGen.nY - MonGen.nRange +
-                                          M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1));
+                            nX = (short)(MonGen.nX - MonGen.nRange + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1));
+                            nY = (short)(MonGen.nY - MonGen.nRange + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1));
                             Cert = AddBaseObject(MonGen.sMapName, nX, nY, MonGen.nRace, MonGen.sMonName);
                             if (Cert != null)
                             {
@@ -1762,7 +1767,7 @@ namespace M2Server
             TPlayObject PlayObject = null;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
-                if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
+                if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject = m_PlayObjectList[i];
                     if (!PlayObject.m_boGhost)
@@ -1786,7 +1791,7 @@ namespace M2Server
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
                 {
-                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject = m_PlayObjectList[i];
                         PlayObject.m_boEmergencyClose = true;
@@ -1808,7 +1813,7 @@ namespace M2Server
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
                 {                    
-                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = m_PlayObjectList[i];
                         break;
@@ -1877,7 +1882,7 @@ namespace M2Server
             for (var i = 0; i < m_AdminList.Count; i++)
             {
                 AdminInfo = m_AdminList[i];
-                if (string.Compare(AdminInfo.sChrName, sUserName, StringComparison.Ordinal) == 0)
+                if (string.Compare(AdminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     btPermission = (byte)AdminInfo.nLv;
                     sIPaddr = AdminInfo.sIPaddr;
@@ -1907,7 +1912,7 @@ namespace M2Server
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (string.Compare(PlayObject.m_sCharName, sChrName, StringComparison.Ordinal) == 0)
+                if (string.Compare(PlayObject.m_sCharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_boKickFlag = true;
                     break;
@@ -2017,7 +2022,7 @@ namespace M2Server
             for (var i = 0; i < m_ChangeServerList.Count; i++)
             {
                 SwitchData = m_ChangeServerList[i];
-                if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.Ordinal) == 0 && SwitchData.nCode == nCode)
+                if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && SwitchData.nCode == nCode)
                 {
                     result = SwitchData;
                     break;
@@ -2551,7 +2556,7 @@ namespace M2Server
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (string.Compare(PlayObject.m_sUserID, sAccount, StringComparison.Ordinal) == 0)
+                if (string.Compare(PlayObject.m_sUserID, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_boExpire = true;
                     break;

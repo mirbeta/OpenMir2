@@ -9,6 +9,7 @@ namespace M2Server
         public int nParam3;
         public int dwDeliveryTime;
         public TBaseObject BaseObject;
+        public int ObjectId;
         public bool boLateDelivery;
         public string Buff;
     }

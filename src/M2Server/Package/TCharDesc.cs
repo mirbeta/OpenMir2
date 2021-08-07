@@ -5,7 +5,7 @@ namespace M2Server
     public struct TCharDesc
     {
         public int Feature;
-        public int Status;
+        public long Status;
 
         public byte[] ToByte()
         {

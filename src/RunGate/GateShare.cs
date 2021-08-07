@@ -19,9 +19,7 @@ namespace RunGate
         public static string GateClass = "GameGate";
         public static string GateName = "游戏网关";
         public static string TitleName = "SKY引擎";
-        public static string ServerAddr = "10.10.0.101";
-        public static int ServerPort = 5000;
-        public static string GateAddr = "10.10.0.101";
+        public static string GateAddr = "10.10.0.188";
         public static int GatePort = 7200;
         public static bool boStarted = false;
         public static bool boServerReady;
@@ -119,6 +117,7 @@ namespace RunGate
         public static ConcurrentDictionary<string, UserClientService> _ClientGateMap;
         private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
+        public static ConcurrentDictionary<string, UserClientService> ServerGateList;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -222,6 +221,7 @@ namespace RunGate
             _ClientGateMap = new ConcurrentDictionary<string, UserClientService>();
             Magic_Attack_Array = new ConcurrentDictionary<int, bool>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
+            ServerGateList = new ConcurrentDictionary<string, UserClientService>();
         }
 
         public static void InitMagicAttackMap()
@@ -267,6 +267,32 @@ namespace RunGate
             MagicDelayTimeMap[45] = 1000; //灭天火
             MagicDelayTimeMap[46] = 1000; //分身术
             MagicDelayTimeMap[47] = 1000; //火龙焰
+        }
+
+        public static void Add(string name, UserClientService userClientService)
+        {
+            if (ServerGateList.ContainsKey(name))
+            {
+                return;
+            }
+            ServerGateList.TryAdd(name, userClientService);
+        }
+
+        public static void Delete(string name)
+        {
+            ServerGateList.TryRemove(name, out var userClientService);
+        }
+
+        public static UserClientService GetClientService()
+        {
+            //TODO 根据配置文件有三种模式  默认随机
+            //1.轮询分配
+            //2.总是分配到最小资源 即网关在线人数最小的那个
+            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
+            var userList = new List<UserClientService>(ServerGateList.Values);
+            var random = new System.Random().Next(userList.Count);
+            Console.WriteLine($"链接数量:[{userList.Count}]");
+            return userList[random];
         }
     } 
 }

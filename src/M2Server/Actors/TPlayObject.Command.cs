@@ -33,7 +33,7 @@ namespace M2Server
             for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
             {
                 UserMagic = PlayObject.m_MagicList[i];
-                if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.Ordinal) == 0)
+                if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     UserMagic.btLevel = (byte)nLevel;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
@@ -569,7 +569,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                if (string.Compare(sDearName.ToLower(), "无", StringComparison.Ordinal) == 0)
+                if (string.Compare(sDearName.ToLower(), "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_sDearName = "";
                     PlayObject.RefShowName();
@@ -676,15 +676,15 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-                if (string.Compare(sJobName, M2Share.sWarrior, StringComparison.Ordinal) == 0)
+                if (string.Compare(sJobName, M2Share.sWarrior, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jWarr;
                 }
-                if (string.Compare(sJobName, M2Share.sWizard, StringComparison.Ordinal) == 0)
+                if (string.Compare(sJobName, M2Share.sWizard, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jWizard;
                 }
-                if (string.Compare(sJobName, M2Share.sTaos, StringComparison.Ordinal) == 0)
+                if (string.Compare(sJobName, M2Share.sTaos, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.m_btJob = M2Share.jTaos;
                 }
@@ -738,7 +738,7 @@ namespace M2Server
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (PlayObject != null)
             {
-               if (string.Compare(sMasterName, "无", StringComparison.Ordinal) == 0)
+               if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                {
                    PlayObject.m_sMasterName = "";
                    PlayObject.RefShowName();
@@ -869,42 +869,6 @@ namespace M2Server
             }
         }
 
-        public void CmdChangeUserFull(string sCmd, string sUserCount)
-        {
-            int nCount;
-            if (m_btPermission < 6)
-            {
-                return;
-            }
-            nCount = HUtil32.Str_ToInt(sUserCount, -1);
-            if (sUserCount == "" || nCount < 1 || sUserCount != "" && sUserCount[1] == '?')
-            {
-                SysMsg("设置服务器最高上线人数。", TMsgColor.c_Red, TMsgType.t_Hint);
-                SysMsg("命令格式: @" + sCmd + " 人数", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            M2Share.g_Config.nUserFull = nCount;
-            SysMsg(format("服务器上线人数限制: %d", nCount), TMsgColor.c_Green, TMsgType.t_Hint);
-        }
-
-        public void CmdChangeZenFastStep(string sCmd, string sFastStep)
-        {
-            int nFastStep;
-            if (m_btPermission < 6)
-            {
-                return;
-            }
-            nFastStep = HUtil32.Str_ToInt(sFastStep, -1);
-            if (sFastStep == "" || nFastStep < 1 || sFastStep != "" && sFastStep[1] == '?')
-            {
-                SysMsg("设置怪物行动速度。", TMsgColor.c_Red, TMsgType.t_Hint);
-                SysMsg("命令格式: @" + sCmd + " 速度", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            M2Share.g_Config.nZenFastStep = nFastStep;
-            SysMsg(format("怪物行动速度: %d", nFastStep), TMsgColor.c_Green, TMsgType.t_Hint);
-        }
-
         public void CmdClearBagItem(TGameCmd Cmd, string sHumanName)
         {
             TPlayObject PlayObject;
@@ -1011,13 +975,13 @@ namespace M2Server
             for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)
             {
                 Envir = M2Share.g_MapManager.Maps[i];
-                if (Envir != null && (boKillAllMap || string.Compare(Envir.sMapName.ToLower(), sMapName, StringComparison.Ordinal) == 0))
+                if (Envir != null && (boKillAllMap || string.Compare(Envir.sMapName.ToLower(), sMapName, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     M2Share.UserEngine.GetMapMonster(Envir, MonList);
                     for (var j = 0; j < MonList.Count; j++)
                     {
                         BaseObject = MonList[j] as TBaseObject;
-                        if (boKillAll || string.Compare(sMonName.ToLower(), BaseObject.m_sCharName, StringComparison.Ordinal) == 0)
+                        if (boKillAll || string.Compare(sMonName.ToLower(), BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             BaseObject.m_boNoItem = boNotItem;
                             BaseObject.m_WAbil.HP = 0;
@@ -1753,7 +1717,7 @@ namespace M2Server
                 SysMsg(sMapName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (string.Compare(sMapMode.ToLower(), "SAFE".ToLower(), StringComparison.Ordinal) == 0)
+            if (string.Compare(sMapMode.ToLower(), "SAFE".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1764,7 +1728,7 @@ namespace M2Server
                     Envir.Flag.boSAFE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "DARK", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1775,7 +1739,7 @@ namespace M2Server
                     Envir.Flag.boDarkness = false;
                 }
             }
-            else if (string.Compare(sMapMode, "FIGHT", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "FIGHT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1786,7 +1750,7 @@ namespace M2Server
                     Envir.Flag.boFightZone = false;
                 }
             }
-            else if (string.Compare(sMapMode, "FIGHT3", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1797,7 +1761,7 @@ namespace M2Server
                     Envir.Flag.boFight3Zone = false;
                 }
             }
-            else if (string.Compare(sMapMode, "DAY", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1808,7 +1772,7 @@ namespace M2Server
                     Envir.Flag.boDayLight = false;
                 }
             }
-            else if (string.Compare(sMapMode, "QUIZ", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1819,7 +1783,7 @@ namespace M2Server
                     Envir.Flag.boQUIZ = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NORECONNECT", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NORECONNECT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1831,7 +1795,7 @@ namespace M2Server
                     Envir.Flag.boNORECONNECT = false;
                 }
             }
-            else if (string.Compare(sMapMode, "MUSIC", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "MUSIC", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1843,7 +1807,7 @@ namespace M2Server
                     Envir.Flag.boMUSIC = false;
                 }
             }
-            else if (string.Compare(sMapMode, "EXPRATE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "EXPRATE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1855,7 +1819,7 @@ namespace M2Server
                     Envir.Flag.boEXPRATE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "PKWINLEVEL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "PKWINLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1867,7 +1831,7 @@ namespace M2Server
                     Envir.Flag.boPKWINLEVEL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "PKWINEXP", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "PKWINEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1879,7 +1843,7 @@ namespace M2Server
                     Envir.Flag.boPKWINEXP = false;
                 }
             }
-            else if (string.Compare(sMapMode, "PKLOSTLEVEL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "PKLOSTLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1891,7 +1855,7 @@ namespace M2Server
                     Envir.Flag.boPKLOSTLEVEL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "PKLOSTEXP", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "PKLOSTEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1903,7 +1867,7 @@ namespace M2Server
                     Envir.Flag.boPKLOSTEXP = false;
                 }
             }
-            else if (string.Compare(sMapMode, "DECHP", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "DECHP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1916,7 +1880,7 @@ namespace M2Server
                     Envir.Flag.boDECHP = false;
                 }
             }
-            else if (string.Compare(sMapMode, "DECGAMEGOLD", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "DECGAMEGOLD", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1929,7 +1893,7 @@ namespace M2Server
                     Envir.Flag.boDECGAMEGOLD = false;
                 }
             }
-            else if (string.Compare(sMapMode, "INCGAMEGOLD", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "INCGAMEGOLD", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1942,7 +1906,7 @@ namespace M2Server
                     Envir.Flag.boINCGAMEGOLD = false;
                 }
             }
-            else if (string.Compare(sMapMode, "INCGAMEPOINT", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "INCGAMEPOINT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "" && sParam2 != "")
                 {
@@ -1955,7 +1919,7 @@ namespace M2Server
                     Envir.Flag.boINCGAMEGOLD = false;
                 }
             }
-            else if (string.Compare(sMapMode, "RUNHUMAN", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "RUNHUMAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1966,7 +1930,7 @@ namespace M2Server
                     Envir.Flag.boRUNHUMAN = false;
                 }
             }
-            else if (string.Compare(sMapMode, "RUNMON", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "RUNMON", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1977,7 +1941,7 @@ namespace M2Server
                     Envir.Flag.boRUNMON = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NEEDHOLE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NEEDHOLE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1988,7 +1952,7 @@ namespace M2Server
                     Envir.Flag.boNEEDHOLE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NORECALL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NORECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -1999,7 +1963,7 @@ namespace M2Server
                     Envir.Flag.boNORECALL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOGUILDRECALL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOGUILDRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2010,7 +1974,7 @@ namespace M2Server
                     Envir.Flag.boNOGUILDRECALL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NODEARRECALL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NODEARRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2021,7 +1985,7 @@ namespace M2Server
                     Envir.Flag.boNODEARRECALL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOMASTERRECALL", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOMASTERRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2032,7 +1996,7 @@ namespace M2Server
                     Envir.Flag.boNOMASTERRECALL = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NORANDOMMOVE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NORANDOMMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2043,7 +2007,7 @@ namespace M2Server
                     Envir.Flag.boNORANDOMMOVE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NODRUG", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NODRUG", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2054,7 +2018,7 @@ namespace M2Server
                     Envir.Flag.boNODRUG = false;
                 }
             }
-            else if (string.Compare(sMapMode, "MINE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "MINE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2065,7 +2029,7 @@ namespace M2Server
                     Envir.Flag.boMINE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "MINE2", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "MINE2", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2076,7 +2040,7 @@ namespace M2Server
                     Envir.Flag.boMINE2 = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOTHROWITEM", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOTHROWITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2087,7 +2051,7 @@ namespace M2Server
                     Envir.Flag.boNOTHROWITEM = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NODROPITEM", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NODROPITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2098,7 +2062,7 @@ namespace M2Server
                     Envir.Flag.boNODROPITEM = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2109,7 +2073,7 @@ namespace M2Server
                     Envir.Flag.boNOPOSITIONMOVE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOHORSE", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOHORSE", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2120,7 +2084,7 @@ namespace M2Server
                     Envir.Flag.boNOHORSE = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOCHAT", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOCHAT", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2131,7 +2095,7 @@ namespace M2Server
                     Envir.Flag.boNOCHAT = false;
                 }
             }
-            else if (string.Compare(sMapMode, "NOHUMNOMON", StringComparison.Ordinal) == 0)
+            else if (string.Compare(sMapMode, "NOHUMNOMON", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2174,7 +2138,7 @@ namespace M2Server
             {
                 UserItem = PlayObject.m_ItemList[i];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
+                if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObject.SendDelItems(UserItem);
                     Dispose(UserItem);
@@ -2324,7 +2288,7 @@ namespace M2Server
                 SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 技能名称)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (string.Compare(sSkillName.ToLower(), "All", StringComparison.Ordinal) == 0)
+            if (string.Compare(sSkillName.ToLower(), "All", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 boDelAll = true;
             }
@@ -2351,7 +2315,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendDelMagic(UserMagic);
                         Dispose(UserMagic);
@@ -2497,7 +2461,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyAccountList.Count; I++)
                 //{
-                //    if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[I]), StringComparison.Ordinal) == 0)
+                //    if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[I]), StringComparison.OrdinalIgnoreCase) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyAccountList.Values[I]) != 0)
                 //        {
@@ -2537,7 +2501,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyChrNameList.Count; I++)
                 //{
-                //    if ((sCharName).ToLower().CompareTo((M2Share.g_DenyChrNameList[I]), StringComparison.Ordinal) == 0)
+                //    if ((sCharName).ToLower().CompareTo((M2Share.g_DenyChrNameList[I]), StringComparison.OrdinalIgnoreCase) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyChrNameList.Values[I]) != 0)
                 //        {
@@ -2577,7 +2541,7 @@ namespace M2Server
             {
                 //for (I = 0; I < M2Share.g_DenyIPAddrList.Count; I++)
                 //{
-                //    if ((sIPaddr).ToLower().CompareTo((M2Share.g_DenyIPAddrList[I]), StringComparison.Ordinal) == 0)
+                //    if ((sIPaddr).ToLower().CompareTo((M2Share.g_DenyIPAddrList[I]), StringComparison.OrdinalIgnoreCase) == 0)
                 //    {
                 //        if (((int)M2Share.g_DenyIPAddrList.Values[I]) != 0)
                 //        {
@@ -2709,7 +2673,7 @@ namespace M2Server
             }
             //for (I = 0; I < M2Share.g_DisableSendMsgList.Count; I++)
             //{
-            //    if ((sHumanName).ToLower().CompareTo((M2Share.g_DisableSendMsgList[I]), StringComparison.Ordinal) == 0)
+            //    if ((sHumanName).ToLower().CompareTo((M2Share.g_DisableSendMsgList[I]), StringComparison.OrdinalIgnoreCase) == 0)
             //    {
             //        PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             //        if (PlayObject != null)
@@ -3860,7 +3824,7 @@ namespace M2Server
             }
             //for (I = 0; I < this.m_BlockWhisperList.Count; I++)
             //{
-            //    if ((this.m_BlockWhisperList[I]).ToLower().CompareTo((sHumanName), StringComparison.Ordinal) == 0)
+            //    if ((this.m_BlockWhisperList[I]).ToLower().CompareTo((sHumanName), StringComparison.OrdinalIgnoreCase) == 0)
             //    {
             //        this.m_BlockWhisperList.Remove(I);
 
@@ -3972,29 +3936,6 @@ namespace M2Server
                     Mon.RefNameColor();
                     m_SlaveList.Add(Mon);
                 }
-            }
-        }
-
-        public void CmdReconnection(string sCmd, string sIPaddr, string sPort)
-        {
-            // 004CE380
-            if (m_btPermission < 6)
-            {
-                return;
-            }
-            if (sIPaddr != "" && sIPaddr[1] == '?')
-            {
-                SysMsg("此命令用于改变客户端连接网关的IP及端口。", TMsgColor.c_Blue, TMsgType.t_Hint);
-                return;
-            }
-            if (sIPaddr == "" || sPort == "")
-            {
-                SysMsg("命令格式: @" + sCmd + " IP地址 端口", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (sIPaddr != "" && sPort != "")
-            {
-                SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
 
@@ -4209,7 +4150,7 @@ namespace M2Server
             {
                 return;
             }
-            if (string.Compare("all", sParam, StringComparison.Ordinal) == 0)
+            if (string.Compare("all", sParam, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 M2Share.LocalDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
@@ -4392,15 +4333,15 @@ namespace M2Server
             }
             nBind = -1;
             nItem = M2Share.GetUseItemIdx(sItem);
-            if (string.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
             }
-            if (string.Compare(sType, "人物", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "人物", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 1;
             }
-            if (string.Compare(sType, "IP", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType, "IP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 2;
             }
@@ -4538,15 +4479,15 @@ namespace M2Server
             }
             nBind = -1;
             nItem = M2Share.GetUseItemIdx(sItem);
-            if (string.Compare(sType.ToLower(), "帐号", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType.ToLower(), "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
             }
-            if (string.Compare(sType.ToLower(), "人物", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType.ToLower(), "人物", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 1;
             }
-            if (string.Compare(sType.ToLower(), "IP", StringComparison.Ordinal) == 0)
+            if (string.Compare(sType.ToLower(), "IP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 2;
             }

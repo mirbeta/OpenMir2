@@ -685,7 +685,7 @@ namespace M2Server
             {
                 if (M2Share.UserEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
                 }
                 else
                 {
@@ -723,7 +723,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < this.m_BlockWhisperList.Count; i++)
             {
-                if (string.Compare(sName, this.m_BlockWhisperList[i], StringComparison.Ordinal) == 0)
+                if (string.Compare(sName, this.m_BlockWhisperList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -3224,7 +3224,8 @@ namespace M2Server
                             if (AddItemToBag(UserItem))
                             {
                                 SendAddItem(UserItem);
-                                m_UseItems[btWhere].wIndex = 0;
+                                //m_UseItems[btWhere].wIndex = 0;
+                                m_UseItems[btWhere] = null;
                                 RecalcAbilitys();
                                 SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                                 SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
@@ -5916,7 +5917,7 @@ namespace M2Server
             {
                 UserItem = m_ItemList[i];
                 s1C = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
-                if (string.Compare(s1C, sItemName, StringComparison.Ordinal) == 0)
+                if (string.Compare(s1C, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (UserItem.Dura > nDura)
                     {
@@ -5975,7 +5976,7 @@ namespace M2Server
                 if (UserItem.MakeIndex == nInt)
                 {
                     sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
-                    if (string.Compare(sUserItemName, sMsg, StringComparison.Ordinal) == 0)
+                    if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         UserItemA = UserItem;
                         break;
@@ -6001,7 +6002,7 @@ namespace M2Server
             {
                 UserItem = m_ItemList[i];
                 sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
-                if (UserItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.Ordinal) == 0)
+                if (UserItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     break;
                 }
@@ -6037,7 +6038,7 @@ namespace M2Server
             {
                 UserItem = m_ItemList[i];
                 sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
-                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.Ordinal) == 0)
+                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
                     if (merchant != null && merchant.m_boStorage && (merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15 || merchant == M2Share.g_FunctionNPC))
@@ -6096,7 +6097,7 @@ namespace M2Server
             {
                 UserItem = m_StorageItemList[i];
                 sUserItemName = ItmUnit.GetItemName(UserItem); // 取自定义物品名称
-                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.Ordinal) == 0)
+                if (UserItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
                     {
@@ -6233,7 +6234,7 @@ namespace M2Server
             BagItems = HumanRcd.Data.BagItems;
             if (BagItems == null)
             {
-                BagItems = new TUserItem[43];
+                BagItems = new TUserItem[Grobal2.MAXBAGITEM];
             }
             for (var i = 0; i < m_ItemList.Count; i++)
             {
@@ -6246,7 +6247,7 @@ namespace M2Server
             HumMagic = HumanRcd.Data.Magic;
             if (HumMagic == null)
             {
-                HumMagic = new TMagicRcd[20];
+                HumMagic = new TMagicRcd[Grobal2.MAXMAGIC];
             }
             for (var i = 0; i < m_MagicList.Count; i++)
             {
@@ -6597,7 +6598,7 @@ namespace M2Server
                         //}
                         //sText = HUtil32.ArrestStringEx(line, "<", ">", ref sCmdStr);
                         //var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
-                        if (!string.IsNullOrEmpty(line))
+                        if (!string.IsNullOrEmpty(line) && !m_CanJmpScriptLableList.ContainsKey(line))
                         {
                             m_CanJmpScriptLableList.Add(line, line);
                         }
@@ -6609,7 +6610,7 @@ namespace M2Server
         public bool LableIsCanJmp(string sLabel)
         {
             var result = false;
-            if (string.Compare(sLabel, "@main", StringComparison.Ordinal) == 0)
+            if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = true;
                 return result;
@@ -6619,7 +6620,7 @@ namespace M2Server
                 result = true;
                 return result;
             }
-            if (string.Compare(sLabel, m_sPlayDiceLabel, StringComparison.Ordinal) == 0)
+            if (string.Compare(sLabel, m_sPlayDiceLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 m_sPlayDiceLabel = string.Empty;
                 result = true;
@@ -6777,7 +6778,7 @@ namespace M2Server
             // 处理强行脱离师徒关系
             for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++)
             {
-                if (String.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.Ordinal) == 0)
+                if (String.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.g_UnForceMasterList.RemoveAt(i);
                     M2Share.SaveUnForceMasterList();
@@ -6842,7 +6843,7 @@ namespace M2Server
                             boIsfound = false;
                             for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
                             {
-                                if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.Ordinal) == 0)
+                                if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     boIsfound = true;
                                     break;
@@ -6872,7 +6873,7 @@ namespace M2Server
             {
                 for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
                 {
-                    if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.Ordinal) == 0)
+                    if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         M2Share.g_UnMasterList.RemoveAt(i);
                         M2Share.SaveUnMasterList();
@@ -7094,7 +7095,7 @@ namespace M2Server
             if (m_boReConfigPwd)
             {
                 m_boReConfigPwd = false;
-                if (String.Compare(m_sTempPwd, sData, StringComparison.Ordinal) == 0)
+                if (String.Compare(m_sTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_sStoragePwd = sData;
                     m_boPasswordLocked = true;
@@ -7110,7 +7111,7 @@ namespace M2Server
             }
             if (m_boUnLockPwd || m_boUnLockStoragePwd)
             {
-                if (String.Compare(m_sStoragePwd, sData, StringComparison.Ordinal) == 0)
+                if (String.Compare(m_sStoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_boPasswordLocked = false;
                     if (m_boUnLockPwd)
@@ -7292,6 +7293,16 @@ namespace M2Server
                 m_boEmergencyClose = true;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 转移到指定服务器
+        /// </summary>
+        /// <param name="sIPaddr"></param>
+        /// <param name="nPort"></param>
+        public void CrossGroupServer(string sIPaddr,int nPort)
+        {
+            this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + nPort);
         }
     }
 }

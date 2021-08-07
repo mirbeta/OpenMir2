@@ -108,7 +108,6 @@ namespace M2Server
                         m_boWalkWaitLocked = false;
                     }
                 }
-
                 if (!m_boWalkWaitLocked && HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();

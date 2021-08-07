@@ -2982,19 +2982,15 @@ namespace M2Server
 
         private bool ConditionOfCheckPoseLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            int nLevel;
-            TBaseObject PoseHuman;
-            char cMethod;
-            result = false;
-            nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
+            var result = false;
+            var nLevel = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKPOSELEVEL);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
-            PoseHuman = PlayObject.GetPoseCreate();
+            var cMethod = QuestConditionInfo.sParam1[0];
+            var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
                 switch (cMethod)
@@ -5152,7 +5148,6 @@ namespace M2Server
                     case M2Share.nCHECKMONAREA:
                         break;
                     case M2Share.nCHECKHUM:
-                        // 0049C4CB
                         if (M2Share.UserEngine.GetMapHuman(QuestConditionInfo.sParam1) < QuestConditionInfo.nParam2)
                         {
                             result = false;
@@ -5198,7 +5193,6 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nEQUAL:
-                        // 0049C5AC
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
@@ -5240,7 +5234,6 @@ namespace M2Server
                                     }
                                     break;
                             }
-                            // case
                         }
                         else
                         {
@@ -5248,7 +5241,6 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nLARGE:
-                        // 0049C658
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
@@ -5298,7 +5290,6 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nSMALL:
-                        // 0049C704
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
@@ -5557,7 +5548,6 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nSC_CHECKGUILDLIST:
-                        // nSC_CHECKGUILDLIST:     if not ConditionOfCheckGuildList(PlayObject,QuestConditionInfo) then Result:=False;
                         if (PlayObject.m_MyGuild != null)
                         {
                             if (!GotoLable_CheckStringList(PlayObject.m_MyGuild.sGuildName, m_sPath + QuestConditionInfo.sParam1))

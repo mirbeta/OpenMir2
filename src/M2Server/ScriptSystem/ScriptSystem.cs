@@ -35,7 +35,7 @@ namespace M2Server
                     {
                         if (!bo1D)
                         {
-                            if (s18[0] == '[' && string.Compare(s18, sLabel, StringComparison.Ordinal) == 0)
+                            if (s18[0] == '[' && string.Compare(s18, sLabel, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 bo1D = true;
                                 List.Add(s18);
@@ -2655,7 +2655,7 @@ namespace M2Server
         private string FormatLabelStr(string sLabel, ref bool boChange)
         {
             var result = sLabel;
-            if (sLabel.IndexOf(")", StringComparison.Ordinal) > -1)
+            if (sLabel.IndexOf(")", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 HUtil32.GetValidStr3(sLabel, ref result, new[] { "(" });
                 boChange = true;
@@ -2674,7 +2674,7 @@ namespace M2Server
             var tempstr = sMsg;
             while (true)
             {
-                if (tempstr.IndexOf(">", StringComparison.Ordinal) < -1)
+                if (tempstr.IndexOf(">", StringComparison.OrdinalIgnoreCase) < -1)
                 {
                     break;
                 }

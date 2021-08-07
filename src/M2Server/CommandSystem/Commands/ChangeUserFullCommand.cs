@@ -7,7 +7,7 @@ namespace M2Server
     /// <summary>
     /// 调整服务器最高上线人数
     /// </summary>
-    [GameCommand("ChangeUserFull", "调整服务器最高上线人数", 10)]
+    [GameCommand("ChangeUserFull", "调整服务器最高上限人数", 10)]
     public class ChangeUserFullCommand : BaseCommond
     {
         [DefaultCommand]

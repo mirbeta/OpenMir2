@@ -107,7 +107,7 @@ namespace M2Server
                     if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) && PlayObject.IsGuildMaster())
                     {
                         boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.Ordinal) == 0)
+                        if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -121,19 +121,19 @@ namespace M2Server
                         }
                         string s20;
                         // 增加挂机
-                        if (string.Compare(sLabel, M2Share.sOFFLINEMSG, StringComparison.Ordinal) == 0)
+                        if (string.Compare(sLabel, M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (this.m_boOffLineMsg)
                             {
                                 this.SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             SendCustemMsg(PlayObject, sMsg);
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, M2Share.sCASTLENAME, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             sMsg = sMsg.Trim();
                             if (sMsg != "")
@@ -149,7 +149,7 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, M2Share.sWITHDRAWAL, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             switch (this.m_Castle.WithDrawalGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
@@ -171,7 +171,7 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, M2Share.sRECEIPTS, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             switch (this.m_Castle.ReceiptGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
@@ -193,30 +193,30 @@ namespace M2Server
                             }
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, M2Share.sOPENMAINDOOR, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             this.m_Castle.MainDoorControl(false);
                         }
-                        else if (string.Compare(sLabel, M2Share.sCLOSEMAINDOOR, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             this.m_Castle.MainDoorControl(true);
                         }
-                        else if (string.Compare(sLabel, M2Share.sREPAIRDOORNOW, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairDoor(PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW1, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(1, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW2, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(2, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW3, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(3, PlayObject);
                             this.GotoLable(PlayObject, M2Share.sMAIN, false);
@@ -234,11 +234,11 @@ namespace M2Server
                             HireArcher(s20, PlayObject);
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
                         }
-                        else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                         }
-                        else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.Ordinal) == 0)
+                        else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {

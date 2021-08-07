@@ -525,7 +525,6 @@ namespace RunGate
                 GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
                 GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);
                 GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
-                
                 GateShare.AddMainLogMsg("智能反外挂程序云端已启动...",0);
                 GateShare.AddMainLogMsg("智能反外挂程序云端已连接...",0);
             }
@@ -558,8 +557,6 @@ namespace RunGate
             if (GateShare.Conf != null)
             {
                  GateShare.TitleName = GateShare.Conf.ReadString(GateShare.GateClass, "Title", GateShare.TitleName);
-                 GateShare.ServerAddr = GateShare.Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
-                 GateShare.ServerPort = GateShare.Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
                  GateShare.GateAddr = GateShare.Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
                  GateShare.GatePort = GateShare.Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
                  GateShare.nShowLogLevel = GateShare.Conf.ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);

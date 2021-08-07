@@ -4,7 +4,7 @@ using M2Server.CommandSystem;
 
 namespace M2Server
 {
-    [GameCommand("ShutupRelease", "", 10)]
+    [GameCommand("ShutupRelease", "恢复禁言", 10)]
     public class ShutupReleaseCommand : BaseCommond
     {
         [DefaultCommand]

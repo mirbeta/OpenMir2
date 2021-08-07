@@ -5,7 +5,7 @@ namespace M2Server
     public class TMessageBodyWL
     {
         public int lParam1;
-        public int lParam2;
+        public long lParam2;
         public int lTag1;
         public int lTag2;
 

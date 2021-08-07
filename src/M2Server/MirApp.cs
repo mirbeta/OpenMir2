@@ -323,10 +323,11 @@ namespace M2Server
             var sMapName = string.Empty;
             var sMapInfo = string.Empty;
             var sServerIndex = string.Empty;
-            if (File.Exists(".\\!servertable.txt"))
+            var sFileName = Path.Combine(M2Share.g_Config.sBaseDir, "!servertable.txt");
+            if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
-                LoadList.LoadFromFile(".\\!servertable.txt");
+                LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];

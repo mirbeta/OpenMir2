@@ -31,6 +31,10 @@ namespace M2Server
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
             {
                 var serverMsgInfo = m_SrvArray[i];
+                if (serverMsgInfo == null)
+                {
+                    continue;
+                }
                 if (serverMsgInfo.Socket == null) continue;
                 if (serverMsgInfo.SocketId != ps.SocketId)
                 {
@@ -160,7 +164,7 @@ namespace M2Server
                 }
                 if (m_SrvArray[i].SocketId == e.ConnectionId)
                 {
-                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + HUtil32.GetString(e.ReceiveBuffer, 0, e.BytesReceived);
+                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + HUtil32.GetString(e.ReceiveBuffer, e.Offset, e.BytesReceived);
                 }
             }
         }

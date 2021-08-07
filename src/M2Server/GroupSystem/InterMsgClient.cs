@@ -78,7 +78,7 @@ namespace M2Server
             {
                 BufStr = sRecvMsg;
                 sRecvMsg = string.Empty;
-                while (BufStr.IndexOf(')') > 0)
+                while (BufStr.IndexOf(')') > -1)
                 {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
                     if (!string.IsNullOrEmpty(Str))
@@ -115,6 +115,7 @@ namespace M2Server
         private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.MainOutMessage("连接主服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")成功...");
+            //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，从而来保持登录数据同步
         }
 
         private void MsgClientError(object sender, DSCClientErrorEventArgs e)

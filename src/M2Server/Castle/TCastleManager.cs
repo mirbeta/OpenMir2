@@ -25,7 +25,7 @@ namespace M2Server
             for (var i = 0; i < _castleList.Count; i++)
             {
                 Castle = _castleList[i];
-                if (string.Compare(Castle.m_sName, sCastleName, StringComparison.Ordinal) == 0)
+                if (string.Compare(Castle.m_sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = Castle;
                     break;

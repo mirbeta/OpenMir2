@@ -177,7 +177,6 @@ namespace M2Server
         public static TM2Config g_Config = null;
         public static int[] g_dwOldNeedExps = new int[Grobal2.MAXCHANGELEVEL];
         public static TGameCommand g_GameCommand = new TGameCommand();
-
         public static string sClientSoftVersionError = "游戏版本错误！！！";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
         public static string sForceDisConnect = "连接被强行中断！！！";
@@ -1586,9 +1585,9 @@ namespace M2Server
         {
             TRouteInfo RouteInfo;
             var result = false;
-            for (var i = 0; i < M2Share.ServerTableList.Length; i++)
+            for (var i = 0; i < ServerTableList.Length; i++)
             {
-                RouteInfo = M2Share.ServerTableList[i];
+                RouteInfo = ServerTableList[i];
                 if (RouteInfo.nGateCount <= 0)
                 {
                     continue;
@@ -1603,9 +1602,9 @@ namespace M2Server
             return result;
         }
 
-        public static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
+        private static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
         {
-            var nC = M2Share.RandomNumber.Random(RouteInfo.nGateCount);
+            var nC = RandomNumber.Random(RouteInfo.nGateCount);
             nGatePort = RouteInfo.nGameGatePort[nC];
             return RouteInfo.sGameGateIP[nC];
         }
@@ -1881,7 +1880,7 @@ namespace M2Server
         // 金币在地上显示的外形ID
         public static int GetRandomLook(int nBaseLook, int nRage)
         {
-            var result = nBaseLook + M2Share.RandomNumber.Random(nRage);
+            var result = nBaseLook + RandomNumber.Random(nRage);
             return result;
         }
 
@@ -1940,8 +1939,8 @@ namespace M2Server
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
-                    result = sName.Substring(0, i - 1);
-                    sC = sName.Substring(i + 1, sName.Length - i - 1);
+                    result = sName.Substring(0, i);
+                    sC = sName.Substring(i, sName.Length - i);
                     bo11 = true;
                     break;
                 }
@@ -2696,55 +2695,55 @@ namespace M2Server
         public static int GetUseItemIdx(string sName)
         {
             int result= -1;
-            if (string.Compare(sName, U_DRESSNAME, StringComparison.Ordinal) == 0)
+            if (string.Compare(sName, U_DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 0;
             }
-            else if (string.Compare(sName, U_WEAPONNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 1;
             }
-            else if (string.Compare(sName, U_RIGHTHANDNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 2;
             }
-            else if (string.Compare(sName, U_NECKLACENAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 3;
             }
-            else if (string.Compare(sName, U_HELMETNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 4;
             }
-            else if (string.Compare(sName, U_ARMRINGLNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 5;
             }
-            else if (string.Compare(sName, U_ARMRINGRNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 6;
             }
-            else if (string.Compare(sName, U_RINGLNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 7;
             }
-            else if (string.Compare(sName, U_RINGRNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 8;
             }
-            else if (string.Compare(sName, U_BUJUKNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 9;
             }
-            else if (string.Compare(sName, U_BELTNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 10;
             }
-            else if (string.Compare(sName, U_BOOTSNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 11;
             }
-            else if (string.Compare(sName, U_CHARMNAME, StringComparison.Ordinal) == 0)
+            else if (string.Compare(sName, U_CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 12;
             }

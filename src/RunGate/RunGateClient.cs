@@ -10,11 +10,8 @@ namespace RunGate
         /// </summary>
         private readonly UserClientService[] _gateClient = new UserClientService[10];
 
-        private readonly GateService _gateService;
-
-        public RunGateClient(GateService gateService)
+        public RunGateClient( )
         {
-            _gateService = gateService;
         }
 
         public void LoadConfig()
@@ -41,7 +38,6 @@ namespace RunGate
                     return;
                 }
                 _gateClient[i] = new UserClientService(serverAddr, serverPort);
-                _gateService.Add(serverAddr, _gateClient[i]);
             }
         }
 

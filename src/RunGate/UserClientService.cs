@@ -84,6 +84,7 @@ namespace RunGate
             //GateShare.boServerReady = true;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
+            GateShare.ServerGateList.TryAdd(e.RemoteAddress, this);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -103,6 +104,7 @@ namespace RunGate
             SocketBuffer = null;
             GateShare.List_45AA58.Clear();
             GateShare.boGateReady = false;
+            GateShare.ServerGateList.TryRemove(e.RemoteAddress, out var userClientService);
             //GateShare.boServerReady = false;
         }
 

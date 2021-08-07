@@ -692,7 +692,7 @@ namespace M2Server
                                 {
                                     m_nMeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Grobal2.RM_STRUCK, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
+                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
                             }
                         }
                         if (m_boFastParalysis)
@@ -1187,7 +1187,7 @@ namespace M2Server
                                 break;
                         }
                         m_nAutoChangeIdx++;
-                        m_nCharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
+                        m_nCharStatus = (m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0);
                         StatusChanged();
                     }
                     if (m_boFixColor && (m_nFixStatus != m_nCharStatus))
@@ -1220,7 +1220,7 @@ namespace M2Server
                                 nInteger = Grobal2.STATE_TRANSPARENT;
                                 break;
                         }
-                        m_nCharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
+                        m_nCharStatus = (m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0);
                         m_nFixStatus = m_nCharStatus;
                         StatusChanged();
                     }
@@ -2443,7 +2443,7 @@ namespace M2Server
             }
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                SendUpdateMsg(this, Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, m_nCharStatus, 0, 0, "");
+                SendUpdateMsg(this, Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, (int)m_nCharStatus, 0, 0, "");
             }
             if (m_btRaceServer >= Grobal2.RC_ANIMAL)
             {

@@ -44,7 +44,7 @@ namespace M2Server
         /// <summary>
         /// 状态值
         /// </summary>
-        public int m_nCharStatus = 0;
+        public long m_nCharStatus = 0;
         /// <summary>
         /// 回城地图
         /// </summary>
@@ -97,7 +97,7 @@ namespace M2Server
         public byte[] m_QuestUnitOpen;
         public byte[] m_QuestUnit;
         public byte[] m_QuestFlag;
-        public int m_nCharStatusEx = 0;
+        public long m_nCharStatusEx = 0;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -508,7 +508,7 @@ namespace M2Server
         public bool m_boFixColor = false;
         // 固定颜色
         public int m_nFixColorIdx = 0;
-        public int m_nFixStatus = 0;
+        public long m_nFixStatus = 0;
         public bool m_boFastParalysis = false;
         // 快速麻痹，受攻击后麻痹立即消失
         public bool m_boSmashSet = false;
@@ -3163,9 +3163,16 @@ namespace M2Server
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         dwDeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        BaseObject = M2Share.ObjectSystem.Get(BaseObject),
                         boLateDelivery = true
                     };
+                    if (BaseObject == Grobal2.RM_STRUCK)
+                    {
+                        SendMessage.ObjectId = Grobal2.RM_STRUCK;
+                    }
+                    else
+                    {
+                        SendMessage.BaseObject = M2Share.ObjectSystem.Get(BaseObject);
+                    }
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         SendMessage.Buff = sMsg;
@@ -3323,6 +3330,10 @@ namespace M2Server
                     if (SendMessage.BaseObject != null)
                     {
                         Msg.BaseObject = SendMessage.BaseObject.ObjectId;
+                    }
+                    else if (SendMessage.ObjectId > 0)
+                    {
+                        Msg.BaseObject = SendMessage.ObjectId;
                     }
                     Msg.dwDeliveryTime = SendMessage.dwDeliveryTime;
                     Msg.boLateDelivery = SendMessage.boLateDelivery;
@@ -3857,15 +3868,15 @@ namespace M2Server
         /// 转换有问题
         /// </summary>
         /// <returns></returns>
-        public int GetCharStatus()
+        public long GetCharStatus()
         {
-            int result = 0;
-            int nStatus = 0;
+            long result = 0;
+            long nStatus = 0;
             for (int i = m_wStatusTimeArr.GetLowerBound(0); i <= m_wStatusTimeArr.GetUpperBound(0); i++)
             {
                 if (m_wStatusTimeArr[i] > 0)
                 {
-                    nStatus = Convert.ToInt32((0x80000000 >> i) | nStatus);
+                    nStatus = (0x80000000 >> i) | nStatus;
                 }
             }
             result = (m_nCharStatusEx & 0xFFFFF) | nStatus;
@@ -3929,7 +3940,7 @@ namespace M2Server
 
         public void StatusChanged()
         {
-            SendRefMsg(Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, m_nCharStatus, 0, 0, "");
+            SendRefMsg(Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, (int)m_nCharStatus, 0, 0, "");
         }
 
         protected void DisappearA()
@@ -4752,7 +4763,7 @@ namespace M2Server
             return result;
         }
 
-        public void WeightChanged()
+        protected void WeightChanged()
         {
             m_WAbil.Weight = RecalcBagWeight();
             SendUpdateMsg(this, Grobal2.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
@@ -4805,18 +4816,16 @@ namespace M2Server
 
         public bool InSafeZone(TEnvirnoment Envir, int nX, int nY)
         {
-            bool result;
             int nSafeX;
             int nSafeY;
             if (m_PEnvir == null)  // 修正机器人刷火墙的错误
             {
-                result = true;
-                return result;
+                return true;
             }
-            result = m_PEnvir.Flag.boSAFE;
+            bool result = m_PEnvir.Flag.boSAFE;
             if (result)
             {
-                return result;
+                return true;
             }
             if ((Envir.sMapName != M2Share.g_Config.sRedHomeMap) || (Math.Abs(nX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) || (Math.Abs(nY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
             {
@@ -4824,11 +4833,7 @@ namespace M2Server
             }
             else
             {
-                result = true;
-            }
-            if (result)
-            {
-                return result;
+                return true;
             }
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
@@ -4887,7 +4892,7 @@ namespace M2Server
             SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
-        public TUserMagic GetMagicInfo(int nMagicID)
+        protected TUserMagic GetMagicInfo(int nMagicID)
         {
             TUserMagic result = null;
             TUserMagic UserMagic;
@@ -4942,12 +4947,15 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 召唤属下
+        /// </summary>
+        /// <param name="sSlaveName"></param>
         public void RecallSlave(string sSlaveName)
         {
             short nX = 0;
             short nY = 0;
-            int nFlag;
-            nFlag = -1;
+            int nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
             if (sSlaveName == M2Share.g_Config.sDragon)
             {
@@ -4997,15 +5005,13 @@ namespace M2Server
         // 刺杀前面一个位置的攻击
         public bool _Attack_SwordLongAttack(int nSecPwr)
         {
-            bool result;
+            bool result = false;
             short nX = 0;
             short nY = 0;
-            TBaseObject BaseObject;
-            result = false;
             nSecPwr = HUtil32.Round(nSecPwr * M2Share.g_Config.nSwordLongPowerRate / 100);
             if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref nX, ref nY))
             {
-                BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
+                TBaseObject BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
                 if (BaseObject != null)
                 {
                     if ((nSecPwr > 0) && IsProperTarget(BaseObject))
@@ -5022,14 +5028,12 @@ namespace M2Server
         // 半月攻击
         public bool _Attack_SwordWideAttack(int nSecPwr)
         {
-            bool result;
-            int nC;
-            int n10;
+            bool result = false;
+            int nC= 0;
+            int n10= 0;
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject;
-            result = false;
-            nC = 0;
             while (true)
             {
                 n10 = (m_btDirection + M2Share.g_Config.WideAttack[nC]) % 8;
@@ -5053,14 +5057,12 @@ namespace M2Server
 
         public bool _Attack_CrsWideAttack(int nSecPwr)
         {
-            bool result;
+            bool result = false;
             int nC = 0;
             int n10 = 0;
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject;
-            result = false;
-            nC = 0;
             while (true)
             {
                 n10 = (m_btDirection + M2Share.g_Config.CrsAttack[nC]) % 8;
@@ -5255,13 +5257,11 @@ namespace M2Server
                 {
                     nPower = 0;
                 }
-
                 if (nPower > 0)
                 {
                     nPower = AttackTarget.GetHitStruckDamage(this, nPower);
                     nWeaponDamage = M2Share.RandomNumber.Random(5) + 2 - m_AddAbil.btWeaponStrong;
                 }
-
                 if (nPower > 0)
                 {
                     AttackTarget.StruckDamage(nPower);
@@ -5390,7 +5390,7 @@ namespace M2Server
             return result;
         }
 
-        public void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
+        protected void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
         {
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");
         }
@@ -5399,7 +5399,7 @@ namespace M2Server
         {
             int result;
             int nArmor;
-            int nRnd = HUtil32.HiWord(m_WAbil.AC) - HUtil32.LoWord(m_WAbil.AC) + 1;
+            var nRnd = HUtil32.HiWord(m_WAbil.AC) - HUtil32.LoWord(m_WAbil.AC) + 1;
             if (nRnd > 0)
             {
                 nArmor = HUtil32.LoWord(m_WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
@@ -5427,7 +5427,6 @@ namespace M2Server
 
         public int GetMagStruckDamage(TBaseObject BaseObject, int nDamage)
         {
-            int result;
             int n14 = HUtil32.LoWord(m_WAbil.MAC) + M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MAC) - HUtil32.LoWord(m_WAbil.MAC) + 1);
             nDamage = HUtil32._MAX(0, nDamage - n14);
             if ((m_btLifeAttrib == Grobal2.LA_UNDEAD) && (BaseObject != null))
@@ -5439,8 +5438,7 @@ namespace M2Server
                 nDamage = HUtil32.Round(nDamage / 1.0e2 * (m_btMagBubbleDefenceLevel + 2) * 8.0);
                 DamageBubbleDefence(nDamage);
             }
-            result = nDamage;
-            return result;
+            return nDamage;
         }
 
         public void StruckDamage(int nDamage)
@@ -5639,7 +5637,7 @@ namespace M2Server
         public bool MakePosion(int nType, int nTime, int nPoint)
         {
             bool result = false;
-            int nOldCharStatus;
+            long nOldCharStatus;
             if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
             {
                 nOldCharStatus = m_nCharStatus;
@@ -5694,7 +5692,7 @@ namespace M2Server
             return result;
         }
 
-        public bool sub_4C5370(short nX, short nY, int nRange, ref short nDX, ref short nDY)
+        protected bool sub_4C5370(short nX, short nY, int nRange, ref short nDX, ref short nDY)
         {
             bool result = false;
             if (m_PEnvir.GetMovingObject(nX, nY, true) == null)
@@ -5754,7 +5752,7 @@ namespace M2Server
             return result;
         }
 
-        public void DamageBubbleDefence(int nInt)
+        private void DamageBubbleDefence(int nInt)
         {
             if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] > 0)
             {
@@ -5819,7 +5817,7 @@ namespace M2Server
             return result;
         }
 
-        public bool IsProperFriend_IsFriend(TBaseObject cret)
+        private bool IsProperFriend_IsFriend(TBaseObject cret)
         {
             bool result = false;
             if (cret.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -5966,7 +5964,7 @@ namespace M2Server
             return result;
         }
 
-        public bool DefenceUp(int nSec)
+        private bool DefenceUp(int nSec)
         {
             bool result = false;
             if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
@@ -5991,7 +5989,6 @@ namespace M2Server
 
         public bool AttPowerUp(int nPower, int nTime)
         {
-            bool result = false;
             m_wStatusArrValue[0] = (ushort)nPower;
             m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
             int nMin = nTime / 60;
@@ -5999,11 +5996,10 @@ namespace M2Server
             SysMsg(format(M2Share.g_sAttPowerUpTime, new object[] { nMin, nSec }), TMsgColor.c_Green, TMsgType.t_Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-            result = true;
-            return result;
+            return true;
         }
 
-        public bool MagDefenceUp(ushort nSec)
+        private bool MagDefenceUp(ushort nSec)
         {
             bool result = false;
             if (m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
@@ -6032,7 +6028,7 @@ namespace M2Server
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            int nOldStatus;
+            long nOldStatus;
             if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
             {
                 return false;
@@ -6093,11 +6089,9 @@ namespace M2Server
 
         public int sub_4C3538()
         {
-            int result;
-            int nC;
+            int result= 0;
+            int nC= -1;
             int n10;
-            result = 0;
-            nC = -1;
             while (nC != 2)
             {
                 n10 = -1;
@@ -6117,17 +6111,14 @@ namespace M2Server
             return result;
         }
 
-        public bool DelBagItem(int nIndex)
+        protected void DelBagItem(int nIndex)
         {
-            bool result = false;
             if ((nIndex < 0) || (nIndex >= m_ItemList.Count))
             {
-                return result;
+                return;
             }
             Dispose(m_ItemList[nIndex]);
             m_ItemList.RemoveAt(nIndex);
-            result = true;
-            return result;
         }
 
         public bool DelBagItem(int nItemIndex, string sItemName)
@@ -6256,7 +6247,7 @@ namespace M2Server
             return false;
         }
 
-        public bool CanRun(short nX, short nY, bool boFlag)
+        private bool CanRun(short nX, short nY, bool boFlag)
         {
             var result = false;
             var btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nX, nY);
@@ -6348,7 +6339,8 @@ namespace M2Server
                 MasterObject = m_Master;
                 if (MasterObject != null)
                 {
-                    while(true){
+                    while (true)
+                    {
                         if (MasterObject.m_Master != null)
                         {
                             MasterObject = MasterObject.m_Master;

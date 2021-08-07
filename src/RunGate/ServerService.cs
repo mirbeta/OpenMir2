@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using SystemModule;
@@ -15,13 +14,9 @@ namespace RunGate
         private ISocketServer ServerSocket;
         public int nReviceMsgSize = 0;
         private long dwProcessClientMsgTime = 0;
-        private readonly ILogger<AppService> _logger;
-        private readonly GateService _gateService;
         
-        public ServerService(ILogger<AppService> logger, GateService gateService)
+        public ServerService()
         {
-            _logger = logger;
-            _gateService = gateService;
             ServerSocket = new ISocketServer(20, 2048);
             ServerSocket.OnClientConnect += ServerSocketClientConnect;
             ServerSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -60,7 +55,7 @@ namespace RunGate
             
             //需要记录socket会话ID和链接网关
 
-            var gateclient = _gateService.GetClientService();
+            var gateclient = GateShare.GetClientService();
 
             for (var nIdx = 0; nIdx < gateclient.SessionArray.Length; nIdx++)
             {
@@ -201,7 +196,7 @@ namespace RunGate
                     var userSession = userClinet.SessionArray[nSocketIndex];
                     if (userSession.Socket == token.Socket)
                     {
-                        var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
+                        var nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                         if (nPos > -1)
                         {
                             userSession.boSendAvailable = true;
