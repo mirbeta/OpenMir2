@@ -445,7 +445,6 @@ namespace M2Server
         public const int MAXUPLEVEL = 500;
         public const int MAXHUMPOWER = 1000;
         public const int BODYLUCKUNIT = 5000;
-        // 10?
         public const int HAM_ALL = 0;
         public const int HAM_PEACE = 1;
         public const int HAM_DEAR = 2;
@@ -1631,8 +1630,7 @@ namespace M2Server
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
-            int result;
-            result = 0;
+            var result = 0;
             nOldVerstionDate = 0;
             if (nVersionDate > 100000000)
             {
@@ -1648,10 +1646,9 @@ namespace M2Server
 
         public static byte GetNextDirection(int sx, int sy, int dx, int dy)
         {
-            byte result;
             int flagx;
             int flagy;
-            result = Grobal2.DR_DOWN;
+            byte result = Grobal2.DR_DOWN;
             if (sx < dx)
             {
                 flagx = 1;
@@ -1888,7 +1885,8 @@ namespace M2Server
             }
             for (var i = 0; i <= sGuildName.Length; i++)
             {
-                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' ' || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
+                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' ' 
+                    || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
                 {
                     result = false;
                 }
@@ -3392,8 +3390,6 @@ namespace M2Server
 
         public static bool LoadMonSayMsg()
         {
-            bool result;
-            int I;
             var sStatus = string.Empty;
             var sRate = string.Empty;
             var sColor = string.Empty;
@@ -3405,17 +3401,16 @@ namespace M2Server
             StringList LoadList;
             string sLineText;
             TMonSayMsg MonSayMsg;
-            string sFileName;
-            result = false;
-            sFileName = g_Config.sEnvirDir + "GenMsg.txt";
+            var result = false;
+            var sFileName = g_Config.sEnvirDir + "GenMsg.txt";
             if (File.Exists(sFileName))
             {
                 g_MonSayMsgList.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (I = 0; I < LoadList.Count; I++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[I].Trim();
+                    sLineText = LoadList[i].Trim();
                     if (sLineText != "" && sLineText[1] < ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new string[] { " ", "/", ",", "\t" });
@@ -3504,10 +3499,7 @@ namespace M2Server
 
         public static string GetIPLocal(string sIPaddr)
         {
-            string result;
-            var sLocal = new char[254 + 1];
-            result = "未知！！！";
-            return result;
+            return "未知！！！";
         }
 
         // 是否记录物品日志
@@ -3532,9 +3524,7 @@ namespace M2Server
         // * 号为通配符
         public static bool CompareIPaddr(string sIPaddr, string dIPaddr)
         {
-            bool result;
-            int nPos;
-            result = false;
+            var result = false;
             if (sIPaddr == "" || dIPaddr == "")
             {
                 return result;
@@ -3544,7 +3534,7 @@ namespace M2Server
                 result = true;
                 return result;
             }
-            nPos = dIPaddr.IndexOf('*');
+            var nPos = dIPaddr.IndexOf('*');
             if (nPos > 0)
             {
                 result = HUtil32.CompareLStr(sIPaddr, dIPaddr, nPos - 1);

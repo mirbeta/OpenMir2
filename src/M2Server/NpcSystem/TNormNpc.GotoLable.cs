@@ -8,8 +8,7 @@ namespace M2Server
 {
     public partial class TNormNpc
     {
-        
-        public bool GotoLable_CheckQuestStatus(TPlayObject PlayObject, TScript ScriptInfo)
+        private bool GotoLable_CheckQuestStatus(TPlayObject PlayObject, TScript ScriptInfo)
         {
             bool result = true;
             int I;
@@ -133,7 +132,7 @@ namespace M2Server
             return result;
         }
 
-        public bool GotoLable_CheckStringList(string sHumName, string sListFileName)
+        private bool GotoLable_CheckStringList(string sHumName, string sListFileName)
         {
             bool result = false;
             StringList LoadList;
@@ -166,11 +165,9 @@ namespace M2Server
             return result;
         }
 
-        public void GotoLable_QuestCheckCondition_SetVal(TPlayObject PlayObject, string sIndex, int nCount)
+        private void GotoLable_QuestCheckCondition_SetVal(TPlayObject PlayObject, string sIndex, int nCount)
         {
-            int n14;
-            n14 = M2Share.GetValNameNo(sIndex);
-            // 获得索引
+            var n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
                 switch (n14)
@@ -236,12 +233,7 @@ namespace M2Server
 
         public bool GotoLable_QuestCheckCondition_CheckRandomNo(TPlayObject PlayObject, string sNumber)
         {
-            bool result = false;
-            if (PlayObject.m_sRandomNo == sNumber)
-            {
-                result = true;
-            }
-            return result;
+            return PlayObject.m_sRandomNo == sNumber;
         }
 
         public bool GotoLable_QuestCheckCondition_CheckUserDateType(TPlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
@@ -303,7 +295,7 @@ namespace M2Server
             return result;
         }
 
-        public bool GotoLable_QuestCheckCondition(TPlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
+        private bool GotoLable_QuestCheckCondition(TPlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
         {
             bool result = true;
             TQuestConditionInfo QuestConditionInfo;
@@ -1347,20 +1339,18 @@ namespace M2Server
             return result;
         }
 
-        public bool GotoLable_JmpToLable(TPlayObject PlayObject, string sLabel)
+        private bool GotoLable_JmpToLable(TPlayObject PlayObject, string sLabel)
         {
-            bool result = false;
             PlayObject.m_nScriptGotoCount++;
             if (PlayObject.m_nScriptGotoCount > M2Share.g_Config.nScriptGotoCountLimit)
             {
-                return result;
+                return false;
             }
             GotoLable(PlayObject, sLabel, false);
-            result = true;
-            return result;
+            return true;
         }
 
-        public void GotoLable_GoToQuest(TPlayObject PlayObject, int nQuest)
+        private void GotoLable_GoToQuest(TPlayObject PlayObject, int nQuest)
         {
             TScript Script;
             for (var i = 0; i < m_ScriptList.Count; i++)
@@ -1422,13 +1412,11 @@ namespace M2Server
             //LoadList.Free;
         }
 
-        public void GotoLable_AddList(string sHumName, string sListFileName)
+        private void GotoLable_AddList(string sHumName, string sListFileName)
         {
-            StringList LoadList;
             string s10 = string.Empty;
-            bool bo15;
             sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
-            LoadList = new StringList();
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 try
@@ -1440,10 +1428,10 @@ namespace M2Server
                     M2Share.MainOutMessage("loading fail.... => " + sListFileName);
                 }
             }
-            bo15 = false;
-            for (var I = 0; I < LoadList.Count; I++)
+            var bo15 = false;
+            for (var i = 0; i < LoadList.Count; i++)
             {
-                s10 = LoadList[I].Trim();
+                s10 = LoadList[i].Trim();
                 if (sHumName.ToLower().CompareTo(s10.ToLower()) == 0)
                 {
                     bo15 = true;
@@ -1465,26 +1453,17 @@ namespace M2Server
             // LoadList.Free;
         }
 
-        public void GotoLable_DELUseDateList(string sHumName, string sListFileName)
+        private void GotoLable_DELUseDateList(string sHumName, string sListFileName)
         {
-            StringList LoadList;
             string s10 = string.Empty;
             string sText;
-            bool bo15;
             sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
-            LoadList = new StringList();
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
-                try
-                {
-                    LoadList.LoadFromFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.MainOutMessage("loading fail.... => " + sListFileName);
-                }
+                LoadList.LoadFromFile(sListFileName);
             }
-            bo15 = false;
+            var bo15 = false;
             for (var i = 0; i < LoadList.Count; i++)
             {
                 sText = LoadList[i].Trim();
@@ -1498,25 +1477,17 @@ namespace M2Server
             }
             if (bo15)
             {
-                try
-                {
-                    LoadList.SaveToFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.MainOutMessage("saving fail.... => " + sListFileName);
-                }
+                LoadList.SaveToFile(sListFileName);
             }
             //LoadList.Free;
         }
 
-        public void GotoLable_DelList(string sHumName, string sListFileName)
+        private void GotoLable_DelList(string sHumName, string sListFileName)
         {
-            StringList LoadList;
             string s10 = string.Empty;
             bool bo15;
             sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
-            LoadList = new StringList();
+            var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 try
@@ -1541,19 +1512,12 @@ namespace M2Server
             }
             if (bo15)
             {
-                try
-                {
-                    LoadList.SaveToFile(sListFileName);
-                }
-                catch
-                {
-                    M2Share.MainOutMessage("saving fail.... => " + sListFileName);
-                }
+                LoadList.SaveToFile(sListFileName);
             }
             // LoadList.Free;
         }
 
-        public void GotoLable_TakeItem(TPlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
+        private void GotoLable_TakeItem(TPlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
             TUserItem UserItem;
             MirItem StdItem;
@@ -1650,7 +1614,7 @@ namespace M2Server
             }
         }
 
-        public void GotoLable_TakeWItem(TPlayObject PlayObject, string sItemName, int nItemCount)
+        private void GotoLable_TakeWItem(TPlayObject PlayObject, string sItemName, int nItemCount)
         {
             string sName = string.Empty;
             string sC = string.Empty;
@@ -1787,7 +1751,7 @@ namespace M2Server
             }
         }
 
-        public bool GotoLable_QuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem,ref bool bo11)
+        private bool GotoLable_QuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem,ref bool bo11)
         {
             bool result= true;
             int II;
@@ -2745,7 +2709,7 @@ namespace M2Server
                 PlayObject.m_Script = null;
                 //FillChar(PlayObject.m_nVal, sizeof(PlayObject.m_nVal), '\0');
             }
-            if (sLabel.ToLower().CompareTo("@main".ToLower()) == 0)
+            if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 for (var i = 0; i < m_ScriptList.Count; i++)
                 {

@@ -12,10 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +281,8 @@
       <workItem from="1628134039796" duration="515000" />
       <workItem from="1628311591955" duration="22140000" />
       <workItem from="1628389091531" duration="9431000" />
-      <workItem from="1628407223872" duration="3242000" />
+      <workItem from="1628407223872" duration="3887000" />
+      <workItem from="1628430193696" duration="1537000" />
     </task>
     <servers />
   </component>
@@ -344,20 +344,20 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs</url>
-          <line>132</line>
+          <line>139</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" initialLine="131" containingFunctionPresentation="method 'MsgClientRead'">
             <startOffsets>
-              <option value="4176" />
+              <option value="4440" />
             </startOffsets>
             <endOffsets>
-              <option value="4205" />
+              <option value="4469" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="350" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs</url>
-          <line>127</line>
+          <line>129</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" initialLine="126" containingFunctionPresentation="method 'MsgClientDisconnected'">
             <startOffsets>
               <option value="3981" />
@@ -369,21 +369,8 @@
           <option name="timeStamp" value="355" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs</url>
-          <line>116</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" initialLine="116" containingFunctionPresentation="method 'MsgClientConnect'">
-            <startOffsets>
-              <option value="3506" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3590" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="358" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs</url>
-          <line>40</line>
+          <line>42</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterServerMsg.cs" initialLine="36" containingFunctionPresentation="method 'DecodeSocStr_SendOtherServer'">
             <startOffsets>
               <option value="1341" />
