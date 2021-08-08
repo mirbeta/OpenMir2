@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using SystemModule;
 using System.IO;
+using SystemModule;
 using SystemModule.Common;
 
 namespace M2Server
@@ -384,7 +383,7 @@ namespace M2Server
                             }
                             if (s34[0] == 'L')
                             {
-                                MapFlag.nL = HUtil32.Str_ToInt(s34.Substring(2 - 1, s34.Length - 1), 1);
+                                MapFlag.nL = HUtil32.Str_ToInt(s34.Substring(1, s34.Length - 1), 1);
                             }
                         }
                         if (M2Share.g_MapManager.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)

@@ -38,7 +38,6 @@ namespace M2Server
         public static LocalDB LocalDB = null;
         public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
-        public static GroupServer GroupServer = null;
         public static DataServer DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GateSystem RunSocket = null;

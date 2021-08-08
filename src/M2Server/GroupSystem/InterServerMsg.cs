@@ -10,6 +10,7 @@ namespace M2Server
     {
         private readonly TServerMsgInfo[] m_SrvArray;
         private readonly ISocketServer _msgServer;
+        private GroupMessageHandle _groupMessageHandle;
 
         public TFrmSrvMsg()
         {
@@ -19,6 +20,7 @@ namespace M2Server
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;
             _msgServer.Init();
+            _groupMessageHandle = new GroupMessageHandle();
         }
 
         public void StartMsgServer()
@@ -74,7 +76,7 @@ namespace M2Server
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, "/");
                         Ident = HUtil32.Str_ToInt(Head, 0);
                         sNum = HUtil32.Str_ToInt(sNumStr, -1);
-                        M2Share.GroupServer.ProcessData(Ident, sNum, Body);
+                        _groupMessageHandle.ProcessData(Ident, sNum, Body);
                     }
                     else
                     {
@@ -93,11 +95,15 @@ namespace M2Server
         {
             if (Socket.Connected)
             {
-                var buffer = SystemModule.HUtil32.GetBytes("(" + sMsg + ")");
+                var buffer = HUtil32.GetBytes("(" + sMsg + ")");
                 Socket.Send(buffer);
             }
         }
 
+        /// <summary>
+        /// 发送消息给所有节点服务器
+        /// </summary>
+        /// <param name="msgstr"></param>
         public void SendServerSocket(string msgstr)
         {
             TServerMsgInfo ServerMsgInfo;
@@ -154,6 +160,11 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 接收节点服务器发送过来的消息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MsgServerClientRead(object sender, AsyncUserToken e)
         {
             for (var i = 0; i < m_SrvArray.Length; i++)

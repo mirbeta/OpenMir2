@@ -2475,10 +2475,9 @@ namespace M2Server
         /// <returns></returns>
         private bool WeaptonMakeLuck()
         {
-            var result = false;
             if (m_UseItems[Grobal2.U_WEAPON] == null && m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
-                return result;
+                return false;
             }
             var nRand = 0;
             var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
@@ -2528,8 +2527,7 @@ namespace M2Server
                     SysMsg(M2Share.g_sWeaptonNotMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
                 }
             }
-            result = true;
-            return result;
+            return true;
         }
 
         /// <summary>
@@ -2796,8 +2794,7 @@ namespace M2Server
                                             UpdateVisibleItem(n18, n1C, MapItem);
                                             if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
-                                                // 2 * 60 * 1000
-                                                if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
+                                                if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
                                                     MapItem.OfBaseObject = null;
                                                     MapItem.DropBaseObject = null;

@@ -6,8 +6,10 @@ namespace M2Server
 {
     public class TAnimalObject: TBaseObject
     {
+        /// <summary>
+        /// 未被处理次数，用于怪物处理循环
+        /// </summary>
         public int m_nNotProcessCount = 0;
-        // 未被处理次数，用于怪物处理循环
         public short m_nTargetX = 0;
         public short m_nTargetY = 0;
         public bool m_boRunAwayMode = false;

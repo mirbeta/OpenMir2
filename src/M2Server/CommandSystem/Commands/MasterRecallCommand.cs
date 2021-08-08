@@ -6,7 +6,7 @@ namespace M2Server
     /// <summary>
     /// 师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。
     /// </summary>
-    [GameCommand("MasterRecall", "师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。", 10)]
+    [GameCommand("MasterRecall", "师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。", 0)]
     public class MasterRecallCommand : BaseCommond
     {
         [DefaultCommand]

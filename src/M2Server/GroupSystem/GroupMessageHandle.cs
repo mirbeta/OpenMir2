@@ -4,11 +4,11 @@ using SystemModule;
 
 namespace M2Server
 {
-    public class GroupServer
+    public class GroupMessageHandle
     {
         private readonly TPlayObject PlayObject = null;
 
-        public GroupServer()
+        public GroupMessageHandle()
         { 
             
         }

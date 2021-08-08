@@ -1,6 +1,5 @@
-﻿using SystemModule;
-using System;
-using M2Server.CommandSystem;
+﻿using M2Server.CommandSystem;
+using SystemModule;
 
 namespace M2Server
 {
@@ -29,8 +28,7 @@ namespace M2Server
             if (m_PlayObject != null)
             {
                 nOLevel = m_PlayObject.m_Abil.Level;
-                //PlayObject.m_Abil.Level = HUtil32._MAX(1, HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel));
-                m_PlayObject.HasLevelUp(1);// 等级调整记录日志
+                m_PlayObject.HasLevelUp(1);
                 M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.m_sMapName + "\09" + m_PlayObject.m_nCurrX + "\09" + m_PlayObject.m_nCurrY + "\09"
                     + m_PlayObject.m_sCharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.m_sCharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayObject.SysMsg(sHumanName + " 等级调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);

@@ -6,7 +6,7 @@ namespace M2Server
     /// <summary>
     /// 夫妻传送，将对方传送到自己身边，对方必须允许传送。
     /// </summary>
-    [GameCommand("DearRecall", "夫妻传送", 10)]
+    [GameCommand("DearRecall", "夫妻传送", 0)]
     public class DearRecallCommond : BaseCommond
     {
         [DefaultCommand]

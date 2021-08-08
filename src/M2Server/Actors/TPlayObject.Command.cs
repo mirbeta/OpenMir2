@@ -350,80 +350,6 @@ namespace M2Server
             }
         }
 
-        public void CmdAdjuestExp(TGameCmd Cmd, string sHumanName, string sExp)
-        {
-            TPlayObject PlayObject;
-            int dwExp;
-            int dwOExp;
-            if (m_btPermission < Cmd.nPerMissionMin)
-            {
-                SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (sHumanName == "")
-            {
-                SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 经验值", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            dwExp = HUtil32.Str_ToInt(sExp, 0);
-            PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-            if (PlayObject != null)
-            {
-                dwOExp = PlayObject.m_Abil.Exp;
-                PlayObject.m_Abil.Exp = dwExp;
-                PlayObject.HasLevelUp(1);
-                SysMsg(sHumanName + " 经验调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);
-                if (M2Share.g_Config.boShowMakeItemMsg)
-                {
-                    M2Share.MainOutMessage("[经验调整] " + m_sCharName + '(' + PlayObject.m_sCharName + ' ' + dwOExp + " -> " + PlayObject.m_Abil.Exp + ')');
-                }
-            }
-            else
-            {
-                SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-        }
-
-        public void CmdAdjuestLevel(TGameCmd Cmd, string sHumanName, int nLevel)
-        {
-            TPlayObject PlayObject;
-            int nOLevel;
-            if (m_btPermission < Cmd.nPerMissionMin)
-            {
-                SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (sHumanName == "")
-            {
-                SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称 等级", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-            if (PlayObject != null)
-            {
-                nOLevel = PlayObject.m_Abil.Level;
-                PlayObject.m_Abil.Level = (ushort)HUtil32._MAX(1, HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel));
-                PlayObject.HasLevelUp(1);
-                SysMsg(sHumanName + " 等级调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);
-                if (M2Share.g_Config.boShowMakeItemMsg)
-                {
-                    M2Share.MainOutMessage("[等级调整] " + m_sCharName + '(' + PlayObject.m_sCharName + ' ' + nOLevel + " -> " + PlayObject.m_Abil.Level + ')');
-                }
-            }
-            else
-            {
-                SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-        }
-
-        public void CmdAdjustExp(TPlayObject Human, int nExp)
-        {
-            if (m_btPermission < 6)
-            {
-                return;
-            }
-        }
-
         public void CmdBackStep(string sCmd, int nType, int nCount)
         {
             if (m_btPermission < 6)
@@ -492,65 +418,6 @@ namespace M2Server
             {
                 SysMsg(M2Share.sReleaseGameMasterMode, TMsgColor.c_Green, TMsgType.t_Hint);
             }
-        }
-
-        public void CmdChangeAttackMode(int nMode, string sParam1, string sParam2, string sParam3, string sParam4, string sParam5, string sParam6, string sParam7)
-        {
-            if (nMode >= M2Share.HAM_ALL && nMode <= M2Share.HAM_PKATTACK)
-            {
-                m_btAttatckMode = (byte)nMode;
-            }
-            else
-            {
-                if (m_btAttatckMode < M2Share.HAM_PKATTACK)
-                {
-                    m_btAttatckMode++;
-                }
-                else
-                {
-                    m_btAttatckMode = M2Share.HAM_ALL;
-                }
-            }
-            if (nMode >= 0 && nMode <= 4)
-            {
-                m_btAttatckMode = (byte)nMode;
-            }
-            else
-            {
-                if (m_btAttatckMode < M2Share.HAM_PKATTACK)
-                {
-                    m_btAttatckMode++;
-                }
-                else
-                {
-                    m_btAttatckMode = M2Share.HAM_ALL;
-                }
-            }
-            switch (m_btAttatckMode)
-            {
-                case M2Share.HAM_ALL:// [攻击模式: 全体攻击]
-                    SysMsg(M2Share.sAttackModeOfAll, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_PEACE: // [攻击模式: 和平攻击]
-                    SysMsg(M2Share.sAttackModeOfPeaceful, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_DEAR:// [攻击模式: 和平攻击]
-                    SysMsg(M2Share.sAttackModeOfDear, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_MASTER:// [攻击模式: 和平攻击]
-                    SysMsg(M2Share.sAttackModeOfMaster, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_GROUP:// [攻击模式: 编组攻击]
-                    SysMsg(M2Share.sAttackModeOfGroup, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_GUILD:// [攻击模式: 行会攻击]
-                    SysMsg(M2Share.sAttackModeOfGuild, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                case M2Share.HAM_PKATTACK:// [攻击模式: 红名攻击]
-                    SysMsg(M2Share.sAttackModeOfRedWhite, TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-            }
-            SendDefMessage(Grobal2.SM_ATTACKMODE, m_btAttatckMode, 0, 0, 0, "");
         }
 
         public void CmdChangeDearName(TGameCmd Cmd, string sHumanName, string sDearName)
@@ -827,22 +694,6 @@ namespace M2Server
             else
             {
                 SysMsg("行会 " + sGuildName + "还没建立！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-        }
-
-        public void CmdChangeSalveStatus()
-        {
-            if (m_SlaveList.Count > 0)
-            {
-                m_boSlaveRelax = !m_boSlaveRelax;
-                if (m_boSlaveRelax)
-                {
-                    SysMsg(M2Share.sPetRest, TMsgColor.c_Green, TMsgType.t_Hint);
-                }
-                else
-                {
-                    SysMsg(M2Share.sPetAttack, TMsgColor.c_Green, TMsgType.t_Hint);
-                }
             }
         }
 
@@ -1189,26 +1040,6 @@ namespace M2Server
             //List14.Free;
         }
 
-        public void CmdAllowGroupReCall(string sCmd, string sParam)
-        {
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("此命令用于允许或禁止编组传送功能。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            m_boAllowGroupReCall = !m_boAllowGroupReCall;
-            if (m_boAllowGroupReCall)
-            {
-                // '[允许天地合一]'
-                SysMsg(M2Share.g_sEnableGroupRecall, TMsgColor.c_Green, TMsgType.t_Hint);
-            }
-            else
-            {
-                // '[禁止天地合一]'
-                SysMsg(M2Share.g_sDisableGroupRecall, TMsgColor.c_Green, TMsgType.t_Hint);
-            }
-        }
-
         public void CmdAnnouncement(TGameCmd Cmd, string sGuildName)
         {
             TGuild Guild;
@@ -1242,98 +1073,6 @@ namespace M2Server
             //}
             M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
             M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "------------------------------------");
-        }
-
-        public void CmdDearRecall(string sCmd, string sParam)
-        {
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("命令格式: @" + sCmd + " (夫妻传送，将对方传送到自己身边，对方必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
-                return;
-            }
-            if (m_sDearName == "")
-            {
-                SysMsg("你没有结婚！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (m_PEnvir.Flag.boNODEARRECALL)
-            {
-                SysMsg("本地图禁止夫妻传送！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (m_DearHuman == null)
-            {
-                if (m_btGender == ObjBase.gMan)
-                {
-                    SysMsg("你的老婆不在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                }
-                else
-                {
-                    SysMsg("你的老公不在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                }
-                return;
-            }
-
-            if (HUtil32.GetTickCount() - m_dwDearRecallTick < 10000)
-            {
-                SysMsg("稍等伙才能再次使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-
-            m_dwDearRecallTick = HUtil32.GetTickCount();
-            if (m_DearHuman.m_boCanDearRecall)
-            {
-                RecallHuman(m_DearHuman.m_sCharName);
-            }
-            else
-            {
-                SysMsg(m_DearHuman.m_sCharName + " 不允许传送！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-        }
-
-        public void CmdMasterRecall(string sCmd, string sParam)
-        {
-            int I;
-            TPlayObject MasterHuman;
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("命令格式: @" + sCmd + " (师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
-                return;
-            }
-            if (!m_boMaster)
-            {
-                SysMsg("只能师父才能使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (m_MasterList.Count == 0)
-            {
-                SysMsg("你的徒弟一个都不在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (m_PEnvir.Flag.boNOMASTERRECALL)
-            {
-                SysMsg("本地图禁止师徒传送！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-
-            if (HUtil32.GetTickCount() - m_dwMasterRecallTick < 10000)
-            {
-                SysMsg("稍等伙才能再次使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            for (I = 0; I < m_MasterList.Count; I++)
-            {
-                MasterHuman = m_MasterList[I];
-                if (MasterHuman.m_boCanMasterRecall)
-                {
-                    RecallHuman(MasterHuman.m_sCharName);
-                }
-                else
-                {
-                    SysMsg(MasterHuman.m_sCharName + " 不允许传送！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                }
-            }
         }
 
         public void CmdDelBonuPoint(TGameCmd Cmd, string sHumName)
@@ -1425,10 +1164,6 @@ namespace M2Server
 
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
-        }
-
-        public void CmdSbkDoorControl(string sCmd, string sParam)
-        {
         }
 
         public void CmdSearchDear(string sCmd, string sParam)
@@ -2778,7 +2513,6 @@ namespace M2Server
 
         public void CmdFreePenalty(TGameCmd Cmd, string sHumanName)
         {
-            // 004CC528
             TPlayObject PlayObject;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
@@ -2803,174 +2537,6 @@ namespace M2Server
             PlayObject.SysMsg(M2Share.g_sGameCommandFreePKHumanMsg, TMsgColor.c_Green, TMsgType.t_Hint);
 
             SysMsg(format(M2Share.g_sGameCommandFreePKMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
-        }
-
-        public void CmdGroupRecall(string sCMD)
-        {
-            short dwValue;
-            TPlayObject PlayObject;
-            if (m_boRecallSuite || m_btPermission >= 6)
-            {
-                if (!m_PEnvir.Flag.boNORECALL)
-                {
-                    dwValue = (short)((HUtil32.GetTickCount() - m_dwGroupRcallTick) / 1000);
-                    m_dwGroupRcallTick = m_dwGroupRcallTick + dwValue * 1000;
-                    if (m_btPermission >= 6)
-                    {
-                        m_wGroupRcallTime = 0;
-                    }
-                    if (m_wGroupRcallTime > dwValue)
-                    {
-                        m_wGroupRcallTime -= dwValue;
-                    }
-                    else
-                    {
-                        m_wGroupRcallTime = 0;
-                    }
-                    if (m_wGroupRcallTime == 0)
-                    {
-                        if (m_GroupOwner == this)
-                        {
-                            for (var I = 1; I < m_GroupMembers.Count; I++)
-                            {
-                                PlayObject = m_GroupMembers[I];
-                                if (PlayObject.m_boAllowGroupReCall)
-                                {
-                                    if (PlayObject.m_PEnvir.Flag.boNORECALL)
-                                    {
-
-                                        SysMsg(string.Format("%s 地图不允许传唤.", new string[] { PlayObject.m_sCharName }), TMsgColor.c_Red, TMsgType.t_Hint);
-                                    }
-                                    else
-                                    {
-                                        RecallHuman(PlayObject.m_sCharName);
-                                    }
-                                }
-                                else
-                                {
-                                    SysMsg(string.Format("%s 拒绝天地合一.", new string[] { PlayObject.m_sCharName }), TMsgColor.c_Red, TMsgType.t_Hint);
-                                }
-                            }
-                            m_dwGroupRcallTick = HUtil32.GetTickCount();
-                            m_wGroupRcallTime = (short)M2Share.g_Config.nGroupRecallTime;
-                        }
-                    }
-                    else
-                    {
-                        SysMsg(string.Format("%d 秒后才能再次使用.", new int[] { m_wGroupRcallTime }), TMsgColor.c_Red, TMsgType.t_Hint);
-                    }
-                }
-                else
-                {
-                    SysMsg("此地图禁止使用此命令！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                }
-            }
-            else
-            {
-                SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-        }
-
-        public void CmdGuildRecall(string sCmd, string sParam)
-        {
-            int dwValue;
-            TPlayObject PlayObject;
-            TGuildRank GuildRank;
-            int nRecallCount;
-            int nNoRecallCount;
-            TUserCastle Castle;
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("命令功能: 行会传送，行会掌门人可以将整个行会成员全部集中。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (!m_boGuildMove && m_btPermission < 6)
-            {
-                SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (!IsGuildMaster())
-            {
-                SysMsg("行会掌门人才可以使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (m_PEnvir.Flag.boNOGUILDRECALL)
-            {
-                SysMsg("本地图不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            Castle = M2Share.CastleManager.InCastleWarArea(this);
-            if (Castle != null && Castle.m_boUnderWar)
-            {
-                SysMsg("攻城区域不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            nRecallCount = 0;
-            nNoRecallCount = 0;
-            dwValue = (HUtil32.GetTickCount() - m_dwGroupRcallTick) / 1000;
-            m_dwGroupRcallTick = m_dwGroupRcallTick + dwValue * 1000;
-            if (m_btPermission >= 6)
-            {
-                m_wGroupRcallTime = 0;
-            }
-            if (m_wGroupRcallTime > dwValue)
-            {
-                m_wGroupRcallTime -= (short)dwValue;
-            }
-            else
-            {
-                m_wGroupRcallTime = 0;
-            }
-            if (m_wGroupRcallTime > 0)
-            {
-                SysMsg(format("%d 秒之后才可以再使用此功能！！！", m_wGroupRcallTime), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            for (var i = 0; i < m_MyGuild.m_RankList.Count; i++)
-            {
-                GuildRank = m_MyGuild.m_RankList[i];
-                for (var j = 0; j < GuildRank.MemberList.Count; j++)
-                {
-                    PlayObject = GuildRank.MemberList[j];
-                    if (PlayObject != null)
-                    {
-                        if (PlayObject == this)
-                        {
-                            // Inc(nNoRecallCount);
-                            continue;
-                        }
-                        if (PlayObject.m_boAllowGuildReCall)
-                        {
-                            if (PlayObject.m_PEnvir.Flag.boNORECALL)
-                            {
-                                SysMsg(format("%s 所在的地图不允许传送。", PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
-                            }
-                            else
-                            {
-                                RecallHuman(PlayObject.m_sCharName);
-                                nRecallCount++;
-                            }
-                        }
-                        else
-                        {
-                            nNoRecallCount++;
-                            SysMsg(format("%s 不允许行会合一！！！", PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                    }
-                }
-            }
-            // SysMsg('已传送' + IntToStr(nRecallCount) + '个成员，' + IntToStr(nNoRecallCount) + '个成员未被传送。',c_Green,t_Hint);
-            SysMsg(format("已传送%d个成员，%d个成员未被传送。", nRecallCount, nNoRecallCount), TMsgColor.c_Green, TMsgType.t_Hint);
-            m_dwGroupRcallTick = HUtil32.GetTickCount();
-            m_wGroupRcallTime = (short)M2Share.g_Config.nGuildRecallTime;
-        }
-
-        public void CmdGuildWar(string sCmd, string sGuildName)
-        {
-            if (m_btPermission < 6)
-            {
-                return;
-            }
         }
 
         public void CmdHair(TGameCmd Cmd, string sHumanName, int nHair)
@@ -3368,56 +2934,6 @@ namespace M2Server
                 }
             }
             //HumanList.Free;
-        }
-
-        public void CmdMemberFunction(string sCmd, string sParam)
-        {
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("打开会员功能窗口.", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (M2Share.g_ManageNPC != null)
-            {
-                M2Share.g_ManageNPC.GotoLable(this, "@Member", false);
-            }
-        }
-
-        public void CmdMemberFunctionEx(string sCmd, string sParam)
-        {
-            if (sParam != "" && sParam[1] == '?')
-            {
-                SysMsg("打开会员功能窗口.", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (M2Share.g_FunctionNPC != null)
-            {
-                M2Share.g_FunctionNPC.GotoLable(this, "@Member", false);
-            }
-        }
-
-        public void CmdMission(TGameCmd Cmd, string sX, string sY)
-        {
-            // 004CCA08
-            short nX = 0;
-            short nY = 0;
-            if (m_btPermission < Cmd.nPerMissionMin)
-            {
-                SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (sX == "" || sY == "")
-            {
-                SysMsg("命令格式: @" + Cmd.sCmd + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            nX = (short)HUtil32.Str_ToInt(sX, 0);
-            nY = (short)HUtil32.Str_ToInt(sY, 0);
-            M2Share.g_boMission = true;
-            M2Share.g_sMissionMap = m_sMapName;
-            M2Share.g_nMissionX = nX;
-            M2Share.g_nMissionY = nY;
-            SysMsg("怪物集中目标已设定为: " + m_sMapName + '(' + M2Share.g_nMissionX + ':' + M2Share.g_nMissionY + ')', TMsgColor.c_Green, TMsgType.t_Hint);
         }
 
         public void CmdMob(TGameCmd Cmd, string sMonName, int nCount, int nLevel, int nExpRatio)
@@ -5003,60 +4519,6 @@ namespace M2Server
             {
                 SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
             }
-        }
-
-        public void CmdTraining(string sSkillName, int nLevel)
-        {
-            if (m_btPermission < 6)
-            {
-                return;
-            }
-        }
-
-        public void CmdUserMoveXY(string sCMD, string sX, string sY)
-        {
-            short nX = 0;
-            short nY = 0;
-            if (m_boTeleport)
-            {
-                nX = (short)HUtil32.Str_ToInt(sX, -1);
-                nY = (short)HUtil32.Str_ToInt(sY, -1);
-                if (!m_PEnvir.Flag.boNOPOSITIONMOVE)
-                {
-                    if (m_PEnvir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
-                    {
-                        // 10000
-                        if (HUtil32.GetTickCount() - m_dwTeleportTick > M2Share.g_Config.dwUserMoveTime * 1000)
-                        {
-                            m_dwTeleportTick = HUtil32.GetTickCount();
-                            SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                            // BaseObjectMove('',sX,sY);
-                            SpaceMove(m_sMapName, nX, nY, 0);
-                        }
-                        else
-                        {
-                            SysMsg(M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - m_dwTeleportTick) / 1000 + "秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                    }
-                    else
-                    {
-                        SysMsg(format(M2Share.g_sGameCommandPositionMoveCanotMoveToMap, m_sMapName, sX, sY), TMsgColor.c_Green, TMsgType.t_Hint);
-                    }
-                }
-                else
-                {
-                    SysMsg("此地图禁止使用此命令！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-                }
-            }
-            else
-            {
-                SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-        }
-
-        public void CmdViewDiary(string sCMD, int nFlag)
-        {
-            // 004D1B70
         }
 
         public void CmdViewWhisper(TGameCmd Cmd, string sCharName, string sParam2)

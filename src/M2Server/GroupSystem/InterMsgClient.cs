@@ -12,6 +12,7 @@ namespace M2Server
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket MsgClient;
         private Timer _heartTimer;
+        private GroupMessageHandle _groupMessageHandle;
 
         public TFrmMsgClient()
         {
@@ -20,6 +21,7 @@ namespace M2Server
             MsgClient.ReceivedDatagram += MsgClientRead;
             MsgClient.OnError += MsgClientError;
             MsgClient.OnDisconnected += MsgClientDisconnected;
+            _groupMessageHandle = new GroupMessageHandle();
         }
 
         public void ConnectMsgServer()
@@ -87,7 +89,7 @@ namespace M2Server
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, "/");
                         Ident = HUtil32.Str_ToInt(Head, 0);
                         sNum = HUtil32.Str_ToInt(sNumStr, -1);
-                        M2Share.GroupServer.ProcessData(Ident, sNum, Body);
+                        _groupMessageHandle.ProcessData(Ident, sNum, Body);
                     }
                     else
                     {
@@ -128,6 +130,11 @@ namespace M2Server
             M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
         }
 
+        /// <summary>
+        /// 接收主机发送过来的消息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
             sRecvMsg = sRecvMsg + e.Data;

@@ -6,7 +6,7 @@ namespace M2Server
     /// <summary>
     /// 调整当前玩家属下状态
     /// </summary>
-    [GameCommand("ChangeSalveStatus", "调整当前玩家属下状态", 10)]
+    [GameCommand("ChangeSalveStatus", "调整当前玩家属下状态", 0)]
     public class ChangeSalveStatusCommand : BaseCommond
     {
         [DefaultCommand]

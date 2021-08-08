@@ -1,13 +1,12 @@
-﻿using SystemModule;
-using System;
-using M2Server.CommandSystem;
+﻿using M2Server.CommandSystem;
+using SystemModule;
 
 namespace M2Server
 {
     /// <summary>
     /// 组队传送
     /// </summary>
-    [GameCommand("GroupRecall", "组队传送", 10)]
+    [GameCommand("GroupRecall", "组队传送", 0)]
     public class GroupRecallCommand : BaseCommond
     {
         [DefaultCommand]

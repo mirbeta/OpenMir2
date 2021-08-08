@@ -515,16 +515,6 @@ namespace M2Server
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MEMBERFUNCTION.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMemberFunction(M2Share.g_GameCommand.MEMBERFUNCTION.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MEMBERFUNCTIONEX.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMemberFunctionEx(M2Share.g_GameCommand.MEMBERFUNCTIONEX.sCmd, sParam1);
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.DEAR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CmdSearchDear(M2Share.g_GameCommand.DEAR.sCmd, sParam1);
@@ -533,16 +523,6 @@ namespace M2Server
                 if (string.Compare(sCMD, M2Share.g_GameCommand.MASTER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CmdSearchMaster(M2Share.g_GameCommand.MASTER.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MASTERECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMasterRecall(M2Share.g_GameCommand.MASTERECALL.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DEARRECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDearRecall(M2Share.g_GameCommand.DEARRECALL.sCmd, sParam1);
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWDEARRCALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
@@ -684,16 +664,6 @@ namespace M2Server
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWGROUPCALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdAllowGroupReCall(sCMD, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.GROUPRECALLL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdGroupRecall(M2Share.g_GameCommand.GROUPRECALLL.sCmd);
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWGUILDRECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_boAllowGuildReCall = !m_boAllowGuildReCall;
@@ -707,11 +677,6 @@ namespace M2Server
                         // '[禁止行会合一]'
                         SysMsg(M2Share.g_sDisableGuildRecall, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.GUILDRECALLL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdGuildRecall(M2Share.g_GameCommand.GUILDRECALLL.sCmd, sParam1);
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.AUTH.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
@@ -730,21 +695,6 @@ namespace M2Server
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DIARY.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdViewDiary(M2Share.g_GameCommand.DIARY.sCmd, HUtil32.Str_ToInt(sParam1, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ATTACKMODE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeAttackMode(HUtil32.Str_ToInt(sParam1, -1), sParam1, sParam2, sParam3, sParam4, sParam5, sParam6, sParam7);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.REST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeSalveStatus();
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.TAKEONHORSE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CmdTakeOnHorse(sCMD, sParam1);
@@ -753,10 +703,6 @@ namespace M2Server
                 if (string.Compare(sCMD, M2Share.g_GameCommand.TAKEOFHORSE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CmdTakeOffHorse(sCMD, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.TESTGA.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.MAPINFO.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
@@ -779,16 +725,6 @@ namespace M2Server
                 //    CmdBindUseItem(M2Share.g_GameCommand.BINDUSEITEM, sParam1, sParam2, sParam3);
                 //    return;
                 //}
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SBKDOOR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSbkDoorControl(M2Share.g_GameCommand.SBKDOOR.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.USERMOVE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdUserMoveXY(M2Share.g_GameCommand.USERMOVE.sCmd, sParam1, sParam2);
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.SEARCHING.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     CmdSearchHuman(M2Share.g_GameCommand.SEARCHING.sCmd, sParam1);
@@ -801,7 +737,6 @@ namespace M2Server
                 }
                 if (m_btPermission >= 2 && sData.Length > 2)
                 {
-                    // if sData[2] = '!' then begin
                     if (m_btPermission >= 6 && sData[2] == M2Share.g_GMRedMsgCmd)
                     {
                         if (HUtil32.GetTickCount() - m_dwSayMsgTick > 2000)
@@ -824,430 +759,6 @@ namespace M2Server
                         }
                         return;
                     }
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.HUMANLOCAL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdHumanLocal(M2Share.g_GameCommand.HUMANLOCAL, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOVE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMapMove(M2Share.g_GameCommand.MOVE, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.POSITIONMOVE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdPositionMove(M2Share.g_GameCommand.POSITIONMOVE, sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.INFO.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdHumanInfo(M2Share.g_GameCommand.INFO, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOBLEVEL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMobLevel(M2Share.g_GameCommand.MOBLEVEL, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOBCOUNT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMobCount(M2Share.g_GameCommand.MOBCOUNT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.HUMANCOUNT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdHumanCount(M2Share.g_GameCommand.HUMANCOUNT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.KICK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdKickHuman(M2Share.g_GameCommand.KICK, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.TING.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdTing(M2Share.g_GameCommand.TING, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SUPERTING.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSuperTing(M2Share.g_GameCommand.SUPERTING, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MAPMOVE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMapMoveHuman(M2Share.g_GameCommand.MAPMOVE, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHUTUP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShutup(M2Share.g_GameCommand.SHUTUP, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MAP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowMapInfo(M2Share.g_GameCommand.MAP, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RELEASESHUTUP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShutupRelease(M2Share.g_GameCommand.RELEASESHUTUP, sParam1, true);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHUTUPLIST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShutupList(M2Share.g_GameCommand.SHUTUPLIST, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.GAMEMASTER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeAdminMode(M2Share.g_GameCommand.GAMEMASTER.sCmd, M2Share.g_GameCommand.GAMEMASTER.nPerMissionMin, sParam1, !m_boAdminMode);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.OBSERVER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeObMode(M2Share.g_GameCommand.OBSERVER.sCmd, M2Share.g_GameCommand.OBSERVER.nPerMissionMin, sParam1, !m_boObMode);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SUEPRMAN.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeSuperManMode(M2Share.g_GameCommand.OBSERVER.sCmd, M2Share.g_GameCommand.OBSERVER.nPerMissionMin, sParam1, !m_boSuperMan);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.LEVEL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeLevel(M2Share.g_GameCommand.LEVEL, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SABUKWALLGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowSbkGold(M2Share.g_GameCommand.SABUKWALLGOLD, sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RECALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdRecallHuman(M2Share.g_GameCommand.RECALL, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.REGOTO.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReGotoHuman(M2Share.g_GameCommand.REGOTO, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWFLAG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowHumanFlag(M2Share.g_GameCommand.SHOWFLAG.sCmd, M2Share.g_GameCommand.SHOWFLAG.nPerMissionMin, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWOPEN.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowHumanUnitOpen(M2Share.g_GameCommand.SHOWOPEN.sCmd, M2Share.g_GameCommand.SHOWOPEN.nPerMissionMin, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWUNIT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowHumanUnit(M2Share.g_GameCommand.SHOWUNIT.sCmd, M2Share.g_GameCommand.SHOWUNIT.nPerMissionMin, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ATTACK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMob(M2Share.g_GameCommand.MOB, sParam1, HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0), HUtil32.Str_ToInt(sParam4, -1));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOBNPC.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMobNpc(M2Share.g_GameCommand.MOBNPC.sCmd, M2Share.g_GameCommand.MOBNPC.nPerMissionMin, sParam1, sParam2, sParam3, sParam4);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.NPCSCRIPT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdNpcScript(M2Share.g_GameCommand.NPCSCRIPT.sCmd, M2Share.g_GameCommand.NPCSCRIPT.nPerMissionMin, sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELNPC.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelNpc(M2Share.g_GameCommand.DELNPC.sCmd, M2Share.g_GameCommand.DELNPC.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RECALLMOB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdRecallMob(M2Share.g_GameCommand.RECALLMOB, sParam1, HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0), HUtil32.Str_ToInt(sParam4, 0), HUtil32.Str_ToInt(sParam5, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.LUCKYPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdLuckPoint(M2Share.g_GameCommand.LUCKYPOINT.sCmd, M2Share.g_GameCommand.LUCKYPOINT.nPerMissionMin, sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.LOTTERYTICKET.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdLotteryTicket(M2Share.g_GameCommand.LOTTERYTICKET.sCmd, M2Share.g_GameCommand.LOTTERYTICKET.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReloadGuild(M2Share.g_GameCommand.RELOADGUILD.sCmd, M2Share.g_GameCommand.RELOADGUILD.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADLINENOTICE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReloadLineNotice(M2Share.g_GameCommand.RELOADLINENOTICE.sCmd, M2Share.g_GameCommand.RELOADLINENOTICE.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADABUSE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReloadAbuse(M2Share.g_GameCommand.RELOADABUSE.sCmd, M2Share.g_GameCommand.RELOADABUSE.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.FREEPENALTY.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdFreePenalty(M2Share.g_GameCommand.FREEPENALTY, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.PKPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdPKpoint(M2Share.g_GameCommand.PKPOINT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.INCPKPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdIncPkPoint(M2Share.g_GameCommand.INCPKPOINT, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.VIEWWHISPER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdViewWhisper(M2Share.g_GameCommand.VIEWWHISPER, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.REALIVE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReAlive(M2Share.g_GameCommand.REALIVE, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.KILL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdKill(M2Share.g_GameCommand.KILL, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SMAKE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSmakeItem(M2Share.g_GameCommand.SMAKE, HUtil32.Str_ToInt(sParam1, 0), HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGEJOB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeJob(M2Share.g_GameCommand.CHANGEJOB, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGEGENDER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeGender(M2Share.g_GameCommand.CHANGEGENDER, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.HAIR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdHair(M2Share.g_GameCommand.HAIR, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.BONUSPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdBonuPoint(M2Share.g_GameCommand.BONUSPOINT, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELBONUSPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelBonuPoint(M2Share.g_GameCommand.DELBONUSPOINT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RESTBONUSPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdRestBonuPoint(M2Share.g_GameCommand.RESTBONUSPOINT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SETPERMISSION.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSetPermission(M2Share.g_GameCommand.SETPERMISSION, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.RENEWLEVEL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdReNewLevel(M2Share.g_GameCommand.RENEWLEVEL, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelGold(M2Share.g_GameCommand.DELGOLD, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdAddGold(M2Share.g_GameCommand.ADDGOLD, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.GAMEGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdGameGold(M2Share.g_GameCommand.GAMEGOLD, sParam1, sParam2, HUtil32.Str_ToInt(sParam3, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.GAMEPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdGamePoint(M2Share.g_GameCommand.GAMEPOINT, sParam1, sParam2, HUtil32.Str_ToInt(sParam3, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CREDITPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdCreditPoint(M2Share.g_GameCommand.CREDITPOINT, sParam1, sParam2, HUtil32.Str_ToInt(sParam3, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.TRAINING.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdTrainingSkill(M2Share.g_GameCommand.TRAINING, sParam1, sParam2, HUtil32.Str_ToInt(sParam3, 0));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELETEITEM.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDeleteItem(M2Share.g_GameCommand.DELETEITEM, sParam1, sParam2, HUtil32.Str_ToInt(sParam3, 1));
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELETESKILL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelSkill(M2Share.g_GameCommand.DELETESKILL, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CLEARMISSION.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdClearMission(M2Share.g_GameCommand.CLEARMISSION, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.STARTQUEST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdStartQuest(M2Share.g_GameCommand.STARTQUEST, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DENYIPLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDenyIPaddrLogon(M2Share.g_GameCommand.DENYIPLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGEDEARNAME.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdChangeDearName(M2Share.g_GameCommand.CHANGEDEARNAME, sParam1, sParam2);
-                    return;
-                }
-                //if ((sCMD).CompareTo((M2Share.g_GameCommand.CHANGEMASTERNAME.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                //{
-                //    CmdChangeMasterName(M2Share.g_GameCommand.CHANGEMASTERNAME, sParam1, sParam2, sParam3);
-                //    return;
-                //}
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CLEARMON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdClearMapMonster(M2Share.g_GameCommand.CLEARMON, sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DENYACCOUNTLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDenyAccountLogon(M2Share.g_GameCommand.DENYACCOUNTLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DENYCHARNAMELOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDenyCharNameLogon(M2Share.g_GameCommand.DENYCHARNAMELOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELDENYIPLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelDenyIPaddrLogon(M2Share.g_GameCommand.DELDENYIPLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELDENYACCOUNTLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelDenyAccountLogon(M2Share.g_GameCommand.DELDENYACCOUNTLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DELDENYCHARNAMELOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDelDenyCharNameLogon(M2Share.g_GameCommand.DELDENYCHARNAMELOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWDENYIPLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowDenyIPaddrLogon(M2Share.g_GameCommand.SHOWDENYIPLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWDENYACCOUNTLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowDenyAccountLogon(M2Share.g_GameCommand.SHOWDENYACCOUNTLOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWDENYCHARNAMELOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowDenyCharNameLogon(M2Share.g_GameCommand.SHOWDENYCHARNAMELOGON, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MISSION.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMission(M2Share.g_GameCommand.MISSION, sParam1, sParam2);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MOBPLACE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdMobPlace(M2Share.g_GameCommand.MOBPLACE, sParam1, sParam2, sParam3, sParam4);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SETMAPMODE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSetMapMode(M2Share.g_GameCommand.SETMAPMODE.sCmd, sParam1, sParam2, sParam3, sParam4);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SHOWMAPMODE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdShowMapMode(M2Share.g_GameCommand.SHOWMAPMODE.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CLRPASSWORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdClearHumanPassword(M2Share.g_GameCommand.CLRPASSWORD.sCmd, M2Share.g_GameCommand.CLRPASSWORD.nPerMissionMin, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CONTESTPOINT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdContestPoint(M2Share.g_GameCommand.CONTESTPOINT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.STARTCONTEST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdStartContest(M2Share.g_GameCommand.STARTCONTEST, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ENDCONTEST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdEndContest(M2Share.g_GameCommand.ENDCONTEST, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ANNOUNCEMENT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdAnnouncement(M2Share.g_GameCommand.ANNOUNCEMENT, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DISABLESENDMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDisableSendMsg(M2Share.g_GameCommand.DISABLESENDMSG, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ENABLESENDMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdEnableSendMsg(M2Share.g_GameCommand.ENABLESENDMSG, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DISABLESENDMSGLIST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdDisableSendMsgList(M2Share.g_GameCommand.DISABLESENDMSGLIST);
-                    return;
                 }
                 if (m_btPermission > 4)
                 {
@@ -1459,16 +970,6 @@ namespace M2Server
                         //    SysMsg("小地图配置重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                         //    return;
                         //}
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADJUESTLEVEL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdAdjuestLevel(M2Share.g_GameCommand.ADJUESTLEVEL, sParam1, HUtil32.Str_ToInt(sParam2, 1));
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADJUESTEXP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdAdjuestExp(M2Share.g_GameCommand.ADJUESTEXP, sParam1, sParam2);
-                            return;
-                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             CmdAddGuild(M2Share.g_GameCommand.ADDGUILD, sParam1, sParam2);

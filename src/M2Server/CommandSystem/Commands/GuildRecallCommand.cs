@@ -7,7 +7,7 @@ namespace M2Server
     /// <summary>
     /// 行会传送，行会掌门人可以将整个行会成员全部集中。
     /// </summary>
-    [GameCommand("GuildRecall", "行会传送，行会掌门人可以将整个行会成员全部集中。", 10)]
+    [GameCommand("GuildRecall", "行会传送，行会掌门人可以将整个行会成员全部集中。", 0)]
     public class GuildRecallCommand : BaseCommond
     {
         [DefaultCommand]
@@ -71,9 +71,9 @@ namespace M2Server
                 {
                     continue;
                 }
-                for (var II = 0; II < GuildRank.MemberList.Count; II++)
+                for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    m_PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[II].m_sCharName);
+                    m_PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].m_sCharName);
                     if (m_PlayObject != null)
                     {
                         if (m_PlayObject == PlayObject)

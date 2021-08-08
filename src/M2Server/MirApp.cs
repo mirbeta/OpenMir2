@@ -251,7 +251,6 @@ namespace M2Server
             M2Share.g_Config.GlobalVal=new int[20];
             M2Share.g_Config.GlobaDyMval = new short[100];
             M2Share.LoadConfig();
-            M2Share.GroupServer = new GroupServer();
             M2Share.DataServer = new DataServer();
             M2Share.ObjectSystem = new ObjectSystem();
             M2Share.ScriptSystem = new ScriptSystem();
