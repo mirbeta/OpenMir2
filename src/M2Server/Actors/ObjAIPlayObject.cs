@@ -301,13 +301,13 @@ namespace M2Server
                     {
                         if (sData.Length >= 2)
                         {
-                            if (sData[1] == '!')
+                            if (sData[1] == '!')//发送组队消息
                             {
                                 SC = sData.Substring(2, sData.Length - 2);
                                 SendGroupText(m_sCharName + ": " + SC);
                                 return;
                             }
-                            if (sData[1] == '~')
+                            if (sData[1] == '~') //发送行会消息
                             {
                                 if (m_MyGuild != null)
                                 {
@@ -317,7 +317,7 @@ namespace M2Server
                                 return;
                             }
                         }
-                        if (!m_PEnvir.Flag.boQUIZ)
+                        if (!m_PEnvir.Flag.boQUIZ) //发送黄色喊话消息
                         {
                             if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
                             {
@@ -327,7 +327,7 @@ namespace M2Server
                                     return;
                                 }
                                 m_dwShoutMsgTick = HUtil32.GetTickCount();
-                                SC = sData.Substring(2 - 1, sData.Length - 1);
+                                SC = sData.Substring(1, sData.Length - 1);
                                 string sCryCryMsg = "(!)" + m_sCharName + ": " + SC;
                                 if (m_boFilterSendMsg)
                                 {

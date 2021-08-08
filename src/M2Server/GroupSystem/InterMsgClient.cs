@@ -28,7 +28,7 @@ namespace M2Server
             MsgClient.Port = M2Share.g_Config.nMsgSrvPort;
             dw2D4Tick = HUtil32.GetTickCount();
             MsgClient.Connect();
-            _heartTimer = new Timer(Connected, null, 1000, 3000);
+            _heartTimer = new Timer(Connected, null, 1000, 10000);
         }
 
         public void Run()

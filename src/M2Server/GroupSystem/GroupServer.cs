@@ -123,15 +123,18 @@ namespace M2Server
                 case Grobal2.ISM_REQUEST_LOVERRECALL:
                     MsgGetRequestLoverRecall(serverNum, Body);
                     break;
+                 case Grobal2.ISM_GRUOPMESSAGE:
+                     Console.WriteLine("跨服消息");
+                     break;
             }
         }
 
-        public void ServerHeartMessage(int sNu,string Body)
+        private void ServerHeartMessage(int sNu,string Body)
         {
 
         }
 
-        public void MsgGetUserServerChange(int sNum, string Body)
+        private void MsgGetUserServerChange(int sNum, string Body)
         {
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::MsgGetUserServerChange";
             int shifttime = HUtil32.GetTickCount();
@@ -173,11 +176,10 @@ namespace M2Server
 
         private void MsgGetWhisper(int sNum, string Body)
         {
-            string Str;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -192,11 +194,10 @@ namespace M2Server
 
         private void MsgGetGMWhisper(int sNum, string Body)
         {
-            string Str;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -211,11 +212,10 @@ namespace M2Server
 
         private void MsgGetLoverWhisper(int sNum, string Body)
         {
-            var Str = string.Empty;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -242,8 +242,7 @@ namespace M2Server
 
         private void MsgGetDelGuild(int sNum, string Body)
         {
-            var gname = string.Empty;
-            gname = Body;
+            var gname = Body;
             M2Share.GuildManager.DelGuild(gname);
         }
 
@@ -275,12 +274,11 @@ namespace M2Server
         private void MsgGetGuildMsg(int sNum, string Body)
         {
             var gname = string.Empty;
-            TGuild g;
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref gname, "/");
             if (gname != "")
             {
-                g = M2Share.GuildManager.FindGuild(gname);
+                var g = M2Share.GuildManager.FindGuild(gname);
                 if (g != null)
                 {
                     g.SendGuildMsg(Str);
@@ -373,8 +371,7 @@ namespace M2Server
         private void MsgGetChatProhibitionCancel(int sNum, string Body)
         {
             byte obtPermission;
-            string whostr;
-            whostr = Body;
+            var whostr = Body;
             if (whostr != "")
             {
                 obtPermission = PlayObject.m_btPermission;
@@ -414,8 +411,6 @@ namespace M2Server
             // UserMgrEngine.OnExternInterMsg(sNum, Ident_, UserName, msgbody);
         }
 
-        // procedure MsgGetRelationShipDelete(sNum: Integer; Body: string);
-
         private void MsgGetReloadMakeItemList()
         {
             //M2Share.LocalDB.LoadMakeItemList();
@@ -424,22 +419,18 @@ namespace M2Server
 
         private void MsgGetGuildMemberRecall(int sNum, string Body)
         {
-            TPlayObject hum;
-            short dx;
-            short dy;
             var dxstr = string.Empty;
             var dystr = string.Empty;
-            var Str = string.Empty;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, "/");
                 Str = HUtil32.GetValidStr3(Str, ref dystr, "/");
-                dx = (short)HUtil32.Str_ToInt(dxstr, 0);
-                dy = (short)HUtil32.Str_ToInt(dystr, 0);
-                hum = M2Share.UserEngine.GetPlayObject(uname);
+                var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
+                var dy = (short)HUtil32.Str_ToInt(dystr, 0);
+                var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.m_boAllowGuildReCall)
@@ -471,26 +462,25 @@ namespace M2Server
                 humlover = M2Share.UserEngine.GetPlayObject(lovername);
                 if (humlover != null)
                 {
-                    // humlover.SysMsg(uname + '丛捞 ' + Str + '俊 甸绢坷继嚼聪促.', 6);
-                    // if UserEngine.FindOtherServerUser(uname, svidx) then
-                    // UserEngine.SendInterMsg(ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.penvir.MapTitle);
+                    int svidx = 0;
+                    if (M2Share.UserEngine.FindOtherServerUser(uname, ref svidx))
+                    {
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.m_PEnvir.sMapDesc);
+                    }
                 }
             }
         }
 
         private void MsgGetLoverLogout(int sNum, string Body)
         {
-            TPlayObject hum;
-            string Str;
             var uname = string.Empty;
-            string lovername;
             const string sLoverFindYouMsg = "正在找你...";
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                lovername = Str;
-                hum = M2Share.UserEngine.GetPlayObject(lovername);
+                var lovername = Str;
+                var hum = M2Share.UserEngine.GetPlayObject(lovername);
                 if (hum != null)
                 {
                     hum.SysMsg(uname + sLoverFindYouMsg, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -505,14 +495,12 @@ namespace M2Server
 
         private void MsgGetLoverKilledMsg(int sNum, string Body)
         {
-            TPlayObject hum;
-            string Str;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SysMsg(Str, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -522,22 +510,18 @@ namespace M2Server
 
         private void MsgGetRecall(int sNum, string Body)
         {
-            TPlayObject hum;
-            short dx;
-            short dy;
             var dxstr = string.Empty;
             var dystr = string.Empty;
-            var Str = string.Empty;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, "/");
                 Str = HUtil32.GetValidStr3(Str, ref dystr, "/");
-                dx = (short)HUtil32.Str_ToInt(dxstr, 0);
-                dy = (short)HUtil32.Str_ToInt(dystr, 0);
-                hum = M2Share.UserEngine.GetPlayObject(uname);
+                var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
+                var dy = (short)HUtil32.Str_ToInt(dystr, 0);
+                var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -548,14 +532,12 @@ namespace M2Server
 
         private void MsgGetRequestRecall(int sNum, string Body)
         {
-            TPlayObject hum;
-            string Str;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.RecallHuman(Str);
@@ -565,14 +547,12 @@ namespace M2Server
 
         private void MsgGetRequestLoverRecall(int sNum, string Body)
         {
-            TPlayObject hum;
-            string Str;
             var uname = string.Empty;
             if (sNum == M2Share.nServerIndex)
             {
-                Str = Body;
+                var Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                hum = M2Share.UserEngine.GetPlayObject(uname);
+                var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (!hum.m_PEnvir.Flag.boNORECALL)

@@ -405,10 +405,10 @@ namespace M2Server
         public static string g_sWizardReNewName = "%chrname\\*<神>*";
         public static string g_sTaosReNewName = "%chrname\\*<尊>*";
         public static string g_sRankLevelName = "{0}\\平民";
-        public static string g_sManDearName = "%s的老公";
-        public static string g_sWoManDearName = "%s的老婆";
-        public static string g_sMasterName = "%s的师父";
-        public static string g_sNoMasterName = "%s的徒弟";
+        public static string g_sManDearName = "{0}的老公";
+        public static string g_sWoManDearName = "{0}的妻子";
+        public static string g_sMasterName = "{0}的师傅";
+        public static string g_sNoMasterName = "{0}的徒弟";
         public static string g_sHumanShowName = "%chrname\\%guildname\\%dearname\\%mastername";
         public static string g_sChangePermissionMsg = "当前权限等级为:%d";
         public static string g_sChangeKillMonExpRateMsg = "经验倍数:%g 时长%d秒";
@@ -429,7 +429,7 @@ namespace M2Server
         public static string g_sDisableSayMsg = "[由于你重复发相同的内容，%d分钟内你将被禁止发言...]";
         public static string g_sOnlineCountMsg = "在线数: %d";
         public static string g_sTotalOnlineCountMsg = "总在线数: %d";
-        public static string g_sYouNeedLevelMsg = "你的等级要在%d级以上才能用此功能！！！";
+        public static string g_sYouNeedLevelMsg = "你的等级要在{0}级以上才能用此功能！！！";
         public static string g_sThisMapDisableSendCyCyMsg = "本地图不允许喊话！！！";
         public static string g_sYouCanSendCyCyLaterMsg = "%d秒后才可以再发文字！！！";
         public static string g_sYouIsDisableSendMsg = "禁止聊天！！！";
@@ -437,16 +437,11 @@ namespace M2Server
         public static string g_sYouKilledByMsg = "你被%s杀害了！！！";
         public static string g_sYouProtectedByLawOfDefense = "[你受到正当规则保护。]";
         public static string g_sYourUseItemIsNul = "你的%s处没有放上装备！！！";
-        // ===============================================================
         public static int nIPLocal = -1;
         public static int nAddGameDataLog = -1;
 
-        public const string g_sProductName = "程序名称：SKY防攻击服务器引擎";
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
-        public const string g_sProgram = "程序制作: 仙侣情缘";
-        public const string g_sWebSite = "程序网站: http://www.jsym2.com";
-        public const string g_sBbsSite = "程序论坛: http://bbs.jsym2.com";
 
         public const int MAXUPLEVEL = 500;
         public const int MAXHUMPOWER = 1000;

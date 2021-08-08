@@ -52,19 +52,24 @@ namespace M2Server
 
                         if (shutdownSeconds > 0)
                         {
-                            Task.Delay(TimeSpan.FromSeconds(1));
+                            Thread.Sleep(TimeSpan.FromSeconds(1));
                         }
                         else
                         {
-                            var crossGroupServer = "";//随机抽取分组可用服务器
-                            foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                            var sIPaddr = string.Empty;
+                            var nPort = 0;
+                            const string sMsg = "{0}/{1}";
+                            if (M2Share.GetMultiServerAddrPort(0, ref sIPaddr, ref nPort)) //如果有可用服务器，那就切换过去
                             {
-                                playObject.CrossGroupServer("10.10.0.188", 7200);
+                                foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                                {
+                                    playObject.CrossGroupServer(sIPaddr, nPort);
+                                }
                             }
                             break;
                         }
                     }
-                });
+                }, cancellationToken);
             }
             return base.StopAsync(cancellationToken);
         }

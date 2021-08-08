@@ -160,6 +160,11 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 取地图编号服务器
+        /// </summary>
+        /// <param name="sMapName"></param>
+        /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
             if (m_MapList.TryGetValue(sMapName.ToLower(), out var envirnoment))

@@ -54,6 +54,11 @@ namespace RunGate
             SessionArray = new TSessionInfo[GATEMAXSESSION];
         }
 
+        public string GetSocketIp()
+        {
+            return $"{ClientSocket.Address}:{ClientSocket.Port}";
+        }
+
         public int GetMaxSession()
         {
             return GATEMAXSESSION;
@@ -62,7 +67,7 @@ namespace RunGate
         public void Start()
         {
             ClientSocket.Connect();
-            //_heartTimer = new Timer(Heart, null, 5000, 60000);
+            _heartTimer = new Timer(Heart, null, 5000, 10000);
         }
 
         public void Stop()

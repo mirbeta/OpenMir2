@@ -910,7 +910,7 @@ namespace M2Server
             return result;
         }
 
-        public void RefUserState()
+        private void RefUserState()
         {
             var n8 = 0;
             if (m_PEnvir.Flag.boFightZone)
@@ -1480,7 +1480,7 @@ namespace M2Server
             return result;
         }
 
-        public bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
+        private bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             var result = false;

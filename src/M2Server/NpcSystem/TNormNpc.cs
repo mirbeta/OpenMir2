@@ -1323,7 +1323,7 @@ namespace M2Server
             var result = false;
             var nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
             nTotlePoint = nTotlePoint + this.m_nBonusPoint;
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1771,7 +1771,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKEXP);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1820,7 +1820,7 @@ namespace M2Server
                 return result;
             }
             Guild = PlayObject.m_MyGuild;
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1869,7 +1869,7 @@ namespace M2Server
                 return result;
             }
             Guild = PlayObject.m_MyGuild;
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1918,7 +1918,7 @@ namespace M2Server
                 return result;
             }
             Guild = PlayObject.m_MyGuild;
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1967,7 +1967,7 @@ namespace M2Server
                 return result;
             }
             Guild = PlayObject.m_MyGuild;
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2016,7 +2016,7 @@ namespace M2Server
                 return result;
             }
             Guild = PlayObject.m_MyGuild;
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2059,7 +2059,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKGAMEGOLD);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2102,7 +2102,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKGAMEPOINT);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2149,7 +2149,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKGROUPCOUNT);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2284,7 +2284,7 @@ namespace M2Server
                 return result;
             }
             nChangeDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_ChangeDate);
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2329,7 +2329,7 @@ namespace M2Server
                 return result;
             }
             nWarDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_WarDate);
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2538,7 +2538,7 @@ namespace M2Server
             {
                 nAddAllValue += UserItem.btValue[I];
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2609,7 +2609,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKLEVELEX);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2719,7 +2719,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKMARRYCOUNT);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2773,7 +2773,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKMEMBERLEVEL);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2816,7 +2816,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKMEMBERTYPE);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3079,7 +3079,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKSLAVECOUNT);
                 return result;
             }
-            cMethod = QuestConditionInfo.sParam1[1];
+            cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -8759,7 +8759,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKLEVELEX);
                 return result;
             }
-            char cMethod = QuestConditionInfo.sParam1[1];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -8813,7 +8813,7 @@ namespace M2Server
             {
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -8865,7 +8865,6 @@ namespace M2Server
             string sName = string.Empty;
             TDynamicVar DynamicVar;
             bool boFoundVar = false;
-            IList<TDynamicVar> DynamicVarList;
             var result = false;
             var sType = QuestConditionInfo.sParam1;
             var sVarName = QuestConditionInfo.sParam2;
@@ -8877,8 +8876,8 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKVAR);
                 return result;
             }
-            var cMethod = sMethod[1];
-            DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
+            var cMethod = sMethod[0];
+            var DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
                 // ,format(sVarTypeError,[sType])
@@ -8938,12 +8937,7 @@ namespace M2Server
 
         private bool ConditionOfHaveMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            if (!string.IsNullOrEmpty(PlayObject.m_sMasterName))
-            {
-                result = true;
-            }
-            return result;
+            return !string.IsNullOrEmpty(PlayObject.m_sMasterName);
         }
 
         private bool ConditionOfPoseHaveMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -9072,7 +9066,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKCASTLEGOLD);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -9112,7 +9106,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKCONTRIBUTION);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -9152,7 +9146,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKCREDITPOINT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -9314,7 +9308,7 @@ namespace M2Server
                 return result;
             }
             var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -9354,7 +9348,7 @@ namespace M2Server
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_PASSWORDERRORCOUNT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[1];
+            var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -9746,7 +9740,7 @@ namespace M2Server
                 return;
             }
             bool boFoundVar = false;
-            char cMethod = sMethod[1];
+            char cMethod = sMethod[0];
             DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
@@ -10065,7 +10059,7 @@ namespace M2Server
                 return result;
             }
             var nHumanCount = M2Share.UserEngine.GetMapHuman(QuestConditionInfo.sParam1);
-            var cMethod = QuestConditionInfo.sParam2[1];
+            var cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {
                 case '=':
@@ -10107,7 +10101,7 @@ namespace M2Server
                 return result;
             }
             var nMonCount = M2Share.UserEngine.GetMapMonster(Envir, null);
-            var cMethod = QuestConditionInfo.sParam2[1];
+            var cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {
                 case '=':
@@ -10140,12 +10134,11 @@ namespace M2Server
 
         private bool ConditionOfCheckIsOnMap(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result = false;
-            if ((PlayObject.m_sMapFileName == QuestConditionInfo.sParam1) || (PlayObject.m_sMapName == QuestConditionInfo.sParam1))
+            if (PlayObject.m_sMapFileName == QuestConditionInfo.sParam1 || PlayObject.m_sMapName == QuestConditionInfo.sParam1)
             {
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         private IList<TDynamicVar> GetDynamicVarList(TPlayObject PlayObject, string sType, ref string sName)

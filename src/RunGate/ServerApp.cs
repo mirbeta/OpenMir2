@@ -109,7 +109,7 @@ namespace RunGate
                         dwRefConsoleMsgTick = HUtil32.GetTickCount();
                         if (!GateShare.boShowBite)
                         {
-                           Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize / 1024 + " KB");
+                           Debug.WriteLine( "接收: " + _serverService.NReviceMsgSize / 1024 + " KB");
                            //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
                            Debug.WriteLine( "编码: " + nProcessMsgSize / 1024 + " KB");
                            Debug.WriteLine( "登录: " + nHumLogonMsgSize / 1024 + " KB");
@@ -119,7 +119,7 @@ namespace RunGate
                         }
                         else
                         {
-                            Debug.WriteLine( "接收: " + _serverService.nReviceMsgSize + " B");
+                            Debug.WriteLine( "接收: " + _serverService.NReviceMsgSize + " B");
                             //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size + " B");
                             Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
                             Debug.WriteLine( "编码: " + nProcessMsgSize + " B");
@@ -133,7 +133,7 @@ namespace RunGate
                             }
                         }
                         //_userClient.nBufferOfM2Size = 0;
-                        _serverService.nReviceMsgSize = 0;
+                        _serverService.NReviceMsgSize = 0;
                         nDeCodeMsgSize = 0;
                         nSendBlockSize = 0;
                         nProcessMsgSize = 0;
@@ -527,6 +527,7 @@ namespace RunGate
                 GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
                 GateShare.AddMainLogMsg("智能反外挂程序云端已启动...",0);
                 GateShare.AddMainLogMsg("智能反外挂程序云端已连接...",0);
+                GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...",0);
             }
             catch (Exception E)
             {

@@ -11,38 +11,38 @@ namespace RunGate
     /// </summary>
     public class ServerService
     {
-        private ISocketServer ServerSocket;
-        public int nReviceMsgSize = 0;
-        private long dwProcessClientMsgTime = 0;
+        private ISocketServer _serverSocket;
+        public int NReviceMsgSize = 0;
+        private long _dwProcessClientMsgTime = 0;
         
         public ServerService()
         {
-            ServerSocket = new ISocketServer(20, 2048);
-            ServerSocket.OnClientConnect += ServerSocketClientConnect;
-            ServerSocket.OnClientDisconnect += ServerSocketClientDisconnect;
-            ServerSocket.OnClientRead += ServerSocketClientRead;
-            ServerSocket.OnClientError += ServerSocketClientError;
-            ServerSocket.Init();
+            _serverSocket = new ISocketServer(20, 2048);
+            _serverSocket.OnClientConnect += ServerSocketClientConnect;
+            _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
+            _serverSocket.OnClientRead += ServerSocketClientRead;
+            _serverSocket.OnClientError += ServerSocketClientError;
+            _serverSocket.Init();
         }
 
         public void Start()
         {
-            ServerSocket.Start(GateShare.GateAddr, GateShare.GatePort);
+            _serverSocket.Start(GateShare.GateAddr, GateShare.GatePort);
         }
 
         public void Stop()
         {
-            ServerSocket.Shutdown();
+            _serverSocket.Shutdown();
         }
 
         /// <summary>
         /// 新玩家链接
         /// </summary>
-        /// <param name="Sender"></param>
+        /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ServerSocketClientConnect(object Sender, AsyncUserToken e)
+        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo UserSession;
+            TSessionInfo userSession;
             var sRemoteAddress = e.RemoteIPaddr;
             var nSockIdx = 0;
             //todo 新玩家链接的时候要随机分配一个可用网关客户端
@@ -57,26 +57,28 @@ namespace RunGate
 
             var gateclient = GateShare.GetClientService();
 
+            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏服务器[{gateclient.GateIdx}] Server:{gateclient.GetSocketIp()}");
+            
             for (var nIdx = 0; nIdx < gateclient.SessionArray.Length; nIdx++)
             {
-                UserSession = gateclient.SessionArray[nIdx];
-                if (UserSession.Socket == null)
+                userSession = gateclient.SessionArray[nIdx];
+                if (userSession.Socket == null)
                 {
-                    UserSession.Socket = e.Socket;
-                    UserSession.sSocData = "";
-                    UserSession.sSendData = "";
-                    UserSession.nUserListIndex = 0;
-                    UserSession.nPacketIdx = -1;
-                    UserSession.nPacketErrCount = 0;
-                    UserSession.boStartLogon = true;
-                    UserSession.boSendLock = false;
-                    UserSession.boSendAvailable = true;
-                    UserSession.boSendCheck = false;
-                    UserSession.nCheckSendLength = 0;
-                    UserSession.dwReceiveTick = HUtil32.GetTickCount();
-                    UserSession.sRemoteAddr = sRemoteAddress;
-                    UserSession.dwSayMsgTick = HUtil32.GetTickCount();
-                    UserSession.nSckHandle = (int) e.Socket.Handle;
+                    userSession.Socket = e.Socket;
+                    userSession.sSocData = "";
+                    userSession.sSendData = "";
+                    userSession.nUserListIndex = 0;
+                    userSession.nPacketIdx = -1;
+                    userSession.nPacketErrCount = 0;
+                    userSession.boStartLogon = true;
+                    userSession.boSendLock = false;
+                    userSession.boSendAvailable = true;
+                    userSession.boSendCheck = false;
+                    userSession.nCheckSendLength = 0;
+                    userSession.dwReceiveTick = HUtil32.GetTickCount();
+                    userSession.sRemoteAddr = sRemoteAddress;
+                    userSession.dwSayMsgTick = HUtil32.GetTickCount();
+                    userSession.nSckHandle = (int) e.Socket.Handle;
                     nSockIdx = nIdx;
                     GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
                     GateShare.SessionCount++;
@@ -98,9 +100,9 @@ namespace RunGate
             }
         }
 
-        private void ServerSocketClientDisconnect(object Sender, AsyncUserToken e)
+        private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo UserSession;
+            TSessionInfo userSession;
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = GateShare.GetSocketIndex(e.ConnectionId);
             var userClinet = GateShare.GetUserClient(e.ConnectionId);
@@ -108,11 +110,11 @@ namespace RunGate
             {
                 if (nSockIndex >= 0 && nSockIndex < userClinet.GetMaxSession())
                 {
-                    UserSession = userClinet.SessionArray[nSockIndex];
-                    UserSession.Socket = null;
-                    UserSession.nSckHandle = -1;
-                    UserSession.sSocData = "";
-                    UserSession.sSendData = "";
+                    userSession = userClinet.SessionArray[nSockIndex];
+                    userSession.Socket = null;
+                    userSession.nSckHandle = -1;
+                    userSession.sSocData = "";
+                    userSession.sSendData = "";
                     GateShare.SessionCount -= 1;
                     if (GateShare.boGateReady)
                     {
@@ -132,7 +134,7 @@ namespace RunGate
             }
         }
 
-        private void ServerSocketClientError(object Sender, AsyncSocketErrorEventArgs e)
+        private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
             Console.WriteLine("客户端链接错误.");
         }
@@ -140,9 +142,9 @@ namespace RunGate
         /// <summary>
         /// 收到客户端消息
         /// </summary>
-        /// <param name="Sender"></param>
+        /// <param name="sender"></param>
         /// <param name="token"></param>
-        private void ServerSocketClientRead(object Sender, AsyncUserToken token)
+        private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
             var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
             var userClinet = GateShare.GetUserClient(token.ConnectionId);
@@ -188,7 +190,7 @@ namespace RunGate
                             return;
                         }
                     }
-                    nReviceMsgSize += sReviceMsg.Length;
+                    NReviceMsgSize += sReviceMsg.Length;
                     if (GateShare.boShowSckData)
                     {
                         GateShare.AddMainLogMsg(sReviceMsg, 0);
@@ -208,20 +210,20 @@ namespace RunGate
                         }
                         if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady) //&& !GateShare.boCheckServerFail
                         {
-                            var UserData = new TSendUserData();
-                            UserData.nSocketIdx = nSocketIndex;
-                            UserData.nSocketHandle = (int)token.Socket.Handle;
-                            UserData.sMsg = sReviceMsg;
-                            UserData.UserCientId = token.ConnectionId;
-                            UserData.UserClient = userClinet;
-                            GateShare.ReviceMsgList.Writer.TryWrite(UserData);
+                            var userData = new TSendUserData();
+                            userData.nSocketIdx = nSocketIndex;
+                            userData.nSocketHandle = (int)token.Socket.Handle;
+                            userData.sMsg = sReviceMsg;
+                            userData.UserCientId = token.ConnectionId;
+                            userData.UserClient = userClinet;
+                            GateShare.ReviceMsgList.Writer.TryWrite(userData);
                         }
                     }
                 }
                 var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
-                if (dwProcessMsgTime > dwProcessClientMsgTime)
+                if (dwProcessMsgTime > _dwProcessClientMsgTime)
                 {
-                    dwProcessClientMsgTime = dwProcessMsgTime;
+                    _dwProcessClientMsgTime = dwProcessMsgTime;
                 }
             }
             catch
@@ -232,7 +234,7 @@ namespace RunGate
 
         private void CloseConnect(string sIPaddr)
         {
-            var userSocket = ServerSocket.GetSocket(sIPaddr);
+            var userSocket = _serverSocket.GetSocket(sIPaddr);
             userSocket?.Socket.Close();
         }
     }

@@ -81,13 +81,14 @@ namespace M2Server
                     {
                         if (sData.Length >= 1)
                         {
-                            if (sData[1] == '!')
+                            if (sData[1] == '!') //发送组队消息
                             {
                                 sC = sData.Substring(3 - 1, sData.Length - 2);
                                 SendGroupText(m_sCharName + ": " + sC);
+                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_sCharName + "/:" + sC);
                                 return;
                             }
-                            if (sData[1] == '~')
+                            if (sData[1] == '~') //发送行会消息
                             {
                                 if (m_MyGuild != null)
                                 {

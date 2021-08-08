@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SystemModule.Packages;
 
@@ -1140,7 +1141,10 @@ namespace SystemModule
         public const int ISM_STANDARDTICKREQ = 239;
         public const int ISM_STANDARDTICK = 240;
         public const int ISM_GUILDWAR = 241;
-
+        /// <summary>
+        /// 发送跨服组队消息
+        /// </summary>
+        public const int ISM_GRUOPMESSAGE = 242;
 
         public const int OS_EVENTOBJECT = 1;
         public const int OS_MOVINGOBJECT = 2;

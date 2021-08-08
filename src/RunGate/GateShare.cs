@@ -291,7 +291,6 @@ namespace RunGate
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             var userList = new List<UserClientService>(ServerGateList.Values);
             var random = new System.Random().Next(userList.Count);
-            Console.WriteLine($"链接数量:[{userList.Count}]");
             return userList[random];
         }
     } 

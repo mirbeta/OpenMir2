@@ -38,6 +38,7 @@ namespace RunGate
                     return;
                 }
                 _gateClient[i] = new UserClientService(serverAddr, serverPort);
+                _gateClient[i].GateIdx = i;
             }
         }
 

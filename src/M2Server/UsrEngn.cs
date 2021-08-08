@@ -391,7 +391,7 @@ namespace M2Server
                         PlayObject.m_Abil.HP = 14;
                     }
                     PlayObject.AbilCopyToWAbil();
-                    Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
+                    Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);//切换其他服务器
                     if (Envir == null)
                     {
                         PlayObject.m_nSessionID = UserOpenInfo.LoadUser.nSessionID;
@@ -406,6 +406,7 @@ namespace M2Server
                         }
                         SendSwitchData(PlayObject, PlayObject.m_nServerIndex);
                         SendChangeServer(PlayObject, (byte)PlayObject.m_nServerIndex);
+                        //todo 切换服务器需要优化，要仔细想想
                         PlayObject = null;
                         return result;
                     }
@@ -694,7 +695,7 @@ namespace M2Server
                                             if (M2Share.LineNoticeList.Count > PlayObject.m_nShowLineNoticeIdx)
                                             {
                                                 var LineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, M2Share.LineNoticeList[PlayObject.m_nShowLineNoticeIdx]);
-                                                switch (LineNoticeMsg[1])
+                                                switch (LineNoticeMsg[0])
                                                 {
                                                     case 'R':
                                                         // PlayObject.SysMsg(g_Config.sLineNoticePreFix + ' '+ LineNoticeList.Strings[PlayObject.m_nShowLineNoticeIdx],g_nLineNoticeColor);
@@ -1156,6 +1157,11 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 取怪物物品掉落
+        /// </summary>
+        /// <param name="mon"></param>
+        /// <returns></returns>
         private int MonGetRandomItems(TBaseObject mon)
         {
             int result;
@@ -1171,6 +1177,7 @@ namespace M2Server
                 }
             }
             if (ItemList != null)
+            {
                 for (var i = 0; i < ItemList.Count; i++)
                 {
                     var MonItem = ItemList[i];
@@ -1182,7 +1189,6 @@ namespace M2Server
                         }
                         else
                         {
-                            // 蜡聪农 酒捞袍 捞亥飘....
                             if (string.IsNullOrEmpty(iname)) iname = MonItem.ItemName;
                             TUserItem UserItem = null;
                             if (CopyToUserItemFromName(iname, ref UserItem))
@@ -1206,7 +1212,7 @@ namespace M2Server
                         }
                     }
                 }
-
+            }
             result = 1;
             return result;
         }
@@ -1406,6 +1412,15 @@ namespace M2Server
             // }
         }
 
+        /// <summary>
+        /// 创建对象
+        /// </summary>
+        /// <param name="sMapName"></param>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="nMonRace"></param>
+        /// <param name="sMonName"></param>
+        /// <returns></returns>
         private TBaseObject AddBaseObject(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
             TBaseObject result = null;
@@ -1986,8 +2001,7 @@ namespace M2Server
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
                 PlayObject.m_boReconnection = true;
-                PlayObject.SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0,
-                        string.Format(sMsg, new object[] { sIPaddr, nPort }));
+                PlayObject.SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, string.Format(sMsg, sIPaddr, nPort));
             }
         }
 

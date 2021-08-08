@@ -14,12 +14,10 @@ namespace M2Server
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
+
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             var builder = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                })
+                .ConfigureLogging(logging => { logging.ClearProviders(); })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<MirApp>();
