@@ -14,26 +14,15 @@ namespace M2Server
 
         public override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
         {
-            int II;
-            string sText;
-            IList<string> List;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (sVariable == "$REQUESTCASTLELIST")
             {
-                sText = "";
-                List = new List<string>();
+                var sText = "";
+                IList<string> List = new List<string>();
                 M2Share.CastleManager.GetCastleNameList(List);
                 for (var i = 0; i < List.Count; i++)
                 {
-                    II = i + 1;
-                    if (II / 2 * 2 == II)
-                    {
-                    }
-                    else
-                    {
-                        
-                    }
-                    sText = sText + format("<{0}/@requestcastlewarnow%d> {1}", new string[] { List[i], i.ToString(), sText });
+                    sText = sText + format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
                 }
                 sText = sText + "\\ \\";
                 sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);

@@ -13,8 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,14 +32,10 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c7788b2bc733412d8ee39c302ff7ce5711600/5d/a739b7b6/HostingHostBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9d/82238dc4/CancellationToken.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/66/fa4a75ec/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/18/360ed885/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -283,6 +278,7 @@
       <workItem from="1628389091531" duration="9431000" />
       <workItem from="1628407223872" duration="3887000" />
       <workItem from="1628430193696" duration="1537000" />
+      <workItem from="1628476573936" duration="1295000" />
     </task>
     <servers />
   </component>
@@ -334,10 +330,10 @@
           <line>111</line>
           <properties documentPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" initialLine="106" containingFunctionPresentation="method 'ClientSocketDisconnect'">
             <startOffsets>
-              <option value="3390" />
+              <option value="3671" />
             </startOffsets>
             <endOffsets>
-              <option value="3469" />
+              <option value="3750" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="345" />
@@ -347,10 +343,10 @@
           <line>139</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" initialLine="131" containingFunctionPresentation="method 'MsgClientRead'">
             <startOffsets>
-              <option value="4440" />
+              <option value="4774" />
             </startOffsets>
             <endOffsets>
-              <option value="4469" />
+              <option value="4803" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="350" />
@@ -360,10 +356,10 @@
           <line>129</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs" initialLine="126" containingFunctionPresentation="method 'MsgClientDisconnected'">
             <startOffsets>
-              <option value="3981" />
+              <option value="4339" />
             </startOffsets>
             <endOffsets>
-              <option value="4064" />
+              <option value="4398" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="355" />
