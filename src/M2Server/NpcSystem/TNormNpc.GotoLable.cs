@@ -35,8 +35,6 @@ namespace M2Server
                     break;
                 }
             }
-            // while
-
             return result;
         }
 
@@ -170,35 +168,30 @@ namespace M2Server
             var n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
-                switch (n14)
+                //根据不同的索引进行赋值
+                if (HUtil32.RangeInDefined(n14, 0, 9))
                 {
-                    // 根据不同的索引进行赋值
-                    // Modify the A .. B: 0 .. 9
-                    case 0:
-                        PlayObject.m_nVal[n14] = nCount;
-                        break;
-                    // Modify the A .. B: 100 .. 119
-                    case 100:
-                        M2Share.g_Config.GlobalVal[n14 - 100] = nCount;
-                        break;
-                    // Modify the A .. B: 200 .. 209
-                    case 200:
-                        PlayObject.m_DyVal[n14 - 200] = nCount;
-                        break;
-                    // Modify the A .. B: 300 .. 399
-                    case 300:
-                        PlayObject.m_nMval[n14 - 300] = nCount;
-                        break;
-                    // Modify the A .. B: 400 .. 499
-                    case 400:
-                        M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)nCount;
-                        break;
-                    // Modify the A .. B: 500 .. 599
-                    case 500:
-                        PlayObject.m_nSval[n14 - 600] = nCount.ToString();
-                        break;
-                    default:
-                        break;
+                    PlayObject.m_nVal[n14] = nCount;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 119))
+                {
+                    M2Share.g_Config.GlobalVal[n14 - 100] = nCount;
+                }
+                else  if (HUtil32.RangeInDefined(n14, 200, 209))
+                {
+                    PlayObject.m_DyVal[n14 - 200] = nCount;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.m_nMval[n14 - 300] = nCount;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)nCount;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.m_nSval[n14 - 600] = nCount.ToString();
                 }
             }
         }
@@ -206,7 +199,7 @@ namespace M2Server
         public bool GotoLable_QuestCheckCondition_CheckDieMon(TPlayObject PlayObject, string MonName)
         {
             bool result = false;
-            if (MonName == "")
+            if (string.IsNullOrEmpty(MonName))
             {
                 result = true;
             }
@@ -257,7 +250,6 @@ namespace M2Server
                 {
                     try
                     {
-
                         LoadList.LoadFromFile(sListFileName);
                     }
                     catch
@@ -1592,7 +1584,6 @@ namespace M2Server
                         }
                         else
                         {
-
                             Dispose(UserItem);
                         }
                     }

@@ -3639,14 +3639,6 @@ namespace M2Server
 
         public virtual void SearchViewRange()
         {
-            int nStartX;
-            int nEndX;
-            int nStartY;
-            int nEndY;
-            int n18;
-            int n1C;
-            int nIdx;
-            int n24;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
@@ -3658,8 +3650,7 @@ namespace M2Server
                 M2Share.ErrorMessage("SearchViewRange nil PEnvir");
                 return;
             }
-
-            n24 = 0;
+            var n24 = 0;
             m_boIsVisibleActive = false;// 先置为FALSE
             try
             {
@@ -3673,21 +3664,20 @@ namespace M2Server
                 M2Share.ErrorMessage(sExceptionMsg1);
                 KickException();
             }
-
-            nStartX = m_nCurrX - m_nViewRange;
-            nEndX = m_nCurrX + m_nViewRange;
-            nStartY = m_nCurrY - m_nViewRange;
-            nEndY = m_nCurrY + m_nViewRange;
+            var nStartX = m_nCurrX - m_nViewRange;
+            var nEndX = m_nCurrX + m_nViewRange;
+            var nStartY = m_nCurrY - m_nViewRange;
+            var nEndY = m_nCurrY + m_nViewRange;
             try
             {
-                for (n18 = nStartX; n18 <= nEndX; n18++)
+                for (var n18 = nStartX; n18 <= nEndX; n18++)
                 {
-                    for (n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
                         {
                             n24 = 1;
-                            nIdx = 0;
+                            var nIdx = 0;
                             while (true)
                             {
                                 if (MapCellInfo.ObjList.Count <= nIdx)
@@ -3740,7 +3730,7 @@ namespace M2Server
             n24 = 2;
             try
             {
-                n18 = 0;
+                var n18 = 0;
                 while (true)
                 {
                     if (m_VisibleActors.Count <= n18)

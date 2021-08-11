@@ -4378,7 +4378,7 @@ namespace M2Server
             M2Share.MainOutMessage("[脚本参数不正确] " + sMsg);
         }
 
-        public void SendMsgToUser(TPlayObject PlayObject, string sMsg)
+        protected void SendMsgToUser(TPlayObject PlayObject, string sMsg)
         {
             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + '/' + sMsg);
         }
@@ -4508,7 +4508,7 @@ namespace M2Server
         private void ActionOfChangeGender(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nGender = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
-            if (!new ArrayList(new int[] { 0, 1 }).Contains(nGender))
+            if (nGender > 1)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEGENDER);
                 return;
@@ -4706,7 +4706,6 @@ namespace M2Server
 
         private void ActionOfGiveItem(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
             TUserItem UserItem;
             MirItem StdItem;
             string sItemName = string.Empty;
@@ -4722,7 +4721,6 @@ namespace M2Server
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
-                // 0049D2FE
                 if (M2Share.g_boGameLogGold)
                 {
                     M2Share.AddGameDataLog('9' + "\t" + PlayObject.m_sMapName + "\t" + PlayObject.m_nCurrX + "\t" + PlayObject.m_nCurrY + "\t" + PlayObject.m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + this.m_sCharName);
@@ -4737,7 +4735,7 @@ namespace M2Server
                     nItemCount = 1;
                 }
                 // 12.28 改上一条
-                for (I = 0; I < nItemCount; I++)
+                for (var I = 0; I < nItemCount; I++)
                 {
                     // nItemCount 为0时出死循环
                     if (PlayObject.IsEnoughBag())
@@ -4844,7 +4842,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildAuraePointMsg, new int[] { Guild.nAurae }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -4892,7 +4889,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, new int[] { Guild.nBuildPoint }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -4987,7 +4983,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sScriptGuildFlourishPointMsg, new int[] { Guild.nFlourishing }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -5076,7 +5071,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sScriptChangeHumanHPMsg, new ushort[] { PlayObject.m_WAbil.MaxHP }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -5607,7 +5601,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sChangeMemberLevelMsg, new int[] { PlayObject.m_nMemberLevel }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -5643,7 +5636,6 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-
                 PlayObject.SysMsg(format(M2Share.g_sChangeMemberTypeMsg, new int[] { PlayObject.m_nMemberType }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
@@ -6385,8 +6377,6 @@ namespace M2Server
         private void ActionOfUpgradeItems(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
-            TUserItem UserItem;
-            MirItem StdItem;
             var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
@@ -6395,8 +6385,8 @@ namespace M2Server
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_UPGRADEITEMS);
                 return;
             }
-            UserItem = PlayObject.m_UseItems[nWhere];
-            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            var UserItem = PlayObject.m_UseItems[nWhere];
+            var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if ((UserItem.wIndex <= 0) || (StdItem == null))
             {
                 PlayObject.SysMsg("你身上没有戴指定物品！！！", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -6436,8 +6426,6 @@ namespace M2Server
         private void ActionOfUpgradeItemsEx(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             int nAddPoint;
-            TUserItem UserItem;
-            MirItem StdItem;
             var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             var nValType = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
@@ -6448,8 +6436,8 @@ namespace M2Server
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_UPGRADEITEMSEX);
                 return;
             }
-            UserItem = PlayObject.m_UseItems[nWhere];
-            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            var UserItem = PlayObject.m_UseItems[nWhere];
+            var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if ((UserItem.wIndex <= 0) || (StdItem == null))
             {
                 PlayObject.SysMsg("你身上没有戴指定物品！！！", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -6815,11 +6803,10 @@ namespace M2Server
         private void ActionOfGroupMoveMap(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             TPlayObject PlayObjectEx;
-            TEnvirnoment Envir;
             bool boFlag = false;
             if (PlayObject.m_GroupOwner != null)
             {
-                Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
+                var Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
                 {
                     if (Envir.CanWalk(QuestActionInfo.nParam2, QuestActionInfo.nParam3, true))
@@ -6973,7 +6960,6 @@ namespace M2Server
                                 LoadList.RemoveAt(i);
                                 try
                                 {
-
                                     LoadList.SaveToFile(sListFileName);
                                 }
                                 catch
