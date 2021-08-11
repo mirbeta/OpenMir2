@@ -21,7 +21,7 @@ namespace M2Server
             }
         }
 
-        public override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
         {
             var sText = string.Empty;
             TCastleDoor CastleDoor;

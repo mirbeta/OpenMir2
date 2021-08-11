@@ -3032,7 +3032,7 @@ namespace M2Server
             for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
             {
                 UserMagic = PlayObject.m_MagicList[i];
-                if (UserMagic.MagicInfo.sMagicName.ToLower().CompareTo(QuestConditionInfo.sParam1.ToLower()) == 0)
+                if (string.Compare(UserMagic.MagicInfo.sMagicName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (UserMagic.btLevel == QuestConditionInfo.nParam2)
                     {
@@ -3316,7 +3316,7 @@ namespace M2Server
             return result;
         }
 
-        public virtual void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected virtual void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
         {
             string sText = string.Empty;
             string s14 = string.Empty;
@@ -4406,7 +4406,7 @@ namespace M2Server
         {
             string sLabel = string.Empty;
             PlayObject.m_nScriptGotoCount = 0;
-            if ((sData != "") && (sData[0] == '@'))// 处理脚本命令 @back 返回上级标签内容
+            if ((!string.IsNullOrEmpty(sData)) && (sData[0] == '@'))// 处理脚本命令 @back 返回上级标签内容
             {
                 HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)
@@ -4708,10 +4708,8 @@ namespace M2Server
         {
             TUserItem UserItem;
             MirItem StdItem;
-            string sItemName = string.Empty;
-            int nItemCount;
-            sItemName = QuestActionInfo.sParam1;
-            nItemCount = QuestActionInfo.nParam2;
+            var sItemName = QuestActionInfo.sParam1;
+            var nItemCount = QuestActionInfo.nParam2;
             if ((sItemName == "") || (nItemCount <= 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GIVE);
@@ -4729,7 +4727,6 @@ namespace M2Server
             }
             if (M2Share.UserEngine.GetStdItemIdx(sItemName) > 0)
             {
-                // if nItemCount > 50 then nItemCount:=50;//11.22 限制数量大小
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
                     nItemCount = 1;
@@ -4786,7 +4783,7 @@ namespace M2Server
             {
                 sParam2 = PlayObject.m_sCharName;
             }
-            string sData = format("@{0} {1} {2} {3} {4} {5}", new string[] { sParam1, sParam2, sParam3, sParam4, sParam5, sParam6 });
+            string sData = format("@{0} {1} {2} {3} {4} {5}", sParam1, sParam2, sParam3, sParam4, sParam5, sParam6);
             byte btOldPermission = PlayObject.m_btPermission;
             try
             {
@@ -4889,7 +4886,7 @@ namespace M2Server
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, new int[] { Guild.nBuildPoint }), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, new[] { Guild.nBuildPoint }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
@@ -4989,10 +4986,7 @@ namespace M2Server
 
         private void ActionOfGuildstabilityPoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nStabilityPoint;
-            char cMethod;
-            TGuild Guild;
-            nStabilityPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
+            var nStabilityPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_STABILITYPOINT);
@@ -5003,8 +4997,8 @@ namespace M2Server
                 PlayObject.SysMsg(M2Share.g_sScriptGuildStabilityPointNoGuild, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            Guild = PlayObject.m_MyGuild;
-            cMethod = QuestActionInfo.sParam1[0];
+            var Guild = PlayObject.m_MyGuild;
+            var cMethod = QuestActionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -5189,8 +5183,7 @@ namespace M2Server
 
         private void ActionOfRestBonusPoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int nTotleUsePoint;
-            nTotleUsePoint = PlayObject.m_BonusAbil.DC + PlayObject.m_BonusAbil.MC + PlayObject.m_BonusAbil.SC + PlayObject.m_BonusAbil.AC + PlayObject.m_BonusAbil.MAC + PlayObject.m_BonusAbil.HP + PlayObject.m_BonusAbil.MP + PlayObject.m_BonusAbil.Hit + PlayObject.m_BonusAbil.Speed + PlayObject.m_BonusAbil.X2;
+            var nTotleUsePoint = PlayObject.m_BonusAbil.DC + PlayObject.m_BonusAbil.MC + PlayObject.m_BonusAbil.SC + PlayObject.m_BonusAbil.AC + PlayObject.m_BonusAbil.MAC + PlayObject.m_BonusAbil.HP + PlayObject.m_BonusAbil.MP + PlayObject.m_BonusAbil.Hit + PlayObject.m_BonusAbil.Speed + PlayObject.m_BonusAbil.X2;
             //FillChar(PlayObject.m_BonusAbil, sizeof(TNakedAbility), '\0');
             PlayObject.m_nBonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
