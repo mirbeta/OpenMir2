@@ -897,6 +897,16 @@ namespace M2Server
                             CmdTestStatus(sCMD, HUtil32.Str_ToInt(sParam1, -1), HUtil32.Str_ToInt(sParam2, 0));
                             return;
                         }
+                        if (string.Compare(sCMD, M2Share.g_GameCommand.DELGAMEGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            CmdDelGameGold(M2Share.g_GameCommand.DELGAMEGOLD.sCmd, sParam1, HUtil32.Str_ToInt(sParam2, 0));
+                            return;
+                        }
+                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGAMEGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            CmdAddGameGold(M2Share.g_GameCommand.ADDGAMEGOLD.sCmd, sParam1, HUtil32.Str_ToInt(sParam2, 0));
+                            return;
+                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.TESTGOLDCHANGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             return;
@@ -960,6 +970,11 @@ namespace M2Server
                         //    SysMsg("小地图配置重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                         //    return;
                         //}
+                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            CmdAddGuild(M2Share.g_GameCommand.ADDGUILD, sParam1, sParam2);
+                            return;
+                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.DELGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             CmdDelGuild(M2Share.g_GameCommand.DELGUILD, sParam1);

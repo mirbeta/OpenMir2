@@ -331,7 +331,7 @@ namespace RunGate
                                                         sDataText = EDcode.DeCodeString(sDataMsg);
                                                         if (sDataText != "")
                                                         {
-                                                            if (sDataText[0] == '/')
+                                                            if (sDataText[1] == '/')
                                                             {
                                                                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { " " }); // 限制最长可发字符长度
                                                                 FilterSayMsg(ref sDataText);
@@ -339,7 +339,7 @@ namespace RunGate
                                                             }
                                                             else
                                                             {
-                                                                if (sDataText[0] != '@')
+                                                                if (sDataText[1] != '@')
                                                                 {
                                                                     FilterSayMsg(ref sDataText);// 限制最长可发字符长度
                                                                 }
@@ -480,7 +480,7 @@ namespace RunGate
                 {
                     sFilterText = GateShare.AbuseList[i];
                     sReplaceText = "";
-                    if (sMsg.IndexOf(sFilterText, StringComparison.OrdinalIgnoreCase) != -1)
+                    if (sMsg.IndexOf(sFilterText) != -1)
                     {
                         for (nLen = 0; nLen <= sFilterText.Length; nLen++)
                         {
@@ -615,6 +615,25 @@ namespace RunGate
             }
         }
         
+        public void ShowLogMsg(bool boFlag)
+        {
+            // int nHeight;
+            // switch(boFlag)
+            // {
+            //     case true:
+            //         nHeight = Panel.Height;
+            //         Panel.Height = 0;
+            //         MemoLog.Height = nHeight;
+            //         MemoLog.Top = Panel.Top;
+            //         break;
+            //     case false:
+            //         nHeight = MemoLog.Height;
+            //         MemoLog.Height = 0;
+            //         Panel.Height = nHeight;
+            //         break;
+            // }
+        }
+
         public void TimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             // if (ServerSocket.Active)
@@ -640,7 +659,7 @@ namespace RunGate
             // }
         }
 
-        private void SendTimerTimer(object obj)
+        public void SendTimerTimer(object obj)
         {
             TSessionInfo UserSession;
             if (HUtil32.GetTickCount() - GateShare.dwSendHoldTick > 3000)

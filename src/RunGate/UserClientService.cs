@@ -10,7 +10,7 @@ namespace RunGate
     /// <summary>
     /// 网关客户端(RunGate-M2Server)
     /// </summary>
-    internal class UserClientService
+    public class UserClientService
     {
         private IClientScoket ClientSocket;
         private int nBufferOfM2Size = 0;
@@ -67,7 +67,7 @@ namespace RunGate
         public void Start()
         {
             ClientSocket.Connect();
-            _heartTimer = new Timer(CheckHeart, null, 5000, 10000);
+            _heartTimer = new Timer(Heart, null, 5000, 10000);
         }
 
         public void Stop()
@@ -184,7 +184,7 @@ namespace RunGate
             }
         }
 
-        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] buff)
+        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new TMsgHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
@@ -194,11 +194,11 @@ namespace RunGate
             GateMsg.wUserListIndex = (ushort)nUserListIndex;
             GateMsg.nLength = nLen;
             var sendBuffer = GateMsg.ToByte();
-            if (buff is { Length: > 0 })
+            if (Data is { Length: > 0 })
             {
-                var tempBuff = new byte[20 + buff.Length];
+                var tempBuff = new byte[20 + Data.Length];
                 Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Buffer.BlockCopy(buff, 0, tempBuff, sendBuffer.Length, buff.Length);
+                Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
                 SendSocket(tempBuff);
             }
             else
@@ -377,7 +377,7 @@ namespace RunGate
         /// 每二秒向游戏服务器发送一个检查信号
         /// </summary>
         /// <param name="obj"></param>
-        private void CheckHeart(object obj)
+        private void Heart(object obj)
         {
             if (GateShare.boGateReady)
             {
