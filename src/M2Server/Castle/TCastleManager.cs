@@ -65,7 +65,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -91,7 +90,6 @@ namespace M2Server
                 Save();
                 return;
             }
-
             for (var i = 0; i < _castleList.Count; i++)
             {
                 Castle = _castleList[i];

@@ -114,7 +114,7 @@ namespace M2Server
         public static void UseAmulet(TPlayObject PlayObject, int nCount, int nType, ref short Idx)
         {
             var dura = (ushort)(nCount * 100);
-            if (PlayObject.m_UseItems[Idx].Dura > dura)
+            if (PlayObject.m_UseItems[Idx] != null && PlayObject.m_UseItems[Idx].Dura > dura)
             {
                 PlayObject.m_UseItems[Idx].Dura -= dura;//减少护身符持久即数量
                 PlayObject.SendMsg(PlayObject, Grobal2.RM_DURACHANGE, Idx, PlayObject.m_UseItems[Idx].Dura, PlayObject.m_UseItems[Idx].DuraMax, 0, "");

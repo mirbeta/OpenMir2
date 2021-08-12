@@ -118,9 +118,6 @@ namespace M2Server
         public bool DoSpell(TPlayObject PlayObject, TUserMagic UserMagic, short nTargetX, short nTargetY, TBaseObject TargeTBaseObject)
         {
             var result = false;
-            bool boTrain;
-            bool boSpellFail;
-            bool boSpellFire;
             short n14 = 0;
             short n18 = 0;
             int n1C;
@@ -140,9 +137,9 @@ namespace M2Server
             {
                 TargeTBaseObject = null;
             }
-            boTrain = false;
-            boSpellFail = false;
-            boSpellFire = true;
+            var boTrain = false;
+            var boSpellFail = false;
+            var boSpellFire = true;
             if (PlayObject.m_nSoftVersionDateEx == 0 && PlayObject.m_dwClientTick == 0 && UserMagic.MagicInfo.wMagicID > 40)
             {
                 return result;
@@ -651,10 +648,9 @@ namespace M2Server
 
         public bool MagMakePrivateTransparent(TBaseObject BaseObject, int nHTime)
         {
-            var result = false;
             if (BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0)
             {
-                return result;
+                return false;
             }
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             BaseObject.GetMapBaseObjects(BaseObject.m_PEnvir, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 9, BaseObjectList);
@@ -675,8 +671,7 @@ namespace M2Server
             BaseObject.StatusChanged();
             BaseObject.m_boHideMode = true;
             BaseObject.m_boTransparent = true;
-            result = true;
-            return result;
+            return true;
         }
 
         private bool MagTamming(TBaseObject BaseObject, TBaseObject TargeTBaseObject, int nTargetX, int nTargetY, int nMagicLevel)
@@ -1018,7 +1013,6 @@ namespace M2Server
                     if (push > 0)
                     {
                         int nDir = M2Share.GetNextDirection(PlayObject.m_nCurrX, PlayObject.m_nCurrY, TargetBaseObject.m_nCurrX, TargetBaseObject.m_nCurrY);
-
                         PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_DELAYPUSHED, (short)nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, TargetBaseObject.ObjectId, "", 600);
                     }
                 }

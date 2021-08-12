@@ -49,7 +49,6 @@ namespace M2Server
                             playObject.SysMsg($"服务器关闭倒计时 [{shutdownSeconds}].", TMsgColor.c_Red, TMsgType.t_Notice);
                             shutdownSeconds--;
                         }
-
                         if (shutdownSeconds > 0)
                         {
                             Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -58,7 +57,6 @@ namespace M2Server
                         {
                             var sIPaddr = string.Empty;
                             var nPort = 0;
-                            const string sMsg = "{0}/{1}";
                             if (M2Share.GetMultiServerAddrPort(0, ref sIPaddr, ref nPort)) //如果有可用服务器，那就切换过去
                             {
                                 foreach (var playObject in M2Share.UserEngine.PlayObjects)

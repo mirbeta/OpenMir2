@@ -13,8 +13,6 @@ namespace M2Server
 
         public override void Run()
         {
-            TBaseObject baseobject;
-            int nPower;
             if (!m_boDeath && !bo554 && !m_boGhost)
             {
                 if (m_TargetCret != null)
@@ -25,10 +23,10 @@ namespace M2Server
                         {
                             if (Math.Abs(m_nTargetX - m_nCurrX) <= 8 && Math.Abs(m_nTargetY - m_nCurrY) <= 8)
                             {
-                                nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
+                                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
                                 if (nPower > 0)
                                 {
-                                    baseobject = GetPoseCreate();
+                                    var baseobject = GetPoseCreate();
                                     if (baseobject != null && IsProperTarget(baseobject) && m_nAntiMagic >= 0)
                                     {
                                         nPower = baseobject.GetMagStruckDamage(this, nPower);

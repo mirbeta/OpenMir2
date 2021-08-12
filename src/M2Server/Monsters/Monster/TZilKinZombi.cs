@@ -12,7 +12,6 @@ namespace M2Server
         {
             this.m_nViewRange = 6;
             this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            
             this.m_dwSearchTick =HUtil32.GetTickCount();
             nZilKillCount = 0;
             if (M2Share.RandomNumber.Random(3) == 0)

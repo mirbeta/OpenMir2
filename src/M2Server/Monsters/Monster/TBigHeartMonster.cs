@@ -15,14 +15,12 @@ namespace M2Server
         {
             var result = false;
             TBaseObject BaseObject;
-            int nPower;
-            TAbility WAbil;
             if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
-                WAbil = m_WAbil;
-                nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+                var WAbil = m_WAbil;
+                var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
                     BaseObject = m_VisibleActors[i].BaseObject;

@@ -30,10 +30,9 @@ namespace M2Server
 
         public override bool Operate(TProcessMessage ProcessMsg)
         {
-            TBaseObject BB;
             if (ProcessMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, m_nCurrX, m_nCurrY, M2Share.g_Config.sBee);
+                var BB = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, m_nCurrX, m_nCurrY, M2Share.g_Config.sBee);
                 if (BB != null)
                 {
                     BB.SetTargetCreat(m_TargetCret);

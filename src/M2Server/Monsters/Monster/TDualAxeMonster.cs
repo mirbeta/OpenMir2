@@ -11,13 +11,11 @@ namespace M2Server
 
         private void FlyAxeAttack(TBaseObject Target)
         {
-            TAbility WAbil;
-            int nDamage;
             if (m_PEnvir.CanFly(m_nCurrX, m_nCurrY, Target.m_nCurrX, Target.m_nCurrY))
             {
                 m_btDirection = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, Target.m_nCurrX, Target.m_nCurrY);
-                WAbil = m_WAbil;
-                nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+                var WAbil = m_WAbil;
+                var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 if (nDamage > 0)
                 {
                     nDamage = Target.GetHitStruckDamage(this, nDamage);

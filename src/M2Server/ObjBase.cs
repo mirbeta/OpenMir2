@@ -29,14 +29,10 @@ namespace M2Server
         public ushort wLooks;
         public int nVisibleFlag;
     } 
-}
-
-namespace M2Server
-{
+    
     public class ObjBase
     {
         public const int gMan = 0;
         public const int gWoMan = 1;
     }
 }
-

@@ -15,17 +15,13 @@ namespace M2Server
 
         private void LightingAttack(byte nDir)
         {
-            TAbility WAbil;
-            int nPower;
-            int nDamage;
-            int btGetBackHP;
             m_btDirection = nDir;
-            WAbil = m_WAbil;
-            nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
-            nDamage = m_TargetCret.GetMagStruckDamage(this, nPower);
+            var WAbil = m_WAbil;
+            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.MC), HUtil32.HiWord(WAbil.MC) - HUtil32.LoWord(WAbil.MC));
+            var nDamage = m_TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
-                btGetBackHP = HUtil32.LoByte(m_WAbil.MP);
+                int btGetBackHP = HUtil32.LoByte(m_WAbil.MP);
                 if (btGetBackHP != 0)
                 {
                     m_WAbil.HP += (ushort)(nDamage / btGetBackHP);

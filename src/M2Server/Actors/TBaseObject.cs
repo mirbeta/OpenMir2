@@ -5627,10 +5627,9 @@ namespace M2Server
         public bool MakePosion(int nType, int nTime, int nPoint)
         {
             bool result = false;
-            long nOldCharStatus;
             if (nType < Grobal2.MAX_STATUS_ATTRIBUTE)
             {
-                nOldCharStatus = m_nCharStatus;
+                var nOldCharStatus = m_nCharStatus;
                 if (m_wStatusTimeArr[nType] > 0)
                 {
                     if (m_wStatusTimeArr[nType] < nTime)
@@ -5651,7 +5650,7 @@ namespace M2Server
                 }
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                 {
-                    SysMsg(format(M2Share.sYouPoisoned, new object[] { nTime, nPoint }), TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(format(M2Share.sYouPoisoned, nTime, nPoint), TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 result = true;
             }
@@ -5665,7 +5664,7 @@ namespace M2Server
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                for (int i = 0; i < m_MsgList.Count; i++)
+                for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
                     if (SendMessage.wIdent == Grobal2.RM_10401)

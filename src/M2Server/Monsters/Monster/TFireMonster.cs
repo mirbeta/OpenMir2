@@ -12,16 +12,12 @@ namespace M2Server
         public override void Run()
         {
             TFireBurnEvent FireBurnEvent;
-            int nx;
-            int ny;
-            int ndamage;
-            int ntime;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                ntime = 20;
-                ndamage = 10;
-                nx = m_nCurrX;
-                ny = m_nCurrY;
+                var ntime = 20;
+                var ndamage = 10;
+                int nx = m_nCurrX;
+                int ny = m_nCurrY;
                 if (m_PEnvir.GetEvent(nx, ny - 1) == null)
                 {
                     FireBurnEvent = new TFireBurnEvent(this, nx, ny - 1, Grobal2.ET_FIRE, ntime * 1000, ndamage);

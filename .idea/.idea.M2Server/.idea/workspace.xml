@@ -14,8 +14,15 @@
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/0/AttackSabukWall.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/Magic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/Magic.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBeeQueen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBeeQueen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,7 +288,8 @@
       <workItem from="1628407223872" duration="3887000" />
       <workItem from="1628430193696" duration="1537000" />
       <workItem from="1628476573936" duration="1310000" />
-      <workItem from="1628656316681" duration="2044000" />
+      <workItem from="1628656316681" duration="2373000" />
+      <workItem from="1628734945712" duration="2898000" />
     </task>
     <servers />
   </component>
