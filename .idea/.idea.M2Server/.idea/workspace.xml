@@ -23,6 +23,11 @@
       <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireballMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireballMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpiderHouseMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpiderHouseMonster.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TZilKinZombi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TZilKinZombi.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,7 +294,7 @@
       <workItem from="1628430193696" duration="1537000" />
       <workItem from="1628476573936" duration="1310000" />
       <workItem from="1628656316681" duration="2373000" />
-      <workItem from="1628734945712" duration="2898000" />
+      <workItem from="1628734945712" duration="3267000" />
     </task>
     <servers />
   </component>

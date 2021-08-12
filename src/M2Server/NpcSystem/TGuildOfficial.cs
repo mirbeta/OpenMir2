@@ -12,7 +12,7 @@ namespace M2Server
             base.Click(PlayObject);
         }
 
-        public override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
         {
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (sVariable == "$REQUESTCASTLELIST")
