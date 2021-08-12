@@ -272,8 +272,7 @@ namespace M2Server
 
         public void UpgradeWapon_sub_4A0218(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
-            int II;
-            ArrayList DuraList;
+            IList<double> DuraList;
             TUserItem UserItem;
             MirItem StdItem;
             TStdItem StdItem80 = null;
@@ -290,7 +289,7 @@ namespace M2Server
             var nDura = 0;
             var nItemCount = 0;
             DelItemList = null;
-            DuraList = new ArrayList();
+            DuraList = new List<double>();
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = ItemList[i];
@@ -392,9 +391,9 @@ namespace M2Server
             }
             for (var i = 0; i < DuraList.Count; i++)
             {
-                for (II = DuraList.Count - 1; II > i; II--)
+                for (var j = DuraList.Count - 1; j > i; j--)
                 {
-                    if ((int)DuraList[II] > (int)DuraList[II - 1])
+                    if (DuraList[j] > DuraList[j - 1])
                     {
                         //DuraList.Exchange(II, II - 1);
                     }
@@ -415,9 +414,9 @@ namespace M2Server
             btMc = (byte)(nMcMin / 5 + nMcMax / 3);
             if (DelItemList != null)
             {
-                var ObjectId = HUtil32.Sequence();
-                M2Share.ObjectSystem.AddOhter(ObjectId, DelItemList);
-                User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                var objectId = HUtil32.Sequence();
+                M2Share.ObjectSystem.AddOhter(objectId, DelItemList);
+                User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
             if (DuraList != null)
             {
@@ -660,12 +659,11 @@ namespace M2Server
         private int GetUserPrice(TPlayObject PlayObject, double nPrice)
         {
             int result;
-            int n14;
             if (m_boCastle)
             {
                 if (m_Castle != null && m_Castle.IsMasterGuild(PlayObject.m_MyGuild))
                 {
-                    n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));// 80%
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));
                     result = HUtil32.Round(nPrice / 100 * n14);// 100
                 }
                 else
@@ -992,7 +990,7 @@ namespace M2Server
             LoadUpgradeList();
         }
 
-        public void SaveNPCData()
+        private void SaveNPCData()
         {
             var sFile = m_sScript + '-' + m_sMapName;
             M2Share.LocalDB.SaveGoodRecord(this, sFile);

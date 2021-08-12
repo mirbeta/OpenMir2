@@ -52,7 +52,7 @@ namespace M2Server
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                if (sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0)
+                if (string.Compare(sHumName.ToLower(), PlayObject.m_sCharName.ToLower(), StringComparison.Ordinal) == 0)
                 {
                     LoadList[i] = PlayObject.m_sCharName + "\t" + DateTime.Today;
                     boFound = true;
@@ -121,14 +121,13 @@ namespace M2Server
 
         private void ActionOfAddSkill(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TUserMagic UserMagic;
             var nLevel = HUtil32._MIN(3, HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0));
             var Magic = M2Share.UserEngine.FindMagic(QuestActionInfo.sParam1);
             if (Magic != null)
             {
                 if (!PlayObject.IsTrainingSkill(Magic.wMagicID))
                 {
-                    UserMagic = new TUserMagic();
+                    var UserMagic = new TUserMagic();
                     UserMagic.MagicInfo = Magic;
                     UserMagic.wMagIdx = Magic.wMagicID;
                     UserMagic.btKey = 0;
@@ -289,7 +288,6 @@ namespace M2Server
 
         private void ActionOfChangeExp(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            char cMethod;
             int dwInt;
             var nExp = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             if (nExp < 0)
@@ -297,7 +295,7 @@ namespace M2Server
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEEXP);
                 return;
             }
-            cMethod = QuestActionInfo.sParam1[0];
+            var cMethod = QuestActionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2991,7 +2989,7 @@ namespace M2Server
             bool result = false;
             int resultc = -1;
             string s18;
-            System.IO.FileInfo myFile;
+            FileInfo myFile;
             StringList LoadList;
             string SLineText = string.Empty;
             string Petname = string.Empty;
@@ -3071,7 +3069,6 @@ namespace M2Server
             {
                 for (var i = 0; i < PlayObject.m_GroupMembers.Count; i++)
                 {
-
                     PlayObjectEx = PlayObject.m_GroupMembers[i];
                     if (PlayObjectEx.m_btJob == nJob)
                     {
