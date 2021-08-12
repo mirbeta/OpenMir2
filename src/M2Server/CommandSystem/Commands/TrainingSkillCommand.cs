@@ -34,14 +34,14 @@ namespace M2Server
             for (var i = 0; i < m_PlayObject.m_MagicList.Count; i++)
             {
                 UserMagic = m_PlayObject.m_MagicList[i];
-                //if (string.Compare(UserMagic.MagicInfo.GetMagicName(), sSkillName, true) == 0)
-                //{
-                //    UserMagic.btLevel = (byte)nLevel;
-                //    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicId, UserMagic.btLevel, UserMagic.nTranPoint, "");
-                //    m_PlayObject.SysMsg(string.Format("{0}的修改炼等级为{1}", sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
-                //    PlayObject.SysMsg(string.Format("{0}的技能{1}修炼等级为{2}", sHumanName, sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
-                //    break;
-                //}
+                if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, true) == 0)
+                {
+                    UserMagic.btLevel = (byte)nLevel;
+                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
+                    m_PlayObject.SysMsg(string.Format("{0}的修改炼等级为{1}", sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format("{0}的技能{1}修炼等级为{2}", sHumanName, sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
+                    break;
+                }
             }
         }
     }

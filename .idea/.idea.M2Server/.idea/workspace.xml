@@ -13,21 +13,11 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/0/AttackSabukWall.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/Magic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/Magic.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBeeQueen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBeeQueen.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TBigHeartMonster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TDualAxeMonster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TElectronicScolpionMon.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireMonster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireballMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TFireballMonster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpiderHouseMonster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TSpiderHouseMonster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TZilKinZombi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Monsters/Monster/TZilKinZombi.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/TrainingSkillCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,9 +37,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24FF2AD3-F0EE-415E-922A-ECFDF6EF6846/fc/1900e188/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -64,7 +53,7 @@
       <option value="$PROJECT_DIR$/src/M2Server/HUtil32.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Package/TDefaultMessage.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSock_old.cs" />
-      <option value="$PROJECT_DIR$/../../Data/Project/HeroM2/src/M2Server/HUtil32.cs" />
+      <option value="$USER_HOME$/Data/Project/HeroM2/src/M2Server/HUtil32.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/RunSockOld.cs" />
       <option value="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" />
       <option value="$PROJECT_DIR$/README.md" />
@@ -295,6 +284,7 @@
       <workItem from="1628476573936" duration="1310000" />
       <workItem from="1628656316681" duration="2373000" />
       <workItem from="1628734945712" duration="3267000" />
+      <workItem from="1628755471477" duration="490000" />
     </task>
     <servers />
   </component>
@@ -336,23 +326,10 @@
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/RunSock.cs</url>
+          <url>file://$USER_HOME$/Data/Project/herom2111111/src/M2Server/RunSock.cs</url>
           <line>607</line>
-          <properties documentPath="$PROJECT_DIR$/../../Data/Project/herom2111111/src/M2Server/RunSock.cs" initialLine="607" containingFunctionPresentation="method 'SendGateBuffers'" />
+          <properties documentPath="$USER_HOME$/Data/Project/herom2111111/src/M2Server/RunSock.cs" initialLine="607" containingFunctionPresentation="method 'SendGateBuffers'" />
           <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/RunGate/UserClientService.cs</url>
-          <line>111</line>
-          <properties documentPath="$PROJECT_DIR$/src/RunGate/UserClientService.cs" initialLine="106" containingFunctionPresentation="method 'ClientSocketDisconnect'">
-            <startOffsets>
-              <option value="3671" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3750" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="345" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/GroupSystem/InterMsgClient.cs</url>
