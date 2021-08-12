@@ -751,7 +751,6 @@ namespace M2Server
                     wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = Grobal2.GM_DATA
                 };
-                //todo 注意下这里
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);

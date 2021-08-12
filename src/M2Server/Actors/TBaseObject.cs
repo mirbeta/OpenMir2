@@ -1177,7 +1177,7 @@ namespace M2Server
             }
         }
 
-        public bool DropGoldDown(int nGold, bool boFalg, TBaseObject GoldOfCreat, TBaseObject DropGoldCreat)
+        protected bool DropGoldDown(int nGold, bool boFalg, TBaseObject GoldOfCreat, TBaseObject DropGoldCreat)
         {
             bool result = false;
             int nX = 0;
@@ -1266,8 +1266,7 @@ namespace M2Server
 
         public void IncPkPoint(int nPoint)
         {
-            int nOldPKLevel;
-            nOldPKLevel = PKLevel();
+            var nOldPKLevel = PKLevel();
             m_nPkPoint += nPoint;
             if (PKLevel() != nOldPKLevel)
             {
@@ -1978,17 +1977,14 @@ namespace M2Server
 
         public int GetQuestUnitOpenStatus(int nFlag)
         {
-            int result;
-            int n10;
-            int n14;
-            result = 0;
+            var result = 0;
             nFlag -= 1;
             if (nFlag < 0)
             {
                 return result;
             }
-            n10 = nFlag / 8;
-            n14 = nFlag % 8;
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
             if ((n10 - m_QuestUnitOpen.Length) < 0)
             {
                 if (((128 >> n14) & m_QuestUnitOpen[n10]) != 0)
@@ -2005,19 +2001,16 @@ namespace M2Server
 
         public void SetQuestUnitOpenStatus(int nFlag, int nValue)
         {
-            int n10;
-            int n14;
-            byte bt15;
             nFlag -= 1;
             if (nFlag < 0)
             {
                 return;
             }
-            n10 = nFlag / 8;
-            n14 = nFlag % 8;
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
             if ((n10 - m_QuestUnitOpen.Length) < 0)
             {
-                bt15 = m_QuestUnitOpen[n10];
+                var bt15 = m_QuestUnitOpen[n10];
                 if (nValue == 0)
                 {
                     m_QuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
@@ -2055,19 +2048,16 @@ namespace M2Server
 
         public void SetQuestUnitStatus(int nFlag, int nValue)
         {
-            int n10;
-            int n14;
-            byte bt15;
             nFlag -= 1;
             if (nFlag < 0)
             {
                 return;
             }
-            n10 = nFlag / 8;
-            n14 = nFlag % 8;
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
             if ((n10 - m_QuestUnit.Length) < 0)
             {
-                bt15 = m_QuestUnit[n10];
+                var bt15 = m_QuestUnit[n10];
                 if (nValue == 0)
                 {
                     m_QuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
@@ -2133,10 +2123,11 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 蜡烛勋章减少持久
+        /// </summary>
         private void UseLamp()
         {
-            int nOldDura;
-            int nDura;
             TPlayObject PlayObject;
             MirItem Stditem;
             const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
@@ -2149,7 +2140,8 @@ namespace M2Server
                     {
                         return;
                     }
-                    nOldDura = HUtil32.Round(m_UseItems[Grobal2.U_RIGHTHAND].Dura / 1000);
+                    var nOldDura = HUtil32.Round(m_UseItems[Grobal2.U_RIGHTHAND].Dura / 1000);
+                    int nDura = 0;
                     if (M2Share.g_Config.boDecLampDura)
                     {
                         nDura = m_UseItems[Grobal2.U_RIGHTHAND].Dura - 1;
