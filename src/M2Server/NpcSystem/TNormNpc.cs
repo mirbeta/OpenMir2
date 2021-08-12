@@ -6742,11 +6742,9 @@ namespace M2Server
             }
         }
 
-        // if DeleteFile(fileName)
         private void ActionOfClearList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            string ffile;
-            ffile = M2Share.g_Config.sEnvirDir + QuestActionInfo.sParam1;
+            var ffile = M2Share.g_Config.sEnvirDir + QuestActionInfo.sParam1;
             if (File.Exists(ffile))
             {
                 //myFile = new FileInfo(ffile);
