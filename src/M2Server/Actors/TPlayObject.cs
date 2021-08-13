@@ -6230,18 +6230,28 @@ namespace M2Server
             HumItems[Grobal2.U_BELT] = m_UseItems[Grobal2.U_BELT];
             HumItems[Grobal2.U_BOOTS] = m_UseItems[Grobal2.U_BOOTS];
             HumItems[Grobal2.U_CHARM] = m_UseItems[Grobal2.U_CHARM];
-            BagItems = HumanRcd.Data.BagItems;
-            if (BagItems == null)
+            try
             {
-                BagItems = new TUserItem[Grobal2.MAXBAGITEM];
-            }
-            for (var i = 0; i < m_ItemList.Count; i++)
-            {
-                if (i >= Grobal2.MAXBAGITEM)
+                BagItems = HumanRcd.Data.BagItems;
+                if (BagItems == null)
                 {
-                    break;
+                    BagItems = new TUserItem[46];
                 }
-                BagItems[i] = m_ItemList[i];
+                for (var i = 0; i < m_ItemList.Count; i++)
+                {
+                    if (i > 46)
+                    {
+                        var sName = M2Share.UserEngine.GetStdItem(m_ItemList[i].wIndex);
+                        Console.WriteLine(sName.Name);
+                        break;
+                    }
+                    BagItems[i] = m_ItemList[i];
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
             HumMagic = HumanRcd.Data.Magic;
             if (HumMagic == null)

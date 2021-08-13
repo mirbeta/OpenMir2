@@ -25,8 +25,8 @@ namespace M2Server
         ///  NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
         public bool m_boIsQuest = false;
-
         protected string m_sPath = string.Empty;
+        public IList<TScriptParams> BatchParamsList;
 
         private void ActionOfAddNameDateList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {

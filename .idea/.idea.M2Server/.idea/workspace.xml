@@ -13,6 +13,14 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AccountSystem/IdSrvClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AuthSystem/AuthClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeSalveStatusCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeSalveStatusCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ItemSystem/ItmUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ItemSystem/ItmUnit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/ObjNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/ObjNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/THumInfoData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Package/THumInfoData.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +41,12 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/fa/31422d40/IList`1.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -101,7 +114,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35016465" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35041323" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -281,7 +294,9 @@
       <workItem from="1628734945712" duration="3267000" />
       <workItem from="1628755471477" duration="2093000" />
       <workItem from="1628778490218" duration="709000" />
-      <workItem from="1628780506087" duration="1301000" />
+      <workItem from="1628780506087" duration="1439000" />
+      <workItem from="1628826191722" duration="2454000" />
+      <workItem from="1628841248747" duration="7543000" />
     </task>
     <servers />
   </component>
@@ -366,6 +381,123 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="363" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs</url>
+          <line>2117</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2117" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
+            <startOffsets>
+              <option value="93520" />
+            </startOffsets>
+            <endOffsets>
+              <option value="93585" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="366" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs</url>
+          <line>2111</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2111" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
+            <startOffsets>
+              <option value="93281" />
+            </startOffsets>
+            <endOffsets>
+              <option value="93282" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="367" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs</url>
+          <line>2084</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2084" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
+            <startOffsets>
+              <option value="91927" />
+            </startOffsets>
+            <endOffsets>
+              <option value="91992" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="368" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs</url>
+          <line>2078</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2078" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
+            <startOffsets>
+              <option value="91688" />
+            </startOffsets>
+            <endOffsets>
+              <option value="91689" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="369" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs</url>
+          <line>17</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" initialLine="17" containingFunctionPresentation="method 'ProcessSayMsg'">
+            <startOffsets>
+              <option value="484" />
+            </startOffsets>
+            <endOffsets>
+              <option value="534" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="374" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs</url>
+          <line>166</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" initialLine="166" containingFunctionPresentation="method 'ProcessUserLineMsg'">
+            <startOffsets>
+              <option value="8171" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8191" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="375" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs</url>
+          <line>360</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" initialLine="360" containingFunctionPresentation="method 'ProcessUserLineMsg'">
+            <startOffsets>
+              <option value="16764" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16811" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="376" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs</url>
+          <line>90</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs" initialLine="90" containingFunctionPresentation="method 'ExecCmd'">
+            <startOffsets>
+              <option value="3093" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3119" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="377" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Package/THumInfoData.cs</url>
+          <line>133</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Package/THumInfoData.cs" initialLine="133" containingFunctionPresentation="constructor 'THumInfoData'">
+            <startOffsets>
+              <option value="4748" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4782" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="385" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

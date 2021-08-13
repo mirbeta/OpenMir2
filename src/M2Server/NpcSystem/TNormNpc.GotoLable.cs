@@ -1745,7 +1745,6 @@ namespace M2Server
         private bool GotoLable_QuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem,ref bool bo11)
         {
             bool result= true;
-            int II;
             TQuestActionInfo QuestActionInfo;
             int n14;
             int n1C;
@@ -1789,9 +1788,9 @@ namespace M2Server
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                         break;
                     case M2Share.nRESET:
-                        for (II = 0; II < QuestActionInfo.nParam2; II++)
+                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
-                            PlayObject.SetQuestFlagStatus(QuestActionInfo.nParam1 + II, 0);
+                            PlayObject.SetQuestFlagStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
                     case M2Share.nSETOPEN:
@@ -1805,9 +1804,9 @@ namespace M2Server
                         PlayObject.SetQuestUnitStatus(n28, n2C);
                         break;
                     case M2Share.nRESETUNIT:
-                        for (II = 0; II < QuestActionInfo.nParam2; II++)
+                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
-                            PlayObject.SetQuestUnitStatus(QuestActionInfo.nParam1 + II, 0);
+                            PlayObject.SetQuestUnitStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
                     case M2Share.nBREAK:
@@ -1862,7 +1861,7 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nMONGEN:
-                        for (II = 0; II < QuestActionInfo.nParam2; II++)
+                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             n20X = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n38 - QuestActionInfo.nParam3);
                             n24Y = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n3C - QuestActionInfo.nParam3);
@@ -1872,10 +1871,10 @@ namespace M2Server
                     case M2Share.nMONCLEAR:
                         List58 = new List<TBaseObject>();
                         M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), List58);
-                        for (II = 0; II < List58.Count; II++)
+                        for (var k = 0; k < List58.Count; k++)
                         {
-                            List58[II].m_boNoItem = true;
-                            List58[II].m_WAbil.HP = 0;
+                            List58[k].m_boNoItem = true;
+                            List58[k].m_WAbil.HP = 0;
                         }
                         //List58.Free;
                         break;
@@ -1906,7 +1905,6 @@ namespace M2Server
                             else
                             {
                                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOV);
-                                break;
                             }
                         }
                         else
@@ -1918,66 +1916,64 @@ namespace M2Server
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_nVal[n14] += QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_nVal[n14]++;
-                                    }
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        M2Share.g_Config.GlobalVal[n14 - 100] += QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        M2Share.g_Config.GlobalVal[n14 - 100]++;
-                                    }
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_DyVal[n14 - 200] += QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_DyVal[n14 - 200]++;
-                                    }
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_nMval[n14 - 300] += QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_nMval[n14 - 300]++;
-                                    }
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        M2Share.g_Config.GlobaDyMval[n14 - 400] += (short)QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        M2Share.g_Config.GlobaDyMval[n14 - 400]++;
-                                    }
-                                    break;
-                                default:
-                                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sINC);
-                                    break;
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_nVal[n14] += QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_nVal[n14]++;
+                                }
+                            }
+                            else if(HUtil32.RangeInDefined(n14,100,119))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    M2Share.g_Config.GlobalVal[n14 - 100] += QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    M2Share.g_Config.GlobalVal[n14 - 100]++;
+                                }
+                            }
+                            else if(HUtil32.RangeInDefined(n14,200,209))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_DyVal[n14 - 200] += QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_DyVal[n14 - 200]++;
+                                }
+                            }
+                            else if(HUtil32.RangeInDefined(n14,300,399))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_nMval[n14 - 300] += QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_nMval[n14 - 300]++;
+                                }
+                            }
+                            else if(HUtil32.RangeInDefined(n14,400,499))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    M2Share.g_Config.GlobaDyMval[n14 - 400] += (short)QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    M2Share.g_Config.GlobaDyMval[n14 - 400]++;
+                                }
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sINC);
                             }
                         }
                         else
@@ -1989,66 +1985,64 @@ namespace M2Server
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14,0,9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_nVal[n14] -= QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_nVal[n14] -= 1;
-                                    }
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        M2Share.g_Config.GlobalVal[n14 - 100] -= QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        M2Share.g_Config.GlobalVal[n14 - 100] -= 1;
-                                    }
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_DyVal[n14 - 200] -= QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_DyVal[n14 - 200] -= 1;
-                                    }
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        PlayObject.m_nMval[n14 - 300] -= QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        PlayObject.m_nMval[n14 - 300] -= 1;
-                                    }
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    if (QuestActionInfo.nParam2 > 1)
-                                    {
-                                        M2Share.g_Config.GlobaDyMval[n14 - 400] -= (short)QuestActionInfo.nParam2;
-                                    }
-                                    else
-                                    {
-                                        M2Share.g_Config.GlobaDyMval[n14 - 400] -= 1;
-                                    }
-                                    break;
-                                default:
-                                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sDEC);
-                                    break;
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_nVal[n14] -= QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_nVal[n14] -= 1;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 119))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    M2Share.g_Config.GlobalVal[n14 - 100] -= QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    M2Share.g_Config.GlobalVal[n14 - 100] -= 1;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_DyVal[n14 - 200] -= QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_DyVal[n14 - 200] -= 1;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    PlayObject.m_nMval[n14 - 300] -= QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    PlayObject.m_nMval[n14 - 300] -= 1;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                if (QuestActionInfo.nParam2 > 1)
+                                {
+                                    M2Share.g_Config.GlobaDyMval[n14 - 400] -= (short)QuestActionInfo.nParam2;
+                                }
+                                else
+                                {
+                                    M2Share.g_Config.GlobaDyMval[n14 - 400] -= 1;
+                                }
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sDEC);
                             }
                         }
                         else
@@ -2061,31 +2055,29 @@ namespace M2Server
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    n18 = PlayObject.m_nVal[n14];
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    n18 = M2Share.g_Config.GlobalVal[n14 - 100];
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    n18 = PlayObject.m_DyVal[n14 - 200];
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    n18 = PlayObject.m_nMval[n14 - 300];
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
-                                    break;
-                                default:
-                                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                                    break;
+                                n18 = PlayObject.m_nVal[n14];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 119))
+                            {
+                                n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            {
+                                n18 = PlayObject.m_DyVal[n14 - 200];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                n18 = PlayObject.m_nMval[n14 - 300];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
                             }
                         }
                         else
@@ -2096,62 +2088,57 @@ namespace M2Server
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    n1C = PlayObject.m_nVal[n14];
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    n1C = M2Share.g_Config.GlobalVal[n14 - 100];
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    n1C = PlayObject.m_DyVal[n14 - 200];
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    n1C = PlayObject.m_nMval[n14 - 300];
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
-                                    break;
-                                default:
-                                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                                    break;
+                                n1C = PlayObject.m_nVal[n14];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 119))
+                            {
+                                n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            {
+                                n1C = PlayObject.m_DyVal[n14 - 200];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                n1C = PlayObject.m_nMval[n14 - 300];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
                             }
                         }
                         else
                         {
-                            // ScriptActionError(PlayObject,'',QuestActionInfo,sSUM);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
                         }
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    PlayObject.m_nVal[9] = PlayObject.m_nVal[9] + n18 + n1C;
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    M2Share.g_Config.GlobalVal[9] = M2Share.g_Config.GlobalVal[9] + n18 + n1C;
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    PlayObject.m_DyVal[9] = PlayObject.m_DyVal[9] + n18 + n1C;
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    PlayObject.m_nMval[99] = PlayObject.m_nMval[99] + n18 + n1C;
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    M2Share.g_Config.GlobaDyMval[99] = (short)(M2Share.g_Config.GlobaDyMval[99] + n18 + n1C);
-                                    break;
+                                PlayObject.m_nVal[9] = PlayObject.m_nVal[9] + n18 + n1C;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 119))
+                            {
+                                M2Share.g_Config.GlobalVal[9] = M2Share.g_Config.GlobalVal[9] + n18 + n1C;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            {
+                                PlayObject.m_DyVal[9] = PlayObject.m_DyVal[9] + n18 + n1C;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                PlayObject.m_nMval[99] = PlayObject.m_nMval[99] + n18 + n1C;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                M2Share.g_Config.GlobaDyMval[99] = (short)(M2Share.g_Config.GlobaDyMval[99] + n18 + n1C);
                             }
                         }
                         break;
@@ -2220,31 +2207,29 @@ namespace M2Server
                         n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
                         if (n14 >= 0)
                         {
-                            switch (n14)
+                            if (HUtil32.RangeInDefined(n14, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    PlayObject.m_nVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    PlayObject.m_nMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                                    break;
-                                default:
-                                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
-                                    break;
+                                PlayObject.m_nVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 119))
+                            {
+                                M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            {
+                                PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                PlayObject.m_nMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
                             }
                         }
                         else
@@ -2276,11 +2261,11 @@ namespace M2Server
                         {
                             List58 = new List<TBaseObject>();
                             M2Share.UserEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
-                            for (II = 0; II < List58.Count; II++)
+                            for (var k = 0; k < List58.Count; k++)
                             {
-                                User = (TPlayObject)List58[II];
+                                User = (TPlayObject)List58[k];
                                 User.MapRandomMove(this.m_sMapName, 0);
-                                if (II > 20)
+                                if (k > 20)
                                 {
                                     break;
                                 }
@@ -2293,17 +2278,27 @@ namespace M2Server
                         }
                         break;
                     case M2Share.nADDBATCH:
-                        //List1C.Add(QuestActionInfo.sParam1, ((n18) as Object));
+                        if (BatchParamsList == null)
+                        {
+                            BatchParamsList = new List<TScriptParams>();
+                        }
+                        BatchParamsList.Add(new TScriptParams()
+                        {
+                            sParams = QuestActionInfo.sParam1,
+                            nParams = n18
+                        });
                         break;
                     case M2Share.nBATCHDELAY:
                         n18 = QuestActionInfo.nParam1 * 1000;
                         break;
                     case M2Share.nBATCHMOVE:
-                        //for (II = 0; II < List1C.Count; II ++ )
-                        //{
-                        //    PlayObject.SendDelayMsg(this, grobal2.RM_10155, 0, 0, 0, 0, List1C[II], ((int)List1C.Values[II]) + n20);
-                        //    n20 += ((int)List1C.Values[II]);
-                        //}
+                        var n20 = 0;
+                        for (var k = 0; k < BatchParamsList.Count; k ++ )
+                        {
+                            var batchParam = BatchParamsList[k];
+                            PlayObject.SendDelayMsg(this.ObjectId, Grobal2.RM_10155, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            n20 += batchParam.nParams;
+                        }
                         break;
                     case M2Share.nPLAYDICE:
                         PlayObject.m_sPlayDiceLabel = QuestActionInfo.sParam2;
@@ -2694,6 +2689,7 @@ namespace M2Server
             TSayingProcedure SayingProcedure;
             TUserItem UserItem = null;
             string sC = string.Empty;
+            IList<TScriptParams> paramsList;
             if (PlayObject.m_NPC != this)
             {
                 PlayObject.m_NPC = null;

@@ -19,7 +19,7 @@ namespace M2Server
             var hederBuff = ReadBytes(67);
             Header = new TRecordHeader(hederBuff);
 
-            var bodyBuff = ReadBytes(3361);
+            var bodyBuff = ReadBytes(3433);
             Data = new THumInfoData(bodyBuff);
         }
 

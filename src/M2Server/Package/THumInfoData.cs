@@ -64,7 +64,7 @@ namespace M2Server
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             HumItems = new TUserItem[13];
-            BagItems = new TUserItem[43];
+            BagItems = new TUserItem[46];
             StorageItems = new TUserItem[50];
             Magic = new TMagicRcd[20];
             Abil = new TAbility();
@@ -127,17 +127,17 @@ namespace M2Server
             for (var i = 0; i < HumItems.Length; i++)
             {
                 var itemBuff = new byte[24];
-                Array.Copy(humItemBuff, i * 24, itemBuff, 0, itemBuff.Length);
+                Array.Copy(humItemBuff, i * 24, itemBuff, 0, 24);
                 HumItems[i] = new TUserItem(itemBuff);
             }
 
-            this.BagItems = new TUserItem[43];
-            var bagItemBuff = ReadBytes(1032);
+            this.BagItems = new TUserItem[46];
+            var bagItemBuff = ReadBytes(24 * 46);
 
             for (var i = 0; i < BagItems.Length; i++)
             {
                 var itemBuff = new byte[24];
-                Buffer.BlockCopy(bagItemBuff, i * 24, itemBuff, 0, itemBuff.Length);
+                Buffer.BlockCopy(bagItemBuff, i * 24, itemBuff, 0, 24);
                 BagItems[i] = new TUserItem(itemBuff);
             }
 
@@ -146,7 +146,7 @@ namespace M2Server
             for (var i = 0; i < Magic.Length; i++)
             {
                 var itemBuff = new byte[8];
-                Buffer.BlockCopy(hubMagicBuff, i * 8, itemBuff, 0, itemBuff.Length);
+                Buffer.BlockCopy(hubMagicBuff, i * 8, itemBuff, 0, 8);
                 Magic[i] = new TMagicRcd(itemBuff);
             }
 
@@ -155,7 +155,7 @@ namespace M2Server
             for (var i = 0; i < StorageItems.Length; i++)
             {
                 var itemBuff = new byte[24];
-                Buffer.BlockCopy(storageBuff, i * 24, itemBuff, 0, itemBuff.Length);
+                Buffer.BlockCopy(storageBuff, i * 24, itemBuff, 0, 24);
                 StorageItems[i] = new TUserItem(itemBuff);
             }
         }

@@ -96,5 +96,11 @@ namespace M2Server
         public IList<TSayingProcedure> ProcedureList;
         public bool boExtJmp;
     }
+
+    public class TScriptParams
+    {
+        public string sParams;
+        public int nParams;
+    }
 }
 
