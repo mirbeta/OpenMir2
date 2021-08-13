@@ -234,11 +234,11 @@ namespace M2Server
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
-                    if ((m_GetWhisperHuman != null) && (!m_GetWhisperHuman.m_boGhost))
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
                     {
                         m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
-                    if ((PlayObject.m_GetWhisperHuman != null) && (!PlayObject.m_GetWhisperHuman.m_boGhost))
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
                     {
                         PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
@@ -246,11 +246,11 @@ namespace M2Server
                 else
                 {
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s", new object[] { m_sCharName, m_Abil.Level, saystr }));
-                    if ((m_GetWhisperHuman != null) && (!m_GetWhisperHuman.m_boGhost))
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
                     {
                         m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
-                    if ((PlayObject.m_GetWhisperHuman != null) && (!PlayObject.m_GetWhisperHuman.m_boGhost))
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
                     {
                         PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, format("%s[%d级]=> %s %s", new object[] { m_sCharName, m_Abil.Level, PlayObject.m_sCharName, saystr }));
                     }
@@ -319,7 +319,7 @@ namespace M2Server
                         }
                         if (!m_PEnvir.Flag.boQUIZ) //发送黄色喊话消息
                         {
-                            if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
+                            if (HUtil32.GetTickCount() - m_dwShoutMsgTick > 10 * 1000)
                             {
                                 if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                 {
@@ -379,7 +379,7 @@ namespace M2Server
             for (var i = 0; i < m_MagicList.Count; i++)
             {
                 TUserMagic UserMagic = m_MagicList[i];
-                if ((UserMagic.MagicInfo.sMagicName).ToLower().CompareTo((sMagicName).ToLower()) == 0)
+                if (UserMagic.MagicInfo.sMagicName.ToLower().CompareTo(sMagicName.ToLower()) == 0)
                 {
                     result = UserMagic;
                     break;
@@ -418,9 +418,9 @@ namespace M2Server
         protected bool GotoNextOne(short nX, short nY, bool boRun)
         {
             bool result = false;
-            if ((Math.Abs(nX - m_nCurrX) <= 2) && (Math.Abs(nY - m_nCurrY) <= 2))
+            if (Math.Abs(nX - m_nCurrX) <= 2 && Math.Abs(nY - m_nCurrY) <= 2)
             {
-                if ((Math.Abs(nX - m_nCurrX) <= 1) && (Math.Abs(nY - m_nCurrY) <= 1))
+                if (Math.Abs(nX - m_nCurrX) <= 1 && Math.Abs(nY - m_nCurrY) <= 1)
                 {
                     result = WalkToNext(nX, nY);
                 }
@@ -458,7 +458,7 @@ namespace M2Server
                     if (!boDisableSayMsg)
                     {
                         nPos = sMsg.IndexOf("=>");
-                        if ((nPos > 0) && (m_AISayMsgList.Count > 0))
+                        if (nPos > 0 && m_AISayMsgList.Count > 0)
                         {
                             sChrName = sMsg.Substring(1 - 1, nPos - 1);
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
@@ -507,12 +507,12 @@ namespace M2Server
             switch (nType)
             {
                 case 0:
-                    if ((m_sConfigListFileName != "") && File.Exists(m_sConfigListFileName))
+                    if (m_sConfigListFileName != "" && File.Exists(m_sConfigListFileName))
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sConfigListFileName);
-                        nIndex = (new System.Random(LoadList.Count)).Next();
-                        if ((nIndex >= 0) && (nIndex < LoadList.Count))
+                        nIndex = new System.Random(LoadList.Count).Next();
+                        if (nIndex >= 0 && nIndex < LoadList.Count)
                         {
                             Str = LoadList[nIndex];
                             if (!string.IsNullOrEmpty(Str))
@@ -535,12 +535,12 @@ namespace M2Server
                     }
                     break;
                 case 1:
-                    if ((m_sHeroConfigListFileName != "") && File.Exists(m_sHeroConfigListFileName))
+                    if (m_sHeroConfigListFileName != "" && File.Exists(m_sHeroConfigListFileName))
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sHeroConfigListFileName);
-                        nIndex = (new System.Random(LoadList.Count)).Next();
-                        if ((nIndex >= 0) && (nIndex < LoadList.Count))
+                        nIndex = new System.Random(LoadList.Count).Next();
+                        if (nIndex >= 0 && nIndex < LoadList.Count)
                         {
                             Str = LoadList[nIndex];
                             if (Str != "")
@@ -580,14 +580,14 @@ namespace M2Server
             TUserMagic UserMagic;
             MirItem StdItem;
             var sFileName = GetRandomConfigFileName(m_sCharName, 0);
-            if ((sFileName == "") || (!File.Exists(sFileName)))
+            if (sFileName == "" || !File.Exists(sFileName))
             {
-                if ((m_sConfigFileName != "") && File.Exists(m_sConfigFileName))
+                if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
                 {
                     sFileName = m_sConfigFileName;
                 }
             }
-            if ((!string.IsNullOrEmpty(sFileName)) && File.Exists(sFileName))
+            if (!string.IsNullOrEmpty(sFileName) && File.Exists(sFileName))
             {
                 ItemIni = new IniFile(sFileName);
                 ItemIni.Load();
@@ -623,7 +623,7 @@ namespace M2Server
                                     Magic = M2Share.UserEngine.FindMagic(sMagicName);
                                     if (Magic != null)
                                     {
-                                        if ((Magic.btJob == 99) || (Magic.btJob == m_btJob))
+                                        if (Magic.btJob == 99 || Magic.btJob == m_btJob)
                                         {
                                             UserMagic = new TUserMagic();
                                             UserMagic.MagicInfo = Magic;
@@ -661,7 +661,7 @@ namespace M2Server
                                     {
                                         if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                         {
-                                            if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
+                                            if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                             {
                                                 //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                             }
@@ -687,7 +687,7 @@ namespace M2Server
                     }
                     for (var i = 0; i <= 9; i++)
                     {
-                        sSayMsg = ItemIni.ReadString("MonSay", (i).ToString(), "");
+                        sSayMsg = ItemIni.ReadString("MonSay", i.ToString(), "");
                         if (sSayMsg != "")
                         {
                             m_AISayMsgList.Add(sSayMsg);
@@ -718,7 +718,7 @@ namespace M2Server
                                 {
                                     if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                     {
-                                        if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
+                                        if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                         {
                                             //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                         }
@@ -740,7 +740,7 @@ namespace M2Server
             for (var i = 0; i < m_VisibleItems.Count; i++)
             {
                 VisibleMapItem = m_VisibleItems[i];
-                if ((VisibleMapItem != null) && (VisibleMapItem.nVisibleFlag > 0))
+                if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
                 {
                     if (VisibleMapItem.MapItem == MapItem)
                     {
@@ -761,7 +761,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (MapItem.Name.ToLower().CompareTo((Grobal2.sSTRING_GOLDNAME).ToLower()) == 0)
+            if (MapItem.Name.ToLower().CompareTo(Grobal2.sSTRING_GOLDNAME.ToLower()) == 0)
             {
                 if (m_PEnvir.DeleteFromMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem) == 1)
                 {
@@ -794,7 +794,7 @@ namespace M2Server
                         UserItem = new TUserItem();
                         UserItem = MapItem.UserItem;
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if ((StdItem != null) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
+                        if (StdItem != null && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(UserItem.wIndex)))
                         {
                             //if (GetCheckItemList(18, StdItem.Name))
                             //{
@@ -847,7 +847,7 @@ namespace M2Server
                     return result;
                 }
                 m_dwPickUpItemTick = HUtil32.GetTickCount();
-                if (this.IsEnoughBag() && (m_TargetCret == null))
+                if (this.IsEnoughBag() && m_TargetCret == null)
                 {
                     boFound = false;
                     if (m_SelMapItem != null)
@@ -856,7 +856,7 @@ namespace M2Server
                         for (var i = 0; i < m_VisibleItems.Count; i++)
                         {
                             VisibleMapItem = m_VisibleItems[i];
-                            if ((VisibleMapItem != null) && (VisibleMapItem.nVisibleFlag > 0))
+                            if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
                             {
                                 if (VisibleMapItem.MapItem == m_SelMapItem)
                                 {
@@ -887,7 +887,7 @@ namespace M2Server
                         for (var i = 0; i < m_VisibleItems.Count; i++)
                         {
                             VisibleMapItem = m_VisibleItems[i];
-                            if ((VisibleMapItem != null) && (VisibleMapItem.nVisibleFlag > 0))
+                            if (VisibleMapItem != null && VisibleMapItem.nVisibleFlag > 0)
                             {
                                 if (VisibleMapItem.MapItem == m_SelMapItem)
                                 {
@@ -903,7 +903,7 @@ namespace M2Server
                         for (var i = 0; i < m_VisibleItems.Count; i++)
                         {
                             VisibleMapItem = m_VisibleItems[i];
-                            if ((VisibleMapItem != null))
+                            if (VisibleMapItem != null)
                             {
                                 if (VisibleMapItem.nVisibleFlag > 0)
                                 {
@@ -912,9 +912,9 @@ namespace M2Server
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)))
                                         {
-                                            if ((MapItem.OfBaseObject == null) || (MapItem.OfBaseObject == this) || (((TBaseObject)MapItem.OfBaseObject).m_Master == this))
+                                            if (MapItem.OfBaseObject == null || MapItem.OfBaseObject == this || ((TBaseObject)MapItem.OfBaseObject).m_Master == this)
                                             {
-                                                if ((Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5) && (Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5))
+                                                if (Math.Abs(VisibleMapItem.nX - m_nCurrX) <= 5 && Math.Abs(VisibleMapItem.nY - m_nCurrY) <= 5)
                                                 {
                                                     n02 = Math.Abs(VisibleMapItem.nX - m_nCurrX) + Math.Abs(VisibleMapItem.nY - m_nCurrY);
                                                     if (n02 < n01)
@@ -941,7 +941,7 @@ namespace M2Server
                         {
                             m_boCanPickIng = false;
                         }
-                        if ((m_nCurrX != SelVisibleMapItem.nX) || (m_nCurrY != SelVisibleMapItem.nY))
+                        if (m_nCurrX != SelVisibleMapItem.nX || m_nCurrY != SelVisibleMapItem.nY)
                         {
                             WalkToTargetXY2(SelVisibleMapItem.nX, VisibleMapItem.nY);
                             result = true;
@@ -982,11 +982,11 @@ namespace M2Server
             {
                 m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
+            if (m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell || m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动 
             }
-            if ((nTargetX != m_nCurrX) || (nTargetY != m_nCurrY))
+            if (nTargetX != m_nCurrX || nTargetY != m_nCurrY)
             {
                 if (HUtil32.GetTickCount() - dwTick3F4 > m_dwTurnIntervalTime)// 转向间隔
                 {
@@ -1034,17 +1034,17 @@ namespace M2Server
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
                     WalkTo(nDir, false);
-                    if ((nTargetX == m_nCurrX) && (nTargetY == m_nCurrY))
+                    if (nTargetX == m_nCurrX && nTargetY == m_nCurrY)
                     {
                         result = true;
                         dwTick3F4 = HUtil32.GetTickCount();
                     }
                     if (!result)
                     {
-                        n20 = (new System.Random(3)).Next();
+                        n20 = new System.Random(3).Next();
                         for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
-                            if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
+                            if (nOldX == m_nCurrX && nOldY == m_nCurrY)
                             {
                                 if (n20 != 0)
                                 {
@@ -1058,12 +1058,12 @@ namespace M2Server
                                 {
                                     nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > Grobal2.DR_UPLEFT))
+                                if (nDir > Grobal2.DR_UPLEFT)
                                 {
                                     nDir = Grobal2.DR_UP;
                                 }
                                 WalkTo(nDir, false);
-                                if ((nTargetX == m_nCurrX) && (nTargetY == m_nCurrY))
+                                if (nTargetX == m_nCurrX && nTargetY == m_nCurrY)
                                 {
                                     result = true;
                                     dwTick3F4 = HUtil32.GetTickCount();
@@ -1085,7 +1085,7 @@ namespace M2Server
             int n20;
             int nOldX;
             int nOldY;
-            if (((m_nCurrX != m_nProtectTargetX) || (m_nCurrY != m_nProtectTargetY)))
+            if (m_nCurrX != m_nProtectTargetX || m_nCurrY != m_nProtectTargetY)
             {
                 n10 = m_nProtectTargetX;
                 n14 = m_nProtectTargetY;
@@ -1131,16 +1131,16 @@ namespace M2Server
                 }
                 nOldX = m_nCurrX;
                 nOldY = m_nCurrY;
-                if ((Math.Abs(m_nCurrX - m_nProtectTargetX) >= 3) || (Math.Abs(m_nCurrY - m_nProtectTargetY) >= 3))
+                if (Math.Abs(m_nCurrX - m_nProtectTargetX) >= 3 || Math.Abs(m_nCurrY - m_nProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     if (!RunTo1(nDir, false, m_nProtectTargetX, m_nProtectTargetY))
                     {
                         WalkTo(nDir, false);
-                        n20 = (new System.Random(3)).Next();
+                        n20 = new System.Random(3).Next();
                         for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
-                            if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
+                            if (nOldX == m_nCurrX && nOldY == m_nCurrY)
                             {
                                 if (n20 != 0)
                                 {
@@ -1154,7 +1154,7 @@ namespace M2Server
                                 {
                                     nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > Grobal2.DR_UPLEFT))
+                                if (nDir > Grobal2.DR_UPLEFT)
                                 {
                                     nDir = Grobal2.DR_UP;
                                 }
@@ -1167,10 +1167,10 @@ namespace M2Server
                 {
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
-                    n20 = (new System.Random(3)).Next();
+                    n20 = new System.Random(3).Next();
                     for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                     {
-                        if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
+                        if (nOldX == m_nCurrX && nOldY == m_nCurrY)
                         {
                             if (n20 != 0)
                             {
@@ -1184,7 +1184,7 @@ namespace M2Server
                             {
                                 nDir = Grobal2.DR_UPLEFT;
                             }
-                            if ((nDir > Grobal2.DR_UPLEFT))
+                            if (nDir > Grobal2.DR_UPLEFT)
                             {
                                 nDir = Grobal2.DR_UP;
                             }
@@ -1199,11 +1199,11 @@ namespace M2Server
         {
             short nX = 0;
             short nY = 0;
-            if (m_boAIStart && (m_TargetCret == null) && !m_boCanPickIng && !m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
+            if (m_boAIStart && m_TargetCret == null && !m_boCanPickIng && !m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 nX = m_nCurrX;
                 nY = m_nCurrY;
-                if ((m_Path != null) && (m_Path.Length > 0) && (m_nPostion < m_Path.Length))
+                if (m_Path != null && m_Path.Length > 0 && m_nPostion < m_Path.Length)
                 {
                     if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
                     {
@@ -1225,11 +1225,11 @@ namespace M2Server
                 }
                 if (m_PointManager.GetPoint(ref nX, ref nY))
                 {
-                    if ((Math.Abs(nX - m_nCurrX) > 2) || (Math.Abs(nY - m_nCurrY) > 2))
+                    if (Math.Abs(nX - m_nCurrX) > 2 || Math.Abs(nY - m_nCurrY) > 2)
                     {
                         m_Path = M2Share.g_FindPath.FindPath(m_PEnvir, m_nCurrX, m_nCurrY, nX, nY, true);
                         m_nPostion = 0;
-                        if ((m_Path.Length > 0) && (m_nPostion < m_Path.Length))
+                        if (m_Path.Length > 0 && m_nPostion < m_Path.Length)
                         {
                             if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
                             {
@@ -1266,9 +1266,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if (((new Random(2)).Next() == 1))
+                    if (new Random(2).Next() == 1)
                     {
-                        TurnTo((byte)(new Random(8)).Next());
+                        TurnTo((byte)new Random(8).Next());
                     }
                     else
                     {
@@ -1281,9 +1281,9 @@ namespace M2Server
             }
             if (m_nMoveFailCount >= 3)
             {
-                if (((new Random(2)).Next() == 1))
+                if (new Random(2).Next() == 1)
                 {
-                    TurnTo((byte)(new Random(8)).Next());
+                    TurnTo((byte)new Random(8).Next());
                 }
                 else
                 {
@@ -1317,17 +1317,17 @@ namespace M2Server
             m_dwStruckTick = HUtil32.GetTickCount();
             if (hiter != null)
             {
-                if ((m_TargetCret == null) && IsProperTarget(hiter))
+                if (m_TargetCret == null && IsProperTarget(hiter))
                 {
                     SetTargetCreat(hiter);
                 }
                 else
                 {
-                    if ((hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || ((hiter.m_Master != null) && (hiter.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT)))
+                    if (hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT || hiter.m_Master != null && hiter.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
-                        if ((m_TargetCret != null) && ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || ((m_TargetCret.m_Master != null) && (m_TargetCret.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT))))
+                        if (m_TargetCret != null && (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null && m_TargetCret.GetMaster().m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                         {
-                            if ((Struck_MINXY(m_TargetCret, hiter) == hiter) || ((new System.Random(6)).Next() == 0))
+                            if (Struck_MINXY(m_TargetCret, hiter) == hiter || new System.Random(6).Next() == 0)
                             {
                                 SetTargetCreat(hiter);
                             }
@@ -1339,9 +1339,9 @@ namespace M2Server
                     }
                     else
                     {
-                        if (((m_TargetCret != null) && (Struck_MINXY(m_TargetCret, hiter) == hiter)) || ((new System.Random(6)).Next() == 0))
+                        if (m_TargetCret != null && Struck_MINXY(m_TargetCret, hiter) == hiter || new System.Random(6).Next() == 0)
                         {
-                            if ((m_btJob > 0) || ((m_TargetCret != null) && (HUtil32.GetTickCount() - m_dwTargetFocusTick > 1000 * 3)))
+                            if (m_btJob > 0 || m_TargetCret != null && HUtil32.GetTickCount() - m_dwTargetFocusTick > 1000 * 3)
                             {
                                 if (IsProperTarget(hiter))
                                 {
@@ -1351,9 +1351,9 @@ namespace M2Server
                         }
                     }
                 }
-                if ((hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (!hiter.m_boAI) && (m_TargetCret == hiter))
+                if (hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT && !hiter.m_boAI && m_TargetCret == hiter)
                 {
-                    if (((new Random(8)).Next() == 0) && (m_AISayMsgList.Count > 0))
+                    if (new Random(8).Next() == 0 && m_AISayMsgList.Count > 0)
                     {
                         if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                         {
@@ -1368,14 +1368,14 @@ namespace M2Server
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[(new System.Random(m_AISayMsgList.Count)).Next()]);
+                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, m_sCharName + ':' + m_AISayMsgList[new System.Random(m_AISayMsgList.Count).Next()]);
                         }
                     }
                 }
             }
             if (m_boAnimal)
             {
-                m_nMeatQuality = (ushort)(m_nMeatQuality - (new System.Random(300)).Next());
+                m_nMeatQuality = (ushort)(m_nMeatQuality - new System.Random(300).Next());
                 if (m_nMeatQuality < 0)
                 {
                     m_nMeatQuality = 0;
@@ -1386,10 +1386,10 @@ namespace M2Server
 
         protected override void SearchTarget()
         {
-            if (((m_TargetCret == null) || (HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000)) && m_boAIStart)
+            if ((m_TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart)
             {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if ((m_TargetCret == null) || (!((m_TargetCret != null) && (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT)) || ((m_TargetCret.m_Master != null) && (m_TargetCret.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT)) || (HUtil32.GetTickCount() - m_dwStruckTick > 15000)))
+                if (m_TargetCret == null || !(m_TargetCret != null && m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || m_TargetCret.m_Master != null && m_TargetCret.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT || HUtil32.GetTickCount() - m_dwStruckTick > 15000)
                 {
                     base.SearchTarget();
                 }
@@ -1412,7 +1412,7 @@ namespace M2Server
             short nY = 0;
             nStep = 0;
             byte btDir;
-            if ((nDir >= 0) && (nDir <= 7))
+            if (nDir >= 0 && nDir <= 7)
             {
                 btDir = nDir;
             }
@@ -1422,9 +1422,9 @@ namespace M2Server
             }
             if (boFlag)
             {
-                if ((Math.Abs(nCurrX - nTargetX) <= 1) && (Math.Abs(nCurrY - nTargetY) <= 1))
+                if (Math.Abs(nCurrX - nTargetX) <= 1 && Math.Abs(nCurrY - nTargetY) <= 1)
                 {
-                    if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 1, ref nX, ref nY) && (nX == nTargetX) && (nY == nTargetY))
+                    if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 1, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                     {
                         nStep = 1;
                         result = true;
@@ -1432,7 +1432,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 2, ref nX, ref nY) && (nX == nTargetX) && (nY == nTargetY))
+                    if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 2, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                     {
                         nStep = 1;
                         result = true;
@@ -1441,7 +1441,7 @@ namespace M2Server
             }
             else
             {
-                if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 1, ref nX, ref nY) && (nX == nTargetX) && (nY == nTargetY))
+                if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 1, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                 {
                     nStep = nStep + 1;
                     result = true;
@@ -1451,7 +1451,7 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (m_PEnvir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY) && (nX == nTargetX) && (nY == nTargetY))
+                if (m_PEnvir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                 {
                     nStep = nStep + 1;
                     result = true;
@@ -1489,9 +1489,9 @@ namespace M2Server
             bool result = false;
             int nStep = 0;
             PointInfo[] Path;
-            if ((Math.Abs(nX - m_nCurrX) <= 2) && (Math.Abs(nY - m_nCurrY) <= 2))
+            if (Math.Abs(nX - m_nCurrX) <= 2 && Math.Abs(nY - m_nCurrY) <= 2)
             {
-                if ((Math.Abs(nX - m_nCurrX) <= 1) && (Math.Abs(nY - m_nCurrY) <= 1))
+                if (Math.Abs(nX - m_nCurrX) <= 1 && Math.Abs(nY - m_nCurrY) <= 1)
                 {
                     result = WalkToNext(nX, nY);
                 }
@@ -1508,9 +1508,9 @@ namespace M2Server
                 {
                     for (var i = 0; i < Path.Length; i++)
                     {
-                        if ((Path[i].nX != m_nCurrX) || (Path[i].nY != m_nCurrY))
+                        if (Path[i].nX != m_nCurrX || Path[i].nY != m_nCurrY)
                         {
-                            if ((Math.Abs(Path[i].nX - m_nCurrX) >= 2) || (Math.Abs(Path[i].nY - m_nCurrY) >= 2))
+                            if (Math.Abs(Path[i].nX - m_nCurrX) >= 2 || Math.Abs(Path[i].nY - m_nCurrY) >= 2)
                             {
                                 result = RunToNext(Path[i].nX, Path[i].nY);
                             }
@@ -1597,7 +1597,7 @@ namespace M2Server
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
                     BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nCurrX, nCurrY, true);
-                    if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost) && (!BaseObject.m_boHideMode || m_boCoolEye) && IsProperTarget(BaseObject))
+                    if (BaseObject != null && !BaseObject.m_boDeath && !BaseObject.m_boGhost && (!BaseObject.m_boHideMode || m_boCoolEye) && IsProperTarget(BaseObject))
                     {
                         result++;
                     }
@@ -1617,7 +1617,7 @@ namespace M2Server
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, n10, 1, ref nX, ref nY))
                 {
                     BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
-                    if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost) && IsProperTarget(BaseObject))
+                    if (BaseObject != null && !BaseObject.m_boDeath && !BaseObject.m_boGhost && IsProperTarget(BaseObject))
                     {
                         result++;
                     }
@@ -1633,7 +1633,7 @@ namespace M2Server
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nCurrX, nCurrY, true);
-            if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost) && IsProperTarget(BaseObject))
+            if (BaseObject != null && !BaseObject.m_boDeath && !BaseObject.m_boGhost && IsProperTarget(BaseObject))
             {
                 result++;
             }
@@ -1641,8 +1641,8 @@ namespace M2Server
             {
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, n10, 1, ref nX, ref nY))
                 {
-                    BaseObject = ((TBaseObject)(m_PEnvir.GetMovingObject(nX, nY, true)));
-                    if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost) && IsProperTarget(BaseObject))
+                    BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
+                    if (BaseObject != null && !BaseObject.m_boDeath && !BaseObject.m_boGhost && IsProperTarget(BaseObject))
                     {
                         result++;
                     }
@@ -1654,7 +1654,7 @@ namespace M2Server
         private int GetMasterRange(int nTargetX, int nTargetY)
         {
             int result = 0;
-            if ((m_Master != null))
+            if (m_Master != null)
             {
                 short nCurrX = m_Master.m_nCurrX;
                 short nCurrY = m_Master.m_nCurrY;
@@ -1672,9 +1672,9 @@ namespace M2Server
             int nStep;
             bool boNeed = false;
             bool result = false;
-            if ((!m_Master.m_boSlaveRelax))
+            if (!m_Master.m_boSlaveRelax)
             {
-                if ((m_PEnvir != m_Master.m_PEnvir) || (Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20) || (Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20))
+                if (m_PEnvir != m_Master.m_PEnvir || Math.Abs(m_nCurrX - m_Master.m_nCurrX) > 20 || Math.Abs(m_nCurrY - m_Master.m_nCurrY) > 20)
                 {
                     boNeed = true;
                 }
@@ -1703,14 +1703,14 @@ namespace M2Server
                 return result;
             }
             m_Master.GetBackPosition(ref nCurrX, ref nCurrY);
-            if ((m_TargetCret == null) && (!m_Master.m_boSlaveRelax))
+            if (m_TargetCret == null && !m_Master.m_boSlaveRelax)
             {
                 for (var i = 1; i <= 2; i++)
                 {
                     // 判断主人是否在英雄对面
                     if (m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, i, ref nX, ref nY))
                     {
-                        if ((m_nCurrX == nX) && (m_nCurrY == nY))
+                        if (m_nCurrX == nX && m_nCurrY == nY)
                         {
                             if (m_Master.GetBackPosition(ref nX, ref nY) && GotoNext(nX, nY, true))
                             {
@@ -1743,7 +1743,7 @@ namespace M2Server
                 {
                     nStep = 1;
                 }
-                if ((Math.Abs(m_nCurrX - nCurrX) > nStep) || (Math.Abs(m_nCurrY - nCurrY) > nStep))
+                if (Math.Abs(m_nCurrX - nCurrX) > nStep || Math.Abs(m_nCurrY - nCurrY) > nStep)
                 {
                     if (GotoNextOne(nCurrX, nCurrY, true))
                     {
@@ -1777,7 +1777,7 @@ namespace M2Server
             bool result = false;
             for (var i = 0; i < m_VisibleActors.Count; i++)
             {
-                if ((m_VisibleActors[i].BaseObject == ActorObject))
+                if (m_VisibleActors[i].BaseObject == ActorObject)
                 {
                     result = true;
                     break;
@@ -1794,11 +1794,11 @@ namespace M2Server
             {
                 if (!M2Share.MagicManager.IsWarrSkill(UserMagic.wMagIdx))
                 {
-                    result = (UserMagic.btKey == 0) || m_boAI;
+                    result = UserMagic.btKey == 0 || m_boAI;
                 }
                 else
                 {
-                    result = (UserMagic.btKey == 0) || m_boAI;
+                    result = UserMagic.btKey == 0 || m_boAI;
                 }
             }
             return result;
@@ -1806,7 +1806,7 @@ namespace M2Server
 
         private bool CheckUserItem(int nItemType, int nCount)
         {
-            return CheckUserItemType(nItemType, nCount) || (GetUserItemList(nItemType, nCount) >= 0);
+            return CheckUserItemType(nItemType, nCount) || GetUserItemList(nItemType, nCount) >= 0;
         }
 
         private bool CheckItemType(int nItemType, MirItem StdItem)
@@ -1815,25 +1815,25 @@ namespace M2Server
             switch (nItemType)
             {
                 case 1:
-                    if ((StdItem.StdMode == 25) && (StdItem.Shape == 1))
+                    if (StdItem.StdMode == 25 && StdItem.Shape == 1)
                     {
                         result = true;
                     }
                     break;
                 case 2:
-                    if ((StdItem.StdMode == 25) && (StdItem.Shape == 2))
+                    if (StdItem.StdMode == 25 && StdItem.Shape == 2)
                     {
                         result = true;
                     }
                     break;
                 case 3:
-                    if ((StdItem.StdMode == 25) && (StdItem.Shape == 3))
+                    if (StdItem.StdMode == 25 && StdItem.Shape == 3)
                     {
                         result = true;
                     }
                     break;
                 case 5:
-                    if ((StdItem.StdMode == 25) && (StdItem.Shape == 5))
+                    if (StdItem.StdMode == 25 && StdItem.Shape == 5)
                     {
                         result = true;
                     }
@@ -1846,7 +1846,8 @@ namespace M2Server
         private bool CheckUserItemType(int nItemType, int nCount)
         {
             bool result = false;
-            if ((m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+            if (m_UseItems[Grobal2.U_ARMRINGL] != null && m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0 &&
+                Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
             {
                 MirItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
@@ -1870,7 +1871,7 @@ namespace M2Server
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    if (CheckItemType(nItemType, StdItem) && (HUtil32.Round(UserItem.Dura / 100) >= nCount))
+                    if (CheckItemType(nItemType, StdItem) && HUtil32.Round(UserItem.Dura / 100) >= nCount)
                     {
                         result = i;
                         break;
@@ -1887,7 +1888,7 @@ namespace M2Server
             TUserItem AddUserItem;
             MirItem StdItem;
             bool result = false;
-            if ((nIndex >= 0) && (nIndex < m_ItemList.Count))
+            if (nIndex >= 0 && nIndex < m_ItemList.Count)
             {
                 UserItem = m_ItemList[nIndex];
                 if (m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
@@ -1946,7 +1947,7 @@ namespace M2Server
                 for (var i = BaseObjectList.Count - 1; i >= 0; i--)
                 {
                     BaseObject = BaseObjectList[i];
-                    if ((BaseObject.m_boHideMode && !m_boCoolEye) || (!IsProperTarget(BaseObject)))
+                    if (BaseObject.m_boHideMode && !m_boCoolEye || !IsProperTarget(BaseObject))
                     {
                         BaseObjectList.RemoveAt(i);
                     }
@@ -1965,7 +1966,7 @@ namespace M2Server
             byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
             while (true)
             {
-                if ((m_TargetCret.m_nCurrX == nX) && (m_TargetCret.m_nCurrY == nY))
+                if (m_TargetCret.m_nCurrX == nX && m_TargetCret.m_nCurrY == nY)
                 {
                     result = true;
                     break;
@@ -1992,7 +1993,7 @@ namespace M2Server
             byte btDir = M2Share.GetNextDirection(nX, nY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
             for (var i = 1; i <= nStep; i++)
             {
-                if ((m_TargetCret.m_nCurrX == nX) && (m_TargetCret.m_nCurrY == nY))
+                if (m_TargetCret.m_nCurrX == nX && m_TargetCret.m_nCurrY == nY)
                 {
                     result = true;
                     break;
@@ -2022,7 +2023,7 @@ namespace M2Server
                 {
                     break;
                 }
-                if ((BaseObject.m_nCurrX == nX) && (BaseObject.m_nCurrY == nY))
+                if (BaseObject.m_nCurrX == nX && BaseObject.m_nCurrY == nY)
                 {
                     result = true;
                     break;
@@ -2043,7 +2044,7 @@ namespace M2Server
                 {
                     break;
                 }
-                if ((BaseObject.m_nCurrX == nX) && (BaseObject.m_nCurrY == nY))
+                if (BaseObject.m_nCurrX == nX && BaseObject.m_nCurrY == nY)
                 {
                     result = true;
                     break;
@@ -2150,11 +2151,11 @@ namespace M2Server
             {
                 return result;
             }
-            if (m_boDeath || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
+            if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result; // 防麻
             }
-            if ((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && !M2Share.g_Config.ClientConf.boParalyCanSpell)
+            if (m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell)
             {
                 return result;// 防麻
             }
@@ -2210,7 +2211,7 @@ namespace M2Server
                     break;
                 case Grobal2.SKILL_MOOTEBO:
                     result = true;
-                    if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3000)
+                    if (HUtil32.GetTickCount() - m_dwDoMotaeboTick > 3000)
                     {
                         m_dwDoMotaeboTick = HUtil32.GetTickCount();
                         if (GetAttackDir(TargeTBaseObject, ref m_btDirection))
@@ -2296,7 +2297,7 @@ namespace M2Server
             {
                 if (BaseObject != null)
                 {
-                    if (BaseObject.m_boGhost || BaseObject.m_boDeath || (BaseObject.m_WAbil.HP <= 0))
+                    if (BaseObject.m_boGhost || BaseObject.m_boDeath || BaseObject.m_WAbil.HP <= 0)
                     {
                         return result;
                     }
@@ -2346,7 +2347,7 @@ namespace M2Server
 
         public bool DoThink_TargetNeedRunPos()
         {
-            return (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_btRaceServer == 108);
+            return m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_btRaceServer == 108;
         }
 
         public bool DoThink_CanRunPos(int nAttackCount)
@@ -2360,7 +2361,7 @@ namespace M2Server
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if ((wMagicID == 27) && (m_Master != null) && (m_TargetCret != null) && AllowUseMagic(27) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (HUtil32.GetTickCount() - m_SkillUseTick[27] > 1000 * 10))
+            if (wMagicID == 27 && m_Master != null && m_TargetCret != null && AllowUseMagic(27) && m_TargetCret.m_Abil.Level < m_Abil.Level && HUtil32.GetTickCount() - m_SkillUseTick[27] > 1000 * 10)
             {
                 btNewDir = M2Share.GetNextDirection(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_Master.m_nCurrX, m_Master.m_nCurrY);
                 if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
@@ -2378,7 +2379,7 @@ namespace M2Server
             byte btNewDir;
             short nTargetX = 0;
             short nTargetY = 0;
-            if ((m_TargetCret != null) && (m_Abil.Level > m_TargetCret.m_Abil.Level) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 1) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 1))
+            if (m_TargetCret != null && m_Abil.Level > m_TargetCret.m_Abil.Level && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 1 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 1)
             {
                 btNewDir = M2Share.GetNextDirection(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_nCurrX, m_nCurrY);
                 if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
@@ -2395,11 +2396,11 @@ namespace M2Server
                 for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
                     ActorObject = m_VisibleActors[i].BaseObject;
-                    if ((Math.Abs(m_nCurrX - ActorObject.m_nCurrX) <= 1) && (Math.Abs(m_nCurrY - ActorObject.m_nCurrY) <= 1))
+                    if (Math.Abs(m_nCurrX - ActorObject.m_nCurrX) <= 1 && Math.Abs(m_nCurrY - ActorObject.m_nCurrY) <= 1)
                     {
-                        if ((!ActorObject.m_boDeath) && (ActorObject != this) && IsProperTarget(ActorObject))
+                        if (!ActorObject.m_boDeath && ActorObject != this && IsProperTarget(ActorObject))
                         {
-                            if ((m_Abil.Level > ActorObject.m_Abil.Level) && (!ActorObject.m_boStickMode))
+                            if (m_Abil.Level > ActorObject.m_Abil.Level && !ActorObject.m_boStickMode)
                             {
                                 btNewDir = M2Share.GetNextDirection(ActorObject.m_nCurrX, ActorObject.m_nCurrY, m_nCurrX, m_nCurrY);
                                 if (m_PEnvir.GetNextPosition(ActorObject.m_nCurrX, ActorObject.m_nCurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
@@ -2437,7 +2438,7 @@ namespace M2Server
                         {
                             nRange = 4;
                         }
-                        if ((wMagicID == 12))
+                        if (wMagicID == 12)
                         {
                             nRange = 2;
                         }
@@ -2450,9 +2451,9 @@ namespace M2Server
                         {
                             result = 0;
                         }
-                        if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2)))
+                        if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2)
                         {
-                            if ((result == 0) && (!(new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))))
+                            if (result == 0 && !new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
                             {
                                 if (DoThink_TargetNeedRunPos())
                                 {
@@ -2469,7 +2470,7 @@ namespace M2Server
                                     }
                                 }
                             }
-                            if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)))
+                            if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)
                             {
                                 result = 2;
                             }
@@ -2477,7 +2478,7 @@ namespace M2Server
                     }
                     break;
                 case 1:
-                    if ((wMagicID == 8) && DoThink_MagPushArround(wMagicID, wMagicID))
+                    if (wMagicID == 8 && DoThink_MagPushArround(wMagicID, wMagicID))
                     {
                         return result;
                     }
@@ -2488,29 +2489,29 @@ namespace M2Server
                         {
                             result = 1;
                         }
-                        else if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)))
+                        else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)
                         {
                             result = 2;
                         }
-                        else if ((new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2 }).Contains(wMagicID)) && (!CanAttack(m_TargetCret, 10, ref btDir)))
+                        else if (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(m_TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }
-                        else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0))
+                        else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0)
                         {
                             result = 5;
                         }
                     }
                     else
                     {
-                        if ((!GetAttackDir(m_TargetCret, 1, ref btDir)))
+                        if (!GetAttackDir(m_TargetCret, 1, ref btDir))
                         {
                             result = 4;
                         }
                     }
                     break;
                 case 2:
-                    if ((wMagicID == 48) && DoThink_MagPushArround(wMagicID, wMagicID))
+                    if (wMagicID == 48 && DoThink_MagPushArround(wMagicID, wMagicID))
                     {
                         return result;
                     }
@@ -2521,22 +2522,22 @@ namespace M2Server
                         {
                             result = 1;
                         }
-                        else if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)))
+                        else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 6 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 6)
                         {
                             result = 2;
                         }
-                        else if ((wMagicID == Grobal2.SKILL_FIRECHARM) && (!CanAttack(m_TargetCret, 10, ref btDir)))
+                        else if (wMagicID == Grobal2.SKILL_FIRECHARM && !CanAttack(m_TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }
-                        else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && (DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0))
+                        else if (DoThink_TargetNeedRunPos() && DoThink_CanRunPos(5) && DoThink_CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 0)
                         {
                             result = 5;
                         }
                     }
                     else
                     {
-                        if ((!GetAttackDir(m_TargetCret, 1, ref btDir)))
+                        if (!GetAttackDir(m_TargetCret, 1, ref btDir))
                         {
                             result = 4;
                         }
@@ -2557,16 +2558,16 @@ namespace M2Server
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if ((WalkStep[i].nWalkStep > 0) && (Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange) && (Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange))
+                if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange && Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange)
                 {
-                    if ((WalkStep[i].nMonCount < n10))
+                    if (WalkStep[i].nMonCount < n10)
                     {
                         n10 = WalkStep[i].nMonCount;
                         MapWalkXY = WalkStep[i];
                     }
                 }
             }
-            if ((MapWalkXY != null) && (m_Master != null))
+            if (MapWalkXY != null && m_Master != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
@@ -2575,9 +2576,9 @@ namespace M2Server
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
-                    if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount) && (Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange) && (Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange))
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange && Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange)
                     {
-                        if ((WalkStep[i].nMastrRange < n10) && (WalkStep[i].nMastrRange < nMastrRange))
+                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange)
                         {
                             n10 = WalkStep[i].nMastrRange;
                             MapWalkXY = WalkStep[i];
@@ -2606,16 +2607,16 @@ namespace M2Server
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if ((WalkStep[i].nWalkStep > 0))
+                if (WalkStep[i].nWalkStep > 0)
                 {
-                    if ((WalkStep[i].nMonCount < n10))
+                    if (WalkStep[i].nMonCount < n10)
                     {
                         n10 = WalkStep[i].nMonCount;
                         MapWalkXY = WalkStep[i];
                     }
                 }
             }
-            if ((MapWalkXY != null) && (m_Master != null))
+            if (MapWalkXY != null && m_Master != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
@@ -2624,9 +2625,9 @@ namespace M2Server
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
-                    if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount))
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount)
                     {
-                        if ((WalkStep[i].nMastrRange < n10) && (WalkStep[i].nMastrRange < nMastrRange))
+                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange)
                         {
                             n10 = WalkStep[i].nMastrRange;
                             MapWalkXY = WalkStep[i];
@@ -2656,10 +2657,10 @@ namespace M2Server
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if ((WalkStep[i].nWalkStep > 0))
+                if (WalkStep[i].nWalkStep > 0)
                 {
                     n1C = Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) + Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY);
-                    if ((n1C < n10))
+                    if (n1C < n10)
                     {
                         n10 = n1C;
                         MapWalkXY = WalkStep[i];
@@ -2673,10 +2674,10 @@ namespace M2Server
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
-                    if ((WalkStep[i].nWalkStep > 0) && (WalkStep[i].nMonCount <= nMonCount))
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount)
                     {
                         n1C = Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) + Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY);
-                        if ((n1C <= n10))
+                        if (n1C <= n10)
                         {
                             n10 = n1C;
                             MapWalkXY = WalkStep[i];
@@ -2895,19 +2896,19 @@ namespace M2Server
             bool result = false;
             try
             {
-                boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (m_btJob == 0);
-                if ((m_btJob == 0) || (wMagicID <= 0))
+                boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || m_btJob == 0;
+                if (m_btJob == 0 || wMagicID <= 0)
                 {
                     nRange = 1;
                     if (wMagicID == 43)
                     {
                         nRange = 4;
                     }
-                    if ((wMagicID == 12))
+                    if (wMagicID == 12)
                     {
                         nRange = 2;
                     }
-                    if ((new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID)))
+                    if (new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
                     {
                         nRange = 6;
                     }
@@ -2916,7 +2917,7 @@ namespace M2Server
                         if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                            if ((MapWalkXY.nWalkStep > 0))
+                            if (MapWalkXY.nWalkStep > 0)
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
                                 if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
@@ -2940,7 +2941,7 @@ namespace M2Server
                             {
                                 MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             }
-                            if ((MapWalkXY.nWalkStep > 0))
+                            if (MapWalkXY.nWalkStep > 0)
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
                                 if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
@@ -2957,19 +2958,19 @@ namespace M2Server
                 {
                     if (wMagicID > 0)
                     {
-                        nRange = HUtil32._MAX((new System.Random(3)).Next(), 2);
+                        nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
                     }
                     else
                     {
                         nRange = 1;
                     }
-                    boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID)) || (nRange == 1);
+                    boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
                     for (var i = 2; i >= 1; i--)
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathA(WalkStep, nRange, 0);
-                            if ((MapWalkXY.nWalkStep > 0))
+                            if (MapWalkXY.nWalkStep > 0)
                             {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                                 {
@@ -2985,7 +2986,7 @@ namespace M2Server
                         if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindMinRange(WalkStep);
-                            if ((MapWalkXY.nWalkStep > 0))
+                            if (MapWalkXY.nWalkStep > 0)
                             {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                                 {
@@ -3001,7 +3002,7 @@ namespace M2Server
                         if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                            if ((MapWalkXY.nWalkStep > 0))
+                            if (MapWalkXY.nWalkStep > 0)
                             {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                                 {
@@ -3028,8 +3029,8 @@ namespace M2Server
             bool boFlag;
             TMapWalkXY[] WalkStep = null;
             bool result = false;
-            int nRange = HUtil32._MAX((new System.Random(3)).Next(), 2);
-            boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
+            int nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
+            boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             TMapWalkXY MapWalkXY;
             for (var i = nRange; i >= 1; i--)
@@ -3037,17 +3038,17 @@ namespace M2Server
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                    if ((MapWalkXY.nWalkStep > 0))
+                    if (MapWalkXY.nWalkStep > 0)
                     {
                         btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, MapWalkXY.nX, MapWalkXY.nY);
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                         {
-                            if ((m_btRaceServer != 108))
+                            if (m_btRaceServer != 108)
                             {
                                 for (var j = nRange; j >= 1; j--)
                                 {
                                     // 再跑1次
-                                    if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
+                                    if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
                                     {
                                         GotoNextOne(nX, nY, m_btRaceServer != 108);
                                         break;
@@ -3066,7 +3067,7 @@ namespace M2Server
                 if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                    if ((MapWalkXY.nWalkStep > 0))
+                    if (MapWalkXY.nWalkStep > 0)
                     {
                         btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, MapWalkXY.nX, MapWalkXY.nY);
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
@@ -3074,7 +3075,7 @@ namespace M2Server
                             for (var j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
-                                if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && (GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount))
+                                if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
                                 {
                                     MapWalkXY.nX = nX;
                                     MapWalkXY.nY = nY;
@@ -3098,13 +3099,13 @@ namespace M2Server
             TMapWalkXY[] WalkStep = null;
             TMapWalkXY MapWalkXY;
             bool result = false;
-            bool boFlag = (m_btRaceServer == 108) || (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID));
+            bool boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
             for (var i = nRange; i >= 1; i--)
             {
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
-                    if ((MapWalkXY.nWalkStep > 0))
+                    if (MapWalkXY.nWalkStep > 0)
                     {
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                         {
@@ -3120,7 +3121,7 @@ namespace M2Server
                 if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                 {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
-                    if ((MapWalkXY.nWalkStep > 0))
+                    if (MapWalkXY.nWalkStep > 0)
                     {
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                         {
@@ -3140,11 +3141,11 @@ namespace M2Server
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if ((m_TargetCret == null) || (m_Master == null))
+            if (m_TargetCret == null || m_Master == null)
             {
                 return result;
             }
-            if ((GetPoseCreate() == m_TargetCret) || (m_TargetCret.GetPoseCreate() == this))
+            if (GetPoseCreate() == m_TargetCret || m_TargetCret.GetPoseCreate() == this)
             {
                 btNewDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
                 if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
@@ -3166,7 +3167,7 @@ namespace M2Server
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && ((boFlag && CanLineAttack(nCurrX, nCurrY)) || !boFlag) && IsGotoXY(m_nCurrX, m_nCurrY, nCurrX, nCurrY))
+            if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(m_nCurrX, m_nCurrY, nCurrX, nCurrY))
             {
                 result = new TMapWalkXY();
                 result.nWalkStep = nRange;
@@ -3260,15 +3261,15 @@ namespace M2Server
             if (m_btJob == 0)
             {
                 nRange = 1;
-                if ((wMagicID == 43))
+                if (wMagicID == 43)
                 {
                     nRange = 2;
                 }
-                if ((wMagicID == 12))
+                if (wMagicID == 12)
                 {
                     nRange = 2;
                 }
-                if ((new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID)))
+                if (new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
                 {
                     nRange = 6;
                 }
@@ -3284,7 +3285,7 @@ namespace M2Server
             }
             nNearTargetCount = GetNearTargetCount(m_nCurrX, m_nCurrY);
             MapWalkXY = null;
-            if ((WalkStep[0].nWalkStep > 0) && (WalkStep[1].nWalkStep > 0))
+            if (WalkStep[0].nWalkStep > 0 && WalkStep[1].nWalkStep > 0)
             {
                 if (m_RunPos.btDirection > 0)
                 {
@@ -3294,42 +3295,42 @@ namespace M2Server
                 {
                     MapWalkXY = WalkStep[0];
                 }
-                if ((nNearTargetCount < WalkStep[0].nMonCount) && (nNearTargetCount < WalkStep[1].nMonCount))
+                if (nNearTargetCount < WalkStep[0].nMonCount && nNearTargetCount < WalkStep[1].nMonCount)
                 {
                     MapWalkXY = null;
                 }
-                else if ((m_RunPos.btDirection > 0) && (nNearTargetCount < WalkStep[1].nMonCount))
+                else if (m_RunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].nMonCount)
                 {
                     MapWalkXY = null;
                 }
-                else if ((m_RunPos.btDirection <= 0) && (nNearTargetCount < WalkStep[0].nMonCount))
+                else if (m_RunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].nMonCount)
                 {
                     MapWalkXY = null;
                 }
-                if ((nNearTargetCount > 0) && (MapWalkXY != null) && (MapWalkXY.nMonCount > nNearTargetCount))
+                if (nNearTargetCount > 0 && MapWalkXY != null && MapWalkXY.nMonCount > nNearTargetCount)
                 {
                     MapWalkXY = null;
                 }
             }
-            else if ((WalkStep[0].nWalkStep > 0))
+            else if (WalkStep[0].nWalkStep > 0)
             {
                 MapWalkXY = WalkStep[0];
-                if ((nNearTargetCount < WalkStep[0].nMonCount))
+                if (nNearTargetCount < WalkStep[0].nMonCount)
                 {
                     MapWalkXY = null;
                 }
                 m_RunPos.btDirection = 0;
             }
-            else if ((WalkStep[1].nWalkStep > 0))
+            else if (WalkStep[1].nWalkStep > 0)
             {
                 MapWalkXY = WalkStep[1];
-                if ((nNearTargetCount < WalkStep[1].nMonCount))
+                if (nNearTargetCount < WalkStep[1].nMonCount)
                 {
                     MapWalkXY = null;
                 }
                 m_RunPos.btDirection = 1;
             }
-            if ((MapWalkXY != null))
+            if (MapWalkXY != null)
             {
                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
                 {
@@ -3352,7 +3353,7 @@ namespace M2Server
             {
                 while (true)
                 {
-                    if ((m_TargetCret == null) || (wMagicID > 255))
+                    if (m_TargetCret == null || wMagicID > 255)
                     {
                         break;
                     }
@@ -3456,26 +3457,26 @@ namespace M2Server
                         result = true;
                     }
                 }
-                if ((m_Master != null) && (m_Master.m_boGhost))
+                if (m_Master != null && m_Master.m_boGhost)
                 {
                     return result;
                 }
-                if ((m_Master != null) && m_Master.InSafeZone() && InSafeZone())
+                if (m_Master != null && m_Master.InSafeZone() && InSafeZone())
                 {
-                    if ((Math.Abs(m_nCurrX - m_Master.m_nCurrX) <= 3) && (Math.Abs(m_nCurrY - m_Master.m_nCurrY) <= 3))
+                    if (Math.Abs(m_nCurrX - m_Master.m_nCurrX) <= 3 && Math.Abs(m_nCurrY - m_Master.m_nCurrY) <= 3)
                     {
                         result = true;
                         return result;
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3000)
+                if (HUtil32.GetTickCount() - m_dwThinkTick > 3000)
                 {
                     m_dwThinkTick = HUtil32.GetTickCount();
                     if (m_PEnvir.GetXYObjCount(m_nCurrX, m_nCurrY) >= 2)
                     {
                         m_boDupMode = true;
                     }
-                    if ((m_TargetCret != null))
+                    if (m_TargetCret != null)
                     {
                         if (!IsProperTarget(m_TargetCret))
                         {
@@ -3487,9 +3488,9 @@ namespace M2Server
                 {
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
-                    WalkTo((byte)(new System.Random(8)).Next(), false);
+                    WalkTo((byte)new System.Random(8).Next(), false);
                     //m_dwStationTick = HUtil32.GetTickCount(); // 增加检测人物站立时间
-                    if ((nOldX != m_nCurrX) || (nOldY != m_nCurrY))
+                    if (nOldX != m_nCurrX || nOldY != m_nCurrY)
                     {
                         m_boDupMode = false;
                         result = true;
@@ -3514,14 +3515,14 @@ namespace M2Server
             bool boFind = false;
             try
             {
-                if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
+                if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
                 {
                     if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
                     {
                         m_dwWalkTick = HUtil32.GetTickCount();
-                        if ((m_TargetCret != null))
+                        if (m_TargetCret != null)
                         {
-                            if (m_TargetCret.m_boDeath || m_TargetCret.m_boGhost || m_TargetCret.InSafeZone() || (m_TargetCret.m_PEnvir != m_PEnvir) || (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) > 11) || (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) > 11))
+                            if (m_TargetCret.m_boDeath || m_TargetCret.m_boGhost || m_TargetCret.InSafeZone() || m_TargetCret.m_PEnvir != m_PEnvir || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) > 11 || Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) > 11)
                             {
                                 DelTargetCreat();
                             }
@@ -3542,27 +3543,27 @@ namespace M2Server
                         }
                         if (m_boProtectStatus) // 守护状态
                         {
-                            if ((m_nProtectTargetX == 0) || (m_nProtectTargetY == 0))// 取守护坐标
+                            if (m_nProtectTargetX == 0 || m_nProtectTargetY == 0)// 取守护坐标
                             {
                                 m_nProtectTargetX = m_nCurrX;// 守护坐标
                                 m_nProtectTargetY = m_nCurrY;// 守护坐标
                             }
-                            if (!m_boProtectOK && (m_ManagedEnvir != null) && (m_TargetCret == null))
+                            if (!m_boProtectOK && m_ManagedEnvir != null && m_TargetCret == null)
                             {
                                 GotoProtect();
                                 m_nGotoProtectXYCount++;
-                                if ((Math.Abs(m_nCurrX - m_nProtectTargetX) <= 3) && (Math.Abs(m_nCurrY - m_nProtectTargetY) <= 3))
+                                if (Math.Abs(m_nCurrX - m_nProtectTargetX) <= 3 && Math.Abs(m_nCurrY - m_nProtectTargetY) <= 3)
                                 {
-                                    m_btDirection = (byte)(new System.Random(8)).Next();
+                                    m_btDirection = (byte)new System.Random(8).Next();
                                     m_boProtectOK = true;
                                     m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
-                                if ((m_nGotoProtectXYCount > 20) && !m_boProtectOK)// 20次还没有走到守护坐标，则飞回坐标上
+                                if (m_nGotoProtectXYCount > 20 && !m_boProtectOK)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
-                                    if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 13) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 13))
+                                    if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 13 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 13)
                                     {
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
-                                        m_btDirection = (byte)(new System.Random(8)).Next();
+                                        m_btDirection = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                     }
@@ -3592,18 +3593,18 @@ namespace M2Server
                                     m_dwActionTick = HUtil32.GetTickCount();
                                     m_nTargetX = m_TargetCret.m_nCurrX;
                                     m_nTargetY = m_TargetCret.m_nCurrY;
-                                    if (AllowUseMagic(12) && (m_btJob == 0))
+                                    if (AllowUseMagic(12) && m_btJob == 0)
                                     {
                                         GetGotoXY(m_TargetCret, 2);
                                     }
-                                    if ((m_btJob > 0))
+                                    if (m_btJob > 0)
                                     {
-                                        if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_btJob == 2) && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)))
+                                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && m_btJob == 2 && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
                                         {
                                             // 道法22前是否物理攻击
                                             if (m_Master != null)
                                             {
-                                                if ((Math.Abs(m_Master.m_nCurrX - m_nCurrX) > 6) || (Math.Abs(m_Master.m_nCurrY - m_nCurrY) > 6))
+                                                if (Math.Abs(m_Master.m_nCurrX - m_nCurrX) > 6 || Math.Abs(m_Master.m_nCurrY - m_nCurrY) > 6)
                                                 {
                                                     base.Run();
                                                     return;
@@ -3626,14 +3627,14 @@ namespace M2Server
                         {
                             if (M2Share.g_Config.boHPAutoMoveMap)
                             {
-                                if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3)) && (HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000)) // 低血时回城或回守护点 
+                                if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
                                     if (m_boProtectStatus) // 守护状态
                                     {
                                         SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
-                                        m_btDirection = (byte)(new System.Random(8)).Next();
+                                        m_btDirection = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
                                     }
@@ -3655,7 +3656,7 @@ namespace M2Server
                                         {
                                             continue;
                                         }
-                                        if ((m_UseItems[nWhere].wIndex <= 0))
+                                        if (m_UseItems[nWhere].wIndex <= 0)
                                         {
                                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
@@ -3666,7 +3667,7 @@ namespace M2Server
                                                     boRecalcAbilitys = true;
                                                     if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                                     {
-                                                        if ((StdItem.Shape == 130) || (StdItem.Shape == 131) || (StdItem.Shape == 132))
+                                                        if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                                         {
                                                             //M2Share.UserEngine.GetUnknowItemValue(UserItem);
                                                         }
@@ -3690,7 +3691,7 @@ namespace M2Server
                                                     if (StdItem != null)
                                                     {
                                                         boFind = false;
-                                                        if ((StdItem.Name).ToLower().CompareTo((m_BagItemNames[i]).ToLower()) == 0)
+                                                        if (StdItem.Name.ToLower().CompareTo(m_BagItemNames[i].ToLower()) == 0)
                                                         {
                                                             boFind = true;
                                                             break;
@@ -3723,7 +3724,7 @@ namespace M2Server
                                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nWhere].wIndex);
                                             if (StdItem != null)
                                             {
-                                                if ((m_UseItems[nWhere].DuraMax > m_UseItems[nWhere].Dura) && (StdItem.StdMode != 43))
+                                                if (m_UseItems[nWhere].DuraMax > m_UseItems[nWhere].Dura && StdItem.StdMode != 43)
                                                 {
                                                     /*if (PlugOfCheckCanItem(3, StdItem.Name, false, 0, 0))
                                                     {
@@ -3776,18 +3777,18 @@ namespace M2Server
                         }
                     }
 
-                    if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && (m_wStatusTimeArr[Grobal2.POISON_STONE] == 0))
+                    if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
                     {
-                        if (m_boProtectStatus && (m_TargetCret == null))// 守护状态
+                        if (m_boProtectStatus && m_TargetCret == null)// 守护状态
                         {
-                            if ((Math.Abs(m_nCurrX - m_nProtectTargetX) > 50) || (Math.Abs(m_nCurrY - m_nProtectTargetY) > 50))
+                            if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 50 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 50)
                             {
                                 m_boProtectOK = false;
                             }
                         }
-                        if ((m_TargetCret == null))
+                        if (m_TargetCret == null)
                         {
-                            if ((m_Master != null))
+                            if (m_Master != null)
                             {
                                 FollowMaster();
                             }
@@ -3826,7 +3827,7 @@ namespace M2Server
                     result = true;
                     if (BaseObject.m_Master != null)
                     {
-                        if ((BaseObject.m_Master == this) || ((BaseObject.m_Master.m_boAI) && !m_boInFreePKArea))
+                        if (BaseObject.m_Master == this || BaseObject.m_Master.m_boAI && !m_boInFreePKArea)
                         {
                             result = false;
                         }
@@ -3887,7 +3888,7 @@ namespace M2Server
                         }
                         if (m_boAI && !result)
                         {
-                            if ((BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))
+                            if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
                             {
                                 if (BaseObject.m_TargetCret != null)
                                 {
@@ -3912,18 +3913,18 @@ namespace M2Server
                                 }
                             }
                         }
-                        if ((BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))// 安全区不能打人物和英雄
+                        if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)// 安全区不能打人物和英雄
                         {
                             if (BaseObject.InSafeZone() || InSafeZone())
                             {
                                 result = false;
                             }
                         }
-                        if ((BaseObject.m_Master == this))
+                        if (BaseObject.m_Master == this)
                         {
                             result = false;
                         }
-                        if (BaseObject.m_boAI && (!m_boInFreePKArea || (BaseObject.PKLevel() < 2)))// 假人不攻击假人,行会战除外
+                        if (BaseObject.m_boAI && (!m_boInFreePKArea || BaseObject.PKLevel() < 2))// 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
@@ -4008,18 +4009,18 @@ namespace M2Server
                 {
                     for (n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && MapCellInfo.ObjList != null)
                         {
                             nIdx = 0;
                             while (true)
                             {
-                                if ((HUtil32.GetTickCount() - dwRunTick) > 500)
+                                if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
                                 }
                                 if (MapCellInfo != null)
                                 {
-                                    if ((MapCellInfo.ObjList != null) && (MapCellInfo.ObjList.Count <= 0))
+                                    if (MapCellInfo.ObjList != null && MapCellInfo.ObjList.Count <= 0)
                                     {
                                         MapCellInfo.ObjList = null;
                                         break;
@@ -4044,12 +4045,12 @@ namespace M2Server
                                 }
                                 if (OSObject != null)
                                 {
-                                    if ((!OSObject.boObjectDisPose))
+                                    if (!OSObject.boObjectDisPose)
                                     {
                                         switch (OSObject.btType)
                                         {
                                             case Grobal2.OS_MOVINGOBJECT:
-                                                if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60000)
+                                                if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60000)
                                                 {
                                                     OSObject.boObjectDisPose = true;
                                                     Dispose(OSObject);
@@ -4066,7 +4067,7 @@ namespace M2Server
                                                 {
                                                     if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                                     {
-                                                        if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                                        if (m_btRaceServer < Grobal2.RC_ANIMAL || m_Master != null || m_boCrazyMode || m_boWantRefMsg || BaseObject.m_Master != null && Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3 || BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                         {
                                                             UpdateVisibleGay(BaseObject);
                                                         }
@@ -4076,11 +4077,11 @@ namespace M2Server
                                             case Grobal2.OS_ITEMOBJECT:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
-                                                    if (((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime))
+                                                    if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
-                                                        if (((TMapItem)(OSObject.CellObj)) != null)
+                                                        if ((TMapItem)OSObject.CellObj != null)
                                                         {
-                                                            Dispose(((TMapItem)(OSObject.CellObj)));
+                                                            Dispose((TMapItem)OSObject.CellObj);
                                                         }
                                                         if (OSObject != null)
                                                         {
@@ -4095,11 +4096,11 @@ namespace M2Server
                                                         }
                                                         continue;
                                                     }
-                                                    MapItem = ((TMapItem)(OSObject.CellObj));
+                                                    MapItem = (TMapItem)OSObject.CellObj;
                                                     UpdateVisibleItem(n18, n1C, MapItem);
-                                                    if ((MapItem.OfBaseObject != null) || (MapItem.DropBaseObject != null))
+                                                    if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                                     {
-                                                        if ((HUtil32.GetTickCount() - MapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)
+                                                        if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
                                                         {
                                                             MapItem.OfBaseObject = null;
                                                             MapItem.DropBaseObject = null;
@@ -4129,7 +4130,7 @@ namespace M2Server
                                                 {
                                                     if (OSObject.CellObj != null)
                                                     {
-                                                        MapEvent = ((TEvent)(OSObject.CellObj));
+                                                        MapEvent = (TEvent)OSObject.CellObj;
                                                         UpdateVisibleEvent(n18, n1C, MapEvent);
                                                     }
                                                 }
@@ -4181,7 +4182,7 @@ namespace M2Server
                                     BaseObject = VisibleBaseObject.BaseObject;
                                     if (BaseObject != null)
                                     {
-                                        if ((!BaseObject.m_boFixedHideMode) && (!BaseObject.m_boGhost))
+                                        if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)
                                         {
                                             SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                                         }
@@ -4194,12 +4195,12 @@ namespace M2Server
                                 }
                                 continue;
                             case 2:
-                                if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject = VisibleBaseObject.BaseObject;
-                                    if ((BaseObject != null))
+                                    if (BaseObject != null)
                                     {
-                                        if ((BaseObject != this) && (!BaseObject.m_boGhost) && !m_boGhost)
+                                        if (BaseObject != this && !BaseObject.m_boGhost && !m_boGhost)
                                         {
                                             if (BaseObject.m_boDeath)
                                             {
@@ -4337,7 +4338,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + (m_nCurrX).ToString() + ',' + (m_nCurrY).ToString() + ',' + " SearchViewRange 3");
+                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX.ToString() + ',' + m_nCurrY.ToString() + ',' + " SearchViewRange 3");
                 KickException();
             }
         }
@@ -4357,7 +4358,7 @@ namespace M2Server
                 if (m_TargetCret != null)
                 {
                     boHit = GetAttackDir(m_TargetCret, ref bt06);
-                    if (!boHit && ((wHitMode == 4) || (wHitMode == 15)))
+                    if (!boHit && (wHitMode == 4 || wHitMode == 15))
                     {
                         boHit = GetAttackDir(m_TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
                     }
@@ -4404,13 +4405,13 @@ namespace M2Server
                 {
                     if (m_TargetCret != null)
                     {
-                        if (((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.25)) || m_TargetCret.m_boCrazyMode))
+                        if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.25) || m_TargetCret.m_boCrazyMode)
                         {
                             // 注释,战不躲避
                             if (AllowUseMagic(12))
                             {
                                 // 血少时或目标疯狂模式时，做隔位刺杀 
-                                if (!(((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))))
+                                if (!(Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))
                                 {
                                     GetGotoXY(m_TargetCret, 2);
                                     GotoTargetXY(m_nTargetX, m_nTargetY, 0);
@@ -4422,9 +4423,9 @@ namespace M2Server
                     if (m_nSelectMagic > 0)
                     {
                         UserMagic = FindMagic(m_nSelectMagic);
-                        if ((UserMagic != null))
+                        if (UserMagic != null)
                         {
-                            if ((UserMagic.btKey == 0))
+                            if (UserMagic.btKey == 0)
                             {
                                 switch (m_nSelectMagic)
                                 {
@@ -4510,9 +4511,9 @@ namespace M2Server
                 }
                 if (m_nSelectMagic > 0)
                 {
-                    if ((m_TargetCret != null))
+                    if (m_TargetCret != null)
                     {
-                        if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
+                        if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)
                         {
                             // 魔法不能打到怪
                             if (m_nSelectMagic != 10)// 除疾光电影外
@@ -4523,9 +4524,9 @@ namespace M2Server
                         }
                     }
                     UserMagic = FindMagic(m_nSelectMagic);
-                    if ((UserMagic != null))
+                    if (UserMagic != null)
                     {
-                        if ((UserMagic.btKey == 0))// 技能打开状态才能使用
+                        if (UserMagic.btKey == 0)// 技能打开状态才能使用
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             return UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret);
@@ -4533,7 +4534,7 @@ namespace M2Server
                     }
                 }
                 m_dwHitTick = HUtil32.GetTickCount();
-                if (M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22))
+                if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22)
                 {
                     m_boIsUseMagic = false;// 是否能躲避
                     result = WarrAttackTarget1(m_wHitMode);
@@ -4559,7 +4560,7 @@ namespace M2Server
                 m_wHitMode = 0;
                 if (m_TargetCret != null)
                 {
-                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 
+                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 
                     {
                         if (m_TargetCret.m_WAbil.MaxHP >= 700)
                         {
@@ -4589,12 +4590,12 @@ namespace M2Server
                 }
                 if (m_nSelectMagic > 0)
                 {
-                    if ((m_TargetCret != null))
+                    if (m_TargetCret != null)
                     {
-                        if ((!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)))
+                        if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)
                         {
                             // 魔法不能打到怪
-                            if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
+                            if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
                             {
                                 if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                 {
@@ -4612,16 +4613,16 @@ namespace M2Server
                     switch (m_nSelectMagic)
                     {
                         case Grobal2.SKILL_HEALLING:// 治愈术 
-                            if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
+                            if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, null);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪
+                                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
                                     {
-                                        if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;
                                             return result;
@@ -4640,16 +4641,16 @@ namespace M2Server
                             }
                             break;
                         case Grobal2.SKILL_BIGHEALLING:// 群体治疗术
-                            if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7)))
+                            if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                     m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
+                                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
                                     {
-                                        if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;// 能躲避
                                             return result;
@@ -4676,11 +4677,11 @@ namespace M2Server
                             break;
                         case Grobal2.SKILL_AMYOUNSUL:
                         case Grobal2.SKILL_GROUPAMYOUNSUL:
-                            if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0))
+                            if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
                             }
-                            else if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0))
+                            else if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
                             {
                                 n_AmuletIndx = 2;
                             }
@@ -4688,11 +4689,11 @@ namespace M2Server
                         case Grobal2.SKILL_CLOAK:
                         case Grobal2.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if ((UserMagic != null) && (UserMagic.btKey == 0))// 技能打开状态才能使用
+                            if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
                             {
                                 UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
                                 m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))// 22级砍血量的怪 
+                                if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
                                 {
                                     if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                     {
@@ -4714,14 +4715,14 @@ namespace M2Server
                         case Grobal2.SKILL_SKELLETON:
                         case Grobal2.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if ((UserMagic != null) && (UserMagic.btKey == 0))
+                            if (UserMagic != null && UserMagic.btKey == 0)
                             {
                                 UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 使用魔法
                                 m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT))
+                                if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
                                 {
                                     // 22级砍血量的怪
-                                    if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                    if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = true; // 能躲避
                                         return result;
@@ -4740,13 +4741,13 @@ namespace M2Server
                             break;
                     }
                     UserMagic = FindMagic(m_nSelectMagic);
-                    if ((UserMagic != null))
+                    if (UserMagic != null)
                     {
-                        if ((UserMagic.btKey == 0))   // 技能打开状态才能使用 
+                        if (UserMagic.btKey == 0)   // 技能打开状态才能使用 
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             result = UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 使用魔法
-                            if ((m_TargetCret.m_WAbil.MaxHP >= 700) || (!M2Share.g_Config.boHeroAttackTao))
+                            if (m_TargetCret.m_WAbil.MaxHP >= 700 || !M2Share.g_Config.boHeroAttackTao)
                             {
                                 return result;
                             }
@@ -4754,16 +4755,16 @@ namespace M2Server
                     }
                 }
                 m_dwHitTick = HUtil32.GetTickCount();
-                if ((m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15)))
+                if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15))
                 {
                     m_boIsUseMagic = true;
                 }
                 // 是否能躲避 
                 // 增加人形条件
-                if ((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || ((m_TargetCret.m_WAbil.MaxHP < 700) && M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)))
+                if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || m_TargetCret.m_WAbil.MaxHP < 700 && M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
-                    if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                    if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                     {
                         // 道走近目标砍 
                         GotoTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 0);
@@ -4784,11 +4785,11 @@ namespace M2Server
             bool result = false;
             try
             {
-                if ((m_TargetCret != null))
+                if (m_TargetCret != null)
                 {
                     if (InSafeZone())// 英雄进入安全区内就不打PK目标
                     {
-                        if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                        if (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             m_TargetCret = null;
                             return result;
@@ -4808,14 +4809,14 @@ namespace M2Server
                 switch (m_btJob)
                 {
                     case 0:
-                        if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWarrorAttackTime))
+                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWarrorAttackTime)
                         {
                             m_boIsUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget1();
                         }
                         break;
                     case 1:
-                        if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWizardAttackTime))// 连击也不受间隔控制
+                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false;// 是否能躲避
@@ -4826,7 +4827,7 @@ namespace M2Server
                         m_nSelectMagic = 0;
                         break;
                     case 2:
-                        if ((HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAITaoistAttackTime))
+                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAITaoistAttackTime)
                         {
                             m_dwHitTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false; // 是否能躲避
@@ -4884,13 +4885,13 @@ namespace M2Server
             bool result = false;
             try
             {
-                if (((HUtil32.GetTickCount() - m_dwAutoAvoidTick) > 1100) && m_boIsUseMagic && !m_boDeath)
+                if (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && m_boIsUseMagic && !m_boDeath)
                 {
                     // 血低于15%时,必定要躲 20080711
-                    if ((m_btJob > 0) && ((m_nSelectMagic == 0) || (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15))))
+                    if (m_btJob > 0 && (m_nSelectMagic == 0 || m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15)))
                     {
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
-                        if (M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) // 22级前道法不躲避
+                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22) // 22级前道法不躲避
                         {
                             if (m_btJob == 1)// 法放魔法后要躲
                             {
@@ -4915,11 +4916,11 @@ namespace M2Server
                                 case 2:
                                     if (m_TargetCret != null)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) // 22级砍血量的怪 20090108
+                                        if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 20090108
                                         {
-                                            if ((m_TargetCret.m_WAbil.MaxHP >= 700))
+                                            if (m_TargetCret.m_WAbil.MaxHP >= 700)
                                             {
-                                                if ((CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0))
+                                                if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
                                                 {
                                                     result = true;
                                                     return result;
@@ -4976,49 +4977,49 @@ namespace M2Server
                                 switch (nDir)
                                 {
                                     case Grobal2.DR_UP:
-                                        if ((Math.Abs(nX - BaseObject.m_nCurrX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
+                                        if (Math.Abs(nX - BaseObject.m_nCurrX) <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_UPRIGHT:
-                                        if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
+                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_RIGHT:
-                                        if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && (Math.Abs(nY - BaseObject.m_nCurrY) <= nRange))
+                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && Math.Abs(nY - BaseObject.m_nCurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWNRIGHT:
-                                        if (((BaseObject.m_nCurrX - nX) >= 0 && (BaseObject.m_nCurrX - nX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
+                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWN:
-                                        if ((Math.Abs(nX - BaseObject.m_nCurrX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
+                                        if (Math.Abs(nX - BaseObject.m_nCurrX) <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWNLEFT:
-                                        if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && ((nY - BaseObject.m_nCurrY) >= 0 && (nY - BaseObject.m_nCurrY) <= nRange))
+                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_LEFT:
-                                        if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && (Math.Abs(nY - BaseObject.m_nCurrY) <= nRange))
+                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && Math.Abs(nY - BaseObject.m_nCurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_UPLEFT:
-                                        if (((nX - BaseObject.m_nCurrX) >= 0 && (nX - BaseObject.m_nCurrX) <= nRange) && ((BaseObject.m_nCurrY - nY) >= 0 && (BaseObject.m_nCurrY - nY) <= nRange))
+                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
@@ -5138,7 +5139,7 @@ namespace M2Server
                 switch (nDir)
                 {
                     case Grobal2.DR_UP:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY -= 2;
                             break;
@@ -5154,7 +5155,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_UPRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY -= 2;
@@ -5172,7 +5173,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_RIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             break;
@@ -5188,7 +5189,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_DOWNRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY += 2;
@@ -5206,7 +5207,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_DOWN:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY += 2;
                             break;
@@ -5222,7 +5223,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_DOWNLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY += 2;
@@ -5240,7 +5241,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_LEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             break;
@@ -5256,7 +5257,7 @@ namespace M2Server
                             continue;
                         }
                     case Grobal2.DR_UPLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && (CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0))
+                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY -= 2;
@@ -5301,7 +5302,7 @@ namespace M2Server
                 }
                 nTargetX = nX;
                 nTargetY = nY;
-                nDir = (byte)(new System.Random(7)).Next();
+                nDir = (byte)new System.Random(7).Next();
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
@@ -5316,7 +5317,7 @@ namespace M2Server
         private bool AutoAvoid()
         {
             bool result = true;
-            if ((m_TargetCret != null) && !m_TargetCret.m_boDeath)
+            if (m_TargetCret != null && !m_TargetCret.m_boDeath)
             {
                 byte nDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
                 nDir = GetBackDir(nDir);
@@ -5334,16 +5335,16 @@ namespace M2Server
         {
             bool result = false;
             long dwAttackTime;
-            if ((m_TargetCret != null) && (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100) && (!m_boIsUseAttackMagic || (m_btJob == 0)))
+            if (m_TargetCret != null && HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && (!m_boIsUseAttackMagic || m_btJob == 0))
             {
                 if (m_btJob > 0)
                 {
-                    if (!m_boIsUseMagic && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 3) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 3)))
+                    if (!m_boIsUseMagic && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 3 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 3))
                     {
                         result = true;
                         return result;
                     }
-                    if (((M2Share.g_Config.boHeroAttackTarget && (m_Abil.Level < 22)) || (M2Share.g_Config.boHeroAttackTao && (m_TargetCret.m_WAbil.MaxHP < 700) && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) && (m_btJob == 2))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)))
+                    if ((M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_WAbil.MaxHP < 700 && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_btJob == 2) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
                     {
                         // 道法22前是否物理攻击 20090210 大于1格时才走向目标
                         result = true;
@@ -5355,12 +5356,12 @@ namespace M2Server
                     switch (m_nSelectMagic)
                     {
                         case Grobal2.SKILL_ERGUM:
-                            if (AllowUseMagic(12) && (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY)))
+                            if (AllowUseMagic(12) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY))
                             {
-                                if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)))
+                                if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed); // 防止负数出错
-                                    if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.g_Config.dwHeroWarrorAttackTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed); // 防止负数出错
+                                    if (HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime)
                                     {
                                         m_wHitMode = 4;
                                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -5373,7 +5374,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                                    if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                                     {
                                         result = true;
                                         return result;
@@ -5383,13 +5384,13 @@ namespace M2Server
                             m_nSelectMagic = 0;
                             if (AllowUseMagic(12))
                             {
-                                if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2))
+                                if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2)
                                 {
                                     result = true;
                                     return result;
                                 }
                             }
-                            else if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                            else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                             {
                                 result = true;
                                 return result;
@@ -5398,10 +5399,10 @@ namespace M2Server
                         case 43:
                             if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
                             {
-                                if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))))
+                                if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);// 防止负数出错
-                                    if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.g_Config.dwHeroWarrorAttackTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);// 防止负数出错
+                                    if (HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime)
                                     {
                                         m_wHitMode = 9;
                                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -5416,13 +5417,13 @@ namespace M2Server
                                 {
                                     if (AllowUseMagic(12))
                                     {
-                                        if (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 2)))
+                                        if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) != 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) != 2)
                                         {
                                             result = true;
                                             return result;
                                         }
                                     }
-                                    else if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                                    else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                                     {
                                         result = true;
                                         return result;
@@ -5432,11 +5433,11 @@ namespace M2Server
                             m_nSelectMagic = 0;
                             if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY))
                             {
-                                if ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0) || (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2) || (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2))
+                                if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, ((int)M2Share.g_Config.dwHeroWarrorAttackTime) - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.g_Config.dwHeroWarrorAttackTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
                                     // 防止负数出错
-                                    if ((HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime))
+                                    if (HUtil32.GetTickCount() - m_dwHitTick > dwAttackTime)
                                     {
                                         m_wHitMode = 9;
                                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -5449,7 +5450,7 @@ namespace M2Server
                                 }
                                 else
                                 {
-                                    if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                                    if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                                     {
                                         result = true;
                                         return result;
@@ -5459,13 +5460,13 @@ namespace M2Server
                             m_nSelectMagic = 0;
                             if (AllowUseMagic(12))
                             {
-                                if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2))
+                                if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2)
                                 {
                                     result = true;
                                     return result;
                                 }
                             }
-                            else if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                            else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                             {
                                 result = true;
                                 return result;
@@ -5474,7 +5475,7 @@ namespace M2Server
                         case 7:
                         case 25:
                         case 26:
-                            if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                            if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                             {
                                 result = true;
                                 m_nSelectMagic = 0;
@@ -5484,18 +5485,18 @@ namespace M2Server
                         default:
                             if (AllowUseMagic(12))
                             {
-                                if (!(((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))))
+                                if (!(Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))
                                 {
                                     result = true;
                                     return result;
                                 }
-                                if (((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2)) || ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)))
+                                if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1)
                                 {
                                     result = true;
                                     return result;
                                 }
                             }
-                            else if ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1))
+                            else if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
                             {
                                 result = true;
                                 return result;
@@ -5516,52 +5517,52 @@ namespace M2Server
             {
                 case 2:
                     // 刺杀位
-                    if ((m_nCurrX - 2 <= BaseObject.m_nCurrX) && (m_nCurrX + 2 >= BaseObject.m_nCurrX) && (m_nCurrY - 2 <= BaseObject.m_nCurrY) && (m_nCurrY + 2 >= BaseObject.m_nCurrY) && ((m_nCurrX != BaseObject.m_nCurrX) || (m_nCurrY != BaseObject.m_nCurrY)))
+                    if (m_nCurrX - 2 <= BaseObject.m_nCurrX && m_nCurrX + 2 >= BaseObject.m_nCurrX && m_nCurrY - 2 <= BaseObject.m_nCurrY && m_nCurrY + 2 >= BaseObject.m_nCurrY && (m_nCurrX != BaseObject.m_nCurrX || m_nCurrY != BaseObject.m_nCurrY))
                     {
                         result = true;
-                        if (((m_nCurrX - 2) == BaseObject.m_nCurrX) && (m_nCurrY == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 2 == BaseObject.m_nCurrX && m_nCurrY == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 2);
                             m_nTargetY = m_nCurrY;
                             return result;
                         }
-                        if (((m_nCurrX + 2) == BaseObject.m_nCurrX) && (m_nCurrY == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 2 == BaseObject.m_nCurrX && m_nCurrY == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 2);
                             m_nTargetY = m_nCurrY;
                             return result;
                         }
-                        if ((m_nCurrX == BaseObject.m_nCurrX) && ((m_nCurrY - 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX == BaseObject.m_nCurrX && m_nCurrY - 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = m_nCurrX;
                             m_nTargetY = (short)(m_nCurrY - 2);
                             return result;
                         }
-                        if ((m_nCurrX == BaseObject.m_nCurrX) && ((m_nCurrY + 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX == BaseObject.m_nCurrX && m_nCurrY + 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = m_nCurrX;
                             m_nTargetY = (short)(m_nCurrY + 2);
                             return result;
                         }
-                        if (((m_nCurrX - 2) == BaseObject.m_nCurrX) && ((m_nCurrY - 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 2 == BaseObject.m_nCurrX && m_nCurrY - 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 2);
                             m_nTargetY = (short)(m_nCurrY - 2);
                             return result;
                         }
-                        if (((m_nCurrX + 2) == BaseObject.m_nCurrX) && ((m_nCurrY - 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 2 == BaseObject.m_nCurrX && m_nCurrY - 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 2);
                             m_nTargetY = (short)(m_nCurrY - 2);
                             return result;
                         }
-                        if (((m_nCurrX - 2) == BaseObject.m_nCurrX) && ((m_nCurrY + 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 2 == BaseObject.m_nCurrX && m_nCurrY + 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 2);
                             m_nTargetY = (short)(m_nCurrY + 2);
                             return result;
                         }
-                        if (((m_nCurrX + 2) == BaseObject.m_nCurrX) && ((m_nCurrY + 2) == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 2 == BaseObject.m_nCurrX && m_nCurrY + 2 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 2);
                             m_nTargetY = (short)(m_nCurrY + 2);
@@ -5572,52 +5573,52 @@ namespace M2Server
                 case 3:
                     // 2
                     // 3格
-                    if ((m_nCurrX - 3 <= BaseObject.m_nCurrX) && (m_nCurrX + 3 >= BaseObject.m_nCurrX) && (m_nCurrY - 3 <= BaseObject.m_nCurrY) && (m_nCurrY + 3 >= BaseObject.m_nCurrY) && ((m_nCurrX != BaseObject.m_nCurrX) || (m_nCurrY != BaseObject.m_nCurrY)))
+                    if (m_nCurrX - 3 <= BaseObject.m_nCurrX && m_nCurrX + 3 >= BaseObject.m_nCurrX && m_nCurrY - 3 <= BaseObject.m_nCurrY && m_nCurrY + 3 >= BaseObject.m_nCurrY && (m_nCurrX != BaseObject.m_nCurrX || m_nCurrY != BaseObject.m_nCurrY))
                     {
                         result = true;
-                        if (((m_nCurrX - 3) == BaseObject.m_nCurrX) && (m_nCurrY == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 3 == BaseObject.m_nCurrX && m_nCurrY == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 3);
                             m_nTargetY = m_nCurrY;
                             return result;
                         }
-                        if (((m_nCurrX + 3) == BaseObject.m_nCurrX) && (m_nCurrY == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 3 == BaseObject.m_nCurrX && m_nCurrY == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 3);
                             m_nTargetY = m_nCurrY;
                             return result;
                         }
-                        if ((m_nCurrX == BaseObject.m_nCurrX) && ((m_nCurrY - 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX == BaseObject.m_nCurrX && m_nCurrY - 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = m_nCurrX;
                             m_nTargetY = (short)(m_nCurrY - 3);
                             return result;
                         }
-                        if ((m_nCurrX == BaseObject.m_nCurrX) && ((m_nCurrY + 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX == BaseObject.m_nCurrX && m_nCurrY + 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = m_nCurrX;
                             m_nTargetY = (short)(m_nCurrY + 3);
                             return result;
                         }
-                        if (((m_nCurrX - 3) == BaseObject.m_nCurrX) && ((m_nCurrY - 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 3 == BaseObject.m_nCurrX && m_nCurrY - 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 3);
                             m_nTargetY = (short)(m_nCurrY - 3);
                             return result;
                         }
-                        if (((m_nCurrX + 3) == BaseObject.m_nCurrX) && ((m_nCurrY - 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 3 == BaseObject.m_nCurrX && m_nCurrY - 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 3);
                             m_nTargetY = (short)(m_nCurrY - 3);
                             return result;
                         }
-                        if (((m_nCurrX - 3) == BaseObject.m_nCurrX) && ((m_nCurrY + 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX - 3 == BaseObject.m_nCurrX && m_nCurrY + 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX - 3);
                             m_nTargetY = (short)(m_nCurrY + 3);
                             return result;
                         }
-                        if (((m_nCurrX + 3) == BaseObject.m_nCurrX) && ((m_nCurrY + 3) == BaseObject.m_nCurrY))
+                        if (m_nCurrX + 3 == BaseObject.m_nCurrX && m_nCurrY + 3 == BaseObject.m_nCurrY)
                         {
                             m_nTargetX = (short)(m_nCurrX + 3);
                             m_nTargetY = (short)(m_nCurrY + 3);
@@ -5640,7 +5641,7 @@ namespace M2Server
             {
                 m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] > 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))// || (m_wStatusArrValue[23] != 0)
+            if (m_wStatusTimeArr[Grobal2.POISON_STONE] > 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell || m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)// || (m_wStatusArrValue[23] != 0)
             {
                 return result; // 麻痹不能跑动 
             }
@@ -5663,7 +5664,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if ((Math.Abs(nTargetX - m_nCurrX) <= 1) && (Math.Abs(nTargetY - m_nCurrY) <= 1))
+                    if (Math.Abs(nTargetX - m_nCurrX) <= 1 && Math.Abs(nTargetY - m_nCurrY) <= 1)
                     {
                         result = true;
                         dwTick5F4 = HUtil32.GetTickCount();
@@ -5685,60 +5686,60 @@ namespace M2Server
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        if ((m_nCurrY > 1) &&
-                          (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                        (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                        (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY - 2, true) > 0))
+                        if (m_nCurrY > 1 &&
+                          (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                        m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
-                          (m_nCurrY > 1) &&
-                          (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                        (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                        (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY - 2, true) > 0))
+                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
+                          m_nCurrY > 1 &&
+                          (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                        (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+                        m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrX += 2;
                             m_nCurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0))
+                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0)
                         {
                             m_nCurrX += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if ((m_nCurrX < m_PEnvir.wWidth - 2) &&
-  (m_nCurrY < m_PEnvir.wHeight - 2) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0))
+                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
+  m_nCurrY < m_PEnvir.wHeight - 2 &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrX += 2;
                             m_nCurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if ((m_nCurrY < m_PEnvir.wHeight - 2) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0))
+                        if (m_nCurrY < m_PEnvir.wHeight - 2 &&
+  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        if ((m_nCurrX > 1) &&
-  (m_nCurrY < m_PEnvir.wHeight - 2) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0))
+                        if (m_nCurrX > 1 &&
+  m_nCurrY < m_PEnvir.wHeight - 2 &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0)
                         {
                             m_nCurrX -= 2;
                             m_nCurrY += 2;
@@ -5746,19 +5747,19 @@ namespace M2Server
 
                         break;
                     case Grobal2.DR_LEFT:
-                        if ((m_nCurrX > 1) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY, true) > 0))
+                        if (m_nCurrX > 1 &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY, true) > 0)
                         {
                             m_nCurrX -= 2;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
-                        if ((m_nCurrX > 1) && (m_nCurrY > 1) &&
- (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-    (m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY - 2, true) > 0))
+                        if (m_nCurrX > 1 && m_nCurrY > 1 &&
+ (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+  (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
+    m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY - 2, true) > 0)
                         {
                             m_nCurrX -= 2;
                             m_nCurrY -= 2;
@@ -5804,11 +5805,11 @@ namespace M2Server
             {
                 m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;// 隐身,一动就显身
             }
-            if (((m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) && (!M2Share.g_Config.ClientConf.boParalyCanSpell)) || (m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0) || (m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0))
+            if (m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanSpell || m_wStatusTimeArr[Grobal2.POISON_DONTMOVE] != 0 || m_wStatusTimeArr[Grobal2.POISON_LOCKSPELL] != 0)
             {
                 return result;// 麻痹不能跑动
             }
-            if ((Math.Abs(nTargetX - m_nCurrX) > 1) || (Math.Abs(nTargetY - m_nCurrY) > 1))
+            if (Math.Abs(nTargetX - m_nCurrX) > 1 || Math.Abs(nTargetY - m_nCurrY) > 1)
             {
                 if (HUtil32.GetTickCount() - dwTick3F4 > m_dwWalkIntervalTime)
                 {
@@ -5856,17 +5857,17 @@ namespace M2Server
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
                     WalkTo(nDir, false);
-                    if ((Math.Abs(nTargetX - m_nCurrX) <= 1) && (Math.Abs(nTargetY - m_nCurrY) <= 1))
+                    if (Math.Abs(nTargetX - m_nCurrX) <= 1 && Math.Abs(nTargetY - m_nCurrY) <= 1)
                     {
                         result = true;
                         dwTick3F4 = HUtil32.GetTickCount();
                     }
                     if (!result)
                     {
-                        n20 = (new System.Random(3)).Next();
+                        n20 = new System.Random(3).Next();
                         for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
-                            if ((nOldX == m_nCurrX) && (nOldY == m_nCurrY))
+                            if (nOldX == m_nCurrX && nOldY == m_nCurrY)
                             {
                                 if (n20 != 0)
                                 {
@@ -5880,12 +5881,12 @@ namespace M2Server
                                 {
                                     nDir = Grobal2.DR_UPLEFT;
                                 }
-                                if ((nDir > Grobal2.DR_UPLEFT))
+                                if (nDir > Grobal2.DR_UPLEFT)
                                 {
                                     nDir = Grobal2.DR_UP;
                                 }
                                 WalkTo(nDir, false);
-                                if ((Math.Abs(nTargetX - m_nCurrX) <= 1) && (Math.Abs(nTargetY - m_nCurrY) <= 1))
+                                if (Math.Abs(nTargetX - m_nCurrX) <= 1 && Math.Abs(nTargetY - m_nCurrY) <= 1)
                                 {
                                     result = true;
                                     dwTick3F4 = HUtil32.GetTickCount();
@@ -5906,7 +5907,7 @@ namespace M2Server
             switch (nCode)
             {
                 case 0:// 正常模式
-                    if ((Math.Abs(m_nCurrX - nTargetX) > 2) || (Math.Abs(m_nCurrY - nTargetY) > 2))
+                    if (Math.Abs(m_nCurrX - nTargetX) > 2 || Math.Abs(m_nCurrY - nTargetY) > 2)
                     {
                         if (m_wStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
@@ -5923,7 +5924,7 @@ namespace M2Server
                     }
                     break;
                 case 1:// 躲避模式
-                    if ((Math.Abs(m_nCurrX - nTargetX) > 1) || (Math.Abs(m_nCurrY - nTargetY) > 1))
+                    if (Math.Abs(m_nCurrX - nTargetX) > 1 || Math.Abs(m_nCurrY - nTargetY) > 1)
                     {
                         if (m_wStatusTimeArr[Grobal2.STATE_LOCKRUN] == 0)
                         {
@@ -5970,16 +5971,16 @@ namespace M2Server
             switch (m_btJob)
             {
                 case 0:
-                    if (AllowUseMagic(26) && ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 9000))// 烈火
+                    if (AllowUseMagic(26) && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000)// 烈火
                     {
                         m_boFireHitSkill = true;
                         result = 26;
                         return result;
                     }
-                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level))
+                    if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && m_TargetCret.m_Abil.Level < m_Abil.Level)
                     {
                         // PK时,使用野蛮冲撞  20080826 血低于800时使用
-                        if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000)
                         {
                             // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
@@ -5990,36 +5991,36 @@ namespace M2Server
                     else
                     {
                         // 打怪使用 
-                        if (AllowUseMagic(27) && ((HUtil32.GetTickCount() - m_SkillUseTick[27]) > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.85)))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 10000 && m_TargetCret.m_Abil.Level < m_Abil.Level && m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.85))
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
                     }
-                    if ((m_TargetCret.m_Master != null))
+                    if (m_TargetCret.m_Master != null)
                     {
                         m_ExpHitter = m_TargetCret.m_Master;
                     }
                     if (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1)
                     {
-                        switch ((new System.Random(3)).Next())
+                        switch (new System.Random(3).Next())
                         {
                             case 0:// 被怪物包围
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && m_TargetCret.m_Abil.Level < m_Abil.Level && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boGroupMbAttackPlayObject) && Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术 
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - m_SkillUseTick[7] > 10000)// 攻杀剑术 
                                 {
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;// 开启攻杀
                                     result = 7;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000)
                                 {
                                     m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
                                     result = 39;
@@ -6057,20 +6058,20 @@ namespace M2Server
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && m_TargetCret.m_Abil.Level < m_Abil.Level && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boGroupMbAttackPlayObject) && Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术 
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - m_SkillUseTick[7] > 10000)// 攻杀剑术 
                                 {
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;
                                     result = 7;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000)
                                 {
                                     m_SkillUseTick[39] = HUtil32.GetTickCount(); // 英雄彻地钉
                                     result = 39;
@@ -6108,19 +6109,19 @@ namespace M2Server
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && m_TargetCret.m_Abil.Level < m_Abil.Level && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boGroupMbAttackPlayObject) && Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3)
                                 {
                                     m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000))
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000)
                                 {
                                     m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))// 攻杀剑术
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - m_SkillUseTick[7] > 10000)// 攻杀剑术
                                 {
                                     m_SkillUseTick[7] = HUtil32.GetTickCount();
                                     m_boPowerHit = true;//  开启攻杀
@@ -6163,10 +6164,10 @@ namespace M2Server
                     }
                     else
                     {
-                        if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1))
+                        if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1)
                         {
                             // PK  身边超过2个目标才使用
-                            if (AllowUseMagic(40) && (HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000))
+                            if (AllowUseMagic(40) && HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000)
                             {
                                 // 英雄抱月刀法
                                 m_SkillUseTick[40] = HUtil32.GetTickCount();
@@ -6177,7 +6178,7 @@ namespace M2Server
                                 result = 40;
                                 return result;
                             }
-                            if ((HUtil32.GetTickCount() - m_SkillUseTick[25] > 1500))
+                            if (HUtil32.GetTickCount() - m_SkillUseTick[25] > 1500)
                             {
                                 if (AllowUseMagic(Grobal2.SKILL_BANWOL))
                                 {
@@ -6197,7 +6198,7 @@ namespace M2Server
                         }
                         // 20071213增加 少于三个怪用 刺杀剑术
                         // 10 * 1000
-                        if (AllowUseMagic(7) && ((HUtil32.GetTickCount() - m_SkillUseTick[7]) > 10000))
+                        if (AllowUseMagic(7) && HUtil32.GetTickCount() - m_SkillUseTick[7] > 10000)
                         {
                             // 攻杀剑术
                             m_SkillUseTick[7] = HUtil32.GetTickCount();
@@ -6205,7 +6206,7 @@ namespace M2Server
                             result = 7;
                             return result;
                         }
-                        if ((HUtil32.GetTickCount() - m_SkillUseTick[12] > 1000))
+                        if (HUtil32.GetTickCount() - m_SkillUseTick[12] > 1000)
                         {
                             if (AllowUseMagic(12))
                             {
@@ -6221,14 +6222,14 @@ namespace M2Server
                         }
                     }
                     // 从高到低使用魔法
-                    if (AllowUseMagic(26) && (HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000))
+                    if (AllowUseMagic(26) && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 9000)
                     {
                         // 烈火
                         m_boFireHitSkill = true;
                         result = 26;
                         return result;
                     }
-                    if (AllowUseMagic(40) && (HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000) && (CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1))
+                    if (AllowUseMagic(40) && HUtil32.GetTickCount() - m_SkillUseTick[40] > 3000 && CheckTargetXYCount1(m_nCurrX, m_nCurrY, 1) > 1)
                     {
                         // 英雄抱月刀法
                         if (!m_boCrsHitkill)
@@ -6239,13 +6240,13 @@ namespace M2Server
                         result = 40;
                         return result;
                     }
-                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - m_SkillUseTick[39] > 3000)) // 英雄彻地钉
+                    if (AllowUseMagic(39) && HUtil32.GetTickCount() - m_SkillUseTick[39] > 3000) // 英雄彻地钉
                     {
                         m_SkillUseTick[39] = HUtil32.GetTickCount();
                         result = 39;
                         return result;
                     }
-                    if ((HUtil32.GetTickCount() - m_SkillUseTick[25] > 3000))
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[25] > 3000)
                     {
                         if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
                         {
@@ -6258,7 +6259,7 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - m_SkillUseTick[12] > 3000))
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[12] > 3000)
                     {
                         if (AllowUseMagic(12))// 英雄刺杀剑术
                         {
@@ -6271,7 +6272,7 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (AllowUseMagic(7) && (HUtil32.GetTickCount() - m_SkillUseTick[7] > 3000))
+                    if (AllowUseMagic(7) && HUtil32.GetTickCount() - m_SkillUseTick[7] > 3000)
                     {
                         // 攻杀剑术
                         m_boPowerHit = true;
@@ -6279,10 +6280,10 @@ namespace M2Server
                         result = 7;
                         return result;
                     }
-                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6)))
+                    if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && m_TargetCret.m_Abil.Level < m_Abil.Level && m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6))
                     {
                         // PK时,使用野蛮冲撞
-                        if (AllowUseMagic(27) && (HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
@@ -6291,14 +6292,14 @@ namespace M2Server
                     }
                     else
                     {
-                        if (AllowUseMagic(27) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6)) && (HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000))
+                        if (AllowUseMagic(27) && m_TargetCret.m_Abil.Level < m_Abil.Level && m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.6) && HUtil32.GetTickCount() - m_SkillUseTick[27] > 3000)
                         {
                             m_SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
                     }
-                    if (AllowUseMagic(41) && (HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000) && (m_TargetCret.m_Abil.Level < m_Abil.Level) && (((m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)) || M2Share.g_Config.boGroupMbAttackPlayObject) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3))
+                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - m_SkillUseTick[41] > 10000 && m_TargetCret.m_Abil.Level < m_Abil.Level && (m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boGroupMbAttackPlayObject) && Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) <= 3 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) <= 3)
                     {
                         m_SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                         result = 41;
@@ -6306,7 +6307,7 @@ namespace M2Server
                     }
                     break;
                 case 1: // 法师
-                    if ((m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence) // 使用 魔法盾
+                    if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !m_boAbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
@@ -6319,10 +6320,10 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level))
+                    if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0 && m_TargetCret.m_WAbil.Level < m_WAbil.Level)
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
-                        if (AllowUseMagic(8) && ((HUtil32.GetTickCount() - m_SkillUseTick[8]) > 3000))
+                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000)
                         {
                             m_SkillUseTick[8] = HUtil32.GetTickCount();
                             result = 8;
@@ -6332,22 +6333,22 @@ namespace M2Server
                     else
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 抗拒火环
-                        if (AllowUseMagic(8) && ((HUtil32.GetTickCount() - m_SkillUseTick[8]) > 3000) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level))
+                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - m_SkillUseTick[8] > 3000 && CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0 && m_TargetCret.m_WAbil.Level < m_WAbil.Level)
                         {
                             m_SkillUseTick[8] = HUtil32.GetTickCount();
                             result = 8;
                             return result;
                         }
                     }
-                    if (AllowUseMagic(45) && (HUtil32.GetTickCount() - m_SkillUseTick[45] > 3000))
+                    if (AllowUseMagic(45) && HUtil32.GetTickCount() - m_SkillUseTick[45] > 3000)
                     {
                         m_SkillUseTick[45] = HUtil32.GetTickCount();
                         result = 45;// 英雄灭天火
                         return result;
                     }
-                    if ((HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY))
                     {
-                        if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (GetDirBaseObjectsCount(m_btDirection, 5) > 0) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
+                        if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && GetDirBaseObjectsCount(m_btDirection, 5) > 0 && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))
                         {
                             if (AllowUseMagic(10))
                             {
@@ -6362,7 +6363,7 @@ namespace M2Server
                                 return result;
                             }
                         }
-                        else if ((GetDirBaseObjectsCount(m_btDirection, 5) > 1) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
+                        else if (GetDirBaseObjectsCount(m_btDirection, 5) > 1 && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))
                         {
                             if (AllowUseMagic(10))
                             {
@@ -6378,7 +6379,7 @@ namespace M2Server
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && (HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
+                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - m_SkillUseTick[32] > 10000 && m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel && m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD && m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1)
                     {
                         // 目标为不死系
                         m_SkillUseTick[32] = HUtil32.GetTickCount();
@@ -6388,9 +6389,9 @@ namespace M2Server
                     if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 1)
                     {
                         // 被怪物包围
-                        if (AllowUseMagic(22) && (HUtil32.GetTickCount() - m_SkillUseTick[22] > 10000))
+                        if (AllowUseMagic(22) && HUtil32.GetTickCount() - m_SkillUseTick[22] > 10000)
                         {
-                            if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))
+                            if (m_TargetCret.m_btRaceServer != 101 && m_TargetCret.m_btRaceServer != 102 && m_TargetCret.m_btRaceServer != 104)
                             {
                                 // 除祖玛怪,才放火墙
                                 m_SkillUseTick[22] = HUtil32.GetTickCount();
@@ -6403,7 +6404,7 @@ namespace M2Server
                         if (new ArrayList(new int[] { 91, 92, 97, 101, 102, 104 }).Contains(m_TargetCret.m_btRaceServer))
                         {
                             // 1000 * 4
-                            if (AllowUseMagic(24) && (HUtil32.GetTickCount() - m_SkillUseTick[24] > 4000) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                            if (AllowUseMagic(24) && HUtil32.GetTickCount() - m_SkillUseTick[24] > 4000 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                             {
                                 m_SkillUseTick[24] = HUtil32.GetTickCount();
                                 result = 24;// 地狱雷光
@@ -6419,12 +6420,12 @@ namespace M2Server
                                 result = 11;// 英雄雷电术
                                 return result;
                             }
-                            else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 2) > 2))
+                            else if (AllowUseMagic(33) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 2) > 2)
                             {
                                 result = 33;// 英雄冰咆哮
                                 return result;
                             }
-                            else if ((HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                            else if (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                             {
                                 if (AllowUseMagic(92))
                                 {
@@ -6440,29 +6441,29 @@ namespace M2Server
                                 }
                             }
                         }
-                        switch ((new System.Random(4)).Next())
+                        switch (new System.Random(4).Next())
                         {
                             case 0:
                                 // 随机选择魔法
                                 // 火球术,大火球,雷电术,爆裂火焰,英雄冰咆哮,流星火雨 从高到低选择
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                if (AllowUseMagic(92) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                else if (AllowUseMagic(58) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(33) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     result = 33;// 英雄冰咆哮
                                     return result;
                                 }
-                                else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(23) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     result = 23;// 爆裂火焰
                                     return result;
@@ -6519,25 +6520,25 @@ namespace M2Server
                                     result = 44;// 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                if (AllowUseMagic(92) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                else if (AllowUseMagic(58) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(33) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰,冰咆哮  从高到低选择
                                     result = 33;// 冰咆哮
                                     return result;
                                 }
-                                else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(23) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     result = 23;// 爆裂火焰
                                     return result;
@@ -6574,25 +6575,25 @@ namespace M2Server
                                     result = 44;// 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                if (AllowUseMagic(92) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                else if (AllowUseMagic(58) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(33) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                     result = 33;
                                     return result;
                                 }
-                                else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(23) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     result = 23;// 爆裂火焰
                                     return result;
@@ -6630,27 +6631,27 @@ namespace M2Server
                                     // 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                if (AllowUseMagic(92) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;
                                     // 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                                else if (AllowUseMagic(58) && HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                                 {
                                     m_SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;
                                     // 流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(33) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(33) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                     result = 33;
                                     return result;
                                 }
-                                else if (AllowUseMagic(23) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1))
+                                else if (AllowUseMagic(23) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 1)
                                 {
                                     result = 23;// 爆裂火焰
                                     return result;
@@ -6691,9 +6692,9 @@ namespace M2Server
                     else
                     {
                         // 只有一个怪时所用的魔法
-                        if (AllowUseMagic(22) && (HUtil32.GetTickCount() - m_SkillUseTick[22] > 10000))
+                        if (AllowUseMagic(22) && HUtil32.GetTickCount() - m_SkillUseTick[22] > 10000)
                         {
-                            if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))
+                            if (m_TargetCret.m_btRaceServer != 101 && m_TargetCret.m_btRaceServer != 102 && m_TargetCret.m_btRaceServer != 104)
                             {
                                 // 除祖玛怪,才放火墙
                                 m_SkillUseTick[22] = HUtil32.GetTickCount();
@@ -6701,7 +6702,7 @@ namespace M2Server
                                 return result;
                             }
                         }
-                        switch ((new System.Random(4)).Next())
+                        switch (new System.Random(4).Next())
                         {
                             case 0:// 随机选择魔法
                                 if (AllowUseMagic(91))
@@ -6894,7 +6895,7 @@ namespace M2Server
                         }
                     }
                     // 从高到低使用魔法 20080710
-                    if ((HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500))
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[58] > 1500)
                     {
                         if (AllowUseMagic(92))// 四级流星火雨
                         {
@@ -6938,13 +6939,13 @@ namespace M2Server
                         result = 33;
                         return result;
                     }
-                    if (AllowUseMagic(32) && (m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel) && (m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD) && (m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1))
+                    if (AllowUseMagic(32) && m_TargetCret.m_Abil.Level < M2Share.g_Config.nMagTurnUndeadLevel && m_TargetCret.m_btLifeAttrib == Grobal2.LA_UNDEAD && m_TargetCret.m_WAbil.Level < m_WAbil.Level - 1)
                     {
                         // 目标为不死系
                         result = 32;// 圣言术
                         return result;
                     }
-                    if (AllowUseMagic(24) && (CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2))
+                    if (AllowUseMagic(24) && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
                     {
                         result = 24;// 地狱雷光
                         return result;
@@ -6964,12 +6965,12 @@ namespace M2Server
                         result = 11;// 英雄雷电术
                         return result;
                     }
-                    if (AllowUseMagic(10) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
+                    if (AllowUseMagic(10) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))
                     {
                         result = 10; // 英雄疾光电影
                         return result;
                     }
-                    if (AllowUseMagic(9) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)) || (((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3)) || ((Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4) && (Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4)))))
+                    if (AllowUseMagic(9) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 5, ref m_nTargetX, ref m_nTargetY) && (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 3 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 3 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 4))
                     {
                         result = 9; // 地狱火
                         return result;
@@ -6986,7 +6987,7 @@ namespace M2Server
                     }
                     if (AllowUseMagic(22))
                     {
-                        if ((m_TargetCret.m_btRaceServer != 101) && (m_TargetCret.m_btRaceServer != 102) && (m_TargetCret.m_btRaceServer != 104))// 除祖玛怪,才放火墙
+                        if (m_TargetCret.m_btRaceServer != 101 && m_TargetCret.m_btRaceServer != 102 && m_TargetCret.m_btRaceServer != 104)// 除祖玛怪,才放火墙
                         {
                             result = 22;// 火墙
                             return result;
@@ -6994,7 +6995,7 @@ namespace M2Server
                     }
                     break;
                 case 2:// 道士
-                    if ((m_SlaveList.Count == 0) && CheckHeroAmulet(1, 5) && (HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000) && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && (m_WAbil.MP > 20))
+                    if (m_SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - m_SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && m_WAbil.MP > 20)
                     {
                         m_SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
                         if (AllowUseMagic(104)) // 召唤火灵
@@ -7015,7 +7016,7 @@ namespace M2Server
                         }
                         return result;
                     }
-                    if ((m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0) && !m_boAbilMagBubbleDefence)
+                    if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] == 0 && !m_boAbilMagBubbleDefence)
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
@@ -7023,11 +7024,11 @@ namespace M2Server
                             return result;
                         }
                     }
-                    if (((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_TargetCret.m_Master != null)) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level <= m_WAbil.Level))
+                    if ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT || m_TargetCret.m_Master != null) && CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0 && m_TargetCret.m_WAbil.Level <= m_WAbil.Level)
                     {
                         // PK时,旁边有人贴身,使用气功波
                         // 3 * 1000
-                        if (AllowUseMagic(48) && ((HUtil32.GetTickCount() - m_SkillUseTick[48]) > 3000))
+                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 3000)
                         {
                             m_SkillUseTick[48] = HUtil32.GetTickCount();
                             result = 48;
@@ -7038,7 +7039,7 @@ namespace M2Server
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 气功波
                         // 20090108 由3秒改到5秒
-                        if (AllowUseMagic(48) && ((HUtil32.GetTickCount() - m_SkillUseTick[48]) > 5000) && (CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0) && (m_TargetCret.m_WAbil.Level <= m_WAbil.Level))
+                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - m_SkillUseTick[48] > 5000 && CheckTargetXYCount3(m_nCurrX, m_nCurrY, 1, 0) > 0 && m_TargetCret.m_WAbil.Level <= m_WAbil.Level)
                         {
                             m_SkillUseTick[48] = HUtil32.GetTickCount();
                             result = 48;
@@ -7046,14 +7047,14 @@ namespace M2Server
                         }
                     }
                     // 绿毒
-                    if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0) && (GetUserItemList(2, 1) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) && !new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
                         // 对于血量超过800的怪用  修改距离 20080704 不毒城墙
                         n_AmuletIndx = 0;
-                        switch ((new System.Random(2)).Next())
+                        switch (new System.Random(2).Next())
                         {
                             case 0:
-                                if (AllowUseMagic(38) && (HUtil32.GetTickCount() - m_SkillUseTick[38] > 1000))
+                                if (AllowUseMagic(38) && HUtil32.GetTickCount() - m_SkillUseTick[38] > 1000)
                                 {
                                     if (m_PEnvir != null)// 判断地图是否禁用
                                     {
@@ -7065,7 +7066,7 @@ namespace M2Server
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
+                                else if (HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000)
                                 {
                                     if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
@@ -7083,7 +7084,7 @@ namespace M2Server
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
+                                if (HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000)
                                 {
                                     if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
@@ -7102,14 +7103,14 @@ namespace M2Server
                                 break;
                         }
                     }
-                    if ((m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0) && (GetUserItemList(2, 2) >= 0) && ((M2Share.g_Config.btHeroSkillMode) || (!M2Share.g_Config.btHeroSkillMode && (m_TargetCret.m_Abil.HP >= 700)) || ((m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT))) && ((Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)) && (!(new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))))
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) && !new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
                         // 对于血量超过100的怪用 不毒城墙
                         n_AmuletIndx = 0;
-                        switch ((new System.Random(2)).Next())
+                        switch (new System.Random(2).Next())
                         {
                             case 0:
-                                if (AllowUseMagic(38) && (HUtil32.GetTickCount() - m_SkillUseTick[38] > 1000))
+                                if (AllowUseMagic(38) && HUtil32.GetTickCount() - m_SkillUseTick[38] > 1000)
                                 {
                                     if (m_PEnvir != null)
                                     {
@@ -7122,7 +7123,7 @@ namespace M2Server
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
+                                else if (HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000)
                                 {
                                     if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
@@ -7140,7 +7141,7 @@ namespace M2Server
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000))
+                                if (HUtil32.GetTickCount() - m_SkillUseTick[6] > 1000)
                                 {
                                     if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
                                     {
@@ -7159,7 +7160,7 @@ namespace M2Server
                                 break;
                         }
                     }
-                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - m_SkillUseTick[51] > 5000))// 英雄飓风破 
+                    if (AllowUseMagic(51) && HUtil32.GetTickCount() - m_SkillUseTick[51] > 5000)// 英雄飓风破 
                     {
                         m_SkillUseTick[51] = HUtil32.GetTickCount();
                         result = 51;
@@ -7167,7 +7168,7 @@ namespace M2Server
                     }
                     if (CheckHeroAmulet(1, 1))
                     {
-                        switch ((new System.Random(3)).Next())
+                        switch (new System.Random(3).Next())
                         {
                             case 0: // 使用符的魔法
                                 if (AllowUseMagic(94))
@@ -7180,20 +7181,20 @@ namespace M2Server
                                     result = 59; // 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
+                                if (AllowUseMagic(13) && HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)) // 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0) // 诅咒术
                                 {
                                     result = 52;// 英雄诅咒术
                                     return result;
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)) // 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0) // 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -7208,7 +7209,7 @@ namespace M2Server
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
+                                if (AllowUseMagic(13) && HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
@@ -7216,7 +7217,7 @@ namespace M2Server
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000))
+                                if (AllowUseMagic(13) && HUtil32.GetTickCount() - m_SkillUseTick[13] > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
@@ -7232,7 +7233,7 @@ namespace M2Server
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))// 诅咒术
+                                if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)// 诅咒术
                                 {
                                     result = 52;
                                     return result;
@@ -7270,7 +7271,7 @@ namespace M2Server
                             result = 13;
                             return result;
                         }
-                        if (AllowUseMagic(52) && (m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0))// 诅咒术
+                        if (AllowUseMagic(52) && m_TargetCret.m_wStatusArrValue[m_TargetCret.m_btJob + 6] == 0)// 诅咒术
                         {
                             result = 52;
                             return result;
@@ -7298,7 +7299,7 @@ namespace M2Server
                         {
                             if (IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || m_boCoolEye))
                             {
-                                if ((Math.Abs(nX - BaseObject.m_nCurrX) <= n10) && (Math.Abs(nY - BaseObject.m_nCurrY) <= n10))
+                                if (Math.Abs(nX - BaseObject.m_nCurrX) <= n10 && Math.Abs(nY - BaseObject.m_nCurrY) <= n10)
                                 {
                                     result++;
                                 }
@@ -7382,7 +7383,7 @@ namespace M2Server
                         {
                             if (IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || m_boCoolEye))
                             {
-                                if ((Math.Abs(nX - BaseObject.m_nCurrX) <= n10) && (Math.Abs(nY - BaseObject.m_nCurrY) <= n10))
+                                if (Math.Abs(nX - BaseObject.m_nCurrX) <= n10 && Math.Abs(nY - BaseObject.m_nCurrY) <= n10)
                                 {
                                     result++;
                                     if (result > nCount)
@@ -7411,21 +7412,21 @@ namespace M2Server
                 if (m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
                 {
                     AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
-                    if ((AmuletStdItem != null))
+                    if (AmuletStdItem != null)
                     {
-                        if ((AmuletStdItem.StdMode == 25))
+                        if (AmuletStdItem.StdMode == 25)
                         {
                             switch (nType)
                             {
                                 case 1:
-                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2:
-                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount))
+                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
                                     {
                                         result = true;
                                         return result;
@@ -7440,19 +7441,19 @@ namespace M2Server
                     AmuletStdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_BUJUK].wIndex);
                     if (AmuletStdItem != null)
                     {
-                        if ((AmuletStdItem.StdMode == 25))
+                        if (AmuletStdItem.StdMode == 25)
                         {
                             switch (nType)
                             {
                                 case 1: // 符
-                                    if ((AmuletStdItem.Shape == 5) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount))
+                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount)
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2: // 毒
-                                    if ((AmuletStdItem.Shape <= 2) && (Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount))
+                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount)
                                     {
                                         result = true;
                                         return result;
@@ -7479,14 +7480,14 @@ namespace M2Server
                                     switch (nType)
                                     {
                                         case 1:
-                                            if ((AmuletStdItem.Shape == 5) && (HUtil32.Round(UserItem.Dura / 100) >= nCount))
+                                            if (AmuletStdItem.Shape == 5 && HUtil32.Round(UserItem.Dura / 100) >= nCount)
                                             {
                                                 result = true;
                                                 return result;
                                             }
                                             break;
                                         case 2:
-                                            if ((AmuletStdItem.Shape <= 2) && (HUtil32.Round(UserItem.Dura / 100) >= nCount))
+                                            if (AmuletStdItem.Shape <= 2 && HUtil32.Round(UserItem.Dura / 100) >= nCount)
                                             {
                                                 result = true;
                                                 return result;

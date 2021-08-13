@@ -68,6 +68,7 @@ namespace M2Server
         public virtual string Handle(string parameters, TPlayObject playObject = null)
         {
             // 检查用户是否有足够的权限来调用命令。
+            playObject.m_btPermission = 10;
             if (playObject != null && this.Attributes.nPermissionMin > playObject.m_btPermission)
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足

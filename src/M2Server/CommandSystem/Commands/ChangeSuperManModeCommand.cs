@@ -15,14 +15,14 @@ namespace M2Server
         {
             var nPermission = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var sParam1 = @Params.Length > 1 ? @Params[1] : "";
-            var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
+            var boFlag = @Params.Length > 2 && bool.Parse(@Params[2]);
 
             if (PlayObject.m_btPermission < nPermission)
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sParam1 != "" && sParam1[0] == '?')
+            if (!string.IsNullOrEmpty(sParam1) && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

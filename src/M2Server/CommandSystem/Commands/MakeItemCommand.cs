@@ -33,8 +33,7 @@ namespace M2Server
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandMakeItemNameOrPerMissionNot, TMsgColor.c_Red,
-                        TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sGamecommandMakeItemNameOrPerMissionNot, TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
 
@@ -52,10 +51,10 @@ namespace M2Server
 
                 nCount = 1;
             }
-            TUserItem UserItem = null;
             for (var i = 0; i < nCount; i++)
             {
                 if (PlayObject.m_ItemList.Count >= Grobal2.MAXBAGITEM) return;
+                TUserItem UserItem = null;
                 if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -97,10 +96,12 @@ namespace M2Server
                 else
                 {
                     UserItem = null;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName),
-                        TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName), TMsgColor.c_Red, TMsgType.t_Hint);
                     break;
                 }
+                
+                PlayObject.SysMsg( PlayObject.m_ItemList.Count.ToString(),
+                    TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

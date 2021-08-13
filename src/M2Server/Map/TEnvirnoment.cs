@@ -49,6 +49,14 @@ namespace M2Server
             return true;
         }
 
+        /// <summary>
+        /// 添加对象到地图
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <param name="btType"></param>
+        /// <param name="pRemoveObject"></param>
+        /// <returns></returns>
         public object AddToMap(int nX, int nY, byte btType, object pRemoveObject)
         {
             object result = null;

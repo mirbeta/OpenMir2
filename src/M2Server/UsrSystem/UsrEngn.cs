@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using SystemModule;
+using SystemModule.Common;
 using SystemModule.Packages;
 
 namespace M2Server
@@ -45,7 +46,8 @@ namespace M2Server
         private int m_nProcHumIDx;
         private IList<TPlayObject> m_PlayObjectFreeList;
         private Dictionary<string,ServerGruopInfo> m_OtherUserNameList;
-        private List<TPlayObject> m_PlayObjectList;
+        private IList<TPlayObject> m_PlayObjectList;
+        private IList<TPlayObject> m_AiPlayObjectList;
         public IList<TMonInfo> MonsterList;
         private int nMerchantPosition;
         /// <summary>
@@ -74,6 +76,7 @@ namespace M2Server
         public IList<TAILogon> m_UserLogonList;//假人列表
         private readonly Thread _userEngineThread;
         private readonly Thread _processTheread;
+        private readonly Thread _processAiThread;
 
         public UserEngine()
         {
@@ -117,6 +120,8 @@ namespace M2Server
             m_UserLogonList = new List<TAILogon>();
             _userEngineThread = new Thread(PrcocessData);
             _processTheread = new Thread(ProcessPlayObjectData);
+            _processAiThread = new Thread(ProcessAiPlayObjectData);
+            m_AiPlayObjectList = new List<TPlayObject>();
         }
 
         public int MonsterCount { get { return nMonsterCount; } }
@@ -130,12 +135,14 @@ namespace M2Server
         {
             _userEngineThread.Start();
             _processTheread.Start();
+            _processAiThread.Start();
         }
 
         public void Stop()
         {
             _userEngineThread.Abort();
             _processTheread.Abort();
+            _processAiThread.Abort();
         }
 
         public void Initialize()
@@ -231,12 +238,12 @@ namespace M2Server
 
         private int GetOnlineHumCount()
         {
-            return m_PlayObjectList.Count;
+            return m_PlayObjectList.Count + m_AiPlayObjectList.Count;
         }
 
         private int GetUserCount()
         {
-            return m_PlayObjectList.Count;
+            return m_PlayObjectList.Count + m_AiPlayObjectList.Count;
         }
 
         private bool ProcessHumans_IsLogined(string sChrName)
@@ -530,7 +537,14 @@ namespace M2Server
                                 PlayObject = ProcessHumans_MakeNewHuman(UserOpenInfo);
                                 if (PlayObject != null)
                                 {
-                                    m_PlayObjectList.Add(PlayObject);
+                                    if (PlayObject.m_boAI)
+                                    {
+                                        m_AiPlayObjectList.Add(PlayObject);
+                                    }
+                                    else
+                                    {
+                                        m_PlayObjectList.Add(PlayObject);
+                                    }
                                     m_NewHumanList.Add(PlayObject);
                                     SendServerGroupMsg(Grobal2.ISM_USERLOGON, M2Share.nServerIndex, PlayObject.m_sCharName);
                                 }
@@ -646,6 +660,118 @@ namespace M2Server
             if (M2Share.g_nHumCountMax < M2Share.g_nHumCountMin) M2Share.g_nHumCountMax = M2Share.g_nHumCountMin;
         }
 
+        private void ProcessAiPlayObjectData()
+        {
+            const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
+            try
+            {
+                //todo 加入Ai专属线程
+                
+                while (true)
+                {
+                    //todo 需要优化这里，当m_PlayObjectList列表过大时处理不过来
+                    var dwCurTick = HUtil32.GetTickCount();
+                    var nIdx = m_nProcHumIDx;
+                    var boCheckTimeLimit = false;
+                    var dwCheckTime = HUtil32.GetTickCount();
+                    while (true)
+                    {
+                        if (m_AiPlayObjectList.Count <= nIdx) break;
+                        var PlayObject = m_AiPlayObjectList[nIdx];
+                        if (dwCurTick - PlayObject.m_dwRunTick > PlayObject.m_nRunTime)
+                        {
+                            PlayObject.m_dwRunTick = dwCurTick;
+                            if (!PlayObject.m_boGhost)
+                            {
+                                if (!PlayObject.m_boLoginNoticeOK)
+                                {
+                                    PlayObject.RunNotice();
+                                }
+                                else
+                                {
+                                    if (!PlayObject.m_boReadyRun)
+                                    {
+                                        PlayObject.m_boReadyRun = true;
+                                        PlayObject.UserLogon();
+                                    }
+                                    else
+                                    {
+                                        if (HUtil32.GetTickCount() - PlayObject.m_dwSearchTick > PlayObject.m_dwSearchTime)
+                                        {
+                                            PlayObject.m_dwSearchTick = HUtil32.GetTickCount();
+                                            PlayObject.SearchViewRange();
+                                            PlayObject.GameTimeChanged();
+                                        }
+                                        if (HUtil32.GetTickCount() - PlayObject.m_dwShowLineNoticeTick > M2Share.g_Config.dwShowLineNoticeTime)
+                                        {
+                                            PlayObject.m_dwShowLineNoticeTick = HUtil32.GetTickCount();
+                                            if (M2Share.LineNoticeList.Count > PlayObject.m_nShowLineNoticeIdx)
+                                            {
+                                                var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, M2Share.LineNoticeList[PlayObject.m_nShowLineNoticeIdx]);
+                                                switch (lineNoticeMsg[0])
+                                                {
+                                                    case 'R':
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Red, TMsgType.t_Notice);
+                                                        break;
+                                                    case 'G':
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Green, TMsgType.t_Notice);
+                                                        break;
+                                                    case 'B':
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Blue, TMsgType.t_Notice);
+                                                        break;
+                                                    default:
+                                                        PlayObject.SysMsg(lineNoticeMsg, (TMsgColor)M2Share.g_Config.nLineNoticeColor, TMsgType.t_Notice);
+                                                        break;
+                                                }
+                                            }
+                                            PlayObject.m_nShowLineNoticeIdx++;
+                                            if (M2Share.LineNoticeList.Count <= PlayObject.m_nShowLineNoticeIdx)
+                                            {
+                                                PlayObject.m_nShowLineNoticeIdx = 0;
+                                            }
+                                        }
+                                        PlayObject.Run();
+                                        if (!M2Share.FrontEngine.IsFull() && HUtil32.GetTickCount() - PlayObject.m_dwSaveRcdTick > M2Share.g_Config.dwSaveHumanRcdTime)
+                                        {
+                                            PlayObject.m_dwSaveRcdTick = HUtil32.GetTickCount();
+                                            PlayObject.DealCancelA();
+                                            SaveHumanRcd(PlayObject);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                m_AiPlayObjectList.Remove(PlayObject);
+                                PlayObject.Disappear();
+                                AddToHumanFreeList(PlayObject);
+                                PlayObject.DealCancelA();
+                                SaveHumanRcd(PlayObject);
+                                M2Share.RunSocket.CloseUser(PlayObject.m_nGateIdx, PlayObject.m_nSocket);
+                                SendServerGroupMsg(Grobal2.SS_202, M2Share.nServerIndex, PlayObject.m_sCharName);
+                                continue;
+                            }
+                        }
+                        nIdx++;
+                        if (HUtil32.GetTickCount() - dwCheckTime > M2Share.g_dwHumLimit)
+                        {
+                            boCheckTimeLimit = true;
+                            m_nProcHumIDx = nIdx;
+                            break;
+                        }
+                    }
+                    if (!boCheckTimeLimit) m_nProcHumIDx = 0;
+
+                    Thread.Sleep(1);
+                }
+            }
+            catch(Exception ex)
+            {
+                M2Share.MainOutMessage(sExceptionMsg8);
+                M2Share.MainOutMessage(ex.StackTrace);
+            }
+        }
+
         private void ProcessPlayObjectData()
         {
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
@@ -653,7 +779,6 @@ namespace M2Server
             {
                 while (true)
                 {
-                    //todo 需要优化这里，当m_PlayObjectList列表过大时处理不过来
                     var dwCurTick = HUtil32.GetTickCount();
                     var nIdx = m_nProcHumIDx;
                     var boCheckTimeLimit = false;
@@ -691,20 +816,20 @@ namespace M2Server
                                             PlayObject.m_dwShowLineNoticeTick = HUtil32.GetTickCount();
                                             if (M2Share.LineNoticeList.Count > PlayObject.m_nShowLineNoticeIdx)
                                             {
-                                                var LineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, M2Share.LineNoticeList[PlayObject.m_nShowLineNoticeIdx]);
-                                                switch (LineNoticeMsg[0])
+                                                var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, M2Share.LineNoticeList[PlayObject.m_nShowLineNoticeIdx]);
+                                                switch (lineNoticeMsg[0])
                                                 {
                                                     case 'R':
-                                                        PlayObject.SysMsg(LineNoticeMsg.Substring(1, LineNoticeMsg.Length - 1), TMsgColor.c_Red, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Red, TMsgType.t_Notice);
                                                         break;
                                                     case 'G':
-                                                        PlayObject.SysMsg(LineNoticeMsg.Substring(1, LineNoticeMsg.Length - 1), TMsgColor.c_Green, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Green, TMsgType.t_Notice);
                                                         break;
                                                     case 'B':
-                                                        PlayObject.SysMsg(LineNoticeMsg.Substring(1, LineNoticeMsg.Length - 1), TMsgColor.c_Blue, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Blue, TMsgType.t_Notice);
                                                         break;
                                                     default:
-                                                        PlayObject.SysMsg(LineNoticeMsg, (TMsgColor)M2Share.g_Config.nLineNoticeColor, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg, (TMsgColor)M2Share.g_Config.nLineNoticeColor, TMsgType.t_Notice);
                                                         break;
                                                 }
                                             }
@@ -746,7 +871,7 @@ namespace M2Server
                     }
                     if (!boCheckTimeLimit) m_nProcHumIDx = 0;
 
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
                 }
             }
             catch(Exception ex)
@@ -2546,7 +2671,7 @@ namespace M2Server
             }
         }
 
-        public string GetHomeInfo(short nX,short nY)
+        public string GetHomeInfo(ref short nX,ref short nY)
         {
             string result;
             int I;
@@ -2577,10 +2702,10 @@ namespace M2Server
             var PlayObject = AddAIPlayObject(AI);
             if (PlayObject != null)
             {
-                PlayObject.m_sHomeMap = GetHomeInfo(PlayObject.m_nHomeX, PlayObject.m_nHomeY);
+                PlayObject.m_sHomeMap = GetHomeInfo(ref PlayObject.m_nHomeX, ref PlayObject.m_nHomeY);
                 PlayObject.m_sUserID = "假人";
                 PlayObject.Start(TPathType.t_Dynamic);
-                m_PlayObjectList.Add(PlayObject);
+                m_AiPlayObjectList.Add(PlayObject);
                 return true;
             }
             return false;
@@ -2588,21 +2713,17 @@ namespace M2Server
 
         private TAIPlayObject AddAIPlayObject(TAILogon AI)
         {
-            TAIPlayObject result;
-            TEnvirnoment Map;
-            TAIPlayObject Cert;
             int n1C;
             int n20;
             int n24;
             object p28;
-            result = null;
-            Cert = null;
-            Map = M2Share.g_MapManager.FindMap(AI.sMapName);
+            TAIPlayObject result = null;
+            var Map = M2Share.g_MapManager.FindMap(AI.sMapName);
             if (Map == null)
             {
                 return result;
             }
-            Cert = new TAIPlayObject();
+            TAIPlayObject Cert = new TAIPlayObject();
             if (Cert != null)
             {
                 Cert.m_PEnvir = Map;

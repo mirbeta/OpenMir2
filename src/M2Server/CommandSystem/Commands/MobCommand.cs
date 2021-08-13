@@ -19,10 +19,9 @@ namespace M2Server
             }
             short nX = 0;
             short nY = 0;
-            TBaseObject Monster = null;
-            var sMonName = @Params.Length > 0 ? @Params[0] : "";//名称
-            var nCount = @Params.Length > 1 ? Convert.ToByte(@Params[1]) : (byte)1;//数量
-            var nLevel = @Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)1;//怪物等级
+            var sMonName = Params.Length > 0 ? @Params[0] : "";//名称
+            var nCount = Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 1;//数量
+            var nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)1;//怪物等级
             if (sMonName == "")
             {
                 return;
@@ -39,7 +38,7 @@ namespace M2Server
             PlayObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
+                TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
                 if (Monster != null)
                 {
                     Monster.m_btSlaveMakeLevel = nLevel;

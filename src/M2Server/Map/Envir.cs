@@ -7,7 +7,7 @@ namespace M2Server
     {
         public byte btType;
         public object CellObj;
-        public double dwAddTime;
+        public int dwAddTime;
         public bool boObjectDisPose;
     }
 

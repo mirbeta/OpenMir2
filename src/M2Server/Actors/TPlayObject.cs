@@ -5305,8 +5305,6 @@ namespace M2Server
         private bool EatItems(MirItem StdItem, TUserItem Useritem)
         {
             var result = false;
-            bool boNeedRecalc;
-            int nOldStatus;
             if (m_PEnvir.Flag.boNODRUG)
             {
                 SysMsg(M2Share.sCanotUseDrugOnThisMap, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -5343,7 +5341,7 @@ namespace M2Server
                     }
                     break;
                 case 1:
-                    nOldStatus = GetMyStatus();
+                    var nOldStatus = GetMyStatus();
                     m_nHungerStatus += StdItem.DuraMax / 10;
                     m_nHungerStatus = HUtil32._MIN(5000, m_nHungerStatus);
                     if (nOldStatus != GetMyStatus())
@@ -5359,7 +5357,7 @@ namespace M2Server
                     switch (StdItem.Shape)
                     {
                         case 12:
-                            boNeedRecalc = false;
+                            var boNeedRecalc = false;
                             if (StdItem.Dc > 0)
                             {
                                 m_wStatusArrValue[0] = StdItem.Dc;
@@ -6230,28 +6228,17 @@ namespace M2Server
             HumItems[Grobal2.U_BELT] = m_UseItems[Grobal2.U_BELT];
             HumItems[Grobal2.U_BOOTS] = m_UseItems[Grobal2.U_BOOTS];
             HumItems[Grobal2.U_CHARM] = m_UseItems[Grobal2.U_CHARM];
-            try
+            BagItems = HumanRcd.Data.BagItems;
+            if (BagItems == null)
             {
-                BagItems = HumanRcd.Data.BagItems;
-                if (BagItems == null)
-                {
-                    BagItems = new TUserItem[46];
-                }
-                for (var i = 0; i < m_ItemList.Count; i++)
-                {
-                    if (i > 46)
-                    {
-                        var sName = M2Share.UserEngine.GetStdItem(m_ItemList[i].wIndex);
-                        Console.WriteLine(sName.Name);
-                        break;
-                    }
-                    BagItems[i] = m_ItemList[i];
-                }
+                BagItems = new TUserItem[46];
             }
-            catch (Exception e)
+            for (var i = 0; i < m_ItemList.Count; i++)
             {
-                Console.WriteLine(e);
-                throw;
+                if (i <= 46)
+                {
+                   BagItems[i] = m_ItemList[i];
+                }
             }
             HumMagic = HumanRcd.Data.Magic;
             if (HumMagic == null)

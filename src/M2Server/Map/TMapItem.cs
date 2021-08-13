@@ -1,3 +1,5 @@
+using SystemModule;
+
 namespace M2Server
 {
     public class TMapItem
@@ -12,5 +14,10 @@ namespace M2Server
         public object OfBaseObject;
         public int dwCanPickUpTick;
         public TUserItem UserItem;
+
+        public TMapItem()
+        {
+            Id = HUtil32.Sequence();
+        }
     }
 }
