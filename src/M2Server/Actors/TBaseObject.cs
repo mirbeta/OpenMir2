@@ -5332,11 +5332,24 @@ namespace M2Server
                     {
                         if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
-                            if ((this as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                            if (this.m_boAI)
                             {
-                                if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                if ((this as TAIPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                 {
-                                    (this as TPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                    {
+                                        (this as TAIPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if ((this as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                {
+                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                    {
+                                        (this as TPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                    }
                                 }
                             }
                         }
@@ -5344,11 +5357,24 @@ namespace M2Server
                         {
                             if (m_Master != null)
                             {
-                                if ((m_Master as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                if (m_Master.m_boAI)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                    if ((m_Master as TAIPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                     {
-                                        (m_Master as TPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                        {
+                                            (m_Master as TAIPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if ((m_Master as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    {
+                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
+                                        {
+                                            (m_Master as TPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        }
                                     }
                                 }
                             }

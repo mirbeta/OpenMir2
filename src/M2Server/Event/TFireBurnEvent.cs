@@ -3,6 +3,9 @@ using SystemModule;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 火墙
+    /// </summary>
     public class TFireBurnEvent : TEvent
     {
         public TFireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)

@@ -1026,7 +1026,6 @@ namespace M2Server
         /// <returns></returns>
         private int MagMakeFireCross(TPlayObject PlayObject, int nDamage, int nHTime, int nX, int nY)
         {
-            TFireBurnEvent FireBurnEvent;
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
             if (M2Share.g_Config.boDisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.m_PEnvir, nX, nY))
             {
@@ -1035,27 +1034,27 @@ namespace M2Server
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY - 1) == null)
             {
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                TFireBurnEvent   FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX - 1, nY) == null)
             {
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY) == null)
             {
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                TFireBurnEvent   FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX + 1, nY) == null)
             {
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY + 1) == null)
             {
-                FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             return 1;

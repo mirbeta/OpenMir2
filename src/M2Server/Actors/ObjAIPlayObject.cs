@@ -183,11 +183,11 @@ namespace M2Server
                 m_PointManager.Initialize(m_PEnvir);
                 m_boAIStart = true;
                 m_nMoveFailCount = 0;
-                //if (g_FunctionNPC != null)
-                //{
+                if (M2Share.g_FunctionNPC != null)
+                {
                     m_nScriptGotoCount = 0;
-                    //g_FunctionNPC.GotoLable(this, "@AIStart", false, false);
-                //}
+                    M2Share.g_FunctionNPC.GotoLable(this, "@AIStart", false);
+                }
             }
         }
 
@@ -206,6 +206,111 @@ namespace M2Server
                 //}
             }
         }
+        
+        public void GainExp(int dwExp)
+        {
+            int n;
+            int sumlv;
+            TPlayObject PlayObject;
+            const string sExceptionMsg = "[Exception] TPlayObject::GainExp";
+            double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
+            try
+            {
+                if (m_GroupOwner != null)
+                {
+                    sumlv = 0;
+                    n = 0;
+                    for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
+                    {
+                        PlayObject = m_GroupOwner.m_GroupMembers[i];
+                        if (!PlayObject.m_boDeath && m_PEnvir == PlayObject.m_PEnvir && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12 && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12)
+                        {
+                            sumlv = sumlv + PlayObject.m_Abil.Level;
+                            n++;
+                        }
+                    }
+                    if (sumlv > 0 && n > 1)
+                    {
+                        // if (n >= 0 && n <= Grobal2.GROUPMAX)
+                        // {
+                        //     dwExp = HUtil32.Round(dwExp * bonus[n]);
+                        // }
+                        // for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
+                        // {
+                        //     PlayObject = m_GroupOwner.m_GroupMembers[i];
+                        //     if (!PlayObject.m_boDeath && m_PEnvir == PlayObject.m_PEnvir && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12 && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12)
+                        //     {
+                        //         if (M2Share.g_Config.boHighLevelKillMonFixExp)
+                        //         {
+                        //             // 02/08 增加，在高等级经验不变时，把组队的经验平均分配
+                        //             PlayObject.WinExp(HUtil32.Round(dwExp / n));
+                        //         }
+                        //         else
+                        //         {
+                        //             PlayObject.WinExp(HUtil32.Round(dwExp / sumlv * PlayObject.m_Abil.Level));
+                        //         }
+                        //     }
+                        // }
+                    }
+                    else
+                    {
+                        WinExp(dwExp);
+                    }
+                }
+                else
+                {
+                    WinExp(dwExp);
+                }
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+            }
+        }
+
+        private void WinExp(int dwExp)
+        {
+            if (m_Abil.Level > M2Share.g_Config.nLimitExpLevel)
+            {
+                dwExp = M2Share.g_Config.nLimitExpValue;
+                GetExp(dwExp);
+            }
+            else if (dwExp > 0)
+            {
+                dwExp = M2Share.g_Config.dwKillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
+                dwExp = m_nKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
+                dwExp = HUtil32.Round(m_nKillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
+                if (m_PEnvir.Flag.boEXPRATE)
+                {
+                    dwExp = HUtil32.Round(m_PEnvir.Flag.nEXPRATE / 100 * dwExp); // 地图上指定杀怪经验倍数
+                }
+                if (m_boExpItem) // 物品经验倍数
+                {
+                    dwExp = HUtil32.Round(m_rExpItem * dwExp);
+                }
+                GetExp(dwExp);
+            }
+        }
+
+        private void GetExp(int dwExp)
+        {
+            m_Abil.Exp += dwExp;
+            AddBodyLuck(dwExp * 0.002);
+            SendMsg(this, Grobal2.RM_WINEXP, 0, dwExp, 0, 0, "");
+            if (m_Abil.Exp >= m_Abil.MaxExp)
+            {
+                m_Abil.Exp -= m_Abil.MaxExp;
+                if (m_Abil.Level < M2Share.MAXUPLEVEL)
+                {
+                    m_Abil.Level++;
+                }
+                HasLevelUp(m_Abil.Level - 1);
+                AddBodyLuck(100);
+                M2Share.AddGameDataLog("12" + "\t" + m_sMapName + "\t" + m_Abil.Level + "\t" + m_Abil.Exp +
+                                       "\t" + m_sCharName + "\t" + '0' + "\t" + '0' + "\t" + '1' + "\t" + '0');
+                IncHealthSpell(2000, 2000);
+            }
+        }
 
         public override void MakeGhost()
         {
@@ -213,6 +318,7 @@ namespace M2Server
             {
                 m_boAIStart = false;
             }
+
             base.MakeGhost();
         }
 
@@ -511,7 +617,7 @@ namespace M2Server
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sConfigListFileName);
-                        nIndex = new System.Random(LoadList.Count).Next();
+                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
                         if (nIndex >= 0 && nIndex < LoadList.Count)
                         {
                             Str = LoadList[nIndex];
@@ -539,7 +645,7 @@ namespace M2Server
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sHeroConfigListFileName);
-                        nIndex = new System.Random(LoadList.Count).Next();
+                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
                         if (nIndex >= 0 && nIndex < LoadList.Count)
                         {
                             Str = LoadList[nIndex];
@@ -1266,9 +1372,9 @@ namespace M2Server
                 }
                 else
                 {
-                    if (new Random(2).Next() == 1)
+                    if (M2Share.RandomNumber.Random(2) == 1)
                     {
-                        TurnTo((byte)new Random(8).Next());
+                        TurnTo((byte)M2Share.RandomNumber.Random(8));
                     }
                     else
                     {
@@ -1281,9 +1387,9 @@ namespace M2Server
             }
             if (m_nMoveFailCount >= 3)
             {
-                if (new Random(2).Next() == 1)
+                if (M2Share.RandomNumber.Random(2) == 1)
                 {
-                    TurnTo((byte)new Random(8).Next());
+                    TurnTo((byte)M2Share.RandomNumber.Random(8));
                 }
                 else
                 {
@@ -1353,7 +1459,7 @@ namespace M2Server
                 }
                 if (hiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT && !hiter.m_boAI && m_TargetCret == hiter)
                 {
-                    if (new Random(8).Next() == 0 && m_AISayMsgList.Count > 0)
+                    if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
                     {
                         if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
                         {
@@ -2958,7 +3064,7 @@ namespace M2Server
                 {
                     if (wMagicID > 0)
                     {
-                        nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
+                        nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
                     }
                     else
                     {

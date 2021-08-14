@@ -11,18 +11,33 @@ namespace M2Server
         public int m_nY = 0;
         public int m_nEventType = 0;
         public int m_nEventParam = 0;
-        public int m_dwOpenStartTick = 0;
+        protected int m_dwOpenStartTick = 0;
         /// <summary>
-        /// 显示时间长度
+        /// 持续时间
         /// </summary>
-        public int m_dwContinueTime = 0;
+        private int m_dwContinueTime = 0;
         public int m_dwCloseTick = 0;
+        /// <summary>
+        /// 是否关闭
+        /// </summary>
         public bool m_boClosed = false;
         public int m_nDamage = 0;
         public TBaseObject m_OwnBaseObject = null;
+        /// <summary>
+        /// 开始运行时间
+        /// </summary>
         public int m_dwRunStart = 0;
+        /// <summary>
+        /// 运行间隔
+        /// </summary>
         public int m_dwRunTick = 0;
+        /// <summary>
+        /// 是否可见
+        /// </summary>
         public bool m_boVisible = false;
+        /// <summary>
+        /// 是否激活
+        /// </summary>
         public bool m_boActive = false;
 
         public TEvent(TEnvirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)

@@ -14,17 +14,11 @@
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/0/AttackSabukWall.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/BaseCommond.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/BaseCommond.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeSuperManModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeSuperManModeCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/CreateAIUserCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MakeItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MakeItemCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MobCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/MobCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Configs/TM2Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Configs/TM2Config.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/Envir.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/Envir.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TMapItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TMapItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,29 +39,14 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/78/e9d794af/Int32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9c/7bc58a64/Number.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/fa/31422d40/IList`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9c/7bc58a64/Number.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -135,7 +114,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35067567" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.35114944" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -317,7 +296,8 @@
       <workItem from="1628778490218" duration="709000" />
       <workItem from="1628780506087" duration="1439000" />
       <workItem from="1628826191722" duration="2454000" />
-      <workItem from="1628841248747" duration="25112000" />
+      <workItem from="1628841248747" duration="27670000" />
+      <workItem from="1628875445986" duration="6303000" />
     </task>
     <servers />
   </component>
@@ -443,32 +423,6 @@
           <option name="timeStamp" value="369" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs</url>
-          <line>3322</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" initialLine="3322" containingFunctionPresentation="method 'ClientUseItems'">
-            <startOffsets>
-              <option value="135470" />
-            </startOffsets>
-            <endOffsets>
-              <option value="135502" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="397" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs</url>
-          <line>3312</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" initialLine="3312" containingFunctionPresentation="method 'ClientUseItems'">
-            <startOffsets>
-              <option value="134970" />
-            </startOffsets>
-            <endOffsets>
-              <option value="134992" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="403" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs</url>
           <line>15</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" initialLine="15" containingFunctionPresentation="method 'ChangeObMode'">
@@ -496,19 +450,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs</url>
-          <line>331</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" initialLine="331" containingFunctionPresentation="method 'SaveConfigFile'">
-            <startOffsets>
-              <option value="15436" />
-            </startOffsets>
-            <endOffsets>
-              <option value="15507" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="461" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs</url>
           <line>416</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" initialLine="416" containingFunctionPresentation="method 'LoadAttackSabukWall'">
             <startOffsets>
@@ -521,17 +462,69 @@
           <option name="timeStamp" value="462" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs</url>
-          <line>670</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" initialLine="670" containingFunctionPresentation="method 'Operate'">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>
+          <line>980</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" initialLine="874" containingFunctionPresentation="method 'SearchPickUpItem'">
             <startOffsets>
-              <option value="28440" />
+              <option value="41394" />
             </startOffsets>
             <endOffsets>
-              <option value="28562" />
+              <option value="41446" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="469" />
+          <option name="timeStamp" value="477" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>
+          <line>950</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" initialLine="844" containingFunctionPresentation="method 'SearchPickUpItem'">
+            <startOffsets>
+              <option value="40151" />
+            </startOffsets>
+            <endOffsets>
+              <option value="40213" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="478" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAdminModeCommand.cs</url>
+          <line>13</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAdminModeCommand.cs" initialLine="13" containingFunctionPresentation="method 'ChangeAdminMode'">
+            <startOffsets>
+              <option value="343" />
+            </startOffsets>
+            <endOffsets>
+              <option value="407" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="481" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs</url>
+          <line>133</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/CommandSystem/CommandManager.cs" initialLine="133" containingFunctionPresentation="method 'ExecCmd'">
+            <startOffsets>
+              <option value="4411" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4447" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="486" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/src/M2Server/Event/TEventManager.cs</url>
+          <line>22</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Event/TEventManager.cs" initialLine="22" containingFunctionPresentation="method 'Run'">
+            <startOffsets>
+              <option value="775" />
+            </startOffsets>
+            <endOffsets>
+              <option value="810" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="498" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

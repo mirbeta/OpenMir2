@@ -14,7 +14,7 @@ namespace M2Server
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _eventList[i];
-                if (executeEvent.m_boActive && HUtil32.GetTickCount() - executeEvent.m_dwRunStart > executeEvent.m_dwRunTick)
+                if (executeEvent.m_boActive && (HUtil32.GetTickCount() - executeEvent.m_dwRunStart) > executeEvent.m_dwRunTick)
                 {
                     executeEvent.m_dwRunStart = HUtil32.GetTickCount();
                     executeEvent.Run();

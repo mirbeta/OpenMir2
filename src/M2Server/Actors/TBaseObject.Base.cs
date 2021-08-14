@@ -60,7 +60,14 @@ namespace M2Server
                             tExp = m_ExpHitter.CalcGetExp(m_Abil.Level, m_dwFightExp);
                             if (!M2Share.g_Config.boVentureServer)
                             {
-                                (m_ExpHitter as TPlayObject).GainExp(tExp);
+                                if (m_ExpHitter.m_boAI)
+                                {
+                                    (m_ExpHitter as TAIPlayObject).GainExp(tExp);
+                                }
+                                else
+                                {
+                                    (m_ExpHitter as TPlayObject).GainExp(tExp);
+                                }
                             }
                             // 是否执行任务脚本
                             if (m_PEnvir.IsCheapStuff())
@@ -100,7 +107,14 @@ namespace M2Server
                                 tExp = m_ExpHitter.m_Master.CalcGetExp(m_Abil.Level, m_dwFightExp);
                                 if (!M2Share.g_Config.boVentureServer)
                                 {
-                                    (m_ExpHitter.m_Master as TPlayObject).GainExp(tExp);
+                                    if (m_ExpHitter.m_Master.m_boAI)
+                                    {
+                                        (m_ExpHitter.m_Master as TAIPlayObject).GainExp(tExp);
+                                    }
+                                    else
+                                    {
+                                        (m_ExpHitter.m_Master as TPlayObject).GainExp(tExp);
+                                    }
                                 }
                             }
                         }
@@ -116,7 +130,14 @@ namespace M2Server
                             tExp = m_LastHiter.CalcGetExp(m_Abil.Level, m_dwFightExp);
                             if (!M2Share.g_Config.boVentureServer)
                             {
-                                (m_LastHiter as TPlayObject).GainExp(tExp);
+                                if (m_LastHiter.m_boAI)
+                                {
+                                    (m_LastHiter as TAIPlayObject).GainExp(tExp);
+                                }
+                                else
+                                {
+                                    (m_LastHiter as TPlayObject).GainExp(tExp);
+                                }
                             }
                         }
                     }
@@ -668,7 +689,14 @@ namespace M2Server
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(m_sCharName))
                                         {
-                                            (TargetBaseObject as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                            if (TargetBaseObject.m_boAI)
+                                            {
+                                                (TargetBaseObject as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                            }
+                                            else
+                                            {
+                                                (TargetBaseObject as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                            }
                                         }
                                     }
                                 }
@@ -680,7 +708,14 @@ namespace M2Server
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(m_sCharName))
                                             {
-                                                (TargetBaseObject.m_Master as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                if (TargetBaseObject.m_Master.m_boAI)
+                                                {
+                                                    (TargetBaseObject.m_Master as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                }
+                                                else
+                                                {
+                                                    (TargetBaseObject.m_Master as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                }
                                             }
                                         }
                                     }

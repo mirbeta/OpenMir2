@@ -6,13 +6,17 @@ namespace M2Server
     /// <summary>
     /// 调整当前玩家攻击模式
     /// </summary>
-    [GameCommand("ChangeAttackMode", "调整当前玩家攻击模式", 0)]
+    [GameCommand("AttackMode", "调整当前玩家攻击模式", 0)]
     public class ChangeAttackModeCommand : BaseCommond
     {
         [DefaultCommand]
         public void ChangeAttackMode(string[] @Params, TPlayObject PlayObject)
         {
-            var nMode = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
+            var nMode = 0;
+            if (Params != null)
+            {
+                nMode = Params.Length > 0 ? int.Parse(Params[0]) : 0;
+            }
             if (nMode >= M2Share.HAM_ALL && nMode <= M2Share.HAM_PKATTACK)
             {
                 PlayObject.m_btAttatckMode = (byte)nMode;
