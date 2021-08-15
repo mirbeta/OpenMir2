@@ -776,8 +776,6 @@ namespace M2Server
 
         internal virtual void SendSocket(TDefaultMessage defMsg, string sMsg)
         {
-            TMsgHeader MsgHdr;
-            int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
             TDefaultMessage? sendDefMsg = defMsg;
             if (m_boOffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
@@ -787,13 +785,14 @@ namespace M2Server
             byte[] Buff = null;
             try
             {
-                MsgHdr = new TMsgHeader
+                var MsgHdr = new TMsgHeader
                 {
                     dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
                     wGSocketIdx = (ushort)m_nGSocketIdx,
                     wIdent = Grobal2.GM_DATA
                 };
+                int nSendBytes;
                 if (sendDefMsg != null)
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
@@ -2014,150 +2013,7 @@ namespace M2Server
         {
 
         }
-
-        public TPlayObject() : base()
-        {
-            m_btRaceServer = Grobal2.RC_PLAYOBJECT;
-            m_boEmergencyClose = false;
-            m_boSwitchData = false;
-            m_boReconnection = false;
-            m_boKickFlag = false;
-            m_boSoftClose = false;
-            m_boReadyRun = false;
-            m_dwSaveRcdTick = HUtil32.GetTickCount();
-            m_boWantRefMsg = true;
-            m_boRcdSaved = false;
-            m_boDieInFight3Zone = false;
-            m_sGotoNpcLabel = "";
-            m_nDelayCall = 0;
-            m_sDelayCallLabel = "";
-            m_boDelayCall = false;
-            m_DelayCallNPC = 0;
-            m_Script = null;
-            m_boTimeRecall = false;
-            m_sMoveMap = "";
-            m_nMoveX = 0;
-            m_nMoveY = 0;
-            m_dwRunTick = HUtil32.GetTickCount();
-            m_nRunTime = 250;
-            m_dwSearchTime = 1000;
-            m_dwSearchTick = HUtil32.GetTickCount();
-            m_nViewRange = 12;
-            m_boNewHuman = false;
-            m_boLoginNoticeOK = false;
-            bo6AB = false;
-            m_boExpire = false;
-            m_boSendNotice = false;
-            m_dwCheckDupObjTick = HUtil32.GetTickCount();
-            dwTick578 = HUtil32.GetTickCount();
-            dwTick57C = HUtil32.GetTickCount();
-            m_boInSafeArea = false;
-            m_dwMagicAttackTick = HUtil32.GetTickCount();
-            m_dwMagicAttackInterval = 0;
-            m_dwAttackTick = HUtil32.GetTickCount();
-            m_dwMoveTick = HUtil32.GetTickCount();
-            m_dwTurnTick = HUtil32.GetTickCount();
-            m_dwActionTick = HUtil32.GetTickCount();
-            m_dwAttackCount = 0;
-            m_dwAttackCountA = 0;
-            m_dwMagicAttackCount = 0;
-            m_dwMoveCount = 0;
-            m_dwMoveCountA = 0;
-            m_nOverSpeedCount = 0;
-            m_sOldSayMsg = "";
-            m_dwSayMsgTick = HUtil32.GetTickCount();
-            m_boDisableSayMsg = false;
-            m_dwDisableSayMsgTick = HUtil32.GetTickCount();
-            m_dLogonTime = DateTime.Now;
-            m_dwLogonTick = HUtil32.GetTickCount();
-            m_boSwitchData = false;
-            m_boSwitchDataSended = false;
-            m_nWriteChgDataErrCount = 0;
-            m_dwShowLineNoticeTick = HUtil32.GetTickCount();
-            m_nShowLineNoticeIdx = 0;
-            m_nSoftVersionDateEx = 0;
-            m_CanJmpScriptLableList = new Hashtable();
-            m_nKillMonExpMultiple = 1;
-            m_nKillMonExpRate = 100;
-            m_dwRateTick = HUtil32.GetTickCount();
-            m_nPowerRate = 100;
-            m_boSetStoragePwd = false;
-            m_boReConfigPwd = false;
-            m_boCheckOldPwd = false;
-            m_boUnLockPwd = false;
-            m_boUnLockStoragePwd = false;
-            m_boPasswordLocked = false;
-            // 锁仓库
-            m_btPwdFailCount = 0;
-            m_sTempPwd = "";
-            m_sStoragePwd = "";
-            m_boFilterSendMsg = false;
-            m_boCanDeal = true;
-            m_boCanDrop = true;
-            m_boCanGetBackItem = true;
-            m_boCanWalk = true;
-            m_boCanRun = true;
-            m_boCanHit = true;
-            m_boCanSpell = true;
-            m_boCanUseItem = true;
-            m_nMemberType = 0;
-            m_nMemberLevel = 0;
-            m_nGameGold = 0;
-            m_boDecGameGold = false;
-            m_nDecGameGold = 1;
-            m_dwDecGameGoldTick = HUtil32.GetTickCount();
-            m_dwDecGameGoldTime = 60 * 1000;
-            m_boIncGameGold = false;
-            m_nIncGameGold = 1;
-            m_dwIncGameGoldTick = HUtil32.GetTickCount();
-            m_dwIncGameGoldTime = 60 * 1000;
-            m_nGamePoint = 0;
-            m_dwIncGamePointTick = HUtil32.GetTickCount();
-            m_nPayMentPoint = 0;
-            m_DearHuman = null;
-            m_MasterHuman = null;
-            m_MasterList = new List<TPlayObject>();
-            m_boSendMsgFlag = false;
-            m_boChangeItemNameFlag = false;
-            m_boCanMasterRecall = false;
-            m_boCanDearRecall = false;
-            m_dwDearRecallTick = HUtil32.GetTickCount();
-            m_dwMasterRecallTick = HUtil32.GetTickCount();
-            m_btReColorIdx = 0;
-            m_GetWhisperHuman = null;
-            m_boOnHorse = false;
-            m_wContribution = 0;
-            m_sRankLevelName = M2Share.g_sRankLevelName;
-            m_boFixedHideMode = true;
-            m_nStep = 0;
-            m_nVal = new int[10];
-            m_nMval = new int[100];
-            m_DyVal = new int[10];
-            m_nSval = new string[100];
-            //FillChar(m_nMval, sizeof(m_nMval), '\0');
-            //FillChar(m_nSval, sizeof(m_nSval), '\0');
-            m_nClientFlagMode = -1;
-            m_dwAutoGetExpTick = HUtil32.GetTickCount();
-            m_nAutoGetExpPoint = 0;
-            m_AutoGetExpEnvir = null;
-            m_dwHitIntervalTime = M2Share.g_Config.dwHitIntervalTime;// 攻击间隔
-            m_dwMagicHitIntervalTime = M2Share.g_Config.dwMagicHitIntervalTime;// 魔法间隔
-            m_dwRunIntervalTime = M2Share.g_Config.dwRunIntervalTime;// 走路间隔
-            m_dwWalkIntervalTime = M2Share.g_Config.dwWalkIntervalTime;// 走路间隔
-            m_dwTurnIntervalTime = M2Share.g_Config.dwTurnIntervalTime;// 换方向间隔
-            m_dwActionIntervalTime = M2Share.g_Config.dwActionIntervalTime;// 组合操作间隔
-            m_dwRunLongHitIntervalTime = M2Share.g_Config.dwRunLongHitIntervalTime;// 组合操作间隔
-            m_dwRunHitIntervalTime = M2Share.g_Config.dwRunHitIntervalTime;// 组合操作间隔
-            m_dwWalkHitIntervalTime = M2Share.g_Config.dwWalkHitIntervalTime;// 组合操作间隔
-            m_dwRunMagicIntervalTime = M2Share.g_Config.dwRunMagicIntervalTime;// 跑位魔法间隔
-            m_DynamicVarList = new List<TDynamicVar>();
-            m_SessInfo = null;
-            m_boTestSpeedMode = false;
-            m_boLockLogon = true;
-            m_boLockLogoned = false;
-            m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
-        }
-
+        
         public void DealCancel()
         {
             if (!m_boDealing)
@@ -2546,7 +2402,7 @@ namespace M2Server
                 if (UserItem != null && UserItem.MakeIndex == nMakeIndex)
                 {
                     sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
-                    if (sUserItemName.CompareTo(sMsg) == 0)
+                    if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
                         if (Merchant != null && Merchant.m_boSell && Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
@@ -2756,12 +2612,10 @@ namespace M2Server
 
         private void ReadAllBook()
         {
-            TUserMagic UserMagic = null;
-            TMagic Magic = null;
             for (var i = 0; i < M2Share.UserEngine.m_MagicList.Count; i++)
             {
-                Magic = M2Share.UserEngine.m_MagicList[i];
-                UserMagic = new TUserMagic
+                var Magic = M2Share.UserEngine.m_MagicList[i];
+                TUserMagic UserMagic = new TUserMagic
                 {
                     MagicInfo = Magic,
                     wMagIdx = Magic.wMagicID,
@@ -2791,22 +2645,14 @@ namespace M2Server
 
         private void SendServerConfig()
         {
-            int nRecog;
-            int nParam;
-            int nRunHuman;
-            int nRunMon;
-            int nRunNpc;
-            int nWarRunAll;
-            TClientConf ClientConf;
-            string sMsg;
             if (m_nSoftVersionDateEx == 0)
             {
                 return;
             }
-            nRunHuman = 0;
-            nRunMon = 0;
-            nRunNpc = 0;
-            nWarRunAll = 0;
+            var nRunHuman = 0;
+            var nRunMon = 0;
+            var nRunNpc = 0;
+            var nWarRunAll = 0;
             if (M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll)
             {
                 nRunHuman = 1;
@@ -2833,16 +2679,16 @@ namespace M2Server
                     nWarRunAll = 1;
                 }
             }
-            ClientConf = M2Share.g_Config.ClientConf;
+            var ClientConf = M2Share.g_Config.ClientConf;
             ClientConf.boRunHuman = nRunHuman == 1;
             ClientConf.boRunMon = nRunMon == 1;
             ClientConf.boRunNpc = nRunNpc == 1;
             ClientConf.boWarRunAll = nWarRunAll == 1;
             ClientConf.wSpellTime = M2Share.g_Config.dwMagicHitIntervalTime + 300;
             ClientConf.wHitIime = M2Share.g_Config.dwHitIntervalTime + 500;
-            sMsg = EDcode.EncodeBuffer(ClientConf);
-            nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
-            nParam = HUtil32.MakeWord(5, 0);
+            var sMsg = EDcode.EncodeBuffer(ClientConf);
+            var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
+            int nParam = HUtil32.MakeWord(5, 0);
             SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, (short)nParam, 0, 0, sMsg);
         }
 
@@ -2983,7 +2829,6 @@ namespace M2Server
 
         private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            int dwCheckTime;
             var result = false;
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0) // 防麻
             {
@@ -2995,7 +2840,7 @@ namespace M2Server
                 return result;
             }
             m_boFilterAction = true;
-            dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+            var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
             if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
             {
                 dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
@@ -3015,12 +2860,11 @@ namespace M2Server
 
         private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
         {
-            int dwCheckTime;
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0)// 防麻
             {
                 return false;
             }
-            dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+            var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
             if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
             {
                 dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
@@ -3033,13 +2877,12 @@ namespace M2Server
 
         private void ClientOpenDoor(int nX, int nY)
         {
-            TUserCastle Castle;
             var door = m_PEnvir.GetDoor(nX, nY);
             if (door == null)
             {
                 return;
             }
-            Castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
+            var Castle = M2Share.CastleManager.IsCastleEnvir(m_PEnvir);
             if (Castle == null || Castle.m_DoorStatus != door.Status || m_btRaceServer != Grobal2.RC_PLAYOBJECT || Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
             {
                 M2Share.UserEngine.OpenDoor(m_PEnvir, nX, nY);
