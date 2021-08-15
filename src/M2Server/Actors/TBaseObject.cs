@@ -215,7 +215,6 @@ namespace M2Server
         /// 下属列表
         /// </summary>        
         public IList<TBaseObject> m_SlaveList = null;
-        public byte bt2A0 = 0;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -656,7 +655,6 @@ namespace M2Server
             m_Master = null;
             m_nKillMonCount = 0;
             m_btSlaveExpLevel = 0;
-            bt2A0 = 0;
             m_GroupMembers = new List<TPlayObject>();
             m_boHearWhisper = true;
             m_boBanShout = true;
