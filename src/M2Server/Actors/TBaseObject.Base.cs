@@ -8,15 +8,8 @@ namespace M2Server
     {
         public virtual void Die()
         {
-            bool boPK;
-            bool guildwarkill;
-            string tStr;
             int tExp;
-            TPlayObject GroupHuman;
-            TMerchant QuestNPC;
             bool tCheck;
-            TBaseObject AttackBaseObject;
-            TUserCastle Castle;
             const string sExceptionMsg1 = "[Exception] TBaseObject::Die 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Die 2";
             const string sExceptionMsg3 = "[Exception] TBaseObject::Die 3";
@@ -70,11 +63,12 @@ namespace M2Server
                             // 是否执行任务脚本
                             if (m_PEnvir.IsCheapStuff())
                             {
+                                TMerchant QuestNPC;
                                 if (m_ExpHitter.m_GroupOwner != null)
                                 {
                                     for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
                                     {
-                                        GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
+                                        TPlayObject GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
                                         if (!GroupHuman.m_boDeath && m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && m_ExpHitter == GroupHuman)
                                         {
                                             tCheck = false;
@@ -153,7 +147,7 @@ namespace M2Server
             }
             try
             {
-                boPK = false;
+                var boPK = false;
                 if (!M2Share.g_Config.boVentureServer && !m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone)
                 {
                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null && PKLevel() < 2)
@@ -176,7 +170,7 @@ namespace M2Server
                 }
                 if (boPK && m_LastHiter != null)
                 {
-                    guildwarkill = false;
+                    var guildwarkill = false;
                     if (m_MyGuild != null && m_LastHiter.m_MyGuild != null)
                     {
                         if (GetGuildRelation(this, m_LastHiter) == 2)
@@ -184,7 +178,7 @@ namespace M2Server
                             guildwarkill = true;    
                         }
                     }
-                    Castle = M2Share.CastleManager.InCastleWarArea(this);
+                    var Castle = M2Share.CastleManager.InCastleWarArea(this);
                     if (Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
                     {
                         guildwarkill = true;
@@ -253,7 +247,7 @@ namespace M2Server
             {
                 if (!m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone && !m_boAnimal)
                 {
-                    AttackBaseObject = m_ExpHitter;
+                    var AttackBaseObject = m_ExpHitter;
                     if (m_ExpHitter != null && m_ExpHitter.m_Master != null)
                     {
                         AttackBaseObject = m_ExpHitter.m_Master;
@@ -298,6 +292,7 @@ namespace M2Server
                         AddBodyLuck(-(50 - (50 - m_Abil.Level * 5)));
                     }
                 }
+                string tStr;
                 if (m_PEnvir.Flag.boFight3Zone)
                 {
                     m_nFightZoneDieCount++;

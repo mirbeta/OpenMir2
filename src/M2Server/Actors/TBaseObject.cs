@@ -2515,221 +2515,6 @@ namespace M2Server
             return (short)HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1));
         }
 
-        /// <summary>
-        /// 武器升级设置
-        /// </summary>
-        /// <param name="UserItem"></param>
-        public void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
-        {
-            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
-            {
-                if (UserItem.btValue[10] == 1)
-                {
-                    UserItem.wIndex = 0;
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 10, 13))
-                {
-                    UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 20, 23))
-                {
-                    UserItem.btValue[1] = (byte)(UserItem.btValue[1] + UserItem.btValue[10] - 19);
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 30, 33))
-                {
-                    UserItem.btValue[2] = (byte)(UserItem.btValue[2] + UserItem.btValue[10] - 29);
-                }
-            }
-            else
-            {
-                UserItem.wIndex = 0;
-            }
-            UserItem.btValue[10] = 0;
-        }
-
-        public void AttackDir_CheckWeaponUpgrade()
-        {
-            TUserItem UseItems;
-            TPlayObject PlayObject;
-            MirItem StdItem;
-            if (m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
-            {
-                UseItems = m_UseItems[Grobal2.U_WEAPON];
-                AttackDir_CheckWeaponUpgradeStatus(m_UseItems[Grobal2.U_WEAPON]);
-                if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
-                {
-                    SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
-                    PlayObject = this as TPlayObject;
-                    PlayObject.SendDelItems(UseItems);
-                    // PlayObject.StatusChanged;
-                    SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
-                    if (StdItem.NeedIdentify == 1)
-                    {
-                        // UserEngine.GetStdItemName(UseItems.wIndex) + #9 +
-                        M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
-                    }
-                    FeatureChanged();
-                }
-                else
-                {
-                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, TMsgColor.c_Red, TMsgType.t_Hint);
-                    PlayObject = this as TPlayObject;
-                    PlayObject.SendUpdateItem(m_UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
-                    if (StdItem.NeedIdentify == 1)
-                    {
-                        // UserEngine.GetStdItemName(UseItems.wIndex) + #9 +
-                        M2Share.AddGameDataLog("20" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
-                    }
-                    RecalcAbilitys();
-                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                }
-            }
-        }
-
-        public virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
-        {
-            TBaseObject AttackTarget;
-            bool boPowerHit;
-            bool boFireHit;
-            bool boCrsHit;
-            bool bo41;
-            bool boTwinHit;
-            bool bo43;
-            short wIdent;
-            const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
-            try
-            {
-                if ((wHitMode == 5) && (m_MagicBanwolSkill != null)) // 半月
-                {
-                    if (m_WAbil.MP > 0)
-                    {
-                        DamageSpell((ushort)(m_MagicBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicBanwolSkill)));
-                        HealthSpellChanged();
-                    }
-                    else
-                    {
-                        wHitMode = Grobal2.RM_HIT;
-                    }
-                }
-                if ((wHitMode == 12) && (m_MagicRedBanwolSkill != null))
-                {
-                    if (m_WAbil.MP > 0)
-                    {
-                        DamageSpell((ushort)(m_MagicRedBanwolSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicRedBanwolSkill)));
-                        HealthSpellChanged();
-                    }
-                    else
-                    {
-                        wHitMode = Grobal2.RM_HIT;
-                    }
-                }
-                if ((wHitMode == 8) && (m_MagicCrsSkill != null))
-                {
-                    if (m_WAbil.MP > 0)
-                    {
-                        DamageSpell((ushort)(m_MagicCrsSkill.MagicInfo.btDefSpell + GetMagicSpell(m_MagicCrsSkill)));
-                        HealthSpellChanged();
-                    }
-                    else
-                    {
-                        wHitMode = Grobal2.RM_HIT;
-                    }
-                }
-
-                m_btDirection = nDir;
-                if (TargeTBaseObject == null)
-                {
-                    AttackTarget = GetPoseCreate();
-                }
-                else
-                {
-                    AttackTarget = TargeTBaseObject;
-                }
-                if ((AttackTarget != null) && (m_UseItems[Grobal2.U_WEAPON] != null) && (m_UseItems[Grobal2.U_WEAPON].wIndex > 0))
-                {
-                    AttackDir_CheckWeaponUpgrade();
-                }
-
-                boPowerHit = m_boPowerHit;
-                boFireHit = m_boFireHitSkill;
-                boCrsHit = m_boCrsHitkill;
-                bo41 = m_bo41kill;
-                boTwinHit = m_boTwinHitSkill;
-                bo43 = m_bo43kill;
-                if (_Attack(ref wHitMode, AttackTarget))
-                {
-                    SetTargetCreat(AttackTarget);
-                }
-                wIdent = Grobal2.RM_HIT;
-                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                {
-                    switch (wHitMode)
-                    {
-                        case 0:
-                            wIdent = Grobal2.RM_HIT;
-                            break;
-                        case 1:
-                            wIdent = Grobal2.RM_HEAVYHIT;
-                            break;
-                        case 2:
-                            wIdent = Grobal2.RM_BIGHIT;
-                            break;
-                        case 3:
-                            if (boPowerHit)
-                            {
-                                wIdent = Grobal2.RM_SPELL2;
-                            }
-                            break;
-                        case 4:
-                            if (m_MagicErgumSkill != null)
-                            {
-                                wIdent = Grobal2.RM_LONGHIT;
-                            }
-                            break;
-                        case 5:
-                            if (m_MagicBanwolSkill != null)
-                            {
-                                wIdent = Grobal2.RM_WIDEHIT;
-                            }
-                            break;
-                        case 7:
-                            if (boFireHit)
-                            {
-                                wIdent = Grobal2.RM_FIREHIT;
-                            }
-                            break;
-                        case 8:
-                            if (m_MagicCrsSkill != null)
-                            {
-                                wIdent = Grobal2.RM_CRSHIT;
-                            }
-                            break;
-                        case 9:
-                            if (boTwinHit)
-                            {
-                                wIdent = Grobal2.RM_TWINHIT;
-                            }
-                            break;
-                        case 12:
-                            if (m_MagicRedBanwolSkill != null)
-                            {
-                                wIdent = Grobal2.RM_WIDEHIT;
-                            }
-                            break;
-                    }
-                }
-                SendAttackMsg(wIdent, m_btDirection, m_nCurrX, m_nCurrY);
-            }
-            catch (Exception e)
-            {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
-            }
-        }
-
         private void CheckPKStatus()
         {
             if (m_boPKFlag && ((HUtil32.GetTickCount() - m_dwPKTick) > M2Share.g_Config.dwPKFlagTime))// 60 * 1000
@@ -3159,6 +2944,9 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 发送延时消息
+        /// </summary>
         public void SendDelayMsg(TBaseObject BaseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             SendMessage SendMessage;
@@ -3182,10 +2970,6 @@ namespace M2Server
                     {
                         SendMessage.Buff = sMsg;
                     }
-                    else
-                    {
-                        SendMessage.Buff = null;
-                    }
                     m_MsgList.Add(SendMessage);
                 }
             }
@@ -3195,6 +2979,9 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 发送延时消息
+        /// </summary>
         public void SendDelayMsg(int BaseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             SendMessage SendMessage;
@@ -3224,10 +3011,6 @@ namespace M2Server
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         SendMessage.Buff = sMsg;
-                    }
-                    else
-                    {
-                        SendMessage.Buff = null;
                     }
                     m_MsgList.Add(SendMessage);
                 }
@@ -3348,11 +3131,11 @@ namespace M2Server
                         break;
                     }
                     SendMessage = m_MsgList[I];
-                    // if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))
-                    // {
-                    //     I++;
-                    //     continue;
-                    // }
+                    if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))//延时消息
+                    {
+                         I++;
+                         continue;
+                    }
                     m_MsgList.RemoveAt(I);
                     Msg = new TProcessMessage();
                     Msg.wIdent = SendMessage.wIdent;
@@ -3566,222 +3349,6 @@ namespace M2Server
             }
         }
 
-        public virtual void UpdateVisibleGay(TBaseObject BaseObject)
-        {
-            bool boIsVisible = false;
-            TVisibleBaseObject VisibleBaseObject;
-            if ((BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_Master != null))// 如果是人物或宝宝则置TRUE
-            {
-                m_boIsVisibleActive = true;
-            }
-            for (int i = 0; i < m_VisibleActors.Count; i++)
-            {
-                VisibleBaseObject = m_VisibleActors[i];
-                if (VisibleBaseObject.BaseObject == BaseObject)
-                {
-                    VisibleBaseObject.nVisibleFlag = 1;
-                    boIsVisible = true;
-                    break;
-                }
-            }
-            if (boIsVisible)
-            {
-                return;
-            }
-            VisibleBaseObject = new TVisibleBaseObject
-            {
-                nVisibleFlag = 2,
-                BaseObject = BaseObject
-            };
-            m_VisibleActors.Add(VisibleBaseObject);
-        }
-
-        public void UpdateVisibleItem(int wX, int wY, TMapItem MapItem)
-        {
-            TVisibleMapItem VisibleMapItem;
-            bool boIsVisible = false;
-            for (int i = 0; i < m_VisibleItems.Count; i++)
-            {
-                VisibleMapItem = m_VisibleItems[i];
-                if (VisibleMapItem.MapItem == MapItem)
-                {
-                    VisibleMapItem.nVisibleFlag = 1;
-                    boIsVisible = true;
-                    break;
-                }
-            }
-            if (boIsVisible)
-            {
-                return;
-            }
-            VisibleMapItem = new TVisibleMapItem
-            {
-                nVisibleFlag = 2,
-                nX = wX,
-                nY = wY,
-                MapItem = MapItem,
-                sName = MapItem.Name,
-                wLooks = MapItem.Looks
-            };
-            m_VisibleItems.Add(VisibleMapItem);
-        }
-
-        public void UpdateVisibleEvent(int wX, int wY, TEvent MapEvent)
-        {
-            bool boIsVisible = false;
-            TEvent __Event;
-            for (int i = 0; i < m_VisibleEvents.Count; i++)
-            {
-                __Event = m_VisibleEvents[i];
-                if (__Event == MapEvent)
-                {
-                    __Event.nVisibleFlag = 1;
-                    boIsVisible = true;
-                    break;
-                }
-            }
-            if (boIsVisible)
-            {
-                return;
-            }
-            MapEvent.nVisibleFlag = 2;
-            MapEvent.m_nX = wX;
-            MapEvent.m_nY = wY;
-            m_VisibleEvents.Add(MapEvent);
-        }
-
-        public bool IsVisibleHuman()
-        {
-            bool result = false;
-            TVisibleBaseObject VisibleBaseObject;
-            for (int i = 0; i < m_VisibleActors.Count; i++)
-            {
-                VisibleBaseObject = m_VisibleActors[i];
-                if ((VisibleBaseObject.BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (VisibleBaseObject.BaseObject.m_Master != null))
-                {
-                    result = true;
-                    break;
-                }
-            }
-            return result;
-        }
-
-        public virtual void SearchViewRange()
-        {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
-            TBaseObject BaseObject;
-            TVisibleBaseObject VisibleBaseObject;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-%d %s %s %d %d %d";
-            if (m_PEnvir == null)
-            {
-                M2Share.ErrorMessage("SearchViewRange nil PEnvir");
-                return;
-            }
-            var n24 = 0;
-            m_boIsVisibleActive = false;// 先置为FALSE
-            try
-            {
-                for (var i = 0; i < m_VisibleActors.Count; i++)
-                {
-                    m_VisibleActors[i].nVisibleFlag = 0;
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg1);
-                KickException();
-            }
-            var nStartX = m_nCurrX - m_nViewRange;
-            var nEndX = m_nCurrX + m_nViewRange;
-            var nStartY = m_nCurrY - m_nViewRange;
-            var nEndY = m_nCurrY + m_nViewRange;
-            try
-            {
-                for (var n18 = nStartX; n18 <= nEndX; n18++)
-                {
-                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
-                    {
-                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
-                        {
-                            n24 = 1;
-                            var nIdx = 0;
-                            while (true)
-                            {
-                                if (MapCellInfo.ObjList.Count <= nIdx)
-                                {
-                                    break;
-                                }
-                                OSObject = MapCellInfo.ObjList[nIdx];
-                                if (OSObject != null)
-                                {
-                                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
-                                    {
-                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
-                                        {
-                                            OSObject = null;
-                                            MapCellInfo.ObjList.RemoveAt(nIdx);
-                                            if (MapCellInfo.ObjList.Count > 0)
-                                            {
-                                                continue;
-                                            }
-                                            MapCellInfo.ObjList = null;
-                                            break;
-                                        }
-                                        BaseObject = OSObject.CellObj as TBaseObject;
-                                        if (BaseObject != null)
-                                        {
-                                            if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
-                                            {
-                                                if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
-                                                {
-                                                    UpdateVisibleGay(BaseObject);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                nIdx++;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
-                M2Share.ErrorMessage(e.Message);
-                KickException();
-            }
-
-            n24 = 2;
-            try
-            {
-                var n18 = 0;
-                while (true)
-                {
-                    if (m_VisibleActors.Count <= n18)
-                    {
-                        break;
-                    }
-                    VisibleBaseObject = m_VisibleActors[n18];
-                    if (VisibleBaseObject.nVisibleFlag == 0)
-                    {
-                        m_VisibleActors.RemoveAt(n18);
-                        Dispose(VisibleBaseObject);
-                        continue;
-                    }
-                    n18++;
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
-                KickException();
-            }
-        }
-
         public int GetFeatureToLong()
         {
             return GetFeature(null);
@@ -3879,11 +3446,7 @@ namespace M2Server
             result = Grobal2.MakeMonsterFeature(m_btRaceImg, m_btMonsterWeapon, m_wAppr);
             return result;
         }
-
-        /// <summary>
-        /// 转换有问题
-        /// </summary>
-        /// <returns></returns>
+        
         public long GetCharStatus()
         {
             long nStatus = 0;
@@ -4981,11 +4544,6 @@ namespace M2Server
                     break;
                 }
             }
-        }
-      
-        protected void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
-        {
-            SendRefMsg(wIdent, btDir, nX, nY, 0, "");
         }
 
         public ushort GetHitStruckDamage(TBaseObject Target, int nDamage)

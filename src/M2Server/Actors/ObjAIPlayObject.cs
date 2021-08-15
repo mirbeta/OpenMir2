@@ -207,67 +207,6 @@ namespace M2Server
             }
         }
         
-        public void GainExp(int dwExp)
-        {
-            int n;
-            int sumlv;
-            TPlayObject PlayObject;
-            const string sExceptionMsg = "[Exception] TPlayObject::GainExp";
-            double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
-            try
-            {
-                if (m_GroupOwner != null)
-                {
-                    sumlv = 0;
-                    n = 0;
-                    for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
-                    {
-                        PlayObject = m_GroupOwner.m_GroupMembers[i];
-                        if (!PlayObject.m_boDeath && m_PEnvir == PlayObject.m_PEnvir && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12 && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12)
-                        {
-                            sumlv = sumlv + PlayObject.m_Abil.Level;
-                            n++;
-                        }
-                    }
-                    if (sumlv > 0 && n > 1)
-                    {
-                        // if (n >= 0 && n <= Grobal2.GROUPMAX)
-                        // {
-                        //     dwExp = HUtil32.Round(dwExp * bonus[n]);
-                        // }
-                        // for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
-                        // {
-                        //     PlayObject = m_GroupOwner.m_GroupMembers[i];
-                        //     if (!PlayObject.m_boDeath && m_PEnvir == PlayObject.m_PEnvir && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12 && Math.Abs(m_nCurrX - PlayObject.m_nCurrX) <= 12)
-                        //     {
-                        //         if (M2Share.g_Config.boHighLevelKillMonFixExp)
-                        //         {
-                        //             // 02/08 增加，在高等级经验不变时，把组队的经验平均分配
-                        //             PlayObject.WinExp(HUtil32.Round(dwExp / n));
-                        //         }
-                        //         else
-                        //         {
-                        //             PlayObject.WinExp(HUtil32.Round(dwExp / sumlv * PlayObject.m_Abil.Level));
-                        //         }
-                        //     }
-                        // }
-                    }
-                    else
-                    {
-                        WinExp(dwExp);
-                    }
-                }
-                else
-                {
-                    WinExp(dwExp);
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg);
-            }
-        }
-
         private void WinExp(int dwExp)
         {
             if (m_Abil.Level > M2Share.g_Config.nLimitExpLevel)
