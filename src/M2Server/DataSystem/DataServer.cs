@@ -71,8 +71,7 @@ namespace M2Server
             var data = HUtil32.GetBytes(sSendMsg);
             _clientScoket.Send(data);
         }
-
-
+        
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = false;

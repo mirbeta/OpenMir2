@@ -13,13 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeAttackModeCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Event/TFireBurnEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MagicSystem/TMagicManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,14 +34,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/c2/fb41e209/ICollection`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/78/e9d794af/Int32.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9c/7bc58a64/Number.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/fa/31422d40/IList`1.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -124,7 +118,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="settings.editor.selected.configurable" value="RiderNuGetOptionsPageId" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected=".NET Project.M2Server">
@@ -297,7 +291,9 @@
       <workItem from="1628780506087" duration="1439000" />
       <workItem from="1628826191722" duration="2454000" />
       <workItem from="1628841248747" duration="27670000" />
-      <workItem from="1628875445986" duration="6303000" />
+      <workItem from="1628875445986" duration="7179000" />
+      <workItem from="1628953238482" duration="790000" />
+      <workItem from="1628954187736" duration="705000" />
     </task>
     <servers />
   </component>
@@ -514,17 +510,17 @@
           <option name="timeStamp" value="486" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/Event/TEventManager.cs</url>
-          <line>22</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/Event/TEventManager.cs" initialLine="22" containingFunctionPresentation="method 'Run'">
+          <url>file://$PROJECT_DIR$/src/M2Server/Event/TEvent.cs</url>
+          <line>73</line>
+          <properties documentPath="$PROJECT_DIR$/src/M2Server/Event/TEvent.cs" initialLine="58" containingFunctionPresentation="method 'Run'">
             <startOffsets>
-              <option value="775" />
+              <option value="2116" />
             </startOffsets>
             <endOffsets>
-              <option value="810" />
+              <option value="2134" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="498" />
+          <option name="timeStamp" value="508" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

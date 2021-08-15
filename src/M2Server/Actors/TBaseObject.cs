@@ -219,7 +219,6 @@ namespace M2Server
         /// 下属列表
         /// </summary>        
         public IList<TBaseObject> m_SlaveList = null;
-        public byte bt2A0 = 0;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -269,10 +268,14 @@ namespace M2Server
         public int m_dwCrazyModeTick = 0;
         public int m_dwCrazyModeInterval = 0;
         public bool m_boShowHP = false;
+        /// <summary>
+        /// 心灵启示检查时间
+        /// </summary>
         public int m_dwShowHPTick = 0;
-        // 0x2E8  心灵启示检查时间(Dword)
+        /// <summary>
+        /// 心灵启示有效时长
+        /// </summary>
         public int m_dwShowHPInterval = 0;
-        // 0x2EC  心灵启示有效时长(Dword)
         public bool bo2F0 = false;
         public int m_dwDupObjTick = 0;
         public TEnvirnoment m_PEnvir = null;
@@ -654,7 +657,6 @@ namespace M2Server
             m_Master = null;
             m_nKillMonCount = 0;
             m_btSlaveExpLevel = 0;
-            bt2A0 = 0;
             m_GroupMembers = new List<TPlayObject>();
             m_boHearWhisper = true;
             m_boBanShout = true;
