@@ -284,7 +284,7 @@ namespace SystemModule.Common
 
         public void SaveToFile(string fileName)
         {
-            var sw2 = new StreamWriter(fileName, false, ASCIIEncoding.Default);
+            var sw2 = new StreamWriter(fileName, false, Encoding.GetEncoding("gb2312"));
             for (int i = 0; i < this.Count; i++)
             {
                 sw2.Write(_mStrings[i] + "\r\n");
@@ -300,7 +300,7 @@ namespace SystemModule.Common
         public void LoadFromFile(string fileName)
         {
             this.Clear();
-            var sr2 = new StreamReader(fileName, Encoding.Default);
+            var sr2 = new StreamReader(fileName, Encoding.GetEncoding("gb2312"));
             while (sr2.Peek() >= 0)
             {
                 this.AppendText(sr2.ReadLine());
@@ -311,7 +311,7 @@ namespace SystemModule.Common
         public void LoadFromFile(string fileName, bool isAdd)
         {
             this.Clear();
-            var sr2 = new StreamReader(fileName, Encoding.Default);
+            var sr2 = new StreamReader(fileName, Encoding.GetEncoding("gb2312"));
             while (sr2.Peek() >= 0)
             {
                 this.AppendText(sr2.ReadLine());

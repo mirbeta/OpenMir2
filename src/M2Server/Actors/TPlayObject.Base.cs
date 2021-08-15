@@ -1358,7 +1358,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        n5F8++;
                     }
                     else
                     {
@@ -1419,7 +1418,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        n5F8++;
                     }
                     else
                     {
@@ -1468,7 +1466,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        n5F8++;
                     }
                     else
                     {
@@ -1532,7 +1529,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        n5F8++;
                     }
                     else
                     {
@@ -1644,7 +1640,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        n5F8++;
                     }
                     else
                     {
@@ -1876,10 +1871,6 @@ namespace M2Server
                                     SetPKFlag(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
                                 }
                                 SetLastHiter(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
-                            }
-                            if (PKLevel() >= 2)
-                            {
-                                m_dw5D4 = HUtil32.GetTickCount();
                             }
                             if (M2Share.CastleManager.IsCastleMember(this) != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
                             {

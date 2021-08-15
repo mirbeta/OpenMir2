@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections;
 using SystemModule;
 
 namespace M2Server
@@ -57,7 +54,6 @@ namespace M2Server
         /// 回城座标Y
         /// </summary>
         public short m_nHomeY = 0;
-        public bool bo94 = false;
         public bool m_boOnHorse = false;
         public byte m_btHorseType = 0;
         public byte m_btDressEffType = 0;
@@ -269,10 +265,14 @@ namespace M2Server
         public int m_dwCrazyModeTick = 0;
         public int m_dwCrazyModeInterval = 0;
         public bool m_boShowHP = false;
+        /// <summary>
+        /// 心灵启示检查时间
+        /// </summary>
         public int m_dwShowHPTick = 0;
-        // 0x2E8  心灵启示检查时间(Dword)
+        /// <summary>
+        /// 心灵启示有效时长
+        /// </summary>
         public int m_dwShowHPInterval = 0;
-        // 0x2EC  心灵启示有效时长(Dword)
         public bool bo2F0 = false;
         public int m_dwDupObjTick = 0;
         public TEnvirnoment m_PEnvir = null;
@@ -437,9 +437,12 @@ namespace M2Server
         /// 当前处理数量
         /// </summary>
         public short m_nProcessRunCount = 0;
+        /// <summary>
+        /// 可见玩家列表
+        /// </summary>
         public IList<TVisibleBaseObject> m_VisibleActors = null;
         /// <summary>
-        /// 人物背包(Dword)数量
+        /// 人物背包
         /// </summary>
         public IList<TUserItem> m_ItemList = null;
         /// <summary>
@@ -551,7 +554,6 @@ namespace M2Server
             bo2B9 = true;
             m_nViewRange = 5;
             m_sHomeMap = "0";
-            bo94 = false;
             m_btPermission = 0;
             m_nLight = 0;
             m_btNameColor = 255;
@@ -3692,7 +3694,6 @@ namespace M2Server
                                             MapCellInfo.ObjList = null;
                                             break;
                                         }
-
                                         BaseObject = OSObject.CellObj as TBaseObject;
                                         if (BaseObject != null)
                                         {

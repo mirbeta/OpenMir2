@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -12,7 +9,6 @@ namespace M2Server
     public partial class TPlayObject : TAnimalObject
     {
         public TDefaultMessage m_DefMsg;
-        public ArrayList TList55C = null;
         public string m_sOldSayMsg = string.Empty;
         public int m_nSayMsgCount = 0;
         public int m_dwSayMsgTick = 0;
@@ -22,8 +18,6 @@ namespace M2Server
         public int dwTick578 = 0;
         public int dwTick57C = 0;
         public bool m_boInSafeArea = false;
-        public int n584 = 0;
-        public int n588 = 0;
         /// <summary>
         /// 登录帐号名
         /// </summary>
@@ -97,9 +91,6 @@ namespace M2Server
         public short m_nSwitchMapY = 0;
         public bool m_boSwitchDataSended = false;
         public int m_dwChgDataWritedTick = 0;
-        public int m_dw5D4 = 0;
-        public int n5F8 = 0;
-        public int n5FC = 0;
         /// <summary>
         /// 攻击间隔
         /// </summary>
@@ -199,8 +190,6 @@ namespace M2Server
         public string m_sMoveMap = string.Empty;
         public short m_nMoveX = 0;
         public short m_nMoveY = 0;
-        public bool bo698 = false;
-        public int n69C = 0;
         /// <summary>
         /// 保存人物数据时间间隔
         /// </summary>
@@ -364,8 +353,6 @@ namespace M2Server
         /// 进入速度测试模式
         /// </summary>
         public bool m_boTestSpeedMode = false;
-        public int nRunCount = 0;
-        public int dwRunTimeCount = 0;
         public int m_dwDelayTime = 0;
         public string m_sRandomNo = string.Empty;
         public int m_dwQueryBagItemsTick = 0;
@@ -2031,8 +2018,6 @@ namespace M2Server
             m_boKickFlag = false;
             m_boSoftClose = false;
             m_boReadyRun = false;
-            bo698 = false;
-            n69C = 0;
             m_dwSaveRcdTick = HUtil32.GetTickCount();
             m_boWantRefMsg = true;
             m_boRcdSaved = false;
@@ -2061,8 +2046,6 @@ namespace M2Server
             dwTick578 = HUtil32.GetTickCount();
             dwTick57C = HUtil32.GetTickCount();
             m_boInSafeArea = false;
-            n5F8 = 0;
-            n5FC = 0;
             m_dwMagicAttackTick = HUtil32.GetTickCount();
             m_dwMagicAttackInterval = 0;
             m_dwAttackTick = HUtil32.GetTickCount();
@@ -2075,15 +2058,12 @@ namespace M2Server
             m_dwMoveCount = 0;
             m_dwMoveCountA = 0;
             m_nOverSpeedCount = 0;
-            TList55C = new ArrayList();
             m_sOldSayMsg = "";
             m_dwSayMsgTick = HUtil32.GetTickCount();
             m_boDisableSayMsg = false;
             m_dwDisableSayMsgTick = HUtil32.GetTickCount();
             m_dLogonTime = DateTime.Now;
             m_dwLogonTick = HUtil32.GetTickCount();
-            n584 = 0;
-            n588 = 0;
             m_boSwitchData = false;
             m_boSwitchDataSended = false;
             m_nWriteChgDataErrCount = 0;

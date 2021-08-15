@@ -38,9 +38,7 @@ namespace M2Server
             }
             if (sCtr == "")
             {
-                PlayObject.SysMsg(
-                    string.Format(M2Share.g_sGameCommandLuckPointMsg, sHumanName, PlayObject.m_nBodyLuckLevel,
-                        PlayObject.m_dBodyLuck, PlayObject.m_nLuck), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandLuckPointMsg, sHumanName, PlayObject.m_nBodyLuckLevel, PlayObject.m_dBodyLuck, PlayObject.m_nLuck), TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
             var nPoint = HUtil32.Str_ToInt(sPoint, 0);

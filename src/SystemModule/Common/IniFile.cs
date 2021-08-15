@@ -186,7 +186,7 @@ namespace SystemModule.Common
                 File.Create(this.FileName).Close();
                 return false;
             }
-            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default);
+            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
             if (rd == null)
             {
                 return false;

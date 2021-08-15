@@ -73,10 +73,14 @@ namespace M2Server
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s14 = LoadList[i].Trim();
-                if (s14 != "" && s14[0] == '#' && HUtil32.CompareLStr(s14, "#CALL", "#CALL".Length))
+                if (!string.IsNullOrEmpty(s14) && s14[0] == '#' && HUtil32.CompareLStr(s14, "#CALL", "#CALL".Length))
                 {
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
+                    if (s20.StartsWith("\\"))
+                    {
+                        s20 = s20.Remove(0, 2);
+                    }
                     s18 = s14.Trim();
                     s34 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
                     if (LoadScriptFile_LoadCallScript(s34, s18, LoadList))
