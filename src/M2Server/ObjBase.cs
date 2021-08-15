@@ -1,6 +1,6 @@
 namespace M2Server
 {
-    public class SendMessage
+    public struct SendMessage
     {
         public int wIdent;
         public int wParam;

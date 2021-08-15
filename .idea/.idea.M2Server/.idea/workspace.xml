@@ -13,9 +13,22 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AuthSystem/AuthClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AuthSystem/AuthClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/LuckPointCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/LuckPointCommand.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/PathFind.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ObjBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Package/Package.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Package/Package.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Common/IniFile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Common/IniFile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Common/TStringList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Common/TStringList.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Grobal2.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +48,11 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/c2/fb41e209/ICollection`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/78/e9d794af/Int32.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9c/7bc58a64/Number.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/fa/31422d40/IList`1.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -121,7 +134,7 @@
     <property name="settings.editor.selected.configurable" value="RiderNuGetOptionsPageId" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected=".NET Project.M2Server">
+  <component name="RunManager" selected=".NET Launch Settings Profile.M2Server: MirServer">
     <configuration name="M2Server" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/src/M2Server/bin/Debug/net5.0/net5.0/net5.0/net5.0/MirServer.dll" />
       <option name="PROGRAM_PARAMETERS" value="-v" />
@@ -294,6 +307,7 @@
       <workItem from="1628875445986" duration="7179000" />
       <workItem from="1628953238482" duration="790000" />
       <workItem from="1628954187736" duration="705000" />
+      <workItem from="1628999431981" duration="3166000" />
     </task>
     <servers />
   </component>

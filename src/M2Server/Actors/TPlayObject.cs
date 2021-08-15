@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -45,7 +48,6 @@ namespace M2Server
         /// 战领沙城时间
         /// </summary>
         public int m_dwLogonTick = 0;
-        // 0x5B8  (Dword)
         /// <summary>
         /// 是否进入游戏完成
         /// </summary>
@@ -254,8 +256,10 @@ namespace M2Server
         /// 离婚次数
         /// </summary>        
         public byte m_btMarryCount = 0;
+        /// <summary>
+        /// 转生等级
+        /// </summary>
         public byte m_btReLevel = 0;
-        // 转生等级
         public byte m_btReColorIdx = 0;
         public int m_dwReColorTick = 0;
         /// <summary>
@@ -294,8 +298,10 @@ namespace M2Server
         public int m_dwKillMonExpRateTime = 0;
         public int m_dwPowerRateTime = 0;
         public int m_dwRateTick = 0;
+        /// <summary>
+        /// 是否允许使用物品
+        /// </summary>
         public bool m_boCanUseItem = false;
-        // 是否允许使用物品
         public bool m_boCanDeal = false;
         public bool m_boCanDrop = false;
         public bool m_boCanGetBackItem = false;

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using SystemModule;
 
 namespace M2Server
@@ -302,51 +304,92 @@ namespace M2Server
         public bool m_boMission = false;
         public short m_nMissionX = 0;
         public short m_nMissionY = 0;
+        /// <summary>
+        /// 隐身戒指
+        /// </summary>
         public bool m_boHideMode = false;
-        // 0x344  隐身戒指(Byte)
         public bool m_boStoneMode = false;
+        /// <summary>
+        /// 是否可以看到隐身人物
+        /// </summary>
         public bool m_boCoolEye = false;
-        // 0x346  //是否可以看到隐身人物
+        /// <summary>
+        /// 是否用了神水
+        /// </summary>
         public bool m_boUserUnLockDurg = false;
-        // 0x347  //是否用了神水
+        /// <summary>
+        /// 魔法隐身了
+        /// </summary>
         public bool m_boTransparent = false;
-        // 0x348  //魔法隐身了
+       /// <summary>
+       /// 管理模式
+       /// </summary>
         public bool m_boAdminMode = false;
-        // 0x349  管理模式(Byte)
+        /// <summary>
+        /// 隐身模式
+        /// </summary>
         public bool m_boObMode = false;
-        // 0x34A  隐身模式(Byte)
+       /// <summary>
+       /// 传送戒指
+       /// </summary>
         public bool m_boTeleport = false;
-        // 0x34B  传送戒指(Byte)
+         /// <summary>
+         /// 麻痹戒指
+         /// </summary>
         public bool m_boParalysis = false;
-        // 0x34C  麻痹戒指(Byte)
         public bool m_boUnParalysis = false;
+        /// <summary>
+        /// 复活戒指
+        /// </summary>
         public bool m_boRevival = false;
-        // 0x34D  复活戒指(Byte)
+        /// <summary>
+        /// 防复活
+        /// </summary>
         public bool m_boUnRevival = false;
-        // 防复活
+        /// <summary>
+        /// 复活戒指使用间隔计数
+        /// </summary>
         public int m_dwRevivalTick = 0;
-        // 0x350  复活戒指使用间隔计数(Dword)
+       /// <summary>
+       /// 火焰戒指
+       /// </summary>
         public bool m_boFlameRing = false;
-        // 0x354  火焰戒指(Byte)
+       /// <summary>
+       /// 治愈戒指
+       /// </summary>
         public bool m_boRecoveryRing = false;
-        // 0x355  治愈戒指(Byte)
+        // 0x355  (Byte)
         public bool m_boAngryRing = false;
         // 0x356  未知戒指(Byte)
+        /// <summary>
+        /// 护身戒指
+        /// </summary>
         public bool m_boMagicShield = false;
-        // 0x357  护身戒指(Byte)
+        /// <summary>
+        /// 防护身
+        /// </summary>
         public bool m_boUnMagicShield = false;
-        // 防护身
+       /// <summary>
+       /// 活力戒指
+       /// </summary>
         public bool m_boMuscleRing = false;
-        // 0x358  活力戒指(Byte)
+       /// <summary>
+       /// 技巧项链
+       /// </summary>
         public bool m_boFastTrain = false;
-        // 0x359  技巧项链(Byte)
+      /// <summary>
+      /// 探测项链
+      /// </summary>
         public bool m_boProbeNecklace = false;
-        // 0x35A  探测项链(Byte)
+      /// <summary>
+      /// 行会传送
+      /// </summary>
         public bool m_boGuildMove = false;
-        // 行会传送
         public bool m_boSupermanItem = false;
+        /// <summary>
+        /// 祈祷
+        /// </summary>
         public bool m_bopirit = false;
-        // 祈祷
         public bool m_boNoDropItem = false;
         public bool m_boNoDropUseItem = false;
         public bool m_boExpItem = false;
@@ -397,10 +440,14 @@ namespace M2Server
         /// 人物攻击变色时间长度
         /// </summary>
         public int m_dwPKTick = 0;
+        /// <summary>
+        /// 魔血一套
+        /// </summary>
         public int m_nMoXieSuite = 0;
-        // 0x3A4  魔血一套(Dword)
+        /// <summary>
+        /// 虹魔一套
+        /// </summary>
         public int m_nHongMoSuite = 0;
-        // 0x3A8 虹魔一套(Dword)
         public double m_db3B0 = 0;
         /// <summary>
         /// 中毒处理间隔时间
@@ -526,8 +573,10 @@ namespace M2Server
         // 挂机字符
         public int m_dwKickOffLineTick = 0;
         public bool m_boNastyMode = false;
+        /// <summary>
+        /// 气血石
+        /// </summary>
         public int m_nAutoAddHPMPMode = 0;
-        // 气血石
         public int m_dwCheckHPMPTick = 0;
         public long dwTick3F4 = 0;
         /// <summary>
@@ -3288,7 +3337,7 @@ namespace M2Server
             SendMsg(BaseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        public virtual bool GetMessage(ref TProcessMessage Msg)
+        protected virtual bool GetMessage(ref TProcessMessage Msg)
         {
             bool result = false;
             int I;
@@ -3304,16 +3353,13 @@ namespace M2Server
                         break;
                     }
                     SendMessage = m_MsgList[I];
-                    //if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))
-                    //{
-                    //    I++;
-                    //    continue;
-                    //}
+                    // if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))
+                    // {
+                    //     I++;
+                    //     continue;
+                    // }
                     m_MsgList.RemoveAt(I);
-                    Msg = new TProcessMessage
-                    {
-                        wIdent = 0
-                    };
+                    Msg = new TProcessMessage();
                     Msg.wIdent = SendMessage.wIdent;
                     Msg.wParam = SendMessage.wParam;
                     Msg.nParam1 = SendMessage.nParam1;
@@ -3337,7 +3383,7 @@ namespace M2Server
                     {
                         Msg.sMsg = string.Empty;
                     }
-                    SendMessage = null;
+                    //SendMessage = null;
                     result = true;
                     break;
                 }

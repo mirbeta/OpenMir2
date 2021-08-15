@@ -225,9 +225,6 @@ namespace SystemModule
         public ushort Weight;
         public ushort WearWeight;
         public ushort HandWeight;
-
-        public TAddAbility()
-        { }
     } 
 
     public class TProcessMessage
