@@ -3080,6 +3080,10 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 显示玩家名字
+        /// </summary>
+        /// <returns></returns>
         public override string GetShowName()
         {
             var result = string.Empty;
