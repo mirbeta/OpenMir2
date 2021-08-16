@@ -596,7 +596,7 @@ namespace M2Server
             //人工智障开始登陆
             if (m_UserLogonList.Count > 0)
             {
-                if (HUtil32.GetTickCount() - m_dwAILogonTick > 1)
+                if (HUtil32.GetTickCount() - m_dwAILogonTick > 1000)
                 {
                     m_dwAILogonTick = HUtil32.GetTickCount();
                     if (m_UserLogonList.Count > 0)
@@ -665,8 +665,6 @@ namespace M2Server
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
             try
             {
-                //todo 加入Ai专属线程
-                
                 while (true)
                 {
                     //todo 需要优化这里，当m_PlayObjectList列表过大时处理不过来

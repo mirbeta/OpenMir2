@@ -4126,8 +4126,6 @@ namespace M2Server
                     {
                         result = true;
                     }
-                    // 15
-                    // 50
                     if ((m_btRaceServer > Grobal2.RC_PEACENPC) && (m_btRaceServer < Grobal2.RC_ANIMAL))
                     {
                         result = true;
