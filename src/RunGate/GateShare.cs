@@ -40,10 +40,6 @@ namespace RunGate
         public static IList<string> AbuseList = null;
         public static ConcurrentDictionary<string, int> SessionIndex;
         /// <summary>
-        /// 连接会话数
-        /// </summary>
-        public static int SessionCount = 0;
-        /// <summary>
         /// 是否显示SOCKET接收的信息
         /// </summary>
         public static bool boShowSckData = false;

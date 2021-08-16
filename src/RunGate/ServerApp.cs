@@ -331,7 +331,7 @@ namespace RunGate
                                                         sDataText = EDcode.DeCodeString(sDataMsg);
                                                         if (sDataText != "")
                                                         {
-                                                            if (sDataText[1] == '/')
+                                                            if (sDataText[0] == '/')
                                                             {
                                                                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { " " }); // 限制最长可发字符长度
                                                                 FilterSayMsg(ref sDataText);
@@ -339,7 +339,7 @@ namespace RunGate
                                                             }
                                                             else
                                                             {
-                                                                if (sDataText[1] != '@')
+                                                                if (sDataText[0] != '@')
                                                                 {
                                                                     FilterSayMsg(ref sDataText);// 限制最长可发字符长度
                                                                 }
@@ -506,7 +506,6 @@ namespace RunGate
                 GateShare.boGateReady = false;
                 //GateShare.boCheckServerFail = false;
                 GateShare.boSendHoldTimeOut = false;
-                GateShare.SessionCount = 1;
                 LoadConfig();
                 GateShare.dwProcessReviceMsgTimeLimit = 50;
                 GateShare.dwProcessSendMsgTimeLimit = 50;

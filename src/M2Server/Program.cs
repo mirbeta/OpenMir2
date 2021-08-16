@@ -1,3 +1,4 @@
+using System;
 using System.Runtime;
 using System.Text;
 using System.Threading;
@@ -23,6 +24,11 @@ namespace M2Server
                     services.AddSingleton<MirApp>();
                     services.AddHostedService<AppService>();
                 });
+
+            cancellationToken.Token.Register(() =>
+            {
+                Console.WriteLine("停止服务.");
+            });
 
             await builder.RunConsoleAsync(cancellationToken.Token);
         }

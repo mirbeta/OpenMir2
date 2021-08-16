@@ -31,8 +31,8 @@ namespace RunGate
             for (var i = 0; i < GateShare.ServerCount; i++)
             {
                 serverAddr = GateShare.Conf.GetString("Servers", $"ServerAddr{i}");
-                serverPort = GateShare.Conf.ReadInteger<int>("Servers", $"ServerPort{i}", 80);
-                if (string.IsNullOrEmpty(serverAddr) || serverPort == 80)
+                serverPort = GateShare.Conf.ReadInteger<int>("Servers", $"ServerPort{i}", -1);
+                if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;

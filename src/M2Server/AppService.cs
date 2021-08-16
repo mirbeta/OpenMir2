@@ -28,6 +28,9 @@ namespace M2Server
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("M2Server is starting.");
+            M2Share.MainOutMessage("正在读取配置信息...");
+            _mirApp.InitializeServer();
+            M2Share.MainOutMessage("读取配置信息完成...");
             _mirApp.StartServer(cancellationToken);
             return base.StartAsync(cancellationToken);
         }

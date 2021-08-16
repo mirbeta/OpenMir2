@@ -11,7 +11,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="" />
+    <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.Action.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.Condition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/ObjectSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrSystem/ObjectSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/AppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AppService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/MirApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MirApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGateClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerApp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Sockets/AsyncSocketServer/IServerSocket.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -293,6 +315,7 @@
       <workItem from="1629004886105" duration="13000" />
       <workItem from="1629008263689" duration="832000" />
       <workItem from="1629028091638" duration="3263000" />
+      <workItem from="1629112038075" duration="1051000" />
     </task>
     <servers />
   </component>
@@ -370,10 +393,10 @@
           <line>2117</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2117" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
             <startOffsets>
-              <option value="93520" />
+              <option value="92720" />
             </startOffsets>
             <endOffsets>
-              <option value="93585" />
+              <option value="92785" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="366" />
@@ -383,10 +406,10 @@
           <line>2111</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2111" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
             <startOffsets>
-              <option value="93281" />
+              <option value="92481" />
             </startOffsets>
             <endOffsets>
-              <option value="93282" />
+              <option value="92482" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="367" />
@@ -396,10 +419,10 @@
           <line>2084</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2084" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
             <startOffsets>
-              <option value="91927" />
+              <option value="91127" />
             </startOffsets>
             <endOffsets>
-              <option value="91992" />
+              <option value="91192" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="368" />
@@ -409,10 +432,10 @@
           <line>2078</line>
           <properties documentPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.GotoLable.cs" initialLine="2078" containingFunctionPresentation="method 'GotoLable_QuestActionProcess'">
             <startOffsets>
-              <option value="91688" />
+              <option value="90888" />
             </startOffsets>
             <endOffsets>
-              <option value="91689" />
+              <option value="90889" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="369" />

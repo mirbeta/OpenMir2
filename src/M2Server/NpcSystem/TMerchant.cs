@@ -8,15 +8,17 @@ namespace M2Server
     public class TMerchant : TNormNpc
     {
         public string m_sScript = string.Empty;
-        public int n56C = 0;
+        /// <summary>
+        /// 物品价格倍率 默认为 100%
+        /// </summary>
         public int m_nPriceRate = 0;
-        // 0x570   物品价格倍率 默认为 100%
-        public bool bo574 = false;
         public bool m_boCastle = false;
         public int dwRefillGoodsTick = 0;
         public int dwClearExpreUpgradeTick = 0;
-        public ArrayList m_ItemTypeList = null;
-        // 0x580  NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
+        /// <summary>
+        /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
+        /// </summary>
+        public IList<int> m_ItemTypeList = null;
         public IList<TGoods> m_RefillGoodsList = null;
         public IList<IList<TUserItem>> m_GoodsList = null;
         public IList<TItemPrice> m_ItemPriceList = null;
@@ -221,7 +223,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_ItemTypeList.Count; i++)
             {
-                if ((int)m_ItemTypeList[i] == nStdMode)
+                if (m_ItemTypeList[i] == nStdMode)
                 {
                     result = true;
                     break;
@@ -1003,7 +1005,7 @@ namespace M2Server
             m_wAppr = 0;
             m_nPriceRate = 100;
             m_boCastle = false;
-            m_ItemTypeList = new ArrayList();
+            m_ItemTypeList = new List<int>();
             m_RefillGoodsList = new List<TGoods>();
             m_GoodsList = new List<IList<TUserItem>>();
             m_ItemPriceList = new List<TItemPrice>();
@@ -1183,7 +1185,7 @@ namespace M2Server
             var n1C = 1;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
-                if (bo29 || bo574)
+                if (bo29)
                 {
                     break;
                 }
@@ -1386,7 +1388,7 @@ namespace M2Server
             var result = false;
             MirItem StdItem;
             var nPrice = GetSellItemPrice(GetUserItemPrice(UserItem));
-            if (nPrice > 0 && !bo574 && ClientSellItem_sub_4A1C84(UserItem))
+            if (nPrice > 0 && ClientSellItem_sub_4A1C84(UserItem))
             {
                 if (PlayObject.IncGold(nPrice))
                 {

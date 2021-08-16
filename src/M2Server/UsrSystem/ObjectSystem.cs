@@ -5,6 +5,9 @@ using SystemModule;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 对象管理系统
+    /// </summary>
     public class ObjectSystem
     {
         /// <summary>
@@ -53,7 +56,7 @@ namespace M2Server
             return actor;
         }
 
-        public void Revome(int actorId)
+        private void Revome(int actorId)
         {
             TBaseObject ghostactor = null;
             _actors.TryRemove(actorId, out ghostactor);

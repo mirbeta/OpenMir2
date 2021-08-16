@@ -149,7 +149,7 @@ namespace M2Server
             m_boLockLogoned = false;
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
-                
+
         private void SendNotice()
         {
             var LoadList = new List<string>();
@@ -2701,7 +2701,7 @@ namespace M2Server
             m_UseItems[Grobal2.U_WEAPON].Dura = m_UseItems[Grobal2.U_WEAPON].DuraMax;
             SendMsg(this, Grobal2.RM_DURACHANGE, 1, m_UseItems[Grobal2.U_WEAPON].Dura,
                 m_UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
-            SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint); 
+            SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
             return true;
         }
 
@@ -2847,8 +2847,8 @@ namespace M2Server
         public override void SearchViewRange()
         {
             TMapCellinfo MapCellInfo = null;
-            TBaseObject BaseObject= null;
-            TEvent MapEvent= null;
+            TBaseObject BaseObject = null;
+            TEvent MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
             {
                 m_VisibleItems[i].nVisibleFlag = 0;
