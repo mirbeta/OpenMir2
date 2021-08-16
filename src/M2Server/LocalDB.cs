@@ -451,8 +451,7 @@ namespace M2Server
             try
             {
                 var sScriptFile = Path.Combine(M2Share.g_Config.sEnvirDir, M2Share.sMarket_Def, "QFunction-0.txt");
-                var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
-                var sScritpDir = M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def;
+                var sScritpDir = Path.Combine(M2Share.g_Config.sEnvirDir, M2Share.sMarket_Def);
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);

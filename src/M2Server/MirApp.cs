@@ -12,13 +12,6 @@ namespace M2Server
 {
     public class MirApp : ServerBase
     {
-        public MirApp()
-        {
-            M2Share.MainOutMessage("正在读取配置信息...");
-            InitializeServer();
-            M2Share.MainOutMessage("读取配置信息完成...");
-        }
-
         public void StartServer(CancellationToken token)
         {
             int nCode;
@@ -217,7 +210,7 @@ namespace M2Server
             }
         }
 
-        private void InitializeServer()
+        public void InitializeServer()
         {
             M2Share.g_nSockCountMax = 0;
             M2Share.g_nHumCountMax = 0;

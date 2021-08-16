@@ -431,7 +431,7 @@ namespace M2Server
                         SendRefMsg(Grobal2.RM_ITEMHIDE, 0, mapItem.Id, m_nCurrX, m_nCurrY, "");
                         if (M2Share.g_boGameLogGold)
                         {
-                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME 
+                            M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME
                                                    + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
@@ -458,7 +458,7 @@ namespace M2Server
                         {
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name 
+                                M2Share.AddGameDataLog('4' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name
                                                        + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
@@ -551,8 +551,6 @@ namespace M2Server
         {
             MirItem Item;
             TStdItem StdItem = null;
-            TClientItem ClientItem = null;
-            TOClientItem OClientItem = null;
             if (m_nSoftVersionDateEx == 0)
             {
                 Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -560,7 +558,7 @@ namespace M2Server
                 {
                     return;
                 }
-                OClientItem = new TOClientItem();
+                TOClientItem OClientItem = new TOClientItem();
                 Item.GetStandardItem(ref StdItem);
                 Item.GetItemAddValue(UserItem, ref StdItem);
                 StdItem.Name = ItmUnit.GetItemName(UserItem);
@@ -593,7 +591,7 @@ namespace M2Server
                 {
                     return;
                 }
-                ClientItem = new TClientItem();
+                TClientItem ClientItem = new TClientItem();
                 Item.GetStandardItem(ref ClientItem.S);
                 Item.GetItemAddValue(UserItem, ref ClientItem.S);
                 ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
@@ -690,7 +688,7 @@ namespace M2Server
         public void WhisperRe(string SayStr, byte MsgType)
         {
             var sendwho = string.Empty;
-            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] {"[", " ", "=", ">"});
+            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] { "[", " ", "=", ">" });
             if (m_boHearWhisper && !IsBlockWhisper(sendwho))
             {
                 switch (MsgType)
@@ -768,7 +766,7 @@ namespace M2Server
                 M2Share.MainOutMessage(sExceptionMsg, MessageType.Error);
             }
         }
-        
+
         private void SendSocket(TDefaultMessage DefMsg)
         {
             SendSocket(DefMsg, "");
@@ -816,7 +814,7 @@ namespace M2Server
                         backingStream.Write((byte)0);
                     }
                     var stream = backingStream.BaseStream as MemoryStream;
-                    Buff = stream?.ToArray();
+                    Buff = stream.ToArray();
                 }
                 else
                 {
@@ -2013,7 +2011,7 @@ namespace M2Server
         {
 
         }
-        
+
         public void DealCancel()
         {
             if (!m_boDealing)
@@ -3005,7 +3003,7 @@ namespace M2Server
         {
             var n10 = 0;
             MirItem StdItem = null;
-            TUserItem UserItem= null;
+            TUserItem UserItem = null;
             string sUserItemName;
             if (!m_boDealing && btWhere < 13)
             {
@@ -3029,14 +3027,14 @@ namespace M2Server
                             // '无法取下物品！！！'
                             SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                             n10 = -4;
-                            goto FailExit; 
+                            goto FailExit;
                         }
                         if ((StdItem.Reserved & 4) != 0)
                         {
                             // '无法取下物品！！！'
                             SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                             n10 = -4;
-                            goto FailExit; 
+                            goto FailExit;
                         }
                         if (M2Share.InDisableTakeOffList(m_UseItems[btWhere].wIndex))
                         {
@@ -5462,7 +5460,7 @@ namespace M2Server
                     pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (pStdItem != null)
                     {
-                        OClientItem=new TOClientItem();
+                        OClientItem = new TOClientItem();
                         pStdItem.GetStandardItem(ref StdItem);
                         pStdItem.GetItemAddValue(UserItem, ref StdItem);
                         StdItem.Name = ItmUnit.GetItemName(UserItem);
@@ -5479,7 +5477,7 @@ namespace M2Server
                     pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (pStdItem != null)
                     {
-                        ClientItem=new TClientItem();
+                        ClientItem = new TClientItem();
                         pStdItem.GetStandardItem(ref ClientItem.S);
                         ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
                         ClientItem.MakeIndex = UserItem.MakeIndex;
@@ -6066,7 +6064,7 @@ namespace M2Server
             {
                 if (i <= 46)
                 {
-                   BagItems[i] = m_ItemList[i];
+                    BagItems[i] = m_ItemList[i];
                 }
             }
             HumMagic = HumanRcd.Data.Magic;
@@ -6114,7 +6112,7 @@ namespace M2Server
 
         private void GetOldAbil(ref TOAbility OAbility)
         {
-            OAbility=new TOAbility();
+            OAbility = new TOAbility();
             OAbility.Level = m_WAbil.Level;
             OAbility.AC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(m_WAbil.AC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(m_WAbil.AC)));
             OAbility.MAC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(m_WAbil.MAC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(m_WAbil.MAC)));
@@ -6149,7 +6147,7 @@ namespace M2Server
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
                     SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == Grobal2.CM_HIT || SendMessage.wIdent == Grobal2.CM_HEAVYHIT || SendMessage.wIdent == Grobal2.CM_BIGHIT || SendMessage.wIdent == Grobal2.CM_POWERHIT 
+                    if (SendMessage.wIdent == Grobal2.CM_HIT || SendMessage.wIdent == Grobal2.CM_HEAVYHIT || SendMessage.wIdent == Grobal2.CM_BIGHIT || SendMessage.wIdent == Grobal2.CM_POWERHIT
                         || SendMessage.wIdent == Grobal2.CM_LONGHIT || SendMessage.wIdent == Grobal2.CM_WIDEHIT || SendMessage.wIdent == Grobal2.CM_FIREHIT)
                     {
                         result++;
@@ -6364,7 +6362,7 @@ namespace M2Server
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
-                case Grobal2.CM_SPELL: 
+                case Grobal2.CM_SPELL:
                     if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
                     {
                         dwActionIntervalTime = m_dwRunMagicIntervalTime;// 跑位魔法
@@ -7125,7 +7123,7 @@ namespace M2Server
         /// </summary>
         /// <param name="sIPaddr"></param>
         /// <param name="nPort"></param>
-        public void CrossGroupServer(string sIPaddr,int nPort)
+        public void CrossGroupServer(string sIPaddr, int nPort)
         {
             this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + nPort);
         }

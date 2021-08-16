@@ -199,11 +199,11 @@ namespace M2Server
                 m_nMoveFailCount = 0;
                 m_Path = null;
                 m_nPostion = -1;
-                //if (g_FunctionNPC != null)
-                //{
+                if (M2Share.g_FunctionNPC != null)
+                {
                     m_nScriptGotoCount = 0;
-                    //g_FunctionNPC.GotoLable(this, "@AIStop", false, false);
-                //}
+                    M2Share.g_FunctionNPC.GotoLable(this, "@AIStop", false);
+                }
             }
         }
         
@@ -5553,8 +5553,12 @@ namespace M2Server
             return result;
         }
 
-        // 是否走向目标
-        // 取刺杀位
+      /// <summary>
+      /// 走向目标
+      /// </summary>
+      /// <param name="BaseObject"></param>
+      /// <param name="nCode"></param>
+      /// <returns></returns>
         private bool GetGotoXY(TBaseObject BaseObject, byte nCode)
         {
             bool result = false;
@@ -5675,8 +5679,12 @@ namespace M2Server
             return result;
         }
 
-        // 检测指定方向和范围内坐标的怪物数量
-        // 跑到目标坐标
+        /// <summary>
+        /// 跑到目标坐标
+        /// </summary>
+        /// <param name="nTargetX"></param>
+        /// <param name="nTargetY"></param>
+        /// <returns></returns>
         private bool RunToTargetXY(short nTargetX, short nTargetY)
         {
             int n10;

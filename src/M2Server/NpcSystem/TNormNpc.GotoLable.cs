@@ -666,43 +666,40 @@ namespace M2Server
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
-                            switch (n10)
+                            if (HUtil32.RangeInDefined(n10, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    if (PlayObject.m_nVal[n10] != QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    if (M2Share.g_Config.GlobalVal[n10 - 100] != QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    if (PlayObject.m_DyVal[n10 - 200] != QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    if (PlayObject.m_nMval[n10 - 300] != QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    if (M2Share.g_Config.GlobaDyMval[n10 - 400] != QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
+                                if (PlayObject.m_nVal[n10] != QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 100, 119))
+                            {
+                                if (M2Share.g_Config.GlobalVal[n10 - 100] != QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            {
+                                if (PlayObject.m_DyVal[n10 - 200] != QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 300, 399))
+                            {
+                                if (PlayObject.m_nMval[n10 - 300] != QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 400, 499))
+                            {
+                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] != QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
                             }
                         }
                         else
@@ -714,45 +711,41 @@ namespace M2Server
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
-                            switch (n10)
+                            if (HUtil32.RangeInDefined(n10,0,9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    if (PlayObject.m_nVal[n10] <= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    if (M2Share.g_Config.GlobalVal[n10 - 100] <= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    if (PlayObject.m_DyVal[n10 - 200] <= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    if (PlayObject.m_nMval[n10 - 300] <= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    if (M2Share.g_Config.GlobaDyMval[n10 - 400] <= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
+                                if (PlayObject.m_nVal[n10] <= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
                             }
-                            // case
+                            else if (HUtil32.RangeInDefined(n10, 100, 119))
+                            {
+                                if (M2Share.g_Config.GlobalVal[n10 - 100] <= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            {
+                                if (PlayObject.m_DyVal[n10 - 200] <= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 300, 399))
+                            {
+                                if (PlayObject.m_nMval[n10 - 300] <= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 400, 499))
+                            {
+                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] <= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
                         }
                         else
                         {
@@ -763,43 +756,40 @@ namespace M2Server
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
-                            switch (n10)
+                            if (HUtil32.RangeInDefined(n10, 0, 9))
                             {
-                                // Modify the A .. B: 0 .. 9
-                                case 0:
-                                    if (PlayObject.m_nVal[n10] >= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 100 .. 119
-                                case 100:
-                                    if (M2Share.g_Config.GlobalVal[n10 - 100] >= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 200 .. 209
-                                case 200:
-                                    if (PlayObject.m_DyVal[n10 - 200] >= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 300 .. 399
-                                case 300:
-                                    if (PlayObject.m_nMval[n10 - 300] >= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
-                                // Modify the A .. B: 400 .. 499
-                                case 400:
-                                    if (M2Share.g_Config.GlobaDyMval[n10 - 400] >= QuestConditionInfo.nParam2)
-                                    {
-                                        result = false;
-                                    }
-                                    break;
+                                if (PlayObject.m_nVal[n10] >= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 100, 119))
+                            {
+                                if (M2Share.g_Config.GlobalVal[n10 - 100] >= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            {
+                                if (PlayObject.m_DyVal[n10 - 200] >= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 300, 399))
+                            {
+                                if (PlayObject.m_nMval[n10 - 300] >= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
+                            }
+                            else if (HUtil32.RangeInDefined(n10, 400, 499))
+                            {
+                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] >= QuestConditionInfo.nParam2)
+                                {
+                                    result = false;
+                                }
                             }
                         }
                         else

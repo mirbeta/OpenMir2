@@ -26,7 +26,7 @@ namespace M2Server
                     {
                         m_boDisableSayMsg = true;
                         m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.g_Config.dwDisableSayMsgTime;// 60 * 1000
-                        SysMsg(format(M2Share.g_sDisableSayMsg, new [] { M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000) }), TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(format(M2Share.g_sDisableSayMsg, new[] { M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000) }), TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
@@ -121,7 +121,7 @@ namespace M2Server
                                 }
                                 return;
                             }
-                            SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new [] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
                             return;
                         }
                         SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
