@@ -81,7 +81,6 @@ namespace RunGate
                     userSession.nSckHandle = (int) e.Socket.Handle;
                     nSockIdx = nIdx;
                     GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
-                    GateShare.SessionCount++;
                     break;
                 }
             }
@@ -115,7 +114,6 @@ namespace RunGate
                     userSession.nSckHandle = -1;
                     userSession.sSocData = "";
                     userSession.sSendData = "";
-                    GateShare.SessionCount -= 1;
                     if (GateShare.boGateReady)
                     {
                         userClinet.SendServerMsg(Grobal2.GM_CLOSE, 0, (int) e.Socket.Handle, 0, 0, ""); //发送消息给M2断开链接

@@ -506,7 +506,6 @@ namespace RunGate
                 GateShare.boGateReady = false;
                 //GateShare.boCheckServerFail = false;
                 GateShare.boSendHoldTimeOut = false;
-                GateShare.SessionCount = 1;
                 LoadConfig();
                 GateShare.dwProcessReviceMsgTimeLimit = 50;
                 GateShare.dwProcessSendMsgTimeLimit = 50;

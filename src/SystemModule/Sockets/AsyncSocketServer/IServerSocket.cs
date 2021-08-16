@@ -228,6 +228,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                     listenSocket.Bind(localEndPoint);
                 }
                 // 用一个侦听1000个连接的队列启动服务器
+                listenSocket.NoDelay = false;
                 listenSocket.Listen(1000);
             }
             catch (ObjectDisposedException)
