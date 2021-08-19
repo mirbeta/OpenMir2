@@ -611,7 +611,7 @@ namespace M2Server
                 for (var i = 0; i < tMapQuestList.Count; i++)
                 {
                     var tStr = tMapQuestList[i];
-                    if (tStr != "" && tStr[0] != ';')
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMap, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new[] { " ", "\t" });
@@ -649,7 +649,6 @@ namespace M2Server
                                 {
                                     result = -i;
                                 }
-                                // nFlag,boFlag,Monster,Item,Quest,boGrouped
                             }
                             else
                             {
@@ -662,7 +661,6 @@ namespace M2Server
                         }
                     }
                 }
-                //tMapQuestList.Free;
             }
             QMangeNPC();
             QFunctionNPC();
@@ -1136,7 +1134,6 @@ namespace M2Server
                             }
                             else
                             {
-
                                 if (bo2D)
                                 {
                                     QDDinfo.sList.Add(s1C);

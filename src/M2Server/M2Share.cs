@@ -1556,7 +1556,7 @@ namespace M2Server
                     sText = LineNoticeList[i].Trim();
                     if (sText == "")
                     {
-                        //LineNoticeList.Remove(i);
+                        LineNoticeList.RemoveAt(i);
                         continue;
                     }
                     LineNoticeList[i] = sText;
@@ -1631,7 +1631,6 @@ namespace M2Server
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
             var result = 0;
-            nOldVerstionDate = 0;
             if (nVersionDate > 100000000)
             {
                 while (nVersionDate > 100000000)
@@ -2114,7 +2113,7 @@ namespace M2Server
                 sC = sList[n8].Trim();
                 if (sC == "")
                 {
-                    //sList.Remove(n8);
+                    sList.RemoveAt(n8);
                     continue;
                 }
                 n8++;

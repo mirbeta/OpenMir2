@@ -77,9 +77,13 @@ namespace M2Server
                 {
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
-                    if (s20.StartsWith("\\"))
+                    if (s20.StartsWith("\\\\"))
                     {
                         s20 = s20.Remove(0, 2);
+                    }
+                    else if (s20.StartsWith("\\"))
+                    {
+                        s20 = s20.Remove(0, 1);
                     }
                     s18 = s14.Trim();
                     s34 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
@@ -1854,21 +1858,20 @@ namespace M2Server
                             {
                                 if (bo8D)
                                 {
-                                    int n20;
                                     // 将Define 好的常量换成指定值
-                                    for (n20 = 0; n20 < DefineList.Count; n20++)
+                                    for (var n20 = 0; n20 < DefineList.Count; n20++)
                                     {
                                         DefineInfo = DefineList[n20];
                                         var n1C = 0;
                                         while (true)
                                         {
-                                            n24 = s34.ToUpper().IndexOf(DefineInfo.sName);
+                                            n24 = s34.ToUpper().IndexOf(DefineInfo.sName, StringComparison.OrdinalIgnoreCase);
                                             if (n24 <= 0)
                                             {
                                                 break;
                                             }
-                                            s58 = s34.Substring(0, n24 - 1);
-                                            s5C = s34.Substring(DefineInfo.sName.Length + n24 - 1, 256);
+                                            s58 = s34.Substring(0, n24);
+                                            s5C = s34.Substring(DefineInfo.sName.Length + n24);
                                             s34 = s58 + DefineInfo.sText + s5C;
                                             LoadList[I] = s34;
                                             n1C++;

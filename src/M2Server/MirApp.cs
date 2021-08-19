@@ -189,7 +189,7 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.ErrorMessage(ex.Message);
+                Console.WriteLine(ex.Message);
             }
         }
 

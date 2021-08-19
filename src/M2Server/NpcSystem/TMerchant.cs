@@ -440,7 +440,8 @@ namespace M2Server
                     return;
                 }
             }
-            if (User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
+            if (User.m_UseItems[Grobal2.U_WEAPON] != null && User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice 
+                && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
             {
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
                 if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
@@ -766,7 +767,6 @@ namespace M2Server
         public override void UserSelect(TPlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
-            var s18 = string.Empty;
             var sMsg = string.Empty;
             var boCanJmp = false;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
@@ -782,10 +782,9 @@ namespace M2Server
                     if (!PlayObject.m_boDeath && sData != "" && sData[0] == '@')
                     {
                         sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
-                        s18 = "";
                         PlayObject.m_sScriptLable = sData;
                         boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -797,98 +796,98 @@ namespace M2Server
                         {
                             return;
                         }
-                        if (String.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
+                        if (string.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
                         {
                             if (m_boOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSendmsg)
                             {
                                 SendCustemMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boS_repair)
                             {
                                 UserSelect_SuperRepairItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boBuy)
                             {
                                 UserSelect_BuyItem(PlayObject, 0);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSell)
                             {
                                 UserSelect_SellItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boRepair)
                             {
                                 UserSelect_RepairItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boMakeDrug)
                             {
                                 UserSelect_MakeDurg(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boPrices)
                             {
                                 UserSelect_ItemPrices(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boStorage)
                             {
                                 UserSelect_Storage(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetback)
                             {
                                 UserSelect_GetBack(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boUpgradenow)
                             {
                                 UpgradeWapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetBackupgnow)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMarry)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMaster)
                             {
@@ -902,11 +901,11 @@ namespace M2Server
                                 ChangeUseItemName(PlayObject, sLabel, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {

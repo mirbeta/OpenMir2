@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <AssemblyName>MirServer</AssemblyName>
         <RootNamespace>MirServer</RootNamespace>
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
@@ -10,16 +10,13 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>bin\Debug\net6.0</OutputPath>
+      <OutputPath>bin\Debug\net5.0\net5.0</OutputPath>
+      <WarningLevel>4</WarningLevel>
       <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-      <PlatformTarget>AnyCPU</PlatformTarget>
       <Prefer32bit>false</Prefer32bit>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
-      <ExternalConsole>true</ExternalConsole>
     </PropertyGroup>
     <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
@@ -34,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SystemModule\SystemModule.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
 </Project>
