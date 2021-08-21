@@ -114,6 +114,8 @@ namespace RunGate
         private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
         public static ConcurrentDictionary<string, UserClientService> ServerGateList;
+        public static List<WeightedItem<UserClientService>> m_ServerGateList = new List<WeightedItem<UserClientService>>();
+
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {

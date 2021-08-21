@@ -12,24 +12,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/global.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/Extensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/MultipleSelector.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/SelectorBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/SelectorOption.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/SingleSelector.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/WeightedItem.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SystemModule/RandomSelector/WeightedSelector.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/M2Server.sln" beforeDir="false" afterPath="$PROJECT_DIR$/M2Server.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Attack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Attack.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/AuthSystem/AuthClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/AuthSystem/AuthClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/LocalDB.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/MirApp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/MirApp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.Condition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.Condition.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/ScriptSystem/ScriptSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/RunGate.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,18 +39,14 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/M2Server/LocalDB.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/c2/fb41e209/ICollection`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/AppService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/78/e9d794af/Int32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/9c/7bc58a64/Number.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/MirApp.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/24ff2ad3f0ee415e922aecfdf6ef68468d7c00/fa/31422d40/IList`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/LocalDB.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/MirApp.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -324,6 +311,7 @@
       <workItem from="1629221594681" duration="345000" />
       <workItem from="1629222041089" duration="131000" />
       <workItem from="1629379491759" duration="635000" />
+      <workItem from="1629541526169" duration="762000" />
     </task>
     <servers />
   </component>
