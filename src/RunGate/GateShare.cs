@@ -125,7 +125,7 @@ namespace RunGate
                 HUtil32.EnterCriticalSection(CS_MainLog);
                 if (nLevel <= nShowLogLevel)
                 {
-                    tMsg = "[" + DateTime.Now.ToString() + "] " + Msg;
+                    tMsg = "[" + DateTime.Now + "] " + Msg;
                     MainLogMsgList.Add(tMsg);
                 }
             }
@@ -283,10 +283,11 @@ namespace RunGate
 
         public static UserClientService GetClientService()
         {
-            //TODO 根据配置文件有三种模式  默认随机
+            //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
+            //4.按权重分配
             var userList = new List<UserClientService>(ServerGateList.Values);
             var random = new System.Random().Next(userList.Count);
             return userList[random];

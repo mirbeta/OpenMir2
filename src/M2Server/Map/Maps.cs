@@ -449,7 +449,6 @@ namespace M2Server
                         }
                     }
                 }
-                //tMapList.Free;
             }
             return result;
         }

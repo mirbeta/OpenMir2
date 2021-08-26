@@ -803,11 +803,11 @@ namespace M2Server
                             PlayObject.SetQuestFlagStatus(nFlag, nValue);
                             if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -826,11 +826,11 @@ namespace M2Server
                             PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -849,11 +849,11 @@ namespace M2Server
                             PlayObject.SetQuestUnitStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else

@@ -40,9 +40,6 @@ namespace M2Server
 
         public void SendMessage(int nQueryID, string sMsg)
         {
-            var sSendMsg = string.Empty;
-            int nCheckCode;
-            string sCheckStr;
             if (!_clientScoket.IsConnected)
             {
                 return;
@@ -56,7 +53,7 @@ namespace M2Server
             {
                 HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
             }
-            nCheckCode = HUtil32.MakeLong(nQueryID ^ 170, sMsg.Length + 6);
+            var nCheckCode = HUtil32.MakeLong(nQueryID ^ 170, sMsg.Length + 6);
             var by = new byte[sizeof(int)];
             unsafe
             {
@@ -65,8 +62,8 @@ namespace M2Server
                     *(int*)pb = nCheckCode;
                 }
             }
-            sCheckStr = EDcode.EncodeBuffer(by, by.Length);
-            sSendMsg = "#" + nQueryID + "/" + sMsg + sCheckStr + "!";
+            var sCheckStr = EDcode.EncodeBuffer(@by, @by.Length);
+            var sSendMsg = "#" + nQueryID + "/" + sMsg + sCheckStr + "!";
             M2Share.g_Config.boDBSocketWorking = true;
             var data = HUtil32.GetBytes(sSendMsg);
             _clientScoket.Send(data);

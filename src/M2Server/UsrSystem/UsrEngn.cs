@@ -257,7 +257,7 @@ namespace M2Server
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
                 {
-                    if (m_PlayObjectList[i].m_sCharName.ToLower().CompareTo(sChrName.ToLower()) == 0)
+                    if (string.Compare(m_PlayObjectList[i].m_sCharName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;
@@ -936,6 +936,7 @@ namespace M2Server
 
         private void ProcessMissions()
         {
+            
         }
 
         private int ProcessMonsters_GetZenTime(int dwTime)
@@ -947,7 +948,7 @@ namespace M2Server
                 if (d10 > 0)
                 {
                     if (d10 > 6) d10 = 6;
-                    result = (int)(dwTime - Math.Round(dwTime / 10 * (decimal)d10));
+                    result = (int)(dwTime - Math.Round(dwTime / 10 * (double)d10));
                 }
                 else
                 {
@@ -1277,13 +1278,12 @@ namespace M2Server
         }
 
         /// <summary>
-        /// 取怪物物品掉落
+        /// 计算怪物掉落物品
+        /// 即创建怪物对象的时候已经算好要掉落的物品和属性
         /// </summary>
-        /// <param name="mon"></param>
         /// <returns></returns>
-        private int MonGetRandomItems(TBaseObject mon)
+        private void MonGetRandomItems(TBaseObject mon)
         {
-            int result;
             IList<TMonItem> ItemList = null;
             var iname = string.Empty;
             for (var i = 0; i < MonsterList.Count; i++)
@@ -1332,8 +1332,6 @@ namespace M2Server
                     }
                 }
             }
-            result = 1;
-            return result;
         }
 
         public bool CopyToUserItemFromName(string sItemName, ref TUserItem Item)
@@ -1522,11 +1520,6 @@ namespace M2Server
         /// <summary>
         /// 创建对象
         /// </summary>
-        /// <param name="sMapName"></param>
-        /// <param name="nX"></param>
-        /// <param name="nY"></param>
-        /// <param name="nMonRace"></param>
-        /// <param name="sMonName"></param>
         /// <returns></returns>
         private TBaseObject AddBaseObject(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
@@ -1756,7 +1749,7 @@ namespace M2Server
                 Cert.m_sCharName = sMonName;
                 Cert.m_WAbil = Cert.m_Abil;
                 if (M2Share.RandomNumber.Random(100) < Cert.m_btCoolEye) Cert.m_boCoolEye = true;
-                MonGetRandomItems(Cert); // 取得怪物爆物品内容
+                MonGetRandomItems(Cert);
                 Cert.Initialize();
                 if (Cert.m_boAddtoMapSuccess)
                 {
@@ -1820,8 +1813,6 @@ namespace M2Server
         /// 创建怪物对象
         /// 在指定时间内创建完对象，则返加TRUE，如果超过指定时间则返回FALSE
         /// </summary>
-        /// <param name="MonGen"></param>
-        /// <param name="nCount"></param>
         /// <returns></returns>
         private bool RegenMonsters(TMonGenInfo MonGen, int nCount)
         {
@@ -1978,6 +1969,10 @@ namespace M2Server
             return null;
         }
 
+        /// <summary>
+        /// 获取指定地图范围对象数
+        /// </summary>
+        /// <returns></returns>
         public int GetMapOfRangeHumanCount(TEnvirnoment Envir, int nX, int nY, int nRange)
         {
             var result = 0;
@@ -2309,7 +2304,6 @@ namespace M2Server
                 SendDoorStatus(Envir, Door.nX, Door.nY, Grobal2.RM_DOORCLOSE, 0, Door.nX, Door.nY, 0, "");
                 result = true;
             }
-
             return result;
         }
 
@@ -2335,8 +2329,7 @@ namespace M2Server
                             if (OSObject != null && OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                             {
                                 BaseObject = (TBaseObject) OSObject.CellObj;
-                                if (BaseObject != null && !BaseObject.m_boGhost &&
-                                    BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
                                 }
@@ -2385,8 +2378,7 @@ namespace M2Server
                         if (BaseObject.m_boDeath || BaseObject.m_boGhost || !BaseObject.m_boHolySeize)
                             MagicEvent.BaseObjectList.RemoveAt(j);
                     }
-                    if (MagicEvent.BaseObjectList.Count <= 0 ||
-                        HUtil32.GetTickCount() - MagicEvent.dwStartTick > MagicEvent.dwTime ||
+                    if (MagicEvent.BaseObjectList.Count <= 0 || HUtil32.GetTickCount() - MagicEvent.dwStartTick > MagicEvent.dwTime ||
                         HUtil32.GetTickCount() - MagicEvent.dwStartTick > 180000)
                     {
                         count = 0;
@@ -2420,7 +2412,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -2444,7 +2435,6 @@ namespace M2Server
                     }
                 }
             }
-
             return result;
         }
 
@@ -2455,7 +2445,6 @@ namespace M2Server
 
         public int GetMerchantList(TEnvirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
-            int result;
             TMerchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
             {
@@ -2463,13 +2452,11 @@ namespace M2Server
                 if (Merchant.m_PEnvir == Envir && Math.Abs(Merchant.m_nCurrX - nX) <= nRange &&
                     Math.Abs(Merchant.m_nCurrY - nY) <= nRange) TmpList.Add(Merchant);
             }
-            result = TmpList.Count;
-            return result;
+            return TmpList.Count;
         }
 
         public int GetNpcList(TEnvirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
-            int result;
             TNormNpc Npc;
             for (var i = 0; i < QuestNPCList.Count; i++)
             {
@@ -2477,8 +2464,7 @@ namespace M2Server
                 if (Npc.m_PEnvir == Envir && Math.Abs(Npc.m_nCurrX - nX) <= nRange &&
                     Math.Abs(Npc.m_nCurrY - nY) <= nRange) TmpList.Add(Npc);
             }
-            result = TmpList.Count;
-            return result;
+            return TmpList.Count;
         }
 
         public void ReloadMerchantList()
@@ -2556,7 +2542,6 @@ namespace M2Server
                 PlayObject = m_PlayObjectList[i];
                 if (!PlayObject.m_boDeath && !PlayObject.m_boGhost && PlayObject.m_PEnvir == Envir) result++;
             }
-
             return result;
         }
 
@@ -2574,7 +2559,6 @@ namespace M2Server
                     result++;
                 }
             }
-
             return result;
         }
 
@@ -2592,7 +2576,6 @@ namespace M2Server
                     break;
                 }
             }
-
             return result;
         }
 
@@ -2672,9 +2655,9 @@ namespace M2Server
         public string GetHomeInfo(ref short nX,ref short nY)
         {
             string result;
-            int I;
             if (M2Share.StartPointList.Count > 0)
             {
+                int I;
                 if (M2Share.StartPointList.Count > M2Share.g_Config.nStartPointSize)
                     I = M2Share.RandomNumber.Random(M2Share.g_Config.nStartPointSize);
                 else
@@ -2695,7 +2678,7 @@ namespace M2Server
             m_UserLogonList.Add(AI);
         }
 
-        public bool RegenAIObject(TAILogon AI)
+        private bool RegenAIObject(TAILogon AI)
         {
             var PlayObject = AddAIPlayObject(AI);
             if (PlayObject != null)
@@ -2830,8 +2813,7 @@ namespace M2Server
 
         public void ClearItemList()
         {
-            int I;
-            I = 0;
+            var I = 0;  
             while (true)
             {
                 //StdItemList.Exchange(M2Share.RandomNumber.Random(StdItemList.Count), StdItemList.Count - 1);
@@ -2850,7 +2832,7 @@ namespace M2Server
             }
         }
 
-        public void ClearMerchantData()
+        private void ClearMerchantData()
         {
             TMerchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
