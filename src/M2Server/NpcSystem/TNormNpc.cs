@@ -22,7 +22,7 @@ namespace M2Server
         /// </summary>
         public bool m_boIsQuest = false;
         protected string m_sPath = string.Empty;
-        public IList<TScriptParams> BatchParamsList;
+        private IList<TScriptParams> BatchParamsList;
        
         public virtual void ClearScript()
         {
@@ -66,7 +66,7 @@ namespace M2Server
             // EXEACTION CHANGEEXP 1 经验数  增加指定经验
             // EXEACTION CHANGEEXP 2 经验数  减少指定经验
             // ================================================
-            if (sParam1.ToLower().CompareTo("CHANGEEXP".ToLower()) == 0)
+            if (string.Compare(sParam1, "CHANGEEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nInt1 = HUtil32.Str_ToInt(sParam2, -1);
                 switch (nInt1)
@@ -125,7 +125,7 @@ namespace M2Server
             // EXEACTION CHANGELEVEL 1 等级数  增加指定等级
             // EXEACTION CHANGELEVEL 2 等级数  减少指定等级
             // ================================================
-            if (sParam1.ToLower().CompareTo("CHANGELEVEL".ToLower()) == 0)
+            if (string.Compare(sParam1, "CHANGELEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nInt1 = HUtil32.Str_ToInt(sParam2, -1);
                 switch (nInt1)
@@ -185,7 +185,7 @@ namespace M2Server
             // EXEACTION KILL 2 人物死亡,显示凶手信息为NPC
             // EXEACTION KILL 3 人物死亡不掉物品,显示凶手信息为NPC
             // ================================================
-            if (sParam1.ToLower().CompareTo("KILL".ToLower()) == 0)
+            if (string.Compare(sParam1, "KILL", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nInt1 = HUtil32.Str_ToInt(sParam2, -1);
                 switch (nInt1)
@@ -213,7 +213,7 @@ namespace M2Server
             // 踢人物下线
             // EXEACTION KICK
             // ================================================
-            if (sParam1.ToLower().CompareTo("KICK".ToLower()) == 0)
+            if (string.Compare(sParam1, "KICK", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_boKickFlag = true;
                 return;
@@ -222,9 +222,8 @@ namespace M2Server
 
         public string GetLineVariableText(TPlayObject PlayObject, string sMsg)
         {
-            string result;
-            int nC = 0;
-            string s10 = string.Empty;
+            var nC = 0;
+            var s10 = string.Empty;
             while (true)
             {
                 if (HUtil32.TagCount(sMsg, '>') < 1)
@@ -239,8 +238,7 @@ namespace M2Server
                     break;
                 }
             }
-            result = sMsg;
-            return result;
+            return sMsg;
         }
 
         /// <summary>
@@ -1148,7 +1146,7 @@ namespace M2Server
             }
         }
 
-        public virtual void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected virtual void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSendCustemMsg)
             {

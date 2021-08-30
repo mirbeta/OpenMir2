@@ -229,7 +229,7 @@ namespace M2Server
             this.m_wAppr = 8;
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }

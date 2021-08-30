@@ -411,7 +411,7 @@ namespace M2Server
             
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSubkMasterSendMsg)
             {

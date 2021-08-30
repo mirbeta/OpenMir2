@@ -1727,7 +1727,7 @@ namespace M2Server
             PlayObject.m_sOffLineLeaveword = sMsg;
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }
