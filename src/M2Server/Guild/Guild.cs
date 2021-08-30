@@ -6,7 +6,13 @@ namespace M2Server
     {
         public int nRankNo;
         public string sRankName;
-        public IList<TPlayObject> MemberList;
+        public IList<TGuildMember> MemberList;
+    }
+
+    public class TGuildMember
+    {
+        public string sMemberName;
+        public TPlayObject PlayObject;
     }
 
     public class TWarGuild

@@ -216,7 +216,7 @@ namespace M2Server
         public string m_sScriptGoBackLable = string.Empty;
         // 用于处理 @back 脚本命令
         public int m_dwTurnTick = 0;
-        public short m_wOldIdent = 0;
+        public int m_wOldIdent = 0;
         public byte m_btOldDir = 0;
         /// <summary>
         /// 第一个操作
@@ -278,10 +278,14 @@ namespace M2Server
         public bool m_boPasswordLocked = false;
         // 锁密码
         public byte m_btPwdFailCount = 0;
+        /// <summary>
+        /// 是否启用锁登录功能
+        /// </summary>
         public bool m_boLockLogon = false;
-        // 是否启用锁登录功能
+        /// <summary>
+        /// 是否打开登录锁
+        /// </summary>        
         public bool m_boLockLogoned = false;
-        // 是否打开登录锁
         public string m_sTempPwd;
         public string m_sStoragePwd;
         public TBaseObject m_PoseBaseObject = null;
@@ -289,12 +293,18 @@ namespace M2Server
         public bool m_boStartMaster = false;
         public bool m_boStartUnMarry = false;
         public bool m_boStartUnMaster = false;
+        /// <summary>
+        /// 禁止发方字(发的文字只能自己看到)
+        /// </summary>
         public bool m_boFilterSendMsg = false;
-        // 禁止发方字(发的文字只能自己看到)
+        /// <summary>
+        /// 杀怪经验倍数(此数除以 100 为真正倍数)
+        /// </summary>        
         public int m_nKillMonExpRate = 0;
-        // 杀怪经验倍数(此数除以 100 为真正倍数)
+        /// <summary>
+        /// 人物攻击力倍数(此数除以 100 为真正倍数)
+        /// </summary>        
         public int m_nPowerRate = 0;
-        // 人物攻击力倍数(此数除以 100 为真正倍数)
         public int m_dwKillMonExpRateTime = 0;
         public int m_dwPowerRateTime = 0;
         public int m_dwRateTick = 0;
@@ -982,14 +992,11 @@ namespace M2Server
             }
         }
 
-        private bool ClientHitXY(short wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             short n14 = 0;
             short n18 = 0;
-            MirItem StdItem;
-            int dwAttackTime;
-            int dwCheckTime;
             const string sExceptionMsg = "[Exception] TPlayObject::ClientHitXY";
             dwDelayTime = 0;
             try
@@ -1011,8 +1018,8 @@ namespace M2Server
                         return result;
                     }
                     m_boFilterAction = true;
-                    dwAttackTime = HUtil32._MAX(0, (M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed) * M2Share.g_Config.ClientConf.btItemSpeed);// 防止负数出错 武器速度控制
-                    dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
+                    int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
+                    int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
                     if (dwCheckTime < dwAttackTime)
                     {
                         m_dwAttackCount++;
@@ -1053,7 +1060,7 @@ namespace M2Server
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !m_PEnvir.CanWalk(n14, n18, false))
                         {
-                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
+                            MirItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -1652,9 +1659,8 @@ namespace M2Server
             }
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
             {
-                return result;
+                return result;// 防麻
             }
-            // 防麻
             if (nFlag != wIdent)
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1736,9 +1742,8 @@ namespace M2Server
             }
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
             {
-                return result;
+                return result; // 防麻
             }
-            // 防麻
             if (!boLateDelivery)
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -3824,7 +3829,7 @@ namespace M2Server
                     {
                         break;
                     }
-                    sSendMsg = sSendMsg + GuildRank.MemberList[j] + '/';
+                    sSendMsg = sSendMsg + GuildRank.MemberList[j].sMemberName + '/';
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
@@ -3848,15 +3853,11 @@ namespace M2Server
                                 if (PlayObject.m_MyGuild == null && m_MyGuild.m_RankList.Count < 400)
                                 {
                                     m_MyGuild.AddMember(PlayObject);
-                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex,
-                                        m_MyGuild.sGuildName);
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                                     PlayObject.m_MyGuild = m_MyGuild;
-                                    PlayObject.m_sGuildRankName =
-                                        m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
+                                    PlayObject.m_sGuildRankName = m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
                                     PlayObject.RefShowName();
-                                    PlayObject.SysMsg(
-                                        "你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + PlayObject.m_sGuildRankName,
-                                        TMsgColor.c_Green, TMsgType.t_Hint);
+                                    PlayObject.SysMsg("你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + PlayObject.m_sGuildRankName, TMsgColor.c_Green, TMsgType.t_Hint);
                                     nC = 0;
                                 }
                                 else
@@ -4583,6 +4584,12 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 挖矿
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <returns></returns>
         private bool PileStones(int nX, int nY)
         {
             var result = false;
@@ -6288,13 +6295,12 @@ namespace M2Server
             return result;
         }
 
-        private bool CheckActionStatus(short wIdent, ref int dwDelayTime)
+        private bool CheckActionStatus(int wIdent, ref int dwDelayTime)
         {
-            int dwCheckTime = 0;
             var result = false;
             dwDelayTime = 0;
-            // 检查人物弯腰停留时间
-            if (!M2Share.g_Config.boDisableStruck)
+            int dwCheckTime = 0;
+            if (!M2Share.g_Config.boDisableStruck) // 检查人物弯腰停留时间
             {
                 dwCheckTime = HUtil32.GetTickCount() - m_dwStruckTick;
                 if (M2Share.g_Config.dwStruckTime > dwCheckTime)
@@ -6402,6 +6408,9 @@ namespace M2Server
         {
             var sText = string.Empty;
             m_CanJmpScriptLableList.Clear();
+            const string start = "<";
+            const string end = ">";
+            var sCmdStr = string.Empty;
             while (true)
             {
                 if (string.IsNullOrEmpty(sMsg))
@@ -6411,19 +6420,15 @@ namespace M2Server
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    var matchCollection = Regex.Matches(sText, "<?@(\\w+?>)", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(3));
-                    foreach (Match match in matchCollection)
+                    Regex rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    var match = rg.Match(sText);
+                    if (match.Success)
                     {
-                        var line = match.Value.Remove(match.Value.Length - 1).ToLower();
-                        //if (line[0] != '<')
-                        //{
-                        //    line = "<" + HUtil32.GetValidStr3(line, ref sData, "<");
-                        //}
-                        //sText = HUtil32.ArrestStringEx(line, "<", ">", ref sCmdStr);
-                        //var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
-                        if (!string.IsNullOrEmpty(line) && !m_CanJmpScriptLableList.ContainsKey(line))
+                        sCmdStr = match.Value;
+                        var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
+                        if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
                         {
-                            m_CanJmpScriptLableList.Add(line, line);
+                            m_CanJmpScriptLableList.Add(sLabel, sLabel);
                         }
                     }
                 }

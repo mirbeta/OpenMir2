@@ -25,7 +25,7 @@ namespace M2Server
                     sText = sText + format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
                 }
                 sText = sText + "\\ \\";
-                sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);
+                sMsg = this.ReplaceVariableText(sMsg, "<$REQUESTCASTLELIST>", sText);
             }
         }
 

@@ -767,7 +767,7 @@ namespace M2Server
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);

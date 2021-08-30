@@ -163,6 +163,9 @@ namespace M2Server
         /// 权限等级
         /// </summary>
         public byte m_btPermission = 0;
+        /// <summary>
+        /// 攻击速度
+        /// </summary>
         public ushort m_nHitSpeed = 0;
         public byte m_btLifeAttrib = 0;
         public byte m_btCoolEye = 0;

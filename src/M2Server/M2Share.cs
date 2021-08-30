@@ -20,6 +20,10 @@ namespace M2Server
     public static class M2Share
     {
         public static int nServerIndex = 0;
+        /// <summary>
+        /// 服务器启动时间
+        /// </summary>
+        public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
         public static ObjectSystem ObjectSystem = null;
@@ -1882,9 +1886,9 @@ namespace M2Server
                 result = false;
                 return result;
             }
-            for (var i = 0; i <= sGuildName.Length; i++)
+            for (var i = 0; i <= sGuildName.Length - 1; i++)
             {
-                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' ' 
+                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
                 {
                     result = false;

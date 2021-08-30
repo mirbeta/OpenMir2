@@ -1943,18 +1943,21 @@ namespace M2Server
         public T FindMerchant<T>(int merchantId)
         {
             var npc = M2Share.ObjectSystem.Get(merchantId);
-            var type = typeof(T);
-            if (type.Name.Equals("TMerchant") && npc is TMerchant)
+            if (npc.GetType().Equals(typeof(TMerchant)) && npc is TMerchant)
             {
                 return (T)Convert.ChangeType(npc, typeof(TMerchant));
             }
-            if (type.Name.Equals("TGuildOfficial") && npc is TGuildOfficial)
+            if (npc.GetType().Equals(typeof(TGuildOfficial)) && npc is TGuildOfficial)
             {
                 return (T)Convert.ChangeType(npc, typeof(TGuildOfficial));
             }
-            if (type.Name.Equals("TNormNpc") && npc is TNormNpc)
+            if (npc.GetType().Equals(typeof(TNormNpc)) && npc is TNormNpc)
             {
                 return (T)Convert.ChangeType(npc, typeof(TNormNpc));
+            }
+            if (npc.GetType().Equals(typeof(TCastleOfficial)) && npc is TCastleOfficial)
+            {
+                return (T)Convert.ChangeType(npc, typeof(TCastleOfficial));
             }
             return default(T);
         }

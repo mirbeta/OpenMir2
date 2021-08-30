@@ -27,7 +27,7 @@ namespace SystemModule
 
         public static int GetTickCount()
         {
-            return Environment.TickCount;
+            return Environment.TickCount - 1200000;
         }
 
         public static int MakeLong(int lowPart, int highPart)

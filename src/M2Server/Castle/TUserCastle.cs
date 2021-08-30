@@ -761,7 +761,7 @@ namespace M2Server
             var Year = AttackerInfo.AttackDate.Year;
             var Month = AttackerInfo.AttackDate.Month;
             var Day = AttackerInfo.AttackDate.Day;
-            result = string.Format(sMsg, new[] { Year, Month, Day });
+            result = string.Format(sMsg, Year, Month, Day);
             return result;
         }
 

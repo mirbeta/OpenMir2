@@ -133,7 +133,6 @@ namespace M2Server
                         wHitMode = Grobal2.RM_HIT;
                     }
                 }
-
                 m_btDirection = nDir;
                 if (TargeTBaseObject == null)
                 {
@@ -344,11 +343,10 @@ namespace M2Server
 
         public void _Attack_sub_4C1E5C(int nSecPwr)
         {
-            byte btDir = 0;
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject = null;
-            btDir = m_btDirection;
+            byte btDir = m_btDirection;
             m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, 1, ref nX, ref nY);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
             btDir = M2Share.sub_4B2F80(m_btDirection, 2);

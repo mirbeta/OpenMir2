@@ -1064,12 +1064,12 @@ namespace M2Server
             if (sVariable == "$PRICERATE")
             {
                 sText = m_nPriceRate.ToString();
-                sMsg = sub_49ADB8(sMsg, "<$PRICERATE>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
             }
             if (sVariable == "$UPGRADEWEAPONFEE")
             {
                 sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
-                sMsg = sub_49ADB8(sMsg, "<$UPGRADEWEAPONFEE>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
             }
             if (sVariable == "$USERWEAPON")
             {
@@ -1081,7 +1081,7 @@ namespace M2Server
                 {
                     sText = "无";
                 }
-                sMsg = sub_49ADB8(sMsg, "<$USERWEAPON>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
             }
         }
 

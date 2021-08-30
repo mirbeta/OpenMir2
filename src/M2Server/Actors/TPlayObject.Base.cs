@@ -1668,10 +1668,11 @@ namespace M2Server
                 case Grobal2.CM_CRSHIT:
                 case Grobal2.CM_TWINHIT:
                 case Grobal2.CM_FIREHIT:
-                    if (ClientHitXY((short)ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, (byte)ProcessMsg.wParam, ProcessMsg.boLateDelivery, ref dwDelayTime))
+                    if (ClientHitXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, (byte)ProcessMsg.wParam, ProcessMsg.boLateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
+                        Console.WriteLine("攻击失败...");
                     }
                     else
                     {
@@ -1699,6 +1700,7 @@ namespace M2Server
                                     }
                                 }
                                 SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());// 如果超速则发送攻击失败信息
+                                Console.WriteLine("攻击失败...");
                             }
                             else
                             {
@@ -2989,9 +2991,8 @@ namespace M2Server
                         if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
                             BaseObject = VisibleBaseObject.BaseObject;
-                            if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)
+                            if (!BaseObject.m_boFixedHideMode && !BaseObject.m_boGhost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                             {
-                                // 01/21 修改防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                                 SendMsg(BaseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
                             }
                         }

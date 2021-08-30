@@ -16,15 +16,19 @@
       <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Attack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Attack.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.ProcessMsg.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/0/AttackSabukWall.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/DataSystem/DataServer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/ItemSystem/ItmUnit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Items/ItmUnit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/ItemSystem/MirItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Items/MirItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/Maps.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/Maps.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GuildRecallCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/GuildRecallCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Configs/TM2Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Configs/TM2Config.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Guild/Guild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Guild/Guild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Guild/TGuild.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Guild/TGuild.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Share.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Share.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TCastleOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TGuildOfficial.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/HUtil32.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,14 +47,14 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/M2Server/AppService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/LocalDB.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Map/TEnvirnoment.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/AppService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/M2Server/MirApp.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/M2Server/NpcSystem/TNormNpc.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -320,6 +324,8 @@
       <workItem from="1629707906791" duration="177000" />
       <workItem from="1629787638392" duration="1253000" />
       <workItem from="1629816562580" duration="6856000" />
+      <workItem from="1630139692696" duration="775000" />
+      <workItem from="1630293271929" duration="695000" />
     </task>
     <servers />
   </component>

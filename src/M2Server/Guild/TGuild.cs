@@ -155,7 +155,7 @@ namespace M2Server
                     {
                         continue;
                     }
-                    if (GuildRank.MemberList[j].m_sCharName == sName)
+                    if (GuildRank.MemberList[j].sMemberName == sName)
                     {
                         result = true;
                         return result;
@@ -321,19 +321,23 @@ namespace M2Server
                                 {
                                     nRankNo = n2C,
                                     sRankName = s24,
-                                    MemberList = new List<TPlayObject>()
+                                    MemberList = new List<TGuildMember>()
                                 };
                                 m_RankList.Add(GuildRank);
                             }
                             while (s18 != "")
                             {
                                 s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
-                                if (s1C == "")
+                                if (string.IsNullOrEmpty(s1C))
                                 {
                                     break;
                                 }
-                                var play = M2Share.UserEngine.GetPlayObject(s1C);
-                                GuildRank.MemberList.Add(play);
+                                var playObject = M2Share.UserEngine.GetPlayObject(s1C);
+                                GuildRank.MemberList.Add(new TGuildMember()
+                                {
+                                    sMemberName = s1C,
+                                    PlayObject = playObject
+                                });
                             }
                         }
                         break;
@@ -351,7 +355,7 @@ namespace M2Server
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    BaseObject = GuildRank.MemberList[j];
+                    BaseObject = GuildRank.MemberList[j].PlayObject;
                     if (BaseObject != null)
                     {
                         BaseObject.RefShowName();
@@ -385,53 +389,52 @@ namespace M2Server
 
         private void SaveGuildFile(string sFileName)
         {
-            ArrayList SaveList;
-            SaveList = new ArrayList
+            StringList SaveList = new StringList();
+            SaveList.Add(M2Share.g_Config.sGuildNotice);
+            TWarGuild WarGuild = null;
+            long n14 = 0;
+            TGuildRank GuildRank = null;
+            for (var i = 0; i < NoticeList.Count; i++)
             {
-                M2Share.g_Config.sGuildNotice
-            };
-            //for (I = 0; I < NoticeList.Count; I ++ )
-            //{
-            //    SaveList.Add('+' + NoticeList[I]);
-            //}
-            //SaveList.Add(' ');
-            //SaveList.Add(M2Share.g_Config.sGuildWar);
-            //for (I = 0; I < GuildWarList.Count; I ++ )
-            //{
-            //    WarGuild = ((GuildWarList.Values[I]) as TWarGuild);
-            //    n14 = WarGuild.dwWarTime - (HUtil32.GetTickCount() - WarGuild.dwWarTick);
-            //    if (n14 <= 0)
-            //    {
-            //        continue;
-            //    }
-            //    SaveList.Add('+' + GuildWarList[I] + ' ' + (n14).ToString());
-            //}
-            //SaveList.Add(' ');
-            //SaveList.Add(M2Share.g_Config.sGuildAll);
-            //for (I = 0; I < GuildAllList.Count; I ++ )
-            //{
-            //    SaveList.Add('+' + GuildAllList[I]);
-            //}
-            //SaveList.Add(' ');
-            //SaveList.Add(M2Share.g_Config.sGuildMember);
-            //for (I = 0; I < m_RankList.Count; I ++ )
-            //{
-            //    GuildRank = m_RankList[I];
-            //    SaveList.Add('#' + (GuildRank.nRankNo).ToString() + ' ' + GuildRank.sRankName);
-            //    for (II = 0; II < GuildRank.MemberList.Count; II ++ )
-            //    {
-            //        SaveList.Add('+' + GuildRank.MemberList[II]);
-            //    }
-            //}
-            //try
-            //{
-            //    SaveList.SaveToFile(sFileName);
-            //}
-            //catch
-            //{
-            //    M2Share.MainOutMessage("保存行会信息失败！！！ " + sFileName);
-            //}
-            //SaveList.Free;
+                SaveList.Add("+" + NoticeList[i]);
+            }
+            SaveList.Add(" ");
+            SaveList.Add(M2Share.g_Config.sGuildWar);
+            for (var i = 0; i < GuildWarList.Count; i++)
+            {
+                WarGuild = GuildWarList[i];
+                n14 = WarGuild.dwWarTime - (HUtil32.GetTickCount() - WarGuild.dwWarTick);
+                if (n14 <= 0)
+                {
+                    continue;
+                }
+                SaveList.Add("+" + GuildWarList[i].Guild.sGuildName + ' ' + n14);
+            }
+            SaveList.Add(" ");
+            SaveList.Add(M2Share.g_Config.sGuildAll);
+            for (var i = 0; i < GuildAllList.Count; i++)
+            {
+                SaveList.Add("+" + GuildAllList[i]);
+            }
+            SaveList.Add(" ");
+            SaveList.Add(M2Share.g_Config.sGuildMember);
+            for (var i = 0; i < m_RankList.Count; i++)
+            {
+                GuildRank = m_RankList[i];
+                SaveList.Add("#" + (GuildRank.nRankNo).ToString() + ' ' + GuildRank.sRankName);
+                for (var j = 0; j < GuildRank.MemberList.Count; j++)
+                {
+                    SaveList.Add("+" + GuildRank.MemberList[j].sMemberName);
+                }
+            }
+            try
+            {
+                SaveList.SaveToFile(sFileName);
+            }
+            catch
+            {
+                M2Share.MainOutMessage("保存行会信息失败！！！ " + sFileName);
+            }
         }
 
         public void SendGuildMsg(string sMsg)
@@ -449,7 +452,7 @@ namespace M2Server
                     GuildRank = m_RankList[i];
                     for (var j = 0; j < GuildRank.MemberList.Count; j++)
                     {
-                        BaseObject = GuildRank.MemberList[j];
+                        BaseObject = GuildRank.MemberList[j].PlayObject;
                         if (BaseObject == null)
                         {
                             continue;
@@ -477,10 +480,10 @@ namespace M2Server
                 {
                     nRankNo = 1,
                     sRankName = M2Share.g_Config.sGuildChief,
-                    MemberList = new List<TPlayObject>()
+                    MemberList = new List<TGuildMember>()
                 };
                 var playObject = M2Share.UserEngine.GetPlayObject(sChief);
-                GuildRank.MemberList.Add(playObject);
+                GuildRank.MemberList.Add(new TGuildMember() { sMemberName = sChief, PlayObject = playObject });
                 m_RankList.Add(GuildRank);
                 SaveGuildInfoFile();
             }
@@ -496,9 +499,9 @@ namespace M2Server
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    if (GuildRank.MemberList[j].m_sCharName == PlayObject.m_sCharName)
+                    if (GuildRank.MemberList[j].sMemberName == PlayObject.m_sCharName)
                     {
-                        GuildRank.MemberList[j] = PlayObject;
+                        GuildRank.MemberList[j].PlayObject = PlayObject;
                         nRankNo = GuildRank.nRankNo;
                         result = GuildRank.sRankName;
                         // PlayObject.RefShowName();
@@ -523,7 +526,7 @@ namespace M2Server
             {
                 return result;
             }
-            result = GuildRank.MemberList[0].m_sCharName;
+            result = GuildRank.MemberList[0].sMemberName;
             return result;
         }
 
@@ -536,6 +539,10 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// todo look
+        /// </summary>
+        /// <param name="PlayObject"></param>
         public void DelHumanObj(TPlayObject PlayObject)
         {
             CheckSaveGuildFile();
@@ -544,7 +551,7 @@ namespace M2Server
                 var guildRank = m_RankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j ++ )
                 {
-                    if (guildRank.MemberList[j] == PlayObject)
+                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.m_sCharName, true) == 1)
                     {
                         guildRank.MemberList[j] = null;
                         return;
@@ -606,12 +613,12 @@ namespace M2Server
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    PlayObject = GuildRank.MemberList[j];
+                    PlayObject = GuildRank.MemberList[j].PlayObject;
                     if (PlayObject != null)
                     {
                         PlayObject.m_MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
-                        PlayObject.RefShowName();// 10/31
+                        PlayObject.RefShowName();
                     }
                 }
                 GuildRank.MemberList = null;
@@ -648,11 +655,15 @@ namespace M2Server
                 {
                     nRankNo = 99,
                     sRankName = M2Share.g_Config.sGuildMemberRank,
-                    MemberList = new List<TPlayObject>()
+                    MemberList = new List<TGuildMember>()
                 };
                 m_RankList.Add(GuildRank18);
             }
-            GuildRank18.MemberList.Add(PlayObject);
+            GuildRank18.MemberList.Add(new TGuildMember()
+            {
+                PlayObject = PlayObject,
+                sMemberName = PlayObject.m_sCharName
+            });
             UpdateGuildFile();
             result = true;
             return result;
@@ -667,7 +678,7 @@ namespace M2Server
                 GuildRank = m_RankList[i];
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    if (GuildRank.MemberList[j].m_sCharName == sHumName)
+                    if (GuildRank.MemberList[j].sMemberName == sHumName)
                     {
                         GuildRank.MemberList.RemoveAt(j);
                         result = true;
@@ -699,7 +710,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (GuildRank.MemberList[0].m_sCharName == sHumName)
+            if (GuildRank.MemberList[0].sMemberName == sHumName)
             {
                 BackupGuildFile();
                 result = true;
@@ -763,7 +774,7 @@ namespace M2Server
                     {
                         nRankNo = HUtil32.Str_ToInt(sRankNo, 99),
                         sRankName = sRankName.Trim(),
-                        MemberList = new List<TPlayObject>()
+                        MemberList = new List<TGuildMember>()
                     };
                     continue;
                 }
@@ -782,7 +793,11 @@ namespace M2Server
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new char[] { ' ', ',' });
                     if (sMemberName != "")
                     {
-                        GuildRank.MemberList.Add(M2Share.UserEngine.GetPlayObject(sMemberName));
+                        GuildRank.MemberList.Add(new TGuildMember()
+                        {
+                            PlayObject = M2Share.UserEngine.GetPlayObject(sMemberName),
+                            sMemberName = sMemberName
+                        });
                     }
                     count++;
                     if (count >= 10)
@@ -853,7 +868,7 @@ namespace M2Server
                     n28 = GuildRank.MemberList.Count;
                     for (var i = 0; i < GuildRank.MemberList.Count; i++)
                     {
-                        if (M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[i].m_sCharName) == null)
+                        if (M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[i].sMemberName) == null)
                         {
                             n28 -= 1;
                             break;
@@ -880,7 +895,7 @@ namespace M2Server
                     for (var j = 0; j < GuildRank.MemberList.Count; j++)
                     {
                         boCheckChange = false;
-                        sMemberName = GuildRank.MemberList[j].m_sCharName;
+                        sMemberName = GuildRank.MemberList[j].sMemberName;
                         n2C++;
                         for (var k = 0; k < GuildRankList.Count; k++)
                         {
@@ -888,7 +903,7 @@ namespace M2Server
                             NewGuildRank = GuildRankList[k];
                             for (n28 = 0; n28 < NewGuildRank.MemberList.Count; n28++)
                             {
-                                if (NewGuildRank.MemberList[n28].m_sCharName == sMemberName)
+                                if (NewGuildRank.MemberList[n28].sMemberName == sMemberName)
                                 {
                                     boCheckChange = true;
                                     break;
@@ -918,14 +933,14 @@ namespace M2Server
                     for (var j = 0; j < GuildRank.MemberList.Count; j++)
                     {
                         boCheckChange = false;
-                        sMemberName = GuildRank.MemberList[j].m_sCharName;
+                        sMemberName = GuildRank.MemberList[j].sMemberName;
                         n30++;
                         for (var k = 0; k < GuildRankList.Count; k++)
                         {
                             NewGuildRank = GuildRankList[k];
                             for (n28 = 0; n28 < NewGuildRank.MemberList.Count; n28++)
                             {
-                                if (NewGuildRank.MemberList[n28].m_sCharName == sMemberName)
+                                if (NewGuildRank.MemberList[n28].sMemberName == sMemberName)
                                 {
                                     boCheckChange = true;
                                     break;
@@ -981,12 +996,12 @@ namespace M2Server
                     GuildRank = m_RankList[i];
                     for (var j = 0; j < GuildRank.MemberList.Count; j++)
                     {
-                        PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].m_sCharName);
+                        PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
                         if (PlayObject != null)
                         {
-                            GuildRank.MemberList[j] = PlayObject;
+                            GuildRank.MemberList[j].PlayObject = PlayObject;
                             PlayObject.RefRankInfo(GuildRank.nRankNo, GuildRank.sRankName);
-                            PlayObject.RefShowName();// 10/31
+                            PlayObject.RefShowName();
                         }
                     }
                 }
