@@ -204,19 +204,19 @@ namespace M2Server
             }
         }
 
-        public void SaveCastleList()
+        private void SaveCastleList()
         {
-            ArrayList LoadList;
+            StringList LoadList;
             if (!Directory.Exists(M2Share.g_Config.sCastleDir))
             {
                 Directory.CreateDirectory(M2Share.g_Config.sCastleDir);
             }
-            LoadList = new ArrayList();
+            LoadList = new StringList();
             for (var i = 0; i < _castleList.Count; i++)
             {
                 LoadList.Add(i.ToString());
             }
-            //LoadList.SaveToFile(M2Share.g_Config.sCastleFile);
+            LoadList.SaveToFile(M2Share.g_Config.sCastleFile);
             //LoadList.Free;
         }
 
