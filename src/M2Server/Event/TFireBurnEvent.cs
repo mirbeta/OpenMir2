@@ -8,6 +8,8 @@ namespace M2Server
     /// </summary>
     public class TFireBurnEvent : TEvent
     {
+        private int m_fireRunTick = 0;
+
         public TFireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)
         {
             m_nDamage = nDamage;
@@ -18,9 +20,9 @@ namespace M2Server
         {
             IList<TBaseObject> BaseObjectList;
             TBaseObject TargeTBaseObject;
-            if (HUtil32.GetTickCount() - m_dwRunTick > 3000)
+            if (HUtil32.GetTickCount() - m_fireRunTick > 3000)
             {
-                m_dwRunTick = HUtil32.GetTickCount();
+                m_fireRunTick = HUtil32.GetTickCount();
                 BaseObjectList = new List<TBaseObject>();
                 if (m_Envir != null)
                 {

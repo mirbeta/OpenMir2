@@ -29,7 +29,7 @@ namespace M2Server
             for (var i = _closedEventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _closedEventList[i];
-                if (HUtil32.GetTickCount() - executeEvent.m_dwCloseTick > 5 * 60 * 1000)
+                if ((HUtil32.GetTickCount() - executeEvent.m_dwCloseTick) > 5 * 60 * 1000)
                 {
                     _closedEventList.RemoveAt(i);
                     executeEvent = null;
