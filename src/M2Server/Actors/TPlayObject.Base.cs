@@ -1672,7 +1672,6 @@ namespace M2Server
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                        Console.WriteLine("攻击失败...");
                     }
                     else
                     {
@@ -1700,7 +1699,6 @@ namespace M2Server
                                     }
                                 }
                                 SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());// 如果超速则发送攻击失败信息
-                                Console.WriteLine("攻击失败...");
                             }
                             else
                             {

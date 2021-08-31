@@ -353,10 +353,9 @@ namespace M2Server
         private void MsgGetChatProhibition(int sNum, string Body)
         {
             byte obtPermission;
-            var Str = string.Empty;
             var whostr = string.Empty;
             var minstr = string.Empty;
-            Str = Body;
+            string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref whostr, "/");
             Str = HUtil32.GetValidStr3(Str, ref minstr, "/");
             if (whostr != "")

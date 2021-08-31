@@ -27,7 +27,7 @@ namespace SystemModule
 
         public static int GetTickCount()
         {
-            return Environment.TickCount - 1200000;
+            return Environment.TickCount;
         }
 
         public static int MakeLong(int lowPart, int highPart)
@@ -664,31 +664,24 @@ namespace SystemModule
 
         public static string ReplaceChar(string src, char srcchr, char repchr)
         {
-            string result;
-            int i;
-            int len;
             if (src != "")
             {
-                len = src.Length;
+                int len = src.Length;
                 var sb = new StringBuilder();
-                for (i = 0; i < len; i++)
+                for (var i = 0; i < len; i++)
                     if (src[i] == srcchr)
                         sb.Append(repchr);
             }
-
-            result = src;
-            return result;
+            return src;
         }
 
         public static int TagCount(string source, char tag)
         {
-            var result = 0;
             var tcount = 0;
             for (var i = 0; i <= source.Length - 1; i++)
                 if (source[i] == tag)
                     tcount++;
-            result = tcount;
-            return result;
+            return tcount;
         }
 
         public static string BoolToStr(bool boo)
