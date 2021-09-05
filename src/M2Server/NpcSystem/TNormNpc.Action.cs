@@ -54,8 +54,6 @@ namespace M2Server
         /// <param name="QuestActionInfo"></param>
         private void ActionOfQUERYYBSELL(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            int I;
-            int K;
             TDealOffInfo DealOffInfo;
             string sSendStr;
             string sUserItemName;
@@ -72,20 +70,20 @@ namespace M2Server
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            for (I = 0; I < M2Share.sSellOffItemList.Count; I++)
+                            for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
-                                DealOffInfo = ((TDealOffInfo)(M2Share.sSellOffItemList[I]));
+                                DealOffInfo = ((TDealOffInfo)(M2Share.sSellOffItemList[i]));
                                 if (((DealOffInfo.sDealCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (new ArrayList(new int[] { 0, 3 }).Contains(DealOffInfo.N)))
                                 {
-                                    for (K = 0; K <= 9; K++)
+                                    for (var j = 0; j <= 9; j++)
                                     {
-                                        StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[K].wIndex);
+                                        StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
                                         if ((StdItem == null))
                                         {
                                             // 是金刚石
-                                            if (!bo12 && (DealOffInfo.UseItems[K].MakeIndex > 0) && (DealOffInfo.UseItems[K].wIndex == UInt16.MaxValue) && (DealOffInfo.UseItems[K].Dura == UInt16.MaxValue) && (DealOffInfo.UseItems[K].DuraMax == UInt16.MaxValue))
+                                            if (!bo12 && (DealOffInfo.UseItems[j].MakeIndex > 0) && (DealOffInfo.UseItems[j].wIndex == UInt16.MaxValue) && (DealOffInfo.UseItems[j].Dura == UInt16.MaxValue) && (DealOffInfo.UseItems[j].DuraMax == UInt16.MaxValue))
                                             {
-                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[K];// '金刚石'
+                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征 20080319
@@ -95,7 +93,7 @@ namespace M2Server
                                             }
                                             else
                                             {
-                                                sClientDealOffInfo.UseItems[K].S.Name = "";
+                                                sClientDealOffInfo.UseItems[j].S.Name = "";
                                             }
                                             continue;
                                         }
@@ -104,17 +102,17 @@ namespace M2Server
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
                                         // 取自定义物品名称
                                         sUserItemName = "";
-                                        if (DealOffInfo.UseItems[K].btValue[13] == 1)
+                                        if (DealOffInfo.UseItems[j].btValue[13] == 1)
                                         {
-                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[K].MakeIndex, DealOffInfo.UseItems[K].wIndex);
+                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[j].MakeIndex, DealOffInfo.UseItems[j].wIndex);
                                         }
                                         if (sUserItemName != "")
                                         {
-                                            sClientDealOffInfo.UseItems[K].S.Name = sUserItemName;
+                                            sClientDealOffInfo.UseItems[j].S.Name = sUserItemName;
                                         }
-                                        sClientDealOffInfo.UseItems[K].MakeIndex = DealOffInfo.UseItems[K].MakeIndex;
-                                        sClientDealOffInfo.UseItems[K].Dura = DealOffInfo.UseItems[K].Dura;
-                                        sClientDealOffInfo.UseItems[K].DuraMax = DealOffInfo.UseItems[K].DuraMax;
+                                        sClientDealOffInfo.UseItems[j].MakeIndex = DealOffInfo.UseItems[j].MakeIndex;
+                                        sClientDealOffInfo.UseItems[j].Dura = DealOffInfo.UseItems[j].Dura;
+                                        sClientDealOffInfo.UseItems[j].DuraMax = DealOffInfo.UseItems[j].DuraMax;
                                         switch (StdItem.StdMode)
                                         {
                                             // if StdItem.StdMode = 50 then //20080808 注释
@@ -123,9 +121,9 @@ namespace M2Server
                                             case 15:
                                             case 19:
                                             case 26:
-                                                if (DealOffInfo.UseItems[K].btValue[8] != 0)
+                                                if (DealOffInfo.UseItems[j].btValue[8] != 0)
                                                 {
-                                                    sClientDealOffInfo.UseItems[K].S.Shape = 130;
+                                                    sClientDealOffInfo.UseItems[j].S.Shape = 130;
                                                 }
                                                 break;
                                         }
