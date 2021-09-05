@@ -117,7 +117,6 @@ namespace M2Server
 
         public override bool Operate(TProcessMessage ProcessMsg)
         {
-            bool result;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {
                 if (ProcessMsg.BaseObject == this.ObjectId && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
@@ -134,13 +133,12 @@ namespace M2Server
                         this.MonsterSayMsg(M2Share.ObjectSystem.Get(ProcessMsg.nParam3), TMonStatus.s_UnderFire);
                     }
                 }
-                result = true;
+                return true;
             }
             else
             {
-                result = base.Operate(ProcessMsg);
+                return base.Operate(ProcessMsg);
             }
-            return result;
         }
 
         public override void Run()

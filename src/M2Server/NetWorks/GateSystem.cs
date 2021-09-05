@@ -687,7 +687,6 @@ namespace M2Server
                         nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
                         SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
-                        Console.WriteLine("有新玩家进入" + sIPaddr);
                         break;
                     case Grobal2.GM_CLOSE:
                         CloseUser(GateIdx, MsgHeader.nSocket);
@@ -733,7 +732,7 @@ namespace M2Server
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
                             {
-                                if (GateUser.boCertification && nMsgLen >= 12)//sizeof(TDefaultMessage)
+                                if (GateUser.boCertification && nMsgLen >= 12)
                                 {
                                     var defMsg = new TDefaultMessage(MsgBuff);
                                     if (nMsgLen == 12) 
@@ -742,7 +741,7 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        var sMsg = EDcode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length-13), true);
+                                        var sMsg = EDcode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13), true);
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, sMsg);
                                     }
                                 }

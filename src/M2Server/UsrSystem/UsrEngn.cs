@@ -785,6 +785,10 @@ namespace M2Server
                     {
                         if (m_PlayObjectList.Count <= nIdx) break;
                         var PlayObject = m_PlayObjectList[nIdx];
+                        if (PlayObject == null)
+                        {
+                            continue;
+                        }
                         if (dwCurTick - PlayObject.m_dwRunTick > PlayObject.m_nRunTime)
                         {
                             PlayObject.m_dwRunTick = dwCurTick;

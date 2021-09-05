@@ -6,11 +6,11 @@
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
         <LangVersion>default</LangVersion>
         <Nullable>disable</Nullable>
+        <BaseOutputPath>bin\</BaseOutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <OutputPath>bin\Debug\net5.0\net5.0</OutputPath>
       <WarningLevel>4</WarningLevel>
       <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
       <Prefer32bit>false</Prefer32bit>
@@ -18,6 +18,12 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Actors\TPlayObject.Core.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Actors\TPlayObject.Core.cs" />
+    </ItemGroup>
     <ItemGroup>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.114.3" />

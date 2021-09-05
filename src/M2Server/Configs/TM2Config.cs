@@ -111,7 +111,7 @@ namespace M2Server
         public int[] dwNeedExps;
         public int[] WideAttack;
         public int[] CrsAttack;
-        public int[, ,] SpitMap;
+        public int[,,] SpitMap;
         public string sHomeMap;
         public short nHomeX;
         public short nHomeY;
@@ -819,9 +819,9 @@ namespace M2Server
         public string sAIHomeMap;
         public short nAIHomeX;
         public short nAIHomeY;
-     public bool boHPAutoMoveMap;//低血回城
-     public bool boAutoRepairItem;
-     public bool boRenewHealth;
+        public bool boHPAutoMoveMap;//低血回城
+        public bool boAutoRepairItem;
+        public bool boRenewHealth;
         public long nAIWarrorAttackTime;
         public long nAIWizardAttackTime;
         public long nAITaoistAttackTime;
@@ -829,12 +829,16 @@ namespace M2Server
         /// 不管目标血值,全部可以使用施毒术否则目标血值达700时使用
         /// </summary>
         public bool btHeroSkillMode;
-        
+
         public long dwHeroWarrorAttackTime;//战士英雄的攻击速度
         public long dwHeroWizardAttackTime;//法师英雄的攻击速度
         public long dwHeroTaoistAttackTime;//道士英雄的攻击速度
-       public string sAIConfigListFileName;
-       public string sHeroAIConfigListFileName;
+        public string sAIConfigListFileName;
+        public string sHeroAIConfigListFileName;
+        /// <summary>
+        /// 寄售系统每次扣多少金币(默认10000金币)
+        /// </summary>
+        public int nDecUserGameGold;
 
         public TM2Config()
         {
@@ -1517,9 +1521,9 @@ namespace M2Server
             nAIWarrorAttackTime = 2080;
             nAIWizardAttackTime = 2150;
             nAITaoistAttackTime = 2150;
-            sAIHomeMap= "3";
-            nAIHomeX= 330;
-            nAIHomeY= 330;
+            sAIHomeMap = "3";
+            nAIHomeX = 330;
+            nAIHomeY = 330;
             boHPAutoMoveMap = false;//低血回城
             boAutoRepairItem = true;
             boAutoPickUpItem = false;
@@ -1531,6 +1535,7 @@ namespace M2Server
             sAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
+            nDecUserGameGold = 10000;
         }
     }
 }

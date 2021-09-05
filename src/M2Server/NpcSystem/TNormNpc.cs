@@ -436,6 +436,11 @@ namespace M2Server
                     }
                     return;
                 }
+                case "$QUERYYBDEALLOG":// 查看元宝交易记录 
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
+                        return;
+                    }
                 case "$KILLER":
                 {
                     if (PlayObject.m_LastHiter != null)

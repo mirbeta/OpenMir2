@@ -529,6 +529,7 @@ namespace M2Server
         public int m_dwWalkWaitTick = 0;
         public bool m_boWalkWaitLocked = false;
         public int m_nNextHitTime = 0;
+        public TUserMagic[] m_MagicArr = null;
         public TUserMagic m_MagicOneSwordSkill = null;
         public TUserMagic m_MagicPowerHitSkill = null;
         /// <summary>
@@ -570,8 +571,10 @@ namespace M2Server
         // 固定颜色
         public int m_nFixColorIdx = 0;
         public long m_nFixStatus = 0;
+        /// <summary>
+        /// 快速麻痹，受攻击后麻痹立即消失
+        /// </summary>
         public bool m_boFastParalysis = false;
-        // 快速麻痹，受攻击后麻痹立即消失
         public bool m_boSmashSet = false;
         public bool m_boHwanDevilSet = false;
         public bool m_boPuritySet = false;
@@ -801,6 +804,7 @@ namespace M2Server
             m_nFixStatus = -1;
             m_boFastParalysis = false;
             m_boNastyMode = false;
+            m_MagicArr = new TUserMagic[20];
             M2Share.ObjectSystem.Add(ObjectId, this);
         }
 
@@ -881,6 +885,10 @@ namespace M2Server
             TMapItem MapItem;
             TMapItem pr;
             string logcap;
+            if (UserItem == null)
+            {
+                return false;
+            }
             MirItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
@@ -1615,8 +1623,7 @@ namespace M2Server
                     break;
                 }
             }
-            int result = tcount;
-            return result;
+            return tcount;
         }
 
         private void BreakOpenHealth()
@@ -1772,7 +1779,7 @@ namespace M2Server
             return result;
         }
 
-        public bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
+        private bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
@@ -1927,12 +1934,11 @@ namespace M2Server
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject MonObj;
             TBaseObject result = null;
             if (m_SlaveList.Count < nMaxMob)
             {
                 GetFrontPosition(ref nX, ref nY);
-                MonObj = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, nX, nY, sMonName);
+                var MonObj = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, nX, nY, sMonName);
                 if (MonObj != null)
                 {
                     MonObj.m_Master = this;
@@ -2410,9 +2416,11 @@ namespace M2Server
             m_Magic41Skill = null;
             m_MagicTwnHitSkill = null;
             m_Magic43Skill = null;
+            m_MagicArr = new TUserMagic[20];
             for (int i = 0; i < m_MagicList.Count; i++)
             {
                 UserMagic = m_MagicList[i];
+                m_MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
                     case Grobal2.SKILL_ONESWORD:// 内功心法
@@ -2466,12 +2474,18 @@ namespace M2Server
                         break;
                 }
             }
+            //+3准确、+2攻击上限，同时还可对目标造成一定额外伤害
+            if (m_MagicArr[3] != null && m_MagicArr[3].btLevel >= 4)//四级技能有效
+            {
+                m_btHitPoint = (byte)HUtil32._MIN(byte.MaxValue, m_btHitPoint + 3);
+                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) + 2);
+                m_nHitPlus += 2;
+            }
         }
 
         public void AddItemSkill(int nIndex)
         {
             TMagic Magic = null;
-            TUserMagic UserMagic;
             switch (nIndex)
             {
                 case 1:
@@ -2485,7 +2499,7 @@ namespace M2Server
             {
                 if (!IsTrainingSkill(Magic.wMagicID))
                 {
-                    UserMagic = new TUserMagic
+                    var UserMagic = new TUserMagic
                     {
                         MagicInfo = Magic,
                         wMagIdx = Magic.wMagicID,
@@ -3159,7 +3173,6 @@ namespace M2Server
                     {
                         Msg.sMsg = string.Empty;
                     }
-                    //SendMessage = null;
                     result = true;
                     break;
                 }
@@ -3234,10 +3247,9 @@ namespace M2Server
                 M2Share.ErrorMessage(m_sCharName + " SendRefMsg nil PEnvir ");
                 return;
             }
-            // 01/21 增加，原来直接不发信息，如果隐身模式则只发送信息给自己
             if (m_boObMode || m_boFixedHideMode)
             {
-                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
@@ -3526,13 +3538,12 @@ namespace M2Server
 
         protected void KickException()
         {
-            TPlayObject PlayObject;
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 m_sMapName = M2Share.g_Config.sHomeMap;
                 m_nCurrX = M2Share.g_Config.nHomeX;
                 m_nCurrY = M2Share.g_Config.nHomeY;
-                PlayObject = this as TPlayObject;
+                TPlayObject PlayObject = this as TPlayObject;
                 PlayObject.m_boEmergencyClose = true;
             }
             else
@@ -3666,12 +3677,6 @@ namespace M2Server
             int nOldX;
             int nOldY;
             TUserCastle Castle;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::EnterAnotherMap -> MsgTargetList Clear";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleItems Dispose";
-            const string sExceptionMsg3 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleItems Clear";
-            const string sExceptionMsg4 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleEvents Clear";
-            const string sExceptionMsg5 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleActors Dispose";
-            const string sExceptionMsg6 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleActors Clear";
             const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
@@ -3710,60 +3715,18 @@ namespace M2Server
                 nOldX = m_nCurrX;
                 nOldY = m_nCurrY;
                 DisappearA();
-                try
+                m_VisibleHumanList.Clear();
+                for (var i = 0; i < m_VisibleItems.Count; i++)
                 {
-                    m_VisibleHumanList.Clear();
+                    m_VisibleItems[i] = null;
                 }
-                catch
+                m_VisibleItems.Clear();
+                m_VisibleEvents.Clear();
+                for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
-                    M2Share.ErrorMessage(sExceptionMsg1);
+                    m_VisibleActors[i] = null;
                 }
-                try
-                {
-                    for (var i = 0; i < m_VisibleItems.Count; i++)
-                    {
-                        m_VisibleItems[i] = null;
-                    }
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg2);
-                }
-                try
-                {
-                    m_VisibleItems.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg3);
-                }
-                try
-                {
-                    m_VisibleEvents.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg4);
-                }
-                try
-                {
-                    for (var i = 0; i < m_VisibleActors.Count; i++)
-                    {
-                        m_VisibleActors[i] = null;
-                    }
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg5);
-                }
-                try
-                {
-                    m_VisibleActors.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg6);
-                }
+                m_VisibleActors.Clear();
                 SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 m_PEnvir = Envir;
                 m_sMapName = Envir.sMapName;
@@ -3773,7 +3736,6 @@ namespace M2Server
                 SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, Envir.m_sMapFileName);
                 if (AddToMap())
                 {
-
                     m_dwMapMoveTick = HUtil32.GetTickCount();
                     m_bo316 = true;
                     result = true;
@@ -4066,7 +4028,6 @@ namespace M2Server
         public virtual bool IsAttackTarget(TBaseObject BaseObject)
         {
             bool result = false;
-            int I;
             if ((BaseObject == null) || (BaseObject == this))
             {
                 return result;
@@ -4176,9 +4137,9 @@ namespace M2Server
                                 result = true;
                                 if ((this as TPlayObject).m_boMaster)
                                 {
-                                    for (I = 0; I < (this as TPlayObject).m_MasterList.Count; I++)
+                                    for (var i = 0; i < (this as TPlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((this as TPlayObject).m_MasterList[I] == BaseObject)
+                                        if ((this as TPlayObject).m_MasterList[i] == BaseObject)
                                         {
                                             result = false;
                                             break;
@@ -4187,9 +4148,9 @@ namespace M2Server
                                 }
                                 if ((BaseObject as TPlayObject).m_boMaster)
                                 {
-                                    for (I = 0; I < (BaseObject as TPlayObject).m_MasterList.Count; I++)
+                                    for (var i = 0; i < (BaseObject as TPlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((BaseObject as TPlayObject).m_MasterList[I] == this)
+                                        if ((BaseObject as TPlayObject).m_MasterList[i] == this)
                                         {
                                             result = false;
                                             break;

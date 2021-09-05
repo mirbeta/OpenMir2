@@ -13,8 +13,23 @@
   <component name="ChangeListManager">
     <list default="true" id="3ed60e10-e33e-4602-b136-35dfd6d3052c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.M2Server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TCastleManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Castle/TUserCastle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TAnimalObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TBaseObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Base.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.Command.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/Actors/TPlayObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ClearBagItemCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/PositionMoveCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/PositionMoveCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/M2Server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NetWorks/GateSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/NpcSystem/TMerchant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/M2Server/UsrSystem/UsrEngn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/GateShare.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/GateShare.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RunGate/ServerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/RunGate/ServerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SystemModule/Grobal2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/SystemModule/Grobal2.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,6 +329,9 @@
       <workItem from="1630293271929" duration="695000" />
       <workItem from="1630296918919" duration="580000" />
       <workItem from="1630306645232" duration="1008000" />
+      <workItem from="1630457243875" duration="1555000" />
+      <workItem from="1630587683917" duration="1361000" />
+      <workItem from="1630718708228" duration="728000" />
     </task>
     <servers />
   </component>
@@ -424,19 +442,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="369" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs</url>
-          <line>15</line>
-          <properties documentPath="$PROJECT_DIR$/src/M2Server/CommandSystem/Commands/ChangeObModeCommand.cs" initialLine="15" containingFunctionPresentation="method 'ChangeObMode'">
-            <startOffsets>
-              <option value="415" />
-            </startOffsets>
-            <endOffsets>
-              <option value="480" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="452" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/M2Server/Actors/ObjAIPlayObject.cs</url>

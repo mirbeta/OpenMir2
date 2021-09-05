@@ -278,7 +278,7 @@ namespace M2Server
             TUserItem UserItem;
             MirItem StdItem;
             TStdItem StdItem80 = null;
-            ArrayList DelItemList;
+            IList<TDeleteItem> DelItemList = null;
             int nDc;
             int nSc;
             int nMc;
@@ -290,7 +290,6 @@ namespace M2Server
             var nMcMax = 0;
             var nDura = 0;
             var nItemCount = 0;
-            DelItemList = null;
             DuraList = new List<double>();
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
@@ -300,9 +299,13 @@ namespace M2Server
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
                     {
-                        DelItemList = new ArrayList();
+                        DelItemList = new List<TDeleteItem>();
                     }
-                    DelItemList.Add(UserItem.MakeIndex);
+                    DelItemList.Add(new TDeleteItem()
+                    {
+                        MakeIndex = UserItem.MakeIndex,
+                        sItemName = M2Share.g_Config.sBlackStone
+                    });
                     DisPose(UserItem);
                     ItemList.RemoveAt(i);
                 }
@@ -378,9 +381,13 @@ namespace M2Server
                             }
                             if (DelItemList == null)
                             {
-                                DelItemList = new ArrayList();
+                                DelItemList = new List<TDeleteItem>();
                             }
-                            DelItemList.Add(UserItem.MakeIndex);
+                            DelItemList.Add(new TDeleteItem()
+                            {
+                                sItemName = StdItem.Name,
+                                MakeIndex = UserItem.MakeIndex
+                            });
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog("26" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -1446,7 +1453,7 @@ namespace M2Server
             bool result = false;
             IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
             TUserItem UserItem = null;
-            IList<int> List28;
+            IList<TDeleteItem> List28;
             string s20 = string.Empty;
             int n1C = 0;
             if (List10 == null)
@@ -1489,9 +1496,13 @@ namespace M2Server
                         {
                             if (List28 == null)
                             {
-                                List28 = new List<int>();
+                                List28 = new List<TDeleteItem>();
                             }
-                            List28.Add(UserItem.MakeIndex);
+                            List28.Add(new TDeleteItem()
+                            {
+                                sItemName = s20,
+                                MakeIndex = UserItem.MakeIndex
+                            });
                             Dispose(UserItem);
                             PlayObject.m_ItemList.RemoveAt(j);
                             n1C -= 1;

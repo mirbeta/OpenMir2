@@ -724,14 +724,13 @@ namespace M2Server
         {
             TPlayObject PlayObject;
             TUserItem UserItem;
-            ArrayList DelList;
-            DelList = null;
+            IList<TDeleteItem> DelList = null;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -747,9 +746,13 @@ namespace M2Server
                 UserItem = PlayObject.m_ItemList[i];
                 if (DelList == null)
                 {
-                    DelList = new ArrayList();
+                    DelList = new List<TDeleteItem>();
                 }
-                DelList.Add(UserItem.MakeIndex);
+                DelList.Add(new TDeleteItem()
+                {
+                    sItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex),
+                    MakeIndex = UserItem.MakeIndex
+                });
                 Dispose(UserItem);
             }
             PlayObject.m_ItemList.Clear();

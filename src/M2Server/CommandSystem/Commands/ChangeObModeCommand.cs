@@ -1,6 +1,5 @@
-﻿using SystemModule;
-using System;
-using M2Server.CommandSystem;
+﻿using M2Server.CommandSystem;
+using SystemModule;
 
 namespace M2Server
 {
@@ -13,7 +12,6 @@ namespace M2Server
         [DefaultCommand]
         public void ChangeObMode(string[] @Params, TPlayObject PlayObject)
         {
-            var nPermission = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var sParam1 = @Params.Length > 1 ? @Params[1] : "";
             var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
 

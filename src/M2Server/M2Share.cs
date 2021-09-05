@@ -64,6 +64,7 @@ namespace M2Server
         public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
         public static Dictionary<string,int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
+        public static IList<TDealOffInfo> sSellOffItemList = null;
         /// <summary>
         /// 游戏公告列表
         /// </summary>
@@ -1356,6 +1357,21 @@ namespace M2Server
         public const int nSC_QUERYBAGITEMS = 382;
         public const string sSC_ISHIGH = "ISHIGH";
         public const int nSC_ISHIGH = 383;
+        /// <summary>
+        /// 开通元宝交易
+        /// </summary>
+        public const string sOPENYBDEAL = "OPENYBDEAL";
+        /// <summary>
+        /// 查询正在出售的物品
+        /// </summary>        
+        public const int nOPENYBDEAL = 252;
+        public const string sQUERYYBSELL = "QUERYYBSELL";
+        /// <summary>
+        /// 查询可以的购买物品
+        /// </summary>        
+        public const int nQUERYYBSELL = 253;
+        public const string sQUERYYBDEAL = "QUERYYBDEAL";
+        public const int nQUERYYBDEAL = 254;
         // =================================================================
         public const string sOFFLINEMSG = "@@offlinemsg";
         // 增加挂机
@@ -1506,6 +1522,7 @@ namespace M2Server
         public const string g_sGameCommandBindUseItemAlreadBindMsg = "%s的%s上的物品早已绑定过了！！！";
         public const string g_sGameCommandMobFireBurnHelpMsg = "命令格式: %s %s %s %s %s %s %s";
         public const string g_sGameCommandMobFireBurnMapNotFountMsg = "地图%s 不存在";
+        public static string sGetSellOffGlod = "{0} {1}增加";
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";
         public const string U_RIGHTHANDNAME = "照明物";

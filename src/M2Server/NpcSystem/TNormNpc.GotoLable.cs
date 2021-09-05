@@ -2634,6 +2634,15 @@ namespace M2Server
                             }
                         }
                         break;
+                    case M2Share.nOPENYBDEAL:
+                        ActionOfOPENYBDEAL(PlayObject, QuestActionInfo);
+                        break;
+                    case M2Share.nQUERYYBSELL:
+                        ActionOfQUERYYBSELL(PlayObject, QuestActionInfo);
+                        break;
+                    case M2Share.nQUERYYBDEAL:
+                        ActionOfQUERYYBDEAL(PlayObject, QuestActionInfo);
+                        break;
                 }
             }
             return result;

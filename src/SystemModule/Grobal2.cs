@@ -100,6 +100,12 @@ namespace SystemModule
         }
     }
 
+    public class TDeleteItem
+    {
+        public string sItemName;
+        public int MakeIndex;
+    }
+
     public struct TClientGoods
     {
         public string Name;
@@ -1142,6 +1148,62 @@ namespace SystemModule
         /// 发送跨服组队消息
         /// </summary>
         public const int ISM_GRUOPMESSAGE = 242;
+
+
+        // ==============================元宝寄售系统==========================
+        public const int RM_SENDDEALOFFFORM = 23000;
+        // 打开出售物品窗口
+        public const int SM_SENDDEALOFFFORM = 23001;
+        // 打开出售物品窗口
+        public const int CM_SELLOFFADDITEM = 23002;
+        // 客户端往出售物品窗口里加物品
+        public const int SM_SELLOFFADDITEM_OK = 23003;
+        // 客户端往出售物品窗口里加物品 成功
+        public const int RM_SELLOFFADDITEM_OK = 23004;
+        public const int SM_SellOffADDITEM_FAIL = 23005;
+        // 客户端往出售物品窗口里加物品 失败
+        public const int RM_SellOffADDITEM_FAIL = 23006;
+        public const int CM_SELLOFFDELITEM = 23007;
+        // 客户端删除出售物品窗里的物品
+        public const int SM_SELLOFFDELITEM_OK = 23008;
+        // 客户端删除出售物品窗里的物品 成功
+        public const int RM_SELLOFFDELITEM_OK = 23009;
+        public const int SM_SELLOFFDELITEM_FAIL = 23010;
+        // 客户端删除出售物品窗里的物品 失败
+        public const int RM_SELLOFFDELITEM_FAIL = 23011;
+        public const int CM_SELLOFFCANCEL = 23012;
+        // 客户端取消元宝寄售
+        public const int RM_SELLOFFCANCEL = 23013;
+        // 元宝寄售取消出售
+        public const int SM_SellOffCANCEL = 23014;
+        // 元宝寄售取消出售
+        public const int CM_SELLOFFEND = 23015;
+        // 客户端元宝寄售结束
+        public const int SM_SELLOFFEND_OK = 23016;
+        // 客户端元宝寄售结束 成功
+        public const int RM_SELLOFFEND_OK = 23017;
+        public const int SM_SELLOFFEND_FAIL = 23018;
+        // 客户端元宝寄售结束 失败
+        public const int RM_SELLOFFEND_FAIL = 23019;
+        public const int RM_QUERYYBSELL = 23020;
+        // 查询正在出售的物品
+        public const int SM_QUERYYBSELL = 23021;
+        // 查询正在出售的物品
+        public const int RM_QUERYYBDEAL = 23022;
+        // 查询可以的购买物品
+        public const int SM_QUERYYBDEAL = 23023;
+        // 查询可以的购买物品
+        public const int CM_CANCELSELLOFFITEMING = 23024;
+        // 取消正在寄售的物品 20080318(出售人)
+        // SM_CANCELSELLOFFITEMING_OK =23018;//取消正在寄售的物品 成功
+        public const int CM_SELLOFFBUYCANCEL = 23025;
+        // 取消寄售 物品购买 20080318(购买人)
+        public const int CM_SELLOFFBUY = 23026;
+        // 确定购买寄售物品 20080318
+        public const int SM_SELLOFFBUY_OK = 23027;
+        // 购买成功
+        public const int RM_SELLOFFBUY_OK = 23028;
+
 
         public const int OS_EVENTOBJECT = 1;
         public const int OS_MOVINGOBJECT = 2;

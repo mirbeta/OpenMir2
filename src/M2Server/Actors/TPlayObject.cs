@@ -376,6 +376,18 @@ namespace M2Server
         /// 包裹刷新时间
         /// </summary>
         public int m_dwClickNpcTime = 0;
+        /// <summary>
+        /// 是否开通元宝交易服务
+        /// </summary>
+        public bool bo_YBDEAL;
+        /// <summary>
+        /// 确认元宝寄售标志
+        /// </summary>
+        public bool m_boSellOffOK = false;
+        /// <summary>
+        /// 元宝寄售物品列表
+        /// </summary>
+        public IList<TUserItem> m_SellOffItemList = null;
 
         private bool ClientPickUpItem_IsSelf(TBaseObject BaseObject)
         {
@@ -1005,11 +1017,10 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)
+                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
-                // 防麻
                 if (!boLateDelivery)
                 {
                     if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1020,6 +1031,13 @@ namespace M2Server
                     m_boFilterAction = true;
                     int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
                     int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
+
+
+                    //if (M2Share.g_Config.boDisableDoubleAttack && (dwCheckTime < M2Share.g_Config.nDoubleAttackCheck)) //禁止双倍攻击
+                    //{
+
+                    //}
+
                     if (dwCheckTime < dwAttackTime)
                     {
                         m_dwAttackCount++;
@@ -1648,7 +1666,7 @@ namespace M2Server
             return result;
         }
 
-        private bool ClientRunXY(short wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
+        private bool ClientRunXY(int wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
         {
             bool result = false;
             byte nDir;
@@ -1659,7 +1677,7 @@ namespace M2Server
             }
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanRun)
             {
-                return result;// 防麻
+                return result;
             }
             if (nFlag != wIdent)
             {
@@ -4708,12 +4726,12 @@ namespace M2Server
             }
         }
 
-        private void SendDelItemList(IList<int> ItemList)
+        private void SendDelItemList(IList<TDeleteItem> ItemList)
         {
             var s10 = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                s10 = s10 + ItemList[i] + '/' + ItemList[i] + '/';
+                s10 = s10 + ItemList[i].sItemName + '/' + ItemList[i].MakeIndex + '/';
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
             SendSocket(m_DefMsg, EDcode.EncodeString(s10));
@@ -6299,7 +6317,7 @@ namespace M2Server
         {
             var result = false;
             dwDelayTime = 0;
-            int dwCheckTime = 0;
+            int dwCheckTime;
             if (!M2Share.g_Config.boDisableStruck) // 检查人物弯腰停留时间
             {
                 dwCheckTime = HUtil32.GetTickCount() - m_dwStruckTick;
