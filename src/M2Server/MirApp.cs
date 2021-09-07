@@ -297,6 +297,7 @@ namespace M2Server
             M2Share.g_Config.UserIDSection = new object();
             M2Share.UserDBSection = new object();
             M2Share.g_DynamicVarList = new List<TDynamicVar>();
+            M2Share.sSellOffItemList = new List<TDealOffInfo>();
             LoadServerTable();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
             M2Share.CommandSystem.RegisterCommand();

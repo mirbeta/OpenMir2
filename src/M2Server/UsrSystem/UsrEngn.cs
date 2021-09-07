@@ -785,10 +785,6 @@ namespace M2Server
                     {
                         if (m_PlayObjectList.Count <= nIdx) break;
                         var PlayObject = m_PlayObjectList[nIdx];
-                        if (PlayObject == null)
-                        {
-                            continue;
-                        }
                         if (dwCurTick - PlayObject.m_dwRunTick > PlayObject.m_nRunTime)
                         {
                             PlayObject.m_dwRunTick = dwCurTick;
@@ -998,7 +994,7 @@ namespace M2Server
                                 boCanCreate = false;
                             else
                                 boCanCreate = true;
-                            if (nGenModCount > nGenCount && boCanCreate)// 0806 增加 控制刷怪数量比例
+                            if (nGenModCount > nGenCount && boCanCreate)// 增加 控制刷怪数量比例
                             {
                                 boRegened = RegenMonsters(MonGen, nGenModCount - nGenCount);
                             }
@@ -1227,7 +1223,7 @@ namespace M2Server
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 StdItem = StdItemList[i];
-                if (string.Compare(StdItem.Name.ToLower(), sItemName.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(StdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = StdItem;
                     break;

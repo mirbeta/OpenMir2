@@ -29,21 +29,19 @@ namespace M2Server
 
         public byte[] ToByte()
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            using var memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(sAccount.ToByte(17));
-                backingStream.Write(sName.ToByte(21));
-                backingStream.Write(nSelectID);
-                backingStream.Write(dCreateDate);
-                backingStream.Write(boDeleted);
-                backingStream.Write(UpdateDate);
-                backingStream.Write(CreateDate);
+            backingStream.Write(sAccount.ToByte(17));
+            backingStream.Write(sName.ToByte(21));
+            backingStream.Write(nSelectID);
+            backingStream.Write(dCreateDate);
+            backingStream.Write(boDeleted);
+            backingStream.Write(UpdateDate);
+            backingStream.Write(CreateDate);
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
         }
     }
 }

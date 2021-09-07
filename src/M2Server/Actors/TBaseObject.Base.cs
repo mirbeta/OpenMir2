@@ -436,7 +436,7 @@ namespace M2Server
             DisappearA();
         }
 
-        public virtual void ScatterBagItems(TBaseObject ItemOfCreat)
+        protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
         {
             int DropWide;
             TUserItem UserItem;
@@ -445,7 +445,7 @@ namespace M2Server
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);// 3
+                DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
                 if ((m_btRaceServer == Grobal2.RC_PLAYCLONE) && (m_Master != null))
                 {
                     return;
@@ -828,9 +828,9 @@ namespace M2Server
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                    default:
+                    /*default:
                         Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                        break;
+                        break;*/
                 }
             }
             catch (Exception e)

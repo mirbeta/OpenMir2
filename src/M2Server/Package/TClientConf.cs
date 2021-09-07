@@ -2,7 +2,7 @@
 
 namespace M2Server
 {
-    public struct TClientConf
+    public class TClientConf : Package
     {
         public bool boClientCanSet;
         public bool boRunHuman;
@@ -58,6 +58,5 @@ namespace M2Server
                 return stream.ToArray();
             }
         }
-    } 
+    }
 }
-

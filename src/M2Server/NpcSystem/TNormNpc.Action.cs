@@ -27,7 +27,7 @@ namespace M2Server
                 //if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
                 //{
                 //    // 增加变量支持
-                //    nGameGold = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
+                nGameGold = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
                 //}
                 if (PlayObject.m_nGameGold >= nGameGold)
                 {
@@ -70,13 +70,19 @@ namespace M2Server
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
+                            sClientDealOffInfo = new TClientDealOffInfo();
+                            sClientDealOffInfo.UseItems = new TClientItem[9];
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
-                                DealOffInfo = ((TDealOffInfo)(M2Share.sSellOffItemList[i]));
-                                if (((DealOffInfo.sDealCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (new ArrayList(new int[] { 0, 3 }).Contains(DealOffInfo.N)))
+                                DealOffInfo = M2Share.sSellOffItemList[i];
+                                if (((DealOffInfo.sDealCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
                                 {
-                                    for (var j = 0; j <= 9; j++)
+                                    for (var j = 0; j < 9; j++)
                                     {
+                                        if (DealOffInfo.UseItems[j] == null)
+                                        {
+                                            continue;
+                                        }
                                         StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
                                         if ((StdItem == null))
                                         {
@@ -86,9 +92,9 @@ namespace M2Server
                                                 TClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
-                                                //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征 20080319
-                                                //_wvar1.S.DuraMax = Int16.MaxValue;// 客户端金刚石特征 20080319
-                                                //_wvar1.S.Looks = UInt16.MaxValue;// 不显示图片 20080319
+                                                _wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
+                                                _wvar1.S.DuraMax = Int16.MaxValue;// 客户端金刚石特征
+                                                _wvar1.S.Looks = UInt16.MaxValue;// 不显示图片
                                                 bo12 = true;
                                             }
                                             else
@@ -100,6 +106,9 @@ namespace M2Server
                                         StdItem80 = StdItem;
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
+                                        sClientDealOffInfo.UseItems[j] = new TClientItem();
+                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[j].S);
+                                        //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         sUserItemName = "";
                                         if (DealOffInfo.UseItems[j].btValue[13] == 1)
@@ -115,7 +124,7 @@ namespace M2Server
                                         sClientDealOffInfo.UseItems[j].DuraMax = DealOffInfo.UseItems[j].DuraMax;
                                         switch (StdItem.StdMode)
                                         {
-                                            // if StdItem.StdMode = 50 then //20080808 注释
+                                            // if StdItem.StdMode = 50 then 
                                             // sClientDealOffInfo.UseItems[K].s.Name := sClientDealOffInfo.UseItems[K].s.Name + ' #' + IntToStr(DealOffInfo.UseItems[K].Dura);
                                             // Modify the A .. B: 15, 19 .. 24, 26
                                             case 15:
@@ -130,7 +139,7 @@ namespace M2Server
                                     }
                                     sClientDealOffInfo.sDealCharName = DealOffInfo.sDealCharName;
                                     sClientDealOffInfo.sBuyCharName = DealOffInfo.sBuyCharName;
-                                    sClientDealOffInfo.dSellDateTime = DealOffInfo.dSellDateTime;
+                                    sClientDealOffInfo.dSellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.nSellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.N;
                                     sSendStr = EDcode.EncodeBuffer(sClientDealOffInfo);
@@ -180,31 +189,37 @@ namespace M2Server
                     {
                         if (M2Share.sSellOffItemList.Count > 0)
                         {
-                            for (var I = 0; I < M2Share.sSellOffItemList.Count; I++)
+                            sClientDealOffInfo = new TClientDealOffInfo();
+                            sClientDealOffInfo.UseItems = new TClientItem[9];
+                            for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
-                                DealOffInfo = ((TDealOffInfo)(M2Share.sSellOffItemList[I]));
+                                DealOffInfo = M2Share.sSellOffItemList[i];
                                 if (((DealOffInfo.sBuyCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (DealOffInfo.N == 0))
                                 {
-                                    for (var K = 0; K <= 9; K++)
+                                    for (var k = 0; k < 9; k++)
                                     {
-                                        StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[K].wIndex);
+                                        if (DealOffInfo.UseItems[k] == null)
+                                        {
+                                            continue;
+                                        }
+                                        StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[k].wIndex);
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
-                                            if (!bo12 && (DealOffInfo.UseItems[K].MakeIndex > 0) && (DealOffInfo.UseItems[K].wIndex == Int16.MaxValue) && (DealOffInfo.UseItems[K].Dura == Int16.MaxValue) && (DealOffInfo.UseItems[K].DuraMax == Int16.MaxValue))
+                                            if (!bo12 && (DealOffInfo.UseItems[k].MakeIndex > 0) && (DealOffInfo.UseItems[k].wIndex == Int16.MaxValue) && (DealOffInfo.UseItems[k].Dura == Int16.MaxValue) && (DealOffInfo.UseItems[k].DuraMax == Int16.MaxValue))
                                             {
-                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[K];// '金刚石'
+                                                TClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;
                                                 //// 金刚石数量
-                                                //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征 20080319
-                                                //_wvar1.S.DuraMax = Int16.MaxValue;// 客户端金刚石特征 20080319
-                                                //_wvar1.S.Looks = UInt16.MaxValue;// 不显示图片 20080319
+                                                //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
+                                                //_wvar1.S.DuraMax = Int16.MaxValue;// 客户端金刚石特征
+                                                //_wvar1.S.Looks = UInt16.MaxValue;// 不显示图片
                                                 bo12 = true;
                                             }
                                             else
                                             {
-                                                sClientDealOffInfo.UseItems[K].S.Name = "";
+                                                sClientDealOffInfo.UseItems[k].S.Name = "";
                                             }
                                             continue;
                                         }
@@ -212,36 +227,36 @@ namespace M2Server
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S);// 取自定义物品名称
                                         //sClientDealOffInfo.UseItems[K].S = StdItem80;
+                                        sClientDealOffInfo.UseItems[k] = new TClientItem();
+                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].S);
                                         sUserItemName = "";
-                                        if (DealOffInfo.UseItems[K].btValue[13] == 1)
+                                        if (DealOffInfo.UseItems[k].btValue[13] == 1)
                                         {
-                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[K].MakeIndex, DealOffInfo.UseItems[K].wIndex);
+                                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(DealOffInfo.UseItems[k].MakeIndex, DealOffInfo.UseItems[k].wIndex);
                                         }
                                         if (sUserItemName != "")
                                         {
-                                            sClientDealOffInfo.UseItems[K].S.Name = sUserItemName;
+                                            sClientDealOffInfo.UseItems[k].S.Name = sUserItemName;
                                         }
-                                        sClientDealOffInfo.UseItems[K].MakeIndex = DealOffInfo.UseItems[K].MakeIndex;
-                                        sClientDealOffInfo.UseItems[K].Dura = DealOffInfo.UseItems[K].Dura;
-                                        sClientDealOffInfo.UseItems[K].DuraMax = DealOffInfo.UseItems[K].DuraMax;
+                                        sClientDealOffInfo.UseItems[k].MakeIndex = DealOffInfo.UseItems[k].MakeIndex;
+                                        sClientDealOffInfo.UseItems[k].Dura = DealOffInfo.UseItems[k].Dura;
+                                        sClientDealOffInfo.UseItems[k].DuraMax = DealOffInfo.UseItems[k].DuraMax;
                                         switch (StdItem.StdMode)
                                         {
-                                            // if StdItem.StdMode = 50 then//20080808 注释
-                                            // sClientDealOffInfo.UseItems[K].s.Name := sClientDealOffInfo.UseItems[K].s.Name + ' #' + IntToStr(DealOffInfo.UseItems[K].Dura);
                                             // Modify the A .. B: 15, 19 .. 24, 26
                                             case 15:
                                             case 19:
                                             case 26:
-                                                if (DealOffInfo.UseItems[K].btValue[8] != 0)
+                                                if (DealOffInfo.UseItems[k].btValue[8] != 0)
                                                 {
-                                                    sClientDealOffInfo.UseItems[K].S.Shape = 130;
+                                                    sClientDealOffInfo.UseItems[k].S.Shape = 130;
                                                 }
                                                 break;
                                         }
                                     }
                                     sClientDealOffInfo.sDealCharName = DealOffInfo.sDealCharName;
                                     sClientDealOffInfo.sBuyCharName = DealOffInfo.sBuyCharName;
-                                    sClientDealOffInfo.dSellDateTime = DealOffInfo.dSellDateTime;
+                                    sClientDealOffInfo.dSellDateTime = HUtil32.DateTimeToDouble(DealOffInfo.dSellDateTime);
                                     sClientDealOffInfo.nSellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.N;
                                     sSendStr = EDcode.EncodeBuffer(sClientDealOffInfo);

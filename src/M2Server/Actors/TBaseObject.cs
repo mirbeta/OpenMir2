@@ -529,7 +529,6 @@ namespace M2Server
         public int m_dwWalkWaitTick = 0;
         public bool m_boWalkWaitLocked = false;
         public int m_nNextHitTime = 0;
-        public TUserMagic[] m_MagicArr = null;
         public TUserMagic m_MagicOneSwordSkill = null;
         public TUserMagic m_MagicPowerHitSkill = null;
         /// <summary>
@@ -804,7 +803,6 @@ namespace M2Server
             m_nFixStatus = -1;
             m_boFastParalysis = false;
             m_boNastyMode = false;
-            m_MagicArr = new TUserMagic[20];
             M2Share.ObjectSystem.Add(ObjectId, this);
         }
 
@@ -2416,11 +2414,9 @@ namespace M2Server
             m_Magic41Skill = null;
             m_MagicTwnHitSkill = null;
             m_Magic43Skill = null;
-            m_MagicArr = new TUserMagic[20];
             for (int i = 0; i < m_MagicList.Count; i++)
             {
                 UserMagic = m_MagicList[i];
-                m_MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
                     case Grobal2.SKILL_ONESWORD:// 内功心法
@@ -2473,13 +2469,6 @@ namespace M2Server
                         m_Magic43Skill = UserMagic;
                         break;
                 }
-            }
-            //+3准确、+2攻击上限，同时还可对目标造成一定额外伤害
-            if (m_MagicArr[3] != null && m_MagicArr[3].btLevel >= 4)//四级技能有效
-            {
-                m_btHitPoint = (byte)HUtil32._MIN(byte.MaxValue, m_btHitPoint + 3);
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) + 2);
-                m_nHitPlus += 2;
             }
         }
 

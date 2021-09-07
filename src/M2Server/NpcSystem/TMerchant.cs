@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using SystemModule;
 
@@ -41,6 +40,7 @@ namespace M2Server
         public bool m_boGetMaster = false;
         public bool m_boUseItemName = false;
         public bool m_boOffLineMsg = false;
+        public bool m_boYBDeal = false;
 
         private void AddItemPrice(int nIndex, int nPrice)
         {
@@ -144,7 +144,6 @@ namespace M2Server
 
         public void RefillGoods()
         {
-            int II;
             TGoods Goods;
             int nIndex;
             int nRefillCount;
@@ -191,15 +190,15 @@ namespace M2Server
                     if (RefillList20.Count > 1000)
                     {
                         bo21 = false;
-                        for (II = 0; II < m_RefillGoodsList.Count; II++)
+                        for (var j = 0; j < m_RefillGoodsList.Count; j++)
                         {
-                            Goods = m_RefillGoodsList[II];
+                            Goods = m_RefillGoodsList[j];
                             nIndex = M2Share.UserEngine.GetStdItemIdx(Goods.sItemName);
-                            //if (((RefillList20[0]) as TItemPrice).wIndex == nIndex)
-                            //{
-                            //    bo21 = true;
-                            //    break;
-                            //}
+                            if (RefillList20[0].wIndex == nIndex)
+                            {
+                                bo21 = true;
+                                break;
+                            }
                         }
                         if (!bo21)
                         {
@@ -771,6 +770,30 @@ namespace M2Server
             User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
         }
 
+        /// <summary>
+        /// 打开出售物品窗口
+        /// </summary>
+        /// <param name="User"></param>
+        public void UserSelect_OpenDealOffForm(TPlayObject User)
+        {
+            if (User.bo_YBDEAL)
+            {
+                if (!User.SellOffInTime(0))
+                {
+                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, this.ObjectId, 0, 0, "");
+                    User.GetBackSellOffItems();
+                }
+                else
+                {
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您还有元宝服务正在进行！！\\ \\<返回/@main>");
+                }
+            }
+            else
+            {
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您未开通元宝服务,请先开通元宝服务！！\\ \\<返回/@main>");
+            }
+        }
+
         public override void UserSelect(TPlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
@@ -919,6 +942,13 @@ namespace M2Server
                                 PlayObject.m_sScriptGoBackLable = M2Share.sMAIN;
                             }
                             GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                        }
+                        else if ((sLabel).ToLower().CompareTo((M2Share.sDealYBme).ToLower()) == 0) // 元宝寄售:出售物品 
+                        {
+                            if (m_boYBDeal)
+                            {
+                                UserSelect_OpenDealOffForm(PlayObject); // 打开出售物品窗口
+                            }
                         }
                     }
                 }

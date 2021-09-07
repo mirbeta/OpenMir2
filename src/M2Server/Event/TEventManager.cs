@@ -40,10 +40,9 @@ namespace M2Server
         public TEvent GetEvent(TEnvirnoment Envir, int nX, int nY, int nType)
         {
             TEvent result = null;
-            TEvent currentEvent = null;
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
-                currentEvent = _eventList[i];
+                TEvent currentEvent = _eventList[i];
                 if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY &&
                     currentEvent.m_nEventType == nType)
                 {

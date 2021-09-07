@@ -135,10 +135,7 @@ namespace M2Server
                 }
                 return true;
             }
-            else
-            {
-                return base.Operate(ProcessMsg);
-            }
+            return base.Operate(ProcessMsg);
         }
 
         public override void Run()

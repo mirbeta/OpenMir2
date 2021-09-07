@@ -1252,7 +1252,7 @@ namespace M2Server
                     _gate.nSendChecked = 1;
                     _gate.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                var sendBuffer = new byte[buffer.Length - 4];//todo 这里为啥要减4?
+                var sendBuffer = new byte[buffer.Length - 4];
                 Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
                 nSendBuffLen = sendBuffer.Length;
                 if (nSendBuffLen > 0)

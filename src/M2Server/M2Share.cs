@@ -1373,6 +1373,14 @@ namespace M2Server
         public const string sQUERYYBDEAL = "QUERYYBDEAL";
         public const int nQUERYYBDEAL = 254;
         // =================================================================
+        /// <summary>
+        /// 元宝寄售:出售物品
+        /// </summary>
+        public const string sDealYBme = "@dealybme";
+        /// <summary>
+        /// 元宝寄售
+        /// </summary>        
+        public const string sybdeal = "@ybdeal";
         public const string sOFFLINEMSG = "@@offlinemsg";
         // 增加挂机
         public const string sSL_SENDMSG = "@@sendmsg";

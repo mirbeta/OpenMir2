@@ -1702,6 +1702,21 @@ namespace M2Server
                 nCMDCode = M2Share.nSC_ISHIGH;
                 goto L001;
             }
+            if (sCmd == M2Share.sOPENYBDEAL)
+            {
+                nCMDCode = M2Share.nOPENYBDEAL;
+                goto L001;
+            }
+            if (sCmd == M2Share.sQUERYYBSELL)
+            {
+                nCMDCode = M2Share.nQUERYYBSELL;
+                goto L001; 
+            }
+            if (sCmd == M2Share.sQUERYYBDEAL)
+            {
+                nCMDCode = M2Share.nQUERYYBDEAL;
+                goto L001;
+            }
             L001:
             if (nCMDCode > 0)
             {
@@ -1994,6 +2009,11 @@ namespace M2Server
                                     if (s30.Equals(M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boOffLineMsg = true;
+                                        continue;
+                                    }
+                                    if ((s30).ToLower().CompareTo((M2Share.sybdeal).ToLower()) == 0)
+                                    {
+                                        ((TMerchant)(NPC)).m_boYBDeal = true;
                                         continue;
                                     }
                                 }

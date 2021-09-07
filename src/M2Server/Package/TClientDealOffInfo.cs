@@ -1,23 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
+using SystemModule;
 
 namespace M2Server
 {
-    public class TClientDealOffInfo
+    /// <summary>
+    /// 客户端元宝寄售数据结构
+    /// </summary>
+    public class TClientDealOffInfo : Package
     {
-        // 客户端元宝寄售数据结构  
+        /// <summary>
+        /// 寄售人
+        /// </summary>        
         public string sDealCharName;
-        // 寄售人
+        /// <summary>
+        /// 购买人
+        /// </summary>        
         public string sBuyCharName;
-        // 购买人
-        public DateTime dSellDateTime;
-        // 寄售时间
+        /// <summary>
+        /// 寄售时间
+        /// </summary>        
+        public double dSellDateTime;
+        /// <summary>
+        /// 交易的元宝数
+        /// </summary>        
         public int nSellGold;
-        // 交易的元宝数
+        /// <summary>
+        /// 物品
+        /// </summary>        
         public TClientItem[] UseItems;
-        // 物品
+        /// <summary>
+        /// 操作状态标识
+        /// </summary>
         public byte N;
-    } 
+
+
+        public byte[] ToByte()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var backingStream = new BinaryWriter(memoryStream);
+                backingStream.Write(sDealCharName.ToByte(15));
+                backingStream.Write(sBuyCharName.ToByte(15));
+                backingStream.Write(dSellDateTime);
+                backingStream.Write(nSellGold);
+                var userItem = new TClientItem();
+                for (int i = 0; i < UseItems.Length; i++)
+                {
+                    if (UseItems[i] == null)
+                    {
+                        backingStream.Write(userItem.ToByte());
+                    }
+                    else
+                    {
+                        backingStream.Write(UseItems[i].ToByte());
+                    }
+                }
+                backingStream.Write(N);
+
+                var stream = backingStream.BaseStream as MemoryStream;
+                return stream.ToArray();
+            }
+        }
+    }
 }

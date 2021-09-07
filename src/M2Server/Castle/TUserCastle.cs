@@ -10,7 +10,7 @@ namespace M2Server
     public class TUserCastle
     {
         public TObjUnit[] m_Archer = new TObjUnit[12];
-        public ArrayList m_AttackGuildList;
+        public IList<TGuild> m_AttackGuildList;
         public IList<TAttackerInfo> m_AttackWarList;
         public bool m_boShowOverMsg;
         /// <summary>
@@ -109,7 +109,7 @@ namespace M2Server
             m_boUnderWar = false;
             m_boShowOverMsg = false;
             m_AttackWarList = new List<TAttackerInfo>();
-            m_AttackGuildList = new ArrayList();
+            m_AttackGuildList = new List<TGuild>();
             m_dwSaveTick = 0;
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
@@ -593,7 +593,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild)m_AttackGuildList[i];
+                AttackGuild = m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild.IsAllyGuild(Guild))
                 {
                     result = true;
@@ -610,7 +610,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild)m_AttackGuildList[i];
+                AttackGuild = m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild == Guild)
                 {
                     result = true;

@@ -11,384 +11,7 @@ namespace M2Server
 {
     public partial class TPlayObject : TAnimalObject
     {
-        public TDefaultMessage m_DefMsg;
-        public string m_sOldSayMsg = string.Empty;
-        public int m_nSayMsgCount = 0;
-        public int m_dwSayMsgTick = 0;
-        public bool m_boDisableSayMsg = false;
-        public int m_dwDisableSayMsgTick = 0;
-        public int m_dwCheckDupObjTick = 0;
-        public int dwTick578 = 0;
-        public int dwTick57C = 0;
-        public bool m_boInSafeArea = false;
-        /// <summary>
-        /// 登录帐号名
-        /// </summary>
-        public string m_sUserID;
-        /// <summary>
-        /// 人物IP地址
-        /// </summary>
-        public string m_sIPaddr = string.Empty;
-        public string m_sIPLocal = string.Empty;
-        public int m_nSocket = 0;
-        /// <summary>
-        /// 人物连接到游戏网关SOCKETID
-        /// </summary>
-        public int m_nGSocketIdx = 0;
-        /// <summary>
-        /// 人物所在网关号
-        /// </summary>
-        public int m_nGateIdx = 0;
-        public int m_nSoftVersionDate = 0;
-        /// <summary>
-        /// 登录时间
-        /// </summary>
-        public DateTime m_dLogonTime;
-        /// <summary>
-        /// 战领沙城时间
-        /// </summary>
-        public int m_dwLogonTick = 0;
-        /// <summary>
-        /// 是否进入游戏完成
-        /// </summary>
-        public bool m_boReadyRun = false;
-        /// <summary>
-        /// 当前会话ID
-        /// </summary>
-        public int m_nSessionID = 0;
-        /// <summary>
-        /// 人物当前模式(测试/付费模式)
-        /// </summary>
-        public int m_nPayMent = 0;
-        public int m_nPayMode = 0;
-        /// <summary>
-        /// 全局会话信息
-        /// </summary>
-        public TSessInfo m_SessInfo = null;
-        public int m_dwLoadTick = 0;
-        /// <summary>
-        /// 人物当前所在服务器序号
-        /// </summary>
-        public int m_nServerIndex = 0;
-        public bool m_boEmergencyClose = false;
-        /// <summary>
-        /// 掉线标志
-        /// </summary>
-        public bool m_boSoftClose = false;
-        /// <summary>
-        /// 断线标志(@kick 命令)
-        /// </summary>
-        public bool m_boKickFlag = false;
-        /// <summary>
-        /// 是否重连
-        /// </summary>
-        public bool m_boReconnection = false;
-        public bool m_boRcdSaved = false;
-        public bool m_boSwitchData = false;
-        public bool m_boSwitchDataOK = false;
-        public string m_sSwitchDataTempFile = string.Empty;
-        public int m_nWriteChgDataErrCount = 0;
-        public string m_sSwitchMapName = string.Empty;
-        public short m_nSwitchMapX = 0;
-        public short m_nSwitchMapY = 0;
-        public bool m_boSwitchDataSended = false;
-        public int m_dwChgDataWritedTick = 0;
-        /// <summary>
-        /// 攻击间隔
-        /// </summary>
-        public int m_dwHitIntervalTime = 0;
-        /// <summary>
-        /// 魔法间隔
-        /// </summary>
-        public int m_dwMagicHitIntervalTime = 0;
-        /// <summary>
-        /// 走路间隔
-        /// </summary>
-        public int m_dwRunIntervalTime = 0;
-        /// <summary>
-        /// 走路间隔
-        /// </summary>
-        public int m_dwWalkIntervalTime = 0;
-        /// <summary>
-        /// 换方向间隔
-        /// </summary>
-        public int m_dwTurnIntervalTime = 0;
-        /// <summary>
-        /// 组合操作间隔
-        /// </summary>
-        public int m_dwActionIntervalTime = 0;
-        /// <summary>
-        /// 移动刺杀间隔
-        /// </summary>
-        public int m_dwRunLongHitIntervalTime = 0;
-        /// <summary>
-        /// 跑位攻击间隔
-        /// </summary>        
-        public int m_dwRunHitIntervalTime = 0;
-        /// <summary>
-        /// 走位攻击间隔
-        /// </summary>        
-        public int m_dwWalkHitIntervalTime = 0;
-        /// <summary>
-        /// 跑位魔法间隔
-        /// </summary>        
-        public int m_dwRunMagicIntervalTime = 0;
-        /// <summary>
-        /// 魔法攻击时间
-        /// </summary>        
-        public int m_dwMagicAttackTick = 0;
-        /// <summary>
-        /// 魔法攻击间隔时间
-        /// </summary>
-        public int m_dwMagicAttackInterval = 0;
-        /// <summary>
-        /// 攻击时间
-        /// </summary>
-        public int m_dwAttackTick = 0;
-        /// <summary>
-        /// 人物跑动时间
-        /// </summary>
-        public int m_dwMoveTick = 0;
-        /// <summary>
-        /// 人物攻击计数
-        /// </summary>
-        public int m_dwAttackCount = 0;
-        /// <summary>
-        /// 人物攻击计数
-        /// </summary>
-        public int m_dwAttackCountA = 0;
-        /// <summary>
-        /// 魔法攻击计数
-        /// </summary>
-        public int m_dwMagicAttackCount = 0;
-        /// <summary>
-        /// 人物跑计数
-        /// </summary>
-        public int m_dwMoveCount = 0;
-        /// <summary>
-        /// 人物跑计数
-        /// </summary>
-        public int m_dwMoveCountA = 0;
-        /// <summary>
-        /// 超速计数
-        /// </summary>
-        public int m_nOverSpeedCount = 0;
-        public bool m_boDieInFight3Zone = false;
-        public string m_sGotoNpcLabel = string.Empty;
-        public int m_nDelayCall = 0;
-        public int m_dwDelayCallTick = 0;
-        public bool m_boDelayCall = false;
-        public int m_DelayCallNPC = 0;
-        public string m_sDelayCallLabel = string.Empty;
-        public TScript m_Script = null;
-        public TBaseObject m_NPC = null;
-        public int[] m_nVal;
-        public int[] m_nMval;
-        public int[] m_DyVal;
-        public string[] m_nSval;
-        public string m_sPlayDiceLabel = string.Empty;
-        public bool m_boTimeRecall = false;
-        public int m_dwTimeRecallTick = 0;
-        public string m_sMoveMap = string.Empty;
-        public short m_nMoveX = 0;
-        public short m_nMoveY = 0;
-        /// <summary>
-        /// 保存人物数据时间间隔
-        /// </summary>
-        public int m_dwSaveRcdTick = 0;
-        public byte m_btBright = 0;
-        public bool m_boNewHuman = false;
-        public bool m_boSendNotice = false;
-        public int m_dwWaitLoginNoticeOKTick = 0;
-        public bool m_boLoginNoticeOK = false;
-        public bool bo6AB = false;
-        /// <summary>
-        /// 帐号过期
-        /// </summary>
-        public bool m_boExpire = false;
-        public int m_dwShowLineNoticeTick = 0;
-        public int m_nShowLineNoticeIdx = 0;
-        public int m_nSoftVersionDateEx = 0;
-        public Hashtable m_CanJmpScriptLableList = null;
-        public int m_nScriptGotoCount = 0;
-        public string m_sScriptCurrLable = string.Empty;
-        // 用于处理 @back 脚本命令
-        public string m_sScriptGoBackLable = string.Empty;
-        // 用于处理 @back 脚本命令
-        public int m_dwTurnTick = 0;
-        public int m_wOldIdent = 0;
-        public byte m_btOldDir = 0;
-        /// <summary>
-        /// 第一个操作
-        /// </summary>
-        public bool m_boFirstAction = false;
-        /// <summary>
-        /// 二次操作之间间隔时间
-        /// </summary>        
-        public int m_dwActionTick = 0;
-        /// <summary>
-        /// 配偶名称
-        /// </summary>
-        public string m_sDearName;
-        public TPlayObject m_DearHuman = null;
-        /// <summary>
-        /// 是否允许夫妻传送
-        /// </summary>
-        public bool m_boCanDearRecall = false;
-        public bool m_boCanMasterRecall = false;
-        /// <summary>
-        /// 夫妻传送时间
-        /// </summary>
-        public int m_dwDearRecallTick = 0;
-        public int m_dwMasterRecallTick = 0;
-        /// <summary>
-        /// 师徒名称
-        /// </summary>
-        public string m_sMasterName;
-        public TPlayObject m_MasterHuman = null;
-        public IList<TPlayObject> m_MasterList = null;
-        public bool m_boMaster = false;
-        /// <summary>
-        /// 声望点
-        /// </summary>
-        public byte m_btCreditPoint = 0;
-        /// <summary>
-        /// 离婚次数
-        /// </summary>        
-        public byte m_btMarryCount = 0;
-        /// <summary>
-        /// 转生等级
-        /// </summary>
-        public byte m_btReLevel = 0;
-        public byte m_btReColorIdx = 0;
-        public int m_dwReColorTick = 0;
-        /// <summary>
-        /// 杀怪经验倍数
-        /// </summary>
-        public int m_nKillMonExpMultiple = 0;
-        /// <summary>
-        /// 处理消息循环时间控制
-        /// </summary>        
-        public int m_dwGetMsgTick = 0;
-        public bool m_boSetStoragePwd = false;
-        public bool m_boReConfigPwd = false;
-        public bool m_boCheckOldPwd = false;
-        public bool m_boUnLockPwd = false;
-        public bool m_boUnLockStoragePwd = false;
-        public bool m_boPasswordLocked = false;
-        // 锁密码
-        public byte m_btPwdFailCount = 0;
-        /// <summary>
-        /// 是否启用锁登录功能
-        /// </summary>
-        public bool m_boLockLogon = false;
-        /// <summary>
-        /// 是否打开登录锁
-        /// </summary>        
-        public bool m_boLockLogoned = false;
-        public string m_sTempPwd;
-        public string m_sStoragePwd;
-        public TBaseObject m_PoseBaseObject = null;
-        public bool m_boStartMarry = false;
-        public bool m_boStartMaster = false;
-        public bool m_boStartUnMarry = false;
-        public bool m_boStartUnMaster = false;
-        /// <summary>
-        /// 禁止发方字(发的文字只能自己看到)
-        /// </summary>
-        public bool m_boFilterSendMsg = false;
-        /// <summary>
-        /// 杀怪经验倍数(此数除以 100 为真正倍数)
-        /// </summary>        
-        public int m_nKillMonExpRate = 0;
-        /// <summary>
-        /// 人物攻击力倍数(此数除以 100 为真正倍数)
-        /// </summary>        
-        public int m_nPowerRate = 0;
-        public int m_dwKillMonExpRateTime = 0;
-        public int m_dwPowerRateTime = 0;
-        public int m_dwRateTick = 0;
-        /// <summary>
-        /// 是否允许使用物品
-        /// </summary>
-        public bool m_boCanUseItem = false;
-        public bool m_boCanDeal = false;
-        public bool m_boCanDrop = false;
-        public bool m_boCanGetBackItem = false;
-        public bool m_boCanWalk = false;
-        public bool m_boCanRun = false;
-        public bool m_boCanHit = false;
-        public bool m_boCanSpell = false;
-        public bool m_boCanSendMsg = false;
-        public int m_nMemberType = 0;
-        // 会员类型
-        public int m_nMemberLevel = 0;
-        // 会员等级
-        public bool m_boSendMsgFlag = false;
-        // 发祝福语标志
-        public bool m_boChangeItemNameFlag = false;
-        public int m_nGameGold = 0;
-        // 游戏币
-        public bool m_boDecGameGold = false;
-        // 是否自动减游戏币
-        public int m_dwDecGameGoldTime = 0;
-        public int m_dwDecGameGoldTick = 0;
-        public int m_nDecGameGold = 0;
-        // 一次减点数
-        public bool m_boIncGameGold = false;
-        // 是否自动加游戏币
-        public int m_dwIncGameGoldTime = 0;
-        public int m_dwIncGameGoldTick = 0;
-        public int m_nIncGameGold = 0;
-        // 一次减点数
-        public int m_nGamePoint = 0;
-        // 游戏点数
-        public int m_dwIncGamePointTick = 0;
-        public int m_nPayMentPoint = 0;
-        public int m_dwPayMentPointTick = 0;
-        public int m_dwDecHPTick = 0;
-        public int m_dwIncHPTick = 0;
-        public TPlayObject m_GetWhisperHuman = null;
-        public int m_dwClearObjTick = 0;
-        public short m_wContribution = 0;
-        // 贡献度
-        public string m_sRankLevelName = string.Empty;
-        // 显示名称格式串
-        public bool m_boFilterAction = false;
-        public bool m_boClientFlag = false;
-        public byte m_nStep = 0;
-        public int m_nClientFlagMode = 0;
-        public int m_dwAutoGetExpTick = 0;
-        public int m_nAutoGetExpTime = 0;
-        public int m_nAutoGetExpPoint = 0;
-        public TEnvirnoment m_AutoGetExpEnvir = null;
-        public bool m_boAutoGetExpInSafeZone = false;
-        public IList<TDynamicVar> m_DynamicVarList = null;
-        public short m_dwClientTick = 0;
-        /// <summary>
-        /// 进入速度测试模式
-        /// </summary>
-        public bool m_boTestSpeedMode = false;
-        public int m_dwDelayTime = 0;
-        public string m_sRandomNo = string.Empty;
-        public int m_dwQueryBagItemsTick = 0;
-        /// <summary>
-        /// 包裹刷新时间
-        /// </summary>
-        public int m_dwClickNpcTime = 0;
-        /// <summary>
-        /// 是否开通元宝交易服务
-        /// </summary>
-        public bool bo_YBDEAL;
-        /// <summary>
-        /// 确认元宝寄售标志
-        /// </summary>
-        public bool m_boSellOffOK = false;
-        /// <summary>
-        /// 元宝寄售物品列表
-        /// </summary>
-        public IList<TUserItem> m_SellOffItemList = null;
-
+        
         private bool ClientPickUpItem_IsSelf(TBaseObject BaseObject)
         {
             bool result;
@@ -2035,7 +1658,7 @@ namespace M2Server
 
         }
 
-        public void DealCancel()
+        private void DealCancel()
         {
             if (!m_boDealing)
             {
@@ -2615,7 +2238,7 @@ namespace M2Server
             SendDefMessage(Grobal2.SM_MAPDESCRIPTION, nMUSICID, 0, 0, 0, m_PEnvir.sMapDesc);
         }
 
-        public void SendWhisperMsg(TPlayObject PlayObject)
+        private void SendWhisperMsg(TPlayObject PlayObject)
         {
             if (PlayObject == this)
             {
@@ -4435,7 +4058,7 @@ namespace M2Server
             }
         }
 
-        protected ushort GetSpellPoint(TUserMagic UserMagic)
+        internal ushort GetSpellPoint(TUserMagic UserMagic)
         {
             return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
@@ -4457,7 +4080,7 @@ namespace M2Server
             return result;
         }
 
-        protected bool DoMotaebo(byte nDir, int nMagicLevel)
+        public bool DoMotaebo(byte nDir, int nMagicLevel)
         {
             int nDmg;
             TBaseObject BaseObject_30 = null;
@@ -5411,7 +5034,7 @@ namespace M2Server
             return result;
         }
 
-        protected void MoveToHome()
+        internal void MoveToHome()
         {
             SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             BaseObjectMove(m_sHomeMap, m_nHomeX, m_nHomeY);
@@ -6438,15 +6061,18 @@ namespace M2Server
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    Regex rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    var match = rg.Match(sText);
-                    if (match.Success)
+                    Regex rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
+                    var match = rg.Matches(sText);
+                    if (match.Count > 0)
                     {
-                        sCmdStr = match.Value;
-                        var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
-                        if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
+                        foreach (Match item in match)
                         {
-                            m_CanJmpScriptLableList.Add(sLabel, sLabel);
+                            sCmdStr = item.Value;
+                            var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
+                            if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
+                            {
+                                m_CanJmpScriptLableList.Add(sLabel, sLabel);
+                            }
                         }
                     }
                 }

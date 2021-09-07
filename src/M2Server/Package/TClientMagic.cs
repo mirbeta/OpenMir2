@@ -2,7 +2,7 @@
 
 namespace M2Server
 {
-    public class TClientMagic
+    public class TClientMagic : Package
     {
         public char Key;
         public byte Level;
@@ -33,4 +33,3 @@ namespace M2Server
         }
     }
 }
-

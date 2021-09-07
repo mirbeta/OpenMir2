@@ -145,6 +145,17 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);
         }
 
+        public static DateTime DoubleToDateTime(double xd)
+        {
+            return (new DateTime(1899, 12, 30)).AddDays(xd);
+        }
+
+        public static double DateTimeToDouble(DateTime dt)
+        {
+            TimeSpan ts = dt - new DateTime(1899, 12, 30);
+            return ts.TotalDays;
+        }
+
         public static string StrPas(byte[] buff)
         {
             var nLen = buff.Length;
