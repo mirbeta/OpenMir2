@@ -1098,27 +1098,29 @@ namespace M2Server
         {
             string sText;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
-            if (sVariable == "$PRICERATE")
+            switch (sVariable)
             {
-                sText = m_nPriceRate.ToString();
-                sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
-            }
-            if (sVariable == "$UPGRADEWEAPONFEE")
-            {
-                sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
-                sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
-            }
-            if (sVariable == "$USERWEAPON")
-            {
-                if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                case "$PRICERATE":
+                    sText = m_nPriceRate.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
+                    break;
+                case "$UPGRADEWEAPONFEE":
+                    sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
+                    break;
+                case "$USERWEAPON":
                 {
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                    {
+                        sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    }
+                    else
+                    {
+                        sText = "无";
+                    }
+                    sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
+                    break;
                 }
-                else
-                {
-                    sText = "无";
-                }
-                sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
             }
         }
 

@@ -803,13 +803,13 @@ namespace M2Server
                                     }
                                     else
                                     {
-                                        if (HUtil32.GetTickCount() - PlayObject.m_dwSearchTick > PlayObject.m_dwSearchTime)
+                                        if ((HUtil32.GetTickCount() - PlayObject.m_dwSearchTick) > PlayObject.m_dwSearchTime)
                                         {
                                             PlayObject.m_dwSearchTick = HUtil32.GetTickCount();
-                                            PlayObject.SearchViewRange();
-                                            PlayObject.GameTimeChanged();
+                                            PlayObject.SearchViewRange();//搜索对像
+                                            PlayObject.GameTimeChanged();//游戏时间改变
                                         }
-                                        if (HUtil32.GetTickCount() - PlayObject.m_dwShowLineNoticeTick > M2Share.g_Config.dwShowLineNoticeTime)
+                                        if ((HUtil32.GetTickCount() - PlayObject.m_dwShowLineNoticeTick) > M2Share.g_Config.dwShowLineNoticeTime)
                                         {
                                             PlayObject.m_dwShowLineNoticeTick = HUtil32.GetTickCount();
                                             if (M2Share.LineNoticeList.Count > PlayObject.m_nShowLineNoticeIdx)
@@ -838,7 +838,7 @@ namespace M2Server
                                             }
                                         }
                                         PlayObject.Run();
-                                        if (!M2Share.FrontEngine.IsFull() && HUtil32.GetTickCount() - PlayObject.m_dwSaveRcdTick > M2Share.g_Config.dwSaveHumanRcdTime)
+                                        if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - PlayObject.m_dwSaveRcdTick) > M2Share.g_Config.dwSaveHumanRcdTime)
                                         {
                                             PlayObject.m_dwSaveRcdTick = HUtil32.GetTickCount();
                                             PlayObject.DealCancelA();
@@ -894,12 +894,12 @@ namespace M2Server
                     {
                         if (dwCurrTick - merchantNpc.m_dwRunTick > merchantNpc.m_nRunTime)
                         {
-                            if (HUtil32.GetTickCount() - merchantNpc.m_dwSearchTick > merchantNpc.m_dwSearchTime)
+                            if ((HUtil32.GetTickCount() - merchantNpc.m_dwSearchTick) > merchantNpc.m_dwSearchTime)
                             {
                                 merchantNpc.m_dwSearchTick = HUtil32.GetTickCount();
                                 merchantNpc.SearchViewRange();
                             }
-                            if (dwCurrTick - merchantNpc.m_dwRunTick > merchantNpc.m_nRunTime)
+                            if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
                             {
                                 merchantNpc.m_dwRunTick = dwCurrTick;
                                 merchantNpc.Run();
@@ -908,14 +908,14 @@ namespace M2Server
                     }
                     else
                     {
-                        if (HUtil32.GetTickCount() - merchantNpc.m_dwGhostTick > 60 * 1000)
+                        if ((HUtil32.GetTickCount() - merchantNpc.m_dwGhostTick) > 60 * 1000)
                         {
                             merchantNpc = null;
                             m_MerchantList.RemoveAt(i);
                             break;
                         }
                     }
-                    if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwNpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwNpcLimit)
                     {
                         nMerchantPosition = i;
                         boProcessLimit = true;
@@ -973,7 +973,7 @@ namespace M2Server
                 var dwCurrentTick = HUtil32.GetTickCount();
                 TMonGenInfo MonGen = null;
                 // 刷新怪物开始
-                if (HUtil32.GetTickCount() - dwRegenMonstersTick > M2Share.g_Config.dwRegenMonstersTime)
+                if ((HUtil32.GetTickCount() - dwRegenMonstersTick) > M2Share.g_Config.dwRegenMonstersTime)
                 {
                     dwRegenMonstersTick = HUtil32.GetTickCount();
                     if (m_nCurrMonGen < m_MonGenList.Count) MonGen = m_MonGenList[m_nCurrMonGen];
@@ -1028,10 +1028,10 @@ namespace M2Server
                         {
                             if (!Monster.m_boGhost)
                             {
-                                if (dwCurrentTick - Monster.m_dwRunTick > Monster.m_nRunTime)
+                                if ((dwCurrentTick - Monster.m_dwRunTick) > Monster.m_nRunTime)
                                 {
                                     Monster.m_dwRunTick = dwRunTick;
-                                    if (dwCurrentTick - Monster.m_dwSearchTick > Monster.m_dwSearchTime)
+                                    if ((dwCurrentTick - Monster.m_dwSearchTick) > Monster.m_dwSearchTime)
                                     {
                                         Monster.m_dwSearchTick = HUtil32.GetTickCount();
                                         Monster.SearchViewRange();
@@ -1051,7 +1051,7 @@ namespace M2Server
                             }
                             else
                             {
-                                if (HUtil32.GetTickCount() - Monster.m_dwGhostTick > 5 * 60 * 1000)
+                                if ((HUtil32.GetTickCount() - Monster.m_dwGhostTick) > 5 * 60 * 1000)
                                 {
                                     MonGen.CertList.RemoveAt(nProcessPosition);
                                     MonGen.CertCount--;
@@ -1061,7 +1061,7 @@ namespace M2Server
                             }
                         }
                         nProcessPosition++;
-                        if (HUtil32.GetTickCount() - dwMonProcTick > M2Share.g_dwMonLimit)
+                        if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.g_dwMonLimit)
                         {
                             boProcessLimit = true;
                             m_nMonGenCertListPosition = nProcessPosition;
@@ -1119,12 +1119,12 @@ namespace M2Server
                     {
                         if (dwCurrTick - NPC.m_dwRunTick > NPC.m_nRunTime)
                         {
-                            if (HUtil32.GetTickCount() - NPC.m_dwSearchTick > NPC.m_dwSearchTime)
+                            if ((HUtil32.GetTickCount() - NPC.m_dwSearchTick) > NPC.m_dwSearchTime)
                             {
                                 NPC.m_dwSearchTick = HUtil32.GetTickCount();
                                 NPC.SearchViewRange();
                             }
-                            if (dwCurrTick - NPC.m_dwRunTick > NPC.m_nRunTime)
+                            if ((dwCurrTick - NPC.m_dwRunTick) > NPC.m_nRunTime)
                             {
                                 NPC.m_dwRunTick = dwCurrTick;
                                 NPC.Run();
@@ -1133,13 +1133,13 @@ namespace M2Server
                     }
                     else
                     {
-                        if (HUtil32.GetTickCount() - NPC.m_dwGhostTick > 60 * 1000)
+                        if ((HUtil32.GetTickCount() - NPC.m_dwGhostTick) > 60 * 1000)
                         {
                             QuestNPCList.RemoveAt(i);
                             break;
                         }
                     }
-                    if (HUtil32.GetTickCount() - dwRunTick > M2Share.g_dwNpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwNpcLimit)
                     {
                         nNpcPosition = i;
                         boProcessLimit = true;
@@ -1183,14 +1183,14 @@ namespace M2Server
             const string sExceptionMsg = "[Exception] TUserEngine::Run";
             try
             {
-                if (HUtil32.GetTickCount() - dwShowOnlineTick > M2Share.g_Config.dwConsoleShowUserCountTime)
+                if ((HUtil32.GetTickCount() - dwShowOnlineTick) > M2Share.g_Config.dwConsoleShowUserCountTime)
                 {
                     dwShowOnlineTick = HUtil32.GetTickCount();
                     M2Share.NoticeManager.LoadingNotice();
                     M2Share.MainOutMessage("在线数: " + PlayObjectCount);
                     M2Share.CastleManager.Save();
                 }
-                if (HUtil32.GetTickCount() - dwSendOnlineHumTime > 10000)
+                if ((HUtil32.GetTickCount() - dwSendOnlineHumTime) > 10000)
                 {
                     dwSendOnlineHumTime = HUtil32.GetTickCount();
                     IdSrvClient.Instance.SendOnlineHumCountMsg(OnlinePlayObject);
@@ -1940,36 +1940,33 @@ namespace M2Server
             return result;
         }
 
-        public T FindMerchant<T>(int merchantId)
+        public object FindMerchant(int merchantId)
         {
-            var npc = M2Share.ObjectSystem.Get(merchantId);
-            if (npc.GetType().Equals(typeof(TMerchant)) && npc is TMerchant)
+            var normNpc = M2Share.ObjectSystem.Get(merchantId);
+            TNormNpc npcObject = null;
+            var npcType = normNpc.GetType();
+            if (npcType == typeof(TMerchant))
             {
-                return (T)Convert.ChangeType(npc, typeof(TMerchant));
+                npcObject = (TMerchant)Convert.ChangeType(normNpc, typeof(TMerchant));
             }
-            if (npc.GetType().Equals(typeof(TGuildOfficial)) && npc is TGuildOfficial)
+            if (npcType == typeof(TGuildOfficial))
             {
-                return (T)Convert.ChangeType(npc, typeof(TGuildOfficial));
+                npcObject = (TGuildOfficial) Convert.ChangeType(normNpc, typeof(TGuildOfficial));
             }
-            if (npc.GetType().Equals(typeof(TNormNpc)) && npc is TNormNpc)
+            if (npcType == typeof(TNormNpc))
             {
-                return (T)Convert.ChangeType(npc, typeof(TNormNpc));
+                npcObject = (TNormNpc)Convert.ChangeType(normNpc, typeof(TNormNpc));
             }
-            if (npc.GetType().Equals(typeof(TCastleOfficial)) && npc is TCastleOfficial)
+            if (npcType == typeof(TCastleOfficial))
             {
-                return (T)Convert.ChangeType(npc, typeof(TCastleOfficial));
+                npcObject = (TCastleOfficial)Convert.ChangeType(normNpc, typeof(TCastleOfficial));
             }
-            return default(T);
+            return npcObject;
         }
 
-        public TGuildOfficial FindNPC(int npcId)
+        public object FindNPC(int npcId)
         {
-            var npc = M2Share.ObjectSystem.Get(npcId);
-            if (npc is TGuildOfficial)
-            {
-                return npc as TGuildOfficial;
-            }
-            return null;
+            return M2Share.ObjectSystem.Get(npcId);;
         }
 
         /// <summary>
@@ -2381,8 +2378,8 @@ namespace M2Server
                         if (BaseObject.m_boDeath || BaseObject.m_boGhost || !BaseObject.m_boHolySeize)
                             MagicEvent.BaseObjectList.RemoveAt(j);
                     }
-                    if (MagicEvent.BaseObjectList.Count <= 0 || HUtil32.GetTickCount() - MagicEvent.dwStartTick > MagicEvent.dwTime ||
-                        HUtil32.GetTickCount() - MagicEvent.dwStartTick > 180000)
+                    if (MagicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - MagicEvent.dwStartTick) > MagicEvent.dwTime ||
+                        (HUtil32.GetTickCount() - MagicEvent.dwStartTick) > 180000)
                     {
                         count = 0;
                         while (true)
@@ -2639,14 +2636,14 @@ namespace M2Server
                 ProcessMonsters();
                 ProcessMerchants();
                 ProcessNpcs();
-                if (HUtil32.GetTickCount() - dwProcessMissionsTime > 1000)
+                if ((HUtil32.GetTickCount() - dwProcessMissionsTime) > 1000)
                 {
                     dwProcessMissionsTime = HUtil32.GetTickCount();
                     ProcessMissions();
                     Process4AECFC();
                     ProcessEvents();
                 }
-                if (HUtil32.GetTickCount() - dwProcessMapDoorTick > 500)
+                if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)
                 {
                     dwProcessMapDoorTick = HUtil32.GetTickCount();
                     ProcessMapDoor();

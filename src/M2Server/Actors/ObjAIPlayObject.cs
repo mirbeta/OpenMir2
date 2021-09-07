@@ -2256,7 +2256,7 @@ namespace M2Server
                     break;
                 case Grobal2.SKILL_MOOTEBO:
                     result = true;
-                    if (HUtil32.GetTickCount() - m_dwDoMotaeboTick > 3000)
+                    if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3000)
                     {
                         m_dwDoMotaeboTick = HUtil32.GetTickCount();
                         if (GetAttackDir(TargeTBaseObject, ref m_btDirection))

@@ -244,7 +244,7 @@ namespace M2Server
                             M2Share.sSellOffItemList.RemoveAt(i);
                             Dispose(DealOffInfo);
                             this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消寄售成功！");
-                            // FrmDB.SaveSellOffItemList;//保存元宝寄售列表
+                            M2Share.LocalDB.SaveSellOffItemList();//保存元宝寄售列表
                         }
                     }
                 }
@@ -341,7 +341,7 @@ namespace M2Server
                                         }
                                     }
                                 }
-                                // FrmDB.SaveSellOffItemList;//保存元宝寄售列表 20080317
+                                M2Share.LocalDB.SaveSellOffItemList();//保存元宝寄售列表
                                 for (var j = 0; j <= 9; j++)
                                 {
                                     StdItem = M2Share.UserEngine.GetStdItem(dealOffInfo.UseItems[j].wIndex);
@@ -591,7 +591,7 @@ namespace M2Server
                 }
                 this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;
-                // FrmDB.SaveSellOffItemList;//保存元宝寄售列表 
+                M2Share.LocalDB.SaveSellOffItemList();//保存元宝寄售列表 
                 m_boSellOffOK = false;
                 m_SellOffItemList.Clear();
             }

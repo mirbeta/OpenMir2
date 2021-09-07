@@ -68,7 +68,7 @@ namespace M2Server
         /// <summary>
         /// 游戏公告列表
         /// </summary>
-        public static StringList LineNoticeList = null;
+        public static IList<string> LineNoticeList = null;
         public static IList<TQDDinfo> QuestDiaryList = null;
         public static ArrayList AbuseTextList = null;
         /// <summary>
@@ -1572,23 +1572,25 @@ namespace M2Server
             var result = false;
             int i;
             string sText;
+            StringList LoadList = null;
             if (File.Exists(FileName))
             {
-                LineNoticeList.LoadFromFile(FileName);
+                LoadList = new StringList();
+                LoadList.LoadFromFile(FileName);
                 i = 0;
                 while (true)
                 {
-                    if (LineNoticeList.Count <= i)
+                    if (LoadList.Count <= i)
                     {
                         break;
                     }
-                    sText = LineNoticeList[i].Trim();
-                    if (sText == "")
+                    sText = LoadList[i].Trim();
+                    if (string.IsNullOrEmpty(sText))
                     {
-                        LineNoticeList.RemoveAt(i);
+                        LoadList.RemoveAt(i);
                         continue;
                     }
-                    LineNoticeList[i] = sText;
+                    LineNoticeList.Add(sText);
                     i++;
                 }
                 result = true;

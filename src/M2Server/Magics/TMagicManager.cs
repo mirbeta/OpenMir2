@@ -376,7 +376,8 @@ namespace M2Server
                     }
                     break;
                 case Grobal2.SKILL_SPACEMOVE:
-                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), TargeTBaseObject.ObjectId, "");
+                    var targerActors = TargeTBaseObject == null ? 0 : TargeTBaseObject.ObjectId;
+                    PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), targerActors, "");
                     boSpellFire = false;
                     if (MagSaceMove(PlayObject, UserMagic.btLevel))
                     {

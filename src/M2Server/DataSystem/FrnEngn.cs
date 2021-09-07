@@ -66,19 +66,15 @@ namespace M2Server
                 case 16:
                 case 17:
                 case 18:
-                case 19:
-                case 20:
-                case 21:
-                case 22:
-                    M2Share.g_nGameTime = 1;
+                    M2Share.g_nGameTime = 1;//白天
                     break;
                 case 11:
                 case 23:
-                    M2Share.g_nGameTime = 2;
+                    M2Share.g_nGameTime = 2;//日落
                     break;
                 case 4:
                 case 15:
-                    M2Share.g_nGameTime = 0;
+                    M2Share.g_nGameTime = 0;//日出
                     break;
                 case 0:
                 case 1:
@@ -87,7 +83,11 @@ namespace M2Server
                 case 12:
                 case 13:
                 case 14:
-                    M2Share.g_nGameTime = 3;
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                    M2Share.g_nGameTime = 3;//夜晚
                     break;
             }
         }

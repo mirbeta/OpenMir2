@@ -736,6 +736,7 @@ namespace SystemModule
         public const int SM_MAGIC_LVEXP = 640;
         public const int SM_DURACHANGE = 642;
         public const int SM_MERCHANTSAY = 643;
+        public const int SM_MOVEMESSAGE = 99;
         public const int SM_MERCHANTDLGCLOSE = 644;
         public const int SM_SENDGOODSLIST = 645;
         public const int SM_SENDUSERSELL = 646;
@@ -1094,6 +1095,7 @@ namespace SystemModule
         public const int RM_41 = 9041;
         public const int RM_TWINHIT = 9042;
         public const int RM_43 = 9043;
+        public const int RM_MOVEMESSAGE = 10099;
 
         // -------Start Inter Server Msg-------
         public const int ISM_GROUPSERVERHEART = 100;

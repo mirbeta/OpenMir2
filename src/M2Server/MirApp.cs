@@ -99,6 +99,8 @@ namespace M2Server
                     return;
                 }
                 M2Share.MainOutMessage("加载捆装物品信息成功...");
+                M2Share.MainOutMessage("加载物品寄售系统...");
+                //M2Share.LocalDB.LoadSellOffItemList();
                 M2Share.MainOutMessage("正在加载任务地图信息...");
                 nCode = M2Share.LocalDB.LoadMapQuest();
                 if (nCode < 0)
@@ -268,7 +270,7 @@ namespace M2Server
             M2Share.g_DenySayMsgList = new ConcurrentDictionary<string, long>();
             M2Share.MiniMapList = new Dictionary<string, int>();
             M2Share.g_UnbindList = new Dictionary<int, string>();
-            M2Share.LineNoticeList = new StringList();
+            M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<TQDDinfo>();
             M2Share.AbuseTextList = new ArrayList();
             M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>();
@@ -396,6 +398,23 @@ namespace M2Server
             sc.AppendLine(
                 $"Hum:{M2Share.g_nHumCountMin}/{M2Share.g_nHumCountMax} UsrRot:{M2Share.dwUsrRotCountMin}/{M2Share.dwUsrRotCountMax} Merch:{M2Share.UserEngine.dwProcessMerchantTimeMin}/{M2Share.UserEngine.dwProcessMerchantTimeMax} Npc:{M2Share.UserEngine.dwProcessNpcTimeMin}/{M2Share.UserEngine.dwProcessNpcTimeMax} ({M2Share.g_nProcessHumanLoopTime})");
             //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
+        }
+
+        private void SaveItemsData()
+        {
+            //if (HUtil32.GetTickCount() - M2Share.dwSaveDataTick > 480000)// 1000 * 60 * 8
+            //{
+            //    M2Share.dwSaveDataTick = HUtil32.GetTickCount();
+            //    if (M2Share.sSellOffItemList != null)
+            //    {
+            //        M2Share.LocalDB.FrmDB.SaveSellOffItemList();
+            //    }
+            //    if (M2Share.g_Storage != null)
+            //    {
+            //        M2Share.g_Storage.SaveToFile(M2Share.g_StorageFileName);
+            //    }
+            //    SaveItemNumber(false);
+            //}
         }
     }
 }

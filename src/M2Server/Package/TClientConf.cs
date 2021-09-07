@@ -10,9 +10,9 @@ namespace M2Server
         public bool boRunNpc;
         public bool boWarRunAll;
         public byte btDieColor;
-        public int wSpellTime;
-        public int wHitIime;
-        public int wItemFlashTime;
+        public ushort wSpellTime;
+        public ushort wHitIime;
+        public ushort wItemFlashTime;
         public byte btItemSpeed;
         public bool boCanStartRun;
         public bool boParalyCanRun;
@@ -28,35 +28,33 @@ namespace M2Server
 
         public byte[] ToByte()
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            using var memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(boClientCanSet);
-                backingStream.Write(boRunHuman);
-                backingStream.Write(boRunMon);
-                backingStream.Write(boRunNpc);
-                backingStream.Write(boWarRunAll);
-                backingStream.Write(btDieColor);
-                backingStream.Write(wSpellTime);
-                backingStream.Write(wHitIime);
-                backingStream.Write(wItemFlashTime);
-                backingStream.Write(btItemSpeed);
-                backingStream.Write(boCanStartRun);
-                backingStream.Write(boParalyCanRun);
-                backingStream.Write(boParalyCanWalk);
-                backingStream.Write(boParalyCanHit);
-                backingStream.Write(boParalyCanSpell);
-                backingStream.Write(boShowRedHPLable);
-                backingStream.Write(boShowHPNumber);
-                backingStream.Write(boShowJobLevel);
-                backingStream.Write(boDuraAlert);
-                backingStream.Write(boMagicLock);
-                backingStream.Write(boAutoPuckUpItem);
+            backingStream.Write(boClientCanSet);
+            backingStream.Write(boRunHuman);
+            backingStream.Write(boRunMon);
+            backingStream.Write(boRunNpc);
+            backingStream.Write(boWarRunAll);
+            backingStream.Write(btDieColor);
+            backingStream.Write(wSpellTime);
+            backingStream.Write(wHitIime);
+            backingStream.Write(wItemFlashTime);
+            backingStream.Write(btItemSpeed);
+            backingStream.Write(boCanStartRun);
+            backingStream.Write(boParalyCanRun);
+            backingStream.Write(boParalyCanWalk);
+            backingStream.Write(boParalyCanHit);
+            backingStream.Write(boParalyCanSpell);
+            backingStream.Write(boShowRedHPLable);
+            backingStream.Write(boShowHPNumber);
+            backingStream.Write(boShowJobLevel);
+            backingStream.Write(boDuraAlert);
+            backingStream.Write(boMagicLock);
+            backingStream.Write(boAutoPuckUpItem);
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
         }
     }
 }

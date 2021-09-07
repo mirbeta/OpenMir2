@@ -35,13 +35,13 @@ namespace M2Server
                     m_boEmergencyClose = true;
                     m_boExpire = false;
                 }
-                if (m_boFireHitSkill && HUtil32.GetTickCount() - m_dwLatestFireHitTick > 20 * 1000)
+                if (m_boFireHitSkill && (HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 20 * 1000)
                 {
                     m_boFireHitSkill = false;
                     SysMsg(M2Share.sSpiritsGone, TMsgColor.c_Red, TMsgType.t_Hint);
                     SendSocket("+UFIR");
                 }
-                if (m_boTwinHitSkill && HUtil32.GetTickCount() - m_dwLatestTwinHitTick > 60 * 1000)
+                if (m_boTwinHitSkill && (HUtil32.GetTickCount() - m_dwLatestTwinHitTick) > 60 * 1000)
                 {
                     m_boTwinHitSkill = false;
                     SendSocket("+UTWN");
@@ -57,20 +57,20 @@ namespace M2Server
                     m_boOffLineFlag = false;
                     m_boSoftClose = true;
                 }
-                if (m_boDelayCall && HUtil32.GetTickCount() - m_dwDelayCallTick > m_nDelayCall)
+                if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
                 {
                     m_boDelayCall = false;
-                    var normNpc = M2Share.UserEngine.FindMerchant<TNormNpc>(m_DelayCallNPC);
+                    TNormNpc normNpc = (TMerchant)M2Share.UserEngine.FindMerchant(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = M2Share.UserEngine.FindNPC(m_DelayCallNPC);
+                        normNpc = (TNormNpc)M2Share.UserEngine.FindNPC(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {
                         normNpc.GotoLable(this, m_sDelayCallLabel, false);
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwCheckDupObjTick > 3000)
+                if ((HUtil32.GetTickCount() - m_dwCheckDupObjTick) > 3000)
                 {
                     m_dwCheckDupObjTick = HUtil32.GetTickCount();
                     GetStartPoint();
@@ -87,8 +87,8 @@ namespace M2Server
                     {
                         bo2F0 = false;
                     }
-                    if ((tObjCount >= 3 && HUtil32.GetTickCount() - m_dwDupObjTick > 3000 || tObjCount == 2
-                        && HUtil32.GetTickCount() - m_dwDupObjTick > 10000) && HUtil32.GetTickCount() - m_dwDupObjTick < 20000)
+                    if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 3000) || tObjCount == 2
+                        && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 10000)) && ((HUtil32.GetTickCount() - m_dwDupObjTick) < 20000))
                     {
                         CharPushed((byte)M2Share.RandomNumber.Random(8), 1);
                     }
@@ -98,7 +98,7 @@ namespace M2Server
                 {
                     ChangePKStatus(true);
                 }
-                if (HUtil32.GetTickCount() - dwTick578 > 1000)
+                if ((HUtil32.GetTickCount() - dwTick578) > 1000)
                 {
                     dwTick578 = HUtil32.GetTickCount();
                     var wHour = DateTime.Now.Hour;
@@ -107,7 +107,7 @@ namespace M2Server
                     var wMSec = DateTime.Now.Millisecond;
                     if (M2Share.g_Config.boDiscountForNightTime && (wHour == M2Share.g_Config.nHalfFeeStart || wHour == M2Share.g_Config.nHalfFeeEnd))
                     {
-                        if (wMin == 0 && wSec <= 30 && HUtil32.GetTickCount() - m_dwLogonTick > 60000)
+                        if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - m_dwLogonTick) > 60000)
                         {
                             LogonTimcCost();
                             m_dwLogonTick = HUtil32.GetTickCount();
@@ -158,7 +158,7 @@ namespace M2Server
                         RefShowName();
                     }
                 }
-                if (HUtil32.GetTickCount() - dwTick57C > 500)
+                if ((HUtil32.GetTickCount() - dwTick57C) > 500)
                 {
                     dwTick57C = HUtil32.GetTickCount();
                 }
@@ -179,7 +179,6 @@ namespace M2Server
                 }
                 if (m_boEmergencyClose || m_boKickFlag || m_boSoftClose)
                 {
-                    Console.WriteLine("我出问题了");
                     if (m_boSwitchData)
                     {
                         m_sMapName = m_sSwitchMapName;
@@ -253,7 +252,7 @@ namespace M2Server
                 }
             }
             tObjCount = m_nGameGold;
-            if (m_boDecGameGold && HUtil32.GetTickCount() - m_dwDecGameGoldTick > m_dwDecGameGoldTime)
+            if (m_boDecGameGold && (HUtil32.GetTickCount() - m_dwDecGameGoldTick) > m_dwDecGameGoldTime)
             {
                 m_dwDecGameGoldTick = HUtil32.GetTickCount();
                 if (m_nGameGold >= m_nDecGameGold)
@@ -273,7 +272,7 @@ namespace M2Server
                     M2Share.AddGameDataLog(format(M2Share.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, m_sMapName, m_nCurrX, m_nCurrY, m_sCharName, M2Share.g_Config.sGameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (m_boIncGameGold && HUtil32.GetTickCount() - m_dwIncGameGoldTick > m_dwIncGameGoldTime)
+            if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_dwIncGameGoldTime)
             {
                 m_dwIncGameGoldTick = HUtil32.GetTickCount();
                 if (m_nGameGold + m_nIncGameGold < 2000000)
@@ -294,7 +293,7 @@ namespace M2Server
             }
             if (!m_boDecGameGold && m_PEnvir.Flag.boDECGAMEGOLD)
             {
-                if (HUtil32.GetTickCount() - m_dwDecGameGoldTick > m_PEnvir.Flag.nDECGAMEGOLDTIME * 1000)
+                if ((HUtil32.GetTickCount() - m_dwDecGameGoldTick) > m_PEnvir.Flag.nDECGAMEGOLDTIME * 1000)
                 {
                     m_dwDecGameGoldTick = HUtil32.GetTickCount();
                     if (m_nGameGold >= m_PEnvir.Flag.nDECGAMEGOLD)
@@ -317,7 +316,7 @@ namespace M2Server
             }
             if (!m_boIncGameGold && m_PEnvir.Flag.boINCGAMEGOLD)
             {
-                if (HUtil32.GetTickCount() - m_dwIncGameGoldTick > m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000)
+                if ((HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000)
                 {
                     m_dwIncGameGoldTick = HUtil32.GetTickCount();
                     if (m_nGameGold + m_PEnvir.Flag.nINCGAMEGOLD <= 2000000)
@@ -342,7 +341,7 @@ namespace M2Server
             }
             if (m_PEnvir.Flag.boINCGAMEPOINT)
             {
-                if (HUtil32.GetTickCount() - m_dwIncGamePointTick > m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000)
+                if ((HUtil32.GetTickCount() - m_dwIncGamePointTick) > m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000)
                 {
                     m_dwIncGamePointTick = HUtil32.GetTickCount();
                     if (m_nGamePoint + m_PEnvir.Flag.nINCGAMEPOINT <= 2000000)
@@ -361,7 +360,7 @@ namespace M2Server
                     }
                 }
             }
-            if (m_PEnvir.Flag.boDECHP && HUtil32.GetTickCount() - m_dwDecHPTick > m_PEnvir.Flag.nDECHPTIME * 1000)
+            if (m_PEnvir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick) > m_PEnvir.Flag.nDECHPTIME * 1000)
             {
                 m_dwDecHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP > m_PEnvir.Flag.nDECHPPOINT)
@@ -374,7 +373,7 @@ namespace M2Server
                 }
                 HealthSpellChanged();
             }
-            if (m_PEnvir.Flag.boINCHP && HUtil32.GetTickCount() - m_dwIncHPTick > m_PEnvir.Flag.nINCHPTIME * 1000)
+            if (m_PEnvir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick) > m_PEnvir.Flag.nINCHPTIME * 1000)
             {
                 m_dwIncHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP + m_PEnvir.Flag.nDECHPPOINT < m_WAbil.MaxHP)
@@ -390,7 +389,7 @@ namespace M2Server
             // 降饥饿点
             if (M2Share.g_Config.boHungerSystem)
             {
-                if (HUtil32.GetTickCount() - m_dwDecHungerPointTick > 1000)
+                if ((HUtil32.GetTickCount() - m_dwDecHungerPointTick) > 1000)
                 {
                     m_dwDecHungerPointTick = HUtil32.GetTickCount();
                     if (m_nHungerStatus > 0)
@@ -428,7 +427,7 @@ namespace M2Server
                     }
                 }
             }
-            if (HUtil32.GetTickCount() - m_dwRateTick > 1000)
+            if ((HUtil32.GetTickCount() - m_dwRateTick) > 1000)
             {
                 m_dwRateTick = HUtil32.GetTickCount();
                 if (m_dwKillMonExpRateTime > 0)
@@ -559,7 +558,7 @@ namespace M2Server
             {
                 M2Share.MainOutMessage(sExceptionMsg3);
             }
-            if (M2Share.g_Config.boReNewChangeColor && m_btReLevel > 0 && HUtil32.GetTickCount() - m_dwReColorTick > M2Share.g_Config.dwReNewNameColorTime)
+            if (M2Share.g_Config.boReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.g_Config.dwReNewNameColorTime)
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
@@ -581,7 +580,7 @@ namespace M2Server
             ProcessSpiritSuite();
             try
             {
-                if (HUtil32.GetTickCount() - m_dwClearObjTick > 10000)
+                if ((HUtil32.GetTickCount() - m_dwClearObjTick) > 10000)
                 {
                     m_dwClearObjTick = HUtil32.GetTickCount();
                     if (m_DearHuman != null && (m_DearHuman.m_boDeath || m_DearHuman.m_boGhost))
@@ -625,7 +624,7 @@ namespace M2Server
                     M2Share.UserEngine.ClearItemList();
                 }
             }
-            if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == m_PEnvir) && HUtil32.GetTickCount() - m_dwAutoGetExpTick > m_nAutoGetExpTime)
+            if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == m_PEnvir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
             {
                 m_dwAutoGetExpTick = HUtil32.GetTickCount();
                 if (!m_boAutoGetExpInSafeZone || m_boAutoGetExpInSafeZone && InSafeZone())
@@ -657,7 +656,7 @@ namespace M2Server
                     ClientQueryUserName(ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
                     break;
                 case Grobal2.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
-                    if (HUtil32.GetTickCount() - m_dwQueryBagItemsTick > 30 * 1000)
+                    if ((HUtil32.GetTickCount() - m_dwQueryBagItemsTick) > 30 * 1000)
                     {
                         m_dwQueryBagItemsTick = HUtil32.GetTickCount();
                         ClientQueryBagItems();
@@ -1568,6 +1567,7 @@ namespace M2Server
                 case Grobal2.RM_SYSMESSAGE2:
                 case Grobal2.RM_GUILDMESSAGE:
                 case Grobal2.RM_SYSMESSAGE3:
+                case Grobal2.RM_MOVEMESSAGE:
                 case Grobal2.RM_MERCHANTSAY:
                     switch (ProcessMsg.wIdent)
                     {
@@ -1591,6 +1591,9 @@ namespace M2Server
                             break;
                         case Grobal2.RM_MERCHANTSAY:
                             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), 0, 1);
+                            break;
+                        case Grobal2.RM_MOVEMESSAGE:
+                            this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord(ProcessMsg.nParam1, ProcessMsg.nParam2), ProcessMsg.nParam3, ProcessMsg.wParam);
                             break;
                     }
                     SendSocket(m_DefMsg, EDcode.EncodeString(ProcessMsg.sMsg));

@@ -3778,9 +3778,6 @@ namespace M2Server
                     case TMsgType.t_System:
                         sMsg = M2Share.g_Config.sSysMsgPreFix + sMsg;
                         break;
-                    case TMsgType.t_Notice:
-                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
-                        break;
                     case TMsgType.t_Cust:
                         sMsg = M2Share.g_Config.sCustMsgpreFix + sMsg;
                         break;
@@ -3789,25 +3786,96 @@ namespace M2Server
                         break;
                 }
             }
-            switch (MsgColor)
+
+            if (MsgType == TMsgType.t_Notice)
             {
-                case TMsgColor.c_Green:
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
-                    break;
-                case TMsgColor.c_Blue:
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
-                    break;
-                default:
-                    if (MsgType == TMsgType.t_Cust)
+                string str = string.Empty;
+                string FColor= string.Empty;
+                string BColor= string.Empty;
+                string nTime= string.Empty;
+                if ((sMsg[0] == '['))// 如果发的是公告
+                {
+                    // 顶部滚动公告
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '[', ']', ref str);
+                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    if (M2Share.g_Config.boShowPreFixMsg)
                     {
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                     }
-                    else
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                }
+                else if ((sMsg[0] == '<'))// 聊天框彩色公告
+                {
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '<', '>', ref str);
+                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    if (M2Share.g_Config.boShowPreFixMsg)
                     {
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                     }
-                    break;
+                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                }
+                else if ((sMsg[0] == '{'))// 屏幕居中公告
+                {
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '{', '}', ref str);
+                    str = HUtil32.GetValidStrCap(str, ref FColor, new string[] {"," });
+                    str = HUtil32.GetValidStrCap(str, ref BColor, new string[] {"," });
+                    str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { ","});
+                    if (M2Share.g_Config.boShowPreFixMsg)
+                    {
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                    }
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
+                }
+                else
+                {
+                    switch (MsgColor)
+                    {
+                        case TMsgColor.c_Red:// 控制公告的颜色
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                            break;
+                        case TMsgColor.c_Green:
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                            break;
+                        case TMsgColor.c_Blue:
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                            break;
+                    }
+                }
             }
+           else
+           {
+               switch (MsgColor)
+               {
+                   case TMsgColor.c_Green:
+                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                       break;
+                   case TMsgColor.c_Blue:
+                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                       break;
+                   default:
+                       if (MsgType == TMsgType.t_Cust)
+                       {
+                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                       }
+                       else
+                       {
+                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                       }
+                       break;
+               }
+           }
         }
 
         /// <summary>

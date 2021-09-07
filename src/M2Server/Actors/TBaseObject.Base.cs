@@ -407,7 +407,7 @@ namespace M2Server
                         return result;
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwMapMoveTick < 3000 || HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick < 3000)
+                if (((HUtil32.GetTickCount() - m_dwMapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick) < 3000))
                 {
                     result = false;
                 }
@@ -909,7 +909,7 @@ namespace M2Server
                     }
                     if (m_WAbil.HP == 0)
                     {
-                        if (((m_LastHiter == null) || !m_LastHiter.m_boUnRevival) && m_boRevival && (HUtil32.GetTickCount() - m_dwRevivalTick > M2Share.g_Config.dwRevivalTime))// 60 * 1000
+                        if (((m_LastHiter == null) || !m_LastHiter.m_boUnRevival) && m_boRevival && ((HUtil32.GetTickCount() - m_dwRevivalTick) > M2Share.g_Config.dwRevivalTime))// 60 * 1000
                         {
                             m_dwRevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
@@ -933,7 +933,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (HUtil32.GetTickCount() - m_dwDeathTick > M2Share.g_Config.dwMakeGhostTime)// 3 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime)// 3 * 60 * 1000
                     {
                         MakeGhost();
                     }

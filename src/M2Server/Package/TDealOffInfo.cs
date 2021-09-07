@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace M2Server
 {
@@ -10,16 +7,26 @@ namespace M2Server
     /// </summary>
     public class TDealOffInfo
     {
+        /// <summary>
+        /// 寄售人
+        /// </summary>
         public string sDealCharName;
-        // 寄售人
+        /// <summary>
+        /// 购买人
+        /// </summary>        
         public string sBuyCharName;
-        // 购买人
+        /// <summary>
+        /// 寄售时间
+        /// </summary>        
         public DateTime dSellDateTime;
-        // 寄售时间
+        /// <summary>
+        /// 交易的元宝数
+        /// </summary>        
         public int nSellGold;
-        // 交易的元宝数
+        /// <summary>
+        /// 物品
+        /// </summary>        
         public TUserItem[] UseItems;
-        // 物品
         public byte N;
     }
 }

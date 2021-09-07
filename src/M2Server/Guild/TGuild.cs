@@ -551,7 +551,7 @@ namespace M2Server
                 var guildRank = m_RankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j ++ )
                 {
-                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.m_sCharName, true) == 1)
+                    if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 1)
                     {
                         guildRank.MemberList[j] = null;
                         return;

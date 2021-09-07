@@ -573,7 +573,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (HUtil32.GetTickCount() - m_dwWaitLoginNoticeOKTick > 10 * 1000)
+                        if ((HUtil32.GetTickCount() - m_dwWaitLoginNoticeOKTick) > 10 * 1000)
                         {
                             m_boEmergencyClose = true;
                         }
@@ -947,7 +947,7 @@ namespace M2Server
                 m_dwIncGamePointTick = HUtil32.GetTickCount();
                 m_dwIncGameGoldTick = HUtil32.GetTickCount();
                 m_dwAutoGetExpTick = HUtil32.GetTickCount();
-                //GetSellOffGlod();// 检查是否有元宝寄售交易结束还没得到元宝
+                GetSellOffGlod();// 检查是否有元宝寄售交易结束还没得到元宝
             }
             catch (Exception e)
             {

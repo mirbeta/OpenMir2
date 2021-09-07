@@ -58,7 +58,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (HUtil32.GetTickCount() - mapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
+            if ((HUtil32.GetTickCount() - mapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
             {
                 mapItem.OfBaseObject = null;
             }
@@ -654,13 +654,6 @@ namespace M2Server
                     m_boFilterAction = true;
                     int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
                     int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
-
-
-                    //if (M2Share.g_Config.boDisableDoubleAttack && (dwCheckTime < M2Share.g_Config.nDoubleAttackCheck)) //禁止双倍攻击
-                    //{
-
-                    //}
-
                     if (dwCheckTime < dwAttackTime)
                     {
                         m_dwAttackCount++;
@@ -1018,7 +1011,7 @@ namespace M2Server
                     break;
                 case Grobal2.SKILL_MOOTEBO:
                     result = true;
-                    if (HUtil32.GetTickCount() - m_dwDoMotaeboTick > 3 * 1000)
+                    if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3 * 1000)
                     {
                         m_dwDoMotaeboTick = HUtil32.GetTickCount();
                         m_btDirection = (byte)nTargetX;
@@ -1574,7 +1567,7 @@ namespace M2Server
         private bool AllowFireHitSkill()
         {
             var result = false;
-            if (HUtil32.GetTickCount() - m_dwLatestFireHitTick > 10 * 1000)
+            if ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 10 * 1000)
             {
                 m_dwLatestFireHitTick = HUtil32.GetTickCount();
                 m_boFireHitSkill = true;
@@ -1607,14 +1600,10 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_dwClickNpcTime > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
+            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                TNormNpc normNpc = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
-                if (normNpc == null)
-                {
-                    normNpc = M2Share.UserEngine.FindNPC(NPC);
-                }
+                var normNpc = (TNormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (TNormNpc)M2Share.UserEngine.FindNPC(NPC);
                 if (normNpc != null)
                 {
                     if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)
@@ -1987,10 +1976,10 @@ namespace M2Server
             {
                 return;
             }
-            TNormNpc npc = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TNormNpc npc = (TNormNpc)M2Share.UserEngine.FindMerchant(nParam1);
             if (npc == null)
             {
-                npc = M2Share.UserEngine.FindNPC(nParam1);
+                npc = (TNormNpc)M2Share.UserEngine.FindNPC(nParam1);
             }
             if (npc == null)
             {
@@ -2024,7 +2013,7 @@ namespace M2Server
             {
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant == null)
             {
                 return;
@@ -2048,7 +2037,7 @@ namespace M2Server
                     sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+                        Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
                         if (Merchant != null && Merchant.m_boSell && Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
                         {
                             if (Merchant.ClientSellItem(this, UserItem))
@@ -2077,7 +2066,7 @@ namespace M2Server
                 {
                     return;
                 }
-                TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+                TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
                 if (merchant == null || !merchant.m_boBuy || merchant.m_PEnvir != m_PEnvir || Math.Abs(merchant.m_nCurrX - m_nCurrX) > 15 || Math.Abs(merchant.m_nCurrY - m_nCurrY) > 15)
                 {
                     return;
@@ -2162,7 +2151,7 @@ namespace M2Server
                 // 折分物品名称(信件物品的名称后面加了使用次数)
                 HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick > 3000)
+            if ((HUtil32.GetTickCount() - m_DealLastTick) > 3000)
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
@@ -2328,12 +2317,12 @@ namespace M2Server
             ClientConf.boRunMon = nRunMon == 1;
             ClientConf.boRunNpc = nRunNpc == 1;
             ClientConf.boWarRunAll = nWarRunAll == 1;
-            ClientConf.wSpellTime = M2Share.g_Config.dwMagicHitIntervalTime + 300;
-            ClientConf.wHitIime = M2Share.g_Config.dwHitIntervalTime + 500;
+            ClientConf.wSpellTime = (ushort)(M2Share.g_Config.dwMagicHitIntervalTime + 300);
+            ClientConf.wHitIime = (ushort)(M2Share.g_Config.dwHitIntervalTime + 500);
             var sMsg = EDcode.EncodeBuffer(ClientConf);
             var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
-            int nParam = HUtil32.MakeWord(5, 0);
-            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, (short)nParam, 0, 0, sMsg);
+            short nParam = (short)HUtil32.MakeWord(5, 0);
+            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, nParam, 0, 0, sMsg);
         }
 
         private void SendServerStatus()
@@ -2606,7 +2595,6 @@ namespace M2Server
                                     SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                     goto FailExit;
                                 }
-                                TakeOffItem = new TUserItem();
                                 TakeOffItem = m_UseItems[btWhere];
                             }
                             if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode) && UserItem.btValue[8] != 0)
@@ -2760,7 +2748,6 @@ namespace M2Server
                 }
                 else
                 {
-
                     Dispose(UserItem);
                     break;
                 }
@@ -3079,7 +3066,7 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick < M2Share.g_Config.dwTryDealTime)
+            if ((HUtil32.GetTickCount() - m_DealLastTick) < M2Share.g_Config.dwTryDealTime)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
@@ -3259,8 +3246,7 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick < M2Share.g_Config.dwDealOKTime || HUtil32.GetTickCount() - m_DealCreat.m_DealLastTick
-                < M2Share.g_Config.dwDealOKTime)
+            if (((HUtil32.GetTickCount() - m_DealLastTick) < M2Share.g_Config.dwDealOKTime) || ((HUtil32.GetTickCount() - m_DealCreat.m_DealLastTick) < M2Share.g_Config.dwDealOKTime))
             {
                 SysMsg(M2Share.g_sDealOKTooFast, TMsgColor.c_Red, TMsgType.t_Hint);
                 DealCancel();
@@ -3386,7 +3372,7 @@ namespace M2Server
 
         private void ClientMakeDrugItem(int NPC, string nItemName)
         {
-            var Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
+            var Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
             if (Merchant == null || !Merchant.m_boMakeDrug)
             {
                 return;
@@ -4274,7 +4260,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick > 10 * 60 * 1000)
+                    if ((HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick) > 10 * 60 * 1000)
                     {
                         mineEvent.AddStoneMine();
                     }
@@ -5417,7 +5403,6 @@ namespace M2Server
                 if (UserItem == CheckItem)
                 {
                     SendDelItems(UserItem);
-
                     Dispose(UserItem);
                     m_ItemList.RemoveAt(i);
                     result = true;
@@ -5459,7 +5444,7 @@ namespace M2Server
             {
                 return;
             }
-            var merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, UserItemA);
@@ -5483,7 +5468,7 @@ namespace M2Server
             {
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientRepairItem(this, UserItem);
@@ -5505,7 +5490,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(ObjectId);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(ObjectId);
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -5524,7 +5509,6 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
                                 M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
@@ -5549,7 +5533,7 @@ namespace M2Server
             string sUserItemName;
             var bo19 = false;
             TUserItem UserItem = null;
-            var merchant = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
+            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
             if (merchant == null)
             {
                 return;
@@ -5584,7 +5568,6 @@ namespace M2Server
                                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
                                     M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
