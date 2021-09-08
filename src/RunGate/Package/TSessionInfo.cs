@@ -22,9 +22,19 @@ namespace RunGate
         public long dwReceiveTick;
         public int nSckHandle;
         public string sRemoteAddr;
+        public string SocketId;
         /// <summary>
         /// 发言间隔控制
         /// </summary>
         public long dwSayMsgTick;
+        /// <summary>
+        /// 开启用户延迟处理
+        /// </summary>
+        public bool bosendAvailableStart;
+        /// <summary>
+        /// 延迟发送给客户端间隔
+        /// </summary>
+        public long dwClientCheckTimeOut;
+        public string sUserName;
     }
 }

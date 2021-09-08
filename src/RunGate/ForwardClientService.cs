@@ -185,11 +185,12 @@ namespace RunGate
                 tSession.nCheckSendLength = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
                 tSession.nSckHandle = 0;
+                tSession.SocketId = string.Empty;
                 tSession.dwSayMsgTick = HUtil32.GetTickCount();
             }
         }
 
-        public void SendServerMsg(ForwardMessage message)
+        private void SendServerMsg(ForwardMessage message)
         {
             SendServerMsg(message.nIdent, message.wSocketIndex, message.nSocket, message.nUserListIndex, message.nLen, message.Data);
         }
@@ -207,7 +208,7 @@ namespace RunGate
             }
         }
 
-        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] Data)
+        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new TMsgHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;

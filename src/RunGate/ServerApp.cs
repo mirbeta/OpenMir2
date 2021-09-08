@@ -256,7 +256,14 @@ namespace RunGate
                             sSendBlock = sData;
                             sData = "";
                         }
-                        if (!UserSession.boSendAvailable)
+                        //检查延迟处理
+                        // if (!UserSession.bosendAvailableStart)
+                        // {
+                        //     UserSession.bosendAvailableStart = false;
+                        //     UserSession.boSendAvailable = false;
+                        //     UserSession.dwTimeOutTime = HUtil32.GetTickCount();
+                        // }
+                        if (!UserSession.boSendAvailable) //用户延迟处理
                         {
                             if (HUtil32.GetTickCount() > UserSession.dwTimeOutTime)
                             {
@@ -270,6 +277,7 @@ namespace RunGate
                         {
                             if (UserSession.nCheckSendLength >= GateShare.SENDCHECKSIZE)
                             {
+                                //M2发送大于512字节封包加'*'
                                 if (!UserSession.boSendCheck)
                                 {
                                     UserSession.boSendCheck = true;
@@ -296,34 +304,6 @@ namespace RunGate
                     }
                     UserSession.sSendData = sData;
                 }
-            }
-        }
-
-        private void FilterSayMsg(ref string sMsg)
-        {
-            int nLen;
-            string sReplaceText;
-            string sFilterText;
-            try
-            {
-                HUtil32.EnterCriticalSection(GateShare.CS_FilterMsg);
-                for (var i = 0; i < GateShare.AbuseList.Count; i++)
-                {
-                    sFilterText = GateShare.AbuseList[i];
-                    sReplaceText = "";
-                    if (sMsg.IndexOf(sFilterText) != -1)
-                    {
-                        for (nLen = 0; nLen <= sFilterText.Length; nLen++)
-                        {
-                            sReplaceText = sReplaceText + GateShare.sReplaceWord;
-                        }
-                        sMsg = sMsg.Replace(sFilterText, sReplaceText);
-                    }
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(GateShare.CS_FilterMsg);
             }
         }
         
@@ -387,23 +367,82 @@ namespace RunGate
             GateShare.AddMainLogMsg("正在加载配置信息...", 3);
             if (GateShare.Conf != null)
             {
-                 GateShare.TitleName = GateShare.Conf.ReadString(GateShare.GateClass, "Title", GateShare.TitleName);
-                 GateShare.GateAddr = GateShare.Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
-                 GateShare.GatePort = GateShare.Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
-                 GateShare.nShowLogLevel = GateShare.Conf.ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
-                 GateShare.boShowBite = GateShare.Conf.ReadBool(GateShare.GateClass, "ShowBite", GateShare.boShowBite);
-                 GateShare.nMaxConnOfIPaddr = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
-                 GateShare.BlockMethod = (TBlockIPMethod)GateShare.Conf.ReadInteger(GateShare.GateClass, "BlockMethod", (int)GateShare.BlockMethod);
-                 GateShare.nMaxClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientPacketSize", GateShare.nMaxClientPacketSize);
-                 GateShare.nNomClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "NomClientPacketSize", GateShare.nNomClientPacketSize);
-                 GateShare.nMaxClientMsgCount = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientMsgCount", GateShare.nMaxClientMsgCount);
-                 GateShare.bokickOverPacketSize = GateShare.Conf.ReadBool(GateShare.GateClass, "kickOverPacket", GateShare.bokickOverPacketSize);
-                 GateShare.dwCheckServerTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ServerCheckTimeOut", GateShare.dwCheckServerTimeOutTime);
-                 GateShare.nClientSendBlockSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "ClientSendBlockSize", GateShare.nClientSendBlockSize);
-                 GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
-                 GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
-                 GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
-                 GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
+                GateShare.TitleName = GateShare.Conf.ReadString(GateShare.GateClass, "Title", GateShare.TitleName);
+                GateShare.GateAddr = GateShare.Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
+                GateShare.GatePort = GateShare.Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
+                GateShare.nShowLogLevel = GateShare.Conf.ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
+                GateShare.boShowBite = GateShare.Conf.ReadBool(GateShare.GateClass, "ShowBite", GateShare.boShowBite);
+                GateShare.nMaxConnOfIPaddr = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
+                GateShare.BlockMethod = (TBlockIPMethod)GateShare.Conf.ReadInteger(GateShare.GateClass, "BlockMethod", (int)GateShare.BlockMethod);
+                GateShare.nMaxClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientPacketSize", GateShare.nMaxClientPacketSize);
+                GateShare.nNomClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "NomClientPacketSize", GateShare.nNomClientPacketSize);
+                GateShare.nMaxClientMsgCount = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientMsgCount", GateShare.nMaxClientMsgCount);
+                GateShare.bokickOverPacketSize = GateShare.Conf.ReadBool(GateShare.GateClass, "kickOverPacket", GateShare.bokickOverPacketSize);
+                GateShare.dwCheckServerTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ServerCheckTimeOut", GateShare.dwCheckServerTimeOutTime);
+                GateShare.nClientSendBlockSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "ClientSendBlockSize", GateShare.nClientSendBlockSize);
+                GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
+                GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
+                GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
+                GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
+
+                GateShare.boStartHitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartHitCheck", GateShare.boStartHitCheck);
+                GateShare.boStartSpellCheck = GateShare.Conf.ReadBool("GameSpeed", "StartSpellCheck", GateShare.boStartSpellCheck);
+                GateShare.boStartWalkCheck = GateShare.Conf.ReadBool("GameSpeed", "StartWalkCheck", GateShare.boStartWalkCheck);
+                GateShare.boStartRunCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunCheck", GateShare.boStartRunCheck);
+                GateShare.boStartTurnCheck = GateShare.Conf.ReadBool("GameSpeed", "StartTurnCheck", GateShare.boStartTurnCheck);
+                GateShare.boStartButchCheck = GateShare.Conf.ReadBool("GameSpeed", "StartButchCheck", GateShare.boStartButchCheck);
+                GateShare.boStartEatCheck = GateShare.Conf.ReadBool("GameSpeed", "StartEatCheck", GateShare.boStartEatCheck);
+                GateShare.boStartRunhitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunhitCheck", GateShare.boStartRunhitCheck);
+                GateShare.boStartRunspellCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunspellCheck", GateShare.boStartRunspellCheck);
+                GateShare.boStartConHitMaxCheck = GateShare.Conf.ReadBool("GameSpeed", "StartConHitMaxCheck", GateShare.boStartConHitMaxCheck);
+                GateShare.boStartConSpellMaxCheck = GateShare.Conf.ReadBool("GameSpeed", "StartConSpellMaxCheck", GateShare.boStartConSpellMaxCheck);
+                GateShare.dwSpinEditHitTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditHitTime", GateShare.dwSpinEditHitTime);
+                GateShare.dwSpinEditSpellTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditSpellTime", GateShare.dwSpinEditSpellTime);
+                GateShare.dwSpinEditWalkTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditWalkTime", GateShare.dwSpinEditWalkTime);
+                GateShare.dwSpinEditRunTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunTime", GateShare.dwSpinEditRunTime);
+                GateShare.dwSpinEditTurnTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditTurnTime", GateShare.dwSpinEditTurnTime);
+                GateShare.dwSpinEditButchTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditButchTime", GateShare.dwSpinEditButchTime);
+                GateShare.dwSpinEditEatTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditEatTime", GateShare.dwSpinEditEatTime);
+                GateShare.dwSpinEditPickupTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditPickupTime", GateShare.dwSpinEditPickupTime);
+                GateShare.dwSpinEditRunhitTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunhitTime", GateShare.dwSpinEditRunhitTime);
+                GateShare.dwSpinEditRunspellTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunspellTime", GateShare.dwSpinEditRunspellTime);
+                GateShare.dwSpinEditConHitMaxTime = GateShare.Conf.ReadInteger<byte>("GameSpeed", "SpinEditConHitMaxTime", GateShare.dwSpinEditConHitMaxTime);
+                GateShare.dwSpinEditConSpellMaxTime = GateShare.Conf.ReadInteger<byte>("GameSpeed", "SpinEditConSpellMaxTime", GateShare.dwSpinEditConSpellMaxTime);
+                GateShare.dwComboBoxHitCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxHitCheck", GateShare.dwComboBoxHitCheck);
+                GateShare.dwComboBoxSpellCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxSpellCheck", GateShare.dwComboBoxSpellCheck);
+                GateShare.dwComboBoxWalkCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxWalkCheck", GateShare.dwComboBoxWalkCheck);
+                GateShare.dwComboBoxRunCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunCheck", GateShare.dwComboBoxRunCheck);
+                GateShare.dwComboBoxTurnCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxTurnCheck", GateShare.dwComboBoxTurnCheck);
+                GateShare.dwComboBoxButchCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxButchCheck", GateShare.dwComboBoxButchCheck);
+                GateShare.dwComboBoxEatCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxEatCheck", GateShare.dwComboBoxEatCheck);
+                GateShare.dwComboBoxRunhitCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunhitCheck", GateShare.dwComboBoxRunhitCheck);
+                GateShare.dwComboBoxRunspellCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunspellCheck", GateShare.dwComboBoxRunspellCheck);
+                GateShare.dwComboBoxConHitMaxCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxConHitMaxCheck", GateShare.dwComboBoxConHitMaxCheck);
+                GateShare.dwComboBoxConSpellMaxCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxConSpellMaxCheck", GateShare.dwComboBoxConSpellMaxCheck);
+                GateShare.nIncErrorCount = GateShare.Conf.ReadInteger("GameSpeed", "IncErrorCount", GateShare.nIncErrorCount);
+                GateShare.nDecErrorCount = GateShare.Conf.ReadInteger("GameSpeed", "DecErrorCount", GateShare.nDecErrorCount);
+                GateShare.nItemSpeedCount = GateShare.Conf.ReadInteger("GameSpeed", "ItemSpeedCount", GateShare.nItemSpeedCount);
+                GateShare.nSpinEditHitCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditHitCount", GateShare.nSpinEditHitCount);
+                GateShare.nSpinEditSpellCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditSpellCount", GateShare.nSpinEditSpellCount);
+                GateShare.nSpinEditWalkCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditWalkCount", GateShare.nSpinEditWalkCount);
+                GateShare.nSpinEditRunCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunCount", GateShare.nSpinEditRunCount);
+                GateShare.boAdvertiCheck = GateShare.Conf.ReadBool("GameSpeed", "AdvertiCheck", GateShare.boAdvertiCheck);
+                GateShare.boSupSpeederCheck = GateShare.Conf.ReadBool("GameSpeed", "SupSpeederCheck", GateShare.boSupSpeederCheck);
+                GateShare.boSuperNeverCheck = GateShare.Conf.ReadBool("GameSpeed", "SuperNeverCheck", GateShare.boSuperNeverCheck);
+                GateShare.boAfterHitCheck = GateShare.Conf.ReadBool("GameSpeed", "AfterHitCheck", GateShare.boAfterHitCheck);
+                GateShare.boDarkHitCheck = GateShare.Conf.ReadBool("GameSpeed", "DarkHitCheck", GateShare.boDarkHitCheck);
+                GateShare.boWalk3caseCheck = GateShare.Conf.ReadBool("GameSpeed", "Walk3caseCheck", GateShare.boWalk3caseCheck);
+                GateShare.boFeiDnItemsCheck = GateShare.Conf.ReadBool("GameSpeed", "FeiDnItemsCheck", GateShare.boFeiDnItemsCheck);
+                GateShare.boCombinationCheck = GateShare.Conf.ReadBool("GameSpeed", "CombinationCheck", GateShare.boCombinationCheck);
+                GateShare.sWarningMsg = GateShare.Conf.ReadString("GameSpeed", "sWarningMsg", GateShare.sWarningMsg);
+                GateShare.yWarningMsg = GateShare.Conf.ReadString("GameSpeed", "yWarningMsg", GateShare.yWarningMsg);
+                GateShare.jWarningMsg = GateShare.Conf.ReadString("GameSpeed", "jWarningMsg", GateShare.jWarningMsg);
+                GateShare.btMsgFColorS = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorS", GateShare.btMsgFColorS);
+                GateShare.btMsgBColorS = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorS", GateShare.btMsgBColorS);
+                GateShare.btMsgFColorY = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorY", GateShare.btMsgFColorY);
+                GateShare.btMsgBColorY = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorY", GateShare.btMsgBColorY);
+                GateShare.btMsgFColorJ = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorJ", GateShare.btMsgFColorJ);
+                GateShare.btMsgBColorJ = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorJ", GateShare.btMsgBColorJ);
             }
             GateShare.AddMainLogMsg("配置信息加载完成...", 3);
             GateShare.LoadAbuseFile();
@@ -444,52 +483,8 @@ namespace RunGate
                 boShowLocked = false;
             }
         }
-        
-        public void ShowLogMsg(bool boFlag)
-        {
-            // int nHeight;
-            // switch(boFlag)
-            // {
-            //     case true:
-            //         nHeight = Panel.Height;
-            //         Panel.Height = 0;
-            //         MemoLog.Height = nHeight;
-            //         MemoLog.Top = Panel.Top;
-            //         break;
-            //     case false:
-            //         nHeight = MemoLog.Height;
-            //         MemoLog.Height = 0;
-            //         Panel.Height = nHeight;
-            //         break;
-            // }
-        }
 
-        public void TimerTimer(System.Object Sender, System.EventArgs _e1)
-        {
-            // if (ServerSocket.Active)
-            // {
-            //     StatusBar.Panels[0].Text = (ServerSocket.Port).ToString();
-            //     POPMENU_PORT.Text = (ServerSocket.Port).ToString();
-            //     if (GateShare.boSendHoldTimeOut)
-            //     {
-            //         StatusBar.Panels[2].Text = (GateShare.SessionCount).ToString() + "/#" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //         POPMENU_CONNCOUNT.Text = (GateShare.SessionCount).ToString() + "/#" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //     }
-            //     else
-            //     {
-            //         StatusBar.Panels[2].Text = (GateShare.SessionCount).ToString() + "/" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //         POPMENU_CONNCOUNT.Text = (GateShare.SessionCount).ToString() + "/" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //     }
-            // }
-            // else
-            // {
-            //     StatusBar.Panels[0].Text = "????";
-            //     StatusBar.Panels[2].Text = "????";
-            //     POPMENU_CONNCOUNT.Text = "????";
-            // }
-        }
-
-        public void SendTimerTimer(object obj)
+        private void SendTimerTimer(object obj)
         {
             TSessionInfo UserSession;
             if (HUtil32.GetTickCount() - GateShare.dwSendHoldTick > 3000)
@@ -521,9 +516,6 @@ namespace RunGate
             }
             if (!GateShare.boGateReady)
             {
-                //StatusBar.Panels[1].Text = "未连接";
-                //StatusBar.Panels[3].Text = "????";
-                //POPMENU_CHECKTICK.Text = "????";
                 if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
                 {
                     dwReConnectServerTime = HUtil32.GetTickCount();
@@ -533,24 +525,11 @@ namespace RunGate
             }
             else
             {
-                //if (GateShare.boCheckServerFail)
-                //{
-                //    StatusBar.Panels[1].Text = "超时";
-                //    Debug.WriteLine("链接游戏数据处理引擎超时");
-                //}
-                //else
-                //{
-                //    Debug.WriteLine("游戏数据处理引擎链接正常");
-                //    StatusBar.Panels[1].Text = "已连接";
-                //    LbLack.Text = (GateShare.n45AA84).ToString() + "/" + (GateShare.n45AA80).ToString();
-                //}
                 GateShare.dwCheckServerTimeMin =  HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
                 if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
                 {
                     GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
                 }
-               // StatusBar.Panels[3].Text = (GateShare.dwCheckServerTimeMin).ToString() + "/" + (GateShare.dwCheckServerTimeMax).ToString();
-                //POPMENU_CHECKTICK.Text = (GateShare.dwCheckServerTimeMin).ToString() + "/" + (GateShare.dwCheckServerTimeMax).ToString();
             }
         }
 
@@ -595,45 +574,6 @@ namespace RunGate
                 result = true;
             }
             return result;
-        }
-
-        private bool CheckDefMsg(TDefaultMessage DefMsg, TSessionInfo SessionInfo)
-        {
-            var result = true;
-            switch(DefMsg.Ident)
-            {
-                case Grobal2.CM_WALK:
-                case Grobal2.CM_RUN:
-                    break;
-                case Grobal2.CM_TURN:
-                    break;
-                case Grobal2.CM_HIT:
-                case Grobal2.CM_HEAVYHIT:
-                case Grobal2.CM_BIGHIT:
-                case Grobal2.CM_POWERHIT:
-                case Grobal2.CM_LONGHIT:
-                case Grobal2.CM_WIDEHIT:
-                case Grobal2.CM_FIREHIT:
-                    break;
-                case Grobal2.CM_SPELL:
-                    break;
-                case Grobal2.CM_DROPITEM:
-                    break;
-                case Grobal2.CM_PICKUP:
-                    break;
-            }
-            return result;
-        }
-
-        private void CloseAllUser()
-        {
-            // for (var nSockIdx = 0; nSockIdx < GateShare.GATEMAXSESSION; nSockIdx ++ )
-            // {
-            //     if (GateShare.SessionArray[nSockIdx].Socket != null)
-            //     {
-            //         GateShare.SessionArray[nSockIdx].Socket.Close();
-            //     }
-            // }
         }
     } 
 }

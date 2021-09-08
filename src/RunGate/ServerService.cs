@@ -72,13 +72,16 @@ namespace RunGate
                     userSession.nPacketErrCount = 0;
                     userSession.boStartLogon = true;
                     userSession.boSendLock = false;
-                    userSession.boSendAvailable = true;
                     userSession.boSendCheck = false;
                     userSession.nCheckSendLength = 0;
+                    userSession.SocketId = e.ConnectionId;
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
                     userSession.sRemoteAddr = sRemoteAddress;
                     userSession.dwSayMsgTick = HUtil32.GetTickCount();
                     userSession.nSckHandle = (int)e.Socket.Handle;
+                    userSession.boSendAvailable = true; // 用户延迟处理。
+                    userSession.bosendAvailableStart = false; // 开启用户延迟处理。
+                    userSession.dwClientCheckTimeOut = 200; // 延迟发送给客户端间隔
                     nSockIdx = nIdx;
                     GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
                     break;
@@ -194,6 +197,10 @@ namespace RunGate
                             }
                         }
                         GateShare.NReviceMsgSize += sReviceMsg.Length;
+                        if (userClinet.SessionArray[nSocketIndex].sUserName == GateShare.boMsgUserName)
+                        {
+                            GateShare.AddMainLogMsg(sReviceMsg, 3);   //封包显示
+                        }
                         if (GateShare.boShowSckData)
                         {
                             GateShare.AddMainLogMsg(sReviceMsg, 0);
@@ -211,7 +218,7 @@ namespace RunGate
                                 sReviceMsg = sReviceMsg.Substring(0, nPos);
                                 //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                             }
-                            if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady) //&& !GateShare.boCheckServerFail
+                            if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady)
                             {
                                 var userData = new TSendUserData();
                                 userData.nSocketIdx = nSocketIndex;
