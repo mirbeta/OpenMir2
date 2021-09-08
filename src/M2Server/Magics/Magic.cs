@@ -16,7 +16,6 @@ namespace M2Server
 
         public static int GetPower13(int nInt, TUserMagic UserMagic)
         {
-            int result;
             double d10 = nInt / 3.0;
             double  d18 = nInt - d10;
             return HUtil32.Round(d18 / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1) + d10 + (UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower)));

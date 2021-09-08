@@ -17,7 +17,7 @@ namespace RunGate
 
         public ServerService()
         {
-            _serverSocket = new ISocketServer(20, 2048);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;

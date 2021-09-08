@@ -78,6 +78,6 @@ namespace M2Server
             }
             return shortarr;
         }
-    }
+    } 
 }
 

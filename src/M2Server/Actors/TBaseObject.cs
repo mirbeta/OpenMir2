@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using SystemModule;
 
 namespace M2Server
@@ -161,6 +163,9 @@ namespace M2Server
         /// 权限等级
         /// </summary>
         public byte m_btPermission = 0;
+        /// <summary>
+        /// 攻击速度
+        /// </summary>
         public ushort m_nHitSpeed = 0;
         public byte m_btLifeAttrib = 0;
         public byte m_btCoolEye = 0;
@@ -565,8 +570,10 @@ namespace M2Server
         // 固定颜色
         public int m_nFixColorIdx = 0;
         public long m_nFixStatus = 0;
+        /// <summary>
+        /// 快速麻痹，受攻击后麻痹立即消失
+        /// </summary>
         public bool m_boFastParalysis = false;
-        // 快速麻痹，受攻击后麻痹立即消失
         public bool m_boSmashSet = false;
         public bool m_boHwanDevilSet = false;
         public bool m_boPuritySet = false;
@@ -876,6 +883,10 @@ namespace M2Server
             TMapItem MapItem;
             TMapItem pr;
             string logcap;
+            if (UserItem == null)
+            {
+                return false;
+            }
             MirItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
@@ -922,7 +933,7 @@ namespace M2Server
                     {
                         if (StdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog(logcap + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                            M2Share.AddGameDataLog(logcap + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
                     }
                     result = true;
@@ -1218,7 +1229,7 @@ namespace M2Server
             return (m_Abil.Level * M2Share.g_Config.nMonUpLvRate) - m_Abil.Level + M2Share.g_Config.nMonUpLvNeedKillBase + tCount;
         }
 
-        public void GainSlaveExp(int nLevel)
+        private void GainSlaveExp(int nLevel)
         {
             m_nKillMonCount += nLevel;
             if (GainSlaveExp_GetUpKillCount() < m_nKillMonCount)
@@ -1272,9 +1283,9 @@ namespace M2Server
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" +
-                                               m_nCurrY.ToString() + "\t" + m_sCharName + "\t" +
-                                               Grobal2.sSTRING_GOLDNAME + "\t" + nGold.ToString() + "\t" +
+                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" +
+                                               m_nCurrY + "\t" + m_sCharName + "\t" +
+                                               Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" +
                                                HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" +
                                                '0');
                     }
@@ -1320,7 +1331,7 @@ namespace M2Server
             return result;
         }
 
-        public void IncPkPoint(int nPoint)
+        protected void IncPkPoint(int nPoint)
         {
             var nOldPKLevel = PKLevel();
             m_nPkPoint += nPoint;
@@ -1332,8 +1343,22 @@ namespace M2Server
                 }
             }
         }
+        
+        private void DecPKPoint(int nPoint)
+        {
+            int nC = PKLevel();
+            m_nPkPoint -= nPoint;
+            if (m_nPkPoint < 0)
+            {
+                m_nPkPoint = 0;
+            }
+            if ((PKLevel() != nC) && (nC > 0) && (nC <= 2))
+            {
+                RefNameColor();
+            }
+        }
 
-        public void AddBodyLuck(double dLuck)
+        protected void AddBodyLuck(double dLuck)
         {
             if ((dLuck > 0) && (m_dBodyLuck < 5 * M2Share.BODYLUCKUNIT))
             {
@@ -1355,7 +1380,7 @@ namespace M2Server
             m_nBodyLuckLevel = n;
         }
 
-        public void MakeWeaponUnlock()
+        protected void MakeWeaponUnlock()
         {
             if (m_UseItems[Grobal2.U_WEAPON] == null)
             {
@@ -1441,12 +1466,11 @@ namespace M2Server
         /// 减少生命值
         /// </summary>
         /// <param name="nDamage"></param>
-        public void DamageHealth(int nDamage)
+        private void DamageHealth(int nDamage)
         {
-            int nSpdam;
             if (((m_LastHiter == null) || !m_LastHiter.m_boUnMagicShield) && m_boMagicShield && (nDamage > 0) && (m_WAbil.MP > 0))
             {
-                nSpdam = HUtil32.Round(nDamage * 1.5);
+                var nSpdam = HUtil32.Round(nDamage * 1.5);
                 if (m_WAbil.MP >= nSpdam)
                 {
                     m_WAbil.MP = (ushort)(m_WAbil.MP - nSpdam);
@@ -1597,11 +1621,10 @@ namespace M2Server
                     break;
                 }
             }
-            int result = tcount;
-            return result;
+            return tcount;
         }
 
-        public void BreakOpenHealth()
+        private void BreakOpenHealth()
         {
             if (m_boShowHP)
             {
@@ -1612,7 +1635,7 @@ namespace M2Server
             }
         }
 
-        public void MakeOpenHealth()
+        private void MakeOpenHealth()
         {
             m_boShowHP = true;
             m_nCharStatusEx = m_nCharStatusEx | Grobal2.STATE_OPENHEATH;
@@ -1620,7 +1643,7 @@ namespace M2Server
             SendRefMsg(Grobal2.RM_OPENHEALTH, 0, m_WAbil.HP, m_WAbil.MaxHP, 0, "");
         }
 
-        public void IncHealthSpell(int nHP, int nMP)
+        protected void IncHealthSpell(int nHP, int nMP)
         {
             if ((nHP < 0) || (nMP < 0))
             {
@@ -1645,7 +1668,7 @@ namespace M2Server
             HealthSpellChanged();
         }
 
-        public void ItemDamageRevivalRing()
+        private void ItemDamageRevivalRing()
         {
             MirItem pSItem;
             ushort nDura;
@@ -1754,7 +1777,7 @@ namespace M2Server
             return result;
         }
 
-        public bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
+        private bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
@@ -1909,12 +1932,11 @@ namespace M2Server
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject MonObj;
             TBaseObject result = null;
             if (m_SlaveList.Count < nMaxMob)
             {
                 GetFrontPosition(ref nX, ref nY);
-                MonObj = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, nX, nY, sMonName);
+                var MonObj = M2Share.UserEngine.RegenMonsterByName(m_PEnvir.sMapName, nX, nY, sMonName);
                 if (MonObj != null)
                 {
                     MonObj.m_Master = this;
@@ -2139,11 +2161,11 @@ namespace M2Server
                         {
                             if (m_ExpHitter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO.ToString(), false);
+                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO, false);
                             }
                             if (m_ExpHitter.m_Master != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter.m_Master as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO.ToString(), false);
+                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter.m_Master as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO, false);
                             }
                         }
                         else
@@ -2152,11 +2174,11 @@ namespace M2Server
                             {
                                 if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO.ToString(), false);
+                                    M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO, false);
                                 }
                                 if (m_LastHiter.m_Master != null)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(m_LastHiter.m_Master as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO.ToString(), false);
+                                    M2Share.g_FunctionNPC.GotoLable(m_LastHiter.m_Master as TPlayObject, "@KillPlayMon" + m_PEnvir.Flag.nKILLFUNCNO, false);
                                 }
                             }
                         }
@@ -2165,7 +2187,7 @@ namespace M2Server
                     {
                         if ((m_LastHiter != null) && (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                         {
-                            M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@KillPlay" + m_PEnvir.Flag.nKILLFUNCNO.ToString(), false);
+                            M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@KillPlay" + m_PEnvir.Flag.nKILLFUNCNO, false);
                         }
                     }
                     result = true;
@@ -2184,15 +2206,13 @@ namespace M2Server
         /// </summary>
         private void UseLamp()
         {
-            TPlayObject PlayObject;
-            MirItem Stditem;
             const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
             try
             {
                 if (m_UseItems[Grobal2.U_RIGHTHAND] != null && m_UseItems[Grobal2.U_RIGHTHAND].wIndex > 0)
                 {
-                    Stditem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_RIGHTHAND].wIndex);
-                    if ((Stditem == null) || (Stditem.Source != 0))
+                    var stdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    if ((stdItem == null) || (stdItem.Source != 0))
                     {
                         return;
                     }
@@ -2211,7 +2231,7 @@ namespace M2Server
                         m_UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
                         if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                         {
-                            PlayObject = this as TPlayObject;
+                            var PlayObject = this as TPlayObject;
                             PlayObject.SendDelItems(m_UseItems[Grobal2.U_RIGHTHAND]);
                         }
                         m_UseItems[Grobal2.U_RIGHTHAND].wIndex = 0;
@@ -2455,7 +2475,6 @@ namespace M2Server
         public void AddItemSkill(int nIndex)
         {
             TMagic Magic = null;
-            TUserMagic UserMagic;
             switch (nIndex)
             {
                 case 1:
@@ -2469,7 +2488,7 @@ namespace M2Server
             {
                 if (!IsTrainingSkill(Magic.wMagicID))
                 {
-                    UserMagic = new TUserMagic
+                    var UserMagic = new TUserMagic
                     {
                         MagicInfo = Magic,
                         wMagIdx = Magic.wMagicID,
@@ -2553,21 +2572,7 @@ namespace M2Server
                 }
             }
         }
-
-        private void DecPKPoint(int nPoint)
-        {
-            int nC = PKLevel();
-            m_nPkPoint -= nPoint;
-            if (m_nPkPoint < 0)
-            {
-                m_nPkPoint = 0;
-            }
-            if ((PKLevel() != nC) && (nC > 0) && (nC <= 2))
-            {
-                RefNameColor();
-            }
-        }
-
+        
         public void DelItemSkill_DeleteSkill(string sSkillName)
         {
             TUserMagic UserMagic;
@@ -2645,16 +2650,12 @@ namespace M2Server
 
         public void DoDamageWeapon(int nWeaponDamage)
         {
-            int nDura;
-            int nDuraPoint;
-            TPlayObject PlayObject;
-            MirItem StdItem;
-            if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (m_UseItems[Grobal2.U_WEAPON] == null || m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return;
             }
-            nDura = m_UseItems[Grobal2.U_WEAPON].Dura;
-            nDuraPoint = HUtil32.Round(nDura / 1.03);
+            int nDura = m_UseItems[Grobal2.U_WEAPON].Dura;
+            var nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0)
             {
@@ -2662,13 +2663,13 @@ namespace M2Server
                 m_UseItems[Grobal2.U_WEAPON].Dura = (ushort)nDura;
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                 {
-                    PlayObject = this as TPlayObject;
+                    var PlayObject = this as TPlayObject;
                     PlayObject.SendDelItems(m_UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
                         // UserEngine.GetStdItemName(m_UseItems[U_WEAPON].wIndex) + #9 +
-                        M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_WEAPON].MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                        M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                     }
                 }
                 m_UseItems[Grobal2.U_WEAPON].wIndex = 0;
@@ -2780,7 +2781,7 @@ namespace M2Server
             return result;
         }
 
-        public int GetLevelExp(int nLevel)
+        protected int GetLevelExp(int nLevel)
         {
             int result;
             if (nLevel <= Grobal2.MAXLEVEL)
@@ -2816,7 +2817,7 @@ namespace M2Server
             }
         }
 
-        public bool InSafeArea()
+        protected bool InSafeArea()
         {
             bool result = false;
             int n14;
@@ -3161,7 +3162,6 @@ namespace M2Server
                     {
                         Msg.sMsg = string.Empty;
                     }
-                    //SendMessage = null;
                     result = true;
                     break;
                 }
@@ -3236,10 +3236,9 @@ namespace M2Server
                 M2Share.ErrorMessage(m_sCharName + " SendRefMsg nil PEnvir ");
                 return;
             }
-            // 01/21 增加，原来直接不发信息，如果隐身模式则只发送信息给自己
             if (m_boObMode || m_boFixedHideMode)
             {
-                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
@@ -3528,13 +3527,12 @@ namespace M2Server
 
         protected void KickException()
         {
-            TPlayObject PlayObject;
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 m_sMapName = M2Share.g_Config.sHomeMap;
                 m_nCurrX = M2Share.g_Config.nHomeX;
                 m_nCurrY = M2Share.g_Config.nHomeY;
-                PlayObject = this as TPlayObject;
+                TPlayObject PlayObject = this as TPlayObject;
                 PlayObject.m_boEmergencyClose = true;
             }
             else
@@ -3668,12 +3666,6 @@ namespace M2Server
             int nOldX;
             int nOldY;
             TUserCastle Castle;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::EnterAnotherMap -> MsgTargetList Clear";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleItems Dispose";
-            const string sExceptionMsg3 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleItems Clear";
-            const string sExceptionMsg4 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleEvents Clear";
-            const string sExceptionMsg5 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleActors Dispose";
-            const string sExceptionMsg6 = "[Exception] TBaseObject::EnterAnotherMap -> VisbleActors Clear";
             const string sExceptionMsg7 = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
@@ -3712,60 +3704,18 @@ namespace M2Server
                 nOldX = m_nCurrX;
                 nOldY = m_nCurrY;
                 DisappearA();
-                try
+                m_VisibleHumanList.Clear();
+                for (var i = 0; i < m_VisibleItems.Count; i++)
                 {
-                    m_VisibleHumanList.Clear();
+                    m_VisibleItems[i] = null;
                 }
-                catch
+                m_VisibleItems.Clear();
+                m_VisibleEvents.Clear();
+                for (var i = 0; i < m_VisibleActors.Count; i++)
                 {
-                    M2Share.ErrorMessage(sExceptionMsg1);
+                    m_VisibleActors[i] = null;
                 }
-                try
-                {
-                    for (var i = 0; i < m_VisibleItems.Count; i++)
-                    {
-                        m_VisibleItems[i] = null;
-                    }
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg2);
-                }
-                try
-                {
-                    m_VisibleItems.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg3);
-                }
-                try
-                {
-                    m_VisibleEvents.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg4);
-                }
-                try
-                {
-                    for (var i = 0; i < m_VisibleActors.Count; i++)
-                    {
-                        m_VisibleActors[i] = null;
-                    }
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg5);
-                }
-                try
-                {
-                    m_VisibleActors.Clear();
-                }
-                catch
-                {
-                    M2Share.ErrorMessage(sExceptionMsg6);
-                }
+                m_VisibleActors.Clear();
                 SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 m_PEnvir = Envir;
                 m_sMapName = Envir.sMapName;
@@ -3775,7 +3725,6 @@ namespace M2Server
                 SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, Envir.m_sMapFileName);
                 if (AddToMap())
                 {
-
                     m_dwMapMoveTick = HUtil32.GetTickCount();
                     m_bo316 = true;
                     result = true;
@@ -3829,9 +3778,6 @@ namespace M2Server
                     case TMsgType.t_System:
                         sMsg = M2Share.g_Config.sSysMsgPreFix + sMsg;
                         break;
-                    case TMsgType.t_Notice:
-                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
-                        break;
                     case TMsgType.t_Cust:
                         sMsg = M2Share.g_Config.sCustMsgpreFix + sMsg;
                         break;
@@ -3840,25 +3786,96 @@ namespace M2Server
                         break;
                 }
             }
-            switch (MsgColor)
+
+            if (MsgType == TMsgType.t_Notice)
             {
-                case TMsgColor.c_Green:
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
-                    break;
-                case TMsgColor.c_Blue:
-                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
-                    break;
-                default:
-                    if (MsgType == TMsgType.t_Cust)
+                string str = string.Empty;
+                string FColor= string.Empty;
+                string BColor= string.Empty;
+                string nTime= string.Empty;
+                if ((sMsg[0] == '['))// 如果发的是公告
+                {
+                    // 顶部滚动公告
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '[', ']', ref str);
+                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    if (M2Share.g_Config.boShowPreFixMsg)
                     {
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                     }
-                    else
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                }
+                else if ((sMsg[0] == '<'))// 聊天框彩色公告
+                {
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '<', '>', ref str);
+                    BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    if (M2Share.g_Config.boShowPreFixMsg)
                     {
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                     }
-                    break;
+                    SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
+                }
+                else if ((sMsg[0] == '{'))// 屏幕居中公告
+                {
+                    sMsg = HUtil32.ArrestStringEx(sMsg, '{', '}', ref str);
+                    str = HUtil32.GetValidStrCap(str, ref FColor, new string[] {"," });
+                    str = HUtil32.GetValidStrCap(str, ref BColor, new string[] {"," });
+                    str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { ","});
+                    if (M2Share.g_Config.boShowPreFixMsg)
+                    {
+                        sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                    }
+                    SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), HUtil32.Str_ToInt(nTime, 0), sMsg);
+                }
+                else
+                {
+                    switch (MsgColor)
+                    {
+                        case TMsgColor.c_Red:// 控制公告的颜色
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                            break;
+                        case TMsgColor.c_Green:
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                            break;
+                        case TMsgColor.c_Blue:
+                            if (M2Share.g_Config.boShowPreFixMsg)
+                            {
+                                sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
+                            }
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                            break;
+                    }
+                }
             }
+           else
+           {
+               switch (MsgColor)
+               {
+                   case TMsgColor.c_Green:
+                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                       break;
+                   case TMsgColor.c_Blue:
+                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                       break;
+                   default:
+                       if (MsgType == TMsgType.t_Cust)
+                       {
+                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                       }
+                       else
+                       {
+                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                       }
+                       break;
+               }
+           }
         }
 
         /// <summary>
@@ -4068,7 +4085,6 @@ namespace M2Server
         public virtual bool IsAttackTarget(TBaseObject BaseObject)
         {
             bool result = false;
-            int I;
             if ((BaseObject == null) || (BaseObject == this))
             {
                 return result;
@@ -4126,8 +4142,6 @@ namespace M2Server
                     {
                         result = true;
                     }
-                    // 15
-                    // 50
                     if ((m_btRaceServer > Grobal2.RC_PEACENPC) && (m_btRaceServer < Grobal2.RC_ANIMAL))
                     {
                         result = true;
@@ -4180,9 +4194,9 @@ namespace M2Server
                                 result = true;
                                 if ((this as TPlayObject).m_boMaster)
                                 {
-                                    for (I = 0; I < (this as TPlayObject).m_MasterList.Count; I++)
+                                    for (var i = 0; i < (this as TPlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((this as TPlayObject).m_MasterList[I] == BaseObject)
+                                        if ((this as TPlayObject).m_MasterList[i] == BaseObject)
                                         {
                                             result = false;
                                             break;
@@ -4191,9 +4205,9 @@ namespace M2Server
                                 }
                                 if ((BaseObject as TPlayObject).m_boMaster)
                                 {
-                                    for (I = 0; I < (BaseObject as TPlayObject).m_MasterList.Count; I++)
+                                    for (var i = 0; i < (BaseObject as TPlayObject).m_MasterList.Count; i++)
                                     {
-                                        if ((BaseObject as TPlayObject).m_MasterList[I] == this)
+                                        if ((BaseObject as TPlayObject).m_MasterList[i] == this)
                                         {
                                             result = false;
                                             break;
@@ -4645,7 +4659,7 @@ namespace M2Server
                         if (StdItem.NeedIdentify == 1)
                         {
                             // UserEngine.GetStdItemName(m_UseItems[U_DRESS].wIndex) + #9 +
-                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_DRESS].MakeIndex.ToString() + "\t" 
+                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_DRESS].MakeIndex + "\t" 
                                 + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
                         m_UseItems[Grobal2.U_DRESS].wIndex = 0;
@@ -4680,7 +4694,7 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex.ToString() + "\t" 
+                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex + "\t" 
                                     + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                             }
                             m_UseItems[i].wIndex = 0;
@@ -4709,11 +4723,11 @@ namespace M2Server
 
         public virtual string GeTBaseObjectInfo()
         {
-            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX.ToString() + '/' + m_nCurrY.ToString() + ' ' + "等级:" + m_Abil.Level.ToString() + ' ' + "经验:" + m_Abil.Exp.ToString() + ' ' 
-                + "生命值: " + m_WAbil.HP.ToString() + '-' + m_WAbil.MaxHP.ToString() + ' ' + "魔法值: " + m_WAbil.MP.ToString() + '-' + m_WAbil.MaxMP.ToString() + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC).ToString() + '-' + HUtil32.HiWord(m_WAbil.DC).ToString() + ' ' 
-                + "魔法力: " + HUtil32.LoWord(m_WAbil.MC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MC).ToString() + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC).ToString() + '-' + HUtil32.HiWord(m_WAbil.SC).ToString() + ' ' 
-                + "防御力: " + HUtil32.LoWord(m_WAbil.AC).ToString() + '-' + HUtil32.HiWord(m_WAbil.AC).ToString() + ' ' + "魔防力: " + HUtil32.LoWord(m_WAbil.MAC).ToString() + '-' + HUtil32.HiWord(m_WAbil.MAC).ToString() + ' ' + "准确:" + m_btHitPoint.ToString() + ' '
-                + "敏捷:" + m_btSpeedPoint.ToString();
+            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX + '/' + m_nCurrY + ' ' + "等级:" + m_Abil.Level + ' ' + "经验:" + m_Abil.Exp + ' ' 
+                + "生命值: " + m_WAbil.HP + '-' + m_WAbil.MaxHP + ' ' + "魔法值: " + m_WAbil.MP + '-' + m_WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC) + ' ' 
+                + "魔法力: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC) + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC) + ' ' 
+                + "防御力: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC) + ' ' + "魔防力: " + HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC) + ' ' + "准确:" + m_btHitPoint + ' '
+                + "敏捷:" + m_btSpeedPoint;
             return result;
         }
 

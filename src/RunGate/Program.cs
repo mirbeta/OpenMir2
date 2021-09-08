@@ -27,13 +27,6 @@ namespace RunGate
                 });
 
             await builder.RunConsoleAsync();
-
-            while (true)
-            {
-                var line = Console.ReadLine();
-                
-                Console.WriteLine(line);
-            }
         }
     }
 }

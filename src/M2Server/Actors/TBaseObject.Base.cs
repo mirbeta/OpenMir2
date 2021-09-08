@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SystemModule;
 
@@ -405,7 +407,7 @@ namespace M2Server
                         return result;
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwMapMoveTick < 3000 || HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick < 3000)
+                if (((HUtil32.GetTickCount() - m_dwMapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick) < 3000))
                 {
                     result = false;
                 }
@@ -434,7 +436,7 @@ namespace M2Server
             DisappearA();
         }
 
-        public virtual void ScatterBagItems(TBaseObject ItemOfCreat)
+        protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
         {
             int DropWide;
             TUserItem UserItem;
@@ -443,7 +445,7 @@ namespace M2Server
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);// 3
+                DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
                 if ((m_btRaceServer == Grobal2.RC_PLAYCLONE) && (m_Master != null))
                 {
                     return;
@@ -493,7 +495,7 @@ namespace M2Server
             int nC;
             int nRate;
             MirItem StdItem;
-            IList<int> DropItemList = null;
+            IList<TDeleteItem> DropItemList = null;
             const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
             try
             {
@@ -518,12 +520,15 @@ namespace M2Server
                             {
                                 if (DropItemList == null)
                                 {
-                                    DropItemList = new List<int>();
+                                    DropItemList = new List<TDeleteItem>();
                                 }
-                                DropItemList.Add(m_UseItems[nC].MakeIndex);
+                                DropItemList.Add(new TDeleteItem()
+                                {
+                                    MakeIndex = m_UseItems[nC].MakeIndex
+                                });
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    M2Share.AddGameDataLog("16" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[nC].MakeIndex.ToString() + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                    M2Share.AddGameDataLog("16" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                                 }
                                 m_UseItems[nC].wIndex = 0;
                             }
@@ -564,9 +569,13 @@ namespace M2Server
                                     {
                                         if (DropItemList == null)
                                         {
-                                            DropItemList = new List<int>();
+                                            DropItemList = new List<TDeleteItem>();
                                         }
-                                        DropItemList.Add(m_UseItems[nC].MakeIndex);
+                                        DropItemList.Add(new TDeleteItem()
+                                        {
+                                            sItemName = M2Share.UserEngine.GetStdItemName(m_UseItems[nC].wIndex),
+                                            MakeIndex = m_UseItems[nC].MakeIndex
+                                        });
                                     }
                                     m_UseItems[nC].wIndex = 0;
                                 }
@@ -765,7 +774,7 @@ namespace M2Server
                         nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
                         nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
                         nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
                         if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(TargetBaseObject);
@@ -819,9 +828,9 @@ namespace M2Server
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                    default:
+                    /*default:
                         Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                        break;
+                        break;*/
                 }
             }
             catch (Exception e)
@@ -835,25 +844,13 @@ namespace M2Server
         public virtual void Run()
         {
             int i;
-            bool boChg;
-            bool boNeedRecalc;
-            int nHP;
-            int nMP;
-            int n18;
-            int dwC;
-            int dwInChsTime;
             TProcessMessage ProcessMsg = null;
-            TBaseObject BaseObject;
             int nInteger;
-            MirItem StdItem;
-            int nCount;
-            int dCount;
-            int bCount;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
             const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
             const string sExceptionMsg3 = "[Exception] TBaseObject::Run 3";
-            const string sExceptionMsg4 = "[Exception] TBaseObject::Run 4 Code:%d";
+            const string sExceptionMsg4 = "[Exception] TBaseObject::Run 4 Code:{0}";
             const string sExceptionMsg5 = "[Exception] TBaseObject::Run 5";
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
             const string sExceptionMsg7 = "[Exception] TBaseObject::Run 7";
@@ -868,7 +865,7 @@ namespace M2Server
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg0);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.ErrorMessage(e.StackTrace);
             }
             try
             {
@@ -877,19 +874,19 @@ namespace M2Server
                     m_WAbil.HP = m_WAbil.MaxHP;
                     m_WAbil.MP = m_WAbil.MaxMP;
                 }
-                dwC = (HUtil32.GetTickCount() - m_dwHPMPTick) / 20;
+                int dwC = (HUtil32.GetTickCount() - m_dwHPMPTick) / 20;
                 m_dwHPMPTick = HUtil32.GetTickCount();
                 m_nHealthTick += dwC;
                 m_nSpellTick += dwC;
                 if (!m_boDeath)
                 {
+                    ushort n18;
                     if ((m_WAbil.HP < m_WAbil.MaxHP) && (m_nHealthTick >= M2Share.g_Config.nHealthFillTime))
                     {
-                        n18 = (m_WAbil.MaxHP / 75) + 1;
-                        // nPlus = m_WAbility.MaxHP / 15 + 1;
+                        n18 = (ushort)((m_WAbil.MaxHP / 75) + 1);
                         if ((m_WAbil.HP + n18) < m_WAbil.MaxHP)
                         {
-                            m_WAbil.HP += (ushort)n18;
+                            m_WAbil.HP += n18;
                         }
                         else
                         {
@@ -899,10 +896,10 @@ namespace M2Server
                     }
                     if ((m_WAbil.MP < m_WAbil.MaxMP) && (m_nSpellTick >= M2Share.g_Config.nSpellFillTime))
                     {
-                        n18 = (m_WAbil.MaxMP / 18) + 1;
+                        n18 = (ushort)((m_WAbil.MaxMP / 18) + 1);
                         if ((m_WAbil.MP + n18) < m_WAbil.MaxMP)
                         {
-                            m_WAbil.MP += (ushort)n18;
+                            m_WAbil.MP += n18;
                         }
                         else
                         {
@@ -912,15 +909,12 @@ namespace M2Server
                     }
                     if (m_WAbil.HP == 0)
                     {
-                        // 防复活
-                        // 60 * 1000
-                        if (((m_LastHiter == null) || !m_LastHiter.m_boUnRevival) && m_boRevival && (HUtil32.GetTickCount() - m_dwRevivalTick > M2Share.g_Config.dwRevivalTime))
+                        if (((m_LastHiter == null) || !m_LastHiter.m_boUnRevival) && m_boRevival && ((HUtil32.GetTickCount() - m_dwRevivalTick) > M2Share.g_Config.dwRevivalTime))// 60 * 1000
                         {
                             m_dwRevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
                             m_WAbil.HP = m_WAbil.MaxHP;
                             HealthSpellChanged();
-                            // '复活戒指生效，体力恢复'
                             SysMsg(M2Share.g_sRevivalRecoverMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                         }
                         if (m_WAbil.HP == 0)
@@ -939,8 +933,7 @@ namespace M2Server
                 }
                 else
                 {
-                    // 3 * 60 * 1000
-                    if (HUtil32.GetTickCount() - m_dwDeathTick > M2Share.g_Config.dwMakeGhostTime)
+                    if ((HUtil32.GetTickCount() - m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime)// 3 * 60 * 1000
                     {
                         MakeGhost();
                     }
@@ -955,10 +948,10 @@ namespace M2Server
             {
                 if (!m_boDeath && ((m_nIncSpell > 0) || (m_nIncHealth > 0) || (m_nIncHealing > 0)))
                 {
-                    dwInChsTime = 600 - HUtil32._MIN(400, m_Abil.Level * 10);
+                    int dwInChsTime = 600 - HUtil32._MIN(400, m_Abil.Level * 10);
                     if (((HUtil32.GetTickCount() - m_dwIncHealthSpellTick) >= dwInChsTime) && !m_boDeath)
                     {
-                        dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - m_dwIncHealthSpellTick - dwInChsTime);
+                        int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - m_dwIncHealthSpellTick - dwInChsTime);
                         m_dwIncHealthSpellTick = HUtil32.GetTickCount() + dwC;
                         if ((m_nIncSpell > 0) || (m_nIncHealth > 0) || (m_nPerHealing > 0))
                         {
@@ -974,6 +967,7 @@ namespace M2Server
                             {
                                 m_nPerHealing = 1;
                             }
+                            int nHP;
                             if (m_nIncHealth < m_nPerHealth)
                             {
                                 nHP = m_nIncHealth;
@@ -984,6 +978,7 @@ namespace M2Server
                                 nHP = m_nPerHealth;
                                 m_nIncHealth -= m_nPerHealth;
                             }
+                            int nMP;
                             if (m_nIncSpell < m_nPerSpell)
                             {
                                 nMP = m_nIncSpell;
@@ -1026,13 +1021,12 @@ namespace M2Server
                 }
                 if ((m_nHealthTick < -M2Share.g_Config.nHealthFillTime) && (m_WAbil.HP > 1))
                 {
-                    // Jacky ????
                     m_WAbil.HP -= 1;
                     m_nHealthTick += M2Share.g_Config.nHealthFillTime;
                     HealthSpellChanged();
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-                boNeedRecalc = false;
+                bool boNeedRecalc = false;
                 if (m_WAbil.HP > m_WAbil.MaxHP)
                 {
                     boNeedRecalc = true;
@@ -1059,6 +1053,10 @@ namespace M2Server
                 {
                     if (!m_boDeath && new ArrayList(new int[] { Grobal2.RC_PLAYOBJECT, Grobal2.RC_PLAYCLONE }).Contains(m_btRaceServer))
                     {
+                        int nCount;
+                        int dCount;
+                        int bCount;
+                        MirItem StdItem;
                         // 加HP
                         if ((m_nIncHealth == 0) && (m_UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - m_nIncHPStoneTime) > M2Share.g_Config.HPStoneIntervalTime) && ((m_WAbil.HP / m_WAbil.MaxHP * 100) < M2Share.g_Config.HPStoneStartRate))
                         {
@@ -1159,7 +1157,7 @@ namespace M2Server
             {
                 if (m_TargetCret != null)
                 {
-                    // 08/06 增加，弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
+                    //修复弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
                     if (((HUtil32.GetTickCount() - m_dwTargetFocusTick) > 30000) || m_TargetCret.m_boDeath || m_TargetCret.m_boGhost || (m_TargetCret.m_PEnvir != m_PEnvir) || (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 15) || (Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 15))
                     {
                         m_TargetCret = null;
@@ -1304,8 +1302,7 @@ namespace M2Server
             try
             {
                 // 减少PK值开始
-                // 120000
-                if ((HUtil32.GetTickCount() - m_dwDecPkPointTick) > M2Share.g_Config.dwDecPkPointTime)
+                if ((HUtil32.GetTickCount() - m_dwDecPkPointTick) > M2Share.g_Config.dwDecPkPointTime)// 120000
                 {
                     m_dwDecPkPointTick = HUtil32.GetTickCount();
                     if (m_nPkPoint > 0)
@@ -1371,7 +1368,7 @@ namespace M2Server
                     {
                         for (i = m_GroupMembers.Count - 1; i >= 0; i--)
                         {
-                            BaseObject = m_GroupMembers[i];
+                            TBaseObject BaseObject = m_GroupMembers[i];
                             if (BaseObject.m_boDeath || BaseObject.m_boGhost)
                             {
                                 m_GroupMembers.RemoveAt(i);
@@ -1396,8 +1393,8 @@ namespace M2Server
             }
             try
             {
-                boChg = false;
-                boNeedRecalc = false;
+                bool boChg = false;
+                bool boNeedRecalc = false;
                 for (i = m_dwStatusArrTick.GetLowerBound(0); i <= m_dwStatusArrTick.GetUpperBound(0); i++)
                 {
                     if ((m_wStatusTimeArr[i] > 0) && (m_wStatusTimeArr[i] < 60000))
@@ -1511,8 +1508,8 @@ namespace M2Server
 
         public virtual string GetShowName()
         {
-            string sShowName = m_sCharName;
-            string result = M2Share.FilterShowName(sShowName);
+            var sShowName = m_sCharName;
+            var result = M2Share.FilterShowName(sShowName);
             if ((m_Master != null) && !m_Master.m_boObMode)
             {
                 result = result + '(' + m_Master.m_sCharName + ')';

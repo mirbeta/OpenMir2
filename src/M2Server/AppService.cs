@@ -38,7 +38,8 @@ namespace M2Server
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("M2Server is stopping.");
-            
+            M2Share.LoadLineNotice("/Volumes/Data/Mirserver/Mir200/Notice/LineNotice.txt");
+
             //转移在线玩家到新服务器
             if (M2Share.UserEngine.PlayObjects.Any())
             {

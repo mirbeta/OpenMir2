@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using System;
+using SystemModule;
 
 namespace M2Server
 {
@@ -13,7 +14,7 @@ namespace M2Server
         /// 武器升级设置
         /// </summary>
         /// <param name="UserItem"></param>
-        public void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
+        private void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
         {
             if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
             {
@@ -41,7 +42,7 @@ namespace M2Server
             UserItem.btValue[10] = 0;
         }
 
-        public void AttackDir_CheckWeaponUpgrade()
+        private void AttackDir_CheckWeaponUpgrade()
         {
             TUserItem UseItems;
             TPlayObject PlayObject;
@@ -61,7 +62,7 @@ namespace M2Server
                     if (StdItem.NeedIdentify == 1)
                     {
                         // UserEngine.GetStdItemName(UseItems.wIndex) + #9 +
-                        M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                        M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     FeatureChanged();
                 }
@@ -74,7 +75,7 @@ namespace M2Server
                     if (StdItem.NeedIdentify == 1)
                     {
                         // UserEngine.GetStdItemName(UseItems.wIndex) + #9 +
-                        M2Share.AddGameDataLog("20" + "\t" + m_sMapName + "\t" + m_nCurrX.ToString() + "\t" + m_nCurrY.ToString() + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex.ToString() + "\t" + '1' + "\t" + '0');
+                        M2Share.AddGameDataLog("20" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
                     SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
@@ -83,7 +84,7 @@ namespace M2Server
             }
         }
 
-        public virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
+        protected virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
         {
             TBaseObject AttackTarget;
             bool boPowerHit;
@@ -132,7 +133,6 @@ namespace M2Server
                         wHitMode = Grobal2.RM_HIT;
                     }
                 }
-
                 m_btDirection = nDir;
                 if (TargeTBaseObject == null)
                 {
@@ -225,7 +225,7 @@ namespace M2Server
         }
         
         // 攻击角色
-        public bool _Attack_DirectAttack(TBaseObject BaseObject, int nSecPwr)
+        private bool _Attack_DirectAttack(TBaseObject BaseObject, int nSecPwr)
         {
             bool result = false;
             if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || !(InSafeZone() && BaseObject.InSafeZone()))
@@ -248,7 +248,7 @@ namespace M2Server
         }
 
         // 刺杀前面一个位置的攻击
-        public bool _Attack_SwordLongAttack(int nSecPwr)
+        private bool _Attack_SwordLongAttack(int nSecPwr)
         {
             bool result = false;
             short nX = 0;
@@ -271,7 +271,7 @@ namespace M2Server
         }
 
         // 半月攻击
-        public bool _Attack_SwordWideAttack(int nSecPwr)
+        private bool _Attack_SwordWideAttack(int nSecPwr)
         {
             bool result = false;
             int nC = 0;
@@ -300,7 +300,7 @@ namespace M2Server
             return result;
         }
 
-        public bool _Attack_CrsWideAttack(int nSecPwr)
+        private bool _Attack_CrsWideAttack(int nSecPwr)
         {
             bool result = false;
             int nC = 0;
@@ -343,11 +343,10 @@ namespace M2Server
 
         public void _Attack_sub_4C1E5C(int nSecPwr)
         {
-            byte btDir = 0;
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject = null;
-            btDir = m_btDirection;
+            byte btDir = m_btDirection;
             m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, 1, ref nX, ref nY);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
             btDir = M2Share.sub_4B2F80(m_btDirection, 2);

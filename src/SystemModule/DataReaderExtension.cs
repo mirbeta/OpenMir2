@@ -20,6 +20,16 @@ namespace SystemModule
             return string.Empty;
         }
 
+        public static DateTime GetDateTime(this IDataReader dr, string name)
+        {
+            var idx = GetOrdinal(dr, name);
+            if (idx > -1)
+            {
+                return Convert.ToDateTime(dr[idx]);
+            }
+            return DateTime.MinValue;
+        }
+
         public static int GetInt32(this IDataReader dr, string name)
         {
             var idx = GetOrdinal(dr, name);

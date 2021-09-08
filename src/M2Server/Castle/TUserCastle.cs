@@ -10,7 +10,7 @@ namespace M2Server
     public class TUserCastle
     {
         public TObjUnit[] m_Archer = new TObjUnit[12];
-        public ArrayList m_AttackGuildList;
+        public IList<TGuild> m_AttackGuildList;
         public IList<TAttackerInfo> m_AttackWarList;
         public bool m_boShowOverMsg;
         /// <summary>
@@ -109,7 +109,7 @@ namespace M2Server
             m_boUnderWar = false;
             m_boShowOverMsg = false;
             m_AttackWarList = new List<TAttackerInfo>();
-            m_AttackGuildList = new ArrayList();
+            m_AttackGuildList = new List<TGuild>();
             m_dwSaveTick = 0;
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
@@ -137,9 +137,9 @@ namespace M2Server
             if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
             {
                 m_MapPalace = M2Share.g_MapManager.FindMap(m_sPalaceMap);
-                if (m_MapPalace == null) M2Share.MainOutMessage(string.Format("皇宫地图{0}没找到！！！", m_sPalaceMap));
+                if (m_MapPalace == null) M2Share.MainOutMessage($"皇宫地图{m_sPalaceMap}没找到！！！");
                 m_MapSecret = M2Share.g_MapManager.FindMap(m_sSecretMap);
-                if (m_MapSecret == null) M2Share.MainOutMessage(string.Format("密道地图{0}没找到！！！", m_sSecretMap));
+                if (m_MapSecret == null) M2Share.MainOutMessage($"密道地图{m_sSecretMap}没找到！！！");
                 m_MapCastle = M2Share.g_MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
@@ -222,12 +222,14 @@ namespace M2Server
                     {
                         Door = m_MapCastle.m_DoorList[i];
                         if (Math.Abs(Door.nX - m_nPalaceDoorX) <= 3 && Math.Abs(Door.nY - m_nPalaceDoorY) <= 3)
+                        {
                             m_DoorStatus = Door.Status;
+                        }
                     }
                 }
                 else
                 {
-                    M2Share.ErrorMessage(string.Format("[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图{0}的设置)", m_sMapName));
+                    M2Share.ErrorMessage($"[错误信息] 城堡所在地图不存在(检查地图配置文件里是否有地图{m_sMapName}的设置)");
                 }
             }
         }
@@ -504,7 +506,6 @@ namespace M2Server
                                 m_AttackWarList.RemoveAt(i);
                             }
                         }
-
                         if (m_boUnderWar)
                         {
                             m_AttackGuildList.Add(m_MasterGuild);
@@ -592,7 +593,7 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild)m_AttackGuildList[i];
+                AttackGuild = m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild.IsAllyGuild(Guild))
                 {
                     result = true;
@@ -609,14 +610,13 @@ namespace M2Server
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
-                AttackGuild = (TGuild)m_AttackGuildList[i];
+                AttackGuild = m_AttackGuildList[i];
                 if (AttackGuild != m_MasterGuild && AttackGuild == Guild)
                 {
                     result = true;
                     break;
                 }
             }
-
             return result;
         }
 
@@ -761,7 +761,7 @@ namespace M2Server
             var Year = AttackerInfo.AttackDate.Year;
             var Month = AttackerInfo.AttackDate.Month;
             var Day = AttackerInfo.AttackDate.Day;
-            result = string.Format(sMsg, new[] { Year, Month, Day });
+            result = string.Format(sMsg, Year, Month, Day);
             return result;
         }
 
@@ -788,18 +788,15 @@ namespace M2Server
                     result = result + wYear + '年' + wMonth + '月' + wDay + "日\\";
                     n10 = 0;
                 }
-
                 if (n10 > 40)
                 {
                     result = result + '\\';
                     n10 = 0;
                 }
-
                 var s20 = '\"' + AttackerInfo.sGuildName + '\"';
                 n10 += s20.Length;
                 result = result + s20;
             }
-
             return result;
         }
 
@@ -956,7 +953,6 @@ namespace M2Server
                     result = true;
                 }
             }
-
             return result;
         }
 
@@ -976,7 +972,6 @@ namespace M2Server
                     Wall = m_RightWall.BaseObject;
                     break;
             }
-
             if (Wall == null || m_boUnderWar || Wall.m_WAbil.HP >= Wall.m_WAbil.MaxHP) return result;
             if (!Wall.m_boDeath)
             {
@@ -997,7 +992,6 @@ namespace M2Server
                     result = true;
                 }
             }
-
             return result;
         }
 

@@ -20,6 +20,10 @@ namespace M2Server
     public static class M2Share
     {
         public static int nServerIndex = 0;
+        /// <summary>
+        /// 服务器启动时间
+        /// </summary>
+        public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
         public static ObjectSystem ObjectSystem = null;
@@ -60,10 +64,11 @@ namespace M2Server
         public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
         public static Dictionary<string,int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
+        public static IList<TDealOffInfo> sSellOffItemList = null;
         /// <summary>
         /// 游戏公告列表
         /// </summary>
-        public static StringList LineNoticeList = null;
+        public static IList<string> LineNoticeList = null;
         public static IList<TQDDinfo> QuestDiaryList = null;
         public static ArrayList AbuseTextList = null;
         /// <summary>
@@ -1352,7 +1357,30 @@ namespace M2Server
         public const int nSC_QUERYBAGITEMS = 382;
         public const string sSC_ISHIGH = "ISHIGH";
         public const int nSC_ISHIGH = 383;
+        /// <summary>
+        /// 开通元宝交易
+        /// </summary>
+        public const string sOPENYBDEAL = "OPENYBDEAL";
+        /// <summary>
+        /// 查询正在出售的物品
+        /// </summary>        
+        public const int nOPENYBDEAL = 252;
+        public const string sQUERYYBSELL = "QUERYYBSELL";
+        /// <summary>
+        /// 查询可以的购买物品
+        /// </summary>        
+        public const int nQUERYYBSELL = 253;
+        public const string sQUERYYBDEAL = "QUERYYBDEAL";
+        public const int nQUERYYBDEAL = 254;
         // =================================================================
+        /// <summary>
+        /// 元宝寄售:出售物品
+        /// </summary>
+        public const string sDealYBme = "@dealybme";
+        /// <summary>
+        /// 元宝寄售
+        /// </summary>        
+        public const string sybdeal = "@ybdeal";
         public const string sOFFLINEMSG = "@@offlinemsg";
         // 增加挂机
         public const string sSL_SENDMSG = "@@sendmsg";
@@ -1502,6 +1530,7 @@ namespace M2Server
         public const string g_sGameCommandBindUseItemAlreadBindMsg = "%s的%s上的物品早已绑定过了！！！";
         public const string g_sGameCommandMobFireBurnHelpMsg = "命令格式: %s %s %s %s %s %s %s";
         public const string g_sGameCommandMobFireBurnMapNotFountMsg = "地图%s 不存在";
+        public static string sGetSellOffGlod = "{0} {1}增加";
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";
         public const string U_RIGHTHANDNAME = "照明物";
@@ -1543,23 +1572,25 @@ namespace M2Server
             var result = false;
             int i;
             string sText;
+            StringList LoadList = null;
             if (File.Exists(FileName))
             {
-                LineNoticeList.LoadFromFile(FileName);
+                LoadList = new StringList();
+                LoadList.LoadFromFile(FileName);
                 i = 0;
                 while (true)
                 {
-                    if (LineNoticeList.Count <= i)
+                    if (LoadList.Count <= i)
                     {
                         break;
                     }
-                    sText = LineNoticeList[i].Trim();
-                    if (sText == "")
+                    sText = LoadList[i].Trim();
+                    if (string.IsNullOrEmpty(sText))
                     {
-                        //LineNoticeList.Remove(i);
+                        LoadList.RemoveAt(i);
                         continue;
                     }
-                    LineNoticeList[i] = sText;
+                    LineNoticeList.Add(sText);
                     i++;
                 }
                 result = true;
@@ -1631,7 +1662,6 @@ namespace M2Server
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
             var result = 0;
-            nOldVerstionDate = 0;
             if (nVersionDate > 100000000)
             {
                 while (nVersionDate > 100000000)
@@ -1883,9 +1913,9 @@ namespace M2Server
                 result = false;
                 return result;
             }
-            for (var i = 0; i <= sGuildName.Length; i++)
+            for (var i = 0; i <= sGuildName.Length - 1; i++)
             {
-                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' ' 
+                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
                 {
                     result = false;
@@ -2114,7 +2144,7 @@ namespace M2Server
                 sC = sList[n8].Trim();
                 if (sC == "")
                 {
-                    //sList.Remove(n8);
+                    sList.RemoveAt(n8);
                     continue;
                 }
                 n8++;

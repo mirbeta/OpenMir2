@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using SystemModule;
 
@@ -41,6 +40,7 @@ namespace M2Server
         public bool m_boGetMaster = false;
         public bool m_boUseItemName = false;
         public bool m_boOffLineMsg = false;
+        public bool m_boYBDeal = false;
 
         private void AddItemPrice(int nIndex, int nPrice)
         {
@@ -144,7 +144,6 @@ namespace M2Server
 
         public void RefillGoods()
         {
-            int II;
             TGoods Goods;
             int nIndex;
             int nRefillCount;
@@ -191,15 +190,15 @@ namespace M2Server
                     if (RefillList20.Count > 1000)
                     {
                         bo21 = false;
-                        for (II = 0; II < m_RefillGoodsList.Count; II++)
+                        for (var j = 0; j < m_RefillGoodsList.Count; j++)
                         {
-                            Goods = m_RefillGoodsList[II];
+                            Goods = m_RefillGoodsList[j];
                             nIndex = M2Share.UserEngine.GetStdItemIdx(Goods.sItemName);
-                            //if (((RefillList20[0]) as TItemPrice).wIndex == nIndex)
-                            //{
-                            //    bo21 = true;
-                            //    break;
-                            //}
+                            if (RefillList20[0].wIndex == nIndex)
+                            {
+                                bo21 = true;
+                                break;
+                            }
                         }
                         if (!bo21)
                         {
@@ -278,7 +277,7 @@ namespace M2Server
             TUserItem UserItem;
             MirItem StdItem;
             TStdItem StdItem80 = null;
-            ArrayList DelItemList;
+            IList<TDeleteItem> DelItemList = null;
             int nDc;
             int nSc;
             int nMc;
@@ -290,7 +289,6 @@ namespace M2Server
             var nMcMax = 0;
             var nDura = 0;
             var nItemCount = 0;
-            DelItemList = null;
             DuraList = new List<double>();
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
@@ -300,9 +298,13 @@ namespace M2Server
                     DuraList.Add(Math.Round(UserItem.Dura / 1.0e3));
                     if (DelItemList == null)
                     {
-                        DelItemList = new ArrayList();
+                        DelItemList = new List<TDeleteItem>();
                     }
-                    DelItemList.Add(UserItem.MakeIndex);
+                    DelItemList.Add(new TDeleteItem()
+                    {
+                        MakeIndex = UserItem.MakeIndex,
+                        sItemName = M2Share.g_Config.sBlackStone
+                    });
                     DisPose(UserItem);
                     ItemList.RemoveAt(i);
                 }
@@ -378,9 +380,13 @@ namespace M2Server
                             }
                             if (DelItemList == null)
                             {
-                                DelItemList = new ArrayList();
+                                DelItemList = new List<TDeleteItem>();
                             }
-                            DelItemList.Add(UserItem.MakeIndex);
+                            DelItemList.Add(new TDeleteItem()
+                            {
+                                sItemName = StdItem.Name,
+                                MakeIndex = UserItem.MakeIndex
+                            });
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog("26" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -440,7 +446,8 @@ namespace M2Server
                     return;
                 }
             }
-            if (User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
+            if (User.m_UseItems[Grobal2.U_WEAPON] != null && User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice 
+                && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
             {
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
                 if (m_boCastle || M2Share.g_Config.boGetAllNpcTax)
@@ -763,10 +770,33 @@ namespace M2Server
             User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ObjectId, 0, 0, "");
         }
 
+        /// <summary>
+        /// 打开出售物品窗口
+        /// </summary>
+        /// <param name="User"></param>
+        public void UserSelect_OpenDealOffForm(TPlayObject User)
+        {
+            if (User.bo_YBDEAL)
+            {
+                if (!User.SellOffInTime(0))
+                {
+                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, this.ObjectId, 0, 0, "");
+                    User.GetBackSellOffItems();
+                }
+                else
+                {
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您还有元宝服务正在进行！！\\ \\<返回/@main>");
+                }
+            }
+            else
+            {
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您未开通元宝服务,请先开通元宝服务！！\\ \\<返回/@main>");
+            }
+        }
+
         public override void UserSelect(TPlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
-            var s18 = string.Empty;
             var sMsg = string.Empty;
             var boCanJmp = false;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
@@ -782,10 +812,9 @@ namespace M2Server
                     if (!PlayObject.m_boDeath && sData != "" && sData[0] == '@')
                     {
                         sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
-                        s18 = "";
                         PlayObject.m_sScriptLable = sData;
                         boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -797,98 +826,98 @@ namespace M2Server
                         {
                             return;
                         }
-                        if (String.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
+                        if (string.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
                         {
                             if (m_boOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSendmsg)
                             {
                                 SendCustemMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boS_repair)
                             {
                                 UserSelect_SuperRepairItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boBuy)
                             {
                                 UserSelect_BuyItem(PlayObject, 0);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSell)
                             {
                                 UserSelect_SellItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boRepair)
                             {
                                 UserSelect_RepairItem(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boMakeDrug)
                             {
                                 UserSelect_MakeDurg(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boPrices)
                             {
                                 UserSelect_ItemPrices(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boStorage)
                             {
                                 UserSelect_Storage(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetback)
                             {
                                 UserSelect_GetBack(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boUpgradenow)
                             {
                                 UpgradeWapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetBackupgnow)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMarry)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMaster)
                             {
@@ -902,17 +931,24 @@ namespace M2Server
                                 ChangeUseItemName(PlayObject, sLabel, sMsg);
                             }
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
                         }
-                        else if (String.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {
                                 PlayObject.m_sScriptGoBackLable = M2Share.sMAIN;
                             }
                             GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                        }
+                        else if ((sLabel).ToLower().CompareTo((M2Share.sDealYBme).ToLower()) == 0) // 元宝寄售:出售物品 
+                        {
+                            if (m_boYBDeal)
+                            {
+                                UserSelect_OpenDealOffForm(PlayObject); // 打开出售物品窗口
+                            }
                         }
                     }
                 }
@@ -1062,27 +1098,29 @@ namespace M2Server
         {
             string sText;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
-            if (sVariable == "$PRICERATE")
+            switch (sVariable)
             {
-                sText = m_nPriceRate.ToString();
-                sMsg = sub_49ADB8(sMsg, "<$PRICERATE>", sText);
-            }
-            if (sVariable == "$UPGRADEWEAPONFEE")
-            {
-                sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
-                sMsg = sub_49ADB8(sMsg, "<$UPGRADEWEAPONFEE>", sText);
-            }
-            if (sVariable == "$USERWEAPON")
-            {
-                if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                case "$PRICERATE":
+                    sText = m_nPriceRate.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
+                    break;
+                case "$UPGRADEWEAPONFEE":
+                    sText = M2Share.g_Config.nUpgradeWeaponPrice.ToString();
+                    sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
+                    break;
+                case "$USERWEAPON":
                 {
-                    sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                    {
+                        sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    }
+                    else
+                    {
+                        sText = "无";
+                    }
+                    sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
+                    break;
                 }
-                else
-                {
-                    sText = "无";
-                }
-                sMsg = sub_49ADB8(sMsg, "<$USERWEAPON>", sText);
             }
         }
 
@@ -1447,7 +1485,7 @@ namespace M2Server
             bool result = false;
             IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
             TUserItem UserItem = null;
-            IList<int> List28;
+            IList<TDeleteItem> List28;
             string s20 = string.Empty;
             int n1C = 0;
             if (List10 == null)
@@ -1490,9 +1528,13 @@ namespace M2Server
                         {
                             if (List28 == null)
                             {
-                                List28 = new List<int>();
+                                List28 = new List<TDeleteItem>();
                             }
-                            List28.Add(UserItem.MakeIndex);
+                            List28.Add(new TDeleteItem()
+                            {
+                                sItemName = s20,
+                                MakeIndex = UserItem.MakeIndex
+                            });
                             Dispose(UserItem);
                             PlayObject.m_ItemList.RemoveAt(j);
                             n1C -= 1;
@@ -1728,7 +1770,7 @@ namespace M2Server
             PlayObject.m_sOffLineLeaveword = sMsg;
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }

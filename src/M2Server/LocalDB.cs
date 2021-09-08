@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule.Common;
+using System.Text.Json;
 
 namespace M2Server
 {
@@ -611,7 +612,7 @@ namespace M2Server
                 for (var i = 0; i < tMapQuestList.Count; i++)
                 {
                     var tStr = tMapQuestList[i];
-                    if (tStr != "" && tStr[0] != ';')
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMap, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new[] { " ", "\t" });
@@ -649,7 +650,6 @@ namespace M2Server
                                 {
                                     result = -i;
                                 }
-                                // nFlag,boFlag,Monster,Item,Quest,boGrouped
                             }
                             else
                             {
@@ -662,7 +662,6 @@ namespace M2Server
                         }
                     }
                 }
-                //tMapQuestList.Free;
             }
             QMangeNPC();
             QFunctionNPC();
@@ -1136,7 +1135,6 @@ namespace M2Server
                             }
                             else
                             {
-
                                 if (bo2D)
                                 {
                                     QDDinfo.sList.Add(s1C);
@@ -1337,6 +1335,7 @@ namespace M2Server
 
         public void ReLoadNpc()
         {
+
         }
 
         public void ReLoadMerchants()
@@ -1614,6 +1613,82 @@ namespace M2Server
             //    }
             //}
             return result;
+        }
+
+        /// <summary>
+        /// 加载寄售系统数据
+        /// </summary>
+        public void LoadSellOffItemList()
+        {
+            TDealOffInfo DealOffInfo;
+            string sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "UserData.db");
+            const string QueryString = "select * from sales";
+            if (!Directory.Exists(sFileName))
+            {
+                Directory.CreateDirectory(sFileName);
+            }
+            sFileName = sFileName + "\\UserData.db";
+            if (File.Exists(sFileName))
+            {
+                using (var dr = Sqlite.ExecuteReader(QueryString))
+                {
+                    while (dr.Read())
+                    {
+                        var sDealCharName = dr.GetString("DealCharName");
+                        var sBuyCharName = dr.GetString("BuyCharName");
+                        var dSellDateTime = dr.GetDateTime("SellDateTime");
+                        var nState = dr.GetByte("State");
+                        var nSellGold = dr.GetInt16("SellGold");
+                        var sUseItems = dr.GetString("UseItems");
+                        if ((sDealCharName != "") && (sBuyCharName != "") && (nState < 4))
+                        {
+                            DealOffInfo = new TDealOffInfo();
+                            DealOffInfo.sDealCharName = sDealCharName;
+                            DealOffInfo.sBuyCharName = sBuyCharName;
+                            DealOffInfo.dSellDateTime = dSellDateTime;
+                            DealOffInfo.nSellGold = nSellGold;
+                            DealOffInfo.UseItems = JsonSerializer.Deserialize<TUserItem[]>(sUseItems);
+                            DealOffInfo.N = nState;
+                            M2Share.sSellOffItemList.Add(DealOffInfo);
+                        }
+                    }
+                }
+                
+            }
+            else
+            {
+ 
+            }
+        }
+
+        /// <summary>
+        /// 保存寄售系统数据
+        /// </summary>
+        public void SaveSellOffItemList()
+        {
+            TDealOffInfo DealOffInfo;
+            string sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "UserData.db");
+            const string sClearString = "delete from sales";
+            if (!File.Exists(sFileName))
+            {
+                Console.WriteLine("保存物品寄售数据失败.");
+                return;
+            }
+            if (M2Share.sSellOffItemList.Count > 0)
+            {
+                Sqlite.ExecuteNonQuery(sClearString);
+                for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
+                {
+                    DealOffInfo = M2Share.sSellOffItemList[i];
+                    if (DealOffInfo != null)
+                    {
+                        string InsertSql = "INSERT INTO sales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
+                            "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.N + ","
+                            + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
+                        Sqlite.ExecuteNonQuery(InsertSql);
+                    }
+                }
+            }
         }
 
         public bool CheckDataBase()

@@ -11,362 +11,7 @@ namespace M2Server
 {
     public partial class TPlayObject : TAnimalObject
     {
-        public TDefaultMessage m_DefMsg;
-        public string m_sOldSayMsg = string.Empty;
-        public int m_nSayMsgCount = 0;
-        public int m_dwSayMsgTick = 0;
-        public bool m_boDisableSayMsg = false;
-        public int m_dwDisableSayMsgTick = 0;
-        public int m_dwCheckDupObjTick = 0;
-        public int dwTick578 = 0;
-        public int dwTick57C = 0;
-        public bool m_boInSafeArea = false;
-        /// <summary>
-        /// 登录帐号名
-        /// </summary>
-        public string m_sUserID;
-        /// <summary>
-        /// 人物IP地址
-        /// </summary>
-        public string m_sIPaddr = string.Empty;
-        public string m_sIPLocal = string.Empty;
-        public int m_nSocket = 0;
-        /// <summary>
-        /// 人物连接到游戏网关SOCKETID
-        /// </summary>
-        public int m_nGSocketIdx = 0;
-        /// <summary>
-        /// 人物所在网关号
-        /// </summary>
-        public int m_nGateIdx = 0;
-        public int m_nSoftVersionDate = 0;
-        /// <summary>
-        /// 登录时间
-        /// </summary>
-        public DateTime m_dLogonTime;
-        /// <summary>
-        /// 战领沙城时间
-        /// </summary>
-        public int m_dwLogonTick = 0;
-        /// <summary>
-        /// 是否进入游戏完成
-        /// </summary>
-        public bool m_boReadyRun = false;
-        /// <summary>
-        /// 当前会话ID
-        /// </summary>
-        public int m_nSessionID = 0;
-        /// <summary>
-        /// 人物当前模式(测试/付费模式)
-        /// </summary>
-        public int m_nPayMent = 0;
-        public int m_nPayMode = 0;
-        /// <summary>
-        /// 全局会话信息
-        /// </summary>
-        public TSessInfo m_SessInfo = null;
-        public int m_dwLoadTick = 0;
-        /// <summary>
-        /// 人物当前所在服务器序号
-        /// </summary>
-        public int m_nServerIndex = 0;
-        public bool m_boEmergencyClose = false;
-        /// <summary>
-        /// 掉线标志
-        /// </summary>
-        public bool m_boSoftClose = false;
-        /// <summary>
-        /// 断线标志(@kick 命令)
-        /// </summary>
-        public bool m_boKickFlag = false;
-        /// <summary>
-        /// 是否重连
-        /// </summary>
-        public bool m_boReconnection = false;
-        public bool m_boRcdSaved = false;
-        public bool m_boSwitchData = false;
-        public bool m_boSwitchDataOK = false;
-        public string m_sSwitchDataTempFile = string.Empty;
-        public int m_nWriteChgDataErrCount = 0;
-        public string m_sSwitchMapName = string.Empty;
-        public short m_nSwitchMapX = 0;
-        public short m_nSwitchMapY = 0;
-        public bool m_boSwitchDataSended = false;
-        public int m_dwChgDataWritedTick = 0;
-        /// <summary>
-        /// 攻击间隔
-        /// </summary>
-        public int m_dwHitIntervalTime = 0;
-        /// <summary>
-        /// 魔法间隔
-        /// </summary>
-        public int m_dwMagicHitIntervalTime = 0;
-        /// <summary>
-        /// 走路间隔
-        /// </summary>
-        public int m_dwRunIntervalTime = 0;
-        /// <summary>
-        /// 走路间隔
-        /// </summary>
-        public int m_dwWalkIntervalTime = 0;
-        /// <summary>
-        /// 换方向间隔
-        /// </summary>
-        public int m_dwTurnIntervalTime = 0;
-        /// <summary>
-        /// 组合操作间隔
-        /// </summary>
-        public int m_dwActionIntervalTime = 0;
-        /// <summary>
-        /// 移动刺杀间隔
-        /// </summary>
-        public int m_dwRunLongHitIntervalTime = 0;
-        /// <summary>
-        /// 跑位攻击间隔
-        /// </summary>        
-        public int m_dwRunHitIntervalTime = 0;
-        /// <summary>
-        /// 走位攻击间隔
-        /// </summary>        
-        public int m_dwWalkHitIntervalTime = 0;
-        /// <summary>
-        /// 跑位魔法间隔
-        /// </summary>        
-        public int m_dwRunMagicIntervalTime = 0;
-        /// <summary>
-        /// 魔法攻击时间
-        /// </summary>        
-        public int m_dwMagicAttackTick = 0;
-        /// <summary>
-        /// 魔法攻击间隔时间
-        /// </summary>
-        public int m_dwMagicAttackInterval = 0;
-        /// <summary>
-        /// 攻击时间
-        /// </summary>
-        public int m_dwAttackTick = 0;
-        /// <summary>
-        /// 人物跑动时间
-        /// </summary>
-        public int m_dwMoveTick = 0;
-        /// <summary>
-        /// 人物攻击计数
-        /// </summary>
-        public int m_dwAttackCount = 0;
-        /// <summary>
-        /// 人物攻击计数
-        /// </summary>
-        public int m_dwAttackCountA = 0;
-        /// <summary>
-        /// 魔法攻击计数
-        /// </summary>
-        public int m_dwMagicAttackCount = 0;
-        /// <summary>
-        /// 人物跑计数
-        /// </summary>
-        public int m_dwMoveCount = 0;
-        /// <summary>
-        /// 人物跑计数
-        /// </summary>
-        public int m_dwMoveCountA = 0;
-        /// <summary>
-        /// 超速计数
-        /// </summary>
-        public int m_nOverSpeedCount = 0;
-        public bool m_boDieInFight3Zone = false;
-        public string m_sGotoNpcLabel = string.Empty;
-        public int m_nDelayCall = 0;
-        public int m_dwDelayCallTick = 0;
-        public bool m_boDelayCall = false;
-        public int m_DelayCallNPC = 0;
-        public string m_sDelayCallLabel = string.Empty;
-        public TScript m_Script = null;
-        public TBaseObject m_NPC = null;
-        public int[] m_nVal;
-        public int[] m_nMval;
-        public int[] m_DyVal;
-        public string[] m_nSval;
-        public string m_sPlayDiceLabel = string.Empty;
-        public bool m_boTimeRecall = false;
-        public int m_dwTimeRecallTick = 0;
-        public string m_sMoveMap = string.Empty;
-        public short m_nMoveX = 0;
-        public short m_nMoveY = 0;
-        /// <summary>
-        /// 保存人物数据时间间隔
-        /// </summary>
-        public int m_dwSaveRcdTick = 0;
-        public byte m_btBright = 0;
-        public bool m_boNewHuman = false;
-        public bool m_boSendNotice = false;
-        public int m_dwWaitLoginNoticeOKTick = 0;
-        public bool m_boLoginNoticeOK = false;
-        public bool bo6AB = false;
-        /// <summary>
-        /// 帐号过期
-        /// </summary>
-        public bool m_boExpire = false;
-        public int m_dwShowLineNoticeTick = 0;
-        public int m_nShowLineNoticeIdx = 0;
-        public int m_nSoftVersionDateEx = 0;
-        public Hashtable m_CanJmpScriptLableList = null;
-        public int m_nScriptGotoCount = 0;
-        public string m_sScriptCurrLable = string.Empty;
-        // 用于处理 @back 脚本命令
-        public string m_sScriptGoBackLable = string.Empty;
-        // 用于处理 @back 脚本命令
-        public int m_dwTurnTick = 0;
-        public short m_wOldIdent = 0;
-        public byte m_btOldDir = 0;
-        /// <summary>
-        /// 第一个操作
-        /// </summary>
-        public bool m_boFirstAction = false;
-        /// <summary>
-        /// 二次操作之间间隔时间
-        /// </summary>        
-        public int m_dwActionTick = 0;
-        /// <summary>
-        /// 配偶名称
-        /// </summary>
-        public string m_sDearName;
-        public TPlayObject m_DearHuman = null;
-        /// <summary>
-        /// 是否允许夫妻传送
-        /// </summary>
-        public bool m_boCanDearRecall = false;
-        public bool m_boCanMasterRecall = false;
-        /// <summary>
-        /// 夫妻传送时间
-        /// </summary>
-        public int m_dwDearRecallTick = 0;
-        public int m_dwMasterRecallTick = 0;
-        /// <summary>
-        /// 师徒名称
-        /// </summary>
-        public string m_sMasterName;
-        public TPlayObject m_MasterHuman = null;
-        public IList<TPlayObject> m_MasterList = null;
-        public bool m_boMaster = false;
-        /// <summary>
-        /// 声望点
-        /// </summary>
-        public byte m_btCreditPoint = 0;
-        /// <summary>
-        /// 离婚次数
-        /// </summary>        
-        public byte m_btMarryCount = 0;
-        /// <summary>
-        /// 转生等级
-        /// </summary>
-        public byte m_btReLevel = 0;
-        public byte m_btReColorIdx = 0;
-        public int m_dwReColorTick = 0;
-        /// <summary>
-        /// 杀怪经验倍数
-        /// </summary>
-        public int m_nKillMonExpMultiple = 0;
-        /// <summary>
-        /// 处理消息循环时间控制
-        /// </summary>        
-        public int m_dwGetMsgTick = 0;
-        public bool m_boSetStoragePwd = false;
-        public bool m_boReConfigPwd = false;
-        public bool m_boCheckOldPwd = false;
-        public bool m_boUnLockPwd = false;
-        public bool m_boUnLockStoragePwd = false;
-        public bool m_boPasswordLocked = false;
-        // 锁密码
-        public byte m_btPwdFailCount = 0;
-        public bool m_boLockLogon = false;
-        // 是否启用锁登录功能
-        public bool m_boLockLogoned = false;
-        // 是否打开登录锁
-        public string m_sTempPwd;
-        public string m_sStoragePwd;
-        public TBaseObject m_PoseBaseObject = null;
-        public bool m_boStartMarry = false;
-        public bool m_boStartMaster = false;
-        public bool m_boStartUnMarry = false;
-        public bool m_boStartUnMaster = false;
-        public bool m_boFilterSendMsg = false;
-        // 禁止发方字(发的文字只能自己看到)
-        public int m_nKillMonExpRate = 0;
-        // 杀怪经验倍数(此数除以 100 为真正倍数)
-        public int m_nPowerRate = 0;
-        // 人物攻击力倍数(此数除以 100 为真正倍数)
-        public int m_dwKillMonExpRateTime = 0;
-        public int m_dwPowerRateTime = 0;
-        public int m_dwRateTick = 0;
-        /// <summary>
-        /// 是否允许使用物品
-        /// </summary>
-        public bool m_boCanUseItem = false;
-        public bool m_boCanDeal = false;
-        public bool m_boCanDrop = false;
-        public bool m_boCanGetBackItem = false;
-        public bool m_boCanWalk = false;
-        public bool m_boCanRun = false;
-        public bool m_boCanHit = false;
-        public bool m_boCanSpell = false;
-        public bool m_boCanSendMsg = false;
-        public int m_nMemberType = 0;
-        // 会员类型
-        public int m_nMemberLevel = 0;
-        // 会员等级
-        public bool m_boSendMsgFlag = false;
-        // 发祝福语标志
-        public bool m_boChangeItemNameFlag = false;
-        public int m_nGameGold = 0;
-        // 游戏币
-        public bool m_boDecGameGold = false;
-        // 是否自动减游戏币
-        public int m_dwDecGameGoldTime = 0;
-        public int m_dwDecGameGoldTick = 0;
-        public int m_nDecGameGold = 0;
-        // 一次减点数
-        public bool m_boIncGameGold = false;
-        // 是否自动加游戏币
-        public int m_dwIncGameGoldTime = 0;
-        public int m_dwIncGameGoldTick = 0;
-        public int m_nIncGameGold = 0;
-        // 一次减点数
-        public int m_nGamePoint = 0;
-        // 游戏点数
-        public int m_dwIncGamePointTick = 0;
-        public int m_nPayMentPoint = 0;
-        public int m_dwPayMentPointTick = 0;
-        public int m_dwDecHPTick = 0;
-        public int m_dwIncHPTick = 0;
-        public TPlayObject m_GetWhisperHuman = null;
-        public int m_dwClearObjTick = 0;
-        public short m_wContribution = 0;
-        // 贡献度
-        public string m_sRankLevelName = string.Empty;
-        // 显示名称格式串
-        public bool m_boFilterAction = false;
-        public bool m_boClientFlag = false;
-        public byte m_nStep = 0;
-        public int m_nClientFlagMode = 0;
-        public int m_dwAutoGetExpTick = 0;
-        public int m_nAutoGetExpTime = 0;
-        public int m_nAutoGetExpPoint = 0;
-        public TEnvirnoment m_AutoGetExpEnvir = null;
-        public bool m_boAutoGetExpInSafeZone = false;
-        public IList<TDynamicVar> m_DynamicVarList = null;
-        public short m_dwClientTick = 0;
-        /// <summary>
-        /// 进入速度测试模式
-        /// </summary>
-        public bool m_boTestSpeedMode = false;
-        public int m_dwDelayTime = 0;
-        public string m_sRandomNo = string.Empty;
-        public int m_dwQueryBagItemsTick = 0;
-        /// <summary>
-        /// 包裹刷新时间
-        /// </summary>
-        public int m_dwClickNpcTime = 0;
-
+        
         private bool ClientPickUpItem_IsSelf(TBaseObject BaseObject)
         {
             bool result;
@@ -413,7 +58,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (HUtil32.GetTickCount() - mapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
+            if ((HUtil32.GetTickCount() - mapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
             {
                 mapItem.OfBaseObject = null;
             }
@@ -982,14 +627,11 @@ namespace M2Server
             }
         }
 
-        private bool ClientHitXY(short wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             short n14 = 0;
             short n18 = 0;
-            MirItem StdItem;
-            int dwAttackTime;
-            int dwCheckTime;
             const string sExceptionMsg = "[Exception] TPlayObject::ClientHitXY";
             dwDelayTime = 0;
             try
@@ -998,11 +640,10 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)
+                if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanHit)// 防麻
                 {
                     return result;
                 }
-                // 防麻
                 if (!boLateDelivery)
                 {
                     if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1011,8 +652,8 @@ namespace M2Server
                         return result;
                     }
                     m_boFilterAction = true;
-                    dwAttackTime = HUtil32._MAX(0, (M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed) * M2Share.g_Config.ClientConf.btItemSpeed);// 防止负数出错 武器速度控制
-                    dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
+                    int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
+                    int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
                     if (dwCheckTime < dwAttackTime)
                     {
                         m_dwAttackCount++;
@@ -1053,7 +694,7 @@ namespace M2Server
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !m_PEnvir.CanWalk(n14, n18, false))
                         {
-                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
+                            MirItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -1370,7 +1011,7 @@ namespace M2Server
                     break;
                 case Grobal2.SKILL_MOOTEBO:
                     result = true;
-                    if (HUtil32.GetTickCount() - m_dwDoMotaeboTick > 3 * 1000)
+                    if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3 * 1000)
                     {
                         m_dwDoMotaeboTick = HUtil32.GetTickCount();
                         m_btDirection = (byte)nTargetX;
@@ -1641,7 +1282,7 @@ namespace M2Server
             return result;
         }
 
-        private bool ClientRunXY(short wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
+        private bool ClientRunXY(int wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
         {
             bool result = false;
             byte nDir;
@@ -1654,7 +1295,6 @@ namespace M2Server
             {
                 return result;
             }
-            // 防麻
             if (nFlag != wIdent)
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1736,9 +1376,8 @@ namespace M2Server
             }
             if (m_boDeath || m_wStatusTimeArr[Grobal2.POISON_STONE] != 0 && !M2Share.g_Config.ClientConf.boParalyCanWalk)
             {
-                return result;
+                return result; // 防麻
             }
-            // 防麻
             if (!boLateDelivery)
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1928,7 +1567,7 @@ namespace M2Server
         private bool AllowFireHitSkill()
         {
             var result = false;
-            if (HUtil32.GetTickCount() - m_dwLatestFireHitTick > 10 * 1000)
+            if ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 10 * 1000)
             {
                 m_dwLatestFireHitTick = HUtil32.GetTickCount();
                 m_boFireHitSkill = true;
@@ -1961,14 +1600,10 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_dwClickNpcTime > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
+            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                TNormNpc normNpc = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
-                if (normNpc == null)
-                {
-                    normNpc = M2Share.UserEngine.FindNPC(NPC);
-                }
+                var normNpc = (TNormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (TNormNpc)M2Share.UserEngine.FindNPC(NPC);
                 if (normNpc != null)
                 {
                     if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)
@@ -2012,7 +1647,7 @@ namespace M2Server
 
         }
 
-        public void DealCancel()
+        private void DealCancel()
         {
             if (!m_boDealing)
             {
@@ -2341,10 +1976,10 @@ namespace M2Server
             {
                 return;
             }
-            TNormNpc npc = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TNormNpc npc = (TNormNpc)M2Share.UserEngine.FindMerchant(nParam1);
             if (npc == null)
             {
-                npc = M2Share.UserEngine.FindNPC(nParam1);
+                npc = (TNormNpc)M2Share.UserEngine.FindNPC(nParam1);
             }
             if (npc == null)
             {
@@ -2378,7 +2013,7 @@ namespace M2Server
             {
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant == null)
             {
                 return;
@@ -2402,7 +2037,7 @@ namespace M2Server
                     sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+                        Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
                         if (Merchant != null && Merchant.m_boSell && Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
                         {
                             if (Merchant.ClientSellItem(this, UserItem))
@@ -2431,7 +2066,7 @@ namespace M2Server
                 {
                     return;
                 }
-                TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+                TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
                 if (merchant == null || !merchant.m_boBuy || merchant.m_PEnvir != m_PEnvir || Math.Abs(merchant.m_nCurrX - m_nCurrX) > 15 || Math.Abs(merchant.m_nCurrY - m_nCurrY) > 15)
                 {
                     return;
@@ -2516,7 +2151,7 @@ namespace M2Server
                 // 折分物品名称(信件物品的名称后面加了使用次数)
                 HUtil32.GetValidStr3(sItemName, ref sItemName, new string[] { " " });
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick > 3000)
+            if ((HUtil32.GetTickCount() - m_DealLastTick) > 3000)
             {
                 for (var i = 0; i < m_ItemList.Count; i++)
                 {
@@ -2592,7 +2227,7 @@ namespace M2Server
             SendDefMessage(Grobal2.SM_MAPDESCRIPTION, nMUSICID, 0, 0, 0, m_PEnvir.sMapDesc);
         }
 
-        public void SendWhisperMsg(TPlayObject PlayObject)
+        private void SendWhisperMsg(TPlayObject PlayObject)
         {
             if (PlayObject == this)
             {
@@ -2682,12 +2317,12 @@ namespace M2Server
             ClientConf.boRunMon = nRunMon == 1;
             ClientConf.boRunNpc = nRunNpc == 1;
             ClientConf.boWarRunAll = nWarRunAll == 1;
-            ClientConf.wSpellTime = M2Share.g_Config.dwMagicHitIntervalTime + 300;
-            ClientConf.wHitIime = M2Share.g_Config.dwHitIntervalTime + 500;
+            ClientConf.wSpellTime = (ushort)(M2Share.g_Config.dwMagicHitIntervalTime + 300);
+            ClientConf.wHitIime = (ushort)(M2Share.g_Config.dwHitIntervalTime + 500);
             var sMsg = EDcode.EncodeBuffer(ClientConf);
             var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
-            int nParam = HUtil32.MakeWord(5, 0);
-            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, (short)nParam, 0, 0, sMsg);
+            short nParam = (short)HUtil32.MakeWord(5, 0);
+            SendDefMessage(Grobal2.SM_SERVERCONFIG, nRecog, nParam, 0, 0, sMsg);
         }
 
         private void SendServerStatus()
@@ -2960,7 +2595,6 @@ namespace M2Server
                                     SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                     goto FailExit;
                                 }
-                                TakeOffItem = new TUserItem();
                                 TakeOffItem = m_UseItems[btWhere];
                             }
                             if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode) && UserItem.btValue[8] != 0)
@@ -3114,7 +2748,6 @@ namespace M2Server
                 }
                 else
                 {
-
                     Dispose(UserItem);
                     break;
                 }
@@ -3433,7 +3066,7 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick < M2Share.g_Config.dwTryDealTime)
+            if ((HUtil32.GetTickCount() - m_DealLastTick) < M2Share.g_Config.dwTryDealTime)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
@@ -3613,8 +3246,7 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - m_DealLastTick < M2Share.g_Config.dwDealOKTime || HUtil32.GetTickCount() - m_DealCreat.m_DealLastTick
-                < M2Share.g_Config.dwDealOKTime)
+            if (((HUtil32.GetTickCount() - m_DealLastTick) < M2Share.g_Config.dwDealOKTime) || ((HUtil32.GetTickCount() - m_DealCreat.m_DealLastTick) < M2Share.g_Config.dwDealOKTime))
             {
                 SysMsg(M2Share.g_sDealOKTooFast, TMsgColor.c_Red, TMsgType.t_Hint);
                 DealCancel();
@@ -3740,7 +3372,7 @@ namespace M2Server
 
         private void ClientMakeDrugItem(int NPC, string nItemName)
         {
-            var Merchant = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
+            var Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
             if (Merchant == null || !Merchant.m_boMakeDrug)
             {
                 return;
@@ -3824,7 +3456,7 @@ namespace M2Server
                     {
                         break;
                     }
-                    sSendMsg = sSendMsg + GuildRank.MemberList[j] + '/';
+                    sSendMsg = sSendMsg + GuildRank.MemberList[j].sMemberName + '/';
                 }
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
@@ -3848,15 +3480,11 @@ namespace M2Server
                                 if (PlayObject.m_MyGuild == null && m_MyGuild.m_RankList.Count < 400)
                                 {
                                     m_MyGuild.AddMember(PlayObject);
-                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex,
-                                        m_MyGuild.sGuildName);
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
                                     PlayObject.m_MyGuild = m_MyGuild;
-                                    PlayObject.m_sGuildRankName =
-                                        m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
+                                    PlayObject.m_sGuildRankName = m_MyGuild.GetRankName(PlayObject, ref PlayObject.m_nGuildRankNo);
                                     PlayObject.RefShowName();
-                                    PlayObject.SysMsg(
-                                        "你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + PlayObject.m_sGuildRankName,
-                                        TMsgColor.c_Green, TMsgType.t_Hint);
+                                    PlayObject.SysMsg("你已加入行会: " + m_MyGuild.sGuildName + " 当前封号为: " + PlayObject.m_sGuildRankName, TMsgColor.c_Green, TMsgType.t_Hint);
                                     nC = 0;
                                 }
                                 else
@@ -4416,7 +4044,7 @@ namespace M2Server
             }
         }
 
-        protected ushort GetSpellPoint(TUserMagic UserMagic)
+        internal ushort GetSpellPoint(TUserMagic UserMagic)
         {
             return (ushort)(HUtil32.Round(UserMagic.MagicInfo.wSpell / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1)) + UserMagic.MagicInfo.btDefSpell);
         }
@@ -4438,7 +4066,7 @@ namespace M2Server
             return result;
         }
 
-        protected bool DoMotaebo(byte nDir, int nMagicLevel)
+        public bool DoMotaebo(byte nDir, int nMagicLevel)
         {
             int nDmg;
             TBaseObject BaseObject_30 = null;
@@ -4583,6 +4211,12 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 挖矿
+        /// </summary>
+        /// <param name="nX"></param>
+        /// <param name="nY"></param>
+        /// <returns></returns>
         private bool PileStones(int nX, int nY)
         {
             var result = false;
@@ -4626,7 +4260,7 @@ namespace M2Server
                 }
                 else
                 {
-                    if (HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick > 10 * 60 * 1000)
+                    if ((HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick) > 10 * 60 * 1000)
                     {
                         mineEvent.AddStoneMine();
                     }
@@ -4701,12 +4335,12 @@ namespace M2Server
             }
         }
 
-        private void SendDelItemList(IList<int> ItemList)
+        private void SendDelItemList(IList<TDeleteItem> ItemList)
         {
             var s10 = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                s10 = s10 + ItemList[i] + '/' + ItemList[i] + '/';
+                s10 = s10 + ItemList[i].sItemName + '/' + ItemList[i].MakeIndex + '/';
             }
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)ItemList.Count);
             SendSocket(m_DefMsg, EDcode.EncodeString(s10));
@@ -5386,7 +5020,7 @@ namespace M2Server
             return result;
         }
 
-        protected void MoveToHome()
+        internal void MoveToHome()
         {
             SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             BaseObjectMove(m_sHomeMap, m_nHomeX, m_nHomeY);
@@ -5769,7 +5403,6 @@ namespace M2Server
                 if (UserItem == CheckItem)
                 {
                     SendDelItems(UserItem);
-
                     Dispose(UserItem);
                     m_ItemList.RemoveAt(i);
                     result = true;
@@ -5811,7 +5444,7 @@ namespace M2Server
             {
                 return;
             }
-            var merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, UserItemA);
@@ -5835,7 +5468,7 @@ namespace M2Server
             {
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(nParam1);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientRepairItem(this, UserItem);
@@ -5857,7 +5490,7 @@ namespace M2Server
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            TMerchant merchant = M2Share.UserEngine.FindMerchant<TMerchant>(ObjectId);
+            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(ObjectId);
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -5876,7 +5509,6 @@ namespace M2Server
                             StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
                                 M2Share.AddGameDataLog('1' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
@@ -5901,7 +5533,7 @@ namespace M2Server
             string sUserItemName;
             var bo19 = false;
             TUserItem UserItem = null;
-            var merchant = M2Share.UserEngine.FindMerchant<TMerchant>(NPC);
+            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
             if (merchant == null)
             {
                 return;
@@ -5936,7 +5568,6 @@ namespace M2Server
                                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                                 if (StdItem.NeedIdentify == 1)
                                 {
-                                    // UserEngine.GetStdItemName(UserItem.wIndex) + #9 +
                                     M2Share.AddGameDataLog('0' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
@@ -6288,13 +5919,12 @@ namespace M2Server
             return result;
         }
 
-        private bool CheckActionStatus(short wIdent, ref int dwDelayTime)
+        private bool CheckActionStatus(int wIdent, ref int dwDelayTime)
         {
-            int dwCheckTime = 0;
             var result = false;
             dwDelayTime = 0;
-            // 检查人物弯腰停留时间
-            if (!M2Share.g_Config.boDisableStruck)
+            int dwCheckTime;
+            if (!M2Share.g_Config.boDisableStruck) // 检查人物弯腰停留时间
             {
                 dwCheckTime = HUtil32.GetTickCount() - m_dwStruckTick;
                 if (M2Share.g_Config.dwStruckTime > dwCheckTime)
@@ -6402,6 +6032,9 @@ namespace M2Server
         {
             var sText = string.Empty;
             m_CanJmpScriptLableList.Clear();
+            const string start = "<";
+            const string end = ">";
+            var sCmdStr = string.Empty;
             while (true)
             {
                 if (string.IsNullOrEmpty(sMsg))
@@ -6411,19 +6044,18 @@ namespace M2Server
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
                 if (!string.IsNullOrEmpty(sText))
                 {
-                    var matchCollection = Regex.Matches(sText, "<?@(\\w+?>)", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(3));
-                    foreach (Match match in matchCollection)
+                    Regex rg = new Regex("(?<=(" + start + "))[.\\s\\S]*?(?=(" + end + "))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
+                    var match = rg.Matches(sText);
+                    if (match.Count > 0)
                     {
-                        var line = match.Value.Remove(match.Value.Length - 1).ToLower();
-                        //if (line[0] != '<')
-                        //{
-                        //    line = "<" + HUtil32.GetValidStr3(line, ref sData, "<");
-                        //}
-                        //sText = HUtil32.ArrestStringEx(line, "<", ">", ref sCmdStr);
-                        //var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
-                        if (!string.IsNullOrEmpty(line) && !m_CanJmpScriptLableList.ContainsKey(line))
+                        foreach (Match item in match)
                         {
-                            m_CanJmpScriptLableList.Add(line, line);
+                            sCmdStr = item.Value;
+                            var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
+                            if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
+                            {
+                                m_CanJmpScriptLableList.Add(sLabel, sLabel);
+                            }
                         }
                     }
                 }

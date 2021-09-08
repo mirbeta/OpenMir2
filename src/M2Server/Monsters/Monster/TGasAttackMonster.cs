@@ -12,14 +12,11 @@ namespace M2Server
 
         public virtual TBaseObject sub_4A9C78(byte bt05)
         {
-            TBaseObject result;
-            TAbility WAbil;
-            int n10;
             TBaseObject BaseObject;
-            result = null;
+            TBaseObject result = null;
             m_btDirection = bt05;
-            WAbil = m_WAbil;
-            n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            var WAbil = m_WAbil;
+            var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");

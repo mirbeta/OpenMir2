@@ -145,6 +145,17 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes, index, count);
         }
 
+        public static DateTime DoubleToDateTime(double xd)
+        {
+            return (new DateTime(1899, 12, 30)).AddDays(xd);
+        }
+
+        public static double DateTimeToDouble(DateTime dt)
+        {
+            TimeSpan ts = dt - new DateTime(1899, 12, 30);
+            return ts.TotalDays;
+        }
+
         public static string StrPas(byte[] buff)
         {
             var nLen = buff.Length;
@@ -664,31 +675,24 @@ namespace SystemModule
 
         public static string ReplaceChar(string src, char srcchr, char repchr)
         {
-            string result;
-            int i;
-            int len;
             if (src != "")
             {
-                len = src.Length;
+                int len = src.Length;
                 var sb = new StringBuilder();
-                for (i = 0; i < len; i++)
+                for (var i = 0; i < len; i++)
                     if (src[i] == srcchr)
                         sb.Append(repchr);
             }
-
-            result = src;
-            return result;
+            return src;
         }
 
         public static int TagCount(string source, char tag)
         {
-            var result = 0;
             var tcount = 0;
             for (var i = 0; i <= source.Length - 1; i++)
                 if (source[i] == tag)
                     tcount++;
-            result = tcount;
-            return result;
+            return tcount;
         }
 
         public static string BoolToStr(bool boo)

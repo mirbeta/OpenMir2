@@ -19,7 +19,7 @@ namespace RunGate
         public static string GateClass = "GameGate";
         public static string GateName = "游戏网关";
         public static string TitleName = "SKY引擎";
-        public static string GateAddr = "10.10.0.163";
+        public static string GateAddr = "10.10.0.168";
         public static int GatePort = 7200;
         public static bool boStarted = false;
         public static bool boServerReady;
@@ -120,8 +120,14 @@ namespace RunGate
         public static ConcurrentDictionary<string, ForwardClientService> _ClientGateMap;
         private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
+<<<<<<< HEAD
         public static ConcurrentDictionary<string, ForwardClientService> ServerGateList;
         public static ConcurrentDictionary<string, UserClientSession> UserSessions;
+=======
+        public static ConcurrentDictionary<string, UserClientService> ServerGateList;
+        public static List<WeightedItem<UserClientService>> m_ServerGateList = new List<WeightedItem<UserClientService>>();
+
+>>>>>>> 587ee339829b65df4190845ca6025a8fe60a3f19
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -131,7 +137,7 @@ namespace RunGate
                 HUtil32.EnterCriticalSection(CS_MainLog);
                 if (nLevel <= nShowLogLevel)
                 {
-                    tMsg = "[" + DateTime.Now.ToString() + "] " + Msg;
+                    tMsg = "[" + DateTime.Now + "] " + Msg;
                     MainLogMsgList.Add(tMsg);
                 }
             }
@@ -291,11 +297,16 @@ namespace RunGate
 
         public static ForwardClientService GetClientService()
         {
-            //TODO 根据配置文件有三种模式  默认随机
+            //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
+<<<<<<< HEAD
             var userList = new List<ForwardClientService>(ServerGateList.Values);
+=======
+            //4.按权重分配
+            var userList = new List<UserClientService>(ServerGateList.Values);
+>>>>>>> 587ee339829b65df4190845ca6025a8fe60a3f19
             var random = new System.Random().Next(userList.Count);
             return userList[random];
         }

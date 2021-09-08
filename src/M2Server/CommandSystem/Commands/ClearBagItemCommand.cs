@@ -1,7 +1,5 @@
 ﻿using SystemModule;
-using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using M2Server.CommandSystem;
 
 namespace M2Server
@@ -14,7 +12,7 @@ namespace M2Server
         {
             var sHumanName = @Params.Length > 0 ? Params[0] : "";
             TUserItem UserItem;
-            IList<int> DelList = null;
+            IList<TDeleteItem> DelList = null;
             if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
@@ -26,33 +24,30 @@ namespace M2Server
                 PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            try
+            if (m_PlayObject.m_ItemList.Count > 0)
             {
-                if (m_PlayObject.m_ItemList.Count > 0)
+                for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
                 {
-                    for (var i = m_PlayObject.m_ItemList.Count - 1; i >= 0; i--)
+                    UserItem = m_PlayObject.m_ItemList[i];
+                    if (DelList == null)
                     {
-                        UserItem = m_PlayObject.m_ItemList[i];
-                        if (DelList == null)
-                        {
-                            DelList = new List<int>();
-                        }
-                        DelList.Add(UserItem.MakeIndex);
-                        //Dispose(UserItem);
-                        UserItem = null;
-                        m_PlayObject.m_ItemList.RemoveAt(i);
+                        DelList = new List<TDeleteItem>();
                     }
-                    m_PlayObject.m_ItemList.Clear();
+                    DelList.Add(new TDeleteItem()
+                    {
+                        sItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex),
+                        MakeIndex = UserItem.MakeIndex
+                    });
+                    UserItem = null;
+                    m_PlayObject.m_ItemList.RemoveAt(i);
                 }
-                if (DelList != null)
-                {
-                    var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectSystem.AddOhter(ObjectId, DelList);
-                    m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
-                }
+                m_PlayObject.m_ItemList.Clear();
             }
-            finally
+            if (DelList != null)
             {
+                var ObjectId = HUtil32.Sequence();
+                M2Share.ObjectSystem.AddOhter(ObjectId, DelList);
+                m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }
         }
     }

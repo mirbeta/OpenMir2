@@ -31,64 +31,60 @@ namespace M2Server
                 sMsg = "????";
                 return;
             }
-            if (sVariable == "$CASTLEGOLD")
+            switch (sVariable)
             {
-                sText = this.m_Castle.m_nTotalGold.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$CASTLEGOLD>", sText);
-            }
-            else if (sVariable == "$TODAYINCOME")
-            {
-                sText = this.m_Castle.m_nTodayIncome.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$TODAYINCOME>", sText);
-            }
-            else if (sVariable == "$CASTLEDOORSTATE")
-            {
-                CastleDoor = (TCastleDoor)this.m_Castle.m_MainDoor.BaseObject;
-                if (CastleDoor.m_boDeath)
+                case "$CASTLEGOLD":
+                    sText = this.m_Castle.m_nTotalGold.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEGOLD>", sText);
+                    break;
+                case "$TODAYINCOME":
+                    sText = this.m_Castle.m_nTodayIncome.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$TODAYINCOME>", sText);
+                    break;
+                case "$CASTLEDOORSTATE":
                 {
-                    sText = "destroyed";
+                    CastleDoor = (TCastleDoor)this.m_Castle.m_MainDoor.BaseObject;
+                    if (CastleDoor.m_boDeath)
+                    {
+                        sText = "destroyed";
+                    }
+                    else if (CastleDoor.m_boOpened)
+                    {
+                        sText = "opened";
+                    }
+                    else
+                    {
+                        sText = "closed";
+                    }
+                    sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEDOORSTATE>", sText);
+                    break;
                 }
-                else if (CastleDoor.m_boOpened)
-                {
-                    sText = "opened";
-                }
-                else
-                {
-                    sText = "closed";
-                }
-                sMsg = this.sub_49ADB8(sMsg, "<$CASTLEDOORSTATE>", sText);
-            }
-            else if (sVariable == "$REPAIRDOORGOLD")
-            {
-                sText = M2Share.g_Config.nRepairDoorPrice.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$REPAIRDOORGOLD>", sText);
-            }
-            else if (sVariable == "$REPAIRWALLGOLD")
-            {
-                sText = M2Share.g_Config.nRepairWallPrice.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$REPAIRWALLGOLD>", sText);
-            }
-            else if (sVariable == "$GUARDFEE")
-            {
-                sText = M2Share.g_Config.nHireGuardPrice.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$GUARDFEE>", sText);
-            }
-            else if (sVariable == "$ARCHERFEE")
-            {
-                sText = M2Share.g_Config.nHireArcherPrice.ToString();
-                sMsg = this.sub_49ADB8(sMsg, "<$ARCHERFEE>", sText);
-            }
-            else if (sVariable == "$GUARDRULE")
-            {
-                sText = "无效";
-                sMsg = this.sub_49ADB8(sMsg, "<$GUARDRULE>", sText);
+                case "$REPAIRDOORGOLD":
+                    sText = M2Share.g_Config.nRepairDoorPrice.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
+                    break;
+                case "$REPAIRWALLGOLD":
+                    sText = M2Share.g_Config.nRepairWallPrice.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
+                    break;
+                case "$GUARDFEE":
+                    sText = M2Share.g_Config.nHireGuardPrice.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
+                    break;
+                case "$ARCHERFEE":
+                    sText = M2Share.g_Config.nHireArcherPrice.ToString();
+                    sMsg = this.ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
+                    break;
+                case "$GUARDRULE":
+                    sText = "无效";
+                    sMsg = this.ReplaceVariableText(sMsg, "<$GUARDRULE>", sText);
+                    break;
             }
         }
 
         public override void UserSelect(TPlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
-            bool boCanJmp;
             const string sExceptionMsg = "[Exception] TCastleManager::UserSelect... ";
             base.UserSelect(PlayObject, sData);
             try
@@ -106,7 +102,7 @@ namespace M2Server
                     PlayObject.m_sScriptLable = sData;
                     if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) && PlayObject.IsGuildMaster())
                     {
-                        boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                        var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
@@ -415,7 +411,7 @@ namespace M2Server
             
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSubkMasterSendMsg)
             {

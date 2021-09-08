@@ -25,7 +25,7 @@ namespace M2Server
                     sText = sText + format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i.ToString(), sText);
                 }
                 sText = sText + "\\ \\";
-                sMsg = this.sub_49ADB8(sMsg, "<$REQUESTCASTLELIST>", sText);
+                sMsg = this.ReplaceVariableText(sMsg, "<$REQUESTCASTLELIST>", sText);
             }
         }
 
@@ -229,7 +229,7 @@ namespace M2Server
             this.m_wAppr = 8;
         }
 
-        public override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
+        protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             base.SendCustemMsg(PlayObject, sMsg);
         }

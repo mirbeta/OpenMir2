@@ -9,40 +9,6 @@ namespace M2Server
 {
     public partial class TPlayObject
     {
-        public void CmdTrainingSkill(TGameCmd Cmd, string sHumanName, string sSkillName, int nLevel)
-        {
-            TUserMagic UserMagic;
-            TPlayObject PlayObject;
-            if (m_btPermission < Cmd.nPerMissionMin)
-            {
-                SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (sHumanName == "" || sSkillName == "" || nLevel <= 0)
-            {
-                SysMsg("命令格式: @" + Cmd.sCmd + " 人物名称  技能名称 修炼等级(0-3)", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            nLevel = HUtil32._MIN(3, nLevel);
-            PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-            if (PlayObject == null)
-            {
-                SysMsg(format("{0}不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            for (var i = 0; i < PlayObject.m_MagicList.Count; i++)
-            {
-                UserMagic = PlayObject.m_MagicList[i];
-                if (string.Compare(UserMagic.MagicInfo.sMagicName, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    UserMagic.btLevel = (byte)nLevel;
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "");
-                    PlayObject.SysMsg(format("%s的修改炼等级为%d", sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
-                    SysMsg(format("%s的技能%s修炼等级为%d", sHumanName, sSkillName, nLevel), TMsgColor.c_Green, TMsgType.t_Hint);
-                    break;
-                }
-            }
-        }
 
         public void CmdAddGameGold(string sCmd, string sHumName, int nPoint)
         {
@@ -724,14 +690,13 @@ namespace M2Server
         {
             TPlayObject PlayObject;
             TUserItem UserItem;
-            ArrayList DelList;
-            DelList = null;
+            IList<TDeleteItem> DelList = null;
             if (m_btPermission < Cmd.nPerMissionMin)
             {
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -747,9 +712,13 @@ namespace M2Server
                 UserItem = PlayObject.m_ItemList[i];
                 if (DelList == null)
                 {
-                    DelList = new ArrayList();
+                    DelList = new List<TDeleteItem>();
                 }
-                DelList.Add(UserItem.MakeIndex);
+                DelList.Add(new TDeleteItem()
+                {
+                    sItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex),
+                    MakeIndex = UserItem.MakeIndex
+                });
                 Dispose(UserItem);
             }
             PlayObject.m_ItemList.Clear();

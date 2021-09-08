@@ -19,7 +19,7 @@ namespace M2Server
                 {
                     sData = sData.Substring(0, M2Share.g_Config.nSayMsgMaxLen); // 3 * 1000
                 }
-                if (HUtil32.GetTickCount() - m_dwSayMsgTick < M2Share.g_Config.dwSayMsgTime)
+                if ((HUtil32.GetTickCount() - m_dwSayMsgTick) < M2Share.g_Config.dwSayMsgTime)
                 {
                     m_nSayMsgCount++;// 2
                     if (m_nSayMsgCount >= M2Share.g_Config.nSayMsgCount)
@@ -101,7 +101,7 @@ namespace M2Server
                         }
                         if (!m_PEnvir.Flag.boQUIZ)
                         {
-                            if (HUtil32.GetTickCount() - m_dwShoutMsgTick > 10 * 1000)
+                            if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
                             {
                                 if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                 {
@@ -803,11 +803,11 @@ namespace M2Server
                             PlayObject.SetQuestFlagStatus(nFlag, nValue);
                             if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -826,11 +826,11 @@ namespace M2Server
                             PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -849,11 +849,11 @@ namespace M2Server
                             PlayObject.SetQuestUnitStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag.ToString() + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
                             }
                         }
                         else

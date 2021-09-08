@@ -2634,6 +2634,15 @@ namespace M2Server
                             }
                         }
                         break;
+                    case M2Share.nOPENYBDEAL:
+                        ActionOfOPENYBDEAL(PlayObject, QuestActionInfo);
+                        break;
+                    case M2Share.nQUERYYBSELL:
+                        ActionOfQUERYYBSELL(PlayObject, QuestActionInfo);
+                        break;
+                    case M2Share.nQUERYYBDEAL:
+                        ActionOfQUERYYBDEAL(PlayObject, QuestActionInfo);
+                        break;
                 }
             }
             return result;
@@ -2679,7 +2688,6 @@ namespace M2Server
             TSayingProcedure SayingProcedure;
             TUserItem UserItem = null;
             string sC = string.Empty;
-            IList<TScriptParams> paramsList;
             if (PlayObject.m_NPC != this)
             {
                 PlayObject.m_NPC = null;
@@ -2696,10 +2704,6 @@ namespace M2Server
                         Script = Script3C;
                         PlayObject.m_Script = Script;
                         PlayObject.m_NPC = this;
-                        break;
-                    }
-                    if (Script != null)
-                    {
                         break;
                     }
                 }
@@ -2768,7 +2772,7 @@ namespace M2Server
                             }
                         }
                     }
-                    if (sSendMsg != "")
+                    if (!string.IsNullOrEmpty(sSendMsg))
                     {
                         GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, false);
                     }

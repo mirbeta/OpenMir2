@@ -73,7 +73,7 @@ namespace M2Server
                 }
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
-                    m_PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].m_sCharName);
+                    m_PlayObject = M2Share.UserEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
                     if (m_PlayObject != null)
                     {
                         if (m_PlayObject == PlayObject)

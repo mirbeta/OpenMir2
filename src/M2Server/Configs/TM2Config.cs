@@ -111,7 +111,7 @@ namespace M2Server
         public int[] dwNeedExps;
         public int[] WideAttack;
         public int[] CrsAttack;
-        public int[, ,] SpitMap;
+        public int[,,] SpitMap;
         public string sHomeMap;
         public short nHomeX;
         public short nHomeY;
@@ -603,39 +603,67 @@ namespace M2Server
         public int btSpeedControlMode;
         public int nOverSpeedKickCount;
         public int dwDropOverSpeed;
+        /// <summary>
+        /// 攻击间隔(ms)
+        /// </summary>
         public int dwHitIntervalTime;
-        // 攻击间隔
+        /// <summary>
+        /// 魔法间隔(ms)
+        /// </summary>        
         public int dwMagicHitIntervalTime;
-        // 魔法间隔
+        /// <summary>
+        /// 跑步间隔(ms)
+        /// </summary>        
         public int dwRunIntervalTime;
-        // 跑步间隔
+        /// <summary>
+        /// 走路间隔(ms)
+        /// </summary>        
         public int dwWalkIntervalTime;
-        // 走路间隔
+        /// <summary>
+        /// 换方向间隔(ms)
+        /// </summary>        
         public int dwTurnIntervalTime;
-        // 换方向间隔
         public bool boControlActionInterval;
         public bool boControlWalkHit;
         public bool boControlRunLongHit;
         public bool boControlRunHit;
         public bool boControlRunMagic;
+        /// <summary>
+        /// 组合操作间隔
+        /// </summary>
         public int dwActionIntervalTime;
-        // 组合操作间隔
+        /// <summary>
+        /// 跑位刺杀间隔
+        /// </summary>        
         public int dwRunLongHitIntervalTime;
-        // 跑位刺杀间隔
+        /// <summary>
+        /// 跑位攻击间隔
+        /// </summary>        
         public int dwRunHitIntervalTime;
-        // 跑位攻击间隔
+        /// <summary>
+        /// 走位攻击间隔
+        /// </summary>        
         public int dwWalkHitIntervalTime;
-        // 走位攻击间隔
+        /// <summary>
+        /// 跑位魔法间隔
+        /// </summary>        
         public int dwRunMagicIntervalTime;
-        // 跑位魔法间隔
+        /// <summary>
+        /// 不显示人物弯腰动作
+        /// </summary>        
         public bool boDisableStruck;
-        // 不显示人物弯腰动作
+        /// <summary>
+        /// 自己不显示人物弯腰动作
+        /// </summary>        
         public bool boDisableSelfStruck;
-        // 自己不显示人物弯腰动作
+        /// <summary>
+        /// 人物弯腰停留时间
+        /// </summary>        
         public int dwStruckTime;
-        // 人物弯腰停留时间
+        /// <summary>
+        /// 杀怪经验倍数
+        /// </summary>        
         public int dwKillMonExpMultiple;
-        // 杀怪经验倍数
         public int dwRequestVersion;
         public bool boHighLevelKillMonFixExp;
         public bool boHighLevelGroupFixExp;
@@ -665,22 +693,38 @@ namespace M2Server
         public string sGuildChief;
         public bool boKickAllUser;
         public bool boTestSpeedMode;
+        /// <summary>
+        /// 气血石
+        /// </summary>
         public byte HPStoneStartRate;
-        // 气血石
+        /// <summary>
+        /// 魔血石
+        /// </summary>        
         public byte MPStoneStartRate;
-        // 魔血石
+        /// <summary>
+        /// 气血石
+        /// </summary>        
         public int HPStoneIntervalTime;
-        // 气血石
+        /// <summary>
+        /// 魔血石
+        /// </summary>        
         public int MPStoneIntervalTime;
-        // 魔血石
+        /// <summary>
+        /// 气血石
+        /// </summary>        
         public byte HPStoneAddRate;
-        // 气血石
+        /// <summary>
+        /// 魔血石
+        /// </summary>        
         public byte MPStoneAddRate;
-        // 魔血石
+        /// <summary>
+        /// 气血石
+        /// </summary>        
         public int HPStoneDecDura;
-        // 气血石
+        /// <summary>
+        /// 魔血石
+        /// </summary>        
         public int MPStoneDecDura;
-        // 魔血石
         public TClientConf ClientConf;
         public int nWeaponMakeUnLuckRate;
         public int nWeaponMakeLuckPoint1;
@@ -775,9 +819,9 @@ namespace M2Server
         public string sAIHomeMap;
         public short nAIHomeX;
         public short nAIHomeY;
-     public bool boHPAutoMoveMap;//低血回城
-     public bool boAutoRepairItem;
-     public bool boRenewHealth;
+        public bool boHPAutoMoveMap;//低血回城
+        public bool boAutoRepairItem;
+        public bool boRenewHealth;
         public long nAIWarrorAttackTime;
         public long nAIWizardAttackTime;
         public long nAITaoistAttackTime;
@@ -785,12 +829,16 @@ namespace M2Server
         /// 不管目标血值,全部可以使用施毒术否则目标血值达700时使用
         /// </summary>
         public bool btHeroSkillMode;
-        
+
         public long dwHeroWarrorAttackTime;//战士英雄的攻击速度
         public long dwHeroWizardAttackTime;//法师英雄的攻击速度
         public long dwHeroTaoistAttackTime;//道士英雄的攻击速度
-       public string sAIConfigListFileName;
-       public string sHeroAIConfigListFileName;
+        public string sAIConfigListFileName;
+        public string sHeroAIConfigListFileName;
+        /// <summary>
+        /// 寄售系统每次扣多少金币(默认10000金币)
+        /// </summary>
+        public int nDecUserGameGold;
 
         public TM2Config()
         {
@@ -1473,9 +1521,9 @@ namespace M2Server
             nAIWarrorAttackTime = 2080;
             nAIWizardAttackTime = 2150;
             nAITaoistAttackTime = 2150;
-            sAIHomeMap= "3";
-            nAIHomeX= 330;
-            nAIHomeY= 330;
+            sAIHomeMap = "3";
+            nAIHomeX = 330;
+            nAIHomeY = 330;
             boHPAutoMoveMap = false;//低血回城
             boAutoRepairItem = true;
             boAutoPickUpItem = false;
@@ -1487,6 +1535,7 @@ namespace M2Server
             sAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
+            nDecUserGameGold = 10000;
         }
     }
 }
