@@ -45,13 +45,17 @@ namespace RunGate
         public static bool boShowSckData = false;
         public static string sReplaceWord = "*";
         /// <summary>
-        /// 接收封包（数据引擎-》网关）
+        /// 接收封包（客户端-》网关）
         /// </summary>
         public static Channel<TSendUserData> ReviceMsgList = null;
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
         public static Channel<TSendUserData> SendMsgList = null;
+        /// <summary>
+        /// 转发封包（数据引擎-》网关）
+        /// </summary>
+        public static Channel<ForwardMessage> ForwardMsgList = null;
         public static int nCurrConnCount = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
@@ -63,7 +67,10 @@ namespace RunGate
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-       
+        /// <summary>
+        /// 累计接受数据大小
+        /// </summary>
+        public static int NReviceMsgSize;
         public static ArrayList List_45AA58 = null;
         public static bool boDecodeMsgLock = false;
         public static long dwProcessReviceMsgTimeLimit = 0;
@@ -110,10 +117,11 @@ namespace RunGate
         public const int MSGMAXLENGTH = 20000;
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
-        public static ConcurrentDictionary<string, UserClientService> _ClientGateMap;
+        public static ConcurrentDictionary<string, ForwardClientService> _ClientGateMap;
         private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
-        public static ConcurrentDictionary<string, UserClientService> ServerGateList;
+        public static ConcurrentDictionary<string, ForwardClientService> ServerGateList;
+        public static ConcurrentDictionary<string, UserClientSession> UserSessions;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -184,7 +192,7 @@ namespace RunGate
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns></returns>
-        public static UserClientService GetUserClient(string connectionId)
+        public static ForwardClientService GetUserClient(string connectionId)
         {
             return _ClientGateMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
         }
@@ -209,15 +217,17 @@ namespace RunGate
             AbuseList = new List<string>();
             ReviceMsgList = Channel.CreateUnbounded<TSendUserData>();
             SendMsgList = Channel.CreateUnbounded<TSendUserData>();
+            ForwardMsgList = Channel.CreateUnbounded<ForwardMessage>();
             List_45AA58 = new ArrayList();
             boShowSckData = false;
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();
             SessionIndex = new ConcurrentDictionary<string, int>();
-            _ClientGateMap = new ConcurrentDictionary<string, UserClientService>();
+            _ClientGateMap = new ConcurrentDictionary<string, ForwardClientService>();
             Magic_Attack_Array = new ConcurrentDictionary<int, bool>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
-            ServerGateList = new ConcurrentDictionary<string, UserClientService>();
+            ServerGateList = new ConcurrentDictionary<string, ForwardClientService>();
+            UserSessions = new ConcurrentDictionary<string, UserClientSession>();
         }
 
         public static void InitMagicAttackMap()
@@ -265,7 +275,7 @@ namespace RunGate
             MagicDelayTimeMap[47] = 1000; //火龙焰
         }
 
-        public static void Add(string name, UserClientService userClientService)
+        public static void Add(string name, ForwardClientService userClientService)
         {
             if (ServerGateList.ContainsKey(name))
             {
@@ -279,13 +289,13 @@ namespace RunGate
             ServerGateList.TryRemove(name, out var userClientService);
         }
 
-        public static UserClientService GetClientService()
+        public static ForwardClientService GetClientService()
         {
             //TODO 根据配置文件有三种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-            var userList = new List<UserClientService>(ServerGateList.Values);
+            var userList = new List<ForwardClientService>(ServerGateList.Values);
             var random = new System.Random().Next(userList.Count);
             return userList[random];
         }

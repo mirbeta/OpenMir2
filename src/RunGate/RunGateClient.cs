@@ -8,7 +8,7 @@ namespace RunGate
         /// <summary>
         /// 点击最多链接10个客户端(RunGate->M2)
         /// </summary>
-        private readonly UserClientService[] _gateClient = new UserClientService[10];
+        private readonly ForwardClientService[] _gateClient = new ForwardClientService[10];
 
         public RunGateClient( )
         {
@@ -37,7 +37,7 @@ namespace RunGate
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient[i] = new UserClientService(serverAddr, serverPort);
+                _gateClient[i] = new ForwardClientService(serverAddr, serverPort);
                 _gateClient[i].GateIdx = i;
             }
         }
@@ -67,7 +67,7 @@ namespace RunGate
             }
         }
 
-        public IList<UserClientService> GetAllClient()
+        public IList<ForwardClientService> GetAllClient()
         {
             return _gateClient;
         }

@@ -62,7 +62,8 @@ namespace RunGate
                 {
                     if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
                     {
-                        ProcessUserPacket(message);
+                        var clientSession = GateShare.UserSessions[message.UserCientId];
+                        clientSession?.HangdleUserPacket(message);
                     }
                 }
             }
@@ -83,6 +84,7 @@ namespace RunGate
                 {
                     if (GateShare.SendMsgList.Reader.TryRead(out var message))
                     {
+                        //todo 需要处理多个网关的数据
                         ProcessPacket(message);
                     }
                 }
@@ -230,177 +232,6 @@ namespace RunGate
             }
         }
 
-        /// <summary>
-        /// 处理客户端发送过来的封包
-        /// </summary>
-        /// <param name="UserData"></param>
-        private void ProcessUserPacket(TSendUserData UserData)
-        {
-            string sMsg = string.Empty;
-            string sData = string.Empty;
-            string sDefMsg = string.Empty;
-            string sDataMsg = string.Empty;
-            string sDataText = string.Empty;
-            string sHumName = string.Empty;
-            byte[] DataBuffer = null;
-            int nOPacketIdx;
-            int nPacketIdx;
-            int nDataLen;
-            int n14;
-            TDefaultMessage DefMsg;
-            try
-            {
-                n14 = 0;
-                nProcessMsgSize += UserData.sMsg.Length;
-                //Console.WriteLine("处理游戏引擎封包:" + nProcessMsgSize);
-                if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
-                {
-                    if (UserData.nSocketHandle == UserData.UserClient.SessionArray[UserData.nSocketIdx].nSckHandle && UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount < 10)
-                    {
-                        if (UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData.Length > GateShare.MSGMAXLENGTH)
-                        {
-                            UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
-                            UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount = 99;
-                            UserData.sMsg = "";
-                        }
-                        sMsg = UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData + UserData.sMsg;
-                        while (true)
-                        {
-                            sData = "";
-                            sMsg = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sData);
-                            if (sData.Length > 2)
-                            {
-                                nPacketIdx = HUtil32.Str_ToInt(sData[0].ToString(), 99); // 将数据名第一位的序号取出
-                                if (UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx == nPacketIdx)
-                                {
-                                    // 如果序号重复则增加错误计数
-                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount++;
-                                }
-                                else
-                                {
-                                    nOPacketIdx = UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx;
-                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx = nPacketIdx;
-                                    sData = sData.Substring(1, sData.Length - 1);
-                                    nDataLen = sData.Length;
-                                    if (nDataLen >= Grobal2.DEFBLOCKSIZE)
-                                    {
-                                        if (UserData.UserClient.SessionArray[UserData.nSocketIdx].boStartLogon)// 第一个人物登录数据包
-                                        {
-                                            nHumLogonMsgSize += sData.Length;
-                                            UserData.UserClient.SessionArray[UserData.nSocketIdx].boStartLogon = false;
-                                            sData = "#" + nPacketIdx + sData + "!";
-                                            UserData.UserClient.SendServerMsg(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, sData.Length, sData);
-                                        }
-                                        else
-                                        {
-                                            // 普通数据包
-                                            nHumPlayMsgSize += sData.Length;
-                                            if (nDataLen == Grobal2.DEFBLOCKSIZE)
-                                            {
-                                                sDefMsg = sData;
-                                                sDataMsg = "";
-                                            }
-                                            else
-                                            {
-                                                sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
-                                                sDataMsg = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
-                                            }
-                                            DefMsg = EDcode.DecodeMessage(sDefMsg); // 检查数据
-                                            if (!string.IsNullOrEmpty(sDataMsg))
-                                            {
-                                                switch (DefMsg.Ident)
-                                                {
-                                                    case Grobal2.CM_SPELL://使用技能
-                                                        //检查技能是否超速
-                                                        
-                                                        break;
-                                                    case Grobal2.CM_EAT: //使用物品
-                                                        // var dwTime = HUtil32.GetTickCount();
-                                                        // if (dwTime - LastEat > dwEatTime)
-                                                        // {
-                                                        //     LastEat = dwTime;
-                                                        // }
-                                                        // else
-                                                        // {
-                                                        //    GateShare.AddMainLogMsg(string.Format("超速封包(药品):{0}",[dwTime - LastEat]), 1);
-                                                        // }
-                                                        break;
-                                                    case Grobal2.CM_SAY: // 控制发言间隔时间
-                                                    {
-                                                        sDataText = EDcode.DeCodeString(sDataMsg);
-                                                        if (sDataText != "")
-                                                        {
-                                                            if (sDataText[0] == '/')
-                                                            {
-                                                                sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { " " }); // 限制最长可发字符长度
-                                                                FilterSayMsg(ref sDataText);
-                                                                sDataText = sHumName + " " + sDataText;
-                                                            }
-                                                            else
-                                                            {
-                                                                if (sDataText[0] != '@')
-                                                                {
-                                                                    FilterSayMsg(ref sDataText);// 限制最长可发字符长度
-                                                                }
-                                                            }
-                                                        }
-                                                        sDataMsg = EDcode.EncodeString(sDataText);
-                                                        break;
-                                                    }
-                                                }
-
-                                                DataBuffer = new byte[sDataMsg.Length + 12 + 1]; //GetMem(Buffer, sDataMsg.Length + 12 + 1);
-                                                Buffer.BlockCopy(DefMsg.ToByte(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
-                                                var msgBuff = HUtil32.GetBytes(sDataMsg);
-                                                Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
-                                                UserData.UserClient.SendServerMsg(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle, 
-                                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, DataBuffer.Length, DataBuffer);
-                                            }
-                                            else
-                                            {
-                                                DataBuffer = DefMsg.ToByte();
-                                                UserData.UserClient.SendServerMsg(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
-                                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, 12, DataBuffer);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (n14 >= 1)
-                                {
-                                    sMsg = "";
-                                }
-                                else
-                                {
-                                    n14++;
-                                }
-                            }
-                            if (HUtil32.TagCount(sMsg, '!') < 1)
-                            {
-                                break;
-                            }
-                        }
-                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = sMsg;
-                    }
-                    else
-                    {
-                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
-                    }
-                }
-            }
-            catch
-            {
-                if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
-                {
-                    sData = "[" + UserData.UserClient.SessionArray[UserData.nSocketIdx].sRemoteAddr + "]";
-                }
-                GateShare.AddMainLogMsg("[Exception] ProcessUserPacket" + sData, 1);
-            }
-        }
-
         private void ProcessPacket(TSendUserData UserData)
         {
             string sData;
@@ -519,7 +350,7 @@ namespace RunGate
                 GateShare.boServerReady = true;
                 sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
                 decodeTimer = new Timer(DecodeTimer, null, 3000, 200);
-                
+
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
                 GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
                 GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);

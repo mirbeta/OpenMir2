@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -10,7 +11,7 @@ namespace RunGate
     /// <summary>
     /// 网关客户端(RunGate-M2Server)
     /// </summary>
-    public class UserClientService
+    public class ForwardClientService
     {
         private IClientScoket ClientSocket;
         private int nBufferOfM2Size = 0;
@@ -39,10 +40,12 @@ namespace RunGate
         /// 独立Buffer分区
         /// </summary>
         private byte[] SocketBuffer = null;
-
+        /// <summary>
+        /// 上次剩下多少字节未处理
+        /// </summary>
         private int nBuffLen = 0;
 
-        public UserClientService(string serverAddr, int serverPort)
+        public ForwardClientService(string serverAddr, int serverPort)
         {
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
@@ -67,6 +70,10 @@ namespace RunGate
         public void Start()
         {
             ClientSocket.Connect();
+            Task.Factory.StartNew(async () =>
+            {
+                await ProcessMessage();
+            });
             _heartTimer = new Timer(Heart, null, 5000, 10000);
         }
 
@@ -78,6 +85,17 @@ namespace RunGate
         public TSessionInfo[] GetSession()
         {
             return SessionArray;
+        }
+
+        private async Task ProcessMessage()
+        {
+            while (await GateShare.ForwardMsgList.Reader.WaitToReadAsync())
+            {
+                if (GateShare.ForwardMsgList.Reader.TryRead(out var message))
+                {
+                    SendServerMsg(message);
+                }
+            }
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -169,6 +187,11 @@ namespace RunGate
                 tSession.nSckHandle = 0;
                 tSession.dwSayMsgTick = HUtil32.GetTickCount();
             }
+        }
+
+        public void SendServerMsg(ForwardMessage message)
+        {
+            SendServerMsg(message.nIdent, message.wSocketIndex, message.nSocket, message.nUserListIndex, message.nLen, message.Data);
         }
 
         public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, string Data)
@@ -403,5 +426,15 @@ namespace RunGate
             //}
             GateShare.boDecodeMsgLock = false;
         }
+    }
+
+    public class ForwardMessage
+    {
+        public ushort nIdent;
+        public int wSocketIndex;
+        public int nSocket;
+        public int nUserListIndex;
+        public int nLen;
+        public byte[] Data;
     }
 }

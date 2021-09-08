@@ -46,7 +46,7 @@ namespace M2Server
             TUserItem UseItems;
             TPlayObject PlayObject;
             MirItem StdItem;
-            if (m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
+            if (m_UseItems[Grobal2.U_WEAPON]!=null&&m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
             {
                 UseItems = m_UseItems[Grobal2.U_WEAPON];
                 AttackDir_CheckWeaponUpgradeStatus(m_UseItems[Grobal2.U_WEAPON]);
