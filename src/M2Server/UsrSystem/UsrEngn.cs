@@ -138,13 +138,6 @@ namespace M2Server
             _processAiThread.Start();
         }
 
-        public void Stop()
-        {
-            _userEngineThread.Abort();
-            _processTheread.Abort();
-            _processAiThread.Abort();
-        }
-
         public void Initialize()
         {
             TMonGenInfo MonGen;

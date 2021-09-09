@@ -25,11 +25,6 @@ namespace M2Server
                     services.AddHostedService<AppService>();
                 });
 
-            cancellationToken.Token.Register(() =>
-            {
-                Console.WriteLine("停止服务.");
-            });
-
             await builder.RunConsoleAsync(cancellationToken.Token);
         }
     }

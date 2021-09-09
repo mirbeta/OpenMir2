@@ -20,13 +20,13 @@ namespace M2Server
         /// 游戏网关
         /// </summary>
         private readonly ISocketServer _gateSocket = null;
-        
-        public object m_RunSocketSection = null;
-        public StringList m_RunAddrList = null;
-        public int n8 = 0;
-        public TIPaddr[] m_IPaddrArr;
-        public int n4F8 = 0;
-        public int dwSendTestMsgTick = 0;
+
+        private object m_RunSocketSection = null;
+        private StringList m_RunAddrList = null;
+        private int n8 = 0;
+        private TIPaddr[] m_IPaddrArr;
+        private int n4F8 = 0;
+        private int dwSendTestMsgTick = 0;
 
         private void AddGate(AsyncUserToken e)
         {
@@ -91,7 +91,7 @@ namespace M2Server
             }
         }
 
-        public void CloseGate(AsyncUserToken e)
+        private void CloseGate(AsyncUserToken e)
         {
             TGateUserInfo GateUser;
             IList<TGateUserInfo> UserList;

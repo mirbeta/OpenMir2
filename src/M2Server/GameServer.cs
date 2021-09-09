@@ -37,7 +37,6 @@ namespace M2Server
 
         protected void Stop()
         {
-            M2Share.UserEngine.Stop();
             M2Share.DataServer.Stop();
         }
 

@@ -59,8 +59,6 @@ namespace RunGate
         public static int nCurrConnCount = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
-        public static int n45AA80 = 0;
-        public static int n45AA84 = 0;
         public static long dwCheckRecviceTick = 0;
         public static long dwCheckRecviceMin = 0;
         public static long dwCheckRecviceMax = 0;
@@ -122,111 +120,214 @@ namespace RunGate
         /// </summary>
         public static bool boCheckBoxShowData = true;
         // 外挂控制相关变量
+        /// <summary>
+        /// 是否启动了外挂控制
+        /// </summary>
         public static bool boStartSpeedCheck = true;
-        // 是否启动了外挂控制
+        /// <summary>
+        /// 是否启动了攻击控制
+        /// </summary>
         public static bool boStartHitCheck = true;
-        // 是否启动了攻击控制
+        /// <summary>
+        /// 是否启动了魔法控制
+        /// </summary>
         public static bool boStartSpellCheck = true;
-        // 是否启动了魔法控制
+        /// <summary>
+        /// 是否启动了走路控制
+        /// </summary>
         public static bool boStartWalkCheck = true;
-        // 是否启动了走路控制
+        /// <summary>
+        /// 是否启动了跑步控制
+        /// </summary>
         public static bool boStartRunCheck = true;
-        // 是否启动了跑步控制
+        /// <summary>
+        /// 是否启动了转身控制
+        /// </summary>
         public static bool boStartTurnCheck = true;
-        // 是否启动了转身控制
+        /// <summary>
+        /// 是否启动了挖肉控制
+        /// </summary>
         public static bool boStartButchCheck = true;
-        // 是否启动了挖肉控制
+        /// <summary>
+        /// 是否启动了吃药控制
+        /// </summary>
         public static bool boStartEatCheck = true;
-        // 是否启动了吃药控制
+        /// <summary>
+        /// 是否启动了移动攻击控制
+        /// </summary>
         public static bool boStartRunhitCheck = true;
-        // 是否启动了移动攻击控制
+        /// <summary>
+        /// 是否启动了移动魔法控制
+        /// </summary>
         public static bool boStartRunspellCheck = true;
-        // 是否启动了移动魔法控制
+        /// <summary>
+        /// 是否启动了带有攻击并发控制
+        /// </summary>
         public static bool boStartConHitMaxCheck = true;
-        // 是否启动了带有攻击并发控制
+        /// <summary>
+        /// 是否启动了带有魔法并发控制
+        /// </summary>
         public static bool boStartConSpellMaxCheck = true;
-        // 是否启动了带有魔法并发控制
+        /// <summary>
+        /// 攻击速度间隔
+        /// </summary>
         public static int dwSpinEditHitTime = 672;
-        // 攻击速度间隔
+        /// <summary>
+        /// 魔法速度间隔
+        /// </summary>
         public static int dwSpinEditSpellTime = 1100;
-        // 魔法速度间隔
+        /// <summary>
+        /// 走路速度间隔
+        /// </summary>
         public static int dwSpinEditWalkTime = 540;
-        // 走路速度间隔
+        /// <summary>
+        /// 跑步速度间隔
+        /// </summary>
         public static int dwSpinEditRunTime = 520;
-        // 跑步速度间隔
+        /// <summary>
+        /// 转身速度间隔
+        /// </summary>
         public static int dwSpinEditTurnTime = 100;
-        // 转身速度间隔
+        /// <summary>
+        /// 挖肉速度间隔
+        /// </summary>
         public static int dwSpinEditButchTime = 500;
-        // 挖肉速度间隔
+        /// <summary>
+        /// 吃药速度间隔
+        /// </summary>
         public static int dwSpinEditEatTime = 200;
-        // 吃药速度间隔
+        /// <summary>
+        /// 捡起速度间隔
+        /// </summary>
         public static int dwSpinEditPickupTime = 100;
-        // 捡起速度间隔
+        /// <summary>
+        /// 移动攻击速度间隔
+        /// </summary>
         public static int dwSpinEditRunhitTime = 320;
-        // 移动攻击速度间隔
+        /// <summary>
+        /// 移动魔法速度间隔
+        /// </summary>
         public static int dwSpinEditRunspellTime = 350;
-        // 移动魔法速度间隔
+        /// <summary>
+        /// 带有攻击并发个数
+        /// </summary>
         public static byte dwSpinEditConHitMaxTime = 10;
-        // 带有攻击并发个数
+        /// <summary>
+        /// 带有魔法并发个数
+        /// </summary>
         public static byte dwSpinEditConSpellMaxTime = 10;
-        // 带有魔法并发个数
+        /// <summary>
+        /// 攻击加速处理
+        /// </summary>
         public static byte dwComboBoxHitCheck = 2;
-        // 攻击加速处理
+        /// <summary>
+        /// 魔法加速处理
+        /// </summary>
         public static byte dwComboBoxSpellCheck = 2;
-        // 魔法加速处理
+        /// <summary>
+        /// 走路加速处理
+        /// </summary>
         public static byte dwComboBoxWalkCheck = 3;
-        // 走路加速处理
+        /// <summary>
+        /// 跑步加速处理
+        /// </summary>
         public static byte dwComboBoxRunCheck = 3;
-        // 跑步加速处理
+        /// <summary>
+        /// 转身加速处理
+        /// </summary>
         public static byte dwComboBoxTurnCheck = 0;
-        // 转身加速处理
+        /// <summary>
+        /// 挖肉加速处理
+        /// </summary>
         public static byte dwComboBoxButchCheck = 0;
-        // 挖肉加速处理
+        /// <summary>
+        /// 吃药加速处理
+        /// </summary>
         public static byte dwComboBoxEatCheck = 1;
-        // 吃药加速处理
+        /// <summary>
+        /// 移动攻击加速处理
+        /// </summary>
         public static byte dwComboBoxRunhitCheck = 1;
-        // 移动攻击加速处理
+        /// <summary>
+        /// 移动魔法加速处理
+        /// </summary>
         public static byte dwComboBoxRunspellCheck = 1;
-        // 移动魔法加速处理
+        /// <summary>
+        /// 带有攻击并发处理
+        /// </summary>
         public static byte dwComboBoxConHitMaxCheck = 2;
-        // 带有攻击并发处理
+        /// <summary>
+        /// 带有魔法并发处理
+        /// </summary>
         public static byte dwComboBoxConSpellMaxCheck = 2;
-        // 带有魔法并发处理
+        /// <summary>
+        /// 每次加速的累加值
+        /// </summary>
         public static int nIncErrorCount = 5;
-        // 每次加速的累加值
+        /// <summary>
+        /// 正常动作的减少值
+        /// </summary>
         public static int nDecErrorCount = 1;
-        // 正常动作的减少值
+        /// <summary>
+        /// 装备加速校正因数
+        /// </summary>
         public static int nItemSpeedCount = 60;
-        // 装备加速校正因数
+        /// <summary>
+        /// 攻击累加值限制
+        /// </summary>
         public static int nSpinEditHitCount = 50;
-        // 攻击累加值限制
+        /// <summary>
+        /// 魔法累加值限制
+        /// </summary>
         public static int nSpinEditSpellCount = 50;
-        // 魔法累加值限制
+        /// <summary>
+        /// 走路累加值限制
+        /// </summary>
         public static int nSpinEditWalkCount = 50;
-        // 走路累加值限制
+        /// <summary>
+        /// 跑步累加值限制
+        /// </summary>
         public static int nSpinEditRunCount = 50;
-        // 跑步累加值限制
+        /// <summary>
+        /// 去掉引擎广告(100%)
+        /// </summary>
         public static bool boAdvertiCheck = true;
-        // 去掉引擎广告(100%)
+        /// <summary>
+        /// 封掉变速齿轮( 99%)
+        /// </summary>
         public static bool boSupSpeederCheck = true;
-        // 封掉变速齿轮( 99%)
+        /// <summary>
+        /// 封掉超级加速(100%)
+        /// </summary>
         public static bool boSuperNeverCheck = true;
-        // 封掉超级加速(100%)
+        /// <summary>
+        /// 封掉特殊攻击( 85%)
+        /// </summary>
         public static bool boAfterHitCheck = true;
-        // 封掉特殊攻击( 85%)
+        /// <summary>
+        /// 封掉挖地暗杀( 99%)
+        /// </summary>
         public static bool boDarkHitCheck = true;
-        // 封掉挖地暗杀( 99%)
+        /// <summary>
+        /// 封掉一步三格(100%)
+        /// </summary>
         public static bool boWalk3caseCheck = true;
-        // 封掉一步三格(100%)
+        /// <summary>
+        /// 封掉飞取装备( 75%)
+        /// </summary>
         public static bool boFeiDnItemsCheck = true;
-        // 封掉飞取装备( 75%)
+        /// <summary>
+        /// 封掉组合攻击(100%)
+        /// </summary>
         public static bool boCombinationCheck = true;
-        // 封掉组合攻击(100%)
-        // 发言间隔时间
+        /// <summary>
+        /// 发言间隔时间
+        /// </summary>
         public static long TrinidadMsgTime = 3000;
-        // 千里传音间隔时间
+        /// <summary>
+        /// 传送间隔时间
+        /// </summary>
         public static long dwSayMoveTime = 10000;
-        // 传送间隔时间
         public static byte boFilterMode = 4;
         public static string sMsgFilter = "@传";
         public static string sModeFilter = "@传送";
@@ -244,25 +345,15 @@ namespace RunGate
         public static byte btMsgFColorJ = 255;
         public static byte btMsgBColorJ = 56;
         public static byte btRedMsgFColor = 0xFF;
-        // 前景
         public static byte btRedMsgBColor = 0x38;
-        // 背景
         public static byte btGreenMsgFColor = 0xDB;
-        // 前景
         public static byte btGreenMsgBColor = 0xFF;
-        // 背景
         public static byte btBlueMsgFColor = 0xFF;
-        // 前景
         public static byte btBlueMsgBColor = 0xFC;
-        // 背景
         public static byte btOLMsgFColor = 0xFC;
-        // 前景
         public static byte btOLMsgBColor = 0x0;
-        // 背景
         public static byte btYYMsgFColor = 0xFD;
-        // 前景
         public static byte btYYMsgBColor = 0xFF;
-        // 背景
         /// <summary>
         /// 玩家开挂记录列表
         /// </summary>

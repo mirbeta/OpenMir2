@@ -1042,6 +1042,11 @@ namespace RunGate
                             }
                             else
                             {
+                                if(sDataText[0]=='@') //对游戏命令放行
+                                {
+                                    result = -1;
+                                    return result;
+                                }
                                 if (sDataText[0] != '@')
                                 {
                                     // 限制最长可发字符长度

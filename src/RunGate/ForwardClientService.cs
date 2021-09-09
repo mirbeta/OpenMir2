@@ -204,7 +204,7 @@ namespace RunGate
             }
             else
             {
-                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, new byte[0]);
+                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, Array.Empty<byte>());
             }
         }
 

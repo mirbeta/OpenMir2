@@ -18,7 +18,7 @@ namespace M2Server
             {
                 return;
             }
-            if (HUtil32.GetTickCount()- AutoRunInfo.dwRunTick > AutoRunInfo.dwRunTimeLen)
+            if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > AutoRunInfo.dwRunTimeLen)
             {
                 switch(AutoRunInfo.nRunCmd)
                 {
