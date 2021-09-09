@@ -1222,6 +1222,9 @@ namespace SystemModule
         /// 大火球
         /// </summary>
         public const int SKILL_HEALLING = 2;
+        /// <summary>
+        /// 未知技能
+        /// </summary>
         public const int SKILL_ONESWORD = 3;
         /// <summary>
         /// 基本剑法
@@ -1369,6 +1372,9 @@ namespace SystemModule
         // CHM
         public const int SKILL_ANGEL = 41;
         public const int SKILL_TWINBLADE = 38;
+        /// <summary>
+        /// 破空剑
+        /// </summary>
         public const int SKILL_43 = 43;
         public const int SKILL_44 = 44;
         /// <summary>

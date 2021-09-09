@@ -206,6 +206,9 @@ namespace M2Server
         public int m_dwShowLineNoticeTick = 0;
         public int m_nShowLineNoticeIdx = 0;
         public int m_nSoftVersionDateEx = 0;
+        /// <summary>
+        /// 可点击脚本标签字典
+        /// </summary>
         private Hashtable m_CanJmpScriptLableList = null;
         public int m_nScriptGotoCount = 0;
         public string m_sScriptCurrLable = string.Empty;
@@ -887,7 +890,7 @@ namespace M2Server
                 {
                     SysMsg("当前服务器运行于冒险模式.", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
-                if (m_MagicErgumSkill != null && !m_boUseThrusting)
+                if (m_MagicArr[Grobal2.SKILL_ERGUM] != null && !m_boUseThrusting)
                 {
                     m_boUseThrusting = true;
                     SendSocket("+LNG");
@@ -1170,9 +1173,8 @@ namespace M2Server
             TVisibleBaseObject VisibleBaseObject;
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || BaseObject.m_Master != null)
             {
-                m_boIsVisibleActive = true;
+                m_boIsVisibleActive = true;// 如果是人物或宝宝则置TRUE
             }
-            // 如果是人物或宝宝则置TRUE
             for (var i = 0; i < m_VisibleActors.Count; i++)
             {
                 VisibleBaseObject = m_VisibleActors[i];
@@ -1240,7 +1242,7 @@ namespace M2Server
                                 {
                                     if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
                                     {
-                                        if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60 * 1000)
+                                        if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
                                             Dispose(OSObject);
                                             MapCellInfo.ObjList.RemoveAt(nIdx);
@@ -1267,7 +1269,7 @@ namespace M2Server
                                     {
                                         if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                                         {
-                                            if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
                                                 Dispose((TMapItem)OSObject.CellObj);
                                                 Dispose(OSObject);
@@ -1283,7 +1285,7 @@ namespace M2Server
                                             UpdateVisibleItem(n18, n1C, MapItem);
                                             if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
-                                                if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
+                                                if ((HUtil32.GetTickCount() - MapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
                                                     MapItem.OfBaseObject = null;
                                                     MapItem.DropBaseObject = null;

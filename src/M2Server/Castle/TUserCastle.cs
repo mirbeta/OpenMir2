@@ -425,7 +425,10 @@ namespace M2Server
             if (!File.Exists(sFileName)) return;
             var loadList = new StringList();
             loadList.LoadFromFile(sFileName);
-            for (var i = 0; i < m_AttackWarList.Count; i++) m_AttackWarList[i] = null;
+            for (var i = 0; i < m_AttackWarList.Count; i++)
+            {
+                m_AttackWarList[i] = null;
+            }
             m_AttackWarList.Clear();
             for (var i = 0; i < loadList.Count; i++)
             {
@@ -521,11 +524,19 @@ namespace M2Server
                     }
                 }
                 for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
+                {
                     if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.m_boGhost)
+                    {
                         m_Guard[i].BaseObject = null;
+                    }
+                }
                 for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
+                {
                     if (m_Archer[i].BaseObject != null && m_Archer[i].BaseObject.m_boGhost)
+                    {
                         m_Archer[i].BaseObject = null;
+                    }
+                }
                 if (m_boUnderWar)
                 {
                     if (m_LeftWall.BaseObject != null) m_LeftWall.BaseObject.m_boStoneMode = false;
@@ -533,7 +544,7 @@ namespace M2Server
                     if (m_RightWall.BaseObject != null) m_RightWall.BaseObject.m_boStoneMode = false;
                     if (!m_boShowOverMsg)
                     {
-                        if (HUtil32.GetTickCount() - m_dwStartCastleWarTick > M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
+                        if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
                             s20 = string.Format(sWarStopTimeMsg, new object[] { m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000) });
@@ -542,7 +553,7 @@ namespace M2Server
                             M2Share.MainOutMessage(s20);
                         }
                     }
-                    if (HUtil32.GetTickCount() - m_dwStartCastleWarTick > M2Share.g_Config.dwCastleWarTime)
+                    if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > M2Share.g_Config.dwCastleWarTime)
                     {
                         StopWallconquestWar();
                     }
@@ -819,7 +830,6 @@ namespace M2Server
                     m_nTodayIncome = M2Share.g_Config.nCastleOneDayGold;
                 }
             }
-
             if (nInGold > 0)
             {
                 if (m_nTotalGold + nInGold < M2Share.g_Config.nCastleGoldMax)
@@ -827,8 +837,7 @@ namespace M2Server
                 else
                     m_nTotalGold = M2Share.g_Config.nCastleGoldMax;
             }
-
-            if (HUtil32.GetTickCount() - m_dwSaveTick > 10 * 60 * 1000)
+            if ((HUtil32.GetTickCount() - m_dwSaveTick) > 10 * 60 * 1000)
             {
                 m_dwSaveTick = HUtil32.GetTickCount();
                 if (M2Share.g_boGameLogGold)
@@ -912,30 +921,46 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 城门控制
+        /// </summary>
+        /// <param name="boClose"></param>
         public void MainDoorControl(bool boClose)
         {
             if (m_MainDoor.BaseObject != null && !m_MainDoor.BaseObject.m_boGhost)
             {
                 if (boClose)
                 {
-                    if (((TCastleDoor)m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor)m_MainDoor.BaseObject).Close();
+                    if (((TCastleDoor)m_MainDoor.BaseObject).m_boOpened)
+                    {
+                        ((TCastleDoor)m_MainDoor.BaseObject).Close();
+                    }
                 }
                 else
                 {
-                    if (!((TCastleDoor)m_MainDoor.BaseObject).m_boOpened) ((TCastleDoor)m_MainDoor.BaseObject).Open();
+                    if (!((TCastleDoor)m_MainDoor.BaseObject).m_boOpened)
+                    {
+                        ((TCastleDoor)m_MainDoor.BaseObject).Open();
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// 修复城门
+        /// </summary>
+        /// <returns></returns>
         public bool RepairDoor()
         {
             var result = false;
             var CastleDoor = m_MainDoor;
-            if (CastleDoor.BaseObject == null || m_boUnderWar ||
-                CastleDoor.BaseObject.m_WAbil.HP >= CastleDoor.BaseObject.m_WAbil.MaxHP) return result;
+            if (CastleDoor.BaseObject == null || m_boUnderWar || CastleDoor.BaseObject.m_WAbil.HP >= CastleDoor.BaseObject.m_WAbil.MaxHP)
+            {
+                return result;
+            }
             if (!CastleDoor.BaseObject.m_boDeath)
             {
-                if (HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick > 60 * 1000)
+                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick) > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
                     ((TCastleDoor)CastleDoor.BaseObject).RefStatus();
@@ -944,7 +969,7 @@ namespace M2Server
             }
             else
             {
-                if (HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick > 60 * 1000)
+                if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick) > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
                     CastleDoor.BaseObject.m_boDeath = false;
@@ -956,6 +981,11 @@ namespace M2Server
             return result;
         }
 
+        /// <summary>
+        /// 修复城墙
+        /// </summary>
+        /// <param name="nWallIndex"></param>
+        /// <returns></returns>
         public bool RepairWall(int nWallIndex)
         {
             var result = false;
@@ -972,10 +1002,13 @@ namespace M2Server
                     Wall = m_RightWall.BaseObject;
                     break;
             }
-            if (Wall == null || m_boUnderWar || Wall.m_WAbil.HP >= Wall.m_WAbil.MaxHP) return result;
+            if (Wall == null || m_boUnderWar || Wall.m_WAbil.HP >= Wall.m_WAbil.MaxHP)
+            {
+                return result;
+            }
             if (!Wall.m_boDeath)
             {
-                if (HUtil32.GetTickCount() - Wall.m_dwStruckTick > 60 * 1000)
+                if ((HUtil32.GetTickCount() - Wall.m_dwStruckTick) > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
                     ((TWallStructure)Wall).RefStatus();
@@ -984,7 +1017,7 @@ namespace M2Server
             }
             else
             {
-                if (HUtil32.GetTickCount() - Wall.m_dwStruckTick > 60 * 1000)
+                if ((HUtil32.GetTickCount() - Wall.m_dwStruckTick) > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
                     Wall.m_boDeath = false;

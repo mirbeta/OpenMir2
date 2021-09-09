@@ -2221,7 +2221,7 @@ namespace M2Server
             switch (UserMagic.wMagIdx)
             {
                 case Grobal2.SKILL_ERGUM:
-                    if (m_MagicErgumSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_ERGUM] != null)
                     {
                         if (!m_boUseThrusting)
                         {
@@ -2235,7 +2235,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_BANWOL:
-                    if (m_MagicBanwolSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_BANWOL] != null)
                     {
                         if (!m_boUseHalfMoon)
                         {
@@ -2249,7 +2249,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_FIRESWORD:
-                    if (m_MagicFireSwordSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_FIRESWORD] != null)
                     {
                         result = true;
                     }

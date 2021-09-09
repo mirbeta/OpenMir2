@@ -316,7 +316,7 @@ namespace M2Server
             }
             if (!m_boIncGameGold && m_PEnvir.Flag.boINCGAMEGOLD)
             {
-                if ((HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000)
+                if ((HUtil32.GetTickCount() - m_dwIncGameGoldTick) > (m_PEnvir.Flag.nINCGAMEGOLDTIME * 1000))
                 {
                     m_dwIncGameGoldTick = HUtil32.GetTickCount();
                     if (m_nGameGold + m_PEnvir.Flag.nINCGAMEGOLD <= 2000000)
@@ -341,7 +341,7 @@ namespace M2Server
             }
             if (m_PEnvir.Flag.boINCGAMEPOINT)
             {
-                if ((HUtil32.GetTickCount() - m_dwIncGamePointTick) > m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000)
+                if ((HUtil32.GetTickCount() - m_dwIncGamePointTick) > (m_PEnvir.Flag.nINCGAMEPOINTTIME * 1000))
                 {
                     m_dwIncGamePointTick = HUtil32.GetTickCount();
                     if (m_nGamePoint + m_PEnvir.Flag.nINCGAMEPOINT <= 2000000)
@@ -360,7 +360,7 @@ namespace M2Server
                     }
                 }
             }
-            if (m_PEnvir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick) > m_PEnvir.Flag.nDECHPTIME * 1000)
+            if (m_PEnvir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick) > (m_PEnvir.Flag.nDECHPTIME * 1000))
             {
                 m_dwDecHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP > m_PEnvir.Flag.nDECHPPOINT)
@@ -373,7 +373,7 @@ namespace M2Server
                 }
                 HealthSpellChanged();
             }
-            if (m_PEnvir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick) > m_PEnvir.Flag.nINCHPTIME * 1000)
+            if (m_PEnvir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick) > (m_PEnvir.Flag.nINCHPTIME * 1000))
             {
                 m_dwIncHPTick = HUtil32.GetTickCount();
                 if (m_WAbil.HP + m_PEnvir.Flag.nDECHPPOINT < m_WAbil.MaxHP)

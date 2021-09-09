@@ -529,22 +529,7 @@ namespace M2Server
         public int m_dwWalkWaitTick = 0;
         public bool m_boWalkWaitLocked = false;
         public int m_nNextHitTime = 0;
-        public TUserMagic m_MagicOneSwordSkill = null;
-        public TUserMagic m_MagicPowerHitSkill = null;
-        /// <summary>
-        /// 刺杀剑法
-        /// </summary>
-        public TUserMagic m_MagicErgumSkill = null;
-        /// <summary>
-        /// 半月弯刀
-        /// </summary>
-        public TUserMagic m_MagicBanwolSkill = null;
-        public TUserMagic m_MagicRedBanwolSkill = null;
-        public TUserMagic m_MagicFireSwordSkill = null;
-        public TUserMagic m_MagicCrsSkill = null;
-        public TUserMagic m_Magic41Skill = null;
-        public TUserMagic m_MagicTwnHitSkill = null;
-        public TUserMagic m_Magic43Skill = null;
+        public TUserMagic[] m_MagicArr = null;
         public bool m_boPowerHit = false;
         public bool m_boUseThrusting = false;
         public bool m_boUseHalfMoon = false;
@@ -703,16 +688,6 @@ namespace M2Server
             m_StorageItemList = new List<TUserItem>();
             //FillChar(m_UseItems, sizeof(grobal2.TUserItem), 0);
             m_UseItems = new TUserItem[13];
-            m_MagicOneSwordSkill = null;
-            m_MagicPowerHitSkill = null;
-            m_MagicErgumSkill = null;
-            m_MagicBanwolSkill = null;
-            m_MagicRedBanwolSkill = null;
-            m_MagicFireSwordSkill = null;
-            m_MagicCrsSkill = null;
-            m_Magic41Skill = null;
-            m_MagicTwnHitSkill = null;
-            m_Magic43Skill = null;
             m_GroupOwner = null;
             m_Castle = null;
             m_Master = null;
@@ -803,6 +778,7 @@ namespace M2Server
             m_nFixStatus = -1;
             m_boFastParalysis = false;
             m_boNastyMode = false;
+            m_MagicArr = new TUserMagic[100];
             M2Share.ObjectSystem.Add(ObjectId, this);
         }
 
@@ -2404,30 +2380,25 @@ namespace M2Server
             }
             m_nHitPlus = 0;
             m_nHitDouble = 0;
-            m_MagicOneSwordSkill = null;
-            m_MagicPowerHitSkill = null;
-            m_MagicErgumSkill = null;
-            m_MagicBanwolSkill = null;
-            m_MagicRedBanwolSkill = null;
-            m_MagicFireSwordSkill = null;
-            m_MagicCrsSkill = null;
-            m_Magic41Skill = null;
-            m_MagicTwnHitSkill = null;
-            m_Magic43Skill = null;
             for (int i = 0; i < m_MagicList.Count; i++)
             {
                 UserMagic = m_MagicList[i];
+                m_MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
                     case Grobal2.SKILL_ONESWORD:// 内功心法
-                        m_MagicOneSwordSkill = UserMagic;
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
                         }
                         break;
+                    case Grobal2.SKILL_ILKWANG:// 基本剑法
+                        if (UserMagic.btLevel > 0)
+                        {
+                            m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
+                        }
+                        break;
                     case Grobal2.SKILL_YEDO:// 攻杀剑法
-                        m_MagicPowerHitSkill = UserMagic;
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(3 / 3 * UserMagic.btLevel));
@@ -2436,37 +2407,8 @@ namespace M2Server
                         m_btAttackSkillCount = (byte)(7 - UserMagic.btLevel);
                         m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
                         break;
-                    case Grobal2.SKILL_ERGUM:// 刺杀剑法
-                        m_MagicErgumSkill = UserMagic;
-                        break;
-                    case Grobal2.SKILL_BANWOL:// 半月弯刀
-                        m_MagicBanwolSkill = UserMagic;
-                        break;
-                    case Grobal2.SKILL_REDBANWOL:
-                        m_MagicRedBanwolSkill = UserMagic;
-                        break;
                     case Grobal2.SKILL_FIRESWORD:// 烈火剑法
-                        m_MagicFireSwordSkill = UserMagic;
                         m_nHitDouble = (byte)(4 + UserMagic.btLevel * 4);
-                        break;
-                    case Grobal2.SKILL_ILKWANG:// 基本剑法
-                        m_MagicOneSwordSkill = UserMagic;
-                        if (UserMagic.btLevel > 0)
-                        {
-                            m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
-                        }
-                        break;
-                    case Grobal2.SKILL_CROSSMOON:
-                        m_MagicCrsSkill = UserMagic;
-                        break;
-                    case 41:
-                        m_Magic41Skill = UserMagic;
-                        break;
-                    case Grobal2.SKILL_TWINBLADE:
-                        m_MagicTwnHitSkill = UserMagic;
-                        break;
-                    case 43:
-                        m_Magic43Skill = UserMagic;
                         break;
                 }
             }

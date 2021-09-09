@@ -759,7 +759,7 @@ namespace M2Server
                     {
                         AttackDir(null, 11, nDir);
                     }
-                    if (m_MagicPowerHitSkill != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
+                    if (m_MagicArr[Grobal2.SKILL_YEDO] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
                     {
                         m_btAttackSkillCount -= 1;
                         if (m_btAttackSkillPointCount == m_btAttackSkillCount)
@@ -769,7 +769,7 @@ namespace M2Server
                         }
                         if (m_btAttackSkillCount <= 0)
                         {
-                            m_btAttackSkillCount = (byte)(7 - m_MagicPowerHitSkill.btLevel);
+                            m_btAttackSkillCount = (byte)(7 - m_MagicArr[Grobal2.SKILL_YEDO].btLevel);
                             m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
                         }
                     }
@@ -951,7 +951,7 @@ namespace M2Server
             switch (UserMagic.wMagIdx)
             {
                 case Grobal2.SKILL_ERGUM:
-                    if (m_MagicErgumSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_ERGUM] != null)
                     {
                         if (!m_boUseThrusting)
                         {
@@ -967,7 +967,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_BANWOL:
-                    if (m_MagicBanwolSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_BANWOL] != null)
                     {
                         if (!m_boUseHalfMoon)
                         {
@@ -983,7 +983,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_REDBANWOL:
-                    if (m_MagicRedBanwolSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_REDBANWOL] != null)
                     {
                         if (!m_boRedUseHalfMoon)
                         {
@@ -999,7 +999,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_FIRESWORD:
-                    if (m_MagicFireSwordSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_FIRESWORD] != null)
                     {
                         if (AllowFireHitSkill())
                         {
@@ -1049,7 +1049,7 @@ namespace M2Server
                     }
                     break;
                 case Grobal2.SKILL_CROSSMOON:
-                    if (m_MagicCrsSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_CROSSMOON] != null)
                     {
                         if (!m_boCrsHitkill)
                         {
@@ -1065,7 +1065,7 @@ namespace M2Server
                     result = true;
                     break;
                 case Grobal2.SKILL_TWINBLADE:// 狂风斩
-                    if (m_MagicTwnHitSkill != null)
+                    if (m_MagicArr[Grobal2.SKILL_TWINBLADE] != null)
                     {
                         if (AllowTwinHitSkill())
                         {
@@ -1084,7 +1084,7 @@ namespace M2Server
                     result = true;
                     break;
                 case 43:// 破空剑
-                    if (m_Magic43Skill != null)
+                    if (m_MagicArr[Grobal2.SKILL_43] != null)
                     {
                         if (!m_bo43kill)
                         {
@@ -2807,17 +2807,17 @@ namespace M2Server
                                             Dispose(UserItem);
                                             m_ItemList.RemoveAt(i);
                                             boEatOK = true;
-                                            if (m_MagicErgumSkill != null && !m_boUseThrusting)
+                                            if (m_MagicArr[Grobal2.SKILL_ERGUM] != null && !m_boUseThrusting)
                                             {
                                                 ThrustingOnOff(true);
                                                 SendSocket("+LNG");
                                             }
-                                            if (m_MagicBanwolSkill != null && !m_boUseHalfMoon)
+                                            if (m_MagicArr[Grobal2.SKILL_BANWOL] != null && !m_boUseHalfMoon)
                                             {
                                                 HalfMoonOnOff(true);
                                                 SendSocket("+WID");
                                             }
-                                            if (m_MagicRedBanwolSkill != null && !m_boRedUseHalfMoon)
+                                            if (m_MagicArr[Grobal2.SKILL_REDBANWOL] != null && !m_boRedUseHalfMoon)
                                             {
                                                 RedHalfMoonOnOff(true);
                                                 SendSocket("+WID");
