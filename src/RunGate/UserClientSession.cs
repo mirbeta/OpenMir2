@@ -1028,17 +1028,18 @@ namespace RunGate
                                     sDataText = sDataText.Substring(1 - 1, GateShare.nSayMsgMaxLen);
                                 }
                                 FilterSayMsg(ref sDataText);// 过滤文字
-                                if (sDataText == "掉线处理")
+                                switch (sDataText)
                                 {
-                                    result = 2;
-                                    return result;
+                                    case "掉线处理":
+                                        result = 2;
+                                        return result;
+                                    case "丢包处理":
+                                        result = 4;
+                                        return result;
+                                    default:
+                                        sDataText = sHumName + " " + sDataText;
+                                        break;
                                 }
-                                if (sDataText == "丢包处理")
-                                {
-                                    result = 4;
-                                    return result;
-                                }
-                                sDataText = sHumName + " " + sDataText;
                             }
                             else
                             {
@@ -1055,15 +1056,14 @@ namespace RunGate
                                         sDataText = sDataText.Substring(1 - 1, GateShare.nSayMsgMaxLen);
                                     }
                                     FilterSayMsg(ref sDataText);// 过滤文字
-                                    if (sDataText == "掉线处理")
+                                    switch (sDataText)
                                     {
-                                        result = 2;
-                                        return result;
-                                    }
-                                    if (sDataText == "丢包处理")
-                                    {
-                                        result = 4;
-                                        return result;
+                                        case "掉线处理":
+                                            result = 2;
+                                            return result;
+                                        case "丢包处理":
+                                            result = 4;
+                                            return result;
                                     }
                                 }
                                 else

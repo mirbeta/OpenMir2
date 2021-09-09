@@ -8,7 +8,7 @@ namespace M2Server
 {
     public class GuildManager
     {
-        public IList<TGuild> GuildList = null;
+        private IList<TGuild> GuildList = null;
 
         public bool AddGuild(string sGuildName, string sChief)
         {
@@ -32,7 +32,7 @@ namespace M2Server
             for (var i = 0; i < GuildList.Count; i++)
             {
                 Guild = GuildList[i];
-                if (String.Compare(Guild.sGuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(Guild.sGuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (Guild.m_RankList.Count > 1)
                     {

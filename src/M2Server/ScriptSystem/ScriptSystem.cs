@@ -77,13 +77,28 @@ namespace M2Server
                 {
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
-                    if (s20.StartsWith("\\\\"))
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                     {
-                        s20 = s20.Remove(0, 2);
+                        if (s20.StartsWith("\\\\"))
+                        {
+                            s20 = s20.Remove(0, 2);
+                        }
+                        else if (s20.StartsWith("\\"))
+                        {
+                            s20 = s20.Remove(0, 1);
+                        }
                     }
-                    else if (s20.StartsWith("\\"))
+                    if (Environment.OSVersion.Platform == PlatformID.MacOSX || Environment.OSVersion.Platform== PlatformID.Unix)
                     {
-                        s20 = s20.Remove(0, 1);
+                        if (s20.StartsWith("\\\\"))
+                        {
+                            s20 = s20.Remove(0, 2);
+                        }
+                        else if (s20.StartsWith("\\"))
+                        {
+                            s20 = s20.Remove(0, 1);
+                        }
+                        s20 = s20.Replace("\\", "/");
                     }
                     s18 = s14.Trim();
                     s34 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
@@ -1165,6 +1180,27 @@ namespace M2Server
             {
                 nCMDCode = M2Share.nSUM;
                 goto L001;
+            }
+            //变量运算
+            if (sCmd == M2Share.sSC_DIV) //除法
+            {
+                nCMDCode = M2Share.nSC_DIV;
+                goto L001;
+            }
+            if (sCmd == M2Share.sSC_MUL) //除法
+            {
+                nCMDCode = M2Share.nSC_MUL;
+                goto L001;
+            }
+            if (sCmd == M2Share.sSC_PERCENT) //除法
+            {
+                nCMDCode = M2Share.nSC_PERCENT;
+                goto L001;
+            }
+            if ((sCmd == M2Share.sTHROWITEM) || (sCmd == M2Share.sDROPITEMMAP))
+            {
+                nCMDCode = M2Share.nTHROWITEM;
+                goto L001; 
             }
             if (sCmd == M2Share.sBREAKTIMERECALL)
             {

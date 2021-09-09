@@ -7,36 +7,46 @@ using SystemModule.Common;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 行会系统
+    /// </summary>
     public class TGuild
     {
-        public int Count { get { return GetMemberCount(); } }
-        public bool IsFull { get { return GetMemgerIsFull(); } }
-        public int nBuildPoint
+        public int Count => GetMemberCount();
+        
+        public bool IsFull => GetMemgerIsFull();
+
+        public int BuildPoint
         {
-            get { return m_nBuildPoint; }
-            set { SetBuildPoint(value); }
+            get => m_nBuildPoint;
+            set => SetBuildPoint(value);
         }
+        
         public int nAurae
         {
-            get { return m_nAurae; }
-            set { SetAuraePoint(value); }
+            get => m_nAurae;
+            set => SetAuraePoint(value);
         }
+        
         public int nStability
         {
-            get { return m_nStability; }
-            set { SetStabilityPoint(value); }
+            get => m_nStability;
+            set => SetStabilityPoint(value);
         }
+        
         public int nFlourishing
         {
-            get { return m_nFlourishing; }
-            set { SetFlourishPoint(value); }
+            get => m_nFlourishing;
+            set => SetFlourishPoint(value);
         }
+        
         public int nChiefItemCount
         {
-            get { return m_nChiefItemCount; }
-            set { SetChiefItemCount(value); }
+            get => m_nChiefItemCount;
+            set => SetChiefItemCount(value);
         }
-        public string sGuildName = string.Empty;
+        
+        public string sGuildName;
         public ArrayList NoticeList = null;
         public IList<TWarGuild> GuildWarList = null;
         public IList<TGuild> GuildAllList = null;
@@ -421,7 +431,7 @@ namespace M2Server
             for (var i = 0; i < m_RankList.Count; i++)
             {
                 GuildRank = m_RankList[i];
-                SaveList.Add("#" + (GuildRank.nRankNo).ToString() + ' ' + GuildRank.sRankName);
+                SaveList.Add("#" + GuildRank.nRankNo + ' ' + GuildRank.sRankName);
                 for (var j = 0; j < GuildRank.MemberList.Count; j++)
                 {
                     SaveList.Add("+" + GuildRank.MemberList[j].sMemberName);
@@ -756,9 +766,8 @@ namespace M2Server
                 {
                     continue;
                 }
-                if (sRankInfo[0] == '#')
+                if (sRankInfo[0] == '#')// 取得职称的名称
                 {
-                    // 取得职称的名称
                     sRankInfo = sRankInfo.Substring(1, sRankInfo.Length - 1);
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankNo, new char[] { ' ', '<' });
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankName, new char[] { '<', '>' });
@@ -810,7 +819,7 @@ namespace M2Server
             {
                 GuildRankList.Add(GuildRank);
             }
-            // 0049931F  校验成员列表是否有改变，如果未修改则退出
+            // 校验成员列表是否有改变，如果未修改则退出
             if (m_RankList.Count == GuildRankList.Count)
             {
                 boCheckChange = true;
@@ -842,7 +851,7 @@ namespace M2Server
                     return result;
                 }
             }
-            // 0049943D 检查行会掌门职业是否为空
+            // 检查行会掌门职业是否为空
             result = -2;
             if (GuildRankList.Count > 0)
             {
@@ -914,9 +923,8 @@ namespace M2Server
                                 break;
                             }
                         }
-                        if (!boCheckChange)
+                        if (!boCheckChange)// 原列表中的人物名称是否在新的列表中
                         {
-                            // 原列表中的人物名称是否在新的列表中
                             result = -6;
                             break;
                         }
@@ -1054,8 +1062,8 @@ namespace M2Server
                         if (GuildWarList[i].Guild == Guild)
                         {
                             WarGuild = GuildWarList[i];
-                            WarGuild.dwWarTick = HUtil32.GetTickCount();// 10800000
-                            WarGuild.dwWarTime = M2Share.g_Config.dwGuildWarTime;
+                            WarGuild.dwWarTick = HUtil32.GetTickCount();
+                            WarGuild.dwWarTime = M2Share.g_Config.dwGuildWarTime;// 10800000
                             SendGuildMsg("***" + Guild.sGuildName + "行会战争将持续三个小时。");
                             break;
                         }
@@ -1065,8 +1073,8 @@ namespace M2Server
                         WarGuild = new TWarGuild
                         {
                             Guild = Guild,
-                            dwWarTick = HUtil32.GetTickCount(),// 10800000
-                            dwWarTime = M2Share.g_Config.dwGuildWarTime
+                            dwWarTick = HUtil32.GetTickCount(),
+                            dwWarTime = M2Share.g_Config.dwGuildWarTime// 10800000
                         };
                         GuildWarList.Add(WarGuild);
                         SendGuildMsg("***" + Guild.sGuildName + "行会战争开始(三个小时)");

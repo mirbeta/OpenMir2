@@ -888,9 +888,21 @@ namespace M2Server
         public const int nDEC = 27;
         public const string sSUM = "SUM";
         public const int nSUM = 28;
+        /// <summary>
+        /// 变量运算 除法
+        /// </summary>
         public const string sSC_DIV = "DIV";
+        public const int nSC_DIV = 241;
+        /// <summary>
+        /// 变量运算 乘法
+        /// </summary>
         public const string sSC_MUL = "MUL";
+        public const int nSC_MUL = 242;
+        /// <summary>
+        /// 量运算 百分比
+        /// </summary>
         public const string sSC_PERCENT = "PERCENT";
+        public const int nSC_PERCENT = 243;
         public const string sBREAKTIMERECALL = "BREAKTIMERECALL";
         public const int nBREAKTIMERECALL = 29;
         public const string sSENDMSG = "SENDMSG";
@@ -1357,6 +1369,12 @@ namespace M2Server
         public const int nSC_QUERYBAGITEMS = 382;
         public const string sSC_ISHIGH = "ISHIGH";
         public const int nSC_ISHIGH = 383;
+        /// <summary>
+        /// 将指定物品刷新到指定地图坐标范围内
+        /// </summary>
+        public const string sTHROWITEM = "THROWITEM";
+        public const string sDROPITEMMAP = "DROPITEMMAP";
+        public const int nTHROWITEM = 384;
         /// <summary>
         /// 开通元宝交易
         /// </summary>

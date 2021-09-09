@@ -680,25 +680,25 @@ namespace M2Server
             switch (cMethod)
             {
                 case '=':
-                    if (Guild.nBuildPoint == nPoint)
+                    if (Guild.BuildPoint == nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (Guild.nBuildPoint > nPoint)
+                    if (Guild.BuildPoint > nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (Guild.nBuildPoint < nPoint)
+                    if (Guild.BuildPoint < nPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (Guild.nBuildPoint >= nPoint)
+                    if (Guild.BuildPoint >= nPoint)
                     {
                         result = true;
                     }

@@ -6070,7 +6070,7 @@ namespace M2Server
                 result = true;
                 return result;
             }
-            if (m_CanJmpScriptLableList.ContainsKey(sLabel.ToLower()))
+            if (m_CanJmpScriptLableList.ContainsKey(sLabel))
             {
                 result = true;
                 return result;

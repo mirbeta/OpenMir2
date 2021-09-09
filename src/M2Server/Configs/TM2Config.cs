@@ -774,7 +774,7 @@ namespace M2Server
         public int nClientFile1_CRC;
         public int nClientFile2_CRC;
         public int nClientFile3_CRC;
-        public short[] GlobaDyMval;
+        public int[] GlobaDyMval;
         public int nM2Crc;
         public int nCheckLicenseFail;
         public int dwCheckTick;

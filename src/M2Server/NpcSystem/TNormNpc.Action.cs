@@ -2696,32 +2696,32 @@ namespace M2Server
             switch (cMethod)
             {
                 case '=':
-                    Guild.nBuildPoint = nBuildPoint;
+                    Guild.BuildPoint = nBuildPoint;
                     break;
                 case '-':
-                    if (Guild.nBuildPoint >= nBuildPoint)
+                    if (Guild.BuildPoint >= nBuildPoint)
                     {
-                        Guild.nBuildPoint = Guild.nBuildPoint - nBuildPoint;
+                        Guild.BuildPoint = Guild.BuildPoint - nBuildPoint;
                     }
                     else
                     {
-                        Guild.nBuildPoint = 0;
+                        Guild.BuildPoint = 0;
                     }
                     break;
                 case '+':
-                    if ((int.MaxValue - Guild.nBuildPoint) >= nBuildPoint)
+                    if ((int.MaxValue - Guild.BuildPoint) >= nBuildPoint)
                     {
-                        Guild.nBuildPoint = Guild.nBuildPoint + nBuildPoint;
+                        Guild.BuildPoint = Guild.BuildPoint + nBuildPoint;
                     }
                     else
                     {
-                        Guild.nBuildPoint = int.MaxValue;
+                        Guild.BuildPoint = int.MaxValue;
                     }
                     break;
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, new[] { Guild.nBuildPoint }), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptGuildBuildPointMsg, new[] { Guild.BuildPoint }), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
@@ -3306,5 +3306,231 @@ namespace M2Server
             }
         }
 
+        private void ActionOfTHROWITEM(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            string sMap = string.Empty;
+            string sItemName= string.Empty;
+            string sUserItemName= string.Empty;
+            string NameCorlr= string.Empty;
+            int I;
+            int idura;
+            int nX = 0;
+            int nY= 0;
+            int nRange= 0;
+            int nCount= 0;
+            int dX= 0;
+            int dY= 0;
+            TEnvirnoment Envir;
+            TMapItem MapItem;
+            TMapItem MapItemA;
+            MirItem StdItem;
+            TUserItem UserItem = null;
+            try
+            {
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref sMap))
+                {
+                    sMap = GetLineVariableText(PlayObject, QuestActionInfo.sParam1);
+                }
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam2, ref nX))
+                {
+                    nX = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+                }
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam3, ref nY))
+                {
+                    nY = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+                }
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam4, ref nRange))
+                {
+                    nRange = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam4), -1);
+                }
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam5, ref sItemName))
+                {
+                    sItemName = GetLineVariableText(PlayObject, QuestActionInfo.sParam5);
+                }
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam6, ref nCount))
+                {
+                    nCount = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam6), -1);
+                }
+                if ((sMap == "") || (nX < 0) || (nY < 0) || (nRange < 0) || (sItemName == "") || (nCount <= 0))
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sTHROWITEM);
+                    return;
+                }
+                Envir = M2Share.g_MapManager.FindMap(sMap); // 查找地图,地图不存在则退出
+                if (Envir == null)
+                {
+                    return;
+                }
+                if (nCount <= 0)
+                {
+                    nCount = 1;
+                }
+                if ((sItemName).ToLower().CompareTo((Grobal2.sSTRING_GOLDNAME).ToLower()) == 0)// 金币
+                {
+                    if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
+                    {
+                        MapItem = new TMapItem();
+                        MapItem.Name = Grobal2.sSTRING_GOLDNAME;
+                        MapItem.Count = nCount;
+                        MapItem.Looks = M2Share.GetGoldShape(nCount);
+                        MapItem.OfBaseObject = PlayObject; // 物品谁可以捡起
+                        MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
+                        MapItem.DropBaseObject = PlayObject; // 谁掉落的
+                        MapItemA = (TMapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                        if (MapItemA != null)
+                        {
+                            if (MapItemA != MapItem)
+                            {
+                                Dispose(MapItem);
+                                MapItem = MapItemA;
+                            }
+                            this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dX, dY, MapItem.Name + "@0");
+                        }
+                        else
+                        {
+                            Dispose(MapItem);
+                        }
+                        return;
+                    }
+                }
+                for (I = 0; I < nCount; I++)
+                {
+                    if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
+                    {
+                        if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
+                        {
+                            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                            if (StdItem != null)
+                            {
+                                if (StdItem.StdMode == 40)
+                                {
+                                    idura = UserItem.Dura;
+                                    idura = idura - 2000;
+                                    if (idura < 0)
+                                    {
+                                        idura = 0;
+                                    }
+                                    UserItem.Dura = (ushort)idura;
+                                }
+                                MapItem = new TMapItem();
+                                MapItem.UserItem = UserItem;
+                                MapItem.Name = StdItem.Name;
+                                NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
+                                sUserItemName = "";
+                                if (UserItem.btValue[13] == 1)
+                                {
+                                    sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                                    if (sUserItemName != "")
+                                    {
+                                        MapItem.Name = sUserItemName;
+                                    }
+                                }
+                                MapItem.Looks = StdItem.Looks;
+                                if (StdItem.StdMode == 45)
+                                {
+                                    MapItem.Looks = (ushort)M2Share.GetRandomLook(MapItem.Looks, StdItem.Shape);
+                                }
+                                MapItem.AniCount = StdItem.AniCount;
+                                MapItem.Reserved = 0;
+                                MapItem.Count = nCount;
+                                MapItem.OfBaseObject = PlayObject;
+                                MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
+                                MapItem.DropBaseObject = PlayObject;
+                                // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
+                                MapItemA = (TMapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                                if (MapItemA != null)
+                                {
+                                    if (MapItemA != MapItem)
+                                    {
+                                        Dispose(MapItem);
+                                        MapItem = MapItemA;
+                                    }
+                                    this.SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dX, dY, MapItem.Name + NameCorlr);
+                                }
+                                else
+                                {
+                                    Dispose(MapItem);
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Dispose(UserItem);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.MainOutMessage("{异常} TNormNpc.ActionOfTHROWITEM");
+            }
+        }
+        
+        public bool ActionOfTHROWITEM_RobotGetDropPosition(TEnvirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
+        {
+            bool result;
+            int I;
+            int II;
+            int III;
+            int nItemCount = 0;
+            int n24;
+            int n28;
+            int n2C;
+            n24 = 999;
+            result = false;
+            n28 = 0;
+            n2C = 0;
+            for (I = 1; I <= nRange; I++)
+            {
+                for (II = -I; II <= I; II++)
+                {
+                    for (III = -I; III <= I; III++)
+                    {
+                        nDX = nOrgX + III;
+                        nDY = nOrgY + II;
+                        if (neEnvir.GetItemEx(nDX, nDY, ref nItemCount) == null)
+                        {
+                            if (neEnvir.bo2C)
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (neEnvir.bo2C && (n24 > nItemCount))
+                            {
+                                n24 = nItemCount;
+                                n28 = nDX;
+                                n2C = nDY;
+                            }
+                        }
+                    }
+                    if (result)
+                    {
+                        break;
+                    }
+                }
+                if (result)
+                {
+                    break;
+                }
+            }
+            if (!result)
+            {
+                if (n24 < 8)
+                {
+                    nDX = n28;
+                    nDY = n2C;
+                }
+                else
+                {
+                    nDX = nOrgX;
+                    nDY = nOrgY;
+                }
+            }
+            return result;
+        }
     }
 }

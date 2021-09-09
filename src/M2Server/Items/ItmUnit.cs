@@ -119,6 +119,105 @@ namespace M2Server
             saveList.SaveToFile(sFileName);
             saveList = null;
         }
+        
+        public int GetItemAddValuePointColor(TUserItem UserItem)
+        {
+            int result = 0;
+            int ItemVlue= 0;
+            MirItem StdItem;
+            // if (M2Share.g_Config.boRandomnameColor)
+            // {
+            //     for (var I = 0; I <= 7; I ++ )
+            //     {
+            //         if (UserItem.btValue[I] != 0)
+            //         {
+            //             ItemVlue ++;
+            //         }
+            //     }
+            //     if (ItemVlue > 0)
+            //     {
+            //         switch(ItemVlue)
+            //         {
+            //             case 1:
+            //                 result = M2Share.g_Config.nRandom1nameColor;
+            //                 break;
+            //             case 2:
+            //                 result = M2Share.g_Config.nRandom2nameColor;
+            //                 break;
+            //             case 3:
+            //                 result = M2Share.g_Config.nRandom3nameColor;
+            //                 break;
+            //             case 4:
+            //                 result = M2Share.g_Config.nRandom4nameColor;
+            //                 break;
+            //             default:
+            //                 result = M2Share.g_Config.nRandom5nameColor;
+            //                 break;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            //         if (StdItem != null)
+            //         {
+            //             switch(StdItem.StdMode)
+            //             {
+            //                 case 0:
+            //                 case 1:
+            //                 case 3:
+            //                     result = M2Share.g_Config.nRandom8nameColor;
+            //                     break;
+            //                 case 5:
+            //                 case 6:
+            //                 case 7:
+            //                 case 99:
+            //                 case 10:
+            //                 case 11:
+            //                 case 15:
+            //                 case 16:
+            //                 case 70:
+            //                 case 77:
+            //                 case 88:
+            //                 case 19:
+            //                 case 20:
+            //                 case 21:
+            //                 case 22:
+            //                 case 23:
+            //                 case 24:
+            //                 case 26:
+            //                 case 52:
+            //                 case 53:
+            //                 case 54:
+            //                 case 62:
+            //                 case 63:
+            //                 case 64:
+            //                     result = M2Share.g_Config.nRandom7nameColor;
+            //                     break;
+            //                 default:
+            //                     result = M2Share.g_Config.nRandom6nameColor;
+            //                     break;
+            //             }
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            //     if (StdItem != null)
+            //     {
+            //         if (StdItem.NameColor != 0)
+            //         {
+            //             result = StdItem.NameColor;
+            //         }
+            //         else
+            //         {
+            //             result = 255;
+            //         }
+            //     }
+            // }
+            return result;
+        }
+
     }
     
     public class ItmUnit

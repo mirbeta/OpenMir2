@@ -206,7 +206,7 @@ namespace M2Server
         public int m_dwShowLineNoticeTick = 0;
         public int m_nShowLineNoticeIdx = 0;
         public int m_nSoftVersionDateEx = 0;
-        public Hashtable m_CanJmpScriptLableList = null;
+        private Hashtable m_CanJmpScriptLableList = null;
         public int m_nScriptGotoCount = 0;
         public string m_sScriptCurrLable = string.Empty;
         // 用于处理 @back 脚本命令
@@ -451,7 +451,7 @@ namespace M2Server
             m_dwShowLineNoticeTick = HUtil32.GetTickCount();
             m_nShowLineNoticeIdx = 0;
             m_nSoftVersionDateEx = 0;
-            m_CanJmpScriptLableList = new Hashtable();
+            m_CanJmpScriptLableList = new Hashtable(StringComparer.OrdinalIgnoreCase);
             m_nKillMonExpMultiple = 1;
             m_nKillMonExpRate = 100;
             m_dwRateTick = HUtil32.GetTickCount();
