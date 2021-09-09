@@ -389,7 +389,8 @@ namespace M2Server
         /// 元宝寄售物品列表
         /// </summary>
         private IList<TUserItem> m_SellOffItemList = null;
-        
+
+
         public TPlayObject() : base()
         {
             m_btRaceServer = Grobal2.RC_PLAYOBJECT;

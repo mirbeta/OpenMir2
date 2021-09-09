@@ -644,46 +644,51 @@ namespace M2Server
                 {
                     return result;
                 }
-                if (!boLateDelivery)
+                if (!M2Share.g_Config.boSpeedHackCheck)
                 {
-                    if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                    if (!boLateDelivery)
                     {
-                        m_boFilterAction = false;
-                        return result;
-                    }
-                    m_boFilterAction = true;
-                    int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
-                    int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
-                    if (dwCheckTime < dwAttackTime)
-                    {
-                        m_dwAttackCount++;
-                        dwDelayTime = dwAttackTime - dwCheckTime;
-                        if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed)
+                        if (!CheckActionStatus(wIdent, ref dwDelayTime))
                         {
-                            if (m_dwAttackCount >= 4)
+                            m_boFilterAction = false;
+                            return result;
+                        }
+                        m_boFilterAction = true;
+
+                        int dwAttackTime = HUtil32._MAX(0, M2Share.g_Config.dwHitIntervalTime - m_nHitSpeed * M2Share.g_Config.ClientConf.btItemSpeed);
+                        int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
+                        if (dwCheckTime < dwAttackTime)
+                        {
+                            m_dwAttackCount++;
+                            dwDelayTime = dwAttackTime - dwCheckTime;
+                            if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed)
                             {
-                                m_dwAttackTick = HUtil32.GetTickCount();
-                                m_dwAttackCount = 0;
-                                dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
-                                if (m_boTestSpeedMode)
+                                if (m_dwAttackCount >= 4)
                                 {
-                                    SysMsg("攻击忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    m_dwAttackTick = HUtil32.GetTickCount();
+                                    m_dwAttackCount = 0;
+                                    dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
+                                    if (m_boTestSpeedMode)
+                                    {
+                                        SysMsg("攻击忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    }
                                 }
+                                else
+                                {
+                                    m_dwAttackCount = 0;
+                                }
+                                return result;
                             }
                             else
                             {
-                                m_dwAttackCount = 0;
+                                if (m_boTestSpeedMode)
+                                {
+                                    SysMsg("攻击步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                }
+                                return result;
                             }
-                            return result;
                         }
-                        else
-                        {
-                            if (m_boTestSpeedMode)
-                            {
-                                SysMsg("攻击步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
-                            }
-                            return result;
-                        }
+
                     }
                 }
                 if (nX == m_nCurrX && nY == m_nCurrY)
@@ -797,44 +802,47 @@ namespace M2Server
             {
                 return result;
             }
-            if (!boLateDelivery)
+            if (!M2Share.g_Config.boSpeedHackCheck)
             {
-                if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                if (!boLateDelivery)
                 {
-                    m_boFilterAction = false;
-                    return result;
-                }
-                m_boFilterAction = true;
-                dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
-                if (dwCheckTime < M2Share.g_Config.dwRunIntervalTime)
-                {
-                    m_dwMoveCount++;
-                    dwDelayTime = M2Share.g_Config.dwRunIntervalTime - dwCheckTime;
-                    if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed)
+                    if (!CheckActionStatus(wIdent, ref dwDelayTime))
                     {
-                        if (m_dwMoveCount >= 4)
+                        m_boFilterAction = false;
+                        return result;
+                    }
+                    m_boFilterAction = true;
+                    dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                    if (dwCheckTime < M2Share.g_Config.dwRunIntervalTime)
+                    {
+                        m_dwMoveCount++;
+                        dwDelayTime = M2Share.g_Config.dwRunIntervalTime - dwCheckTime;
+                        if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed)
                         {
-                            m_dwMoveTick = HUtil32.GetTickCount();
-                            m_dwMoveCount = 0;
-                            dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
-                            if (m_boTestSpeedMode)
+                            if (m_dwMoveCount >= 4)
                             {
-                                SysMsg("马跑步忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                m_dwMoveTick = HUtil32.GetTickCount();
+                                m_dwMoveCount = 0;
+                                dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
+                                if (m_boTestSpeedMode)
+                                {
+                                    SysMsg("马跑步忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                }
                             }
+                            else
+                            {
+                                m_dwMoveCount = 0;
+                            }
+                            return result;
                         }
                         else
                         {
-                            m_dwMoveCount = 0;
+                            if (m_boTestSpeedMode)
+                            {
+                                SysMsg("马跑步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            }
+                            return result;
                         }
-                        return result;
-                    }
-                    else
-                    {
-                        if (m_boTestSpeedMode)
-                        {
-                            SysMsg("马跑步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                        return result;
                     }
                 }
             }
@@ -886,7 +894,7 @@ namespace M2Server
                 return result;
             }
             var boIsWarrSkill = M2Share.MagicManager.IsWarrSkill(UserMagic.wMagIdx);
-            if (!boLateDelivery && !boIsWarrSkill)
+            if (!boLateDelivery && !boIsWarrSkill && (!M2Share.g_Config.boSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -1295,7 +1303,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (nFlag != wIdent)
+            if (nFlag != wIdent && (!M2Share.g_Config.boSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -1378,7 +1386,7 @@ namespace M2Server
             {
                 return result; // 防麻
             }
-            if (!boLateDelivery)
+            if (!boLateDelivery && (!M2Share.g_Config.boSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
@@ -2473,11 +2481,14 @@ namespace M2Server
                 return result;
             }
             m_boFilterAction = true;
-            var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-            if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+            if (!M2Share.g_Config.boSpeedHackCheck)
             {
-                dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
-                return result;
+                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+                {
+                    dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
+                    return result;
+                }
             }
             if (nX == m_nCurrX && nY == m_nCurrY)
             {
@@ -2497,13 +2508,16 @@ namespace M2Server
             {
                 return false;
             }
-            var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-            if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+            if (!M2Share.g_Config.boSpeedHackCheck)
             {
-                dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
-                return false;
+                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+                {
+                    dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
+                    return false;
+                }
+                m_dwTurnTick = HUtil32.GetTickCount();
             }
-            m_dwTurnTick = HUtil32.GetTickCount();
             SendRefMsg(Grobal2.RM_POWERHIT, 0, 0, 0, 0, "");
             return true;
         }
@@ -2873,13 +2887,18 @@ namespace M2Server
             var result = false;
             dwDelayTime = 0;
             var BaseObject = M2Share.ObjectSystem.Get(charId);
-            var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
-            if (dwCheckTime < M2Share.g_Config.dwTurnIntervalTime)
+
+            if (!M2Share.g_Config.boSpeedHackCheck)
             {
-                dwDelayTime = M2Share.g_Config.dwTurnIntervalTime - dwCheckTime;
-                return result;
+                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                if (dwCheckTime < HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150))
+                {
+                    dwDelayTime = HUtil32._MAX(150, M2Share.g_Config.dwTurnIntervalTime - 150) - dwCheckTime;
+                    return result;
+                }
+                m_dwTurnTick = HUtil32.GetTickCount();
             }
-            m_dwTurnTick = HUtil32.GetTickCount();
+
             if (Math.Abs(nX - m_nCurrX) <= 2 && Math.Abs(nY - m_nCurrY) <= 2)
             {
                 if (m_PEnvir.IsValidObject(nX, nY, 2, BaseObject))
@@ -5923,6 +5942,11 @@ namespace M2Server
         {
             var result = false;
             dwDelayTime = 0;
+            if (M2Share.g_Config.boSpeedHackCheck)
+            {
+                result = true;
+                return result;
+            }
             int dwCheckTime;
             if (!M2Share.g_Config.boDisableStruck) // 检查人物弯腰停留时间
             {

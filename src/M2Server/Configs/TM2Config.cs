@@ -839,6 +839,10 @@ namespace M2Server
         /// 寄售系统每次扣多少金币(默认10000金币)
         /// </summary>
         public int nDecUserGameGold;
+        /// <summary>
+        /// 关闭游戏引擎的加速控制
+        /// </summary>
+        public bool boSpeedHackCheck;
 
         public TM2Config()
         {
@@ -1536,6 +1540,7 @@ namespace M2Server
             sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
+            boSpeedHackCheck = false;
         }
     }
 }
