@@ -38,7 +38,7 @@ namespace M2Server
                     }
                     if (borunaway)
                     {
-                        if (HUtil32.GetTickCount() - time1 > 5000)
+                        if ((HUtil32.GetTickCount() - time1) > 5000)
                         {
                             if (Math.Abs(m_nTargetX - m_nCurrX) == 1 && Math.Abs(m_nTargetY - m_nCurrY) == 1)
                             {
@@ -55,7 +55,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();

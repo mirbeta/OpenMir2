@@ -17,7 +17,7 @@ namespace M2Server
             TBaseObject BaseObject= null;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
                 {
                     for (var i = 0; i < m_VisibleActors.Count; i++)
                     {
@@ -50,7 +50,7 @@ namespace M2Server
                         m_TargetCret = null;
                     }
                 }
-                if (m_boRunAwayMode && m_TargetCret != null && HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
+                if (m_boRunAwayMode && m_TargetCret != null && (HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
                 {
                     if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 6 && Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 6)
                     {

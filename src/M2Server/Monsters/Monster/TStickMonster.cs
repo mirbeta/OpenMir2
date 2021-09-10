@@ -32,7 +32,7 @@ namespace M2Server
             }
             if (this.GetAttackDir(this.m_TargetCret, ref btDir))
             {
-                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick =HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick =HUtil32.GetTickCount();
@@ -105,7 +105,7 @@ namespace M2Server
             bool bo05;
             if (!this.m_boGhost && !this.m_boDeath && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - this.m_dwWalkTick > this.m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - this.m_dwWalkTick) > this.m_nWalkSpeed)
                 {
                     this.m_dwWalkTick =HUtil32.GetTickCount();
                     if (this.m_boFixedHideMode)
@@ -117,7 +117,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
                         {
                             this.SearchTarget();
                         }

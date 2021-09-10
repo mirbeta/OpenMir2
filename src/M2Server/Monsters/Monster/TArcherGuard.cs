@@ -39,7 +39,7 @@ namespace M2Server
             TBaseObject TargetBaseObject = null;
             if (!m_boDeath && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     for (var i = 0; i < m_VisibleActors.Count; i++)
@@ -70,7 +70,7 @@ namespace M2Server
                 }
                 if (m_TargetCret != null)
                 {
-                    if (HUtil32.GetTickCount() - m_dwHitTick >= m_nNextHitTime)
+                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
                     {
                         m_dwHitTick = HUtil32.GetTickCount();
                         sub_4A6B30(m_TargetCret);

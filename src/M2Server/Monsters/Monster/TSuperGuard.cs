@@ -16,7 +16,7 @@ namespace M2Server
             short wHitMode;
             if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
             {
-                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick = HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -65,7 +65,7 @@ namespace M2Server
                 this.m_Master = null;
             }
             // 不允许召唤为宝宝
-            if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
             {
                 for (var i = 0; i < this.m_VisibleActors.Count; i++)
                 {

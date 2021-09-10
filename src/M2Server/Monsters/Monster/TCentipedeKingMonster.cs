@@ -49,7 +49,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY);
@@ -99,12 +99,12 @@ namespace M2Server
             TBaseObject BaseObject;
             if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     if (m_boFixedHideMode)
                     {
-                        if (HUtil32.GetTickCount() - m_dwAttickTick > 10000)
+                        if ((HUtil32.GetTickCount() - m_dwAttickTick) > 10000)
                         {
                             for (var i = 0; i < m_VisibleActors.Count; i++)
                             {
@@ -130,14 +130,14 @@ namespace M2Server
                     }
                     else
                     {
-                        if (HUtil32.GetTickCount() - m_dwAttickTick > 3000)
+                        if ((HUtil32.GetTickCount() - m_dwAttickTick) > 3000)
                         {
                             if (AttackTarget())
                             {
                                 base.Run();
                                 return;
                             }
-                            if (HUtil32.GetTickCount() - m_dwAttickTick > 10000)
+                            if ((HUtil32.GetTickCount() - m_dwAttickTick) > 10000)
                             {
                                 ComeDown();
                                 m_dwAttickTick = HUtil32.GetTickCount();

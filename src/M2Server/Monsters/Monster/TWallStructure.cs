@@ -53,7 +53,7 @@ namespace M2Server
             int n08;
             if (this.m_boDeath)
             {
-                this.m_dwDeathTick =HUtil32.GetTickCount();
+                this.m_dwDeathTick = HUtil32.GetTickCount();
                 if (boSetMapFlaged)
                 {
                     this.m_PEnvir.SetMapXYFlag(this.m_nCurrX, this.m_nCurrY, true);

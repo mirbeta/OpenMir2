@@ -30,7 +30,7 @@ namespace M2Server
                 }
                 if (BaseObject.bo2B0)
                 {
-                    if (HUtil32.GetTickCount() - BaseObject.m_dw2B4Tick < 2 * 60 * 1000)
+                    if ((HUtil32.GetTickCount() - BaseObject.m_dw2B4Tick) < (2 * 60 * 1000))
                     {
                         result = true;
                     }

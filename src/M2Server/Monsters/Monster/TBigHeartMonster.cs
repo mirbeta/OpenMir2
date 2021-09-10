@@ -15,7 +15,7 @@ namespace M2Server
         {
             var result = false;
             TBaseObject BaseObject;
-            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");

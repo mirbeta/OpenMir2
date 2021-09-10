@@ -5,10 +5,9 @@ namespace M2Server
 {
     public class TMonster : TAnimalObject
     {
-        public int n54C = 0;
-        private int m_dwThinkTick = 0;
-        protected bool bo554 = false;
-        private bool m_boDupMode = false;
+        private int m_dwThinkTick;
+        protected bool bo554;
+        private bool m_boDupMode;
 
         public TMonster() : base()
         {
@@ -57,7 +56,7 @@ namespace M2Server
         private bool Think()
         {
             var result = false;
-            if (HUtil32.GetTickCount() - m_dwThinkTick > 3 * 1000)
+            if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
                 if (m_PEnvir.GetXYObjCount(m_nCurrX, m_nCurrY) >= 2)
@@ -126,12 +125,12 @@ namespace M2Server
                 }
                 if (m_boWalkWaitLocked)
                 {
-                    if (HUtil32.GetTickCount() - m_dwWalkWaitTick > m_dwWalkWait)
+                    if ((HUtil32.GetTickCount() - m_dwWalkWaitTick) > m_dwWalkWait)
                     {
                         m_boWalkWaitLocked = false;
                     }
                 }
-                if (!m_boWalkWaitLocked && HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
+                if (!m_boWalkWaitLocked && (HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     m_nWalkCount++;
@@ -192,7 +191,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (m_dwRunAwayTime > 0 && HUtil32.GetTickCount() - m_dwRunAwayStart > m_dwRunAwayTime)
+                        if (m_dwRunAwayTime > 0 && (HUtil32.GetTickCount() - m_dwRunAwayStart) > m_dwRunAwayTime)
                         {
                             m_boRunAwayMode = false;
                             m_dwRunAwayTime = 0;

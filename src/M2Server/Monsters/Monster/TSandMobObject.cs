@@ -16,7 +16,7 @@ namespace M2Server
         {
             if (!m_boDeath && !m_boGhost)
             {
-                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     if (m_boFixedHideMode)
@@ -28,7 +28,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (m_WAbil.HP > 0 && m_WAbil.HP < m_WAbil.MaxHP / 20 && HUtil32.GetTickCount() - m_dwAppearStart > 3000)
+                        if (m_WAbil.HP > 0 && m_WAbil.HP < m_WAbil.MaxHP / 20 && (HUtil32.GetTickCount() - m_dwAppearStart) > 3000)
                         {
                             ComeDown();
                         }
@@ -40,7 +40,7 @@ namespace M2Server
                                 return;
                             }
                         }
-                        if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - m_dwHitTick )> m_nNextHitTime)
                         {
                             SearchTarget();
                         }

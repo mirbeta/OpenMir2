@@ -19,7 +19,7 @@ namespace M2Server
             }
             if (TargetInSpitRange(m_TargetCret, ref btDir))
             {
-                if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
                 {
                     m_dwHitTick = HUtil32.GetTickCount();
                     m_dwTargetFocusTick = HUtil32.GetTickCount();

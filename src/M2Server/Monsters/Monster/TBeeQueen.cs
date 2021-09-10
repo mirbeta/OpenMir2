@@ -5,8 +5,7 @@ namespace M2Server
 {
     public class TBeeQueen : TAnimalObject
     {
-        public int n54C = 0;
-        private IList<TBaseObject> BBList = null;
+        private IList<TBaseObject> BBList;
 
         public TBeeQueen() : base()
         {
@@ -44,13 +43,12 @@ namespace M2Server
 
         public override void Run()
         {
-            TBaseObject BB;
             if (!m_boGhost && !m_boDeath && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - m_dwWalkTick >= m_nWalkSpeed)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
-                    if (HUtil32.GetTickCount() - m_dwHitTick >= m_nNextHitTime)
+                    if ((HUtil32.GetTickCount() - m_dwHitTick) >= m_nNextHitTime)
                     {
                         m_dwHitTick = HUtil32.GetTickCount();
                         SearchTarget();
@@ -61,7 +59,7 @@ namespace M2Server
                     }
                     for (var i = BBList.Count - 1; i >= 0; i--)
                     {
-                        BB = BBList[i];
+                        var BB = BBList[i];
                         if (BB.m_boDeath || BB.m_boGhost)
                         {
                             BBList.RemoveAt(i);

@@ -53,7 +53,7 @@ namespace M2Server
             }
             if (m_boDeath)
             {
-                if (HUtil32.GetTickCount() - m_dwDeathTick > 2 * 1000)
+                if ((HUtil32.GetTickCount() - m_dwDeathTick) > (2 * 1000))
                 {
                     MakeGhost();
                 }
@@ -71,7 +71,7 @@ namespace M2Server
                 }
                 if (boChangeFace)
                 {
-                    if (HUtil32.GetTickCount() - dwDigDownTick > 6 * 10 * 1000)
+                    if ((HUtil32.GetTickCount() - dwDigDownTick) > (6 * 10 * 1000))
                     {
                         TBaseObject elfMon = null;
                         var ElfName = m_sCharName;

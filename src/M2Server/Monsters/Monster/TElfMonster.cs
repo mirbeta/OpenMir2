@@ -4,7 +4,7 @@ namespace M2Server
 {
     public class TElfMonster : TMonster
     {
-        private bool boIsFirst = false;
+        private bool boIsFirst;
 
         public void AppearNow()
         {
@@ -47,7 +47,7 @@ namespace M2Server
             }
             if (m_boDeath)
             {
-                if (HUtil32.GetTickCount() - m_dwDeathTick > 2 * 1000)
+                if ((HUtil32.GetTickCount() - m_dwDeathTick) > (2 * 1000))
                 {
                     MakeGhost();
                 }

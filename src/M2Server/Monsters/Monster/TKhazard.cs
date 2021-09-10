@@ -26,7 +26,6 @@ namespace M2Server
                     {
                         if (time1 == 0)
                         {
-                            // do drag back on random
                             GetFrontPosition(ref nx, ref ny);
                             m_TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             m_TargetCret.SpaceMove(m_sMapName, nx, ny, 0);
@@ -40,7 +39,6 @@ namespace M2Server
                         {
                             if (m_TargetCret.m_WAbil.HP <= m_TargetCret.m_WAbil.MaxHP / 2)
                             {
-                                // if target below half hp
                                 GetFrontPosition(ref nx, ref ny);
                             }
                             m_TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -53,7 +51,7 @@ namespace M2Server
                         }
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();

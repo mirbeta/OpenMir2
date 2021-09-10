@@ -42,7 +42,7 @@ namespace M2Server
             short n8 = 0;
             short nC = 0;
             int n10;
-            if (!m_boDeath && !bo554 && !m_boGhost && HUtil32.GetTickCount() - dw558 > 30 * 1000)
+            if (!m_boDeath && !bo554 && !m_boGhost && (HUtil32.GetTickCount() - dw558) > (30 * 1000))
             {
                 dw558 = HUtil32.GetTickCount();
                 if (m_TargetCret != null && sub_4C3538() >= 5)
@@ -65,7 +65,7 @@ namespace M2Server
                 }
                 if (bo55C)
                 {
-                    if (HUtil32.GetTickCount() - dw564 < 8000)
+                    if ((HUtil32.GetTickCount() - dw564) < 8000)
                     {
                         m_nNextHitTime = 10000;
                     }
@@ -78,7 +78,7 @@ namespace M2Server
                 }
                 if (bo55D)
                 {
-                    if (HUtil32.GetTickCount() - dw568 < 8000)
+                    if ((HUtil32.GetTickCount() - dw568) < 8000)
                     {
                         m_nNextHitTime = 500;
                         m_nWalkSpeed = 400;

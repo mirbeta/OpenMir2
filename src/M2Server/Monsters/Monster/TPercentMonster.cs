@@ -30,7 +30,7 @@ namespace M2Server
         private bool Think()
         {
             var result = false;
-            if (HUtil32.GetTickCount() - m_dwThinkTick > 3 * 1000)
+            if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3 * 1000)
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
                 if (m_PEnvir.GetXYObjCount(m_nCurrX, m_nCurrY) >= 2)
@@ -65,7 +65,7 @@ namespace M2Server
             {
                 if (GetAttackDir(m_TargetCret, ref btDir))
                 {
-                    if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+                    if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
                     {
                         m_dwHitTick = HUtil32.GetTickCount();
                         m_dwTargetFocusTick = HUtil32.GetTickCount();
@@ -103,12 +103,12 @@ namespace M2Server
                 }
                 if (m_boWalkWaitLocked)
                 {
-                    if (HUtil32.GetTickCount() - m_dwWalkWaitTick > m_dwWalkWait)
+                    if ((HUtil32.GetTickCount() - m_dwWalkWaitTick) > m_dwWalkWait)
                     {
                         m_boWalkWaitLocked = false;
                     }
                 }
-                if (!m_boWalkWaitLocked && HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed)
+                if (!m_boWalkWaitLocked && (HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed)
                 {
                     m_dwWalkTick = HUtil32.GetTickCount();
                     m_nWalkCount++;
@@ -169,7 +169,7 @@ namespace M2Server
                     }
                     else
                     {
-                        if (m_dwRunAwayTime > 0 && HUtil32.GetTickCount() - m_dwRunAwayStart > m_dwRunAwayTime)
+                        if (m_dwRunAwayTime > 0 && (HUtil32.GetTickCount() - m_dwRunAwayStart) > m_dwRunAwayTime)
                         {
                             m_boRunAwayMode = false;
                             m_dwRunAwayTime = 0;

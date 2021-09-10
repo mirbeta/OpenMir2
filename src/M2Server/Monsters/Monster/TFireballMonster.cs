@@ -33,7 +33,7 @@ namespace M2Server
                                         if (nPower > 0)
                                         {
                                             baseobject.StruckDamage(nPower);
-                                            if (HUtil32.GetTickCount() - m_dwSpellTick > m_nNextHitTime)
+                                            if ((HUtil32.GetTickCount() - m_dwSpellTick) > m_nNextHitTime)
                                             {
                                                 m_dwSpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(Grobal2.RM_SPELL, 48, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 48, "");
@@ -52,7 +52,7 @@ namespace M2Server
                 {
                     m_TargetCret = null;
                 }
-                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();

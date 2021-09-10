@@ -22,7 +22,7 @@ namespace M2Server
                         this.SpaceMove(this.m_TargetCret.m_sMapName, this.m_TargetCret.m_nCurrX, this.m_TargetCret.m_nCurrY, 0);
                     }
                 }
-                if (HUtil32.GetTickCount() - this.m_dwSearchEnemyTick > 8000 || HUtil32.GetTickCount() - this.m_dwSearchEnemyTick > 1000 && this.m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - this.m_dwSearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - this.m_dwSearchEnemyTick) > 1000 && this.m_TargetCret == null)
                 {
                     this.m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     this.SearchTarget();

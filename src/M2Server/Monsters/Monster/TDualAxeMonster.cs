@@ -36,7 +36,7 @@ namespace M2Server
             {
                 return result;
             }
-            if (HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - m_dwHitTick )> m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7)
@@ -93,7 +93,7 @@ namespace M2Server
             TargetBaseObject = null;
             if (!m_boDeath && !bo558 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick >= 5000)
+                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) >= 5000)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     for (var i = 0; i < m_VisibleActors.Count; i++)
@@ -121,7 +121,7 @@ namespace M2Server
                         SetTargetCreat(TargetBaseObject);
                     }
                 }
-                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed && m_TargetCret != null)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed && m_TargetCret != null)
                 {
                     if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4)
                     {

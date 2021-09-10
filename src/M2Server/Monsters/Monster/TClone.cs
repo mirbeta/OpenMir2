@@ -70,12 +70,12 @@ namespace M2Server
             int nAttackDir;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000)
             {
-                if (HUtil32.GetTickCount() - m_dwSearchEnemyTick > 1000 && m_TargetCret == null)
+                if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
                 {
                     m_dwSearchEnemyTick = HUtil32.GetTickCount();
                     SearchTarget();
                 }
-                if (HUtil32.GetTickCount() - m_dwWalkTick > m_nWalkSpeed && m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)
+                if ((HUtil32.GetTickCount() - m_dwWalkTick) > m_nWalkSpeed && m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 4 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 4)
                 {
                     if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) <= 2 && M2Share.RandomNumber.Random(3) != 0)
                     {
@@ -84,7 +84,7 @@ namespace M2Server
                     }
                     GetBackPosition(ref m_nTargetX, ref m_nTargetY);
                 }
-                if (m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6 && HUtil32.GetTickCount() - m_dwHitTick > m_nNextHitTime)
+                if (m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6 && (HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
                 {
                     m_dwHitTick = HUtil32.GetTickCount();
                     nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);

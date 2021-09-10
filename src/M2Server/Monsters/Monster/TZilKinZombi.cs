@@ -33,7 +33,7 @@ namespace M2Server
 
         public override void Run()
         {
-            if (this.m_boDeath && !this.m_boGhost && nZilKillCount >= 0 && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.m_VisibleActors.Count > 0 && HUtil32.GetTickCount() - dw558 >= dw560)
+            if (this.m_boDeath && !this.m_boGhost && nZilKillCount >= 0 && this.m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && this.m_VisibleActors.Count > 0 && (HUtil32.GetTickCount() - dw558) >= dw560)
             {
                 this.m_Abil.MaxHP = (ushort)(this.m_Abil.MaxHP >> 1);
                 this.m_dwFightExp = this.m_dwFightExp / 2;
