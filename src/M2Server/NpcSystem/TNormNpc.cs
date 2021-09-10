@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 管理类NPC
+    /// 如 月老
+    /// </summary>
     public partial class TNormNpc : TAnimalObject
     {
         /// <summary>

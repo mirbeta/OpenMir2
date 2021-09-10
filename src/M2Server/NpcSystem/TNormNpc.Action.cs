@@ -24,11 +24,10 @@ namespace M2Server
                     PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您已开通寄售服务,不需要再开通！！！\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
-                //if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
-                //{
-                //    // 增加变量支持
-                nGameGold = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
-                //}
+                if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
+                {
+                    nGameGold = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
+                }
                 if (PlayObject.m_nGameGold >= nGameGold)
                 {
                     // 玩家的元宝数大于或等于开通所需的元宝数

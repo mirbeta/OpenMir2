@@ -2,12 +2,15 @@
 
 namespace M2Server
 {
+    /// <summary>
+    /// 练功师
+    /// </summary>
     public class TTrainer: TNormNpc
     {
         public int n564 = 0;
-        public int m_dw568 = 0;
-        public int n56C = 0;
-        public int n570 = 0;
+        private int m_dw568 = 0;
+        private int n56C = 0;
+        private int n570 = 0;
 
         public TTrainer() : base()
         {

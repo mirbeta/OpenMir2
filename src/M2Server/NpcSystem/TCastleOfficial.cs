@@ -4,7 +4,8 @@ using SystemModule;
 namespace M2Server
 {
     /// <summary>
-    /// 沙巴克NPC
+    /// 沙城NPC类
+    /// 沙城管理人员如：沙城管理员 沙城老人
     /// </summary>
     public class TCastleOfficial : TMerchant
     {

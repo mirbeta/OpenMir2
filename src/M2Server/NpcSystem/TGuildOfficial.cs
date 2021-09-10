@@ -5,6 +5,10 @@ using SystemModule;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 行会NPC类
+    /// 行会管理NPC 如：比奇国王
+    /// </summary>
     public class TGuildOfficial: TNormNpc
     {
         public override void Click(TPlayObject PlayObject)

@@ -30,7 +30,7 @@ namespace M2Server
             int dwTimeOutTick = HUtil32.GetTickCount();
             while (true)
             {
-                if (HUtil32.GetTickCount() - dwTimeOutTick > dwTimeOut)
+                if ((HUtil32.GetTickCount() - dwTimeOutTick) > dwTimeOut)
                 {
                     //M2Share.n4EBB6C = M2Share.n4EBB68;
                     break;
@@ -118,7 +118,7 @@ namespace M2Server
                     M2Share.ErrorMessage(sSaveDBTimeOut);
                 }
             }
-            if (HUtil32.GetTickCount() - dwTimeOutTick > M2Share.dwRunDBTimeMax)
+            if ((HUtil32.GetTickCount() - dwTimeOutTick) > M2Share.dwRunDBTimeMax)
             {
                 M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - dwTimeOutTick;
             }

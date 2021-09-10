@@ -4,6 +4,10 @@ using SystemModule;
 
 namespace M2Server
 {
+    /// <summary>
+    /// 交易NPC类
+    /// 普通商人 如：药店和杂货店都在此实现
+    /// </summary>
     public class TMerchant : TNormNpc
     {
         public string m_sScript = string.Empty;

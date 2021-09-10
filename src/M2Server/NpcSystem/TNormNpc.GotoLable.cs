@@ -231,19 +231,12 @@ namespace M2Server
 
         public bool GotoLable_QuestCheckCondition_CheckUserDateType(TPlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
         {
-            bool result;
-            int nDay;
-            int UseDay;
-            int LastDay;
-            DateTime nnday;
-            int i;
-            StringList LoadList;
             string sText = string.Empty;
             string Name = string.Empty;
             string ssDay = string.Empty;
-            result = false;
+            var result = false;
             sListFileName = M2Share.g_Config.sEnvirDir + sListFileName;
-            LoadList = new StringList();
+            var LoadList = new StringList();
             try
             {
                 if (File.Exists(sListFileName))
@@ -257,8 +250,8 @@ namespace M2Server
                         M2Share.MainOutMessage("loading fail.... => " + sListFileName);
                     }
                 }
-                nDay = HUtil32.Str_ToInt(sDay, 0);
-                for (i = 0; i < LoadList.Count; i++)
+                var nDay = HUtil32.Str_ToInt(sDay, 0);
+                for (var i = 0; i < LoadList.Count; i++)
                 {
                     sText = LoadList[i].Trim();
                     sText = HUtil32.GetValidStrCap(sText, ref Name, new string[] { " ", "\t" });
@@ -266,9 +259,9 @@ namespace M2Server
                     if (charName == Name)
                     {
                         ssDay = sText.Trim();
-                        nnday = HUtil32.Str_ToDate(ssDay);
-                        UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
-                        LastDay = nDay - UseDay;
+                        var nnday = HUtil32.Str_ToDate(ssDay);
+                        var UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
+                        var LastDay = nDay - UseDay;
                         if (LastDay < 0)
                         {
                             result = true;

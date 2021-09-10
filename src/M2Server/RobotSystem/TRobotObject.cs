@@ -26,28 +26,28 @@ namespace M2Server
                         switch(AutoRunInfo.nMoethod)
                         {
                             case ObjRobot.nRODAY:
-                                if (HUtil32.GetTickCount()- AutoRunInfo.dwRunTick > 24 * 60 * 60 * 1000 * AutoRunInfo.nParam1)
+                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (24 * 60 * 60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case ObjRobot.nROHOUR:
-                                if (HUtil32.GetTickCount()- AutoRunInfo.dwRunTick > 60 * 60 * 1000 * AutoRunInfo.nParam1)
+                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (60 * 60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case ObjRobot.nROMIN:
-                                if (HUtil32.GetTickCount()- AutoRunInfo.dwRunTick > 60 * 1000 * AutoRunInfo.nParam1)
+                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case ObjRobot.nROSEC:
-                                if (HUtil32.GetTickCount()- AutoRunInfo.dwRunTick > 1000 * AutoRunInfo.nParam1)
+                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
