@@ -8,6 +8,113 @@ namespace M2Server
 {
     public partial class TNormNpc
     {
+        private void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
+        {
+            bool bo11;
+            string sSendMsg;
+            TScript Script = null;
+            TScript Script3C = null;
+            TSayingRecord SayingRecord;
+            TSayingProcedure SayingProcedure;
+            TUserItem UserItem = null;
+            string sC = string.Empty;
+            if (PlayObject.m_NPC != this)
+            {
+                PlayObject.m_NPC = null;
+                PlayObject.m_Script = null;
+                //FillChar(PlayObject.m_nVal, sizeof(PlayObject.m_nVal), '\0');
+            }
+            if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                for (var i = 0; i < m_ScriptList.Count; i++)
+                {
+                    Script3C = m_ScriptList[i];
+                    if (Script3C.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
+                    {
+                        Script = Script3C;
+                        PlayObject.m_Script = Script;
+                        PlayObject.m_NPC = this;
+                        break;
+                    }
+                }
+            }
+            if (Script == null)
+            {
+                if (PlayObject.m_Script != null)
+                {
+                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
+                    {
+                        if (m_ScriptList[i] == PlayObject.m_Script)
+                        {
+                            Script = m_ScriptList[i];
+                        }
+                    }
+                }
+                if (Script == null)
+                {
+                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
+                    {
+                        if (GotoLable_CheckQuestStatus(PlayObject, m_ScriptList[i]))
+                        {
+                            Script = m_ScriptList[i];
+                            PlayObject.m_Script = Script;
+                            PlayObject.m_NPC = this;
+                        }
+                    }
+                }
+            }
+            // 跳转到指定示签，执行
+            if (Script != null)
+            {
+                if (Script.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
+                {
+                    if (boExtJmp && SayingRecord.boExtJmp == false)
+                    {
+                        return;
+                    }
+                    sSendMsg = "";
+                    for (var i = 0; i < SayingRecord.ProcedureList.Count; i++)
+                    {
+                        SayingProcedure = SayingRecord.ProcedureList[i];
+                        bo11 = false;
+                        if (GotoLable_QuestCheckCondition(PlayObject, SayingProcedure.ConditionList, ref sC, ref UserItem))
+                        {
+                            sSendMsg = sSendMsg + SayingProcedure.sSayMsg;
+                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
+                            {
+                                break;
+                            }
+                            if (bo11)
+                            {
+                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
+                            }
+                        }
+                        else
+                        {
+                            sSendMsg = sSendMsg + SayingProcedure.sElseSayMsg;
+                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
+                            {
+                                break;
+                            }
+                            if (bo11)
+                            {
+                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(sSendMsg))
+                    {
+                        GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, false);
+                    }
+                }
+            }
+        }
+
+        public void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp)
+        {
+            GotoLable(PlayObject, sLabel, boExtJmp, "");
+        }
+
         private bool GotoLable_CheckQuestStatus(TPlayObject PlayObject, TScript ScriptInfo)
         {
             bool result = true;
@@ -122,7 +229,7 @@ namespace M2Server
                 }
                 return result;
             }
-            result = PlayObject.sub_4C4CD4(sItemType, ref nCount);
+            result = PlayObject.CheckItemCount(sItemType, ref nCount);
             if (nCount < nParam)
             {
                 result = null;
@@ -3056,113 +3163,6 @@ namespace M2Server
             {
                 PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + '/' + sMsg);
             }
-        }
-
-        private void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
-        {
-            bool bo11;
-            string sSendMsg;
-            TScript Script = null;
-            TScript Script3C = null;
-            TSayingRecord SayingRecord;
-            TSayingProcedure SayingProcedure;
-            TUserItem UserItem = null;
-            string sC = string.Empty;
-            if (PlayObject.m_NPC != this)
-            {
-                PlayObject.m_NPC = null;
-                PlayObject.m_Script = null;
-                //FillChar(PlayObject.m_nVal, sizeof(PlayObject.m_nVal), '\0');
-            }
-            if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                for (var i = 0; i < m_ScriptList.Count; i++)
-                {
-                    Script3C = m_ScriptList[i];
-                    if (Script3C.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
-                    {
-                        Script = Script3C;
-                        PlayObject.m_Script = Script;
-                        PlayObject.m_NPC = this;
-                        break;
-                    }
-                }
-            }
-            if (Script == null)
-            {
-                if (PlayObject.m_Script != null)
-                {
-                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
-                    {
-                        if (m_ScriptList[i] == PlayObject.m_Script)
-                        {
-                            Script = m_ScriptList[i];
-                        }
-                    }
-                }
-                if (Script == null)
-                {
-                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
-                    {
-                        if (GotoLable_CheckQuestStatus(PlayObject, m_ScriptList[i]))
-                        {
-                            Script = m_ScriptList[i];
-                            PlayObject.m_Script = Script;
-                            PlayObject.m_NPC = this;
-                        }
-                    }
-                }
-            }
-            // 跳转到指定示签，执行
-            if (Script != null)
-            {
-                if (Script.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
-                {
-                    if (boExtJmp && SayingRecord.boExtJmp == false)
-                    {
-                        return;
-                    }
-                    sSendMsg = "";
-                    for (var i = 0; i < SayingRecord.ProcedureList.Count; i++)
-                    {
-                        SayingProcedure = SayingRecord.ProcedureList[i];
-                        bo11 = false;
-                        if (GotoLable_QuestCheckCondition(PlayObject, SayingProcedure.ConditionList, ref sC, ref UserItem))
-                        {
-                            sSendMsg = sSendMsg + SayingProcedure.sSayMsg;
-                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
-                            {
-                                break;
-                            }
-                            if (bo11)
-                            {
-                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
-                            }
-                        }
-                        else
-                        {
-                            sSendMsg = sSendMsg + SayingProcedure.sElseSayMsg;
-                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
-                            {
-                                break;
-                            }
-                            if (bo11)
-                            {
-                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
-                            }
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(sSendMsg))
-                    {
-                        GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, false);
-                    }
-                }
-            }
-        }
-
-        public void GotoLable(TPlayObject PlayObject, string sLabel, bool boExtJmp)
-        {
-            GotoLable(PlayObject, sLabel, boExtJmp, "");
         }
     }
 }

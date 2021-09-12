@@ -676,7 +676,7 @@ namespace M2Server
                 GetStartPoint();
                 for (var i = m_MagicList.Count - 1; i >= 0; i--)
                 {
-                    sub_4C713C(m_MagicList[i]);
+                    CheckSeeHealGauge(m_MagicList[i]);
                 }
                 if (m_boNewHuman)
                 {
@@ -1047,7 +1047,7 @@ namespace M2Server
         }
 
         /// <summary>
-        /// 超级修复武器
+        /// 特修武器
         /// </summary>
         /// <returns></returns>
         private bool SuperRepairWeapon()

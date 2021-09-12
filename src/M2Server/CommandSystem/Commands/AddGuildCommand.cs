@@ -38,7 +38,7 @@ namespace M2Server
             {
                 if (M2Share.GuildManager.AddGuild(sGuildName, sGuildChief))
                 {
-                    // UserEngine.SendServerGroupMsg(SS_205, nServerIndex, sGuildName + '/' + sGuildChief);
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.nServerIndex, sGuildName + '/' + sGuildChief);
                     PlayObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, TMsgColor.c_Green, TMsgType.t_Hint);
                     boAddState = true;
                 }

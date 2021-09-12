@@ -49,8 +49,8 @@ namespace M2Server
             }
             if (M2Share.g_boGameLogGameGold)
             {
-                //M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GAMEGOLD, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
-                //    m_PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], PlayObject.m_sCharName));
+                M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, Grobal2.LOG_GAMEGOLD, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
+                    m_PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], PlayObject.m_sCharName));
             }
             PlayObject.GameGoldChanged();
             m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold,

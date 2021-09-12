@@ -144,7 +144,6 @@ namespace M2Server
                 {
                     AttackDir_CheckWeaponUpgrade();
                 }
-
                 boPowerHit = m_boPowerHit;
                 boFireHit = m_boFireHitSkill;
                 boCrsHit = m_boCrsHitkill;

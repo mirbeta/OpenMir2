@@ -46,8 +46,8 @@ namespace M2Server
                 PlayObject.SysMsg(sHumName + "的金币已增加" + nCount + ".", TMsgColor.c_Green, TMsgType.t_Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    //M2Share.AddGameDataLog("14" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() 
-                    //    + "\09" + PlayObject.m_sCharName + "\09" + M2Share.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
+                    M2Share.AddGameDataLog("14" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() 
+                        + "\09" + PlayObject.m_sCharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else

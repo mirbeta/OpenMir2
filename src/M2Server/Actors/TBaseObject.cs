@@ -1971,7 +1971,11 @@ namespace M2Server
             return result;
         }
 
-        public void sub_4C713C(TUserMagic Magic)
+        /// <summary>
+        /// 检查心灵启示
+        /// </summary>
+        /// <param name="Magic"></param>
+        public void CheckSeeHealGauge(TUserMagic Magic)
         {
             if (Magic.MagicInfo.wMagicID == 28)
             {
@@ -2610,7 +2614,6 @@ namespace M2Server
                     var StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        // UserEngine.GetStdItemName(m_UseItems[U_WEAPON].wIndex) + #9 +
                         M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                     }
                 }
@@ -2815,9 +2818,7 @@ namespace M2Server
                 m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round(m_btSlaveExpLevel * 2 + HUtil32.HiWord(m_WAbil.DC)));
                 n8 = n8 + HUtil32.Round(m_Abil.MaxHP * 0.15) * m_btSlaveExpLevel;
                 m_WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(m_Abil.MaxHP + m_btSlaveExpLevel * 60), n8);
-                // m_WAbil.MAC:=0; 01/20 取消此行，防止怪物升级后魔防变0
             }
-            // m_btHitPoint:=15; 01/20 取消此行，防止怪物升级后准确率变15
         }
 
         public void SendFirstMsg(TBaseObject BaseObject, short wIdent, short wParam, int lParam1, int lParam2, int lParam3, string sMsg)
@@ -4459,7 +4460,7 @@ namespace M2Server
                     UserMagic.nTranPoint -= UserMagic.MagicInfo.MaxTrain[n10];
                     UserMagic.btLevel++;
                     SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 800);
-                    sub_4C713C(UserMagic);
+                    CheckSeeHealGauge(UserMagic);
                 }
                 else
                 {
@@ -4600,7 +4601,6 @@ namespace M2Server
                         StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_DRESS].wIndex);
                         if (StdItem.NeedIdentify == 1)
                         {
-                            // UserEngine.GetStdItemName(m_UseItems[U_DRESS].wIndex) + #9 +
                             M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_DRESS].MakeIndex + "\t" 
                                 + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
@@ -5150,7 +5150,7 @@ namespace M2Server
             return true;
         }
 
-        public TUserItem sub_4C4CD4(string sItemName, ref int nCount)
+        public TUserItem CheckItemCount(string sItemName, ref int nCount)
         {
             TUserItem result = null;
             string sName;

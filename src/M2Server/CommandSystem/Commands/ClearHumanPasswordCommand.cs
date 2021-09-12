@@ -26,14 +26,14 @@ namespace M2Server
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
-            if (PlayObject == null)
+            if (m_PlayObject == null)
             {
                 return;
             }
-            PlayObject.m_boPasswordLocked = false;
-            PlayObject.m_boUnLockStoragePwd = false;
-            PlayObject.m_sStoragePwd = "";
-            PlayObject.SysMsg("你的保护密码已被清除！！！", TMsgColor.c_Green, TMsgType.t_Hint);
+            m_PlayObject.m_boPasswordLocked = false;
+            m_PlayObject.m_boUnLockStoragePwd = false;
+            m_PlayObject.m_sStoragePwd = "";
+            m_PlayObject.SysMsg("你的保护密码已被清除！！！", TMsgColor.c_Green, TMsgType.t_Hint);
             PlayObject.SysMsg(string.Format("{0}的保护密码已被清除！！！", sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
         }
     }

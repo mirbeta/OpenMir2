@@ -641,11 +641,6 @@ namespace M2Server
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.ENDGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdEndGuild();
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.AUTHALLY.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsGuildMaster())
@@ -762,11 +757,6 @@ namespace M2Server
                 }
                 if (m_btPermission > 4)
                 {
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.BACKSTEP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        CmdBackStep(sCMD, HUtil32.Str_ToInt(sParam1, 0), HUtil32.Str_ToInt(sParam2, 1));
-                        return;
-                    }
                     if (string.Compare(sCMD, M2Share.g_GameCommand.BALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         // 精神波
@@ -862,11 +852,6 @@ namespace M2Server
                         }
                         return;
                     }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.DISABLEFILTER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        CmdDisableFilter(sCMD, sParam1);
-                        return;
-                    }
                     if (string.Compare(sCMD, M2Share.g_GameCommand.OXQUIZROOM.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         return;
@@ -892,21 +877,6 @@ namespace M2Server
                         //    //CmdTestFire(sCMD, HUtil32.Str_ToInt(sParam1, 0), HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0), HUtil32.Str_ToInt(sParam4, 0));
                         //    return;
                         //}
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.TESTSTATUS.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdTestStatus(sCMD, HUtil32.Str_ToInt(sParam1, -1), HUtil32.Str_ToInt(sParam2, 0));
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.DELGAMEGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdDelGameGold(M2Share.g_GameCommand.DELGAMEGOLD.sCmd, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGAMEGOLD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdAddGameGold(M2Share.g_GameCommand.ADDGAMEGOLD.sCmd, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                            return;
-                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.TESTGOLDCHANGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             return;
@@ -970,16 +940,6 @@ namespace M2Server
                         //    SysMsg("小地图配置重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                         //    return;
                         //}
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdAddGuild(M2Share.g_GameCommand.ADDGUILD, sParam1, sParam2);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.DELGUILD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdDelGuild(M2Share.g_GameCommand.DELGUILD, sParam1);
-                            return;
-                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGESABUKLORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             CmdChangeSabukLord(M2Share.g_GameCommand.CHANGESABUKLORD, sParam1, sParam2, true);
