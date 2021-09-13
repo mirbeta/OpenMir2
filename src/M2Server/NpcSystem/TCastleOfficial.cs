@@ -117,7 +117,6 @@ namespace M2Server
                             return;
                         }
                         string s20;
-                        // 增加挂机
                         if (string.Compare(sLabel, M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (this.m_boOffLineMsg)

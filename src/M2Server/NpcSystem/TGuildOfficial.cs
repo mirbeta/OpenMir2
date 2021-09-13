@@ -67,15 +67,15 @@ namespace M2Server
                     {
                         return;
                     }
-                    if (string.Compare(sLabel.ToLower(), M2Share.sBUILDGUILDNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sLabel, M2Share.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel.ToLower(), M2Share.sSCL_GUILDWAR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, M2Share.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel.ToLower(), M2Share.sDONATE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, M2Share.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         DoNate(PlayObject);
                     }
@@ -83,11 +83,11 @@ namespace M2Server
                     {
                         ReQuestCastleWar(PlayObject, sLabel.Substring(M2Share.sREQUESTCASTLEWAR.Length, sLabel.Length - M2Share.sREQUESTCASTLEWAR.Length));
                     }
-                    else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, this.ObjectId, 0, 0, "");
                     }
-                    else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (PlayObject.m_sScriptGoBackLable == "")
                         {

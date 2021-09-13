@@ -68,15 +68,15 @@ namespace M2Server
 
     public class TSayingProcedure
     {
-        public List<TQuestConditionInfo> ConditionList;
-        public List<TQuestActionInfo> ActionList;
+        public IList<TQuestConditionInfo> ConditionList;
+        public IList<TQuestActionInfo> ActionList;
         public string sSayMsg;
-        public List<string> SayOldLabelList;
-        public List<string> SayNewLabelList;
-        public List<TQuestActionInfo> ElseActionList;
+        public IList<string> SayOldLabelList;
+        public IList<string> SayNewLabelList;
+        public IList<TQuestActionInfo> ElseActionList;
         public string sElseSayMsg;
-        public List<string> ElseSayOldLabelList;
-        public List<string> ElseSayNewLabelList;
+        public IList<string> ElseSayOldLabelList;
+        public IList<string> ElseSayNewLabelList;
 
         public TSayingProcedure()
         {

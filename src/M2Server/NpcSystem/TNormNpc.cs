@@ -333,7 +333,6 @@ namespace M2Server
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
                     return;
                 case "$DATETIME":
-                    // sText:=DateTimeToStr(Now);
                     sText = DateTime.Now.ToString("dddddd,dddd,hh:mm:nn");
                     sMsg = ReplaceVariableText(sMsg, "<$DATETIME>", sText);
                     return;

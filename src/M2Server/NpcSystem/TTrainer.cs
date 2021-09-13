@@ -43,7 +43,7 @@ namespace M2Server
         {
             if (n570 > 0)
             {
-                if (HUtil32.GetTickCount() - m_dw568 > 3 * 1000)
+                if ((HUtil32.GetTickCount() - m_dw568) > 3 * 1000)
                 {
                     this.ProcessSayMsg("总破坏力为  " + n56C + ",平均值为 " + n56C / n570);
                     n570 = 0;

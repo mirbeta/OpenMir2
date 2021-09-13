@@ -25,7 +25,6 @@ namespace M2Server
         private StringList m_RunAddrList = null;
         private int n8 = 0;
         private TIPaddr[] m_IPaddrArr;
-        private int n4F8 = 0;
         private int dwSendTestMsgTick = 0;
 
         private void AddGate(AsyncUserToken e)
@@ -813,8 +812,6 @@ namespace M2Server
                 RunSock.g_GateArr[i] = Gate;
             }
             LoadRunAddr();
-            n4F8 = 0;
-            
             _gateSocket = new ISocketServer(20, 2048);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;

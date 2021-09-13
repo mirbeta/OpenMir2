@@ -160,7 +160,7 @@ namespace M2Server
                 for (var i = 0; i < m_RefillGoodsList.Count; i++)
                 {
                     Goods = m_RefillGoodsList[i];
-                    if (HUtil32.GetTickCount() - Goods.dwRefillTick > Goods.dwRefillTime * 60 * 1000)
+                    if ((HUtil32.GetTickCount() - Goods.dwRefillTick) > (Goods.dwRefillTime * 60 * 1000))
                     {
                         Goods.dwRefillTick = HUtil32.GetTickCount();
                         nIndex = M2Share.UserEngine.GetStdItemIdx(Goods.sItemName);
@@ -517,7 +517,7 @@ namespace M2Server
                 if (m_UpgradeWeaponList[i].sUserName == User.m_sCharName)
                 {
                     n18 = 1;
-                    if (HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick > M2Share.g_Config.dwUPgradeWeaponGetBackTime || User.m_btPermission >= 4)
+                    if (((HUtil32.GetTickCount() - m_UpgradeWeaponList[i].dwGetBackTick) > M2Share.g_Config.dwUPgradeWeaponGetBackTime) || User.m_btPermission >= 4)
                     {
                         UpgradeInfo = m_UpgradeWeaponList[i];
                         m_UpgradeWeaponList.RemoveAt(i);
@@ -669,6 +669,12 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 获取物品售卖价格
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="nPrice"></param>
+        /// <returns></returns>
         private int GetUserPrice(TPlayObject PlayObject, double nPrice)
         {
             int result;
@@ -947,7 +953,7 @@ namespace M2Server
                             }
                             GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                         }
-                        else if ((sLabel).ToLower().CompareTo((M2Share.sDealYBme).ToLower()) == 0) // 元宝寄售:出售物品 
+                        else if (sLabel.ToLower().CompareTo((M2Share.sDealYBme).ToLower()) == 0) // 元宝寄售:出售物品 
                         {
                             if (m_boYBDeal)
                             {
@@ -968,12 +974,12 @@ namespace M2Server
         {
             try
             {
-                if (HUtil32.GetTickCount() - dwRefillGoodsTick > 30000)
+                if ((HUtil32.GetTickCount() - dwRefillGoodsTick) > 30000)
                 {
                     dwRefillGoodsTick = HUtil32.GetTickCount();
                     RefillGoods();
                 }
-                if (HUtil32.GetTickCount() - dwClearExpreUpgradeTick > 10 * 60 * 1000)
+                if ((HUtil32.GetTickCount() - dwClearExpreUpgradeTick) > 10 * 60 * 1000)
                 {
                     dwClearExpreUpgradeTick = HUtil32.GetTickCount();
                     ClearExpreUpgradeListData();
@@ -1005,7 +1011,7 @@ namespace M2Server
                         SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
-                if (m_boCanMove && HUtil32.GetTickCount() - m_dwMoveTick > m_dwMoveTime * 1000)
+                if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick) > m_dwMoveTime * 1000)
                 {
                     m_dwMoveTick = HUtil32.GetTickCount();
                     SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -1768,7 +1774,11 @@ namespace M2Server
             }
         }
 
-        // 增加挂机
+        /// <summary>
+        /// 设置挂机留言信息
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="sMsg"></param>
         public void SetOffLineMsg(TPlayObject PlayObject, string sMsg)
         {
             PlayObject.m_sOffLineLeaveword = sMsg;
@@ -1779,7 +1789,9 @@ namespace M2Server
             base.SendCustemMsg(PlayObject, sMsg);
         }
 
-        // 清除临时文件，包括交易库存，价格表
+        /// <summary>
+        /// 清除临时文件，包括交易库存，价格表
+        /// </summary>
         public void ClearData()
         {
             TUserItem UserItem;
@@ -1796,7 +1808,6 @@ namespace M2Server
                         UserItem = ItemList[j];
                         Dispose(UserItem);
                     }
-                    //ItemList.Free;
                 }
                 m_GoodsList.Clear();
                 for (var i = 0; i < m_ItemPriceList.Count; i++)
@@ -1855,6 +1866,7 @@ namespace M2Server
 
         public void DisPose(object obj)
         {
+            obj = null;
         }
     }
 }
