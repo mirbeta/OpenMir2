@@ -9,9 +9,9 @@ namespace GameSvr
 {
     public class AppService : BackgroundService
     {
-        private readonly MirApp _mirApp;
+        private readonly GameApp _mirApp;
         
-        public AppService(MirApp serverApp)
+        public AppService(GameApp serverApp)
         {
             _mirApp = serverApp;
         }

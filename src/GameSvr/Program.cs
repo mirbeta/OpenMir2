@@ -20,7 +20,7 @@ namespace GameSvr
                 .ConfigureLogging(logging => { logging.ClearProviders(); })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<MirApp>();
+                    services.AddSingleton<GameApp>();
                     services.AddHostedService<AppService>();
                 });
 

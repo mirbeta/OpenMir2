@@ -10,7 +10,7 @@ using SystemModule.Common;
 
 namespace GameSvr
 {
-    public class MirApp : ServerBase
+    public class GameApp : ServerBase
     {
         public void StartServer(CancellationToken token)
         {

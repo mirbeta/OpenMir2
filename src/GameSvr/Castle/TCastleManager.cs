@@ -9,13 +9,11 @@ namespace GameSvr
 {
     public class CastleManager
     {
-        private readonly object _criticalSection;
         private readonly IList<TUserCastle> _castleList;
 
         public CastleManager()
         {
             _castleList = new List<TUserCastle>();
-            _criticalSection = new object();
         }
 
         public TUserCastle Find(string sCastleName)
