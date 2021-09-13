@@ -82,7 +82,7 @@ namespace GameSvr
             {
                 M2Share.EventManager.Run();
                 M2Share.RobotManage.Run();
-                if (HUtil32.GetTickCount() - _runTimeTick > 10000)
+                if ((HUtil32.GetTickCount() - _runTimeTick) > 10000)
                 {
                     _runTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildManager.Run();

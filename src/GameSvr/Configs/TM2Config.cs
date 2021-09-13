@@ -515,7 +515,7 @@ namespace GameSvr
         public int nWinLotteryLevel4;
         public int nWinLotteryLevel5;
         public int nWinLotteryLevel6;
-        public int[] GlobalVal;
+
         public int nItemNumber;
         public int nItemNumberEx;
         public int nGuildRecallTime;
@@ -811,7 +811,18 @@ namespace GameSvr
         public int nClientFile1_CRC;
         public int nClientFile2_CRC;
         public int nClientFile3_CRC;
+        /// <summary>
+        /// 不可保存的变量 I
+        /// </summary>
         public int[] GlobaDyMval;
+        /// <summary>
+        /// 变量可保存 G
+        /// </summary>
+        public int[] GlobalVal;
+        /// <summary>
+        /// 变量可保存 A
+        /// </summary>
+        public string[] GlobalAVal;
         public int nM2Crc;
         public int nCheckLicenseFail;
         public int dwCheckTick;
@@ -1344,7 +1355,9 @@ namespace GameSvr
             nWinLotteryLevel4 = 0;
             nWinLotteryLevel5 = 0;
             nWinLotteryLevel6 = 0;
-            GlobalVal = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            GlobalVal = new int[500];
+            GlobaDyMval = new int[500];
+            GlobalAVal = new string[500]; 
             nItemNumber = 0;
             nItemNumberEx = int.MaxValue / 2;
             nGuildRecallTime = 180;

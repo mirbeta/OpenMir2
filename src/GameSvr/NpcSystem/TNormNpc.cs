@@ -1042,7 +1042,7 @@ namespace GameSvr
                     {
                         sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', M2Share.g_Config.GlobalVal[n18 - 100].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 200, 209))
+                    else if (HUtil32.RangeInDefined(n18, 200, 299))
                     {
                         sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', PlayObject.m_DyVal[n18 - 200].ToString());
                     }
@@ -1217,7 +1217,7 @@ namespace GameSvr
                         nValue = PlayObject.m_nVal[n01];
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 100, 109))
+                    else if (HUtil32.RangeInDefined(n01, 100, 199))
                     {
                         nValue = M2Share.g_Config.GlobalVal[n01 - 100];
                         result = true;
@@ -1316,7 +1316,7 @@ namespace GameSvr
                         PlayObject.m_nVal[n01] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 100, 109))
+                    else if (HUtil32.RangeInDefined(n01, 100, 199))
                     {
                         M2Share.g_Config.GlobalVal[n01 - 100] = nValue;
                         result = true;

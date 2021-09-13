@@ -284,7 +284,7 @@ namespace GameSvr
                 {
                     M2Share.g_Config.GlobalVal[n14 - 100] = nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
                     PlayObject.m_DyVal[n14 - 200] = nCount;
                 }
@@ -780,7 +780,7 @@ namespace GameSvr
                                     result = false;
                                 }
                             }
-                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            else if (HUtil32.RangeInDefined(n10, 200, 299))
                             {
                                 if (PlayObject.m_DyVal[n10 - 200] != QuestConditionInfo.nParam2)
                                 {
@@ -825,7 +825,7 @@ namespace GameSvr
                                     result = false;
                                 }
                             }
-                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            else if (HUtil32.RangeInDefined(n10, 200, 299))
                             {
                                 if (PlayObject.m_DyVal[n10 - 200] <= QuestConditionInfo.nParam2)
                                 {
@@ -870,7 +870,7 @@ namespace GameSvr
                                     result = false;
                                 }
                             }
-                            else if (HUtil32.RangeInDefined(n10, 200, 209))
+                            else if (HUtil32.RangeInDefined(n10, 200, 299))
                             {
                                 if (PlayObject.m_DyVal[n10 - 200] >= QuestConditionInfo.nParam2)
                                 {
@@ -2028,7 +2028,7 @@ namespace GameSvr
                                     M2Share.g_Config.GlobalVal[n14 - 100]++;
                                 }
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 if (QuestActionInfo.nParam2 > 1)
                                 {
@@ -2097,7 +2097,7 @@ namespace GameSvr
                                     M2Share.g_Config.GlobalVal[n14 - 100] -= 1;
                                 }
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 if (QuestActionInfo.nParam2 > 1)
                                 {
@@ -2153,7 +2153,7 @@ namespace GameSvr
                             {
                                 n18 = M2Share.g_Config.GlobalVal[n14 - 100];
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 n18 = PlayObject.m_DyVal[n14 - 200];
                             }
@@ -2186,7 +2186,7 @@ namespace GameSvr
                             {
                                 n1C = M2Share.g_Config.GlobalVal[n14 - 100];
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 n1C = PlayObject.m_DyVal[n14 - 200];
                             }
@@ -2218,7 +2218,7 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobalVal[9] = M2Share.g_Config.GlobalVal[9] + n18 + n1C;
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 PlayObject.m_DyVal[9] = PlayObject.m_DyVal[9] + n18 + n1C;
                             }
@@ -2248,7 +2248,7 @@ namespace GameSvr
                                 {
                                     n18 = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n18 = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2293,7 +2293,7 @@ namespace GameSvr
                                 {
                                     n1C = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n1C = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2342,7 +2342,7 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobalVal[n14 - 100] = n18 / n1C;
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 PlayObject.m_DyVal[n14 - 200] = n18 / n1C;
                             }
@@ -2376,7 +2376,7 @@ namespace GameSvr
                                 {
                                     n18 = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n18 = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2421,7 +2421,7 @@ namespace GameSvr
                                 {
                                     n1C = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n1C = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2470,7 +2470,7 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobalVal[n14 - 100] = n18 * n1C;
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 PlayObject.m_DyVal[n14 - 200] = n18 * n1C;
                             }
@@ -2504,7 +2504,7 @@ namespace GameSvr
                                 {
                                     n18 = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n18 = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2549,7 +2549,7 @@ namespace GameSvr
                                 {
                                     n1C = M2Share.g_Config.GlobalVal[n14 - 100];
                                 }
-                                else if (HUtil32.RangeInDefined(n14, 200, 209))
+                                else if (HUtil32.RangeInDefined(n14, 200, 299))
                                 {
                                     n1C = PlayObject.m_DyVal[n14 - 200];
                                 }
@@ -2598,7 +2598,7 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobalVal[n14 - 100] = n18 / n1C * 100;
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 PlayObject.m_DyVal[n14 - 200] = n18 / n1C * 100;
                             }
@@ -2610,9 +2610,25 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 / n1C * 100;
                             }
-                            else if (HUtil32.RangeInDefined(n14, 800, 1200))//G变量
+                            else if (HUtil32.RangeInDefined(n14, 500, 599))
+                            {
+                                PlayObject.m_nInteger[n14 - 500] = n18 / n1C * 100;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 600, 699))
+                            {
+                                PlayObject.m_sString[n14 - 600] = $"{n18 / n1C * 100}%";
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 700, 799))
+                            {
+                                M2Share.g_Config.GlobalAVal[n14 - 700] = $"{n18 / n1C * 100}%";
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                             {
                                 M2Share.g_Config.GlobalVal[n14 - 700] = n18 / n1C * 100;
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
+                            {
+                                M2Share.g_Config.GlobalAVal[n14 - 1100] = $"{n18 / n1C * 100}%";
                             }
                         }
                         break;
@@ -2692,7 +2708,7 @@ namespace GameSvr
                             {
                                 M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                             }
-                            else if (HUtil32.RangeInDefined(n14, 200, 209))
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
                                 PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                             }

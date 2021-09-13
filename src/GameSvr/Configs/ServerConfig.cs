@@ -2664,6 +2664,15 @@ namespace GameSvr.Configs
                 else
                     M2Share.g_Config.GlobalVal[i] = nLoadInteger;
             }
+            for (var i = M2Share.g_Config.GlobalAVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalAVal.GetUpperBound(0); i++)
+            {
+                sLoadString = Config.ReadString("Setup", "GlobalStrVal" + i, "");
+                if (string.IsNullOrEmpty(sLoadString))
+                    Config.WriteString("Setup", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
+                else
+                    M2Share.g_Config.GlobalAVal[i] = sLoadString;
+            }
+            
             nLoadInteger = Config.ReadInteger("Setup", "WinLotteryCount", -1);
             if (nLoadInteger < 0)
                 Config.WriteInteger("Setup", "WinLotteryCount", M2Share.g_Config.nWinLotteryCount);

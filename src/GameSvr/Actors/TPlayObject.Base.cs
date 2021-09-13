@@ -179,10 +179,38 @@ namespace GameSvr
         public string m_sDelayCallLabel = string.Empty;
         public TScript m_Script = null;
         public TBaseObject m_NPC = null;
+        /// <summary>
+        /// 玩家的变量P
+        /// </summary>
         public int[] m_nVal;
+        /// <summary>
+        /// 玩家的变量M
+        /// </summary>
         public int[] m_nMval;
+        /// <summary>
+        /// 玩家的变量D
+        /// </summary>
         public int[] m_DyVal;
+        /// <summary>
+        /// 玩家的变量
+        /// </summary>
         public string[] m_nSval;
+        /// <summary>
+        /// 人物变量  N
+        /// </summary>
+        public int[] m_nInteger;
+        /// <summary>
+        /// 人物变量  S
+        /// </summary>
+        public string[] m_sString;
+        /// <summary>
+        /// 服务器变量 W 0-20 个人服务器数值变量，不可保存，不可操作
+        /// </summary>
+        public string[] m_ServerStrVal;
+        /// <summary>
+        /// E 0-20 个人服务器字符串变量，不可保存，不可操作
+        /// </summary>
+        public int[] m_ServerIntVal;
         public string m_sPlayDiceLabel = string.Empty;
         public bool m_boTimeRecall = false;
         public int m_dwTimeRecallTick = 0;
@@ -509,10 +537,14 @@ namespace GameSvr
             m_sRankLevelName = M2Share.g_sRankLevelName;
             m_boFixedHideMode = true;
             m_nStep = 0;
-            m_nVal = new int[10];
+            m_nVal = new int[100];
             m_nMval = new int[100];
-            m_DyVal = new int[10];
+            m_DyVal = new int[100];
             m_nSval = new string[100];
+            m_nInteger = new int[100];
+            m_sString = new string[100];
+            m_ServerStrVal = new string[100];
+            m_ServerIntVal = new int[100];
             //FillChar(m_nMval, sizeof(m_nMval), '\0');
             //FillChar(m_nSval, sizeof(m_nSval), '\0');
             m_nClientFlagMode = -1;
