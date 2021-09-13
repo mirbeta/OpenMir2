@@ -688,6 +688,7 @@ namespace SystemModule
         public const int SM_SENDMYMAGIC = 211;
         public const int SM_DELMAGIC = 212;
         public const int SM_ATTACKMODE = 213;
+        public const int CM_CHECKTIME = 15999;
         // 攻击模式
         public const int SM_CERTIFICATION_SUCCESS = 500;
         public const int SM_CERTIFICATION_FAIL = 501;
@@ -921,7 +922,7 @@ namespace SystemModule
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
         public const int GM_TEST = 20;
-        // M2Server
+        // GameSvr
         public const int GROUPMAX = 11;
         public const int CM_42HIT = 42;
         public const int CM_PASSWORD = 2001;
