@@ -2594,8 +2594,10 @@ namespace GameSvr
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (!PlayObject.m_boGhost) 
+                if (!PlayObject.m_boGhost)
+                {
                     PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
+                }
             }
         }
 

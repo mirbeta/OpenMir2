@@ -16,18 +16,17 @@ namespace GameSvr
             _mirApp = serverApp;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Task.Run(async () =>
+            if (M2Share.boStartReady)
             {
                 await M2Share.RunSocket.StartConsumer();
-            }, stoppingToken);
-            return Task.CompletedTask;
+            }
         }
         
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("GameSvr is starting.");
+            M2Share.MainOutMessage("GameSvr is starting.");
             M2Share.MainOutMessage("正在读取配置信息...");
             _mirApp.InitializeServer();
             M2Share.MainOutMessage("读取配置信息完成...");
@@ -39,7 +38,7 @@ namespace GameSvr
         {
             Console.WriteLine("GameSvr is stopping.");
 
-            //转移在线玩家到新服务器
+            //如果有多机负载转移在线玩家到新服务器
             if (M2Share.UserEngine.PlayObjects.Any())
             {
                 Task.Run(() =>

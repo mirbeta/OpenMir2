@@ -101,7 +101,7 @@ namespace GameSvr
                 }
                 M2Share.MainOutMessage("加载捆装物品信息成功...");
                 M2Share.MainOutMessage("加载物品寄售系统...");
-                //M2Share.LocalDB.LoadSellOffItemList();
+                M2Share.LocalDB.LoadSellOffItemList();
                 M2Share.MainOutMessage("正在加载任务地图信息...");
                 nCode = M2Share.LocalDB.LoadMapQuest();
                 if (nCode < 0)
@@ -273,7 +273,7 @@ namespace GameSvr
             M2Share.g_UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<TQDDinfo>();
-            M2Share.AbuseTextList = new ArrayList();
+            M2Share.AbuseTextList = new StringList();
             M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>();
             M2Share.g_ChatLoggingList = new List<string>();
             M2Share.g_DisableMakeItemList = new List<string>();
@@ -362,29 +362,33 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 加载文字过滤配置
+        /// </summary>
+        /// <param name="FileName"></param>
+        /// <returns></returns>
         private bool LoadAbuseInformation(string FileName)
         {
-            bool result;
-            int i;
-            result = false;
+            int lineCount = 0;
+            var result = false;
+            var sText = string.Empty;
             if (File.Exists(FileName))
             {
                 M2Share.AbuseTextList.Clear();
-                //M2Share.AbuseTextList.LoadFromFile(FileName);
-                i = 0;
+                M2Share.AbuseTextList.LoadFromFile(FileName);
                 while (true)
                 {
-                    if (M2Share.AbuseTextList.Count <= i)
+                    if (M2Share.AbuseTextList.Count <= lineCount)
                     {
                         break;
                     }
-                    //sText = M2Share.AbuseTextList[i].Trim();
-                    //if (sText == "")
-                    //{
-                    //    M2Share.AbuseTextList.Remove(i);
-                    //    continue;
-                    //}
-                    i++;
+                    sText = M2Share.AbuseTextList[lineCount].Trim();
+                    if (sText == "")
+                    {
+                        M2Share.AbuseTextList.RemoveAt(lineCount);
+                        continue;
+                    }
+                    lineCount++;
                 }
                 result = true;
             }
@@ -401,9 +405,12 @@ namespace GameSvr
             //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
         }
 
+        /// <summary>
+        /// 保存变量
+        /// </summary>
         private void SaveItemsData()
         {
-            //if (HUtil32.GetTickCount() - M2Share.dwSaveDataTick > 480000)// 1000 * 60 * 8
+            //if (HUtil32.GetTickCount() - M2Share.dwSaveDataTick > 480000)
             //{
             //    M2Share.dwSaveDataTick = HUtil32.GetTickCount();
             //    if (M2Share.sSellOffItemList != null)

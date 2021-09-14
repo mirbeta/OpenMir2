@@ -2715,6 +2715,9 @@ namespace GameSvr.Configs
                 M2Share.g_Config.nWinLotteryLevel6 = nLoadInteger;
         }
 
+        /// <summary>
+        /// 保存游戏变量和彩票中奖数据
+        /// </summary>
         public void SaveVariable()
         {
             Config.WriteInteger("Setup", "ItemNumber", M2Share.g_Config.nItemNumber);

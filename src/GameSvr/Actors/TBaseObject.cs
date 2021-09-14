@@ -10,21 +10,24 @@ namespace GameSvr
         public int ObjectId;
         public string m_sMapName;
         public string m_sMapFileName;
+        /// <summary>
+        /// 名称
+        /// </summary>
         public string m_sCharName;
         /// <summary>
-        /// 人物所在座标X
+        /// 所在座标X
         /// </summary>
         public short m_nCurrX = 0;
         /// <summary>
-        /// 人物所在座标Y
+        /// 所在座标Y
         /// </summary>
         public short m_nCurrY = 0;
         /// <summary>
-        /// 人物所在方向
+        /// 所在方向
         /// </summary>
         public byte m_btDirection = 0;
         /// <summary>
-        /// 人物的性别
+        /// 性别
         /// </summary>
         public byte m_btGender = 0;
         /// <summary>
@@ -32,7 +35,7 @@ namespace GameSvr
         /// </summary>
         public byte m_btHair = 0;
         /// <summary>
-        /// 人物的职业
+        /// 人物的职业 (0:战士 1：法师 2:道士)
         /// </summary>
         public byte m_btJob = 0;
         /// <summary>
@@ -150,7 +153,7 @@ namespace GameSvr
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
-        public byte m_btGreenPoisoningPoint = 0;
+        private byte m_btGreenPoisoningPoint = 0;
         /// <summary>
         /// 人物身上最多可带金币数
         /// </summary>
@@ -166,7 +169,7 @@ namespace GameSvr
         /// <summary>
         /// 攻击速度
         /// </summary>
-        public ushort m_nHitSpeed = 0;
+        protected ushort m_nHitSpeed = 0;
         public byte m_btLifeAttrib = 0;
         public byte m_btCoolEye = 0;
         public TBaseObject m_GroupOwner = null;
@@ -239,7 +242,7 @@ namespace GameSvr
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        public bool m_boGuildWarArea = false;
+        private bool m_boGuildWarArea = false;
         /// <summary>
         /// 所属城堡
         /// </summary>
@@ -1842,7 +1845,7 @@ namespace GameSvr
                         m_VisibleActors[i] = null;
                     }
                     m_VisibleActors.Clear();
-                    m_VisibleEvents.Clear();// 01/21 移动时清除列表
+                    m_VisibleEvents.Clear();
                     m_PEnvir = Envir;
                     m_sMapName = Envir.sMapName;
                     m_sMapFileName = Envir.m_sMapFileName;
@@ -1975,7 +1978,7 @@ namespace GameSvr
         /// 检查心灵启示
         /// </summary>
         /// <param name="Magic"></param>
-        public void CheckSeeHealGauge(TUserMagic Magic)
+        protected void CheckSeeHealGauge(TUserMagic Magic)
         {
             if (Magic.MagicInfo.wMagicID == 28)
             {
@@ -2127,7 +2130,7 @@ namespace GameSvr
             }
         }
 
-        public bool KillFunc()
+        private bool KillFunc()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
             bool result = false;
@@ -2219,7 +2222,6 @@ namespace GameSvr
                         SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, m_UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
                         RecalcAbilitys();
-                        // FeatureChanged(); 01/21 取消 蜡烛是本人才可以看到的，不需要发送广播信息
                     }
                     else
                     {
@@ -2339,6 +2341,10 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 计算包裹物品重量
+        /// </summary>
+        /// <returns></returns>
         protected ushort RecalcBagWeight()
         {
             ushort result = 0;
@@ -2356,6 +2362,9 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 计算攻击速度
+        /// </summary>
         private void RecalcHitSpeed()
         {
             TUserMagic UserMagic;
@@ -3436,7 +3445,7 @@ namespace GameSvr
         /// <summary>
         /// 取怪物说话信息列表
         /// </summary>
-        public void LoadSayMsg()
+        private void LoadSayMsg()
         {
             for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
             {
@@ -3533,7 +3542,6 @@ namespace GameSvr
                         }
                     }
                 }
-
                 if (__Event != null)
                 {
                     if (__Event.m_OwnBaseObject.IsProperTarget(this))
@@ -3541,7 +3549,6 @@ namespace GameSvr
                         SendMsg(__Event.m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.m_nDamage, 0, 0, "");
                     }
                 }
-
                 if (result && (GateObj != null))
                 {
                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3601,7 +3608,7 @@ namespace GameSvr
         /// <param name="nDMapX"></param>
         /// <param name="nDMapY"></param>
         /// <returns></returns>
-        public bool EnterAnotherMap(TEnvirnoment Envir, int nDMapX, int nDMapY)
+        private bool EnterAnotherMap(TEnvirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
             TMapCellinfo MapCellInfo = null;
@@ -3730,15 +3737,14 @@ namespace GameSvr
                 }
             }
 
-            if (MsgType == TMsgType.t_Notice)
+            if (MsgType == TMsgType.t_Notice)// 如果发的是公告
             {
                 string str = string.Empty;
                 string FColor= string.Empty;
                 string BColor= string.Empty;
                 string nTime= string.Empty;
-                if ((sMsg[0] == '['))// 如果发的是公告
+                if (sMsg[0] == '[')// 顶部滚动公告
                 {
-                    // 顶部滚动公告
                     sMsg = HUtil32.ArrestStringEx(sMsg, '[', ']', ref str);
                     BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
                     if (M2Share.g_Config.boShowPreFixMsg)
@@ -3747,7 +3753,7 @@ namespace GameSvr
                     }
                     SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
                 }
-                else if ((sMsg[0] == '<'))// 聊天框彩色公告
+                else if (sMsg[0] == '<')// 聊天框彩色公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, '<', '>', ref str);
                     BColor = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
@@ -3757,7 +3763,7 @@ namespace GameSvr
                     }
                     SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.Str_ToInt(FColor, 255), HUtil32.Str_ToInt(BColor, 255), 0, sMsg);
                 }
-                else if ((sMsg[0] == '{'))// 屏幕居中公告
+                else if (sMsg[0] == '{')// 屏幕居中公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, '{', '}', ref str);
                     str = HUtil32.GetValidStrCap(str, ref FColor, new string[] {"," });
@@ -3893,7 +3899,10 @@ namespace GameSvr
             }
         }
 
-        public void ApplyMeatQuality()
+        /// <summary>
+        /// 设置肉的品质
+        /// </summary>
+        protected void ApplyMeatQuality()
         {
             GameItem StdItem;
             TUserItem UserItem;
@@ -3911,7 +3920,7 @@ namespace GameSvr
             }
         }
 
-        public bool TakeBagItems(TBaseObject BaseObject)
+        protected bool TakeBagItems(TBaseObject BaseObject)
         {
             bool result = false;
             TUserItem UserItem;
@@ -3938,6 +3947,10 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 散落金币
+        /// </summary>
+        /// <param name="GoldOfCreat"></param>
         public void ScatterGolds(TBaseObject GoldOfCreat)
         {
             int I;
@@ -4025,6 +4038,11 @@ namespace GameSvr
             return true;
         }
 
+        /// <summary>
+        /// 是否可以攻击的目标
+        /// </summary>
+        /// <param name="BaseObject"></param>
+        /// <returns></returns>
         public virtual bool IsAttackTarget(TBaseObject BaseObject)
         {
             bool result = false;

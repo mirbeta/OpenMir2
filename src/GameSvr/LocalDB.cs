@@ -1419,11 +1419,6 @@ namespace GameSvr
                         }
                     }
                 }
-                
-            }
-            else
-            {
- 
             }
         }
 

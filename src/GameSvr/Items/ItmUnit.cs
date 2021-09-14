@@ -72,6 +72,9 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 加载自定义物品名称
+        /// </summary>
         public void LoadCustomItemName()
         {
             string sLineText;
@@ -107,6 +110,9 @@ namespace GameSvr
             loadList = null;
         }
 
+        /// <summary>
+        /// 保存自定义物品名称
+        /// </summary>
         public void SaveCustomItemName()
         {
             var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "ItemNameList.txt");
@@ -120,6 +126,11 @@ namespace GameSvr
             saveList = null;
         }
         
+        /// <summary>
+        /// 获取物品名称颜色
+        /// </summary>
+        /// <param name="UserItem"></param>
+        /// <returns></returns>
         public int GetItemAddValuePointColor(TUserItem UserItem)
         {
             int result = 0;

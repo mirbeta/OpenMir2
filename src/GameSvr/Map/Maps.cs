@@ -442,7 +442,7 @@ namespace GameSvr
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNO.ToLower()))
                             {
-                                M2Share.ErrorMessage(string.Format("重复小地图配置信息[{0}]", sMapNO));
+                                M2Share.ErrorMessage($"重复小地图配置信息[{sMapNO}]");
                                 continue;
                             }
                             M2Share.MiniMapList.Add(sMapNO.ToLower(), nIdx);

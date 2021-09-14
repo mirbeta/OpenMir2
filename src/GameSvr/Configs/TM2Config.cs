@@ -218,6 +218,9 @@ namespace GameSvr
         public int nMonsterPowerRate;
         public int nItemsPowerRate;
         public int nItemsACPowerRate;
+        /// <summary>
+        /// 是否显示在线人数
+        /// </summary>
         public bool boSendOnlineCount;
         public int nSendOnlineCountRate;
         /// <summary>

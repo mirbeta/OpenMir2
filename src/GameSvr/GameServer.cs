@@ -11,14 +11,6 @@ namespace GameSvr
         /// 运行时间
         /// </summary>
         private int _runTimeTick = 0;
-        /// <summary>
-        /// 游戏公告定时器
-        /// </summary>
-        private Timer _gamenoticeTimer = null;
-        /// <summary>
-        /// 全局变量定时器
-        /// </summary>
-        private Timer _saveVariableTimer = null;
 
         protected ServerBase()
         {
@@ -31,8 +23,7 @@ namespace GameSvr
             M2Share.RunSocket.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
-            _gamenoticeTimer = new Timer(ProcessGameNotice, null, 5000, 5000);
-            _saveVariableTimer = new Timer(SaveItemNumber, null, 15000, 20000);
+            var timer = new Timer(SaveItemNumber, null, 15000, 10000);
         }
 
         protected void Stop()
@@ -56,11 +47,11 @@ namespace GameSvr
                 {
                     InterMsgClient.Instance.Run();
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
         }
 
-        private void ProcessGameNotice(object obj)
+        private void ProcessGameNotice()
         {
             if (M2Share.g_Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.g_Config.dwSendOnlineTime)
             {
@@ -70,8 +61,9 @@ namespace GameSvr
             }
         }
 
-        private static void SaveItemNumber(object sender)
+        private void SaveItemNumber(object sender)
         {
+            ProcessGameNotice();
             M2Share.ServerConf.SaveVariable();
         }
 

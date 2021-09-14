@@ -74,7 +74,7 @@ namespace GameSvr
         /// </summary>
         public static IList<string> LineNoticeList = null;
         public static IList<TQDDinfo> QuestDiaryList = null;
-        public static ArrayList AbuseTextList = null;
+        public static StringList AbuseTextList = null;
         /// <summary>
         /// 怪物说话信息列表
         /// </summary>
