@@ -40,6 +40,7 @@ namespace GameSvr
         /// </summary>
         public static CommandManager CommandSystem = null;
         public static LocalDB LocalDB = null;
+        public static CommonDB CommonDB = null;
         public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
         public static DataServer DataServer = null;

@@ -917,19 +917,19 @@ namespace GameSvr
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADITEMDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            M2Share.LocalDB.LoadItemsDB();
+                            M2Share.CommonDB.LoadItemsDB();
                             SysMsg("物品数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMAGICDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            // FrmDB.LoadMagicDB();
-                            // SysMsg('魔法数据库重新加载完成。',c_Green,t_Hint);
+                            M2Share.CommonDB.LoadMagicDB();
+                            SysMsg("魔法数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMONSTERDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            M2Share.LocalDB.LoadMonsterDB();
+                            M2Share.CommonDB.LoadMonsterDB();
                             SysMsg("怪物数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }

@@ -16,7 +16,8 @@ namespace GameSvr
         {
             int nCode;
             M2Share.LocalDB = new LocalDB();
-            if (!M2Share.LocalDB.CheckDataBase())
+            M2Share.CommonDB = new CommonDB();
+            if (!M2Share.CommonDB.CheckDataBase())
             {
                 return;
             }
@@ -28,7 +29,7 @@ namespace GameSvr
                 M2Share.LoadDenyChrNameList();
                 M2Share.LoadNoClearMonList();
                 M2Share.MainOutMessage("正在加载物品数据库...");
-                nCode = M2Share.LocalDB.LoadItemsDB();
+                nCode = M2Share.CommonDB.LoadItemsDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("物品数据库加载失败！！！" + "Code: " + nCode);
@@ -52,7 +53,7 @@ namespace GameSvr
                 }
                 M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
                 M2Share.MainOutMessage("正在加载怪物数据库...");
-                nCode = M2Share.LocalDB.LoadMonsterDB();
+                nCode = M2Share.CommonDB.LoadMonsterDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载怪物数据库失败！！！" + "Code: " + nCode);
@@ -60,7 +61,7 @@ namespace GameSvr
                 }
                 M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
                 M2Share.MainOutMessage("正在加载技能数据库...");
-                nCode = M2Share.LocalDB.LoadMagicDB();
+                nCode = M2Share.CommonDB.LoadMagicDB();
                 if (nCode < 0)
                 {
                     M2Share.MainOutMessage("加载技能数据库失败！！！" + "Code: " + nCode);

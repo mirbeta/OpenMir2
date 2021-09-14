@@ -478,9 +478,8 @@ namespace GameSvr
             }
         }
 
-        public void CmdReloadMonItems()
+        private void CmdReloadMonItems()
         {
-            int I;
             TMonInfo Monster;
             if (m_btPermission < 6)
             {
@@ -488,9 +487,9 @@ namespace GameSvr
             }
             try
             {
-                for (I = 0; I < M2Share.UserEngine.MonsterList.Count; I++)
+                for (var i = 0; i < M2Share.UserEngine.MonsterList.Count; i++)
                 {
-                    Monster = M2Share.UserEngine.MonsterList[I];
+                    Monster = M2Share.UserEngine.MonsterList[i];
                     M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
                 }
                 SysMsg("怪物爆物品列表重加载完成...", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -501,7 +500,7 @@ namespace GameSvr
             }
         }
 
-        public void CmdReloadNpc(string sParam)
+        private void CmdReloadNpc(string sParam)
         {
             IList<TBaseObject> TmpList;
             TMerchant Merchant;
