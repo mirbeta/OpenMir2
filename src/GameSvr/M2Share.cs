@@ -19,6 +19,9 @@ namespace GameSvr
 
     public static class M2Share
     {
+        /// <summary>
+        /// 服务器编号
+        /// </summary>
         public static int nServerIndex = 0;
         /// <summary>
         /// 服务器启动时间
@@ -100,8 +103,10 @@ namespace GameSvr
         /// 怪物爆物品限制
         /// </summary>
         public static Dictionary<string, TMonDrop> g_MonDropLimitLIst = null;
+        /// <summary>
+        /// 禁止取下物品列表
+        /// </summary>
         public static IList<string> g_DisableTakeOffList = null;
-        // 禁止取下物品列表
         public static IList<string> g_ChatLoggingList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
@@ -431,7 +436,7 @@ namespace GameSvr
         public static string g_sScriptGuildStabilityPointNoGuild = "你的行会的建筑度为:%d";
         public static string g_sScriptGuildStabilityPointMsg = "你的行会的安定度为:%d";
         public static string g_sScriptChiefItemCountMsg = "你的行会的超级装备数为:%d";
-        public static string g_sDisableSayMsg = "[由于你重复发相同的内容，%d分钟内你将被禁止发言...]";
+        public static string g_sDisableSayMsg = "[由于你重复发相同的内容，{0}分钟内你将被禁止发言...]";
         public static string g_sOnlineCountMsg = "在线数: %d";
         public static string g_sTotalOnlineCountMsg = "总在线数: %d";
         public static string g_sYouNeedLevelMsg = "你的等级要在{0}级以上才能用此功能！！！";

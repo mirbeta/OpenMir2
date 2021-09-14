@@ -26,7 +26,7 @@ namespace GameSvr
                     {
                         m_boDisableSayMsg = true;
                         m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.g_Config.dwDisableSayMsgTime;// 60 * 1000
-                        SysMsg(format(M2Share.g_sDisableSayMsg, new[] { M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000) }), TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(format(M2Share.g_sDisableSayMsg, M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000)), TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else

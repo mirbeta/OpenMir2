@@ -59,7 +59,6 @@ namespace GameSvr
         {
             var sMsg = string.Empty;
             var sLabel = string.Empty;
-            bool boCanJmp;
             const string sExceptionMsg = "[Exception] TGuildOfficial::UserSelect... ";
             base.UserSelect(PlayObject, sData);
             try
@@ -67,7 +66,7 @@ namespace GameSvr
                 if (sData != "" && sData[0] == '@')
                 {
                     sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
-                    boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                    var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                     this.GotoLable(PlayObject, sLabel, !boCanJmp);
                     if (!boCanJmp)
                     {

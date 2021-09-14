@@ -110,7 +110,7 @@ namespace GameSvr
             return result;
         }
 
-        public void RefillGoods_RefillItems(ref IList<TUserItem> List, string sItemName, int nInt)
+        private void RefillGoods_RefillItems(ref IList<TUserItem> List, string sItemName, int nInt)
         {
             TUserItem UserItem;
             if (List == null)
@@ -132,7 +132,7 @@ namespace GameSvr
             }
         }
 
-        public void RefillGoods_DelReFillItem(ref IList<TUserItem> List, int nInt)
+        private void RefillGoods_DelReFillItem(ref IList<TUserItem> List, int nInt)
         {
             for (var i = List.Count - 1; i >= 0; i--)
             {
@@ -146,7 +146,7 @@ namespace GameSvr
             }
         }
 
-        public void RefillGoods()
+        private void RefillGoods()
         {
             TGoods Goods;
             int nIndex;
@@ -275,7 +275,7 @@ namespace GameSvr
             }
         }
 
-        public void UpgradeWapon_sub_4A0218(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
+        private void UpgradeWapon_sub_4A0218(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
             IList<double> DuraList;
             TUserItem UserItem;
@@ -1417,7 +1417,7 @@ namespace GameSvr
             return HUtil32.Round(nPrice / 2.0);
         }
 
-        public bool ClientSellItem_sub_4A1C84(TUserItem UserItem)
+        private bool ClientSellItem_sub_4A1C84(TUserItem UserItem)
         {
             var result = true;
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -1490,7 +1490,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool ClientMakeDrugItem_sub_4A28FC(TPlayObject PlayObject, string sItemName)
+        private bool ClientMakeDrugItem_sub_4A28FC(TPlayObject PlayObject, string sItemName)
         {
             bool result = false;
             IList<TMakeItem> List10 = M2Share.GetMakeItemInfo(sItemName);
@@ -1779,7 +1779,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="sMsg"></param>
-        public void SetOffLineMsg(TPlayObject PlayObject, string sMsg)
+        protected void SetOffLineMsg(TPlayObject PlayObject, string sMsg)
         {
             PlayObject.m_sOffLineLeaveword = sMsg;
         }
@@ -1864,7 +1864,7 @@ namespace GameSvr
             }
         }
 
-        public void DisPose(object obj)
+        private void DisPose(object obj)
         {
             obj = null;
         }

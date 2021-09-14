@@ -1111,7 +1111,7 @@ namespace GameSvr
         protected string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
             string result;
-            int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
+            var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
                 var s14 = sMsg.Substring(0, n10);
@@ -1234,7 +1234,7 @@ namespace GameSvr
                     }
                     else if (HUtil32.RangeInDefined(n01, 500, 599))
                     {
-                        //nValue = PlayObject.m_nInteger[n01 - 500];
+                        nValue = PlayObject.m_nInteger[n01 - 500];
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 800, 1199))
@@ -1244,7 +1244,7 @@ namespace GameSvr
                     }
                     else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                     {
-                        //nValue = PlayObject.m_ServerIntVal[n01 - 1700];
+                        nValue = PlayObject.m_ServerIntVal[n01 - 1700];
                         result = true;
                     }
                 }
@@ -1271,22 +1271,22 @@ namespace GameSvr
                 {
                     if (HUtil32.RangeInDefined(n01, 600, 699))
                     {
-                        //sValue = PlayObject.m_sString[n01 - 600];
+                        sValue = PlayObject.m_sString[n01 - 600];
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 700, 799))
                     {
-                        //sValue = M2Share.g_Config.GlobalAVal[n01 - 700];
+                        sValue = M2Share.g_Config.GlobalAVal[n01 - 700];
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                     {
-                        //sValue = M2Share.g_Config.GlobalAVal[n01 - 1100];// A变量(100-499)
+                        sValue = M2Share.g_Config.GlobalAVal[n01 - 1100];// A变量(100-499)
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                     {
-                        //sValue = PlayObject.m_ServerStrVal[n01 - 1600];
+                        sValue = PlayObject.m_ServerStrVal[n01 - 1600];
                         result = true;
                     }
                 }
@@ -1338,7 +1338,7 @@ namespace GameSvr
                     }
                     else if (HUtil32.RangeInDefined(n01, 500, 599))
                     {
-                        // PlayObject.m_nInteger[n01 - 500] = nValue;
+                        PlayObject.m_nInteger[n01 - 500] = nValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 800, 1199))
@@ -1348,7 +1348,7 @@ namespace GameSvr
                     }
                     else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                     {
-                        //PlayObject.m_ServerIntVal[n01 - 1700] = nValue;
+                        PlayObject.m_ServerIntVal[n01 - 1700] = nValue;
                         result = true;
                     }
                 }
@@ -1375,17 +1375,17 @@ namespace GameSvr
                 {
                     if (HUtil32.RangeInDefined(n01, 600, 699))
                     {
-                        //PlayObject.m_sString[n01 - 600] = sValue;
+                        PlayObject.m_sString[n01 - 600] = sValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 700, 799))
                     {
-                        //M2Share.g_Config.GlobalAVal[n01 - 700] = sValue;
+                        M2Share.g_Config.GlobalAVal[n01 - 700] = sValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                     {
-                        //M2Share.g_Config.GlobalAVal[n01 - 1100] = sValue;// A变量(100-499)
+                        M2Share.g_Config.GlobalAVal[n01 - 1100] = sValue;// A变量(100-499)
                         result = true;
                     }
                 }
