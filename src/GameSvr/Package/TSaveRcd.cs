@@ -1,3 +1,5 @@
+using SystemModule;
+
 namespace GameSvr
 {
     public class TSaveRcd

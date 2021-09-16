@@ -627,16 +627,12 @@ namespace SystemModule
 
         private static bool IsEnglish(char Ch)
         {
-            var result = false;
-            if (Ch >= 'A' && Ch <= 'Z' || Ch >= 'a' && Ch <= 'z') result = true;
-            return result;
+            return Ch >= 'A' && Ch <= 'Z' || Ch >= 'a' && Ch <= 'z';
         }
 
         public static bool IsEngNumeric(char Ch)
         {
-            var result = false;
-            if (IsEnglish(Ch) || Ch >= '0' && Ch <= '9') result = true;
-            return result;
+            return IsEnglish(Ch) || Ch >= '0' && Ch <= '9';;
         }
 
         public static bool IsEnglishStr(string sEngStr)
@@ -647,7 +643,6 @@ namespace SystemModule
                 result = IsEnglish(sEngStr[i]);
                 if (result) break;
             }
-
             return result;
         }
 
@@ -659,7 +654,6 @@ namespace SystemModule
                 result = false;
                 return result;
             }
-
             try
             {
                 Convert.ToSingle(str);
@@ -771,16 +765,6 @@ namespace SystemModule
             return result;
         }
 
-        public static int GetCodeMsgSize(double X)
-        {
-            int result;
-            if (Convert.ToInt32(X) < X)
-                result = Convert.ToInt32(X) + 1;
-            else
-                result = Convert.ToInt32(X);
-            return result;
-        }
-
         public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
         {
             var pSrc = (byte*) Src + SrcIndex;
@@ -876,6 +860,16 @@ namespace SystemModule
                 }
             }
             return result;
+        }
+        
+        public static long IpToInt(string ip)
+        {
+            char[] separator = new char[] { '.' };
+            string[] items = ip.Split(separator);
+            return long.Parse(items[0]) << 24
+                   | long.Parse(items[1]) << 16
+                   | long.Parse(items[2]) << 8
+                   | long.Parse(items[3]);
         }
 
     }

@@ -528,11 +528,9 @@ namespace GameGate
                             }
                         }
                         // ------------------------------------
-                        if ((HUtil32.GetTickCount() - _gameSpeed.dwContinueTick) < 3000)
+                        if ((HUtil32.GetTickCount() - _gameSpeed.dwContinueTick) < 3000)// 停顿操作后3秒内数据全部抛出
                         {
-                            // 停顿操作后3秒内数据全部抛出
-                            result = 4;
-                            // 返回抛出数据
+                            result = 4; // 返回抛出数据
                             return result;
                         }
                         // ------------------------------------
@@ -750,9 +748,8 @@ namespace GameGate
                         // ------------------------------------
                         // 原理:保存每次走路和跑步时间,判断移动后魔法之间间隔.
                         // ------------------------------------
-                        if (GateShare.boStartRunhitCheck)
+                        if (GateShare.boStartRunhitCheck)// 移动魔法
                         {
-                            // 移动魔法
                             if ((HUtil32.GetTickCount() - _gameSpeed.dwRunWalkTick) < GateShare.dwSpinEditRunspellTime)
                             {
                                 SessionInfo.dwClientCheckTimeOut = 5000;// 延迟间隔
@@ -844,8 +841,7 @@ namespace GameGate
                                 break;
                         }
                         break;
-                    case Grobal2.CM_TURN:
-                        // 转身     （只有停顿和延迟处理）
+                    case Grobal2.CM_TURN: // 转身     （只有停顿和延迟处理）
                         // ------------------------------------
                         // 原理:外挂利用挖地.自身不显示下蹲动作,而达到比正常玩家快1步.
                         // 每次保存上一次动作,判断挖地操作后,少下蹲动作,作为挖地暗杀处理.
@@ -960,30 +956,25 @@ namespace GameGate
                         {
                             if ((HUtil32.GetTickCount() - _gameSpeed.dwEatTick) < GateShare.dwSpinEditEatTime)
                             {
-                                if (SessionInfo.boSendAvailable)
+                                if (SessionInfo.boSendAvailable)// 延迟间隔
                                 {
-                                    // 延迟间隔
                                     SessionInfo.dwClientCheckTimeOut = 100;
                                 }
                                 else
                                 {
-                                    SessionInfo.dwClientCheckTimeOut += GateShare.dwSpinEditEatTime;
+                                    SessionInfo.dwClientCheckTimeOut += GateShare.dwSpinEditEatTime;// 延迟间隔
                                 }
-                                // 延迟间隔
-                                result = GateShare.dwComboBoxEatCheck + 10;
-                                // 返回吃药加速处理
+                                result = GateShare.dwComboBoxEatCheck + 10; // 返回吃药加速处理
                             }
                             if (SessionInfo.sUserName == GateShare.boMsgUserName)
                             {
-                                GateShare.AddMainLogMsg("[吃药间隔]：" + (HUtil32.GetTickCount() - _gameSpeed.dwEatTick) + " 毫秒(" + (_gameSpeed.nErrorCount) + "/50)", 3);
+                                GateShare.AddMainLogMsg("[吃药间隔]：" + (HUtil32.GetTickCount() - _gameSpeed.dwEatTick) + " 毫秒(" + (_gameSpeed.nErrorCount) + "/50)", 3);// 封包显示
                             }
-                            // 封包显示
                             _gameSpeed.dwEatTick = HUtil32.GetTickCount();// 保存吃药时间
                             _gameSpeed.dwGameTick = HUtil32.GetTickCount();// 在线时间
                         }
                         break;
-                    case Grobal2.CM_CHECKTIME:
-                        // 变速齿轮
+                    case Grobal2.CM_CHECKTIME: // 变速齿轮
                         // ------------------------------------
                         // 原理：SKY客户端登陆游戏后，每1分钟向游戏网关发送一次CM_15999进行验证
                         // 在这里只需要判断两次间隔小于50秒，作为客户端已被加速处理。
@@ -1128,7 +1119,7 @@ namespace GameGate
                 }
                 if (SessionInfo.Socket.Connected)
                 {
-                    DefMsg = Grobal2.MakeDefaultMsg(103, (int)(SessionInfo.Socket.Handle), HUtil32.MakeWord(FColor, BColor), 0, 1);
+                    DefMsg = Grobal2.MakeDefaultMsg(103, (int)SessionInfo.Socket.Handle, HUtil32.MakeWord(FColor, BColor), 0, 1);
                     sSendText = "#" + EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sMsg) + "!";
                     SessionInfo.Socket.SendText(sSendText);
                 }
@@ -1197,29 +1188,98 @@ namespace GameGate
 
     public class GameSpeed
     {
-        public int nErrorCount;// 加速的累计值
-        public int m_nHitSpeed;// 装备加速
-        public long dwSayMsgTick;// 发言时间
-        public long dwHitTick;// 攻击时间
-        public long dwSpellTick;// 魔法时间
-        public long dwWalkTick;// 走路时间
-        public long dwRunTick;// 跑步时间
-        public long dwTurnTick;// 转身时间
-        public long dwButchTick;// 挖肉时间
-        public long dwEatTick;// 吃药时间
-        public long dwPickupTick;// 捡起时间
-        public long dwRunWalkTick;// 移动时间
-        public long dwFeiDnItemsTick;// 传送时间
-        public long dwSupSpeederTick;// 变速齿轮时间
-        public int dwSupSpeederCount;// 变速齿轮累计
-        public long dwSuperNeverTick;// 超级加速时间
-        public int dwSuperNeverCount;// 超级加速累计
-        public int dwUserDoTick;// 记录上一次操作
-        public long dwContinueTick;// 保存停顿操作时间
-        public int dwConHitMaxCount;// 带有攻击并发累计
-        public int dwConSpellMaxCount;// 带有魔法并发累计
-        public int dwCombinationTick;// 记录上一次移动方向
-        public int dwCombinationCount;// 智能攻击累计
+        /// <summary>
+        /// 加速的累计值
+        /// </summary>
+        public int nErrorCount;
+        /// <summary>
+        /// 装备加速
+        /// </summary>
+        public int m_nHitSpeed;
+        /// <summary>
+        /// 发言时间
+        /// </summary>
+        public long dwSayMsgTick;
+        /// <summary>
+        /// 攻击时间
+        /// </summary>
+        public long dwHitTick;
+        /// <summary>
+        /// 魔法时间
+        /// </summary>
+        public long dwSpellTick;
+        /// <summary>
+        /// 走路时间
+        /// </summary>
+        public long dwWalkTick;
+        /// <summary>
+        /// 跑步时间
+        /// </summary>
+        public long dwRunTick;
+        /// <summary>
+        /// 转身时间
+        /// </summary>
+        public long dwTurnTick;
+        /// <summary>
+        /// 挖肉时间
+        /// </summary>
+        public long dwButchTick;
+        /// <summary>
+        /// 吃药时间
+        /// </summary>
+        public long dwEatTick;
+        /// <summary>
+        /// 捡起时间
+        /// </summary>
+        public long dwPickupTick;
+        /// <summary>
+        /// 移动时间
+        /// </summary>
+        public long dwRunWalkTick;
+        /// <summary>
+        /// 传送时间
+        /// </summary>
+        public long dwFeiDnItemsTick;
+        /// <summary>
+        /// 变速齿轮时间
+        /// </summary>
+        public long dwSupSpeederTick;
+        /// <summary>
+        /// 变速齿轮累计
+        /// </summary>
+        public int dwSupSpeederCount;
+        /// <summary>
+        /// 超级加速时间
+        /// </summary>
+        public long dwSuperNeverTick;
+        /// <summary>
+        /// 超级加速累计
+        /// </summary>
+        public int dwSuperNeverCount;
+        /// <summary>
+        /// 记录上一次操作
+        /// </summary>
+        public int dwUserDoTick;
+        /// <summary>
+        /// 保存停顿操作时间
+        /// </summary>
+        public long dwContinueTick;
+        /// <summary>
+        /// 带有攻击并发累计
+        /// </summary>
+        public int dwConHitMaxCount;
+        /// <summary>
+        /// 带有魔法并发累计
+        /// </summary>
+        public int dwConSpellMaxCount;
+        /// <summary>
+        /// 记录上一次移动方向
+        /// </summary>
+        public int dwCombinationTick;
+        /// <summary>
+        /// 智能攻击累计
+        /// </summary>
+        public int dwCombinationCount;
         public long dwGameTick;
 
         public GameSpeed()

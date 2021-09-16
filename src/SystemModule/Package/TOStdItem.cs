@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using SystemModule;
 
-namespace GameSvr
+namespace SystemModule
 {
     public struct TOStdItem
     {

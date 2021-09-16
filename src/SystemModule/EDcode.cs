@@ -138,6 +138,14 @@ namespace SystemModule
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
             return EncBuf;
         }
+        
+        public static byte[] DecodeBuffer(string Src,int size)
+        {
+            var EncBuf = new byte[size];
+            var bSrc = HUtil32.GetBytes(Src);
+            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
+            return EncBuf;
+        }
 
         /// <summary>
         /// 加密字符串

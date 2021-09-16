@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace DBSvr
-{
+namespace DBSvr{
     class Program
     {
         static void Main(string[] args)

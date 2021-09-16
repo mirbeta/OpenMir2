@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -32,6 +33,8 @@ namespace SystemModule.Sockets.AsyncSocketServer
         SocketAsyncEventArgsPool m_readPool;
         // 写Socket操作的SocketAsyncEventArgs可重用对象池
         SocketAsyncEventArgsPool m_writePool;
+
+        bool isActive = false;
 
         // 测试用
         long m_totalBytesRead;          // 服务器接收到的总字节数计数器
@@ -101,17 +104,12 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
         }
 
-        public AsyncUserToken GetSocket(string ipAddr)
+        public IList<AsyncUserToken> GetSockets()
         {
-            if (string.IsNullOrEmpty(ipAddr))
+            lock (((ICollection)this.m_tokens).SyncRoot)
             {
-                return null;
+                return this.m_tokens.Values.ToList();
             }
-            // if (m_sockets.ContainsKey(ipAddr))
-            // {
-            //     return m_sockets[ipAddr];
-            // }
-            return null;
         }
 
         /// <summary>
@@ -207,6 +205,12 @@ namespace SystemModule.Sockets.AsyncSocketServer
         public void Start(string ip,int port)
         {
             Start(new IPEndPoint(IPAddress.Parse(ip), port));
+            isActive = true;
+        }
+
+        public bool Active
+        {
+            get { return isActive; }
         }
 
         /// <summary>
@@ -817,6 +821,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 }
                 this.m_tokens.Clear();
             }
+            isActive = false;
         }
     }
 }

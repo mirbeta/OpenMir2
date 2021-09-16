@@ -884,10 +884,13 @@ namespace SystemModule
         public const int SS_213 = 213;
         public const int SS_214 = 214;
         public const int SS_WHISPER = 299;
-        // ?????
-        // 不正确
-        // Damian
+        /// <summary>
+        /// 获取服务器信息
+        /// </summary>
         public const int SS_SERVERINFO = 103;
+        /// <summary>
+        /// 客户端退出游戏
+        /// </summary>
         public const int SS_SOFTOUTSESSION = 102;
         public const int SS_LOGINCOST = 30002;
         // Damian

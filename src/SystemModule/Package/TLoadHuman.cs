@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using SystemModule;
 
-namespace GameSvr
+namespace SystemModule
 {
     public class TLoadHuman
     {
@@ -22,6 +21,16 @@ namespace GameSvr
                 var stream = backingStream.BaseStream as MemoryStream;
                 return stream.ToArray();
             }
+        }
+
+        public TLoadHuman()
+        {
+
+        }
+
+        public TLoadHuman(byte[] buffer)
+        {
+
         }
     }
 }

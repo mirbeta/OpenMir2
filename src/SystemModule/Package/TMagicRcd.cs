@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GameSvr
+namespace SystemModule
 {
     public class TMagicRcd
     {

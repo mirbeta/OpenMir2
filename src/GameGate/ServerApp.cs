@@ -39,7 +39,7 @@ namespace GameGate
             dwLoopCheckTick = HUtil32.GetTickCount();
         }
 
-        public async Task StartProcessMessageService()
+        public async Task Start()
         {
             var gTasks = new Task[2];
             var consumerTask1 =Task.Factory.StartNew(ProcessReviceMessage);
@@ -385,6 +385,7 @@ namespace GameGate
                 GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
                 GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
 
+                //防外挂配置参数
                 GateShare.boStartHitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartHitCheck", GateShare.boStartHitCheck);
                 GateShare.boStartSpellCheck = GateShare.Conf.ReadBool("GameSpeed", "StartSpellCheck", GateShare.boStartSpellCheck);
                 GateShare.boStartWalkCheck = GateShare.Conf.ReadBool("GameSpeed", "StartWalkCheck", GateShare.boStartWalkCheck);
@@ -540,7 +541,7 @@ namespace GameGate
             for (var i = 0; i < GateShare.TempBlockIPList.Count; i ++ )
             {
                 sBlockIPaddr = GateShare.TempBlockIPList[i];
-                if (sIPaddr.ToLower().CompareTo(sBlockIPaddr.ToLower()) == 0)
+                if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;

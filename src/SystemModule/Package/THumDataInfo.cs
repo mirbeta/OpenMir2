@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace GameSvr
+namespace SystemModule
 {
     public class THumDataInfo : Package
     {

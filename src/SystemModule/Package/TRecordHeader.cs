@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using SystemModule;
 
-namespace GameSvr
+namespace SystemModule
 {
     public class TRecordHeader : Package
     {

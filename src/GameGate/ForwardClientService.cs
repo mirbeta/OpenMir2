@@ -87,6 +87,9 @@ namespace GameGate
             return SessionArray;
         }
 
+        /// <summary>
+        /// 这里有问题 会导致多个监听到一个
+        /// </summary>
         private async Task ProcessMessage()
         {
             while (await GateShare.ForwardMsgList.Reader.WaitToReadAsync())
