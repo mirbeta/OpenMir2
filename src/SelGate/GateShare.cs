@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule.Common;
@@ -65,9 +66,12 @@ namespace SelGate
         public static long g_dwGameCenterHandle = 0;
         public static string g_sNowStartGate = "正在启动前置服务器...";
         public static string g_sNowStartOK = "启动前置服务器完成...";
+        public const int GATEMAXSESSION = 10000;
+        public static int nSessionCount = 0;
+        public static ConcurrentDictionary<string, int> _sessionMap = new ConcurrentDictionary<string, int>();
+
         public static void LoadBlockIPFile()
         {
-            int I;
             string sFileName;
             StringList LoadList;
             string sIPaddr;
@@ -78,7 +82,7 @@ namespace SelGate
             {
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (I = 0; I < LoadList.Count; I++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
                     sIPaddr = LoadList[0].Trim();
                     if (sIPaddr == "")
@@ -109,6 +113,16 @@ namespace SelGate
             SaveList.SaveToFile(".\\BlockIPList.txt");
             //SaveList.Free;
         }
+        
+        public static void MainOutMessage(string sMsg, int nMsgLevel)
+        {
+            string tMsg;
+            if (nMsgLevel <= GateShare.nShowLogLevel)
+            {
+                tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+                GateShare.MainLogMsgList.Add(tMsg);
+            }
+        }
 
         public void initialization()
         {
@@ -125,6 +139,5 @@ namespace SelGate
             //CS_MainLog.Free;
             //CS_FilterMsg.Free;
         }
-
     }
 }
