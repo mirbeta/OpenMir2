@@ -10,5 +10,6 @@
     <file url="file://$PROJECT_DIR$/src/LoginSvr/LSShare.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/LoginSvr/MasSocService.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/LoginSvr/MonSocService.cs" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/SelGate/Main.cs" charset="GB2312" />
   </component>
 </project>

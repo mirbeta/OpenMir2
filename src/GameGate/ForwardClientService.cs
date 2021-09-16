@@ -3,8 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
-using SystemModule.Sockets.AsyncSocketClient;
-using SystemModule.Sockets.Event;
+using SystemModule.Sockets;
 
 namespace GameGate
 {

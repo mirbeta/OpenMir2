@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace SelGate
-{
+namespace SelGate{
     class Program
     {
         static void Main(string[] args)

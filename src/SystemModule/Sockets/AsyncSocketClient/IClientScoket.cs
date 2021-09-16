@@ -2,9 +2,8 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using SystemModule.Sockets.Event;
 
-namespace SystemModule.Sockets.AsyncSocketClient
+namespace SystemModule.Sockets
 {
     public class IClientScoket
     {

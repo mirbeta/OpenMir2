@@ -1,15 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
 
-namespace LoginGate
+namespace SelGate
 {
-    public partial class TFrmMain
+    public class TFrmMain
     {
         private long dwShowMainLogTick = 0;
         private bool boShowLocked = false;
@@ -21,52 +20,50 @@ namespace LoginGate
         private ArrayList StringList318 = null;
         private long dwDecodeMsgTime = 0;
         private long dwReConnectServerTick = 0;
-        private TUserSession[] g_SessionArray;
-        private IList<string> ClientSockeMsgList;
-        private ISocketServer ServerSocket;
-        private IClientScoket ClientSocket;
-        private string sProcMsg = string.Empty;
+        public static TUserSession[] g_SessionArray;
+        public static ArrayList ClientSockeMsgList = null;
+        public static string sProcMsg = String.Empty;
+        public const int GATEMAXSESSION = 10000;
+        private readonly IClientScoket ClientSocket;
+        private readonly ISocketServer ServerSocket;
+
 
         public TFrmMain()
         {
-            TempLogList = new ArrayList();
-            StringList30C = new ArrayList();
-            StringList318 = new ArrayList();
-            dwDecodeMsgTime = 0;
-            IniUserSessionArray();
 
-            ClientSocket = new IClientScoket();
-            ClientSocket.OnConnected += ClientSocketConnect;
-            ClientSocket.OnDisconnected += ClientSocketDisconnect;
-            ClientSocket.ReceivedDatagram += ClientSocketRead;
-            ClientSocket.OnError += ClientSocketError;
-
-            ServerSocket = new ISocketServer(ushort.MaxValue, 1024);
-            ServerSocket.OnClientConnect += ServerSocketClientConnect;
-            ServerSocket.OnClientDisconnect += ServerSocketClientDisconnect;
-            ServerSocket.OnClientRead += ServerSocketClientRead;
-            ServerSocket.OnClientError += ServerSocketClientError;
-            ServerSocket.Init();
         }
 
-        public void ServerSocketClientConnect(object sender, AsyncUserToken e)
+        public static void MainOutMessage(string sMsg, int nMsgLevel)
+        {
+            string tMsg;
+            if (nMsgLevel <= GateShare.nShowLogLevel)
+            {
+                tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+                GateShare.MainLogMsgList.Add(tMsg);
+            }
+        }
+
+        public void ServerSocketClientConnect(Object Sender, Socket Socket)
         {
             TUserSession UserSession;
-            string sLocalIPaddr;
+            string sRemoteIPaddr = string.Empty;
+            string sLocalIPaddr = string.Empty;
+            int nSockIndex;
             TSockaddr IPaddr;
-            string sRemoteIPaddr = e.RemoteIPaddr;
-            if (GateShare.g_boDynamicIPDisMode)
-            {
-                sLocalIPaddr = e.RemoteIPaddr;
-            }
-            else
-            {
-                sLocalIPaddr = IPAddress.Any.AddressFamily.ToString();
-            }
+            //Socket.nIndex = -1;
+            //sRemoteIPaddr = Socket.RemoteAddress;
+            //if (GateShare.g_boDynamicIPDisMode)
+            //{
+            //    sLocalIPaddr = ClientSocket.Socket.RemoteAddress;
+            //}
+            //else
+            //{
+            //    sLocalIPaddr = Socket.LocalAddress;
+            //}
             if (IsBlockIP(sRemoteIPaddr))
             {
-                MainOutMessage("ËøáÊª§ËøûÊé•: " + sRemoteIPaddr, 1);
-                e.Socket.Close();
+                MainOutMessage("π˝¬À¡¨Ω”: " + sRemoteIPaddr, 1);
+                Socket.Close();
                 return;
             }
             if (IsConnLimited(sRemoteIPaddr))
@@ -74,7 +71,7 @@ namespace LoginGate
                 switch (GateShare.BlockMethod)
                 {
                     case TBlockIPMethod.mDisconnect:
-                        e.Socket.Close();
+                        Socket.Close();
                         break;
                     case TBlockIPMethod.mBlock:
                         IPaddr = new TSockaddr();
@@ -89,17 +86,17 @@ namespace LoginGate
                         CloseConnect(sRemoteIPaddr);
                         break;
                 }
-                MainOutMessage("Á´ØÂè£ÊîªÂáª: " + sRemoteIPaddr, 1);
+                MainOutMessage("∂Àø⁄π•ª˜: " + sRemoteIPaddr, 1);
                 return;
             }
             if (GateShare.boGateReady)
             {
-                for (var nSockIndex = 0; nSockIndex < GateShare.GATEMAXSESSION; nSockIndex++)
+                for (nSockIndex = 0; nSockIndex < GATEMAXSESSION; nSockIndex++)
                 {
                     UserSession = g_SessionArray[nSockIndex];
                     if (UserSession.Socket == null)
                     {
-                        UserSession.Socket = e.Socket;
+                        UserSession.Socket = Socket;
                         UserSession.sRemoteIPaddr = sRemoteIPaddr;
                         UserSession.nSendMsgLen = 0;
                         UserSession.bo0C = false;
@@ -110,39 +107,41 @@ namespace LoginGate
                         UserSession.nCheckSendLength = 0;
                         UserSession.n20 = 0;
                         UserSession.dwUserTimeOutTick = HUtil32.GetTickCount();
-                        UserSession.SocketHandle = (int)e.Socket.Handle;
+                        UserSession.SocketHandle = (int)Socket.Handle;
                         UserSession.sIP = sRemoteIPaddr;
                         UserSession.MsgList.Clear();
-                        GateShare.socketMap.TryAdd(e.ConnectionId, nSockIndex);
+                        //Socket.nIndex = nSockIndex;
                         nSessionCount++;
                         break;
                     }
                 }
-                if (!string.IsNullOrEmpty(e.ConnectionId))
-                {
-                    ClientSocket.SendText("%O" + (int)e.Socket.Handle + "/" + sRemoteIPaddr + "/" + sLocalIPaddr + "$");
-                    MainOutMessage("Connect: " + sRemoteIPaddr, 5);
-                }
-                else
-                {
-                    e.Socket.Close();
-                    MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
-                }
+                //if (Socket.nIndex >= 0)
+                //{
+                //    ClientSocket.SendText("%O" + (int)Socket.Handle + "/" + sRemoteIPaddr + "/" + sLocalIPaddr + "$");
+                //    MainOutMessage("Connect: " + sRemoteIPaddr, 5);
+                //}
+                //else
+                //{
+                //    Socket.Close();
+                //    MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
+                //}
             }
             else
             {
-                e.Socket.Close();
+                Socket.Close();
                 MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
             }
         }
 
-        public void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
+        public void ServerSocketClientDisconnect(Object Sender, Socket Socket)
         {
             TUserSession UserSession;
-            TSockaddr IPaddr;
-            string sRemoteIPaddr = e.RemoteIPaddr;
+            int nSockIndex = 0;
+            string sRemoteIPaddr = string.Empty;
+            TSockaddr IPaddr = null;
+            //sRemoteIPaddr = Socket.RemoteAddress;
             long nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
-            int nSockIndex = GateShare.socketMap[e.ConnectionId];
+            //nSockIndex = Socket.nIndex;
             for (var i = 0; i < GateShare.CurrIPaddrList.Count; i++)
             {
                 IPaddr = GateShare.CurrIPaddrList[i];
@@ -157,7 +156,7 @@ namespace LoginGate
                     break;
                 }
             }
-            if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
+            if ((nSockIndex >= 0) && (nSockIndex < GATEMAXSESSION))
             {
                 UserSession = g_SessionArray[nSockIndex];
                 UserSession.Socket = null;
@@ -167,36 +166,31 @@ namespace LoginGate
                 nSessionCount -= 1;
                 if (GateShare.boGateReady)
                 {
-                    ClientSocket.SendText("%X" + e.Socket.Handle + "$");
+                    ClientSocket.SendText("%X" + (int)Socket.Handle + "$");
                     MainOutMessage("DisConnect: " + sRemoteIPaddr, 5);
                 }
             }
         }
 
-        public void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        public void ServerSocketClientError(Object Sender, Socket Socket)
         {
-
+ 
         }
 
-        public void ServerSocketClientRead(object sender, AsyncUserToken e)
+        public void ServerSocketClientRead(Object Sender, Socket Socket)
         {
             TUserSession UserSession;
-            string sReviceMsg;
+            int nSockIndex = 0;
+            string sReviceMsg = string.Empty;
             string s10;
             string s1C;
             int nPos;
             int nMsgLen;
-            if (!GateShare.socketMap.TryGetValue(e.ConnectionId, out var nSockIndex))
-            {
-                return;
-            }
-            if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
+           // nSockIndex = Socket.nIndex;
+            if ((nSockIndex >= 0) && (nSockIndex < GATEMAXSESSION))
             {
                 UserSession = g_SessionArray[nSockIndex];
-                var nReviceLen = e.BytesReceived;
-                var data = new byte[nReviceLen];
-                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                sReviceMsg = HUtil32.GetString(data, 0, data.Length);
+                //sReviceMsg = Socket.ReceiveText;
                 if ((sReviceMsg != "") && boServerReady)
                 {
                     nPos = sReviceMsg.IndexOf("*");
@@ -221,10 +215,21 @@ namespace LoginGate
                         {
                             UserSession.n20 = nMsgLen;
                         }
-                        ClientSocket.SendText("%A" + (int)e.Socket.Handle + "/" + sReviceMsg + "$");
+                        ClientSocket.SendText("%A" + (int)Socket.Handle + "/" + sReviceMsg + "$");
                     }
                 }
             }
+        }
+
+        public void FormDestroy(Object Sender)
+        {
+            //int nIndex;
+            //StringList30C.Free;
+            //TempLogList.Free;
+            //for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
+            //{
+            //    g_SessionArray[nIndex].MsgList.Free;
+            //}
         }
 
         public void FormCloseQuery(System.Object Sender, System.ComponentModel.CancelEventArgs _e1)
@@ -233,7 +238,7 @@ namespace LoginGate
             //{
             //    return;
             //}
-            //if (Application.MessageBox("ÊòØÂê¶Á°ÆËÆ§ÈÄÄÂá∫ÊúçÂä°Âô®Ôºü", "ÊèêÁ§∫‰ø°ÊÅØ", MB_YESNO + MB_ICONQUESTION) == IDYES)
+            //if (Application.MessageBox(" «∑Ò»∑»œÕÀ≥ˆ∑˛ŒÒ∆˜£ø", "Ã· æ–≈œ¢", MB_YESNO + MB_ICONQUESTION) == IDYES)
             //{
             //    if (GateShare.boServiceStart)
             //    {
@@ -247,7 +252,7 @@ namespace LoginGate
             //}
         }
 
-        public void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        public void ClientSocketConnect(Object Sender, Socket Socket)
         {
             GateShare.boGateReady = true;
             nSessionCount = 0;
@@ -256,10 +261,11 @@ namespace LoginGate
             boServerReady = true;
         }
 
-        public void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        public void ClientSocketDisconnect(Object Sender, Socket Socket)
         {
             TUserSession UserSession;
-            for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+            int nIndex;
+            for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
             {
                 UserSession = g_SessionArray[nIndex];
                 if (UserSession.Socket != null)
@@ -276,40 +282,41 @@ namespace LoginGate
             nSessionCount = 0;
         }
 
-        public void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+        public void ClientSocketError(Object Sender, Socket Socket)
         {
             boServerReady = false;
         }
 
-        public void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        public void ClientSocketRead(Object Sender, Socket Socket)
         {
-            var sReviceMsg = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
-            ClientSockeMsgList.Add(sReviceMsg);
+            //string sRecvMsg;
+            //sRecvMsg = Socket.ReceiveText;
+            //ClientSockeMsgList.Add(sRecvMsg);
         }
 
-        public void SendTimerTimer(System.Object Sender, EventArgs _e1)
+        public void SendTimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             int nIndex;
             TUserSession UserSession;
-            //if (ServerSocket.Active)
-            //{
-            //    GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
-            //}
-            //if (GateShare.boSendHoldTimeOut)
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString() + "#";
-            //    if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
-            //    {
-            //        GateShare.boSendHoldTimeOut = false;
-            //    }
-            //}
-            //else
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString();
-            //}
+            if (ServerSocket.Active)
+            {
+               // GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
+            }
+            if (GateShare.boSendHoldTimeOut)
+            {
+                //LbHold.Text = (GateShare.n456A30).ToString() + "#";
+                if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
+                {
+                    GateShare.boSendHoldTimeOut = false;
+                }
+            }
+            else
+            {
+                //LbHold.Text = (GateShare.n456A30).ToString();
+            }
             if (GateShare.boGateReady && (!GateShare.boKeepAliveTimcOut))
             {
-                for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+                for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
                 {
                     UserSession = g_SessionArray[nIndex];
                     if (UserSession.Socket != null)
@@ -330,12 +337,13 @@ namespace LoginGate
                 if ((HUtil32.GetTickCount() - dwReConnectServerTick) > 1000)// 30 * 1000
                 {
                     dwReConnectServerTick = HUtil32.GetTickCount();
-                    ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
+                    //ClientSocket.Port = GateShare.ServerPort;
+                    //ClientSocket.Host = GateShare.ServerAddr;
                 }
             }
         }
 
-        public void TimerTimer(System.Object Sender, EventArgs _e1)
+        public void TimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             //if (ServerSocket.Active)
             //{
@@ -357,34 +365,34 @@ namespace LoginGate
             //Label2.Text = (dwDecodeMsgTime).ToString();
             //if (!GateShare.boGateReady)
             //{
-            //    StatusBar.Panels[1].Text = "---]    [---";
+            //    StatusBar.Panels[1].Text = "Œ¥¡¨Ω”";
             //}
             //else
             //{
             //    if (GateShare.boKeepAliveTimcOut)
             //    {
-            //        StatusBar.Panels[1].Text = "---]$$$$[---";
+            //        StatusBar.Panels[1].Text = "≥¨ ±";
             //    }
             //    else
             //    {
-            //        StatusBar.Panels[1].Text = "-----][-----";
+            //        StatusBar.Panels[1].Text = "“—¡¨Ω”";
             //        LbLack.Text = (GateShare.n456A2C).ToString() + "/" + (GateShare.nSendMsgCount).ToString();
             //    }
             //}
         }
 
-        public void DecodeTimerTimer(System.Object Sender, EventArgs _e1)
+        public void DecodeTimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             string sProcessMsg = string.Empty;
             string sSocketMsg = string.Empty;
             string sSocketHandle = string.Empty;
-            int nSocketIndex = 0;
-            int nMsgCount = 0;
-            int nSendRetCode = 0;
-            int nSocketHandle = 0;
-            long dwDecodeTick = 0;
-            long dwDecodeTime = 0;
-            string sRemoteIPaddr = string.Empty;
+            int nSocketIndex;
+            int nMsgCount;
+            int nSendRetCode;
+            int nSocketHandle;
+            long dwDecodeTick;
+            long dwDecodeTime;
+            string sRemoteIPaddr;
             TUserSession UserSession;
             TSockaddr IPaddr;
             ShowMainLogMsg();
@@ -396,6 +404,7 @@ namespace LoginGate
             {
                 dwDecodeTick = HUtil32.GetTickCount();
                 GateShare.boDecodeLock = true;
+                sProcessMsg = "";
                 while (true)
                 {
                     if (ClientSockeMsgList.Count <= 0)
@@ -404,7 +413,7 @@ namespace LoginGate
                     }
                     sProcessMsg = sProcMsg + ClientSockeMsgList[0];
                     sProcMsg = "";
-                    ClientSockeMsgList.RemoveAt(0);
+                    ClientSockeMsgList.Remove(0);
                     while (true)
                     {
                         if (HUtil32.TagCount(sProcessMsg, '$') < 1)
@@ -420,23 +429,25 @@ namespace LoginGate
                         {
                             if (sSocketMsg[1] == '-')
                             {
-                                CloseSocket(HUtil32.Str_ToInt(sSocketMsg.Substring(2, sSocketMsg.Length - 2), 0));
+                                CloseSocket(HUtil32.Str_ToInt(sSocketMsg.Substring(3 - 1, sSocketMsg.Length - 2), 0));
                                 continue;
                             }
                             else
                             {
+                                // 0x004521B7
                                 GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
                                 GateShare.boKeepAliveTimcOut = false;
                                 continue;
                             }
                         }
+                        // 0x004521CD
                         sSocketMsg = HUtil32.GetValidStr3(sSocketMsg, ref sSocketHandle, new string[] { "/" });
                         nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
                         if (nSocketHandle < 0)
                         {
                             continue;
                         }
-                        for (nSocketIndex = 0; nSocketIndex < GateShare.GATEMAXSESSION; nSocketIndex++)
+                        for (nSocketIndex = 0; nSocketIndex < GATEMAXSESSION; nSocketIndex++)
                         {
                             if (g_SessionArray[nSocketIndex].SocketHandle == nSocketHandle)
                             {
@@ -445,7 +456,10 @@ namespace LoginGate
                             }
                         }
                     }
+                    // 0x00452246
                 }
+                // 0x452252
+                // if sProcessMsg <> '' then ClientSockeMsgList.Add(sProcessMsg);
                 if (sProcessMsg != "")
                 {
                     sProcMsg = sProcessMsg;
@@ -453,13 +467,13 @@ namespace LoginGate
                 GateShare.nSendMsgCount = 0;
                 GateShare.n456A2C = 0;
                 StringList318.Clear();
-                for (nSocketIndex = 0; nSocketIndex < GateShare.GATEMAXSESSION; nSocketIndex++)
+                for (nSocketIndex = 0; nSocketIndex < GATEMAXSESSION; nSocketIndex++)
                 {
-                    if (g_SessionArray[nSocketIndex].SocketHandle <= -1)
+                    if (g_SessionArray[nSocketIndex].SocketHandle <= -1)// Ãﬂ≥˝≥¨ ±Œﬁ ˝æ›¥´ ‰¡¨Ω”
                     {
                         continue;
                     }
-                    if ((HUtil32.GetTickCount() - g_SessionArray[nSocketIndex].dwConnctCheckTick) > GateShare.dwKeepConnectTimeOut)// Ë∏¢Èô§Ë∂ÖÊó∂Êó†Êï∞ÊçÆ‰º†ËæìËøûÊé•
+                    if ((HUtil32.GetTickCount() - g_SessionArray[nSocketIndex].dwConnctCheckTick) > GateShare.dwKeepConnectTimeOut)
                     {
                         sRemoteIPaddr = g_SessionArray[nSocketIndex].sRemoteIPaddr;
                         switch (GateShare.BlockMethod)
@@ -480,7 +494,7 @@ namespace LoginGate
                                 CloseConnect(sRemoteIPaddr);
                                 break;
                         }
-                        MainOutMessage("Á´ØÂè£Á©∫ËøûÊé•ÊîªÂáª: " + sRemoteIPaddr, 1);
+                        MainOutMessage("∂Àø⁄ø’¡¨Ω”π•ª˜: " + sRemoteIPaddr, 1);
                         continue;
                     }
                     while (true)
@@ -514,6 +528,7 @@ namespace LoginGate
                         }
                         else
                         {
+                            // 0x004523A4
                             UserSession.SocketHandle = -1;
                             UserSession.Socket = null;
                             UserSession.MsgList.Clear();
@@ -531,7 +546,7 @@ namespace LoginGate
                 if ((HUtil32.GetTickCount() - GateShare.dwKeepAliveTick) > 10 * 1000)
                 {
                     GateShare.boKeepAliveTimcOut = true;
-                    ClientSocket.Disconnect();
+                    //ClientSocket.Close();
                 }
             }
             finally
@@ -553,7 +568,7 @@ namespace LoginGate
         {
             int nIndex;
             TUserSession UserSession;
-            for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+            for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
             {
                 UserSession = g_SessionArray[nIndex];
                 if ((UserSession.Socket != null) && (UserSession.SocketHandle == nSocketHandle))
@@ -632,7 +647,7 @@ namespace LoginGate
             GateShare.nMaxConnOfIPaddr = Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
             GateShare.dwKeepConnectTimeOut = Conf.ReadInteger<long>(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
             GateShare.g_boDynamicIPDisMode = Conf.ReadBool(GateShare.GateClass, "DynamicIPDisMode", GateShare.g_boDynamicIPDisMode);
-            Conf = null;
+            //Conf.Free;
             GateShare.LoadBlockIPFile();
         }
 
@@ -640,10 +655,10 @@ namespace LoginGate
         {
             try
             {
-                MainOutMessage("Ê¨¢Ëøé‰ΩøÁî®ÁøéÈ£éÁ≥ªÁªüËΩØ‰ª∂...",0);
-                MainOutMessage("ÁΩëÁ´ô:http://www.gameofmir.com",0);
-                MainOutMessage("ËÆ∫Âùõ:http://bbs.gameofmir.com",0);
-                MainOutMessage("Ê≠£Âú®ÂêØÂä®ÊúçÂä°...", 3);
+                // MainOutMessage('ª∂”≠ π”√Ù·∑ÁœµÕ≥»Ìº˛...',0);
+                // MainOutMessage('Õ¯’æ:http://www.gameofmir.com',0);
+                // MainOutMessage('¬€Ã≥:http://bbs.gameofmir.com',0);
+                MainOutMessage("’˝‘⁄∆Ù∂Ø∑˛ŒÒ...", 3);
                 GateShare.boServiceStart = true;
                 GateShare.boGateReady = false;
                 boServerReady = false;
@@ -658,27 +673,23 @@ namespace LoginGate
                 GateShare.CurrIPaddrList = new List<TSockaddr>();
                 GateShare.BlockIPList = new List<TSockaddr>();
                 GateShare.TempBlockIPList = new List<TSockaddr>();
-                ClientSockeMsgList = new List<string>();
+                ClientSockeMsgList = new ArrayList();
                 ResUserSessionArray();
                 LoadConfig();
-
-                ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
-                ServerSocket.Start(GateShare.GateAddr, GateShare.GatePort);
+                //ClientSocket.Active = false;
+                //ClientSocket.Host = GateShare.ServerAddr;
+                //ClientSocket.Port = GateShare.ServerPort;
+                //ClientSocket.Active = true;
+                //ServerSocket.Active = false;
+                //ServerSocket.Address = GateShare.GateAddr;
+                //ServerSocket.Port = GateShare.GatePort;
+                //ServerSocket.Active = true;
                 //SendTimer.Enabled = true;
-                MainOutMessage("ÂêØÂä®ÊúçÂä°ÂÆåÊàê...", 3);
+                MainOutMessage("∆Ù∂Ø∑˛ŒÒÕÍ≥…...", 3);
             }
             catch (Exception E)
             {
                 MainOutMessage(E.Message, 0);
-            }
-        }
-
-        public static void MainOutMessage(string sMsg, int nMsgLevel)
-        {
-            if (nMsgLevel <= GateShare.nShowLogLevel)
-            {
-                string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
-                GateShare.MainLogMsgList.Add(tMsg);
             }
         }
 
@@ -687,7 +698,7 @@ namespace LoginGate
             //int I;
             //int nSockIdx;
             //TSockaddr IPaddr;
-            //MainOutMessage("Ê≠£Âú®ÂÅúÊ≠¢ÊúçÂä°...", 3);
+            //MainOutMessage("’˝‘⁄Õ£÷π∑˛ŒÒ...", 3);
             //GateShare.boServiceStart = false;
             //GateShare.boGateReady = false;
             //MENU_CONTROL_START.Enabled = true;
@@ -722,14 +733,14 @@ namespace LoginGate
             //    this.Dispose(IPaddr);
             //}
             //GateShare.TempBlockIPList.Free;
-            //MainOutMessage("ÂÅúÊ≠¢ÊúçÂä°ÂÆåÊàê...", 3);
+            //MainOutMessage("Õ£÷π∑˛ŒÒÕÍ≥…...", 3);
         }
 
         private void ResUserSessionArray()
         {
             TUserSession UserSession;
             int nIndex;
-            for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+            for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
             {
                 UserSession = g_SessionArray[nIndex];
                 UserSession.Socket = null;
@@ -742,7 +753,8 @@ namespace LoginGate
         private void IniUserSessionArray()
         {
             TUserSession UserSession;
-            for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+            int nIndex;
+            for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
             {
                 UserSession = g_SessionArray[nIndex];
                 UserSession.Socket = null;
@@ -760,44 +772,54 @@ namespace LoginGate
             }
         }
 
-        public void StartTimerTimer(System.Object Sender, EventArgs _e1)
+        public void StartTimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             if (GateShare.boStarted)
             {
                 //StartTimer.Enabled = false;
                 StopService();
                 GateShare.boClose = true;
+                //this.Close();
             }
             else
             {
                 GateShare.boStarted = true;
-                // StartTimer.Enabled = false;
+                //StartTimer.Enabled = false;
                 StartService();
             }
         }
 
-        private void CloseConnect(string sIPaddr)
+        public void FormCreate(System.Object Sender, System.EventArgs _e1)
         {
+            TempLogList = new ArrayList();
+            StringList30C = new ArrayList();
+            StringList318 = new ArrayList();
+            dwDecodeMsgTime = 0;
+            IniUserSessionArray();
+        }
+
+        public void CloseConnect(string sIPaddr)
+        {
+            int i;
             bool boCheck;
             if (ServerSocket.Active)
             {
                 while (true)
                 {
-                    boCheck = false;
-                    var socketList = ServerSocket.GetSockets();
-                    for (var i = 0; i < socketList.Count; i++)
-                    {
-                        if (sIPaddr == socketList[i].RemoteIPaddr)
-                        {
-                            socketList[i].Socket.Close();
-                            boCheck = true;
-                            break;
-                        }
-                    }
-                    if (!boCheck)
-                    {
-                        break;
-                    }
+                    //boCheck = false;
+                    //for (i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
+                    //{
+                    //    if (sIPaddr == ServerSocket.Socket.Connections[i].RemoteAddress)
+                    //    {
+                    //        ServerSocket.Socket.Connections[i].Close();
+                    //        boCheck = true;
+                    //        break;
+                    //    }
+                    //}
+                    //if (!boCheck)
+                    //{
+                    //    break;
+                    //}
                 }
             }
         }
@@ -805,8 +827,8 @@ namespace LoginGate
         private bool IsBlockIP(string sIPaddr)
         {
             bool result = false;
-            var nIPaddr = HUtil32.IpToInt((sIPaddr as string));
-            TSockaddr IPaddr = null;
+            TSockaddr IPaddr;
+            long nIPaddr = HUtil32.IpToInt(sIPaddr);
             for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {
                 IPaddr = GateShare.TempBlockIPList[i];
@@ -830,9 +852,11 @@ namespace LoginGate
 
         private bool IsConnLimited(string sIPaddr)
         {
-            bool result = false;
+            bool result;
             TSockaddr IPaddr;
-            bool boDenyConnect = false;
+            bool boDenyConnect;
+            result = false;
+            boDenyConnect = false;
             long nIPaddr = HUtil32.IpToInt(sIPaddr);
             for (var i = 0; i < GateShare.CurrIPaddrList.Count; i++)
             {
@@ -883,27 +907,34 @@ namespace LoginGate
 
         private void ShowMainLogMsg()
         {
+            int i;
             if ((HUtil32.GetTickCount() - dwShowMainLogTick) < 200)
             {
                 return;
             }
             dwShowMainLogTick = HUtil32.GetTickCount();
-            boShowLocked = true;
-            for (var i = 0; i < GateShare.MainLogMsgList.Count; i++)
+            try
             {
-                TempLogList.Add(GateShare.MainLogMsgList[i]);
+                boShowLocked = true;
+                for (i = 0; i < GateShare.MainLogMsgList.Count; i++)
+                {
+                    TempLogList.Add(GateShare.MainLogMsgList[i]);
+                }
+                GateShare.MainLogMsgList.Clear();
+                for (i = 0; i < TempLogList.Count; i++)
+                {
+                    Console.WriteLine(TempLogList[i]);
+                }
+                TempLogList.Clear();
             }
-            GateShare.MainLogMsgList.Clear();
-            for (var i = 0; i < TempLogList.Count; i++)
+            finally
             {
-                Console.WriteLine(TempLogList[i]);
+                boShowLocked = false;
             }
-            TempLogList.Clear();
-            boShowLocked = false;
         }
     }
 
-    public class TUserSession
+    public struct TUserSession
     {
         public Socket Socket;
         public string sRemoteIPaddr;
