@@ -131,7 +131,7 @@ namespace SystemModule.Sockets
         {
             get
             {
-                return EndPoint.ToString();
+                return EndPoint.Address.ToString();
             }
         }
 

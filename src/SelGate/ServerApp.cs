@@ -1,21 +1,38 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 
-namespace LoginGate
+namespace SelGate
 {
-    public partial class TFrmMain
+    public class ServerApp
     {
-        private long dwReConnectServerTick = 0;
         private long dwShowMainLogTick = 0;
         private ArrayList TempLogList = null;
+        private long dwReConnectServerTick = 0;
+        private Timer logTimer;
+        private readonly GateServer gateServer;
+        private readonly GateClient gateClient;
 
-        public TFrmMain()
+        public ServerApp(GateServer gateServer, GateClient gateClient)
         {
-            IniUserSessionArray();
+            GateShare.Initialization();
+            TempLogList = new ArrayList();
+            this.gateServer = gateServer;
+            this.gateClient = gateClient;
+        }
+
+        public void FormDestroy(Object Sender)
+        {
+            //int nIndex;
+            //StringList30C.Free;
+            //TempLogList.Free;
+            //for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
+            //{
+            //    g_SessionArray[nIndex].MsgList.Free;
+            //}
         }
 
         public void FormCloseQuery(System.Object Sender, System.ComponentModel.CancelEventArgs _e1)
@@ -38,26 +55,27 @@ namespace LoginGate
             //}
         }
 
-        public void SendTimerTimer(System.Object Sender, EventArgs _e1)
+        public void SendTimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             int nIndex;
             TUserSession UserSession;
-            //if (ServerSocket.Active)
-            //{
+            // if (ServerSocket.Active)
+            // {
             //    GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
-            //}
-            //if (GateShare.boSendHoldTimeOut)
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString() + "#";
-            //    if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
-            //    {
-            //        GateShare.boSendHoldTimeOut = false;
-            //    }
-            //}
-            //else
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString();
-            //}
+            // }
+            if (GateShare.boSendHoldTimeOut)
+            {
+                //LbHold.Text = (GateShare.n456A30).ToString() + "#";
+                if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
+                {
+                    GateShare.boSendHoldTimeOut = false;
+                }
+            }
+            else
+            {
+                //LbHold.Text = (GateShare.n456A30).ToString();
+            }
+            //清理超时则会话
             if (GateShare.boGateReady && (!GateShare.boKeepAliveTimcOut))
             {
                 for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
@@ -81,12 +99,13 @@ namespace LoginGate
                 if ((HUtil32.GetTickCount() - dwReConnectServerTick) > 1000)// 30 * 1000
                 {
                     dwReConnectServerTick = HUtil32.GetTickCount();
-                    //ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
+                    //ClientSocket.Port = GateShare.ServerPort;
+                    //ClientSocket.Host = GateShare.ServerAddr;
                 }
             }
         }
 
-        public void TimerTimer(System.Object Sender, EventArgs _e1)
+        public void TimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             //if (ServerSocket.Active)
             //{
@@ -108,17 +127,17 @@ namespace LoginGate
             //Label2.Text = (dwDecodeMsgTime).ToString();
             //if (!GateShare.boGateReady)
             //{
-            //    StatusBar.Panels[1].Text = "---]    [---";
+            //    StatusBar.Panels[1].Text = "未连接";
             //}
             //else
             //{
             //    if (GateShare.boKeepAliveTimcOut)
             //    {
-            //        StatusBar.Panels[1].Text = "---]$$$$[---";
+            //        StatusBar.Panels[1].Text = "超时";
             //    }
             //    else
             //    {
-            //        StatusBar.Panels[1].Text = "-----][-----";
+            //        StatusBar.Panels[1].Text = "已连接";
             //        LbLack.Text = (GateShare.n456A2C).ToString() + "/" + (GateShare.nSendMsgCount).ToString();
             //    }
             //}
@@ -126,8 +145,10 @@ namespace LoginGate
 
         private void LoadConfig()
         {
-            var sConfigFileName = ".\\Config.ini";
-            var Conf = new IniFile(sConfigFileName);
+            IniFile Conf;
+            string sConfigFileName;
+            sConfigFileName = ".\\Config.ini";
+            Conf = new IniFile(sConfigFileName);
             GateShare.TitleName = Conf.ReadString(GateShare.GateClass, "Title", GateShare.TitleName);
             GateShare.ServerPort = Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
             GateShare.ServerAddr = Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
@@ -142,15 +163,15 @@ namespace LoginGate
             GateShare.nMaxConnOfIPaddr = Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
             GateShare.dwKeepConnectTimeOut = Conf.ReadInteger<long>(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
             GateShare.g_boDynamicIPDisMode = Conf.ReadBool(GateShare.GateClass, "DynamicIPDisMode", GateShare.g_boDynamicIPDisMode);
-            Conf = null;
+            //Conf.Free;
             GateShare.LoadBlockIPFile();
         }
 
-        private void StartService()
+        public void StartService()
         {
             try
             {
-                TempLogList = new ArrayList();
+                logTimer = new Timer(ShowMainLogMsg, null, 0, 100);
                 GateShare.MainOutMessage("欢迎使用翎风系统软件...", 0);
                 GateShare.MainOutMessage("网站:http://www.gameofmir.com", 0);
                 GateShare.MainOutMessage("论坛:http://bbs.gameofmir.com", 0);
@@ -163,16 +184,13 @@ namespace LoginGate
                 GateShare.boKeepAliveTimcOut = false;
                 GateShare.nSendMsgCount = 0;
                 GateShare.n456A2C = 0;
+                //dwSendKeepAliveTick = HUtil32.GetTickCount();
                 GateShare.boSendHoldTimeOut = false;
                 GateShare.dwSendHoldTick = HUtil32.GetTickCount();
                 GateShare.CurrIPaddrList = new List<TSockaddr>();
                 GateShare.BlockIPList = new List<TSockaddr>();
                 GateShare.TempBlockIPList = new List<TSockaddr>();
-                GateShare.ClientSockeMsgList = new List<string>();
-                //
                 LoadConfig();
-
-                //SendTimer.Enabled = true;
                 GateShare.MainOutMessage("启动服务完成...", 3);
             }
             catch (Exception E)
@@ -181,8 +199,7 @@ namespace LoginGate
             }
         }
 
-
-        private void StopService()
+        public void StopService()
         {
             //int I;
             //int nSockIdx;
@@ -225,13 +242,13 @@ namespace LoginGate
             //MainOutMessage("停止服务完成...", 3);
         }
 
-
-
         private void IniUserSessionArray()
         {
+            TUserSession UserSession;
+            GateShare.g_SessionArray = new TUserSession[GateShare.GATEMAXSESSION];
             for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
             {
-                var UserSession = new TUserSession();
+                UserSession = new TUserSession();
                 UserSession.Socket = null;
                 UserSession.sRemoteIPaddr = "";
                 UserSession.nSendMsgLen = 0;
@@ -248,23 +265,34 @@ namespace LoginGate
             }
         }
 
-        public void StartTimerTimer(System.Object Sender, EventArgs _e1)
+        public void StartTimerTimer(System.Object Sender, System.EventArgs _e1)
         {
             if (GateShare.boStarted)
             {
                 //StartTimer.Enabled = false;
                 StopService();
                 GateShare.boClose = true;
+                //this.Close();
             }
             else
             {
                 GateShare.boStarted = true;
-                // StartTimer.Enabled = false;
+                //StartTimer.Enabled = false;
                 StartService();
             }
         }
 
-        private void ShowMainLogMsg()
+        public void Start()
+        {
+            //StringList30C = new ArrayList();
+            //StringList318 = new ArrayList();
+            //dwDecodeMsgTime = 0;
+            IniUserSessionArray();
+            gateServer.Start();
+            gateClient.Start();
+        }
+
+        private void ShowMainLogMsg(object obj)
         {
             if ((HUtil32.GetTickCount() - dwShowMainLogTick) < 200)
             {
@@ -282,24 +310,5 @@ namespace LoginGate
             }
             TempLogList.Clear();
         }
-    }
-
-    public class TUserSession
-    {
-        public Socket Socket;
-        public string sRemoteIPaddr;
-        public int nSendMsgLen;
-        public bool bo0C;
-        public long dw10Tick;
-        public int nCheckSendLength;
-        public bool boSendAvailable;
-        public bool boSendCheck;
-        public long dwSendLockTimeOut;
-        public int n20;
-        public long dwUserTimeOutTick;
-        public int SocketHandle;
-        public string sIP;
-        public IList<string> MsgList;
-        public long dwConnctCheckTick;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using SystemModule.Common;
 
 namespace SelGate
@@ -39,10 +40,10 @@ namespace SelGate
         public static int nShowLogLevel = 3;
         public static ArrayList StringList456A14 = null;
         public static string GateClass = "SelGate";
-        public static string GateName = "½ÇÉ«Íø¹Ø";
-        public static string TitleName = "SKYÒıÇæ";
+        public static string GateName = "è§’è‰²ç½‘å…³";
+        public static string TitleName = "SKYå¼•æ“";
         public static int ServerPort = 5100;
-        public static string ServerAddr = "127.0.0.1";
+        public static string ServerAddr = "10.10.0.58";
         public static int GatePort = 7100;
         public static string GateAddr = "0.0.0.0";
         public static bool boGateReady = false;
@@ -62,13 +63,16 @@ namespace SelGate
         public static TBlockIPMethod BlockMethod = TBlockIPMethod.mDisconnect;
         public static long dwKeepConnectTimeOut = 60 * 1000;
         public static bool g_boDynamicIPDisMode = false;
-        // ÓÃÓÚ¶¯Ì¬IP£¬·Ö»ú·ÅÖÃµÇÂ¼Íø¹ØÓÃ£¬´ò¿ª´ËÄ£Ê½ºó£¬Íø¹Ø½«»á°ÑÁ¬½ÓµÇÂ¼·şÎñÆ÷µÄIPµØÖ·£¬µ±Îª·şÎñÆ÷IP£¬·¢¸øµÇÂ¼·şÎñÆ÷£¬¿Í»§¶Ë½«Ö±½ÓÊ¹ÓÃ´ËIPÁ¬½Ó½ÇÉ«Íø¹Ø
+        // ç”¨äºåŠ¨æ€IPï¼Œåˆ†æœºæ”¾ç½®ç™»å½•ç½‘å…³ç”¨ï¼Œæ‰“å¼€æ­¤æ¨¡å¼åï¼Œç½‘å…³å°†ä¼šæŠŠè¿æ¥ç™»å½•æœåŠ¡å™¨çš„IPåœ°å€ï¼Œå½“ä¸ºæœåŠ¡å™¨IPï¼Œå‘ç»™ç™»å½•æœåŠ¡å™¨ï¼Œå®¢æˆ·ç«¯å°†ç›´æ¥ä½¿ç”¨æ­¤IPè¿æ¥è§’è‰²ç½‘å…³
         public static long g_dwGameCenterHandle = 0;
-        public static string g_sNowStartGate = "ÕıÔÚÆô¶¯Ç°ÖÃ·şÎñÆ÷...";
-        public static string g_sNowStartOK = "Æô¶¯Ç°ÖÃ·şÎñÆ÷Íê³É...";
+        public static string g_sNowStartGate = "æ­£åœ¨å¯åŠ¨å‰ç½®æœåŠ¡å™¨...";
+        public static string g_sNowStartOK = "å¯åŠ¨å‰ç½®æœåŠ¡å™¨å®Œæˆ...";
+        public static bool boServerReady = false;
         public const int GATEMAXSESSION = 10000;
         public static int nSessionCount = 0;
+        public static TUserSession[] g_SessionArray;
         public static ConcurrentDictionary<string, int> _sessionMap = new ConcurrentDictionary<string, int>();
+        public static IList<string> ClientSockeMsgList = null;
 
         public static void LoadBlockIPFile()
         {
@@ -124,8 +128,9 @@ namespace SelGate
             }
         }
 
-        public void initialization()
+        public static void Initialization()
         {
+            ClientSockeMsgList = new List<string>();
             CS_MainLog = new object();
             CS_FilterMsg = new object();
             StringList456A14 = new ArrayList();
@@ -139,5 +144,24 @@ namespace SelGate
             //CS_MainLog.Free;
             //CS_FilterMsg.Free;
         }
+    }
+    
+    public class TUserSession
+    {
+        public Socket Socket;
+        public string sRemoteIPaddr;
+        public int nSendMsgLen;
+        public bool bo0C;
+        public long dw10Tick;
+        public int nCheckSendLength;
+        public bool boSendAvailable;
+        public bool boSendCheck;
+        public long dwSendLockTimeOut;
+        public int n20;
+        public long dwUserTimeOutTick;
+        public int SocketHandle;
+        public string sIP;
+        public IList<string> MsgList;
+        public long dwConnctCheckTick;
     }
 }

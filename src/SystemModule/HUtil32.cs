@@ -864,6 +864,10 @@ namespace SystemModule
         
         public static long IpToInt(string ip)
         {
+            if (string.IsNullOrEmpty(ip))
+            {
+                return -1;
+            }
             char[] separator = new char[] { '.' };
             string[] items = ip.Split(separator);
             return long.Parse(items[0]) << 24

@@ -71,7 +71,12 @@ namespace LoginGate
         public static string g_sNowStartOK = "启动登录前置服务器完成...";
         public static int GATEMAXSESSION = 10000;
         public static ConcurrentDictionary<string, int> socketMap = null;
-        
+        public static TUserSession[] g_SessionArray;
+        public static int nSessionCount = 0;
+        public static bool boServerReady = false;
+        public static IList<string> ClientSockeMsgList;
+
+
         public static void LoadBlockIPFile()
         {
             StringList LoadList;
@@ -102,6 +107,15 @@ namespace LoginGate
             }
         }
 
+        public static void MainOutMessage(string sMsg, int nMsgLevel)
+        {
+            if (nMsgLevel <= GateShare.nShowLogLevel)
+            {
+                string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+                GateShare.MainLogMsgList.Add(tMsg);
+            }
+        }
+
         public static void SaveBlockIPList()
         {
             StringList SaveList = new StringList();
@@ -115,6 +129,7 @@ namespace LoginGate
 
         public void initialization()
         {
+            g_SessionArray = new TUserSession[GATEMAXSESSION];
             CS_MainLog = new object();
             CS_FilterMsg = new object();
             StringList456A14 = new List<string>();

@@ -1,11 +1,11 @@
 using SystemModule;
 using SystemModule.Sockets;
 
-namespace SelGate
+namespace LoginGate
 {
     public class GateClient
     {
-        public readonly IClientScoket ClientSocket;
+        public IClientScoket ClientSocket;
 
         public GateClient()
         {
@@ -18,13 +18,11 @@ namespace SelGate
 
         public void Start()
         {
+            ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
             ResUserSessionArray();
-            ClientSocket.Address = GateShare.ServerAddr;
-            ClientSocket.Port = GateShare.ServerPort;//游戏服务器(DB)的端口，此端口标准为 5000，如果使用的游戏服务器端修改过，则改为相应的端口。
-            ClientSocket.Connect();
         }
 
-        public void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateShare.boGateReady = true;
             GateShare.nSessionCount = 0;
@@ -33,10 +31,10 @@ namespace SelGate
             GateShare.boServerReady = true;
         }
 
-        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        public void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             TUserSession UserSession;
-            for (int nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+            for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
             {
                 UserSession = GateShare.g_SessionArray[nIndex];
                 if (UserSession.Socket != null)
@@ -53,17 +51,17 @@ namespace SelGate
             GateShare.nSessionCount = 0;
         }
 
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+        public void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             GateShare.boServerReady = false;
         }
 
-        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        public void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            string sRecvMsg = e.Data;
-            GateShare.ClientSockeMsgList.Add(sRecvMsg);
+            var sReviceMsg = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
+            GateShare.ClientSockeMsgList.Add(sReviceMsg);
         }
-        
+
         private void ResUserSessionArray()
         {
             TUserSession UserSession;
@@ -76,5 +74,6 @@ namespace SelGate
                 UserSession.MsgList.Clear();
             }
         }
+
     }
 }
