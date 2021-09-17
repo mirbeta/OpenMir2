@@ -113,7 +113,7 @@ namespace SystemModule
         /// <param name="str">密文</param>
         /// <param name="chinese">是否返回中文</param>
         /// <returns></returns>
-        public static unsafe string DeCodeString(string str, bool chinese = false)
+        public static unsafe string DeCodeString(string str, bool chinese = true)
         {
             var encBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);

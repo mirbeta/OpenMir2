@@ -136,7 +136,7 @@ namespace GameSvr
         /// <param name="e"></param>
         private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
-            sRecvMsg = sRecvMsg + e.Data;
+            sRecvMsg = sRecvMsg + e.ReceiveText;
         }
     }
 }

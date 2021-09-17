@@ -7,13 +7,13 @@ namespace SystemModule.Sockets
     {
         public byte[] Buff;
         public Socket socket;
-        public string Data;
+        public string ReceiveText;
 
         public DSCClientDataInEventArgs(Socket soc, byte[] dataIn)
         {
             this.socket = soc;
             this.Buff = dataIn;
-            this.Data = System.Text.Encoding.GetEncoding("gb2312").GetString(dataIn, 0, dataIn.Length);
+            this.ReceiveText = System.Text.Encoding.GetEncoding("gb2312").GetString(dataIn, 0, dataIn.Length);
         }
     }
 }

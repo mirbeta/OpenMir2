@@ -12,7 +12,6 @@ namespace DBSvr
     public class THumDB
     {
         public bool m_boChanged = false;
-        private IDbConnection ADOConnection = null;
         public IList<string> m_MirQuickList = null;
         public IList<string> m_MirQuickIDList = null;
         private Dictionary<int, string> m_QuickIndexNameList = null;

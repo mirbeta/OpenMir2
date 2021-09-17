@@ -78,7 +78,7 @@ namespace DBSvr
 
         public void UserSocketClientError(Object Sender)
         {
-            
+
         }
 
         public void UserSocketClientRead(Object Sender, Socket Socket)
@@ -386,7 +386,7 @@ namespace DBSvr
         private void SendKeepAlivePacket(Socket Socket)
         {
             if (Socket.Connected)
-            { 
+            {
                 Socket.SendText("%++$");
             }
         }
@@ -394,8 +394,7 @@ namespace DBSvr
         private void ProcessUserMsg(ref TUserInfo UserInfo)
         {
             string s10 = string.Empty;
-            int nC;
-            nC = 0;
+            int nC = 0;
             while (true)
             {
                 if (HUtil32.TagCount(UserInfo.s2C, '!') <= 0)
@@ -431,8 +430,7 @@ namespace DBSvr
         {
             TUserInfo UserInfo;
             string sUserIPaddr = string.Empty;
-            string sGateIPaddr = string.Empty;
-            sGateIPaddr = HUtil32.GetValidStr3(sIP, ref sUserIPaddr, new string[] { "/" });
+            string sGateIPaddr = HUtil32.GetValidStr3(sIP, ref sUserIPaddr, new string[] { "/" });
             for (var i = 0; i < GateInfo.UserList.Count; i++)
             {
                 UserInfo = GateInfo.UserList[i];
@@ -479,12 +477,9 @@ namespace DBSvr
 
         private void DeCodeUserMsg(string sData, ref TUserInfo UserInfo)
         {
-            string sDefMsg;
-            string s18;
-            TDefaultMessage Msg;
-            sDefMsg = sData.Substring(1 - 1, Grobal2.DEFBLOCKSIZE);
-            s18 = sData.Substring(Grobal2.DEFBLOCKSIZE + 1 - 1, sData.Length - Grobal2.DEFBLOCKSIZE);
-            Msg = EDcode.DecodeMessage(sDefMsg);
+            string sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
+            string s18 = sData.Substring(Grobal2.DEFBLOCKSIZE + 1 - 1, sData.Length - Grobal2.DEFBLOCKSIZE);
+            TDefaultMessage Msg = EDcode.DecodeMessage(sDefMsg);
             switch (Msg.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
@@ -569,6 +564,12 @@ namespace DBSvr
             }
         }
 
+        /// <summary>
+        /// 查询角色
+        /// </summary>
+        /// <param name="sData"></param>
+        /// <param name="UserInfo"></param>
+        /// <returns></returns>
         private bool QueryChr(string sData, ref TUserInfo UserInfo)
         {
             bool result;
@@ -693,6 +694,11 @@ namespace DBSvr
             return result;
         }
 
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="sData"></param>
+        /// <param name="UserInfo"></param>
         private void DelChr(string sData, ref TUserInfo UserInfo)
         {
             TDefaultMessage Msg;
@@ -744,6 +750,11 @@ namespace DBSvr
             SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
         }
 
+        /// <summary>
+        /// 新建角色
+        /// </summary>
+        /// <param name="sData"></param>
+        /// <param name="UserInfo"></param>
         private void NewChr(string sData, ref TUserInfo UserInfo)
         {
             string Data = string.Empty;
@@ -853,7 +864,7 @@ namespace DBSvr
                 }
                 else
                 {
-                    DBSMain.FrmDBSrv.DelHum(sChrName);
+                    //BSMain.FrmDBSrv.DelHum(sChrName); //删除人物
                     nCode = 4;
                 }
             }
@@ -869,6 +880,12 @@ namespace DBSvr
             SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
         }
 
+        /// <summary>
+        /// 选择角色
+        /// </summary>
+        /// <param name="sData"></param>
+        /// <param name="UserInfo"></param>
+        /// <returns></returns>
         private bool SelectChr(string sData, ref TUserInfo UserInfo)
         {
             string sAccount = string.Empty;
@@ -886,7 +903,7 @@ namespace DBSvr
             string sRouteIP = string.Empty;
             int nRoutePort = 0;
             var result = false;
-            var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, new string[] { "/" });
+            var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData, true), ref sAccount, new string[] { "/" });
             boDataOK = false;
             if (UserInfo.sAccount == sAccount)
             {
@@ -1016,7 +1033,7 @@ namespace DBSvr
 
         private bool CheckDenyChrName(string sChrName)
         {
-            bool result= true;
+            bool result = true;
             for (var i = 0; i < DBShare.DenyChrNameList.Count; i++)
             {
                 if (string.Compare((sChrName).ToLower(), (DBShare.DenyChrNameList[i]).ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
@@ -1027,8 +1044,7 @@ namespace DBSvr
             }
             return result;
         }
-
-    } 
+    }
 }
 
 namespace DBSvr

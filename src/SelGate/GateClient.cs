@@ -60,7 +60,7 @@ namespace SelGate
 
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            string sRecvMsg = e.Data;
+            string sRecvMsg = e.ReceiveText;
             GateShare.ClientSockeMsgList.Add(sRecvMsg);
         }
         
