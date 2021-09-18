@@ -220,16 +220,9 @@ namespace LoginGate
             string sProcessMsg = string.Empty;
             string sSocketMsg = string.Empty;
             string sSocketHandle = string.Empty;
-            int nSocketIndex = 0;
-            int nMsgCount = 0;
-            int nSendRetCode = 0;
-            int nSocketHandle = 0;
-            long dwDecodeTick = 0;
-            long dwDecodeTime = 0;
-            string sRemoteIPaddr = string.Empty;
+            int dwDecodeTick = 0;
             TUserSession UserSession;
             TSockaddr IPaddr;
-            //ShowMainLogMsg();
             if (GateShare.boDecodeLock || (!GateShare.boGateReady))
             {
                 return;
@@ -238,6 +231,7 @@ namespace LoginGate
             {
                 dwDecodeTick = HUtil32.GetTickCount();
                 GateShare.boDecodeLock = true;
+                int nSocketIndex;
                 while (true)
                 {
                     if (GateShare.ClientSockeMsgList.Count <= 0)
@@ -254,7 +248,7 @@ namespace LoginGate
                             break;
                         }
                         sProcessMsg = HUtil32.ArrestStringEx(sProcessMsg, "%", "$", ref sSocketMsg);
-                        if (sSocketMsg == "")
+                        if (string.IsNullOrEmpty(sSocketMsg))
                         {
                             break;
                         }
@@ -273,7 +267,7 @@ namespace LoginGate
                             }
                         }
                         sSocketMsg = HUtil32.GetValidStr3(sSocketMsg, ref sSocketHandle, new string[] { "/" });
-                        nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
+                        int nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
                         if (nSocketHandle < 0)
                         {
                             continue;
@@ -288,12 +282,11 @@ namespace LoginGate
                         }
                     }
                 }
-                if (sProcessMsg != "")
+                if (!string.IsNullOrEmpty(sProcessMsg))
                 {
                     sProcMsg = sProcessMsg;
                 }
                 GateShare.nSendMsgCount = 0;
-                GateShare.n456A2C = 0;
                 StringList318.Clear();
                 for (nSocketIndex = 0; nSocketIndex < GateShare.GATEMAXSESSION; nSocketIndex++)
                 {
@@ -303,7 +296,7 @@ namespace LoginGate
                     }
                     if ((HUtil32.GetTickCount() - GateShare.g_SessionArray[nSocketIndex].dwConnctCheckTick) > GateShare.dwKeepConnectTimeOut)// 踢除超时无数据传输连接
                     {
-                        sRemoteIPaddr = GateShare.g_SessionArray[nSocketIndex].sRemoteIPaddr;
+                        string sRemoteIPaddr = GateShare.g_SessionArray[nSocketIndex].sRemoteIPaddr;
                         switch (GateShare.BlockMethod)
                         {
                             case TBlockIPMethod.mDisconnect:
@@ -332,7 +325,7 @@ namespace LoginGate
                             break;
                         }
                         UserSession = GateShare.g_SessionArray[nSocketIndex];
-                        nSendRetCode = SendUserMsg(UserSession, UserSession.MsgList[0]);
+                        int nSendRetCode = SendUserMsg(UserSession, UserSession.MsgList[0]);
                         if ((nSendRetCode >= 0))
                         {
                             if (nSendRetCode == 1)
@@ -343,15 +336,14 @@ namespace LoginGate
                             }
                             if (UserSession.MsgList.Count > 100)
                             {
-                                nMsgCount = 0;
+                                int nMsgCount = 0;
                                 while (nMsgCount != 51)
                                 {
                                     UserSession.MsgList.RemoveAt(0);
                                     nMsgCount++;
                                 }
                             }
-                            GateShare.n456A2C += UserSession.MsgList.Count;
-                            GateShare.MainOutMessage(UserSession.sIP + " : " + (UserSession.MsgList.Count).ToString(), 5);
+                            GateShare.MainOutMessage(UserSession.sIP + " : " + UserSession.MsgList.Count, 5);
                             GateShare.nSendMsgCount++;
                         }
                         else
@@ -380,7 +372,7 @@ namespace LoginGate
             {
                 GateShare.boDecodeLock = false;
             }
-            dwDecodeTime = HUtil32.GetTickCount() - dwDecodeTick;
+            int dwDecodeTime = HUtil32.GetTickCount() - dwDecodeTick;
             if (dwDecodeMsgTime < dwDecodeTime)
             {
                 dwDecodeMsgTime = dwDecodeTime;

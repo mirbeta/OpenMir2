@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,37 +10,33 @@ namespace LoginSvr
 {
     public class AppServer
     {
-        private ArrayList SList_0344 = null;
-        private TThreadParseList ParseList = null;
-        private LoginSvrService loginSvr;
-        private ISocketServer gSocket;
+        private ThreadParseList parseListTimer = null;
+        private LoginService _loginService;
+        private ISocketServer _serverSocket;
         private Timer _logThreadTime;
         private Timer _execThreadTimer;
-        private readonly MasSocService _masSoc;
+        private readonly MasSocService _massocService;
 
-        public AppServer(LoginSvrService loginSvrService, MasSocService masSoc)
+        public AppServer(LoginService loginService, MasSocService masSocService)
         {
-            LSShare.initialization();
+            LSShare.Initialization();
             TConfig Config = LSShare.g_Config;
             Config.boRemoteClose = false;
-            LSShare.StringList_0 = new List<long>();
-            LSShare.nSessionIdx = 1;
             Config.GateList = new List<TGateInfo>();
             Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();
-            SList_0344 = new ArrayList();
             Config.AccountCostList = new Dictionary<string, int>();
             Config.IPaddrCostList = new Dictionary<string, int>();
-            loginSvr = loginSvrService;
-            _masSoc = masSoc;
-            ParseList = new TThreadParseList(loginSvr);
-            gSocket = new ISocketServer(ushort.MaxValue, 1024);
-            gSocket.OnClientConnect += GSocketClientConnect;
-            gSocket.OnClientDisconnect += GSocketClientDisconnect;
-            gSocket.OnClientRead += GSocketClientRead;
-            gSocket.OnClientError += GSocketClientError;
-            gSocket.Init();
+            LSShare.nSessionIdx = 1;
+            _loginService = loginService;
+            _massocService = masSocService;
             _logThreadTime = new Timer(LogThreadTime, null, 1000, 3000);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket.OnClientConnect += GSocketClientConnect;
+            _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
+            _serverSocket.OnClientRead += GSocketClientRead;
+            _serverSocket.OnClientError += GSocketClientError;
+            _serverSocket.Init();
         }
 
         private void GSocketClientConnect(object sender, SystemModule.Sockets.AsyncUserToken e)
@@ -124,7 +119,7 @@ namespace LoginSvr
             try
             {
                 TConfig Config = LSShare.g_Config;
-                loginSvr.ProcessGate(Config);
+                _loginService.ProcessGate(Config);
             }
             finally
             {
@@ -134,57 +129,39 @@ namespace LoginSvr
 
         private void LogThreadTime(object obj)
         {
-            TConfig Config;
-            Config = LSShare.g_Config;
+            TConfig Config = LSShare.g_Config;
             //Label1.Text = (Config.dwProcessGateTime).ToString();
             //CkLogin.Checked = GSocket.Socket.Connected;
             //CkLogin.Text = "连接 (" + (GSocket.Socket.ActiveConnections).ToString() + ")";
             //LbMasCount.Text = (LSShare.nOnlineCountMin).ToString() + "/" + (LSShare.nOnlineCountMax).ToString();
-            //if (Memo1.Lines.Count > 2000)
-            //{
-            //    Memo1.Clear();
-            //}
             for (var i = 0; i < LSShare.g_MainMsgList.Count; i++)
             {
                 Console.WriteLine(LSShare.g_MainMsgList[i]);
             }
             LSShare.g_MainMsgList.Clear();
-            var count = 0;
-            while (true)
-            {
-                if (LSShare.StringList_0.Count <= count)
-                {
-                    break;
-                }
-                if ((HUtil32.GetTickCount() - LSShare.StringList_0[count]) > 60000)
-                {
-                    LSShare.StringList_0.Remove(count);
-                    continue;
-                }
-                count++;
-            }
-            loginSvr.SessionClearKick(Config);
-            loginSvr.SessionClearNoPayMent(Config);
+            _loginService.SessionClearKick(Config);
+            _loginService.SessionClearNoPayMent(Config);
             MonitorTimer(obj);
         }
 
         public void Start()
         {
             TConfig Config = LSShare.g_Config;
-            loginSvr.StartService(Config);
+            _loginService.StartService(Config);
             LSShare.MainOutMessage("1) 正在启动服务器...");
             LSShare.MainOutMessage("2) 正在等待服务器连接...");
-            // while (true)
-            // {
-            //     if (FrmMasSoc.CheckReadyServers())
-            //     {
-            //         break;
-            //     }
-            //     Thread.Sleep(1);
-            // }
-            gSocket.Start(Config.sGateAddr, Config.nGatePort);
+            while (true)
+            {
+                if (_massocService.CheckReadyServers())
+                {
+                    break;
+                }
+                Thread.Sleep(1);
+            }
+            _serverSocket.Start(Config.sGateAddr, Config.nGatePort);
             LSShare.MainOutMessage("3) 服务器启动完成...");
             _execThreadTimer = new Timer(ExecTimerTimer, null, 3000, 1);
+            parseListTimer = new ThreadParseList(_loginService);
         }
 
         public void CountLogTimerTimer(System.Object Sender, System.EventArgs _e1)
@@ -192,61 +169,53 @@ namespace LoginSvr
             const string sFormatMsg = "{0}/{1}";
             TConfig Config = LSShare.g_Config;
             string sLogMsg = string.Format(sFormatMsg, LSShare.nOnlineCountMin, LSShare.nOnlineCountMax);
-            loginSvr.SaveContLogMsg(Config, sLogMsg);
+            _loginService.SaveContLogMsg(Config, sLogMsg);
             LSShare.nOnlineCountMax = 0;
         }
 
         public void MonitorTimer(object obj)
         {
             string sServerName;
-            IList<TMsgServerInfo> ServerList;
             TMsgServerInfo MsgServer;
-            long TickTime;
-            StringBuilder msgStr = new StringBuilder();
-            try
+            int TickTime;
+            IList<TMsgServerInfo> ServerList = _massocService.m_ServerList;
+            if (!ServerList.Any())
             {
-                ServerList = _masSoc.m_ServerList;
-                if (!ServerList.Any())
+                return;
+            }
+            StringBuilder msgStr = new StringBuilder();
+            for (var i = 0; i < ServerList.Count; i++)
+            {
+                MsgServer = ServerList[i];
+                sServerName = MsgServer.sServerName;
+                if (sServerName != "")
                 {
-                    return;
-                }
-                for (var i = 0; i < ServerList.Count; i++)
-                {
-                    MsgServer = ServerList[i];
-                    sServerName = MsgServer.sServerName;
-                    if (sServerName != "")
+                    msgStr.Append($"{sServerName}");
+                    if (MsgServer.nServerIndex == 99)
                     {
-                        msgStr.Append($"{sServerName}");
-                        if (MsgServer.nServerIndex == 99)
-                        {
-                            msgStr.Append(" ServerIndex:[DB] ");
-                        }
-                        else
-                        {
-                            msgStr.Append($" ServerIndex:[{MsgServer.nServerIndex}] ");
-                        }
-                        msgStr.Append($"OnLineCount:[{MsgServer.nOnlineCount}] SelectId:[{MsgServer.nSelectID}] ");
-                        TickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
-                        if (TickTime < 30000)
-                        {
-                            msgStr.Append("Status:[正常]");
-                        }
-                        else
-                        {
-                            msgStr.Append("Status:[超时]");
-                        }
-                        if (TickTime > 60000)
-                        {
-                            MsgServer.Socket.Close();
-                        }
+                        msgStr.Append(" ServerIndex:[DB] ");
+                    }
+                    else
+                    {
+                        msgStr.Append($" ServerIndex:[{MsgServer.nServerIndex}] ");
+                    }
+                    msgStr.Append($"OnLineCount:[{MsgServer.nOnlineCount}] SelectId:[{MsgServer.nSelectID}] ");
+                    TickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
+                    if (TickTime < 30000)
+                    {
+                        msgStr.Append("Status:[正常]");
+                    }
+                    else
+                    {
+                        msgStr.Append("Status:[超时]");
+                    }
+                    if (TickTime > 60000)
+                    {
+                        MsgServer.Socket.Close();
                     }
                 }
-                LSShare.MainOutMessage(msgStr.ToString());
             }
-            catch
-            {
-                LSShare.MainOutMessage("TFrmMain.MonitorTimerTimer");
-            }
+            LSShare.MainOutMessage(msgStr.ToString());
         }
     }
 }

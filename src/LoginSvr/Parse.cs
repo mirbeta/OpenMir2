@@ -7,23 +7,21 @@ using SystemModule.Common;
 
 namespace LoginSvr
 {
-    public class TThreadParseList
+    public class ThreadParseList
     {
         private StringList AccountLoadList = null;
         private StringList IPaddrLoadList = null;
         private IList<AccountConst> AccountCostList = null;
         private IList<AccountConst> IPaddrCostList = null;
-        private bool bo40 = false;
         private readonly Thread _parseThread;
-        private readonly LoginSvrService _loginSvr;
+        private readonly LoginService _loginSvr;
 
-        public TThreadParseList(LoginSvrService loginSvr)
+        public ThreadParseList(LoginService loginSvr)
         {
             AccountLoadList = new StringList();
             IPaddrLoadList = new StringList();
             AccountCostList = new List<AccountConst>();
             IPaddrCostList = new List<AccountConst>();
-            bo40 = false;
             _loginSvr = loginSvr;
             _parseThread = new Thread(Execute);
             _parseThread.IsBackground = true;
@@ -32,17 +30,15 @@ namespace LoginSvr
 
         private void Execute(object obj)
         {
-            long dwTick2C;
-            string s18=String.Empty;
-            string s1C=String.Empty;
-            string s24=String.Empty;
-            string s28=String.Empty;
+            string s18 = String.Empty;
+            string s1C = String.Empty;
+            string s24 = String.Empty;
+            string s28 = String.Empty;
             int nC;
             int n10;
             int n14;
-            TConfig Config;
-            Config = LSShare.g_Config;
-            dwTick2C = 0;
+            TConfig Config = LSShare.g_Config;
+            int dwTick2C = 0;
             while (true)
             {
                 if ((HUtil32.GetTickCount() - dwTick2C) > 5 * 60 * 1000)
@@ -67,12 +63,9 @@ namespace LoginSvr
                                     n14 = HUtil32.Str_ToInt(s28, 0);
                                     nC = HUtil32.MakeLong(HUtil32._MAX(n14, 0), HUtil32._MAX(n10, 0));
                                     _loginSvr.LoadAccountCostList(Config, new AccountConst(s1C, nC));
-                                    if (!bo40)
+                                    if ((i % 100) == 0)
                                     {
-                                        if ((i % 100) == 0)
-                                        {
-                                            Thread.Sleep(1);
-                                        }
+                                        Thread.Sleep(1);
                                     }
                                 }
                             }
@@ -101,12 +94,9 @@ namespace LoginSvr
                                     n14 = HUtil32.Str_ToInt(s28, 0);
                                     nC = HUtil32.MakeLong(HUtil32._MAX(n14, 0), HUtil32._MAX(n10, 0));
                                     _loginSvr.LoadIPaddrCostList(Config, new AccountConst(s1C, nC));
-                                    if (!bo40)
+                                    if ((i % 100) == 0)
                                     {
-                                        if ((i % 100) == 0)
-                                        {
-                                            Thread.Sleep(1);
-                                        }
+                                        Thread.Sleep(1);
                                     }
                                 }
                             }

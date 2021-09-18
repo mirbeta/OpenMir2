@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Sockets;
 using SystemModule.Common;
 
@@ -10,7 +8,6 @@ namespace LoginSvr
     public class LSShare
     {
         public static TConfig g_Config;
-        public static IList<long> StringList_0 = null;
         public static int nOnlineCountMin = 0;
         public static int nOnlineCountMax = 0;
         public static IList<string> g_MainMsgList = null;
@@ -21,21 +18,6 @@ namespace LoginSvr
         public static string[] ServerAddr = new string[16];
         public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
         public static int UserLimit = ushort.MaxValue;
-
-        public static int GetCodeMsgSize(double X)
-        {
-            int result;
-            if (Convert.ToInt32(X) < X)
-            {
-                result = Convert.ToInt32(X) + 1;
-            }
-            else
-            {
-                result = Convert.ToInt32(X);
-            }
-
-            return result;
-        }
 
         public static bool CheckAccountName(string sName)
         {
@@ -79,15 +61,12 @@ namespace LoginSvr
 
         public static int GetSessionID()
         {
-            int result;
             nSessionIdx++;
             if (nSessionIdx >= Int32.MaxValue)
             {
                 nSessionIdx = 2;
             }
-
-            result = nSessionIdx;
-            return result;
+            return nSessionIdx;
         }
 
         public static void SaveGateConfig(TConfig Config)
@@ -99,8 +78,7 @@ namespace LoginSvr
             string sC;
             SaveList = new StringList();
             SaveList.Add(";No space allowed");
-            SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) +
-                         GenSpaceString("Public", 17) + "Gate...");
+            SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
             for (i = 0; i < Config.nRouteCount; i++)
             {
                 sC = GenSpaceString(Config.GateRoute[i].sServerName, 15) +
@@ -151,11 +129,10 @@ namespace LoginSvr
         public static string GenSpaceString(string sStr, int nSpaceCOunt)
         {
             string result = sStr + " ";
-            for (var i = 1; i <= nSpaceCOunt - sStr.Length; i++)
+            for (var i = 0; i <= nSpaceCOunt - sStr.Length; i++)
             {
                 result = result + " ";
             }
-
             return result;
         }
 
@@ -164,17 +141,11 @@ namespace LoginSvr
             g_MainMsgList.Add(sMsg);
         }
 
-        public static void initialization()
+        public static void Initialization()
         {
             g_MainMsgList = new List<string>();
             g_Config = new TConfig();
         }
-
-        public void finalization()
-        {
-            g_MainMsgList = null;
-        }
-
     }
 
     public struct TGateNet

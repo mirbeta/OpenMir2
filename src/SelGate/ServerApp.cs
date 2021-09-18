@@ -13,26 +13,11 @@ namespace SelGate
         private ArrayList TempLogList = null;
         private long dwReConnectServerTick = 0;
         private Timer logTimer;
-        private readonly GateServer gateServer;
-        private readonly GateClient gateClient;
 
         public ServerApp(GateServer gateServer, GateClient gateClient)
         {
             GateShare.Initialization();
             TempLogList = new ArrayList();
-            this.gateServer = gateServer;
-            this.gateClient = gateClient;
-        }
-
-        public void FormDestroy(Object Sender)
-        {
-            //int nIndex;
-            //StringList30C.Free;
-            //TempLogList.Free;
-            //for (nIndex = 0; nIndex < GATEMAXSESSION; nIndex++)
-            //{
-            //    g_SessionArray[nIndex].MsgList.Free;
-            //}
         }
 
         public void FormCloseQuery(System.Object Sender, System.ComponentModel.CancelEventArgs _e1)
@@ -105,44 +90,6 @@ namespace SelGate
             }
         }
 
-        public void TimerTimer(System.Object Sender, System.EventArgs _e1)
-        {
-            //if (ServerSocket.Active)
-            //{
-            //    StatusBar.Panels[0].Text = (ServerSocket.Port).ToString();
-            //    if (GateShare.boSendHoldTimeOut)
-            //    {
-            //        StatusBar.Panels[2].Text = (nSessionCount).ToString() + "/#" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //    }
-            //    else
-            //    {
-            //        StatusBar.Panels[2].Text = (nSessionCount).ToString() + "/" + (ServerSocket.Socket.ActiveConnections).ToString();
-            //    }
-            //}
-            //else
-            //{
-            //    StatusBar.Panels[0].Text = "????";
-            //    StatusBar.Panels[2].Text = "????";
-            //}
-            //Label2.Text = (dwDecodeMsgTime).ToString();
-            //if (!GateShare.boGateReady)
-            //{
-            //    StatusBar.Panels[1].Text = "未连接";
-            //}
-            //else
-            //{
-            //    if (GateShare.boKeepAliveTimcOut)
-            //    {
-            //        StatusBar.Panels[1].Text = "超时";
-            //    }
-            //    else
-            //    {
-            //        StatusBar.Panels[1].Text = "已连接";
-            //        LbLack.Text = (GateShare.n456A2C).ToString() + "/" + (GateShare.nSendMsgCount).ToString();
-            //    }
-            //}
-        }
-
         private void LoadConfig()
         {
             IniFile Conf;
@@ -183,7 +130,6 @@ namespace SelGate
                 dwReConnectServerTick = HUtil32.GetTickCount() - 25 * 1000;
                 GateShare.boKeepAliveTimcOut = false;
                 GateShare.nSendMsgCount = 0;
-                GateShare.n456A2C = 0;
                 //dwSendKeepAliveTick = HUtil32.GetTickCount();
                 GateShare.boSendHoldTimeOut = false;
                 GateShare.dwSendHoldTick = HUtil32.GetTickCount();
@@ -207,8 +153,6 @@ namespace SelGate
             //MainOutMessage("正在停止服务...", 3);
             //GateShare.boServiceStart = false;
             //GateShare.boGateReady = false;
-            //MENU_CONTROL_START.Enabled = true;
-            //MENU_CONTROL_STOP.Enabled = false;
             //SendTimer.Enabled = false;
             //for (nSockIdx = 0; nSockIdx < GATEMAXSESSION; nSockIdx++)
             //{
@@ -265,31 +209,9 @@ namespace SelGate
             }
         }
 
-        public void StartTimerTimer(System.Object Sender, System.EventArgs _e1)
-        {
-            if (GateShare.boStarted)
-            {
-                //StartTimer.Enabled = false;
-                StopService();
-                GateShare.boClose = true;
-                //this.Close();
-            }
-            else
-            {
-                GateShare.boStarted = true;
-                //StartTimer.Enabled = false;
-                StartService();
-            }
-        }
-
         public void Start()
         {
-            //StringList30C = new ArrayList();
-            //StringList318 = new ArrayList();
-            //dwDecodeMsgTime = 0;
             IniUserSessionArray();
-            gateServer.Start();
-            gateClient.Start();
         }
 
         private void ShowMainLogMsg(object obj)

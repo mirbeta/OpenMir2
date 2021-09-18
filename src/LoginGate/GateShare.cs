@@ -2,11 +2,31 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
 
 namespace LoginGate
 {
+    public class TUserSession
+    {
+        public Socket Socket;
+        public string sRemoteIPaddr;
+        public int nSendMsgLen;
+        public bool bo0C;
+        public long dw10Tick;
+        public int nCheckSendLength;
+        public bool boSendAvailable;
+        public bool boSendCheck;
+        public long dwSendLockTimeOut;
+        public int n20;
+        public long dwUserTimeOutTick;
+        public int SocketHandle;
+        public string sIP;
+        public IList<string> MsgList;
+        public long dwConnctCheckTick;
+    }
+
     public class TSockaddr
     {
         public long nIPaddr;
@@ -28,8 +48,6 @@ namespace LoginGate
 
     public class GateShare
     {
-        public static object CS_MainLog = null;
-        public static object CS_FilterMsg = null;
         public static IList<string> MainLogMsgList = null;
         public static IList<TSockaddr> BlockIPList = null;
         public static IList<TSockaddr> TempBlockIPList = null;
@@ -37,7 +55,6 @@ namespace LoginGate
         public static int nIPCountLimit1 = 20;
         public static int nIPCountLimit2 = 40;
         public static int nShowLogLevel = 3;
-        public static IList<string> StringList456A14 = null;
         public static string GateClass = "LoginGate";
         public static string GateName = "登录网关";
         public static string TitleName = "SKY引擎";
@@ -53,8 +70,6 @@ namespace LoginGate
         public static long dwKeepAliveTick = 0;
         public static bool boKeepAliveTimcOut = false;
         public static int nSendMsgCount = 0;
-        public static int n456A2C = 0;
-        public static int n456A30 = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
         public static bool boDecodeLock = false;
@@ -65,7 +80,6 @@ namespace LoginGate
         /// 用于动态IP，分机放置登录网关用，打开此模式后，网关将会把连接登录服务器的IP地址，当为服务器IP，发给登录服务器，客户端将直接使用此IP连接角色网关
         /// </summary>
         public static bool g_boDynamicIPDisMode = false;
-        public static long g_dwGameCenterHandle = 0;
         public static int GATEMAXSESSION = 10000;
         public static ConcurrentDictionary<string, int> socketMap = null;
         public static TUserSession[] g_SessionArray;
@@ -127,9 +141,6 @@ namespace LoginGate
         public static void Initialization()
         {
             g_SessionArray = new TUserSession[GATEMAXSESSION];
-            CS_MainLog = new object();
-            CS_FilterMsg = new object();
-            StringList456A14 = new List<string>();
             MainLogMsgList = new List<string>();
             socketMap = new ConcurrentDictionary<string, int>();
         }

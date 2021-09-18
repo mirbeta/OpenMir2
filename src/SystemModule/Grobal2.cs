@@ -464,7 +464,6 @@ namespace SystemModule
         public const int VERSION_NUMBER = 20020522;
         public const int CLIENT_VERSION_NUMBER = 120040918;
         public const int CM_POWERBLOCK = 0;
-        // Damian
         public const int MapNameLen = 16;
         public const int ActorNameLen = 14;
         public const int DR_UP = 0;
@@ -503,31 +502,64 @@ namespace SystemModule
         public const int HALFY = 16;
         public const int MAXBAGITEM = 52;
         public const int HOWMANYMAGICS = 20;
+        /// <summary>
+        /// 用户最大的物品
+        /// </summary>
         public const int USERITEMMAX = 46;
-        // 用户最大的物品
         public const int MaxSkillLevel = 3;
-        public const int MAX_STATUS_ATTRIBUTE = 12;
+        /// <summary>
         // 物品类型(物品属性读取)
+        /// </summary>
+        public const int MAX_STATUS_ATTRIBUTE = 12;
+        /// <summary>
+        /// 武器
+        /// </summary>
         public const int ITEM_WEAPON = 0;
-        // 武器
+        /// <summary>
+        /// 装备
+        /// </summary>
         public const int ITEM_ARMOR = 1;
-        // 装备
+        /// <summary>
+        /// 辅助物品
+        /// </summary>
         public const int ITEM_ACCESSORY = 2;
-        // 辅助物品
-        public const int ITEM_ETC = 3;
+        /// <summary>
         // 其它物品
+        /// 
+        /// </summary>
+        public const int ITEM_ETC = 3;
+        /// <summary>
+        /// 药水
+        /// </summary>
         public const int ITEM_LEECHDOM = 4;
-        // 药水
+        /// <summary>
+        /// 金币
+        /// </summary>
         public const int ITEM_GOLD = 10;
-        // 金币
+        /// <summary>
+        /// 中毒类型 - 绿毒
+        /// </summary>
         public const int POISON_DECHEALTH = 0;
-        // 中毒类型 - 绿毒
+        /// <summary>
+        /// 中毒类型 - 红毒
+        /// </summary>
         public const int POISON_DAMAGEARMOR = 1;
-        // 中毒类型 - 红毒
+        /// <summary>
+        /// 中毒类型 - 不能使用技能
+        /// </summary>
         public const int POISON_LOCKSPELL = 2;
+        /// <summary>
+        /// 中毒类型 - 禁止移动
+        /// </summary>
         public const int POISON_DONTMOVE = 4;
+        /// <summary>
+        /// 中毒类型 - 防麻
+        /// </summary>
         public const int POISON_STONE = 5;
-        public const int STATE_LOCKRUN = 3;//不能跑动(中蛛网)
+        /// <summary>
+        /// 不能跑动(中蛛网)
+        /// </summary>
+        public const int STATE_LOCKRUN = 3;
         public const int POISON_68 = 68;
         public const int STATE_TRANSPARENT = 8;
         public const int STATE_DEFENCEUP = 9;
@@ -535,18 +567,12 @@ namespace SystemModule
         public const int STATE_BUBBLEDEFENCEUP = 11;
         public const int STATE_STONE_MODE = 0x00000001;
         public const int STATE_OPENHEATH = 0x00000002;
-        // 眉仿 傍俺惑怕
         public const int ET_DIGOUTZOMBI = 1;
-        // 粱厚啊 顶颇绊 唱柯 如利
         public const int ET_MINE = 2;
-        // 堡籍捞 概厘登绢 乐澜
         public const int ET_PILESTONES = 3;
-        // 倒公歹扁
         public const int ET_HOLYCURTAIN = 4;
-        // 搬拌
         public const int ET_FIRE = 5;
         public const int ET_SCULPEICE = 6;
-        // 林付空狼 倒柄柳 炼阿
         public const int RCC_MERCHANT = 50;
         public const int RCC_GUARD = 12;
         public const int RCC_USERHUMAN = 0;
@@ -557,7 +583,13 @@ namespace SystemModule
         public const int CM_NEWCHR = 101;
         public const int CM_DELCHR = 102;
         public const int CM_SELCHR = 103;
+        /// <summary>
+        /// 玩家选择服务器
+        /// </summary>
         public const int CM_SELECTSERVER = 104;
+        /// <summary>
+        /// 开门
+        /// </summary>
         public const int CM_OPENDOOR = 1002;
         public const int CM_SOFTCLOSE = 1009;
         public const int CM_DROPITEM = 1000;
@@ -605,11 +637,19 @@ namespace SystemModule
         public const int CM_GUILDALLY = 1044;
         public const int CM_GUILDBREAKALLY = 1045;
         public const int CM_SPEEDHACKUSER = 10430;
-        // ??
         public const int CM_PROTOCOL = 2000;
         public const int CM_IDPASSWORD = 2001;
+        /// <summary>
+        /// 创建账号
+        /// </summary>
         public const int CM_ADDNEWUSER = 2002;
+        /// <summary>
+        /// 修改密码
+        /// </summary>
         public const int CM_CHANGEPASSWORD = 2003;
+        /// <summary>
+        /// 更新账号信息
+        /// </summary>
         public const int CM_UPDATEUSER = 2004;
         public const int CM_THROW = 3005;
         public const int CM_TURN = 3010;
@@ -629,23 +669,36 @@ namespace SystemModule
         public const int SM_THROW = 5;
         public const int SM_RUSH = 6;
         public const int SM_RUSHKUNG = 7;
+        /// <summary>
+        /// 烈火
+        /// </summary>
         public const int SM_FIREHIT = 8;
-        // 烈火
         public const int SM_BACKSTEP = 9;
+        /// <summary>
+        /// 转向
+        /// </summary>
         public const int SM_TURN = 10;
+        /// <summary>
+        /// 走
+        /// </summary>
         public const int SM_WALK = 11;
-        // 走
         public const int SM_SITDOWN = 12;
         public const int SM_RUN = 13;
+        /// <summary>
+        /// 砍
+        /// </summary>
         public const int SM_HIT = 14;
-        // 砍
         public const int SM_HEAVYHIT = 15;
         public const int SM_BIGHIT = 16;
+        /// <summary>
+        /// 使用魔法
+        /// </summary>
         public const int SM_SPELL = 17;
-        // 使用魔法
+        /// <summary>
+        /// 刺杀
+        /// </summary>
         public const int SM_POWERHIT = 18;
         public const int SM_LONGHIT = 19;
-        // 刺杀
         public const int SM_DIGUP = 20;
         public const int SM_DIGDOWN = 21;
         public const int SM_FLYAXE = 22;
@@ -705,10 +758,8 @@ namespace SystemModule
         public const int SM_DELCHR_FAIL = 524;
         public const int SM_STARTPLAY = 525;
         public const int SM_STARTFAIL = 526;
-        // SM_USERFULL
         public const int SM_QUERYCHR_FAIL = 527;
         public const int SM_OUTOFCONNECTION = 528;
-        // ?
         public const int SM_PASSOK_SELECTSERVER = 529;
         public const int SM_SELECTSERVER_OK = 530;
         public const int SM_NEEDUPDATE_ACCOUNT = 531;
@@ -745,9 +796,7 @@ namespace SystemModule
         public const int SM_USERSELLITEM_OK = 648;
         public const int SM_USERSELLITEM_FAIL = 649;
         public const int SM_BUYITEM_SUCCESS = 650;
-        // ?
         public const int SM_BUYITEM_FAIL = 651;
-        // ?
         public const int SM_SENDDETAILGOODSLIST = 652;
         public const int SM_GOLDCHANGED = 653;
         public const int SM_CHANGELIGHT = 654;
@@ -814,15 +863,11 @@ namespace SystemModule
         public const int SM_DONATE_OK = 764;
         public const int SM_DONATE_FAIL = 765;
         public const int SM_MENU_OK = 767;
-        // ?
         public const int SM_GUILDMAKEALLY_OK = 768;
         public const int SM_GUILDMAKEALLY_FAIL = 769;
         public const int SM_GUILDBREAKALLY_OK = 770;
-        // ?
         public const int SM_GUILDBREAKALLY_FAIL = 771;
-        // ?
         public const int SM_DLGMSG = 772;
-        // Jacky
         public const int SM_SPACEMOVE_HIDE = 800;
         public const int SM_SPACEMOVE_SHOW = 801;
         public const int SM_RECONNECT = 802;
@@ -833,13 +878,11 @@ namespace SystemModule
         public const int SM_SPACEMOVE_SHOW2 = 807;
         public const int SM_TIMECHECK_MSG = 810;
         public const int SM_ADJUST_BONUS = 811;
-        // ?
         public const int SM_OPENHEALTH = 1100;
         public const int SM_CLOSEHEALTH = 1101;
         public const int SM_CHANGEFACE = 1104;
         public const int SM_BREAKWEAPON = 1102;
         public const int SM_INSTANCEHEALGUAGE = 1103;
-        // ??
         public const int SM_VERSION_FAIL = 1106;
         public const int SM_ITEMUPDATE = 1500;
         public const int SM_MONSTERSAY = 1501;
@@ -851,12 +894,23 @@ namespace SystemModule
         public const int SM_ACTION2_MIN = 65072;
         public const int SM_ACTION2_MAX = 65073;
         public const int CM_SERVERREGINFO = 65074;
-        // -------------------------------------
         public const int CM_GETGAMELIST = 5001;
         public const int SM_SENDGAMELIST = 5002;
+        /// <summary>
+        /// 找回密码
+        /// </summary>
         public const int CM_GETBACKPASSWORD = 5003;
+        /// <summary>
+        /// 找回密码成功
+        /// </summary>
         public const int SM_GETBACKPASSWD_SUCCESS = 5005;
+        /// <summary>
+        /// 找回密码失败
+        /// </summary>
         public const int SM_GETBACKPASSWD_FAIL = 5006;
+        /// <summary>
+        /// 发送服务器配置信息
+        /// </summary>
         public const int SM_SERVERCONFIG = 5007;
         public const int SM_GAMEGOLDNAME = 5008;
         public const int SM_PASSWORD = 5009;
@@ -893,15 +947,12 @@ namespace SystemModule
         /// </summary>
         public const int SS_SOFTOUTSESSION = 102;
         public const int SS_LOGINCOST = 30002;
-        // Damian
         public const int DBR_FAIL = 2000;
         public const int DB_LOADHUMANRCD = 100;
         public const int DB_SAVEHUMANRCD = 101;
         public const int DB_SAVEHUMANRCDEX = 102;
-        // ?
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
-        // ?
         public const int SG_FORMHANDLE = 32001;
         public const int SG_STARTNOW = 32002;
         public const int SG_STARTOK = 32003;
@@ -913,14 +964,11 @@ namespace SystemModule
         public const int GS_USERACCOUNT = 32102;
         public const int GS_CHANGEACCOUNTINFO = 32103;
         public const int WM_SENDPROCMSG = 32104;
-        // Damian
         public const uint RUNGATECODE = 0xAA55AA55;
         public const int GM_OPEN = 1;
         public const int GM_CLOSE = 2;
         public const int GM_CHECKSERVER = 3;
-        // Send check signal to Server
         public const int GM_CHECKCLIENT = 4;
-        // Send check signal to Client
         public const int GM_DATA = 5;
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
@@ -960,19 +1008,38 @@ namespace SystemModule
         public const int RC_GUARD = 11;
         public const int RC_PEACENPC = 15;
         public const int RC_ANIMAL = 50;
+        /// <summary>
+        /// 练功师
+        /// </summary>
         public const int RC_EXERCISE = 55;
-        // 练功师
+        /// <summary>
+        /// 人型怪物
+        /// </summary>
         public const int RC_PLAYCLONE = 60;
-        // 人型怪物
+        /// <summary>
+        /// 普通怪物
+        /// </summary>
         public const int RC_MONSTER = 80;
+        /// <summary>
+        /// NPC
+        /// </summary>
         public const int RC_NPC = 10;
+        /// <summary>
+        /// 守卫
+        /// </summary>
         public const int RC_ARCHERGUARD = 112;
+        /// <summary>
+        /// 魔王岭弓箭手
+        /// </summary>
         public const int RC_135 = 135;
-        // 魔王岭弓箭手
+        /// <summary>
+        /// 魔王岭弓箭手
+        /// </summary>        
         public const int RC_136 = 136;
-        // 魔王岭弓箭手
+        /// <summary>
+        /// 任务怪物
+        /// </summary>
         public const int RC_153 = 153;
-        // 任务怪物
         public const int RM_TURN = 10001;
         public const int RM_WALK = 10002;
         public const int RM_HORSERUN = 50003;

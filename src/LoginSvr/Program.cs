@@ -1,11 +1,11 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace LoginSvr{
+namespace LoginSvr
+{
     class Program
     {
         static async Task Main(string[] args)
@@ -20,7 +20,7 @@ namespace LoginSvr{
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<AppServer>();
-                    services.AddSingleton<LoginSvrService>();
+                    services.AddSingleton<LoginService>();
                     services.AddHostedService<AppService>();
                     services.AddSingleton<AccountDB>();
                     services.AddSingleton<MasSocService>();

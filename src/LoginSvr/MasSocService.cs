@@ -12,7 +12,7 @@ namespace LoginSvr
     {
         public readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
-        private readonly LoginSvrService loginSvr;
+        private readonly LoginService loginSvr;
 
         public MasSocService()
         {
@@ -90,9 +90,7 @@ namespace LoginSvr
             string sServerName = string.Empty;
             string sIndex = string.Empty;
             string sOnlineCount = string.Empty;
-            int nCode;
-            TConfig Config;
-            Config = LSShare.g_Config;
+            TConfig Config = LSShare.g_Config;
             for (var i = 0; i < m_ServerList.Count; i++)
             {
                 MsgServer = m_ServerList[i];
@@ -110,7 +108,7 @@ namespace LoginSvr
                             break;
                         }
                         sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, new string[] { "/" });
-                        nCode = HUtil32.Str_ToInt(sCode, -1);
+                        int nCode = HUtil32.Str_ToInt(sCode, -1);
                         switch (nCode)
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
@@ -199,9 +197,6 @@ namespace LoginSvr
         /// <param name="nIndex"></param>
         private void SortServerList(int nIndex)
         {
-            int nC;
-            int n10;
-            int n14;
             TMsgServerInfo MsgServerSort;
             TMsgServerInfo MsgServer;
             int nNewIndex;
@@ -213,7 +208,7 @@ namespace LoginSvr
                 }
                 MsgServerSort = m_ServerList[nIndex];
                 m_ServerList.RemoveAt(nIndex);
-                for (nC = 0; nC < m_ServerList.Count; nC++)
+                for (var nC = 0; nC < m_ServerList.Count; nC++)
                 {
                     MsgServer = m_ServerList[nC];
                     if (MsgServer.sServerName == MsgServerSort.sServerName)
@@ -228,7 +223,7 @@ namespace LoginSvr
                             nNewIndex = nC + 1;
                             if (nNewIndex < m_ServerList.Count)
                             {
-                                for (n10 = nNewIndex; n10 < m_ServerList.Count; n10++)
+                                for (var n10 = nNewIndex; n10 < m_ServerList.Count; n10++)
                                 {
                                     MsgServer = m_ServerList[n10];
                                     if (MsgServer.sServerName == MsgServerSort.sServerName)
@@ -236,7 +231,7 @@ namespace LoginSvr
                                         if (MsgServer.nServerIndex < MsgServerSort.nServerIndex)
                                         {
                                             m_ServerList.Insert(n10, MsgServerSort);
-                                            for (n14 = n10 + 1; n14 < m_ServerList.Count; n14++)
+                                            for (var n14 = n10 + 1; n14 < m_ServerList.Count; n14++)
                                             {
                                                 MsgServer = m_ServerList[n14];
                                                 if ((MsgServer.sServerName == MsgServerSort.sServerName) && (MsgServer.nServerIndex == MsgServerSort.nServerIndex))
@@ -511,7 +506,7 @@ namespace LoginSvr
         public int nServerIndex;
         public int nOnlineCount;
         public int nSelectID;
-        public long dwKeepAliveTick;
+        public int dwKeepAliveTick;
         public string sIPaddr;
     }
 
