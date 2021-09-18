@@ -8,6 +8,14 @@ using SystemModule.Common;
 
 namespace DBSvr
 {
+    public class TQuickID
+    {
+        public int nSelectID;
+        public string sAccount;
+        public int nIndex;
+        public string sChrName;
+    }
+
     public class THumInfo
     {
         public TRecordHeader Header;

@@ -19,43 +19,87 @@ namespace DBSvr
         private int n2E4 = 0;
         private IList<TGateInfo> GateList = null;
         private TGateInfo CurGate = null;
-        private IList<string> MapList = null;
+        private Dictionary<string, int> MapList = null;
         private readonly THumDB HumDB;
+        private readonly HumChrDB HumChrDB;
+        private readonly ISocketServer UserSocket;
 
         public TFrmUserSoc()
         {
-
+            //CS_GateSession = new TCriticalSection();
+            //GateList = new ArrayList();
+            //UserSocket.Port = DBShare.g_nGatePort;
+            //UserSocket.Address = DBShare.g_sGateAddr;
+            //UserSocket.Active = true;
+            MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            UserSocket = new ISocketServer(ushort.MaxValue,1024);
+            UserSocket.OnClientConnect += UserSocketClientConnect;
+            UserSocket.OnClientDisconnect += UserSocketClientDisconnect;
+            UserSocket.OnClientRead += UserSocketClientRead;
+            UserSocket.OnClientError += UserSocketClientError;
+            UserSocket.Init();
+            LoadServerInfo();
+            LoadChrNameList("DenyChrName.txt");
+            LoadClearMakeIndexList("ClearMakeIndex.txt");
         }
 
-        public void UserSocketClientConnect(Object Sender, Socket Socket)
+        public void Start()
+        { 
+            
+        }
+
+        public void Stop()
         {
-            //TGateInfo GateInfo;
-            //string sIPaddr;
-            //sIPaddr = Socket.RemoteAddress;
-            //if (!DBShare.CheckServerIP(sIPaddr))
-            //{
-            //    DBShare.OutMainMessage("非法网关连接: " + sIPaddr);
-            //    Socket.Close;
-            //    return;
-            //}
-            //if (!DBShare.boOpenDBBusy)
-            //{
-            //    GateInfo = new TGateInfo();
-            //    GateInfo.Socket = Socket;
-            //    GateInfo.sGateaddr = sIPaddr;
-            //    GateInfo.sText = "";
-            //    GateInfo.UserList = new List<TUserInfo>();
-            //    GateInfo.dwTick10 = HUtil32.GetTickCount();
-            //    GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            //    GateList.Add(GateInfo);
-            //}
-            //else
-            //{
-            //    Socket.Close;
-            //}
+            TGateInfo GateInfo;
+            TUserInfo UserInfo;
+            for (var i = 0; i < GateList.Count; i++)
+            {
+                GateInfo = GateList[i];
+                if (GateInfo != null)
+                {
+                    //for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
+                    //{
+                    //    UserInfo = GateInfo.UserList[ii];
+                    //    this.Dispose(UserInfo);
+                    //}
+                    //GateInfo.UserList.Free;
+                }
+                GateList.RemoveAt(i);
+                break;
+            }
+            GateList = null;
+            MapList = null;
+            CS_GateSession = null;
         }
 
-        public void UserSocketClientDisconnect(Object Sender, Socket Socket)
+        public void UserSocketClientConnect(object sender, AsyncUserToken e)
+        {
+            TGateInfo GateInfo;
+            string sIPaddr = e.RemoteIPaddr;
+            if (!DBShare.CheckServerIP(sIPaddr))
+            {
+                DBShare.OutMainMessage("非法网关连接: " + sIPaddr);
+                e.Socket.Close();
+                return;
+            }
+            if (!DBShare.boOpenDBBusy)
+            {
+                GateInfo = new TGateInfo();
+                GateInfo.Socket = e.Socket;
+                GateInfo.sGateaddr = sIPaddr;
+                GateInfo.sText = "";
+                GateInfo.UserList = new List<TUserInfo>();
+                GateInfo.dwTick10 = HUtil32.GetTickCount();
+                GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
+                GateList.Add(GateInfo);
+            }
+            else
+            {
+                e.Socket.Close();
+            }
+        }
+
+        public void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
@@ -76,23 +120,26 @@ namespace DBSvr
             }
         }
 
-        public void UserSocketClientError(Object Sender)
+        public void UserSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        public void UserSocketClientRead(Object Sender, Socket Socket)
+        public void UserSocketClientRead(object sender, AsyncUserToken e)
         {
             string sReviceMsg;
             TGateInfo GateInfo;
             for (var i = 0; i < GateList.Count; i++)
             {
                 GateInfo = GateList[i];
-                if (GateInfo.Socket == Socket)
+                if (GateInfo.Socket == e.Socket)
                 {
                     CurGate = GateInfo;
-                    //sReviceMsg = Socket.ReceiveText;
-                    //GateInfo.sText = GateInfo.sText + sReviceMsg;
+                    var nReviceLen = e.BytesReceived;
+                    var data = new byte[nReviceLen];
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    sReviceMsg = HUtil32.GetString(data, 0, data.Length);
+                    GateInfo.sText = GateInfo.sText + sReviceMsg;
                     if (GateInfo.sText.Length < 81920)
                     {
                         if (GateInfo.sText.IndexOf("$", StringComparison.OrdinalIgnoreCase) > 1)
@@ -108,44 +155,7 @@ namespace DBSvr
             }
         }
 
-        public void FormCreate(System.Object Sender, System.EventArgs _e1)
-        {
-            //CS_GateSession = new TCriticalSection();
-            //GateList = new ArrayList();
-            //MapList = new ArrayList();
-            //UserSocket.Port = DBShare.g_nGatePort;
-            //UserSocket.Address = DBShare.g_sGateAddr;
-            //UserSocket.Active = true;
-            LoadServerInfo();
-            LoadChrNameList("DenyChrName.txt");
-            LoadClearMakeIndexList("ClearMakeIndex.txt");
-        }
-
-        public void FormDestroy(Object Sender)
-        {
-            TGateInfo GateInfo;
-            TUserInfo UserInfo;
-            for (var i = 0; i < GateList.Count; i++)
-            {
-                GateInfo = GateList[i];
-                if (GateInfo != null)
-                {
-                    //for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
-                    //{
-                    //    UserInfo = GateInfo.UserList[ii];
-                    //    this.Dispose(UserInfo);
-                    //}
-                    //GateInfo.UserList.Free;
-                }
-                GateList.RemoveAt(i);
-                break;
-            }
-            //GateList.Free;
-            //MapList.Free;
-            //CS_GateSession.Free;
-        }
-
-        public void Timer1Timer(System.Object Sender, System.EventArgs _e1)
+        public void Timer1Timer(object obj)
         {
             int n8 = DBShare.g_nQueryChrCount + DBShare.nHackerNewChrCount + DBShare.nHackerDelChrCount + DBShare.nHackerSelChrCount + DBShare.n4ADC1C + DBShare.n4ADC20 + DBShare.n4ADC24 + DBShare.n4ADC28;
             if (DBShare.n4ADBB8 != n8)
@@ -197,9 +207,6 @@ namespace DBSvr
         private void LoadServerInfo()
         {
             StringList LoadList;
-            int nRouteIdx;
-            int nGateIdx;
-            int nServerIndex;
             string sLineText = string.Empty;
             string sSelGateIPaddr = string.Empty;
             string sGameGateIPaddr = string.Empty;
@@ -208,13 +215,13 @@ namespace DBSvr
             string sMapName = string.Empty;
             string sMapInfo = string.Empty;
             string sServerIndex = string.Empty;
-            FileStream Conf;
+            IniFile Conf;
             try
             {
                 LoadList = new StringList();
                 LoadList.LoadFromFile(DBShare.sGateConfFileName);
-                nRouteIdx = 0;
-                nGateIdx = 0;
+                int nRouteIdx = 0;
+                int nGateIdx = 0;
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i].Trim();
@@ -240,8 +247,8 @@ namespace DBSvr
                         nRouteIdx++;
                     }
                 }
-                //Conf = new FileStream(DBShare.sConfFileName);
-                //DBShare.sMapFile = Conf.ReadString("Setup", "MapFile", DBShare.sMapFile);
+                Conf = new IniFile(DBShare.sConfFileName);
+                DBShare.sMapFile = Conf.ReadString("Setup", "MapFile", DBShare.sMapFile);
                 //Conf.Free;
                 MapList.Clear();
                 if (File.Exists(DBShare.sMapFile))
@@ -256,8 +263,8 @@ namespace DBSvr
                             sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
                             sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new string[] { " ", "\09" });
                             sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new string[] { " ", "\09" }).Trim();
-                            nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
-                            //MapList.Add(sMapName, nServerIndex);
+                            int nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
+                            MapList.Add(sMapName, nServerIndex);
                         }
                     }
                 }
@@ -708,27 +715,27 @@ namespace DBSvr
             var boCheck = false;
             try
             {
-                if (HumDB.Open())
+                if (HumChrDB.Open())
                 {
-                    n10 = HumDB.Index(sChrName);
-                    //if (n10 >= 0)
-                    //{
-                    //    HumDB.Get(n10, ref HumRecord);
-                    //    nIndex = DelChr_snametolevel(sChrName);
-                    //    if (HumRecord.sAccount == UserInfo.sAccount)
-                    //    {
-                    //        if (nIndex < DBShare.nDELMaxLevel)
-                    //        {
-                    //            HumRecord.boDeleted = true;
-                    //            HumRecord.dModDate = DateTime.Now;
-                    //            boCheck = HumDB.Update(n10, ref HumRecord);
-                    //        }
-                    //        else
-                    //        {
-                    //            nckr = 1;
-                    //        }
-                    //    }
-                    //}
+                    n10 = HumChrDB.Index(sChrName);
+                    if (n10 >= 0)
+                    {
+                        HumChrDB.Get(n10, ref HumRecord);
+                        nIndex = DelChr_snametolevel(sChrName);
+                        if (HumRecord.sAccount == UserInfo.sAccount)
+                        {
+                            if (nIndex < DBShare.nDELMaxLevel)
+                            {
+                                HumRecord.boDeleted = true;
+                                HumRecord.dModDate = DateTime.Now;
+                                boCheck = HumChrDB.Update(n10, ref HumRecord);
+                            }
+                            else
+                            {
+                                nckr = 1;
+                            }
+                        }
+                    }
                 }
             }
             finally
@@ -823,29 +830,29 @@ namespace DBSvr
                 }
                 try
                 {
-                    if (HumDB.Open())
+                    if (HumChrDB.Open())
                     {
-                        //if (HumDB.ChrCountOfAccount(sAccount) < 2)
-                        //{
-                        //    HumRecord = new THumInfo();
-                        //    HumRecord.sChrName = sChrName;
-                        //    HumRecord.sAccount = sAccount;
-                        //    HumRecord.boDeleted = false;
-                        //    HumRecord.btCount = 0;
-                        //    HumRecord.Header.sName = sChrName;
-                        //    HumRecord.Header.nSelectID = UserInfo.nSelGateID;
-                        //    if (HumRecord.Header.sName != "")
-                        //    {
-                        //        if (!HumDB.Add(ref HumRecord))
-                        //        {
-                        //            nCode = 2;
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    nCode = 3;
-                        //}
+                        if (HumChrDB.ChrCountOfAccount(sAccount) < 2)
+                        {
+                            HumRecord = new THumInfo();
+                            HumRecord.sChrName = sChrName;
+                            HumRecord.sAccount = sAccount;
+                            HumRecord.boDeleted = false;
+                            HumRecord.btCount = 0;
+                            HumRecord.Header.sName = sChrName;
+                            HumRecord.Header.nSelectID = UserInfo.nSelGateID;
+                            if (HumRecord.Header.sName != "")
+                            {
+                                if (!HumChrDB.Add(ref HumRecord))
+                                {
+                                    nCode = 2;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            nCode = 3;
+                        }
                     }
                 }
                 finally
@@ -886,12 +893,11 @@ namespace DBSvr
         private bool SelectChr(string sData, ref TUserInfo UserInfo)
         {
             string sAccount = string.Empty;
-            ArrayList ChrList;
+            IList<TQuickID> ChrList;
             THumInfo HumRecord = null;
-            int I;
             int nIndex;
             int nMapIndex;
-            //TQuickID QuickID;
+            TQuickID QuickID;
             THumDataInfo ChrRecord = null;
             string sCurMap = string.Empty;
             bool boDataOK;
@@ -906,35 +912,34 @@ namespace DBSvr
             {
                 try
                 {
-                    //if (HumDB.Open())
-                    //{
-                    //    ChrList = new ArrayList();
-                    //    if (HumDB.FindByAccount(sAccount, ref ChrList) >= 0)
-                    //    {
-                    //        for (I = 0; I < ChrList.Count; I++)
-                    //        {
-                    //            QuickID = ((TQuickID)(ChrList.Values[I]));
-                    //            nIndex = QuickID.nIndex;
-                    //            if (HumDB.GetBy(nIndex, ref HumRecord))
-                    //            {
-                    //                if (HumRecord.sChrName == sChrName)
-                    //                {
-                    //                    HumRecord.boSelected = true;
-                    //                    HumDB.UpdateBy(nIndex, ref HumRecord);
-                    //                }
-                    //                else
-                    //                {
-                    //                    if (HumRecord.boSelected)
-                    //                    {
-                    //                        HumRecord.boSelected = false;
-                    //                        HumDB.UpdateBy(nIndex, ref HumRecord);
-                    //                    }
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //    //ChrList.Free;
-                    //}
+                    if (HumChrDB.Open())
+                    {
+                        ChrList = new List<TQuickID>();
+                        if (HumChrDB.FindByAccount(sAccount, ref ChrList) >= 0)
+                        {
+                            for (var i = 0; i < ChrList.Count; i++)
+                            {
+                                nIndex = ChrList[i].nIndex;
+                                //if (HumChrDB.GetBy(nIndex, ref HumRecord))
+                                //{
+                                //    if (HumRecord.sChrName == sChrName)
+                                //    {
+                                //        HumRecord.boSelected = true;
+                                //        HumChrDB.UpdateBy(nIndex, ref HumRecord);
+                                //    }
+                                //    else
+                                //    {
+                                //        if (HumRecord.boSelected)
+                                //        {
+                                //            HumRecord.boSelected = false;
+                                //            HumChrDB.UpdateBy(nIndex, ref HumRecord);
+                                //        }
+                                //    }
+                                //}
+                            }
+                        }
+                        //ChrList.Free;
+                    }
                 }
                 finally
                 {
@@ -1011,16 +1016,11 @@ namespace DBSvr
 
         private int GetMapIndex(string sMap)
         {
-            int result = 0;
-            for (var i = 0; i < MapList.Count; i++)
+            if (MapList.ContainsKey(sMap))
             {
-                if (MapList[i] == sMap)
-                {
-                    //result = MapList.Values[i];
-                    break;
-                }
+                return MapList[sMap];
             }
-            return result;
+            return 0;
         }
 
         private void SendUserSocket(Socket Socket, string sSessionID, string sSendMsg)
