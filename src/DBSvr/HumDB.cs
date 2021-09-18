@@ -197,7 +197,7 @@ namespace DBSvr
                 using var conn = GetConnection();
                 conn.Open();
                 var command = new MySqlCommand();
-                command.CommandText = string.Format("UPDATE TBL_CHARACTER SET FLD_SEX=%d, FLD_JOB=%d WHERE FLD_CHARNAME='%s'", new object[] { QueryChrRcd.btSex, QueryChrRcd.btJob, QueryChrRcd.sName });
+                command.CommandText = string.Format("UPDATE TBL_CHARACTER SET FLD_SEX={0}, FLD_JOB={1} WHERE FLD_CHARNAME='{2}'", new object[] { QueryChrRcd.btSex, QueryChrRcd.btJob, QueryChrRcd.sName });
                 command.Connection = (MySqlConnection)conn;
                 try
                 {
@@ -419,13 +419,20 @@ namespace DBSvr
                     return false;
                 }
                 dr = command.ExecuteReader();
+                var magicList = new List<TMagicRcd>();
                 while (dr.Read())
                 {
-                    //HumanRCD.Data.Magic[i].wMagIdx = dr.GetUInt16("FLD_MAGICID");
-                    //HumanRCD.Data.Magic[i].btClass = dr.GetInt32("FLD_TYPE");
-                    //HumanRCD.Data.Magic[i].btLevel = dr.GetByte("FLD_LEVEL");
-                    //HumanRCD.Data.Magic[i].btKey = dr.GetByte("FLD_USEKEY");
-                    //HumanRCD.Data.Magic[i].nTranPoint = dr.GetInt32("FLD_CURRTRAIN");
+                    magicList.Add(new TMagicRcd()
+                    {
+                        wMagIdx = dr.GetUInt16("FLD_MAGICID"),
+                        btKey = dr.GetByte("FLD_USEKEY"),
+                        btLevel = dr.GetByte("FLD_LEVEL"),
+                        nTranPoint = dr.GetInt32("FLD_CURRTRAIN")
+                    });
+                }
+                for (int j = 0; j < magicList.Count; j++)
+                {
+                    HumanRCD.Data.Magic[j] = magicList[j];
                 }
                 try
                 {
@@ -565,7 +572,7 @@ namespace DBSvr
             double dwHP;
             double dwMP;
             char[] TempBuf = new char[Convert.ToInt32(Grobal2.BUFFERSIZE - 1) + 1];
-            const string sSqlStr = "INSERT INTO TBL_CHARACTER ( FLD_CHARNAME, FLD_LOGINID, FLD_DELETED, FLD_CREATEDATE, FLD_MAPNAME,FLD_CX, FLD_CY, FLD_DIR, FLD_HAIR, FLD_SEX, FLD_JOB, FLD_LEVEL, FLD_GOLD," + "FLD_HOMEMAP, FLD_HOMECX, FLD_HOMECY, FLD_PKPOINT, FLD_ATTACKMODE, FLD_FIGHTZONEDIE," + "FLD_BODYLUCK, FLD_INCHEALTH, FLD_INCSPELL, FLD_INCHEALING, FLD_BONUSPOINT," + "FLD_HUNGRYSTATE, FLD_TESTSERVERRESETCOUNT, FLD_ENABLEGRECALL) VALUES" + "( '%s', '%s', 0, GETDATE(), '," + "0, 0, 0, %d, %d, %d, 0, 0," + "', 0, 0, 0, 0, 0," + "0, 0, 0, 0, 0," + "0, 0, 0)";
+            const string sSqlStr = "INSERT INTO TBL_CHARACTER (FLD_CHARNAME, FLD_LOGINID, FLD_DELETED, FLD_CREATEDATE, FLD_MAPNAME,FLD_CX, FLD_CY, FLD_DIR, FLD_HAIR, FLD_SEX, FLD_JOB, FLD_LEVEL, FLD_GOLD," + "FLD_HOMEMAP, FLD_HOMECX, FLD_HOMECY, FLD_PKPOINT, FLD_ATTACKMODE, FLD_FIGHTZONEDIE," + "FLD_BODYLUCK, FLD_INCHEALTH, FLD_INCSPELL, FLD_INCHEALING, FLD_BONUSPOINT," + "FLD_HUNGRYSTATE, FLD_TESTSERVERRESETCOUNT, FLD_ENABLEGRECALL) VALUES" + "( '%s', '%s', 0, GETDATE(), '," + "0, 0, 0, %d, %d, %d, 0, 0," + "', 0, 0, 0, 0, 0," + "0, 0, 0, 0, 0," + "0, 0, 0)";
             const string sSqlStr2 = "UPDATE TBL_CHARACTER SET FLD_DELETED=%d, FLD_CREATEDATE='%s', " + "FLD_MAPNAME='%s', FLD_CX=%d, FLD_CY=%d, FLD_DIR=%d, FLD_HAIR=%d, FLD_SEX=%d, " + "FLD_JOB=%d, FLD_GOLD=%d, FLD_LEVEL=%d, FLD_HP=%d, FLD_MP=%d, FLD_EXP=%d, " + "FLD_HOMEMAP='%s', FLD_HOMECX=%d, FLD_HOMECY=%d, FLD_DEARCHARNAME='%s', " + "FLD_MASTERCHARNAME='%s', FLD_MASTER=%d, FLD_CREDITPOINT=%d, FLD_IPLEVEL=%d, " + "FLD_STORAGEPASSWD='%s', FLD_REBIRTHLEVEL=%d, FLD_LOCKLOGON=%d, FLD_IPPOINT=%d, " + "FLD_BONUSPOINT=%d, FLD_GAMEGOLD=%d, FLD_GAMEPOINT=%d, FLD_PAYPOINT=%d, " + "FLD_HUNGRYSTATE=%d, FLD_PKPOINT=%d, FLD_ALLOWPARTY=%d, FLD_FREEGULITYCOUNT=%d, " + "FLD_ATTACKMODE=%d, FLD_INCHEALTH=%d, FLD_INCSPELL=%d, FLD_INCHEALING=%d, " + "FLD_FIGHTZONEDIE=%d, FLD_TESTSERVERRESETCOUNT=%d, FLD_IPEXP=%d, " + "FLD_NIMBUSPOINT=%d, FLD_NATUREELEMENT=%d, FLD_ENABLEGRECALL=%d, " + "FLD_ENABLEGROUPRECALL=%d, FLD_GAINEXPRATE=%d, FLD_GAINEXPRATETIME=%d, " + "FLD_HERONAME='%s', FLD_HEROMASTERNAME='%s', FLD_OPENGAMEGOLDDEAL=%d, " + "FLD_GROUPRECALLTIME=%d, FLD_BODYLUCK=%f, FLD_MARKMAP='%s', " + "FLD_MARKMAPX=%d, FLD_MARKMAPY=%d WHERE FLD_CHARNAME='%s'";
             const string sSqlStr3 = "UPDATE TBL_BONUSABILITY SET FLD_AC=%d, FLD_MAC=%d, FLD_DC=%d, FLD_MC=%d, FLD_SC=%d, FLD_HP=%d, FLD_MP=%d, FLD_HIT=%d, FLD_SPEED=%d, FLD_RESERVED=%d, " + "WHERE FLD_CHARNAME='%s'";
             const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_CHARNAME='%s'";
@@ -716,7 +723,7 @@ namespace DBSvr
                         }
                     }
                     // Delete Store Item Data
-                    command.CommandText = string.Format("DELETE FROM TBL_STORAGE WHERE FLD_CHARNAME='%s'", new string[] { HumanRCD.Header.sName });
+                    command.CommandText = string.Format("DELETE FROM TBL_STORAGE WHERE FLD_CHARNAME='{0}'", HumanRCD.Header.sName);
                     try
                     {
                         command.ExecuteNonQuery();
@@ -742,7 +749,7 @@ namespace DBSvr
                             }
                         }
                     }
-                    command.CommandText = string.Format("DELETE FROM TBL_ADDON WHERE FLD_CHARNAME='%s'", new string[] { HumanRCD.Header.sName });
+                    command.CommandText = string.Format("DELETE FROM TBL_ADDON WHERE FLD_CHARNAME='{0}'", HumanRCD.Header.sName);
                     try
                     {
                         command.ExecuteNonQuery();
@@ -920,8 +927,6 @@ namespace DBSvr
     {
         public static bool g_boSQLIsReady = false;
         public static THumDB HumDataDB = null;
-        public const string sDBHeaderDesc = "传奇数据库文件 2009/01/01";
-        public const string sDBIdxHeaderDesc = "传奇数据库索引文件 2009/01/01";
 
         public static bool InitializeSQL()
         {

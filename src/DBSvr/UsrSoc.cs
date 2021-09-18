@@ -157,7 +157,6 @@ namespace DBSvr
 
         public int GetUserCount()
         {
-            int result;
             TGateInfo GateInfo;
             int nUserCount = 0;
             for (var i = 0; i < GateList.Count; i++)
@@ -165,8 +164,7 @@ namespace DBSvr
                 GateInfo = GateList[i];
                 nUserCount += GateInfo.UserList.Count;
             }
-            result = nUserCount;
-            return result;
+            return nUserCount;
         }
 
         private bool NewChrData(string sChrName, int nSex, int nJob, int nHair)
@@ -259,7 +257,7 @@ namespace DBSvr
                             sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new string[] { " ", "\09" });
                             sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new string[] { " ", "\09" }).Trim();
                             nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
-                            //MapList.Add(sMapName, ((nServerIndex) as Object));
+                            //MapList.Add(sMapName, nServerIndex);
                         }
                     }
                 }
@@ -332,7 +330,6 @@ namespace DBSvr
             string s0C = string.Empty;
             string s10 = string.Empty;
             char s19;
-            int i;
             TUserInfo UserInfo;
             while (true)
             {
@@ -344,7 +341,7 @@ namespace DBSvr
                 if (s10 != "")
                 {
                     s19 = s10[1];
-                    s10 = s10.Substring(2 - 1, s10.Length - 1);
+                    s10 = s10.Substring(1, s10.Length - 1);
                     switch (s19)
                     {
                         case '-':
@@ -353,7 +350,7 @@ namespace DBSvr
                             break;
                         case 'A':
                             s10 = HUtil32.GetValidStr3(s10, ref s0C, new string[] { "/" });
-                            for (i = 0; i < GateInfo.UserList.Count; i++)
+                            for (var i = 0; i < GateInfo.UserList.Count; i++)
                             {
                                 UserInfo = GateInfo.UserList[i];
                                 if (UserInfo != null)
@@ -478,7 +475,7 @@ namespace DBSvr
         private void DeCodeUserMsg(string sData, ref TUserInfo UserInfo)
         {
             string sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
-            string s18 = sData.Substring(Grobal2.DEFBLOCKSIZE + 1 - 1, sData.Length - Grobal2.DEFBLOCKSIZE);
+            string s18 = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
             TDefaultMessage Msg = EDcode.DecodeMessage(sDefMsg);
             switch (Msg.Ident)
             {

@@ -300,7 +300,7 @@ namespace DBSvr
         {
             if (_socket.IsConnected)
             {
-                _socket.SendText("(" + (Grobal2.SS_SERVERINFO).ToString() + "/" + DBShare.sServerName + "/" + "99" + "/" + (UsrSoc.FrmUserSoc.GetUserCount()).ToString() + ")");
+                _socket.SendText("(" + (Grobal2.SS_SERVERINFO).ToString() + "/" + DBShare.sServerName + "/" + "99" + "/" + UsrSoc.FrmUserSoc.GetUserCount() + ")");
             }
         }
 

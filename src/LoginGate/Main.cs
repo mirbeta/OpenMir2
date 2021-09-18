@@ -15,6 +15,7 @@ namespace LoginGate
 
         public TFrmMain()
         {
+            GateShare.Initialization();
             IniUserSessionArray();
         }
 
@@ -224,8 +225,6 @@ namespace LoginGate
             //GateShare.TempBlockIPList.Free;
             //MainOutMessage("停止服务完成...", 3);
         }
-
-
 
         private void IniUserSessionArray()
         {

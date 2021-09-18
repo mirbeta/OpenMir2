@@ -20,7 +20,6 @@ namespace LoginGate
         public GateServer(GateClient gateClient)
         {
             this.gateClient = gateClient;
-
             ServerSocket = new ISocketServer(ushort.MaxValue, 1024);
             ServerSocket.OnClientConnect += ServerSocketClientConnect;
             ServerSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -194,8 +193,8 @@ namespace LoginGate
                         UserSession.boSendAvailable = true;
                         UserSession.boSendCheck = false;
                         UserSession.nCheckSendLength = 0;
-                        s10 = sReviceMsg.Substring(1 - 1, nPos - 1);
-                        s1C = sReviceMsg.Substring(nPos + 1 - 1, sReviceMsg.Length - nPos);
+                        s10 = sReviceMsg.Substring(0, nPos - 1);
+                        s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
                         sReviceMsg = s10 + s1C;
                     }
                     nMsgLen = sReviceMsg.Length;
@@ -312,13 +311,13 @@ namespace LoginGate
                                 break;
                             case TBlockIPMethod.mBlock:
                                 IPaddr = new TSockaddr();
-                                IPaddr.nIPaddr = HUtil32.IpToInt((sRemoteIPaddr as string));
+                                IPaddr.nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
                                 GateShare.TempBlockIPList.Add(IPaddr);
                                 CloseConnect(sRemoteIPaddr);
                                 break;
                             case TBlockIPMethod.mBlockList:
                                 IPaddr = new TSockaddr();
-                                IPaddr.nIPaddr = HUtil32.IpToInt((sRemoteIPaddr as string));
+                                IPaddr.nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
                                 GateShare.BlockIPList.Add(IPaddr);
                                 CloseConnect(sRemoteIPaddr);
                                 break;
@@ -442,7 +441,7 @@ namespace LoginGate
         private bool IsBlockIP(string sIPaddr)
         {
             bool result = false;
-            var nIPaddr = HUtil32.IpToInt((sIPaddr as string));
+            var nIPaddr = HUtil32.IpToInt(sIPaddr);
             TSockaddr IPaddr = null;
             for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {

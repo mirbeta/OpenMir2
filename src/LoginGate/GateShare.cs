@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -67,8 +66,6 @@ namespace LoginGate
         /// </summary>
         public static bool g_boDynamicIPDisMode = false;
         public static long g_dwGameCenterHandle = 0;
-        public static string g_sNowStartGate = "正在启动登录前置服务器...";
-        public static string g_sNowStartOK = "启动登录前置服务器完成...";
         public static int GATEMAXSESSION = 10000;
         public static ConcurrentDictionary<string, int> socketMap = null;
         public static TUserSession[] g_SessionArray;
@@ -127,7 +124,7 @@ namespace LoginGate
             SaveList = null;
         }
 
-        public void initialization()
+        public static void Initialization()
         {
             g_SessionArray = new TUserSession[GATEMAXSESSION];
             CS_MainLog = new object();
