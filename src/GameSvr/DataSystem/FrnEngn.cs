@@ -266,7 +266,7 @@ namespace GameSvr
                     ChangeUserGoldInDB(GoldChangeInfo);
                     DisPose(GoldChangeInfo);
                 }
-                //ChangeGoldList.Free;
+                ChangeGoldList = null;
             }
         }
 
@@ -319,10 +319,8 @@ namespace GameSvr
 
         private bool LoadHumFromDB(TLoadDBInfo LoadUser, ref bool boReTry)
         {
-            bool result;
             THumDataInfo HumanRcd = null;
-            TUserOpenInfo UserOpenInfo;
-            result = false;
+            var result = false;
             boReTry = false;
             if (InSaveRcdList(LoadUser.sCharName))
             {
@@ -341,7 +339,7 @@ namespace GameSvr
             }
             else
             {
-                UserOpenInfo = new TUserOpenInfo
+                var UserOpenInfo = new TUserOpenInfo
                 {
                     sChrName = LoadUser.sCharName,
                     LoadUser = LoadUser,

@@ -279,14 +279,13 @@ namespace GameSvr
         public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent)
         {
             TSessInfo result = null;
-            TSessInfo SessInfo;
             var boFound = false;
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
             nPayMode = 0;
             for (var i = 0; i < m_SessionList.Count; i++)
             {
-                SessInfo = m_SessionList[i];
+                var SessInfo = m_SessionList[i];
                 if (SessInfo.nSessionID == nSessionID && SessInfo.sAccount == sAccount)
                 {
                     switch (SessInfo.nPayMent)

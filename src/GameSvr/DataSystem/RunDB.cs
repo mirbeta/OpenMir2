@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using SystemModule;
 using SystemModule.Packages;
 
@@ -104,7 +105,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    //Thread.CurrentThread.Sleep(1);
+                    Thread.Sleep(1);
                 }
             }
             if (!boLoadDBOK)
@@ -126,19 +127,9 @@ namespace GameSvr
             return result;
         }
 
-        public static bool MakeHumRcdFromLocal(ref THumDataInfo HumanRcd)
-        {
-            bool result;
-            //FillChar(HumanRcd, sizeof(THumDataInfo), '\0');
-            HumanRcd.Data.Abil.Level = 30;
-            result = true;
-            return result;
-        }
-
         public static bool LoadHumRcdFromDB(string sAccount, string sCharName, string sStr, ref THumDataInfo HumanRcd, int nCertCode)
         {
             bool result = false;
-            //FillChar(HumanRcd, sizeof(THumDataInfo), '\0');
             HumanRcd = new THumDataInfo();
             if (LoadRcd(sAccount, sCharName, sStr, nCertCode, ref HumanRcd))
             {
@@ -153,11 +144,18 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 保存玩家数据到DB
+        /// </summary>
+        /// <param name="sAccount"></param>
+        /// <param name="sCharName"></param>
+        /// <param name="nSessionID"></param>
+        /// <param name="HumanRcd"></param>
+        /// <returns></returns>
         public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
         {
-            bool result = SaveRcd(sAccount, sCharName, nSessionID, ref HumanRcd);
             M2Share.g_Config.nSaveDBCount ++;
-            return result;
+            return SaveRcd(sAccount, sCharName, nSessionID, ref HumanRcd);
         }
 
         private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
@@ -179,7 +177,7 @@ namespace GameSvr
                 else
                 {
                     Debug.WriteLine("[RunDB] 保存人物({0})数据失败", sCharName);
-                    M2Share.ErrorMessage(string.Format("[RunDB] 保存人物({0})数据失败", sCharName));
+                    M2Share.ErrorMessage($"[RunDB] 保存人物({sCharName})数据失败");
                 }
             }
             return result;
