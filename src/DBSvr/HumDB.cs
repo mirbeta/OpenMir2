@@ -12,16 +12,16 @@ namespace DBSvr
     public class THumDB
     {
         public bool m_boChanged = false;
-        public IList<string> m_MirQuickList = null;
-        public IList<string> m_MirQuickIDList = null;
+        public Dictionary<string, int> m_MirQuickList = null;
+        public Dictionary<int, string> m_MirQuickIDList = null;
         private Dictionary<int, string> m_QuickIndexNameList = null;
         public int m_nRecordCount = 0;
 
         public THumDB(string sFileName)
         {
             DBShare.boDataDBReady = false;
-            //m_MirQuickList = new TQuickList();
-            //m_MirQuickIDList = new TQuickList();
+            m_MirQuickList = new Dictionary<string, int>();
+            m_MirQuickIDList = new Dictionary<int, string>();
             DBShare.n4ADAE4 = 0;
             DBShare.n4ADAF0 = 0;
             m_nRecordCount = -1;
@@ -222,31 +222,32 @@ namespace DBSvr
             bool result = false;
             int nIndex;
             string sChrName = HumanRCD.Header.sName;
-            //if (m_MirQuickList.GetIndex(sChrName) >= 0)
-            //{
-            //    result = false;
-            //}
-            //else
-            //{
-            //    nIndex = m_nRecordCount;
-            //    m_nRecordCount++;
-            //    if (UpdateRecord(nIndex, ref HumanRCD, true))
-            //    {
-            //        m_MirQuickList.AddRecord(sChrName, nIndex);
-            //        result = true;
-            //    }
-            //    else
-            //    {
-            //        result = false;
-            //    }
-            //}
+            if (m_MirQuickList.TryGetValue(sChrName, out nIndex))
+            {
+                if (nIndex >= 0)
+                {
+                    result = false;
+                }
+            }
+            else
+            {
+                nIndex = m_nRecordCount;
+                m_nRecordCount++;
+                if (UpdateRecord(nIndex, ref HumanRCD, true))
+                {
+                    m_MirQuickList.Add(sChrName, nIndex);
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
             return result;
         }
 
         private bool GetRecord(int nIndex, ref THumDataInfo HumanRCD)
         {
-            bool result;
-            string sChrName;
             string sTmp;
             string str;
             int i;
@@ -262,8 +263,8 @@ namespace DBSvr
             const string sSQL5 = "SELECT * FROM TBL_ITEM WHERE FLD_CHARNAME='{0}'";
             const string sSQL6 = "SELECT * FROM TBL_STORAGE WHERE FLD_CHARNAME='{0}'";
             const string sSQL7 = "SELECT * FROM TBL_ADDON WHERE FLD_CHARNAME='{0}'";
-            result = true;
-            sChrName = m_MirQuickList[nIndex];
+            bool result = true;
+            string sChrName = m_MirQuickIDList[nIndex];
             try
             {
                 var command = new MySqlCommand();
@@ -797,10 +798,10 @@ namespace DBSvr
             int result;
             for (var i = 0; i < m_MirQuickList.Count; i++)
             {
-                if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
-                {
-                    //List.Add(m_MirQuickList[i], m_MirQuickList.Values[i]);
-                }
+                //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
+                //{
+                //    List.Add(m_MirQuickList[i], m_MirQuickList.Values[i]);
+                //}
             }
             result = List.Count;
             return result;
@@ -829,7 +830,7 @@ namespace DBSvr
         private bool DeleteRecord(int nIndex)
         {
             bool result = true;
-            string sChrName = m_MirQuickList[nIndex];
+            string sChrName = m_MirQuickIDList[nIndex];
             var command = new MySqlCommand();
             using var conn = GetConnection();
             conn.Open();
