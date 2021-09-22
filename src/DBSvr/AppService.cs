@@ -9,12 +9,12 @@ namespace DBSvr
     {
         private readonly ILogger<AppService> _logger;
         private readonly ServerApp _serverApp;
-        private readonly TFrmUserSoc _userSoc;
-        private readonly TFrmIDSoc _idSoc;
+        private readonly UserSocService _userSoc;
+        private readonly LoginSocService _idSoc;
         private readonly HumDataService _dataService;
         private Timer keepAliveTimer;
 
-        public AppService(ILogger<AppService> logger, ServerApp serverApp, TFrmUserSoc userSoc, TFrmIDSoc idSoc, HumDataService dataService)
+        public AppService(ILogger<AppService> logger, ServerApp serverApp, UserSocService userSoc, LoginSocService idSoc, HumDataService dataService)
         {
             _logger = logger;
             _serverApp = serverApp;

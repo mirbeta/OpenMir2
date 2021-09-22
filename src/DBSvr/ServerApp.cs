@@ -8,7 +8,7 @@ namespace DBSvr
         private bool m_boRemoteClose = false;
         private Timer logTimer;
 
-        public ServerApp(TFrmUserSoc userSoc)
+        public ServerApp()
         {
 
         }
@@ -78,7 +78,7 @@ namespace DBSvr
             //StartTimer.Enabled = false;
             //DBShare.boOpenDBBusy = true;
             //HumDB.HumChrDB = new TFileHumDB(DBShare.sHumDBFilePath + "Hum.DB");
-            //HumDB = new TFileDB(DBShare.sDataDBFilePath + "Mir.DB");
+            //HumDB = new MySqlHumDB(DBShare.sDataDBFilePath + "Mir.DB");
             //DBShare.boOpenDBBusy = false;
             //DBShare.boAutoClearDB = true;
             //IDSocCli.FrmIDSoc.OpenConnect();

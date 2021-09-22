@@ -20,11 +20,11 @@ namespace DBSvr
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<ServerApp>();
-                    services.AddSingleton<TFrmUserSoc>();
-                    services.AddSingleton<TFrmIDSoc>();
+                    services.AddSingleton<UserSocService>();
+                    services.AddSingleton<LoginSocService>();
                     services.AddSingleton<HumDataService>();
-                    services.AddSingleton<TFileHumDB>();
-                    services.AddSingleton<THumDB>();
+                    services.AddSingleton<MySqlHumRecordDB>();
+                    services.AddSingleton<MySqlHumDB>();
                     services.AddHostedService<AppService>();
                 });
 

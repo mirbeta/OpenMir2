@@ -13,11 +13,11 @@ namespace DBSvr
         private IList<THumSession> HumSessionList = null;
         private TDefaultMessage m_DefMsg;
         private string s34C;
-        private readonly THumDB HumDB;
+        private readonly MySqlHumDB HumDB;
         private readonly ISocketServer serverSocket;
-        private readonly TFrmIDSoc _frmIdSoc;
+        private readonly LoginSocService _frmIdSoc;
 
-        public HumDataService(TFrmIDSoc frmIdSoc)
+        public HumDataService(LoginSocService frmIdSoc)
         {
             _frmIdSoc = frmIdSoc;
             ServerList = new List<TServerInfo>();
@@ -252,7 +252,7 @@ namespace DBSvr
             {
                 try
                 {
-                    if (HumDB.OpenEx())
+                    if (HumDB.Open())
                     {
                         nIndex = HumDB.Index(sHumName);
                         if (nIndex >= 0)

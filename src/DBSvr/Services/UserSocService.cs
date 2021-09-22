@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -11,18 +10,18 @@ using SystemModule.Sockets;
 
 namespace DBSvr
 {
-    public class TFrmUserSoc
+    public class UserSocService
     {
         private IList<TGateInfo> GateList = null;
         private TGateInfo CurGate = null;
         private Dictionary<string, int> MapList = null;
-        private readonly THumDB HumDB;
-        private readonly TFileHumDB HumChrDB;
+        private readonly MySqlHumDB HumDB;
+        private readonly MySqlHumRecordDB HumChrDB;
         private readonly ISocketServer UserSocket;
         private Timer userSocTimer;
-        private readonly TFrmIDSoc _frmIdSoc;
+        private readonly LoginSocService _frmIdSoc;
 
-        public TFrmUserSoc(TFrmIDSoc frmIdSoc, TFileHumDB humChrDb, THumDB humDb)
+        public UserSocService(LoginSocService frmIdSoc, MySqlHumRecordDB humChrDb, MySqlHumDB humDb)
         {
             _frmIdSoc = frmIdSoc;
             HumChrDB = humChrDb;
@@ -611,53 +610,43 @@ namespace DBSvr
                 {
                     if (HumDB.Open() && (HumChrDB.FindByAccount(sAccount, ref ChrList) >= 0))
                     {
-                        try
+                        for (var i = 0; i < ChrList.Count; i++)
                         {
-                            if (HumDB.OpenEx())
+                            QuickID = ChrList[i];
+                            if (QuickID.nSelectID != UserInfo.nSelGateID) // 如果选择ID不对,则跳过
                             {
-                                for (var i = 0; i < ChrList.Count; i++)
+                                continue;
+                            }
+                            if (HumChrDB.GetBy(QuickID.nIndex, ref HumRecord) && !HumRecord.boDeleted)
+                            {
+                                sChrName = QuickID.sChrName;
+                                nIndex = HumDB.Index(sChrName);
+                                if ((nIndex < 0) || (nChrCount >= 2))
                                 {
-                                    QuickID = ((TQuickID)(ChrList[i]));
-                                    if (QuickID.nSelectID != UserInfo.nSelGateID) // 如果选择ID不对,则跳过
+                                    continue;
+                                }
+                                if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
+                                {
+                                    btSex = ChrRecord.Data.btSex;
+                                    sJob = (ChrRecord.Data.btJob).ToString();
+                                    sHair = (ChrRecord.Data.btHair).ToString();
+                                    sLevel = (ChrRecord.Data.Abil.Level).ToString();
+                                    if (HumRecord.boSelected)
                                     {
-                                        continue;
+                                        s40 = s40 + "*";
                                     }
-                                    if (HumChrDB.GetBy(QuickID.nIndex, ref HumRecord) && !HumRecord.boDeleted)
-                                    {
-                                        sChrName = QuickID.sChrName;
-                                        nIndex = HumDB.Index(sChrName);
-                                        if ((nIndex < 0) || (nChrCount >= 2))
-                                        {
-                                            continue;
-                                        }
-                                        if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
-                                        {
-                                            btSex = ChrRecord.Data.btSex;
-                                            sJob = (ChrRecord.Data.btJob).ToString();
-                                            sHair = (ChrRecord.Data.btHair).ToString();
-                                            sLevel = (ChrRecord.Data.Abil.Level).ToString();
-                                            if (HumRecord.boSelected)
-                                            {
-                                                s40 = s40 + "*";
-                                            }
-                                            s40 = s40 + sChrName + "/" + sJob + "/" + sHair + "/" + sLevel + "/" + (btSex).ToString() + "/";
-                                            nChrCount++;
-                                        }
-                                    }
+                                    s40 = s40 + sChrName + "/" + sJob + "/" + sHair + "/" + sLevel + "/" + btSex + "/";
+                                    nChrCount++;
                                 }
                             }
-                        }
-                        finally
-                        {
-                            HumDB.Close();
                         }
                     }
                 }
                 finally
                 {
-                    //HumDB.Close();
+                    HumDB.Close();
                 }
-                //ChrList.Free;
+                ChrList = null;
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
             }
             else
@@ -685,7 +674,7 @@ namespace DBSvr
             result = 0;
             try
             {
-                if (HumDB.OpenEx())
+                if (HumDB.Open())
                 {
                     nIndex = HumDB.Index(sName);
                     if (nIndex >= 0)
@@ -822,7 +811,6 @@ namespace DBSvr
             {
                 try
                 {
-                    HumDB.__Lock();
                     if (HumDB.Index(sChrName) >= 0)
                     {
                         nCode = 2;
@@ -830,7 +818,7 @@ namespace DBSvr
                 }
                 finally
                 {
-                    HumDB.UnLock();
+                
                 }
                 try
                 {
@@ -904,14 +892,13 @@ namespace DBSvr
             TQuickID QuickID;
             THumDataInfo ChrRecord = null;
             string sCurMap = string.Empty;
-            bool boDataOK;
             string sDefMsg = string.Empty;
             string sRouteMsg = string.Empty;
             string sRouteIP = string.Empty;
             int nRoutePort = 0;
             var result = false;
             var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData, true), ref sAccount, new string[] { "/" });
-            boDataOK = false;
+            var boDataOK = false;
             if (UserInfo.sAccount == sAccount)
             {
                 try
@@ -951,7 +938,7 @@ namespace DBSvr
                 }
                 try
                 {
-                    if (HumDB.OpenEx())
+                    if (HumDB.Open())
                     {
                         nIndex = HumDB.Index(sChrName);
                         if (nIndex >= 0)
@@ -1047,12 +1034,3 @@ namespace DBSvr
         }
     }
 }
-
-namespace DBSvr
-{
-    public class UsrSoc
-    {
-        public static TFrmUserSoc FrmUserSoc = null;
-    } 
-}
-

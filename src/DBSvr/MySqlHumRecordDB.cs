@@ -2,14 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.IO;
 using MySql.Data.MySqlClient;
 using SystemModule;
 
 namespace DBSvr
 {
-    public class TFileHumDB
+    public class MySqlHumRecordDB
     {
         public int m_nCurIndex = 0;
         public int m_nFileHandle = 0;
@@ -26,7 +24,7 @@ namespace DBSvr
 
         private IDbConnection _dbConnection = null;
 
-        public TFileHumDB()
+        public MySqlHumRecordDB()
         {
             m_QuickList = new Dictionary<string, int>();
             m_IndexQuickList = new Dictionary<int, string>();

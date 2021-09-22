@@ -10,7 +10,7 @@ namespace DBSvr
     /// <summary>
     /// 账号中心
     /// </summary>
-    public class TFrmIDSoc
+    public class LoginSocService
     {
         private IList<TGlobaSessionInfo> GlobaSessionList = null;
         private string m_sSockMsg = string.Empty;
@@ -19,7 +19,7 @@ namespace DBSvr
         private readonly IClientScoket _socket;
         private Timer connectiTimer = null;
 
-        public TFrmIDSoc()
+        public LoginSocService()
         {
             _socket = new IClientScoket();
             _socket.ReceivedDatagram += IDSocketRead;
