@@ -15,8 +15,11 @@ namespace SystemModule.Sockets
         {
             this.socket = soc;
             var endPoint = (IPEndPoint)soc.RemoteEndPoint;
-            this.RemoteAddress = endPoint.Address?.ToString();
-            this.RemotePort = endPoint.Port;
+            if (endPoint != null)
+            {
+                this.RemoteAddress = endPoint.Address?.ToString();
+                this.RemotePort = endPoint.Port;
+            }
         }
     }
 }

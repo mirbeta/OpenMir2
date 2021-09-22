@@ -109,18 +109,18 @@ namespace LoginGate
                 if (!string.IsNullOrEmpty(e.ConnectionId) && gateClient.ClientSocket.IsConnected)
                 {
                     gateClient.ClientSocket.SendText("%O" + (int)e.Socket.Handle + "/" + sRemoteIPaddr + "/" + sLocalIPaddr + "$");
-                    GateShare.MainOutMessage("Connect: " + sRemoteIPaddr, 5);
+                    GateShare.MainOutMessage("客户端链接: " + sRemoteIPaddr, 5);
                 }
                 else
                 {
                     e.Socket.Close();
-                    GateShare.MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
+                    GateShare.MainOutMessage("账号服务器未就绪，断开链接: " + sRemoteIPaddr, 1);
                 }
             }
             else
             {
                 e.Socket.Close();
-                GateShare.MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
+                GateShare.MainOutMessage("服务器未准备就绪，断开链接: " + sRemoteIPaddr, 1);
             }
         }
 

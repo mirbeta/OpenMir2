@@ -19,7 +19,7 @@ namespace LoginSvr
             _masSock = masSock;
         }
 
-        public void LoadAddrTable(TConfig Config)
+        private void LoadAddrTable(TConfig Config)
         {
             int nRouteIdx;
             int nSelGateIdx;
@@ -107,20 +107,7 @@ namespace LoginSvr
             return result;
         }
 
-        public void CloseUser(TConfig Config, string sAccount, int nSessionID)
-        {
-            TConnInfo ConnInfo;
-            for (var i = Config.SessionList.Count - 1; i >= 0; i--)
-            {
-                ConnInfo = Config.SessionList[i];
-                if ((ConnInfo.sAccount == sAccount) || (ConnInfo.nSessionID == nSessionID))
-                {
-                    _masSock.SendServerMsg(Grobal2.SS_CLOSESESSION, ConnInfo.sServerName, ConnInfo.sAccount + "/" + (ConnInfo.nSessionID).ToString());
-                    ConnInfo = null;
-                    Config.SessionList.RemoveAt(i);
-                }
-            }
-        }
+
 
         public void ProcessGate(TConfig Config)
         {

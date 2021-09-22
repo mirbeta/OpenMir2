@@ -21,10 +21,10 @@ namespace LoginSvr
                 {
                     services.AddSingleton<AppServer>();
                     services.AddSingleton<LoginService>();
-                    services.AddHostedService<AppService>();
                     services.AddSingleton<AccountDB>();
                     services.AddSingleton<MasSocService>();
                     services.AddSingleton<MonSocService>();
+                    services.AddHostedService<AppService>();
                 });
 
             await builder.RunConsoleAsync();

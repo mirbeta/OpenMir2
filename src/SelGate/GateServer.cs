@@ -112,13 +112,13 @@ namespace SelGate
                 else
                 {
                     e.Socket.Close();
-                    GateShare.MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
+                    GateShare.MainOutMessage("Socket出错，断开链接: " + sRemoteIPaddr, 1);
                 }
             }
             else
             {
                 e.Socket.Close();
-                GateShare.MainOutMessage("Kick Off: " + sRemoteIPaddr, 1);
+                GateShare.MainOutMessage("服务器未准备就绪，断开链接: " + sRemoteIPaddr, 1);
             }
         }
 

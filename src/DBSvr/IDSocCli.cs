@@ -8,7 +8,7 @@ using SystemModule.Sockets;
 namespace DBSvr
 {
     /// <summary>
-    /// ÕËºÅÖĞĞÄ
+    /// è´¦å·ä¸­å¿ƒ
     /// </summary>
     public class TFrmIDSoc
     {
@@ -34,12 +34,12 @@ namespace DBSvr
 
         private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage("µÇÂ½·şÎñÆ÷Á´½Ó³É¹¦.");
+            DBShare.OutMainMessage("è´¦å·ç™»é™†æœåŠ¡å™¨é“¾æ¥æˆåŠŸ.");
         }
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage("ÎŞ·¨Á´½ÓµÇÂ¼·şÎñÆ÷.");
+            DBShare.OutMainMessage("ä¸é“¾æ¥è´¦å·ç™»å½•æœåŠ¡å™¨æ–­å¼€é“¾æ¥.");
         }
 
         public void Start()
@@ -47,7 +47,7 @@ namespace DBSvr
             _socket.Address = sIDAddr;
             _socket.Port = nIDPort;
             _socket.Connect();
-            connectiTimer = new Timer(ConnectionTimer, null, 5000, 10000);
+            connectiTimer = new Timer(ConnectionTimer, null, 5000, 5000);
         }
 
         public void Stop()

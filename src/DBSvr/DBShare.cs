@@ -305,6 +305,11 @@ namespace DBSvr
         public DateTime dModDate;
         public byte btCount;
         public byte[] unknown2;
+
+        public THumInfo()
+        {
+            Header = new TRecordHeader();
+        }
     }
 
     public class TGlobaSessionInfo

@@ -1,3 +1,4 @@
+using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -6,6 +7,7 @@ namespace LoginGate
     public class GateClient
     {
         public IClientScoket ClientSocket;
+        private Timer _connectTimer;
 
         public GateClient()
         {
@@ -20,6 +22,15 @@ namespace LoginGate
         {
             ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
             ResUserSessionArray();
+            _connectTimer = new Timer(ConnectTimer, null, 1000, 3000);
+        }
+
+        private void ConnectTimer(object obj)
+        {
+            if (!ClientSocket.IsConnected)
+            {
+                ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
+            }
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -29,7 +40,7 @@ namespace LoginGate
             GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
             //ResUserSessionArray();
             GateShare.boServerReady = true;
-            GateShare.MainOutMessage("账号服务器链接成功.", 1);
+            GateShare.MainOutMessage("账号登陆服务器链接成功.", 1);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -47,6 +58,7 @@ namespace LoginGate
             //ClientSockeMsgList.Clear();
             GateShare.boGateReady = false;
             GateShare.nSessionCount = 0;
+            GateShare.MainOutMessage("与账号登陆服务器断开链接.", 1);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -72,6 +84,5 @@ namespace LoginGate
                 UserSession.MsgList.Clear();
             }
         }
-
     }
 }

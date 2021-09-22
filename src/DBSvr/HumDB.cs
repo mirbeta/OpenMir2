@@ -17,7 +17,7 @@ namespace DBSvr
         private Dictionary<int, string> m_QuickIndexNameList = null;
         public int m_nRecordCount = 0;
 
-        public THumDB(string sFileName)
+        public THumDB()
         {
             m_MirQuickList = new Dictionary<string, int>();
             m_MirQuickIDList = new Dictionary<int, string>();
@@ -126,7 +126,7 @@ namespace DBSvr
 
         public int Index(string sName)
         {
-            return 0;
+            return -1;
             //return m_MirQuickList.GetIndex(sName);
         }
 

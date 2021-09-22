@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.IO;
+using MySql.Data.MySqlClient;
 using SystemModule;
 
 namespace DBSvr
@@ -20,18 +23,18 @@ namespace DBSvr
         /// 已被删除的记录号
         /// </summary>
         public IList<int> m_DeletedList = null;
-        public string m_sDBFileName = String.Empty;
 
-        public TFileHumDB(string sFileName)
+        private IDbConnection _dbConnection = null;
+
+        public TFileHumDB()
         {
-            m_sDBFileName = sFileName;
             m_QuickList = new Dictionary<string, int>();
             m_IndexQuickList = new Dictionary<int, string>();
             m_QuickIDList = new TQuickIDList();
             m_DeletedList = new List<int>();
             LoadQuickList();
+            m_Header = new TDBHeader();
         }
-
 
         private void LoadQuickList()
         {
@@ -52,29 +55,28 @@ namespace DBSvr
             {
                 if (Open())
                 {
-                    //FileSeek(m_nFileHandle, 0, 0);
-                    //if (FileRead(m_nFileHandle, DBHeader, sizeof(TDBHeader)) == sizeof(TDBHeader))
-                    //{
-                    //    for (nIndex = 0; nIndex < DBHeader.nHumCount; nIndex++)
-                    //    {
-                    //        if (FileRead(m_nFileHandle, DBRecord, sizeof(THumInfo)) != sizeof(THumInfo))
-                    //        {
-                    //            break;
-                    //        }
-                    if (!DBRecord.Header.boDeleted)
+                    var command = new MySqlCommand();
+                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.CommandText = "select * from TBL_HUMRECORD";
+                    var dr = command.ExecuteReader();
+                    while (dr.Read())
                     {
-                        m_QuickList.Add(DBRecord.Header.sName, nRecordIndex);
-                        m_IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
-                        AccountList.Add(new TQuickID() { sAccount = DBRecord.sAccount, nSelectID = DBRecord.Header.nSelectID });
-                        ChrNameList.Add(DBRecord.sChrName);
+                        if (!DBRecord.Header.boDeleted)
+                        {
+                            m_QuickList.Add(DBRecord.Header.sName, nRecordIndex);
+                            m_IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
+                            AccountList.Add(new TQuickID() { sAccount = DBRecord.sAccount, nSelectID = DBRecord.Header.nSelectID });
+                            ChrNameList.Add(DBRecord.sChrName);
+                        }
+                        else
+                        {
+                            m_DeletedList.Add(nIndex);
+                        }
+                        nRecordIndex++;
+                        nIndex++;
                     }
-                    else
-                    {
-                        m_DeletedList.Add(nIndex);
-                    }
-                    nRecordIndex++;
-                    //    }
-                    //}
+                    dr.Close();
+                    dr.Dispose();
                 }
             }
             finally
@@ -92,46 +94,25 @@ namespace DBSvr
 
         public void Close()
         {
-            //m_nFileHandle.Close();
-            //if (m_boChanged)
-            //{
-            //    m_OnChange(this);
-            //}
-            //UnLock();
+            _dbConnection.Close();
+            _dbConnection.Dispose();
         }
 
         public bool Open()
         {
-            bool result;
+            bool result = false;
             m_nCurIndex = 0;
             m_boChanged = false;
-            if (File.Exists(m_sDBFileName))
+            _dbConnection = new MySqlConnection(DBShare.DBConnection);
+            try
             {
-                //m_nFileHandle = File.Open(m_sDBFileName, (FileMode) FileAccess.ReadWrite | FileShare.ReadWrite);
-                //if (m_nFileHandle > 0)
-                //{
-                //    FileRead(m_nFileHandle, m_Header, sizeof(TDBHeader));
-                //}
-            }
-            else
-            {
-                //m_nFileHandle = File.Create(m_sDBFileName);
-                //if (m_nFileHandle > 0)
-                //{
-                //    FillChar(m_Header, sizeof(TDBHeader), '\0');
-                //    m_Header.sDesc = Units.HumDB.sDBHeaderDesc;
-                //    m_Header.nHumCount = 0;
-                //    m_Header.n6C = 0;
-                //    FileWrite(m_nFileHandle, m_Header, sizeof(TDBHeader));
-                //}
-            }
-            if (m_nFileHandle > 0)
-            {
+                _dbConnection.Open();
                 result = true;
             }
-            else
+            catch (Exception e)
             {
-                result = false;
+                Console.WriteLine(e);
+                throw;
             }
             return result;
         }
@@ -267,19 +248,21 @@ namespace DBSvr
 
         public bool Add(THumInfo HumRecord)
         {
-            bool result;
-            TDBHeader Header;
-            int nIndex;
-            if (m_QuickList[HumRecord.Header.sName] >= 0)
+            bool result = false;
+            if (m_QuickList.ContainsKey(HumRecord.Header.sName))
             {
-                result = false;
+                if (m_QuickList[HumRecord.Header.sName] >= 0)
+                {
+                    return false;
+                }
             }
             else
             {
-                Header = m_Header;
+                var oldHeader = m_Header;
+                int nIndex = 0;
                 if (m_DeletedList.Count > 0)
                 {
-                    nIndex = ((int)m_DeletedList[0]);
+                    nIndex = m_DeletedList[0];
                     m_DeletedList.RemoveAt(0);
                 }
                 else
@@ -295,7 +278,7 @@ namespace DBSvr
                 }
                 else
                 {
-                    m_Header = Header;
+                    m_Header = oldHeader;
                     result = false;
                 }
             }
@@ -305,7 +288,7 @@ namespace DBSvr
         private bool UpdateRecord(int nIndex, THumInfo HumRecord, bool boNew)
         {
             bool result;
-            THumInfo HumRcd = null;
+            THumInfo HumRcd = HumRecord;
             //int nPosion = nIndex * sizeof(THumInfo) + sizeof(TDBHeader);
             //if (FileSeek(m_nFileHandle, nPosion, 0) == nPosion)
             //{

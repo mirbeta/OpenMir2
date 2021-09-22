@@ -12,7 +12,6 @@ namespace LoginSvr
     {
         public readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
-        private readonly LoginService loginSvr;
 
         public MasSocService()
         {
@@ -113,7 +112,7 @@ namespace LoginSvr
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new string[] { "/" });
-                                loginSvr.CloseUser(Config, sAccount, HUtil32.Str_ToInt(sMsg, 0));
+                                CloseUser(Config, sAccount, HUtil32.Str_ToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new string[] { "/" });
@@ -145,6 +144,21 @@ namespace LoginSvr
             }
         }
 
+        public void CloseUser(TConfig Config, string sAccount, int nSessionID)
+        {
+            TConnInfo ConnInfo;
+            for (var i = Config.SessionList.Count - 1; i >= 0; i--)
+            {
+                ConnInfo = Config.SessionList[i];
+                if ((ConnInfo.sAccount == sAccount) || (ConnInfo.nSessionID == nSessionID))
+                {
+                    SendServerMsg(Grobal2.SS_CLOSESESSION, ConnInfo.sServerName, ConnInfo.sAccount + "/" + (ConnInfo.nSessionID).ToString());
+                    ConnInfo = null;
+                    Config.SessionList.RemoveAt(i);
+                }
+            }
+        }
+        
         private void RefServerLimit(string sServerName)
         {
             int nCount = 0;

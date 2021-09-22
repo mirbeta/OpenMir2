@@ -224,6 +224,7 @@ namespace SystemModule.Sockets
             {
                 this.OnDisconnected(this, new DSCClientConnectedEventArgs(this.cli));
             }
+            IsConnected = false;
         }
 
         private void RaiseErrorEvent(SocketException error)

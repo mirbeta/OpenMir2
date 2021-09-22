@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +23,8 @@ namespace DBSvr
                     services.AddSingleton<TFrmUserSoc>();
                     services.AddSingleton<TFrmIDSoc>();
                     services.AddSingleton<HumDataService>();
+                    services.AddSingleton<TFileHumDB>();
+                    services.AddSingleton<THumDB>();
                     services.AddHostedService<AppService>();
                 });
 
