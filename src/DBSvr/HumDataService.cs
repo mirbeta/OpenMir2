@@ -92,14 +92,12 @@ namespace DBSvr
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     s10 = HUtil32.GetString(data, 0, data.Length);
-                    DBShare.n4ADBF4++;
                     if (!string.IsNullOrEmpty(s10))
                     {
                         ServerInfo.sStr = ServerInfo.sStr + s10;
-                        if (s10.IndexOf("!") > 0)
+                        if (s10.IndexOf("!", StringComparison.Ordinal) > 0)
                         {
                             ProcessServerPacket(ServerInfo);
-                            DBShare.n4ADBF8++;
                             break;
                         }
                         else
@@ -107,7 +105,6 @@ namespace DBSvr
                             if (ServerInfo.sStr.Length > 81920)
                             {
                                 ServerInfo.sStr = "";
-                                DBShare.n4ADC2C++;
                             }
                         }
                     }
@@ -167,14 +164,12 @@ namespace DBSvr
                 }
                 if (s1C != "")
                 {
-                    DBShare.n4ADC00++;
                     //Label4.Text = "Error " + (DBShare.n4ADC00).ToString();
                 }
                 if (!bo25)
                 {
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     SendSocket(ServerInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
-                    DBShare.n4ADC00++;
                     //Label4.Text = "Error " + (DBShare.n4ADC00).ToString();
                 }
             }
@@ -185,7 +180,6 @@ namespace DBSvr
 
         private void SendSocket(Socket Socket, string sMsg)
         {
-            DBShare.n4ADBFC++;
             int n10 = HUtil32.MakeLong(HUtil32.Str_ToInt(s34C, 0) ^ 170, sMsg.Length + 6);
             var by = new byte[sizeof(int)];
             unsafe
@@ -229,7 +223,6 @@ namespace DBSvr
                 default:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     SendSocket(Socket, EDcode.EncodeMessage(m_DefMsg));
-                    DBShare.n4ADC04++;
                     break;
             }
         }

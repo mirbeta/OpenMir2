@@ -17,12 +17,14 @@ namespace DBSvr
         private string sIDAddr = string.Empty;
         private int nIDPort = 0;
         private readonly IClientScoket _socket;
-        private Timer keepAliveTimer;
+        private Timer connectiTimer = null;
 
         public TFrmIDSoc()
         {
             _socket = new IClientScoket();
             _socket.ReceivedDatagram += IDSocketRead;
+            _socket.OnConnected += IDSocketConnected;
+            _socket.OnDisconnected += IDSocketDisconnected;
             IniFile Conf = new IniFile(DBShare.sConfFileName);
             if (Conf != null)
             {
@@ -33,12 +35,22 @@ namespace DBSvr
             GlobaSessionList = new List<TGlobaSessionInfo>();
         }
 
+        private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
+        {
+            DBShare.OutMainMessage("登录服务器链接成功.");
+        }
+
+        private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
+        {
+            DBShare.OutMainMessage("无法链接登录服务器.");
+        }
+
         public void Start()
         {
             _socket.Address = sIDAddr;
             _socket.Port = nIDPort;
             _socket.Connect();
-            keepAliveTimer = new Timer(KeepAliveTimer, null, 1000, 5000);
+            connectiTimer = new Timer(ConnectionTimer, null, 5000, 10000);
         }
 
         public void Stop()
@@ -52,18 +64,20 @@ namespace DBSvr
             GlobaSessionList = null;
         }
 
-        public void Timer1Timer(System.Object Sender, System.EventArgs _e1)
+        private void ConnectionTimer(object obj)
         {
-            //if ((IDSocket.Address != "") && !(IDSocket.Active))
-            //{
-            //    IDSocket.Active = true;
-            //}
+            if (!_socket.IsConnected)
+            {
+                _socket.Address = sIDAddr;
+                _socket.Port = nIDPort;
+                _socket.Connect();
+            }
         }
 
-        public void IDSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void IDSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             m_sSockMsg = m_sSockMsg + e.ReceiveText;
-            if (m_sSockMsg.IndexOf(")") > 0)
+            if (m_sSockMsg.IndexOf(")", StringComparison.Ordinal) > 0)
             {
                 ProcessSocketMsg();
             }
@@ -79,7 +93,7 @@ namespace DBSvr
             string sData = string.Empty;
             string sCode = string.Empty;
             string sScoketText = m_sSockMsg;
-            while ((sScoketText.IndexOf(")") > 0))
+            while ((sScoketText.IndexOf(")", StringComparison.Ordinal) > 0))
             {
                 sScoketText = HUtil32.ArrestStringEx(sScoketText, "(", ")", ref sData);
                 if (sData == "")
@@ -296,14 +310,6 @@ namespace DBSvr
             }
         }
 
-        private void SendKeepAlivePacket()
-        {
-            if (_socket.IsConnected)
-            {
-                _socket.SendText("(" + (Grobal2.SS_SERVERINFO).ToString() + "/" + DBShare.sServerName + "/" + "99" + "/" + UsrSoc.FrmUserSoc.GetUserCount() + ")");
-            }
-        }
-
         public bool GetSession(string sAccount, string sIPaddr)
         {
             bool result = false;
@@ -323,14 +329,17 @@ namespace DBSvr
             return result;
         }
 
-        public void KeepAliveTimer(object obj)
-        {
-            SendKeepAlivePacket();
-        }
-
         private void ProcessGetOnlineCount(string sData)
         {
 
+        }
+
+        public void SendKeepAlivePacket(int userCount)
+        {
+            if (_socket.IsConnected)
+            {
+                _socket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + DBShare.sServerName + "/" + "99" + "/" + userCount + ")");
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/src/DBSvr/DBShare.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/DBSvr/HumDB.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/DBSvr/IDSocCli.cs" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/DBSvr/LocalDB.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/DBSvr/UsrSoc.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/LoginGate/GateShare.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/LoginSvr/FrmFindId.cs" charset="GB2312" />

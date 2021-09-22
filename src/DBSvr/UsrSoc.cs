@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -12,25 +13,18 @@ namespace DBSvr
 {
     public class TFrmUserSoc
     {
-        private long dwKeepAliveTick = 0;
-        private object CS_GateSession = null;
-        private int n2DC = 0;
-        private int n2E0 = 0;
-        private int n2E4 = 0;
         private IList<TGateInfo> GateList = null;
         private TGateInfo CurGate = null;
         private Dictionary<string, int> MapList = null;
         private readonly THumDB HumDB;
-        private readonly HumChrDB HumChrDB;
+        private readonly TFileHumDB HumChrDB;
         private readonly ISocketServer UserSocket;
+        private Timer userSocTimer;
 
         public TFrmUserSoc()
         {
             //CS_GateSession = new TCriticalSection();
-            //GateList = new ArrayList();
-            //UserSocket.Port = DBShare.g_nGatePort;
-            //UserSocket.Address = DBShare.g_sGateAddr;
-            //UserSocket.Active = true;
+            GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             UserSocket = new ISocketServer(ushort.MaxValue,1024);
             UserSocket.OnClientConnect += UserSocketClientConnect;
@@ -44,8 +38,9 @@ namespace DBSvr
         }
 
         public void Start()
-        { 
-            
+        {
+            UserSocket.Start(DBShare.g_sGateAddr, DBShare.g_nGatePort);
+            userSocTimer = new Timer(Timer1Timer, null, 1000, 10000);
         }
 
         public void Stop()
@@ -69,20 +64,20 @@ namespace DBSvr
             }
             GateList = null;
             MapList = null;
-            CS_GateSession = null;
         }
 
         public void UserSocketClientConnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
             string sIPaddr = e.RemoteIPaddr;
+            const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
             if (!DBShare.CheckServerIP(sIPaddr))
             {
                 DBShare.OutMainMessage("非法网关连接: " + sIPaddr);
                 e.Socket.Close();
                 return;
             }
-            if (!DBShare.boOpenDBBusy)
+            if (DBShare.boOpenDBBusy)
             {
                 GateInfo = new TGateInfo();
                 GateInfo.Socket = e.Socket;
@@ -92,6 +87,7 @@ namespace DBSvr
                 GateInfo.dwTick10 = HUtil32.GetTickCount();
                 GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
                 GateList.Add(GateInfo);
+                //DBShare.MainOutMessage(string.Format(sGateOpen, i, e.RemoteIPaddr, e.RemotePort));
             }
             else
             {
@@ -103,6 +99,7 @@ namespace DBSvr
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
+            const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
             for (var i = 0; i < GateList.Count; i++)
             {
                 GateInfo = GateList[i];
@@ -115,6 +112,7 @@ namespace DBSvr
                     }
                     GateInfo.UserList = null;
                 }
+                DBShare.MainOutMessage(string.Format(sGateClose, i, e.RemoteIPaddr, e.RemotePort));
                 GateList.RemoveAt(i);
                 break;
             }
@@ -232,6 +230,7 @@ namespace DBSvr
                         {
                             continue;
                         }
+                        DBShare.g_RouteInfo[nRouteIdx] = new TRouteInfo();
                         DBShare.g_RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
                         DBShare.g_RouteInfo[nRouteIdx].nGateCount = 0;
                         nGateIdx = 0;
@@ -340,20 +339,20 @@ namespace DBSvr
             TUserInfo UserInfo;
             while (true)
             {
-                if (GateInfo.sText.IndexOf("$", StringComparison.OrdinalIgnoreCase) <= 0)
+                if (GateInfo.sText.IndexOf("$", StringComparison.Ordinal) <= 0)
                 {
                     break;
                 }
                 GateInfo.sText = HUtil32.ArrestStringEx(GateInfo.sText, "%", "$", ref s10);
                 if (s10 != "")
                 {
-                    s19 = s10[1];
+                    s19 = s10[0];
                     s10 = s10.Substring(1, s10.Length - 1);
                     switch (s19)
                     {
                         case '-':
                             SendKeepAlivePacket(GateInfo.Socket);
-                            dwKeepAliveTick = HUtil32.GetTickCount();
+                            //dwKeepAliveTick = HUtil32.GetTickCount();
                             break;
                         case 'A':
                             s10 = HUtil32.GetValidStr3(s10, ref s0C, new string[] { "/" });
@@ -408,7 +407,7 @@ namespace DBSvr
                 UserInfo.s2C = HUtil32.ArrestStringEx(UserInfo.s2C, "#", "!", ref s10);
                 if (s10 != "")
                 {
-                    s10 = s10.Substring(2 - 1, s10.Length - 1);
+                    s10 = s10.Substring(1, s10.Length - 1);
                     if (s10.Length >= Grobal2.DEFBLOCKSIZE)
                     {
                         DeCodeUserMsg(s10, ref UserInfo);
@@ -843,7 +842,7 @@ namespace DBSvr
                             HumRecord.Header.nSelectID = UserInfo.nSelGateID;
                             if (HumRecord.Header.sName != "")
                             {
-                                if (!HumChrDB.Add(ref HumRecord))
+                                if (!HumChrDB.Add(HumRecord))
                                 {
                                     nCode = 2;
                                 }

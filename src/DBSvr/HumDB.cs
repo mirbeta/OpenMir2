@@ -19,11 +19,8 @@ namespace DBSvr
 
         public THumDB(string sFileName)
         {
-            DBShare.boDataDBReady = false;
             m_MirQuickList = new Dictionary<string, int>();
             m_MirQuickIDList = new Dictionary<int, string>();
-            DBShare.n4ADAE4 = 0;
-            DBShare.n4ADAF0 = 0;
             m_nRecordCount = -1;
             m_QuickIndexNameList = new Dictionary<int, string>();
             //if (Units.HumDB_SQL.g_boSQLIsReady)
@@ -48,9 +45,6 @@ namespace DBSvr
             const string sSQL = "SELECT * FROM TBL_CHARACTER";
             //m_MirQuickList.Clear();
             //m_MirQuickIDList.Clear();
-            DBShare.n4ADAE4 = 0;
-            DBShare.n4ADAE8 = 0;
-            DBShare.n4ADAF0 = 0;
             m_nRecordCount = -1;
             AccountList = new ArrayList();
             ChrNameList = new ArrayList();
@@ -67,10 +61,8 @@ namespace DBSvr
                     var dr = command.ExecuteReader();
                     while (dr.Read())
                     {
-                        DBShare.n4ADAF0 = m_nRecordCount;
                         for (nIndex = 0; nIndex < m_nRecordCount; nIndex++)
                         {
-                            DBShare.n4ADAE4++;
                             boDeleted = dr.GetBoolean("FLD_DELETED");
                             sAccount = dr.GetString("FLD_LOGINID");
                             sChrName = dr.GetString("FLD_CHARNAME");
@@ -79,11 +71,6 @@ namespace DBSvr
                                 //m_MirQuickList.Add(sChrName, nIndex);
                                 //AccountList.Add(sAccount, nIndex);
                                 //ChrNameList.Add(sChrName, nIndex);
-                                DBShare.n4ADAE8++;
-                            }
-                            else
-                            {
-                                DBShare.n4ADAEC++;
                             }
                         }
                     }
@@ -109,7 +96,6 @@ namespace DBSvr
             AccountList = null;
             ChrNameList = null;
             //m_MirQuickList.SortString(0, m_MirQuickList.Count - 1);
-            DBShare.boDataDBReady = true;
         }
 
         public void __Lock()
@@ -142,6 +128,11 @@ namespace DBSvr
         {
             return 0;
             //return m_MirQuickList.GetIndex(sName);
+        }
+
+        public int ChrCountOfAccount(string sAccount)
+        {
+            return 0;
         }
 
         public int Get(int nIndex, ref THumDataInfo HumanRCD)
