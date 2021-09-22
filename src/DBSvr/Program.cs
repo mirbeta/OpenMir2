@@ -22,7 +22,8 @@ namespace DBSvr
                 {
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<TFrmUserSoc>();
-                    services.AddTransient<TFrmIDSoc>();
+                    services.AddSingleton<TFrmIDSoc>();
+                    services.AddSingleton<HumDataService>();
                     services.AddHostedService<AppService>();
                 });
 

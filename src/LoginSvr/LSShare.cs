@@ -155,7 +155,7 @@ namespace LoginSvr
         public bool boEnable;
     }
 
-    public struct TGateRoute
+    public class TGateRoute
     {
         public string sServerName;
         public string sTitle;
@@ -163,6 +163,11 @@ namespace LoginSvr
         public string sPublicAddr;
         public int nSelIdx;
         public TGateNet[] Gate;
+
+        public TGateRoute()
+        {
+            Gate = new TGateNet[10];
+        }
     }
 
     public class TConfig
@@ -233,6 +238,7 @@ namespace LoginSvr
             boDynamicIPMode = false;
             nReadyServers = 0;
             boShowDetailMsg = false;
+            GateRoute = new TGateRoute[60];
         }
     }
 

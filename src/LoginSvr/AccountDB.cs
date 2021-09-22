@@ -140,7 +140,7 @@ namespace LoginSvr
         {
             const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE FLD_LOGINID='{0}'";
             var result = true;
-            string sAccount = m_QuickList[nIndex].sAccount;
+            string sAccount = m_QuickList[nIndex - 1].sAccount;
             using var conn = GetConnection();
             conn.Open();
             var command = new MySqlCommand();
@@ -195,7 +195,7 @@ namespace LoginSvr
             var quick = m_QuickList.SingleOrDefault(o => o.sAccount == sName);
             if (quick == null)
             {
-                return 0;
+                return -1;
             }
             return quick.nIndex;
         }
@@ -207,7 +207,7 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (m_QuickList.Count <= nIndex)
+            if (m_QuickList.Count < nIndex)
             {
                 return result;
             }

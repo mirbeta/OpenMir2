@@ -36,16 +36,11 @@ namespace SelGate
         public static int nIPCountLimit2 = 40;
         public static int nShowLogLevel = 3;
         public static string GateClass = "SelGate";
-        public static string GateName = "角色网关";
-        public static string TitleName = "SKY引擎";
         public static int ServerPort = 5100;
-        public static string ServerAddr = "10.10.0.58";
+        public static string ServerAddr = "10.10.0.168";
         public static int GatePort = 7100;
-        public static string GateAddr = "0.0.0.0";
+        public static string GateAddr = "10.10.0.168";
         public static bool boGateReady = false;
-        public static bool boShowMessage = false;
-        public static bool boStarted = false;
-        public static bool boClose = false;
         public static bool boServiceStart = false;
         public static long dwKeepAliveTick = 0;
         public static bool boKeepAliveTimcOut = false;
@@ -56,10 +51,11 @@ namespace SelGate
         public static int nMaxConnOfIPaddr = 10;
         public static TBlockIPMethod BlockMethod = TBlockIPMethod.mDisconnect;
         public static long dwKeepConnectTimeOut = 60 * 1000;
+        /// <summary>
+        /// 用于动态IP，分机放置登录网关用，打开此模式后，网关将会把连接登录服务器的IP地址，
+        /// 当为服务器IP，发给登录服务器，客户端将直接使用此IP连接角色网关
+        /// </summary>
         public static bool g_boDynamicIPDisMode = false;
-        // 用于动态IP，分机放置登录网关用，打开此模式后，网关将会把连接登录服务器的IP地址，当为服务器IP，发给登录服务器，客户端将直接使用此IP连接角色网关
-        public static string g_sNowStartGate = "正在启动前置服务器...";
-        public static string g_sNowStartOK = "启动前置服务器完成...";
         public static bool boServerReady = false;
         public const int GATEMAXSESSION = 10000;
         public static int nSessionCount = 0;
@@ -116,7 +112,7 @@ namespace SelGate
             string tMsg;
             if (nMsgLevel <= nShowLogLevel)
             {
-                tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+                tMsg = "[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + sMsg;
                 MainLogMsgList.Add(tMsg);
             }
         }
@@ -125,14 +121,6 @@ namespace SelGate
         {
             ClientSockeMsgList = new List<string>();
             MainLogMsgList = new List<string>();
-        }
-
-        public void finalization()
-        {
-            //StringList456A14.Free;
-            //MainLogMsgList.Free;
-            //CS_MainLog.Free;
-            //CS_FilterMsg.Free;
         }
     }
     

@@ -11,14 +11,16 @@ namespace DBSvr
         private readonly ServerApp _serverApp;
         private readonly TFrmUserSoc _userSoc;
         private readonly TFrmIDSoc _idSoc;
+        private readonly HumDataService _dataService;
         private Timer keepAliveTimer;
 
-        public AppService(ILogger<AppService> logger, ServerApp serverApp, TFrmUserSoc userSoc, TFrmIDSoc idSoc)
+        public AppService(ILogger<AppService> logger, ServerApp serverApp, TFrmUserSoc userSoc, TFrmIDSoc idSoc, HumDataService dataService)
         {
             _logger = logger;
             _serverApp = serverApp;
             _userSoc = userSoc;
             _idSoc = idSoc;
+            _dataService = dataService;
             keepAliveTimer = new Timer(KeepAliveTimer, null, 1000, 5000);
         }
 
@@ -28,6 +30,7 @@ namespace DBSvr
             _serverApp.Start();
             _userSoc.Start();
             _idSoc.Start();
+            _dataService.Start();
             return Task.CompletedTask;
         }
 

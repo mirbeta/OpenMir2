@@ -7,7 +7,7 @@ using SystemModule.Sockets;
 
 namespace DBSvr
 {
-    internal class HumDataService
+    public class HumDataService
     {
         private IList<TServerInfo> ServerList = null;
         private IList<THumSession> HumSessionList = null;
@@ -15,9 +15,11 @@ namespace DBSvr
         private string s34C;
         private readonly THumDB HumDB;
         private readonly ISocketServer serverSocket;
+        private readonly TFrmIDSoc _frmIdSoc;
 
-        public HumDataService()
+        public HumDataService(TFrmIDSoc frmIdSoc)
         {
+            _frmIdSoc = frmIdSoc;
             ServerList = new List<TServerInfo>();
             HumSessionList = new List<THumSession>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -30,10 +32,10 @@ namespace DBSvr
 
         public void Start()
         {
-            //serverSocket.Start(sServerAddr, nServerPort);
+            serverSocket.Start(DBShare.sServerAddr, DBShare.nServerPort);
         }
 
-        public void ServerSocketClientConnect(object sender, AsyncUserToken e)
+        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             TServerInfo ServerInfo;
             string sIPaddr = e.RemoteIPaddr;
@@ -43,7 +45,7 @@ namespace DBSvr
                 e.Socket.Close();
                 return;
             }
-            if (!DBShare.boOpenDBBusy)
+            if (DBShare.boOpenDBBusy)
             {
                 ServerInfo = new TServerInfo();
                 ServerInfo.bo08 = true;
@@ -58,7 +60,7 @@ namespace DBSvr
             }
         }
 
-        public void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
+        private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TServerInfo ServerInfo;
             for (var i = 0; i < ServerList.Count; i++)
@@ -74,12 +76,12 @@ namespace DBSvr
             }
         }
 
-        public void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        public void ServerSocketClientRead(object sender, AsyncUserToken e)
+        private void ServerSocketClientRead(object sender, AsyncUserToken e)
         {
             TServerInfo ServerInfo;
             string s10;
@@ -240,7 +242,7 @@ namespace DBSvr
             int nCheckCode = -1;
             if ((sAccount != "") && (sHumName != ""))
             {
-                nCheckCode = IDSocCli.FrmIDSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
+                nCheckCode = _frmIdSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
                     DBShare.OutMainMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + (nSessionID).ToString());
@@ -333,7 +335,7 @@ namespace DBSvr
                 {
                     HumDB.Close();
                 }
-                IDSocCli.FrmIDSoc.SetSessionSaveRcd(sUserID);
+                _frmIdSoc.SetSessionSaveRcd(sUserID);
             }
             if (!bo21)
             {

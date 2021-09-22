@@ -20,9 +20,11 @@ namespace DBSvr
         private readonly TFileHumDB HumChrDB;
         private readonly ISocketServer UserSocket;
         private Timer userSocTimer;
+        private readonly TFrmIDSoc _frmIdSoc;
 
-        public TFrmUserSoc()
+        public TFrmUserSoc(TFrmIDSoc frmIdSoc)
         {
+            _frmIdSoc = frmIdSoc;
             //CS_GateSession = new TCriticalSection();
             GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -87,7 +89,7 @@ namespace DBSvr
                 GateInfo.dwTick10 = HUtil32.GetTickCount();
                 GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
                 GateList.Add(GateInfo);
-                //DBShare.MainOutMessage(string.Format(sGateOpen, i, e.RemoteIPaddr, e.RemotePort));
+                DBShare.MainOutMessage(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
             }
             else
             {
@@ -95,7 +97,7 @@ namespace DBSvr
             }
         }
 
-        public void UserSocketClientDisconnect(object sender, AsyncUserToken e)
+        private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
@@ -118,12 +120,12 @@ namespace DBSvr
             }
         }
 
-        public void UserSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        private void UserSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        public void UserSocketClientRead(object sender, AsyncUserToken e)
+        private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
             string sReviceMsg;
             TGateInfo GateInfo;
@@ -466,10 +468,10 @@ namespace DBSvr
                 UserInfo = GateInfo.UserList[i];
                 if ((UserInfo != null) && (UserInfo.sConnID == sID))
                 {
-                    if (!IDSocCli.FrmIDSoc.GetGlobaSessionStatus(UserInfo.nSessionID))
+                    if (!_frmIdSoc.GetGlobaSessionStatus(UserInfo.nSessionID))
                     {
-                        IDSocCli.FrmIDSoc.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString());
-                        IDSocCli.FrmIDSoc.CloseSession(UserInfo.sAccount, UserInfo.nSessionID);
+                        _frmIdSoc.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString());
+                        _frmIdSoc.CloseSession(UserInfo.sAccount, UserInfo.nSessionID);
                     }
                     UserInfo = null;
                     GateInfo.UserList.RemoveAt(i);
@@ -504,7 +506,7 @@ namespace DBSvr
                     if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((UserInfo.sAccount != "") && IDSocCli.FrmIDSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             NewChr(s18, ref UserInfo);
                             UserInfo.boChrQueryed = false;
@@ -524,7 +526,7 @@ namespace DBSvr
                     if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((UserInfo.sAccount != "") && IDSocCli.FrmIDSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             DelChr(s18, ref UserInfo);
                             UserInfo.boChrQueryed = false;
@@ -543,7 +545,7 @@ namespace DBSvr
                 case Grobal2.CM_SELCHR:
                     if (!UserInfo.boChrQueryed)
                     {
-                        if ((UserInfo.sAccount != "") && IDSocCli.FrmIDSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             if (SelectChr(s18, ref UserInfo))
                             {
@@ -597,9 +599,9 @@ namespace DBSvr
             nSessionID = HUtil32.Str_ToInt(sSessionID, -2);
             UserInfo.nSessionID = nSessionID;
             nChrCount = 0;
-            if (IDSocCli.FrmIDSoc.CheckSession(sAccount, UserInfo.sUserIPaddr, nSessionID))
+            if (_frmIdSoc.CheckSession(sAccount, UserInfo.sUserIPaddr, nSessionID))
             {
-                IDSocCli.FrmIDSoc.SetGlobaSessionNoPlay(nSessionID);
+                _frmIdSoc.SetGlobaSessionNoPlay(nSessionID);
                 UserInfo.sAccount = sAccount;
                 ChrList = new ArrayList();
                 try
@@ -971,9 +973,9 @@ namespace DBSvr
                 {
                     sRouteIP = UserInfo.sGateIPaddr;
                 }
-                sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + (nRoutePort + nMapIndex).ToString());
+                sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + nRoutePort + nMapIndex);
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sDefMsg + sRouteMsg);
-                IDSocCli.FrmIDSoc.SetGlobaSessionPlay(UserInfo.nSessionID);
+                _frmIdSoc.SetGlobaSessionPlay(UserInfo.nSessionID);
                 result = true;
             }
             else

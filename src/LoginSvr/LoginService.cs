@@ -30,7 +30,7 @@ namespace LoginSvr
             string sRemote = string.Empty;
             string sPublic = string.Empty;
             string sGatePort = string.Empty;
-            string sFileName = ".\\!addrtable.txt";
+            string sFileName = "!AddrTable.txt";
             StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
@@ -48,6 +48,7 @@ namespace LoginSvr
                         sLineText = sLineText.Trim();
                         if ((sTitle != "") && (sRemote != "") && (sPublic != "") && (nRouteIdx < 60))
                         {
+                            Config.GateRoute[nRouteIdx] = new TGateRoute();
                             Config.GateRoute[nRouteIdx].sServerName = sServerName;
                             Config.GateRoute[nRouteIdx].sTitle = sTitle;
                             Config.GateRoute[nRouteIdx].sRemoteAddr = sRemote;
@@ -902,11 +903,11 @@ namespace LoginSvr
             }
         }
 
-        public string GetServerListInfo()
+        private string GetServerListInfo()
         {
-            string result = string.Empty;
-            string sServerInfo = string.Empty;
-            TConfig Config = LSShare.g_Config;
+            var result = string.Empty;
+            var sServerInfo = string.Empty;
+            var Config = LSShare.g_Config;
             try
             {
                 for (var i = 0; i < Config.ServerNameList.Count; i++)
@@ -914,7 +915,7 @@ namespace LoginSvr
                     string sServerName = Config.ServerNameList[i];
                     if (sServerName != "")
                     {
-                        sServerInfo = sServerInfo + sServerName + "/" + (_masSock.ServerStatus(sServerName)).ToString() + "/";
+                        sServerInfo = sServerInfo + sServerName + "/" + _masSock.ServerStatus(sServerName) + "/";
                     }
                 }
                 result = sServerInfo;
@@ -991,7 +992,7 @@ namespace LoginSvr
             }
         }
 
-        public void AccountUpdateUserInfo(TConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountUpdateUserInfo(TConfig Config, TUserInfo UserInfo, string sData)
         {
             TUserEntry UserEntry = null;
             TUserEntryAdd UserAddEntry = null;
@@ -1506,6 +1507,7 @@ namespace LoginSvr
             Config.sCountLogDir = LoadConfig_LoadConfigString(sSectionDB, sIdentCountLogDir, Config.sCountLogDir);
             Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
+            LoadAddrTable(Config);
         }
     }
 }

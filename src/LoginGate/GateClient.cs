@@ -27,20 +27,18 @@ namespace LoginGate
             GateShare.boGateReady = true;
             GateShare.nSessionCount = 0;
             GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
-            ResUserSessionArray();
+            //ResUserSessionArray();
             GateShare.boServerReady = true;
+            GateShare.MainOutMessage("账号服务器链接成功.", 1);
         }
 
-        public void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             TUserSession UserSession;
             for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
             {
                 UserSession = GateShare.g_SessionArray[nIndex];
-                if (UserSession.Socket != null)
-                {
-                    UserSession.Socket.Close();
-                }
+                UserSession.Socket?.Close();
                 UserSession.Socket = null;
                 UserSession.sRemoteIPaddr = "";
                 UserSession.SocketHandle = -1;
@@ -51,12 +49,12 @@ namespace LoginGate
             GateShare.nSessionCount = 0;
         }
 
-        public void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             GateShare.boServerReady = false;
         }
 
-        public void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var sReviceMsg = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
             GateShare.ClientSockeMsgList.Add(sReviceMsg);

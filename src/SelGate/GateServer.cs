@@ -177,14 +177,14 @@ namespace SelGate
                 var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 if ((sReviceMsg != "") && GateShare.boServerReady)
                 {
-                    int nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+                    int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                     if (nPos > 0)
                     {
                         UserSession.boSendAvailable = true;
                         UserSession.boSendCheck = false;
                         UserSession.nCheckSendLength = 0;
                         string s10 = sReviceMsg.Substring(0, nPos - 1);
-                        string s1C = sReviceMsg.Substring(nPos + 1 - 1, sReviceMsg.Length - nPos);
+                        string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
                         sReviceMsg = s10 + s1C;
                     }
                     int nMsgLen = sReviceMsg.Length;

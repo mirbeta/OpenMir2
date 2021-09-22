@@ -39,11 +39,10 @@ namespace LoginSvr
             _serverSocket.Init();
         }
 
-        private void GSocketClientConnect(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void GSocketClientConnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
-            TConfig Config;
-            Config = LSShare.g_Config;
+            var Config = LSShare.g_Config;
             //if (!ExecTimer.Enabled)
             //{
             //    Socket.Close();
@@ -58,7 +57,7 @@ namespace LoginSvr
             Config.GateList.Add(GateInfo);
         }
 
-        private void GSocketClientDisconnect(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void GSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
@@ -85,12 +84,12 @@ namespace LoginSvr
             }
         }
 
-        private void GSocketClientError(object sender, SystemModule.Sockets.AsyncSocketErrorEventArgs e)
+        private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        private void GSocketClientRead(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void GSocketClientRead(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
             TConfig Config = LSShare.g_Config;

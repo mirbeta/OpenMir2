@@ -37,7 +37,7 @@ namespace LoginGate
             decodeTimer = new Timer(DecodeTimer, null, 0, 1);
         }
 
-        public void ServerSocketClientConnect(object sender, AsyncUserToken e)
+        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             TUserSession UserSession;
             string sLocalIPaddr;
@@ -106,7 +106,7 @@ namespace LoginGate
                         break;
                     }
                 }
-                if (!string.IsNullOrEmpty(e.ConnectionId))
+                if (!string.IsNullOrEmpty(e.ConnectionId) && gateClient.ClientSocket.IsConnected)
                 {
                     gateClient.ClientSocket.SendText("%O" + (int)e.Socket.Handle + "/" + sRemoteIPaddr + "/" + sLocalIPaddr + "$");
                     GateShare.MainOutMessage("Connect: " + sRemoteIPaddr, 5);
@@ -126,6 +126,10 @@ namespace LoginGate
 
         public void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
+            if (!GateShare.socketMap.ContainsKey(e.ConnectionId))
+            {
+                return;
+            }
             TUserSession UserSession;
             TSockaddr IPaddr;
             string sRemoteIPaddr = e.RemoteIPaddr;
@@ -153,7 +157,7 @@ namespace LoginGate
                 UserSession.SocketHandle = -1;
                 UserSession.MsgList.Clear();
                 GateShare.nSessionCount -= 1;
-                if (GateShare.boGateReady)
+                if (GateShare.boGateReady && gateClient.ClientSocket.IsConnected)
                 {
                     gateClient.ClientSocket.SendText("%X" + e.Socket.Handle + "$");
                     GateShare.MainOutMessage("DisConnect: " + sRemoteIPaddr, 5);
@@ -357,7 +361,7 @@ namespace LoginGate
                 if ((HUtil32.GetTickCount() - dwSendKeepAliveTick) > 2 * 1000)
                 {
                     dwSendKeepAliveTick = HUtil32.GetTickCount();
-                    if (GateShare.boGateReady)
+                    if (GateShare.boGateReady && gateClient.ClientSocket.IsConnected)
                     {
                         gateClient.ClientSocket.SendText("%--$");
                     }

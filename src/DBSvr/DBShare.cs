@@ -17,9 +17,9 @@ namespace DBSvr
         public static string sConnectPath = ".\\Connects\\";
         public static string sLogPath = ".\\Log\\";
         public static int nServerPort = 6000;
-        public static string sServerAddr = "0.0.0.0";
+        public static string sServerAddr = "10.10.0.168";
         public static int g_nGatePort = 5100;
-        public static string g_sGateAddr = "0.0.0.0";
+        public static string g_sGateAddr = "10.10.0.168";
         public static int nIDServerPort = 5600;
         public static string sIDServerAddr = "10.10.0.168";
         public static bool g_boEnglishNames = false;

@@ -24,12 +24,12 @@ namespace SelGate
             ClientSocket.Connect();
         }
 
-        public void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateShare.boGateReady = true;
             GateShare.nSessionCount = 0;
             GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
-            ResUserSessionArray();
+            //ResUserSessionArray();
             GateShare.boServerReady = true;
         }
 

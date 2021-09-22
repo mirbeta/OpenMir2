@@ -56,12 +56,10 @@ namespace LoginGate
         public static int nIPCountLimit2 = 40;
         public static int nShowLogLevel = 3;
         public static string GateClass = "LoginGate";
-        public static string GateName = "登录网关";
-        public static string TitleName = "SKY引擎";
         public static int ServerPort = 5500;
-        public static string ServerAddr = "127.0.0.1";
+        public static string ServerAddr = "10.10.0.168";
         public static int GatePort = 7000;
-        public static string GateAddr = "0.0.0.0";
+        public static string GateAddr = "10.10.0.168";
         public static bool boGateReady = false;
         public static bool boShowMessage = false;
         public static bool boStarted = false;
@@ -77,7 +75,7 @@ namespace LoginGate
         public static TBlockIPMethod BlockMethod = TBlockIPMethod.mDisconnect;
         public static long dwKeepConnectTimeOut = 60 * 1000;
         /// <summary>
-        /// 用于动态IP，分机放置登录网关用，打开此模式后，网关将会把连接登录服务器的IP地址，当为服务器IP，发给登录服务器，客户端将直接使用此IP连接角色网关
+        /// ??????IP???????????????????????????????????????????????IP??????????????IP??????????????????????????????IP??????????
         /// </summary>
         public static bool g_boDynamicIPDisMode = false;
         public static int GATEMAXSESSION = 10000;

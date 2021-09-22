@@ -96,7 +96,6 @@ namespace SelGate
             string sConfigFileName;
             sConfigFileName = ".\\Config.ini";
             Conf = new IniFile(sConfigFileName);
-            GateShare.TitleName = Conf.ReadString(GateShare.GateClass, "Title", GateShare.TitleName);
             GateShare.ServerPort = Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
             GateShare.ServerAddr = Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
             GateShare.GatePort = Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);

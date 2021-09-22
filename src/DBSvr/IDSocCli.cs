@@ -26,18 +26,15 @@ namespace DBSvr
             _socket.OnConnected += IDSocketConnected;
             _socket.OnDisconnected += IDSocketDisconnected;
             IniFile Conf = new IniFile(DBShare.sConfFileName);
-            if (Conf != null)
-            {
-                sIDAddr = Conf.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
-                nIDPort = Conf.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
-                Conf = null;
-            }
+            sIDAddr = Conf.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
+            nIDPort = Conf.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
+            Conf = null;
             GlobaSessionList = new List<TGlobaSessionInfo>();
         }
 
         private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage("登录服务器链接成功.");
+            DBShare.OutMainMessage("登陆服务器链接成功.");
         }
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
@@ -341,13 +338,5 @@ namespace DBSvr
                 _socket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + DBShare.sServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
-    }
-}
-
-namespace DBSvr
-{
-    public class IDSocCli
-    {
-        public static TFrmIDSoc FrmIDSoc = null;
     }
 }

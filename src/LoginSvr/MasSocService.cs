@@ -33,7 +33,7 @@ namespace LoginSvr
             LoadUserLimit();
         }
 
-        private void MSocketClientConnect(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void MSocketClientConnect(object sender, AsyncUserToken e)
         {
             string sRemoteAddr = e.RemoteIPaddr;
             bool boAllowed = false;
@@ -60,7 +60,7 @@ namespace LoginSvr
             }
         }
 
-        private void MSocketClientDisconnect(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void MSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TMsgServerInfo MsgServer;
             for (var i = 0; i < m_ServerList.Count; i++)
@@ -75,12 +75,12 @@ namespace LoginSvr
             }
         }
 
-        private void MSocketClientError(object sender, SystemModule.Sockets.AsyncSocketErrorEventArgs e)
+        private void MSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        private void MSocketClientRead(object sender, SystemModule.Sockets.AsyncUserToken e)
+        private void MSocketClientRead(object sender, AsyncUserToken e)
         {
             TMsgServerInfo MsgServer;
             string sReviceMsg = string.Empty;
