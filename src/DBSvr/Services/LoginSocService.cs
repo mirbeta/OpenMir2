@@ -32,13 +32,13 @@ namespace DBSvr
 
         private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage("账号登陆服务器链接成功.");
+            DBShare.OutMainMessage($"账号登陆服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.");
         }
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _socket.IsBusy = false;
-            DBShare.OutMainMessage("与链接账号登录服务器断开链接.");
+            DBShare.OutMainMessage($"与链接账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
         }
 
         public void Start()

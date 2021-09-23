@@ -110,6 +110,7 @@ namespace GameGate
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.TryAdd(e.RemoteAddress, this);
+            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -130,6 +131,7 @@ namespace GameGate
             GateShare.List_45AA58.Clear();
             GateShare.boGateReady = false;
             GateShare.ServerGateList.TryRemove(e.RemoteAddress, out var userClientService);
+            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             //GateShare.boServerReady = false;
         }
 

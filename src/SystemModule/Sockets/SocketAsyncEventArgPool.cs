@@ -5,28 +5,28 @@ using System.Net.Sockets;
 namespace SystemModule.Sockets
 {
     /// <summary>
-    /// ³ÊÏÖÒ»¸ö¿ÉÖØÓÃµÄSocketAsyncEventArgs¶ÔÏó¼¯ºÏ.
+    /// å‘ˆç°ä¸€ä¸ªå¯é‡ç”¨çš„SocketAsyncEventArgså¯¹è±¡é›†åˆ.
     /// </summary>
     internal class SocketAsyncEventArgsPool
     {
         private readonly Stack<SocketAsyncEventArgs> m_pool;
 
         /// <summary>
-        /// ÓÃÖ¸¶¨µÄ´óĞ¡³õÊ¼»¯¶ÔÏó³Ø
+        /// ç”¨æŒ‡å®šçš„å¤§å°åˆå§‹åŒ–å¯¹è±¡æ± 
         /// </summary>
-        /// <param name="capacity">¶ÔÏó³Ø¿ÉÒÔ¹ÜÀíµÄ×î´óSocketAsyncEventArgs¶ÔÏóÊıÁ¿</param>
+        /// <param name="capacity">å¯¹è±¡æ± å¯ä»¥ç®¡ç†çš„æœ€å¤§SocketAsyncEventArgså¯¹è±¡æ•°é‡</param>
         public SocketAsyncEventArgsPool(int capacity)
         {
             m_pool = new Stack<SocketAsyncEventArgs>(capacity);
         }
 
         /// <summary>
-        /// Ìí¼ÓÒ»¸öSocketAsyncEventArgs¶ÔÏóÊµÀıµ½³ØÀï
+        /// æ·»åŠ ä¸€ä¸ªSocketAsyncEventArgså¯¹è±¡å®ä¾‹åˆ°æ± é‡Œ
         /// </summary>
-        /// <param name="item">ÒªÌí¼Óµ½³ØÀïµÄSocketAsyncEventArgs¶ÔÏóÊµÀı</param>
+        /// <param name="item">è¦æ·»åŠ åˆ°æ± é‡Œçš„SocketAsyncEventArgså¯¹è±¡å®ä¾‹</param>
         public void Push(SocketAsyncEventArgs item)
         {
-            if (item == null) { throw new ArgumentNullException("Òª±»Ìí¼Óµ½SocketAsyncEventArgs³ØµÄÏîÄ¿²»ÄÜÎª¿Õ(null)"); }
+            if (item == null) { throw new ArgumentNullException("è¦è¢«æ·»åŠ åˆ°SocketAsyncEventArgsæ± çš„é¡¹ç›®ä¸èƒ½ä¸ºç©º(null)"); }
             lock (m_pool)
             {
                 m_pool.Push(item);
@@ -34,9 +34,9 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
-        /// ´Ó³ØÀïÉ¾³ıÒ»¸öSocketAsyncEventArgs¶ÔÏóÊµÀı
+        /// ä»æ± é‡Œåˆ é™¤ä¸€ä¸ªSocketAsyncEventArgså¯¹è±¡å®ä¾‹
         /// </summary>
-        /// <returns>Òª±»´Ó³ØÀïÉ¾³ıµÄ¶ÔÏó</returns>
+        /// <returns>è¦è¢«ä»æ± é‡Œåˆ é™¤çš„å¯¹è±¡</returns>
         public SocketAsyncEventArgs Pop()
         {
             lock (m_pool)
@@ -46,7 +46,7 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
-        /// ³ØÖĞSocketAsyncEventArgs¶ÔÏóÊµÀıµÄÊıÁ¿
+        /// æ± ä¸­SocketAsyncEventArgså¯¹è±¡å®ä¾‹çš„æ•°é‡
         /// </summary>
         public int Count
         {

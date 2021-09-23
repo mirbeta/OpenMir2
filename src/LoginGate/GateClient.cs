@@ -40,7 +40,7 @@ namespace LoginGate
             GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
             //ResUserSessionArray();
             GateShare.boServerReady = true;
-            GateShare.MainOutMessage("账号登陆服务器链接成功.", 1);
+            GateShare.MainOutMessage($"账号登陆服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -58,7 +58,7 @@ namespace LoginGate
             //ClientSockeMsgList.Clear();
             GateShare.boGateReady = false;
             GateShare.nSessionCount = 0;
-            GateShare.MainOutMessage("与账号登陆服务器断开链接.", 1);
+            GateShare.MainOutMessage($"账号登陆服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)

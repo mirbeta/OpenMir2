@@ -33,7 +33,7 @@ namespace DBSvr
         public void Start()
         {
             serverSocket.Start(DBShare.sServerAddr, DBShare.nServerPort);
-            DBShare.MainOutMessage("数据库服务器启动.");
+            DBShare.OutMainMessage($"数据库角色服务[{DBShare.sServerAddr}:{DBShare.nServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)

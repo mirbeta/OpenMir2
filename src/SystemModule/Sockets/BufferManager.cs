@@ -4,23 +4,23 @@ using System.Net.Sockets;
 namespace SystemModule.Sockets
 {
     /// <summary>
-    /// Õâ¸öÀà´´½¨Ò»¸ö¿ÉÒÔ±»»®·ÖºÍ·ÖÅä¸øSocketAsyncEventArgs¶ÔÏóÃ¿´Î²Ù×÷¿ÉÒÔÊ¹ÓÃµÄµ¥¶ÀµÄ´òµÄ»º³åÇø
-    /// Õâ¿ÉÒÔÊ¹»º³åÇøºÜÈİÒ×µØ±»ÖØ¸´Ê¹ÓÃ²¢ÇÒ·ÀÖ¹ÔÚÄÚ´ÓÖĞ¶Ñ»ıËéÆ¬¡£
-    /// BufferManager Àà±©Â¶µÄ²Ù×÷²»ÊÇÏß³Ì°²È«µÄ(ĞèÒª×öÏß³Ì°²È«´¦Àí)
+    /// è¿™ä¸ªç±»åˆ›å»ºä¸€ä¸ªå¯ä»¥è¢«åˆ’åˆ†å’Œåˆ†é…ç»™SocketAsyncEventArgså¯¹è±¡æ¯æ¬¡æ“ä½œå¯ä»¥ä½¿ç”¨çš„å•ç‹¬çš„æ‰“çš„ç¼“å†²åŒº
+    /// è¿™å¯ä»¥ä½¿ç¼“å†²åŒºå¾ˆå®¹æ˜“åœ°è¢«é‡å¤ä½¿ç”¨å¹¶ä¸”é˜²æ­¢åœ¨å†…ä»ä¸­å †ç§¯ç¢ç‰‡ã€‚
+    /// BufferManager ç±»æš´éœ²çš„æ“ä½œä¸æ˜¯çº¿ç¨‹å®‰å…¨çš„(éœ€è¦åšçº¿ç¨‹å®‰å…¨å¤„ç†)
     /// </summary>
     internal class BufferManager
     {
-        private readonly int m_numBytes;                 // ±»»º³åÇø³Ø¹ÜÀíµÄ×Ö½Ú×ÜÊı
-        private byte[] m_buffer;                // ±»BufferManagerÎ¬³ÖµÄ»ù´¡×Ö½ÚÊı×é
-        private readonly Stack<int> m_freeIndexPool;     // ÊÍ·ÅµÄË÷Òı³Ø
-        private int m_currentIndex;             //µ±Ç°Ë÷Òı
-        private readonly int m_bufferSize;               //»º³åÇø´óĞ¡
+        private readonly int m_numBytes;                 // è¢«ç¼“å†²åŒºæ± ç®¡ç†çš„å­—èŠ‚æ€»æ•°
+        private byte[] m_buffer;                // è¢«BufferManagerç»´æŒçš„åŸºç¡€å­—èŠ‚æ•°ç»„
+        private readonly Stack<int> m_freeIndexPool;     // é‡Šæ”¾çš„ç´¢å¼•æ± 
+        private int m_currentIndex;             //å½“å‰ç´¢å¼•
+        private readonly int m_bufferSize;               //ç¼“å†²åŒºå¤§å°
 
         /// <summary>
-        /// ³õÊ¼»¯»º³åÇø¹ÜÀí¶ÔÏó
+        /// åˆå§‹åŒ–ç¼“å†²åŒºç®¡ç†å¯¹è±¡
         /// </summary>
-        /// <param name="totalBytes">»º³åÇø¹ÜÀí¶ÔÏó¹ÜÀíµÄ×Ö½Ú×ÜÊı</param>
-        /// <param name="bufferSize">Ã¿¸ö»º³åÇø´óĞ¡</param>
+        /// <param name="totalBytes">ç¼“å†²åŒºç®¡ç†å¯¹è±¡ç®¡ç†çš„å­—èŠ‚æ€»æ•°</param>
+        /// <param name="bufferSize">æ¯ä¸ªç¼“å†²åŒºå¤§å°</param>
         public BufferManager(int totalBytes, int bufferSize)
         {
             m_numBytes = totalBytes;
@@ -30,18 +30,18 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
-        /// ·ÖÅä±»»º³åÇø³ØÊ¹ÓÃµÄ»º³åÇø¿Õ¼ä
+        /// åˆ†é…è¢«ç¼“å†²åŒºæ± ä½¿ç”¨çš„ç¼“å†²åŒºç©ºé—´
         /// </summary>
         public void InitBuffer()
         {
-            // ´´½¨Ò»¸ö´óµÄ´ó»º³åÇø²¢ÇÒ»®·Ö¸øÃ¿Ò»¸öSocketAsyncEventArgs¶ÔÏó
+            // åˆ›å»ºä¸€ä¸ªå¤§çš„å¤§ç¼“å†²åŒºå¹¶ä¸”åˆ’åˆ†ç»™æ¯ä¸€ä¸ªSocketAsyncEventArgså¯¹è±¡
             m_buffer = new byte[m_numBytes];
         }
 
         /// <summary>
-        /// ´Ó»º³åÇø³ØÖĞ·ÖÅäÒ»¸ö»º³åÇø¸øÖ¸¶¨µÄSocketAsyncEventArgs¶ÔÏó
+        /// ä»ç¼“å†²åŒºæ± ä¸­åˆ†é…ä¸€ä¸ªç¼“å†²åŒºç»™æŒ‡å®šçš„SocketAsyncEventArgså¯¹è±¡
         /// </summary>
-        /// <returns>Èç¹û»º³åÇø±»³É¹¦ÉèÖÃ·µ»ØÕæ·ñÔò·µ»Ø¼Ù</returns>
+        /// <returns>å¦‚æœç¼“å†²åŒºè¢«æˆåŠŸè®¾ç½®è¿”å›çœŸå¦åˆ™è¿”å›å‡</returns>
         public bool SetBuffer(SocketAsyncEventArgs args)
         {
             if (m_freeIndexPool.Count > 0)
@@ -61,7 +61,7 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
-        /// ´ÓÒ»¸öSocketAsyncEventArgs¶ÔÏóÉÏÉ¾³ı»º³åÇø£¬Õâ½«°Ñ»º³åÇøÊÍ·Å»Ø»º³åÇø³Ø
+        /// ä»ä¸€ä¸ªSocketAsyncEventArgså¯¹è±¡ä¸Šåˆ é™¤ç¼“å†²åŒºï¼Œè¿™å°†æŠŠç¼“å†²åŒºé‡Šæ”¾å›ç¼“å†²åŒºæ± 
         /// </summary>
         public void FreeBuffer(SocketAsyncEventArgs args)
         {

@@ -232,7 +232,7 @@ namespace SystemModule.Sockets
         {
             if (null != this.OnError)
             {
-                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(error));
+                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Address, Port, error));
             }
         }
 

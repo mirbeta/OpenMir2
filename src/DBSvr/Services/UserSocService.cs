@@ -40,7 +40,7 @@ namespace DBSvr
         public void Start()
         {
             UserSocket.Start(DBShare.g_sGateAddr, DBShare.g_nGatePort);
-            DBShare.OutMainMessage("角色网关监听.");
+            DBShare.OutMainMessage($"数据库服务[{DBShare.g_sGateAddr}:{DBShare.g_nGatePort}]已启动.等待链接...");
         }
 
         public void Stop()

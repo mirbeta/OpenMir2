@@ -55,10 +55,9 @@ namespace DBSvr
             _LoginSoc.SendKeepAlivePacket(userCount);
             _LoginSoc.CheckConnection();
             _dataService.ClearTimeoutSession();
-            ServerState(userCount);
+            //ServerState(userCount);
         }
-
-
+        
         private void ServerState(int userCount)
         {
             var sb = new StringBuilder();

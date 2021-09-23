@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -176,7 +177,6 @@ namespace LoginSvr
         {
             string sServerName;
             TMsgServerInfo MsgServer;
-            int TickTime;
             IList<TMsgServerInfo> ServerList = _massocService.m_ServerList;
             if (!ServerList.Any())
             {
@@ -199,8 +199,8 @@ namespace LoginSvr
                         msgStr.Append($" ServerIndex:[{MsgServer.nServerIndex}] ");
                     }
                     msgStr.Append($"OnLineCount:[{MsgServer.nOnlineCount}] SelectId:[{MsgServer.nSelectID}] ");
-                    TickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
-                    if (TickTime < 30000)
+                    var tickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
+                    if (tickTime < 30000)
                     {
                         msgStr.Append("Status:[正常]");
                     }
@@ -208,13 +208,19 @@ namespace LoginSvr
                     {
                         msgStr.Append("Status:[超时]");
                     }
-                    if (TickTime > 60000)
+                    if (tickTime <= 60000) continue;
+                    MsgServer.Socket.Close();
+                    if (string.IsNullOrEmpty(sServerName))
                     {
-                        MsgServer.Socket.Close();
+                        LSShare.MainOutMessage($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                    }
+                    else
+                    {
+                        LSShare.MainOutMessage($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                     }
                 }
             }
-            LSShare.MainOutMessage(msgStr.ToString());
+            Debug.WriteLine(msgStr.ToString());
         }
     }
 }

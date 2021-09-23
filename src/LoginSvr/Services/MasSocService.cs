@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using Org.BouncyCastle.Crypto.Parameters;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
@@ -28,6 +29,7 @@ namespace LoginSvr
         {
             TConfig Config = LSShare.g_Config;
             serverSocket.Start(Config.sServerAddr, Config.nServerPort);
+            LSShare.MainOutMessage($"账号登陆服务器[{Config.sServerAddr}:{Config.nServerPort}]已启动.等待链接...");
             LoadServerAddr();
             LoadUserLimit();
         }
@@ -51,6 +53,7 @@ namespace LoginSvr
                 MsgServer.sReceiveMsg = "";
                 MsgServer.Socket = e.Socket;
                 m_ServerList.Add(MsgServer);
+                LSShare.MainOutMessage($"服务器[{e.RemoteIPaddr}:{e.RemotePort}]链接成功.");
             }
             else
             {
@@ -67,6 +70,14 @@ namespace LoginSvr
                 MsgServer = m_ServerList[i];
                 if (MsgServer.Socket == e.Socket)
                 {
+                    if (MsgServer.nServerIndex == 99)
+                    {
+                        LSShare.MainOutMessage($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                    }
+                    else
+                    {
+                        LSShare.MainOutMessage($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                    }
                     MsgServer = null;
                     m_ServerList.RemoveAt(i);
                     break;
@@ -144,7 +155,7 @@ namespace LoginSvr
             }
         }
 
-        public void CloseUser(TConfig Config, string sAccount, int nSessionID)
+        private void CloseUser(TConfig Config, string sAccount, int nSessionID)
         {
             TConnInfo ConnInfo;
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)

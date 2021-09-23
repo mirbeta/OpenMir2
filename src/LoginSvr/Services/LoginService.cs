@@ -106,9 +106,7 @@ namespace LoginSvr
             }
             return result;
         }
-
-
-
+        
         public void ProcessGate(TConfig Config)
         {
             int I;

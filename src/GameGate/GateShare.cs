@@ -374,11 +374,8 @@ namespace GameGate
             try
             {
                 HUtil32.EnterCriticalSection(CS_MainLog);
-                if (nLevel <= nShowLogLevel)
-                {
-                    tMsg = "[" + DateTime.Now + "] " + Msg;
-                    MainLogMsgList.Add(tMsg);
-                }
+                tMsg = "[" + DateTime.Now + "] " + Msg;
+                MainLogMsgList.Add(tMsg);
             }
             finally
             {

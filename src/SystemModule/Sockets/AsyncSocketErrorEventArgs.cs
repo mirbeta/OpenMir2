@@ -3,14 +3,14 @@ using System;
 namespace SystemModule.Sockets
 {
     /// <summary>
-    /// Òì²½Socket´íÎóÊÂ¼ş²ÎÊıÀà
+    /// å¼‚æ­¥Socketé”™è¯¯äº‹ä»¶å‚æ•°ç±»
     /// </summary>
     public class AsyncSocketErrorEventArgs : EventArgs
     {
         private AsyncSocketException _exception;
 
         /// <summary>
-        /// Ê¹ÓÃSocketException²ÎÊı½øĞĞ¹¹Ôì
+        /// ä½¿ç”¨SocketExceptionå‚æ•°è¿›è¡Œæ„é€ 
         /// </summary>
         /// <param name="exception"></param>
         public AsyncSocketErrorEventArgs(AsyncSocketException exception)
