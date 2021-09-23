@@ -1,3 +1,4 @@
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -10,47 +11,62 @@ namespace DBSvr
         private readonly ILogger<AppService> _logger;
         private readonly ServerApp _serverApp;
         private readonly UserSocService _userSoc;
-        private readonly LoginSocService _idSoc;
+        private readonly LoginSocService _LoginSoc;
         private readonly HumDataService _dataService;
-        private Timer keepAliveTimer;
+        private Timer _threadTimer;
 
         public AppService(ILogger<AppService> logger, ServerApp serverApp, UserSocService userSoc, LoginSocService idSoc, HumDataService dataService)
         {
             _logger = logger;
             _serverApp = serverApp;
             _userSoc = userSoc;
-            _idSoc = idSoc;
+            _LoginSoc = idSoc;
             _dataService = dataService;
-            keepAliveTimer = new Timer(KeepAliveTimer, null, 1000, 5000);
+            _threadTimer = new Timer(ThreadServerTimer, null, 1000, 5000);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"GameGate is stopping."));
+            stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
             _serverApp.Start();
             _userSoc.Start();
-            _idSoc.Start();
+            _LoginSoc.Start();
             _dataService.Start();
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is starting.");
+            _logger.LogDebug($"DBSvr is starting.");
             _serverApp.StartService();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is stopping.");
+            _logger.LogDebug($"DBSvr is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }
 
-        private void KeepAliveTimer(object obj)
+        private void ThreadServerTimer(object obj)
         {
-            _idSoc.SendKeepAlivePacket(_userSoc.GetUserCount());
+            var userCount = _userSoc.GetUserCount();
+            _LoginSoc.SendKeepAlivePacket(userCount);
+            _LoginSoc.CheckConnection();
+            _dataService.ClearTimeoutSession();
+            ServerState(userCount);
+        }
+
+
+        private void ServerState(int userCount)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"UserCount:{userCount}");
+            sb.AppendLine(DBShare.g_nClearIndex + "/(" + DBShare.g_nClearCount + "/" + DBShare.g_nClearItemIndexCount + ")/" + DBShare.g_nClearRecordCount);
+            sb.AppendLine($"H-QyChr:{DBShare.g_nQueryChrCount} H-NwChr:{DBShare.nHackerNewChrCount} H-DlChr:{DBShare.nHackerDelChrCount} Dubb -Sl:{DBShare.nHackerSelChrCount}");
+            sb.AppendLine($"H-Er-P1:{DBShare.n4ADC1C} Dubl-P2:{DBShare.n4ADC20} Dubl-P3:{DBShare.n4ADC24} Dubl-P4:{DBShare.n4ADC28}");
+            DBShare.OutMainMessage(sb.ToString());
         }
     }
 }

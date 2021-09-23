@@ -10,11 +10,6 @@ namespace DBSvr
 {
     public class DBShare
     {
-        public static string sHumDBFilePath = ".\\FDB\\";
-        public static string sDataDBFilePath = ".\\FDB\\";
-        public static string sFeedPath = ".\\FDB\\";
-        public static string sBackupPath = ".\\FDB\\";
-        public static string sConnectPath = ".\\Connects\\";
         public static string sLogPath = ".\\Log\\";
         public static int nServerPort = 6000;
         public static string sServerAddr = "10.10.0.168";
@@ -23,7 +18,6 @@ namespace DBSvr
         public static int nIDServerPort = 5600;
         public static string sIDServerAddr = "10.10.0.168";
         public static bool g_boEnglishNames = false;
-        public static bool boViewHackMsg = false;
         public static int g_nQueryChrCount = 0;
         public static int nHackerNewChrCount = 0;
         public static int nHackerDelChrCount = 0;
@@ -38,11 +32,11 @@ namespace DBSvr
         public static string sGateConfFileName = "!ServerInfo.txt";
         public static string sServerIPConfFileNmae = "!AddrTable.txt";
         public static string sGateIDConfFileName = "SelectID.txt";
-        public static string sMapFile = String.Empty;
+        public static string sMapFile = string.Empty;
         public static StringList DenyChrNameList = null;
         public static Hashtable ServerIPList = null;
         public static Dictionary<string, short> GateIDList = null;
-        public static long dwInterval = 3000;
+        public static int dwInterval = 3000;
         public static int nLevel1 = 1;
         public static int nLevel2 = 7;
         public static int nLevel3 = 14;
@@ -121,6 +115,7 @@ namespace DBSvr
                     }
                     ServerIPList.Add(stringList[i], stringList[i]);
                 }
+                stringList = null;
             }
             catch
             {
@@ -134,11 +129,6 @@ namespace DBSvr
             IniFile Conf = new IniFile(sConfFileName);
             if (Conf != null)
             {
-                sDataDBFilePath = Conf.ReadString("DB", "Dir", sDataDBFilePath);
-                sHumDBFilePath = Conf.ReadString("DB", "HumDir", sHumDBFilePath);
-                sFeedPath = Conf.ReadString("DB", "FeeDir", sFeedPath);
-                sBackupPath = Conf.ReadString("DB", "Backup", sBackupPath);
-                sConnectPath = Conf.ReadString("DB", "ConnectDir", sConnectPath);
                 sLogPath = Conf.ReadString("DB", "LogDir", sLogPath);
                 nServerPort = Conf.ReadInteger("Setup", "ServerPort", nServerPort);
                 sServerAddr = Conf.ReadString("Setup", "ServerAddr", sServerAddr);
@@ -146,11 +136,10 @@ namespace DBSvr
                 g_sGateAddr = Conf.ReadString("Setup", "GateAddr", g_sGateAddr);
                 sIDServerAddr = Conf.ReadString("Server", "IDSAddr", sIDServerAddr);
                 nIDServerPort = Conf.ReadInteger("Server", "IDSPort", nIDServerPort);
-                boViewHackMsg = Conf.ReadBool("Setup", "ViewHackMsg", boViewHackMsg);
                 sServerName = Conf.ReadString("Setup", "ServerName", sServerName);
                 boDenyChrName = Conf.ReadBool("Setup", "DenyChrName", boDenyChrName);
                 nDELMaxLevel = Conf.ReadInteger("Setup", "DELMaxLevel", nDELMaxLevel);
-                dwInterval = Conf.ReadInteger<long>("DBClear", "Interval", dwInterval);
+                dwInterval = Conf.ReadInteger<int>("DBClear", "Interval", dwInterval);
                 nLevel1 = Conf.ReadInteger("DBClear", "Level1", nLevel1);
                 nLevel2 = Conf.ReadInteger("DBClear", "Level2", nLevel2);
                 nLevel3 = Conf.ReadInteger("DBClear", "Level3", nLevel3);
@@ -266,15 +255,6 @@ namespace DBSvr
             GateIDList = new Dictionary<string, short>();
             //g_ClearMakeIndex = new object();
         }
-
-        public void finalization()
-        {
-            //DenyChrNameList.Free;
-            //ServerIPList.Free;
-            //GateIDList.Free;
-            //g_ClearMakeIndex.Free;
-        }
-
     }
 
     public class TServerInfo

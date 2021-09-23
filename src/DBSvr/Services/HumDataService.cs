@@ -15,11 +15,11 @@ namespace DBSvr
         private string s34C;
         private readonly MySqlHumDB HumDB;
         private readonly ISocketServer serverSocket;
-        private readonly LoginSocService _frmIdSoc;
+        private readonly LoginSocService _LoginSoc;
 
         public HumDataService(LoginSocService frmIdSoc)
         {
-            _frmIdSoc = frmIdSoc;
+            _LoginSoc = frmIdSoc;
             ServerList = new List<TServerInfo>();
             HumSessionList = new List<THumSession>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -33,6 +33,7 @@ namespace DBSvr
         public void Start()
         {
             serverSocket.Start(DBShare.sServerAddr, DBShare.nServerPort);
+            DBShare.MainOutMessage("数据库服务器启动.");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -126,7 +127,6 @@ namespace DBSvr
             int n18;
             int wE;
             int w10;
-            TDefaultMessage DefMsg;
             if (DBShare.boOpenDBBusy)
             {
                 return;
@@ -195,6 +195,86 @@ namespace DBSvr
             Socket.SendText("#" + s34C + "/" + sMsg + s18 + "!");
         }
 
+        /// <summary>
+        /// 清理超时会话
+        /// </summary>
+        public void ClearTimeoutSession()
+        {
+            THumSession HumSession;
+            int i = 0;
+            while (true)
+            {
+                if (HumSessionList.Count <= i)
+                {
+                    break;
+                }
+                HumSession = HumSessionList[i];
+                if (!HumSession.bo24)
+                {
+                    if (HumSession.bo2C)
+                    {
+                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 20 * 1000)
+                        {
+                            HumSession = null;
+                            HumSessionList.RemoveAt(i);
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 2 * 60 * 1000)
+                        {
+                            HumSession = null;
+                            HumSessionList.RemoveAt(i);
+                            continue;
+                        }
+                    }
+                }
+                if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 40 * 60 * 1000)
+                {
+                    HumSession = null;
+                    HumSessionList.RemoveAt(i);
+                    continue;
+                }
+                i++;
+            }
+        }
+
+        public bool CopyHumData(string sSrcChrName, string sDestChrName, string sUserID)
+        {
+            THumDataInfo HumanRCD = null;
+            bool result = false;
+            bool bo15 = false;
+            try
+            {
+                if (HumDB.Open())
+                {
+                    int n14 = HumDB.Index(sSrcChrName);
+                    if ((n14 >= 0) && (HumDB.Get(n14, ref HumanRCD) >= 0))
+                    {
+                        bo15 = true;
+                    }
+                    if (bo15)
+                    {
+                        n14 = HumDB.Index(sDestChrName);
+                        if ((n14 >= 0))
+                        {
+                            HumanRCD.Header.sName = sDestChrName;
+                            HumanRCD.Data.sChrName = sDestChrName;
+                            HumanRCD.Data.sAccount = sUserID;
+                            HumDB.Update(n14, ref HumanRCD);
+                            result = true;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                HumDB.Close();
+            }
+            return result;
+        }
+
         private void ProcessServerMsg(string sMsg, int nLen, Socket Socket)
         {
             string sDefMsg;
@@ -207,8 +287,8 @@ namespace DBSvr
             }
             else
             {
-                sDefMsg = sMsg.Substring(1 - 1, Grobal2.DEFBLOCKSIZE);
-                sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE + 1 - 1, sMsg.Length - Grobal2.DEFBLOCKSIZE - 6);
+                sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
+                sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE - 6);
             }
             DefMsg = EDcode.DecodeMessage(sDefMsg);
             switch (DefMsg.Ident)
@@ -242,7 +322,7 @@ namespace DBSvr
             int nCheckCode = -1;
             if ((sAccount != "") && (sHumName != ""))
             {
-                nCheckCode = _frmIdSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
+                nCheckCode = _LoginSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
                     DBShare.OutMainMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + (nSessionID).ToString());
@@ -280,7 +360,6 @@ namespace DBSvr
             if ((nCheckCode == 1) || boFoundSession)
             {
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                //string str = EDcode.EncodeBuffer(HumanRCD);
                 SendSocket(Socket, EDcode.EncodeMessage(m_DefMsg) + EDcode.EncodeString(sHumName) + "/" + EDcode.EncodeBuffer(HumanRCD));
             }
             else
@@ -335,7 +414,7 @@ namespace DBSvr
                 {
                     HumDB.Close();
                 }
-                _frmIdSoc.SetSessionSaveRcd(sUserID);
+                _LoginSoc.SetSessionSaveRcd(sUserID);
             }
             if (!bo21)
             {
@@ -362,7 +441,6 @@ namespace DBSvr
         {
             string sChrName = string.Empty;
             string sUserID = string.Empty;
-            bool bo21;
             string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new string[] { "/" });
             sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new string[] { "/" });
             sUserID = EDcode.DeCodeString(sUserID);
@@ -380,48 +458,6 @@ namespace DBSvr
                 }
             }
             SaveHumanRcd(nRecog, sMsg, Socket);
-        }
-
-        public void Timer2Timer(System.Object Sender, System.EventArgs _e1)
-        {
-            THumSession HumSession;
-            int i = 0;
-            while (true)
-            {
-                if (HumSessionList.Count <= i)
-                {
-                    break;
-                }
-                HumSession = HumSessionList[i];
-                if (!HumSession.bo24)
-                {
-                    if (HumSession.bo2C)
-                    {
-                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 20 * 1000)
-                        {
-                            HumSession = null;
-                            HumSessionList.RemoveAt(i);
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 2 * 60 * 1000)
-                        {
-                            HumSession = null;
-                            HumSessionList.RemoveAt(i);
-                            continue;
-                        }
-                    }
-                }
-                if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 40 * 60 * 1000)
-                {
-                    HumSession = null;
-                    HumSessionList.RemoveAt(i);
-                    continue;
-                }
-                i++;
-            }
         }
 
         private void ClearSocket(Socket Socket)
@@ -444,41 +480,5 @@ namespace DBSvr
                 nIndex++;
             }
         }
-
-        public bool CopyHumData(string sSrcChrName, string sDestChrName, string sUserID)
-        {
-            THumDataInfo HumanRCD = null;
-            bool result = false;
-            bool bo15 = false;
-            try
-            {
-                if (HumDB.Open())
-                {
-                    int n14 = HumDB.Index(sSrcChrName);
-                    if ((n14 >= 0) && (HumDB.Get(n14, ref HumanRCD) >= 0))
-                    {
-                        bo15 = true;
-                    }
-                    if (bo15)
-                    {
-                        n14 = HumDB.Index(sDestChrName);
-                        if ((n14 >= 0))
-                        {
-                            HumanRCD.Header.sName = sDestChrName;
-                            HumanRCD.Data.sChrName = sDestChrName;
-                            HumanRCD.Data.sAccount = sUserID;
-                            HumDB.Update(n14, ref HumanRCD);
-                            result = true;
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                HumDB.Close();
-            }
-            return result;
-        }
-
     }
 }

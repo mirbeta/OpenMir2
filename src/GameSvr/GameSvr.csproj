@@ -22,6 +22,7 @@
     </PropertyGroup>
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' " />
     <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.26" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.114.3" />
   </ItemGroup>

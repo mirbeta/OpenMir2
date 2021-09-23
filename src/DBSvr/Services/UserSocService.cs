@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -18,15 +17,13 @@ namespace DBSvr
         private readonly MySqlHumDB HumDB;
         private readonly MySqlHumRecordDB HumChrDB;
         private readonly ISocketServer UserSocket;
-        private Timer userSocTimer;
-        private readonly LoginSocService _frmIdSoc;
+        private readonly LoginSocService _LoginSoc;
 
-        public UserSocService(LoginSocService frmIdSoc, MySqlHumRecordDB humChrDb, MySqlHumDB humDb)
+        public UserSocService(LoginSocService loginSoc, MySqlHumRecordDB humChrDb, MySqlHumDB humDb)
         {
-            _frmIdSoc = frmIdSoc;
+            _LoginSoc = loginSoc;
             HumChrDB = humChrDb;
             HumDB = humDb;
-            //CS_GateSession = new TCriticalSection();
             GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             UserSocket = new ISocketServer(ushort.MaxValue,1024);
@@ -44,7 +41,6 @@ namespace DBSvr
         {
             UserSocket.Start(DBShare.g_sGateAddr, DBShare.g_nGatePort);
             DBShare.OutMainMessage("角色网关监听.");
-            userSocTimer = new Timer(Timer1Timer, null, 1000, 10000);
         }
 
         public void Stop()
@@ -56,12 +52,12 @@ namespace DBSvr
                 GateInfo = GateList[i];
                 if (GateInfo != null)
                 {
-                    //for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
-                    //{
-                    //    UserInfo = GateInfo.UserList[ii];
-                    //    this.Dispose(UserInfo);
-                    //}
-                    //GateInfo.UserList.Free;
+                    for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
+                    {
+                        UserInfo = GateInfo.UserList[ii];
+                        UserInfo = null;
+                    }
+                    GateInfo.UserList = null;
                 }
                 GateList.RemoveAt(i);
                 break;
@@ -144,7 +140,7 @@ namespace DBSvr
                     GateInfo.sText = GateInfo.sText + sReviceMsg;
                     if (GateInfo.sText.Length < 81920)
                     {
-                        if (GateInfo.sText.IndexOf("$", StringComparison.OrdinalIgnoreCase) > 1)
+                        if (GateInfo.sText.IndexOf("$", StringComparison.Ordinal) > 1)
                         {
                             ProcessGateMsg(ref GateInfo);
                         }
@@ -154,16 +150,6 @@ namespace DBSvr
                         GateInfo.sText = "";
                     }
                 }
-            }
-        }
-
-        public void Timer1Timer(object obj)
-        {
-            int n8 = DBShare.g_nQueryChrCount + DBShare.nHackerNewChrCount + DBShare.nHackerDelChrCount + DBShare.nHackerSelChrCount + DBShare.n4ADC1C + DBShare.n4ADC20 + DBShare.n4ADC24 + DBShare.n4ADC28;
-            if (DBShare.n4ADBB8 != n8)
-            {
-                DBShare.n4ADBB8 = n8;
-                DBShare.OutMainMessage("H-QyChr=" + (DBShare.g_nQueryChrCount).ToString() + " " + "H-NwChr=" + (DBShare.nHackerNewChrCount).ToString() + " " + "H-DlChr=" + (DBShare.nHackerDelChrCount).ToString() + " " + "Dubl-Sl=" + (DBShare.nHackerSelChrCount).ToString() + " " + "H-Er-P1=" + (DBShare.n4ADC1C).ToString() + " " + "Dubl-P2=" + (DBShare.n4ADC20).ToString() + " " + "Dubl-P3=" + (DBShare.n4ADC24).ToString() + " " + "Dubl-P4=" + (DBShare.n4ADC28).ToString());
             }
         }
 
@@ -470,10 +456,10 @@ namespace DBSvr
                 UserInfo = GateInfo.UserList[i];
                 if ((UserInfo != null) && (UserInfo.sConnID == sID))
                 {
-                    if (!_frmIdSoc.GetGlobaSessionStatus(UserInfo.nSessionID))
+                    if (!_LoginSoc.GetGlobaSessionStatus(UserInfo.nSessionID))
                     {
-                        _frmIdSoc.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString());
-                        _frmIdSoc.CloseSession(UserInfo.sAccount, UserInfo.nSessionID);
+                        _LoginSoc.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString());
+                        _LoginSoc.CloseSession(UserInfo.sAccount, UserInfo.nSessionID);
                     }
                     UserInfo = null;
                     GateInfo.UserList.RemoveAt(i);
@@ -508,7 +494,7 @@ namespace DBSvr
                     if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             NewChr(s18, ref UserInfo);
                             UserInfo.boChrQueryed = false;
@@ -528,7 +514,7 @@ namespace DBSvr
                     if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             DelChr(s18, ref UserInfo);
                             UserInfo.boChrQueryed = false;
@@ -547,7 +533,7 @@ namespace DBSvr
                 case Grobal2.CM_SELCHR:
                     if (!UserInfo.boChrQueryed)
                     {
-                        if ((UserInfo.sAccount != "") && _frmIdSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
                             if (SelectChr(s18, ref UserInfo))
                             {
@@ -579,32 +565,22 @@ namespace DBSvr
         /// <returns></returns>
         private bool QueryChr(string sData, ref TUserInfo UserInfo)
         {
-            bool result;
             string sAccount = string.Empty;
-            string sSessionID = string.Empty;
-            int nSessionID;
-            int nChrCount;
             IList<TQuickID> ChrList;
-            int I;
             int nIndex;
             THumDataInfo ChrRecord = null;
             THumInfo HumRecord = null;
             TQuickID QuickID;
-            byte btSex;
-            string sChrName = string.Empty;
-            string sJob = string.Empty;
-            string sHair = string.Empty;
-            string sLevel = string.Empty;
             string s40 = string.Empty;
-            result = false;
-            sSessionID = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, new string[] { "/" });
-            nSessionID = HUtil32.Str_ToInt(sSessionID, -2);
-            UserInfo.nSessionID = nSessionID;
-            nChrCount = 0;
-            if (_frmIdSoc.CheckSession(sAccount, UserInfo.sUserIPaddr, nSessionID))
+            bool result = false;
+            string sSessionID = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, new string[] { "/" });
+            int nSessionID = HUtil32.Str_ToInt(sSessionID, -2);
+            int nChrCount = 0;
+            if (_LoginSoc.CheckSession(sAccount, UserInfo.sUserIPaddr, nSessionID))
             {
-                _frmIdSoc.SetGlobaSessionNoPlay(nSessionID);
+                _LoginSoc.SetGlobaSessionNoPlay(nSessionID);
                 UserInfo.sAccount = sAccount;
+                UserInfo.nSessionID = nSessionID;
                 ChrList = new List<TQuickID>();
                 try
                 {
@@ -619,7 +595,7 @@ namespace DBSvr
                             }
                             if (HumChrDB.GetBy(QuickID.nIndex, ref HumRecord) && !HumRecord.boDeleted)
                             {
-                                sChrName = QuickID.sChrName;
+                                string sChrName = QuickID.sChrName;
                                 nIndex = HumDB.Index(sChrName);
                                 if ((nIndex < 0) || (nChrCount >= 2))
                                 {
@@ -627,10 +603,10 @@ namespace DBSvr
                                 }
                                 if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
                                 {
-                                    btSex = ChrRecord.Data.btSex;
-                                    sJob = (ChrRecord.Data.btJob).ToString();
-                                    sHair = (ChrRecord.Data.btHair).ToString();
-                                    sLevel = (ChrRecord.Data.Abil.Level).ToString();
+                                    byte btSex = ChrRecord.Data.btSex;
+                                    string sJob = (ChrRecord.Data.btJob).ToString();
+                                    string sHair = (ChrRecord.Data.btHair).ToString();
+                                    string sLevel = (ChrRecord.Data.Abil.Level).ToString();
                                     if (HumRecord.boSelected)
                                     {
                                         s40 = s40 + "*";
@@ -699,22 +675,18 @@ namespace DBSvr
         private void DelChr(string sData, ref TUserInfo UserInfo)
         {
             TDefaultMessage Msg;
-            string sMsg;
-            int n10;
             THumInfo HumRecord = null;
-            int nckr;
-            int nIndex;
             var sChrName = EDcode.DeCodeString(sData);
             var boCheck = false;
             try
             {
                 if (HumChrDB.Open())
                 {
-                    n10 = HumChrDB.Index(sChrName);
+                    int n10 = HumChrDB.Index(sChrName);
                     if (n10 >= 0)
                     {
                         HumChrDB.Get(n10, ref HumRecord);
-                        nIndex = DelChr_snametolevel(sChrName);
+                        int nIndex = DelChr_snametolevel(sChrName);
                         if (HumRecord.sAccount == UserInfo.sAccount)
                         {
                             if (nIndex < DBShare.nDELMaxLevel)
@@ -722,10 +694,6 @@ namespace DBSvr
                                 HumRecord.boDeleted = true;
                                 HumRecord.dModDate = DateTime.Now;
                                 boCheck = HumChrDB.Update(n10, ref HumRecord);
-                            }
-                            else
-                            {
-                                nckr = 1;
                             }
                         }
                     }
@@ -743,7 +711,7 @@ namespace DBSvr
             {
                 Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
-            sMsg = EDcode.EncodeMessage(Msg);
+            string sMsg = EDcode.EncodeMessage(Msg);
             SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
         }
 
@@ -763,7 +731,6 @@ namespace DBSvr
             TDefaultMessage Msg;
             string sMsg;
             THumInfo HumRecord;
-            int i;
             var nCode = -1;
             Data = EDcode.DeCodeString(sData);
             Data = HUtil32.GetValidStr3(Data, ref sAccount, new string[] { "/" });
@@ -794,7 +761,7 @@ namespace DBSvr
                 {
                     nCode = 0;
                 }
-                for (i = 0; i <= sChrName.Length; i++)
+                for (var i = 0; i <= sChrName.Length; i++)
                 {
                     if ((sChrName[i] == '?') || (sChrName[i] == ' ') || (sChrName[i] == '/') || (sChrName[i] == '@') || (sChrName[i] == '?') || (sChrName[i] == '\'') ||
                         (sChrName[i] == '\'') || (sChrName[i] == '\\') || (sChrName[i] == '.') || (sChrName[i] == ',') || (sChrName[i] == ':') || (sChrName[i] == ';') ||
@@ -860,7 +827,7 @@ namespace DBSvr
                 }
                 else
                 {
-                    //BSMain.FrmDBSrv.DelHum(sChrName); //删除人物
+                    HumDB.Delete(sChrName);//删除人物
                     nCode = 4;
                 }
             }
@@ -887,20 +854,15 @@ namespace DBSvr
             string sAccount = string.Empty;
             IList<TQuickID> ChrList;
             THumInfo HumRecord = null;
-            int nIndex;
-            int nMapIndex;
-            TQuickID QuickID;
             THumDataInfo ChrRecord = null;
             string sCurMap = string.Empty;
-            string sDefMsg = string.Empty;
-            string sRouteMsg = string.Empty;
-            string sRouteIP = string.Empty;
             int nRoutePort = 0;
             var result = false;
             var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData, true), ref sAccount, new string[] { "/" });
             var boDataOK = false;
             if (UserInfo.sAccount == sAccount)
             {
+                int nIndex;
                 try
                 {
                     if (HumChrDB.Open())
@@ -911,25 +873,25 @@ namespace DBSvr
                             for (var i = 0; i < ChrList.Count; i++)
                             {
                                 nIndex = ChrList[i].nIndex;
-                                //if (HumChrDB.GetBy(nIndex, ref HumRecord))
-                                //{
-                                //    if (HumRecord.sChrName == sChrName)
-                                //    {
-                                //        HumRecord.boSelected = true;
-                                //        HumChrDB.UpdateBy(nIndex, ref HumRecord);
-                                //    }
-                                //    else
-                                //    {
-                                //        if (HumRecord.boSelected)
-                                //        {
-                                //            HumRecord.boSelected = false;
-                                //            HumChrDB.UpdateBy(nIndex, ref HumRecord);
-                                //        }
-                                //    }
-                                //}
+                                if (HumChrDB.GetBy(nIndex, ref HumRecord))
+                                {
+                                    if (HumRecord.sChrName == sChrName)
+                                    {
+                                        HumRecord.boSelected = true;
+                                        HumChrDB.UpdateBy(nIndex, ref HumRecord);
+                                    }
+                                    else
+                                    {
+                                        if (HumRecord.boSelected)
+                                        {
+                                            HumRecord.boSelected = false;
+                                            HumChrDB.UpdateBy(nIndex, ref HumRecord);
+                                        }
+                                    }
+                                }
                             }
                         }
-                        //ChrList.Free;
+                        ChrList = null;
                     }
                 }
                 finally
@@ -956,16 +918,16 @@ namespace DBSvr
             }
             if (boDataOK)
             {
-                nMapIndex = GetMapIndex(sCurMap);
-                sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
-                sRouteIP = GateRouteIP(CurGate.sGateaddr, ref nRoutePort);
+                int nMapIndex = GetMapIndex(sCurMap);
+                string sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
+                string sRouteIP = GateRouteIP(CurGate.sGateaddr, ref nRoutePort);
                 if (DBShare.g_boDynamicIPMode)// 使用动态IP
                 {
                     sRouteIP = UserInfo.sGateIPaddr;
                 }
-                sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + nRoutePort + nMapIndex);
+                string sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + nRoutePort + nMapIndex);
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sDefMsg + sRouteMsg);
-                _frmIdSoc.SetGlobaSessionPlay(UserInfo.nSessionID);
+                _LoginSoc.SetGlobaSessionPlay(UserInfo.nSessionID);
                 result = true;
             }
             else
@@ -1019,12 +981,17 @@ namespace DBSvr
             Socket.SendText("%" + sSessionID + "/#" + sSendMsg + "!$");
         }
 
+        /// <summary>
+        /// 检查是否禁止名称
+        /// </summary>
+        /// <param name="sChrName"></param>
+        /// <returns></returns>
         private bool CheckDenyChrName(string sChrName)
         {
             bool result = true;
             for (var i = 0; i < DBShare.DenyChrNameList.Count; i++)
             {
-                if (string.Compare((sChrName).ToLower(), (DBShare.DenyChrNameList[i]).ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sChrName, DBShare.DenyChrNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = false;
                     break;

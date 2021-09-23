@@ -13,6 +13,7 @@ namespace SystemModule.Sockets
         public bool IsConnected;//连接是否成功
         public string Address = string.Empty;
         public int Port = 0;
+        public bool IsBusy = false;
 
         public event DSCClientOnConnectedHandler OnConnected;//连接成功事件
 

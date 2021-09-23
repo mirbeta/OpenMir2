@@ -12,7 +12,6 @@ namespace DBSvr
         public int m_nCurIndex = 0;
         public int m_nFileHandle = 0;
         public int n0C = 0;
-        public bool m_boChanged = false;
         public TDBHeader m_Header = null;
         public Dictionary<string, int> m_QuickList = null;
         public Dictionary<int, string> m_IndexQuickList = null;
@@ -40,7 +39,6 @@ namespace DBSvr
             int nIndex = 0;
             IList<TQuickID> AccountList;
             IList<string> ChrNameList;
-            TDBHeader DBHeader;
             THumInfo DBRecord = null;
             m_nCurIndex = 0;
             m_QuickList.Clear();
@@ -92,48 +90,31 @@ namespace DBSvr
 
         public void Close()
         {
-            _dbConnection.Close();
-            _dbConnection.Dispose();
+            if (_dbConnection != null)
+            {
+                _dbConnection.Close();
+                _dbConnection.Dispose();
+            }
         }
 
         public bool Open()
         {
             bool result = false;
             m_nCurIndex = 0;
-            m_boChanged = false;
-            _dbConnection = new MySqlConnection(DBShare.DBConnection);
-            try
+            if (_dbConnection == null)
             {
-                _dbConnection.Open();
-                result = true;
+                try
+                {
+                    _dbConnection = new MySqlConnection(DBShare.DBConnection);
+                    _dbConnection.Open();
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            return result;
-        }
-
-        public bool OpenEx()
-        {
-            bool result = false;
-            TDBHeader DBHeader;
-            m_boChanged = false;
-            //m_nFileHandle = File.Open(m_sDBFileName, (FileMode) FileAccess.ReadWrite | FileShare.ReadWrite);
-            //if (m_nFileHandle > 0)
-            //{
-            //    result = true;
-            //    if (FileRead(m_nFileHandle, DBHeader, sizeof(TDBHeader)) == sizeof(TDBHeader))
-            //    {
-            //        m_Header = DBHeader;
-            //    }
-            //    m_nCurIndex = 0;
-            //}
-            //else
-            //{
-            //    result = false;
-            //}
             return result;
         }
 
@@ -181,7 +162,6 @@ namespace DBSvr
         public int FindByName(string sChrName, ArrayList ChrList)
         {
             int result;
-
             for (var i = 0; i < m_QuickList.Count; i ++ )
             {
                 //if (HUtil32.CompareLStr(m_QuickList[i], sChrName, sChrName.Length))
@@ -306,7 +286,6 @@ namespace DBSvr
                 //FileWrite(m_nFileHandle, HumRecord, sizeof(THumInfo));
                 //FileSeek(m_nFileHandle,  -sizeof(THumInfo), 1);
                 m_nCurIndex = nIndex;
-                m_boChanged = true;
                 result = true;
             }
             //}
@@ -353,7 +332,6 @@ namespace DBSvr
             HumRcdHeader.dCreateDate = HUtil32.DateTimeToDouble(DateTime.Now);
             //FileWrite(m_nFileHandle, HumRcdHeader, sizeof(TRecordHeader));
             m_DeletedList.Add(nIndex);
-            m_boChanged = true;
             result = true;
             return result;
         }

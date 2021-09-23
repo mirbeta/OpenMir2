@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
+using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace GameSvr
 {
@@ -10,6 +12,8 @@ namespace GameSvr
     /// </summary>
     public class CommonDB
     {
+        private IDbConnection _dbConnection;
+
         public bool CheckDataBase()
         {
             var dataPath = Path.Combine(M2Share.g_Config.sEnvirDir, "Data.db");
@@ -30,7 +34,6 @@ namespace GameSvr
             int Idx;
             GameItem Item;
             const string sSQLString = "SELECT * FROM STDITEMS";
-            //HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
                 for (var i = 0; i < M2Share.UserEngine.StdItemList.Count; i++)
@@ -39,7 +42,14 @@ namespace GameSvr
                 }
                 M2Share.UserEngine.StdItemList.Clear();
                 result = -1;
-                using (var dr = Sqlite.ExecuteReader(sSQLString))
+                if (!Open())
+                {
+                    return result;
+                }
+                var command = new MySqlCommand();
+                command.Connection = (MySqlConnection)_dbConnection;
+                command.CommandText = sSQLString;
+                using (var dr = command.ExecuteReader())
                 {
                     while (dr.Read())
                     {
@@ -130,6 +140,7 @@ namespace GameSvr
             }
             finally
             {
+                Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
@@ -144,7 +155,14 @@ namespace GameSvr
             try
             {
                 M2Share.UserEngine.SwitchMagicList();
-                using var dr = Sqlite.ExecuteReader(sSQLString);
+                if (!Open())
+                {
+                    return result;
+                }
+                var command = new MySqlCommand();
+                command.Connection = (MySqlConnection)_dbConnection;
+                command.CommandText = sSQLString;
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     Magic = new TMagic
@@ -185,6 +203,7 @@ namespace GameSvr
             }
             finally
             {
+                Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
@@ -199,7 +218,14 @@ namespace GameSvr
             try
             {
                 M2Share.UserEngine.MonsterList.Clear();
-                using var dr = Sqlite.ExecuteReader(sSQLString);
+                if (!Open())
+                {
+                    return result;
+                }
+                var command = new MySqlCommand();
+                command.Connection = (MySqlConnection)_dbConnection;
+                command.CommandText = sSQLString;
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     Monster = new TMonInfo
@@ -253,10 +279,41 @@ namespace GameSvr
             }
             finally
             {
+                Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
         }
 
+
+
+        public bool Open()
+        {
+            bool result = false;
+            if (_dbConnection == null)
+            {
+                try
+                {
+                    _dbConnection = new MySqlConnection(Sqlite.SqlConnctionString);
+                    _dbConnection.Open();
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            return result;
+        }
+
+        public void Close()
+        {
+            if (_dbConnection != null)
+            {
+                _dbConnection.Close();
+                _dbConnection.Dispose();
+            }
+        }
     }
 }

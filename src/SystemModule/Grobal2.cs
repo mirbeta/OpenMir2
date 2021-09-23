@@ -742,19 +742,42 @@ namespace SystemModule
         public const int SM_DELMAGIC = 212;
         public const int SM_ATTACKMODE = 213;
         public const int CM_CHECKTIME = 15999;
-        // 攻击模式
+        /// <summary>
+        /// 攻击模式成功
+        /// </summary>
         public const int SM_CERTIFICATION_SUCCESS = 500;
+        /// <summary>
+        /// 攻击模式失败
+        /// </summary>
         public const int SM_CERTIFICATION_FAIL = 501;
+        /// <summary>
+        /// 账号不存在
+        /// </summary>
         public const int SM_ID_NOTFOUND = 502;
         public const int SM_PASSWD_FAIL = 503;
         public const int SM_NEWID_SUCCESS = 504;
         public const int SM_NEWID_FAIL = 505;
         public const int SM_CHGPASSWD_SUCCESS = 506;
         public const int SM_CHGPASSWD_FAIL = 507;
+        /// <summary>
+        /// 查询人物
+        /// </summary>
         public const int SM_QUERYCHR = 520;
+        /// <summary>
+        /// 创建人物成功
+        /// </summary>
         public const int SM_NEWCHR_SUCCESS = 521;
+        /// <summary>
+        /// 创建人物失败
+        /// </summary>
         public const int SM_NEWCHR_FAIL = 522;
+        /// <summary>
+        /// 删除人物成功
+        /// </summary>
         public const int SM_DELCHR_SUCCESS = 523;
+        /// <summary>
+        /// 删除人物失败
+        /// </summary>
         public const int SM_DELCHR_FAIL = 524;
         public const int SM_STARTPLAY = 525;
         public const int SM_STARTFAIL = 526;

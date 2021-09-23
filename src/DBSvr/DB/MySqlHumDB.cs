@@ -37,8 +37,8 @@ namespace DBSvr
             string sAccount;
             string sChrName;
             const string sSQL = "SELECT * FROM TBL_CHARACTER";
-            //m_MirQuickList.Clear();
-            //m_MirQuickIDList.Clear();
+            m_MirQuickList.Clear();
+            m_MirQuickIDList.Clear();
             m_nRecordCount = -1;
             AccountList = new ArrayList();
             ChrNameList = new ArrayList();
@@ -97,8 +97,11 @@ namespace DBSvr
         {
             try
             {
-                _dbConnection = new MySqlConnection(DBShare.DBConnection);
-                _dbConnection.Open();
+                if (_dbConnection == null)
+                {
+                    _dbConnection = new MySqlConnection(DBShare.DBConnection);
+                    _dbConnection.Open();
+                }
                 return true;
             }
             catch (Exception e)
@@ -110,8 +113,11 @@ namespace DBSvr
 
         public void Close()
         {
-            _dbConnection.Close();
-            _dbConnection.Dispose();
+            if (_dbConnection != null)
+            {
+                _dbConnection.Close();
+                _dbConnection.Dispose();
+            }
         }
 
         public int Index(string sName)
@@ -128,7 +134,6 @@ namespace DBSvr
         public int Get(int nIndex, ref THumDataInfo HumanRCD)
         {
             int result = -1;
-            int nIdx;
             if (nIndex < 0)
             {
                 return result;
@@ -189,7 +194,7 @@ namespace DBSvr
                 catch
                 {
                     result = false;
-                    DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (1)");
+                    DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateChrRecord");
                     return result;
                 }
                 m_boChanged = true;
@@ -327,14 +332,9 @@ namespace DBSvr
                     HumanRCD.Data.boAllowGroupReCall = dr.GetBoolean("FLD_ENABLEGROUPRECALL");
                     //HumanRCD.Data.nKillMonExpRate = dr.GetInt32("FLD_GAINEXPRATE");
                     //HumanRCD.Data.dwKillMonExpRateTime = dr.GetInt32("FLD_GAINEXPRATETIME");
-                    //HumanRCD.Data.sHeroName = dr.GetString("FLD_HERONAME");
-                    //HumanRCD.Data.sHeroMasterName = dr.GetString("FLD_HEROMASTERNAME");
                     //HumanRCD.Data.btOptnYBDeal = dr.GetInt32("FLD_OPENGAMEGOLDDEAL");
                     HumanRCD.Data.wGroupRcallTime = dr.GetInt16("FLD_GROUPRECALLTIME");
                     HumanRCD.Data.dBodyLuck = dr.GetDouble("FLD_BODYLUCK");
-                    //HumanRCD.Data.sMarkerMap = dr.GetString("FLD_MARKMAP");
-                    //HumanRCD.Data.wMarkerX = dr.GetInt32("FLD_MARKMAPX");
-                    //HumanRCD.Data.wMarkerY = dr.GetInt32("FLD_MARKMAPY");
                 }
                 try
                 {
@@ -542,8 +542,8 @@ namespace DBSvr
             double dwMP;
             char[] TempBuf = new char[Convert.ToInt32(Grobal2.BUFFERSIZE - 1) + 1];
             const string sSqlStr3 = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME='{0}'";
-            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_CHARNAME='%s'";
-            const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_CHARNAME, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(:FLD_CHARNAME, :FLD_QUESTOPENINDEX, :FLD_QUESTFININDEX, :FLD_QUEST)";
+            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_CHARNAME='{0}'";
+            const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_CHARNAME, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(@FLD_CHARNAME, @FLD_QUESTOPENINDEX, @FLD_QUESTFININDEX, @FLD_QUEST)";
             try
             {
                 hd = HumanRCD.Data;
@@ -693,7 +693,7 @@ namespace DBSvr
                             }
                         }
                     }
-                    command.CommandText = string.Format("DELETE FROM TBL_ADDON WHERE FLD_CHARNAME='{0}'", HumanRCD.Header.sName);
+                    command.CommandText = $"DELETE FROM TBL_ADDON WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
                     try
                     {
                         command.ExecuteNonQuery();
@@ -731,7 +731,7 @@ namespace DBSvr
             }
             finally
             {
-                 
+                 Close();
             }
             return result;
         }
@@ -747,7 +747,7 @@ namespace DBSvr
             strSql.AppendLine("(@FLDServerNum, @FLDLoginID, @FLDCharName, @FLDMapName, @FLDCX, @FLDCY, @FLDLevel, @FLDDir, @FLDHair, @FLDSex, @FLDJob, @FLDGold, @FLDGamePoint, @FLDHomeMap,");
             strSql.AppendLine("@FLDHomeX, @FLDHomeY, @FLDPkPoint, @FLDReLevel, @FLDAttatckMode, @FLDFightZoneDieCount, @FLDBodyLuck, @FLDIncHealth,@FLDIncSpell, @FLDIncHealing, @FLDCreditPoint, @FLDBonusPoint,");
             strSql.AppendLine("@FLDHungerStatus, @FLDPayMentPoint, @FLDLockLogon, @FLDMarryCount, @FLDAllowGroupReCall, @FLDGroupRcallTime, @FLDAllowGuildReCall, @FLDIsMaster, @FLDMasterName, @FLDDearName");
-            strSql.AppendLine(",@FLDStoragePwd, @FLDDeleted, @FLDCREATEDATE, @FLDLASTUPDATE) ");
+            strSql.AppendLine(",@FLDStoragePwd, @FLDDeleted, now(), now()) ");
             
             var command = new MySqlCommand();
             if (!Open())
@@ -792,12 +792,37 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_DearName", hd.sDearName);
             command.Parameters.AddWithValue("@FLD_StoragePwd", hd.sStoragePwd);
             command.Parameters.AddWithValue("@FLD_Deleted", 0);
-            command.Parameters.AddWithValue("@FLD_CREATEDATE", DateTime.Now);
-            command.Parameters.AddWithValue("@FLD_LASTUPDATE", DateTime.Now);
             command.CommandText = string.Format(strSql.ToString());
             command.Connection = (MySqlConnection)_dbConnection;
             try
             {
+                command.ExecuteNonQuery();
+
+                strSql.Clear();
+                strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_ChrId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
+                strSql.AppendLine(" FLD_Weight, FLD_MaxWeight, FLD_WearWeight,FLD_MaxWearWeight, FLD_HandWeight, FLD_MaxHandWeight) VALUES ");
+                strSql.AppendLine(" (@FLD_ChrId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
+
+                command.CommandText = strSql.ToString();
+                command.Parameters.AddWithValue("@FLD_ChrId", 1);
+                command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
+                command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
+                command.Parameters.AddWithValue("@FLD_Mac", hd.Abil.MAC);
+                command.Parameters.AddWithValue("@FLD_Dc", hd.Abil.DC);
+                command.Parameters.AddWithValue("@FLD_Mc", hd.Abil.MC);
+                command.Parameters.AddWithValue("@FLD_Sc", hd.Abil.SC);
+                command.Parameters.AddWithValue("@FLD_Hp", hd.Abil.HP);
+                command.Parameters.AddWithValue("@FLD_Mp", hd.Abil.MP);
+                command.Parameters.AddWithValue("@FLD_MaxHP", hd.Abil.MaxHP);
+                command.Parameters.AddWithValue("@FLD_MAxMP", hd.Abil.MaxMP);
+                command.Parameters.AddWithValue("@FLD_Exp", hd.Abil.Exp);
+                command.Parameters.AddWithValue("@FLD_MaxExp", hd.Abil.MaxExp);
+                command.Parameters.AddWithValue("@FLD_Weight", hd.Abil.Weight);
+                command.Parameters.AddWithValue("@FLD_MaxWeight", hd.Abil.MaxWeight);
+                command.Parameters.AddWithValue("@FLD_WearWeight", hd.Abil.WearWeight);
+                command.Parameters.AddWithValue("@FLD_MaxWearWeight", hd.Abil.MaxWearWeight);
+                command.Parameters.AddWithValue("@FLD_HandWeight", hd.Abil.HandWeight);
+                command.Parameters.AddWithValue("@FLD_MaxHandWeight", hd.Abil.MaxHandWeight);
                 command.ExecuteNonQuery();
             }
             catch
@@ -827,7 +852,7 @@ namespace DBSvr
             strSql.AppendLine("UPDATE TBL_CHARACTER SET FLD_ServerNum = @FLD_ServerNum, FLD_LoginID = @FLD_LoginID, FLD_CharName = @FLD_CharName, FLD_MapName = @FLD_MapName, FLD_CX = @FLD_CX, FLD_CY = @FLD_CY, FLD_Level = @FLD_Level, FLD_Dir = @FLD_Dir, FLD_Hair = @FLD_Hair, FLD_Sex = @FLD_Sex, FLD_Job = FLD_Job, FLD_Gold = @FLD_Gold, ");
             strSql.AppendLine("FLD_GamePoint = @FLD_GamePoint, FLD_HomeMap = @FLD_HomeMap, FLD_HomeX = @FLD_HomeX, FLD_HomeY = @FLD_HomeY, FLD_PkPoint = @FLD_PkPoint, FLD_ReLevel = @FLD_ReLevel, FLD_AttatckMode = @FLD_AttatckMode, FLD_FightZoneDieCount = @FLD_FightZoneDieCount, FLD_BodyLuck = @FLD_BodyLuck, FLD_IncHealth = @FLD_IncHealth, FLD_IncSpell = @FLD_IncSpell,");
             strSql.AppendLine("FLD_IncHealing = @FLD_IncHealing, FLD_CreditPoint = @FLD_CreditPoint, FLD_BonusPoint =@FLD_BonusPoint, FLD_HungerStatus =@FLD_HungerStatus, FLD_PayMentPoint = @FLD_PayMentPoint, FLD_LockLogon = @FLD_LockLogon, FLD_MarryCount = @FLD_MarryCount, FLD_AllowGroupReCall = @FLD_AllowGroupReCall, ");
-            strSql.AppendLine(" FLD_GroupRcallTime = @FLD_GroupRcallTime, FLD_AllowGuildReCall = @FLD_AllowGuildReCall, FLD_IsMaster = @FLD_IsMaster, FLD_MasterName = @FLD_MasterName, FLD_DearName = @FLD_DearName, FLD_StoragePwd = @FLD_StoragePwd, FLD_Deleted = @FLD_Deleted,FLD_LASTUPDATE = now() WHERE Id = @Id;");
+            strSql.AppendLine("FLD_GroupRcallTime = @FLD_GroupRcallTime, FLD_AllowGuildReCall = @FLD_AllowGuildReCall, FLD_IsMaster = @FLD_IsMaster, FLD_MasterName = @FLD_MasterName, FLD_DearName = @FLD_DearName, FLD_StoragePwd = @FLD_StoragePwd, FLD_Deleted = @FLD_Deleted,FLD_LASTUPDATE = now() WHERE Id = @Id;");
             
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
             command.Parameters.AddWithValue("@FLD_LoginID", 1);

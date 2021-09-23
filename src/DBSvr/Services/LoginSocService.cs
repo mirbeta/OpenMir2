@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
@@ -17,7 +16,6 @@ namespace DBSvr
         private string sIDAddr = string.Empty;
         private int nIDPort = 0;
         private readonly IClientScoket _socket;
-        private Timer connectiTimer = null;
 
         public LoginSocService()
         {
@@ -39,15 +37,13 @@ namespace DBSvr
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
+            _socket.IsBusy = false;
             DBShare.OutMainMessage("与链接账号登录服务器断开链接.");
         }
 
         public void Start()
         {
-            _socket.Address = sIDAddr;
-            _socket.Port = nIDPort;
-            _socket.Connect();
-            connectiTimer = new Timer(ConnectionTimer, null, 5000, 5000);
+            _socket.Connect(sIDAddr, nIDPort);
         }
 
         public void Stop()
@@ -61,13 +57,12 @@ namespace DBSvr
             GlobaSessionList = null;
         }
 
-        private void ConnectionTimer(object obj)
+        public void CheckConnection()
         {
-            if (!_socket.IsConnected)
+            if (!_socket.IsConnected && _socket.IsBusy)
             {
-                _socket.Address = sIDAddr;
-                _socket.Port = nIDPort;
-                _socket.Connect();
+                _socket.Connect(sIDAddr, nIDPort);
+                _socket.IsBusy = true;
             }
         }
 
