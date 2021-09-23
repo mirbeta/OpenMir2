@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.IO;
 using System.Text;
+using Org.BouncyCastle.Crypto.Modes.Gcm;
 using SystemModule;
 
 namespace DBSvr
@@ -14,15 +15,15 @@ namespace DBSvr
     {
         public bool m_boChanged = false;
         public Dictionary<string, int> m_MirQuickList = null;
-        public Dictionary<int, string> m_MirQuickIDList = null;
+        public TQuickIDList m_MirQuickIDList = null;
         private Dictionary<int, string> m_QuickIndexNameList = null;
         public int m_nRecordCount = 0;
         private IDbConnection _dbConnection;
 
         public MySqlHumDB()
         {
-            m_MirQuickList = new Dictionary<string, int>();
-            m_MirQuickIDList = new Dictionary<int, string>();
+            m_MirQuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            m_MirQuickIDList = new TQuickIDList();
             m_nRecordCount = -1;
             m_QuickIndexNameList = new Dictionary<int, string>();
             LoadQuickList();
@@ -30,63 +31,56 @@ namespace DBSvr
 
         private void LoadQuickList()
         {
-            int nIndex;
             bool boDeleted;
-            ArrayList AccountList;
-            ArrayList ChrNameList;
+            IList<TQuickID> AccountList;
+            IList<string> ChrNameList;
             string sAccount;
             string sChrName;
+            int nSelectID = 0;
             const string sSQL = "SELECT * FROM TBL_CHARACTER";
             m_MirQuickList.Clear();
             m_MirQuickIDList.Clear();
             m_nRecordCount = -1;
-            AccountList = new ArrayList();
-            ChrNameList = new ArrayList();
+            AccountList = new List<TQuickID>();
+            ChrNameList = new List<string>();
             try
             {
                 if (!Open())
                 {
                     return;
                 }
-                try
+                var command = new MySqlCommand();
+                command.CommandText = sSQL;
+                command.Connection = (MySqlConnection)_dbConnection;
+                using  var dr = command.ExecuteReader();
+                var nIndex = 0;
+                while (dr.Read())
                 {
-                    var command = new MySqlCommand();
-                    command.CommandText = sSQL;
-                    command.Connection = (MySqlConnection)_dbConnection;
-                    var dr = command.ExecuteReader();
-                    while (dr.Read())
+                    boDeleted = dr.GetBoolean("FLD_DELETED");
+                    sAccount = dr.GetString("FLD_LOGINID");
+                    sChrName = dr.GetString("FLD_CHARNAME");
+                    if (!boDeleted && (sChrName != ""))
                     {
-                        for (nIndex = 0; nIndex < m_nRecordCount; nIndex++)
+                        m_MirQuickList.Add(sChrName, nIndex);
+                        AccountList.Add(new TQuickID()
                         {
-                            boDeleted = dr.GetBoolean("FLD_DELETED");
-                            sAccount = dr.GetString("FLD_LOGINID");
-                            sChrName = dr.GetString("FLD_CHARNAME");
-                            if (!boDeleted && (sChrName != ""))
-                            {
-                                //m_MirQuickList.Add(sChrName, nIndex);
-                                //AccountList.Add(sAccount, nIndex);
-                                //ChrNameList.Add(sChrName, nIndex);
-                            }
-                        }
+                            sAccount = sAccount,
+                            nSelectID = nIndex
+                        });
+                        ChrNameList.Add(sChrName);
                     }
-                }
-                catch (Exception ex)
-                {
-                    DBShare.MainOutMessage("[Exception] MySqlHumDB.LoadQuickList");
-                }
-                finally
-                {
 
+                    nIndex++;
                 }
             }
             finally
             {
                 Close();
             }
-            for (nIndex = 0; nIndex < AccountList.Count; nIndex++)
+            for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                //m_MirQuickIDList.AddRecord(AccountList[nIndex], ChrNameList[nIndex], ((int)AccountList.Values[nIndex]));
-                //m_QuickIndexNameList.Add(nIndex, ChrNameList[nIndex]);
+                m_MirQuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], 0, AccountList[nIndex].nSelectID);
+                m_QuickIndexNameList.Add(nIndex, ChrNameList[nIndex]);
             }
             AccountList = null;
             ChrNameList = null;
@@ -100,6 +94,9 @@ namespace DBSvr
                 if (_dbConnection == null)
                 {
                     _dbConnection = new MySqlConnection(DBShare.DBConnection);
+                }
+                if (_dbConnection.State == ConnectionState.Closed)
+                {
                     _dbConnection.Open();
                 }
                 return true;
@@ -122,8 +119,11 @@ namespace DBSvr
 
         public int Index(string sName)
         {
+            if (m_MirQuickList.ContainsKey(sName))
+            {
+                return m_MirQuickList[sName];
+            }
             return -1;
-            //return m_MirQuickList.GetIndex(sName);
         }
 
         public int ChrCountOfAccount(string sAccount)
@@ -237,13 +237,6 @@ namespace DBSvr
 
         private bool GetRecord(int nIndex, ref THumDataInfo HumanRCD)
         {
-            string sTmp;
-            string str;
-            int i;
-            int ii;
-            int nCount;
-            int nPosition;
-            //TBlob Blob;
             int dw;
             const string sSQL1 = "SELECT * FROM TBL_CHARACTER WHERE FLD_CHARNAME='{0}'";
             const string sSQL2 = "SELECT * FROM TBL_BONUSABILITY WHERE FLD_CHARNAME='{0}'";
@@ -253,7 +246,7 @@ namespace DBSvr
             const string sSQL6 = "SELECT * FROM TBL_STORAGE WHERE FLD_CHARNAME='{0}'";
             const string sSQL7 = "SELECT * FROM TBL_ADDON WHERE FLD_CHARNAME='{0}'";
             bool result = true;
-            string sChrName = m_MirQuickIDList[nIndex];
+            string sChrName = m_QuickIndexNameList[nIndex];
             if (!Open())
             {
                 return false;
@@ -274,11 +267,16 @@ namespace DBSvr
                 var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
+                    HumanRCD = new THumDataInfo();
+                    HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
                     HumanRCD.Header.boDeleted = dr.GetBoolean("FLD_DELETED");
                     HumanRCD.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("FLD_CREATEDATE"));
                     HumanRCD.Data.sChrName = dr.GetString("FLD_CHARNAME");
-                    HumanRCD.Data.sCurMap = dr.GetString("FLD_MAPNAME");
+                    if (!dr.IsDBNull(dr.GetOrdinal("FLD_MAPNAME")))
+                    {
+                        HumanRCD.Data.sCurMap = dr.GetString("FLD_MAPNAME");
+                    }
                     HumanRCD.Data.wCurX = dr.GetInt16("FLD_CX");
                     HumanRCD.Data.wCurY = dr.GetInt16("FLD_CY");
                     HumanRCD.Data.btDir = dr.GetByte("FLD_DIR");
@@ -286,56 +284,73 @@ namespace DBSvr
                     HumanRCD.Data.btSex = dr.GetByte("FLD_SEX");
                     HumanRCD.Data.btJob = dr.GetByte("FLD_JOB");
                     HumanRCD.Data.nGold = dr.GetInt32("FLD_GOLD");
-                    // TAbility
-                    HumanRCD.Data.Abil.Level = dr.GetUInt16("FLD_LEVEL");
-                    dw = dr.GetInt32("FLD_HP");
-                    HumanRCD.Data.Abil.HP = HUtil32.LoWord(dw);
-                    HumanRCD.Data.Abil.AC = HUtil32.HiWord(dw);
-                    dw = dr.GetInt32("FLD_MP");
-                    HumanRCD.Data.Abil.MP = HUtil32.LoWord(dw);
-                    HumanRCD.Data.Abil.MAC = HUtil32.HiWord(dw);
-                    HumanRCD.Data.Abil.Exp = dr.GetInt32("FLD_EXP");
-                    HumanRCD.Data.sHomeMap = dr.GetString("FLD_HOMEMAP");
+                    if (!dr.IsDBNull(dr.GetOrdinal("FLD_HOMEMAP")))
+                    {
+                        HumanRCD.Data.sHomeMap = dr.GetString("FLD_HOMEMAP");
+                    }
                     HumanRCD.Data.wHomeX = dr.GetInt16("FLD_HOMECX");
                     HumanRCD.Data.wHomeY = dr.GetInt16("FLD_HOMECY");
-                    HumanRCD.Data.sDearName = dr.GetString("FLD_DEARCHARNAME");
-                    HumanRCD.Data.sMasterName = dr.GetString("FLD_MASTERCHARNAME");
+                    if (!dr.IsDBNull(dr.GetOrdinal("FLD_DEARCHARNAME")))
+                    {
+                        HumanRCD.Data.sDearName = dr.GetString("FLD_DEARCHARNAME");
+                    }
+                    if (!dr.IsDBNull(dr.GetOrdinal("FLD_MASTERCHARNAME")))
+                    {
+                        HumanRCD.Data.sMasterName = dr.GetString("FLD_MASTERCHARNAME");
+                    }
                     HumanRCD.Data.boMaster = dr.GetBoolean("FLD_MASTER");
                     HumanRCD.Data.btCreditPoint = dr.GetByte("FLD_CREDITPOINT");
-                    //HumanRCD.Data.btInPowerLevel = dr.GetInt32("FLD_IPLEVEL");
-                    // word
-                    HumanRCD.Data.sStoragePwd = dr.GetString("FLD_STORAGEPASSWD");
+                    if (!dr.IsDBNull(dr.GetOrdinal("FLD_STORAGEPASSWD")))
+                    {
+                        HumanRCD.Data.sStoragePwd = dr.GetString("FLD_STORAGEPASSWD");
+                    }
                     HumanRCD.Data.btReLevel = dr.GetByte("FLD_REBIRTHLEVEL");
                     HumanRCD.Data.boLockLogon = dr.GetBoolean("FLD_LOCKLOGON");
-                    //HumanRCD.Data.wInPowerPoint = dr.GetInt32("FLD_IPPOINT");
-                    // word
-                    // TNakedAbility
                     HumanRCD.Data.nBonusPoint = dr.GetInt32("FLD_BONUSPOINT");
                     HumanRCD.Data.nGameGold = dr.GetInt32("FLD_GAMEGOLD");
                     HumanRCD.Data.nGamePoint = dr.GetInt32("FLD_GAMEPOINT");
                     HumanRCD.Data.nPayMentPoint = dr.GetInt32("FLD_PAYPOINT");
                     HumanRCD.Data.nHungerStatus = dr.GetInt32("FLD_HUNGRYSTATE");
-                    //HumanRCD.Data.nPKPOINT = dr.GetInt32("FLD_PKPOINT");
-                    HumanRCD.Data.btAllowGroup = dr.GetBoolean("FLD_ALLOWPARTY") == true ? (byte)1 : (byte)0;
-                    //HumanRCD.Data.btClPkPoint = dr.GetInt32("FLD_FREEGULITYCOUNT");
+                    HumanRCD.Data.btAllowGroup = dr.GetBoolean("FLD_ALLOWPARTY") ? (byte)1 : (byte)0;
                     HumanRCD.Data.btAttatckMode = dr.GetByte("FLD_ATTACKMODE");
                     HumanRCD.Data.btIncHealth = dr.GetByte("FLD_INCHEALTH");
                     HumanRCD.Data.btIncSpell = dr.GetByte("FLD_INCSPELL");
                     HumanRCD.Data.btIncHealing = dr.GetByte("FLD_INCHEALING");
                     HumanRCD.Data.btFightZoneDieCount = dr.GetByte("FLD_FIGHTZONEDIE");
-                    HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
-                    //HumanRCD.Data.btNewHuman = dr.GetInt32("FLD_TESTSERVERRESETCOUNT");
-                    //HumanRCD.Data.dwInPowerExp = dr.GetInt32("FLD_IPEXP");
-                    //HumanRCD.Data.dwGatherNimbus = dr.GetInt32("FLD_NIMBUSPOINT");
-                    //HumanRCD.Data.btAttribute = dr.GetInt32("FLD_NATUREELEMENT");
                     HumanRCD.Data.boAllowGuildReCall = dr.GetBoolean("FLD_ENABLEGRECALL");
                     HumanRCD.Data.boAllowGroupReCall = dr.GetBoolean("FLD_ENABLEGROUPRECALL");
-                    //HumanRCD.Data.nKillMonExpRate = dr.GetInt32("FLD_GAINEXPRATE");
-                    //HumanRCD.Data.dwKillMonExpRateTime = dr.GetInt32("FLD_GAINEXPRATETIME");
-                    //HumanRCD.Data.btOptnYBDeal = dr.GetInt32("FLD_OPENGAMEGOLDDEAL");
                     HumanRCD.Data.wGroupRcallTime = dr.GetInt16("FLD_GROUPRECALLTIME");
                     HumanRCD.Data.dBodyLuck = dr.GetDouble("FLD_BODYLUCK");
                 }
+                try
+                {
+                    command.CommandText = $"select * from TBL_CHARACTER_ABLITY where FLD_ChrName='{sChrName}'";
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+                dr = command.ExecuteReader();
+                // TAbility
+                HumanRCD.Data.Abil.Level = dr.GetUInt16("FLD_LEVEL");
+                dw = dr.GetInt32("FLD_HP");
+                HumanRCD.Data.Abil.HP = HUtil32.LoWord(dw);
+                HumanRCD.Data.Abil.AC = HUtil32.HiWord(dw);
+                dw = dr.GetInt32("FLD_MP");
+                HumanRCD.Data.Abil.MP = HUtil32.LoWord(dw);
+                HumanRCD.Data.Abil.MAC = HUtil32.HiWord(dw);
+                HumanRCD.Data.Abil.DC =dr.GetInt32("FLD_DC");
+                HumanRCD.Data.Abil.MC =dr.GetInt32("FLD_MC");
+                HumanRCD.Data.Abil.SC =dr.GetInt32("FLD_SC");
+                HumanRCD.Data.Abil.Exp = dr.GetInt32("FLD_EXP");
+                HumanRCD.Data.Abil.MaxExp = dr.GetInt32("FLD_MaxExp");
+                HumanRCD.Data.Abil.Weight = dr.GetUInt16("FLD_Weight");
+                HumanRCD.Data.Abil.MaxWeight = dr.GetUInt16("FLD_MaxWeight");
+                HumanRCD.Data.Abil.WearWeight = dr.GetUInt16("FLD_WearWeight");
+                HumanRCD.Data.Abil.MaxWearWeight = dr.GetUInt16("FLD_MaxWearWeight");
+                HumanRCD.Data.Abil.HandWeight = dr.GetUInt16("FLD_HandWeight");
+                HumanRCD.Data.Abil.MaxHandWeight = dr.GetUInt16("FLD_MaxHandWeight");
                 try
                 {
                     command.CommandText = string.Format(sSQL2, sChrName);
@@ -348,6 +363,10 @@ namespace DBSvr
                 dr = command.ExecuteReader();
                 while (dr.Read())
                 {
+                    if (HumanRCD.Data.BonusAbil == null)
+                    {
+                        HumanRCD.Data.BonusAbil = new TNakedAbility();
+                    }
                     HumanRCD.Data.BonusAbil.AC = dr.GetUInt16("FLD_AC");
                     HumanRCD.Data.BonusAbil.MAC = dr.GetUInt16("FLD_MAC");
                     HumanRCD.Data.BonusAbil.DC = dr.GetUInt16("FLD_DC");
@@ -744,10 +763,10 @@ namespace DBSvr
             strSql.AppendLine("FLD_HomeX, FLD_HomeY, FLD_PkPoint, FLD_ReLevel, FLD_AttatckMode, FLD_FightZoneDieCount, FLD_BodyLuck, FLD_IncHealth,FLD_IncSpell, FLD_IncHealing, FLD_CreditPoint, FLD_BonusPoint,");
             strSql.AppendLine("FLD_HungerStatus, FLD_PayMentPoint, FLD_LockLogon, FLD_MarryCount, FLD_AllowGroupReCall, FLD_GroupRcallTime, FLD_AllowGuildReCall, FLD_IsMaster, FLD_MasterName, FLD_DearName");
             strSql.AppendLine(",FLD_StoragePwd, FLD_Deleted, FLD_CREATEDATE, FLD_LASTUPDATE) VALUES ");
-            strSql.AppendLine("(@FLDServerNum, @FLDLoginID, @FLDCharName, @FLDMapName, @FLDCX, @FLDCY, @FLDLevel, @FLDDir, @FLDHair, @FLDSex, @FLDJob, @FLDGold, @FLDGamePoint, @FLDHomeMap,");
-            strSql.AppendLine("@FLDHomeX, @FLDHomeY, @FLDPkPoint, @FLDReLevel, @FLDAttatckMode, @FLDFightZoneDieCount, @FLDBodyLuck, @FLDIncHealth,@FLDIncSpell, @FLDIncHealing, @FLDCreditPoint, @FLDBonusPoint,");
-            strSql.AppendLine("@FLDHungerStatus, @FLDPayMentPoint, @FLDLockLogon, @FLDMarryCount, @FLDAllowGroupReCall, @FLDGroupRcallTime, @FLDAllowGuildReCall, @FLDIsMaster, @FLDMasterName, @FLDDearName");
-            strSql.AppendLine(",@FLDStoragePwd, @FLDDeleted, now(), now()) ");
+            strSql.AppendLine("(@FLD_ServerNum, @FLD_LoginID, @FLD_CharName, @FLD_MapName, @FLD_CX, @FLD_CY, @FLD_Level, @FLD_Dir, @FLD_Hair, @FLD_Sex, @FLD_Job, @FLD_Gold, @FLD_GamePoint, @FLD_HomeMap,");
+            strSql.AppendLine("@FLD_HomeX, @FLD_HomeY, @FLD_PkPoint, @FLD_ReLevel, @FLD_AttatckMode, @FLD_FightZoneDieCount, @FLD_BodyLuck, @FLD_IncHealth,@FLD_IncSpell, @FLD_IncHealing, @FLD_CreditPoint, @FLD_BonusPoint,");
+            strSql.AppendLine("@FLD_HungerStatus, @FLD_PayMentPoint, @FLD_LockLogon, @FLD_MarryCount, @FLD_AllowGroupReCall, @FLD_GroupRcallTime, @FLD_AllowGuildReCall, @FLD_IsMaster, @FLD_MasterName, @FLD_DearName");
+            strSql.AppendLine(",@FLD_StoragePwd, @FLD_Deleted, now(), now()) ");
             
             var command = new MySqlCommand();
             if (!Open())
@@ -804,6 +823,7 @@ namespace DBSvr
                 strSql.AppendLine(" (@FLD_ChrId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
 
                 command.CommandText = strSql.ToString();
+                command.Parameters.Clear();
                 command.Parameters.AddWithValue("@FLD_ChrId", 1);
                 command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
                 command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
@@ -825,7 +845,7 @@ namespace DBSvr
                 command.Parameters.AddWithValue("@FLD_MaxHandWeight", hd.Abil.MaxHandWeight);
                 command.ExecuteNonQuery();
             }
-            catch
+            catch(Exception ex)
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.InsertRecord (1)");
@@ -947,7 +967,7 @@ namespace DBSvr
         private bool DeleteRecord(int nIndex)
         {
             bool result = true;
-            string sChrName = m_MirQuickIDList[nIndex];
+            string sChrName = m_QuickIndexNameList[nIndex];
             var command = new MySqlCommand();
             if (!Open())
             {
@@ -1026,7 +1046,7 @@ namespace DBSvr
                     DBShare.MainOutMessage("[Exception] MySqlHumDB.GetQryChar (1)");
                     return result;
                 }
-                var dr = command.ExecuteReader();
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     QueryChrRcd.sName = dr.GetString("FLD_CHARNAME");

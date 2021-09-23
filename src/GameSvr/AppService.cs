@@ -10,7 +10,11 @@ namespace GameSvr
     public class AppService : BackgroundService
     {
         private readonly GameApp _mirApp;
-        
+        private Timer _connectTimer;
+        private int CheckIntervalTime;
+        private int SaveIntervalTime;
+        private int ClearIntervalTime;
+
         public AppService(GameApp serverApp)
         {
             _mirApp = serverApp;
@@ -18,6 +22,10 @@ namespace GameSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            CheckIntervalTime = HUtil32.GetTickCount();
+            SaveIntervalTime = HUtil32.GetTickCount();
+            ClearIntervalTime = HUtil32.GetTickCount();
+            _connectTimer = new Timer(CheckConnectTimer, null, 1000, 3000);
             if (M2Share.boStartReady)
             {
                 await M2Share.RunSocket.StartConsumer();
@@ -72,6 +80,27 @@ namespace GameSvr
                 }, cancellationToken);
             }
             return base.StopAsync(cancellationToken);
+        }
+
+        private void CheckConnectTimer(object obj)
+        {
+            if ((HUtil32.GetTickCount() - CheckIntervalTime) > 3000) //3s一次检查链接
+            {
+                M2Share.DataServer.CheckConnected();
+                IdSrvClient.Instance.CheckConnected();
+                InterMsgClient.Instance.CheckConnected();
+                CheckIntervalTime = HUtil32.GetTickCount();
+            }
+            if ((HUtil32.GetTickCount() - SaveIntervalTime) > 50000) //保存游戏变量等
+            {
+                _mirApp.SaveItemNumber();
+                SaveIntervalTime = HUtil32.GetTickCount();
+            }
+            if ((HUtil32.GetTickCount() - ClearIntervalTime) > 60000)
+            {
+                M2Share.ObjectSystem.ClearGhost();
+                ClearIntervalTime = HUtil32.GetTickCount();
+            }
         }
     }
 }

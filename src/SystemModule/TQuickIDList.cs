@@ -1,11 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SystemModule
 {
-    public class TQuickIDList : ArrayList
+    public class TQuickIDList
     {
         private readonly Dictionary<string, IList<TQuickID>> m_List = new Dictionary<string, IList<TQuickID>>();
+        private readonly IList<TQuickID> _quickList = new List<TQuickID>();
+
+        public void Clear()
+        {
+            m_List.Clear();
+            _quickList.Clear();
+        }
 
         public void AddRecord(string sAccount, string sChrName, int nIndex, int nSelIndex)
         {
@@ -21,22 +29,24 @@ namespace SystemModule
             QuickID.sChrName = sChrName;
             QuickID.nIndex = nIndex;
             QuickID.nSelectID = nSelIndex;
-            if (this.Count == 0)
+            if (_quickList.Count == 0)
             {
                 ChrList = new List<TQuickID>();
                 ChrList.Add(QuickID);
                 m_List.Add(sAccount, ChrList);
+                _quickList.Add(QuickID);
             }
             else
             {
-                if (this.Count == 1)
+                if (m_List.Count == 1)
                 {
-                    nMed = sAccount.CompareTo(this[0]);
+                    nMed = string.Compare(sAccount, _quickList[0].sAccount, StringComparison.OrdinalIgnoreCase);
                     if (nMed > 0)
                     {
                         ChrList = new List<TQuickID>();
                         ChrList.Add(QuickID);
                         m_List.Add(sAccount, ChrList);
+                        _quickList.Add(QuickID);
                     }
                     else
                     {
@@ -45,11 +55,12 @@ namespace SystemModule
                             ChrList = new List<TQuickID>();
                             ChrList.Add(QuickID);
                             m_List[sAccount].Add(QuickID);
+                            _quickList.Add(QuickID);
                             //m_List.Add(sAccount, ChrList);
                         }
                         else
                         {
-                            ChrList = this[0] as List<TQuickID>;
+                            ChrList = m_List[_quickList[0].sAccount];
                             ChrList.Add(QuickID);
                         }
                     }
@@ -57,38 +68,41 @@ namespace SystemModule
                 else
                 {
                     nLow = 0;
-                    nHigh = this.Count - 1;
+                    nHigh = m_List.Count - 1;
                     nMed = (nHigh - nLow) / 2 + nLow;
                     while (true)
                     {
                         if ((nHigh - nLow) == 1)
                         {
-                            n20 = sAccount.CompareTo(this[nHigh]);
+                            n20 = string.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase);
                             if (n20 > 0)
                             {
                                 ChrList = new List<TQuickID>();
                                 ChrList.Add(QuickID);
                                 //this.InsertObject(nHigh + 1, sAccount, ChrList);
                                 m_List[sAccount].Add(QuickID);
+                                _quickList.Add(QuickID);
                                 break;
                             }
                             else
                             {
-                                if (sAccount.CompareTo(this[nHigh]) == 0)
+                                if (sAccount.CompareTo(_quickList[nHigh]) == 0)
                                 {
-                                    ChrList = this[nHigh] as List<TQuickID>;
+                                    ChrList = m_List[_quickList[nHigh].sAccount] as List<TQuickID>;
                                     ChrList.Add(QuickID);
+                                    _quickList.Add(QuickID);
                                     break;
                                 }
                                 else
                                 {
-                                    n20 = sAccount.CompareTo(this[nLow]);
+                                    n20 = String.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase);
                                     if (n20 > 0)
                                     {
                                         ChrList = new List<TQuickID>();
                                         ChrList.Add(QuickID);
                                         //this.InsertObject(nLow + 1, sAccount, ChrList);
                                         m_List[sAccount].Add(QuickID);
+                                        _quickList.Add(QuickID);
                                         break;
                                     }
                                     else
@@ -99,11 +113,12 @@ namespace SystemModule
                                             ChrList.Add(QuickID);
                                             //this.InsertObject(nLow, sAccount, ChrList);
                                             m_List[sAccount].Add(QuickID);
+                                            _quickList.Add(QuickID);
                                             break;
                                         }
                                         else
                                         {
-                                            ChrList = this[n20] as List<TQuickID>;
+                                            ChrList = m_List[_quickList[n20].sAccount] as List<TQuickID>;
                                             ChrList.Add(QuickID);
                                             break;
                                         }
@@ -113,7 +128,7 @@ namespace SystemModule
                         }
                         else
                         {
-                            n1C = sAccount.CompareTo(this[nMed]);
+                            n1C = String.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
                             if (n1C > 0)
                             {
                                 nLow = nMed;
@@ -126,7 +141,7 @@ namespace SystemModule
                                 nMed = (nHigh - nLow) / 2 + nLow;
                                 continue;
                             }
-                            ChrList = this[nMed] as List<TQuickID>;
+                            ChrList = m_List[_quickList[nMed].sAccount] as List<TQuickID>;
                             ChrList.Add(QuickID);
                             break;
                         }
@@ -139,11 +154,11 @@ namespace SystemModule
         {
             TQuickID QuickID;
             IList<TQuickID> ChrList;
-            if ((this.Count - 1) < nIndex)
+            if ((m_List.Count - 1) < nIndex)
             {
                 return;
             }
-            ChrList = this[nIndex] as List<TQuickID>;
+            ChrList = m_List[sChrName] as List<TQuickID>;
             for (var i = 0; i < ChrList.Count; i++)
             {
                 QuickID = ChrList[i];
@@ -157,46 +172,45 @@ namespace SystemModule
             if (ChrList.Count <= 0)
             {
                 //ChrList.Free;
-                this.Remove(nIndex);
+                m_List.Remove(sChrName);
             }
         }
 
         public int GetChrList(string sAccount, ref IList<TQuickID> ChrNameList)
         {
-            int result;
             int nHigh;
             int nLow;
             int nMed;
             int n20;
             int n24;
-            result = -1;
-            if (this.Count == 0)
+            var result = -1;
+            if (m_List.Count == 0)
             {
                 return result;
             }
-            if (this.Count == 1)
+            if (m_List.Count == 1)
             {
-                if (sAccount.CompareTo(this[0]) == 0)
+                if (string.Compare(sAccount, _quickList[0].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    ChrNameList = this[0] as List<TQuickID>;
+                    ChrNameList = m_List[_quickList[0].sAccount] as List<TQuickID>;
                     result = 0;
                 }
             }
             else
             {
                 nLow = 0;
-                nHigh = this.Count - 1;
+                nHigh = m_List.Count - 1;
                 nMed = (nHigh - nLow) / 2 + nLow;
                 n24 = -1;
                 while (true)
                 {
                     if ((nHigh - nLow) == 1)
                     {
-                        if (sAccount.CompareTo(this[nHigh]) == 0)
+                        if (String.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             n24 = nHigh;
                         }
-                        if (sAccount.CompareTo(this[nLow]) == 0)
+                        if (String.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             n24 = nLow;
                         }
@@ -204,7 +218,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        n20 = sAccount.CompareTo(this[nMed]);
+                        n20 = String.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
                         if (n20 > 0)
                         {
                             nLow = nMed;
@@ -223,7 +237,7 @@ namespace SystemModule
                 }
                 if (n24 != -1)
                 {
-                    ChrNameList = this[n24] as List<TQuickID>;
+                    ChrNameList = m_List[_quickList[n24].sAccount] as List<TQuickID>;
                 }
                 result = n24;
             }

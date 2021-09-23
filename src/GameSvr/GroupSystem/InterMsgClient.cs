@@ -10,7 +10,6 @@ namespace GameSvr
         private int dw2D4Tick = 0;
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket MsgClient;
-        private Timer _heartTimer;
         private GroupMessageHandle _groupMessageHandle;
 
         public TFrmMsgClient()
@@ -29,7 +28,6 @@ namespace GameSvr
             MsgClient.Port = M2Share.g_Config.nMsgSrvPort;
             dw2D4Tick = HUtil32.GetTickCount();
             MsgClient.Connect();
-            _heartTimer = new Timer(Connected, null, 1000, 10000);
         }
 
         public void Run()
@@ -47,7 +45,7 @@ namespace GameSvr
             }
         }
 
-        private void Connected(object obj)
+        public void CheckConnected()
         {
             if (MsgClient.IsConnected)
             {

@@ -18,11 +18,9 @@ namespace GameSvr
         /// 其他对象
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
-        private readonly Timer _actorTime = null;
 
         public ObjectSystem()
         {
-            _actorTime = new Timer(DoWork, null, 30000, 60000);//定时移除已经挂掉的对象
             Debug.WriteLine("Start Clear Actor Thread...");
         }
 
@@ -76,7 +74,10 @@ namespace GameSvr
             }
         }
 
-        private void DoWork(object obj)
+        /// <summary>
+        /// 清理
+        /// </summary>
+        public void ClearGhost()
         {
             var actorIds = _actors.Keys;
             TBaseObject actor = null;

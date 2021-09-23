@@ -12,7 +12,6 @@ namespace GameSvr
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
         private readonly IClientScoket IDSocket;
-        private Timer _heartTimer;
 
         public TFrmIDSoc()
         {
@@ -29,7 +28,7 @@ namespace GameSvr
             }
         }
 
-        private void Connected(object obj)
+        public void CheckConnected()
         {
             if (IDSocket.IsConnected)
             {
@@ -54,8 +53,7 @@ namespace GameSvr
 
         public void Initialize()
         {
-            Connected(null);
-            _heartTimer = new Timer(Connected, null, 1000, 3000);
+            CheckConnected();
         }
 
         private void SendSocket(string sSendMsg)
@@ -375,7 +373,6 @@ namespace GameSvr
 
         public void Close()
         {
-            _heartTimer.Dispose();
             IDSocket.Disconnect();
         }
 

@@ -7,7 +7,6 @@ namespace GameSvr
     public class DataServer
     {
         private readonly IClientScoket _clientScoket;
-        private Timer _connectTimer = null;
 
         public DataServer()
         {
@@ -19,17 +18,15 @@ namespace GameSvr
 
         public void Start()
         { 
-            _connectTimer = new Timer(ConnectTimerTime, null, 5000, 3000);
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
 
         public void Stop()
         {
-            _connectTimer.Dispose();
             _clientScoket.Disconnect();
         }
 
-        private void ConnectTimerTime(object obj)
+        public void CheckConnected()
         {
             if (!_clientScoket.IsConnected)
             {

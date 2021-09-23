@@ -137,7 +137,7 @@ namespace DBSvr
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    GateInfo.sText = GateInfo.sText + sReviceMsg;
+                    GateInfo.sText += sReviceMsg;
                     if (GateInfo.sText.Length < 81920)
                     {
                         if (GateInfo.sText.IndexOf("$", StringComparison.Ordinal) > 1)
@@ -603,10 +603,10 @@ namespace DBSvr
                                 }
                                 if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
                                 {
-                                    byte btSex = ChrRecord.Data.btSex;
-                                    string sJob = (ChrRecord.Data.btJob).ToString();
-                                    string sHair = (ChrRecord.Data.btHair).ToString();
-                                    string sLevel = (ChrRecord.Data.Abil.Level).ToString();
+                                    var btSex = ChrRecord.Data.btSex;
+                                    var sJob = (ChrRecord.Data.btJob).ToString();
+                                    var sHair = (ChrRecord.Data.btHair).ToString();
+                                    var sLevel = (ChrRecord.Data.Abil.Level).ToString();
                                     if (HumRecord.boSelected)
                                     {
                                         s40 = s40 + "*";

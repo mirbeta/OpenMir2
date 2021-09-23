@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using MySql.Data.MySqlClient;
 using SystemModule;
 
@@ -54,14 +55,29 @@ namespace DBSvr
                     var command = new MySqlCommand();
                     command.Connection = (MySqlConnection)_dbConnection;
                     command.CommandText = "select * from TBL_HUMRECORD";
-                    var dr = command.ExecuteReader();
+                    using var dr = command.ExecuteReader();
                     while (dr.Read())
                     {
+                        DBRecord = new THumInfo();
+                        DBRecord.Id = dr.GetInt32("Id");
+                        DBRecord.sAccount = dr.GetString("FLD_Account");
+                        DBRecord.sChrName = dr.GetString("FLD_ChrName");
+                        DBRecord.boSelected = dr.GetBoolean("FLD_SelectID");
+                        DBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                        DBRecord.Header.sAccount = DBRecord.sAccount;
+                        DBRecord.Header.sName = DBRecord.sChrName;
+                        DBRecord.Header.nSelectID = DBRecord.boSelected ? 1 : 0;
+                        DBRecord.Header.boDeleted = DBRecord.boDeleted;
                         if (!DBRecord.Header.boDeleted)
                         {
                             m_QuickList.Add(DBRecord.Header.sName, nRecordIndex);
                             m_IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
-                            AccountList.Add(new TQuickID() { sAccount = DBRecord.sAccount, nSelectID = DBRecord.Header.nSelectID });
+                            AccountList.Add(new TQuickID()
+                            {
+                                nIndex = DBRecord.Id, 
+                                sAccount = DBRecord.sAccount,
+                                nSelectID = DBRecord.Header.nSelectID
+                            });
                             ChrNameList.Add(DBRecord.sChrName);
                         }
                         else
@@ -81,14 +97,14 @@ namespace DBSvr
             }
             for (nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                m_QuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], nIndex, AccountList[nIndex].nSelectID);
+                m_QuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], AccountList[nIndex].nIndex, AccountList[nIndex].nSelectID);
             }
             AccountList = null;
             ChrNameList = null;
             //m_QuickList.SortString(0, m_QuickList.Count - 1);
         }
 
-        public void Close()
+        private void Close()
         {
             if (_dbConnection != null)
             {
@@ -103,16 +119,23 @@ namespace DBSvr
             m_nCurIndex = 0;
             if (_dbConnection == null)
             {
+                _dbConnection = new MySqlConnection(DBShare.DBConnection);
+            }
+            if (_dbConnection.State == ConnectionState.Open)
+            {
+                return true;
+            }
+            if (_dbConnection.State == ConnectionState.Closed)
+            {
                 try
                 {
-                    _dbConnection = new MySqlConnection(DBShare.DBConnection);
                     _dbConnection.Open();
                     result = true;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
-                    throw;
+                    DBShare.OutMainMessage("打开数据库[MySql]失败.");
+                    result = false;
                 }
             }
             return result;
@@ -145,24 +168,35 @@ namespace DBSvr
         private bool GetRecord(int nIndex, ref THumInfo HumDBRecord)
         {
             bool result = false;
-            //if (FileSeek(m_nFileHandle, sizeof(THumInfo) * nIndex + sizeof(TDBHeader), 0) !=  -1)
-            //{
-            //    FileRead(m_nFileHandle, HumDBRecord, sizeof(THumInfo));
-            //    FileSeek(m_nFileHandle,  -sizeof(THumInfo) * nIndex + sizeof(TDBHeader), 1);
-            //    m_nCurIndex = nIndex;
-            //    result = true;
-            //}
-            //else
-            //{
-            //    result = false;
-            //}
+            if (!Open())
+            {
+                return result;
+            }
+            var command = new MySqlCommand();
+            command.CommandText = "select * from TBL_HUMRECORD where Id=@Id";
+            command.Connection = (MySqlConnection)_dbConnection;
+            command.Parameters.AddWithValue("@Id", nIndex);
+            using var dr = command.ExecuteReader();
+            if (dr.Read())
+            {
+                HumDBRecord = new THumInfo();
+                HumDBRecord.sAccount = dr.GetString("FLD_Account");
+                HumDBRecord.sChrName = dr.GetString("FLD_ChrName");
+                HumDBRecord.boSelected = dr.GetBoolean("FLD_SelectID");
+                HumDBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                HumDBRecord.Header.sAccount = HumDBRecord.sAccount;
+                HumDBRecord.Header.sName = HumDBRecord.sChrName;
+                HumDBRecord.Header.nSelectID = HumDBRecord.boSelected ? 1 : 0;
+                HumDBRecord.Header.boDeleted = HumDBRecord.boDeleted;
+                result = true;
+            }
             return result;
         }
 
         public int FindByName(string sChrName, ArrayList ChrList)
         {
             int result;
-            for (var i = 0; i < m_QuickList.Count; i ++ )
+            for (var i = 0; i < m_QuickList.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_QuickList[i], sChrName, sChrName.Length))
                 //{
@@ -195,7 +229,7 @@ namespace DBSvr
             m_QuickIDList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
-                for (var i = 0; i < ChrNameList.Count; i ++ )
+                for (var i = 0; i < ChrNameList.Count; i++)
                 {
                     QuickID = ChrNameList[i];
                     ChrList.Add(QuickID);
@@ -213,11 +247,11 @@ namespace DBSvr
             m_QuickIDList.GetChrList(sAccount, ref ChrList);
             if (ChrList != null)
             {
-                for (var i = 0; i < ChrList.Count; i ++ )
+                for (var i = 0; i < ChrList.Count; i++)
                 {
                     if (GetBy(ChrList[i].nIndex, ref HumDBRecord) && (!HumDBRecord.boDeleted))
                     {
-                        result ++;
+                        result++;
                     }
                 }
             }
@@ -246,7 +280,7 @@ namespace DBSvr
                 else
                 {
                     nIndex = m_Header.nHumCount;
-                    m_Header.nHumCount ++;
+                    m_Header.nHumCount++;
                 }
                 if (UpdateRecord(nIndex, HumRecord, true))
                 {
@@ -265,34 +299,57 @@ namespace DBSvr
 
         private bool UpdateRecord(int nIndex, THumInfo HumRecord, bool boNew)
         {
-            bool result;
+            bool result = false;
             THumInfo HumRcd = HumRecord;
-            //int nPosion = nIndex * sizeof(THumInfo) + sizeof(TDBHeader);
-            //if (FileSeek(m_nFileHandle, nPosion, 0) == nPosion)
-            //{
-            //int n10 = FileSeek(m_nFileHandle, 0, 1);//&& (FileRead(m_nFileHandle, HumRcd, sizeof(THumInfo)) == sizeof(THumInfo)) &&
-            if (boNew && (!HumRcd.Header.boDeleted) && (HumRcd.Header.sName != ""))
+            try
             {
-                result = true;
+                if (boNew && (!HumRcd.Header.boDeleted) && (HumRcd.Header.sName != ""))
+                {
+                    if (!Open())
+                    {
+                        return false;
+                    }
+                    var strSql = new StringBuilder();
+                    strSql.AppendLine("INSERT INTO `TBL_HUMRECORD` (`FLD_Account`, `FLD_ChrName`, `FLD_SelectID`, `FLD_IsDeleted`, `FLD_CreateDate`, `FLD_ModifyDate`) VALUES ");
+                    strSql.AppendLine("(@FLD_Account, @FLD_ChrName, @FLD_SelectID, @FLD_IsDeleted, now(), now());");
+                    var command = new MySqlCommand();
+                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.CommandText = strSql.ToString();
+                    command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
+                    command.Parameters.AddWithValue("@FLD_ChrName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.boSelected);
+                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
+                    command.ExecuteNonQuery();
+                    result = true;
+                }
+                else
+                {
+                    if (!Open())
+                    {
+                        return false;
+                    }
+                    HumRecord.Header.boDeleted = false;
+                    var strSql = new StringBuilder();
+                    strSql.AppendLine("UPDATE TBL_HUMRECORD SET FLD_Account = @FLD_Account, FLD_ChrName = @FLD_ChrName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
+                    strSql.AppendLine(" FLD_ModifyDate = now() WHERE Id = @Id;");
+                    var command = new MySqlCommand();
+                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.CommandText = strSql.ToString();
+                    command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
+                    command.Parameters.AddWithValue("@FLD_ChrName", HumRecord.sChrName);
+                    command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.boSelected);
+                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Header.boDeleted);
+                    command.Parameters.AddWithValue("@Id", nIndex);
+                    command.ExecuteNonQuery();
+                    m_nCurIndex = nIndex;
+                    result = true;
+                }
             }
-            else
+            catch (Exception e)
             {
-                HumRecord.Header.boDeleted = false;
-                HumRecord.Header.dCreateDate = HUtil32.DateTimeToDouble(DateTime.Now);
-                m_Header.dUpdateDate = DateTime.Now;
-                //FileSeek(m_nFileHandle, 0, 0);
-                //FileWrite(m_nFileHandle, m_Header, sizeof(TDBHeader));
-                //FileSeek(m_nFileHandle, n10, 0);
-                //FileWrite(m_nFileHandle, HumRecord, sizeof(THumInfo));
-                //FileSeek(m_nFileHandle,  -sizeof(THumInfo), 1);
-                m_nCurIndex = nIndex;
-                result = true;
+                Close();
+                DBShare.OutMainMessage(e.Message);
             }
-            //}
-            //else
-            //{
-            //     result = false;
-            // }
             return result;
         }
 
@@ -347,10 +404,10 @@ namespace DBSvr
             {
                 return result;
             }
-            //if (UpdateRecord(m_QuickList[nIndex], HumDBRecord, false))
-            //{
-            //    result = true;
-            //}
+            if (UpdateRecord(m_QuickList[HumDBRecord.sAccount], HumDBRecord, false))
+            {
+                result = true;
+            }
             return result;
         }
 
@@ -364,5 +421,5 @@ namespace DBSvr
             return result;
         }
 
-    } 
+    }
 }

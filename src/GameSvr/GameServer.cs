@@ -23,7 +23,6 @@ namespace GameSvr
             M2Share.RunSocket.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
-            var timer = new Timer(SaveItemNumber, null, 15000, 10000);
         }
 
         protected void Stop()
@@ -61,7 +60,7 @@ namespace GameSvr
             }
         }
 
-        private void SaveItemNumber(object sender)
+        public void SaveItemNumber()
         {
             ProcessGameNotice();
             M2Share.ServerConf.SaveVariable();

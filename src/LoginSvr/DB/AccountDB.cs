@@ -75,7 +75,7 @@ namespace LoginSvr
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
                 command.Connection = (MySqlConnection)conn;
-                var dr = command.ExecuteReader();
+                using  var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     boDeleted = dr.GetBoolean("FLD_DELETED");

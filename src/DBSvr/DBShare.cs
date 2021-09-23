@@ -277,6 +277,7 @@ namespace DBSvr
 
     public class THumInfo
     {
+        public int Id;
         public TRecordHeader Header;
         public string sChrName;
         public string sAccount;
