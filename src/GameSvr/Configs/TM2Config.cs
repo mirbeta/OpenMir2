@@ -4,7 +4,7 @@ namespace GameSvr
 {
     public class TM2Config
     {
-        public int nConfigSize;
+        public string sConnctionString;
         public string sServerName;
         public string sServerIPaddr;
         public string sWebSite;
@@ -897,7 +897,6 @@ namespace GameSvr
 
         public TM2Config()
         {
-            nConfigSize = 0;
             sServerName = "SKY引擎";
             sServerIPaddr = "127.0.0.1";
             sWebSite = "http=//www.jsym2.com";
@@ -1594,6 +1593,7 @@ namespace GameSvr
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
             boSpeedHackCheck = false;
+            sConnctionString = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
         }
     }
 }

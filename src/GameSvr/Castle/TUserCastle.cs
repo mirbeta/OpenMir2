@@ -439,8 +439,14 @@ namespace GameSvr
                 var attackerInfo = new TAttackerInfo();
                 HUtil32.ArrestStringEx(s20, '\"', '\"', ref s20);
                 var time = DateTime.Now;
-                attackerInfo.AttackDate = DateTime.TryParse(s20, out time) ? time : DateTime.Now;
-                attackerInfo.AttackDate = Convert.ToDateTime(s20);
+                if (DateTime.TryParse(s20, out time))
+                {
+                    attackerInfo.AttackDate = time;
+                }
+                else
+                {
+                    attackerInfo.AttackDate = DateTime.Now;
+                }
                 attackerInfo.sGuildName = guildName;
                 attackerInfo.Guild = guild;
                 m_AttackWarList.Add(attackerInfo);

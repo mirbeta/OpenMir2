@@ -17,10 +17,6 @@ namespace GameSvr
             int nCode;
             M2Share.LocalDB = new LocalDB();
             M2Share.CommonDB = new CommonDB();
-            if (!M2Share.CommonDB.CheckDataBase())
-            {
-                return;
-            }
             try
             {
                 M2Share.LoadGameLogItemNameList();

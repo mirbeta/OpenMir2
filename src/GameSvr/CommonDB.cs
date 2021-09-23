@@ -13,27 +13,13 @@ namespace GameSvr
     public class CommonDB
     {
         private IDbConnection _dbConnection;
-
-        public bool CheckDataBase()
-        {
-            var dataPath = Path.Combine(M2Share.g_Config.sEnvirDir, "Data.db");
-            if (!File.Exists(dataPath))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("数据库文件不存在,请确认文件是否存在或路径是否正确.");
-                Console.ResetColor();
-                return false;
-            }
-            Sqlite.SqlConnctionString = string.Format(Sqlite.SqlConnctionString, dataPath);
-            return true;
-        }
         
         public int LoadItemsDB()
         {
             int result = -1;
             int Idx;
             GameItem Item;
-            const string sSQLString = "SELECT * FROM STDITEMS";
+            const string sSQLString = "SELECT * FROM TBL_StdItems";
             try
             {
                 for (var i = 0; i < M2Share.UserEngine.StdItemList.Count; i++)
@@ -56,12 +42,12 @@ namespace GameSvr
                         Item = new GameItem();
                         Idx = dr.GetInt32("Idx");// 序号
                         Item.Name = dr.GetString("Name");// 名称
-                        Item.StdMode = dr.GetByte("StdMode");// 分类号
-                        Item.Shape = dr.GetByte("Shape");// 装备外观
-                        Item.Weight = dr.GetByte("Weight");// 重量
-                        Item.AniCount = dr.GetByte("AniCount");
+                        Item.StdMode = (byte)dr.GetInt32("StdMode");// 分类号
+                        Item.Shape = (byte)dr.GetInt32("Shape");// 装备外观
+                        Item.Weight = (byte)dr.GetInt32("Weight");// 重量
+                        Item.AniCount = (byte)dr.GetInt32("AniCount");
                         Item.Source = dr.GetInt16("Source");
-                        Item.Reserved = dr.GetByte("Reserved");// 保留
+                        Item.Reserved = (byte)dr.GetInt32("Reserved");// 保留
                         Item.Looks = dr.GetUInt16("Looks");// 物品外观
                         Item.DuraMax = (ushort)dr.GetInt32("DuraMax");// 持久
                         Item.Ac = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nItemsACPowerRate / 10));
@@ -115,17 +101,17 @@ namespace GameSvr
                                 Item.ItemType = Grobal2.ITEM_ETC;
                                 break;
                         }
-                        if (M2Share.UserEngine.StdItemList.Count == Idx)
-                        {
+                        //if (M2Share.UserEngine.StdItemList.Count == Idx)
+                        //{
                             M2Share.UserEngine.StdItemList.Add(Item);
                             result = 1;
-                        }
-                        else
-                        {
-                            M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败！！！", new object[] { Idx, Item.Name }));
-                            result = -100;
-                            return result;
-                        }
+                        //}
+                        // else
+                        // {
+                        //     M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败！！！", new object[] { Idx, Item.Name }));
+                        //     result = -100;
+                        //     return result;
+                        // }
                     }
                 }
                 M2Share.g_boGameLogGold = M2Share.GetGameLogItemNameList(Grobal2.sSTRING_GOLDNAME) == 1;
@@ -149,7 +135,7 @@ namespace GameSvr
         public int LoadMagicDB()
         {
             TMagic Magic;
-            const string sSQLString = "select * from Magic";
+            const string sSQLString = "select * from TBL_Magic";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -169,26 +155,26 @@ namespace GameSvr
                     {
                         wMagicID = dr.GetUInt16("MagId"),
                         sMagicName = dr.GetString("MagName"),
-                        btEffectType = dr.GetByte("EffectType"),
-                        btEffect = dr.GetByte("Effect"),
+                        btEffectType = (byte)dr.GetInt32("EffectType"),
+                        btEffect = (byte)dr.GetInt32("Effect"),
                         wSpell = dr.GetUInt16("Spell"),
                         wPower = dr.GetUInt16("Power"),
                         wMaxPower = dr.GetUInt16("MaxPower"),
-                        btJob = dr.GetByte("Job")
+                        btJob = (byte)dr.GetInt32("Job")
                     };
-                    Magic.TrainLevel[0] = dr.GetByte("NeedL1");
-                    Magic.TrainLevel[1] = dr.GetByte("NeedL2");
-                    Magic.TrainLevel[2] = dr.GetByte("NeedL3");
-                    Magic.TrainLevel[3] = dr.GetByte("NeedL3");
+                    Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
+                    Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
+                    Magic.TrainLevel[2] = (byte)dr.GetInt32("NeedL3");
+                    Magic.TrainLevel[3] = (byte)dr.GetInt32("NeedL3");
                     Magic.MaxTrain[0] = dr.GetInt32("L1Train");
                     Magic.MaxTrain[1] = dr.GetInt32("L2Train");
                     Magic.MaxTrain[2] = dr.GetInt32("L3Train");
                     Magic.MaxTrain[3] = Magic.MaxTrain[2];
                     Magic.btTrainLv = 3;
                     Magic.dwDelayTime = dr.GetInt32("Delay");
-                    Magic.btDefSpell = dr.GetByte("DefSpell");
-                    Magic.btDefPower = dr.GetByte("DefPower");
-                    Magic.btDefMaxPower = dr.GetByte("DefMaxPower");
+                    Magic.btDefSpell = (byte)dr.GetInt32("DefSpell");
+                    Magic.btDefPower = (byte)dr.GetInt32("DefPower");
+                    Magic.btDefMaxPower = (byte)dr.GetInt32("DefMaxPower");
                     Magic.sDescr = dr.GetString("Descr");
                     if (Magic.wMagicID > 0)
                     {
@@ -213,7 +199,7 @@ namespace GameSvr
         {
             var result = 0;
             TMonInfo Monster;
-            const string sSQLString = "select * from Monster";
+            const string sSQLString = "select * from TBL_Monster";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -232,11 +218,11 @@ namespace GameSvr
                     {
                         ItemList = new List<TMonItem>(),
                         sName = dr.GetString("NAME").Trim(),
-                        btRace = dr.GetByte("Race"),
-                        btRaceImg = dr.GetByte("RaceImg"),
+                        btRace = (byte)dr.GetInt32("Race"),
+                        btRaceImg = (byte)dr.GetInt32("RaceImg"),
                         wAppr = dr.GetUInt16("Appr"),
                         wLevel = dr.GetUInt16("Lvl"),
-                        btLifeAttrib = dr.GetByte("Undead"),
+                        btLifeAttrib = (byte)dr.GetInt32("Undead"),
                         wCoolEye = dr.GetInt16("CoolEye"),
                         dwExp = dr.GetInt32("Exp")
                     };
@@ -285,29 +271,32 @@ namespace GameSvr
             return result;
         }
 
-
-
-        public bool Open()
+        private bool Open()
         {
-            bool result = false;
             if (_dbConnection == null)
             {
                 try
                 {
-                    _dbConnection = new MySqlConnection(Sqlite.SqlConnctionString);
+                    _dbConnection = new MySqlConnection(M2Share.g_Config.sConnctionString);
                     _dbConnection.Open();
-                    result = true;
+                    return true;
                 }
                 catch (Exception e)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(e);
-                    throw;
+                    Console.ResetColor();
+                    return false;
                 }
             }
-            return result;
+            else if (_dbConnection.State == ConnectionState.Closed)
+            {
+                _dbConnection.Open();
+            }
+            return true;
         }
 
-        public void Close()
+        private void Close()
         {
             if (_dbConnection != null)
             {
