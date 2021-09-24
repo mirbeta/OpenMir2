@@ -8,7 +8,6 @@ namespace SelGate
     public class GateClient
     {
         public readonly IClientScoket ClientSocket;
-        private Timer _connectTimer;
 
         public GateClient()
         {
@@ -27,13 +26,14 @@ namespace SelGate
             ClientSocket.Connect();
         }
 
-        private void ConnectTimer(object obj)
+        public void CheckConnected()
         {
             if (!ClientSocket.IsConnected)
             {
                 ClientSocket.Address = GateShare.ServerAddr;
                 ClientSocket.Port = GateShare.ServerPort;
                 ClientSocket.Connect();
+                GateShare.MainOutMessage($"重新链接数据库[{GateShare.ServerAddr}:{GateShare.ServerPort}]服务器.", 1);
             }
         }
 
@@ -72,11 +72,6 @@ namespace SelGate
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             GateShare.boServerReady = false;
-            if (_connectTimer == null) //链接失败启动心跳链接
-            {
-                _connectTimer = new Timer(ConnectTimer, null, 5000, 5000);
-                Debug.WriteLine("链接数据库服务器失败，启动链接任务");
-            }
             GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]失败,请确认配置是否正确。", 1);
         }
 

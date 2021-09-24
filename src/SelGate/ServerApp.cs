@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 
@@ -9,83 +8,43 @@ namespace SelGate
 {
     public class ServerApp
     {
-        private long dwShowMainLogTick = 0;
+        private int dwShowMainLogTick = 0;
         private ArrayList TempLogList = null;
-        private long dwReConnectServerTick = 0;
-        private Timer logTimer;
 
-        public ServerApp(GateServer gateServer, GateClient gateClient)
+        public ServerApp()
         {
             GateShare.Initialization();
             TempLogList = new ArrayList();
         }
-
-        public void FormCloseQuery(System.Object Sender, System.ComponentModel.CancelEventArgs _e1)
+        
+        /// <summary>
+        /// 清理超时会话
+        /// </summary>
+        public void ClearTimer()
         {
-            //if (GateShare.boClose)
-            //{
-            //    return;
-            //}
-            //if (Application.MessageBox("是否确认退出服务器？", "提示信息", MB_YESNO + MB_ICONQUESTION) == IDYES)
-            //{
-            //    if (GateShare.boServiceStart)
-            //    {
-            //        StartTimer.Enabled = true;
-            //        CanClose = false;
-            //    }
-            //}
-            //else
-            //{
-            //    CanClose = false;
-            //}
-        }
-
-        public void SendTimerTimer(System.Object Sender, System.EventArgs _e1)
-        {
-            int nIndex;
-            TUserSession UserSession;
-            // if (ServerSocket.Active)
-            // {
-            //    GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
-            // }
             if (GateShare.boSendHoldTimeOut)
             {
-                //LbHold.Text = (GateShare.n456A30).ToString() + "#";
                 if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
                 {
                     GateShare.boSendHoldTimeOut = false;
                 }
             }
-            else
-            {
-                //LbHold.Text = (GateShare.n456A30).ToString();
-            }
-            //清理超时则会话
             if (GateShare.boGateReady && (!GateShare.boKeepAliveTimcOut))
             {
-                for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
+                for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
                 {
-                    UserSession = GateShare.g_SessionArray[nIndex];
-                    if (UserSession.Socket != null)
+                    var userSession = GateShare.g_SessionArray[nIndex];
+                    if (userSession.Socket != null)
                     {
-                        if ((HUtil32.GetTickCount() - UserSession.dwUserTimeOutTick) > 60 * 60 * 1000)
+                        if ((HUtil32.GetTickCount() - userSession.dwUserTimeOutTick) > 60 * 60 * 1000)
                         {
-                            UserSession.Socket.Close();
-                            UserSession.Socket = null;
-                            UserSession.SocketHandle = -1;
-                            UserSession.MsgList.Clear();
-                            UserSession.sRemoteIPaddr = "";
+                            userSession.Socket.Close();
+                            userSession.Socket = null;
+                            userSession.SocketHandle = -1;
+                            userSession.sRemoteIPaddr = "";
+                            userSession.MsgList.Clear();
                         }
                     }
-                }
-            }
-            if (!GateShare.boGateReady && (GateShare.boServiceStart))
-            {
-                if ((HUtil32.GetTickCount() - dwReConnectServerTick) > 1000)// 30 * 1000
-                {
-                    dwReConnectServerTick = HUtil32.GetTickCount();
-                    //ClientSocket.Port = GateShare.ServerPort;
-                    //ClientSocket.Host = GateShare.ServerAddr;
                 }
             }
         }
@@ -117,7 +76,6 @@ namespace SelGate
         {
             try
             {
-                logTimer = new Timer(ShowMainLogMsg, null, 0, 100);
                 GateShare.MainOutMessage("欢迎使用翎风系统软件...", 0);
                 GateShare.MainOutMessage("网站:http://www.gameofmir.com", 0);
                 GateShare.MainOutMessage("论坛:http://bbs.gameofmir.com", 0);
@@ -126,7 +84,6 @@ namespace SelGate
                 GateShare.boGateReady = false;
                 GateShare.boServerReady = false;
                 GateShare.nSessionCount = 0;
-                dwReConnectServerTick = HUtil32.GetTickCount() - 25 * 1000;
                 GateShare.boKeepAliveTimcOut = false;
                 GateShare.nSendMsgCount = 0;
                 //dwSendKeepAliveTick = HUtil32.GetTickCount();
@@ -213,7 +170,7 @@ namespace SelGate
             IniUserSessionArray();
         }
 
-        private void ShowMainLogMsg(object obj)
+        public void ShowMainLogMsg()
         {
             if ((HUtil32.GetTickCount() - dwShowMainLogTick) < 200)
             {

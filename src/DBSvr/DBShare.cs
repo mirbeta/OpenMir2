@@ -355,26 +355,6 @@ namespace DBSvr
 
     public class TDBHeader
     {
-        public string sDesc;
-        public int n24;
-        public int n28;
-        public int n2C;
-        public int n30;
-        public int n34;
-        public int n38;
-        public int n3C;
-        public int n40;
-        public int n44;
-        public int n48;
-        public int n4C;
-        public int n50;
-        public int n54;
-        public int n58;
-        public int nLastIndex;
-        public DateTime dLastDate;
         public int nHumCount;
-        public int n6C;
-        public int n70;
-        public DateTime dUpdateDate;
     }
 }

@@ -10,9 +10,6 @@ namespace DBSvr
 {
     public class MySqlHumRecordDB
     {
-        public int m_nCurIndex = 0;
-        public int m_nFileHandle = 0;
-        public int n0C = 0;
         public TDBHeader m_Header = null;
         public Dictionary<string, int> m_QuickList = null;
         public Dictionary<int, string> m_IndexQuickList = null;
@@ -36,18 +33,14 @@ namespace DBSvr
 
         private void LoadQuickList()
         {
-            int nRecordIndex;
             int nIndex = 0;
-            IList<TQuickID> AccountList;
-            IList<string> ChrNameList;
             THumInfo DBRecord = null;
-            m_nCurIndex = 0;
             m_QuickList.Clear();
             m_QuickIDList.Clear();
             m_DeletedList.Clear();
-            nRecordIndex = 0;
-            AccountList = new List<TQuickID>();
-            ChrNameList = new List<string>();
+            var nRecordIndex = 0;
+            IList<TQuickID> AccountList = new List<TQuickID>();
+            IList<string> ChrNameList = new List<string>();
             try
             {
                 if (Open())
@@ -116,7 +109,6 @@ namespace DBSvr
         public bool Open()
         {
             bool result = false;
-            m_nCurIndex = 0;
             if (_dbConnection == null)
             {
                 _dbConnection = new MySqlConnection(DBShare.DBConnection);
@@ -341,7 +333,6 @@ namespace DBSvr
                     command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Header.boDeleted);
                     command.Parameters.AddWithValue("@Id", nIndex);
                     command.ExecuteNonQuery();
-                    m_nCurIndex = nIndex;
                     result = true;
                 }
             }
