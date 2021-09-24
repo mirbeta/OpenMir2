@@ -10,15 +10,17 @@ namespace SystemModule.Sockets
         public string RemoteAddress;
         public int RemotePort;
 
-
         public DSCClientConnectedEventArgs(Socket soc)
         {
             this.socket = soc;
-            var endPoint = (IPEndPoint)soc.RemoteEndPoint;
-            if (endPoint != null)
+            if (soc.RemoteEndPoint != null)
             {
-                this.RemoteAddress = endPoint.Address?.ToString();
-                this.RemotePort = endPoint.Port;
+                var endPoint = (IPEndPoint)soc.RemoteEndPoint;
+                if (endPoint != null)
+                {
+                    this.RemoteAddress = endPoint.Address?.ToString();
+                    this.RemotePort = endPoint.Port;
+                }
             }
         }
     }

@@ -1,3 +1,4 @@
+using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Threading;
 using SystemModule;
@@ -8,6 +9,7 @@ namespace SelGate
     public class GateClient
     {
         public readonly IClientScoket ClientSocket;
+        private int ConnectedCount = 0;
 
         public GateClient()
         {
@@ -28,12 +30,13 @@ namespace SelGate
 
         public void CheckConnected()
         {
-            if (!ClientSocket.IsConnected)
+            if (!ClientSocket.IsConnected && ConnectedCount <= 50 && GateShare.boServerReady == false)
             {
                 ClientSocket.Address = GateShare.ServerAddr;
                 ClientSocket.Port = GateShare.ServerPort;
                 ClientSocket.Connect();
-                GateShare.MainOutMessage($"重新链接数据库[{GateShare.ServerAddr}:{GateShare.ServerPort}]服务器.", 1);
+                ConnectedCount++;
+                //GateShare.MainOutMessage($"重新链接数据库[{GateShare.ServerAddr}:{GateShare.ServerPort}]服务器.", 1);
             }
         }
 
@@ -44,7 +47,8 @@ namespace SelGate
             GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
             //ResUserSessionArray();
             GateShare.boServerReady = true;
-            GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]成功。", 1);
+            ConnectedCount = 0;
+            GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]连接成功.", 1);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -66,13 +70,16 @@ namespace SelGate
             GateShare.boGateReady = false;
             GateShare.boServerReady = false;
             GateShare.nSessionCount = 0;
-            GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接。", 1);
+            GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             GateShare.boServerReady = false;
-            GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]失败,请确认配置是否正确。", 1);
+            if (ConnectedCount < 50)
+            {
+                GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接失败.", 1);
+            }
         }
 
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)

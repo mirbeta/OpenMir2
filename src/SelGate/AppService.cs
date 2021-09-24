@@ -54,7 +54,7 @@ namespace SelGate
             _serverApp.ClearTimer();
             if (!GateShare.boGateReady && (GateShare.boServiceStart))
             {
-                if ((HUtil32.GetTickCount() - dwReConnectServerTick) > 1000)// 30 * 1000
+                if ((HUtil32.GetTickCount() - dwReConnectServerTick) > 5000)// 30 * 1000
                 {
                     dwReConnectServerTick = HUtil32.GetTickCount();
                     _gateClient.CheckConnected();

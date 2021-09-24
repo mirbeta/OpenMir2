@@ -20,6 +20,7 @@ namespace GameSvr
             IDSocket = new IClientScoket();
             IDSocket.OnConnected += IDSocketConnect;
             IDSocket.OnDisconnected += IDSocketDisconnect;
+            IDSocket.OnError += IDSocketError;
             IDSocket.ReceivedDatagram += IdSocketRead;
             if (M2Share.g_Config != null)
             {
@@ -34,6 +35,10 @@ namespace GameSvr
             {
                 return;
             }
+            if (IDSocket.IsBusy)
+            {
+                return;
+            }
             IDSocket.Connect(IDSocket.Address, IDSocket.Port);
         }
 
@@ -43,11 +48,24 @@ namespace GameSvr
             try
             {
                 var str = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
-                M2Share.g_Config.sIDSocketRecvText = M2Share.g_Config.sIDSocketRecvText + str;
+                M2Share.g_Config.sIDSocketRecvText += str;
             }
             finally
             {
                 HUtil32.LeaveCriticalSection(M2Share.g_Config.UserIDSection);
+            }
+        }
+
+        private void IDSocketError(object sender, DSCClientErrorEventArgs e)
+        {
+            switch (e.ErrorCode)
+            {
+                case 10061:
+                    M2Share.ErrorMessage("无法链接登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]...");
+                    break;
+                case 10054:
+                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]关闭连接...");
+                    break;
             }
         }
 
@@ -74,7 +92,7 @@ namespace GameSvr
                     break;
                 }
             }
-            SendSocket(string.Format(sFormatMsg, new object[] { Grobal2.SS_SOFTOUTSESSION, sUserId, nId }));
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SOFTOUTSESSION, sUserId, nId));
         }
 
         public void SendHumanLogOutMsgA(string sUserID, int nID)
@@ -364,7 +382,10 @@ namespace GameSvr
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (!M2Share.g_Config.boIDSocketConnected) return;
+            // if (!M2Share.g_Config.boIDSocketConnected)
+            // {
+            //     return;
+            // }
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
             IDSocket.IsConnected = false;

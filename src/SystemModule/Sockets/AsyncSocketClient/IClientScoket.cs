@@ -46,6 +46,7 @@ namespace SystemModule.Sockets
             IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(ip), port);
             try
             {
+                IsBusy = true;
                 this.cli.BeginConnect(remoteEP, this.HandleConnect, this.cli);//开始异步连接
             }
             catch (ObjectDisposedException)
@@ -67,13 +68,13 @@ namespace SystemModule.Sockets
             Socket asyncState = (Socket)iar.AsyncState;
             try
             {
-                asyncState.EndConnect(iar);//结束异步连接
+                asyncState.EndConnect(iar); //结束异步连接
                 if (null != this.OnConnected)
                 {
-                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli));//引发连接成功事件
+                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli)); //引发连接成功事件
                     IsConnected = true;
                 }
-                this.StartWaitingForData(asyncState);//开始接收数据
+                this.StartWaitingForData(asyncState); //开始接收数据
             }
             catch (ObjectDisposedException ex)
             {
@@ -84,9 +85,13 @@ namespace SystemModule.Sockets
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    this.RaiseDisconnectedEvent(); //引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);//引发错误事件
+                this.RaiseErrorEvent(exception); //引发错误事件
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -232,7 +237,7 @@ namespace SystemModule.Sockets
         {
             if (null != this.OnError)
             {
-                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Address, Port, error));
+                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Address, Port, error.ErrorCode, error));
             }
         }
 

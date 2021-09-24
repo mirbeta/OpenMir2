@@ -59,7 +59,7 @@ namespace DBSvr
                         DBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
                         DBRecord.Header.sAccount = DBRecord.sAccount;
                         DBRecord.Header.sName = DBRecord.sChrName;
-                        DBRecord.Header.nSelectID = DBRecord.boSelected ? 1 : 0;
+                        DBRecord.Header.nSelectID = DBRecord.boSelected ? 0 : 1;
                         DBRecord.Header.boDeleted = DBRecord.boDeleted;
                         if (!DBRecord.Header.boDeleted)
                         {
@@ -67,7 +67,7 @@ namespace DBSvr
                             m_IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
                             AccountList.Add(new TQuickID()
                             {
-                                nIndex = DBRecord.Id, 
+                                nIndex = DBRecord.Id,
                                 sAccount = DBRecord.sAccount,
                                 nSelectID = DBRecord.Header.nSelectID
                             });

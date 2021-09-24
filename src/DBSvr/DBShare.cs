@@ -59,7 +59,7 @@ namespace DBSvr
         public static int nDELMaxLevel = 30;
         public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
 
-        public static void LoadGateID()
+        private static void LoadGateID()
         {
             StringList LoadList;
             string sLineText;
@@ -249,11 +249,9 @@ namespace DBSvr
 
         public static void Initialization()
         {
-            //InitializeCriticalSection(HumDB_CS);
             DenyChrNameList = new StringList();
             ServerIPList = new Hashtable();
             GateIDList = new Dictionary<string, short>();
-            //g_ClearMakeIndex = new object();
         }
     }
 
@@ -311,6 +309,9 @@ namespace DBSvr
         public string sText;
         public IList<TUserInfo> UserList;
         public long dwTick10;
+        /// <summary>
+        /// 网关ID
+        /// </summary>
         public short nGateID;
     }
 

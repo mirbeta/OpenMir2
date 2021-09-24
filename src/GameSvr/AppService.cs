@@ -31,7 +31,7 @@ namespace GameSvr
                 await M2Share.RunSocket.StartConsumer();
             }
         }
-        
+
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             M2Share.MainOutMessage("GameSvr is starting.");

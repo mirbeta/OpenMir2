@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
 
@@ -23,27 +20,7 @@ namespace LoginGate
             IniUserSessionArray();
         }
 
-        public void FormCloseQuery(System.Object Sender, System.ComponentModel.CancelEventArgs _e1)
-        {
-            //if (GateShare.boClose)
-            //{
-            //    return;
-            //}
-            //if (Application.MessageBox("是否确认退出服务器？", "提示信息", MB_YESNO + MB_ICONQUESTION) == IDYES)
-            //{
-            //    if (GateShare.boServiceStart)
-            //    {
-            //        StartTimer.Enabled = true;
-            //        CanClose = false;
-            //    }
-            //}
-            //else
-            //{
-            //    CanClose = false;
-            //}
-        }
-
-        public void SendTimerTimer(System.Object Sender, EventArgs _e1)
+        public void SendTimerTimer()
         {
             int nIndex;
             TUserSession UserSession;
@@ -51,14 +28,14 @@ namespace LoginGate
             //{
             //    GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
             //}
-            //if (GateShare.boSendHoldTimeOut)
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString() + "#";
-            //    if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
-            //    {
-            //        GateShare.boSendHoldTimeOut = false;
-            //    }
-            //}
+            if (GateShare.boSendHoldTimeOut)
+            {
+                //LbHold.Text = (GateShare.n456A30).ToString() + "#";
+                if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
+                {
+                    GateShare.boSendHoldTimeOut = false;
+                }
+            }
             //else
             //{
             //    LbHold.Text = (GateShare.n456A30).ToString();

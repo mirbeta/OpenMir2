@@ -2155,36 +2155,57 @@ namespace GameSvr
             PlayObject.m_UseItems[Grobal2.U_BOOTS] = HumItems[Grobal2.U_BOOTS];
             PlayObject.m_UseItems[Grobal2.U_CHARM] = HumItems[Grobal2.U_CHARM];
             BagItems = HumanRcd.Data.BagItems;
-            for (var i = BagItems.GetLowerBound(0); i <= BagItems.GetUpperBound(0); i++)
+            if (BagItems != null)
             {
-                if (BagItems[i].wIndex > 0)
+                for (var i = BagItems.GetLowerBound(0); i <= BagItems.GetUpperBound(0); i++)
                 {
-                    UserItem = BagItems[i];
-                    PlayObject.m_ItemList.Add(UserItem);
+                    if (BagItems[i] == null)
+                    {
+                        continue;
+                    }
+                    if (BagItems[i].wIndex > 0)
+                    {
+                        UserItem = BagItems[i];
+                        PlayObject.m_ItemList.Add(UserItem);
+                    }
                 }
             }
             HumMagic = HumanRcd.Data.Magic;
-            for (var i = HumMagic.GetLowerBound(0); i <= HumMagic.GetUpperBound(0); i++)
+            if (HumMagic != null)
             {
-                MagicInfo = M2Share.UserEngine.FindMagic(HumMagic[i].wMagIdx);
-                if (MagicInfo != null)
+                for (var i = HumMagic.GetLowerBound(0); i <= HumMagic.GetUpperBound(0); i++)
                 {
-                    UserMagic = new TUserMagic();
-                    UserMagic.MagicInfo = MagicInfo;
-                    UserMagic.wMagIdx = HumMagic[i].wMagIdx;
-                    UserMagic.btLevel = HumMagic[i].btLevel;
-                    UserMagic.btKey = HumMagic[i].btKey;
-                    UserMagic.nTranPoint = HumMagic[i].nTranPoint;
-                    PlayObject.m_MagicList.Add(UserMagic);
+                    if (HumMagic[i] == null)
+                    {
+                        continue;
+                    }
+                    MagicInfo = M2Share.UserEngine.FindMagic(HumMagic[i].wMagIdx);
+                    if (MagicInfo != null)
+                    {
+                        UserMagic = new TUserMagic();
+                        UserMagic.MagicInfo = MagicInfo;
+                        UserMagic.wMagIdx = HumMagic[i].wMagIdx;
+                        UserMagic.btLevel = HumMagic[i].btLevel;
+                        UserMagic.btKey = HumMagic[i].btKey;
+                        UserMagic.nTranPoint = HumMagic[i].nTranPoint;
+                        PlayObject.m_MagicList.Add(UserMagic);
+                    }
                 }
             }
             StorageItems = HumanRcd.Data.StorageItems;
-            for (var i = StorageItems.GetLowerBound(0); i <= StorageItems.GetUpperBound(0); i++)
+            if (StorageItems != null)
             {
-                if (StorageItems[i].wIndex > 0)
+                for (var i = StorageItems.GetLowerBound(0); i <= StorageItems.GetUpperBound(0); i++)
                 {
-                    UserItem = StorageItems[i];
-                    PlayObject.m_StorageItemList.Add(UserItem);
+                    if (StorageItems[i] == null)
+                    {
+                        continue;
+                    }
+                    if (StorageItems[i].wIndex > 0)
+                    {
+                        UserItem = StorageItems[i];
+                        PlayObject.m_StorageItemList.Add(UserItem);
+                    }
                 }
             }
         }

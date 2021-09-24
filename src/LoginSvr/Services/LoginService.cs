@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using SystemModule;
@@ -10,6 +11,7 @@ namespace LoginSvr
 {
     public class LoginService
     {
+        private readonly ISocketServer _serverSocket;
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
 
@@ -17,6 +19,84 @@ namespace LoginSvr
         {
             _accountDB = accountDB;
             _masSock = masSock;
+            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket.OnClientConnect += GSocketClientConnect;
+            _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
+            _serverSocket.OnClientRead += GSocketClientRead;
+            _serverSocket.OnClientError += GSocketClientError;
+            _serverSocket.Init();
+        }
+
+        public void Start()
+        {
+            _serverSocket.Start(LSShare.g_Config.sGateAddr, LSShare.g_Config.nGatePort);
+            LSShare.MainOutMessage($"4) 账号登陆服务[{LSShare.g_Config.sGateAddr}:{LSShare.g_Config.nGatePort}]已启动.");
+        }
+        
+        private void GSocketClientConnect(object sender, AsyncUserToken e)
+        {
+            var Config = LSShare.g_Config;
+            var GateInfo = new TGateInfo();
+            GateInfo.Socket = e.Socket;
+            GateInfo.sIPaddr = LSShare.GetGatePublicAddr(Config, e.RemoteIPaddr);
+            GateInfo.sReceiveMsg = "";
+            GateInfo.UserList = new List<TUserInfo>();
+            GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
+            Config.GateList.Add(GateInfo);
+        }
+
+        private void GSocketClientDisconnect(object sender, AsyncUserToken e)
+        {
+            TGateInfo GateInfo;
+            TUserInfo UserInfo;
+            TConfig Config = LSShare.g_Config;
+            for (var i = 0; i < Config.GateList.Count; i++)
+            {
+                GateInfo = Config.GateList[i];
+                if (GateInfo.Socket == e.Socket)
+                {
+                    for (var j = 0; j < GateInfo.UserList.Count; j++)
+                    {
+                        UserInfo = GateInfo.UserList[j];
+                        if (Config.boShowDetailMsg)
+                        {
+                            LSShare.MainOutMessage("Close: " + UserInfo.sUserIPaddr);
+                        }
+                        UserInfo = null;
+                    }
+                    GateInfo.UserList = null;
+                    GateInfo = null;
+                    Config.GateList.RemoveAt(i);
+                    break;
+                }
+            }
+            LSShare.MainOutMessage($"[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+        }
+
+        private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        {
+            
+        }
+
+        private void GSocketClientRead(object sender, AsyncUserToken e)
+        {
+            TGateInfo GateInfo;
+            TConfig Config = LSShare.g_Config;
+            for (var i = 0; i < Config.GateList.Count; i++)
+            {
+                GateInfo = Config.GateList[i];
+                if (GateInfo.Socket == e.Socket)
+                {
+                    var nReviceLen = e.BytesReceived;
+                    var data = new byte[nReviceLen];
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
+                    GateInfo.sReceiveMsg = GateInfo.sReceiveMsg + sReviceMsg;
+
+                    LSShare.MainOutMessage("收到数据:" + GateInfo.sReceiveMsg);
+                    break;
+                }
+            }
         }
 
         private void LoadAddrTable(TConfig Config)
@@ -93,27 +173,37 @@ namespace LoginSvr
         /// <summary>
         /// 是否付费账号
         /// </summary>
-        /// <param name="Config"></param>
-        /// <param name="sIPaddr"></param>
-        /// <param name="sAccount"></param>
         /// <returns></returns>
-        public bool IsPayMent(TConfig Config, string sIPaddr, string sAccount)
+        private bool IsPayMent(TConfig Config, string sIPaddr, string sAccount)
         {
-            bool result = false;
-            if ((Config.AccountCostList.ContainsKey(sAccount)) || (Config.IPaddrCostList.ContainsKey(sIPaddr)))
-            {
-                result = true;
-            }
-            return result;
+            return Config.AccountCostList.ContainsKey(sAccount) || Config.IPaddrCostList.ContainsKey(sIPaddr);
         }
         
-        public void ProcessGate(TConfig Config)
+        public void ProceDataTimer()
+        {
+            if (LSShare.bo470D20 && !LSShare.g_boDataDBReady)
+            {
+                return;
+            }
+            LSShare.bo470D20 = true;
+            try
+            {
+                TConfig Config = LSShare.g_Config;
+                ProcessGate(Config);
+            }
+            finally
+            {
+                LSShare.bo470D20 = false;
+            }
+        }
+
+        private void ProcessGate(TConfig Config)
         {
             int I;
             int II;
             TGateInfo GateInfo;
             TUserInfo UserInfo;
-            //EnterCriticalSection(Config.GateCriticalSection);
+            HUtil32.EnterCriticalSection(Config.GateCriticalSection);
             try
             {
                 Config.dwProcessGateTick = HUtil32.GetTickCount();
@@ -125,7 +215,7 @@ namespace LoginSvr
                         break;
                     }
                     GateInfo = Config.GateList[I];
-                    if (GateInfo.sReceiveMsg != "" && GateInfo.UserList != null)
+                    if (!string.IsNullOrEmpty(GateInfo.sReceiveMsg) && GateInfo.UserList != null)
                     {
                         DecodeGateData(Config, GateInfo);
                         Config.sGateIPaddr = GateInfo.sIPaddr;
@@ -137,7 +227,7 @@ namespace LoginSvr
                                 break;
                             }
                             UserInfo = GateInfo.UserList[II];
-                            if (UserInfo.sReceiveMsg != "")
+                            if (!string.IsNullOrEmpty(UserInfo.sReceiveMsg))
                             {
                                 DecodeUserData(Config, UserInfo);
                             }
@@ -157,7 +247,7 @@ namespace LoginSvr
             }
             finally
             {
-                // LeaveCriticalSection(Config.GateCriticalSection);
+                HUtil32.LeaveCriticalSection(Config.GateCriticalSection);
             }
         }
 
@@ -629,7 +719,7 @@ namespace LoginSvr
             }
         }
 
-        public void AccountCheckProtocol(TUserInfo UserInfo, int nDate)
+        private void AccountCheckProtocol(TUserInfo UserInfo, int nDate)
         {
             TDefaultMessage DefMsg;
             if (nDate < LSShare.nVersionDate)
@@ -645,7 +735,7 @@ namespace LoginSvr
             SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
         }
 
-        public bool KickUser(TConfig Config, TUserInfo UserInfo)
+        private bool KickUser(TConfig Config, TUserInfo UserInfo)
         {
             TGateInfo GateInfo;
             TUserInfo User;
@@ -677,9 +767,6 @@ namespace LoginSvr
         /// <summary>
         /// 账号登陆
         /// </summary>
-        /// <param name="Config"></param>
-        /// <param name="UserInfo"></param>
-        /// <param name="sData"></param>
         private void AccountLogin(TConfig Config, TUserInfo UserInfo, string sData)
         {
             string sLoginID = string.Empty;
@@ -816,12 +903,7 @@ namespace LoginSvr
         /// <summary>
         /// 获取角色网关信息
         /// </summary>
-        /// <param name="Config"></param>
-        /// <param name="sServerName"></param>
-        /// <param name="sIPaddr"></param>
-        /// <param name="sSelGateIP"></param>
-        /// <param name="nSelGatePort"></param>
-        public void GetSelGateInfo(TConfig Config, string sServerName, string sIPaddr, ref string sSelGateIP, ref int nSelGatePort)
+        private void GetSelGateInfo(TConfig Config, string sServerName, string sIPaddr, ref string sSelGateIP, ref int nSelGatePort)
         {
             int nGateIdx;
             int nGateCount;
@@ -918,7 +1000,7 @@ namespace LoginSvr
         /// <param name="Config"></param>
         /// <param name="UserInfo"></param>
         /// <param name="sData"></param>
-        public void AccountSelectServer(TConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountSelectServer(TConfig Config, TUserInfo UserInfo, string sData)
         {
             TDefaultMessage DefMsg;
             bool boPayCost;
@@ -965,6 +1047,7 @@ namespace LoginSvr
                         _masSock.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString() + "/" + ((UserInfo.boPayCost == true ? 1 : 0)).ToString() + "/" + (nPayMode).ToString() + "/" + UserInfo.sUserIPaddr);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, UserInfo.nSessionID, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + (nSelGatePort).ToString() + "/" + (UserInfo.nSessionID).ToString()));
+                        LSShare.MainOutMessage($"同步会话消息到[{sServerName}]成功.");
                     }
                     else
                     {
@@ -972,6 +1055,7 @@ namespace LoginSvr
                         SessionDel(Config, UserInfo.nSessionID);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
+                        LSShare.MainOutMessage($"同步会话消息到[{sServerName}]失败.");
                     }
                 }
             }
@@ -1133,7 +1217,7 @@ namespace LoginSvr
             }
         }
 
-        public void SendGateMsg(Socket Socket, string sSockIndex, string sMsg)
+        private void SendGateMsg(Socket Socket, string sSockIndex, string sMsg)
         {
             var sSendMsg = "%" + sSockIndex + "/#" + sMsg + "!$";
             Socket.SendText(sSendMsg);

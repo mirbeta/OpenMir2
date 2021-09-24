@@ -127,10 +127,6 @@ namespace DBSvr
             int n18;
             int wE;
             int w10;
-            if (DBShare.boOpenDBBusy)
-            {
-                return;
-            }
             try
             {
                 bo25 = false;
@@ -380,7 +376,7 @@ namespace DBSvr
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
             bo21 = false;
-            if (sHumanRCD.Length == 10 * 4 / 3)
+            if (sHumanRCD.Length >= 10 * 4 / 3)
             {
                 HumanRCD = new THumDataInfo(EDcode.DecodeBuffer(sHumanRCD));
             }

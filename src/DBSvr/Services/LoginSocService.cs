@@ -38,7 +38,7 @@ namespace DBSvr
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _socket.IsBusy = false;
-            DBShare.OutMainMessage($"与链接账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
+            DBShare.OutMainMessage($"账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
         }
 
         public void Start()
@@ -59,11 +59,17 @@ namespace DBSvr
 
         public void CheckConnection()
         {
-            if (!_socket.IsConnected && _socket.IsBusy)
+            if (_socket.IsConnected)
             {
-                _socket.Connect(sIDAddr, nIDPort);
-                _socket.IsBusy = true;
+                return;
+
             }
+            if (_socket.IsBusy)
+            { 
+                return;
+            }
+            _socket.Connect(sIDAddr, nIDPort);
+            _socket.IsBusy = true;
         }
 
         private void IDSocketRead(object sender, DSCClientDataInEventArgs e)

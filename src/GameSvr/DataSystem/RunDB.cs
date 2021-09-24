@@ -147,10 +147,6 @@ namespace GameSvr
         /// <summary>
         /// 保存玩家数据到DB
         /// </summary>
-        /// <param name="sAccount"></param>
-        /// <param name="sCharName"></param>
-        /// <param name="nSessionID"></param>
-        /// <param name="HumanRcd"></param>
         /// <returns></returns>
         public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
         {
@@ -176,7 +172,6 @@ namespace GameSvr
                 }
                 else
                 {
-                    Debug.WriteLine("[RunDB] 保存人物({0})数据失败", sCharName);
                     M2Share.ErrorMessage($"[RunDB] 保存人物({sCharName})数据失败");
                 }
             }
@@ -205,7 +200,7 @@ namespace GameSvr
                     if (nRecog == 1)
                     {
                         sHumanRcdStr = HUtil32.GetValidStr3(sHumanRcdStr, ref sDBMsg, '/');
-                        string sDBCharName = EDcode.DeCodeString(sDBMsg, true);
+                        var sDBCharName = EDcode.DeCodeString(sDBMsg);
                         if (sDBCharName == sCharName)
                         {
                             var dataBuff = EDcode.DecodeBuffer(sHumanRcdStr);

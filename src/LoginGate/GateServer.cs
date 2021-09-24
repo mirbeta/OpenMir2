@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Net;
 using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
@@ -49,7 +48,7 @@ namespace LoginGate
             }
             else
             {
-                sLocalIPaddr = IPAddress.Any.AddressFamily.ToString();
+                sLocalIPaddr = e.RemoteIPaddr;
             }
             if (IsBlockIP(sRemoteIPaddr))
             {

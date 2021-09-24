@@ -27,9 +27,10 @@ namespace SelGate
 
         public void Start()
         {
-            //网关对外开放的端口号，此端口标准为 7200，此端口可根据自己的要求进行修改。
+            //网关对外开放的端口号，此端口标准为 7100，此端口可根据自己的要求进行修改。
             ServerSocket.Start(GateShare.GateAddr, GateShare.GatePort);
             //SendTimer.Enabled = true;
+            GateShare.MainOutMessage($"角色网关[{GateShare.GateAddr}:{GateShare.GatePort}]已启动.", 1);
             decodeTimer = new Timer(DecodeTimer, null, 0, 1);
         }
 

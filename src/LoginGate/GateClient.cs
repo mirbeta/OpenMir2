@@ -1,4 +1,3 @@
-using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -7,7 +6,6 @@ namespace LoginGate
     public class GateClient
     {
         public IClientScoket ClientSocket;
-        private Timer _connectTimer;
 
         public GateClient()
         {
@@ -22,15 +20,19 @@ namespace LoginGate
         {
             ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
             ResUserSessionArray();
-            _connectTimer = new Timer(ConnectTimer, null, 1000, 3000);
         }
 
-        private void ConnectTimer(object obj)
+        public void CheckConnected()
         {
-            if (!ClientSocket.IsConnected)
+            if (ClientSocket.IsConnected)
             {
-                ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
+                return;
             }
+            if (ClientSocket.IsBusy)
+            {
+                return;
+            }
+            ClientSocket.Connect(GateShare.ServerAddr, GateShare.ServerPort);
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)

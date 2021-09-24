@@ -353,8 +353,8 @@ namespace DBSvr
                                 {
                                     if (UserInfo.sConnID == s0C)
                                     {
-                                        UserInfo.s2C = UserInfo.s2C + s10;
-                                        if (s10.IndexOf("!", StringComparison.OrdinalIgnoreCase) < 1)
+                                        UserInfo.s2C += s10;
+                                        if (s10.IndexOf("!", StringComparison.Ordinal) < 1)
                                         {
                                             continue;
                                         }
@@ -476,6 +476,7 @@ namespace DBSvr
             switch (Msg.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
+                    DBShare.MainOutMessage("查询角色");
                     if (!UserInfo.boChrQueryed || ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 200))
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
@@ -623,6 +624,7 @@ namespace DBSvr
                     HumDB.Close();
                 }
                 ChrList = null;
+                DBShare.OutMainMessage("查询角色成功:" + s40);
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
             }
             else
@@ -925,7 +927,7 @@ namespace DBSvr
                 {
                     sRouteIP = UserInfo.sGateIPaddr;
                 }
-                string sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + nRoutePort + nMapIndex);
+                string sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + (nRoutePort + nMapIndex));
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sDefMsg + sRouteMsg);
                 _LoginSoc.SetGlobaSessionPlay(UserInfo.nSessionID);
                 result = true;
@@ -944,7 +946,7 @@ namespace DBSvr
 
         private string GateRouteIP_GetRoute(TRouteInfo RouteInfo, ref int nGatePort)
         {
-            var nGateIndex = (new System.Random(RouteInfo.nGateCount)).Next();
+            var nGateIndex = RandomNumber.GetInstance().Random(RouteInfo.nGateCount);
             var result = RouteInfo.sGameGateIP[nGateIndex];
             nGatePort = RouteInfo.nGameGatePort[nGateIndex];
             return result;
@@ -958,6 +960,10 @@ namespace DBSvr
             for (var i = DBShare.g_RouteInfo.GetLowerBound(0); i <= DBShare.g_RouteInfo.GetUpperBound(0); i++)
             {
                 RouteInfo = DBShare.g_RouteInfo[i];
+                if (RouteInfo == null)
+                {
+                    continue;
+                }
                 if (RouteInfo.sSelGateIP == sGateIP)
                 {
                     result = GateRouteIP_GetRoute(RouteInfo, ref nPort);

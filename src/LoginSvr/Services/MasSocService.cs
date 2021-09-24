@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using Org.BouncyCastle.Crypto.Parameters;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
@@ -29,7 +28,7 @@ namespace LoginSvr
         {
             TConfig Config = LSShare.g_Config;
             serverSocket.Start(Config.sServerAddr, Config.nServerPort);
-            LSShare.MainOutMessage($"账号登陆服务器[{Config.sServerAddr}:{Config.nServerPort}]已启动.等待链接...");
+            LSShare.MainOutMessage($"3) 账号数据服务[{Config.sServerAddr}:{Config.nServerPort}]已启动.");
             LoadServerAddr();
             LoadUserLimit();
         }
@@ -53,7 +52,7 @@ namespace LoginSvr
                 MsgServer.sReceiveMsg = "";
                 MsgServer.Socket = e.Socket;
                 m_ServerList.Add(MsgServer);
-                LSShare.MainOutMessage($"服务器[{e.RemoteIPaddr}:{e.RemotePort}]链接成功.");
+                LSShare.MainOutMessage($"[{e.RemoteIPaddr}:{e.RemotePort}]建立链接.");
             }
             else
             {
@@ -87,7 +86,7 @@ namespace LoginSvr
 
         private void MSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-
+                
         }
 
         private void MSocketClientRead(object sender, AsyncUserToken e)
@@ -139,7 +138,7 @@ namespace LoginSvr
                                 {
                                     LSShare.nOnlineCountMax = LSShare.nOnlineCountMin;
                                 }
-                                SendServerMsgA(Grobal2.SS_KEEPALIVE, (LSShare.nOnlineCountMin).ToString());
+                                SendServerMsgA(Grobal2.SS_KEEPALIVE, LSShare.nOnlineCountMin.ToString());
                                 RefServerLimit(sServerName);
                                 break;
                             case Grobal2.UNKNOWMSG:
