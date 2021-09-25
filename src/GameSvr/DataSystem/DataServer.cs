@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Sockets;
 
 namespace GameSvr
@@ -14,6 +13,7 @@ namespace GameSvr
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.ReceivedDatagram += DBSocketRead;
+            _clientScoket.OnError += DBSocketError;
         }
 
         public void Start()
@@ -75,6 +75,22 @@ namespace GameSvr
         {
             _clientScoket.IsConnected = true;
             M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...", messageColor: System.ConsoleColor.Green);
+        }
+
+        private void DBSocketError(object sender, DSCClientErrorEventArgs e)
+        {
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]拒绝链接...");
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]关闭连接...");
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]链接超时...");
+                    break;
+            }
         }
 
         private void DBSocketRead(object sender, DSCClientDataInEventArgs e)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -60,11 +59,14 @@ namespace GameSvr
         {
             switch (e.ErrorCode)
             {
-                case 10061:
-                    M2Share.ErrorMessage("无法链接登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]...");
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]拒绝链接...");
                     break;
-                case 10054:
+                case System.Net.Sockets.SocketError.ConnectionReset:
                     M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]关闭连接...");
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]链接超时...");
                     break;
             }
         }

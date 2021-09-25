@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packages;
 using SystemModule.Sockets;
 
 namespace GameGate
@@ -328,8 +327,8 @@ namespace GameGate
                 _runGateClient.LoadConfig();
                 _runGateClient.Start();
                 GateShare.boServerReady = true;
+                decodeTimer = new Timer(DecodeTimer, null, 0, 200);
                 sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
-                decodeTimer = new Timer(DecodeTimer, null, 3000, 200);
 
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
                 GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);

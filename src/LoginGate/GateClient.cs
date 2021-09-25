@@ -66,6 +66,18 @@ namespace LoginGate
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             GateShare.boServerReady = false;
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    GateShare.MainOutMessage("账号登陆服务器[" + GateShare.ServerAddr + ":" + GateShare.ServerPort + "]拒绝链接...", 1);
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    GateShare.MainOutMessage("账号登陆服务器[" + GateShare.ServerAddr + ":" + GateShare.ServerPort + "]关闭连接...", 1);
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    GateShare.MainOutMessage("账号登陆服务器[" + GateShare.ServerAddr + ":" + GateShare.ServerPort + "]链接超时...", 1);
+                    break;
+            }
         }
 
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)

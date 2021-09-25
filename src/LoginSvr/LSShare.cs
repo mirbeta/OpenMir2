@@ -72,14 +72,13 @@ namespace LoginSvr
         public static void SaveGateConfig(TConfig Config)
         {
             StringList SaveList;
-            int i;
             int n8;
             string s10;
             string sC;
             SaveList = new StringList();
             SaveList.Add(";No space allowed");
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
-            for (i = 0; i < Config.nRouteCount; i++)
+            for (var i = 0; i < Config.nRouteCount; i++)
             {
                 sC = GenSpaceString(Config.GateRoute[i].sServerName, 15) +
                      GenSpaceString(Config.GateRoute[i].sTitle, 15) +

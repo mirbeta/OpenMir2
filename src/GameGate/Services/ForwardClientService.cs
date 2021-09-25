@@ -162,8 +162,18 @@ namespace GameGate
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
-            Console.WriteLine(e.exception);
-            //GateShare.boServerReady = false;
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    break;
+            }
         }
 
         public void RestSessionArray()

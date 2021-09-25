@@ -23,11 +23,28 @@ namespace DBSvr
             _socket.ReceivedDatagram += IDSocketRead;
             _socket.OnConnected += IDSocketConnected;
             _socket.OnDisconnected += IDSocketDisconnected;
+            _socket.OnError += IDSocketError;
             IniFile Conf = new IniFile(DBShare.sConfFileName);
             sIDAddr = Conf.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
             nIDPort = Conf.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
             Conf = null;
             GlobaSessionList = new List<TGlobaSessionInfo>();
+        }
+
+        private void IDSocketError(object sender, DSCClientErrorEventArgs e)
+        {
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]拒绝链接...");
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]关闭连接...");
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]链接超时...");
+                    break;
+            }
         }
 
         private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
@@ -37,7 +54,6 @@ namespace DBSvr
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            _socket.IsBusy = false;
             DBShare.OutMainMessage($"账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
         }
 
@@ -62,14 +78,12 @@ namespace DBSvr
             if (_socket.IsConnected)
             {
                 return;
-
             }
             if (_socket.IsBusy)
             { 
                 return;
             }
             _socket.Connect(sIDAddr, nIDPort);
-            _socket.IsBusy = true;
         }
 
         private void IDSocketRead(object sender, DSCClientDataInEventArgs e)

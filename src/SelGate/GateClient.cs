@@ -1,6 +1,3 @@
-using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
-using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -36,7 +33,6 @@ namespace SelGate
                 ClientSocket.Port = GateShare.ServerPort;
                 ClientSocket.Connect();
                 ConnectedCount++;
-                //GateShare.MainOutMessage($"重新链接数据库[{GateShare.ServerAddr}:{GateShare.ServerPort}]服务器.", 1);
             }
         }
 
@@ -78,7 +74,18 @@ namespace SelGate
             GateShare.boServerReady = false;
             if (ConnectedCount < 50)
             {
-                GateShare.MainOutMessage($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接失败.", 1);
+                switch (e.ErrorCode)
+                {
+                    case System.Net.Sockets.SocketError.ConnectionRefused:
+                        GateShare.MainOutMessage("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                        break;
+                    case System.Net.Sockets.SocketError.ConnectionReset:
+                        GateShare.MainOutMessage("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                        break;
+                    case System.Net.Sockets.SocketError.TimedOut:
+                        GateShare.MainOutMessage("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                        break;
+                }
             }
         }
 

@@ -376,7 +376,7 @@ namespace DBSvr
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
             bo21 = false;
-            if (sHumanRCD.Length >= 10 * 4 / 3)
+            if (sHumanRCD.Length >= 5000)
             {
                 HumanRCD = new THumDataInfo(EDcode.DecodeBuffer(sHumanRCD));
             }

@@ -1,11 +1,11 @@
-using System.Threading;
+锘縰sing System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
 namespace LoginSvr
 {
     /// <summary>
-    /// 远程监控服务（未完善）
+    /// 杩滅▼鐩戞帶鏈嶅姟(鏃犵敤)
     /// </summary>
     public class MonSocService
     {
@@ -40,11 +40,11 @@ namespace LoginSvr
                     sMsg = sMsg + sServerName + "/" + msgServer.nServerIndex + "/" + msgServer.nOnlineCount + "/";
                     if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)
                     {
-                        sMsg = sMsg + "正常 ;";
+                        sMsg = sMsg + "姝ｅ父 ;";
                     }
                     else
                     {
-                        sMsg = sMsg + "超时 ;";
+                        sMsg = sMsg + "瓒呮椂 ;";
                     }
                 }
                 else

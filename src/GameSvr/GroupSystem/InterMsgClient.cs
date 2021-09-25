@@ -119,7 +119,18 @@ namespace GameSvr
 
         private void MsgClientError(object sender, DSCClientErrorEventArgs e)
         {
-            M2Share.MainOutMessage("无法连接主服务器(" + MsgClient.Address + ':' + MsgClient.Port + ")...");
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]拒绝链接...");
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]关闭连接...");
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]链接超时...");
+                    break;
+            }
         }
 
         private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e)
