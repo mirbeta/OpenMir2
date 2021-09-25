@@ -69,6 +69,7 @@ namespace SystemModule
             Magic = new TMagicRcd[20];
             Abil = new TAbility();
             BonusAbil = new TNakedAbility();
+            wStatusTimeArr = new ushort[12];
         }
 
         public THumInfoData(byte[] buffer) 
@@ -178,7 +179,7 @@ namespace SystemModule
                 backingStream.Write(nGold);
                 backingStream.Write(Abil.ToByte());//50
                 for (var i = 0; i < wStatusTimeArr.Length; i++)
-                {
+                { 
                     backingStream.Write(wStatusTimeArr[i]); //24
                 }
                 backingStream.Write(sHomeMap.ToByte(17));

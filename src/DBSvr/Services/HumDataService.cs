@@ -276,7 +276,6 @@ namespace DBSvr
         {
             string sDefMsg;
             string sData;
-            TDefaultMessage DefMsg;
             if (nLen == Grobal2.DEFBLOCKSIZE)
             {
                 sDefMsg = sMsg;
@@ -287,7 +286,7 @@ namespace DBSvr
                 sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
                 sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE - 6);
             }
-            DefMsg = EDcode.DecodeMessage(sDefMsg);
+            var DefMsg = EDcode.DecodeMessage(sDefMsg);
             switch (DefMsg.Ident)
             {
                 case Grobal2.DB_LOADHUMANRCD:

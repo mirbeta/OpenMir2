@@ -101,7 +101,7 @@ namespace SystemModule
 
         public static TDefaultMessage DecodeMessage(string str)
         {
-            var EncBuf = new byte[BUFFERSIZE];
+            var EncBuf = new byte[str.Length];
             var bSrc = HUtil32.StringToByteAry(str);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
             return new TDefaultMessage(EncBuf);

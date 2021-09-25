@@ -2099,8 +2099,7 @@ namespace GameSvr
             PlayObject.m_Abil.MaxWearWeight = HumData.Abil.MaxWearWeight;
             PlayObject.m_Abil.HandWeight = HumData.Abil.HandWeight;
             PlayObject.m_Abil.MaxHandWeight = HumData.Abil.MaxHandWeight;
-            //PlayObject.m_Abil:=HumData.Abil;
-            //PlayObject.m_wStatusTimeArr = HumData.wStatusTimeArr;
+            PlayObject.m_wStatusTimeArr = HumData.wStatusTimeArr;
             PlayObject.m_sHomeMap = HumData.sHomeMap;
             PlayObject.m_nHomeX = HumData.wHomeX;
             PlayObject.m_nHomeY = HumData.wHomeY;
@@ -2112,15 +2111,22 @@ namespace GameSvr
             PlayObject.m_boMaster = HumData.boMaster;
             PlayObject.m_sDearName = HumData.sDearName;
             PlayObject.m_sStoragePwd = HumData.sStoragePwd;
-            if (PlayObject.m_sStoragePwd != "") PlayObject.m_boPasswordLocked = true;
+            if (PlayObject.m_sStoragePwd != "")
+            {
+                PlayObject.m_boPasswordLocked = true;
+            }
             PlayObject.m_nGameGold = HumData.nGameGold;
             PlayObject.m_nGamePoint = HumData.nGamePoint;
             PlayObject.m_nPayMentPoint = HumData.nPayMentPoint;
             PlayObject.m_nPkPoint = HumData.nPKPoint;
             if (HumData.btAllowGroup > 0)
+            {
                 PlayObject.m_boAllowGroup = true;
+            }
             else
+            {
                 PlayObject.m_boAllowGroup = false;
+            }
             PlayObject.btB2 = HumData.btF9;
             PlayObject.m_btAttatckMode = HumData.btAttatckMode;
             PlayObject.m_nIncHealth = HumData.btIncHealth;
