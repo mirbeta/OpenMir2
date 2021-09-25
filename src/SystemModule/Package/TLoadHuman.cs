@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public class TLoadHuman
+    public class TLoadHuman : Package
     {
         public string sAccount;
         public string sChrName;
@@ -28,10 +28,12 @@ namespace SystemModule
 
         }
 
-        public TLoadHuman(byte[] buffer)
+        public TLoadHuman(byte[] buffer) : base(buffer)
         {
-
+            sAccount = ReadPascalString(16);
+            sChrName = ReadPascalString(20);
+            sUserAddr = ReadPascalString(17);
+            nSessionID = ReadInt32();
         }
     }
 }
-

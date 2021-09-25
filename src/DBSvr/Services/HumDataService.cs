@@ -17,9 +17,10 @@ namespace DBSvr
         private readonly ISocketServer serverSocket;
         private readonly LoginSocService _LoginSoc;
 
-        public HumDataService(LoginSocService frmIdSoc)
+        public HumDataService(LoginSocService frmIdSoc, MySqlHumDB humDb)
         {
             _LoginSoc = frmIdSoc;
+            HumDB = humDb;
             ServerList = new List<TServerInfo>();
             HumSessionList = new List<THumSession>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -376,7 +377,7 @@ namespace DBSvr
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
             bo21 = false;
-            if (sHumanRCD.Length >= 5000)
+            if (sHumanRCD.Length >= 4000)
             {
                 HumanRCD = new THumDataInfo(EDcode.DecodeBuffer(sHumanRCD));
             }
