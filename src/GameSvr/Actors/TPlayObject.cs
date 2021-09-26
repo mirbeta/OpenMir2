@@ -5620,7 +5620,7 @@ namespace GameSvr
             TMagicRcd[] HumMagic;
             TUserMagic UserMagic;
             HumData = HumanRcd.Data;
-            HumData.sChrName = m_sCharName;
+            HumData.sCharName = m_sCharName;
             HumData.sCurMap = m_sMapName;
             HumData.wCurX = m_nCurrX;
             HumData.wCurY = m_nCurrY;

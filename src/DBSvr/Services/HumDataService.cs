@@ -257,7 +257,7 @@ namespace DBSvr
                         if ((n14 >= 0))
                         {
                             HumanRCD.Header.sName = sDestChrName;
-                            HumanRCD.Data.sChrName = sDestChrName;
+                            HumanRCD.Data.sCharName = sDestChrName;
                             HumanRCD.Data.sAccount = sUserID;
                             HumDB.Update(n14, ref HumanRCD);
                             result = true;

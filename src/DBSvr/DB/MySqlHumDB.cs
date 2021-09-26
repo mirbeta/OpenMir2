@@ -297,7 +297,7 @@ namespace DBSvr
             {
                 command.CommandText = string.Format(sSQL1, sChrName);
                 command.Connection = (MySqlConnection)_dbConnection;
-                var dr = command.ExecuteReader();
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     HumanRCD = new THumDataInfo();
@@ -305,7 +305,7 @@ namespace DBSvr
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
                     HumanRCD.Header.boDeleted = dr.GetBoolean("FLD_DELETED");
                     HumanRCD.Header.dCreateDate = HUtil32.DateTimeToDouble(dr.GetDateTime("FLD_CREATEDATE"));
-                    HumanRCD.Data.sChrName = dr.GetString("FLD_CHARNAME");
+                    HumanRCD.Data.sCharName = dr.GetString("FLD_CHARNAME");
                     if (!dr.IsDBNull(dr.GetOrdinal("FLD_MAPNAME")))
                     {
                         HumanRCD.Data.sCurMap = dr.GetString("FLD_MAPNAME");
@@ -366,7 +366,7 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetRecord (1)");
+                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetChrRecord");
                 return false;
             }
             finally
@@ -389,7 +389,7 @@ namespace DBSvr
             {
                 command.CommandText = $"select * from TBL_CHARACTER_ABLITY where FLD_CharName='{sChrName}'";
                 command.Connection = (MySqlConnection)_dbConnection;
-                var dr = command.ExecuteReader();
+                using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     HumanRCD.Data.Abil.Level = dr.GetUInt16("FLD_LEVEL");
@@ -440,7 +440,7 @@ namespace DBSvr
             try
             {
                 command.CommandText = string.Format(sSQL2, sChrName);
-                var dr = command.ExecuteReader();
+                using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     if (HumanRCD.Data.BonusAbil == null)
@@ -485,10 +485,10 @@ namespace DBSvr
             var command = new MySqlCommand();
             try
             {
+                var magicList = new List<TMagicRcd>();
                 command.Connection = (MySqlConnection)_dbConnection;
                 command.CommandText = string.Format(sSQL4, sChrName);
-                var dr = command.ExecuteReader();
-                var magicList = new List<TMagicRcd>();
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     magicList.Add(new TMagicRcd()
@@ -501,10 +501,7 @@ namespace DBSvr
                 }
                 dr.Close();
                 dr.Dispose();
-                for (int j = 0; j < magicList.Count; j++)
-                {
-                    HumanRCD.Data.Magic[j] = magicList[j];
-                }
+                HumanRCD.Data.Magic = magicList.ToArray();
                 reslut = true;
             }
             catch (Exception)
@@ -532,7 +529,7 @@ namespace DBSvr
             {
                 command.Connection = (MySqlConnection)_dbConnection;
                 command.CommandText = string.Format(sSQL5, sChrName);
-                var dr = command.ExecuteReader();
+                using var dr = command.ExecuteReader();
                 var i = 0;
                 for (var j = 0; j < HumanRCD.Data.HumItems.Length; j++)
                 {
@@ -547,7 +544,7 @@ namespace DBSvr
                         HumanRCD.Data.HumItems[nPosition].wIndex = dr.GetUInt16("FLD_STDINDEX");
                         HumanRCD.Data.HumItems[nPosition].Dura = dr.GetUInt16("FLD_DURA");
                         HumanRCD.Data.HumItems[nPosition].DuraMax = dr.GetUInt16("FLD_DURAMAX");
-                        for (var ii = 0; ii <= 13; ii++)
+                        for (var ii = 0; ii < 14; ii++)
                         {
                             HumanRCD.Data.HumItems[nPosition].btValue[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
                         }
@@ -559,7 +556,7 @@ namespace DBSvr
                         HumanRCD.Data.BagItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
                         HumanRCD.Data.BagItems[i].Dura = dr.GetUInt16("FLD_DURA");
                         HumanRCD.Data.BagItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
-                        for (var ii = 0; ii <= 13; ii++)
+                        for (var ii = 0; ii < 14; ii++)
                         {
                             HumanRCD.Data.BagItems[i].btValue[ii] = (byte)dr.GetInt32($"FLD_VALUE{ii}");
                         }
@@ -596,16 +593,18 @@ namespace DBSvr
                 command.CommandText = string.Format(sSQL6, sChrName);
                 command.Connection = (MySqlConnection)_dbConnection;
                 var dr = command.ExecuteReader();
+                var i = 0;
                 while (dr.Read())
                 {
-                    //HumanRCD.Data.StorageItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
-                    //HumanRCD.Data.StorageItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
-                    //HumanRCD.Data.StorageItems[i].Dura = dr.GetUInt16("FLD_DURA");
-                    //HumanRCD.Data.StorageItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
-                    //for (ii = HumanRCD.Data.StorageItems[i].btValue.GetLowerBound(0); ii <= HumanRCD.Data.StorageItems[i].btValue.GetUpperBound(0); ii++)
-                    //{
-                    //    HumanRCD.Data.StorageItems[i].btValue[ii] = dr.GetByte(string.Format("FLD_VALUE{0}", ii));
-                    //}
+                    HumanRCD.Data.StorageItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
+                    HumanRCD.Data.StorageItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
+                    HumanRCD.Data.StorageItems[i].Dura = dr.GetUInt16("FLD_DURA");
+                    HumanRCD.Data.StorageItems[i].DuraMax = dr.GetUInt16("FLD_DURAMAX");
+                    for (var ii = 0; ii < 14; ii++)
+                    {
+                        HumanRCD.Data.StorageItems[i].btValue[ii] = dr.GetByte(string.Format("FLD_VALUE{0}", ii));
+                    }
+                    i++;
                 }
                 dr.Close();
                 dr.Dispose();
@@ -646,7 +645,7 @@ namespace DBSvr
             if (dr.Read())
             {
                 var sTmp = dr.GetString("FLD_STATUS");
-                var i = HumanRCD.Data.wStatusTimeArr.GetLowerBound(0);
+                var i = 0;
                 var str = string.Empty;
                 while (sTmp != "")
                 {
@@ -682,7 +681,7 @@ namespace DBSvr
             catch (Exception ex)
             {
                 result = false;
-                DBShare.MainOutMessage($"保存玩家[{HumanRCD.Header.sName}]数据失败.");
+                DBShare.MainOutMessage($"保存玩家[{HumanRCD.Header.sName}]数据失败. " + ex.Message);
             }
             return result;
         }
@@ -707,7 +706,7 @@ namespace DBSvr
             }
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
             command.Parameters.AddWithValue("@FLD_LoginID", 1);
-            command.Parameters.AddWithValue("@FLD_CharName", hd.sChrName);
+            command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             command.Parameters.AddWithValue("@FLD_MapName", hd.sCurMap);
             command.Parameters.AddWithValue("@FLD_CX", hd.wCurX);
             command.Parameters.AddWithValue("@FLD_CY", hd.wCurY);
@@ -750,13 +749,13 @@ namespace DBSvr
                 command.ExecuteNonQuery();
 
                 strSql.Clear();
-                strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_ChrId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
+                strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_CharId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
                 strSql.AppendLine(" FLD_Weight, FLD_MaxWeight, FLD_WearWeight,FLD_MaxWearWeight, FLD_HandWeight, FLD_MaxHandWeight) VALUES ");
-                strSql.AppendLine(" (@FLD_ChrId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
+                strSql.AppendLine(" (@FLD_CharId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
 
                 command.CommandText = strSql.ToString();
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@FLD_ChrId", 1);
+                command.Parameters.AddWithValue("@FLD_CharId", 1);
                 command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
                 command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
                 command.Parameters.AddWithValue("@FLD_Mac", hd.Abil.MAC);
@@ -847,7 +846,7 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_StoragePwd", hd.sStoragePwd);
             command.Parameters.AddWithValue("@FLD_Deleted", 0);
             command.Parameters.AddWithValue("@Id", Id);
-            command.Parameters.AddWithValue("@FLD_CharName", hd.sChrName);
+            command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             try
             {
                 command.ExecuteNonQuery();
@@ -881,8 +880,8 @@ namespace DBSvr
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = strSql.ToString();
-            command.Parameters.AddWithValue("@FLD_ChrId", 1);
-            command.Parameters.AddWithValue("@FLD_CharName", hd.sChrName);
+            command.Parameters.AddWithValue("@FLD_CharId", 1);
+            command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
             command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
             command.Parameters.AddWithValue("@FLD_Mac", hd.Abil.MAC);
@@ -949,7 +948,7 @@ namespace DBSvr
                     command.CommandText = strSql.ToString();
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@FLD_CHARID", 1);
-                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sChrName);
+                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                     command.Parameters.AddWithValue("@FLD_POSITION", -1);
                     command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
@@ -988,7 +987,7 @@ namespace DBSvr
                     command.CommandText = strSql.ToString();
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@FLD_CHARID", 1);
-                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sChrName);
+                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                     command.Parameters.AddWithValue("@FLD_POSITION", i);
                     command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.HumItems[i].MakeIndex);
                     command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].wIndex);
@@ -1186,7 +1185,7 @@ namespace DBSvr
             {
                 command.CommandText = sSqlStr5;
                 command.Parameters.AddWithValue("@FLD_CharId", id);
-                command.Parameters.AddWithValue("@FLD_CharName", HumanRCD.Data.sChrName);
+                command.Parameters.AddWithValue("@FLD_CharName", HumanRCD.Data.sCharName);
                 command.Parameters.AddWithValue("@FLD_Status", string.Join("/", HumanRCD.Data.wStatusTimeArr));
                 command.ExecuteNonQuery();
                 result = true;

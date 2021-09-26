@@ -133,9 +133,9 @@ namespace GameSvr
             HumanRcd = new THumDataInfo();
             if (LoadRcd(sAccount, sCharName, sStr, nCertCode, ref HumanRcd))
             {
-                HumanRcd.Data.sChrName = sCharName;
+                HumanRcd.Data.sCharName = sCharName;
                 HumanRcd.Data.sAccount = sAccount;
-                if (HumanRcd.Data.sChrName == sCharName && (HumanRcd.Data.sAccount == "" || HumanRcd.Data.sAccount == sAccount))
+                if (HumanRcd.Data.sCharName == sCharName && (HumanRcd.Data.sAccount == "" || HumanRcd.Data.sAccount == sAccount))
                 {
                     result = true;
                 }

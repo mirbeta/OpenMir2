@@ -177,7 +177,7 @@ namespace DBSvr
                     ChrRecord.Header = new TRecordHeader();
                     ChrRecord.Data = new THumInfoData();
                     ChrRecord.Header.sName = sChrName;
-                    ChrRecord.Data.sChrName = sChrName;
+                    ChrRecord.Data.sCharName = sChrName;
                     ChrRecord.Data.btSex = (byte)nSex;
                     ChrRecord.Data.btJob = (byte)nJob;
                     ChrRecord.Data.btHair = (byte)nHair;

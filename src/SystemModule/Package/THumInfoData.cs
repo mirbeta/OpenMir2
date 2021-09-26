@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using SystemModule;
 
 namespace SystemModule
 {
     public class THumInfoData : Package
     {
-        public string sChrName;
+        public string sCharName;
         public string sCurMap;
         public short wCurX;
         public short wCurY;
@@ -75,7 +74,7 @@ namespace SystemModule
         public THumInfoData(byte[] buffer) 
             : base(buffer)
         {
-            this.sChrName = ReadPascalString(14);
+            this.sCharName = ReadPascalString(14);
             this.sCurMap = ReadPascalString(16);
             this.wCurX = ReadInt16();
             this.wCurY = ReadInt16();
@@ -167,7 +166,7 @@ namespace SystemModule
             {
                 var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(sChrName.ToByte(15));
+                backingStream.Write(sCharName.ToByte(15));
                 backingStream.Write(sCurMap.ToByte(17));
 
                 backingStream.Write(wCurX);

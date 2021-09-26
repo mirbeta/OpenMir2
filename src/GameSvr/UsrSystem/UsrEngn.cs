@@ -2084,7 +2084,7 @@ namespace GameSvr
             TUserItem[] StorageItems;
             TUserItem UserItem;
             HumData = HumanRcd.Data;
-            PlayObject.m_sCharName = HumData.sChrName;
+            PlayObject.m_sCharName = HumData.sCharName;
             PlayObject.m_sMapName = HumData.sCurMap;
             PlayObject.m_nCurrX = HumData.wCurX;
             PlayObject.m_nCurrY = HumData.wCurY;
