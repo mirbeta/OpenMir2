@@ -28,7 +28,7 @@ namespace GameSvr
             _connectTimer = new Timer(CheckConnectTimer, null, 1000, 3000);
             if (M2Share.boStartReady)
             {
-                await M2Share.RunSocket.StartConsumer();
+                await M2Share.RunSocket.StartConsumer(stoppingToken);
             }
         }
 
@@ -45,6 +45,18 @@ namespace GameSvr
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("GameSvr is stopping.");
+
+            //todo 需要立即保存所有玩家数据，防止数据不对
+
+            if (M2Share.UserEngine.PlayObjectCount > 0)
+            {
+                Console.WriteLine("开始玩家数据保存");
+                foreach (var item in M2Share.UserEngine.PlayObjects)
+                {
+                    M2Share.UserEngine.SaveHumanRcd(item);
+                }
+                Console.WriteLine("玩家数据保存完毕.");
+            }
 
             //如果有多机负载转移在线玩家到新服务器
             if (M2Share.UserEngine.PlayObjects.Any())
@@ -79,6 +91,10 @@ namespace GameSvr
                     }
                 }, cancellationToken);
             }
+
+            M2Share.boStartReady = false;
+            _mirApp.Stop();
+
             return base.StopAsync(cancellationToken);
         }
 

@@ -17,7 +17,7 @@ namespace GameSvr
             _runServer = new Thread(Run) { IsBackground = true };
         }
 
-        protected void Start()
+        public void Start()
         {
             _runServer.Start();
             M2Share.RunSocket.Start();
@@ -25,9 +25,12 @@ namespace GameSvr
             M2Share.DataServer.Start();
         }
 
-        protected void Stop()
+        public void Stop()
         {
             M2Share.DataServer.Stop();
+            M2Share.RunSocket.Stop();
+            M2Share.UserEngine.Stop();
+            _runServer.Interrupt();
         }
 
         private void Run()

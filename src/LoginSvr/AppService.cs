@@ -29,7 +29,7 @@ namespace LoginSvr
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"GameGate is stopping."));
+            stoppingToken.Register(() => _logger.LogDebug($"LoginSvr is stopping."));
             _serverApp.Start();
             _masSoc.Start();
             _monSoc.Start();
@@ -40,13 +40,13 @@ namespace LoginSvr
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is starting.");
+            _logger.LogDebug($"LoginSvr is starting.");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is stopping.");
+            _logger.LogDebug($"LoginSvr is stopping.");
             //_serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

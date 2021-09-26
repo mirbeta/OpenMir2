@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
@@ -1153,6 +1154,11 @@ namespace GameSvr
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
         }
 
+        public void Stop()
+        {
+            _gateSocket.Shutdown();
+        }
+
         private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
             //M2Share.RunSocket.CloseErrGate();
@@ -1180,13 +1186,13 @@ namespace GameSvr
             SocketRead(e.ConnectionId, data);
         }
         
-        public async Task StartConsumer()
+        public async Task StartConsumer(CancellationToken cancellation)
         {
             var gTasks = new Task[RunSock.g_GateArr.Length];
             for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
             {
                 var consumer = new GateConsumer(RunSock.g_GateArr[i], i);
-                var consumerTask = consumer.ConsumeData();
+                var consumerTask = consumer.ConsumeData(cancellation);
                 gTasks[i] = consumerTask;
             }
             await Task.WhenAll(gTasks);
@@ -1209,10 +1215,10 @@ namespace GameSvr
             _gate = gate;
         }
         
-        public async Task ConsumeData()
+        public async Task ConsumeData(CancellationToken cancellation)
         {
             Console.WriteLine($"GameGate Consumer ({_identifier}): Starting");
-            while (await _reader.WaitToReadAsync())
+            while (await _reader.WaitToReadAsync(cancellation))
             {
                 if (_reader.TryRead(out var buff))
                 {

@@ -118,9 +118,9 @@ namespace GameSvr
             OldMagicList = new ArrayList();
             m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>();
             m_UserLogonList = new List<TAILogon>();
-            _userEngineThread = new Thread(PrcocessData);
-            _processTheread = new Thread(ProcessPlayObjectData);
-            _processAiThread = new Thread(ProcessAiPlayObjectData);
+            _userEngineThread = new Thread(PrcocessData) { IsBackground = true };
+            _processTheread = new Thread(ProcessPlayObjectData) { IsBackground = true };
+            _processAiThread = new Thread(ProcessAiPlayObjectData) { IsBackground = true };
             m_AiPlayObjectList = new List<TPlayObject>();
         }
 
@@ -136,6 +136,13 @@ namespace GameSvr
             _userEngineThread.Start();
             _processTheread.Start();
             _processAiThread.Start();
+        }
+
+        public void Stop()
+        {
+            _userEngineThread.Interrupt();
+            _processTheread.Interrupt();
+            _processAiThread.Interrupt();
         }
 
         public void Initialize()
@@ -2042,7 +2049,7 @@ namespace GameSvr
             }
         }
 
-        private void SaveHumanRcd(TPlayObject PlayObject)
+        public void SaveHumanRcd(TPlayObject PlayObject)
         {
             if (PlayObject.m_boAI) //AI玩家不需要保存数据
             {

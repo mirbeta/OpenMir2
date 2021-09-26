@@ -143,7 +143,7 @@ namespace GameSvr
                     M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
                 }
                 StartEngine();
-                base.Start();
+                Start();
                 M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
             }
             catch (Exception e)

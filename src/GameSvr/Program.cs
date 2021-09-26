@@ -17,12 +17,21 @@ namespace GameSvr
 
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             var builder = new HostBuilder()
-                .ConfigureLogging(logging => { logging.ClearProviders(); })
+                .ConfigureLogging(logging => {
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.ClearProviders();
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<GameApp>();
                     services.AddHostedService<AppService>();
                 });
+
+            System.Console.CancelKeyPress += (sender, e) =>
+            {
+                cancellationToken.CancelAfter(2000);
+            };
 
             await builder.RunConsoleAsync(cancellationToken.Token);
         }
