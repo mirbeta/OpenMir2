@@ -172,7 +172,6 @@ namespace LoginSvr
     public class TConfig
     {
         public IniFile IniConf;
-        public bool boRemoteClose;
         public string sDBServer;
         public int nDBSPort;
         public string sFeeServer;
@@ -186,12 +185,8 @@ namespace LoginSvr
         public string sMonAddr;
         public int nMonPort;
         public string sGateIPaddr;
-        public string sIdDir;
-        public string sWebLogDir;
         public string sFeedIDList;
         public string sFeedIPList;
-        public string sCountLogDir;
-        public string sChrLogDir;
         public bool boTestServer;
         /// <summary>
         /// 是否允许创建账号
@@ -213,7 +208,6 @@ namespace LoginSvr
 
         public TConfig()
         {
-            boRemoteClose = false;
             sDBServer = "10.10.0.168";
             nDBSPort = 16300;
             sFeeServer = "10.10.0.168";
@@ -226,12 +220,8 @@ namespace LoginSvr
             nServerPort = 5600;
             sMonAddr = "10.10.0.168";
             nMonPort = 3000;
-            sIdDir = ".\\DB\\";
-            sWebLogDir = ".\\Share\\";
-            sFeedIDList = ".\\FeedIDList.txt";
-            sFeedIPList = ".\\FeedIPList.txt";
-            sCountLogDir = ".\\CountLog\\";
-            sChrLogDir = ".\\ChrLog\\";
+            sFeedIDList = "FeedIDList.txt";
+            sFeedIPList = "FeedIPList.txt";
             boTestServer = true;
             boEnableMakingID = true;
             boDynamicIPMode = false;

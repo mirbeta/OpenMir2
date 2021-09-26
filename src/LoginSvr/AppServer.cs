@@ -17,7 +17,6 @@ namespace LoginSvr
         {
             LSShare.Initialization();
             TConfig Config = LSShare.g_Config;
-            Config.boRemoteClose = false;
             Config.GateList = new List<TGateInfo>();
             Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();

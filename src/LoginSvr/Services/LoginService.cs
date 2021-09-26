@@ -1571,9 +1571,6 @@ namespace LoginSvr
             Config.nReadyServers = LoadConfig_LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
             Config.boEnableMakingID = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
             Config.boDynamicIPMode = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
-            Config.sIdDir = LoadConfig_LoadConfigString(sSectionDB, sIdentIdDir, Config.sIdDir);
-            Config.sWebLogDir = LoadConfig_LoadConfigString(sSectionDB, sIdentWebLogDir, Config.sWebLogDir);
-            Config.sCountLogDir = LoadConfig_LoadConfigString(sSectionDB, sIdentCountLogDir, Config.sCountLogDir);
             Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
             LoadAddrTable(Config);
