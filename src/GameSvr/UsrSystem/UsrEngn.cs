@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Packages;
 
 namespace GameSvr
@@ -665,9 +664,8 @@ namespace GameSvr
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
             try
             {
-                while (true)
+                while (M2Share.boStartReady)
                 {
-                    //todo 需要优化这里，当m_PlayObjectList列表过大时处理不过来
                     var dwCurTick = HUtil32.GetTickCount();
                     var nIdx = m_nProcHumIDx;
                     var boCheckTimeLimit = false;
@@ -775,7 +773,7 @@ namespace GameSvr
             const string sExceptionMsg8 = "[Exception] TUserEngine::ProcessHumans";
             try
             {
-                while (true)
+                while (M2Share.boStartReady)
                 {
                     var dwCurTick = HUtil32.GetTickCount();
                     var nIdx = m_nProcHumIDx;
@@ -2659,7 +2657,7 @@ namespace GameSvr
 
         private void PrcocessData()
         {
-            while (true)
+            while (M2Share.boStartReady)
             {
                 ProcessHumans();
                 ProcessMonsters();
