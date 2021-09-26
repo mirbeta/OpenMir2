@@ -7,7 +7,7 @@ namespace GameSvr
         public ushort Ident;
         public ushort wMsg;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

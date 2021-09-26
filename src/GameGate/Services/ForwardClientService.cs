@@ -230,7 +230,7 @@ namespace GameGate
             GateMsg.wIdent = nIdent;
             GateMsg.wUserListIndex = (ushort)nUserListIndex;
             GateMsg.nLength = nLen;
-            var sendBuffer = GateMsg.ToByte();
+            var sendBuffer = GateMsg.GetPacket();
             if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];

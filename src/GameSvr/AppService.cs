@@ -92,8 +92,8 @@ namespace GameSvr
                 }, cancellationToken);
             }
 
-            M2Share.boStartReady = false;
             _mirApp.Stop();
+            M2Share.boStartReady = false;
 
             return base.StopAsync(cancellationToken);
         }

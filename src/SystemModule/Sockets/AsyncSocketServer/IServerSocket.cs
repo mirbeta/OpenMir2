@@ -243,7 +243,14 @@ namespace SystemModule.Sockets
             {
                 //RaiseErrorEvent(null, exception);
                 // 启动失败抛出启动失败异常
-                throw new AsyncSocketException("服务器启动失败", AsyncSocketErrorCode.ServerStartFailure);
+                if (ex.ErrorCode == (int)SocketError.AddressNotAvailable)
+                {
+                    throw new AsyncSocketException(ex.Message, ex);
+                }
+                else
+                {
+                    throw new AsyncSocketException("服务器启动失败", AsyncSocketErrorCode.ServerStartFailure);
+                }
             }
             catch (Exception exception_debug)
             {

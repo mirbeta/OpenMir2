@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SystemModule
 {
-    public class THumInfoData : Package
+    public class THumInfoData : Packets
     {
         public string sCharName;
         public string sCurMap;
@@ -160,7 +160,7 @@ namespace SystemModule
             }
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -176,7 +176,7 @@ namespace SystemModule
                 backingStream.Write(btSex);
                 backingStream.Write(btJob);
                 backingStream.Write(nGold);
-                backingStream.Write(Abil.ToByte());//50
+                backingStream.Write(Abil.GetPacket());//50
                 for (var i = 0; i < wStatusTimeArr.Length; i++)
                 { 
                     backingStream.Write(wStatusTimeArr[i]); //24
@@ -184,7 +184,7 @@ namespace SystemModule
                 backingStream.Write(sHomeMap.ToByte(17));
                 backingStream.Write(wHomeX);
                 backingStream.Write(wHomeY);
-                backingStream.Write(BonusAbil.ToByte()); //24
+                backingStream.Write(BonusAbil.GetPacket()); //24
                 backingStream.Write(nBonusPoint);
                 backingStream.Write(btCreditPoint);
                 backingStream.Write(btReLevel);
@@ -217,27 +217,28 @@ namespace SystemModule
                 backingStream.Write(QuestUnit);
                 backingStream.Write(QuestFlag);
                 backingStream.Write(btMarryCount);
-                var userItem = new TUserItem();
+                var nullItem = new TUserItem();
+                var nullBuffer = nullItem.GetPacket();
                 for (var i = 0; i < HumItems.Length; i++)
                 {
                     if (HumItems[i] == null)
                     {
-                        backingStream.Write(userItem.ToByte());
+                        backingStream.Write(nullBuffer);
                     }
                     else
                     {
-                        backingStream.Write(HumItems[i].ToByte());
+                        backingStream.Write(HumItems[i].GetPacket());
                     }
                 }
                 for (var i = 0; i < BagItems.Length; i++)
                 {
                     if (BagItems[i] == null)
                     {
-                        backingStream.Write(userItem.ToByte());
+                        backingStream.Write(nullBuffer);
                     }
                     else
                     {
-                        backingStream.Write(BagItems[i].ToByte());
+                        backingStream.Write(BagItems[i].GetPacket());
                     }
                 }
                 var userMagic = new TMagicRcd();
@@ -245,24 +246,25 @@ namespace SystemModule
                 {
                     if (Magic[i] == null)
                     {
-                        backingStream.Write(userMagic.ToByte());
+                        backingStream.Write(userMagic.GetPacket());
                     }
                     else
                     {
-                        backingStream.Write(Magic[i].ToByte());//16
+                        backingStream.Write(Magic[i].GetPacket());//16
                     }
                 }
                 for (var i = 0; i < StorageItems.Length; i++)
                 {
                     if (StorageItems[i] == null)
                     {
-                        backingStream.Write(userItem.ToByte());
+                        backingStream.Write(nullBuffer);
                     }
                     else
                     {
-                        backingStream.Write(StorageItems[i].ToByte());
+                        backingStream.Write(StorageItems[i].GetPacket());
                     }
                 }
+                nullItem = null;
                 var stream = backingStream.BaseStream as MemoryStream;
                 return stream.ToArray();
             }

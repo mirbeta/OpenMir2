@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TClientConf : Package
+    public class TClientConf : Packets
     {
         public bool boClientCanSet;
         public bool boRunHuman;
@@ -27,7 +27,7 @@ namespace GameSvr
         public bool boMagicLock;
         public bool boAutoPuckUpItem;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);

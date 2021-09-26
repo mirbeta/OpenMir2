@@ -18,13 +18,13 @@ namespace GameSvr
             MagicInfo = new TMagic();
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
                 var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(MagicInfo.ToByte());//76
+                backingStream.Write(MagicInfo.GetPacket());//76
                 backingStream.Write(btLevel);
                 backingStream.Write(wMagIdx);
                 backingStream.Write(nTranPoint);

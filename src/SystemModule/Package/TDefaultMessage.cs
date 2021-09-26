@@ -10,7 +10,7 @@ namespace SystemModule.Packages
         public ushort Tag;
         public ushort Series;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);

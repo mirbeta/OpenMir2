@@ -27,7 +27,7 @@ namespace SystemModule
             MaxTrain = new int[4];
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

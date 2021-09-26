@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace SystemModule
 {
-    public class TRecordHeader : Package
+    public class TRecordHeader : Packets
     {
         public string sAccount;
         public string sName;
@@ -27,7 +27,7 @@ namespace SystemModule
             this.CreateDate = ReadDouble();//BitConverter.ToDouble(buff, 59);
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);

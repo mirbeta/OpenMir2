@@ -72,7 +72,7 @@ namespace SystemModule
         /// </summary>
         public uint Price;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

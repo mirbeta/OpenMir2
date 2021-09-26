@@ -79,7 +79,7 @@ namespace SystemModule
         }
 
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

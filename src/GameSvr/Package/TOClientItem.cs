@@ -10,13 +10,13 @@ namespace GameSvr
         public ushort Dura;
         public ushort DuraMax;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
                 var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(S.ToByte());
+                backingStream.Write(S.GetPacket());
                 backingStream.Write(MakeIndex);
                 backingStream.Write(Dura);
                 backingStream.Write(DuraMax);

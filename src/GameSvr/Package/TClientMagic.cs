@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TClientMagic : Package
+    public class TClientMagic : Packets
     {
         public char Key;
         public byte Level;
@@ -15,7 +15,7 @@ namespace GameSvr
             Def = new TMagic();
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -26,7 +26,7 @@ namespace GameSvr
                 backingStream.Write((byte)0);
                 backingStream.Write((byte)0);
                 backingStream.Write(CurTrain);
-                backingStream.Write(Def.ToByte());
+                backingStream.Write(Def.GetPacket());
 
                 var stream = backingStream.BaseStream as MemoryStream;
                 return stream.ToArray();

@@ -209,7 +209,7 @@ namespace GameGate
                                             if (!string.IsNullOrEmpty(sDataMsg))
                                             {
                                                 DataBuffer = new byte[sDataMsg.Length + 12 + 1]; //GetMem(Buffer, sDataMsg.Length + 12 + 1);
-                                                Buffer.BlockCopy(DefMsg.ToByte(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
+                                                Buffer.BlockCopy(DefMsg.GetPacket(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
                                                 var msgBuff = HUtil32.GetBytes(sDataMsg);
                                                 Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
                                                 Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
@@ -217,7 +217,7 @@ namespace GameGate
                                             }
                                             else
                                             {
-                                                DataBuffer = DefMsg.ToByte();
+                                                DataBuffer = DefMsg.GetPacket();
                                                 Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
                                                     UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, 12, DataBuffer);
                                             }

@@ -169,7 +169,7 @@ namespace SystemModule
         {
             var result = string.Empty;
             var type = typeof(T);
-            var targetsMethord = type.GetMethod("ToByte");
+            var targetsMethord = type.GetMethod("GetPacket");
             if (targetsMethord == null) throw new Exception(string.Format("序列化{0}失败", type.Name));
             var methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { });
             var buffSize = methordResult.Length;
@@ -230,8 +230,8 @@ namespace SystemModule
         public static unsafe string EncodeMessage(TDefaultMessage smsg)
         {
             string result = string.Empty;
-            byte[] EncBuf = new byte[BUFFERSIZE];
-            byte[] TempBuf = smsg.ToByte();
+            byte[] EncBuf = new byte[1024];
+            byte[] TempBuf = smsg.GetPacket();
             int DestLen = Encode6BitBuf(TempBuf, EncBuf, 12, BUFFERSIZE);
             fixed (byte* pb = EncBuf)
             {

@@ -4,16 +4,22 @@ using System.Text;
 
 namespace SystemModule
 {
+
+    public class ClientPackets : Packets
+    {
+
+    }
+
     /// <summary>
     /// Reads primitive data types from an array of binary data.
     /// </summary>
-    public abstract class Package 
+    public abstract class Packets
     {
         public readonly BinaryReader binaryReader;
 
-        public Package() { }
+        public Packets() { }
 
-        public Package(byte[] segment)
+        public Packets(byte[] segment)
         {
             if (segment == null)
             {

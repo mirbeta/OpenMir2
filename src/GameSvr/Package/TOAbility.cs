@@ -24,7 +24,7 @@ namespace GameSvr
         public byte HandWeight;
         public byte MaxHandWeight;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

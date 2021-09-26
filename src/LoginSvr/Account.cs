@@ -15,7 +15,7 @@ namespace LoginSvr
         }
     }
 
-    public class TUserEntry : Package
+    public class TUserEntry : Packets
     {
         public string sAccount;
         public string sPassword;
@@ -45,7 +45,7 @@ namespace LoginSvr
         }
     }
 
-    public class TUserEntryAdd: Package
+    public class TUserEntryAdd: Packets
     {
         public string sQuiz2;
         public string sAnswer2;

@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public class TUserItem : Package
+    public class TUserItem : Packets
     {
         public int MakeIndex;
         public ushort wIndex;
@@ -25,7 +25,7 @@ namespace SystemModule
             this.btValue = ReadBytes(14);
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

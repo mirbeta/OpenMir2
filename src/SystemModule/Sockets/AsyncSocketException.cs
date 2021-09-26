@@ -10,14 +10,15 @@ namespace SystemModule.Sockets
     {
         private const string m_asyncSocketException = "异步通讯中发生通讯异常.";
         private readonly AsyncSocketErrorCode m_errorCode;
-        ///// <summary>
-        ///// 使用默认错误提示构造
-        ///// </summary>
-        //public AsyncSocketException() :
-        //    base(m_asyncSocketException)
-        //{
-        //    m_errorCode = AsyncSocketErrorCode.
-        //}
+
+        /// <summary>
+        /// 使用默认错误提示构造
+        /// </summary>
+        public AsyncSocketException() :
+            base(m_asyncSocketException)
+        {
+            m_errorCode = AsyncSocketErrorCode.ServerStartFailure;
+        }
 
         public AsyncSocketException(string message, SocketException socketException) :
             base(String.Format("{0} - {1}",

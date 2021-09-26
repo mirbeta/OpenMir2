@@ -666,7 +666,7 @@ namespace GameSvr
             MsgHeader.nLength = 0;
             if (Socket.Connected)
             {
-                var data = MsgHeader.ToByte();
+                var data = MsgHeader.GetPacket();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -775,7 +775,7 @@ namespace GameSvr
             };
             if (Socket.Connected)
             {
-                var data = MsgHeader.ToByte();
+                var data = MsgHeader.GetPacket();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -859,8 +859,8 @@ namespace GameSvr
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
-            backingStream.Write(msgHeader.ToByte());
-            backingStream.Write(defMsg.ToByte());
+            backingStream.Write(msgHeader.GetPacket());
+            backingStream.Write(defMsg.GetPacket());
             var stream = backingStream.BaseStream as MemoryStream;
             var buff = stream.ToArray();
             if (!AddGateBuffer(nGateIdx, buff))
@@ -1001,8 +1001,8 @@ namespace GameSvr
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
-            backingStream.Write(msgHdr.ToByte());
-            backingStream.Write(defMsg.ToByte());
+            backingStream.Write(msgHdr.GetPacket());
+            backingStream.Write(defMsg.GetPacket());
             var stream = backingStream.BaseStream as MemoryStream;
             var buff = stream.ToArray();
             if (!AddGateBuffer(nIndex, buff))
@@ -1322,7 +1322,7 @@ namespace GameSvr
             };
             if (Socket.Connected)
             {
-                var data = MsgHeader.ToByte();
+                var data = MsgHeader.GetPacket();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }

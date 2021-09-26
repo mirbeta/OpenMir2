@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public class TNakedAbility : Package
+    public class TNakedAbility : Packets
     {
         public ushort DC;
         public ushort MC;
@@ -32,7 +32,7 @@ namespace SystemModule
             X2 = ReadByte(); //buff[20];
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

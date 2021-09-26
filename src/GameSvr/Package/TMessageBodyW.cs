@@ -9,7 +9,7 @@ namespace GameSvr
         public ushort Tag1;
         public ushort Tag2;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

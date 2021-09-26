@@ -11,7 +11,7 @@ namespace SystemModule.Packages
         public int wUserListIndex;
         public int nLength;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);

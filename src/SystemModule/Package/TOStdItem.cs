@@ -23,7 +23,7 @@ namespace SystemModule
         public byte NeedLevel;
         public int Price;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

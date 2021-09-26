@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 客户端元宝寄售数据结构
     /// </summary>
-    public class TClientDealOffInfo : Package
+    public class TClientDealOffInfo : Packets
     {
         /// <summary>
         /// 寄售人
@@ -35,7 +35,7 @@ namespace GameSvr
         public byte N;
 
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -49,11 +49,11 @@ namespace GameSvr
                 {
                     if (UseItems[i] == null)
                     {
-                        backingStream.Write(userItem.ToByte());
+                        backingStream.Write(userItem.GetPacket());
                     }
                     else
                     {
-                        backingStream.Write(UseItems[i].ToByte());
+                        backingStream.Write(UseItems[i].GetPacket());
                     }
                 }
                 backingStream.Write(N);

@@ -22,7 +22,7 @@ namespace SystemModule
         /// </summary>
         public int nTranPoint;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

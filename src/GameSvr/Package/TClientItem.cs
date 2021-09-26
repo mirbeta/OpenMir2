@@ -15,13 +15,13 @@ namespace GameSvr
             S = new TStdItem();
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
                 var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(S.ToByte());
+                backingStream.Write(S.GetPacket());
                 backingStream.Write(MakeIndex);
                 backingStream.Write(Dura);
                 backingStream.Write(DuraMax);

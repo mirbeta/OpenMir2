@@ -395,7 +395,7 @@ namespace GameSvr
                     using var memoryStream = new MemoryStream();
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
-                    backingStream.Write(MsgHdr.ToByte());
+                    backingStream.Write(MsgHdr.GetPacket());
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         backingStream.Write(bMsg);
@@ -451,8 +451,8 @@ namespace GameSvr
                     using var memoryStream = new MemoryStream();
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
-                    backingStream.Write(MsgHdr.ToByte());
-                    backingStream.Write(defMsg.ToByte());
+                    backingStream.Write(MsgHdr.GetPacket());
+                    backingStream.Write(defMsg.GetPacket());
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         backingStream.Write(bMsg);
@@ -471,7 +471,7 @@ namespace GameSvr
                         using var memoryStream = new MemoryStream();
                         var backingStream = new BinaryWriter(memoryStream);
                         backingStream.Write(nSendBytes);
-                        backingStream.Write(MsgHdr.ToByte());
+                        backingStream.Write(MsgHdr.GetPacket());
                         if (!string.IsNullOrEmpty(sMsg))
                         {
                             backingStream.Write(bMsg);

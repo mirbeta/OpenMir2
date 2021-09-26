@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TUserStateInfo : Package
+    public class TUserStateInfo : Packets
     {
         public int Feature;
         public string UserName;
@@ -18,7 +18,7 @@ namespace GameSvr
             UseItems = new TClientItem[13];
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
@@ -45,7 +45,7 @@ namespace GameSvr
 
             for (var i = 0; i < UseItems.Length; i++)
             {
-                backingStream.Write(UseItems[i].ToByte());
+                backingStream.Write(UseItems[i].GetPacket());
             }
 
             var stream = backingStream.BaseStream as MemoryStream;

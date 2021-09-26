@@ -9,7 +9,7 @@ namespace GameSvr
         public int lTag1;
         public int lTag2;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

@@ -2,14 +2,14 @@
 
 namespace SystemModule
 {
-    public class TLoadHuman : Package
+    public class TLoadHuman : Packets
     {
         public string sAccount;
         public string sChrName;
         public string sUserAddr;
         public int nSessionID;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

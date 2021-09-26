@@ -7,7 +7,7 @@ namespace GameSvr
         public int Feature;
         public long Status;
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {

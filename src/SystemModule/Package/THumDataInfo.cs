@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public class THumDataInfo : Package
+    public class THumDataInfo : Packets
     {
         public TRecordHeader Header;
         public THumInfoData Data;
@@ -23,14 +23,14 @@ namespace SystemModule
             Data = new THumInfoData(bodyBuff);
         }
 
-        public byte[] ToByte()
+        public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())
             {
                 var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(Header.ToByte());
-                backingStream.Write(Data.ToByte());
+                backingStream.Write(Header.GetPacket());
+                backingStream.Write(Data.GetPacket());
 
                 var stream = backingStream.BaseStream as MemoryStream;
                 return stream.ToArray();
@@ -38,4 +38,3 @@ namespace SystemModule
         }
     }
 }
-
