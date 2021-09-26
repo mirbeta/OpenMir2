@@ -13,7 +13,7 @@ namespace GameGate
     {
         public static object CS_MainLog = null;
         public static object CS_FilterMsg = null;
-        public static ArrayList MainLogMsgList = null;
+        public static IList<string> MainLogMsgList = null;
         public static int nShowLogLevel = 0;
         public static int ServerCount = 1;
         public static string GateClass = "GameGate";
@@ -21,9 +21,7 @@ namespace GameGate
         public static string TitleName = "SKY引擎";
         public static string GateAddr = "10.10.0.168";
         public static int GatePort = 7200;
-        public static bool boStarted = false;
         public static bool boServerReady;
-        public static bool boClose = false;
         /// <summary>
         /// 显示B 或 KB
         /// </summary>
@@ -42,7 +40,7 @@ namespace GameGate
         /// <summary>
         /// 是否显示SOCKET接收的信息
         /// </summary>
-        public static bool boShowSckData = false;
+        public static bool boShowSckData = true;
         public static string sReplaceWord = "*";
         /// <summary>
         /// 接收封包（客户端-》网关）
@@ -69,7 +67,6 @@ namespace GameGate
         /// 累计接受数据大小
         /// </summary>
         public static int NReviceMsgSize;
-        public static ArrayList List_45AA58 = null;
         public static bool boDecodeMsgLock = false;
         public static long dwProcessReviceMsgTimeLimit = 0;
         public static long dwProcessSendMsgTimeLimit = 0;
@@ -455,12 +452,11 @@ namespace GameGate
             nShowLogLevel = Conf.ReadInteger(GateClass, "ShowLogLevel", nShowLogLevel);
             CS_MainLog = new object();
             CS_FilterMsg = new object();
-            MainLogMsgList = new ArrayList();
+            MainLogMsgList = new List<string>();
             AbuseList = new List<string>();
             ReviceMsgList = Channel.CreateUnbounded<TSendUserData>();
             SendMsgList = Channel.CreateUnbounded<TSendUserData>();
             ForwardMsgList = Channel.CreateUnbounded<ForwardMessage>();
-            List_45AA58 = new ArrayList();
             boShowSckData = false;
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();

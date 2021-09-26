@@ -128,7 +128,6 @@ namespace GameGate
             }
             RestSessionArray();
             SocketBuffer = null;
-            GateShare.List_45AA58.Clear();
             GateShare.boGateReady = false;
             GateShare.ServerGateList.TryRemove(e.RemoteAddress, out var userClientService);
             GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);

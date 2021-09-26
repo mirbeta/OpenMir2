@@ -61,9 +61,6 @@ namespace LoginGate
         public static int GatePort = 7000;
         public static string GateAddr = "10.10.0.168";
         public static bool boGateReady = false;
-        public static bool boShowMessage = false;
-        public static bool boStarted = false;
-        public static bool boClose = false;
         public static bool boServiceStart = false;
         public static long dwKeepAliveTick = 0;
         public static bool boKeepAliveTimcOut = false;
