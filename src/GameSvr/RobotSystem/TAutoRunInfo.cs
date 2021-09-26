@@ -2,17 +2,27 @@
 {
     public class AutoRunInfo
     {
+        /// <summary>
+        /// 上一次运行时间记录
+        /// </summary>
         public int dwRunTick;
-        // 上一次运行时间记录
+        /// <summary>
+        /// 运行间隔时间长
+        /// </summary>        
         public int dwRunTimeLen;
-        // 运行间隔时间长
+        /// <summary>
+        /// 自动运行类型
+        /// </summary>
         public int nRunCmd;
-        // 自动运行类型
         public int nMoethod;
+        /// <summary>
+        /// 运行脚本标签
+        /// </summary>
         public string sParam1;
-        // 运行脚本标签
+        /// <summary>
+        /// 传送到脚本参数内容
+        /// </summary>
         public string sParam2;
-        // 传送到脚本参数内容
         public string sParam3;
         public string sParam4;
         public int nParam1;

@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -7,7 +6,6 @@ namespace GameSvr
 {
     public class TFrmMsgClient
     {
-        private int dw2D4Tick = 0;
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket MsgClient;
         private GroupMessageHandle _groupMessageHandle;
@@ -26,7 +24,6 @@ namespace GameSvr
         {
             MsgClient.Address = M2Share.g_Config.sMsgSrvAddr;
             MsgClient.Port = M2Share.g_Config.nMsgSrvPort;
-            dw2D4Tick = HUtil32.GetTickCount();
             MsgClient.Connect();
         }
 
@@ -35,13 +32,6 @@ namespace GameSvr
             if (MsgClient.IsConnected)
             {
                 DecodeSocStr();
-            }
-            else
-            {
-                if ((HUtil32.GetTickCount() - dw2D4Tick) > 20 * 1000)
-                {
-                    dw2D4Tick = HUtil32.GetTickCount();
-                }
             }
         }
 
@@ -145,7 +135,7 @@ namespace GameSvr
         /// <param name="e"></param>
         private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
-            sRecvMsg = sRecvMsg + e.ReceiveText;
+            sRecvMsg += e.ReceiveText;
         }
     }
 }

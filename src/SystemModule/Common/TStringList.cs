@@ -299,6 +299,10 @@ namespace SystemModule.Common
         /// <param name="fileName"></param>
         public void LoadFromFile(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                return;
+            }
             this.Clear();
             var sr2 = new StreamReader(fileName, Encoding.GetEncoding("gb2312"));
             while (sr2.Peek() >= 0)

@@ -65,7 +65,7 @@ namespace DBSvr
             sb.AppendLine(DBShare.g_nClearIndex + "/(" + DBShare.g_nClearCount + "/" + DBShare.g_nClearItemIndexCount + ")/" + DBShare.g_nClearRecordCount);
             sb.AppendLine($"H-QyChr:{DBShare.g_nQueryChrCount} H-NwChr:{DBShare.nHackerNewChrCount} H-DlChr:{DBShare.nHackerDelChrCount} Dubb -Sl:{DBShare.nHackerSelChrCount}");
             sb.AppendLine($"H-Er-P1:{DBShare.n4ADC1C} Dubl-P2:{DBShare.n4ADC20} Dubl-P3:{DBShare.n4ADC24} Dubl-P4:{DBShare.n4ADC28}");
-            DBShare.OutMainMessage(sb.ToString());
+            DBShare.MainOutMessage(sb.ToString());
         }
     }
 }

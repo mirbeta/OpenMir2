@@ -105,7 +105,7 @@ namespace GameGate
                                         if (UserData.UserClient.SessionArray[UserData.nSocketIdx].boStartLogon)// 第一个人物登录数据包
                                         {
                                             // 第一个人物登录数据包   **1111/小小/6/120040918/0
-                                            sDataText = EDcode.DeCodeString(sData, true);
+                                            sDataText = EDcode.DeCodeString(sData);
                                             if ((sDataText[0] != '*') || (sDataText[1] != '*'))// 非法登陆
                                             {
                                                 UserData.UserClient.SessionArray[UserData.nSocketIdx].nSckHandle = -1;

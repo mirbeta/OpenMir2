@@ -101,17 +101,17 @@ namespace GameSvr
                                 Item.ItemType = Grobal2.ITEM_ETC;
                                 break;
                         }
-                        //if (M2Share.UserEngine.StdItemList.Count == Idx)
-                        //{
+                        if (M2Share.UserEngine.StdItemList.Count <= Idx)
+                        {
                             M2Share.UserEngine.StdItemList.Add(Item);
                             result = 1;
-                        //}
-                        // else
-                        // {
-                        //     M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败！！！", new object[] { Idx, Item.Name }));
-                        //     result = -100;
-                        //     return result;
-                        // }
+                        }
+                        else
+                        {
+                            M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败！！！", new object[] { Idx, Item.Name }));
+                            result = -100;
+                            return result;
+                        }
                     }
                 }
                 M2Share.g_boGameLogGold = M2Share.GetGameLogItemNameList(Grobal2.sSTRING_GOLDNAME) == 1;

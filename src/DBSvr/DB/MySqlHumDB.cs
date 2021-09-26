@@ -101,7 +101,7 @@ namespace DBSvr
                     }
                     catch (Exception e)
                     {
-                        DBShare.OutMainMessage("打开数据库[MySql]失败.");
+                        DBShare.MainOutMessage("打开数据库[MySql]失败.");
                         result = false;
                     }
                     break;
@@ -1287,10 +1287,6 @@ namespace DBSvr
             return result;
         }
 
-        public void Rebuild()
-        {
-        }
-
         public int Count()
         {
             return m_MirQuickList.Count;
@@ -1315,7 +1311,6 @@ namespace DBSvr
         public int GetQryChar(int nIndex, ref TQueryChr QueryChrRcd)
         {
             int result = -1;
-            string sChrName;
             const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE FLD_CHARNAME='{0}'";
             if (nIndex < 0)
             {
@@ -1325,7 +1320,7 @@ namespace DBSvr
             {
                 return result;
             }
-            sChrName = m_QuickIndexNameList[nIndex];
+            string sChrName = m_QuickIndexNameList[nIndex];
             try
             {
                 if (!Open())
@@ -1337,20 +1332,20 @@ namespace DBSvr
                 {
                     command.CommandText = string.Format(sSQL, sChrName);
                     command.Connection = (MySqlConnection)_dbConnection;
+                    using var dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        QueryChrRcd.sName = dr.GetString("FLD_CHARNAME");
+                        QueryChrRcd.btJob = dr.GetByte("FLD_JOB");
+                        QueryChrRcd.btHair = dr.GetByte("FLD_HAIR");
+                        QueryChrRcd.btSex = dr.GetByte("FLD_SEX");
+                        QueryChrRcd.wLevel = dr.GetUInt16("FLD_LEVEL");
+                    }
                 }
                 catch (Exception)
                 {
                     DBShare.MainOutMessage("[Exception] MySqlHumDB.GetQryChar (1)");
                     return result;
-                }
-                using var dr = command.ExecuteReader();
-                while (dr.Read())
-                {
-                    QueryChrRcd.sName = dr.GetString("FLD_CHARNAME");
-                    QueryChrRcd.btJob = dr.GetByte("FLD_JOB");
-                    QueryChrRcd.btHair = dr.GetByte("FLD_HAIR");
-                    QueryChrRcd.btSex = dr.GetByte("FLD_SEX");
-                    QueryChrRcd.wLevel = dr.GetUInt16("FLD_LEVEL");
                 }
             }
             finally

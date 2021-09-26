@@ -34,7 +34,7 @@ namespace DBSvr
         public void Start()
         {
             serverSocket.Start(DBShare.sServerAddr, DBShare.nServerPort);
-            DBShare.OutMainMessage($"数据库角色服务[{DBShare.sServerAddr}:{DBShare.nServerPort}]已启动.等待链接...");
+            DBShare.MainOutMessage($"数据库角色服务[{DBShare.sServerAddr}:{DBShare.nServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -43,23 +43,16 @@ namespace DBSvr
             string sIPaddr = e.RemoteIPaddr;
             if (!DBShare.CheckServerIP(sIPaddr))
             {
-                DBShare.OutMainMessage("非法服务器连接: " + sIPaddr);
+                DBShare.MainOutMessage("非法服务器连接: " + sIPaddr);
                 e.Socket.Close();
                 return;
             }
-            if (DBShare.boOpenDBBusy)
-            {
-                ServerInfo = new TServerInfo();
-                ServerInfo.bo08 = true;
-                ServerInfo.nSckHandle = (int)e.Socket.Handle;
-                ServerInfo.sStr = "";
-                ServerInfo.Socket = e.Socket;
-                ServerList.Add(ServerInfo);
-            }
-            else
-            {
-                e.Socket.Close();
-            }
+            ServerInfo = new TServerInfo();
+            ServerInfo.bo08 = true;
+            ServerInfo.nSckHandle = (int)e.Socket.Handle;
+            ServerInfo.sStr = "";
+            ServerInfo.Socket = e.Socket;
+            ServerList.Add(ServerInfo);
         }
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -98,7 +91,7 @@ namespace DBSvr
                     s10 = HUtil32.GetString(data, 0, data.Length);
                     if (!string.IsNullOrEmpty(s10))
                     {
-                        ServerInfo.sStr = ServerInfo.sStr + s10;
+                        ServerInfo.sStr += s10;
                         if (s10.IndexOf("!", StringComparison.Ordinal) > 0)
                         {
                             ProcessServerPacket(ServerInfo);
@@ -124,26 +117,21 @@ namespace DBSvr
             string s1C = string.Empty;
             string s20 = string.Empty;
             string s24 = string.Empty;
-            int n14;
-            int n18;
-            int wE;
-            int w10;
             try
             {
                 bo25 = false;
                 s1C = ServerInfo.sStr;
                 ServerInfo.sStr = "";
-                s20 = "";
                 s1C = HUtil32.ArrestStringEx(s1C, "#", "!", ref s20);
-                if (s20 != "")
+                if (!string.IsNullOrEmpty(s20))
                 {
                     s20 = HUtil32.GetValidStr3(s20, ref s24, new string[] { "/" });
-                    n14 = s20.Length;
+                    int n14 = s20.Length;
                     if ((n14 >= Grobal2.DEFBLOCKSIZE) && (s24 != ""))
                     {
-                        wE = HUtil32.Str_ToInt(s24, 0) ^ 170;
-                        w10 = n14;
-                        n18 = HUtil32.MakeLong(wE, w10);
+                        int wE = HUtil32.Str_ToInt(s24, 0) ^ 170;
+                        int w10 = n14;
+                        int n18 = HUtil32.MakeLong(wE, w10);
                         var by = new byte[sizeof(int)];
                         unsafe
                         {
@@ -161,15 +149,10 @@ namespace DBSvr
                         }
                     }
                 }
-                if (s1C != "")
-                {
-                    //Label4.Text = "Error " + (DBShare.n4ADC00).ToString();
-                }
                 if (!bo25)
                 {
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     SendSocket(ServerInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
-                    //Label4.Text = "Error " + (DBShare.n4ADC00).ToString();
                 }
             }
             finally
@@ -210,7 +193,7 @@ namespace DBSvr
                 {
                     if (HumSession.bo2C)
                     {
-                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 20 * 1000)
+                        if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 20 * 1000)
                         {
                             HumSession = null;
                             HumSessionList.RemoveAt(i);
@@ -219,7 +202,7 @@ namespace DBSvr
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 2 * 60 * 1000)
+                        if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 2 * 60 * 1000)
                         {
                             HumSession = null;
                             HumSessionList.RemoveAt(i);
@@ -227,7 +210,7 @@ namespace DBSvr
                         }
                     }
                 }
-                if ((HUtil32.GetTickCount() - HumSession.dwTick30) > 40 * 60 * 1000)
+                if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 40 * 60 * 1000)
                 {
                     HumSession = null;
                     HumSessionList.RemoveAt(i);
@@ -307,7 +290,6 @@ namespace DBSvr
 
         private void LoadHumanRcd(string sMsg, Socket Socket)
         {
-            int nIndex;
             THumDataInfo HumanRCD = null;
             bool boFoundSession = false;
             TLoadHuman LoadHuman = new TLoadHuman(EDcode.DecodeBuffer(sMsg));
@@ -321,7 +303,7 @@ namespace DBSvr
                 nCheckCode = _LoginSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    DBShare.OutMainMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + (nSessionID).ToString());
+                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + (nSessionID).ToString());
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
@@ -330,7 +312,7 @@ namespace DBSvr
                 {
                     if (HumDB.Open())
                     {
-                        nIndex = HumDB.Index(sHumName);
+                        int nIndex = HumDB.Index(sHumName);
                         if (nIndex >= 0)
                         {
                             if (HumDB.Get(nIndex, ref HumanRCD) < 0)
@@ -369,13 +351,12 @@ namespace DBSvr
         {
             string sChrName = string.Empty;
             string sUserID = string.Empty;
-            bool bo21;
             THumDataInfo HumanRCD = null;
             string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new string[] { "/" });
             sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new string[] { "/" });
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
-            bo21 = false;
+            bool bo21 = false;
             if (sHumanRCD.Length >= 4000)
             {
                 HumanRCD = new THumDataInfo(EDcode.DecodeBuffer(sHumanRCD));
@@ -419,7 +400,7 @@ namespace DBSvr
                     THumSession HumSession = HumSessionList[i];
                     if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
                     {
-                        HumSession.dwTick30 = HUtil32.GetTickCount();
+                        HumSession.lastSessionTick = HUtil32.GetTickCount();
                         break;
                     }
                 }
@@ -449,7 +430,7 @@ namespace DBSvr
                     HumSession.bo24 = false;
                     HumSession.Socket = Socket;
                     HumSession.bo2C = true;
-                    HumSession.dwTick30 = HUtil32.GetTickCount();
+                    HumSession.lastSessionTick = HUtil32.GetTickCount();
                     break;
                 }
             }

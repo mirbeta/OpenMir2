@@ -143,10 +143,7 @@ namespace GameSvr
             {
                 try
                 {
-                    M2Share.UserEngine.AddSwitchData(new TSwitchDataInfo()
-                    {
-
-                    });
+                    M2Share.UserEngine.AddSwitchData(new TSwitchDataInfo());
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.nServerIndex, ufilename);
                 }
                 catch
@@ -296,7 +293,6 @@ namespace GameSvr
             TGuild g;
             TGuild WarGuild;
             TWarGuild pgw;
-            int currenttick;
             if (sNum == 0)
             {
                 Str = Body;
@@ -310,7 +306,7 @@ namespace GameSvr
                     WarGuild = M2Share.GuildManager.FindGuild(warguildname);
                     if (g != null && WarGuild != null)
                     {
-                        currenttick = HUtil32.GetTickCount();
+                        int currenttick = HUtil32.GetTickCount();
                         if (M2Share.g_nServerTickDifference == 0)
                         {
                             M2Share.g_nServerTickDifference = Convert.ToInt32(StartTime) - currenttick;
@@ -403,10 +399,8 @@ namespace GameSvr
         private void MsgGetUserMgr(int sNum, string Body, int Ident_)
         {
             var UserName = string.Empty;
-            var msgbody = string.Empty;
-            var Str = string.Empty;
-            Str = Body;
-            msgbody = HUtil32.GetValidStr3(Str, ref UserName, "/");
+            string Str = Body;
+            string msgbody = HUtil32.GetValidStr3(Str, ref UserName, "/");
             // UserMgrEngine.OnExternInterMsg(sNum, Ident_, UserName, msgbody);
         }
 
@@ -524,7 +518,7 @@ namespace GameSvr
                 if (hum != null)
                 {
                     hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                    hum.SpaceMove(Str, dx, dy, 0);// 傍埃捞悼
+                    hum.SpaceMove(Str, dx, dy, 0);
                 }
             }
         }

@@ -18,7 +18,6 @@ namespace DBSvr
         /// 已被删除的记录号
         /// </summary>
         public IList<int> m_DeletedList = null;
-
         private IDbConnection _dbConnection = null;
 
         public MySqlHumRecordDB()
@@ -126,7 +125,7 @@ namespace DBSvr
                 }
                 catch (Exception e)
                 {
-                    DBShare.OutMainMessage("打开数据库[MySql]失败.");
+                    DBShare.MainOutMessage("打开数据库[MySql]失败.");
                     result = false;
                 }
             }
@@ -339,7 +338,7 @@ namespace DBSvr
             catch (Exception e)
             {
                 Close();
-                DBShare.OutMainMessage(e.Message);
+                DBShare.MainOutMessage(e.Message);
             }
             return result;
         }

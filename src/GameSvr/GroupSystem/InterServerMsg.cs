@@ -25,6 +25,7 @@ namespace GameSvr
         public void StartMsgServer()
         {
             _msgServer.Start(M2Share.g_Config.sMsgSrvAddr, M2Share.g_Config.nMsgSrvPort);
+            M2Share.MainOutMessage($"节点数据服务[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)
@@ -210,7 +211,13 @@ namespace GameSvr
         public Socket Socket;
         public string SocData;
         public string SocketId;
-    } 
+    }
+
+    public class ServerGruopInfo
+    {
+        public int nServerIdx;
+        public string sCharName;
+    }
 }
 
 namespace GameSvr

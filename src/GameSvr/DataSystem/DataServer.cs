@@ -28,10 +28,15 @@ namespace GameSvr
 
         public void CheckConnected()
         {
-            if (!_clientScoket.IsConnected)
+            if (_clientScoket.IsConnected)
             {
-                _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
+                return;
             }
+            if (_clientScoket.IsBusy)
+            {
+                return;
+            }
+            _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
 
         public void SendMessage(int nQueryID, string sMsg)
@@ -82,13 +87,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]拒绝链接...");
+                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]关闭连接...");
+                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("数据库服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]链接超时...");
+                    M2Share.ErrorMessage("数据库服务器[" + M2Share.g_Config.sDBAddr + ":" + M2Share.g_Config.nDBPort + "]链接超时...");
                     break;
             }
         }
@@ -98,7 +103,7 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                M2Share.g_Config.sDBSocketRecvText = M2Share.g_Config.sDBSocketRecvText + e.ReceiveText;
+                M2Share.g_Config.sDBSocketRecvText += e.ReceiveText;
                 if (!M2Share.g_Config.boDBSocketWorking)
                 {
                     M2Share.g_Config.sDBSocketRecvText = "";

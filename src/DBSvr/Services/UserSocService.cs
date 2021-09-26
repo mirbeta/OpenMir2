@@ -40,7 +40,7 @@ namespace DBSvr
         public void Start()
         {
             UserSocket.Start(DBShare.g_sGateAddr, DBShare.g_nGatePort);
-            DBShare.OutMainMessage($"数据库服务[{DBShare.g_sGateAddr}:{DBShare.g_nGatePort}]已启动.等待链接...");
+            DBShare.MainOutMessage($"数据库服务[{DBShare.g_sGateAddr}:{DBShare.g_nGatePort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -73,26 +73,19 @@ namespace DBSvr
             const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
             if (!DBShare.CheckServerIP(sIPaddr))
             {
-                DBShare.OutMainMessage("非法网关连接: " + sIPaddr);
+                DBShare.MainOutMessage("非法网关连接: " + sIPaddr);
                 e.Socket.Close();
                 return;
             }
-            if (DBShare.boOpenDBBusy)
-            {
-                GateInfo = new TGateInfo();
-                GateInfo.Socket = e.Socket;
-                GateInfo.sGateaddr = sIPaddr;
-                GateInfo.sText = "";
-                GateInfo.UserList = new List<TUserInfo>();
-                GateInfo.dwTick10 = HUtil32.GetTickCount();
-                GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-                GateList.Add(GateInfo);
-                DBShare.MainOutMessage(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
-            }
-            else
-            {
-                e.Socket.Close();
-            }
+            GateInfo = new TGateInfo();
+            GateInfo.Socket = e.Socket;
+            GateInfo.sGateaddr = sIPaddr;
+            GateInfo.sText = "";
+            GateInfo.UserList = new List<TUserInfo>();
+            GateInfo.dwTick10 = HUtil32.GetTickCount();
+            GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
+            GateList.Add(GateInfo);
+            DBShare.MainOutMessage(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -107,8 +100,7 @@ namespace DBSvr
                 {
                     for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
                     {
-                        UserInfo = GateInfo.UserList[ii];
-                        UserInfo = null;
+                        GateInfo.UserList[ii] = null;
                     }
                     GateInfo.UserList = null;
                 }
@@ -125,7 +117,6 @@ namespace DBSvr
 
         private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
-            string sReviceMsg;
             TGateInfo GateInfo;
             for (var i = 0; i < GateList.Count; i++)
             {
@@ -136,8 +127,7 @@ namespace DBSvr
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    GateInfo.sText += sReviceMsg;
+                    GateInfo.sText += HUtil32.GetString(data, 0, data.Length);
                     if (GateInfo.sText.Length < 81920)
                     {
                         if (GateInfo.sText.IndexOf("$", StringComparison.Ordinal) > 1)
@@ -476,7 +466,6 @@ namespace DBSvr
             switch (Msg.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
-                    DBShare.MainOutMessage("查询角色");
                     if (!UserInfo.boChrQueryed || ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 200))
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
@@ -488,7 +477,7 @@ namespace DBSvr
                     else
                     {
                         DBShare.g_nQueryChrCount++;
-                        DBShare.OutMainMessage("[Hacker Attack] QUERYCHR " + UserInfo.sUserIPaddr);
+                        DBShare.MainOutMessage("[Hacker Attack] QUERYCHR " + UserInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_NEWCHR:
@@ -508,7 +497,7 @@ namespace DBSvr
                     else
                     {
                         DBShare.nHackerNewChrCount++;
-                        DBShare.OutMainMessage("[Hacker Attack] NEWCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        DBShare.MainOutMessage("[Hacker Attack] NEWCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_DELCHR:
@@ -528,7 +517,7 @@ namespace DBSvr
                     else
                     {
                         DBShare.nHackerDelChrCount++;
-                        DBShare.OutMainMessage("[Hacker Attack] DELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        DBShare.MainOutMessage("[Hacker Attack] DELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_SELCHR:
@@ -549,7 +538,7 @@ namespace DBSvr
                     else
                     {
                         DBShare.nHackerSelChrCount++;
-                        DBShare.OutMainMessage("Double send SELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        DBShare.MainOutMessage("Double send SELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
                     }
                     break;
                 default:
@@ -624,7 +613,7 @@ namespace DBSvr
                     HumDB.Close();
                 }
                 ChrList = null;
-                DBShare.OutMainMessage("查询角色成功:" + s40);
+                DBShare.MainOutMessage("查询角色成功:" + s40);
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
             }
             else
@@ -637,24 +626,20 @@ namespace DBSvr
 
         private void OutOfConnect(TUserInfo UserInfo)
         {
-            TDefaultMessage Msg;
-            string sMsg;
-            Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            sMsg = EDcode.EncodeMessage(Msg);
+            TDefaultMessage Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            string sMsg = EDcode.EncodeMessage(Msg);
             SendUserSocket(UserInfo.Socket, sMsg, UserInfo.sConnID);
         }
 
         public int DelChr_snametolevel(string sName)
         {
-            int result;
-            int nIndex;
             THumDataInfo ChrRecord = null;
-            result = 0;
+            int result = 0;
             try
             {
                 if (HumDB.Open())
                 {
-                    nIndex = HumDB.Index(sName);
+                    int nIndex = HumDB.Index(sName);
                     if (nIndex >= 0)
                     {
                         HumDB.Get(nIndex, ref ChrRecord);
@@ -724,17 +709,14 @@ namespace DBSvr
         /// <param name="UserInfo"></param>
         private void NewChr(string sData, ref TUserInfo UserInfo)
         {
-            string Data = string.Empty;
             string sAccount = string.Empty;
             string sChrName = string.Empty;
             string sHair = string.Empty;
             string sJob = string.Empty;
             string sSex = string.Empty;
             TDefaultMessage Msg;
-            string sMsg;
-            THumInfo HumRecord;
             var nCode = -1;
-            Data = EDcode.DeCodeString(sData);
+            string Data = EDcode.DeCodeString(sData);
             Data = HUtil32.GetValidStr3(Data, ref sAccount, new string[] { "/" });
             Data = HUtil32.GetValidStr3(Data, ref sChrName, new string[] { "/" });
             Data = HUtil32.GetValidStr3(Data, ref sHair, new string[] { "/" });
@@ -795,7 +777,7 @@ namespace DBSvr
                     {
                         if (HumChrDB.ChrCountOfAccount(sAccount) < 2)
                         {
-                            HumRecord = new THumInfo();
+                            THumInfo HumRecord = new THumInfo();
                             HumRecord.sChrName = sChrName;
                             HumRecord.sAccount = sAccount;
                             HumRecord.boDeleted = false;
@@ -841,7 +823,7 @@ namespace DBSvr
             {
                 Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
-            sMsg = EDcode.EncodeMessage(Msg);
+            string sMsg = EDcode.EncodeMessage(Msg);
             SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
         }
 
@@ -860,7 +842,7 @@ namespace DBSvr
             string sCurMap = string.Empty;
             int nRoutePort = 0;
             var result = false;
-            var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData, true), ref sAccount, new string[] { "/" });
+            var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, new string[] { "/" });
             var boDataOK = false;
             if (UserInfo.sAccount == sAccount)
             {

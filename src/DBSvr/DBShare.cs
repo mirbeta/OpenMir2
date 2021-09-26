@@ -37,21 +37,10 @@ namespace DBSvr
         public static Hashtable ServerIPList = null;
         public static Dictionary<string, short> GateIDList = null;
         public static int dwInterval = 3000;
-        public static int nLevel1 = 1;
-        public static int nLevel2 = 7;
-        public static int nLevel3 = 14;
-        public static int nDay1 = 14;
-        public static int nDay2 = 62;
-        public static int nDay3 = 124;
-        public static int nMonth1 = 0;
-        public static int nMonth2 = 0;
-        public static int nMonth3 = 0;
         public static int g_nClearRecordCount = 0;
         public static int g_nClearIndex = 0;
         public static int g_nClearCount = 0;
         public static int g_nClearItemIndexCount = 0;
-        public static bool boOpenDBBusy = false;
-        public static long g_dwGameCenterHandle = 0;
         public static bool g_boDynamicIPMode = false;
         public static StringList g_ClearMakeIndex = null;
         public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
@@ -119,7 +108,7 @@ namespace DBSvr
             }
             catch
             {
-                OutMainMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错！！！");
+                MainOutMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错！！！");
             }
         }
 
@@ -140,15 +129,6 @@ namespace DBSvr
                 boDenyChrName = Conf.ReadBool("Setup", "DenyChrName", boDenyChrName);
                 nDELMaxLevel = Conf.ReadInteger("Setup", "DELMaxLevel", nDELMaxLevel);
                 dwInterval = Conf.ReadInteger<int>("DBClear", "Interval", dwInterval);
-                nLevel1 = Conf.ReadInteger("DBClear", "Level1", nLevel1);
-                nLevel2 = Conf.ReadInteger("DBClear", "Level2", nLevel2);
-                nLevel3 = Conf.ReadInteger("DBClear", "Level3", nLevel3);
-                nDay1 = Conf.ReadInteger("DBClear", "Day1", nDay1);
-                nDay2 = Conf.ReadInteger("DBClear", "Day2", nDay2);
-                nDay3 = Conf.ReadInteger("DBClear", "Day3", nDay3);
-                nMonth1 = Conf.ReadInteger("DBClear", "Month1", nMonth1);
-                nMonth2 = Conf.ReadInteger("DBClear", "Month2", nMonth2);
-                nMonth3 = Conf.ReadInteger("DBClear", "Month3", nMonth3);
                 LoadInteger = Conf.ReadInteger("Setup", "DynamicIPMode", -1);
                 if (LoadInteger < 0)
                 {
@@ -159,7 +139,6 @@ namespace DBSvr
                     g_boDynamicIPMode = LoadInteger == 1;
                 }
                 g_boEnglishNames = Conf.ReadBool("Setup", "EnglishNameOnly", g_boEnglishNames);
-                //Conf.Free;
             }
             LoadIPTable();
             LoadGateID();
@@ -222,16 +201,6 @@ namespace DBSvr
             return result;
         }
 
-        public static void OutMainMessage(string sMsg)
-        {
-            WriteLogMsg(sMsg);
-        }
-
-        private static void WriteLogMsg(string sMsg)
-        {
-            Console.WriteLine(sMsg);
-        }
-
         public static bool CheckServerIP(string sIP)
         {
             bool result = false;
@@ -270,7 +239,7 @@ namespace DBSvr
         public Socket Socket;
         public bool bo24;
         public bool bo2C;
-        public long dwTick30;
+        public long lastSessionTick;
     }
 
     public class THumInfo

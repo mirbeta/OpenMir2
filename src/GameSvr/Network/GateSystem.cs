@@ -279,7 +279,7 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification -> GetCertification";
             try
             {
-                var sData = EDcode.DeCodeString(sMsg, true);
+                var sData = EDcode.DeCodeString(sMsg);
                 if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.Substring(2, sData.Length - 2);
@@ -740,7 +740,7 @@ namespace GameSvr
                                     }
                                     else
                                     {
-                                        var sMsg = EDcode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13), true);
+                                        var sMsg = EDcode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13));
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, sMsg);
                                     }
                                 }

@@ -10,6 +10,7 @@ namespace DBSvr
     /// 账号中心
     /// </summary>
     public class LoginSocService
+
     {
         private IList<TGlobaSessionInfo> GlobaSessionList = null;
         private string m_sSockMsg = string.Empty;
@@ -36,25 +37,25 @@ namespace DBSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]拒绝链接...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]关闭连接...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    DBShare.OutMainMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]链接超时...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]链接超时...");
                     break;
             }
         }
 
         private void IDSocketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage($"账号登陆服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.");
+            DBShare.MainOutMessage($"账号登陆服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.");
         }
 
         private void IDSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            DBShare.OutMainMessage($"账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
+            DBShare.MainOutMessage($"账号登录服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.");
         }
 
         public void Start()
@@ -64,11 +65,9 @@ namespace DBSvr
 
         public void Stop()
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
-                GlobaSessionInfo = null;
+                GlobaSessionList[i] = null;
             }
             GlobaSessionList = null;
         }
@@ -88,16 +87,11 @@ namespace DBSvr
 
         private void IDSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            m_sSockMsg = m_sSockMsg + e.ReceiveText;
+            m_sSockMsg += e.ReceiveText;
             if (m_sSockMsg.IndexOf(")", StringComparison.Ordinal) > 0)
             {
                 ProcessSocketMsg();
             }
-        }
-
-        public void IDSocketError()
-        {
-
         }
 
         private void ProcessSocketMsg()
