@@ -1036,7 +1036,7 @@ namespace GameSvr
                     if (boFlag == MapQuestFlag.boGrouped || !boFlag)
                     {
                         bo1D = false;
-                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.sItemName != "")
+                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.!string.IsNullOrEmpty(sItemName))
                         {
                             if (MapQuestFlag.sMonName == sCharName && MapQuestFlag.sItemName == sItem)
                             {
@@ -1050,7 +1050,7 @@ namespace GameSvr
                                 bo1D = true;
                             }
                         }
-                        if (MapQuestFlag.sMonName == "" && MapQuestFlag.sItemName != "")
+                        if (MapQuestFlag.sMonName == "" && MapQuestFlag.!string.IsNullOrEmpty(sItemName))
                         {
                             if (MapQuestFlag.sItemName == sItem)
                             {

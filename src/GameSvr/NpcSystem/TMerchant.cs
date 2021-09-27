@@ -501,10 +501,7 @@ namespace GameSvr
         private void GetBackupgWeapon(TPlayObject User)
         {
             TUpgradeInfo UpgradeInfo = null;
-            int n10 = 0;
             int n18 = 0;
-            int n1C = 0;
-            int n90 = 0;
             TUserItem UserItem;
             GameItem StdItem;
             if (!User.IsEnoughBag())
@@ -574,6 +571,7 @@ namespace GameSvr
                         UpgradeInfo.UserItem.DuraMax += 4000;
                     }
                 }
+                int n1C;
                 if (UpgradeInfo.btDc == UpgradeInfo.btMc && UpgradeInfo.btMc == UpgradeInfo.btSc)
                 {
                     n1C = M2Share.RandomNumber.Random(3);
@@ -582,6 +580,8 @@ namespace GameSvr
                 {
                     n1C = -1;
                 }
+                int n90;
+                int n10;
                 if (UpgradeInfo.btDc >= UpgradeInfo.btMc && UpgradeInfo.btDc >= UpgradeInfo.btSc || n1C == 0)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
@@ -807,11 +807,9 @@ namespace GameSvr
         public override void UserSelect(TPlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
-            var sMsg = string.Empty;
-            var boCanJmp = false;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
             base.UserSelect(PlayObject, sData);
-            if (!(this is TMerchant))// 如果类名不是 TMerchant 则不执行以下处理函数
+            if (this is not TMerchant)// 如果类名不是 TMerchant 则不执行以下处理函数
             {
                 return;
             }
@@ -821,10 +819,10 @@ namespace GameSvr
                 {
                     if (!PlayObject.m_boDeath && sData != "" && sData[0] == '@')
                     {
-                        sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                        string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
                         PlayObject.m_sScriptLable = sData;
-                        boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                        if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
                             {
@@ -836,98 +834,98 @@ namespace GameSvr
                         {
                             return;
                         }
-                        if (string.Compare(sLabel.ToLower(), M2Share.sOFFLINEMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
+                        if (string.Compare(sLabel, M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
                         {
                             if (m_boOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sSL_SENDMSG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSendmsg)
                             {
                                 SendCustemMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sSUPERREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boS_repair)
                             {
                                 UserSelect_SuperRepairItem(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sBUY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sBUY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boBuy)
                             {
                                 UserSelect_BuyItem(PlayObject, 0);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sSELL.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSELL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boSell)
                             {
                                 UserSelect_SellItem(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sREPAIR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boRepair)
                             {
                                 UserSelect_RepairItem(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sMAKEDURG.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sMAKEDURG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boMakeDrug)
                             {
                                 UserSelect_MakeDurg(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sPRICES.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sPRICES, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boPrices)
                             {
                                 UserSelect_ItemPrices(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sSTORAGE.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sSTORAGE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boStorage)
                             {
                                 UserSelect_Storage(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sGETBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetback)
                             {
                                 UserSelect_GetBack(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sUPGRADENOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sUPGRADENOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boUpgradenow)
                             {
                                 UpgradeWapon(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETBACKUPGNOW.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetBackupgnow)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMARRY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sGETMARRY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMarry)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sGETMASTER.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sGETMASTER, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (m_boGetMaster)
                             {
@@ -941,11 +939,11 @@ namespace GameSvr
                                 ChangeUseItemName(PlayObject, sLabel, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sEXIT.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ObjectId, 0, 0, "");
                         }
-                        else if (string.Compare(sLabel.ToLower(), M2Share.sBACK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, M2Share.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.m_sScriptGoBackLable == "")
                             {
@@ -953,7 +951,7 @@ namespace GameSvr
                             }
                             GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                         }
-                        else if (sLabel.ToLower().CompareTo((M2Share.sDealYBme).ToLower()) == 0) // 元宝寄售:出售物品 
+                        else if (sLabel.CompareTo((M2Share.sDealYBme)) == 0) // 元宝寄售:出售物品 
                         {
                             if (m_boYBDeal)
                             {
@@ -1692,7 +1690,7 @@ namespace GameSvr
                 {
                     if (UserItem.DuraMax > 0)
                     {
-                        nRepairPrice = HUtil32.Round(nPrice / 3 / UserItem.DuraMax * (UserItem.DuraMax - UserItem.Dura));
+                        nRepairPrice = HUtil32.Round(((nPrice / 3) / UserItem.DuraMax) * (UserItem.DuraMax - UserItem.Dura));
                     }
                     else
                     {
@@ -1848,7 +1846,7 @@ namespace GameSvr
                 {
                     M2Share.ItemUnit.DelCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
                 }
-                if (sItemName != "")
+                if (!string.IsNullOrEmpty(sItemName))
                 {
                     M2Share.ItemUnit.AddCustomItemName(UserItem.MakeIndex, UserItem.wIndex, sItemName);
                     UserItem.btValue[13] = 1;

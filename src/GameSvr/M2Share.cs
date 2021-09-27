@@ -2894,7 +2894,7 @@ namespace GameSvr
             //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
             //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] {" ", "/", ",", "\t"});
             //        nItemCount = HUtil32.Str_ToInt(sItemCount,  -1);
-            //        if ((sItemName != "") && (nItemCount >= 0))
+            //        if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
             //        {
             //            MonDrop = new TMonDrop();
             //            MonDrop.sItemName = sItemName;
@@ -2959,7 +2959,7 @@ namespace GameSvr
             //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
             //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] {" ", "/", ",", "\t"});
             //            nItemIdx = HUtil32.Str_ToInt(sItemIdx,  -1);
-            //            if ((sItemName != "") && (nItemIdx >= 0))
+            //            if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
             //            {
             //                g_DisableTakeOffList.Add(sItemName, ((nItemIdx) as Object));
             //            }

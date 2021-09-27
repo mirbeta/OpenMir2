@@ -245,8 +245,12 @@ namespace SystemModule.Sockets
         {
             try
             {
-                this.cli.Shutdown(SocketShutdown.Both);
-                this.cli.Close();
+                if (cli != null)
+                {
+                    this.cli.Shutdown(SocketShutdown.Both);
+                    this.cli.Close();
+                }
+
             }
             catch (Exception) { }
         }

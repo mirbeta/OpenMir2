@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>M2Server</RootNamespace>
+        <RootNamespace>GameSvr</RootNamespace>
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
         <LangVersion>default</LangVersion>
         <Nullable>disable</Nullable>

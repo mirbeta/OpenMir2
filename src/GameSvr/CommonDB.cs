@@ -1,10 +1,9 @@
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using SystemModule;
 using System.Data;
-using MySql.Data.MySqlClient;
 using System.Text.Json;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -272,7 +271,6 @@ namespace GameSvr
             return result;
         }
 
-
         /// <summary>
         /// 加载寄售系统数据
         /// </summary>
@@ -286,7 +284,7 @@ namespace GameSvr
             try
             {
                 TDealOffInfo DealOffInfo;
-                const string sSQLString = "select * from sales";
+                const string sSQLString = "select * from TBL_GOLDSALES";
                 var command = new MySqlCommand();
                 command.Connection = (MySqlConnection)_dbConnection;
                 command.CommandText = sSQLString;
@@ -335,7 +333,7 @@ namespace GameSvr
                 return;
             }
             TDealOffInfo DealOffInfo;
-            const string sSQLString = "delete from sales";
+            const string sSQLString = "delete from TBL_GOLDSALES";
             try
             {
                 if (M2Share.sSellOffItemList.Count > 0)

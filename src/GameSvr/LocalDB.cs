@@ -1000,7 +1000,7 @@ namespace GameSvr
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sData, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStrCap(tStr, ref sItemName, new[] { " ", "\t" });
-                        if (sItemName != "" && sItemName[0] == '\"')
+                        if (!string.IsNullOrEmpty(sItemName) && sItemName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                         }
