@@ -357,10 +357,10 @@ namespace GameSvr
         public static string g_sSendCustMsgCanNotUseNowMsg = "祝福语功能还没有开放!!!";
         public static string g_sSubkMasterMsgCanNotUseNowMsg = "城主发信息功能还没有开放!!!";
         public static string g_sWeaponRepairSuccess = "武器修复成功...";
-        public static string g_sDefenceUpTime = "防御力增加%d秒";
-        public static string g_sMagDefenceUpTime = "魔法防御力增加%d秒";
-        public static string g_sAttPowerUpTime = "物理攻击力增加%d分钟%d秒 ";
-        public static string g_sAttPowerDownTime = "物理攻击力减少了%d分钟%d秒";
+        public static string g_sDefenceUpTime = "防御力增加{0}秒";
+        public static string g_sMagDefenceUpTime = "魔法防御力增加{0}秒";
+        public static string g_sAttPowerUpTime = "物理攻击力增加{0}分钟{1}秒 ";
+        public static string g_sAttPowerDownTime = "物理攻击力减少了{0}分钟{1}秒";
         public static string g_sWinLottery1Msg = "祝贺您，中了一等奖。";
         public static string g_sWinLottery2Msg = "祝贺您，中了二等奖。";
         public static string g_sWinLottery3Msg = "祝贺您，中了三等奖。";

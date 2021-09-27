@@ -1423,7 +1423,6 @@ namespace GameSvr
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 PlayObject = this as TPlayObject;
-                // Result:=Result * PlayObject.m_nPowerMult + ROUND(Result * (PlayObject.m_nPowerMultPoint / 100));
                 result = HUtil32.Round(result * (PlayObject.m_nPowerRate / 100));
                 if (PlayObject.m_boPowerItem)
                 {
@@ -5069,20 +5068,20 @@ namespace GameSvr
             return result;
         }
 
-        private bool DefenceUp(int nSec)
+        private bool DefenceUp(ushort nSec)
         {
             bool result = false;
             if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
                 if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] < nSec)
                 {
-                    m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = (ushort)nSec;
+                    m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = (ushort)nSec;
+                m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] = nSec;
                 result = true;
             }
             m_dwStatusArrTick[Grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
@@ -5098,7 +5097,7 @@ namespace GameSvr
             m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
             int nMin = nTime / 60;
             int nSec = nTime % 60;
-            SysMsg(format(M2Share.g_sAttPowerUpTime, new object[] { nMin, nSec }), TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(format(M2Share.g_sAttPowerUpTime, nMin, nSec), TMsgColor.c_Green, TMsgType.t_Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;
