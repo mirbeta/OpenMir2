@@ -16,7 +16,7 @@ namespace GameSvr
 
             if (M2Share.nServerIndex != 0)
             {
-                PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sGuildName == "")
@@ -30,7 +30,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg("没找到" + sGuildName + "这个行会！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("没找到" + sGuildName + "这个行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

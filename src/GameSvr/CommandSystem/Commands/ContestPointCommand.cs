@@ -27,7 +27,7 @@ namespace GameSvr.Command
             }
             else
             {
-                PlayObject.SysMsg(string.Format("行会: {0} 不存在！！！", sGuildName), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format("行会: {0} 不存在!!!", sGuildName), TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
     }

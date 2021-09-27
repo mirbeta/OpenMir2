@@ -108,7 +108,7 @@ namespace DBSvr
             }
             catch
             {
-                MainOutMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错！！！");
+                MainOutMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错!!!");
             }
         }
 

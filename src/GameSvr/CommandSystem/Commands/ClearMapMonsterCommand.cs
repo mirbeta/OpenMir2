@@ -94,7 +94,7 @@ namespace GameSvr
             }
             if (Envir == null)
             {
-                PlayObject.SysMsg("输入的地图不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("输入的地图不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             PlayObject.SysMsg("已清除怪物数: " + nMonCount, TMsgColor.c_Red, TMsgType.t_Hint);

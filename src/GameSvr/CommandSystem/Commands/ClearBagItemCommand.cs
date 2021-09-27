@@ -13,7 +13,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? Params[0] : "";
             TUserItem UserItem;
             IList<TDeleteItem> DelList = null;
-            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -660,7 +660,7 @@ namespace GameSvr
             TUserItem UserItem;
             var sIPaddr = "127.0.0.1";
             const string sExceptionMsg = "[Exception] TPlayObject::UserLogon";
-            const string sCheckIPaddrFail = "登录IP地址不匹配！！！";
+            const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
             try
             {
                 if (M2Share.g_Config.boTestServer)

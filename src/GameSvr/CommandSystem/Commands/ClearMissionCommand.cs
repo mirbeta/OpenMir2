@@ -14,7 +14,7 @@ namespace GameSvr
         public void ClearMission(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if (sHumanName == "")
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -27,7 +27,7 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format("{0}不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format("{0}不在线，或在其它服务器上!!", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             PlayObject.SysMsg(string.Format("{0}的任务标志已经全部清零。", sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);

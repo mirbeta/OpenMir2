@@ -40,7 +40,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg("行会 " + sGuildName + "还没建立！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("行会 " + sGuildName + "还没建立!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

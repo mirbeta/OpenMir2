@@ -26,7 +26,7 @@ namespace GameSvr
             var Envir = M2Share.g_MapManager.FindMap(sMapName);
             if (Envir == null)
             {
-                PlayObject.SysMsg(sMapName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             sMsg = "地图模式: " + Envir.GetEnvirInfo();

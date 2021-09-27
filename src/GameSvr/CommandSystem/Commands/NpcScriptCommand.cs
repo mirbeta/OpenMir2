@@ -53,7 +53,7 @@ namespace GameSvr
             }
             if (nNPCType < 0)
             {
-                PlayObject.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sParam1 == "")

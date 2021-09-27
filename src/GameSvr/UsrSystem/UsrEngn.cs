@@ -1217,7 +1217,7 @@ namespace GameSvr
         {
             GameItem result = null;
             GameItem StdItem = null;
-            if (sItemName == "") return result;
+            if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 StdItem = StdItemList[i];
@@ -2591,7 +2591,7 @@ namespace GameSvr
         {
             GameItem StdItem;
             var result = -1;
-            if (sItemName == "") return result;
+            if (string.IsNullOrEmpty(sItemName)) return result;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 StdItem = StdItemList[i];

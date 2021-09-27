@@ -181,7 +181,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确！！！，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                        SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                     }
                     return;
                 }
@@ -530,12 +530,12 @@ namespace GameSvr
                     m_boCanDearRecall = !m_boCanDearRecall;
                     if (m_boCanDearRecall)
                     {
-                        // '允许夫妻传送！！！'
+                        // '允许夫妻传送!!!'
                         SysMsg(M2Share.g_sEnableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '禁止夫妻传送！！！'
+                        // '禁止夫妻传送!!!'
                         SysMsg(M2Share.g_sDisableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     return;
@@ -545,12 +545,12 @@ namespace GameSvr
                     m_boCanMasterRecall = !m_boCanMasterRecall;
                     if (m_boCanMasterRecall)
                     {
-                        // '允许师徒传送！！！'
+                        // '允许师徒传送!!!'
                         SysMsg(M2Share.g_sEnableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '禁止师徒传送！！！'
+                        // '禁止师徒传送!!!'
                         SysMsg(M2Share.g_sDisableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     return;
@@ -1031,7 +1031,7 @@ namespace GameSvr
                         //}
                     }
                 }
-                SysMsg('@' + sCMD + " 此命令不正确，或没有足够的权限！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg('@' + sCMD + " 此命令不正确，或没有足够的权限!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
             catch (Exception e)
             {

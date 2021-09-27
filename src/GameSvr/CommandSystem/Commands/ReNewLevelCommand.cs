@@ -18,7 +18,7 @@ namespace GameSvr
             {
                 return;
             }
-            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 点数(为空则查看)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -36,7 +36,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + " 没在线上！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 没在线上!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

@@ -32,7 +32,7 @@ namespace GameSvr
             //Envir = M2Share.g_MapManager.FindMap(sMapName);
             //if ((Envir == null))
             //{
-            //    PlayObject.   SysMsg(sMapName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.   SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
             //if ((sMapMode).ToLower().CompareTo(("SAFE").ToLower()) == 0)

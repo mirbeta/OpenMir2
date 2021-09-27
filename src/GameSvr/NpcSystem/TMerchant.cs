@@ -795,12 +795,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您还有元宝服务正在进行！！\\ \\<返回/@main>");
+                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
                 }
             }
             else
             {
-                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您未开通元宝服务,请先开通元宝服务！！\\ \\<返回/@main>");
+                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
             }
         }
 
@@ -1674,7 +1674,7 @@ namespace GameSvr
             }
             if (PlayObject.m_sScriptLable == "@fail_s_repair")
             {
-                SendMsgToUser(PlayObject, "对不起！我不能帮你修理这个物品。\\ \\ \\<返回/@main>");
+                SendMsgToUser(PlayObject, "对不起!我不能帮你修理这个物品。\\ \\ \\<返回/@main>");
                 PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                 return result;
             }

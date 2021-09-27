@@ -670,7 +670,7 @@ namespace GameSvr
                                     dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg("攻击忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg("攻击忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                                     }
                                 }
                                 else
@@ -683,7 +683,7 @@ namespace GameSvr
                             {
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg("攻击步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg("攻击步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                                 }
                                 return result;
                             }
@@ -826,7 +826,7 @@ namespace GameSvr
                                 dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg("马跑步忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg("马跑步忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                                 }
                             }
                             else
@@ -839,7 +839,7 @@ namespace GameSvr
                         {
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("马跑步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("马跑步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                             return result;
                         }
@@ -916,7 +916,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwMagicHitIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("魔法忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("魔法忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -929,7 +929,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("魔法忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("魔法忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                         return result;
                     }
@@ -1325,7 +1325,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwRunIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("跑步忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("跑步忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -1338,7 +1338,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("跑步忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("跑步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                         return result;
                     }
@@ -1408,7 +1408,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwWalkIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("走路忙复位！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("走路忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                         }
                         else
@@ -1421,7 +1421,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("走路忙！！！" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("走路忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                         return result;
                     }
@@ -2583,7 +2583,7 @@ namespace GameSvr
                                 {
                                     if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                                     {
-                                        // '无法取下物品！！！'
+                                        // '无法取下物品!!!'
                                         SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                         n18 = -4;
                                         goto FailExit;
@@ -2591,21 +2591,21 @@ namespace GameSvr
                                 }
                                 if (!m_boUserUnLockDurg && (StdItem20.Reserved & 2) != 0)
                                 {
-                                    // '无法取下物品！！！'
+                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if ((StdItem20.Reserved & 4) != 0)
                                 {
-                                    // '无法取下物品！！！'
+                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if (M2Share.InDisableTakeOffList(m_UseItems[btWhere].wIndex))
                                 {
-                                    // '无法取下物品！！！'
+                                    // '无法取下物品!!!'
                                     SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                     goto FailExit;
                                 }
@@ -2664,7 +2664,7 @@ namespace GameSvr
                         {
                             if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                             {
-                                // '无法取下物品！！！'
+                                // '无法取下物品!!!'
                                 SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                                 n10 = -4;
                                 goto FailExit;
@@ -2672,21 +2672,21 @@ namespace GameSvr
                         }
                         if (!m_boUserUnLockDurg && (StdItem.Reserved & 2) != 0)
                         {
-                            // '无法取下物品！！！'
+                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if ((StdItem.Reserved & 4) != 0)
                         {
-                            // '无法取下物品！！！'
+                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if (M2Share.InDisableTakeOffList(m_UseItems[btWhere].wIndex))
                         {
-                            // '无法取下物品！！！'
+                            // '无法取下物品!!!'
                             SysMsg(M2Share.g_sCanotTakeOffItem, TMsgColor.c_Red, TMsgType.t_Hint);
                             goto FailExit;
                         }
@@ -3582,7 +3582,7 @@ namespace GameSvr
                             m_MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
-                            SysMsg("行会" + s14 + "已被取消！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("行会" + s14 + "已被取消!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                             nC = 0;
                         }
                     }
@@ -3711,8 +3711,8 @@ namespace GameSvr
                 {
                     m_MyGuild.DelAllyGuild(guild);
                     guild.DelAllyGuild(m_MyGuild);
-                    m_MyGuild.SendGuildMsg(guild.sGuildName + " 行会与您的行会解除联盟成功！！！");
-                    guild.SendGuildMsg(m_MyGuild.sGuildName + " 行会解除了与您行会的联盟！！！");
+                    m_MyGuild.SendGuildMsg(guild.sGuildName + " 行会与您的行会解除联盟成功!!!");
+                    guild.SendGuildMsg(m_MyGuild.sGuildName + " 行会解除了与您行会的联盟!!!");
                     m_MyGuild.RefMemberName();
                     guild.RefMemberName();
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, m_MyGuild.sGuildName);
@@ -3842,7 +3842,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg("非法数据调整！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("非法数据调整!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -5559,7 +5559,7 @@ namespace GameSvr
             }
             if (m_nPayMent == 1 && !M2Share.g_Config.boTryModeUseStorage)
             {
-                // '试玩模式不可以使用仓库功能！！！'
+                // '试玩模式不可以使用仓库功能!!!'
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
@@ -5599,7 +5599,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        // '无法携带更多的东西！！！'
+                        // '无法携带更多的东西!!!'
                         SysMsg(M2Share.g_sCanotGetItems, TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                     break;
@@ -6567,7 +6567,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确！！！，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                    SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                 }
                 return;
             }
@@ -6579,7 +6579,7 @@ namespace GameSvr
                     m_sStoragePwd = sData;
                     m_boPasswordLocked = true;
                     m_sTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);// '密码设置成功！！，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
+                    SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else
                 {
@@ -6698,7 +6698,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    SysMsg("召唤失败！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg("召唤失败!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
@@ -6714,18 +6714,18 @@ namespace GameSvr
             bool boReQuestOK;
             if (!IsGuildMaster())
             {
-                SysMsg("只有行会掌门人才能申请！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("只有行会掌门人才能申请!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (M2Share.nServerIndex != 0)
             {
-                SysMsg("这个命令不能在本服务器上使用！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("这个命令不能在本服务器上使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild == null)
             {
-                SysMsg("行会不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("行会不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             boReQuestOK = false;

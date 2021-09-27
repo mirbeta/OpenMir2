@@ -23,7 +23,7 @@ namespace GameSvr.Command
             {
                 nSex = 1;
             }
-            if (sHumanName == "" || nSex == -1)
+            if (string.IsNullOrEmpty(sHumanName) || nSex == -1)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 性别(男、女)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -39,12 +39,12 @@ namespace GameSvr.Command
                 }
                 else
                 {
-                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别未改变！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别未改变!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + "没有在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + "没有在线!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

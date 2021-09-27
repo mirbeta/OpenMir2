@@ -198,7 +198,7 @@ namespace GameSvr
             }
             else
             {
-                M2Share.MainOutMessage("城堡列表文件未找到！！！");
+                M2Share.MainOutMessage("城堡列表文件未找到!!!");
             }
         }
 

@@ -28,12 +28,12 @@ namespace GameSvr
             {
                 if (PlayObject.m_btGender == 0)
                 {
-                    // '你的老婆还没有上线！！！'
+                    // '你的老婆还没有上线!!!'
                     PlayObject.SysMsg(M2Share.g_sYourWifeNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 else
                 {
-                    // '你的老公还没有上线！！！'
+                    // '你的老公还没有上线!!!'
                     PlayObject.SysMsg(M2Share.g_sYourHusbandNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 return;

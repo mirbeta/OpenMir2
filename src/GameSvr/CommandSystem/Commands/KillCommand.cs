@@ -19,7 +19,7 @@ namespace GameSvr
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             TBaseObject BaseObject;
-            if (sHumanName != "")
+            if (!string.IsNullOrEmpty(sHumanName))
             {
                 BaseObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                 if (BaseObject == null)
@@ -33,7 +33,7 @@ namespace GameSvr
                 BaseObject = PlayObject.GetPoseCreate();
                 if (BaseObject == null)
                 {
-                    PlayObject.SysMsg("命令使用方法不正确，必须与角色面对面站好！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

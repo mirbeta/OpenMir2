@@ -137,9 +137,9 @@ namespace GameSvr
             if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
             {
                 m_MapPalace = M2Share.g_MapManager.FindMap(m_sPalaceMap);
-                if (m_MapPalace == null) M2Share.MainOutMessage($"皇宫地图{m_sPalaceMap}没找到！！！");
+                if (m_MapPalace == null) M2Share.MainOutMessage($"皇宫地图{m_sPalaceMap}没找到!!!");
                 m_MapSecret = M2Share.g_MapManager.FindMap(m_sSecretMap);
-                if (m_MapSecret == null) M2Share.MainOutMessage($"密道地图{m_sSecretMap}没找到！！！");
+                if (m_MapSecret == null) M2Share.MainOutMessage($"密道地图{m_sSecretMap}没找到!!!");
                 m_MapCastle = M2Share.g_MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {

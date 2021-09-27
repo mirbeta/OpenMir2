@@ -19,7 +19,7 @@ namespace GameSvr
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             string sCtr = @params.Length > 1 ? @params[1] : "";
             var nPoint = @params.Length > 2 ? Convert.ToUInt16(@params[2]) : 0;
-            if (sHumanName == "")
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 return;
             }
@@ -27,8 +27,8 @@ namespace GameSvr
             {
                 Ctr = sCtr[0];
             }
-            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000
-                || sHumanName != "" && sHumanName[1] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000
+                || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name,
                     M2Share.g_sGameCommandGamePointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);

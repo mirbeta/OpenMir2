@@ -181,12 +181,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("你没有足够的金币！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("你没有足够的金币!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("行会 " + sGuildName + " 不存在！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("行会 " + sGuildName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
             result = 1;
             return result;
@@ -218,17 +218,17 @@ namespace GameSvr
                     }
                     else
                     {
-                        PlayObject.SysMsg("你现在无法请求攻城！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("你现在无法请求攻城!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("你没有" + M2Share.g_Config.sZumaPiece + "！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("你没有" + M2Share.g_Config.sZumaPiece + "!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("你的请求被取消！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你的请求被取消!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 

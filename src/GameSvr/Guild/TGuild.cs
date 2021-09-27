@@ -443,7 +443,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("保存行会信息失败！！！ " + sFileName);
+                M2Share.MainOutMessage("保存行会信息失败!!! " + sFileName);
             }
         }
 

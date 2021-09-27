@@ -25,7 +25,7 @@ namespace GameSvr
                 m_PlayObject.m_nBonusPoint = 0;
                 m_PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 m_PlayObject.HasLevelUp(0);
-                m_PlayObject.SysMsg("分配点数已清除！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                m_PlayObject.SysMsg("分配点数已清除!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(sHumName + " 的分配点数已清除.", TMsgColor.c_Green, TMsgType.t_Hint);
             }
             else

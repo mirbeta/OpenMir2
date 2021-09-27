@@ -11,7 +11,7 @@ namespace GameSvr
         {
             if (M2Share.g_DisableSendMsgList.Count <= 0)
             {
-                PlayObject.SysMsg("禁言列表为空！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("禁言列表为空!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             PlayObject.SysMsg("禁言列表:", TMsgColor.c_Blue, TMsgType.t_Hint);

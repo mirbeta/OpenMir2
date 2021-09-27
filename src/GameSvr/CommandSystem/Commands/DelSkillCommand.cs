@@ -26,7 +26,7 @@ namespace GameSvr
             //THeroObject m_HeroObject;
             //bool boDelAll;
             //TUserMagic UserMagic;
-            //if ((sHumanName == "") || (sSkillName == ""))
+            //if ((string.IsNullOrEmpty(sHumanName)) || (sSkillName == ""))
             //{
             //    if (M2Share.g_Config.boGMShowFailMsg)
             //    {

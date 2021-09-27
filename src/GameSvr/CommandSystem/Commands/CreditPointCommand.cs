@@ -23,8 +23,8 @@ namespace GameSvr
             {
                 Ctr = sCtr[0];
             }
-            if (sHumanName == "" || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > int.MaxValue
-                || sHumanName != "" && sHumanName[0] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > int.MaxValue
+                || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandCreditPointHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);

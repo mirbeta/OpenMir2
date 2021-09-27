@@ -1036,21 +1036,21 @@ namespace GameSvr
                     if (boFlag == MapQuestFlag.boGrouped || !boFlag)
                     {
                         bo1D = false;
-                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.!string.IsNullOrEmpty(sItemName))
+                        if (!string.IsNullOrEmpty(MapQuestFlag.sMonName) && !string.IsNullOrEmpty(MapQuestFlag.sItemName))
                         {
                             if (MapQuestFlag.sMonName == sCharName && MapQuestFlag.sItemName == sItem)
                             {
                                 bo1D = true;
                             }
                         }
-                        if (MapQuestFlag.sMonName != "" && MapQuestFlag.sItemName == "")
+                        if (!string.IsNullOrEmpty(MapQuestFlag.sMonName) && string.IsNullOrEmpty(MapQuestFlag.sItemName))
                         {
-                            if (MapQuestFlag.sMonName == sCharName && sItem == "")
+                            if (MapQuestFlag.sMonName == sCharName && string.IsNullOrEmpty(sItem))
                             {
                                 bo1D = true;
                             }
                         }
-                        if (MapQuestFlag.sMonName == "" && MapQuestFlag.!string.IsNullOrEmpty(sItemName))
+                        if (string.IsNullOrEmpty(MapQuestFlag.sMonName) && !string.IsNullOrEmpty(MapQuestFlag.sItemName))
                         {
                             if (MapQuestFlag.sItemName == sItem)
                             {

@@ -25,7 +25,7 @@ namespace GameSvr
             //}
             //if (!PlayObject.m_PEnvir.m_boFight3Zone)
             //{
-            //    PlayObject.SysMsg("此命令不能在当前地图中使用！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.SysMsg("此命令不能在当前地图中使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
             //Guild = M2Share.g_GuildManager.FindGuild(sGuildName);

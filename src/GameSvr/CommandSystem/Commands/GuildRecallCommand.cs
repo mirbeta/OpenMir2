@@ -21,17 +21,17 @@ namespace GameSvr
             }
             if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
             {
-                PlayObject.SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (!PlayObject.IsGuildMaster())
             {
-                PlayObject.SysMsg("行会掌门人才可以使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("行会掌门人才可以使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (PlayObject.m_PEnvir.Flag.boNOGUILDRECALL)
             {
-                PlayObject.SysMsg("本地图不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("本地图不允许使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             TGuildRank GuildRank;
@@ -39,7 +39,7 @@ namespace GameSvr
             m_Castle = M2Share.CastleManager.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.m_boUnderWar)
             {
-                PlayObject.SysMsg("攻城区域不允许使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("攻城区域不允许使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var nRecallCount = 0;
@@ -60,7 +60,7 @@ namespace GameSvr
             }
             if (PlayObject.m_wGroupRcallTime > 0)
             {
-                PlayObject.SysMsg(string.Format("{0} 秒之后才可以再使用此功能！！！", PlayObject.m_wGroupRcallTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format("{0} 秒之后才可以再使用此功能!!!", PlayObject.m_wGroupRcallTime), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             TPlayObject m_PlayObject;
@@ -96,7 +96,7 @@ namespace GameSvr
                         else
                         {
                             nNoRecallCount++;
-                            PlayObject.SysMsg(string.Format("{0} 不允许行会合一！！！", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg(string.Format("{0} 不允许行会合一!!!", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                 }

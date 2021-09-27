@@ -10,7 +10,7 @@ namespace GameSvr
         public void DisableSendMsg(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if (sHumanName == "")
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

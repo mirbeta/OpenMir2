@@ -15,7 +15,7 @@ namespace GameSvr
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sDearName = @Params.Length > 1 ? @Params[1] : "";
-            if (sHumanName == "" || sDearName == "")
+            if (string.IsNullOrEmpty(sHumanName) || sDearName == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 配偶名称(如果为 无 则清除)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

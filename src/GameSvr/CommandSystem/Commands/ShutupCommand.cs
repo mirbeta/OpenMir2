@@ -20,7 +20,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sTime = @Params.Length > 1 ? @Params[1] : "";
 
-            if (sTime == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (sTime == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShutupHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

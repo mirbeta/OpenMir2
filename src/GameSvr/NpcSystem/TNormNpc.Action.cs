@@ -21,7 +21,7 @@ namespace GameSvr
             {
                 if (PlayObject.bo_YBDEAL)
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您已开通寄售服务,不需要再开通！！！\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
@@ -33,11 +33,11 @@ namespace GameSvr
                     // 玩家的元宝数大于或等于开通所需的元宝数
                     PlayObject.m_nGameGold -= nGameGold;
                     PlayObject.bo_YBDEAL = true;
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/开通寄售服务成功！！！\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您身上没有" + M2Share.g_Config.sGameGoldName + ",或" + M2Share.g_Config.sGameGoldName + "数不够！！！\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, this.m_sCharName + "/您身上没有" + M2Share.g_Config.sGameGoldName + ",或" + M2Share.g_Config.sGameGoldName + "数不够!!!\\ \\<返回/@main>");
                 }
             }
             catch
@@ -155,7 +155,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通寄售服务,请先开通！！！");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -272,7 +272,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通元宝寄售服务,请先开通！！！");
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ObjectId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -1429,7 +1429,7 @@ namespace GameSvr
                     // 强行离婚
                     if (QuestActionInfo.sParam2.ToLower().CompareTo("FORCE".ToLower()) == 0)
                     {
-                        M2Share.UserEngine.SendBroadCastMsg('[' + this.m_sCharName + "]: " + "我宣布" + PlayObject.m_sCharName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系！！！", TMsgType.t_Say);
+                        M2Share.UserEngine.SendBroadCastMsg('[' + this.m_sCharName + "]: " + "我宣布" + PlayObject.m_sCharName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", TMsgType.t_Say);
                         PoseHuman = M2Share.UserEngine.GetPlayObject(PlayObject.m_sDearName);
                         if (PoseHuman != null)
                         {
@@ -1697,7 +1697,7 @@ namespace GameSvr
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if ((UserItem.wIndex <= 0) || (StdItem == null))
             {
-                PlayObject.SysMsg("你身上没有戴指定物品！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你身上没有戴指定物品!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             nRate = M2Share.RandomNumber.Random(nRate);
@@ -1705,7 +1705,7 @@ namespace GameSvr
             var nValType = M2Share.RandomNumber.Random(14);
             if (nRate != 0)
             {
-                PlayObject.SysMsg("装备升级失败！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("装备升级失败!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (nValType == 14)
@@ -1748,7 +1748,7 @@ namespace GameSvr
             var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if ((UserItem.wIndex <= 0) || (StdItem == null))
             {
-                PlayObject.SysMsg("你身上没有戴指定物品！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你身上没有戴指定物品!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var nRatePoint = M2Share.RandomNumber.Random(nRate * 10);
@@ -1758,15 +1758,15 @@ namespace GameSvr
                 switch (nUpgradeItemStatus)
                 {
                     case 0:
-                        PlayObject.SysMsg("装备升级未成功！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("装备升级未成功!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         break;
                     case 1:
                         PlayObject.SendDelItems(UserItem);
                         UserItem.wIndex = 0;
-                        PlayObject.SysMsg("装备破碎！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("装备破碎!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         break;
                     case 2:
-                        PlayObject.SysMsg("装备升级失败，装备属性恢复默认！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("装备升级失败，装备属性恢复默认!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         if (nValType != 14)
                         {
                             UserItem.btValue[nValType] = 0;
@@ -1950,7 +1950,7 @@ namespace GameSvr
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
-            if ((sItemName == "") || (nMakeIndex <= 0))
+            if ((string.IsNullOrEmpty(sItemName)) || (nMakeIndex <= 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CLEARMAKEITEMS);
                 return;
@@ -2544,7 +2544,7 @@ namespace GameSvr
             GameItem StdItem;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
-            if ((sItemName == "") || (nItemCount <= 0))
+            if ((string.IsNullOrEmpty(sItemName)) || (nItemCount <= 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GIVE);
                 return;
@@ -3022,7 +3022,7 @@ namespace GameSvr
             PlayObject.m_nBonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
-            PlayObject.SysMsg("分配点数已复位！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg("分配点数已复位!!!", TMsgColor.c_Red, TMsgType.t_Hint);
         }
 
         private void ActionOfRestReNewLevel(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -3350,7 +3350,7 @@ namespace GameSvr
                 {
                     nCount = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam6), -1);
                 }
-                if ((sMap == "") || (nX < 0) || (nY < 0) || (nRange < 0) || (sItemName == "") || (nCount <= 0))
+                if ((sMap == "") || (nX < 0) || (nY < 0) || (nRange < 0) || (string.IsNullOrEmpty(sItemName)) || (nCount <= 0))
                 {
                     ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sTHROWITEM);
                     return;

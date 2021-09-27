@@ -14,7 +14,7 @@ namespace GameSvr
         public void ReGotoHuman(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandReGotoHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);

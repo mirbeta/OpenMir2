@@ -45,7 +45,7 @@ namespace GameSvr
             //{
             //    nBind = 3;
             //}
-            //if ((nItem < 0) || (nBind < 0) || (sHumanName == "") || ((sHumanName != "") && (sHumanName[0] == '?')))
+            //if ((nItem < 0) || (nBind < 0) || (string.IsNullOrEmpty(sHumanName)) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
             //    if (M2Share.g_Config.boGMShowFailMsg)
             //    {

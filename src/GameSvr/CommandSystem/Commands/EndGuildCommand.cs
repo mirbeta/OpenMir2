@@ -27,12 +27,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("行会掌门人不能这样退出行会！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("行会掌门人不能这样退出行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("你都没加入行会！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你都没加入行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

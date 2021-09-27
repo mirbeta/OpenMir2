@@ -28,7 +28,7 @@ namespace GameSvr
                 nCode = M2Share.CommonDB.LoadItemsDB();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("物品数据库加载失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("物品数据库加载失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
@@ -36,7 +36,7 @@ namespace GameSvr
                 nCode = Maps.LoadMinMap();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("小地图数据加载失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("小地图数据加载失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage("小地图数据加载成功...");
@@ -44,7 +44,7 @@ namespace GameSvr
                 nCode = Maps.LoadMapInfo();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("地图数据加载失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
@@ -52,7 +52,7 @@ namespace GameSvr
                 nCode = M2Share.CommonDB.LoadMonsterDB();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载怪物数据库失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("加载怪物数据库失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
@@ -60,7 +60,7 @@ namespace GameSvr
                 nCode = M2Share.CommonDB.LoadMagicDB();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载技能数据库失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("加载技能数据库失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
@@ -68,7 +68,7 @@ namespace GameSvr
                 nCode = M2Share.LocalDB.LoadMonGen();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载怪物刷新配置信息失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
@@ -92,7 +92,7 @@ namespace GameSvr
                 nCode = M2Share.LocalDB.LoadUnbindList();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载捆装物品信息失败！！！" + "Code: " + nCode);
+                    M2Share.MainOutMessage("加载捆装物品信息失败!!!" + "Code: " + nCode);
                     return;
                 }
                 M2Share.MainOutMessage("加载捆装物品信息成功...");
@@ -102,7 +102,7 @@ namespace GameSvr
                 nCode = M2Share.LocalDB.LoadMapQuest();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载任务地图信息失败！！！");
+                    M2Share.MainOutMessage("加载任务地图信息失败!!!");
                     return;
                 }
                 M2Share.MainOutMessage("加载任务地图信息成功...");
@@ -110,7 +110,7 @@ namespace GameSvr
                 nCode = M2Share.LocalDB.LoadQuestDiary();
                 if (nCode < 0)
                 {
-                    M2Share.MainOutMessage("加载任务说明信息失败！！！");
+                    M2Share.MainOutMessage("加载任务说明信息失败!!!");
                     return;
                 }
                 M2Share.MainOutMessage("加载任务说明信息成功...");
@@ -121,7 +121,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("正在加载公告提示信息...");
                 if (!M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
                 {
-                    M2Share.MainOutMessage("加载公告提示信息失败！！！");
+                    M2Share.MainOutMessage("加载公告提示信息失败!!!");
                 }
                 M2Share.MainOutMessage("加载公告提示信息成功...");
                 M2Share.LocalDB.LoadAdminList();

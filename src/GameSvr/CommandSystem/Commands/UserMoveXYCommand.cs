@@ -31,7 +31,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayObject.m_dwTeleportTick) / 1000 + "秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg(M2Share.g_Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayObject.m_dwTeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                     else
@@ -41,12 +41,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("此地图禁止使用此命令！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("此地图禁止使用此命令!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

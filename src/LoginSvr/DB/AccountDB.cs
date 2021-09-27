@@ -32,7 +32,7 @@ namespace LoginSvr
             }
             catch (Exception E)
             {
-                LSShare.MainOutMessage("[警告] SQL 连接失败！请检查SQL设置...");
+                LSShare.MainOutMessage("[警告] SQL 连接失败!请检查SQL设置...");
                 LSShare.MainOutMessage(LSShare.DBConnection);
                 LSShare.MainOutMessage(E.Message);
             }

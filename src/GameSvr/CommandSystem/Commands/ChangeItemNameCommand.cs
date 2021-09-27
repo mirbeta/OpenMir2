@@ -21,7 +21,7 @@ namespace GameSvr.Command
             {
                 return;
             }
-            if (sMakeIndex == "" || sItemIndex == "" || sItemName == "")
+            if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -39,7 +39,7 @@ namespace GameSvr.Command
                 PlayObject.SysMsg("物品名称设置成功。", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
-            PlayObject.SysMsg("此物品，已经设置了其它的名称！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg("此物品，已经设置了其它的名称!!!", TMsgColor.c_Red, TMsgType.t_Hint);
         }
     }
 }

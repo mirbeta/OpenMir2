@@ -16,7 +16,7 @@ namespace GameSvr
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             var nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             string sMsg;
-            if (sHumName == "")
+            if (string.IsNullOrEmpty(sHumName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 属性点数(不输入为查看点数)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

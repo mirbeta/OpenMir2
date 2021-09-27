@@ -228,7 +228,7 @@ namespace SystemModule.Common
                             }
                             if (this.iniCahce.ContainsKey(sec))
                             {
-                               // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件！");
+                               // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
                                 goto Label_02AE;
                             }
                             curSec = new Dictionary<string, string>();

@@ -17,7 +17,7 @@ namespace GameSvr
             var sExp = @Params.Length > 1 ? @Params[1] : "";
             var dwExp = 0;
             var dwOExp = 0;
-            if (sHumanName == "")
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 经验值", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

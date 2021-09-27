@@ -40,7 +40,7 @@ namespace GameSvr
             {
                 return;
             }
-            if (sMakeIndex == "" || sItemIndex == "" || sItemName == "")
+            if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
                 SysMsg("命令格式: @" + sCmd + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -58,7 +58,7 @@ namespace GameSvr
                 SysMsg("物品名称设置成功。", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
-            SysMsg("此物品，已经设置了其它的名称！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+            SysMsg("此物品，已经设置了其它的名称!!!", TMsgColor.c_Red, TMsgType.t_Hint);
         }
 
         public void CmdChangeObMode(string sCmd, int nPermission, string sParam1, bool boFlag)
@@ -121,7 +121,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg("行会 " + sGuildName + "还没建立！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("行会 " + sGuildName + "还没建立!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -158,7 +158,7 @@ namespace GameSvr
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -209,12 +209,12 @@ namespace GameSvr
             {
                 if (m_btGender == ObjBase.gMan)
                 {
-                    // '你的老婆还没有上线！！！'
+                    // '你的老婆还没有上线!!!'
                     SysMsg(M2Share.g_sYourWifeNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 else
                 {
-                    // '你的老公还没有上线！！！'
+                    // '你的老公还没有上线!!!'
                     SysMsg(M2Share.g_sYourHusbandNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 return;
@@ -331,7 +331,7 @@ namespace GameSvr
             {
                 return;
             }
-            if (sHumanName == "" || nHungerPoint < 0)
+            if (string.IsNullOrEmpty(sHumanName) || nHungerPoint < 0)
             {
                 SysMsg("命令格式: @" + sCmd + " 人物名称 能量值", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -346,7 +346,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg(sHumanName + "没有在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(sHumanName + "没有在线!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -359,12 +359,12 @@ namespace GameSvr
             }
             if (!M2Share.g_Config.boLockHumanLogin)
             {
-                SysMsg("本服务器还没有启用登录锁功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("本服务器还没有启用登录锁功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (m_boLockLogon && !m_boLockLogoned)
             {
-                SysMsg("您还没有打开登录锁或还没有设置锁密码！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("您还没有打开登录锁或还没有设置锁密码!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_boLockLogon = !m_boLockLogon;
@@ -385,7 +385,7 @@ namespace GameSvr
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, sCmd, M2Share.g_sGameCommandPrvMsgHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -496,7 +496,7 @@ namespace GameSvr
             }
             catch
             {
-                SysMsg("怪物爆物品列表重加载失败！！！", TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg("怪物爆物品列表重加载失败!!!", TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
 
@@ -513,9 +513,9 @@ namespace GameSvr
             {
                 M2Share.LocalDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
-                SysMsg("交易NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("交易NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 M2Share.UserEngine.ReloadNpcList();
-                SysMsg("管理NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("管理NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             TmpList = new List<TBaseObject>();
@@ -531,7 +531,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg("附近未发现任何交易NPC！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("附近未发现任何交易NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
             TmpList.Clear();
             if (M2Share.UserEngine.GetNpcList(m_PEnvir, m_nCurrX, m_nCurrY, 9, TmpList) > 0)
@@ -546,7 +546,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg("附近未发现任何管理NPC！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("附近未发现任何管理NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
             //TmpList.Free;
         }
@@ -556,7 +556,7 @@ namespace GameSvr
             TPlayObject PlayObject;
             if (m_boProbeNecklace || m_btPermission >= 6)
             {
-                if (sHumanName == "")
+                if (string.IsNullOrEmpty(sHumanName))
                 {
                     SysMsg("命令格式: @" + sCmd + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
@@ -571,17 +571,17 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(sHumanName + " 现在不在线，或位于其它服务器上！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
                 {
-                    SysMsg((HUtil32.GetTickCount() - m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg((HUtil32.GetTickCount() - m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -593,7 +593,7 @@ namespace GameSvr
                 SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sTime == "" || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (sTime == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 SysMsg(format(M2Share.g_sGameCommandParamUnKnow, Cmd.sCmd, M2Share.g_sGameCommandShutupHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -693,7 +693,7 @@ namespace GameSvr
             }
             if (m_btHorseType == 0)
             {
-                SysMsg("骑马必须先戴上马牌！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("骑马必须先戴上马牌!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_boOnHorse = true;

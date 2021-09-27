@@ -14,8 +14,7 @@ namespace GameSvr
         public void FreePenalty(string[] @Params, TPlayObject PlayObject)
         {
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-
-            if (sHumanName != "" && sHumanName[0] == '?')
+            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandFreePKHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

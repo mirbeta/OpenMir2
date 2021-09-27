@@ -24,7 +24,7 @@ namespace GameSvr
             int nType;
             GameItem StdItem;
             TUserItem UserItem = null;
-            if (sHumanName == "" || sItemName == "" || sItemCount == "" || sType == "")
+            if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 物品名称 数量 类型(0,1,2))", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

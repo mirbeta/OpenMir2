@@ -19,7 +19,7 @@ namespace GameSvr
             int nItemCount;
             GameItem StdItem;
             TUserItem UserItem;
-            if (sHumanName == "" || sItemName == "")
+            if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 物品名称 数量)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -1016,7 +1016,7 @@ namespace GameSvr
             TGateUserInfo GateUserInfo;
             TGateInfo Gate;
             const string sExceptionMsg = "[Exception] TRunSocket::KickUser";
-            const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线！！！";
+            const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
             try
             {
                 for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
@@ -1048,7 +1048,7 @@ namespace GameSvr
                                         }
                                         else
                                         {
-                                            GateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏！", TMsgColor.c_Red, TMsgType.t_Hint);
+                                            GateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!", TMsgColor.c_Red, TMsgType.t_Hint);
                                         }
                                         GateUserInfo.PlayObject.m_boEmergencyClose = true;
                                         GateUserInfo.PlayObject.m_boSoftClose = true;

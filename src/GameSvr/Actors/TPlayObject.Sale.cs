@@ -243,7 +243,7 @@ namespace GameSvr
 
                             M2Share.sSellOffItemList.RemoveAt(i);
                             Dispose(DealOffInfo);
-                            this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消寄售成功！");
+                            this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消寄售成功!");
                             M2Share.CommonDB.SaveSellOffItemList();//保存元宝寄售列表
                         }
                     }
@@ -276,7 +276,7 @@ namespace GameSvr
                         dealOffInfo.N = 3;// 购买人取消标识
                         // sSellOffItemList.Delete(I);
                         // sSellOffItemList.Add(DealOffInfo);
-                        this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消交易成功！");
+                        this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消交易成功!");
                         break;
                     }
                 }
@@ -453,7 +453,7 @@ namespace GameSvr
         /// <returns></returns>
         public string SelectSellDate()
         {
-            var result = "您未开通" + M2Share.g_Config.sGameGoldName + "寄售服务,请先开通！！！\\ \\<返回/@main>";
+            var result = "您未开通" + M2Share.g_Config.sGameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
             if (bo_YBDEAL)
             {
                 // 已开通元宝服务
@@ -477,7 +477,7 @@ namespace GameSvr
                         }
                     }
                 }
-                result = "您未进行任何寄售交易！！！\\ \\<返回/@main>";
+                result = "您未进行任何寄售交易!!!\\ \\<返回/@main>";
             }
             return result;
         }

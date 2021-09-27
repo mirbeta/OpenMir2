@@ -26,8 +26,8 @@ namespace GameSvr
             //    Ctr = sCtr[0];
             //}
 
-            //if ((sHumanName == "") || !(new ArrayList(new string[] { "=", "+", "-" }).Contains(Ctr)) ||
-            //    (nGameGlory < 0) || (nGameGlory > 255) || ((sHumanName != "") && (sHumanName[0] == '?')))
+            //if ((string.IsNullOrEmpty(sHumanName)) || !(new ArrayList(new string[] { "=", "+", "-" }).Contains(Ctr)) ||
+            //    (nGameGlory < 0) || (nGameGlory > 255) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
             //    {
             //        PlayObject.SysMsg(

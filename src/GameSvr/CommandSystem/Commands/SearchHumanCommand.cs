@@ -16,7 +16,7 @@ namespace GameSvr
             TPlayObject m_PlayObject;
             if (PlayObject.m_boProbeNecklace || PlayObject.m_btPermission >= 6)
             {
-                if (sHumanName == "")
+                if (string.IsNullOrEmpty(sHumanName))
                 {
                     PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
@@ -32,17 +32,17 @@ namespace GameSvr
                     }
                     else
                     {
-                        PlayObject.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("您现在还无法使用此功能！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

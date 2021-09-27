@@ -20,7 +20,7 @@ namespace GameSvr.Command
             {
                 return;
             }
-            if (sHumName == "" || nPoint <= 0)
+            if (string.IsNullOrEmpty(sHumName) || nPoint <= 0)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称  金币数量", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

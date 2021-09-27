@@ -20,7 +20,7 @@ namespace GameSvr
             {
                 return;
             }
-            if (sHumanName == "" || nHungerPoint < 0)
+            if (string.IsNullOrEmpty(sHumanName) || nHungerPoint < 0)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 能量值", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -35,7 +35,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + "没有在线！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + "没有在线!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

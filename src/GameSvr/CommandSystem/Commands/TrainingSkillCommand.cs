@@ -19,7 +19,7 @@ namespace GameSvr
 
             TUserMagic UserMagic;
             TPlayObject m_PlayObject;
-            if (sHumanName == "" || sSkillName == "" || nLevel <= 0)
+            if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称  技能名称 修炼等级(0-3)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
@@ -28,7 +28,7 @@ namespace GameSvr
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format("{0}不在线，或在其它服务器上！！", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format("{0}不在线，或在其它服务器上!!", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             for (var i = 0; i < m_PlayObject.m_MagicList.Count; i++)

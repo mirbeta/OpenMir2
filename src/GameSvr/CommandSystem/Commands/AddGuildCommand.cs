@@ -22,7 +22,7 @@ namespace GameSvr
                 PlayObject.SysMsg("这个命令只能使用在主服务器上", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sGuildName == "" || sGuildChief == "")
+            if (string.IsNullOrEmpty(sGuildName) || sGuildChief == "")
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 行会名称 掌门人名称", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

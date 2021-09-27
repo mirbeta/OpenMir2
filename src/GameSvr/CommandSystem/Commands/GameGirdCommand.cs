@@ -22,7 +22,7 @@ namespace GameSvr
             //{
             //    Ctr = sCtr[1];
             //}
-            //if ((sHumanName == "") || !(new ArrayList(new string[] { "=", "+", "-" }).Contains(Ctr)) || (nGameGird < 0) || (nGameGird > 200000000) || ((sHumanName != "") && (sHumanName[0] == '?')))
+            //if ((string.IsNullOrEmpty(sHumanName)) || !(new ArrayList(new string[] { "=", "+", "-" }).Contains(Ctr)) || (nGameGird < 0) || (nGameGird > 200000000) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
             //    if (M2Share.g_Config.boGMShowFailMsg)
             //    {

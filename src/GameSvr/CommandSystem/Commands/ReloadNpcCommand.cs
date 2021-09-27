@@ -32,9 +32,9 @@ namespace GameSvr
             {
                 //M2Share.ScriptSystem.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
-                PlayObject.SysMsg("交易NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("交易NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 M2Share.UserEngine.ReloadNpcList();
-                PlayObject.SysMsg("管理NPC重新加载完成！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("管理NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             TmpMerList = new List<TBaseObject>();
@@ -52,7 +52,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("附近未发现任何交易NPC！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("附近未发现任何交易NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
                 TmpNorList = new List<TBaseObject>();
                 if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpNorList) > 0)
@@ -67,7 +67,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("附近未发现任何管理NPC！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("附近未发现任何管理NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             finally

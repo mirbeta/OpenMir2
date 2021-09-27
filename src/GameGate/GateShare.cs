@@ -333,11 +333,11 @@ namespace GameGate
         public static string sModeFilter = "@传送";
         public static string sCharFilter = "您发送的信息里包含了非法字符.";
         public static string boMsgUserName = "$$$$$";
-        public static string sWarningMsg = "[提示]: 请爱护游戏环境，关闭加速外挂重新登陆！";
-        public static string yWarningMsg = "[提示]: 发现超速动作，服务器将延迟您当前操作！";
-        public static string jWarningMsg = "[提示]: 发现超速动作，服务器将停顿您当前操作！";
-        public static string fWarningMsg = "[提示]: 短时间内无法使用此功能！";
-        public static string gWarningMsg = "[提示]: 发言速度太快了！";
+        public static string sWarningMsg = "[提示]: 请爱护游戏环境，关闭加速外挂重新登陆!";
+        public static string yWarningMsg = "[提示]: 发现超速动作，服务器将延迟您当前操作!";
+        public static string jWarningMsg = "[提示]: 发现超速动作，服务器将停顿您当前操作!";
+        public static string fWarningMsg = "[提示]: 短时间内无法使用此功能!";
+        public static string gWarningMsg = "[提示]: 发言速度太快了!";
         public static byte btMsgFColorS = 251;
         public static byte btMsgBColorS = 0;
         public static byte btMsgFColorY = 219;

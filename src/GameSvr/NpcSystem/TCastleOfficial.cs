@@ -18,7 +18,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) || PlayObject.m_btPermission >= 3)
@@ -97,7 +97,7 @@ namespace GameSvr
             {
                 if (this.m_Castle == null)
                 {
-                    PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
                 string s18;
@@ -146,7 +146,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                s18 = "城堡名称更改失败！！！";
+                                s18 = "城堡名称更改失败!!!";
                             }
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, s18);
                         }
@@ -155,7 +155,7 @@ namespace GameSvr
                             switch (this.m_Castle.WithDrawalGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
                                 case -4:
-                                    s18 = "输入的金币数不正确！！！";
+                                    s18 = "输入的金币数不正确!!!";
                                     break;
                                 case -3:
                                     s18 = "您无法携带更多的东西了。";
@@ -164,7 +164,7 @@ namespace GameSvr
                                     s18 = "该城内没有这么多金币.";
                                     break;
                                 case -1:
-                                    s18 = "只有行会 " + this.m_Castle.m_sOwnGuild + " 的掌门人才能使用！！！";
+                                    s18 = "只有行会 " + this.m_Castle.m_sOwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
                                     this.GotoLable(PlayObject, M2Share.sMAIN, false);
@@ -177,7 +177,7 @@ namespace GameSvr
                             switch (this.m_Castle.ReceiptGolds(PlayObject, HUtil32.Str_ToInt(sMsg, 0)))
                             {
                                 case -4:
-                                    s18 = "输入的金币数不正确！！！";
+                                    s18 = "输入的金币数不正确!!!";
                                     break;
                                 case -3:
                                     s18 = "你已经达到在城内存放货物的限制了。";
@@ -186,7 +186,7 @@ namespace GameSvr
                                     s18 = "你没有那么多金币.";
                                     break;
                                 case -1:
-                                    s18 = "只有行会 " + this.m_Castle.m_sOwnGuild + " 的掌门人才能使用！！！";
+                                    s18 = "只有行会 " + this.m_Castle.m_sOwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
                                     this.GotoLable(PlayObject, M2Share.sMAIN, false);
@@ -265,7 +265,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireGuardPrice)
@@ -291,22 +291,22 @@ namespace GameSvr
                         }
                         else
                         {
-                            PlayObject.SysMsg("现在无法雇佣！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg("现在无法雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("早已雇佣！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("早已雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("指令错误！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("指令错误!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -314,7 +314,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireArcherPrice)
@@ -340,22 +340,22 @@ namespace GameSvr
                         }
                         else
                         {
-                            PlayObject.SysMsg("现在无法雇佣！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg("现在无法雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("早已雇佣！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("早已雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("指令错误！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("指令错误!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -363,7 +363,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nRepairDoorPrice)
@@ -375,12 +375,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("城门不需要修理！！！", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("城门不需要修理!!!", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
 
@@ -388,7 +388,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nRepairWallPrice)
@@ -400,12 +400,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg("城门不需要修理！！！", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("城门不需要修理!!!", TMsgColor.c_Green, TMsgType.t_Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足！！！", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
         

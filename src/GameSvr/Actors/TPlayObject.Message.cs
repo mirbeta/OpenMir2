@@ -13,8 +13,8 @@ namespace GameSvr
             int tObjCount;
             int nInteger;
             TProcessMessage ProcessMsg = null;
-            const string sPayMentExpire = "您的帐户充值时间已到期！！！";
-            const string sDisConnectMsg = "游戏被强行中断！！！";
+            const string sPayMentExpire = "您的帐户充值时间已到期!!!";
+            const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
             const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # %s Ident:%d Sender:%d wP:%d nP1:%d nP2:%d np3:%d Msg:%s";
             const string sExceptionMsg3 = "[Exception] TPlayObject::Run -> GetHighHuman";
@@ -1125,7 +1125,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        // '请勿使用非法软件！！！'
+                                        // '请勿使用非法软件!!!'
                                         SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                                         m_boEmergencyClose = true;
                                     }
@@ -1606,7 +1606,7 @@ namespace GameSvr
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
                         if (M2Share.g_Config.boOldClientShowHiLevel && m_Abil.Level > 255)
                         {
-                            // '由于您使用的客户端版本太老了，无法正确显示人物信息！！！'
+                            // '由于您使用的客户端版本太老了，无法正确显示人物信息!!!'
                             SysMsg(M2Share.g_sClientVersionTooOld, TMsgColor.c_Red, TMsgType.t_Hint);
                             SysMsg("Level: " + m_Abil.Level, TMsgColor.c_Green, TMsgType.t_Hint);
                             SysMsg("HP: " + m_WAbil.HP + '-' + m_WAbil.MaxHP, TMsgColor.c_Blue, TMsgType.t_Hint);

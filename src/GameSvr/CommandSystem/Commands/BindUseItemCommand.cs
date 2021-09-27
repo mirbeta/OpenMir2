@@ -41,7 +41,7 @@ namespace GameSvr
                 nBind = 3;
             }
             boLight = sLight == "1";
-            if (nItem < 0 || nBind < 0 || sHumanName == "" || sHumanName != "" && sHumanName[1] == '?')
+            if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

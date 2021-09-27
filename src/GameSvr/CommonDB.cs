@@ -108,7 +108,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败！！！", new object[] { Idx, Item.Name }));
+                            M2Share.MainOutMessage(string.Format("加载物品(Idx:{0} Name:{1})数据失败!!!", new object[] { Idx, Item.Name }));
                             result = -100;
                             return result;
                         }

@@ -17,7 +17,7 @@ namespace GameSvr
             var sPermission = @Params.Length > 1 ? @Params[1] : "";
             var nPerission = HUtil32.Str_ToInt(sPermission, 0);
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
-            if (sHumanName == "" || !(nPerission >= 0 && nPerission <= 10))
+            if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 权限等级(0 - 10)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -99,7 +99,7 @@ namespace GameSvr
                     Guild = GuildList[i];
                     if (!Guild.LoadGuild())
                     {
-                        M2Share.ErrorMessage(Guild.sGuildName + " 读取出错！！！");
+                        M2Share.ErrorMessage(Guild.sGuildName + " 读取出错!!!");
                         GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
@@ -108,7 +108,7 @@ namespace GameSvr
             }
             else
             {
-                M2Share.ErrorMessage("行会信息文件未找到！！！");
+                M2Share.ErrorMessage("行会信息文件未找到!!!");
             }
         }
 
@@ -144,7 +144,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("行会信息保存失败！！！");
+                M2Share.MainOutMessage("行会信息保存失败!!!");
             }
             //SaveList.Free;
         }

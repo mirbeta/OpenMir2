@@ -16,7 +16,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 1 ? @Params[1] : "";
             var sFlag = @Params.Length > 2 ? @Params[2] : "";
 
-            if (sHumanName == "" || sHumanName != "" && sHumanName[0] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShowHumanFlagHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

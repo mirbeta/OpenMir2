@@ -19,14 +19,11 @@ namespace GameSvr
             var sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
             var nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
             var sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
-            if (sItemName == "")
+            if (string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(
-                    string.Format(M2Share.g_sGameCommandParamUnKnow, Attributes.Name,
-                        M2Share.g_sGamecommandMakeHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, Attributes.Name, M2Share.g_sGamecommandMakeHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
             if (PlayObject.m_btPermission < Attributes.nPermissionMax)
@@ -36,19 +33,16 @@ namespace GameSvr
                     PlayObject.SysMsg(M2Share.g_sGamecommandMakeItemNameOrPerMissionNot, TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-
                 if (M2Share.CastleManager.InCastleWarArea(PlayObject) != null) // 攻城区域，禁止使用此功能
                 {
                     PlayObject.SysMsg(M2Share.g_sGamecommandMakeInCastleWarRange, TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-
                 if (!PlayObject.InSafeZone())
                 {
                     PlayObject.SysMsg(M2Share.g_sGamecommandMakeInSafeZoneRange, TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
-
                 nCount = 1;
             }
             for (var i = 0; i < nCount; i++)

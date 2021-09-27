@@ -14,7 +14,7 @@ namespace GameSvr
         public void ReAlive(string[] @params, TPlayObject PlayObject)
         {
             var sHumanName = @params.Length > 0 ? @params[0] : "";
-            if (sHumanName == "")
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg("命令格式不正确", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
