@@ -77,7 +77,7 @@ namespace LoginGate
             if (nMsgLevel <= GateShare.nShowLogLevel)
             {
                 string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
-                GateShare.MainLogMsgList.Add(tMsg);
+                MainLogMsgList.Add(tMsg);
             }
         }
 

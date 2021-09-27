@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Threading;
 using SystemModule;
 using SystemModule.Sockets;
@@ -10,7 +9,6 @@ namespace LoginGate
     {
         private ISocketServer ServerSocket;
         private readonly GateClient gateClient;
-        private ArrayList StringList318 = null;
         private long dwDecodeMsgTime = 0;
         private long dwSendKeepAliveTick = 0;
         private string sProcMsg = string.Empty;
@@ -25,7 +23,6 @@ namespace LoginGate
             ServerSocket.OnClientRead += ServerSocketClientRead;
             ServerSocket.OnClientError += ServerSocketClientError;
             ServerSocket.Init();
-            StringList318 = new ArrayList();
             dwDecodeMsgTime = 0;
         }
 
@@ -130,13 +127,12 @@ namespace LoginGate
                 return;
             }
             TUserSession UserSession;
-            TSockaddr IPaddr;
             string sRemoteIPaddr = e.RemoteIPaddr;
             long nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
             int nSockIndex = GateShare.socketMap[e.ConnectionId];
             for (var i = 0; i < GateShare.CurrIPaddrList.Count; i++)
             {
-                IPaddr = GateShare.CurrIPaddrList[i];
+                TSockaddr IPaddr = GateShare.CurrIPaddrList[i];
                 if (IPaddr.nIPaddr == nIPaddr)
                 {
                     IPaddr.nCount -= 1;
@@ -171,36 +167,30 @@ namespace LoginGate
 
         public void ServerSocketClientRead(object sender, AsyncUserToken e)
         {
-            TUserSession UserSession;
-            string sReviceMsg;
-            string s10;
-            string s1C;
-            int nPos;
-            int nMsgLen;
             if (!GateShare.socketMap.TryGetValue(e.ConnectionId, out var nSockIndex))
             {
                 return;
             }
             if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
             {
-                UserSession = GateShare.g_SessionArray[nSockIndex];
+                TUserSession UserSession = GateShare.g_SessionArray[nSockIndex];
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                sReviceMsg = HUtil32.GetString(data, 0, data.Length);
+                string sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 if ((sReviceMsg != "") && GateShare.boServerReady)
                 {
-                    nPos = sReviceMsg.IndexOf("*");
+                    int nPos = sReviceMsg.IndexOf("*");
                     if (nPos > 0)
                     {
                         UserSession.boSendAvailable = true;
                         UserSession.boSendCheck = false;
                         UserSession.nCheckSendLength = 0;
-                        s10 = sReviceMsg.Substring(0, nPos - 1);
-                        s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
+                        string s10 = sReviceMsg.Substring(0, nPos - 1);
+                        string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
                         sReviceMsg = s10 + s1C;
                     }
-                    nMsgLen = sReviceMsg.Length;
+                    int nMsgLen = sReviceMsg.Length;
                     if ((sReviceMsg != "") && (GateShare.boGateReady) && (!GateShare.boKeepAliveTimcOut))
                     {
                         UserSession.dwConnctCheckTick = HUtil32.GetTickCount();
@@ -290,7 +280,6 @@ namespace LoginGate
                     sProcMsg = sProcessMsg;
                 }
                 GateShare.nSendMsgCount = 0;
-                StringList318.Clear();
                 for (nSocketIndex = 0; nSocketIndex < GateShare.GATEMAXSESSION; nSocketIndex++)
                 {
                     if (GateShare.g_SessionArray[nSocketIndex].SocketHandle <= -1)

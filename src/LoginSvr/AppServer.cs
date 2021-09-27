@@ -16,13 +16,6 @@ namespace LoginSvr
         public AppServer(LoginService loginService, MasSocService masSocService)
         {
             LSShare.Initialization();
-            TConfig Config = LSShare.g_Config;
-            Config.GateList = new List<TGateInfo>();
-            Config.SessionList = new List<TConnInfo>();
-            Config.ServerNameList = new List<string>();
-            Config.AccountCostList = new Dictionary<string, int>();
-            Config.IPaddrCostList = new Dictionary<string, int>();
-            LSShare.nSessionIdx = 1;
             _loginService = loginService;
             _massocService = masSocService;
         }

@@ -144,6 +144,12 @@ namespace LoginSvr
         {
             g_MainMsgList = new List<string>();
             g_Config = new TConfig();
+            nSessionIdx = 1;
+            g_Config.GateList = new List<TGateInfo>();
+            g_Config.SessionList = new List<TConnInfo>();
+            g_Config.ServerNameList = new List<string>();
+            g_Config.AccountCostList = new Dictionary<string, int>();
+            g_Config.IPaddrCostList = new Dictionary<string, int>();
         }
     }
 

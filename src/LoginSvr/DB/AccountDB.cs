@@ -12,6 +12,7 @@ namespace LoginSvr
         private IDbConnection ADOConnection = null;
         private IList<AccountQuick> m_QuickList = null;
         private int nRecordCount = 0;
+        private IDbConnection _dbConnection;
 
         public AccountDB()
         {
@@ -38,25 +39,40 @@ namespace LoginSvr
             }
         }
 
-        private IDbConnection GetConnection()
-        {
-            return new MySqlConnection(LSShare.DBConnection);
-        }
-
-        public bool OpenEx()
-        {
-            return Open();
-        }
-
         public bool Open()
         {
-            __Lock();
-            return true;
+            bool result = false;
+            if (_dbConnection == null)
+            {
+                _dbConnection = new MySqlConnection(LSShare.DBConnection);
+            }
+            switch (_dbConnection.State)
+            {
+                case ConnectionState.Open:
+                    return true;
+                case ConnectionState.Closed:
+                    try
+                    {
+                        _dbConnection.Open();
+                        result = true;
+                    }
+                    catch (Exception e)
+                    {
+                        LSShare.MainOutMessage("打开数据库[MySql]失败.");
+                        result = false;
+                    }
+                    break;
+            }
+            return result;
         }
 
         public void Close()
         {
-            UnLock();
+            if (_dbConnection != null)
+            {
+                _dbConnection.Close();
+                _dbConnection.Dispose();
+            }
         }
 
         private void LoadQuickList()
@@ -67,14 +83,15 @@ namespace LoginSvr
             const string sSQL = "SELECT FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
             nRecordCount = -1;
             m_QuickList.Clear();
-            __Lock();
             try
             {
-                using var conn = GetConnection();
-                conn.Open();
+                if (!Open())
+                {
+                    return;
+                }
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
-                command.Connection = (MySqlConnection)conn;
+                command.Connection = (MySqlConnection)_dbConnection;
                 using  var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -92,20 +109,10 @@ namespace LoginSvr
             }
             finally
             {
-                UnLock();
+                Close();
             }
             //m_QuickList.SortString(0, m_QuickList.Count - 1);
             LSShare.g_boDataDBReady = true;
-        }
-
-        public void __Lock()
-        {
-           // EnterCriticalSection(FCriticalSection);
-        }
-
-        public void UnLock()
-        {
-           // LeaveCriticalSection(FCriticalSection);
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -141,15 +148,48 @@ namespace LoginSvr
             const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE FLD_LOGINID='{0}'";
             var result = true;
             string sAccount = m_QuickList[nIndex - 1].sAccount;
-            using var conn = GetConnection();
-            conn.Open();
+            if (!Open())
+            {
+                return false;
+            }
             var command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, sAccount);
-            command.Connection = (MySqlConnection)conn;
+            command.Connection = (MySqlConnection)_dbConnection;
             IDataReader dr;
             try
             {
                 dr = command.ExecuteReader();
+                if (DBRecord == null)
+                {
+                    DBRecord = new TAccountDBRecord();
+                    DBRecord.Header = new TRecordHeader();
+                    DBRecord.UserEntry = new TUserEntry();
+                    DBRecord.UserEntryAdd = new TUserEntryAdd();
+                }
+                if (dr.Read())
+                {
+                    DBRecord.Header.sAccount = dr.GetString("FLD_LOGINID");
+                    DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("FLD_DELETED"));
+                    DBRecord.Header.CreateDate = dr.GetDateTime("FLD_CREATEDATE");
+                    DBRecord.Header.UpdateDate = dr.GetDateTime("FLD_LASTUPDATE");
+                    DBRecord.nErrorCount = dr.GetInt32("FLD_ERRORCOUNT");
+                    DBRecord.dwActionTick = dr.GetInt32("FLD_ACTIONTICK");
+                    DBRecord.UserEntry.sAccount = dr.GetString("FLD_LOGINID");
+                    DBRecord.UserEntry.sPassword = dr.GetString("FLD_PASSWORD");
+                    DBRecord.UserEntry.sUserName = dr.GetString("FLD_USERNAME");
+                    DBRecord.UserEntry.sSSNo = dr.GetString("FLD_SSNO");
+                    DBRecord.UserEntry.sPhone = dr.GetString("FLD_PHONE");
+                    DBRecord.UserEntry.sQuiz = dr.GetString("FLD_QUIZ1");
+                    DBRecord.UserEntry.sAnswer = dr.GetString("FLD_ANSWER1");
+                    DBRecord.UserEntry.sEMail = dr.GetString("FLD_EMAIL");
+                    DBRecord.UserEntryAdd.sQuiz2 = dr.GetString("FLD_QUIZ2");
+                    DBRecord.UserEntryAdd.sAnswer2 = dr.GetString("FLD_ANSWER2");
+                    DBRecord.UserEntryAdd.sBirthDay = dr.GetString("FLD_BIRTHDAY");
+                    DBRecord.UserEntryAdd.sMobilePhone = dr.GetString("FLD_MOBILEPHONE");
+                    DBRecord.UserEntryAdd.sMemo = "";
+                    DBRecord.UserEntryAdd.sMemo2 = "";
+                }
+                return result;
             }
             catch
             {
@@ -157,37 +197,10 @@ namespace LoginSvr
                 LSShare.MainOutMessage("[Exception] TFileIDDB.GetRecord (1)");
                 return result;
             }
-            if (DBRecord == null)
+            finally
             {
-                DBRecord = new TAccountDBRecord();
-                DBRecord.Header = new TRecordHeader();
-                DBRecord.UserEntry = new TUserEntry();
-                DBRecord.UserEntryAdd = new TUserEntryAdd();
+                Close();
             }
-            if (dr.Read())
-            {
-                DBRecord.Header.sAccount = dr.GetString("FLD_LOGINID");
-                DBRecord.Header.boDeleted = dr.GetBoolean(dr.GetOrdinal("FLD_DELETED"));
-                DBRecord.Header.CreateDate = dr.GetDateTime("FLD_CREATEDATE");
-                DBRecord.Header.UpdateDate = dr.GetDateTime("FLD_LASTUPDATE");
-                DBRecord.nErrorCount = dr.GetInt32("FLD_ERRORCOUNT");
-                DBRecord.dwActionTick = dr.GetInt32("FLD_ACTIONTICK");
-                DBRecord.UserEntry.sAccount = dr.GetString("FLD_LOGINID");
-                DBRecord.UserEntry.sPassword = dr.GetString("FLD_PASSWORD");
-                DBRecord.UserEntry.sUserName = dr.GetString("FLD_USERNAME");
-                DBRecord.UserEntry.sSSNo = dr.GetString("FLD_SSNO");
-                DBRecord.UserEntry.sPhone = dr.GetString("FLD_PHONE");
-                DBRecord.UserEntry.sQuiz = dr.GetString("FLD_QUIZ1");
-                DBRecord.UserEntry.sAnswer = dr.GetString("FLD_ANSWER1");
-                DBRecord.UserEntry.sEMail = dr.GetString("FLD_EMAIL");
-                DBRecord.UserEntryAdd.sQuiz2 = dr.GetString("FLD_QUIZ2");
-                DBRecord.UserEntryAdd.sAnswer2 = dr.GetString("FLD_ANSWER2");
-                DBRecord.UserEntryAdd.sBirthDay = dr.GetString("FLD_BIRTHDAY");
-                DBRecord.UserEntryAdd.sMobilePhone = dr.GetString("FLD_MOBILEPHONE");
-                DBRecord.UserEntryAdd.sMemo = "";
-                DBRecord.UserEntryAdd.sMemo2 = "";
-            }
-            return result;
         }
 
         public int Index(string sName)
@@ -227,10 +240,12 @@ namespace LoginSvr
             const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET FLD_PASSWORD='{0}', FLD_USERNAME='{1}',FLD_LASTUPDATE={2}, FLD_ERRORCOUNT={3}, FLD_ACTIONTICK={4},FLD_SSNO='{5}', FLD_BIRTHDAY='{6}', FLD_PHONE='{7}',FLD_MOBILEPHONE='{8}', FLD_EMAIL='{9}', FLD_QUIZ1='{10}', FLD_ANSWER1='{11}', FLD_QUIZ2='{12}',FLD_ANSWER2='{13}' WHERE FLD_LOGINID='{14}'";
             try
             {
-                using var conn = GetConnection();
-                conn.Open();
+                if (!Open())
+                {
+                    return false;
+                }
                 var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)conn;
+                command.Connection = (MySqlConnection)_dbConnection;
                 switch (btFlag)
                 {
                     case 1:
@@ -277,7 +292,7 @@ namespace LoginSvr
             }
             finally
             {
-
+                Close();
             }
             return result;
         }

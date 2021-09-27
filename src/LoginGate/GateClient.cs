@@ -82,8 +82,7 @@ namespace LoginGate
 
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sReviceMsg = HUtil32.GetString(e.Buff, 0, e.Buff.Length);
-            GateShare.ClientSockeMsgList.Add(sReviceMsg);
+            GateShare.ClientSockeMsgList.Add(e.ReceiveText);
         }
 
         private void ResUserSessionArray()

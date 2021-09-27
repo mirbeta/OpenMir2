@@ -91,8 +91,7 @@ namespace SelGate
 
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            string sRecvMsg = e.ReceiveText;
-            GateShare.ClientSockeMsgList.Add(sRecvMsg);
+            GateShare.ClientSockeMsgList.Add(e.ReceiveText);
         }
         
         private void ResUserSessionArray()
