@@ -41,12 +41,12 @@ namespace GameGate
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 =Task.Factory.StartNew(ProcessReviceMessage);
+            var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
             gTasks[0] = consumerTask1;
 
             var consumerTask2 = Task.Factory.StartNew(ProcessSendMessage);
             gTasks[1] = consumerTask2;
-            
+
             await Task.WhenAll(gTasks);
         }
 
@@ -99,7 +99,7 @@ namespace GameGate
             long dwLoopProcessTime;
             long dwProcessReviceMsgLimiTick;
             TSendUserData tUserData = null;
-            TSessionInfo UserSession= null;
+            TSessionInfo UserSession = null;
             ShowMainLogMsg();
             if (!GateShare.boDecodeMsgLock)
             {
@@ -110,24 +110,24 @@ namespace GameGate
                         dwRefConsoleMsgTick = HUtil32.GetTickCount();
                         if (!GateShare.boShowBite)
                         {
-                           Debug.WriteLine( "接收: " + _serverService.NReviceMsgSize / 1024 + " KB");
-                           //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
-                           Debug.WriteLine( "编码: " + nProcessMsgSize / 1024 + " KB");
-                           Debug.WriteLine( "登录: " + nHumLogonMsgSize / 1024 + " KB");
-                           Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
-                           Debug.WriteLine( "解码: " + nDeCodeMsgSize / 1024 + " KB");
-                           Debug.WriteLine( "发送: " + nSendBlockSize / 1024 + " KB");
+                            Debug.WriteLine("接收: " + _serverService.NReviceMsgSize / 1024 + " KB");
+                            //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
+                            Debug.WriteLine("编码: " + nProcessMsgSize / 1024 + " KB");
+                            Debug.WriteLine("登录: " + nHumLogonMsgSize / 1024 + " KB");
+                            Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
+                            Debug.WriteLine("解码: " + nDeCodeMsgSize / 1024 + " KB");
+                            Debug.WriteLine("发送: " + nSendBlockSize / 1024 + " KB");
                         }
                         else
                         {
-                            Debug.WriteLine( "接收: " + _serverService.NReviceMsgSize + " B");
+                            Debug.WriteLine("接收: " + _serverService.NReviceMsgSize + " B");
                             //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size + " B");
                             Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
-                            Debug.WriteLine( "编码: " + nProcessMsgSize + " B");
+                            Debug.WriteLine("编码: " + nProcessMsgSize + " B");
                             Debug.WriteLine("登录: " + nHumLogonMsgSize + " B");
-                            Debug.WriteLine( "普通: " + nHumPlayMsgSize + " B");
-                            Debug.WriteLine( "解码: " + nDeCodeMsgSize + " B");
-                            Debug.WriteLine( "发送: " + nSendBlockSize + " B");
+                            Debug.WriteLine("普通: " + nHumPlayMsgSize + " B");
+                            Debug.WriteLine("解码: " + nDeCodeMsgSize + " B");
+                            Debug.WriteLine("发送: " + nSendBlockSize + " B");
                             if (GateShare.dwCheckServerTimeMax > 1)
                             {
                                 GateShare.dwCheckServerTimeMax -= 1;
@@ -144,7 +144,7 @@ namespace GameGate
                     try
                     {
                         dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
-                        if (HUtil32.GetTickCount() - dwProcessPacketTick > 300)
+                        if ((HUtil32.GetTickCount() - dwProcessPacketTick) > 300)
                         {
                             dwProcessPacketTick = HUtil32.GetTickCount();
                             if (GateShare.ReviceMsgList.Reader.Count > 0)
@@ -175,7 +175,7 @@ namespace GameGate
                                     GateShare.dwProcessSendMsgTimeLimit -= 1;
                                 }
                             }
-                            var  clientList= _runGateClient.GetAllClient();
+                            var clientList = _runGateClient.GetAllClient();
                             for (var i = 0; i < clientList.Count; i++)
                             {
                                 if (clientList[i] == null)
@@ -223,10 +223,10 @@ namespace GameGate
                 {
                     dwRefConsolMsgTick = HUtil32.GetTickCount();
                     // LabelLoopTime.Text = (dwLoopTime).ToString();
-                   //Console.WriteLine("接收处理限制: " + GateShare.dwProcessReviceMsgTimeLimit);
-                   //Console.WriteLine("发送处理限制: " + GateShare.dwProcessSendMsgTimeLimit);
-                   //Console.WriteLine("接收: " + _serverService.dwProcessClientMsgTime);
-                   //Console.WriteLine("发送: " + dwProcessServerMsgTime);
+                    //Console.WriteLine("接收处理限制: " + GateShare.dwProcessReviceMsgTimeLimit);
+                    //Console.WriteLine("发送处理限制: " + GateShare.dwProcessSendMsgTimeLimit);
+                    //Console.WriteLine("接收: " + _serverService.dwProcessClientMsgTime);
+                    //Console.WriteLine("发送: " + dwProcessServerMsgTime);
                 }
             }
         }
@@ -247,8 +247,8 @@ namespace GameGate
                     {
                         if (sData.Length > GateShare.nClientSendBlockSize)
                         {
-                            sSendBlock = sData.Substring(0 ,GateShare.nClientSendBlockSize);
-                            sData = sData.Substring(GateShare.nClientSendBlockSize ,sData.Length - GateShare.nClientSendBlockSize);
+                            sSendBlock = sData.Substring(0, GateShare.nClientSendBlockSize);
+                            sData = sData.Substring(GateShare.nClientSendBlockSize, sData.Length - GateShare.nClientSendBlockSize);
                         }
                         else
                         {
@@ -305,7 +305,7 @@ namespace GameGate
                 }
             }
         }
-        
+
         public void StartService()
         {
             try
@@ -331,12 +331,12 @@ namespace GameGate
                 sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
 
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
-                GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...",0);
-                GateShare.AddMainLogMsg("网站:http://www.gameofmir.com",0);
-                GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com",0);
-                GateShare.AddMainLogMsg("智能反外挂程序云端已启动...",0);
-                GateShare.AddMainLogMsg("智能反外挂程序云端已连接...",0);
-                GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...",0);
+                GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
+                GateShare.AddMainLogMsg("网站:http://www.gameofmir.com", 0);
+                GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
+                GateShare.AddMainLogMsg("智能反外挂程序云端已启动...", 0);
+                GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
+                GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
             }
             catch (Exception E)
             {
@@ -493,13 +493,14 @@ namespace GameGate
             }
             if (GateShare.boGateReady) //清理超时用户会话   && !GateShare.boCheckServerFail
             {
-                var  clientList= _runGateClient.GetAllClient();
+                var clientList = _runGateClient.GetAllClient();
                 for (var i = 0; i < clientList.Count; i++)
                 {
-                    if (clientList[i] == null) {
+                    if (clientList[i] == null)
+                    {
                         continue;
                     }
-                    for (var j = 0; j < clientList[i].GetMaxSession(); j ++ )
+                    for (var j = 0; j < clientList[i].GetMaxSession(); j++)
                     {
                         UserSession = clientList[i].SessionArray[j];
                         if (UserSession.Socket != null)
@@ -508,7 +509,7 @@ namespace GameGate
                             {
                                 UserSession.Socket.Close();
                                 UserSession.Socket = null;
-                                UserSession.nSckHandle =  -1;
+                                UserSession.nSckHandle = -1;
                             }
                         }
                     }
@@ -525,7 +526,7 @@ namespace GameGate
             }
             else
             {
-                GateShare.dwCheckServerTimeMin =  HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
+                GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
                 if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
                 {
                     GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
@@ -535,9 +536,9 @@ namespace GameGate
 
         private bool IsBlockIP(string sIPaddr)
         {
-            bool result= false;
+            bool result = false;
             string sBlockIPaddr;
-            for (var i = 0; i < GateShare.TempBlockIPList.Count; i ++ )
+            for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {
                 sBlockIPaddr = GateShare.TempBlockIPList[i];
                 if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
@@ -546,7 +547,7 @@ namespace GameGate
                     break;
                 }
             }
-            for (var i = 0; i < GateShare.BlockIPList.Count; i ++ )
+            for (var i = 0; i < GateShare.BlockIPList.Count; i++)
             {
                 sBlockIPaddr = GateShare.BlockIPList[i];
                 if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr, sBlockIPaddr.Length))
@@ -560,8 +561,8 @@ namespace GameGate
 
         private bool IsConnLimited(string sIPaddr)
         {
-            bool result= false;
-            int nCount= 0;
+            bool result = false;
+            int nCount = 0;
             // for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i ++ )
             // {
             //     if ((sIPaddr).ToLower().CompareTo((ServerSocket.Connections[i].RemoteAddress).ToLower()) == 0)
@@ -575,6 +576,5 @@ namespace GameGate
             }
             return result;
         }
-    } 
+    }
 }
-

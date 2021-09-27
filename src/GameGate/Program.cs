@@ -15,6 +15,8 @@ namespace GameGate
             var builder = new HostBuilder()
                 .ConfigureLogging(logging =>
                 {
+                    logging.AddConsole();
+                    logging.AddDebug();
                     logging.ClearProviders();
                 })
                 .ConfigureServices((hostContext, services) =>

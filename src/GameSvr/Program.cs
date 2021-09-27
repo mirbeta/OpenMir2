@@ -25,6 +25,7 @@ namespace GameSvr
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<GameApp>();
+                    services.AddSingleton<MirLog>();
                     services.AddHostedService<AppService>();
                 });
 

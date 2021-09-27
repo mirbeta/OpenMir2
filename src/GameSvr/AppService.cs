@@ -14,10 +14,12 @@ namespace GameSvr
         private int CheckIntervalTime;
         private int SaveIntervalTime;
         private int ClearIntervalTime;
+        private MirLog _mirLog;
 
-        public AppService(GameApp serverApp)
+        public AppService(GameApp serverApp, MirLog mirLog)
         {
             _mirApp = serverApp;
+            _mirLog = mirLog;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -117,6 +119,7 @@ namespace GameSvr
                 M2Share.ObjectSystem.ClearGhost();
                 ClearIntervalTime = HUtil32.GetTickCount();
             }
+            _mirLog.OutLog();
         }
     }
 }

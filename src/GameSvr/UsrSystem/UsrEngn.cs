@@ -783,7 +783,7 @@ namespace GameSvr
                     {
                         if (m_PlayObjectList.Count <= nIdx) break;
                         var PlayObject = m_PlayObjectList[nIdx];
-                        if (dwCurTick - PlayObject.m_dwRunTick > PlayObject.m_nRunTime)
+                        if ((dwCurTick - PlayObject.m_dwRunTick) > PlayObject.m_nRunTime)
                         {
                             PlayObject.m_dwRunTick = dwCurTick;
                             if (!PlayObject.m_boGhost)
@@ -1115,7 +1115,7 @@ namespace GameSvr
                     NPC = QuestNPCList[i];
                     if (!NPC.m_boGhost)
                     {
-                        if (dwCurrTick - NPC.m_dwRunTick > NPC.m_nRunTime)
+                        if ((dwCurrTick - NPC.m_dwRunTick) > NPC.m_nRunTime)
                         {
                             if ((HUtil32.GetTickCount() - NPC.m_dwSearchTick) > NPC.m_dwSearchTime)
                             {

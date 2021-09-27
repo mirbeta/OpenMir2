@@ -1,33 +1,66 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using SystemModule;
-using SystemModule.Common;
 
 namespace GameSvr
 {
     public class MirLog
     {
-        private readonly AsynQueue<LogInfo> _logqueue = null;
+        private readonly ConcurrentQueue<LogInfo> _logqueue = null;
+        private readonly ConcurrentQueue<LogInfo> _debugLog = null;
+        private readonly ConcurrentQueue<LogInfo> _chatLog = null;
 
         public MirLog()
         {
-            _logqueue = new AsynQueue<LogInfo>();
-            _logqueue.ProcessItemFunction += _logqueue_ProcessItemFunction;
+            _logqueue = new ConcurrentQueue<LogInfo>();
+            _debugLog = new ConcurrentQueue<LogInfo>();
+            _chatLog = new ConcurrentQueue<LogInfo>();
         }
 
-        private void _logqueue_ProcessItemFunction(LogInfo message)
+        public void OutLog()
         {
-            if (M2Share.boStartReady)
+            while (!_logqueue.IsEmpty)
             {
-                if (message.MessageLevel == MessageLevel.Low)
-                {
-                    _logqueue.Enqueue(message);
-                    return;
-                }
+                LogInfo message;
+
+                if (!_logqueue.TryDequeue(out message)) continue;
+
                 OutMessage(message.Message, message.MessageType, consoleColor: message.MessageColor);
-                return;
             }
-            _logqueue.Enqueue(message);
+
+            while (!_debugLog.IsEmpty)
+            {
+                LogInfo message;
+
+                if (!_debugLog.TryDequeue(out message)) continue;
+
+                OutMessage(message.Message, message.MessageType, consoleColor: message.MessageColor);
+
+            }
+
+            while (!_chatLog.IsEmpty)
+            {
+                LogInfo message;
+
+                if (!_chatLog.TryDequeue(out message)) continue;
+
+                OutMessage(message.Message, message.MessageType, consoleColor: message.MessageColor);
+            }
         }
+
+        //private void _logqueue_ProcessItemFunction(LogInfo message)
+        //{
+        //    if (M2Share.boStartReady)
+        //    {
+        //        if (message.MessageLevel == MessageLevel.Low)
+        //        {
+        //            _logqueue.Enqueue(message);
+        //            return;
+        //        }
+        //        return;
+        //    }
+        //    _logqueue.Enqueue(message);
+        //}
 
         public void LogInfo(string message, MessageType messageType, MessageLevel messageLevel = MessageLevel.None)
         {
