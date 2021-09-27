@@ -11,7 +11,7 @@ namespace GameSvr
         }
         
         /// <summary>
-        /// 武器升级设置
+        /// 检查武器升级状态
         /// </summary>
         /// <param name="UserItem"></param>
         private void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
@@ -56,7 +56,6 @@ namespace GameSvr
                     SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
                     PlayObject = this as TPlayObject;
                     PlayObject.SendDelItems(UseItems);
-                    // PlayObject.StatusChanged;
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
                     if (StdItem.NeedIdentify == 1)
@@ -140,9 +139,12 @@ namespace GameSvr
                 {
                     AttackTarget = TargeTBaseObject;
                 }
-                if ((AttackTarget != null) && (m_UseItems[Grobal2.U_WEAPON] != null) && (m_UseItems[Grobal2.U_WEAPON].wIndex > 0))
+                if (m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
                 {
-                    AttackDir_CheckWeaponUpgrade();
+                    if ((AttackTarget != null) && (m_UseItems[Grobal2.U_WEAPON] != null) && (m_UseItems[Grobal2.U_WEAPON].wIndex > 0))
+                    {
+                        AttackDir_CheckWeaponUpgrade();
+                    }
                 }
                 boPowerHit = m_boPowerHit;
                 boFireHit = m_boFireHitSkill;
