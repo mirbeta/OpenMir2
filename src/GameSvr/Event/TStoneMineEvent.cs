@@ -7,15 +7,35 @@ namespace GameSvr
         public int m_nMineCount = 0;
         private int m_nAddStoneCount = 0;
         public int m_dwAddStoneMineTick = 0;
+        public bool m_boAddToMap = false;
 
         public TStoneMineEvent(TEnvirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
         {
-            m_Envir.AddToMapMineEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this);
-            m_boVisible = false;
-            m_nMineCount = M2Share.RandomNumber.Random(200);
-            m_dwAddStoneMineTick = HUtil32.GetTickCount();
-            m_boActive = false;
-            m_nAddStoneCount = M2Share.RandomNumber.Random(80);
+            m_boAddToMap = true;
+            if (nType == 55 || nType == 56 || nType == 57)
+            {
+                if (m_Envir.AddToMapItemEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
+                {
+                    m_boAddToMap = false;
+                }
+                m_boVisible = false;
+                m_nMineCount = M2Share.RandomNumber.Random(2000) + 300;
+                m_dwAddStoneMineTick = HUtil32.GetTickCount();
+                m_boActive = false;
+                m_nAddStoneCount = M2Share.RandomNumber.Random(800) + 100;
+            }
+            else
+            {
+                if (m_Envir.AddToMapItemEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
+                {
+                    m_boAddToMap = false;
+                }
+                m_boVisible = false;
+                m_nMineCount = M2Share.RandomNumber.Random(200) + 1;
+                m_dwAddStoneMineTick = HUtil32.GetTickCount();
+                m_boActive = false;
+                m_nAddStoneCount = M2Share.RandomNumber.Random(80) + 1;
+            }
         }
 
         public void AddStoneMine()

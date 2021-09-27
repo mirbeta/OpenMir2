@@ -43,11 +43,13 @@ namespace GameSvr
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 TEvent currentEvent = _eventList[i];
-                if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY &&
-                    currentEvent.m_nEventType == nType)
+                if (currentEvent.m_nEventType == nType)
                 {
-                    result = currentEvent;
-                    break;
+                    if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY)
+                    {
+                        result = currentEvent;
+                        break;
+                    }
                 }
             }
             return result;

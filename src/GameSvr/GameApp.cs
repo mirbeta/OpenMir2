@@ -160,7 +160,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("登录服务器连接初始化完成...");
                 M2Share.g_MapManager.LoadMapDoor();
                 M2Share.MainOutMessage("地图环境加载成功...");
-                //MakeStoneMines();
+                MakeStoneMines();
                 M2Share.MainOutMessage("矿物数据初始成功...");
                 M2Share.LocalDB.LoadMerchant();
                 M2Share.MainOutMessage("交易NPC列表加载成功...");
@@ -195,6 +195,7 @@ namespace GameSvr
         private void MakeStoneMines()
         {
             TEnvirnoment Envir;
+            var stoneList = new List<TStoneMineEvent>();
             var mineMapList = M2Share.g_MapManager.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
@@ -203,7 +204,15 @@ namespace GameSvr
                 {
                     for (var nH = 0; nH < Envir.wHeight; nH++)
                     {
-                        new TStoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
+                        var mine = new TStoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
+                        if (!mine.m_boAddToMap)
+                        {
+                            mine = null;
+                        }
+                        else
+                        {
+                            stoneList.Add(mine);
+                        }
                     }
                 }
             }

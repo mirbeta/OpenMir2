@@ -559,6 +559,29 @@ namespace GameSvr
             return result;
         }
 
+        public object AddToMapItemEvent(int nX, int nY, int nType, object __Event)
+        {
+            object result = null;
+            TMapCellinfo MapCellInfo = null;
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            {
+                if (MapCellInfo.ObjList == null)
+                {
+                    MapCellInfo.ObjList = new List<TOSObject>();
+                }
+                if (nType == Grobal2.OS_EVENTOBJECT)
+                {
+                    var OSObject = new TOSObject();
+                    OSObject.btType = (byte)nType;
+                    OSObject.CellObj = __Event;
+                    OSObject.dwAddTime = HUtil32.GetTickCount();
+                    MapCellInfo.ObjList.Add(OSObject);
+                    result = OSObject;
+                }
+            }
+            return result;
+        }
+
         public object AddToMapMineEvent(int nX, int nY, int nType, object __Event)
         {
             TMapCellinfo MapCellInfo = null;
