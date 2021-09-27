@@ -202,9 +202,9 @@ namespace GameSvr
         /// 是否被召唤(主人)
         /// </summary>
         public TBaseObject m_Master = null;
-       /// <summary>
-       /// 怪物叛变时间
-       /// </summary>
+        /// <summary>
+        /// 怪物叛变时间
+        /// </summary>
         public int m_dwMasterRoyaltyTick = 0;
         public int m_dwMasterTick = 0;
         /// <summary>
@@ -327,21 +327,21 @@ namespace GameSvr
         /// 魔法隐身了
         /// </summary>
         public bool m_boTransparent = false;
-       /// <summary>
-       /// 管理模式
-       /// </summary>
+        /// <summary>
+        /// 管理模式
+        /// </summary>
         public bool m_boAdminMode = false;
         /// <summary>
         /// 隐身模式
         /// </summary>
         public bool m_boObMode = false;
-       /// <summary>
-       /// 传送戒指
-       /// </summary>
+        /// <summary>
+        /// 传送戒指
+        /// </summary>
         public bool m_boTeleport = false;
-         /// <summary>
-         /// 麻痹戒指
-         /// </summary>
+        /// <summary>
+        /// 麻痹戒指
+        /// </summary>
         public bool m_boParalysis = false;
         public bool m_boUnParalysis = false;
         /// <summary>
@@ -356,13 +356,13 @@ namespace GameSvr
         /// 复活戒指使用间隔计数
         /// </summary>
         public int m_dwRevivalTick = 0;
-       /// <summary>
-       /// 火焰戒指
-       /// </summary>
+        /// <summary>
+        /// 火焰戒指
+        /// </summary>
         public bool m_boFlameRing = false;
-       /// <summary>
-       /// 治愈戒指
-       /// </summary>
+        /// <summary>
+        /// 治愈戒指
+        /// </summary>
         public bool m_boRecoveryRing = false;
         /// <summary>
         /// 未知戒指
@@ -376,21 +376,21 @@ namespace GameSvr
         /// 防护身
         /// </summary>
         public bool m_boUnMagicShield = false;
-       /// <summary>
-       /// 活力戒指
-       /// </summary>
+        /// <summary>
+        /// 活力戒指
+        /// </summary>
         public bool m_boMuscleRing = false;
-       /// <summary>
-       /// 技巧项链
-       /// </summary>
+        /// <summary>
+        /// 技巧项链
+        /// </summary>
         public bool m_boFastTrain = false;
-      /// <summary>
-      /// 探测项链
-      /// </summary>
+        /// <summary>
+        /// 探测项链
+        /// </summary>
         public bool m_boProbeNecklace = false;
-      /// <summary>
-      /// 行会传送
-      /// </summary>
+        /// <summary>
+        /// 行会传送
+        /// </summary>
         public bool m_boGuildMove = false;
         public bool m_boSupermanItem = false;
         /// <summary>
@@ -703,7 +703,7 @@ namespace GameSvr
             m_boAllowDeal = true;
             m_boAllowGroupReCall = false;
             m_BlockWhisperList = new List<string>();
-            m_SlaveList = new  List<TBaseObject>();
+            m_SlaveList = new List<TBaseObject>();
             m_WAbil = new TAbility();// FillChar(m_WAbil, sizeof(TAbility), '\0');
             m_QuestUnitOpen = new byte[128];//FillChar(m_QuestUnitOpen, sizeof(grobal2.byte), '\0');
             m_QuestUnit = new byte[128];// FillChar(m_QuestUnit, sizeof(grobal2.byte), '\0');
@@ -1240,7 +1240,7 @@ namespace GameSvr
                 DropBaseObject = DropGoldCreat
             };
             GetDropPosition(m_nCurrX, m_nCurrY, 3, ref nX, ref nY);
-            TMapItem MapItemA = (TMapItem) m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+            TMapItem MapItemA = (TMapItem)m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
             if (MapItemA != null)
             {
                 if (MapItemA != MapItem)
@@ -1322,7 +1322,7 @@ namespace GameSvr
                 }
             }
         }
-        
+
         private void DecPKPoint(int nPoint)
         {
             int nC = PKLevel();
@@ -2527,7 +2527,7 @@ namespace GameSvr
                 }
             }
         }
-        
+
         public void DelItemSkill_DeleteSkill(string sSkillName)
         {
             TUserMagic UserMagic;
@@ -2852,10 +2852,6 @@ namespace GameSvr
                     {
                         SendMessage.Buff = sMsg;
                     }
-                    else
-                    {
-                        SendMessage.Buff = null;
-                    }
                     m_MsgList.Insert(0, SendMessage);
                 }
             }
@@ -3086,8 +3082,8 @@ namespace GameSvr
                     SendMessage = m_MsgList[I];
                     if ((SendMessage.dwDeliveryTime != 0) && (HUtil32.GetTickCount() < SendMessage.dwDeliveryTime))//延时消息
                     {
-                         I++;
-                         continue;
+                        I++;
+                        continue;
                     }
                     m_MsgList.RemoveAt(I);
                     Msg = new TProcessMessage();
@@ -3172,13 +3168,6 @@ namespace GameSvr
 
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            int nC;
-            int nCX;
-            int nCY;
-            int nLX;
-            int nLY;
-            int nHX;
-            int nHY;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
@@ -3200,13 +3189,13 @@ namespace GameSvr
                 {
                     m_SendRefMsgTick = HUtil32.GetTickCount();
                     m_VisibleHumanList.Clear();
-                    nLX = m_nCurrX - M2Share.g_Config.nSendRefMsgRange; // 12
-                    nHX = m_nCurrX + M2Share.g_Config.nSendRefMsgRange; // 12
-                    nLY = m_nCurrY - M2Share.g_Config.nSendRefMsgRange; // 12
-                    nHY = m_nCurrY + M2Share.g_Config.nSendRefMsgRange; // 12
-                    for (nCX = nLX; nCX <= nHX; nCX++)
+                    var nLX = m_nCurrX - M2Share.g_Config.nSendRefMsgRange; // 12
+                    var nHX = m_nCurrX + M2Share.g_Config.nSendRefMsgRange; // 12
+                    var nLY = m_nCurrY - M2Share.g_Config.nSendRefMsgRange; // 12
+                    var nHY = m_nCurrY + M2Share.g_Config.nSendRefMsgRange; // 12
+                    for (var nCX = nLX; nCX <= nHX; nCX++)
                     {
-                        for (nCY = nLY; nCY <= nHY; nCY++)
+                        for (var nCY = nLY; nCY <= nHY; nCY++)
                         {
                             if (m_PEnvir.GetMapCellInfo(nCX, nCY, ref MapCellInfo))
                             {
@@ -3271,7 +3260,7 @@ namespace GameSvr
                     }
                     return;
                 }
-                for (nC = 0; nC < m_VisibleHumanList.Count; nC++)
+                for (var nC = 0; nC < m_VisibleHumanList.Count; nC++)
                 {
                     BaseObject = m_VisibleHumanList[nC];
                     if (BaseObject.m_boGhost)
@@ -3322,16 +3311,10 @@ namespace GameSvr
         public int GetFeature(TBaseObject BaseObject)
         {
             int result;
-            byte nDress;
-            byte nWeapon;
-            byte nHair;
-            byte nRaceImg;
-            byte nAppr;
             GameItem StdItem;
-            bool bo25;
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                nDress = 0;
+                byte nDress = 0;
                 if (m_UseItems[Grobal2.U_DRESS] != null && m_UseItems[Grobal2.U_DRESS].wIndex > 0)// 衣服
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_DRESS].wIndex);
@@ -3341,7 +3324,7 @@ namespace GameSvr
                     }
                 }
                 nDress += m_btGender;
-                nWeapon = 0;
+                byte nWeapon = 0;
                 if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].wIndex > 0)// 武器
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_WEAPON].wIndex);
@@ -3351,19 +3334,19 @@ namespace GameSvr
                     }
                 }
                 nWeapon += m_btGender;
-                nHair = (byte)(m_btHair * 2 + m_btGender);
+                byte nHair = (byte)(m_btHair * 2 + m_btGender);
                 result = Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
                 return result;
             }
-            bo25 = false;
+            bool bo25 = false;
             if ((BaseObject != null) && BaseObject.m_boRaceImg)
             {
                 bo25 = true;
             }
             if (bo25)
             {
-                nRaceImg = m_btRaceImg;
-                nAppr = (byte)m_wAppr;
+                byte nRaceImg = m_btRaceImg;
+                byte nAppr = (byte)m_wAppr;
                 switch (nAppr)
                 {
                     case 0:
@@ -3397,7 +3380,7 @@ namespace GameSvr
             result = Grobal2.MakeMonsterFeature(m_btRaceImg, m_btMonsterWeapon, m_wAppr);
             return result;
         }
-        
+
         public long GetCharStatus()
         {
             long nStatus = 0;
@@ -3503,7 +3486,7 @@ namespace GameSvr
             bool bo1D;
             TEvent __Event;
             TPlayObject PlayObject;
-            const string sExceptionMsg = "[Exception] TBaseObject::Walk %s %s %d:%d";
+            const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
             bool result = true;
             if (m_PEnvir == null)
             {
@@ -3740,9 +3723,9 @@ namespace GameSvr
             if (MsgType == TMsgType.t_Notice)// 如果发的是公告
             {
                 string str = string.Empty;
-                string FColor= string.Empty;
-                string BColor= string.Empty;
-                string nTime= string.Empty;
+                string FColor = string.Empty;
+                string BColor = string.Empty;
+                string nTime = string.Empty;
                 if (sMsg[0] == '[')// 顶部滚动公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, '[', ']', ref str);
@@ -3766,9 +3749,9 @@ namespace GameSvr
                 else if (sMsg[0] == '{')// 屏幕居中公告
                 {
                     sMsg = HUtil32.ArrestStringEx(sMsg, '{', '}', ref str);
-                    str = HUtil32.GetValidStrCap(str, ref FColor, new string[] {"," });
-                    str = HUtil32.GetValidStrCap(str, ref BColor, new string[] {"," });
-                    str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { ","});
+                    str = HUtil32.GetValidStrCap(str, ref FColor, new string[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref BColor, new string[] { "," });
+                    str = HUtil32.GetValidStrCap(str, ref nTime, new string[] { "," });
                     if (M2Share.g_Config.boShowPreFixMsg)
                     {
                         sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
@@ -3803,28 +3786,28 @@ namespace GameSvr
                     }
                 }
             }
-           else
-           {
-               switch (MsgColor)
-               {
-                   case TMsgColor.c_Green:
-                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
-                       break;
-                   case TMsgColor.c_Blue:
-                       SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
-                       break;
-                   default:
-                       if (MsgType == TMsgType.t_Cust)
-                       {
-                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
-                       }
-                       else
-                       {
-                           SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
-                       }
-                       break;
-               }
-           }
+            else
+            {
+                switch (MsgColor)
+                {
+                    case TMsgColor.c_Green:
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
+                        break;
+                    case TMsgColor.c_Blue:
+                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
+                        break;
+                    default:
+                        if (MsgType == TMsgType.t_Cust)
+                        {
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
+                        }
+                        else
+                        {
+                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
+                        }
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -4619,7 +4602,7 @@ namespace GameSvr
                         StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_DRESS].wIndex);
                         if (StdItem.NeedIdentify == 1)
                         {
-                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_DRESS].MakeIndex + "\t" 
+                            M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
                                 + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                         }
                         m_UseItems[Grobal2.U_DRESS].wIndex = 0;
@@ -4654,7 +4637,7 @@ namespace GameSvr
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex + "\t" 
+                                M2Share.AddGameDataLog('3' + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[i].MakeIndex + "\t"
                                     + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                             }
                             m_UseItems[i].wIndex = 0;
@@ -4683,9 +4666,9 @@ namespace GameSvr
 
         public virtual string GeTBaseObjectInfo()
         {
-            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX + '/' + m_nCurrY + ' ' + "等级:" + m_Abil.Level + ' ' + "经验:" + m_Abil.Exp + ' ' 
-                + "生命值: " + m_WAbil.HP + '-' + m_WAbil.MaxHP + ' ' + "魔法值: " + m_WAbil.MP + '-' + m_WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC) + ' ' 
-                + "魔法力: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC) + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC) + ' ' 
+            string result = m_sCharName + ' ' + "地图:" + m_sMapName + '(' + m_PEnvir.sMapDesc + ") " + "座标:" + m_nCurrX + '/' + m_nCurrY + ' ' + "等级:" + m_Abil.Level + ' ' + "经验:" + m_Abil.Exp + ' '
+                + "生命值: " + m_WAbil.HP + '-' + m_WAbil.MaxHP + ' ' + "魔法值: " + m_WAbil.MP + '-' + m_WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC) + ' '
+                + "魔法力: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC) + ' ' + "道术: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC) + ' '
                 + "防御力: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC) + ' ' + "魔防力: " + HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC) + ' ' + "准确:" + m_btHitPoint + ' '
                 + "敏捷:" + m_btSpeedPoint;
             return result;
@@ -5211,8 +5194,8 @@ namespace GameSvr
 
         public int sub_4C3538()
         {
-            int result= 0;
-            int nC= -1;
+            int result = 0;
+            int nC = -1;
             int n10;
             while (nC != 2)
             {
@@ -5280,7 +5263,8 @@ namespace GameSvr
             {
                 return m_PEnvir.CanWalkEx(nX, nY, boFlag);
             }
-            else{
+            else
+            {
                 return CanRun(nCurrX, nCurrY, nX, nY, boFlag);
             }
         }
@@ -5292,9 +5276,10 @@ namespace GameSvr
             switch (btDir)
             {
                 case Grobal2.DR_UP:
-                    if (nCurrY > 1) {
+                    if (nCurrY > 1)
+                    {
                         if ((m_PEnvir.CanWalkEx(nCurrX, nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))
-                                && (m_PEnvir.CanWalkEx(nCurrX, nCurrY - 2, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                && (m_PEnvir.CanWalkEx(nCurrX, nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5342,7 +5327,7 @@ namespace GameSvr
                     break;
                 case Grobal2.DR_DOWNLEFT:
                     if ((nCurrX > 1) && (nCurrY < m_PEnvir.wHeight - 2) && (m_PEnvir.CanWalkEx(nCurrX - 1, nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                    (m_PEnvir.CanWalkEx(nCurrX - 2, nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) ||(M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    (m_PEnvir.CanWalkEx(nCurrX - 2, nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5350,7 +5335,7 @@ namespace GameSvr
                     break;
                 case Grobal2.DR_LEFT:
                     if ((nCurrX > 1) && (m_PEnvir.CanWalkEx(nCurrX - 1, nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                    (m_PEnvir.CanWalkEx(nCurrX - 2, nCurrY, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    (m_PEnvir.CanWalkEx(nCurrX - 2, nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5376,9 +5361,10 @@ namespace GameSvr
             switch (btDir)
             {
                 case Grobal2.DR_UP:
-                    if (m_nCurrY > 1) {
+                    if (m_nCurrY > 1)
+                    {
                         if ((m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone()))
-                                && (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                                && (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                         {
                             result = true;
                             return result;
@@ -5426,7 +5412,7 @@ namespace GameSvr
                     break;
                 case Grobal2.DR_DOWNLEFT:
                     if ((m_nCurrX > 1) && (m_nCurrY < m_PEnvir.wHeight - 2) && (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) ||(M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5434,7 +5420,7 @@ namespace GameSvr
                     break;
                 case Grobal2.DR_LEFT:
                     if ((m_nCurrX > 1) && (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())) &&
-                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun ||((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
+                    (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || ((m_btPermission > 9) && M2Share.g_Config.boGMRunAll)) || (M2Share.g_Config.boSafeAreaLimited && InSafeZone())))
                     {
                         result = true;
                         return result;
@@ -5488,4 +5474,3 @@ namespace GameSvr
         }
     }
 }
-

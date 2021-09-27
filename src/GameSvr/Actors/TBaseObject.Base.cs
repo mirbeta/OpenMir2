@@ -843,7 +843,6 @@ namespace GameSvr
 
         public virtual void Run()
         {
-            int i;
             TProcessMessage ProcessMsg = null;
             int nInteger;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
@@ -1251,7 +1250,6 @@ namespace GameSvr
                         StatusChanged();
                     }
                     // 宝宝在主人死亡后死亡处理
-
                     if (m_Master.m_boDeath && ((HUtil32.GetTickCount() - m_Master.m_dwDeathTick) > 1000))
                     {
                         if (M2Share.g_Config.boMasterDieMutiny && (m_Master.m_LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.g_Config.nMasterDieMutinyRate) == 0))
@@ -1275,7 +1273,7 @@ namespace GameSvr
                     }
                 }
                 // 清除宝宝列表中已经死亡及叛变的宝宝信息
-                for (i = m_SlaveList.Count - 1; i >= 0; i--)
+                for (var i = m_SlaveList.Count - 1; i >= 0; i--)
                 {
                     if (m_SlaveList[i].m_boDeath || m_SlaveList[i].m_boGhost || (m_SlaveList[i].m_Master != this))
                     {
@@ -1330,7 +1328,7 @@ namespace GameSvr
                         }
                         if (HUtil32.GetTickCount() > m_dwMasterRoyaltyTick)
                         {
-                            for (i = 0; i < m_Master.m_SlaveList.Count; i++)
+                            for (var i = 0; i < m_Master.m_SlaveList.Count; i++)
                             {
                                 if (m_Master.m_SlaveList[i] == this)
                                 {
@@ -1366,7 +1364,7 @@ namespace GameSvr
 
                     if (m_GroupOwner == this)
                     {
-                        for (i = m_GroupMembers.Count - 1; i >= 0; i--)
+                        for (var i = m_GroupMembers.Count - 1; i >= 0; i--)
                         {
                             TBaseObject BaseObject = m_GroupMembers[i];
                             if (BaseObject.m_boDeath || BaseObject.m_boGhost)
@@ -1395,7 +1393,7 @@ namespace GameSvr
             {
                 bool boChg = false;
                 bool boNeedRecalc = false;
-                for (i = m_dwStatusArrTick.GetLowerBound(0); i <= m_dwStatusArrTick.GetUpperBound(0); i++)
+                for (var i = m_dwStatusArrTick.GetLowerBound(0); i <= m_dwStatusArrTick.GetUpperBound(0); i++)
                 {
                     if ((m_wStatusTimeArr[i] > 0) && (m_wStatusTimeArr[i] < 60000))
                     {
@@ -1427,7 +1425,7 @@ namespace GameSvr
                         }
                     }
                 }
-                for (i = m_wStatusArrValue.GetLowerBound(0); i <= m_wStatusArrValue.GetUpperBound(0); i++)
+                for (var i = m_wStatusArrValue.GetLowerBound(0); i <= m_wStatusArrValue.GetUpperBound(0); i++)
                 {
                     if (m_wStatusArrValue[i] > 0)
                     {
@@ -1519,38 +1517,13 @@ namespace GameSvr
 
         public virtual void RecalcAbilitys()
         {
-            ushort wOldHP;
-            ushort wOldMP;
-            bool boOldHideMode;
-            int nOldLight;
             GameItem StdItem;
-            bool[] boRecallSuite = new bool[4];
-            bool[] boMoXieSuite = new bool[3];
-            bool[] boSpirit = new bool[4];
-            bool boHongMoSuite1;
-            bool boHongMoSuite2;
-            bool boHongMoSuite3;
-            bool boSmash1;
-            bool boSmash2;
-            bool boSmash3;
-            bool boHwanDevil1;
-            bool boHwanDevil2;
-            bool boHwanDevil3;
-            bool boPurity1;
-            bool boPurity2;
-            bool boPurity3;
-            bool boMundane1;
-            bool boMundane2;
-            bool boNokChi1;
-            bool boNokChi2;
-            bool boTaoBu1;
-            bool boTaoBu2;
-            bool boFiveString1;
-            bool boFiveString2;
-            bool boFiveString3;
-            m_AddAbil = new TAddAbility();//FillChar(m_AddAbil, sizeof(TAddAbility), '\0');
-            wOldHP = m_WAbil.HP;
-            wOldMP = m_WAbil.MP;
+            bool[] boRecallSuite = new bool[4] { false, false, false, false };
+            bool[] boMoXieSuite = new bool[3] { false, false, false };
+            bool[] boSpirit = new bool[4] { false, false, false, false };
+            m_AddAbil = new TAddAbility();
+            ushort wOldHP = m_WAbil.HP;
+            ushort wOldMP = m_WAbil.MP;
             m_WAbil = m_Abil;
             m_WAbil.HP = wOldHP;
             m_WAbil.MP = wOldMP;
@@ -1568,7 +1541,6 @@ namespace GameSvr
             m_rExpItem = 0;
             m_boPowerItem = false;
             m_rPowerItem = 0;
-            boOldHideMode = m_boHideMode;
             m_boHideMode = false;
             m_boTeleport = false;
             m_boParalysis = false;
@@ -1595,48 +1567,38 @@ namespace GameSvr
             m_nAutoAddHPMPMode = 0;
             // 气血石
             m_nMoXieSuite = 0;
-            boMoXieSuite[0] = false;
-            boMoXieSuite[1] = false;
-            boMoXieSuite[2] = false;
             m_db3B0 = 0;
             m_nHongMoSuite = 0;
-            boHongMoSuite1 = false;
-            boHongMoSuite2 = false;
-            boHongMoSuite3 = false;
-            boSpirit[0] = false;
-            boSpirit[1] = false;
-            boSpirit[2] = false;
-            boSpirit[3] = false;
+            bool boHongMoSuite1 = false;
+            bool boHongMoSuite2 = false;
+            bool boHongMoSuite3 = false;
             m_boRecallSuite = false;
-            boRecallSuite[0] = false;
-            boRecallSuite[1] = false;
-            boRecallSuite[2] = false;
-            boRecallSuite[3] = false;
             m_boSmashSet = false;
-            boSmash1 = false;
-            boSmash2 = false;
-            boSmash3 = false;
+            bool boSmash1 = false;
+            bool boSmash2 = false;
+            bool boSmash3 = false;
             m_boHwanDevilSet = false;
-            boHwanDevil1 = false;
-            boHwanDevil2 = false;
-            boHwanDevil3 = false;
+            bool boHwanDevil1 = false;
+            bool boHwanDevil2 = false;
+            bool boHwanDevil3 = false;
             m_boPuritySet = false;
-            boPurity1 = false;
-            boPurity2 = false;
-            boPurity3 = false;
+            bool boPurity1 = false;
+            bool boPurity2 = false;
+            bool boPurity3 = false;
             m_boMundaneSet = false;
-            boMundane1 = false;
-            boMundane2 = false;
+            bool boMundane1 = false;
+            bool boMundane2 = false;
             m_boNokChiSet = false;
-            boNokChi1 = false;
-            boNokChi2 = false;
+            bool boNokChi1 = false;
+            bool boNokChi2 = false;
             m_boTaoBuSet = false;
-            boTaoBu1 = false;
-            boTaoBu2 = false;
+            bool boTaoBu1 = false;
+            bool boTaoBu2 = false;
             m_boFiveStringSet = false;
-            boFiveString1 = false;
-            boFiveString2 = false;
-            boFiveString3 = false;
+            bool boFiveString1 = false;
+            bool boFiveString2 = false;
+            bool boFiveString3 = false;
+            bool boOldHideMode = m_boHideMode;
             m_dwPKDieLostExp = 0;
             m_nPKDieLostLevel = 0;
             for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
@@ -2293,7 +2255,7 @@ namespace GameSvr
             {
                 m_boFiveStringSet = true;
             }
-            m_WAbil.Weight = (ushort)RecalcBagWeight();
+            m_WAbil.Weight = RecalcBagWeight();
             if (m_boTransparent && (m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] > 0))
             {
                 m_boHideMode = true;
@@ -2317,10 +2279,9 @@ namespace GameSvr
             }
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                // 01-20 增加此行，只有类型为人物的角色才重新计算攻击敏捷
-                RecalcHitSpeed();
+                RecalcHitSpeed();//增加此行，只有类型为人物的角色才重新计算攻击敏捷
             }
-            nOldLight = m_nLight;
+            int nOldLight = m_nLight;
             if ((m_UseItems[Grobal2.U_RIGHTHAND] != null) && (m_UseItems[Grobal2.U_RIGHTHAND].wIndex > 0) && (m_UseItems[Grobal2.U_RIGHTHAND].Dura > 0))
             {
                 m_nLight = 3;
@@ -2416,7 +2377,6 @@ namespace GameSvr
                     m_nMoXieSuite = m_WAbil.MaxMP - 1;
                 }
                 m_WAbil.MaxMP -= (ushort)m_nMoXieSuite;
-                // Inc(m_WAbil.MaxHP,m_nMoXieSuite);
                 m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_nMoXieSuite);
             }
             if (m_bopirit)
