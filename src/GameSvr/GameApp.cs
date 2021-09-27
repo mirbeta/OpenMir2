@@ -160,7 +160,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("登录服务器连接初始化完成...");
                 M2Share.g_MapManager.LoadMapDoor();
                 M2Share.MainOutMessage("地图环境加载成功...");
-                MakeStoneMines();
+                //MakeStoneMines();
                 M2Share.MainOutMessage("矿物数据初始成功...");
                 M2Share.LocalDB.LoadMerchant();
                 M2Share.MainOutMessage("交易NPC列表加载成功...");
