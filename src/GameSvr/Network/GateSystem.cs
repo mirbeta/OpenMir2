@@ -1152,6 +1152,7 @@ namespace GameSvr
         public void Start()
         {
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
+            M2Share.MainOutMessage($"游戏网关[{M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
         }
 
         public void Stop()
