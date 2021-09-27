@@ -1593,7 +1593,7 @@ namespace GameSvr
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
             boSpeedHackCheck = false;
-            sConnctionString = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
+            sConnctionString = "server=127.0.0.1;uid=root;pwd=123456;database=Mir2;";
         }
     }
 }

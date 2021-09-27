@@ -187,6 +187,10 @@ namespace GameSvr
                     result = 1;
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
             finally
             {
                 Close();

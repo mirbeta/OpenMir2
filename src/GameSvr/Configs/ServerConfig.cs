@@ -60,6 +60,12 @@ namespace GameSvr.Configs
             if (StringConf.ReadString("Guild", "GuildChief", "") == "")
                 StringConf.WriteString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
             M2Share.g_Config.sGuildChief = StringConf.ReadString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
+
+            //数据库设置
+            if (Config.ReadString("Server", "ConnctionString", "") == "")
+                Config.WriteString("Server", "ConnctionString", M2Share.g_Config.sConnctionString);
+            M2Share.g_Config.sConnctionString = Config.ReadString("Server", "ConnctionString", M2Share.g_Config.sConnctionString);
+
             // 服务器设置
             if (Config.ReadInteger("Server", "ServerIndex", -1) < 0)
                 Config.WriteInteger("Server", "ServerIndex", M2Share.nServerIndex);
