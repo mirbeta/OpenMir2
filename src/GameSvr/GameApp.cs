@@ -97,7 +97,7 @@ namespace GameSvr
                 }
                 M2Share.MainOutMessage("加载捆装物品信息成功...");
                 M2Share.MainOutMessage("加载物品寄售系统...");
-                M2Share.LocalDB.LoadSellOffItemList();
+                M2Share.CommonDB.LoadSellOffItemList();
                 M2Share.MainOutMessage("正在加载任务地图信息...");
                 nCode = M2Share.LocalDB.LoadMapQuest();
                 if (nCode < 0)

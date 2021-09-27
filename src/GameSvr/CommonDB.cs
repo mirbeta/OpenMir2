@@ -4,6 +4,7 @@ using System.IO;
 using SystemModule;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Text.Json;
 
 namespace GameSvr
 {
@@ -269,6 +270,103 @@ namespace GameSvr
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
+        }
+
+
+        /// <summary>
+        /// 加载寄售系统数据
+        /// </summary>
+        public void LoadSellOffItemList()
+        {
+            if (!Open())
+            {
+                M2Share.MainOutMessage("读取物品寄售列表失败.");
+                return;
+            }
+            try
+            {
+                TDealOffInfo DealOffInfo;
+                const string sSQLString = "select * from sales";
+                var command = new MySqlCommand();
+                command.Connection = (MySqlConnection)_dbConnection;
+                command.CommandText = sSQLString;
+                using (var dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var sDealCharName = dr.GetString("DealCharName");
+                        var sBuyCharName = dr.GetString("BuyCharName");
+                        var dSellDateTime = dr.GetDateTime("SellDateTime");
+                        var nState = dr.GetByte("State");
+                        var nSellGold = dr.GetInt16("SellGold");
+                        var sUseItems = dr.GetString("UseItems");
+                        if ((sDealCharName != "") && (sBuyCharName != "") && (nState < 4))
+                        {
+                            DealOffInfo = new TDealOffInfo();
+                            DealOffInfo.sDealCharName = sDealCharName;
+                            DealOffInfo.sBuyCharName = sBuyCharName;
+                            DealOffInfo.dSellDateTime = dSellDateTime;
+                            DealOffInfo.nSellGold = nSellGold;
+                            DealOffInfo.UseItems = JsonSerializer.Deserialize<TUserItem[]>(sUseItems);
+                            DealOffInfo.N = nState;
+                            M2Share.sSellOffItemList.Add(DealOffInfo);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Close();
+            }
+        }
+
+        /// <summary>
+        /// 保存寄售系统数据
+        /// </summary>
+        public void SaveSellOffItemList()
+        {
+            if (!Open())
+            {
+                M2Share.MainOutMessage("保存物品寄售数据失败.");
+                return;
+            }
+            TDealOffInfo DealOffInfo;
+            const string sSQLString = "delete from sales";
+            try
+            {
+                if (M2Share.sSellOffItemList.Count > 0)
+                {
+                    var command = new MySqlCommand();
+                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.CommandText = sSQLString;
+                    command.ExecuteNonQuery();
+
+                    for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
+                    {
+                        DealOffInfo = M2Share.sSellOffItemList[i];
+                        if (DealOffInfo != null)
+                        {
+                            string InsertSql = "INSERT INTO sales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
+                                "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.N + ","
+                                + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
+                            command.CommandText = InsertSql;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Close();
+            }
         }
 
         private bool Open()
