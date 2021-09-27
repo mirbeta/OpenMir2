@@ -523,33 +523,33 @@ namespace GameSvr
                             DamageHealth(-n20);
                         }
                     }
-                    if ((m_MagicArr[Grobal2.SKILL_ILKWANG] != null) && (m_btRaceServer == Grobal2.RC_PLAYOBJECT))
-                    {
-                        TUserMagic attackMagic = GetAttrackMagic(Grobal2.SKILL_ILKWANG);
-                        if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= m_Abil.Level))
-                        {
-                            (this as TPlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                            if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
-                            {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
-                            }
-                        }
-                    }
-                    if (bo21 && (m_MagicArr[Grobal2.SKILL_YEDO] != null) && (m_btRaceServer == Grobal2.RC_PLAYOBJECT))
-                    {
-                        TUserMagic attackMagic = GetAttrackMagic(Grobal2.SKILL_YEDO);
-                        if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= m_Abil.Level))
-                        {
-                            (this as TPlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                            if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
-                            {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
-                            }
-                        }
-                    }
                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
                         TUserMagic attackMagic = null;
+                        if ((m_MagicArr[Grobal2.SKILL_ILKWANG] != null))
+                        {
+                            attackMagic = GetAttrackMagic(Grobal2.SKILL_ILKWANG);
+                            if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= m_Abil.Level))
+                            {
+                                (this as TPlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
+                                if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
+                                {
+                                    SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                }
+                            }
+                        }
+                        if (bo21 && (m_MagicArr[Grobal2.SKILL_YEDO] != null))
+                        {
+                            attackMagic = GetAttrackMagic(Grobal2.SKILL_YEDO);
+                            if ((attackMagic.btLevel < 3) && (attackMagic.MagicInfo.TrainLevel[attackMagic.btLevel] <= m_Abil.Level))
+                            {
+                                (this as TPlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
+                                if (!(this as TPlayObject).CheckMagicLevelup(attackMagic))
+                                {
+                                    SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.MagicInfo.wMagicID, attackMagic.btLevel, attackMagic.nTranPoint, "", 3000);
+                                }
+                            }
+                        }
                         switch (wHitMode)
                         {
                             case 4:
@@ -692,7 +692,6 @@ namespace GameSvr
                         }
                     }
                 }
-
                 if ((nWeaponDamage > 0) && (m_UseItems[Grobal2.U_WEAPON] != null) && (m_UseItems[Grobal2.U_WEAPON].wIndex > 0))
                 {
                     DoDamageWeapon(nWeaponDamage);
