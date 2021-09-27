@@ -24,22 +24,13 @@ namespace LoginGate
         {
             int nIndex;
             TUserSession UserSession;
-            //if (ServerSocket.Active)
-            //{
-            //    GateShare.n456A30 = ServerSocket.Socket.ActiveConnections;
-            //}
             if (GateShare.boSendHoldTimeOut)
             {
-                //LbHold.Text = (GateShare.n456A30).ToString() + "#";
                 if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3 * 1000)
                 {
                     GateShare.boSendHoldTimeOut = false;
                 }
             }
-            //else
-            //{
-            //    LbHold.Text = (GateShare.n456A30).ToString();
-            //}
             if (GateShare.boGateReady && (!GateShare.boKeepAliveTimcOut))
             {
                 for (nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
@@ -117,7 +108,6 @@ namespace LoginGate
                 GateShare.TempBlockIPList = new List<TSockaddr>();
                 GateShare.ClientSockeMsgList = new List<string>();
                 LoadConfig();
-                //SendTimer.Enabled = true;
                 GateShare.MainOutMessage("启动服务完成...", 3);
             }
             catch (Exception E)

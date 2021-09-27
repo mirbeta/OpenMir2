@@ -199,12 +199,31 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
-        /// 启动异步Socket服务器
+        /// 启动异步Socket服务
+        /// 支持指定IP和端口
         /// </summary>
         /// <param name="Port"></param>
-        public void Start(string ip,int port)
+        public void Start(string ip, int port)
         {
-            Start(new IPEndPoint(IPAddress.Parse(ip), port));
+            if (ip == "*" || ip == "all")
+            {
+                Start(port);
+            }
+            else
+            {
+                Start(new IPEndPoint(IPAddress.Parse(ip), port));
+                isActive = true;
+            }
+        }
+
+        /// <summary>
+        /// 启动异步Scoket服务
+        /// 绑定本机所有IP并指定端口
+        /// </summary>
+        /// <param name="port"></param>
+        public void Start(int port)
+        {
+            Start(new IPEndPoint(IPAddress.Any, port));
             isActive = true;
         }
 

@@ -214,11 +214,11 @@ namespace LoginSvr
             nFeePort = 16301;
             sLogServer = "10.10.0.168";
             nLogPort = 16301;
-            sGateAddr = "10.10.0.168";
+            sGateAddr = "*";
             nGatePort = 5500;
-            sServerAddr = "10.10.0.168";
+            sServerAddr = "*";
             nServerPort = 5600;
-            sMonAddr = "10.10.0.168";
+            sMonAddr = "*";
             nMonPort = 3000;
             sFeedIDList = "FeedIDList.txt";
             sFeedIPList = "FeedIPList.txt";

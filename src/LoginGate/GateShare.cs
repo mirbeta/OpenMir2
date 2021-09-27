@@ -8,44 +8,6 @@ using SystemModule.Common;
 
 namespace LoginGate
 {
-    public class TUserSession
-    {
-        public Socket Socket;
-        public string sRemoteIPaddr;
-        public int nSendMsgLen;
-        public bool bo0C;
-        public long dw10Tick;
-        public int nCheckSendLength;
-        public bool boSendAvailable;
-        public bool boSendCheck;
-        public long dwSendLockTimeOut;
-        public int n20;
-        public long dwUserTimeOutTick;
-        public int SocketHandle;
-        public string sIP;
-        public IList<string> MsgList;
-        public long dwConnctCheckTick;
-    }
-
-    public class TSockaddr
-    {
-        public long nIPaddr;
-        public int nCount;
-        public long dwIPCountTick1;
-        public int nIPCount1;
-        public long dwIPCountTick2;
-        public int nIPCount2;
-        public long dwDenyTick;
-        public int nIPDenyCount;
-    }
-
-    public enum TBlockIPMethod
-    {
-        mDisconnect,
-        mBlock,
-        mBlockList
-    }
-
     public class GateShare
     {
         public static IList<string> MainLogMsgList = null;
@@ -59,7 +21,7 @@ namespace LoginGate
         public static int ServerPort = 5500;
         public static string ServerAddr = "10.10.0.168";
         public static int GatePort = 7000;
-        public static string GateAddr = "10.10.0.168";
+        public static string GateAddr = "*";
         public static bool boGateReady = false;
         public static bool boServiceStart = false;
         public static long dwKeepAliveTick = 0;
@@ -136,6 +98,44 @@ namespace LoginGate
             MainLogMsgList = new List<string>();
             socketMap = new ConcurrentDictionary<string, int>();
         }
-    } 
+    }
+
+    public class TUserSession
+    {
+        public Socket Socket;
+        public string sRemoteIPaddr;
+        public int nSendMsgLen;
+        public bool bo0C;
+        public long dw10Tick;
+        public int nCheckSendLength;
+        public bool boSendAvailable;
+        public bool boSendCheck;
+        public long dwSendLockTimeOut;
+        public int n20;
+        public long dwUserTimeOutTick;
+        public int SocketHandle;
+        public string sIP;
+        public IList<string> MsgList;
+        public long dwConnctCheckTick;
+    }
+
+    public class TSockaddr
+    {
+        public long nIPaddr;
+        public int nCount;
+        public long dwIPCountTick1;
+        public int nIPCount1;
+        public long dwIPCountTick2;
+        public int nIPCount2;
+        public long dwDenyTick;
+        public int nIPDenyCount;
+    }
+
+    public enum TBlockIPMethod
+    {
+        mDisconnect,
+        mBlock,
+        mBlockList
+    }
 }
 

@@ -39,7 +39,7 @@ namespace SelGate
         public static int ServerPort = 5100;
         public static string ServerAddr = "10.10.0.168";
         public static int GatePort = 7100;
-        public static string GateAddr = "10.10.0.168";
+        public static string GateAddr = "*";
         public static bool boGateReady = false;
         public static bool boServiceStart = false;
         public static long dwKeepAliveTick = 0;
