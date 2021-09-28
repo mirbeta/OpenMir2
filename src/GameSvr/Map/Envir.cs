@@ -31,9 +31,24 @@ namespace GameSvr
         public byte btLight;
     }
 
+    public enum CellAttribute : byte
+    {
+        Walk = 0,
+        HighWall = 1,
+        LowWall = 2,
+    }
+
     public class TMapCellinfo
     {
-        public byte chFlag;
+        public static TMapCellinfo LowWall { get { return new TMapCellinfo { Attribute = CellAttribute.LowWall }; } }
+        public static TMapCellinfo HighWall { get { return new TMapCellinfo { Attribute = CellAttribute.HighWall }; } }
+
+        public bool Valid
+        {
+            get { return Attribute == CellAttribute.Walk; }
+        }
+
+        public CellAttribute Attribute;
         public IList<TOSObject> ObjList;
     }
 

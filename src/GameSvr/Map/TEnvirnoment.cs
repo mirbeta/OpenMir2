@@ -33,6 +33,7 @@ namespace GameSvr
         private int m_nHumCount = 0;
         public IList<PointInfo> m_PointList;
 
+
         public bool AllowMagics(string magicName)
         {
             return true;
@@ -62,7 +63,7 @@ namespace GameSvr
             try
             {
                 var bo1E = false;
-                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+                if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
                 {
                     if (MapCellInfo.ObjList == null)
                     {
@@ -168,7 +169,7 @@ namespace GameSvr
                 bo1A = true;
                 if (!boFlag && GetMapCellInfo(nX, nY, ref MapCellInfo))
                 {
-                    if (MapCellInfo.chFlag == 0)
+                    if (MapCellInfo.Valid)
                     {
                         if (MapCellInfo.ObjList != null)
                         {
@@ -197,7 +198,7 @@ namespace GameSvr
                 }
                 if (bo1A)
                 {
-                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag != 0)
+                    if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Attribute != 0)
                     {
                         result = -1;
                     }
@@ -269,7 +270,7 @@ namespace GameSvr
             TOSObject OSObject;
             TBaseObject BaseObject;
             var result = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 result = true;
                 if (!boFlag && MapCellInfo.ObjList != null)
@@ -314,7 +315,7 @@ namespace GameSvr
             TOSObject OSObject;
             TBaseObject BaseObject;
             var result = true;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 if (MapCellInfo.ObjList != null)
                 {
@@ -351,7 +352,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             TUserCastle Castle;
             var result = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 result = true;
                 if (!boFlag && MapCellInfo.ObjList != null)
@@ -514,7 +515,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             TMapItem result = null;
             bo2C = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 bo2C = true;
                 if (MapCellInfo.ObjList != null)
@@ -563,7 +564,7 @@ namespace GameSvr
         {
             object result = null;
             TMapCellinfo MapCellInfo = null;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && (MapCellInfo.chFlag == 0))
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 if (MapCellInfo.ObjList == null)
                 {
@@ -591,7 +592,7 @@ namespace GameSvr
             {
                 var bo19 = GetMapCellInfo(nX, nY, ref MapCellInfo);
                 var bo1A = false;
-                if (bo19 && MapCellInfo.chFlag != 0)
+                if (bo19 && MapCellInfo.Attribute != 0)
                 {
                     if (MapCellInfo.ObjList == null)
                     {
@@ -701,16 +702,19 @@ namespace GameSvr
                         n24 = nW * wHeight;
                         for (var nH = 0; nH < wHeight; nH++)
                         {
-                            MapCellArray[n24 + nH] = new TMapCellinfo();
                             // wBkImg High
                             if ((buffer[buffIndex + 1] & 0x80) != 0)
                             {
-                                MapCellArray[n24 + nH].chFlag = 1;
+                                MapCellArray[n24 + nH] = TMapCellinfo.HighWall;
                             }
                             // wFrImg High
                             if ((buffer[buffIndex + 5] & 0x80) != 0)
                             {
-                                MapCellArray[n24 + nH].chFlag = 2;
+                                MapCellArray[n24 + nH] = TMapCellinfo.LowWall;
+                            }
+                            if (MapCellArray[n24 + nH] == null)
+                            {
+                                MapCellArray[n24 + nH] = new TMapCellinfo();
                             }
                             // btDoorIndex
                             if ((buffer[buffIndex + 6] & 0x80) != 0)
@@ -1099,7 +1103,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             nCount = 0;
             bo2C = false;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 0)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
                 bo2C = true;
                 if (MapCellInfo.ObjList != null)
@@ -1264,11 +1268,11 @@ namespace GameSvr
             {
                 if (boFlag)
                 {
-                    MapCellInfo.chFlag = 0;
+                    MapCellInfo.Attribute = CellAttribute.Walk;
                 }
                 else
                 {
-                    MapCellInfo.chFlag = 2;
+                    MapCellInfo.Attribute = CellAttribute.LowWall;
                 }
             }
         }
@@ -1328,7 +1332,7 @@ namespace GameSvr
         {
             TMapCellinfo MapCellInfo = null;
             var result = true;
-            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.chFlag == 2)
+            if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Attribute == CellAttribute.LowWall)
             {
                 result = false;
             }

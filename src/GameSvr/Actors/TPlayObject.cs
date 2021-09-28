@@ -3888,7 +3888,7 @@ namespace GameSvr
                 {
                     if (Map.GetMapCellInfo(nX, nY, ref MapCellInfo))
                     {
-                        SysMsg("标志: " + MapCellInfo.chFlag, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg("标志: " + MapCellInfo.Attribute, TMsgColor.c_Green, TMsgType.t_Hint);
                         if (MapCellInfo.ObjList != null)
                         {
                             SysMsg("对象数: " + MapCellInfo.ObjList.Count, TMsgColor.c_Green, TMsgType.t_Hint);
