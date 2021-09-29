@@ -18,11 +18,14 @@ namespace GameSvr
                 {
                     m_boAddToMap = false;
                 }
-                m_boVisible = false;
-                m_nMineCount = M2Share.RandomNumber.Random(2000) + 300;
-                m_dwAddStoneMineTick = HUtil32.GetTickCount();
-                m_boActive = false;
-                m_nAddStoneCount = M2Share.RandomNumber.Random(800) + 100;
+                else
+                {
+                    m_boVisible = false;
+                    m_nMineCount = M2Share.RandomNumber.Random(2000) + 300;
+                    m_dwAddStoneMineTick = HUtil32.GetTickCount();
+                    m_boActive = false;
+                    m_nAddStoneCount = M2Share.RandomNumber.Random(800) + 100;
+                }
             }
             else
             {
@@ -30,11 +33,14 @@ namespace GameSvr
                 {
                     m_boAddToMap = false;
                 }
-                m_boVisible = false;
-                m_nMineCount = M2Share.RandomNumber.Random(200) + 1;
-                m_dwAddStoneMineTick = HUtil32.GetTickCount();
-                m_boActive = false;
-                m_nAddStoneCount = M2Share.RandomNumber.Random(80) + 1;
+                else
+                {
+                    m_boVisible = false;
+                    m_nMineCount = M2Share.RandomNumber.Random(200) + 1;
+                    m_dwAddStoneMineTick = HUtil32.GetTickCount();
+                    m_boActive = false;
+                    m_nAddStoneCount = M2Share.RandomNumber.Random(80) + 1;
+                }
             }
         }
 

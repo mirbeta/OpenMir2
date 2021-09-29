@@ -207,7 +207,7 @@ namespace GameSvr
                         var mine = new TStoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.m_boAddToMap)
                         {
-                            mine = null;
+                            mine.Dispose();
                         }
                         else
                         {

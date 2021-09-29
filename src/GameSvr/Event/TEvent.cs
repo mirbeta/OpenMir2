@@ -1,8 +1,9 @@
 ﻿using SystemModule;
+using System;
 
 namespace GameSvr
 {
-    public class TEvent
+    public class TEvent : IDisposable
     {
         public int Id;
         public int nVisibleFlag = 0;
@@ -93,6 +94,10 @@ namespace GameSvr
                 m_Envir = null;
             }
         }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }
-
