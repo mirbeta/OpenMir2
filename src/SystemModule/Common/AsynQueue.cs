@@ -38,7 +38,6 @@ namespace SystemModule.Common
         public AsynQueue()
         {
             queue = new ConcurrentQueue<T>();
-            Start();
         }
 
         public int Count
@@ -49,7 +48,7 @@ namespace SystemModule.Common
             }
         }
 
-        private void Start()
+        public void Start()
         {
             Thread process_Thread = new Thread(PorcessItem)
             {

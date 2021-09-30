@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using SystemModule;
 
 namespace GameSvr
@@ -9,15 +10,17 @@ namespace GameSvr
         private readonly ConcurrentQueue<LogInfo> _logqueue = null;
         private readonly ConcurrentQueue<LogInfo> _debugLog = null;
         private readonly ConcurrentQueue<LogInfo> _chatLog = null;
+        private Timer _logTime;
 
         public MirLog()
         {
             _logqueue = new ConcurrentQueue<LogInfo>();
             _debugLog = new ConcurrentQueue<LogInfo>();
             _chatLog = new ConcurrentQueue<LogInfo>();
+            _logTime = new Timer(OutLog, null, 0, 1000);
         }
 
-        public void OutLog()
+        public void OutLog(object obj)
         {
             while (!_logqueue.IsEmpty)
             {

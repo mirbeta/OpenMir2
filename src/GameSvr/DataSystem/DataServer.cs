@@ -1,4 +1,5 @@
 ﻿using SystemModule;
+using SystemModule.Common;
 using SystemModule.Sockets;
 
 namespace GameSvr
@@ -6,6 +7,7 @@ namespace GameSvr
     public class DataServer
     {
         private readonly IClientScoket _clientScoket;
+        private AsynQueue<SaveHumData> _saveQueue;
 
         public DataServer()
         {
@@ -14,16 +16,20 @@ namespace GameSvr
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.ReceivedDatagram += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
+            //_saveQueue = new AsynQueue<SaveHumData>();
+            //_saveQueue.ProcessItemFunction += ProcessSaveHumData;
         }
 
         public void Start()
         { 
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
+            //_saveQueue.Start();
         }
 
         public void Stop()
         {
             _clientScoket.Disconnect();
+            //_saveQueue.Stop();
         }
 
         public void CheckConnected()
@@ -84,6 +90,7 @@ namespace GameSvr
 
         private void DBSocketError(object sender, DSCClientErrorEventArgs e)
         {
+            _clientScoket.IsConnected = false;
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
@@ -114,5 +121,34 @@ namespace GameSvr
                 HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
             }
         }
+
+        public void AddToSaveQueue(SaveHumData saveHumData)
+        {
+            _saveQueue.Enqueue(saveHumData);
+        }
+
+        private void ProcessSaveHumData(SaveHumData saveHumData)
+        {
+            if (saveHumData.MsgType == 1)
+            {
+                SendMessage(saveHumData.QueryId, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_SAVEHUMANRCD, saveHumData.SessionID, 0, 0, 0)) +
+                                                 EDcode.EncodeString(saveHumData.sAccount) + "/" + EDcode.EncodeString(saveHumData.sCharName) + "/" + saveHumData.sHunData);
+            }
+            else if (saveHumData.MsgType == 0)
+            {
+                SendMessage(saveHumData.QueryId, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_LOADHUMANRCD, saveHumData.SessionID, 0, 0, 0)) +
+                                                 EDcode.EncodeString(saveHumData.sAccount) + "/" + EDcode.EncodeString(saveHumData.sCharName) + "/" + saveHumData.sHunData);
+            }
+        }
+    }
+
+    public class SaveHumData
+    {
+        public string sAccount;
+        public string sCharName;
+        public int QueryId;
+        public int SessionID;
+        public string sHunData;
+        public int MsgType;
     }
 }

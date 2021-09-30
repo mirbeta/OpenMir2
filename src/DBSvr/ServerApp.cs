@@ -17,11 +17,6 @@ namespace DBSvr
 
         public void StartService()
         {
-            DBShare.MainOutMessage("服务器已启动...");
-        }
-
-        public void StopService()
-        {
             DBShare.Initialization();
             DBShare.LoadConfig();
             DBShare.nHackerNewChrCount = 0;
@@ -31,6 +26,12 @@ namespace DBSvr
             DBShare.n4ADC20 = 0;
             DBShare.n4ADC24 = 0;
             DBShare.n4ADC28 = 0;
+            DBShare.MainOutMessage("服务器已启动...");
+        }
+
+        public void StopService()
+        {
+
         }
 
         public void DelHum(string sChrName)

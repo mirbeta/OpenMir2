@@ -161,6 +161,15 @@ namespace GameSvr
             string sStr = string.Empty;
             int nQueryID = GetQueryID(M2Share.g_Config);
             bool result = false;
+            // M2Share.DataServer.AddToSaveQueue(new SaveHumData()
+            // {
+            //      sAccount = sAccount,
+            //      sCharName = sCharName,
+            //      SessionID = nSessionID,
+            //      QueryId = nQueryID,
+            //      sHunData = EDcode.EncodeBuffer(HumanRcd),
+            //      MsgType = 1
+            // });
             M2Share.DataServer.SendMessage(nQueryID, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0)) +
                 EDcode.EncodeString(sAccount) + "/" + EDcode.EncodeString(sCharName) + "/" + EDcode.EncodeBuffer(HumanRcd));
             if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sStr, 5000, false))

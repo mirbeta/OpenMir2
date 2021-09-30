@@ -2199,7 +2199,7 @@ namespace GameSvr
                             else
                             {
                                 QuestConditionInfo = null;
-                                M2Share.MainOutMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 12)
@@ -2212,7 +2212,7 @@ namespace GameSvr
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.MainOutMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 13)
@@ -2225,7 +2225,7 @@ namespace GameSvr
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.MainOutMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 14)

@@ -202,7 +202,7 @@ namespace GameSvr
             else
             {
                 // 如果DB已经关闭，不在保存
-                // MainOutMessage('not DBSocketConnected');
+                M2Share.ErrorMessage("DBSvr 断开链接，保存数据失败.");
                 HUtil32.EnterCriticalSection(m_UserCriticalSection);
                 try
                 {
