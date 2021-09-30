@@ -1412,6 +1412,14 @@ namespace GameSvr
                     case M2Share.nSC_ISHIGH:
                         result = ConditionOfIsHigh(PlayObject, QuestConditionInfo);
                         break;
+                    case M2Share.nSCHECKDEATHPLAYMON:
+                        var s01 = string.Empty;
+                        if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
+                        {
+                            s01 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
+                        }
+                        result = CheckKillMon2(PlayObject, s01);
+                        break;
                 }
                 if (!result)
                 {
@@ -1419,6 +1427,11 @@ namespace GameSvr
                 }
             }
             return result;
+        }
+
+        private bool CheckKillMon2(TPlayObject PlayObject, string sMonName)
+        {
+            return true;
         }
 
         private bool GotoLable_JmpToLable(TPlayObject PlayObject, string sLabel)
@@ -3145,6 +3158,29 @@ namespace GameSvr
                         break;
                     case M2Share.nQUERYYBDEAL:
                         ActionOfQUERYYBDEAL(PlayObject, QuestActionInfo);
+                        break;
+                    case M2Share.nDELAYGOTO:
+                        PlayObject.m_boTimeGoto = true;
+                        var m_DelayGoto = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
+                        if (m_DelayGoto == 0) {
+                            var delayCount = 0;
+                            GetValValue(PlayObject, QuestActionInfo.sParam1, ref delayCount);
+                            m_DelayGoto = delayCount;
+                        }
+                        if (m_DelayGoto > 0)
+                        {
+                            PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
+                        }
+                        else {
+                            PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
+                        }
+                        PlayObject.m_sTimeGotoLable = QuestActionInfo.sParam2;
+                        PlayObject.m_TimeGotoNPC = this;
+                        break;
+                    case M2Share.nCLEARDELAYGOTO:
+                        PlayObject.m_boTimeGoto = false;
+                        PlayObject.m_sTimeGotoLable = "";
+                        PlayObject.m_TimeGotoNPC = null;
                         break;
                 }
             }

@@ -4,6 +4,7 @@ namespace GameSvr
 {
     public class TM2Config
     {
+        public string sDBType;
         public string sConnctionString;
         public string sServerName;
         public string sServerIPaddr;
@@ -1594,6 +1595,7 @@ namespace GameSvr
             nDecUserGameGold = 10000;
             boSpeedHackCheck = false;
             sConnctionString = "server=127.0.0.1;uid=root;pwd=123456;database=Mir2;";
+            sDBType = "MySQL";
         }
     }
 }

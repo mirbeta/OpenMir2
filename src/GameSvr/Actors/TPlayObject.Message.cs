@@ -46,10 +46,33 @@ namespace GameSvr
                     m_boTwinHitSkill = false;
                     SendSocket("+UTWN");
                 }
-                if (m_boTimeRecall && HUtil32.GetTickCount() > m_dwTimeRecallTick)
+                if (m_boTimeRecall && HUtil32.GetTickCount() > m_dwTimeRecallTick) //执行 TimeRecall回到原地
                 {
                     m_boTimeRecall = false;
                     SpaceMove(m_sMoveMap, m_nMoveX, m_nMoveY, 0);
+                }
+                for (int i = 0; i < 20; i++) //个人定时器
+                {
+                    if (AutoTimerStatus[i] > 500)
+                    {
+                        if ((HUtil32.GetTickCount() - AutoTimerTick[i]) > AutoTimerStatus[i])
+                        {
+                            if (M2Share.g_ManageNPC != null)
+                            {
+                                AutoTimerTick[i] = HUtil32.GetTickCount();
+                                m_nScriptGotoCount = 0;
+                                M2Share.g_ManageNPC.GotoLable(this, "@OnTimer" + i, false);
+                            }
+                        }
+                    }
+                }
+                if (m_boTimeGoto && (HUtil32.GetTickCount() > m_dwTimeGotoTick)) //Delaygoto延时跳转
+                {
+                    m_boTimeGoto = false;
+                    if (m_TimeGotoNPC as TMerchant != null)
+                    {
+                        (m_TimeGotoNPC as TMerchant).GotoLable(this, m_sTimeGotoLable, false);
+                    }
                 }
                 // 增加挂机
                 if (m_boOffLineFlag && HUtil32.GetTickCount() > m_dwKickOffLineTick)

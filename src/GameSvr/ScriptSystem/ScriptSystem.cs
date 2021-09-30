@@ -1753,7 +1753,27 @@ namespace GameSvr
                 nCMDCode = M2Share.nQUERYYBDEAL;
                 goto L001;
             }
-            L001:
+            if (sCmd == M2Share.sDELAYGOTO)
+            {
+                nCMDCode = M2Share.nDELAYGOTO;
+                goto L001;
+            }
+            if (sCmd == M2Share.sCLEARDELAYGOTO)
+            {
+                nCMDCode = M2Share.nCLEARDELAYGOTO;
+                goto L001;
+            }
+            if (sCmd == M2Share.sSCHECKDEATHPLAYMON)
+            {
+                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
+                goto L001;
+            }
+            if (sCmd == M2Share.sSCHECKKILLMOBNAME)
+            {
+                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
+                goto L001;
+            }
+        L001:
             if (nCMDCode > 0)
             {
                 QuestActionInfo.nCmdCode = nCMDCode;

@@ -404,6 +404,17 @@ namespace GameSvr
         public int m_dwDelayTime = 0;
         public string m_sRandomNo = string.Empty;
         public int m_dwQueryBagItemsTick = 0;
+        public bool m_boTimeGoto;
+        public int m_dwTimeGotoTick;
+        public string m_sTimeGotoLable;
+        public TBaseObject m_TimeGotoNPC;
+        /// <summary>
+        /// 个人定时器
+        /// </summary>
+        public int[] AutoTimerTick;
+        /// <summary>
+        /// 个人定时器 时间间隔
+        /// </summary>    public int[] AutoTimerStatus;
         /// <summary>
         /// 包裹刷新时间
         /// </summary>
@@ -566,6 +577,12 @@ namespace GameSvr
             m_boTestSpeedMode = false;
             m_boLockLogon = true;
             m_boLockLogoned = false;
+            m_boTimeGoto = false;
+            m_dwTimeGotoTick = HUtil32.GetTickCount();
+            m_sTimeGotoLable = "";
+            m_TimeGotoNPC = null;
+            AutoTimerTick = new int[20];
+            AutoTimerStatus = new int[20];
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 

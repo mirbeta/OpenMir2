@@ -1396,6 +1396,21 @@ namespace GameSvr
         public const int nQUERYYBSELL = 253;
         public const string sQUERYYBDEAL = "QUERYYBDEAL";
         public const int nQUERYYBDEAL = 254;
+        /// <summary>
+        /// 延时跳转
+        /// </summary>
+        public const string sDELAYGOTO = "DELAYGOTO";
+        public const int nDELAYGOTO = 255;
+        public const string sCLEARDELAYGOTO = "CLEARDELAYGOTO";
+        public const int nCLEARDELAYGOTO = 256;
+        /// <summary>
+        /// 检查已杀死怪物
+        /// </summary>
+        public const string sSCHECKDEATHPLAYMON = "CHECKDEATHPLAYMON";
+        /// <summary>
+        /// 检查已杀死怪物
+        /// </summary>        public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
+        public const int nSCHECKDEATHPLAYMON = 397;
         // =================================================================
         /// <summary>
         /// 元宝寄售:出售物品
@@ -1405,6 +1420,8 @@ namespace GameSvr
         /// 元宝寄售
         /// </summary>        
         public const string sybdeal = "@ybdeal";
+
+
         public const string sOFFLINEMSG = "@@offlinemsg";
         // 增加挂机
         public const string sSL_SENDMSG = "@@sendmsg";

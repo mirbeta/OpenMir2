@@ -62,9 +62,14 @@ namespace GameSvr.Configs
             M2Share.g_Config.sGuildChief = StringConf.ReadString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
 
             //数据库设置
-            if (Config.ReadString("Server", "ConnctionString", "") == "")
-                Config.WriteString("Server", "ConnctionString", M2Share.g_Config.sConnctionString);
-            M2Share.g_Config.sConnctionString = Config.ReadString("Server", "ConnctionString", M2Share.g_Config.sConnctionString);
+            if (Config.ReadString("DataBase", "ConnctionString", "") == "")
+                Config.WriteString("DataBase", "ConnctionString", M2Share.g_Config.sConnctionString);
+            M2Share.g_Config.sConnctionString = Config.ReadString("DataBase", "ConnctionString", M2Share.g_Config.sConnctionString);
+
+            //数据库类型设置
+            if (Config.ReadString("DataBase", "DbType", "") == "")
+                Config.WriteString("DataBase", "DbType", M2Share.g_Config.sDBType);
+            M2Share.g_Config.sDBType = Config.ReadString("DataBase", "DbType", M2Share.g_Config.sDBType);
 
             // 服务器设置
             if (Config.ReadInteger("Server", "ServerIndex", -1) < 0)
