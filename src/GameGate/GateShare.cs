@@ -17,8 +17,6 @@ namespace GameGate
         public static int nShowLogLevel = 0;
         public static int ServerCount = 1;
         public static string GateClass = "GameGate";
-        public static string GateName = "游戏网关";
-        public static string TitleName = "SKY引擎";
         public static string GateAddr = "*";
         public static int GatePort = 7200;
         public static bool boServerReady;
@@ -95,7 +93,7 @@ namespace GameGate
         /// </summary>
         public static long dwClientTimeOutTime = 5000;
         public static IniFile Conf = null;
-        private static string sConfigFileName = "Config.ini";
+        private static string sConfigFileName = "config.conf";
         /// <summary>
         /// 发言字符长度
         /// </summary>

@@ -198,6 +198,11 @@ namespace DBSvr
             {
                 LoadList = new StringList();
                 LoadList.LoadFromFile(DBShare.sGateConfFileName);
+                if (LoadList.Count <= 0)
+                {
+                    DBShare.MainOutMessage("加载游戏服务配置文件!ServerInfo.txt失败.");
+                    return;
+                }
                 int nRouteIdx = 0;
                 int nGateIdx = 0;
                 for (var i = 0; i < LoadList.Count; i++)

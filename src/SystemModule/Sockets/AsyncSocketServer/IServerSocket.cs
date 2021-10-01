@@ -266,6 +266,10 @@ namespace SystemModule.Sockets
                 {
                     throw new AsyncSocketException(ex.Message, ex);
                 }
+                else if (ex.ErrorCode == 48)
+                {
+                    throw new AsyncSocketException("Socket端口被占用", AsyncSocketErrorCode.ServerStartFailure);
+                }
                 else
                 {
                     throw new AsyncSocketException("服务器启动失败", AsyncSocketErrorCode.ServerStartFailure);

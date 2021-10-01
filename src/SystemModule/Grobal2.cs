@@ -1317,11 +1317,11 @@ namespace SystemModule
         /// </summary>
         public const int SKILL_HEALLING = 2;
         /// <summary>
-        /// 未知技能
+        /// 基本剑术
         /// </summary>
         public const int SKILL_ONESWORD = 3;
         /// <summary>
-        /// 基本剑法
+        /// 精神力战法
         /// </summary>
         public const int SKILL_ILKWANG = 4;
         /// <summary>

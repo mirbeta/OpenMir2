@@ -91,8 +91,7 @@ namespace LoginSvr
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    GateInfo.sReceiveMsg = GateInfo.sReceiveMsg + sReviceMsg;
-
+                    GateInfo.sReceiveMsg += sReviceMsg;
                     LSShare.MainOutMessage("收到数据:" + GateInfo.sReceiveMsg);
                     break;
                 }

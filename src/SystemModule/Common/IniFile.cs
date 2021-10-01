@@ -12,13 +12,12 @@ namespace SystemModule.Common
     {
         private string fileName;
         private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>();
-       
+
         private bool largeCommentFlag = false;
 
         public IniFile(string fileName)
         {
-            
-               this.FileName = fileName;         
+            this.FileName = fileName;
         }
 
         public bool ContainSectionName(string secName)
@@ -53,7 +52,7 @@ namespace SystemModule.Common
         {
             return GetBool(section, key, defValue);
         }
-        
+
         public DateTime ReadDateTime(string section, string key, DateTime defValue)
         {
             if (this.iniCahce.ContainsKey(section))
@@ -76,7 +75,7 @@ namespace SystemModule.Common
         {
             return GetInt(section, key, defValue);
         }
-        
+
         public T ReadInteger<T>(string section, string key, object defValue)
         {
             if (this.iniCahce.ContainsKey(section))
@@ -94,12 +93,12 @@ namespace SystemModule.Common
             }
             return (T)Convert.ChangeType(defValue, typeof(T));
         }
-        
+
         public int ReadInteger(string section, string key, byte defValue)
         {
             return GetInt(section, key, defValue);
         }
-        
+
         public int GetInt(string section, string key, int defValue)
         {
             if (this.iniCahce.ContainsKey(section))
@@ -113,7 +112,7 @@ namespace SystemModule.Common
                     {
                         return defValue;
                     }
-                    if(int.TryParse(str,out ret))
+                    if (int.TryParse(str, out ret))
                     {
                         return ret;
                     }
@@ -155,8 +154,8 @@ namespace SystemModule.Common
             }
             return new List<String>();
         }
-        
-        public string ReadString(string section, string key,string defval)
+
+        public string ReadString(string section, string key, string defval)
         {
             var result = GetString(section, key);
             if (string.IsNullOrEmpty(result))
@@ -165,7 +164,7 @@ namespace SystemModule.Common
             }
             return result;
         }
-        
+
         public string GetString(string section, string key)
         {
             if (this.iniCahce.ContainsKey(section))
@@ -228,7 +227,7 @@ namespace SystemModule.Common
                             }
                             if (this.iniCahce.ContainsKey(sec))
                             {
-                               // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
+                                // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
                                 goto Label_02AE;
                             }
                             curSec = new Dictionary<string, string>();
@@ -344,7 +343,7 @@ namespace SystemModule.Common
         {
             this.WriteString(section, key, val.ToString());
         }
-        
+
         public void WriteBool(string section, string key, bool val)
         {
             //Console.WriteLine("todo ini WriteBool");

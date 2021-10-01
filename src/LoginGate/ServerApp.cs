@@ -61,8 +61,9 @@ namespace LoginGate
 
         private void LoadConfig()
         {
-            var sConfigFileName = ".\\Config.ini";
+            var sConfigFileName = "logingate.conf";
             var Conf = new IniFile(sConfigFileName);
+            Conf.Load();
             GateShare.ServerPort = Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
             GateShare.ServerAddr = Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
             GateShare.GatePort = Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);

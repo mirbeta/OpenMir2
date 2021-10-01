@@ -1409,8 +1409,9 @@ namespace GameSvr
         public const string sSCHECKDEATHPLAYMON = "CHECKDEATHPLAYMON";
         /// <summary>
         /// 检查已杀死怪物
-        /// </summary>        public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
-        public const int nSCHECKDEATHPLAYMON = 397;
+        /// </summary>
+        public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
+        public const int nSCHECKDEATHPLAYMON = 257;
         // =================================================================
         /// <summary>
         /// 元宝寄售:出售物品

@@ -2398,13 +2398,13 @@ namespace GameSvr
                 m_MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
-                    case Grobal2.SKILL_ONESWORD:// 内功心法
+                    case Grobal2.SKILL_ONESWORD:// 基本剑法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
                         }
                         break;
-                    case Grobal2.SKILL_ILKWANG:// 基本剑法
+                    case Grobal2.SKILL_ILKWANG:// 精神力战法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
