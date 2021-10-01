@@ -1412,6 +1412,7 @@ namespace GameSvr
         /// </summary>
         public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
         public const int nSCHECKDEATHPLAYMON = 257;
+        
         // =================================================================
         /// <summary>
         /// 元宝寄售:出售物品

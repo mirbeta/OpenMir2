@@ -476,7 +476,7 @@ namespace DBSvr
             {
                 return reslut;
             }
-            const string sSQL4 = "SELECT * FROM TBL_MAGIC WHERE FLD_CHARNAME='{0}'";
+            const string sSQL4 = "SELECT * FROM TBL_CHARACTER_MAGIC WHERE FLD_CHARNAME='{0}'";
             var command = new MySqlCommand();
             try
             {
@@ -489,8 +489,8 @@ namespace DBSvr
                     magicList.Add(new TMagicRcd()
                     {
                         wMagIdx = dr.GetUInt16("FLD_MAGICID"),
-                        btKey = dr.GetByte("FLD_USEKEY"),
-                        btLevel = dr.GetByte("FLD_LEVEL"),
+                        btKey = (byte)dr.GetInt32("FLD_USEKEY"),
+                        btLevel = (byte)dr.GetInt32("FLD_LEVEL"),
                         nTranPoint = dr.GetInt32("FLD_CURRTRAIN")
                     });
                 }
@@ -1097,7 +1097,7 @@ namespace DBSvr
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
-            command.CommandText = $"DELETE FROM TBL_MAGIC WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
+            command.CommandText = $"DELETE FROM TBL_CHARACTER_MAGIC WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
                 command.ExecuteNonQuery();
@@ -1106,7 +1106,8 @@ namespace DBSvr
                 {
                     if (HumanRCD.Data.Magic[i].wMagIdx > 0)
                     {
-                        command.CommandText = string.Format("INSERT INTO TBL_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})", new object[] { HumanRCD.Header.sName, hd.Magic[i].wMagIdx, hd.Magic[i].btLevel, hd.Magic[i].btKey, hd.Magic[i].nTranPoint });
+                        command.CommandText = string.Format("INSERT INTO TBL_CHARACTER_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES ('{0}', {1}, {2}, {3}, {4})", 
+                            new object[] { HumanRCD.Header.sName, hd.Magic[i].wMagIdx, hd.Magic[i].btLevel, hd.Magic[i].btKey, hd.Magic[i].nTranPoint });
                         command.ExecuteNonQuery();
                     }
                 }

@@ -1593,7 +1593,7 @@ namespace GameSvr
             sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
-            boSpeedHackCheck = false;
+            boSpeedHackCheck = true;
             sConnctionString = "server=127.0.0.1;uid=root;pwd=123456;database=Mir2;";
             sDBType = "MySQL";
         }

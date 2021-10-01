@@ -846,6 +846,16 @@ namespace GameSvr
                 nCMDCode = M2Share.nSC_DELAYGOTO;
                 goto L001;
             }
+            if (sCmd == M2Share.sSCHECKDEATHPLAYMON)
+            {
+                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
+                goto L001;
+            }
+            if (sCmd == M2Share.sSCHECKKILLMOBNAME)
+            {
+                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
+                goto L001;
+            }
             // ------------------------------
             L001:
             if (nCMDCode > 0)
@@ -1763,17 +1773,7 @@ namespace GameSvr
                 nCMDCode = M2Share.nCLEARDELAYGOTO;
                 goto L001;
             }
-            if (sCmd == M2Share.sSCHECKDEATHPLAYMON)
-            {
-                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSCHECKKILLMOBNAME)
-            {
-                nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
-                goto L001;
-            }
-        L001:
+            L001:
             if (nCMDCode > 0)
             {
                 QuestActionInfo.nCmdCode = nCMDCode;
