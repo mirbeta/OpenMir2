@@ -92,13 +92,13 @@ namespace GameSvr
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 _wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
-                                                _wvar1.S.DuraMax = Int16.MaxValue;// 客户端金刚石特征
-                                                _wvar1.S.Looks = UInt16.MaxValue;// 不显示图片
+                                                _wvar1.Item.DuraMax = Int16.MaxValue;// 客户端金刚石特征
+                                                _wvar1.Item.Looks = UInt16.MaxValue;// 不显示图片
                                                 bo12 = true;
                                             }
                                             else
                                             {
-                                                sClientDealOffInfo.UseItems[j].S.Name = "";
+                                                sClientDealOffInfo.UseItems[j].Item.Name = "";
                                             }
                                             continue;
                                         }
@@ -106,7 +106,7 @@ namespace GameSvr
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
                                         sClientDealOffInfo.UseItems[j] = new TClientItem();
-                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[j].S);
+                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[j].Item);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         sUserItemName = "";
@@ -116,7 +116,7 @@ namespace GameSvr
                                         }
                                         if (sUserItemName != "")
                                         {
-                                            sClientDealOffInfo.UseItems[j].S.Name = sUserItemName;
+                                            sClientDealOffInfo.UseItems[j].Item.Name = sUserItemName;
                                         }
                                         sClientDealOffInfo.UseItems[j].MakeIndex = DealOffInfo.UseItems[j].MakeIndex;
                                         sClientDealOffInfo.UseItems[j].Dura = DealOffInfo.UseItems[j].Dura;
@@ -131,7 +131,7 @@ namespace GameSvr
                                             case 26:
                                                 if (DealOffInfo.UseItems[j].btValue[8] != 0)
                                                 {
-                                                    sClientDealOffInfo.UseItems[j].S.Shape = 130;
+                                                    sClientDealOffInfo.UseItems[j].Item.Shape = 130;
                                                 }
                                                 break;
                                         }
@@ -218,7 +218,7 @@ namespace GameSvr
                                             }
                                             else
                                             {
-                                                sClientDealOffInfo.UseItems[k].S.Name = "";
+                                                sClientDealOffInfo.UseItems[k].Item.Name = "";
                                             }
                                             continue;
                                         }
@@ -227,7 +227,7 @@ namespace GameSvr
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S);// 取自定义物品名称
                                         //sClientDealOffInfo.UseItems[K].S = StdItem80;
                                         sClientDealOffInfo.UseItems[k] = new TClientItem();
-                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].S);
+                                        StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
                                         sUserItemName = "";
                                         if (DealOffInfo.UseItems[k].btValue[13] == 1)
                                         {
@@ -235,7 +235,7 @@ namespace GameSvr
                                         }
                                         if (sUserItemName != "")
                                         {
-                                            sClientDealOffInfo.UseItems[k].S.Name = sUserItemName;
+                                            sClientDealOffInfo.UseItems[k].Item.Name = sUserItemName;
                                         }
                                         sClientDealOffInfo.UseItems[k].MakeIndex = DealOffInfo.UseItems[k].MakeIndex;
                                         sClientDealOffInfo.UseItems[k].Dura = DealOffInfo.UseItems[k].Dura;
@@ -248,7 +248,7 @@ namespace GameSvr
                                             case 26:
                                                 if (DealOffInfo.UseItems[k].btValue[8] != 0)
                                                 {
-                                                    sClientDealOffInfo.UseItems[k].S.Shape = 130;
+                                                    sClientDealOffInfo.UseItems[k].Item.Shape = 130;
                                                 }
                                                 break;
                                         }
@@ -286,7 +286,7 @@ namespace GameSvr
             string sLineText;
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var sListFileName = Path.Combine(M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -332,7 +332,7 @@ namespace GameSvr
             string sLineText;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var sListFileName = Path.Combine(M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             var LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -740,7 +740,7 @@ namespace GameSvr
 
         private void ActionOfClearNameList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var sListFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam1;
+            var sListFileName = Path.Combine(M2Share.g_Config.sEnvirDir, m_sPath, QuestActionInfo.sParam1);
             var LoadList = new StringList();
             LoadList.Clear();
             try
@@ -1459,8 +1459,12 @@ namespace GameSvr
             }
         }
 
-        // 保存变量值
-        // SAVEVAR 变量类型 变量名 文件名
+        /// <summary>
+        /// 保存变量值
+        /// SAVEVAR 变量类型 变量名 文件名
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfSaveVar(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
@@ -1468,11 +1472,24 @@ namespace GameSvr
             bool boFoundVar;
             IList<TDynamicVar> DynamicVarList;
             IniFile IniFile;
-            const string sVarFound = "变量%s不存在，变量类型:%s";
-            const string sVarTypeError = "变量类型错误，错误类型:%s 当前支持类型(HUMAN、GUILD、GLOBAL)";
-            string sType = QuestActionInfo.sParam1;
-            string sVarName = QuestActionInfo.sParam2;
-            string sFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam3;
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            var sType = QuestActionInfo.sParam1;
+            var sVarName = QuestActionInfo.sParam2;
+            var sFileName = GetLineVariableText(PlayObject, QuestActionInfo.sParam3);
+            if (sFileName[0] == '\\')
+            {
+                sFileName = sFileName.Substring(1, sFileName.Length - 1);
+            }
+            if (sFileName[1] == '\\')
+            {
+                sFileName = sFileName.Substring(2, sFileName.Length - 2);
+            }
+            if (sFileName[2] == '\\')
+            {
+                sFileName = sFileName.Substring(3, sFileName.Length - 3);
+            }
+            sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, sFileName);
             if ((sType == "") || (sVarName == "") || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SAVEVAR);
@@ -1483,7 +1500,7 @@ namespace GameSvr
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, new string[] { sType }), QuestActionInfo, M2Share.sSC_VAR);
+                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
             IniFile = new IniFile(sFileName);
@@ -1494,10 +1511,10 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.VInteger:
+                        case TVarType.Integer:
                             IniFile.WriteInteger(sName, DynamicVar.sName, DynamicVar.nInternet);
                             break;
-                        case TVarType.VString:
+                        case TVarType.String:
                             IniFile.WriteString(sName, DynamicVar.sName, DynamicVar.sString);
                             break;
                     }
@@ -1507,9 +1524,8 @@ namespace GameSvr
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, new string[] { sVarName, sType }), QuestActionInfo, M2Share.sSC_SAVEVAR);
+                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, M2Share.sSC_SAVEVAR);
             }
-            //IniFile.Free;
         }
 
         private void ActionOfDelayCall(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -1521,18 +1537,23 @@ namespace GameSvr
             PlayObject.m_DelayCallNPC = this.ObjectId;
         }
 
-        // 对变量进行运算(+、-、*、/)
+        /// <summary>
+        /// 对变量进行运算(+、-、*、/)
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfCalcVar(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
+            string sVarValue2 = string.Empty;
             IList<TDynamicVar> DynamicVarList;
-            const string sVarFound = "变量%s不存在，变量类型:%s";
-            const string sVarTypeError = "变量类型错误，错误类型:%s 当前支持类型(HUMAN、GUILD、GLOBAL)";
-            string sType = QuestActionInfo.sParam1;
-            string sVarName = QuestActionInfo.sParam2;
-            string sMethod = QuestActionInfo.sParam3;
-            string sVarValue = QuestActionInfo.sParam4;
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            string sType = QuestActionInfo.sParam1;//类型
+            string sVarName = QuestActionInfo.sParam2;//自定义变量
+            string sMethod = QuestActionInfo.sParam3;//操作符 +-*/=
+            string sVarValue = QuestActionInfo.sParam4;//变量
             int nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
             if ((sType == "") || (sVarName == "") || (sMethod == ""))
             {
@@ -1540,12 +1561,55 @@ namespace GameSvr
                 return;
             }
             bool boFoundVar = false;
+            if ((sVarValue != "") && (!HUtil32.IsStringNumber(sVarValue)))
+            {
+                if (HUtil32.CompareLStr(sVarValue, "<$HUMAN(", 8))
+                {
+                    HUtil32.ArrestStringEx(sVarValue, "(", ")", ref sVarValue2);
+                    sVarValue = sVarValue2;
+                    if (PlayObject.m_DynamicVarList.Count > 0)
+                    {
+                        for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
+                        {
+                            DynamicVar = PlayObject.m_DynamicVarList[i];
+                            if ((DynamicVar.sName).ToLower().CompareTo((sVarValue).ToLower()) == 0)
+                            {
+                                switch (DynamicVar.VarType)
+                                {
+                                    case TVarType.Integer:
+                                        nVarValue = DynamicVar.nInternet;
+                                        break;
+                                    case TVarType.String:
+                                        sVarValue = DynamicVar.sString;
+                                        break;
+                                }
+                                boFoundVar = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!boFoundVar)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sVarValue, sType), QuestActionInfo, M2Share.sSC_CALCVAR);
+                        return;
+                    }
+                }
+                else
+                {
+                    nVarValue = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, sVarValue), 0);
+                    sVarValue = GetLineVariableText(PlayObject, sVarValue);
+                }
+            }
+            else
+            {
+                nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
+            }
             char cMethod = sMethod[0];
             DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, new string[] { sType }), QuestActionInfo, M2Share.sSC_CALCVAR);
+                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_CALCVAR);
                 return;
             }
             for (var i = 0; i < DynamicVarList.Count; i++)
@@ -1555,7 +1619,7 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.VInteger:
+                        case TVarType.Integer:
                             switch (cMethod)
                             {
                                 case '=':
@@ -1575,7 +1639,18 @@ namespace GameSvr
                                     break;
                             }
                             break;
-                        case TVarType.VString:
+                        case TVarType.String:
+                            switch (cMethod)
+                            {
+                                case '=':
+                                    DynamicVar.sString = sVarValue;
+                                    break;
+                                case '+':
+                                    DynamicVar.sString = DynamicVar.sString + sVarValue;
+                                    break;
+                                case '-':
+                                    break;
+                            }
                             break;
                     }
                     boFoundVar = true;
@@ -1584,7 +1659,7 @@ namespace GameSvr
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, new string[] { sVarName, sType }), QuestActionInfo, M2Share.sSC_CALCVAR);
+                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, M2Share.sSC_CALCVAR);
             }
         }
 
@@ -1601,9 +1676,9 @@ namespace GameSvr
             string ffile = QuestActionInfo.sParam1;
             if (PlayObject.m_GroupOwner != null)
             {
-                for (var I = 0; I < PlayObject.m_GroupMembers.Count; I++)
+                for (var i = 0; i < PlayObject.m_GroupMembers.Count; i++)
                 {
-                    PlayObject = PlayObject.m_GroupMembers[I];
+                    PlayObject = PlayObject.m_GroupMembers[i];
                     // AddListEx(PlayObject.m_sCharName,ffile);
                 }
             }
@@ -1611,7 +1686,7 @@ namespace GameSvr
 
         private void ActionOfClearList(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            var ffile = M2Share.g_Config.sEnvirDir + QuestActionInfo.sParam1;
+            var ffile = Path.Combine(M2Share.g_Config.sEnvirDir, QuestActionInfo.sParam1);
             if (File.Exists(ffile))
             {
                 //myFile = new FileInfo(ffile);
@@ -1680,7 +1755,6 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GROUPMOVEMAP);
             }
         }
-
 
         private void ActionOfUpgradeItems(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
@@ -1806,22 +1880,35 @@ namespace GameSvr
             TDynamicVar DynamicVar;
             bool boFoundVar;
             IList<TDynamicVar> DynamicVarList;
-            const string sVarFound = "变量%s已存在，变量类型:%s";
-            const string sVarTypeError = "变量类型错误，错误类型:%s 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            const string sVarFound = "变量{0}已存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam2;
             var sVarName = QuestActionInfo.sParam3;
             var sVarValue = QuestActionInfo.sParam4;
             var nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
-            var VarType = TVarType.vNone;
+            var VarType = TVarType.None;
+            if ((QuestActionInfo.sParam1).ToLower().CompareTo(("Integer").ToLower()) == 0)
+            {
+                VarType = TVarType.Integer;
+            }
+            if ((QuestActionInfo.sParam1).ToLower().CompareTo(("String").ToLower()) == 0)
+            {
+                VarType = TVarType.String;
+            }
+            if ((sType == "") || (sVarName == "") || (VarType == TVarType.None))
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_VAR);
+                return;
+            }
             if (QuestActionInfo.sParam1.ToLower().CompareTo("Integer".ToLower()) == 0)
             {
-                VarType = TVarType.VInteger;
+                VarType = TVarType.Integer;
             }
             if (QuestActionInfo.sParam1.ToLower().CompareTo("String".ToLower()) == 0)
             {
-                VarType = TVarType.VString;
+                VarType = TVarType.String;
             }
-            if ((sType == "") || (sVarName == "") || (VarType == TVarType.vNone))
+            if ((sType == "") || (sVarName == "") || (VarType == TVarType.None))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_VAR);
                 return;
@@ -1836,7 +1923,7 @@ namespace GameSvr
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, new string[] { sType }), QuestActionInfo, M2Share.sSC_VAR);
+                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
             for (var i = 0; i < DynamicVarList.Count; i++)
@@ -1853,7 +1940,7 @@ namespace GameSvr
             }
             else
             {
-                ScriptActionError(PlayObject, format(sVarFound, new string[] { sVarName, sType }), QuestActionInfo, M2Share.sSC_VAR);
+                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, M2Share.sSC_VAR);
             }
         }
 
@@ -1866,11 +1953,24 @@ namespace GameSvr
             bool boFoundVar;
             IList<TDynamicVar> DynamicVarList;
             IniFile IniFile;
-            const string sVarFound = "变量%s不存在，变量类型:%s";
-            const string sVarTypeError = "变量类型错误，错误类型:%s 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam1;
             var sVarName = QuestActionInfo.sParam2;
-            var sFileName = M2Share.g_Config.sEnvirDir + m_sPath + QuestActionInfo.sParam3;
+            var sFileName = GetLineVariableText(PlayObject, QuestActionInfo.sParam3);
+            if (sFileName[0] == '\\')
+            {
+                sFileName = sFileName.Substring(1, sFileName.Length - 1);
+            }
+            if (sFileName[1] == '\\')
+            {
+                sFileName = sFileName.Substring(2, sFileName.Length - 2);
+            }
+            if (sFileName[2] == '\\')
+            {
+                sFileName = sFileName.Substring(3, sFileName.Length - 3);
+            }
+            sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, sFileName);
             if ((sType == "") || (sVarName == "") || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_LOADVAR);
@@ -1881,21 +1981,21 @@ namespace GameSvr
             if (DynamicVarList == null)
             {
                 Dispose(DynamicVar);
-                ScriptActionError(PlayObject, format(sVarTypeError, new string[] { sType }), QuestActionInfo, M2Share.sSC_VAR);
+                ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
             IniFile = new IniFile(sFileName);
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];
-                if (DynamicVar.sName.ToLower().CompareTo(sVarName.ToLower()) == 0)
+                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.VInteger:
+                        case TVarType.Integer:
                             DynamicVar.nInternet = IniFile.ReadInteger(sName, DynamicVar.sName, 0);
                             break;
-                        case TVarType.VString:
+                        case TVarType.String:
                             DynamicVar.sString = IniFile.ReadString(sName, DynamicVar.sName, "");
                             break;
                     }
@@ -1905,9 +2005,8 @@ namespace GameSvr
             }
             if (!boFoundVar)
             {
-                ScriptActionError(PlayObject, format(sVarFound, new string[] { sVarName, sType }), QuestActionInfo, M2Share.sSC_LOADVAR);
+                ScriptActionError(PlayObject, format(sVarFound, sVarName, sType), QuestActionInfo, M2Share.sSC_LOADVAR);
             }
-            //IniFile.Free;
         }
 
         private void ActionOfClearNeedItems(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -2989,7 +3088,6 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    //FillChar(PlayObject.m_BonusAbil, sizeof(TNakedAbility), '\0');
                     PlayObject.HasLevelUp(0);
                     PlayObject.m_nBonusPoint = nBonusPoint;
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
@@ -3018,7 +3116,6 @@ namespace GameSvr
         private void ActionOfRestBonusPoint(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var nTotleUsePoint = PlayObject.m_BonusAbil.DC + PlayObject.m_BonusAbil.MC + PlayObject.m_BonusAbil.SC + PlayObject.m_BonusAbil.AC + PlayObject.m_BonusAbil.MAC + PlayObject.m_BonusAbil.HP + PlayObject.m_BonusAbil.MP + PlayObject.m_BonusAbil.Hit + PlayObject.m_BonusAbil.Speed + PlayObject.m_BonusAbil.X2;
-            //FillChar(PlayObject.m_BonusAbil, sizeof(TNakedAbility), '\0');
             PlayObject.m_nBonusPoint += nTotleUsePoint;
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
@@ -3138,7 +3235,6 @@ namespace GameSvr
                 return;
             }
             PlayObject.m_nKillMonExpRate = nRate;
-            // PlayObject.m_dwKillMonExpRateTime:=_MIN(High(Word),nTime);
             PlayObject.m_dwKillMonExpRateTime = nTime;
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
@@ -3230,7 +3326,6 @@ namespace GameSvr
                 return;
             }
             PlayObject.m_nPowerRate = nRate;
-            // PlayObject.m_dwPowerRateTime:=_MIN(High(Word),nTime);
             PlayObject.m_dwPowerRateTime = nTime;
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
@@ -3308,17 +3403,14 @@ namespace GameSvr
         private void ActionOfTHROWITEM(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sMap = string.Empty;
-            string sItemName= string.Empty;
-            string sUserItemName= string.Empty;
-            string NameCorlr= string.Empty;
-            int I;
+            string sItemName = string.Empty;
             int idura;
             int nX = 0;
-            int nY= 0;
-            int nRange= 0;
-            int nCount= 0;
-            int dX= 0;
-            int dY= 0;
+            int nY = 0;
+            int nRange = 0;
+            int nCount = 0;
+            int dX = 0;
+            int dY = 0;
             TEnvirnoment Envir;
             TMapItem MapItem;
             TMapItem MapItemA;
@@ -3392,7 +3484,7 @@ namespace GameSvr
                         return;
                     }
                 }
-                for (I = 0; I < nCount; I++)
+                for (var i = 0; i < nCount; i++)
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
                     {
@@ -3414,8 +3506,8 @@ namespace GameSvr
                                 MapItem = new TMapItem();
                                 MapItem.UserItem = UserItem;
                                 MapItem.Name = StdItem.Name;
-                                NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
-                                sUserItemName = "";
+                                var NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
+                                var sUserItemName = "";
                                 if (UserItem.btValue[13] == 1)
                                 {
                                     sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
@@ -3465,7 +3557,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("{异常} TNormNpc.ActionOfTHROWITEM");
             }
         }
-        
+
         public bool ActionOfTHROWITEM_RobotGetDropPosition(TEnvirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
         {
             bool result;

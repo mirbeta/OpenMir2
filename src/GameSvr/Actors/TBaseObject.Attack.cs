@@ -14,7 +14,7 @@ namespace GameSvr
         /// 检查武器升级状态
         /// </summary>
         /// <param name="UserItem"></param>
-        private void AttackDir_CheckWeaponUpgradeStatus(TUserItem UserItem)
+        private void CheckWeaponUpgradeStatus(TUserItem UserItem)
         {
             if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
             {
@@ -42,7 +42,7 @@ namespace GameSvr
             UserItem.btValue[10] = 0;
         }
 
-        private void AttackDir_CheckWeaponUpgrade()
+        private void CheckWeaponUpgrade()
         {
             TUserItem UseItems;
             TPlayObject PlayObject;
@@ -50,7 +50,7 @@ namespace GameSvr
             if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
             {
                 UseItems = m_UseItems[Grobal2.U_WEAPON];
-                AttackDir_CheckWeaponUpgradeStatus(m_UseItems[Grobal2.U_WEAPON]);
+                CheckWeaponUpgradeStatus(m_UseItems[Grobal2.U_WEAPON]);
                 if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
                 {
                     SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -143,7 +143,7 @@ namespace GameSvr
                 {
                     if ((AttackTarget != null) && (m_UseItems[Grobal2.U_WEAPON].wIndex > 0))
                     {
-                        AttackDir_CheckWeaponUpgrade();
+                        CheckWeaponUpgrade();
                     }
                 }
                 boPowerHit = m_boPowerHit;
@@ -246,8 +246,12 @@ namespace GameSvr
             return result;
         }
 
-        // 刺杀前面一个位置的攻击
-        private bool _Attack_SwordLongAttack(ref int nSecPwr)
+        /// <summary>
+        /// 刺杀前面一个位置的攻击
+        /// </summary>
+        /// <param name="nSecPwr"></param>
+        /// <returns></returns>
+        private bool SwordLongAttack(ref int nSecPwr)
         {
             bool result = false;
             short nX = 0;
@@ -269,8 +273,12 @@ namespace GameSvr
             return result;
         }
 
-        // 半月攻击
-        private bool _Attack_SwordWideAttack(ref int nSecPwr)
+        /// <summary>
+        /// 半月攻击
+        /// </summary>
+        /// <param name="nSecPwr"></param>
+        /// <returns></returns>
+        private bool SwordWideAttack(ref int nSecPwr)
         {
             bool result = false;
             int nC = 0;
@@ -299,7 +307,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool _Attack_CrsWideAttack(int nSecPwr)
+        private bool CrsWideAttack(int nSecPwr)
         {
             bool result = false;
             int nC = 0;
@@ -422,7 +430,7 @@ namespace GameSvr
                     }
                     if (nSecPwr > 0)
                     {
-                        if (!_Attack_SwordLongAttack(ref nSecPwr) && M2Share.g_Config.boLimitSwordLong)
+                        if (!SwordLongAttack(ref nSecPwr) && M2Share.g_Config.boLimitSwordLong)
                         {
                             wHitMode = 0;
                         }
@@ -440,7 +448,7 @@ namespace GameSvr
                     }
                     if (nSecPwr > 0)
                     {
-                        _Attack_SwordWideAttack(ref nSecPwr);
+                        SwordWideAttack(ref nSecPwr);
                     }
                 }
                 if (wHitMode == 12)
@@ -455,7 +463,7 @@ namespace GameSvr
                     }
                     if (nSecPwr > 0)
                     {
-                        _Attack_SwordWideAttack(ref nSecPwr);
+                        SwordWideAttack(ref nSecPwr);
                     }
                 }
                 if (wHitMode == 6)
@@ -478,7 +486,7 @@ namespace GameSvr
                     }
                     if (nSecPwr > 0)
                     {
-                        _Attack_CrsWideAttack(nSecPwr);
+                        CrsWideAttack(nSecPwr);
                     }
                 }
                 if (AttackTarget == null)
@@ -512,8 +520,7 @@ namespace GameSvr
                     {
                         AttackTarget.MakePosion(Grobal2.POISON_STONE, M2Share.g_Config.nAttackPosionTime, 0);
                     }
-                    // 虹魔，吸血
-                    if (m_nHongMoSuite > 0)
+                    if (m_nHongMoSuite > 0)// 虹魔，吸血
                     {
                         m_db3B0 = nPower / 100 * m_nHongMoSuite;
                         if (m_db3B0 >= 2.0)

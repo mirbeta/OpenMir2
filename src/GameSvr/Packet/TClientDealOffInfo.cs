@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using SystemModule;
 
 namespace GameSvr
@@ -37,30 +36,28 @@ namespace GameSvr
 
         public byte[] GetPacket()
         {
-            using (var memoryStream = new MemoryStream())
+            using MemoryStream memoryStream = new();
+            var backingStream = new BinaryWriter(memoryStream);
+            backingStream.Write(sDealCharName.ToByte(15));
+            backingStream.Write(sBuyCharName.ToByte(15));
+            backingStream.Write(dSellDateTime);
+            backingStream.Write(nSellGold);
+            var nullItem = new TClientItem();
+            var nullBuff = nullItem.GetPacket();
+            for (int i = 0; i < UseItems.Length; i++)
             {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(sDealCharName.ToByte(15));
-                backingStream.Write(sBuyCharName.ToByte(15));
-                backingStream.Write(dSellDateTime);
-                backingStream.Write(nSellGold);
-                var userItem = new TClientItem();
-                for (int i = 0; i < UseItems.Length; i++)
+                if (UseItems[i] == null)
                 {
-                    if (UseItems[i] == null)
-                    {
-                        backingStream.Write(userItem.GetPacket());
-                    }
-                    else
-                    {
-                        backingStream.Write(UseItems[i].GetPacket());
-                    }
+                    backingStream.Write(nullBuff);
                 }
-                backingStream.Write(N);
-
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
+                else
+                {
+                    backingStream.Write(UseItems[i].GetPacket());
+                }
             }
+            backingStream.Write(N);
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
         }
     }
 }

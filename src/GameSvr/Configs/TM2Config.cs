@@ -328,45 +328,25 @@ namespace GameSvr
         public int nItemExpRate;
         public int nScriptGotoCountLimit;
         public byte btHearMsgFColor;
-        // 前景
         public byte btHearMsgBColor;
-        // 背景
         public byte btWhisperMsgFColor;
-        // 前景
         public byte btWhisperMsgBColor;
-        // 背景
         public byte btGMWhisperMsgFColor;
-        // 前景
         public byte btGMWhisperMsgBColor;
-        // 背景
         public byte btCryMsgFColor;
-        // 前景
         public byte btCryMsgBColor;
-        // 背景
         public byte btGreenMsgFColor;
-        // 前景
         public byte btGreenMsgBColor;
-        // 背景
         public byte btBlueMsgFColor;
-        // 前景
         public byte btBlueMsgBColor;
-        // 背景
         public byte btRedMsgFColor;
-        // 前景
         public byte btRedMsgBColor;
-        // 背景
         public byte btGuildMsgFColor;
-        // 前景
         public byte btGuildMsgBColor;
-        // 背景
         public byte btGroupMsgFColor;
-        // 前景
         public byte btGroupMsgBColor;
-        // 背景
         public byte btCustMsgFColor;
-        // 前景
         public byte btCustMsgBColor;
-        // 背景
         public byte btPurpleMsgFColor;
         public byte btPurpleMsgBColor;
         public int nMonRandomAddValue;
@@ -471,12 +451,18 @@ namespace GameSvr
         public int nUnknowNecklaceSCAddRate;
         public int nUnknowNecklaceSCAddValueMaxLimit;
         public int nMonOneDropGoldCount;
+        /// <summary>
+        /// 客户端时间
+        /// </summary>
         public bool boSendCurTickCount;
-        // 客户端时间
+        /// <summary>
+        /// 挖矿命中率
+        /// </summary>        
         public int nMakeMineHitRate;
-        // 挖矿命中率
+        /// <summary>
+        /// 挖矿率
+        /// </summary>        
         public int nMakeMineRate;
-        // 挖矿率
         public int nStoneTypeRate;
         public int nStoneTypeRateMin;
         public int nGoldStoneMin;
@@ -503,7 +489,6 @@ namespace GameSvr
         public int nWinLottery2Max;
         public int nWinLottery1Min;
         public int nWinLottery1Max;
-        // 16180 + 1820;
         public int nWinLottery1Gold;
         public int nWinLottery2Gold;
         public int nWinLottery3Gold;
@@ -519,7 +504,6 @@ namespace GameSvr
         public int nWinLotteryLevel4;
         public int nWinLotteryLevel5;
         public int nWinLotteryLevel6;
-
         public int nItemNumber;
         public int nItemNumberEx;
         public int nGuildRecallTime;
@@ -530,10 +514,14 @@ namespace GameSvr
         public int nCanDropPrice;
         public bool boSendCustemMsg;
         public bool boSubkMasterSendMsg;
+        /// <summary>
+        /// 特修价格倍数
+        /// </summary>
         public int nSuperRepairPriceRate;
-        // 特修价格倍数
+        /// <summary>
+        /// 普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
+        /// </summary>        
         public int nRepairItemDecDura;
-        // 普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
         public bool boDieScatterBag;
         public int nDieScatterBagRate;
         public bool boDieRedScatterBagAll;
@@ -549,8 +537,10 @@ namespace GameSvr
         public int nCastleNameLen;
         public int nAttackPosionRate;
         public int nAttackPosionTime;
+        /// <summary>
+        /// 复活间隔时间
+        /// </summary>
         public int dwRevivalTime;
-        // 复活间隔时间
         public bool boUserMoveCanDupObj;
         public bool boUserMoveCanOnItem;
         public int dwUserMoveTime;
@@ -577,11 +567,15 @@ namespace GameSvr
         public bool boThreadRun;
         public bool boShowExceptionMsg;
         public bool boShowPreFixMsg;
+        /// <summary>
+        /// 魔法锁定范围
+        /// </summary>
         public int nMagicAttackRage;
-        // 魔法锁定范围
         public bool nBoBoall;
+        /// <summary>
+        /// 物品掉落范围
+        /// </summary>
         public int nDropItemRage;
-        // 爆物范围
         public string sSkeleton;
         public int nSkeletonCount;
         public TRecallMigic[] SkeletonArray;
@@ -603,14 +597,22 @@ namespace GameSvr
         public int nFireBoomRage;
         public int nSnowWindRange;
         public int nElecBlizzardRange;
+        /// <summary>
+        /// 圣言怪物等级限制
+        /// </summary>
         public int nMagTurnUndeadLevel;
-        // 圣言怪物等级限制
+        /// <summary>
+        /// 诱惑之光怪物等级限制
+        /// </summary>        
         public int nMagTammingLevel;
-        // 诱惑之光怪物等级限制
+        /// <summary>
+        /// 诱惑怪物相差等级机率，此数字越小机率越大；
+        /// </summary>        
         public int nMagTammingTargetLevel;
-        // 诱惑怪物相差等级机率，此数字越小机率越大；
+        /// <summary>
+        /// 成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
+        /// </summary>        
         public int nMagTammingHPRate;
-        // 成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
         public int nMagTammingCount;
         public int nMabMabeHitRandRate;
         public int nMabMabeHitMinLvLimit;
@@ -867,7 +869,6 @@ namespace GameSvr
         /// 机器人血量低于多少开始回血（百分比）
         /// </summary>
         public int nRenewPercent;
-
         public string sAIHomeMap;
         public short nAIHomeX;
         public short nAIHomeY;
@@ -881,7 +882,6 @@ namespace GameSvr
         /// 不管目标血值,全部可以使用施毒术否则目标血值达700时使用
         /// </summary>
         public bool btHeroSkillMode;
-
         public long dwHeroWarrorAttackTime;//战士英雄的攻击速度
         public long dwHeroWizardAttackTime;//法师英雄的攻击速度
         public long dwHeroTaoistAttackTime;//道士英雄的攻击速度

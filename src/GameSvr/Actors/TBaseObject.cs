@@ -525,6 +525,9 @@ namespace GameSvr
         public TUserItem[] m_UseItems;
         public IList<TMonSayMsg> m_SayMsgList = null;
         public IList<TUserItem> m_StorageItemList = null;
+        /// <summary>
+        /// 走路速度
+        /// </summary>
         public int m_nWalkSpeed = 0;
         public int m_nWalkStep = 0;
         public int m_nWalkCount = 0;

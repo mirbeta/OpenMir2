@@ -249,8 +249,6 @@ namespace GameSvr
             M2Share.g_Config.nWinLotteryLevel4 = 0;
             M2Share.g_Config.nWinLotteryLevel5 = 0;
             M2Share.g_Config.nWinLotteryLevel6 = 0;
-            M2Share.g_Config.GlobalVal=new int[20];
-            M2Share.g_Config.GlobaDyMval = new int[100];
             M2Share.LoadConfig();
             M2Share.DataServer = new DataServer();
             M2Share.ObjectSystem = new ObjectSystem();

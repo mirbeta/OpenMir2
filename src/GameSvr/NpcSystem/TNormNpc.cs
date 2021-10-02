@@ -659,7 +659,6 @@ namespace GameSvr
                     return;
                 case "$IPLOCAL":
                     sText = PlayObject.m_sIPLocal;
-                    // GetIPLocal(PlayObject.m_sIPaddr);
                     sMsg = ReplaceVariableText(sMsg, "<$IPLOCAL>", sText);
                     return;
                 case "$GUILDBUILDPOINT":
@@ -800,12 +799,12 @@ namespace GameSvr
                                 }
                                 else
                                 {
-                                    sMsg = "Well I guess there may be no wall conquest war in the mean time .\\ \\<back/@main>";
+                                    sMsg ="暂时没有行会攻城 .\\ \\<返回/@main>";
                                 }
                             }
                             else
                             {
-                                sMsg = "Now is on wall conquest war.\\ \\<back/@main>";
+                                sMsg = "正在攻城当中.\\ \\<返回/@main>";
                             }
                         }
                         else
@@ -830,7 +829,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            sMsg = "We have no schedule...\\ \\<back/@main>";
+                            sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                         }
                         return;
                     }
@@ -948,11 +947,11 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.VInteger:
+                            case TVarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
                                 break;
-                            case TVarType.VString:
+                            case TVarType.String:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                                 boFoundVar = true;
                                 break;
@@ -981,11 +980,11 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.VInteger:
+                            case TVarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
                                 break;
-                            case TVarType.VString:
+                            case TVarType.String:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                                 boFoundVar = true;
                                 break;
@@ -1010,11 +1009,11 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.VInteger:
+                            case TVarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
                                 break;
-                            case TVarType.VString:
+                            case TVarType.String:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                                 boFoundVar = true;
                                 break;
@@ -1034,25 +1033,53 @@ namespace GameSvr
                 var n18 = M2Share.GetValNameNo(s14);
                 if (n18 >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n18, 0, 9))
+                    if (HUtil32.RangeInDefined(n18, 0, 99))
                     {
-                        sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', PlayObject.m_nVal[n18].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nVal[n18]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 100, 119))
+                    else if (HUtil32.RangeInDefined(n18, 100, 199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', M2Share.g_Config.GlobalVal[n18 - 100].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[n18 - 100]).ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 200, 299))
                     {
-                        sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', PlayObject.m_DyVal[n18 - 200].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_DyVal[n18 - 200]).ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 300, 399))
                     {
-                        sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', PlayObject.m_nMval[n18 - 300].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nMval[n18 - 300]).ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 400, 499))
                     {
-                        sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', M2Share.g_Config.GlobaDyMval[n18 - 400].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobaDyMval[n18 - 400]).ToString());
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 500, 599))
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nInteger[n18 - 500]).ToString());
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 600, 699))
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_sString[n18 - 600]);
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 700, 799))
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[n18 - 700]);
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 800, 1199))
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[n18 - 700]).ToString());
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 1200, 1599))
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[n18 - 1100]);
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 1600, 1699)) //个人服务器字符串变量E
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_ServerStrVal[n18 - 1600]);
+                    }
+                    else if (HUtil32.RangeInDefined(n18, 1700, 1799)) //个人服务器字符串变量W
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_ServerIntVal[n18 - 1700]).ToString());
                     }
                 }
             }
@@ -1177,12 +1204,12 @@ namespace GameSvr
         private IList<TDynamicVar> GetDynamicVarList(TPlayObject PlayObject, string sType, ref string sName)
         {
             IList<TDynamicVar> result = null;
-            if (HUtil32.CompareLStr(sType, "HUMAN", "HUMAN".Length))
+            if (HUtil32.CompareLStr(sType, "HUMAN", 5))
             {
                 result = PlayObject.m_DynamicVarList;
                 sName = PlayObject.m_sCharName;
             }
-            else if (HUtil32.CompareLStr(sType, "GUILD", "GUILD".Length))
+            else if (HUtil32.CompareLStr(sType, "GUILD", 5))
             {
                 if (PlayObject.m_MyGuild == null)
                 {
@@ -1191,10 +1218,15 @@ namespace GameSvr
                 result = PlayObject.m_MyGuild.m_DynamicVarList;
                 sName = PlayObject.m_MyGuild.sGuildName;
             }
-            else if (HUtil32.CompareLStr(sType, "GLOBAL", "GLOBAL".Length))
+            else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
             {
                 result = M2Share.g_DynamicVarList;
                 sName = "GLOBAL";
+            }
+            else if (HUtil32.CompareLStr(sType, "Account", 7))
+            {
+                result = PlayObject.m_DynamicVarList;
+                sName = PlayObject.m_sUserID;
             }
             return result;
         }

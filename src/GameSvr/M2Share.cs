@@ -163,6 +163,7 @@ namespace GameSvr
         public const string sExpConfigFileName = "Exps.ini";
         public const string sCommandFileName = "Command.ini";
         public const string sStringFileName = "String.ini";
+        public const string sGlobalConfigFileName = "Global.ini";
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static TNormNpc g_ManageNPC = null;
@@ -2022,84 +2023,238 @@ namespace GameSvr
             return (byte)((nDir + nRage) % 8);
         }
 
+        /// <summary>
+        /// 获取服务器变量
+        /// </summary>
+        /// <param name="sText"></param>
+        /// <returns></returns>
         public static int GetValNameNo(string sText)
         {
             var result = -1;
             int nValNo;
             if (sText.Length >= 2)
             {
-                if (char.ToUpper(sText[0]) == 'P')
+                var valType = char.ToUpper(sText[0]);
+                switch (valType)
                 {
-                    nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
-                    if (nValNo < 10)
-                    {
-                        result = nValNo;
-                    }
-                }
-                if (char.ToUpper(sText[0]) == 'G')
-                {
-                    if (sText.Length == 3)
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
-                        if (nValNo < 20)
+                    case 'P':
+                        if (sText.Length == 3)
                         {
-                            result = nValNo + 100;
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo;
+                            }
                         }
-                    }
-                    else
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
-                        if (nValNo < 10)
+                        else
                         {
-                            result = nValNo + 100;
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo;
+                            }
                         }
-                    }
-                }
-                if (char.ToUpper(sText[0]) == 'M')
-                {
-                    if (sText.Length == 3)
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
-                        if (nValNo < 100)
+                        break;
+                    case 'G':
+                        if (sText.Length == 4)
                         {
-                            result = nValNo + 300;
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,3),  -1);
+                            if ((nValNo < 500) && (nValNo > 99))
+                            {
+                                result = nValNo + 700;
+                            }
                         }
-                    }
-                    else
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
-                        if (nValNo < 10)
+                        if (sText.Length == 3)
                         {
-                            result = nValNo + 300;
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 100;
+                            }
                         }
-                    }
-                }
-                if (char.ToUpper(sText[0]) == 'I')
-                {
-                    if (sText.Length == 3)
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
-                        if (nValNo < 100)
+                        else
                         {
-                            result = nValNo + 400;
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 100;
+                            }
                         }
-                    }
-                    else
-                    {
-                        nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
-                        if (nValNo < 10)
+                        break;
+                    case 'M':
+                        if (sText.Length == 3)
                         {
-                            result = nValNo + 400;
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 300;
+                            }
                         }
-                    }
-                }
-                if (char.ToUpper(sText[0]) == 'D')
-                {
-                    nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
-                    if (nValNo < 10)
-                    {
-                        result = nValNo + 200;
-                    }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 300;
+                            }
+                        }
+                        break;
+                    case 'I':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 400;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 400;
+                            }
+                        }
+                        break;
+                    case 'D':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 200;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 200;
+                            }
+                        }
+                        return result;
+                        break;
+                    case 'N':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 500;
+                            }
+                        }
+                        else
+                        {
+                            nValNo =HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 500;
+                            }
+                        }
+                        break;
+                    case 'S':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 600;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 600;
+                            }
+                        }
+                        break;
+                    case 'A':
+                        if (sText.Length == 4)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,3),  -1);
+                            if ((nValNo < 500) && (nValNo > 99))
+                            {
+                                result = nValNo + 1100;
+                            }
+                        }
+                        else
+                        {
+                            if (sText.Length == 3)
+                            {
+                                nValNo = HUtil32.Str_ToInt(sText.Substring(1 ,2),  -1);
+                                if ((nValNo >= 0) && (nValNo < 100))
+                                {
+                                    result = nValNo + 700;
+                                }
+                            }
+                            else
+                            {
+                                nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                                if ((nValNo >= 0) && (nValNo < 10))
+                                {
+                                    result = nValNo + 700;
+                                }
+                            }
+                        }
+                        break;
+                    case 'T':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1 ,3),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 700;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 700;
+                            }
+                        }
+                        break;
+                    case 'E':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 1600;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 1600;
+                            }
+                        }
+                        break;
+                    case 'W':
+                        if (sText.Length == 3)
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1 ,2),  -1);
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
+                                result = nValNo + 1700;
+                            }
+                        }
+                        else
+                        {
+                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(),  -1);
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
+                                result = nValNo + 1700;
+                            }
+                        } 
+                        break;
                 }
             }
             return result;

@@ -14,12 +14,18 @@ namespace GameSvr
         public string Buff;
     }
 
+    /// <summary>
+    /// 可见的精灵
+    /// </summary>
     public class TVisibleBaseObject
     {
         public TBaseObject BaseObject;
         public int nVisibleFlag;
     }
 
+    /// <summary>
+    /// 可见的地图物品
+    /// </summary>
     public class TVisibleMapItem
     {
         public int nX;

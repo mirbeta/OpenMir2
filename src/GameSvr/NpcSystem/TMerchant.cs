@@ -1378,8 +1378,8 @@ namespace GameSvr
                         {
                             UserItem = List20[j];
                             ClientItem = new TClientItem();
-                            Item.GetStandardItem(ref ClientItem.S);
-                            Item.GetItemAddValue(UserItem, ref ClientItem.S);
+                            Item.GetStandardItem(ref ClientItem.Item);
+                            Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                             ClientItem.Dura = UserItem.Dura;
                             ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             ClientItem.MakeIndex = UserItem.MakeIndex;

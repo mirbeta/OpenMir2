@@ -237,26 +237,26 @@ namespace GameSvr
                     return;
                 }
                 TClientItem ClientItem = new TClientItem();
-                Item.GetStandardItem(ref ClientItem.S);
-                Item.GetItemAddValue(UserItem, ref ClientItem.S);
-                ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                Item.GetStandardItem(ref ClientItem.Item);
+                Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                 ClientItem.MakeIndex = UserItem.MakeIndex;
                 ClientItem.Dura = UserItem.Dura;
                 ClientItem.DuraMax = UserItem.DuraMax;
-                StdItem = ClientItem.S;
+                StdItem = ClientItem.Item;
                 if (StdItem.StdMode == 50)
                 {
-                    ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
+                    ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                 }
                 if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                 {
                     if (UserItem.btValue[8] == 0)
                     {
-                        ClientItem.S.Shape = 0;
+                        ClientItem.Item.Shape = 0;
                     }
                     else
                     {
-                        ClientItem.S.Shape = 130;
+                        ClientItem.Item.Shape = 130;
                     }
                 }
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
@@ -1860,15 +1860,15 @@ namespace GameSvr
                     if (Item != null)
                     {
                         TClientItem ClientItem = new TClientItem();
-                        Item.GetStandardItem(ref ClientItem.S);
-                        Item.GetItemAddValue(UserItem, ref ClientItem.S);
-                        ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                        Item.GetStandardItem(ref ClientItem.Item);
+                        Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;
                         ClientItem.MakeIndex = UserItem.MakeIndex;
                         if (Item.StdMode == 50)
                         {
-                            ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
+                            ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                         }
                         sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
                     }
@@ -1964,9 +1964,9 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        StdItem.GetStandardItem(ref ClientItem.S);
-                        StdItem.GetItemAddValue(PlayObject.m_UseItems[i], ref ClientItem.S);
-                        ClientItem.S.Name = ItmUnit.GetItemName(PlayObject.m_UseItems[i]);
+                        StdItem.GetStandardItem(ref ClientItem.Item);
+                        StdItem.GetItemAddValue(PlayObject.m_UseItems[i], ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(PlayObject.m_UseItems[i]);
                         ClientItem.MakeIndex = PlayObject.m_UseItems[i].MakeIndex;
                         ClientItem.Dura = PlayObject.m_UseItems[i].Dura;
                         ClientItem.DuraMax = PlayObject.m_UseItems[i].DuraMax;
@@ -2428,9 +2428,9 @@ namespace GameSvr
                         if (Item != null)
                         {
                             TClientItem ClientItem = new TClientItem();
-                            Item.GetStandardItem(ref ClientItem.S);
-                            Item.GetItemAddValue(m_UseItems[i], ref ClientItem.S);
-                            ClientItem.S.Name = ItmUnit.GetItemName(m_UseItems[i]);
+                            Item.GetStandardItem(ref ClientItem.Item);
+                            Item.GetItemAddValue(m_UseItems[i], ref ClientItem.Item);
+                            ClientItem.Item.Name = ItmUnit.GetItemName(m_UseItems[i]);
                             ClientItem.Dura = m_UseItems[i].Dura;
                             ClientItem.DuraMax = m_UseItems[i].DuraMax;
                             ClientItem.MakeIndex = m_UseItems[i].MakeIndex;
@@ -4328,9 +4328,9 @@ namespace GameSvr
                     Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (Item != null)
                     {
-                        Item.GetStandardItem(ref ClientItem.S);
-                        Item.GetItemAddValue(UserItem, ref ClientItem.S);
-                        ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                        Item.GetStandardItem(ref ClientItem.Item);
+                        Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;
                         ClientItem.MakeIndex = UserItem.MakeIndex;
@@ -4396,15 +4396,15 @@ namespace GameSvr
                 if (StdItem != null)
                 {
                     TClientItem ClientItem = new TClientItem();
-                    StdItem.GetStandardItem(ref ClientItem.S);
-                    StdItem.GetItemAddValue(UserItem, ref ClientItem.S);
-                    ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                    StdItem.GetStandardItem(ref ClientItem.Item);
+                    StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     if (StdItem.StdMode == 50)
                     {
-                        ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
+                        ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                     }
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
@@ -4443,15 +4443,15 @@ namespace GameSvr
                 if (StdItem != null)
                 {
                     TClientItem ClientItem = new TClientItem();
-                    StdItem.GetStandardItem(ref ClientItem.S);
-                    StdItem.GetItemAddValue(UserItem, ref ClientItem.S);
-                    ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                    StdItem.GetStandardItem(ref ClientItem.Item);
+                    StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                     ClientItem.MakeIndex = UserItem.MakeIndex;
                     ClientItem.Dura = UserItem.Dura;
                     ClientItem.DuraMax = UserItem.DuraMax;
                     if (StdItem.StdMode == 50)
                     {
-                        ClientItem.S.Name = ClientItem.S.Name + " #" + UserItem.Dura;
+                        ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                     }
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
@@ -5079,21 +5079,20 @@ namespace GameSvr
             {
                 nSlavecount = 5;
             }
-            var BaseObject = MakeSlave(slaveInfo.sSlaveName, 3, slaveInfo.btSlaveLevel, nSlavecount,
-                slaveInfo.dwRoyaltySec);
+            var BaseObject = MakeSlave(slaveInfo.sSlaveName, 3, slaveInfo.btSlaveLevel, nSlavecount, slaveInfo.dwRoyaltySec);
             if (BaseObject != null)
             {
                 BaseObject.m_nKillMonCount = slaveInfo.nKillCount;
                 BaseObject.m_btSlaveExpLevel = slaveInfo.btSlaveExpLevel;
                 BaseObject.m_WAbil.HP = slaveInfo.nHP;
                 BaseObject.m_WAbil.MP = slaveInfo.nMP;
-                if (1500 - slaveInfo.btSlaveLevel * 200 < BaseObject.m_nWalkSpeed)
+                if ((1500 - slaveInfo.btSlaveLevel * 200) < BaseObject.m_nWalkSpeed)
                 {
-                    BaseObject.m_nWalkSpeed = 1500 - slaveInfo.btSlaveLevel * 200;
+                    BaseObject.m_nWalkSpeed = (1500 - slaveInfo.btSlaveLevel) * 200;
                 }
-                if (2000 - slaveInfo.btSlaveLevel * 200 < BaseObject.m_nNextHitTime)
+                if ((2000 - slaveInfo.btSlaveLevel * 200) < BaseObject.m_nNextHitTime)
                 {
-                    BaseObject.m_nWalkSpeed = 2000 - slaveInfo.btSlaveLevel * 200;
+                    BaseObject.m_nWalkSpeed = (2000 - slaveInfo.btSlaveLevel) * 200;
                 }
                 RecalcAbilitys();
             }
@@ -5131,8 +5130,8 @@ namespace GameSvr
                     if (pStdItem != null)
                     {
                         ClientItem = new TClientItem();
-                        pStdItem.GetStandardItem(ref ClientItem.S);
-                        ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                        pStdItem.GetStandardItem(ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                         ClientItem.MakeIndex = UserItem.MakeIndex;
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;
@@ -5179,9 +5178,9 @@ namespace GameSvr
                     if (StdItem != null)
                     {
                         ClientItem = new TClientItem();
-                        StdItem.GetStandardItem(ref ClientItem.S);
-                        StdItem.GetItemAddValue(UserItem, ref ClientItem.S);
-                        ClientItem.S.Name = ItmUnit.GetItemName(UserItem);
+                        StdItem.GetStandardItem(ref ClientItem.Item);
+                        StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
                         ClientItem.MakeIndex = UserItem.MakeIndex;
                         ClientItem.Dura = UserItem.Dura;
                         ClientItem.DuraMax = UserItem.DuraMax;

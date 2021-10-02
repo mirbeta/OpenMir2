@@ -4,9 +4,21 @@ namespace SystemModule
 {
     public class TUserItem : Packets
     {
+        /// <summary>
+        /// 唯一ID
+        /// </summary>
         public int MakeIndex;
+        /// <summary>
+        /// 物品ID
+        /// </summary>
         public ushort wIndex;
+        /// <summary>
+        /// 当前持久值
+        /// </summary>
         public ushort Dura;
+        /// <summary>
+        /// 最大持久值
+        /// </summary>
         public ushort DuraMax;
         public byte[] btValue;
 

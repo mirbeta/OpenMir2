@@ -9,6 +9,7 @@ namespace GameSvr.Configs
         public readonly IniFile Config;
         public readonly IniFile ExpConf;
         public readonly IniFile StringConf;
+        public readonly IniFile GlobalConfig;
 
         public ServerConfig()
         {
@@ -17,22 +18,26 @@ namespace GameSvr.Configs
                 StringConf = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sStringFileName));
                 Config = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sConfigFileName));
                 ExpConf = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sExpConfigFileName));
+                GlobalConfig = new IniFile(Path.Combine("/Volumes/Data/MirServer/Mir200", M2Share.sGlobalConfigFileName));
             }
             else if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
             {
                 StringConf = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sStringFileName));
                 Config = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sConfigFileName));
                 ExpConf = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sExpConfigFileName));
+                GlobalConfig = new IniFile(Path.Combine("/opt/MirServer/Mir200", M2Share.sGlobalConfigFileName));
             }
             else
             {
                 StringConf = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sStringFileName));
                 Config = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sConfigFileName));
                 ExpConf = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sExpConfigFileName));
+                GlobalConfig = new IniFile(Path.Combine("D:/MirServer/Mir200", M2Share.sGlobalConfigFileName));
             }
             Config.Load();
             StringConf.Load();
             ExpConf.Load();
+            GlobalConfig.Load();
         }
 
         public void LoadConfig()
@@ -2667,21 +2672,31 @@ namespace GameSvr.Configs
                 Config.WriteInteger("Setup", "GuildWarTime", M2Share.g_Config.dwGuildWarTime);
             else
                 M2Share.g_Config.dwGuildWarTime = nLoadInteger;
+            
             for (var i = M2Share.g_Config.GlobalVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalVal.GetUpperBound(0); i++)
             {
-                nLoadInteger = Config.ReadInteger("Setup", "GlobalVal" + i, -1);
+                nLoadInteger = GlobalConfig.ReadInteger("Integer", "GlobalVal" + i, -1);
                 if (nLoadInteger < 0)
-                    Config.WriteInteger("Setup", "GlobalVal" + i, M2Share.g_Config.GlobalVal[i]);
+                {
+                    GlobalConfig.WriteInteger("Integer", "GlobalVal" + i, M2Share.g_Config.GlobalVal[i]);
+                }
                 else
+                {
                     M2Share.g_Config.GlobalVal[i] = nLoadInteger;
+                }
             }
+            
             for (var i = M2Share.g_Config.GlobalAVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalAVal.GetUpperBound(0); i++)
             {
-                sLoadString = Config.ReadString("Setup", "GlobalStrVal" + i, "");
+                sLoadString = GlobalConfig.ReadString("String", "GlobalStrVal" + i, "");
                 if (string.IsNullOrEmpty(sLoadString))
-                    Config.WriteString("Setup", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
+                {
+                    GlobalConfig.WriteString("String", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
+                }
                 else
+                {
                     M2Share.g_Config.GlobalAVal[i] = sLoadString;
+                }
             }
             
             nLoadInteger = Config.ReadInteger("Setup", "WinLotteryCount", -1);

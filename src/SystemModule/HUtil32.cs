@@ -100,6 +100,11 @@ namespace SystemModule
             return (byte) W;
         }
 
+        public static bool IsVarNumber(string Str)
+        {
+            return (CompareLStr(Str, "HUMAN", 5)) || (CompareLStr(Str, "GUILD", 5)) || (CompareLStr(Str, "GLOBAL", 6));
+        }
+
         public static int Round(object r)
         {
             return (int) Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);

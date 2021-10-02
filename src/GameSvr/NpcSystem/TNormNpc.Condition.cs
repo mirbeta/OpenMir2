@@ -2063,7 +2063,7 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.VInteger:
+                        case TVarType.Integer:
                             switch (cMethod)
                             {
                                 case '=':
@@ -2092,7 +2092,7 @@ namespace GameSvr
                                     break;
                             }
                             break;
-                        case TVarType.VString:
+                        case TVarType.String:
                             break;
                     }
                     boFoundVar = true;

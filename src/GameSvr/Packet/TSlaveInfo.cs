@@ -1,6 +1,6 @@
 namespace GameSvr
 {
-    public struct TSlaveInfo
+    public class TSlaveInfo
     {
         public string sSlaveName;
         public byte btSlaveLevel;

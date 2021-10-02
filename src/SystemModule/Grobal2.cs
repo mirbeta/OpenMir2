@@ -115,17 +115,6 @@ namespace SystemModule
         public int Grade;
     }
 
-    // public struct THumInfo
-    // {
-    //     public bool boDeleted;
-    //     public bool boSelected;
-    //     public string[] sAccount;
-    //     public DateTime dModDate;
-    //     public string[] sChrName;
-    //     public byte btCount;
-    //     public TRecordHeader Header;
-    // }
-
     public class TDoorStatus
     {
         public bool bo01;
@@ -311,13 +300,37 @@ namespace SystemModule
     public struct TMonInfo
     {
         public IList<TMonItem> ItemList;
+        /// <summary>
+        /// 怪物名
+        /// </summary>
         public string sName;
+        /// <summary>
+        /// 种族
+        /// </summary>
         public byte btRace;
+        /// <summary>
+        /// 种族图像
+        /// </summary>
         public byte btRaceImg;
+        /// <summary>
+        /// 形像代码
+        /// </summary>
         public ushort wAppr;
+        /// <summary>
+        /// 怪物等级
+        /// </summary>
         public ushort wLevel;
+        /// <summary>
+        /// 不死系
+        /// </summary>
         public byte btLifeAttrib;
+        /// <summary>
+        /// 视线范围
+        /// </summary>
         public short wCoolEye;
+        /// <summary>
+        /// 经验点数
+        /// </summary>
         public int dwExp;
         public ushort wHP;
         public ushort wMP;
@@ -328,10 +341,25 @@ namespace SystemModule
         public ushort wMC;
         public ushort wSC;
         public ushort wSpeed;
+        /// <summary>
+        /// 命中率
+        /// </summary>
         public ushort wHitPoint;
+        /// <summary>
+        /// 行走速度
+        /// </summary>
         public ushort wWalkSpeed;
+        /// <summary>
+        /// 行走步伐
+        /// </summary>
         public ushort wWalkStep;
+        /// <summary>
+        /// 行走等待
+        /// </summary>
         public ushort wWalkWait;
+        /// <summary>
+        /// 攻击速度
+        /// </summary>
         public ushort wAttackSpeed;
         public ushort wAntiPush;
         public bool boAggro;
@@ -450,9 +478,9 @@ namespace SystemModule
 
     public enum TVarType
     {
-        vNone,
-        VInteger,
-        VString
+        None,
+        Integer,
+        String
     }
 }
 
@@ -460,7 +488,6 @@ namespace SystemModule
 {
     public class Grobal2
     {
-        public const string VERSION_NUMBER_STR = "当前版本：20161001";
         public const int VERSION_NUMBER = 20020522;
         public const int CLIENT_VERSION_NUMBER = 120040918;
         public const int CM_POWERBLOCK = 0;
@@ -482,16 +509,49 @@ namespace SystemModule
         /// 武器
         /// </summary>
         public const int U_WEAPON = 1;
+        /// <summary>
+        /// 右手
+        /// </summary>
         public const int U_RIGHTHAND = 2;
+        /// <summary>
+        /// 项链
+        /// </summary>
         public const int U_NECKLACE = 3;
+        /// <summary>
+        /// 头盔
+        /// </summary>
         public const int U_HELMET = 4;
+        /// <summary>
+        /// 左手手镯,符
+        /// </summary>
         public const int U_ARMRINGL = 5;
+        /// <summary>
+        /// 右手手镯
+        /// </summary>
         public const int U_ARMRINGR = 6;
+        /// <summary>
+        /// 左戒指
+        /// </summary>
         public const int U_RINGL = 7;
+        /// <summary>
+        /// 右戒指
+        /// </summary>
         public const int U_RINGR = 8;
+        /// <summary>
+        /// 物品
+        /// </summary>
         public const int U_BUJUK = 9;
+        /// <summary>
+        /// 腰带
+        /// </summary>
         public const int U_BELT = 10;
+        /// <summary>
+        /// 鞋
+        /// </summary>
         public const int U_BOOTS = 11;
+        /// <summary>
+        /// 宝石
+        /// </summary>
         public const int U_CHARM = 12;
         public const int DEFBLOCKSIZE = 16;
         public const int BUFFERSIZE = 10000;
@@ -502,6 +562,11 @@ namespace SystemModule
         public const int HALFY = 16;
         public const int MAXBAGITEM = 52;
         public const int HOWMANYMAGICS = 20;
+
+        //摆摊
+        public const int       CM_SENDSELL =9050;   //开始摆摊 public const int SM_SENDSELL =9051; public const int RM_SENDSELL =9052; public const int CM_MYSHOPEXIT =9053; public const int SM_MYSHOPEXIT =9054; public const int CM_MYSHOPHAM =9055; public const int SM_MYSHOPHAM =9056; public const int CM_HAMSHOPBUY =9057; public const int SM_HAMSHOPBUYA =9058; public const int SM_HAMSHOPBUYB =9059; public const int SM_HAMSHOPTYPE =9060; public const int CM_OPHAMSHOP =9061; public const int SM_OPHAMSHOP =9062; public const int CM_CHACKITEM =9063;
+        public const int SM_CHACKITEM = 9064;
+
         /// <summary>
         /// 用户最大的物品
         /// </summary>
@@ -524,8 +589,7 @@ namespace SystemModule
         /// </summary>
         public const int ITEM_ACCESSORY = 2;
         /// <summary>
-        // 其它物品
-        /// 
+        /// 其它物品
         /// </summary>
         public const int ITEM_ETC = 3;
         /// <summary>
@@ -561,10 +625,25 @@ namespace SystemModule
         /// </summary>
         public const int STATE_LOCKRUN = 3;
         public const int POISON_68 = 68;
+        /// <summary>
+        /// 隐身
+        /// </summary>
         public const int STATE_TRANSPARENT = 8;
+        /// <summary>
+        /// 神圣战甲术  防御力
+        /// </summary>
         public const int STATE_DEFENCEUP = 9;
+        /// <summary>
+        /// 幽灵盾  魔御力
+        /// </summary>
         public const int STATE_MAGDEFENCEUP = 10;
+        /// <summary>
+        /// 魔法盾
+        /// </summary>
         public const int STATE_BUBBLEDEFENCEUP = 11;
+        /// <summary>
+        /// 被石化
+        /// </summary>
         public const int STATE_STONE_MODE = 0x00000001;
         public const int STATE_OPENHEATH = 0x00000002;
         public const int ET_DIGOUTZOMBI = 1;
@@ -710,8 +789,10 @@ namespace SystemModule
         public const int SM_MOVEFAIL = 28;
         public const int SM_HIDE = 29;
         public const int SM_DISAPPEAR = 30;
+        /// <summary>
+        /// 弯腰
+        /// </summary>
         public const int SM_STRUCK = 31;
-        // 弯腰
         public const int SM_DEATH = 32;
         public const int SM_SKELETON = 33;
         public const int SM_NOWDEATH = 34;
@@ -939,7 +1020,6 @@ namespace SystemModule
         public const int SM_PASSWORD = 5009;
         public const int SM_HORSERUN = 5010;
         public const int UNKNOWMSG = 199;
-        // 以下几个正确
         public const int SS_OPENSESSION = 100;
         public const int SS_CLOSESESSION = 101;
         public const int SS_KEEPALIVE = 104;
@@ -996,40 +1076,44 @@ namespace SystemModule
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
         public const int GM_TEST = 20;
-        // GameSvr
         public const int GROUPMAX = 11;
         public const int CM_42HIT = 42;
         public const int CM_PASSWORD = 2001;
         public const int CM_CHGPASSWORD = 2002;
         public const int CM_SETPASSWORD = 2004;
         public const int CM_HORSERUN = 3035;
-        // ------------未知消息码
         public const int CM_CRSHIT = 3036;
-        // ------------未知消息码
         public const int CM_3037 = 3037;
         public const int CM_TWINHIT = 3038;
         public const int CM_QUERYUSERSET = 3040;
-        // Damian
         public const int SM_PLAYDICE = 8001;
         public const int SM_PASSWORDSTATUS = 8002;
         public const int SM_NEEDPASSWORD = 8003;
         public const int SM_GETREGINFO = 8004;
         public const int DATA_BUFSIZE = 1024;
         public const int RUNGATEMAX = 8;
-        // MAX_STATUS_ATTRIBUTE = 13;
         public const int MAXMAGIC = 54;
-        public const string PN_GETRGB = "GetRGB";
-        public const string PN_GAMEDATALOG = "GameDataLog";
-        public const string PN_SENDBROADCASTMSG = "SendBroadcastMsg";
         public const string sSTRING_GOLDNAME = "金币";
         public const short MAXLEVEL = short.MaxValue;
         public const int MAXCHANGELEVEL = 1000;
         public const int SLAVEMAXLEVEL = 50;
         public const int LOG_GAMEGOLD = 1;
         public const int LOG_GAMEPOINT = 2;
+        /// <summary>
+        /// 玩家
+        /// </summary>
         public const int RC_PLAYOBJECT = 0;
+        /// <summary>
+        /// 守卫
+        /// </summary>
         public const int RC_GUARD = 11;
+        /// <summary>
+        /// NPC
+        /// </summary>
         public const int RC_PEACENPC = 15;
+        /// <summary>
+        /// 怪物
+        /// </summary>
         public const int RC_ANIMAL = 50;
         /// <summary>
         /// 练功师
@@ -1245,7 +1329,6 @@ namespace SystemModule
         /// </summary>
         public const int ISM_GRUOPMESSAGE = 242;
 
-
         // ==============================元宝寄售系统==========================
         public const int RM_SENDDEALOFFFORM = 23000;
         // 打开出售物品窗口
@@ -1290,12 +1373,12 @@ namespace SystemModule
         public const int SM_QUERYYBDEAL = 23023;
         // 查询可以的购买物品
         public const int CM_CANCELSELLOFFITEMING = 23024;
-        // 取消正在寄售的物品 20080318(出售人)
+        // 取消正在寄售的物品 (出售人)
         // SM_CANCELSELLOFFITEMING_OK =23018;//取消正在寄售的物品 成功
         public const int CM_SELLOFFBUYCANCEL = 23025;
-        // 取消寄售 物品购买 20080318(购买人)
+        // 取消寄售 物品购买 (购买人)
         public const int CM_SELLOFFBUY = 23026;
-        // 确定购买寄售物品 20080318
+        // 确定购买寄售物品 
         public const int SM_SELLOFFBUY_OK = 23027;
         // 购买成功
         public const int RM_SELLOFFBUY_OK = 23028;

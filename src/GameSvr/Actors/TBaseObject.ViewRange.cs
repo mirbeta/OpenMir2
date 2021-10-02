@@ -112,7 +112,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             TVisibleBaseObject VisibleBaseObject;
             const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-%d %s %s %d %d %d";
+            const string sExceptionMsg2 = "[Exception] TBaseObject::SearchViewRange 1-{0} {1} {2} {3} {4} {5}";
             if (m_PEnvir == null)
             {
                 M2Share.ErrorMessage("SearchViewRange nil PEnvir");

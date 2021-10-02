@@ -5323,8 +5323,6 @@ namespace GameSvr
                         break;
                 }
             }
-            bool result;
-            return result;
         }
 
         public bool AutoAvoid_GetAvoidXY(ref short nTargetX, ref short nTargetY)

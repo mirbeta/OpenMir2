@@ -5,30 +5,28 @@ namespace GameSvr
 {
     public class TClientItem
     {
-        public TStdItem S;
+        public TStdItem Item;
         public int MakeIndex;
         public ushort Dura;
         public ushort DuraMax;
 
         public TClientItem()
         {
-            S = new TStdItem();
+            Item = new TStdItem();
         }
 
         public byte[] GetPacket()
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            using MemoryStream memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(S.GetPacket());
-                backingStream.Write(MakeIndex);
-                backingStream.Write(Dura);
-                backingStream.Write(DuraMax);
+            backingStream.Write(Item.GetPacket());
+            backingStream.Write(MakeIndex);
+            backingStream.Write(Dura);
+            backingStream.Write(DuraMax);
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
         }
     }
 }
