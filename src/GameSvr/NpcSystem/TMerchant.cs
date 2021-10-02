@@ -1618,6 +1618,11 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 客户查询修复所需成本
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="UserItem"></param>
         public void ClientQueryRepairCost(TPlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
@@ -1626,7 +1631,7 @@ namespace GameSvr
             {
                 if (UserItem.DuraMax > 0)
                 {
-                    nRepairPrice = HUtil32.Round(nPrice / 3 / UserItem.DuraMax * (UserItem.DuraMax - UserItem.Dura));
+                    nRepairPrice = HUtil32.Round(((double)(nPrice / 3) / UserItem.DuraMax) * (UserItem.DuraMax - UserItem.Dura));
                 }
                 else
                 {
@@ -1658,6 +1663,12 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 修理物品
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="UserItem"></param>
+        /// <returns></returns>
         public bool ClientRepairItem(TPlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
