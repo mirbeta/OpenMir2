@@ -29,7 +29,7 @@ namespace GameGate
             _gameSpeed.dwEatTick = HUtil32.GetTickCount(); // 吃药时间
             _gameSpeed.dwPickupTick = HUtil32.GetTickCount(); // 捡起时间
             _gameSpeed.dwRunWalkTick = HUtil32.GetTickCount(); // 移动时间
-            _gameSpeed.dwFeiDnItemsTick = HUtil32.GetTickCount() - 10000; // 传送时间  {-15000 刚上来15秒内不能拣东西}
+            _gameSpeed.dwFeiDnItemsTick = HUtil32.GetTickCount() - 10000; // 传送时间 15000 刚上来10秒内不能拣东西
             _gameSpeed.dwSupSpeederTick = HUtil32.GetTickCount(); // 变速齿轮时间
             _gameSpeed.dwSupSpeederCount = 0; // 变速齿轮累计
             _gameSpeed.dwSuperNeverTick = HUtil32.GetTickCount(); // 超级加速时间

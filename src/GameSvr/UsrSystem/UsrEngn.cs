@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using SystemModule;
 using SystemModule.Packages;
@@ -847,6 +848,9 @@ namespace GameSvr
                             }
                             else
                             {
+                                
+                                Console.WriteLine("我踢人了");
+                                
                                 m_PlayObjectList.Remove(PlayObject);
                                 PlayObject.Disappear();
                                 AddToHumanFreeList(PlayObject);

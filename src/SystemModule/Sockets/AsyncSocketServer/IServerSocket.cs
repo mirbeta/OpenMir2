@@ -432,7 +432,10 @@ namespace SystemModule.Sockets
         {
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
             // 检查远程主机是否关闭连接
-
+            if (e.SocketError != SocketError.Success)
+            {
+                Debug.WriteLine("asdasdasd");
+            }
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
                 // 增加接收到的字节总数

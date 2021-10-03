@@ -16,7 +16,7 @@ namespace GameGate
 
         public ServerService()
         {
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new ISocketServer(2000, 10);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -215,6 +215,7 @@ namespace GameGate
                                 userSession.nCheckSendLength = 0;
                                 userSession.dwReceiveTick = HUtil32.GetTickCount();
                                 sReviceMsg = sReviceMsg.Substring(0, nPos);
+                                Console.WriteLine($"[{DateTime.Now}]收到消息");
                                 //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                             }
                             if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady)

@@ -334,7 +334,7 @@ namespace GameGate
                 GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
                 GateShare.AddMainLogMsg("网站:http://www.gameofmir.com", 0);
                 GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
-                GateShare.AddMainLogMsg("智能反外挂程序云端已启动...", 0);
+                GateShare.AddMainLogMsg("智能反外挂程序已启动...", 0);
                 GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
                 GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
             }

@@ -109,7 +109,7 @@ namespace GameGate
         /// <summary>
         /// 会话超时时间
         /// </summary>
-        public static long dwSessionTimeOutTime = 60 * 60 * 1000;
+        public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         public const int MSGMAXLENGTH = 20000;
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
