@@ -1,19 +1,130 @@
-﻿using SystemModule.Common;
+﻿using System.IO;
+using SystemModule.Common;
 
 namespace GameSvr.Configs
 {
     public class StringConfig
     {
-        public IniFile StringConf;
+        public readonly IniFile StringConf;
 
         public StringConfig()
         {
-            StringConf = new IniFile(M2Share.sStringFileName);
+            StringConf = new IniFile(Path.Combine(M2Share.sConfigPath, M2Share.sStringFileName));
         }
 
         public void LoadString()
         {
             string LoadString;
+            if (StringConf.ReadString("Server", "ServerIP", "") == "")
+            {
+                StringConf.WriteString("Server", "ServerIP", M2Share.g_Config.sServerIPaddr);
+            }
+            M2Share.g_Config.sServerIPaddr = StringConf.ReadString("Server", "ServerIP", M2Share.g_Config.sServerIPaddr);
+            if (StringConf.ReadString("Server", "WebSite", "") == "")
+            {
+                StringConf.WriteString("Server", "WebSite", M2Share.g_Config.sWebSite);
+            }
+            M2Share.g_Config.sWebSite = StringConf.ReadString("Server", "WebSite", M2Share.g_Config.sWebSite);
+            if (StringConf.ReadString("Server", "BbsSite", "") == "")
+            {
+                StringConf.WriteString("Server", "BbsSite", M2Share.g_Config.sBbsSite);
+            }
+            M2Share.g_Config.sBbsSite = StringConf.ReadString("Server", "BbsSite", M2Share.g_Config.sBbsSite);
+            if (StringConf.ReadString("Server", "ClientDownload", "") == "")
+            {
+                StringConf.WriteString("Server", "ClientDownload", M2Share.g_Config.sClientDownload);
+            }
+            M2Share.g_Config.sClientDownload = StringConf.ReadString("Server", "ClientDownload", M2Share.g_Config.sClientDownload);
+            if (StringConf.ReadString("Server", "QQ", "") == "")
+            {
+                StringConf.WriteString("Server", "QQ", M2Share.g_Config.sQQ);
+            }
+            M2Share.g_Config.sQQ = StringConf.ReadString("Server", "QQ", M2Share.g_Config.sQQ);
+            if (StringConf.ReadString("Server", "Phone", "") == "")
+            {
+                StringConf.WriteString("Server", "Phone", M2Share.g_Config.sPhone);
+            }
+            M2Share.g_Config.sPhone = StringConf.ReadString("Server", "Phone", M2Share.g_Config.sPhone);
+            if (StringConf.ReadString("Server", "BankAccount0", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount0", M2Share.g_Config.sBankAccount0);
+            }
+            M2Share.g_Config.sBankAccount0 = StringConf.ReadString("Server", "BankAccount0", M2Share.g_Config.sBankAccount0);
+            if (StringConf.ReadString("Server", "BankAccount1", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount1", M2Share.g_Config.sBankAccount1);
+            }
+            M2Share.g_Config.sBankAccount1 = StringConf.ReadString("Server", "BankAccount1", M2Share.g_Config.sBankAccount1);
+            if (StringConf.ReadString("Server", "BankAccount2", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount2", M2Share.g_Config.sBankAccount2);
+            }
+            M2Share.g_Config.sBankAccount2 = StringConf.ReadString("Server", "BankAccount2", M2Share.g_Config.sBankAccount2);
+            if (StringConf.ReadString("Server", "BankAccount3", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount3", M2Share.g_Config.sBankAccount3);
+            }
+            M2Share.g_Config.sBankAccount3 = StringConf.ReadString("Server", "BankAccount3", M2Share.g_Config.sBankAccount3);
+            if (StringConf.ReadString("Server", "BankAccount4", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount4", M2Share.g_Config.sBankAccount4);
+            }
+            M2Share.g_Config.sBankAccount4 = StringConf.ReadString("Server", "BankAccount4", M2Share.g_Config.sBankAccount4);
+            if (StringConf.ReadString("Server", "BankAccount5", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount5", M2Share.g_Config.sBankAccount5);
+            }
+            M2Share.g_Config.sBankAccount5 = StringConf.ReadString("Server", "BankAccount5", M2Share.g_Config.sBankAccount5);
+            if (StringConf.ReadString("Server", "BankAccount6", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount6", M2Share.g_Config.sBankAccount6);
+            }
+            M2Share.g_Config.sBankAccount6 = StringConf.ReadString("Server", "BankAccount6", M2Share.g_Config.sBankAccount6);
+            if (StringConf.ReadString("Server", "BankAccount7", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount7", M2Share.g_Config.sBankAccount7);
+            }
+            M2Share.g_Config.sBankAccount7 = StringConf.ReadString("Server", "BankAccount7", M2Share.g_Config.sBankAccount7);
+            if (StringConf.ReadString("Server", "BankAccount8", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount8", M2Share.g_Config.sBankAccount8);
+            }
+            M2Share.g_Config.sBankAccount8 = StringConf.ReadString("Server", "BankAccount8", M2Share.g_Config.sBankAccount8);
+            if (StringConf.ReadString("Server", "BankAccount9", "") == "")
+            {
+                StringConf.WriteString("Server", "BankAccount9", M2Share.g_Config.sBankAccount9);
+            }
+            M2Share.g_Config.sBankAccount9 = StringConf.ReadString("Server", "BankAccount9", M2Share.g_Config.sBankAccount9);
+            if (StringConf.ReadString("Guild", "GuildNotice", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildNotice", M2Share.g_Config.sGuildNotice);
+            }
+            M2Share.g_Config.sGuildNotice = StringConf.ReadString("Guild", "GuildNotice", M2Share.g_Config.sGuildNotice);
+            if (StringConf.ReadString("Guild", "GuildWar", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildWar", M2Share.g_Config.sGuildWar);
+            }
+            M2Share.g_Config.sGuildWar = StringConf.ReadString("Guild", "GuildWar", M2Share.g_Config.sGuildWar);
+            if (StringConf.ReadString("Guild", "GuildAll", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildAll", M2Share.g_Config.sGuildAll);
+            }
+            M2Share.g_Config.sGuildAll = StringConf.ReadString("Guild", "GuildAll", M2Share.g_Config.sGuildAll);
+            if (StringConf.ReadString("Guild", "GuildMember", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildMember", M2Share.g_Config.sGuildMember);
+            }
+            M2Share.g_Config.sGuildMember =StringConf.ReadString("Guild", "GuildMember", M2Share.g_Config.sGuildMember);
+            if (StringConf.ReadString("Guild", "GuildMemberRank", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildMemberRank", M2Share.g_Config.sGuildMemberRank);
+            }
+            M2Share.g_Config.sGuildMemberRank =StringConf.ReadString("Guild", "GuildMemberRank", M2Share.g_Config.sGuildMemberRank);
+            if (StringConf.ReadString("Guild", "GuildChief", "") == "")
+            {
+                StringConf.WriteString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
+            }
+            M2Share.g_Config.sGuildChief = StringConf.ReadString("Guild", "GuildChief", M2Share.g_Config.sGuildChief);
             LoadString = StringConf.ReadString("String", "ClientSoftVersionError", "");
             if (LoadString == "")
             {

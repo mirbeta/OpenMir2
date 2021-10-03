@@ -23,8 +23,8 @@ namespace GameSvr
             IDSocket.ReceivedDatagram += IdSocketRead;
             if (M2Share.g_Config != null)
             {
-                IDSocket.Address = M2Share.ServerConf.Config.ReadString("Server", "IDSAddr", "127.0.0.1");
-                IDSocket.Port = M2Share.ServerConf.Config.ReadInteger("Server", "IDSPort", 5600);
+                IDSocket.Address = M2Share.ServerConf._config.ReadString("Server", "IDSAddr", "127.0.0.1");
+                IDSocket.Port = M2Share.ServerConf._config.ReadInteger("Server", "IDSPort", 5600);
             }
         }
 

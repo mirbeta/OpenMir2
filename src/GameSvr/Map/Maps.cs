@@ -46,7 +46,7 @@ namespace GameSvr
                 {
                     LoadList.Add(LoadMapList[i]);
                 }
-                //LoadMapList.Free;
+                LoadMapList = null;
             }
         }
 
@@ -101,7 +101,7 @@ namespace GameSvr
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
-                    if (sFlag != "" && sFlag[0] == '[')
+                    if (!string.IsNullOrEmpty(sFlag) && sFlag[0] == '[')
                     {
                         sMapName = "";
                         MapFlag = new TMapFlag
@@ -414,7 +414,7 @@ namespace GameSvr
                         M2Share.g_MapManager.AddMapRoute(sMapName, n14, n18, s44, n1C, n20);
                     }
                 }
-                //LoadList.Free;
+                LoadList = null;
             }
             return result;
         }
@@ -424,7 +424,7 @@ namespace GameSvr
             var sMapNO = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = M2Share.g_Config.sEnvirDir + "MiniMap.txt";
+            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();

@@ -296,7 +296,7 @@ namespace GameSvr
                     var SaveList = new StringList();
                     SaveList.Add(";此脚为功能脚本，用于实现各种与脚本有关的功能");
                     SaveList.SaveToFile(sScriptFile);
-                    //SaveList.Free;
+                    SaveList = null;
                 }
                 if (File.Exists(sScriptFile))
                 {
@@ -345,8 +345,8 @@ namespace GameSvr
                     SaveList.Add("[@Login]");
                     SaveList.Add("#if");
                     SaveList.Add("#act");
-                    // tSaveList.Add(';设置10倍杀怪经验');
-                    // tSaveList.Add(';CANGETEXP 1 10');
+                    SaveList.Add(";设置10倍杀怪经验");
+                    SaveList.Add(";CANGETEXP 1 10");
                     SaveList.Add("#say");
                     SaveList.Add("游戏登录脚本运行成功，欢迎进入本游戏!!!\\ \\");
                     SaveList.Add("<关闭/@exit> \\ \\");
@@ -354,7 +354,7 @@ namespace GameSvr
                     SaveList.Add(sShowFile + '\\');
                     SaveList.Add("脚本内容请自行按自己的要求修改。");
                     SaveList.SaveToFile(sScriptFile);
-                    //SaveList.Free;
+                    SaveList = null;
                 }
                 if (File.Exists(sScriptFile))
                 {
@@ -398,7 +398,7 @@ namespace GameSvr
                     var tSaveList = new StringList();
                     tSaveList.Add(";此脚为机器人专用脚本，用于机器人处理功能用的脚本。");
                     tSaveList.SaveToFile(sScriptFile);
-                    //tSaveList.Free;
+                    tSaveList = null;
                 }
                 if (File.Exists(sScriptFile))
                 {
@@ -822,32 +822,17 @@ namespace GameSvr
 
         public int LoadQuestDiary()
         {
-            int result;
-            int i;
+            int result= 1;
             IList<TQDDinfo> QDDinfoList;
             TQDDinfo QDDinfo;
             var s14 = string.Empty;
             var s18 = string.Empty;
             var s1C = string.Empty;
             var s20 = string.Empty;
-            bool bo2D;
-            int nC;
             StringList LoadList;
-            result = 1;
-            for (i = 0; i < M2Share.QuestDiaryList.Count; i++)
-            {
-                //QDDinfoList = M2Share.QuestDiaryList[i];
-                //for (ii = 0; ii < QDDinfoList.Count; ii ++ )
-                //{
-                //    QDDinfo = (TQDDinfo)QDDinfoList[ii];
-                //    //QDDinfo.sList.Free;
-                //    //Dispose(QDDinfo);
-                //}
-                ////QDDinfoList.Free;
-            }
+            var bo2D = false;
+            var nC = 1;
             M2Share.QuestDiaryList.Clear();
-            bo2D = false;
-            nC = 1;
             while (true)
             {
                 QDDinfoList = null;
@@ -858,7 +843,7 @@ namespace GameSvr
                     QDDinfo = null;
                     LoadList = new StringList();
                     LoadList.LoadFromFile(s14);
-                    for (i = 0; i < LoadList.Count; i++)
+                    for (var i = 0; i < LoadList.Count; i++)
                     {
                         s1C = LoadList[i];
                         if (s1C != "" && s1C[0] != ';')
@@ -907,13 +892,12 @@ namespace GameSvr
                                 }
                             }
                         }
-
                     }
-                    //LoadList.Free;
+                    LoadList = null;
                 }
                 if (QDDinfoList != null)
                 {
-                    //M2Share.QuestDiaryList.Add(QDDinfoList);
+                    M2Share.QuestDiaryList.Add(QDDinfoList);
                 }
                 else
                 {

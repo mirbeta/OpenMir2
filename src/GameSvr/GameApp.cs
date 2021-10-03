@@ -275,7 +275,7 @@ namespace GameSvr
             M2Share.MiniMapList = new Dictionary<string, int>();
             M2Share.g_UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
-            M2Share.QuestDiaryList = new List<TQDDinfo>();
+            M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
             M2Share.AbuseTextList = new StringList();
             M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>();
             M2Share.g_ChatLoggingList = new List<string>();

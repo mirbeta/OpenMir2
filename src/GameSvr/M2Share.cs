@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using SystemModule.Common;
 
@@ -34,6 +35,7 @@ namespace GameSvr
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;
         public static ExpsConfig ExpConf = null;
+        public static GlobalConfig GlobalConf = null;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -73,7 +75,7 @@ namespace GameSvr
         /// 游戏公告列表
         /// </summary>
         public static IList<string> LineNoticeList = null;
-        public static IList<TQDDinfo> QuestDiaryList = null;
+        public static IList<IList<TQDDinfo>> QuestDiaryList = null;
         public static StringList AbuseTextList = null;
         /// <summary>
         /// 怪物说话信息列表
@@ -159,11 +161,12 @@ namespace GameSvr
         public static int g_dwSocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
-        public const string sConfigFileName = "!Setup.txt";
-        public const string sExpConfigFileName = "Exps.ini";
-        public const string sCommandFileName = "Command.ini";
-        public const string sStringFileName = "String.ini";
-        public const string sGlobalConfigFileName = "Global.ini";
+        public static string sConfigPath = "";
+        public const string sConfigFileName = "!Setup.conf";
+        public const string sExpConfigFileName = "Exps.conf";
+        public const string sCommandFileName = "Command.conf";
+        public const string sStringFileName = "String.conf";
+        public const string sGlobalConfigFileName = "Global.conf";
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static TNormNpc g_ManageNPC = null;
@@ -1679,18 +1682,31 @@ namespace GameSvr
 
         static M2Share()
         {
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major>=11)
+            {
+                sConfigPath = "/Volumes/Data/MirServer/Mir200";
+            }
+            else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                sConfigPath = "/opt/MirServer/Mir200";
+            }
+            else
+            {
+                sConfigPath = "D:/MirServer/Mir200";
+            }
             ServerConf = new ServerConfig();
             CommandConf = new GameCmdConfig();
             StringConf = new StringConfig();
             ExpConf = new ExpsConfig();
-            RandomNumber = RandomNumber.GetInstance();
             LogSystem = new MirLog();
             g_Config = new TM2Config();
+            GlobalConf = new GlobalConfig();
+            RandomNumber = RandomNumber.GetInstance();
         }
 
         public static void MainOutMessage(string Msg)
         {
-            Console.WriteLine('[' + DateTime.Now.ToString() + "] " + Msg);
+            Console.WriteLine("[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + Msg);
         }
 
         public static void MainOutMessage(string Msg, MessageType messageType = MessageType.Success, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.White)
@@ -3722,6 +3738,7 @@ namespace GameSvr
             ServerConf.LoadConfig();
             StringConf.LoadString();
             ExpConf.LoadConfig();
+            GlobalConf.LoadConfig();
         }
 
         public static string GetIPLocal(string sIPaddr)
