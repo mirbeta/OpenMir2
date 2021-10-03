@@ -119,7 +119,6 @@ namespace GameSvr
                 M2Share.ObjectSystem.ClearGhost();
                 ClearIntervalTime = HUtil32.GetTickCount();
             }
-            //_mirLog.OutLog();
         }
     }
 }

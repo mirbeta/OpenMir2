@@ -713,7 +713,6 @@ namespace GameSvr
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDFLOURISHPOINT>", sText);
                         return;
                     }
-                // 其它信息
                 case "$REQUESTCASTLEWARITEM":
                     sText = M2Share.g_Config.sZumaPiece;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", sText);
@@ -799,7 +798,7 @@ namespace GameSvr
                                 }
                                 else
                                 {
-                                    sMsg ="暂时没有行会攻城 .\\ \\<返回/@main>";
+                                    sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                                 }
                             }
                             else
@@ -872,6 +871,126 @@ namespace GameSvr
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLEGETDAYS>", sText);
                         return;
                     }
+                case "$YEAR":// 服务器年
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$YEAR>", DateTime.Now.ToString("yyyy"));
+                        return;
+                    }
+                case "$MONTH":// 服务器月
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$MONTH>", DateTime.Now.ToString("MM"));
+                        return;
+                    }
+                case "$DAY":// 服务器日
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$DAY>", DateTime.Now.ToString("dd"));
+                        return;
+                    }
+                case "$DATE":// 服务器日
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$DATE>", DateTime.Now.ToString("yyyy-MM-dd"));
+                        return;
+                    }
+                case "$HOUR":// 服务器时
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$HOUR>", DateTime.Now.ToString("hh"));
+                        return;
+                    }
+                case "$MINUTE":// 服务器分
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$MINUTE>", DateTime.Now.ToString("mm"));
+                        return;
+                    }
+                case "$SECOND":// 服务器秒
+                    {
+                        sMsg = ReplaceVariableText(sMsg, "<$SECOND>", DateTime.Now.ToString("ss"));
+                        return;
+                    }
+                case "$KILLMONNAME":// 上次杀怪的名称
+                    {
+                        //if ((PlayObject.m_Killmonname != ""))
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLMONNAME>", PlayObject.m_KILLMONNAME);
+                        //}
+                        //else
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLMONNAME>", "");
+                        //}
+                        return;
+                    }
+                case "$KILLPLAYERNAME":// 上次杀人的名称
+                    {
+                        //if ((PlayObject.m_KillPlayName != ""))
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLPLAYERNAME>", PlayObject.m_KILLPLAYNAME);
+                        //}
+                        //else
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLPLAYERNAME>", "");
+                        //}
+                        return;
+                    }
+                case "$KILLPLAYERMAP":// 上次杀人的地图名称
+                    {
+                        //if ((PlayObject.m_KillPlayMAP != ""))
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLPLAYERMAP>", PlayObject.m_KILLPLAYMAP);
+                        //}
+                        //else
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLPLAYERMAP>", "");
+                        //}
+                        return;
+                    }
+                case "$KILLMONMAP":// 上次杀怪的地图名称
+                    {
+                        //if (PlayObject.m_Killmonmap != "")
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLMONMAP>", PlayObject.m_KILLMONMAP);
+                        //}
+                        //else
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$KILLMONMAP>", "");
+                        //}
+                        return;
+                    }
+                case "$MOVEMONMAP":// 上次去过的地图名称
+                    {
+                        //if (PlayObject.m_MOVEMONMAP != "")
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$MOVEMONMAP>", PlayObject.m_MOVEMONMAP);
+                        //}
+                        //else
+                        //{
+                        //    sMsg = ReplaceVariableText(sMsg, "<$MOVEMONMAP>", "");
+                        //}
+                        return;
+                    }
+                case "$BSNAME":// 上次攻击我的名称
+                    {
+                        if ((PlayObject.m_LastHiter != null))
+                        {
+                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.m_LastHiter.m_sCharName);
+                        }
+                        else
+                        {
+                            sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", "");
+                        }
+                        return;
+                    }
+                case "$TARGETNAME":// 正在攻击的人物或怪物名称
+                    {
+                        if (PlayObject.m_TargetCret != null)
+                        {
+                            sText = PlayObject.m_TargetCret.m_sCharName;
+                        }
+                        else
+                        {
+                            sText = "";
+                        }
+                        sMsg = ReplaceVariableText(sMsg, "<$TARGETNAME>", sText);
+                        return;
+                    }
                 case "$CMD_DATE":
                     sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", M2Share.g_GameCommand.DATA.sCmd);
                     return;
@@ -935,6 +1054,373 @@ namespace GameSvr
                 case "$CMD_UNLOCK":
                     sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", M2Share.g_GameCommand.UNLOCK.sCmd);
                     return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[", "$MAPMONSTERCOUNT[".Length)) // 地图怪物数量
+            {
+                TMonGenInfo MonGen = null;
+                TBaseObject BaseObject = null;
+                int MonGenCount = 0;
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                var MapName = HUtil32.GetValidStr3(s14, ref s14, new string[] { "/" });
+                var MonsterName = s14;
+                if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
+                {
+                    MapName = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
+                }
+                if (MonsterName.StartsWith("$"))
+                {
+                    MonsterName = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
+                }
+                if (string.Compare(MapName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部地图
+                {
+                    if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
+                    {
+                        for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                        {
+                            MonGen = M2Share.UserEngine.m_MonGenList[i];
+                            if (MonGen == null)
+                            {
+                                continue;
+                            }
+                            for (var j = 0; j < MonGen.CertList.Count; j++)
+                            {
+                                BaseObject = MonGen.CertList[j];
+                                if ((BaseObject.m_Master == null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                {
+                                    MonGenCount++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                        {
+                            MonGen = M2Share.UserEngine.m_MonGenList[i];
+                            if (MonGen == null)
+                            {
+                                continue;
+                            }
+                            for (var j = 0; j < MonGen.CertList.Count; j++)
+                            {
+                                BaseObject = MonGen.CertList[j];
+                                if ((BaseObject.m_Master == null) && (string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                {
+                                    MonGenCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // 如果不是全部地图
+                    var Envir = M2Share.g_MapManager.FindMap(MapName);
+                    if (Envir != null)
+                    {
+                        if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
+                        {
+                            for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                            {
+                                MonGen = M2Share.UserEngine.m_MonGenList[i];
+                                if (MonGen == null)
+                                {
+                                    continue;
+                                }
+                                for (var j = 0; j < MonGen.CertList.Count; j++)
+                                {
+                                    BaseObject = MonGen.CertList[j];
+                                    if ((BaseObject.m_Master == null) && (BaseObject.m_PEnvir == Envir) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                    {
+                                        MonGenCount++;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (var i = 0; i < M2Share.UserEngine.m_MonGenList.Count; i++)
+                            {
+                                MonGen = M2Share.UserEngine.m_MonGenList[i];
+                                if (MonGen == null)
+                                {
+                                    continue;
+                                }
+                                for (var j = 0; j < MonGen.CertList.Count; j++)
+                                {
+                                    BaseObject = MonGen.CertList[j];
+                                    if ((BaseObject.m_Master == null) && (BaseObject.m_PEnvir == Envir) && (string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                    {
+                                        MonGenCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", MonGenCount.ToString());
+            }
+            //if (sVariable == "$BUTCHITEMNAME")// 显示挖到的物品名称
+            //{
+            //    if (PlayObject.m_sButchItem == "")
+            //    {
+            //        sMsg = "????";
+            //    }
+            //    else
+            //    {
+            //        sMsg = ReplaceVariableText(sMsg, "<$BUTCHITEMNAME>", PlayObject.m_sButchItem);
+            //    }
+            //    return;
+            //}
+            // -------------------------------------------------------------------------------
+            if (HUtil32.CompareLStr(sVariable, "$MONKILLER[", "$MONKILLER[".Length))// $MONKILLER(怪物名称 + 地图号) 显示杀死此怪物的杀手
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
+                //}
+                //sText = MonDie.ReadString("杀怪人名称", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEHOUR[", "$MONDIEHOUR[".Length)) // $MONDIEHOUR(怪物名称 + 地图号) 显示该怪物死时的小时
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-时", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEMIN[", "$MONDIEMIN[".Length))// $MONDIEMIN(怪物名称 + 地图号) 显示该怪物死时的分钟
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-分", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIESEC[", "$MONDIESEC[".Length))// $MONDIESEC(怪物名称 + 地图号) 显示该怪物死时的秒数
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-秒", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEYEAR[", "$MONDIEYEAR[".Length))// $MONDIEYEAR[怪物名称 + 地图号]   显示该怪物死亡的年
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-年", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEMONTH[", "$MONDIEMONTH[".Length))// $MONDIEMONTH[怪物名称 + 地图号]  显示该怪物死亡的月
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-月", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$MONDIEDAY[", "$MONDIEDAY[".Length))// $MONDIEDAY[怪物名称 + 地图号]    显示该怪物死亡的日
+            {
+                HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
+                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //if (MonDie == null)
+                //{
+                //    return;
+                //}
+                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //{
+                //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
+                //}
+                //sText = MonDie.ReadString("怪物死亡-日", s14, "错误");
+                //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
+                //MonDie.Free;
+                return;
+            }
+            // 个人信息
+            if (HUtil32.CompareLStr(sVariable, "$USEITEMMAKEINDEX(", "$USEITEMAKEINDEX(".Length))// 显示n位置的装备ID
+            {
+                HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
+                var n18 = HUtil32.Str_ToInt(s14, -1);
+                if ((n18 >= 0 && n18 <= 15) && PlayObject.m_UseItems[n18] != null && (PlayObject.m_UseItems[n18].wIndex > 0))
+                {
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_UseItems[n18].MakeIndex).ToString());
+                }
+                else
+                {
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "0");
+                }
+                return;
+            }
+            if (HUtil32.CompareLStr(sVariable, "$USEITEMNAME(", "$USEITEMNAME(".Length))// 显示n位置的装备名称
+            {
+                HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
+                var n18 = HUtil32.Str_ToInt(s14, -1);
+                if ((n18 >= 0 && n18 <= 15) && PlayObject.m_UseItems[n18] != null && (PlayObject.m_UseItems[n18].wIndex > 0))
+                {
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[n18].wIndex));
+                }
+                else
+                {
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "无");
+                }
+                return;
+            }
+            if (sVariable == "$ATTACKMODE")// 显示用户当前的攻击模式
+            {
+                switch (PlayObject.m_btAttatckMode)
+                {
+                    case M2Share.HAM_ALL: // [攻击模式: 全体攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "0");
+                        break;
+                    case M2Share.HAM_PEACE: // [攻击模式: 和平攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "1");
+                        break;
+                    case M2Share.HAM_DEAR:// [攻击模式: 夫妻攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "2");
+                        break;
+                    case M2Share.HAM_MASTER:// [攻击模式: 师徒攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "3");
+                        break;
+                    case M2Share.HAM_GROUP: // [攻击模式: 编组攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "4");
+                        break;
+                    case M2Share.HAM_GUILD: // [攻击模式: 行会攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "5");
+                        break;
+                    case M2Share.HAM_PKATTACK: // [攻击模式: 红名攻击]
+                        sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "6");
+                        break;
+                }
+            }
+            if (sVariable == "$CLIENTVERSION")//显示当前用户客户端版本
+            {
+                sMsg = ReplaceVariableText(sMsg, "<$CLIENTVERSION>", (PlayObject.m_nSoftVersionDate).ToString());
+                return;
+            }
+            if (sVariable == "$QUERYYBDEALLOG") // 查看元宝交易记录 
+            {
+                sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
+                return;
+            }
+            if (sVariable == "$GUILDNAME")
+            {
+                if (PlayObject.m_MyGuild != null)
+                {
+                    sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.m_MyGuild.sGuildName);
+                }
+                else
+                {
+                    sMsg = "无";
+                }
+                return;
+            }
+            if (sVariable == "$GOLDCOUNT")// 包裹金币数
+            {
+                sText = (PlayObject.m_nGold).ToString();
+                sMsg = ReplaceVariableText(sMsg, "<$GOLDCOUNT>", sText);
+                return;
+            }
+            if (sVariable == "$GOLDCOUNTX")// 包裹最多可携带金币数
+            {
+                sText = (PlayObject.m_nGoldMax).ToString();
+                sMsg = ReplaceVariableText(sMsg, "<$GOLDCOUNTX>", sText);
+                return;
+            }
+            if (sVariable == "$LUCKY")// 幸运  增加人物暴击
+            {
+                sText = (PlayObject.m_nLuck).ToString();
+                sMsg = ReplaceVariableText(sMsg, "<$LUCKY>", sText);
+                return;
+            }
+            if (sVariable == "$GAMEGOLD")// 元宝
+            {
+                sText = (PlayObject.m_nGameGold).ToString();
+                sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLD>", sText);
+                return;
+            }
+            if (sVariable == "$REQUESTCASTLEWARITEM") // 祖玛头像
+            {
+                sText = M2Share.g_Config.sZumaPiece;
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", sText);
+                return;
+            }
+            if (sVariable == "$REQUESTCASTLEWARDAY")// 几天后开始攻城
+            {
+                sText = (M2Share.g_Config.nStartCastleWarDays).ToString();
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
+                return;
+            }
+            if (sVariable == "$REQUESTBUILDGUILDITEM")// 沃玛号角
+            {
+                sText = M2Share.g_Config.sWomaHorn;
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
+                return;
+            }
+            if (sVariable == "$GUILDWARFEE") // 行会战金币数
+            {
+                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", (M2Share.g_Config.nGuildWarPrice).ToString());
+                return;
+            }
+            if (sVariable == "$BUILDGUILDFEE")// 建立行会所需的金币数
+            {
+                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", (M2Share.g_Config.nBuildGuildPrice).ToString());
+                return;
             }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN(", "$HUMAN(".Length))
             {

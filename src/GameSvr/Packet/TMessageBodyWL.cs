@@ -5,7 +5,7 @@ namespace GameSvr
     public class TMessageBodyWL
     {
         public int lParam1;
-        public long lParam2;
+        public int lParam2;
         public int lTag1;
         public int lTag2;
 
@@ -26,4 +26,3 @@ namespace GameSvr
         }
     }
 }
-

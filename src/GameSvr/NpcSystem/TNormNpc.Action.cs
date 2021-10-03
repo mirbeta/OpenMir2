@@ -1703,7 +1703,11 @@ namespace GameSvr
             }
         }
 
-        // 脚本特修身上所有装备命令
+        /// <summary>
+        /// 特修身上所有装备
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfRepairAllItem(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sUserItemName;

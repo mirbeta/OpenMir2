@@ -653,7 +653,7 @@ namespace GameSvr
             var MessageBodyWL = new TMessageBodyWL();
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, m_nCurrX, m_nCurrY, HUtil32.MakeWord(m_btDirection, m_nLight));
             MessageBodyWL.lParam1 = GetFeatureToLong();
-            MessageBodyWL.lParam2 = m_nCharStatus;
+            MessageBodyWL.lParam2 = (int)m_nCharStatus;
             if (m_boAllowGroup)
             {
                 MessageBodyWL.lTag1 = HUtil32.MakeLong(HUtil32.MakeWord(1, 0), GetFeatureEx());

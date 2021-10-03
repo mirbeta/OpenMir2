@@ -775,7 +775,7 @@ namespace GameSvr
                         m_boSoftClose = true;
                     }
                     break;
-                case Grobal2.CM_CLICKNPC:
+                case Grobal2.CM_CLICKNPC:   
                     ClientClickNPC(ProcessMsg.nParam1);
                     break;
                 case Grobal2.CM_MERCHANTDLGSELECT:
@@ -1496,7 +1496,7 @@ namespace GameSvr
                                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ProcessMsg.wParam);
                                 MessageBodyWL = new TMessageBodyWL();
                                 MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                                MessageBodyWL.lParam2 = BaseObject.m_nCharStatus;
+                                MessageBodyWL.lParam2 = (int)BaseObject.m_nCharStatus;
                                 MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                                 if (ProcessMsg.wIdent == Grobal2.RM_STRUCK_MAG)
                                 {
@@ -1804,7 +1804,7 @@ namespace GameSvr
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.m_nLight));
                     MessageBodyWL = new TMessageBodyWL();
                     MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                    MessageBodyWL.lParam2 = BaseObject.m_nCharStatus;
+                    MessageBodyWL.lParam2 = (int)BaseObject.m_nCharStatus;
                     MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                     MessageBodyWL.lTag1 = 0;
                     s1C = EDcode.EncodeBuffer(MessageBodyWL);

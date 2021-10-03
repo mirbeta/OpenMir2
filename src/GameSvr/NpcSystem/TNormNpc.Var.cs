@@ -1541,6 +1541,184 @@ namespace GameSvr
             }
         }
 
+        private void SumData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            var n18 = 0;
+            var n14 = 0;
+            var s34 = string.Empty;
+            var s44 = string.Empty;
+            var s48 = string.Empty;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    n18 = PlayObject.m_nVal[n14];
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    n18 = M2Share.g_Config.GlobalVal[n14 - 100];
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    n18 = PlayObject.m_DyVal[n14 - 200];
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    n18 = PlayObject.m_nMval[n14 - 300];
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    n18 = PlayObject.m_nInteger[n14 - 500];
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    s44 = PlayObject.m_sString[n14 - 600];
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    s44 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    n18 = M2Share.g_Config.GlobalVal[n14 - 700];//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    s44 = M2Share.g_Config.GlobalAVal[n14 - 1100];//A变量
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
+                }
+            }
+            else
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
+            }
+            var n1C = 0;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    n1C = PlayObject.m_nVal[n14];
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    n1C = M2Share.g_Config.GlobalVal[n14 - 100];
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    n1C = PlayObject.m_DyVal[n14 - 200];
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    n1C = PlayObject.m_nMval[n14 - 300];
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    n1C = PlayObject.m_nInteger[n14 - 500];
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    s48 = PlayObject.m_sString[n14 - 600];
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    s48 = M2Share.g_Config.GlobalAVal[n14 - 700];
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    n1C = M2Share.g_Config.GlobalVal[n14 - 700];//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    s48 = M2Share.g_Config.GlobalAVal[n14 - 1100];//A变量
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
+                }
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    PlayObject.m_nVal[n14] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    M2Share.g_Config.GlobalVal[n14 - 100] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    PlayObject.m_DyVal[n14 - 200] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.m_nMval[n14 - 300] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.m_nInteger[n14 - 500] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    PlayObject.m_sString[n14 - 600] = s44 + s48;
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    M2Share.g_Config.GlobalAVal[n14 - 700] = s44 + s48;
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    M2Share.g_Config.GlobalVal[n14 - 700] = n18 + n1C;//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    M2Share.g_Config.GlobalAVal[n14 - 1100] = s44 + s48;//A变量
+                }
+            }
+        }
+
         private bool GetMovDataHumanInfoValue(TPlayObject PlayObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
         {
             string s10 = string.Empty;
@@ -1803,14 +1981,12 @@ namespace GameSvr
                     nDataType = 0;
                     result = true;
                     return result;
-                case "$X":
-                    // 人物X坐标
+                case "$X": // 人物X坐标
                     nValue = PlayObject.m_nCurrX;
                     nDataType = 1;
                     result = true;
                     return result;
-                case "$Y":
-                    // 人物Y坐标
+                case "$Y": // 人物Y坐标
                     nValue = PlayObject.m_nCurrY;
                     nDataType = 1;
                     result = true;
@@ -1984,6 +2160,136 @@ namespace GameSvr
                     nDataType = 1;
                     result = true;
                     return result;
+                case "$GAMEPOINT":
+                    nValue = PlayObject.m_nGamePoint;
+                    nDataType = 1;
+                    result = true;
+                    return result;
+                case "$HUNGER":
+                    nValue = PlayObject.GetMyStatus();
+                    nDataType = 1;
+                    result = true;
+                    return result;
+                case "$LOGINTIME":
+                    sValue = (PlayObject.m_dLogonTime).ToString();
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$LOGINLONG":
+                    nValue = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
+                    nDataType = 1;
+                    result = true;
+                    return result;
+                case "$DRESS":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$WEAPON":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$RIGHTHAND":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RIGHTHAND].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$HELMET":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$NECKLACE":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$RING_R":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$RING_L":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$ARMRING_R":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$ARMRING_L":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$BUJUK":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$BELT":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BELT].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$BOOTS":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$CHARM":
+                    sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex);
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$IPLOCAL":
+                    sValue = PlayObject.m_sIPLocal;
+                    nDataType = 0;
+                    result = true;
+                    return result;
+                case "$GUILDBUILDPOINT":
+                    {
+                        if (PlayObject.m_MyGuild != null)
+                        {
+                            //nValue = PlayObject.m_MyGuild.nBuildPoint;
+                        }
+                        nDataType = 0;
+                        result = true;
+                        return result;
+                    }
+                case "$GUILDAURAEPOINT":
+                    {
+                        if (PlayObject.m_MyGuild != null)
+                        {
+                            nValue = PlayObject.m_MyGuild.nAurae;
+                        }
+                        nDataType = 0;
+                        result = true;
+                        return result;
+                    }
+                case "$GUILDSTABILITYPOINT":
+                    {
+                        if (PlayObject.m_MyGuild != null)
+                        {
+                            nValue = PlayObject.m_MyGuild.nStability;
+                        }
+                        nDataType = 0;
+                        result = true;
+                        return result;
+                    }
+                case "$GUILDFLOURISHPOINT":
+                    {
+                        if (PlayObject.m_MyGuild != null)
+                        {
+                            nValue = PlayObject.m_MyGuild.nFlourishing;
+                        }
+                        nDataType = 0;
+                        result = true;
+                        return result;
+                    }
             }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN", 6))//  人物变量
             {
@@ -2041,193 +2347,6 @@ namespace GameSvr
                     }
                 }
             }
-            if (sVariable == "$GAMEPOINT")
-            {
-                nValue = PlayObject.m_nGamePoint;
-                nDataType = 1;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$HUNGER")
-            {
-                nValue = PlayObject.GetMyStatus();
-                nDataType = 1;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$LOGINTIME")
-            {
-                sValue = (PlayObject.m_dLogonTime).ToString();
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$DATETIME")
-            {
-                // sValue = FormatDateTime("dddddd,dddd,hh:mm:nn", DateTime.Now);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$DATE")
-            {
-                //sValue = FormatDateTime("dddddd", DateTime.Now);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$LOGINLONG")
-            {
-                nValue = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
-                nDataType = 1;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$DRESS")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_DRESS].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$WEAPON")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$RIGHTHAND")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RIGHTHAND].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$HELMET")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_HELMET].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$NECKLACE")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_NECKLACE].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$RING_R")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGR].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$RING_L")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_RINGL].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$ARMRING_R")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGR].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$ARMRING_L")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$BUJUK")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$BELT")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BELT].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$BOOTS")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_BOOTS].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$CHARM")
-            {
-                sValue = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_CHARM].wIndex);
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$IPADDR")
-            {
-                sValue = PlayObject.m_sIPaddr;
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$IPLOCAL")
-            {
-                sValue = PlayObject.m_sIPLocal;
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$GUILDBUILDPOINT")
-            {
-                if (PlayObject.m_MyGuild != null)
-                {
-                    //nValue = PlayObject.m_MyGuild.nBuildPoint;
-                }
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$GUILDAURAEPOINT")
-            {
-                if (PlayObject.m_MyGuild != null)
-                {
-                    nValue = PlayObject.m_MyGuild.nAurae;
-                }
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            else if (sVariable == "$GUILDSTABILITYPOINT")
-            {
-                if (PlayObject.m_MyGuild != null)
-                {
-                    nValue = PlayObject.m_MyGuild.nStability;
-                }
-                nDataType = 0;
-                result = true;
-                return result;
-            }
-            if (sVariable == "$GUILDFLOURISHPOINT")
-            {
-                if (PlayObject.m_MyGuild != null)
-                {
-                    nValue = PlayObject.m_MyGuild.nFlourishing;
-                }
-                nDataType = 0;
-                result = true;
-                return result;
-            }
             return result;
         }
 
@@ -2241,7 +2360,7 @@ namespace GameSvr
                 {
                     case 1:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
-                        {
+                        {   
                             PlayObject.m_nVal[n100] = nValue;
                             result = true;
                         }
@@ -2627,7 +2746,7 @@ namespace GameSvr
             }
             if (HUtil32.IsVarNumber(sParam1))
             {
-                if ((sParam3 != "") && (sParam3[0] == '<') && (sParam3[sParam3.Length-1] == '>'))
+                if ((sParam3 != "") && (sParam3[0] == '<') && (sParam3[sParam3.Length - 1] == '>'))
                 {
                     result = 0;
                 }
@@ -2648,7 +2767,7 @@ namespace GameSvr
             int n01 = M2Share.GetValNameNo(sParam1);
             if (n01 >= 0)
             {
-                if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[sParam2.Length-1] == '>'))
+                if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[sParam2.Length - 1] == '>'))
                 {
                     result = 4;
                 }
@@ -2668,5 +2787,6 @@ namespace GameSvr
             }
             return result;
         }
+
     }
 }

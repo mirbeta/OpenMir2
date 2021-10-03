@@ -763,49 +763,7 @@ namespace GameSvr
                         }
                         break;
                     case M2Share.nEQUAL:
-                        n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
-                        if (n10 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n10, 0, 9))
-                            {
-                                if (PlayObject.m_nVal[n10] != QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 100, 119))
-                            {
-                                if (M2Share.g_Config.GlobalVal[n10 - 100] != QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 200, 299))
-                            {
-                                if (PlayObject.m_DyVal[n10 - 200] != QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 300, 399))
-                            {
-                                if (PlayObject.m_nMval[n10 - 300] != QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 400, 499))
-                            {
-                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] != QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            result = false;
-                        }
+                        result = EqualData(PlayObject, QuestConditionInfo);
                         break;
                     case M2Share.nLARGE:
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
@@ -1991,96 +1949,7 @@ namespace GameSvr
                         DecInteger(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nSUM:
-                        n18 = 0;
-                        n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
-                        if (n14 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n14, 0, 9))
-                            {
-                                n18 = PlayObject.m_nVal[n14];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 100, 119))
-                            {
-                                n18 = M2Share.g_Config.GlobalVal[n14 - 100];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 200, 299))
-                            {
-                                n18 = PlayObject.m_DyVal[n14 - 200];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 300, 399))
-                            {
-                                n18 = PlayObject.m_nMval[n14 - 300];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 400, 499))
-                            {
-                                n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
-                            }
-                            else
-                            {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                            }
-                        }
-                        else
-                        {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                        }
-                        n1C = 0;
-                        n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
-                        if (n14 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n14, 0, 9))
-                            {
-                                n1C = PlayObject.m_nVal[n14];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 100, 119))
-                            {
-                                n1C = M2Share.g_Config.GlobalVal[n14 - 100];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 200, 299))
-                            {
-                                n1C = PlayObject.m_DyVal[n14 - 200];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 300, 399))
-                            {
-                                n1C = PlayObject.m_nMval[n14 - 300];
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 400, 499))
-                            {
-                                n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
-                            }
-                            else
-                            {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                            }
-                        }
-                        else
-                        {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSUM);
-                        }
-                        n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
-                        if (n14 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n14, 0, 9))
-                            {
-                                PlayObject.m_nVal[9] = PlayObject.m_nVal[9] + n18 + n1C;
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 100, 119))
-                            {
-                                M2Share.g_Config.GlobalVal[9] = M2Share.g_Config.GlobalVal[9] + n18 + n1C;
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 200, 299))
-                            {
-                                PlayObject.m_DyVal[9] = PlayObject.m_DyVal[9] + n18 + n1C;
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 300, 399))
-                            {
-                                PlayObject.m_nMval[99] = PlayObject.m_nMval[99] + n18 + n1C;
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 400, 499))
-                            {
-                                M2Share.g_Config.GlobaDyMval[99] = (short)(M2Share.g_Config.GlobaDyMval[99] + n18 + n1C);
-                            }
-                        }
+                        SumData(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nSC_DIV:
                         DivData(PlayObject, QuestActionInfo);

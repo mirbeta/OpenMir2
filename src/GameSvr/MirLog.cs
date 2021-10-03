@@ -20,7 +20,7 @@ namespace GameSvr
             _logTime = new Timer(OutLog, null, 0, 1000);
         }
 
-        public void OutLog(object obj)
+        private void OutLog(object obj)
         {
             while (!_logqueue.IsEmpty)
             {

@@ -2634,5 +2634,301 @@ namespace GameSvr
             }
             return false;
         }
+
+        private bool EqualData(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        {
+            var result = false;
+            int n14 = 0;
+            int n18 = 0;
+            var s01 = string.Empty;
+            var s02 = string.Empty;
+            if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))// 比较数值
+            {
+                if (n14 != n18)
+                {
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+            else
+            {
+                // 比较字符串
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
+                {
+                    s01 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);//  支持变量
+                }
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam2, ref s02))
+                {
+                    s02 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);//  支持变量
+                }
+                if ((s01).ToLower().CompareTo((s02).ToLower()) == 0)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        public bool CheckVarNameNo(TPlayObject PlayObject, TQuestConditionInfo CheckQuestConditionInfo, ref int n140, ref int n180)
+        {
+            bool result = false;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            n140 = -1;
+            n180 = -1;
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam1, "(", ")", ref sParam1);
+            }
+            else
+            {
+                sParam1 = CheckQuestConditionInfo.sParam1;
+            }
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam2, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam2, "(", ")", ref sParam2);
+            }
+            else
+            {
+                sParam2 = CheckQuestConditionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = CheckQuestConditionInfo.sParam3;
+            }
+            switch (GotoLable_CheckVarNameNo_GetDataType(CheckQuestConditionInfo))
+            {
+                case 0:
+                    if (GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam1, sParam2, ref n140) && GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam3, ref n180))
+                    {
+                        result = true;
+                    }
+                    break;
+                case 1:
+                    n180 = CheckQuestConditionInfo.nParam3;
+                    if (GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam1, sParam2, ref n140))
+                    {
+                        result = true;
+                    }
+                    break;
+                case 2:
+                    if (GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam1, ref n140) && GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam2, ref n180))
+                    {
+                        result = true;
+                    }
+                    break;
+                case 3:
+                    if (GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam1, ref n140) && GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam2, sParam3, ref n180))
+                    {
+                        result = true;
+                    }
+                    break;
+                case 4:
+                    n180 = CheckQuestConditionInfo.nParam2;
+                    if (GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam1, ref n140))
+                    {
+                        result = true;
+                    }
+                    break;
+                case 5:
+                    break;
+            }
+            return result;
+        }
+
+        public int GotoLable_CheckVarNameNo_GetDataType(TQuestConditionInfo CheckQuestConditionInfo)
+        {
+            int result;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            result = -1;
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam1, "(", ")", ref sParam1);
+            }
+            else
+            {
+                sParam1 = CheckQuestConditionInfo.sParam1;
+            }
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam2, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam2, "(", ")", ref sParam2);
+            }
+            else
+            {
+                sParam2 = CheckQuestConditionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(CheckQuestConditionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(CheckQuestConditionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = CheckQuestConditionInfo.sParam3;
+            }
+            if (HUtil32.IsVarNumber(sParam1))
+            {
+                if ((sParam3 != "") && (M2Share.GetValNameNo(sParam3) >= 0))
+                {
+                    result = 0;
+                }
+                else if ((sParam3 != "") && HUtil32.IsStringNumber(sParam3))
+                {
+                    result = 1;
+                }
+                return result;
+            }
+            if (M2Share.GetValNameNo(sParam1) >= 0)
+            {
+                if ((sParam2 != "") && (M2Share.GetValNameNo(sParam2) >= 0))
+                {
+                    result = 2;
+                }
+                else if ((sParam2 != "") && HUtil32.IsVarNumber(sParam2) && (sParam3 != ""))
+                {
+                    result = 3;
+                }
+                else if ((sParam2 != "") && HUtil32.IsStringNumber(sParam2))
+                {
+                    result = 4;
+                }
+            }
+            return result;
+        }
+
+        public bool GotoLable_CheckVarNameNo_GetDynamicVarValue(TPlayObject PlayObject, string sVarType, string sValName, ref int nValue)
+        {
+            bool result = false;
+            TDynamicVar DynamicVar;
+            string sName = string.Empty;
+            IList<TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            if (DynamicVarList == null)
+            {
+                return result;
+            }
+            else
+            {
+                if (DynamicVarList.Count > 0)
+                {
+                    for (var i = 0; i < DynamicVarList.Count; i++)
+                    {
+                        DynamicVar = DynamicVarList[i];
+                        if (DynamicVar != null)
+                        {
+                            if ((DynamicVar.sName).ToLower().CompareTo((sValName).ToLower()) == 0)
+                            {
+                                switch (DynamicVar.VarType)
+                                {
+                                    case TVarType.Integer:
+                                        nValue = DynamicVar.nInternet;
+                                        result = true;
+                                        break;
+                                    case TVarType.String:
+                                        break;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public bool GotoLable_CheckVarNameNo_GetValValue(TPlayObject PlayObject, string sValName, ref int nValue)
+        {
+            nValue = 0;
+            bool result = false;
+            int n100 = M2Share.GetValNameNo(sValName);
+            if (n100 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n100, 0, 9))
+                {
+                    nValue = PlayObject.m_nVal[n100];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 100, 199))
+                {
+                    nValue = M2Share.g_Config.GlobalVal[n100 - 100];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 200, 299))
+                {
+                    nValue = PlayObject.m_DyVal[n100 - 200];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 300, 399))
+                {
+                    nValue = PlayObject.m_nMval[n100 - 300];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 400, 499))
+                {
+                    nValue = M2Share.g_Config.GlobaDyMval[n100 - 400];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 500, 599))
+                {
+                    nValue = PlayObject.m_nInteger[n100 - 500];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 600, 699))
+                {
+                    if (HUtil32.IsStringNumber(PlayObject.m_sString[n100 - 600]))
+                    {
+                        nValue = HUtil32.Str_ToInt(PlayObject.m_sString[n100 - 600], 0);
+                        result = true;
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n100, 700, 799))
+                {
+                    if (HUtil32.IsStringNumber(M2Share.g_Config.GlobalAVal[n100 - 700]))
+                    {
+                        nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n100 - 700], 0);
+                        result = true;
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n100, 800, 1199))//G变量
+                {
+                    nValue = M2Share.g_Config.GlobalVal[n100 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n100, 1200, 1599))//G变量
+                {
+                    if (HUtil32.IsStringNumber(M2Share.g_Config.GlobalAVal[n100 - 1100]))
+                    {
+                        nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n100 - 1100], 0);
+                        result = true;
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n100, 1600, 1699))//G变量
+                {
+                    if (HUtil32.IsStringNumber(PlayObject.m_ServerStrVal[n100 - 1600]))
+                    {
+                        nValue = HUtil32.Str_ToInt(PlayObject.m_ServerStrVal[n100 - 1600], 0);
+                        result = true;
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n100, 1700, 1799))//G变量
+                {
+                    nValue = PlayObject.m_ServerIntVal[n100 - 1700];
+                    result = true;
+                }
+            }
+            return result;
+        }
     }
 }

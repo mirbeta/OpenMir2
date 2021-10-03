@@ -680,10 +680,10 @@ namespace GameSvr
             int result;
             if (m_boCastle)
             {
-                if (m_Castle != null && m_Castle.IsMasterGuild(PlayObject.m_MyGuild))
+                if (m_Castle != null && m_Castle.IsMasterGuild(PlayObject.m_MyGuild)) //沙巴克成员修复物品打折
                 {
-                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));
-                    result = HUtil32.Round(nPrice / 100 * n14);// 100
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(m_nPriceRate * (M2Share.g_Config.nCastleMemberPriceRate / 100)));//80%
+                    result = HUtil32.Round(nPrice / 100 * n14);
                 }
                 else
                 {
@@ -713,7 +713,6 @@ namespace GameSvr
                 var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    // 取自定义物品名称
                     var sName = ItmUnit.GetItemName(UserItem);
                     var nPrice = GetUserPrice(User, GetItemPrice(UserItem.wIndex));
                     var nStock = List14.Count;
@@ -752,7 +751,6 @@ namespace GameSvr
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
                 List14 = m_GoodsList[i];
-                // if List14.Count <= 0 then Continue; //0807 增加，防止在制药物品列表为空时出错
                 UserItem = List14[0];
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
@@ -951,7 +949,7 @@ namespace GameSvr
                             }
                             GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
                         }
-                        else if (sLabel.CompareTo((M2Share.sDealYBme)) == 0) // 元宝寄售:出售物品 
+                        else if (string.Compare(sLabel, M2Share.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
                         {
                             if (m_boYBDeal)
                             {
