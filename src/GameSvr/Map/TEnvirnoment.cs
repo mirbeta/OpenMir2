@@ -586,6 +586,7 @@ namespace GameSvr
         public object AddToMapMineEvent(int nX, int nY, int nType, object __Event)
         {
             TMapCellinfo MapCellInfo = null;
+            TMapCellinfo Mc = new TMapCellinfo();
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMapMineEvent ";
             object result = null;
             try
@@ -594,20 +595,45 @@ namespace GameSvr
                 var bo1A = false;
                 if (bo19 && MapCellInfo.Attribute != 0)
                 {
-                    if (MapCellInfo.ObjList == null)
+                    var Space = false;// 人物可以走到的地方才放上矿藏
+                    for (var X = nX - 1; X <= nX + 1; X ++ )
                     {
-                        MapCellInfo.ObjList = new List<TOSObject>();
-                    }
-                    if (!bo1A)
-                    {
-                        var OSObject = new TOSObject
+                        for (var Y = nY - 1; Y <= nY + 1; Y ++ )
                         {
-                            btType = (byte)nType,
-                            CellObj = __Event,
-                            dwAddTime = HUtil32.GetTickCount()
-                        };
-                        MapCellInfo.ObjList.Add(OSObject);
-                        result = __Event;
+                            if (GetMapCellInfo(X, Y, ref Mc))
+                            {
+                                if ((Mc.Valid))
+                                {
+                                    Space = true;
+                                }
+                            }
+                            if (Space)
+                            {
+                                break;
+                            }
+                        }
+                        if (Space)
+                        {
+                            break;
+                        }
+                    }
+                    if (Space)
+                    {
+                        if (MapCellInfo.ObjList == null)
+                        {
+                            MapCellInfo.ObjList = new List<TOSObject>();
+                        }
+                        if (!bo1A)
+                        {
+                            var OSObject = new TOSObject
+                            {
+                                btType = (byte)nType,
+                                CellObj = __Event,
+                                dwAddTime = HUtil32.GetTickCount()
+                            };
+                            MapCellInfo.ObjList.Add(OSObject);
+                            result = __Event;
+                        }
                     }
                 }
             }

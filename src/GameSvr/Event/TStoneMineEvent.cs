@@ -29,7 +29,7 @@ namespace GameSvr
             }
             else
             {
-                if (m_Envir.AddToMapItemEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
+                if (m_Envir.AddToMapMineEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
                 {
                     m_boAddToMap = false;
                 }
