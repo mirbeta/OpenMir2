@@ -227,7 +227,6 @@ namespace GameSvr
                             s20 = sLabel.Substring(M2Share.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
                             PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "");
-                            // GotoLable(PlayObject,sHIREGUARDOK,False);
                         }
                         else if (HUtil32.CompareLStr(sLabel, M2Share.sHIREARCHERNOW, M2Share.sHIREARCHERNOW.Length))
                         {

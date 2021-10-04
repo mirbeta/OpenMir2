@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SystemModule;
 
 namespace GameSvr
@@ -23,13 +24,28 @@ namespace GameSvr
         /// </summary>
         public IList<int> m_ItemTypeList = null;
         public IList<TGoods> m_RefillGoodsList = null;
+        /// <summary>
+        /// 商品列表
+        /// </summary>
         public IList<IList<TUserItem>> m_GoodsList = null;
+        /// <summary>
+        /// 物品价格列表
+        /// </summary>
         public IList<TItemPrice> m_ItemPriceList = null;
+        /// <summary>
+        /// 物品价格列表
+        /// </summary>
         public IList<TUpgradeInfo> m_UpgradeWeaponList = null;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
         public int m_dwMoveTick = 0;
+        /// <summary>
+        /// 是否购买物品
+        /// </summary>
         public bool m_boBuy = false;
+        /// <summary>
+        /// 是否交易物品
+        /// </summary>
         public bool m_boSell = false;
         public bool m_boMakeDrug = false;
         public bool m_boPrices = false;
@@ -154,7 +170,7 @@ namespace GameSvr
             IList<TUserItem> RefillList;
             IList<TUserItem> RefillList20;
             bool bo21;
-            const string sExceptionMsg = "[Exception] TMerchant::RefillGoods %s/%d:%d [%s] Code:%d";
+            const string sExceptionMsg = "[Exception] TMerchant::RefillGoods {0}/{1}:{2} [{3}] Code:{4}";
             try
             {
                 for (var i = 0; i < m_RefillGoodsList.Count; i++)
@@ -275,9 +291,8 @@ namespace GameSvr
             }
         }
 
-        private void UpgradeWapon_sub_4A0218(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
+        private void UpgradeWaponAddValue(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
-            IList<double> DuraList;
             TUserItem UserItem;
             GameItem StdItem;
             TStdItem StdItem80 = null;
@@ -293,7 +308,7 @@ namespace GameSvr
             var nMcMax = 0;
             var nDura = 0;
             var nItemCount = 0;
-            DuraList = new List<double>();
+            IList<double> DuraList = new List<double>();
             for (var i = ItemList.Count - 1; i >= 0; i--)
             {
                 UserItem = ItemList[i];
@@ -407,7 +422,7 @@ namespace GameSvr
                 {
                     if (DuraList[j] > DuraList[j - 1])
                     {
-                        //DuraList.Exchange(II, II - 1);
+                        DuraList.Reverse();
                     }
                 }
             }
@@ -432,7 +447,7 @@ namespace GameSvr
             }
             if (DuraList != null)
             {
-                //DuraList.Free;
+                DuraList = null;
             }
         }
 
@@ -481,7 +496,7 @@ namespace GameSvr
                 User.RecalcAbilitys();
                 User.FeatureChanged();
                 User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                UpgradeWapon_sub_4A0218(User, User.m_ItemList, ref UpgradeInfo.btDc, ref UpgradeInfo.btSc, ref UpgradeInfo.btMc, ref UpgradeInfo.btDura);
+                UpgradeWaponAddValue(User, User.m_ItemList, ref UpgradeInfo.btDc, ref UpgradeInfo.btSc, ref UpgradeInfo.btMc, ref UpgradeInfo.btDura);
                 UpgradeInfo.dtTime = DateTime.Now;
                 UpgradeInfo.dwGetBackTick = HUtil32.GetTickCount();
                 m_UpgradeWeaponList.Add(UpgradeInfo);
@@ -1238,7 +1253,6 @@ namespace GameSvr
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    // 取自定义物品名称
                     sUserItemName = ItmUnit.GetItemName(UserItem);
                     if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
                     {
@@ -1670,7 +1684,6 @@ namespace GameSvr
         public bool ClientRepairItem(TPlayObject PlayObject, TUserItem UserItem)
         {
             int nRepairPrice;
-            GameItem StdItem;
             var result = false;
             var boCanRepair = true;
             if (PlayObject.m_sScriptLable == M2Share.sSUPERREPAIR && !m_boS_repair)
@@ -1692,7 +1705,7 @@ namespace GameSvr
             {
                 nPrice = nPrice * M2Share.g_Config.nSuperRepairPriceRate;
             }
-            StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            GameItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)

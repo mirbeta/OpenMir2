@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using SystemModule;
@@ -2844,13 +2845,7 @@ namespace GameSvr
 
         public void ClearItemList()
         {
-            var I = 0;  
-            while (true)
-            {
-                //StdItemList.Exchange(M2Share.RandomNumber.Random(StdItemList.Count), StdItemList.Count - 1);
-                I++;
-                if (I >= StdItemList.Count) break;
-            }
+            StdItemList.Reverse();
             ClearMerchantData();
         }
 

@@ -1603,16 +1603,14 @@ namespace GameSvr
 
         private void ScriptActionError(TPlayObject PlayObject, string sErrMsg, TQuestActionInfo QuestActionInfo, string sCmd)
         {
-            string sMsg;
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.MainOutMessage(sMsg);
         }
 
         private void ScriptConditionError(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            string sMsg;
-            sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            string sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.MainOutMessage("[脚本参数不正确] " + sMsg);
         }
 
@@ -1720,56 +1718,53 @@ namespace GameSvr
         private bool GetValValue(TPlayObject PlayObject, string sMsg, ref int nValue)
         {
             bool result = false;
-            int n01;
-            try
+            if (sMsg == "")
             {
-                if (sMsg == "")
-                {
-                    return result;
-                }
-                n01 = M2Share.GetValNameNo(sMsg);
-                if (n01 >= 0)
-                {
-                    if (HUtil32.RangeInDefined(n01, 0, 99))
-                    {
-                        nValue = PlayObject.m_nVal[n01];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 100, 199))
-                    {
-                        nValue = M2Share.g_Config.GlobalVal[n01 - 100];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 300, 399))
-                    {
-                        nValue = PlayObject.m_nMval[n01 - 300];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 400, 499))
-                    {
-                        nValue = M2Share.g_Config.GlobaDyMval[n01 - 400];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 500, 599))
-                    {
-                        nValue = PlayObject.m_nInteger[n01 - 500];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 800, 1199))
-                    {
-                        nValue = M2Share.g_Config.GlobalVal[n01 - 700];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 1700, 1799))
-                    {
-                        nValue = PlayObject.m_ServerIntVal[n01 - 1700];
-                        result = true;
-                    }
-                }
+                return result;
             }
-            catch
+            int n01 = M2Share.GetValNameNo(sMsg);
+            if (n01 >= 0)
             {
-                M2Share.MainOutMessage("{异常} TNormNpc.GetValValue1");
+                if (HUtil32.RangeInDefined(n01, 0, 99))
+                {
+                    nValue = PlayObject.m_nVal[n01];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 100, 199))
+                {
+                    nValue = M2Share.g_Config.GlobalVal[n01 - 100];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 200, 299))
+                {
+                    nValue = PlayObject.m_DyVal[n01 - 200];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 300, 399))
+                {
+                    nValue = PlayObject.m_nMval[n01 - 300];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 400, 499))
+                {
+                    nValue = M2Share.g_Config.GlobaDyMval[n01 - 400];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 500, 599))
+                {
+                    nValue = PlayObject.m_nInteger[n01 - 500];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 800, 1199))
+                {
+                    nValue = M2Share.g_Config.GlobalVal[n01 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1700, 1799))
+                {
+                    nValue = PlayObject.m_ServerIntVal[n01 - 1700];
+                    result = true;
+                }
             }
             return result;
         }
