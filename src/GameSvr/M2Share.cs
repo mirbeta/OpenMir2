@@ -162,7 +162,7 @@ namespace GameSvr
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
         public static string sConfigPath = "";
-        public const string sConfigFileName = "!Setup.conf";
+        public const string sConfigFileName = "Server.conf";
         public const string sExpConfigFileName = "Exps.conf";
         public const string sCommandFileName = "Command.conf";
         public const string sStringFileName = "String.conf";
@@ -2279,7 +2279,7 @@ namespace GameSvr
         {
             bool result;
             var Item = UserEngine.GetStdItem(nIndex);
-            if (new ArrayList(new int[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(Item.StdMode))// 修正错误
+            if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(Item.StdMode))// 修正错误
             {
                 result = true;
             }

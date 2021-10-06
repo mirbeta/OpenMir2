@@ -481,10 +481,11 @@ namespace GameSvr
                     }
                 }
                 User.GoldChanged();
+                var userItem = new TUserItem(User.m_UseItems[Grobal2.U_WEAPON]);
                 UpgradeInfo = new TUpgradeInfo
                 {
                     sUserName = User.m_sCharName,
-                    UserItem = User.m_UseItems[Grobal2.U_WEAPON]
+                    UserItem = userItem
                 };
                 StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[Grobal2.U_WEAPON].wIndex);
                 if (StdItem.NeedIdentify == 1)
@@ -502,6 +503,7 @@ namespace GameSvr
                 m_UpgradeWeaponList.Add(UpgradeInfo);
                 SaveUpgradingList();
                 bo0D = true;
+                userItem = null;
             }
             if (bo0D)
             {
@@ -577,11 +579,11 @@ namespace GameSvr
                     {
                         UpgradeInfo.UserItem.DuraMax += 1000;
                     }
-                    else if (HUtil32.RangeInDefined(r, 1, 4))
+                    else if (HUtil32.RangeInDefined(r, 5, 7))
                     {
                         UpgradeInfo.UserItem.DuraMax += 2000;
                     }
-                    else if (HUtil32.RangeInDefined(r, 1, 4))
+                    else if (HUtil32.RangeInDefined(r, 8, 255))
                     {
                         UpgradeInfo.UserItem.DuraMax += 4000;
                     }
@@ -600,7 +602,7 @@ namespace GameSvr
                 if (UpgradeInfo.btDc >= UpgradeInfo.btMc && UpgradeInfo.btDc >= UpgradeInfo.btSc || n1C == 0)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
-                    n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90 ) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 10;

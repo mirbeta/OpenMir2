@@ -564,7 +564,20 @@ namespace SystemModule
         public const int HOWMANYMAGICS = 20;
 
         //摆摊
-        public const int       CM_SENDSELL =9050;   //开始摆摊 public const int SM_SENDSELL =9051; public const int RM_SENDSELL =9052; public const int CM_MYSHOPEXIT =9053; public const int SM_MYSHOPEXIT =9054; public const int CM_MYSHOPHAM =9055; public const int SM_MYSHOPHAM =9056; public const int CM_HAMSHOPBUY =9057; public const int SM_HAMSHOPBUYA =9058; public const int SM_HAMSHOPBUYB =9059; public const int SM_HAMSHOPTYPE =9060; public const int CM_OPHAMSHOP =9061; public const int SM_OPHAMSHOP =9062; public const int CM_CHACKITEM =9063;
+        public const int       CM_SENDSELL =9050;   //开始摆摊
+ public const int SM_SENDSELL =9051;
+ public const int RM_SENDSELL =9052;
+ public const int CM_MYSHOPEXIT =9053;
+ public const int SM_MYSHOPEXIT =9054;
+ public const int CM_MYSHOPHAM =9055;
+ public const int SM_MYSHOPHAM =9056;
+ public const int CM_HAMSHOPBUY =9057;
+ public const int SM_HAMSHOPBUYA =9058;
+ public const int SM_HAMSHOPBUYB =9059;
+ public const int SM_HAMSHOPTYPE =9060;
+ public const int CM_OPHAMSHOP =9061;
+ public const int SM_OPHAMSHOP =9062;
+ public const int CM_CHACKITEM =9063;
         public const int SM_CHACKITEM = 9064;
 
         /// <summary>
@@ -1221,6 +1234,9 @@ namespace SystemModule
         public const int RM_10401 = 10401;
         public const int RM_OPENHEALTH = 10410;
         public const int RM_CLOSEHEALTH = 10411;
+        /// <summary>
+        /// 升级武器失败
+        /// </summary>
         public const int RM_BREAKWEAPON = 10413;
         public const int RM_10414 = 10414;
         public const int RM_CHANGEFACE = 10415;

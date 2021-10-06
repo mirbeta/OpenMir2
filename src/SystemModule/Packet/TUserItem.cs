@@ -37,6 +37,15 @@ namespace SystemModule
             this.btValue = ReadBytes(14);
         }
 
+        public TUserItem(TUserItem userItem)
+        {
+            this.MakeIndex = userItem.MakeIndex;
+            this.wIndex = userItem.wIndex;
+            this.Dura = userItem.Dura;
+            this.DuraMax = userItem.DuraMax;
+            this.btValue = userItem.btValue;
+        }
+
         public byte[] GetPacket()
         {
             using (var memoryStream = new MemoryStream())

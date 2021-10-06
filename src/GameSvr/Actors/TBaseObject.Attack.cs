@@ -14,7 +14,7 @@ namespace GameSvr
         /// 检查武器升级状态
         /// </summary>
         /// <param name="UserItem"></param>
-        private void CheckWeaponUpgradeStatus(TUserItem UserItem)
+        private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
         {
             if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
             {
@@ -49,8 +49,8 @@ namespace GameSvr
             GameItem StdItem;
             if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
             {
-                UseItems = m_UseItems[Grobal2.U_WEAPON];
-                CheckWeaponUpgradeStatus(m_UseItems[Grobal2.U_WEAPON]);
+                UseItems = new TUserItem(m_UseItems[Grobal2.U_WEAPON]);
+                CheckWeaponUpgradeStatus(ref m_UseItems[Grobal2.U_WEAPON]);
                 if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
                 {
                     SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
@@ -58,9 +58,12 @@ namespace GameSvr
                     PlayObject.SendDelItems(UseItems);
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
-                    if (StdItem.NeedIdentify == 1)
+                    if (StdItem != null)
                     {
-                        M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        if (StdItem.NeedIdentify == 1)
+                        {
+                            M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        }
                     }
                     FeatureChanged();
                 }
@@ -79,6 +82,7 @@ namespace GameSvr
                     SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
                 }
             }
+            UseItems = null;
         }
 
         protected virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
