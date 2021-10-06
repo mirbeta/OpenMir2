@@ -19,7 +19,6 @@ namespace DBSvr
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<ServerApp>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<LoginSocService>();
                     services.AddSingleton<HumDataService>();

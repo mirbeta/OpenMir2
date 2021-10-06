@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging.Console;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -53,8 +54,11 @@ namespace GameGate
             //从全局服务获取可用网关服务进行分配 
 
             //需要记录socket会话ID和链接网关
-
             var gateclient = GateShare.GetClientService();
+            if (gateclient == null)
+            {
+                return;
+            }
 
             Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏服务器[{gateclient.GateIdx}] Server:{gateclient.GetSocketIp()}");
 
@@ -148,6 +152,10 @@ namespace GameGate
         /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
+            if (!GateShare.UserSessions.ContainsKey(token.ConnectionId))
+            {
+                return;
+            }
             var clientSession = GateShare.UserSessions[token.ConnectionId];
             if (clientSession != null)
             {

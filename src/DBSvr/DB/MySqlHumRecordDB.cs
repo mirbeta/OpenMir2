@@ -10,14 +10,14 @@ namespace DBSvr
 {
     public class MySqlHumRecordDB
     {
-        public TDBHeader m_Header = null;
-        public Dictionary<string, int> m_QuickList = null;
-        public Dictionary<int, string> m_IndexQuickList = null;
-        public TQuickIDList m_QuickIDList = null;
+        private TDBHeader m_Header = null;
+        private Dictionary<string, int> m_QuickList = null;
+        private Dictionary<int, string> m_IndexQuickList = null;
+        private TQuickIDList m_QuickIDList = null;
         /// <summary>
         /// 已被删除的记录号
         /// </summary>
-        public IList<int> m_DeletedList = null;
+        private IList<int> m_DeletedList = null;
         private IDbConnection _dbConnection = null;
 
         public MySqlHumRecordDB()
@@ -32,7 +32,6 @@ namespace DBSvr
 
         private void LoadQuickList()
         {
-            int nIndex = 0;
             THumInfo DBRecord = null;
             m_QuickList.Clear();
             m_QuickIDList.Clear();
@@ -74,10 +73,9 @@ namespace DBSvr
                         }
                         else
                         {
-                            m_DeletedList.Add(nIndex);
+                            m_DeletedList.Add(DBRecord.Id);
                         }
                         nRecordIndex++;
-                        nIndex++;
                     }
                     dr.Close();
                     dr.Dispose();
@@ -87,7 +85,7 @@ namespace DBSvr
             {
                 Close();
             }
-            for (nIndex = 0; nIndex < AccountList.Count; nIndex++)
+            for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
                 m_QuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], AccountList[nIndex].nIndex, AccountList[nIndex].nSelectID);
             }

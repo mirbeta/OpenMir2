@@ -288,21 +288,18 @@ namespace DBSvr
         private bool LoadClearMakeIndexList(string sFileName)
         {
             bool result = false;
-            int i;
-            int nIndex;
-            string sLineText;
             if (File.Exists(sFileName))
             {
                 DBShare.g_ClearMakeIndex.LoadFromFile(sFileName);
-                i = 0;
+                var i = 0;
                 while (true)
                 {
                     if (DBShare.g_ClearMakeIndex.Count <= i)
                     {
                         break;
                     }
-                    sLineText = DBShare.g_ClearMakeIndex[i];
-                    nIndex = HUtil32.Str_ToInt(sLineText, -1);
+                    var sLineText = DBShare.g_ClearMakeIndex[i];
+                    var nIndex = HUtil32.Str_ToInt(sLineText, -1);
                     if (nIndex < 0)
                     {
                         DBShare.g_ClearMakeIndex.RemoveAt(i);

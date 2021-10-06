@@ -108,7 +108,7 @@ namespace GameGate
                     {
                         gameSpeed.dwWalkTick =HUtil32. GetTickCount();      //走路间隔
                         gameSpeed.dwRunTick = HUtil32.GetTickCount();       //跑步间隔
-                        gameSpeed.dwHitTick = HUtil32.GetTickCount();       //攻击间隔
+                        gameSpeed.dwAttackTick = HUtil32.GetTickCount();       //攻击间隔
                         gameSpeed.dwSpellTick = HUtil32.GetTickCount();     //魔法间隔
                         gameSpeed.dwTurnTick = HUtil32.GetTickCount();      //转身间隔
                         gameSpeed.dwPickupTick =HUtil32. GetTickCount();    //捡起间隔

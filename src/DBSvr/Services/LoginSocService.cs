@@ -10,7 +10,6 @@ namespace DBSvr
     /// 账号中心
     /// </summary>
     public class LoginSocService
-
     {
         private IList<TGlobaSessionInfo> GlobaSessionList = null;
         private string m_sSockMsg = string.Empty;

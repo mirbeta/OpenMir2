@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
@@ -355,14 +356,15 @@ namespace GameGate
         /// <summary>
         /// 玩家开挂记录列表
         /// </summary>
-        public static ConcurrentDictionary<string,string> GameSpeedList = null;
+        public static ConcurrentDictionary<string, string> GameSpeedList = null;
         public static ConcurrentDictionary<string, ForwardClientService> _ClientGateMap;
-        private static ConcurrentDictionary<int, bool> Magic_Attack_Array;
+        public static bool[] Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
         public static ConcurrentDictionary<string, ForwardClientService> ServerGateList;
         public static ConcurrentDictionary<string, UserClientSession> UserSessions;
         public static List<WeightedItem<ForwardClientService>> m_ServerGateList = new List<WeightedItem<ForwardClientService>>();
-            
+        public static Dictionary<string, UserClientSession> PunishList;
+
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
             string tMsg;
@@ -374,7 +376,7 @@ namespace GameGate
             }
             finally
             {
-              HUtil32.LeaveCriticalSection(CS_MainLog);
+                HUtil32.LeaveCriticalSection(CS_MainLog);
             }
         }
 
@@ -433,7 +435,7 @@ namespace GameGate
         {
             return _ClientGateMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
         }
-        
+
         /// <summary>
         /// 从字典删除用户和网关对应关系
         /// </summary>
@@ -460,16 +462,27 @@ namespace GameGate
             TempBlockIPList = new List<string>();
             SessionIndex = new ConcurrentDictionary<string, int>();
             _ClientGateMap = new ConcurrentDictionary<string, ForwardClientService>();
-            Magic_Attack_Array = new ConcurrentDictionary<int, bool>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
             ServerGateList = new ConcurrentDictionary<string, ForwardClientService>();
             UserSessions = new ConcurrentDictionary<string, UserClientSession>();
             GameSpeedList = new ConcurrentDictionary<string, string>();
+            InitMagicAttackMap();
         }
 
         public static void InitMagicAttackMap()
         {
-            //Magic_Attack_Array.TryAdd();
+            Magic_Attack_Array = new bool[128]
+            {
+                false, true, false, false, false, true, true, false, false, true, true, true, false, true, false, false,
+                false, false, false, false, false, false, true, true, true, false, false,
+                false, false, false, false, false, true, true, false, false, true, true, true, true, false, true, false,
+                false, true, true, false, true, false, false, false, true, true, true, true, false, false, true, true,
+                false, false, false, false, false, false, false, false, false, false, false, false, true, true, true,
+                true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                true, true, true
+            };
         }
 
         public static void InitMagicDelayTimeMap()
@@ -534,8 +547,32 @@ namespace GameGate
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             //4.按权重分配
             var userList = new List<ForwardClientService>(ServerGateList.Values);
-            var random = new System.Random().Next(userList.Count);
-            return userList[random];
+            if (userList.Any())
+            {
+                var random = new System.Random().Next(userList.Count);
+                return userList[random];
+            }
+            return null;
         }
-    } 
+    }
+
+    public class TDelayMsg
+    {
+        public long dwDelayTime;
+        public int nMag;
+        public int nCmd;
+        public int nDir;
+        public int nBufLen;
+        public byte[] pBuffer;
+
+        public TDelayMsg()
+        {
+            pBuffer = new byte[1024];
+        }
+    }
+
+    public class THardwareHeader
+    {
+        public long dwMagicCode;
+    }
 }

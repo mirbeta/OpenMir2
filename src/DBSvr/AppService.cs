@@ -9,16 +9,14 @@ namespace DBSvr
     public class AppService : BackgroundService
     {
         private readonly ILogger<AppService> _logger;
-        private readonly ServerApp _serverApp;
         private readonly UserSocService _userSoc;
         private readonly LoginSocService _LoginSoc;
         private readonly HumDataService _dataService;
         private Timer _threadTimer;
 
-        public AppService(ILogger<AppService> logger, ServerApp serverApp, UserSocService userSoc, LoginSocService idSoc, HumDataService dataService)
+        public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSocService idSoc, HumDataService dataService)
         {
             _logger = logger;
-            _serverApp = serverApp;
             _userSoc = userSoc;
             _LoginSoc = idSoc;
             _dataService = dataService;
@@ -28,7 +26,6 @@ namespace DBSvr
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
-            _serverApp.Start();
             _userSoc.Start();
             _LoginSoc.Start();
             _dataService.Start();
@@ -38,14 +35,22 @@ namespace DBSvr
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug($"DBSvr is starting.");
-            _serverApp.StartService();
+            DBShare.Initialization();
+            DBShare.LoadConfig();
+            DBShare.nHackerNewChrCount = 0;
+            DBShare.nHackerDelChrCount = 0;
+            DBShare.nHackerSelChrCount = 0;
+            DBShare.n4ADC1C = 0;
+            DBShare.n4ADC20 = 0;
+            DBShare.n4ADC24 = 0;
+            DBShare.n4ADC28 = 0;
+            DBShare.MainOutMessage("服务器已启动...");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug($"DBSvr is stopping.");
-            _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }
 

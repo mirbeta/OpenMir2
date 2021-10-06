@@ -23,7 +23,7 @@ namespace DBSvr
             HumDB = humDb;
             ServerList = new List<TServerInfo>();
             HumSessionList = new List<THumSession>();
-            serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            serverSocket = new ISocketServer(ushort.MaxValue, 512);
             serverSocket.OnClientConnect += ServerSocketClientConnect;
             serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             serverSocket.OnClientRead += ServerSocketClientRead;
@@ -97,12 +97,9 @@ namespace DBSvr
                             ProcessServerPacket(ServerInfo);
                             break;
                         }
-                        else
+                        else if (ServerInfo.sStr.Length > 81920)
                         {
-                            if (ServerInfo.sStr.Length > 81920)
-                            {
-                                ServerInfo.sStr = "";
-                            }
+                            ServerInfo.sStr = "";
                         }
                     }
                     break;
