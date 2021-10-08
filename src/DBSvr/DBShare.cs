@@ -89,14 +89,14 @@ namespace DBSvr
             return result;
         }
 
-        public static void LoadIPTable()
+        private static void LoadIPTable()
         {
             ServerIPList.Clear();
             try
             {
                 var stringList = new StringList();
                 stringList.LoadFromFile(sServerIPConfFileNmae);
-                for (int i = 0; i < stringList.Count; i++)
+                for (var i = 0; i < stringList.Count; i++)
                 {
                     if (ServerIPList.ContainsKey(stringList[i]))
                     {
@@ -246,7 +246,7 @@ namespace DBSvr
         public string sChrName;
         public string sAccount;
         public bool boDeleted;
-        public bool boSelected;
+        public byte boSelected;
         public DateTime dModDate;
         public byte btCount;
         public byte[] unknown2;

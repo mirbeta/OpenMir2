@@ -95,7 +95,7 @@ namespace SystemModule
                                 }
                                 else
                                 {
-                                    n20 = String.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase);
+                                    n20 = string.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase);
                                     if (n20 > 0)
                                     {
                                         ChrList = new List<TQuickID>();
@@ -128,7 +128,7 @@ namespace SystemModule
                         }
                         else
                         {
-                            n1C = String.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
+                            n1C = string.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
                             if (n1C > 0)
                             {
                                 nLow = nMed;
@@ -206,11 +206,11 @@ namespace SystemModule
                 {
                     if ((nHigh - nLow) == 1)
                     {
-                        if (String.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             n24 = nHigh;
                         }
-                        if (String.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sAccount, _quickList[nLow].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             n24 = nLow;
                         }
@@ -218,7 +218,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        n20 = String.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
+                        n20 = string.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
                         if (n20 > 0)
                         {
                             nLow = nMed;

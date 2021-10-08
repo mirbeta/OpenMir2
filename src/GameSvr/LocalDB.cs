@@ -1216,63 +1216,14 @@ namespace GameSvr
 
         public int LoadUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
         {
-            int result;
-            string sFileName;
-            result = -1;
-            sFileName = ".\\Envir\\Market_Upg\\" + sNPCName + ".upg";
-            //if (File.Exists(sFileName))
-            //{
-            //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Read | FileShare.ReadWrite);
-            //    if (FileHandle > 0)
-            //    {
-            //        
-            //        FileRead(FileHandle, nRecordCount, sizeof(int));
-            //        for (I = 0; I < nRecordCount; I ++ )
-            //        {
-            //            
-            //            if (FileRead(FileHandle, UpgradeRecord, sizeof(TUpgradeInfo)) == sizeof(TUpgradeInfo))
-            //            {
-            //                UpgradeInfo = new TUpgradeInfo();
-            //                UpgradeInfo = UpgradeRecord;
-            //                UpgradeInfo.dwGetBackTick = 0;
-            //                DataList.Add(UpgradeInfo);
-            //            }
-            //        }
-            //        FileHandle.Close();
-            //        result = 1;
-            //    }
-            //}
-            return result;
+            //todo 加载武器升级数据
+            return -1;
         }
 
         public int SaveUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)
         {
-            int result;
-            string sFileName;
-            result = -1;
-            sFileName = ".\\Envir\\Market_Upg\\" + sNPCName + ".upg";
-            //if (File.Exists(sFileName))
-            //{
-            //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Write | FileShare.ReadWrite);
-            //}
-            //else
-            //{
-            //    FileHandle = File.Create(sFileName);
-            //}
-            //if (FileHandle > 0)
-            //{
-            //    
-            //    FileWrite(FileHandle, DataList.Count, sizeof(int));
-            //    for (I = 0; I < DataList.Count; I ++ )
-            //    {
-            //        UpgradeInfo = DataList[I];
-            //        
-            //        FileWrite(FileHandle, UpgradeInfo, sizeof(TUpgradeInfo));
-            //    }
-            //    FileHandle.Close();
-            //    result = 1;
-            //}
-            return result;
+            //todo 保存武器升级数据
+            return -1;
         }
 
         public int LoadGoodRecord(TMerchant NPC, string sFile)

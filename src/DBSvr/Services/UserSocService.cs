@@ -155,7 +155,7 @@ namespace DBSvr
             return nUserCount;
         }
 
-        private bool NewChrData(string sChrName, int nSex, int nJob, int nHair)
+        private bool NewChrData(string sAccount,string sChrName, int nSex, int nJob, int nHair)
         {
             bool result = false;
             THumDataInfo ChrRecord;
@@ -167,7 +167,9 @@ namespace DBSvr
                     ChrRecord.Header = new TRecordHeader();
                     ChrRecord.Data = new THumInfoData();
                     ChrRecord.Header.sName = sChrName;
+                    ChrRecord.Header.sAccount = sAccount;
                     ChrRecord.Data.sCharName = sChrName;
+                    ChrRecord.Data.sAccount = sAccount;
                     ChrRecord.Data.btSex = (byte)nSex;
                     ChrRecord.Data.btJob = (byte)nJob;
                     ChrRecord.Data.btHair = (byte)nHair;
@@ -585,6 +587,7 @@ namespace DBSvr
                             {
                                 continue;
                             }
+                            HumRecord = null;
                             if (HumChrDB.GetBy(QuickID.nIndex, ref HumRecord) && !HumRecord.boDeleted)
                             {
                                 string sChrName = QuickID.sChrName;
@@ -593,13 +596,14 @@ namespace DBSvr
                                 {
                                     continue;
                                 }
+                                ChrRecord = null;
                                 if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
                                 {
                                     var btSex = ChrRecord.Data.btSex;
-                                    var sJob = (ChrRecord.Data.btJob).ToString();
-                                    var sHair = (ChrRecord.Data.btHair).ToString();
-                                    var sLevel = (ChrRecord.Data.Abil.Level).ToString();
-                                    if (HumRecord.boSelected)
+                                    var sJob = ChrRecord.Data.btJob.ToString();
+                                    var sHair = ChrRecord.Data.btHair.ToString();
+                                    var sLevel = ChrRecord.Data.Abil.Level.ToString();
+                                    if (HumRecord.boSelected == 1)
                                     {
                                         s40 = s40 + "*";
                                     }
@@ -633,7 +637,7 @@ namespace DBSvr
             SendUserSocket(UserInfo.Socket, sMsg, UserInfo.sConnID);
         }
 
-        public int DelChr_snametolevel(string sName)
+        private int DelChrSnameToLevel(string sName)
         {
             THumDataInfo ChrRecord = null;
             int result = 0;
@@ -675,10 +679,10 @@ namespace DBSvr
                     if (n10 >= 0)
                     {
                         HumChrDB.Get(n10, ref HumRecord);
-                        int nIndex = DelChr_snametolevel(sChrName);
+                        int nLevel = DelChrSnameToLevel(sChrName);
                         if (HumRecord.sAccount == UserInfo.sAccount)
                         {
-                            if (nIndex < DBShare.nDELMaxLevel)
+                            if (nLevel < DBShare.nDELMaxLevel)
                             {
                                 HumRecord.boDeleted = true;
                                 HumRecord.dModDate = DateTime.Now;
@@ -762,16 +766,9 @@ namespace DBSvr
             }
             if (nCode == -1)
             {
-                try
+                if (HumDB.Index(sChrName) >= 0)
                 {
-                    if (HumDB.Index(sChrName) >= 0)
-                    {
-                        nCode = 2;
-                    }
-                }
-                finally
-                {
-                
+                    nCode = 2;
                 }
                 try
                 {
@@ -806,7 +803,7 @@ namespace DBSvr
                 }
                 if (nCode == -1)
                 {
-                    if (NewChrData(sChrName, HUtil32.Str_ToInt(sSex, 0), HUtil32.Str_ToInt(sJob, 0), HUtil32.Str_ToInt(sHair, 0)))
+                    if (NewChrData(sAccount, sChrName, HUtil32.Str_ToInt(sSex, 0), HUtil32.Str_ToInt(sJob, 0), HUtil32.Str_ToInt(sHair, 0)))
                     {
                         nCode = 1;
                     }
@@ -863,14 +860,14 @@ namespace DBSvr
                                 {
                                     if (HumRecord.sChrName == sChrName)
                                     {
-                                        HumRecord.boSelected = true;
+                                        HumRecord.boSelected = 1;
                                         HumChrDB.UpdateBy(nIndex, ref HumRecord);
                                     }
                                     else
                                     {
-                                        if (HumRecord.boSelected)
+                                        if (HumRecord.boSelected == 1)
                                         {
-                                            HumRecord.boSelected = false;
+                                            HumRecord.boSelected = 0;
                                             HumChrDB.UpdateBy(nIndex, ref HumRecord);
                                         }
                                     }
@@ -959,6 +956,10 @@ namespace DBSvr
 
         private int GetMapIndex(string sMap)
         {
+            if (string.IsNullOrEmpty(sMap))
+            {
+                return 0;
+            }
             if (MapList.ContainsKey(sMap))
             {
                 return MapList[sMap];

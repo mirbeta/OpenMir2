@@ -27,15 +27,15 @@ namespace GameSvr
         /// <summary>
         /// 商品列表
         /// </summary>
-        public IList<IList<TUserItem>> m_GoodsList = null;
+        private IList<IList<TUserItem>> m_GoodsList = null;
         /// <summary>
         /// 物品价格列表
         /// </summary>
-        public IList<TItemPrice> m_ItemPriceList = null;
+        private IList<TItemPrice> m_ItemPriceList = null;
         /// <summary>
-        /// 物品价格列表
+        /// 物品升级列表
         /// </summary>
-        public IList<TUpgradeInfo> m_UpgradeWeaponList = null;
+        private IList<TUpgradeInfo> m_UpgradeWeaponList = null;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
         public int m_dwMoveTick = 0;
@@ -454,12 +454,11 @@ namespace GameSvr
         private void UpgradeWapon(TPlayObject User)
         {
             var bo0D = false;
-            TUpgradeInfo UpgradeInfo;
-            GameItem StdItem;
+            TUpgradeInfo upgradeInfo;
             for (var i = 0; i < m_UpgradeWeaponList.Count; i++)
             {
-                UpgradeInfo = m_UpgradeWeaponList[i];
-                if (UpgradeInfo.sUserName == User.m_sCharName)
+                upgradeInfo = m_UpgradeWeaponList[i];
+                if (upgradeInfo.sUserName == User.m_sCharName)
                 {
                     GotoLable(User, M2Share.sUPGRADEING, false);
                     return;
@@ -482,12 +481,12 @@ namespace GameSvr
                 }
                 User.GoldChanged();
                 var userItem = new TUserItem(User.m_UseItems[Grobal2.U_WEAPON]);
-                UpgradeInfo = new TUpgradeInfo
+                upgradeInfo = new TUpgradeInfo
                 {
                     sUserName = User.m_sCharName,
                     UserItem = userItem
                 };
-                StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                var StdItem = M2Share.UserEngine.GetStdItem(User.m_UseItems[Grobal2.U_WEAPON].wIndex);
                 if (StdItem.NeedIdentify == 1)
                 {
                     M2Share.AddGameDataLog("25" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + User.m_UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
@@ -497,10 +496,10 @@ namespace GameSvr
                 User.RecalcAbilitys();
                 User.FeatureChanged();
                 User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                UpgradeWaponAddValue(User, User.m_ItemList, ref UpgradeInfo.btDc, ref UpgradeInfo.btSc, ref UpgradeInfo.btMc, ref UpgradeInfo.btDura);
-                UpgradeInfo.dtTime = DateTime.Now;
-                UpgradeInfo.dwGetBackTick = HUtil32.GetTickCount();
-                m_UpgradeWeaponList.Add(UpgradeInfo);
+                UpgradeWaponAddValue(User, User.m_ItemList, ref upgradeInfo.btDc, ref upgradeInfo.btSc, ref upgradeInfo.btMc, ref upgradeInfo.btDura);
+                upgradeInfo.dtTime = DateTime.Now;
+                upgradeInfo.dwGetBackTick = HUtil32.GetTickCount();
+                m_UpgradeWeaponList.Add(upgradeInfo);
                 SaveUpgradingList();
                 bo0D = true;
                 userItem = null;
@@ -515,12 +514,14 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 取回升级武器
+        /// </summary>
+        /// <param name="User"></param>
         private void GetBackupgWeapon(TPlayObject User)
         {
             TUpgradeInfo UpgradeInfo = null;
             int n18 = 0;
-            TUserItem UserItem;
-            GameItem StdItem;
             if (!User.IsEnoughBag())
             {
                 GotoLable(User, M2Share.sGETBACKUPGFULL, false);
@@ -599,7 +600,7 @@ namespace GameSvr
                 }
                 int n90;
                 int n10;
-                if (UpgradeInfo.btDc >= UpgradeInfo.btMc && UpgradeInfo.btDc >= UpgradeInfo.btSc || n1C == 0)
+                if (UpgradeInfo.btDc >= UpgradeInfo.btMc && (UpgradeInfo.btDc >= UpgradeInfo.btSc) || (n1C == 0))
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90 ) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
@@ -623,7 +624,7 @@ namespace GameSvr
                 if (UpgradeInfo.btMc >= UpgradeInfo.btDc && UpgradeInfo.btMc >= UpgradeInfo.btSc || n1C == 1)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponMCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 20;
@@ -644,7 +645,7 @@ namespace GameSvr
                 if (UpgradeInfo.btSc >= UpgradeInfo.btMc && UpgradeInfo.btSc >= UpgradeInfo.btDc || n1C == 2)
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btMc);
-                    n10 = HUtil32._MIN(85, n90 << 3 - n90 + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponSCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 30;
@@ -662,15 +663,15 @@ namespace GameSvr
                         UpgradeInfo.UserItem.btValue[10] = 1;
                     }
                 }
-                UserItem = UpgradeInfo.UserItem;
-                DisPose(UpgradeInfo);
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                var UserItem = UpgradeInfo.UserItem;
+                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem.NeedIdentify == 1)
                 {
                     M2Share.AddGameDataLog("24" + "\t" + User.m_sMapName + "\t" + User.m_nCurrX + "\t" + User.m_nCurrY + "\t" + User.m_sCharName + "\t" + StdItem.Name + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + '0');
                 }
                 User.AddItemToBag(UserItem);
                 User.SendAddItem(UserItem);
+                DisPose(UpgradeInfo);
             }
             switch (n18)
             {

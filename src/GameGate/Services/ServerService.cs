@@ -223,7 +223,6 @@ namespace GameGate
                                 userSession.nCheckSendLength = 0;
                                 userSession.dwReceiveTick = HUtil32.GetTickCount();
                                 sReviceMsg = sReviceMsg.Substring(0, nPos);
-                                Console.WriteLine($"[{DateTime.Now}]收到消息");
                                 //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                             }
                             if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady)

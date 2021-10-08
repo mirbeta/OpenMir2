@@ -32,7 +32,7 @@ namespace DBSvr
             IList<string> ChrNameList;
             string sAccount;
             string sChrName;
-            const string sSQL = "SELECT * FROM TBL_CHARACTER";
+            const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE FLD_Deleted=0";
             m_MirQuickList.Clear();
             m_MirQuickIDList.Clear();
             m_nRecordCount = -1;
@@ -51,6 +51,7 @@ namespace DBSvr
                 var nIndex = 0;
                 while (dr.Read())
                 {
+                    nIndex = dr.GetInt32("Id");
                     boDeleted = dr.GetBoolean("FLD_DELETED");
                     sAccount = dr.GetString("FLD_LOGINID");
                     sChrName = dr.GetString("FLD_CHARNAME");
@@ -60,12 +61,11 @@ namespace DBSvr
                         AccountList.Add(new TQuickID()
                         {
                             sAccount = sAccount,
-                            nSelectID = nIndex
+                            nSelectID = 0
                         });
                         ChrNameList.Add(sChrName);
+                        m_QuickIndexNameList.Add(nIndex, sChrName);
                     }
-
-                    nIndex++;
                 }
             }
             finally
@@ -75,7 +75,6 @@ namespace DBSvr
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
                 m_MirQuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], 0, AccountList[nIndex].nSelectID);
-                m_QuickIndexNameList.Add(nIndex, ChrNameList[nIndex]);
             }
             AccountList = null;
             ChrNameList = null;
@@ -127,11 +126,6 @@ namespace DBSvr
             return -1;
         }
 
-        public int ChrCountOfAccount(string sAccount)
-        {
-            return 0;
-        }
-
         public int Get(int nIndex, ref THumDataInfo HumanRCD)
         {
             int result = -1;
@@ -139,7 +133,7 @@ namespace DBSvr
             {
                 return result;
             }
-            if (m_MirQuickList.Count <= nIndex)
+            if (m_MirQuickList.Count < nIndex)
             {
                 return result;
             }
@@ -153,7 +147,7 @@ namespace DBSvr
         public bool Update(int nIndex, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if ((nIndex >= 0) && (m_MirQuickList.Count > nIndex))
+            if ((nIndex >= 0) && (m_MirQuickList.Count >= nIndex))
             {
                 if (UpdateRecord(nIndex, ref HumanRCD))
                 {
@@ -168,7 +162,7 @@ namespace DBSvr
             bool result = false;
             if ((nIndex >= 0) && (m_MirQuickList.Count > nIndex))
             {
-                if (UpdateChrRecord(nIndex, ref QueryChrRcd, false))
+                if (UpdateChrRecord(ref QueryChrRcd))
                 {
                     result = true;
                 }
@@ -176,7 +170,7 @@ namespace DBSvr
             return result;
         }
 
-        private bool UpdateChrRecord(int nIndex, ref TQueryChr QueryChrRcd, bool boNew)
+        private bool UpdateChrRecord(ref TQueryChr QueryChrRcd)
         {
             bool result = true;
             try
@@ -185,8 +179,12 @@ namespace DBSvr
                 {
                     return false;
                 }
+                const string sStrSql = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE FLD_CHARNAME=@FLD_CHARNAME";
                 var command = new MySqlCommand();
-                command.CommandText = string.Format("UPDATE TBL_CHARACTER SET FLD_SEX={0}, FLD_JOB={1} WHERE FLD_CHARNAME='{2}'", new object[] { QueryChrRcd.btSex, QueryChrRcd.btJob, QueryChrRcd.sName });
+                command.CommandText = sStrSql;
+                command.Parameters.AddWithValue("@FLD_SEX",QueryChrRcd.btSex);
+                command.Parameters.AddWithValue("@FLD_JOB", QueryChrRcd.btJob);
+                command.Parameters.AddWithValue("@FLD_CHARNAME", QueryChrRcd.sName);
                 command.Connection = (MySqlConnection)_dbConnection;
                 try
                 {
@@ -221,7 +219,7 @@ namespace DBSvr
             {
                 nIndex = m_nRecordCount;
                 m_nRecordCount++;
-                if (AddRecord(nIndex, ref HumanRCD))
+                if (AddRecord(ref nIndex, ref HumanRCD))
                 {
                     m_MirQuickList.Add(sChrName, nIndex);
                     result = true;
@@ -238,7 +236,16 @@ namespace DBSvr
         {
             const string sSQL3 = "SELECT * FROM TBL_QUEST WHERE FLD_CHARNAME='{0}'";
             bool result = true;
-            string sChrName = m_QuickIndexNameList[nIndex];
+            string sChrName = string.Empty;
+            if (HumanRCD == null)
+            {
+                sChrName = m_QuickIndexNameList[nIndex];
+            }
+            else
+            {
+                sChrName = HumanRCD.Header.sName;
+            }
+
             try
             {
                 GetChrRecord(sChrName, ref HumanRCD);
@@ -344,7 +351,7 @@ namespace DBSvr
                     HumanRCD.Data.nGamePoint = dr.GetInt32("FLD_GamePoint");
                     HumanRCD.Data.nPayMentPoint = dr.GetInt32("FLD_PayMentPoint");
                     HumanRCD.Data.nHungerStatus = dr.GetInt32("FLD_HungerStatus");
-                    HumanRCD.Data.btAllowGroup = dr.GetBoolean("FLD_AllowGroup") ? (byte)1 : (byte)0;
+                    HumanRCD.Data.btAllowGroup = (byte)dr.GetInt32("FLD_AllowGroup");
                     HumanRCD.Data.btAttatckMode = dr.GetByte("FLD_AttatckMode");
                     HumanRCD.Data.btIncHealth = dr.GetByte("FLD_IncHealth");
                     HumanRCD.Data.btIncSpell = dr.GetByte("FLD_IncSpell");
@@ -647,6 +654,7 @@ namespace DBSvr
                         }
                     }
                 }
+                result = true;
                 dr.Close();
                 dr.Dispose();
             }
@@ -655,15 +663,19 @@ namespace DBSvr
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetPlayerStatus");
                 return false;
             }
+            finally
+            {
+                Close();
+            }
             return result;
         }
 
-        private bool AddRecord(int nIndex, ref THumDataInfo HumanRCD)
+        private bool AddRecord(ref int nIndex, ref THumDataInfo HumanRCD)
         {
-            return InsertRecord(HumanRCD.Data);
+            return InsertRecord(HumanRCD.Data, ref nIndex);
         }
 
-        private bool InsertRecord(THumInfoData hd)
+        private bool InsertRecord(THumInfoData hd, ref int nIndex)
         {
             bool result = true;
             var strSql = new StringBuilder();
@@ -682,7 +694,7 @@ namespace DBSvr
                 return false;
             }
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
-            command.Parameters.AddWithValue("@FLD_LoginID", 1);
+            command.Parameters.AddWithValue("@FLD_LoginID", hd.sAccount);
             command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             command.Parameters.AddWithValue("@FLD_MapName", hd.sCurMap);
             command.Parameters.AddWithValue("@FLD_CX", hd.wCurX);
@@ -724,6 +736,7 @@ namespace DBSvr
             try
             {
                 command.ExecuteNonQuery();
+                nIndex = (int)command.LastInsertedId;
 
                 strSql.Clear();
                 strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_CharId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
@@ -783,6 +796,10 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage($"保存玩家[{HumanRCD.Header.sName}]数据失败. " + ex.Message);
+            }
+            finally
+            {
+                Close();
             }
             return result;
         }
@@ -908,6 +925,10 @@ namespace DBSvr
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
             }
+            finally
+            {
+                Close();
+            }
             return result;
         }
 
@@ -923,7 +944,94 @@ namespace DBSvr
             command.CommandText = $"DELETE FROM TBL_ITEM WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
-                command.ExecuteNonQuery();
+                THumInfoData hd = HumanRCD.Data;
+                var strSql = new StringBuilder();
+                strSql.AppendLine("INSERT INTO TBL_ITEM(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
+                strSql.AppendLine("FLD_VALUE0, FLD_VALUE1, FLD_VALUE2, FLD_VALUE3, FLD_VALUE4, FLD_VALUE5, FLD_VALUE6, FLD_VALUE7, FLD_VALUE8, FLD_VALUE9, FLD_VALUE10, FLD_VALUE11, FLD_VALUE12, FLD_VALUE13) ");
+                strSql.AppendLine(" VALUES ");
+                strSql.AppendLine("(@FLD_CHARID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
+                strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
+
+                for (var i = 0; i <= hd.BagItems.GetUpperBound(0); i++)
+                {
+                    if ((hd.BagItems[i].wIndex > 0) && (hd.BagItems[i].MakeIndex > 0))
+                    {
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@FLD_CHARID", 1);
+                        command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
+                        command.Parameters.AddWithValue("@FLD_POSITION", -1);
+                        command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
+                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
+                        command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
+                        command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
+                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].btValue[0]);
+                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].btValue[1]);
+                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].btValue[2]);
+                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].btValue[3]);
+                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].btValue[4]);
+                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].btValue[5]);
+                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].btValue[6]);
+                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
+                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
+                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[10]);
+                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
+                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
+                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            result = false;
+                            DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
+                        }
+                    }
+                }
+
+                for (var i = 0; i <= hd.HumItems.GetUpperBound(0); i++)
+                {
+                    if ((hd.HumItems[i].wIndex > 0) && (hd.HumItems[i].MakeIndex > 0))
+                    {
+                        command.CommandText = strSql.ToString();
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@FLD_CHARID", 1);
+                        command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
+                        command.Parameters.AddWithValue("@FLD_POSITION", i);
+                        command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.HumItems[i].MakeIndex);
+                        command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].wIndex);
+                        command.Parameters.AddWithValue("@FLD_DURA", hd.HumItems[i].Dura);
+                        command.Parameters.AddWithValue("@FLD_DURAMAX", hd.HumItems[i].DuraMax);
+                        command.Parameters.AddWithValue("@FLD_VALUE0", hd.HumItems[i].btValue[0]);
+                        command.Parameters.AddWithValue("@FLD_VALUE1", hd.HumItems[i].btValue[1]);
+                        command.Parameters.AddWithValue("@FLD_VALUE2", hd.HumItems[i].btValue[2]);
+                        command.Parameters.AddWithValue("@FLD_VALUE3", hd.HumItems[i].btValue[3]);
+                        command.Parameters.AddWithValue("@FLD_VALUE4", hd.HumItems[i].btValue[4]);
+                        command.Parameters.AddWithValue("@FLD_VALUE5", hd.HumItems[i].btValue[5]);
+                        command.Parameters.AddWithValue("@FLD_VALUE6", hd.HumItems[i].btValue[6]);
+                        command.Parameters.AddWithValue("@FLD_VALUE7", hd.HumItems[i].btValue[7]);
+                        command.Parameters.AddWithValue("@FLD_VALUE8", hd.HumItems[i].btValue[8]);
+                        command.Parameters.AddWithValue("@FLD_VALUE9", hd.HumItems[i].btValue[9]);
+                        command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].btValue[10]);
+                        command.Parameters.AddWithValue("@FLD_VALUE11", hd.HumItems[i].btValue[11]);
+                        command.Parameters.AddWithValue("@FLD_VALUE12", hd.HumItems[i].btValue[12]);
+                        command.Parameters.AddWithValue("@FLD_VALUE13", hd.HumItems[i].btValue[13]);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch
+                        {
+                            result = false;
+                            DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (13)");
+                        }
+                    }
+                }
+                {
+                    command.ExecuteNonQuery();
+                }
             }
             catch
             {
@@ -931,90 +1039,9 @@ namespace DBSvr
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
                 return result;
             }
-            THumInfoData hd = HumanRCD.Data;
-            var strSql = new StringBuilder();
-            strSql.AppendLine("INSERT INTO TBL_ITEM(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
-            strSql.AppendLine("FLD_VALUE0, FLD_VALUE1, FLD_VALUE2, FLD_VALUE3, FLD_VALUE4, FLD_VALUE5, FLD_VALUE6, FLD_VALUE7, FLD_VALUE8, FLD_VALUE9, FLD_VALUE10, FLD_VALUE11, FLD_VALUE12, FLD_VALUE13) ");
-            strSql.AppendLine(" VALUES ");
-            strSql.AppendLine("(@FLD_CHARID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
-            strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
-
-            for (var i = 0; i <= hd.BagItems.GetUpperBound(0); i++)
+            finally
             {
-                if ((hd.BagItems[i].wIndex > 0) && (hd.BagItems[i].MakeIndex > 0))
-                {
-                    command.CommandText = strSql.ToString();
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@FLD_CHARID", 1);
-                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
-                    command.Parameters.AddWithValue("@FLD_POSITION", -1);
-                    command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
-                    command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
-                    command.Parameters.AddWithValue("@FLD_DURA", hd.BagItems[i].Dura);
-                    command.Parameters.AddWithValue("@FLD_DURAMAX", hd.BagItems[i].DuraMax);
-                    command.Parameters.AddWithValue("@FLD_VALUE0", hd.BagItems[i].btValue[0]);
-                    command.Parameters.AddWithValue("@FLD_VALUE1", hd.BagItems[i].btValue[1]);
-                    command.Parameters.AddWithValue("@FLD_VALUE2", hd.BagItems[i].btValue[2]);
-                    command.Parameters.AddWithValue("@FLD_VALUE3", hd.BagItems[i].btValue[3]);
-                    command.Parameters.AddWithValue("@FLD_VALUE4", hd.BagItems[i].btValue[4]);
-                    command.Parameters.AddWithValue("@FLD_VALUE5", hd.BagItems[i].btValue[5]);
-                    command.Parameters.AddWithValue("@FLD_VALUE6", hd.BagItems[i].btValue[6]);
-                    command.Parameters.AddWithValue("@FLD_VALUE7", hd.BagItems[i].btValue[7]);
-                    command.Parameters.AddWithValue("@FLD_VALUE8", hd.BagItems[i].btValue[8]);
-                    command.Parameters.AddWithValue("@FLD_VALUE9", hd.BagItems[i].btValue[9]);
-                    command.Parameters.AddWithValue("@FLD_VALUE10", hd.BagItems[i].btValue[10]);
-                    command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
-                    command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
-                    command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        result = false;
-                        DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
-                    }
-                }
-            }
-
-            for (var i = 0; i <= hd.HumItems.GetUpperBound(0); i++)
-            {
-                if ((hd.HumItems[i].wIndex > 0) && (hd.HumItems[i].MakeIndex > 0))
-                {
-                    command.CommandText = strSql.ToString();
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@FLD_CHARID", 1);
-                    command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
-                    command.Parameters.AddWithValue("@FLD_POSITION", i);
-                    command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.HumItems[i].MakeIndex);
-                    command.Parameters.AddWithValue("@FLD_STDINDEX", hd.HumItems[i].wIndex);
-                    command.Parameters.AddWithValue("@FLD_DURA", hd.HumItems[i].Dura);
-                    command.Parameters.AddWithValue("@FLD_DURAMAX", hd.HumItems[i].DuraMax);
-                    command.Parameters.AddWithValue("@FLD_VALUE0", hd.HumItems[i].btValue[0]);
-                    command.Parameters.AddWithValue("@FLD_VALUE1", hd.HumItems[i].btValue[1]);
-                    command.Parameters.AddWithValue("@FLD_VALUE2", hd.HumItems[i].btValue[2]);
-                    command.Parameters.AddWithValue("@FLD_VALUE3", hd.HumItems[i].btValue[3]);
-                    command.Parameters.AddWithValue("@FLD_VALUE4", hd.HumItems[i].btValue[4]);
-                    command.Parameters.AddWithValue("@FLD_VALUE5", hd.HumItems[i].btValue[5]);
-                    command.Parameters.AddWithValue("@FLD_VALUE6", hd.HumItems[i].btValue[6]);
-                    command.Parameters.AddWithValue("@FLD_VALUE7", hd.HumItems[i].btValue[7]);
-                    command.Parameters.AddWithValue("@FLD_VALUE8", hd.HumItems[i].btValue[8]);
-                    command.Parameters.AddWithValue("@FLD_VALUE9", hd.HumItems[i].btValue[9]);
-                    command.Parameters.AddWithValue("@FLD_VALUE10", hd.HumItems[i].btValue[10]);
-                    command.Parameters.AddWithValue("@FLD_VALUE11", hd.HumItems[i].btValue[11]);
-                    command.Parameters.AddWithValue("@FLD_VALUE12", hd.HumItems[i].btValue[12]);
-                    command.Parameters.AddWithValue("@FLD_VALUE13", hd.HumItems[i].btValue[13]);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch
-                    {
-                        result = false;
-                        DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (13)");
-                    }
-                }
+                Close();
             }
             return result;
         }
@@ -1068,15 +1095,7 @@ namespace DBSvr
                         command.Parameters.AddWithValue("@FLD_VALUE11", hd.BagItems[i].btValue[11]);
                         command.Parameters.AddWithValue("@FLD_VALUE12", hd.BagItems[i].btValue[12]);
                         command.Parameters.AddWithValue("@FLD_VALUE13", hd.BagItems[i].btValue[13]);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            result = false;
-                            DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
-                        }
+                        command.ExecuteNonQuery();
                     }
                 }
             }
@@ -1084,6 +1103,10 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (10)");
+            }
+            finally
+            {
+                Close();
             }
             return result;
         }
@@ -1102,12 +1125,18 @@ namespace DBSvr
             {
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
+                const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_CHARNAME, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
                 for (var i = 0; i <= HumanRCD.Data.Magic.GetUpperBound(0); i++)
                 {
                     if (HumanRCD.Data.Magic[i].wMagIdx > 0)
                     {
-                        command.CommandText = string.Format("INSERT INTO TBL_CHARACTER_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES ('{0}', {1}, {2}, {3}, {4})", 
-                            new object[] { HumanRCD.Header.sName, hd.Magic[i].wMagIdx, hd.Magic[i].btLevel, hd.Magic[i].btKey, hd.Magic[i].nTranPoint });
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@FLD_CHARNAME", HumanRCD.Header.sName);
+                        command.Parameters.AddWithValue("@FLD_MAGICID", hd.Magic[i].wMagIdx);
+                        command.Parameters.AddWithValue("@FLD_LEVEL", hd.Magic[i].btLevel);
+                        command.Parameters.AddWithValue("@FLD_USEKEY", hd.Magic[i].btKey);
+                        command.Parameters.AddWithValue("@FLD_CURRTRAIN", hd.Magic[i].nTranPoint);
+                        command.CommandText = sStrSql;
                         command.ExecuteNonQuery();
                     }
                 }
@@ -1116,6 +1145,10 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.SavePlayerMagic");
+            }
+            finally
+            {
+                Close();
             }
             return result;
         }
@@ -1127,16 +1160,28 @@ namespace DBSvr
             {
                 return result;
             }
-            var hd = HumanRCD.Data;
-            const string sSqlStr3 = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME='{0}'";
+            var bonusAbil = HumanRCD.Data.BonusAbil;
+            const string sSqlStr= "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME=@FLD_CHARNAME";
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
-            command.CommandText = string.Format(sSqlStr3, new object[] { hd.BonusAbil.AC, hd.BonusAbil.MAC, hd.BonusAbil.DC, hd.BonusAbil.MC, hd.BonusAbil.SC, hd.BonusAbil.HP, hd.BonusAbil.MP, hd.BonusAbil.Hit, hd.BonusAbil.Speed, hd.BonusAbil.X2, HumanRCD.Header.sName });
+            command.Parameters.AddWithValue("@FLD_AC", bonusAbil.AC);
+            command.Parameters.AddWithValue("@FLD_MAC",bonusAbil.MAC);
+            command.Parameters.AddWithValue("@FLD_DC", bonusAbil.DC);
+            command.Parameters.AddWithValue("@FLD_MC", bonusAbil.MC);
+            command.Parameters.AddWithValue("@FLD_SC", bonusAbil.SC);
+            command.Parameters.AddWithValue("@FLD_HP", bonusAbil.HP);
+            command.Parameters.AddWithValue("@FLD_MP", bonusAbil.MP);
+            command.Parameters.AddWithValue("@FLD_HIT",bonusAbil.Hit);
+            command.Parameters.AddWithValue("@FLD_SPEED", bonusAbil.Speed);
+            command.Parameters.AddWithValue("@FLD_RESERVED", bonusAbil.X2);
+            command.Parameters.AddWithValue("@FLD_CHARNAME", HumanRCD.Header.sName);
+            command.CommandText = sSqlStr;
             try
             {
                 command.ExecuteNonQuery();
+                result = true;
             }
-            catch
+            catch(Exception ex)
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateBonusability");
@@ -1163,14 +1208,6 @@ namespace DBSvr
             try
             {
                 command.ExecuteNonQuery();
-            }
-            catch
-            {
-                result = false;
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_QUEST)");
-            }
-            try
-            {
                 //command.CommandText = sSqlStr5;
                 //Units.HumDB_SQL.dbQry.ParamByName("FLD_CHARNAME").Value = HumanRCD.Header.sName;
                 //EDcode.Encode6BitBuf(HumanRCD.Data.QuestUnitOpen, TempBuf, sizeof(HumanRCD.Data.QuestUnitOpen), sizeof(TempBuf));
@@ -1185,6 +1222,10 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateQuest");
+            }
+            finally
+            {
+                Close();
             }
             return result;
         }
@@ -1204,14 +1245,6 @@ namespace DBSvr
             try
             {
                 command.ExecuteNonQuery();
-            }
-            catch
-            {
-                result = false;
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateStatus (DELETE TBL_CHARACTER_STATUS)");
-            }
-            try
-            {
                 command.CommandText = sSqlStr5;
                 command.Parameters.AddWithValue("@FLD_CharId", id);
                 command.Parameters.AddWithValue("@FLD_CharName", HumanRCD.Data.sCharName);
@@ -1219,11 +1252,15 @@ namespace DBSvr
                 command.ExecuteNonQuery();
                 result = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateStatus (INSERT TBL_CHARACTER_STATUS)");
             }
+            finally
+            {
+                Close();
+            }            
             return result;
         }
 
