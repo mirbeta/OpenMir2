@@ -1919,7 +1919,7 @@ namespace GameSvr
                 if (MonObj != null)
                 {
                     MonObj.m_Master = this;
-                    MonObj.m_dwMasterRoyaltyTick = (HUtil32.GetTickCount() + dwRoyaltySec) * 1000;
+                    MonObj.m_dwMasterRoyaltyTick = HUtil32.GetTickCount() + (dwRoyaltySec * 1000);
                     MonObj.m_btSlaveMakeLevel = (byte)nMakeLevel;
                     MonObj.m_btSlaveExpLevel = (byte)nExpLevel;
                     MonObj.RecalcAbilitys();

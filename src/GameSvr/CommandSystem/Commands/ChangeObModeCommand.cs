@@ -12,13 +12,17 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeObMode(string[] @Params, TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            var boFlag = !PlayObject.m_boObMode;
-            if (sParam1 != "" && sParam1[0] == '?')
+            if (Params != null && Params.Length > 0)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
+                var sParam1 = @Params.Length > 0 ? @Params[0] : "";
+                if (sParam1 != "" && sParam1[0] == '?')
+                {
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""),
+                        TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
             }
+            var boFlag = !PlayObject.m_boObMode;
             if (boFlag)
             {
                 PlayObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决GM登录隐身有影子问题

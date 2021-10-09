@@ -499,7 +499,7 @@ namespace GameGate
             MagicDelayTimeMap[14] = 1000; //幽灵盾
             MagicDelayTimeMap[15] = 1000; //神圣战甲术
             MagicDelayTimeMap[16] = 1000; //困魔咒
-            MagicDelayTimeMap[17] = 1000; //召唤骷髅
+            MagicDelayTimeMap[Grobal2.SKILL_SKELLETON] = 1000; //召唤骷髅
             MagicDelayTimeMap[18] = 1000; //隐身术
             MagicDelayTimeMap[19] = 1000; //集体隐身术
             MagicDelayTimeMap[20] = 1000; //诱惑之光
@@ -509,7 +509,7 @@ namespace GameGate
             MagicDelayTimeMap[24] = 1000; //地狱雷光
             MagicDelayTimeMap[28] = 1000; //心灵启示
             MagicDelayTimeMap[29] = 1000; //群体治疗术
-            MagicDelayTimeMap[30] = 1000; //召唤神兽
+            MagicDelayTimeMap[Grobal2.SKILL_SINSU] = 1000; //召唤神兽
             MagicDelayTimeMap[32] = 1000; //圣言术
             MagicDelayTimeMap[33] = 950; //冰咆哮
             MagicDelayTimeMap[34] = 1000; //解毒术

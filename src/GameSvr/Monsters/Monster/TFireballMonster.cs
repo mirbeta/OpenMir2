@@ -26,13 +26,13 @@ namespace GameSvr
                                 var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.MC) - HUtil32.LoWord(m_WAbil.MC) + 1) + HUtil32.LoWord(m_WAbil.MC);
                                 if (nPower > 0)
                                 {
-                                    var baseobject = GetPoseCreate();
-                                    if (baseobject != null && IsProperTarget(baseobject) && m_nAntiMagic >= 0)
+                                    var BaseObject = GetPoseCreate();
+                                    if (BaseObject != null && IsProperTarget(BaseObject) && m_nAntiMagic >= 0)
                                     {
-                                        nPower = baseobject.GetMagStruckDamage(this, nPower);
+                                        nPower = BaseObject.GetMagStruckDamage(this, nPower);
                                         if (nPower > 0)
                                         {
-                                            baseobject.StruckDamage(nPower);
+                                            BaseObject.StruckDamage(nPower);
                                             if ((HUtil32.GetTickCount() - m_dwSpellTick) > m_nNextHitTime)
                                             {
                                                 m_dwSpellTick = HUtil32.GetTickCount();

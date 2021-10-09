@@ -40,16 +40,18 @@ namespace GameSvr
 
     public class TMapCellinfo
     {
-        public static TMapCellinfo LowWall { get { return new TMapCellinfo { Attribute = CellAttribute.LowWall }; } }
-        public static TMapCellinfo HighWall { get { return new TMapCellinfo { Attribute = CellAttribute.HighWall }; } }
+        public static TMapCellinfo LowWall => new TMapCellinfo { Attribute = CellAttribute.LowWall };
+        public static TMapCellinfo HighWall => new TMapCellinfo { Attribute = CellAttribute.HighWall };
 
-        public bool Valid
-        {
-            get { return Attribute == CellAttribute.Walk; }
-        }
+        public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;
         public IList<TOSObject> ObjList;
+
+        public TMapCellinfo()
+        {
+            ObjList = new List<TOSObject>();
+        }
     }
 
     public class PointInfo

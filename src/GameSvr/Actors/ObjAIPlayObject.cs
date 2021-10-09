@@ -7055,13 +7055,13 @@ namespace GameSvr
                         {
                             result = 72;
                         }
-                        else if (AllowUseMagic(30))// 召唤神兽
+                        else if (AllowUseMagic(Grobal2.SKILL_SINSU))// 召唤神兽
                         {
-                            result = 30;
+                            result = Grobal2.SKILL_SINSU;
                         }
-                        else if (AllowUseMagic(17)) // 召唤骷髅
+                        else if (AllowUseMagic(Grobal2.SKILL_SKELLETON)) // 召唤骷髅
                         {
-                            result = 17;
+                            result = Grobal2.SKILL_SKELLETON;
                         }
                         return result;
                     }
