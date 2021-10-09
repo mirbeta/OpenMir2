@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SystemModule;
 
 namespace GameSvr
@@ -898,12 +897,6 @@ namespace GameSvr
                 case Grobal2.CM_GUILDBREAKALLY:
                     ClientGuildBreakAlly(ProcessMsg.sMsg);
                     break;
-                //case Grobal2.CM_1046:
-                //    M2Share.MainOutMessage(format("%s/%d/%d/%d/%d/%d/%s", new string[] {this.m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, EDcode.DecodeString(ProcessMsg.sMsg)}));
-                //     break;
-                // case Grobal2.CM_1056:
-                //     M2Share.MainOutMessage(format("%s/%d/%d/%d/%d/%d/%s", new string[] {this.m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, EDcode.DecodeString(ProcessMsg.sMsg)}));
-                //    break;
                 case Grobal2.CM_TURN:
                     if (ClientChangeDir((short)ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam, ref dwDelayTime))
                     {
@@ -1148,7 +1141,6 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        // '请勿使用非法软件!!!'
                                         SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                                         m_boEmergencyClose = true;
                                     }

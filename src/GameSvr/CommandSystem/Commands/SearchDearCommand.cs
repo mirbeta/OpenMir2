@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 此命令用于查询配偶当前所在位置
     /// </summary>
-    [GameCommand("SearchDear", "此命令用于查询配偶当前所在位置", 10)]
+    [GameCommand("SearchDear", "此命令用于查询配偶当前所在位置", 0)]
     public class SearchDearCommand
     {
         [DefaultCommand]

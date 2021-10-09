@@ -16,7 +16,7 @@ namespace GameSvr
             if (M2Share.g_RobotNPC != null)
             {
                 M2Share.g_RobotNPC.ClearScript();
-                //M2Share.g_RobotNPC.LoadNpcScript();
+                M2Share.g_RobotNPC.LoadNPCScript();
                 PlayObject.SysMsg("重新加载机器人专用脚本完成...", TMsgColor.c_Green, TMsgType.t_Hint);
             }
             else

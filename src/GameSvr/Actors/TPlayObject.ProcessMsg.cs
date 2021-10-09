@@ -515,27 +515,15 @@ namespace GameSvr
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.DEAR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSearchDear(M2Share.g_GameCommand.DEAR.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.MASTER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSearchMaster(M2Share.g_GameCommand.MASTER.sCmd, sParam1);
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWDEARRCALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_boCanDearRecall = !m_boCanDearRecall;
                     if (m_boCanDearRecall)
                     {
-                        // '允许夫妻传送!!!'
                         SysMsg(M2Share.g_sEnableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '禁止夫妻传送!!!'
                         SysMsg(M2Share.g_sDisableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     return;
@@ -545,25 +533,17 @@ namespace GameSvr
                     m_boCanMasterRecall = !m_boCanMasterRecall;
                     if (m_boCanMasterRecall)
                     {
-                        // '允许师徒传送!!!'
                         SysMsg(M2Share.g_sEnableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '禁止师徒传送!!!'
                         SysMsg(M2Share.g_sDisableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
                     }
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.DATA.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    // '当前日期时间: '
-                    SysMsg(M2Share.g_sNowCurrDateTime + DateTime.Now.ToString("dddddd,dddd,hh:mm:nn"), TMsgColor.c_Blue, TMsgType.t_Hint);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.PRVMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdPrvMsg(M2Share.g_GameCommand.PRVMSG.sCmd, M2Share.g_GameCommand.PRVMSG.nPerMissionMin, sParam1);
+                    SysMsg(M2Share.g_sNowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TMsgColor.c_Blue, TMsgType.t_Hint);
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
@@ -571,12 +551,10 @@ namespace GameSvr
                     m_boHearWhisper = !m_boHearWhisper;
                     if (m_boHearWhisper)
                     {
-                        // '[允许私聊]'
                         SysMsg(M2Share.g_sEnableHearWhisper, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止私聊]'
                         SysMsg(M2Share.g_sDisableHearWhisper, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -586,12 +564,10 @@ namespace GameSvr
                     m_boBanShout = !m_boBanShout;
                     if (m_boBanShout)
                     {
-                        // '[允许群聊]'
                         SysMsg(M2Share.g_sEnableShoutMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止群聊]'
                         SysMsg(M2Share.g_sDisableShoutMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -601,12 +577,10 @@ namespace GameSvr
                     m_boAllowDeal = !m_boAllowDeal;
                     if (m_boAllowDeal)
                     {
-                        // '[允许交易]'
                         SysMsg(M2Share.g_sEnableDealMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止交易]'
                         SysMsg(M2Share.g_sDisableDealMsg, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -616,12 +590,10 @@ namespace GameSvr
                     m_boBanGuildChat = !m_boBanGuildChat;
                     if (m_boBanGuildChat)
                     {
-                        // '[允许行会聊天]'
                         SysMsg(M2Share.g_sEnableGuildChat, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止行会聊天]'
                         SysMsg(M2Share.g_sDisableGuildChat, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -631,12 +603,10 @@ namespace GameSvr
                     m_boAllowGuild = !m_boAllowGuild;
                     if (m_boAllowGuild)
                     {
-                        // '[允许加入行会]'
                         SysMsg(M2Share.g_sEnableJoinGuild, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止加入行会]'
                         SysMsg(M2Share.g_sDisableJoinGuild, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -648,12 +618,10 @@ namespace GameSvr
                         m_MyGuild.m_boEnableAuthAlly = !m_MyGuild.m_boEnableAuthAlly;
                         if (m_MyGuild.m_boEnableAuthAlly)
                         {
-                            // '[允许行会联盟]'
                             SysMsg(M2Share.g_sEnableAuthAllyGuild, TMsgColor.c_Green, TMsgType.t_Hint);
                         }
                         else
                         {
-                            // '[禁止行会联盟]'
                             SysMsg(M2Share.g_sDisableAuthAllyGuild, TMsgColor.c_Green, TMsgType.t_Hint);
                         }
                     }
@@ -664,12 +632,10 @@ namespace GameSvr
                     m_boAllowGuildReCall = !m_boAllowGuildReCall;
                     if (m_boAllowGuildReCall)
                     {
-                        // '[允许行会合一]'
                         SysMsg(M2Share.g_sEnableGuildRecall, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     else
                     {
-                        // '[禁止行会合一]'
                         SysMsg(M2Share.g_sDisableGuildRecall, TMsgColor.c_Green, TMsgType.t_Hint);
                     }
                     return;
@@ -690,44 +656,9 @@ namespace GameSvr
                     }
                     return;
                 }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.TAKEONHORSE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdTakeOnHorse(sCMD, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.TAKEOFHORSE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdTakeOffHorse(sCMD, sParam1);
-                    return;
-                }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.MAPINFO.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     ShowMapInfo(sParam1, sParam2, sParam3);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.CLEARBAG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdClearBagItem(M2Share.g_GameCommand.CLEARBAG, sParam1);
-                    return;
-                }
-                //if ((sCMD).CompareTo((M2Share.g_GameCommand.SHOWUSEITEMINFO.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                //{
-                //    CmdShowUseItemInfo(M2Share.g_GameCommand.SHOWUSEITEMINFO, sParam1);
-                //    return;
-                //}
-                //if ((sCMD).CompareTo((M2Share.g_GameCommand.BINDUSEITEM.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                //{
-                //    CmdBindUseItem(M2Share.g_GameCommand.BINDUSEITEM, sParam1, sParam2, sParam3);
-                //    return;
-                //}
-                if (string.Compare(sCMD, M2Share.g_GameCommand.SEARCHING.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdSearchHuman(M2Share.g_GameCommand.SEARCHING.sCmd, sParam1);
-                    return;
-                }
-                if (string.Compare(sCMD, M2Share.g_GameCommand.LOCKLOGON.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    CmdLockLogin(M2Share.g_GameCommand.LOCKLOGON);
                     return;
                 }
                 if (m_btPermission >= 2 && sData.Length > 2)
@@ -737,7 +668,7 @@ namespace GameSvr
                         if (HUtil32.GetTickCount() - m_dwSayMsgTick > 2000)
                         {
                             m_dwSayMsgTick = HUtil32.GetTickCount();
-                            sData = sData.Substring(3 - 1, sData.Length - 2);
+                            sData = sData.Substring(2, sData.Length - 2);
                             if (sData.Length > M2Share.g_Config.nSayRedMsgMaxLen)
                             {
                                 sData = sData.Substring(0, M2Share.g_Config.nSayRedMsgMaxLen);
@@ -757,32 +688,6 @@ namespace GameSvr
                 }
                 if (m_btPermission > 4)
                 {
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.BALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        // 精神波
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGELUCK.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.HUNGER.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        CmdHunger(M2Share.g_GameCommand.HUNGER.sCmd, sParam1, HUtil32.Str_ToInt(sParam2, 0));
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.NAMECOLOR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.TRANSPARECY.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.LEVEL0.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
                     if (string.Compare(sCMD, M2Share.g_GameCommand.SETFLAG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject = M2Share.UserEngine.GetPlayObject(sParam1);
@@ -852,69 +757,8 @@ namespace GameSvr
                         }
                         return;
                     }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.OXQUIZROOM.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.GSA.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return;
-                    }
-                    if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGEITEMNAME.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        CmdChangeItemName(M2Share.g_GameCommand.CHANGEITEMNAME.sCmd, sParam1, sParam2, sParam3);
-                        return;
-                    }
                     if (m_btPermission >= 5 || M2Share.g_Config.boTestServer)
                     {
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.FIREBURN.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            //CmdFireBurn(HUtil32.Str_ToInt(sParam1, 0), HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0));
-                            return;
-                        }
-                        //if ((sCMD).CompareTo((M2Share.g_GameCommand.TESTFIRE.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    //CmdTestFire(sCMD, HUtil32.Str_ToInt(sParam1, 0), HUtil32.Str_ToInt(sParam2, 0), HUtil32.Str_ToInt(sParam3, 0), HUtil32.Str_ToInt(sParam4, 0));
-                        //    return;
-                        //}
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.TESTGOLDCHANGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADADMIN.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReLoadAdmin(M2Share.g_GameCommand.RELOADADMIN.sCmd);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADNPC.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReloadNpc(sParam1);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMANAGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReloadManage(M2Share.g_GameCommand.RELOADMANAGE, sParam1);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADROBOTMANAGE.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReloadRobotManage();
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADROBOT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReloadRobot();
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMONITEMS.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdReloadMonItems();
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADDIARY.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADITEMDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.CommonDB.LoadItemsDB();
@@ -933,102 +777,6 @@ namespace GameSvr
                             SysMsg("怪物数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
                             return;
                         }
-                        //if ((sCMD).CompareTo((M2Share.g_GameCommand.RELOADMINMAP.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    // FrmDB.LoadMinMap();
-                        //    // g_MapManager.ReSetMinMap();
-                        //    SysMsg("小地图配置重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
-                        //    return;
-                        //}
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGESABUKLORD.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdChangeSabukLord(M2Share.g_GameCommand.CHANGESABUKLORD, sParam1, sParam2, true);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.FORCEDWALLCONQUESTWAR.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdForcedWallconquestWar(M2Share.g_GameCommand.FORCEDWALLCONQUESTWAR, sParam1);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDTOITEMEVENT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADDTOITEMEVENTASPIECES.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ITEMEVENTLIST.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.STARTINGGIFTNO.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.DELETEALLITEMEVENT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.STARTITEMEVENT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ITEMEVENTTERM.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.ADJUESTTESTLEVEL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.OPDELETESKILL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.CHANGEWEAPONDURA.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADGUILDALL.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.SPIRIT.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdSpirtStart(M2Share.g_GameCommand.SPIRIT.sCmd, sParam1);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.SPIRITSTOP.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            CmdSpirtStop(M2Share.g_GameCommand.SPIRITSTOP.sCmd, sParam1);
-                            return;
-                        }
-                        //else if ((sCMD).CompareTo((M2Share.g_GameCommand.TESTSERVERCONFIG.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    SendServerConfig();
-                        //    return;
-                        //}
-                        //else if ((sCMD).CompareTo((M2Share.g_GameCommand.SERVERSTATUS.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    SendServerStatus();
-                        //    return;
-                        //}
-                        //else if ((sCMD).CompareTo((M2Share.g_GameCommand.TESTGETBAGITEM.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    CmdTestGetBagItems(M2Share.g_GameCommand.TESTGETBAGITEM, sParam1);
-                        //    return;
-                        //}
-                        //else if ((sCMD).CompareTo((M2Share.g_GameCommand.MOBFIREBURN.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    CmdMobFireBurn(M2Share.g_GameCommand.MOBFIREBURN, sParam1, sParam2, sParam3, sParam4, sParam5, sParam6);
-                        //    return;
-                        //}
-                        //else if ((sCMD).CompareTo((M2Share.g_GameCommand.TESTSPEEDMODE.sCmd), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    CmdTestSpeedMode(M2Share.g_GameCommand.TESTSPEEDMODE);
-                        //    return;
-                        //}
                     }
                 }
                 SysMsg('@' + sCMD + " 此命令不正确，或没有足够的权限!!!", TMsgColor.c_Red, TMsgType.t_Hint);

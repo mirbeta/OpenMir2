@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 搜索指定玩家所在地图XY坐标
     /// </summary>
-    [GameCommand("SearchHuman", "搜索指定玩家所在地图XY坐标", 10)]
+    [GameCommand("SearchHuman", "搜索指定玩家所在地图XY坐标", 0)]
     public class SearchHumanCommand : BaseCommond
     {
         [DefaultCommand]

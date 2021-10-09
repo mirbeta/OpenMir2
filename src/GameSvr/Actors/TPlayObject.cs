@@ -2171,7 +2171,7 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称v
+                        sUserItemName = ItmUnit.GetItemName(UserItem);// 取自定义物品名称
                         if (sUserItemName.CompareTo(sItemName) == 0)
                         {
                             if (M2Share.g_Config.boControlDropItem && StdItem.Price < M2Share.g_Config.nCanDropPrice)
@@ -2887,7 +2887,6 @@ namespace GameSvr
             var result = false;
             dwDelayTime = 0;
             var BaseObject = M2Share.ObjectSystem.Get(charId);
-
             if (!M2Share.g_Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
@@ -2898,7 +2897,6 @@ namespace GameSvr
                 }
                 m_dwTurnTick = HUtil32.GetTickCount();
             }
-
             if (Math.Abs(nX - m_nCurrX) <= 2 && Math.Abs(nY - m_nCurrY) <= 2)
             {
                 if (m_PEnvir.IsValidObject(nX, nY, 2, BaseObject))
@@ -3193,7 +3191,6 @@ namespace GameSvr
                     UserItem = m_DealItemList[i];
                     if (UserItem.MakeIndex == nItemIdx)
                     {
-                        // 取自定义物品名称
                         sUserItemName = ItmUnit.GetItemName(UserItem);
                         if (sUserItemName.CompareTo(sItemName) == 0)
                         {

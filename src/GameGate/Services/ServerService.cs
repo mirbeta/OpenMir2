@@ -57,6 +57,7 @@ namespace GameGate
             var gateclient = GateShare.GetClientService();
             if (gateclient == null)
             {
+                Console.WriteLine("获取GameSvr链接错误");
                 return;
             }
 
@@ -92,8 +93,7 @@ namespace GameGate
             }
             if (nSockIdx < gateclient.GetMaxSession())
             {
-                gateclient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int)e.Socket.Handle, 0, e.RemoteIPaddr.Length,
-                    e.RemoteIPaddr); //通知M2有新玩家进入游戏
+                gateclient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
                 GateShare.UserSessions.TryAdd(e.ConnectionId, new UserClientSession());
@@ -128,7 +128,7 @@ namespace GameGate
                     }
                     GateShare.DelSocketIndex(e.ConnectionId);
                     GateShare.DeleteUserClient(e.ConnectionId);
-                    GateShare.UserSessions.TryRemove(e.ConnectionId,out var clientSession);
+                    GateShare.UserSessions.TryRemove(e.ConnectionId, out var clientSession);
                 }
             }
             else
@@ -164,7 +164,7 @@ namespace GameGate
                 string sRemoteAddress = token.RemoteIPaddr;
                 if (userClinet == null)
                 {
-                    GateShare.AddMainLogMsg("非法攻击: " + token.RemoteIPaddr, 5);
+                    GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
                     Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{token.ConnectionId}]");
                     return;
                 }
@@ -218,6 +218,7 @@ namespace GameGate
                             var nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                             if (nPos > -1)
                             {
+                                Console.WriteLine("ReviceMsg:" + sReviceMsg);
                                 userSession.boSendAvailable = true;
                                 userSession.boSendCheck = false;
                                 userSession.nCheckSendLength = 0;

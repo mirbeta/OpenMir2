@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 开始工程战役
     /// </summary>
-    [GameCommand("ForcedWallconquestWar", "开始工程战役", 10)]
+    [GameCommand("ForcedWallconquestWar", "开始攻城战役", 10)]
     public class ForcedWallconquestWarCommand : BaseCommond
     {
         [DefaultCommand]

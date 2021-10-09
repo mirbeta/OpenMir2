@@ -182,7 +182,7 @@ namespace DBSvr
                 const string sStrSql = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE FLD_CHARNAME=@FLD_CHARNAME";
                 var command = new MySqlCommand();
                 command.CommandText = sStrSql;
-                command.Parameters.AddWithValue("@FLD_SEX",QueryChrRcd.btSex);
+                command.Parameters.AddWithValue("@FLD_SEX", QueryChrRcd.btSex);
                 command.Parameters.AddWithValue("@FLD_JOB", QueryChrRcd.btJob);
                 command.Parameters.AddWithValue("@FLD_CHARNAME", QueryChrRcd.sName);
                 command.Connection = (MySqlConnection)_dbConnection;
@@ -1161,17 +1161,17 @@ namespace DBSvr
                 return result;
             }
             var bonusAbil = HumanRCD.Data.BonusAbil;
-            const string sSqlStr= "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME=@FLD_CHARNAME";
+            const string sSqlStr = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME=@FLD_CHARNAME";
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.Parameters.AddWithValue("@FLD_AC", bonusAbil.AC);
-            command.Parameters.AddWithValue("@FLD_MAC",bonusAbil.MAC);
+            command.Parameters.AddWithValue("@FLD_MAC", bonusAbil.MAC);
             command.Parameters.AddWithValue("@FLD_DC", bonusAbil.DC);
             command.Parameters.AddWithValue("@FLD_MC", bonusAbil.MC);
             command.Parameters.AddWithValue("@FLD_SC", bonusAbil.SC);
             command.Parameters.AddWithValue("@FLD_HP", bonusAbil.HP);
             command.Parameters.AddWithValue("@FLD_MP", bonusAbil.MP);
-            command.Parameters.AddWithValue("@FLD_HIT",bonusAbil.Hit);
+            command.Parameters.AddWithValue("@FLD_HIT", bonusAbil.Hit);
             command.Parameters.AddWithValue("@FLD_SPEED", bonusAbil.Speed);
             command.Parameters.AddWithValue("@FLD_RESERVED", bonusAbil.X2);
             command.Parameters.AddWithValue("@FLD_CHARNAME", HumanRCD.Header.sName);
@@ -1181,7 +1181,7 @@ namespace DBSvr
                 command.ExecuteNonQuery();
                 result = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateBonusability");
@@ -1260,7 +1260,7 @@ namespace DBSvr
             finally
             {
                 Close();
-            }            
+            }
             return result;
         }
 

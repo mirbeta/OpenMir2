@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 查询师徒当前所在位置
     /// </summary>
-    [GameCommand("SearchMaster", "查询师徒当前所在位置", 100)]
+    [GameCommand("SearchMaster", "查询师徒当前所在位置", 0)]
     public class SearchMasterCommand : BaseCommond
     {
         [DefaultCommand]

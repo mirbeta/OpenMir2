@@ -11,14 +11,8 @@ namespace GameSvr
     {
         public void ChangeAdminMode(string[] @Params, TPlayObject PlayObject)
         {
-            var nPermission = @Params.Length > 0 ? int.Parse(Params[0]) : 0;
-            var sParam1 = @Params.Length > 1 ? Params[1] : "";
-            var boFlag = @Params.Length > 2 && bool.Parse(Params[2]);
-            if (PlayObject.m_btPermission < nPermission)
-            {
-                PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
+            var sParam1 = @Params.Length > 0 ? Params[0] : "";
+            var boFlag = !PlayObject.m_boAdminMode;
             if (sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);

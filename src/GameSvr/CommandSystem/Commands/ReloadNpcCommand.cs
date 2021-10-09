@@ -28,9 +28,9 @@ namespace GameSvr
             {
                 return;
             }
-            if (string.Compare("all".ToLower(), sParam.ToLower(), StringComparison.CurrentCultureIgnoreCase) == 0)
+            if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                //M2Share.ScriptSystem.ReLoadMerchants();
+                M2Share.LocalDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
                 PlayObject.SysMsg("交易NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 M2Share.UserEngine.ReloadNpcList();

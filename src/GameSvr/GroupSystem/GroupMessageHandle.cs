@@ -348,7 +348,6 @@ namespace GameSvr
 
         private void MsgGetChatProhibition(int sNum, string Body)
         {
-            byte obtPermission;
             var whostr = string.Empty;
             var minstr = string.Empty;
             string Str = Body;
@@ -356,23 +355,17 @@ namespace GameSvr
             Str = HUtil32.GetValidStr3(Str, ref minstr, "/");
             if (whostr != "")
             {
-                obtPermission = PlayObject.m_btPermission;
-                PlayObject.m_btPermission = 10;
-                PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
-                PlayObject.m_btPermission = obtPermission;
+                //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
+                M2Share.CommandSystem.ExecCmd("Shutup", PlayObject);
             }
         }
 
         private void MsgGetChatProhibitionCancel(int sNum, string Body)
         {
-            byte obtPermission;
             var whostr = Body;
             if (whostr != "")
             {
-                obtPermission = PlayObject.m_btPermission;
-                PlayObject.m_btPermission = 10;
-                PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, "");
-                PlayObject.m_btPermission = obtPermission;
+                //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, "");
             }
         }
 

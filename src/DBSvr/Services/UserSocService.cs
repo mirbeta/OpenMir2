@@ -186,7 +186,6 @@ namespace DBSvr
 
         private void LoadServerInfo()
         {
-            StringList LoadList;
             string sLineText = string.Empty;
             string sSelGateIPaddr = string.Empty;
             string sGameGateIPaddr = string.Empty;
@@ -195,70 +194,67 @@ namespace DBSvr
             string sMapName = string.Empty;
             string sMapInfo = string.Empty;
             string sServerIndex = string.Empty;
-            IniFile Conf;
-            try
+            var LoadList = new StringList();
+            if (!File.Exists(DBShare.sGateConfFileName))
             {
-                LoadList = new StringList();
-                LoadList.LoadFromFile(DBShare.sGateConfFileName);
-                if (LoadList.Count <= 0)
+                return;                
+            }
+            LoadList.LoadFromFile(DBShare.sGateConfFileName);
+            if (LoadList.Count <= 0)
+            {
+                DBShare.MainOutMessage("加载游戏服务配置文件!ServerInfo.txt失败.");
+                return;
+            }
+            int nRouteIdx = 0;
+            int nGateIdx = 0;
+            for (var i = 0; i < LoadList.Count; i++)
+            {
+                sLineText = LoadList[i].Trim();
+                if(!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
-                    DBShare.MainOutMessage("加载游戏服务配置文件!ServerInfo.txt失败.");
-                    return;
+                    sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new string[] { " ", "\09" });
+                    if ((sGameGate == "") || (sSelGateIPaddr == ""))
+                    {
+                        continue;
+                    }
+                    DBShare.g_RouteInfo[nRouteIdx] = new TRouteInfo();
+                    DBShare.g_RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
+                    DBShare.g_RouteInfo[nRouteIdx].nGateCount = 0;
+                    nGateIdx = 0;
+                    while ((sGameGate != ""))
+                    {
+                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new string[] { " ", "\09" });
+                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new string[] { " ", "\09" });
+                        DBShare.g_RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                        DBShare.g_RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
+                        nGateIdx++;
+                    }
+                    DBShare.g_RouteInfo[nRouteIdx].nGateCount = nGateIdx;
+                    nRouteIdx++;
                 }
-                int nRouteIdx = 0;
-                int nGateIdx = 0;
+            }
+            var DBConf = new IniFile(DBShare.sConfFileName);
+            DBShare.sMapFile = DBConf.ReadString("Setup", "MapFile", DBShare.sMapFile);
+            MapList.Clear();
+            if (File.Exists(DBShare.sMapFile))
+            {
+                LoadList.Clear();
+                LoadList.LoadFromFile(DBShare.sMapFile);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i].Trim();
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    sLineText = LoadList[i];
+                    if ((sLineText != "") && (sLineText[0] == '['))
                     {
-                        sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new string[] { " ", "\09" });
-                        if ((sGameGate == "") || (sSelGateIPaddr == ""))
-                        {
-                            continue;
-                        }
-                        DBShare.g_RouteInfo[nRouteIdx] = new TRouteInfo();
-                        DBShare.g_RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
-                        DBShare.g_RouteInfo[nRouteIdx].nGateCount = 0;
-                        nGateIdx = 0;
-                        while ((sGameGate != ""))
-                        {
-                            sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new string[] { " ", "\09" });
-                            sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new string[] { " ", "\09" });
-                            DBShare.g_RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                            DBShare.g_RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
-                            nGateIdx++;
-                        }
-                        DBShare.g_RouteInfo[nRouteIdx].nGateCount = nGateIdx;
-                        nRouteIdx++;
+                        sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
+                        sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new string[] { " ", "\09" });
+                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new string[] { " ", "\09" }).Trim();
+                        int nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
+                        MapList.Add(sMapName, nServerIndex);
                     }
                 }
-                Conf = new IniFile(DBShare.sConfFileName);
-                DBShare.sMapFile = Conf.ReadString("Setup", "MapFile", DBShare.sMapFile);
-                //Conf.Free;
-                MapList.Clear();
-                if (File.Exists(DBShare.sMapFile))
-                {
-                    LoadList.Clear();
-                    LoadList.LoadFromFile(DBShare.sMapFile);
-                    for (var i = 0; i < LoadList.Count; i++)
-                    {
-                        sLineText = LoadList[i];
-                        if ((sLineText != "") && (sLineText[0] == '['))
-                        {
-                            sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
-                            sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new string[] { " ", "\09" });
-                            sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new string[] { " ", "\09" }).Trim();
-                            int nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
-                            MapList.Add(sMapName, nServerIndex);
-                        }
-                    }
-                }
-                //LoadList.Free;
             }
-            finally
-            {
-            }
+            DBConf = null;
+            LoadList = null;
         }
 
         private bool LoadChrNameList(string sFileName)
@@ -413,11 +409,17 @@ namespace DBSvr
             }
         }
 
+        /// <summary>
+        /// 打开用户会话
+        /// </summary>
+        /// <param name="sID"></param>
+        /// <param name="sIP"></param>
+        /// <param name="GateInfo"></param>
         private void OpenUser(string sID, string sIP, ref TGateInfo GateInfo)
         {
-            TUserInfo UserInfo;
             string sUserIPaddr = string.Empty;
             string sGateIPaddr = HUtil32.GetValidStr3(sIP, ref sUserIPaddr, new string[] { "/" });
+            TUserInfo UserInfo;
             for (var i = 0; i < GateInfo.UserList.Count; i++)
             {
                 UserInfo = GateInfo.UserList[i];
@@ -525,7 +527,7 @@ namespace DBSvr
                     }
                     break;
                 case Grobal2.CM_SELCHR:
-                    if (!UserInfo.boChrQueryed)
+                    if (UserInfo.boChrQueryed)
                     {
                         if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
@@ -560,11 +562,6 @@ namespace DBSvr
         private bool QueryChr(string sData, ref TUserInfo UserInfo)
         {
             string sAccount = string.Empty;
-            IList<TQuickID> ChrList;
-            int nIndex;
-            THumDataInfo ChrRecord = null;
-            THumInfo HumRecord = null;
-            TQuickID QuickID;
             string s40 = string.Empty;
             bool result = false;
             string sSessionID = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, new string[] { "/" });
@@ -575,28 +572,28 @@ namespace DBSvr
                 _LoginSoc.SetGlobaSessionNoPlay(nSessionID);
                 UserInfo.sAccount = sAccount;
                 UserInfo.nSessionID = nSessionID;
-                ChrList = new List<TQuickID>();
+                IList<TQuickID> ChrList = new List<TQuickID>();
                 try
                 {
                     if (HumDB.Open() && (HumChrDB.FindByAccount(sAccount, ref ChrList) >= 0))
                     {
                         for (var i = 0; i < ChrList.Count; i++)
                         {
-                            QuickID = ChrList[i];
-                            if (QuickID.nSelectID != UserInfo.nSelGateID) // 如果选择ID不对,则跳过
+                            var quickId = ChrList[i];
+                            if (quickId.nSelectID != UserInfo.nSelGateID) // 如果选择ID不对,则跳过
                             {
                                 continue;
                             }
-                            HumRecord = null;
-                            if (HumChrDB.GetBy(QuickID.nIndex, ref HumRecord) && !HumRecord.boDeleted)
+                            THumInfo HumRecord = null;
+                            if (HumChrDB.GetBy(quickId.nIndex, ref HumRecord) && !HumRecord.boDeleted)
                             {
-                                string sChrName = QuickID.sChrName;
-                                nIndex = HumDB.Index(sChrName);
+                                string sChrName = quickId.sChrName;
+                                var nIndex = HumDB.Index(sChrName);
                                 if ((nIndex < 0) || (nChrCount >= 2))
                                 {
                                     continue;
                                 }
-                                ChrRecord = null;
+                                THumDataInfo ChrRecord = null;
                                 if (HumDB.Get(nIndex, ref ChrRecord) >= 0)
                                 {
                                     var btSex = ChrRecord.Data.btSex;
@@ -621,6 +618,7 @@ namespace DBSvr
                 ChrList = null;
                 DBShare.MainOutMessage("查询角色成功:" + s40);
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
+                result = true;
             }
             else
             {
@@ -630,6 +628,10 @@ namespace DBSvr
             return result;
         }
 
+        /// <summary>
+        /// 会话错误
+        /// </summary>
+        /// <param name="UserInfo"></param>
         private void OutOfConnect(TUserInfo UserInfo)
         {
             TDefaultMessage Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
@@ -835,7 +837,6 @@ namespace DBSvr
         private bool SelectChr(string sData, ref TUserInfo UserInfo)
         {
             string sAccount = string.Empty;
-            IList<TQuickID> ChrList;
             THumInfo HumRecord = null;
             THumDataInfo ChrRecord = null;
             string sCurMap = string.Empty;
@@ -850,7 +851,7 @@ namespace DBSvr
                 {
                     if (HumChrDB.Open())
                     {
-                        ChrList = new List<TQuickID>();
+                        IList<TQuickID> ChrList = new List<TQuickID>();
                         if (HumChrDB.FindByAccount(sAccount, ref ChrList) >= 0)
                         {
                             for (var i = 0; i < ChrList.Count; i++)

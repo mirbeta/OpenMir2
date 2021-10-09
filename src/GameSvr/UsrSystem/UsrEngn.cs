@@ -63,7 +63,9 @@ namespace GameSvr
         /// 处理怪物总数位置，用于计算怪物总数
         /// </summary>
         private int nMonsterProcessPostion;
-
+        /// <summary>
+        /// NPC处理数
+        /// </summary>
         private int nNpcPosition;
         /// <summary>
         /// 处理人物开始索引（每次处理人物数限制）
@@ -849,9 +851,6 @@ namespace GameSvr
                             }
                             else
                             {
-                                
-                                Console.WriteLine("我踢人了");
-                                
                                 m_PlayObjectList.Remove(PlayObject);
                                 PlayObject.Disappear();
                                 AddToHumanFreeList(PlayObject);
@@ -895,7 +894,7 @@ namespace GameSvr
                     var merchantNpc = m_MerchantList[i];
                     if (!merchantNpc.m_boGhost)
                     {
-                        if (dwCurrTick - merchantNpc.m_dwRunTick > merchantNpc.m_nRunTime)
+                        if ((dwCurrTick - merchantNpc.m_dwRunTick) > merchantNpc.m_nRunTime)
                         {
                             if ((HUtil32.GetTickCount() - merchantNpc.m_dwSearchTick) > merchantNpc.m_dwSearchTime)
                             {
@@ -925,7 +924,10 @@ namespace GameSvr
                         break;
                     }
                 }
-                if (!boProcessLimit) nMerchantPosition = 0;
+                if (!boProcessLimit)
+                {
+                    nMerchantPosition = 0;
+                }
             }
             catch
             {
@@ -933,8 +935,13 @@ namespace GameSvr
             }
             dwProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (dwProcessMerchantTimeMin > dwProcessMerchantTimeMax)
+            {
                 dwProcessMerchantTimeMax = dwProcessMerchantTimeMin;
-            if (dwProcessNpcTimeMin > dwProcessNpcTimeMax) dwProcessNpcTimeMax = dwProcessNpcTimeMin;
+            }
+            if (dwProcessNpcTimeMin > dwProcessNpcTimeMax)
+            {
+                dwProcessNpcTimeMax = dwProcessNpcTimeMin;
+            }
         }
 
         private void ProcessMissions()
@@ -981,9 +988,13 @@ namespace GameSvr
                     dwRegenMonstersTick = HUtil32.GetTickCount();
                     if (m_nCurrMonGen < m_MonGenList.Count) MonGen = m_MonGenList[m_nCurrMonGen];
                     if (m_nCurrMonGen < m_MonGenList.Count - 1)
+                    {
                         m_nCurrMonGen++;
+                    }
                     else
+                    {
                         m_nCurrMonGen = 0;
+                    }
                     if (MonGen != null && !string.IsNullOrEmpty(MonGen.sMonName) && !M2Share.g_Config.boVentureServer)
                     {
                         var nTemp = HUtil32.GetTickCount() - MonGen.dwStartTick;
@@ -1025,7 +1036,9 @@ namespace GameSvr
                     while (true)
                     {
                         if (nProcessPosition >= MonGen.CertCount) //MonGen.CertList.Count 修改为计数
+                        {
                             break;
+                        }
                         Monster = (TAnimalObject)MonGen.CertList[nProcessPosition];
                         if (Monster != null)
                         {
@@ -1102,7 +1115,10 @@ namespace GameSvr
             for (var i = 0; i < MonGen.CertList.Count; i++)
             {
                 BaseObject = MonGen.CertList[i];
-                if (!BaseObject.m_boDeath && !BaseObject.m_boGhost) nCount++;
+                if (!BaseObject.m_boDeath && !BaseObject.m_boGhost)
+                {
+                    nCount++;
+                }
             }
             return nCount;
         }
@@ -1240,9 +1256,13 @@ namespace GameSvr
             int result;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
+            {
                 result = StdItemList[nItemIdx].Weight;
+            }
             else
+            {
                 result = 0;
+            }
             return result;
         }
 
@@ -1251,9 +1271,13 @@ namespace GameSvr
             var result = "";
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
+            {
                 result = StdItemList[nItemIdx].Name;
+            }
             else
+            {
                 result = "";
+            }
             return result;
         }
 
@@ -1322,7 +1346,7 @@ namespace GameSvr
                                 {
                                     StdItem.RandomUpgradeItem(UserItem);
                                 }
-                                if (new ArrayList(new[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                 {
                                     if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                     {

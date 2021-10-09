@@ -34,8 +34,10 @@ namespace GameSvr
                 M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09"
                     + PlayObject.m_sCharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 Castle.GetCastle(Guild);
-
-                // UserEngine.SendServerGroupMsg(SS_211, nServerIndex, sGuildName);
+                if (boFlag)
+                {
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.nServerIndex, sGuildName);
+                }
                 PlayObject.SysMsg(Castle.m_sName + " 所属行会已经更改为 " + sGuildName, TMsgColor.c_Green, TMsgType.t_Hint);
             }
             else

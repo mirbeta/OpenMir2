@@ -92,6 +92,10 @@ namespace GameSvr
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足
             }
+            if (playObject.m_btPermission < target.MinUserLevel)
+            {
+                return M2Share.g_sGameCommandPermissionTooLow;//权限不足
+            }
             string result;
             var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
             if (methodsParamsCount > 1) //默认参数为当前对象，即：PlayObject

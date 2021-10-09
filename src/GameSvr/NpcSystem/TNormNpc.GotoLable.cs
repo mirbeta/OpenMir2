@@ -1967,13 +1967,16 @@ namespace GameSvr
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
-                                PlayObject.CmdChangeAdminMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
+                                M2Share.CommandSystem.ExecCmd("ChangeAdminMode", PlayObject);
+                                //PlayObject.CmdChangeAdminMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
                                 break;
                             case 2:
-                                PlayObject.CmdChangeSuperManMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
+                                M2Share.CommandSystem.ExecCmd("ChangeSuperManMode", PlayObject);
+                                //PlayObject.CmdChangeSuperManMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
                                 break;
                             case 3:
-                                PlayObject.CmdChangeObMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
+                                M2Share.CommandSystem.ExecCmd("ChangeObMode", PlayObject);
+                                //PlayObject.CmdChangeObMode("", 10, "", HUtil32.Str_ToInt(QuestActionInfo.sParam2, 0) == 1);
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sCHANGEMODE);

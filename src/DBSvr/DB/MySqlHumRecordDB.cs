@@ -370,13 +370,8 @@ namespace DBSvr
         {
             TRecordHeader HumRcdHeader = null;
             var result = false;
-            //if (FileSeek(m_nFileHandle, nIndex * sizeof(THumInfo) + sizeof(TDBHeader), 0) ==  -1)
-            //{
-            //    return result;
-            //}
             HumRcdHeader.boDeleted = true;
             HumRcdHeader.dCreateDate = HUtil32.DateTimeToDouble(DateTime.Now);
-            //FileWrite(m_nFileHandle, HumRcdHeader, sizeof(TRecordHeader));
             m_DeletedList.Add(nIndex);
             result = true;
             return result;
