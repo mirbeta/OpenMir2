@@ -414,7 +414,8 @@ namespace GameSvr
         public int[] AutoTimerTick;
         /// <summary>
         /// 个人定时器 时间间隔
-        /// </summary>    public int[] AutoTimerStatus;
+        /// </summary>
+    public int[] AutoTimerStatus;
         /// <summary>
         /// 包裹刷新时间
         /// </summary>
@@ -1162,7 +1163,7 @@ namespace GameSvr
                     M2Share.g_Config.nWinLotteryLevel2++;
                 }
             }
-            else if (new ArrayList(new object[] { M2Share.g_Config.nWinLottery1Min + M2Share.g_Config.nWinLottery1Max }).Contains(nRate))
+            else if (new ArrayList(new int[] { M2Share.g_Config.nWinLottery1Min + M2Share.g_Config.nWinLottery1Max }).Contains(nRate))
             {
                 if (M2Share.g_Config.nWinLotteryCount < M2Share.g_Config.nNoWinLotteryCount)
                 {

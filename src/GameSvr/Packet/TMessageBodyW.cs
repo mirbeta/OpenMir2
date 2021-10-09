@@ -11,7 +11,7 @@ namespace GameSvr
 
         public byte[] GetPacket()
         {
-            using MemoryStream memoryStream = new MemoryStream();
+            using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
 
             backingStream.Write(Param1);

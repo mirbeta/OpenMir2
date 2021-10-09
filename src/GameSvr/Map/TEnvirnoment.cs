@@ -389,7 +389,7 @@ namespace GameSvr
                                         }
                                         else
                                         {
-                                            if (new ArrayList(new[] { Grobal2.RC_GUARD, Grobal2.RC_ARCHERGUARD }).Contains(BaseObject.m_btRaceServer))
+                                            if(BaseObject.m_btRaceServer==Grobal2.RC_GUARD || BaseObject.m_btRaceServer== Grobal2.RC_ARCHERGUARD)
                                             {
                                                 if (M2Share.g_Config.boRunGuard)
                                                 {

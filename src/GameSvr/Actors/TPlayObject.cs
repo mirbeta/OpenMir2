@@ -215,7 +215,7 @@ namespace GameSvr
                 {
                     OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
                 }
-                if (new ArrayList(new object[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                 {
                     if (UserItem.btValue[8] == 0)
                     {
@@ -2579,7 +2579,7 @@ namespace GameSvr
                             if (m_UseItems[btWhere] != null && m_UseItems[btWhere].wIndex > 0)
                             {
                                 StdItem20 = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
-                                if (StdItem20 != null && new ArrayList(new object[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem20.StdMode))
+                                if (StdItem20 != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem20.StdMode))
                                 {
                                     if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                                     {
@@ -2660,7 +2660,7 @@ namespace GameSvr
                     if (m_UseItems[btWhere].MakeIndex == nItemIdx)
                     {
                         StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[btWhere].wIndex);
-                        if (StdItem != null && new ArrayList(new object[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                        if (StdItem != null && new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                         {
                             if (!m_boUserUnLockDurg && m_UseItems[btWhere].btValue[7] != 0)
                             {

@@ -46,7 +46,7 @@ namespace GameSvr
         /// <summary>
         /// 状态值
         /// </summary>
-        public long m_nCharStatus = 0;
+        public int m_nCharStatus = 0;
         /// <summary>
         /// 回城地图
         /// </summary>
@@ -557,10 +557,12 @@ namespace GameSvr
         public bool m_boAutoChangeColor = false;
         public int m_dwAutoChangeColorTick = 0;
         public int m_nAutoChangeIdx = 0;
+        /// <summary>
+        /// 固定颜色
+        /// </summary>
         public bool m_boFixColor = false;
-        // 固定颜色
         public int m_nFixColorIdx = 0;
-        public long m_nFixStatus = 0;
+        public int m_nFixStatus = 0;
         /// <summary>
         /// 快速麻痹，受攻击后麻痹立即消失
         /// </summary>
@@ -1197,7 +1199,7 @@ namespace GameSvr
             SendRefMsg(Grobal2.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
         }
 
-        public int GainSlaveExp_GetUpKillCount()
+        private int GainSlaveUpKillCount()
         {
             int tCount;
             if (m_btSlaveExpLevel < Grobal2.SLAVEMAXLEVEL - 2)
@@ -1214,9 +1216,9 @@ namespace GameSvr
         private void GainSlaveExp(int nLevel)
         {
             m_nKillMonCount += nLevel;
-            if (GainSlaveExp_GetUpKillCount() < m_nKillMonCount)
+            if (GainSlaveUpKillCount() < m_nKillMonCount)
             {
-                m_nKillMonCount -= GainSlaveExp_GetUpKillCount();
+                m_nKillMonCount -= GainSlaveUpKillCount();
                 if (m_btSlaveExpLevel < (m_btSlaveMakeLevel * 2 + 1))
                 {
                     m_btSlaveExpLevel++;
@@ -1265,11 +1267,8 @@ namespace GameSvr
                     }
                     if (M2Share.g_boGameLogGold)
                     {
-                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" +
-                                               m_nCurrY + "\t" + m_sCharName + "\t" +
-                                               Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" +
-                                               HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" +
-                                               '0');
+                        M2Share.AddGameDataLog(s20 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" +
+                                               HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -1541,7 +1540,6 @@ namespace GameSvr
                     {
                         m_nCurrX = nx;
                         m_nCurrY = ny;
-                        // SendRefMsg(RM_PUSH, GetBackDir(ndir), m_nCurrX, m_nCurrY, 0, '');
                         SendRefMsg(Grobal2.RM_PUSH, nBackDir, m_nCurrX, m_nCurrY, 0, "");
                         result++;
                         if (m_btRaceServer >= Grobal2.RC_ANIMAL)
@@ -1662,7 +1660,7 @@ namespace GameSvr
                     pSItem = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
                     if (pSItem != null)
                     {
-                        if (new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && new ArrayList(new int[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
+                        if (new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && new ArrayList(new byte[] { 114, 160, 161, 162 }).Contains(pSItem.AniCount)))
                         {
                             nDura = m_UseItems[i].Dura;
                             tDura = (ushort)HUtil32.Round(nDura / 1000.0);// 1.03
@@ -1921,7 +1919,7 @@ namespace GameSvr
                 if (MonObj != null)
                 {
                     MonObj.m_Master = this;
-                    MonObj.m_dwMasterRoyaltyTick = HUtil32.GetTickCount() + dwRoyaltySec * 1000;
+                    MonObj.m_dwMasterRoyaltyTick = (HUtil32.GetTickCount() + dwRoyaltySec) * 1000;
                     MonObj.m_btSlaveMakeLevel = (byte)nMakeLevel;
                     MonObj.m_btSlaveExpLevel = (byte)nExpLevel;
                     MonObj.RecalcAbilitys();
@@ -3383,7 +3381,7 @@ namespace GameSvr
             return result;
         }
 
-        public long GetCharStatus()
+        public int GetCharStatus()
         {
             long nStatus = 0;
             for (int i = m_wStatusTimeArr.GetLowerBound(0); i <= m_wStatusTimeArr.GetUpperBound(0); i++)
@@ -3393,7 +3391,8 @@ namespace GameSvr
                     nStatus = (0x80000000 >> i) | nStatus;
                 }
             }
-            return (m_nCharStatusEx & 0xFFFFF) | nStatus;
+            var status = (m_nCharStatusEx & 0xFFFFF) | nStatus;
+            return status >= int.MaxValue ? 0 : (int)status;
         }
 
         public void AbilCopyToWAbil()

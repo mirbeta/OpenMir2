@@ -33,7 +33,6 @@ namespace GameSvr
         /// </summary>
         public byte N;
 
-
         public byte[] GetPacket()
         {
             using MemoryStream memoryStream = new();

@@ -1049,7 +1049,7 @@ namespace GameSvr
             {
                 if (m_UseItems[Grobal2.U_CHARM] != null)
                 {
-                    if (!m_boDeath && new ArrayList(new int[] { Grobal2.RC_PLAYOBJECT, Grobal2.RC_PLAYCLONE }).Contains(m_btRaceServer))
+                    if (!m_boDeath && new ArrayList(new byte[] { Grobal2.RC_PLAYOBJECT, Grobal2.RC_PLAYCLONE }).Contains(m_btRaceServer))
                     {
                         int nCount;
                         int dCount;
@@ -1060,7 +1060,7 @@ namespace GameSvr
                         {
                             m_nIncHPStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_CHARM].wIndex);
-                            if ((StdItem.StdMode == 7) && new ArrayList(new int[] { 1, 3 }).Contains(StdItem.Shape))
+                            if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 1, 3 }).Contains(StdItem.Shape))
                             {
                                 nCount = m_UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.g_Config.HPStoneAddRate);
@@ -1103,7 +1103,7 @@ namespace GameSvr
                         {
                             m_nIncMPStoneTime = HUtil32.GetTickCount();
                             StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_CHARM].wIndex);
-                            if ((StdItem.StdMode == 7) && new ArrayList(new int[] { 2, 3 }).Contains(StdItem.Shape))
+                            if ((StdItem.StdMode == 7) && new ArrayList(new byte[] { 2, 3 }).Contains(StdItem.Shape))
                             {
                                 nCount = m_UseItems[Grobal2.U_CHARM].Dura * 10;
                                 bCount = Convert.ToInt32(nCount / M2Share.g_Config.MPStoneAddRate);
@@ -1211,7 +1211,7 @@ namespace GameSvr
                                 break;
                         }
                         m_nAutoChangeIdx++;
-                        m_nCharStatus = (m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0);
+                        m_nCharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
                         StatusChanged();
                     }
                     if (m_boFixColor && (m_nFixStatus != m_nCharStatus))
@@ -1244,7 +1244,7 @@ namespace GameSvr
                                 nInteger = Grobal2.STATE_TRANSPARENT;
                                 break;
                         }
-                        m_nCharStatus = (m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0);
+                        m_nCharStatus = (int)((m_nCharStatusEx & 0xFFFFF) | ((0x80000000 >> nInteger) | 0));
                         m_nFixStatus = m_nCharStatus;
                         StatusChanged();
                     }
@@ -1514,6 +1514,9 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 计算自身属性
+        /// </summary>
         public virtual void RecalcAbilitys()
         {
             GameItem StdItem;
@@ -2363,7 +2366,6 @@ namespace GameSvr
             }
             if (m_boMuscleRing)
             {
-                // 活力
                 m_WAbil.MaxWeight += m_WAbil.MaxWeight;
                 m_WAbil.MaxWearWeight += m_WAbil.MaxWearWeight;
                 m_WAbil.MaxHandWeight += m_WAbil.MaxHandWeight;

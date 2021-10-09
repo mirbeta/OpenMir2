@@ -1818,7 +1818,7 @@ namespace GameSvr
             switch (nIdx)
             {
                 case Grobal2.U_DRESS:
-                    if (new ArrayList(new byte[] { 10, 11 }).Contains(StdItem.StdMode))
+                    if (StdItem.StdMode == 10 || StdItem.StdMode == 11)
                     {
                         result = true;
                     }
@@ -1905,12 +1905,10 @@ namespace GameSvr
             //    Day = DateTime.Day;
             //    while (true)
             //    {
-            //        
             //        if (MonthDays[false][Month] >= (Day + nDay))
             //        {
             //            break;
             //        }
-            //        
             //        nDay = (Day + nDay) - MonthDays[false][Month] - 1;
             //        Day = 1;
             //        if (Month <= 11)

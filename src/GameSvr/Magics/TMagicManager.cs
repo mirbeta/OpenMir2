@@ -61,12 +61,27 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 是否战士技能
+        /// </summary>
+        /// <param name="wMagIdx"></param>
+        /// <returns></returns>
         public bool IsWarrSkill(int wMagIdx)
         {
             var result = false;
-            if (new ArrayList(new[] { Grobal2.SKILL_ONESWORD, Grobal2.SKILL_ILKWANG, Grobal2.SKILL_YEDO, Grobal2.SKILL_ERGUM, Grobal2.SKILL_BANWOL, Grobal2.SKILL_FIRESWORD, Grobal2.SKILL_MOOTEBO, Grobal2.SKILL_CROSSMOON, Grobal2.SKILL_TWINBLADE }).Contains(wMagIdx))
+            switch (wMagIdx)
             {
-                result = true;
+                case Grobal2.SKILL_ONESWORD:
+                case Grobal2.SKILL_ILKWANG:
+                case Grobal2.SKILL_YEDO:
+                case Grobal2.SKILL_ERGUM:
+                case Grobal2.SKILL_BANWOL:
+                case Grobal2.SKILL_FIRESWORD:
+                case Grobal2.SKILL_MOOTEBO:
+                case Grobal2.SKILL_CROSSMOON:
+                case Grobal2.SKILL_TWINBLADE:
+                    result = true;
+                    break;
             }
             return result;
         }
@@ -99,7 +114,6 @@ namespace GameSvr
             }
             else
             {
-
                 result = HUtil32.LoWord(wInt);
             }
             return result;
@@ -122,13 +136,12 @@ namespace GameSvr
             short n18 = 0;
             int n1C;
             ushort nPower = 0;
-            GameItem StdItem;
             short nAmuletIdx = 0;
             if (IsWarrSkill(UserMagic.wMagIdx))
             {
                 return result;
             }
-            if (Math.Abs(PlayObject.m_nCurrX - nTargetX) > M2Share.g_Config.nMagicAttackRage || Math.Abs(PlayObject.m_nCurrY - nTargetY) > M2Share.g_Config.nMagicAttackRage)
+            if ((Math.Abs(PlayObject.m_nCurrX - nTargetX) > M2Share.g_Config.nMagicAttackRage) || (Math.Abs(PlayObject.m_nCurrY - nTargetY) > M2Share.g_Config.nMagicAttackRage))
             {
                 return result;
             }
@@ -203,7 +216,7 @@ namespace GameSvr
                     {
                         if (Magic.CheckAmulet(PlayObject, 1, 2, ref nAmuletIdx))
                         {
-                            StdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[nAmuletIdx].wIndex);
+                            var StdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[nAmuletIdx].wIndex);
                             if (StdItem != null)
                             {
                                 Magic.UseAmulet(PlayObject, 1, 2, ref nAmuletIdx);
@@ -666,7 +679,7 @@ namespace GameSvr
                     }
                 }
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = (ushort)nHTime;
             BaseObject.m_nCharStatus = BaseObject.GetCharStatus();
             BaseObject.StatusChanged();
@@ -938,7 +951,7 @@ namespace GameSvr
                 }
                 PlayObject.SendRefMsg(Grobal2.RM_10205, 0, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 1, "");
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             return result;
         }
 
@@ -977,7 +990,7 @@ namespace GameSvr
                     }
                 }
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             return result;
         }
 
@@ -1076,7 +1089,7 @@ namespace GameSvr
                     result = true;
                 }
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             return result;
         }
 
@@ -1103,7 +1116,7 @@ namespace GameSvr
                     result = true;
                 }
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             return result;
         }
 
@@ -1138,7 +1151,7 @@ namespace GameSvr
                         result = 0;
                     }
                 }
-                //BaseObjectList.Free;
+                BaseObjectList = null;
                 if (result > 0 && MagicEvent != null)
                 {
                     var HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
@@ -1194,7 +1207,7 @@ namespace GameSvr
                     }
                 }
             }
-            //BaseObjectList.Free;
+            BaseObjectList = null;
             return result;
         }
 
@@ -1294,7 +1307,7 @@ namespace GameSvr
                 int nMakeLevel = UserMagic.btLevel;
                 int nExpLevel = UserMagic.btLevel;
                 var nCount = M2Share.g_Config.nSkeletonCount;
-                var dwRoyaltySec = 10 * 24 * 60 * 60;
+                var dwRoyaltySec = 10 * 24 * 60 * 60;//叛变时间
                 for (var i = M2Share.g_Config.SkeletonArray.GetLowerBound(0); i <= M2Share.g_Config.SkeletonArray.GetUpperBound(0); i++)
                 {
                     if (M2Share.g_Config.SkeletonArray[i].nHumLevel == 0)

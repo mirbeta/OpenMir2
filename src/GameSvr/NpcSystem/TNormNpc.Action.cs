@@ -74,7 +74,7 @@ namespace GameSvr
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (((DealOffInfo.sDealCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
+                                if ((String.Compare(DealOffInfo.sDealCharName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
                                 {
                                     for (var j = 0; j < 9; j++)
                                     {

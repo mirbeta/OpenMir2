@@ -236,7 +236,7 @@ namespace SystemModule.Sockets
         /// 启动异步Socket服务器
         /// </summary>
         /// <param name="localEndPoint">要绑定的本地终结点</param>
-        public void Start(IPEndPoint localEndPoint)// 启动
+        private void Start(IPEndPoint localEndPoint)// 启动
         {
             try
             {
@@ -341,8 +341,7 @@ namespace SystemModule.Sockets
         {
             AsyncUserToken token;
             Interlocked.Increment(ref m_numConnectedSockets);
-            Debug.WriteLine(string.Format("客户端连接请求被接受. 有 {0} 个客户端连接到服务器",
-                m_numConnectedSockets.ToString()));
+            Debug.WriteLine($"客户端连接请求被接受. 有 {m_numConnectedSockets} 个客户端连接到服务器");
             SocketAsyncEventArgs readEventArg;
             // 获得已经接受的客户端连接Socket并把它放到ReadEventArg对象的user token中
             lock (m_readPool)
@@ -432,16 +431,11 @@ namespace SystemModule.Sockets
         {
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
             // 检查远程主机是否关闭连接
-            if (e.SocketError != SocketError.Success)
-            {
-                Debug.WriteLine("asdasdasd");
-            }
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
                 // 增加接收到的字节总数
                 Interlocked.Add(ref m_totalBytesRead, e.BytesTransferred);
-                Debug.WriteLine(string.Format("服务器读取字节总数:{0}", m_totalBytesRead.ToString()));
-
+                Debug.WriteLine($"服务器读取字节总数:{BytesToReadableValue(m_totalBytesRead)}");
                 //byte[] destinationArray = new byte[e.BytesTransferred];// 目的字节数组
                 //Array.Copy(e.Buffer, 0, destinationArray, 0, e.BytesTransferred);
                 token.SetBytesReceived(e.BytesTransferred);
@@ -503,7 +497,7 @@ namespace SystemModule.Sockets
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("客户端:{0}已经关闭或者未连接", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                     //return;
                 }
             }
@@ -579,7 +573,7 @@ namespace SystemModule.Sockets
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("客户端:{0}已经关闭或者未连接", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                     //return;
                 }
             }
@@ -645,7 +639,6 @@ namespace SystemModule.Sockets
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
             // 增加发送计数器
             Interlocked.Add(ref m_totalBytesWrite, e.BytesTransferred);
-
             if (e.Count > m_BufferSize)
             {
                 lock (m_bufferLock)
@@ -664,7 +657,7 @@ namespace SystemModule.Sockets
 
             if (e.SocketError == SocketError.Success)
             {
-                Debug.WriteLine(string.Format("发送 字节数:{0}", e.BytesTransferred.ToString()));
+                Debug.WriteLine($"发送总字节数:{BytesToReadableValue(e.BytesTransferred)}");
                 //lock (((ICollection)this.m_tokens).SyncRoot)
                 //{
                 //    if (!this.m_tokens.TryGetValue(token.ConnectionId, out token))
@@ -674,7 +667,6 @@ namespace SystemModule.Sockets
                 //        //return;
                 //    }
                 //}
-
                 EventHandler<AsyncUserToken> handler = OnDataSendCompleted;
                 // 如果订户事件将为空(null)
                 if (handler != null)
@@ -735,7 +727,7 @@ namespace SystemModule.Sockets
             {
                 if (!this.m_tokens.TryGetValue(connectionId, out token))
                 {
-                    throw new AsyncSocketException(string.Format("客户端:{0}已经关闭或者未连接", connectionId), AsyncSocketErrorCode.ClientSocketNoExist);
+                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                     //return;//不存在该ID客户端
                 }
             }
@@ -793,15 +785,13 @@ namespace SystemModule.Sockets
                 // 减少连接到服务器客户端总数的计数器的值
                 Interlocked.Decrement(ref m_numConnectedSockets);
                 m_maxNumberAcceptedClients.Release();
-
-                Debug.WriteLine(string.Format("一个客户端被从服务器断开. 有 {0} 个客户端连接到服务器", m_numConnectedSockets.ToString()));
+                Debug.WriteLine($"一个客户端被从服务器断开. 有 {m_numConnectedSockets.ToString()} 个客户端连接到服务器");
                 lock (m_readPool)
                 {
                     // 释放以使它们可以被其他客户端重新利用
                     m_readPool.Push(token.ReadEventArgs);
                 }
             }
-
         }
         
         private void RaiseErrorEvent(AsyncUserToken token, AsyncSocketException exception)
@@ -834,7 +824,6 @@ namespace SystemModule.Sockets
                     try
                     {
                         CloseClientSocket(token);
-
                         EventHandler<AsyncUserToken> handler = OnClientDisconnect;
                         // 如果订户事件将为空(null)
                         if ((handler != null) && (null != token))
@@ -844,7 +833,6 @@ namespace SystemModule.Sockets
                     }
                     // 编译时打开注释调试时关闭
                     //catch(Exception){ }
-
                     // 编译时关闭调试时打开
                     catch (Exception exception_debug)
                     {
@@ -855,6 +843,42 @@ namespace SystemModule.Sockets
                 this.m_tokens.Clear();
             }
             isActive = false;
+        }
+        
+        /// <summary>
+        /// 获取文件大小的显示字符串
+        /// </summary>
+        /// <returns></returns>
+        private string BytesToReadableValue(long length)
+        {
+            int byteConversion = 1024;
+            double bytes = Convert.ToDouble(length);
+            // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
+            if (bytes >= Math.Pow(byteConversion, 6)) // EB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 5)) // PB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 4)) // TB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 3)) // GB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
+            }
+            if (bytes >= Math.Pow(byteConversion, 2)) // MB
+            {
+                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
+            }
+            if (bytes >= byteConversion) // KB
+            {
+                return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
+            }
+            return string.Concat(bytes, " Bytes");// Bytes
         }
     }
 }

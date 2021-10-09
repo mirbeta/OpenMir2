@@ -704,7 +704,7 @@ namespace GameSvr
                                     UserItem = new TUserItem();
                                     if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                                     {
-                                        if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                        if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                         {
                                             if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                             {
@@ -761,7 +761,7 @@ namespace GameSvr
                                 UserItem = new TUserItem();
                                 if (M2Share.UserEngine.CopyToUserItemFromName(m_UseItemNames[i], ref UserItem))
                                 {
-                                    if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                    if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                     {
                                         if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                         {
@@ -2498,7 +2498,7 @@ namespace GameSvr
                         }
                         if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 2 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 2)
                         {
-                            if (result == 0 && !new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
+                            if (result == 0 && !new ArrayList(new short[] { 60, 61, 62 }).Contains(wMagicID))
                             {
                                 if (DoThink_TargetNeedRunPos())
                                 {
@@ -2538,7 +2538,7 @@ namespace GameSvr
                         {
                             result = 2;
                         }
-                        else if (new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(m_TargetCret, 10, ref btDir))
+                        else if (new ArrayList(new short[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(m_TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }
@@ -2941,7 +2941,7 @@ namespace GameSvr
             bool result = false;
             try
             {
-                boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || m_btJob == 0;
+                boFlag = m_btRaceServer == 108 || new ArrayList(new int[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || m_btJob == 0;
                 if (m_btJob == 0 || wMagicID <= 0)
                 {
                     nRange = 1;
@@ -3009,7 +3009,7 @@ namespace GameSvr
                     {
                         nRange = 1;
                     }
-                    boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
+                    boFlag = m_btRaceServer == 108 || new ArrayList(new int[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
                     for (var i = 2; i >= 1; i--)
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -3075,7 +3075,7 @@ namespace GameSvr
             TMapWalkXY[] WalkStep = null;
             bool result = false;
             int nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
-            boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
+            boFlag = m_btRaceServer == 108 || new ArrayList(new short[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             TMapWalkXY MapWalkXY;
             for (var i = nRange; i >= 1; i--)
@@ -3144,7 +3144,7 @@ namespace GameSvr
             TMapWalkXY[] WalkStep = null;
             TMapWalkXY MapWalkXY;
             bool result = false;
-            bool boFlag = m_btRaceServer == 108 || new ArrayList(new object[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
+            bool boFlag = m_btRaceServer == 108 || new ArrayList(new short[] { Grobal2.SKILL_FIREBALL, Grobal2.SKILL_FIREBALL2, Grobal2.SKILL_FIRECHARM }).Contains(wMagicID);
             for (var i = nRange; i >= 1; i--)
             {
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -3710,7 +3710,7 @@ namespace GameSvr
                                                 if (M2Share.UserEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
                                                 {
                                                     boRecalcAbilitys = true;
-                                                    if (new ArrayList(new int[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+                                                    if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                                                     {
                                                         if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
                                                         {
@@ -6437,22 +6437,20 @@ namespace GameSvr
                         result = 32;// 圣言术
                         return result;
                     }
-                    if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 1)
+                    if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 2) > 1)// 被怪物包围
                     {
-                        // 被怪物包围
                         if (AllowUseMagic(22) && HUtil32.GetTickCount() - m_SkillUseTick[22] > 10000)
                         {
-                            if (m_TargetCret.m_btRaceServer != 101 && m_TargetCret.m_btRaceServer != 102 && m_TargetCret.m_btRaceServer != 104)
+                            if (m_TargetCret.m_btRaceServer != 101 && m_TargetCret.m_btRaceServer != 102 && m_TargetCret.m_btRaceServer != 104) // 除祖玛怪,才放火墙
                             {
-                                // 除祖玛怪,才放火墙
                                 m_SkillUseTick[22] = HUtil32.GetTickCount();
                                 result = 22;// 火墙
                                 return result;
                             }
                         }
-                        // 地狱雷光,只对祖玛(101,102,104)，沃玛(91,92,97)，野猪(81)系列的用   20080217
-                        // 遇到祖玛的怪应该多用地狱雷光，夹杂雷电术，少用冰咆哮 20080228
-                        if (new ArrayList(new int[] { 91, 92, 97, 101, 102, 104 }).Contains(m_TargetCret.m_btRaceServer))
+                        // 地狱雷光,只对祖玛(101,102,104)，沃玛(91,92,97)，野猪(81)系列的
+                        // 遇到祖玛的怪应该多用地狱雷光，夹杂雷电术，少用冰咆哮
+                        if (new ArrayList(new byte[] { 91, 92, 97, 101, 102, 104 }).Contains(m_TargetCret.m_btRaceServer))
                         {
                             // 1000 * 4
                             if (AllowUseMagic(24) && HUtil32.GetTickCount() - m_SkillUseTick[24] > 4000 && CheckTargetXYCount(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 3) > 2)
@@ -7098,9 +7096,11 @@ namespace GameSvr
                         }
                     }
                     // 绿毒
-                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) && !new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 
+                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) 
+                        && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
-                        // 对于血量超过800的怪用  修改距离 20080704 不毒城墙
+                        // 对于血量超过800的怪用 不毒城墙
                         n_AmuletIndx = 0;
                         switch (new System.Random(2).Next())
                         {
@@ -7154,7 +7154,9 @@ namespace GameSvr
                                 break;
                         }
                     }
-                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) && !new ArrayList(new int[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 
+                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) 
+                        && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
                         // 对于血量超过100的怪用 不毒城墙
                         n_AmuletIndx = 0;

@@ -9,16 +9,14 @@ namespace GameSvr
 
         public byte[] GetPacket()
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            using var memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
 
-                backingStream.Write(Ident);
-                backingStream.Write(wMsg);
+            backingStream.Write(Ident);
+            backingStream.Write(wMsg);
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream.ToArray();
         }
     }
 }
