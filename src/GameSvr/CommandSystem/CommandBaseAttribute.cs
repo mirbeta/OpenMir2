@@ -84,8 +84,7 @@ namespace GameSvr.CommandSystem
     [AttributeUsage(AttributeTargets.Method)]
     public class DefaultCommand : CommandAttribute
     {
-        public DefaultCommand(byte minUserLevel = 0)
-            : base("", "", minUserLevel)
+        public DefaultCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel)
         {
         }
     }
