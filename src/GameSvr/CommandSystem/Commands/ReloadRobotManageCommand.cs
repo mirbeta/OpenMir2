@@ -9,10 +9,6 @@ namespace GameSvr
         [DefaultCommand]
         public void ReloadRobotManage(string[] @params, TPlayObject PlayObject)
         {
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
             if (M2Share.g_RobotNPC != null)
             {
                 M2Share.g_RobotNPC.ClearScript();

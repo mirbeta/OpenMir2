@@ -14,6 +14,10 @@ namespace GameSvr
         [DefaultCommand]
         public void MobFireBurn(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sMAP = @Params.Length > 0 ? @Params[0] : "";//地图号
             var sX = @Params.Length > 1 ? @Params[1] : "";//坐标X
             var sY = @Params.Length > 2 ? @Params[2] : "";//坐标Y

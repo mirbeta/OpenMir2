@@ -51,11 +51,9 @@ namespace GameSvr
                 var attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) continue;
                 if (method.Name.ToLower() == "fallback") continue;
-
                 this._commands.Add(new DefaultCommand(this.Attributes.nPermissionMin), method);
                 return;
             }
-
             this._commands.Add(new DefaultCommand(this.Attributes.nPermissionMin), this.GetType().GetMethod("Fallback"));
         }
 
@@ -68,7 +66,12 @@ namespace GameSvr
         public virtual string Handle(string parameters, TPlayObject playObject = null)
         {
             // 检查用户是否有足够的权限来调用命令。
-            playObject.m_btPermission = 10;
+            if (playObject != null)
+            {
+#if Debug
+                playObject.m_btPermission = 10;
+#endif
+            }
             if (playObject != null && this.Attributes.nPermissionMin > playObject.m_btPermission)
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足
@@ -83,9 +86,10 @@ namespace GameSvr
             {
                 @params = parameters.Split(' ');
                 target = this.GetSubcommand(@params[0]) ?? this.GetDefaultSubcommand();
-
                 if (target != this.GetDefaultSubcommand())
+                {
                     @params = @params.Skip(1).ToArray();
+                }
             }
             // 检查用户是否有足够的权限来调用命令
             if (playObject != null && target.MinUserLevel > playObject.m_btPermission)
@@ -100,6 +104,10 @@ namespace GameSvr
             var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
             if (methodsParamsCount > 1) //默认参数为当前对象，即：PlayObject
             {
+                if (@params == null)
+                {
+                    return "命令格式: @" + target.Name + target.Help;
+                }
                 result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
             }
             else
@@ -116,7 +124,6 @@ namespace GameSvr
                 if (command != pair.Key.Name) continue;
                 return pair.Key.Help;
             }
-
             return string.Empty;
         }
 

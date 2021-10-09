@@ -10,11 +10,14 @@ namespace GameSvr
         [DefaultCommand]
         public void LotteryTicket(string[] @Params, TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam1 == "" || sParam1 != "" && sParam1[1] == '?')
+            if (@Params != null && @Params.Length > 0)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
+                var sParam1 = @Params.Length > 0 ? @Params[0] : "";
+                if (sParam1 == "" || sParam1 != "" && sParam1[1] == '?')
+                {
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
             }
             PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandLotteryTicketMsg, M2Share.g_Config.nWinLotteryCount,
                 M2Share.g_Config.nNoWinLotteryCount, M2Share.g_Config.nWinLotteryLevel1, M2Share.g_Config.nWinLotteryLevel2,

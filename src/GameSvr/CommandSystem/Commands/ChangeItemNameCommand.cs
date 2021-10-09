@@ -6,21 +6,21 @@ namespace GameSvr.Command
     /// <summary>
     /// 调整指定物品名称
     /// </summary>
-    [GameCommand("ChangeItemName", "调整指定物品名称", 10)]
+    [GameCommand("ChangeItemName", "调整指定物品名称", 10, Help = "物品编号 物品ID号 物品名称")]
     public class ChangeItemNameCommand : BaseCommond
     {
         [DefaultCommand]
         public void ChangeItemName(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             int nMakeIndex;
             int nItemIndex;
             var sMakeIndex = @params.Length > 0 ? @params[0] : "";
             var sItemIndex = @params.Length > 1 ? @params[1] : "";
             var sItemName = @params.Length > 2 ? @params[2] : "";
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
             if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
                 PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);

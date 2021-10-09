@@ -1536,7 +1536,7 @@ namespace GameSvr
         public const string g_sGameCommandRecallMobHelpMsg = "怪物名称 数量 等级";
         public const string g_sGameCommandLuckPointHelpMsg = "人物名称 控制符 幸运点数";
         public const string g_sGameCommandLuckPointMsg = "%s 的幸运点数为:%d/%g 幸运值为:%d";
-        public const string g_sGameCommandLotteryTicketMsg = "已中彩票数:%d 未中彩票数:%d 一等奖:%d 二等奖:%d 三等奖:%d 四等奖:%d 五等奖:%d 六等奖:%d ";
+        public const string g_sGameCommandLotteryTicketMsg = "已中彩票数:{0} 未中彩票数:{1} 一等奖:{2} 二等奖:{3} 三等奖:{4} 四等奖:{5} 五等奖:{6} 六等奖:{7} ";
         public const string g_sGameCommandReloadGuildHelpMsg = "行会名称";
         public const string g_sGameCommandReloadGuildOnMasterserver = "此命令只能在主游戏服务器上执行!!!";
         public const string g_sGameCommandReloadGuildNotFoundGuildMsg = "未找到行会%s!!!";
@@ -1575,7 +1575,7 @@ namespace GameSvr
         public const string g_sGameCommandBindUseItemHelpMsg = "人物名称 物品类型 绑定方法";
         public const string g_sGameCommandBindUseItemNoItemMsg = "%s的%s没有戴物品!!!";
         public const string g_sGameCommandBindUseItemAlreadBindMsg = "%s的%s上的物品早已绑定过了!!!";
-        public const string g_sGameCommandMobFireBurnHelpMsg = "命令格式: %s %s %s %s %s %s %s";
+        public const string g_sGameCommandMobFireBurnHelpMsg = "命令格式: {0} {1} {2} {3} {4} {5} {6}";
         public const string g_sGameCommandMobFireBurnMapNotFountMsg = "地图%s 不存在";
         public static string sGetSellOffGlod = "{0} {1}增加";
         public const string U_DRESSNAME = "衣服";

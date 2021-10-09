@@ -13,10 +13,6 @@ namespace GameSvr
         public void ReloadMonItems(string[] @Params, TPlayObject PlayObject)
         {
             TMonInfo Monster;
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
             try
             {
                 for (var i = 0; i < M2Share.UserEngine.MonsterList.Count; i++)

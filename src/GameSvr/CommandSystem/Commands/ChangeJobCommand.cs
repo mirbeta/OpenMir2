@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeJob(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             TPlayObject m_PlayObject;
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var sJobName = @params.Length > 1 ? @params[1] : "";
@@ -25,15 +29,15 @@ namespace GameSvr
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (string.Compare(sJobName, "Warr", true) == 0)
+                if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.m_btJob = 0;
                 }
-                if (string.Compare(sJobName, "Wizard", true) == 0)
+                if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.m_btJob = 1;
                 }
-                if (string.Compare(sJobName, "Taos", true) == 0)
+                if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.m_btJob = 2;
                 }

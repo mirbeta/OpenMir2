@@ -12,12 +12,6 @@ namespace GameSvr
         [DefaultCommand]
         public void LockLogin(string[] @Params, TPlayObject PlayObject)
         {
-            if (PlayObject.m_btPermission < this.Attributes.nPermissionMin) //最小权限
-            {
-                PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-
             if (!M2Share.g_Config.boLockHumanLogin)
             {
                 PlayObject.SysMsg("本服务器还没有启用登录锁功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);

@@ -24,10 +24,6 @@ namespace GameSvr
             IList<TBaseObject> TmpNorList = null;
             TMerchant Merchant;
             TNormNpc NPC;
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 M2Share.LocalDB.ReLoadMerchants();

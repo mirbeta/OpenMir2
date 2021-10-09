@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void Hunger(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
             TPlayObject m_PlayObject;

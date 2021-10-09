@@ -16,15 +16,17 @@ namespace GameSvr
         [DefaultCommand]
         public void MobLevel(string[] @Params, TPlayObject PlayObject)
         {
-            var Param = @Params.Length > 0 ? @Params[0] : "";
-            IList<TBaseObject> BaseObjectList;
-            TBaseObject BaseObject;
-            if (Param != "" && Param[0] == '?')
+            if (@Params != null && @Params.Length > 0)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, new string[] { this.Attributes.Name, "" }), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
+                var sParam = @Params.Length > 0 ? @Params[0] : "";
+                if (sParam != "" && sParam[0] == '?')
+                {
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow,  this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
             }
-            BaseObjectList = new List<TBaseObject>();
+            TBaseObject BaseObject;
+            IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.m_nCurrX, PlayObject.m_nCurrY, 2, true, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {

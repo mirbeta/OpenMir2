@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeMasterName(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sMasterName = @Params.Length > 1 ? @Params[1] : "";
             var sIsMaster = @Params.Length > 2 ? @Params[2] : "";
@@ -24,7 +28,7 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (sMasterName.ToLower().CompareTo("无".ToLower()) == 0)
+                if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     m_PlayObject.m_sMasterName = "";
                     m_PlayObject.RefShowName();

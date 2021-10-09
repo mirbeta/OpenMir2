@@ -15,7 +15,6 @@ namespace GameSvr
         public void CmdMakeItem(string[] Params, TPlayObject PlayObject)
         {
             if (Params == null) return;
-
             var sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
             var nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
             var sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
@@ -77,13 +76,10 @@ namespace GameSvr
                     {
                         M2Share.AddGameDataLog("5" + "\09" + PlayObject.m_sMapName + "\09" + PlayObject.m_nCurrX +
                            "\09" + PlayObject.m_nCurrY + "\09" + PlayObject.m_sCharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
-                           HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" +
-                           "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
+                           HUtil32.LoWord(StdItem.Dc) + "/" + HUtil32.HiWord(StdItem.Dc) + ")" + "(" + HUtil32.LoWord(StdItem.Mc) + "/" + HUtil32.HiWord(StdItem.Mc) + ")" + "(" +
                            HUtil32.LoWord(StdItem.Sc) + "/" + HUtil32.HiWord(StdItem.Sc) + ")" + "(" + HUtil32.LoWord(StdItem.Ac) + "/" +
-                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) +
-                           "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.btValue[0]
-                           + "/" + UserItem.btValue[1] + "/" + UserItem.btValue[2] + "/" + UserItem.btValue[3]
-                           + "/" + UserItem.btValue[4] + "/" + UserItem.btValue[5] + "/" + UserItem.btValue[6]
+                           HUtil32.HiWord(StdItem.Ac) + ")" + "(" + HUtil32.LoWord(StdItem.Mac) + "/" + HUtil32.HiWord(StdItem.Mac) + ")" + UserItem.btValue[0]
+                           + "/" + UserItem.btValue[1] + "/" + UserItem.btValue[2] + "/" + UserItem.btValue[3] + "/" + UserItem.btValue[4] + "/" + UserItem.btValue[5] + "/" + UserItem.btValue[6]
                            + "/" + UserItem.btValue[7] + "/" + UserItem.btValue[8] + "/" + UserItem.btValue[14] + "\09" + PlayObject.m_sCharName);
                     }
                 }
@@ -93,9 +89,7 @@ namespace GameSvr
                     PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName), TMsgColor.c_Red, TMsgType.t_Hint);
                     break;
                 }
-                
-                PlayObject.SysMsg( PlayObject.m_ItemList.Count.ToString(),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg( PlayObject.m_ItemList.Count.ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }
