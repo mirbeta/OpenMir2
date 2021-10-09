@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace SystemModule
 {
- /// <summary>
+    /// <summary>
     /// 时间戳ID
     /// </summary>
     public class TimestampID

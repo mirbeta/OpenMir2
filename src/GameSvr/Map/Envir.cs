@@ -3,6 +3,19 @@ using System.Runtime.InteropServices;
 
 namespace GameSvr
 {
+    /// <summary>
+    /// 可见的地图物品
+    /// </summary>
+    public class TVisibleMapItem
+    {
+        public int nX;
+        public int nY;
+        public TMapItem MapItem;
+        public string sName;
+        public ushort wLooks;
+        public int nVisibleFlag;
+    } 
+    
     public class TOSObject
     {
         public byte btType;

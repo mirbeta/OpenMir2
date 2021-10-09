@@ -22,19 +22,6 @@ namespace GameSvr
         public TBaseObject BaseObject;
         public int nVisibleFlag;
     }
-
-    /// <summary>
-    /// 可见的地图物品
-    /// </summary>
-    public class TVisibleMapItem
-    {
-        public int nX;
-        public int nY;
-        public TMapItem MapItem;
-        public string sName;
-        public ushort wLooks;
-        public int nVisibleFlag;
-    } 
     
     public class ObjBase
     {
