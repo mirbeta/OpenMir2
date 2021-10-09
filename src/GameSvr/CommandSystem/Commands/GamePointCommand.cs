@@ -8,7 +8,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家声望
     /// </summary>
-    [GameCommand("GamePoint", "调整指定玩家声望", 10)]
+    [GameCommand("GamePoint", "调整指定玩家声望", M2Share.g_sGameCommandGamePointHelpMsg, 10)]
     public class GamePointCommand : BaseCommond
     {
         [DefaultCommand]
@@ -30,8 +30,7 @@ namespace GameSvr
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name,
-                    M2Share.g_sGameCommandGamePointHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

@@ -4,18 +4,22 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("ClearBagItem", "清理包裹物品", 10)]
+    [GameCommand("ClearBagItem", "清理包裹物品", "人物名称", 10)]
     public class ClearBagItemCommand : BaseCommond
     {
         [DefaultCommand]
         public void ClearBagItem(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? Params[0] : "";
             TUserItem UserItem;
             IList<TDeleteItem> DelList = null;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, "人物名称"), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

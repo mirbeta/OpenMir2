@@ -15,7 +15,7 @@ namespace GameSvr
                 var sParam = @params.Length > 0 ? @params[0] : "";
                 if (sParam != "" && sParam[1] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

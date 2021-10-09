@@ -13,7 +13,7 @@ namespace GameSvr
 
             if (sParam1 != "" && sParam1[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapInfoMsg, PlayObject.m_PEnvir.sMapName, PlayObject.m_PEnvir.sMapDesc), TMsgColor.c_Green, TMsgType.t_Hint);

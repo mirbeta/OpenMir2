@@ -4,7 +4,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("ShutupRelease", "恢复禁言", 10)]
+    [GameCommand("ShutupRelease", "恢复禁言", M2Share.g_sGameCommandShutupReleaseHelpMsg, 10)]
     public class ShutupReleaseCommand : BaseCommond
     {
         [DefaultCommand]
@@ -15,8 +15,7 @@ namespace GameSvr
 
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShutupReleaseHelpMsg),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.g_DenySayMsgList);

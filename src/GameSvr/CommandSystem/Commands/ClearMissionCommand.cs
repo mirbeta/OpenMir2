@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 清除指定玩家的任务标志。
     /// </summary>
-    [GameCommand("ClearMission", "清除指定玩家的任务标志", 10)]
+    [GameCommand("ClearMission", "清除指定玩家的任务标志", "人物名称", 10)]
     public class ClearMissionCommand : BaseCommond
     {
         [DefaultCommand]
@@ -16,7 +16,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sHumanName[0] == '?')
@@ -27,10 +27,10 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format("{0}不在线，或在其它服务器上!!", sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format("{0}的任务标志已经全部清零。", sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"{sHumanName}的任务标志已经全部清零。", TMsgColor.c_Green, TMsgType.t_Hint);
         }
     }
 }

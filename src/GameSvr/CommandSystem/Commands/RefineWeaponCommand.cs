@@ -7,12 +7,16 @@ namespace GameSvr
     /// <summary>
     /// 调整物品属性
     /// </summary>
-    [GameCommand("RefineWeapon", "调整物品属性", 10)]
+    [GameCommand("RefineWeapon", "调整身上武器属性", "攻击力 魔法力 道术 准确度", 10)]
     public class RefineWeaponCommand : BaseCommond
     {
         [DefaultCommand]
         public void RefineWeapon(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var nDc = @Params.Length > 0 ? Convert.ToInt32(@Params[0]) : 0;
             var nMc = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;
             var nSc = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
@@ -21,7 +25,7 @@ namespace GameSvr
             {
                 return;
             }
-            if (PlayObject.m_UseItems[Grobal2.U_WEAPON] == null && PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
+            if (PlayObject.m_UseItems[Grobal2.U_WEAPON] == null || PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex <= 0)
             {
                 return;
             }
@@ -33,8 +37,7 @@ namespace GameSvr
             PlayObject.RecalcAbilitys();
             PlayObject.SendMsg(PlayObject, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             PlayObject.SendMsg(PlayObject, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-            M2Share.MainOutMessage("[武器调整]" + PlayObject.m_sCharName + " DC:" + nDc + " MC" + nMc + " SC" + nSc
-                + " HIT:" + nHit);
+            M2Share.MainOutMessage("[武器调整]" + PlayObject.m_sCharName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }
 }

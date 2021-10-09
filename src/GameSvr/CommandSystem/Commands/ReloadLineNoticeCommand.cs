@@ -19,11 +19,11 @@ namespace GameSvr
                 var sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (sParam1 != "" && sParam1[0] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }
-            if (M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir,"LineNotice.txt")))
+            if (M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);
             }

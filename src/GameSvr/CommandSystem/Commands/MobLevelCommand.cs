@@ -1,9 +1,6 @@
 ﻿using SystemModule;
-using System;
 using System.Collections.Generic;
 using GameSvr.CommandSystem;
-using System.Collections;
-using System.Linq;
 
 namespace GameSvr
 {
@@ -21,7 +18,7 @@ namespace GameSvr
                 var sParam = @Params.Length > 0 ? @Params[0] : "";
                 if (sParam != "" && sParam[0] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow,  this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

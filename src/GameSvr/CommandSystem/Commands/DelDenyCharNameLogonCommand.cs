@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("DelDenyCharNameLogon", "", 10)]
+    [GameCommand("DelDenyCharNameLogon", "", "人物名称", 10)]
     public class DelDenyCharNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
@@ -13,7 +13,7 @@ namespace GameSvr
 
             if (sCharName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var boDelete = false;

@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 将指定人物禁言(支持权限分配)
     /// </summary>
-    [GameCommand("Shutup", "将指定人物禁言(支持权限分配)", 10)]
+    [GameCommand("Shutup", "将指定人物禁言", M2Share.g_sGameCommandShutupHelpMsg, 10)]
     public class ShutupCommand : BaseCommond
     {
         [DefaultCommand]
@@ -19,10 +19,10 @@ namespace GameSvr
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sTime = @Params.Length > 1 ? @Params[1] : "";
-
-            if (sTime == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
+            if (sTime == "" || string.IsNullOrEmpty(sHumanName) ||
+                !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShutupHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandShutupHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var dwTime = (uint)HUtil32.Str_ToInt(sTime, 5);

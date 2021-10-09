@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 进入/退出隐身模式(进入模式后别人看不到自己)(支持权限分配)
     /// </summary>
-    [GameCommand("ChangeObMode", "进入/退出隐身模式(进入模式后别人看不到自己)(支持权限分配)", 10)]
+    [GameCommand("ChangeObMode", "进入/退出隐身模式(进入模式后别人看不到自己)", 10)]
     public class ChangeObModeCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,8 +17,7 @@ namespace GameSvr
                 var sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (sParam1 != "" && sParam1[0] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""),
-                        TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

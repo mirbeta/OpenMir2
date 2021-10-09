@@ -8,7 +8,7 @@ namespace GameSvr
     /// <summary>
     /// 取指定玩家物品
     /// </summary>
-    [GameCommand("GetUserItems", "取指定玩家物品", 10)]
+    [GameCommand("GetUserItems", "取指定玩家物品", "人物名称 物品名称 数量 类型(0,1,2)", 10)]
     public class GetUserItemsCommand : BaseCommond
     {
         [DefaultCommand]
@@ -26,7 +26,7 @@ namespace GameSvr
             TUserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 物品名称 数量 类型(0,1,2))", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

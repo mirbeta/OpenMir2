@@ -27,7 +27,7 @@ namespace GameSvr
 
             if (sParam1 == "" || sParam1 != "" && sParam1[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandNpcScriptHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandNpcScriptHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             nNPCType = -1;

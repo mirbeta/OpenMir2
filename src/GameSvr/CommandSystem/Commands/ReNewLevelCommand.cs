@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家转生等级
     /// </summary>
-    [GameCommand("ReNewLevel", "调整指定玩家转生等级", 10)]
+    [GameCommand("ReNewLevel", "调整指定玩家转生等级", "人物名称 点数(为空则查看)", 10)]
     public class ReNewLevelCommand : BaseCommond
     {
         [DefaultCommand]
@@ -20,7 +20,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 点数(为空则查看)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var nLevel = HUtil32.Str_ToInt(sLevel, -1);

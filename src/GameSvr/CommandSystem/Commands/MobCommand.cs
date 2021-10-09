@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 刷指定怪物
     /// </summary>
-    [GameCommand("Mob", "刷指定怪物", 10)]
+    [GameCommand("Mob", "刷指定怪物", "怪物名称 数量 等级(0-7)", 10)]
     public class MobCommand : BaseCommond
     {
         [DefaultCommand]
@@ -24,6 +24,7 @@ namespace GameSvr
             var nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (nCount <= 0)

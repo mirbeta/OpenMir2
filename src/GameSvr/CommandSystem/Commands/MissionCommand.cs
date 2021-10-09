@@ -18,7 +18,7 @@ namespace GameSvr
             short nY;
             if (sX == "" || sY == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             nX = (short)HUtil32.Str_ToInt(sX, 0);

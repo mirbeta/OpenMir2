@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家职业
     /// </summary>
-    [GameCommand("ChangeJob", "调整指定玩家职业", 10)]
+    [GameCommand("ChangeJob", "调整指定玩家职业", M2Share.g_sGameCommandChangeJobHelpMsg, 10)]
     public class ChangeJobCommand : BaseCommond
     {
         [DefaultCommand]
@@ -22,8 +22,7 @@ namespace GameSvr
             var sJobName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sJobName == "")
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandChangeJobHelpMsg),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

@@ -9,7 +9,7 @@ namespace GameSvr
     /// <summary>
     /// 将指定地图所有玩家随机移动
     /// </summary>
-    [GameCommand("MapMoveHuman", "将指定地图所有玩家随机移动", 10)]
+    [GameCommand("MapMoveHuman", "将指定地图所有玩家随机移动", M2Share.g_sGameCommandMapMoveHelpMsg, 10)]
     public class MapMoveHumanCommand : BaseCommond
     {
         [DefaultCommand]
@@ -21,7 +21,7 @@ namespace GameSvr
             TPlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMapMoveHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var SrcEnvir = M2Share.g_MapManager.FindMap(sSrcMap);

@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 退出行会
     /// </summary>
-    [GameCommand("EndGuild", "退出行会", 10)]
+    [GameCommand("EndGuild", "退出行会", 0)]
     public class EndGuildCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,7 +17,7 @@ namespace GameSvr
                 if (PlayObject.m_nGuildRankNo > 1)
                 {
                     if (PlayObject.m_MyGuild.IsMember(PlayObject.m_sCharName) && PlayObject.m_MyGuild.DelMember(PlayObject.m_sCharName))
-                    {                        
+                    {
                         M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.nServerIndex, PlayObject.m_MyGuild.sGuildName);
                         PlayObject.m_MyGuild = null;
                         PlayObject.RefRankInfo(0, "");

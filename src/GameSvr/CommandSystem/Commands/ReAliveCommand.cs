@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 复活指定玩家
     /// </summary>
-    [GameCommand("ReAlive", "复活指定玩家", 10)]
+    [GameCommand("ReAlive", "复活指定玩家", M2Share.g_sGameCommandPrvMsgHelpMsg, 10)]
     public class ReAliveCommand : BaseCommond
     {
         [DefaultCommand]
@@ -16,7 +16,7 @@ namespace GameSvr
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg("命令格式不正确", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

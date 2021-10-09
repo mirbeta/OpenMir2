@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("DisableSendMsg", "", 10)]
+    [GameCommand("DisableSendMsg", "", "人物名称", 10)]
     public class DisableSendMsgCommand : BaseCommond
     {
         [DefaultCommand]
@@ -12,7 +12,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

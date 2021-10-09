@@ -16,7 +16,7 @@ namespace GameSvr
             var sParam1 = @Params.Length > 0 ? @Params[0] : "";
             if (sParam1 != "" && sParam1[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (PlayObject.m_btPermission < 6)

@@ -7,19 +7,22 @@ namespace GameSvr
     /// <summary>
     /// 调整沙巴克所属行会
     /// </summary>
-    [GameCommand("ChangeSabukLord", "调整沙巴克所属行会", 10)]
+    [GameCommand("ChangeSabukLord", "调整沙巴克所属行会", "城堡名称 行会名称", 10)]
     public class ChangeSabukLordCommand : BaseCommond
     {
         [DefaultCommand]
         public void ChangeSabukLord(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
             var sGuildName = @Params.Length > 1 ? @Params[1] : "";
             var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
-
             if (sCASTLENAME == "" || sGuildName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 城堡名称 行会名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var Castle = M2Share.CastleManager.Find(sCASTLENAME);
@@ -31,8 +34,7 @@ namespace GameSvr
             var Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild != null)
             {
-                M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09"
-                    + PlayObject.m_sCharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
+                M2Share.AddGameDataLog("27" + "\09" + Castle.m_sOwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.m_sCharName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 Castle.GetCastle(Guild);
                 if (boFlag)
                 {

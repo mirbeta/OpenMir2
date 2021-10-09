@@ -9,7 +9,7 @@ namespace GameSvr
     /// <summary>
     /// 随机传送一个指定玩家和他身边的人
     /// </summary>
-    [GameCommand("SuperTing", "随机传送一个指定玩家和他身边的人", 10)]
+    [GameCommand("SuperTing", "随机传送一个指定玩家和他身边的人", M2Share.g_sGameCommandSuperTingHelpMsg, 10)]
     public class SuperTingCommand : BaseCommond
     {
         [DefaultCommand]
@@ -22,7 +22,7 @@ namespace GameSvr
             IList<TBaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandSuperTingHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.Str_ToInt(sRange, 2));

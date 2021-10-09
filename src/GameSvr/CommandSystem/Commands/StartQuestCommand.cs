@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("StartQuest", "", 10)]
+    [GameCommand("StartQuest", "", "问答名称", 10)]
     public class StartQuestCommand : BaseCommond
     {
         [DefaultCommand]
@@ -12,7 +12,7 @@ namespace GameSvr
             var sQuestName = @params.Length > 0 ? @params[0] : "";
             if (sQuestName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 问答名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             M2Share.UserEngine.SendQuestMsg(sQuestName);

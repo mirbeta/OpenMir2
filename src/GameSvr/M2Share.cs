@@ -1508,8 +1508,8 @@ namespace GameSvr
         public const string g_sGameCommandCreditPointHumanMsg = "你的声望点已增加%d点，当前总声望点数为%d点。";
         public const string g_sGameCommandCreditPointGMMsg = "%s的声望点已增加%d点，当前总声望点数为%d点。";
         public const string g_sGameCommandGameGoldHelpMsg = " 人物名称 控制符(+,-,=) 游戏币(1-200000000)";
-        public const string g_sGameCommandGameGoldHumanMsg = "你的%s已增加%d，当前拥有%d%s。";
-        public const string g_sGameCommandGameGoldGMMsg = "%s的%s已增加%d，当前拥有%d%s。";
+        public const string g_sGameCommandGameGoldHumanMsg = "你的{0}已增加{1}，当前拥有{2}{3}。";
+        public const string g_sGameCommandGameGoldGMMsg = "{0}的{1}已增加{2}，当前拥有{3}{4}。";
         public const string g_sGameCommandMapInfoMsg = "地图名称: {0}({1})";
         public const string g_sGameCommandMapInfoSizeMsg = "地图大小: X({0}) Y({1})";
         public const string g_sGameCommandShutupReleaseHelpMsg = "人物名称";
@@ -1535,7 +1535,7 @@ namespace GameSvr
         public const string g_sGameCommandDelNpcMsg = "命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!";
         public const string g_sGameCommandRecallMobHelpMsg = "怪物名称 数量 等级";
         public const string g_sGameCommandLuckPointHelpMsg = "人物名称 控制符 幸运点数";
-        public const string g_sGameCommandLuckPointMsg = "%s 的幸运点数为:%d/%g 幸运值为:%d";
+        public const string g_sGameCommandLuckPointMsg = "{0} 的幸运点数为:{1}/{2} 幸运值为:{3}";
         public const string g_sGameCommandLotteryTicketMsg = "已中彩票数:{0} 未中彩票数:{1} 一等奖:{2} 二等奖:{3} 三等奖:{4} 四等奖:{5} 五等奖:{6} 六等奖:{7} ";
         public const string g_sGameCommandReloadGuildHelpMsg = "行会名称";
         public const string g_sGameCommandReloadGuildOnMasterserver = "此命令只能在主游戏服务器上执行!!!";
@@ -1547,7 +1547,7 @@ namespace GameSvr
         public const string g_sGameCommandFreePKHumanMsg = "你的PK值已经被清除...";
         public const string g_sGameCommandFreePKMsg = "%s的PK值已经被清除...";
         public const string g_sGameCommandPKPointHelpMsg = "人物名称";
-        public const string g_sGameCommandPKPointMsg = "%s的PK点数为:%d";
+        public const string g_sGameCommandPKPointMsg = "{0}的PK点数为:{1}";
         public const string g_sGameCommandIncPkPointHelpMsg = "人物名称 PK点数";
         public const string g_sGameCommandIncPkPointAddPointMsg = "%s的PK值已增加%d点...";
         public const string g_sGameCommandIncPkPointDecPointMsg = "%s的PK值已减少%d点...";

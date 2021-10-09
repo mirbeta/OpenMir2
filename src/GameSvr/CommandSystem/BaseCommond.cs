@@ -7,7 +7,7 @@ namespace GameSvr
 {
     public class BaseCommond
     {
-        protected GameCommandAttribute Attributes { get; private set; }
+        protected GameCommandAttribute CommandAttribute { get; private set; }
 
         private readonly Dictionary<CommandAttribute, MethodInfo> _commands =
             new Dictionary<CommandAttribute, MethodInfo>();
@@ -18,7 +18,7 @@ namespace GameSvr
         /// <param name="attributes"></param>
         public void Register(GameCommandAttribute attributes)
         {
-            this.Attributes = attributes;
+            this.CommandAttribute = attributes;
             this.RegisterDefaultCommand();
             this.RegisterCommands();
         }
@@ -51,10 +51,10 @@ namespace GameSvr
                 var attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) continue;
                 if (method.Name.ToLower() == "fallback") continue;
-                this._commands.Add(new DefaultCommand(this.Attributes.nPermissionMin), method);
+                this._commands.Add(new DefaultCommand(this.CommandAttribute.nPermissionMin), method);
                 return;
             }
-            this._commands.Add(new DefaultCommand(this.Attributes.nPermissionMin), this.GetType().GetMethod("Fallback"));
+            this._commands.Add(new DefaultCommand(this.CommandAttribute.nPermissionMin), this.GetType().GetMethod("Fallback"));
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace GameSvr
             // 检查用户是否有足够的权限来调用命令。
             if (playObject != null)
             {
-#if Debug
+#if DEBUG
                 playObject.m_btPermission = 10;
 #endif
             }
-            if (playObject != null && this.Attributes.nPermissionMin > playObject.m_btPermission)
+            if (playObject != null && this.CommandAttribute.nPermissionMin > playObject.m_btPermission)
             {
                 return M2Share.g_sGameCommandPermissionTooLow;//权限不足
             }
@@ -106,7 +106,7 @@ namespace GameSvr
             {
                 if (@params == null)
                 {
-                    return "命令格式: @" + target.Name + target.Help;
+                    return CommandAttribute.CommandHelp();
                 }
                 result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
             }

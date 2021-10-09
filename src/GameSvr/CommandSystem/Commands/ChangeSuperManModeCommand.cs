@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整当前玩家进入无敌模式
     /// </summary>
-    [GameCommand("ChangeSuperManMode", "调整当前玩家进入无敌模式", 10)]
+    [GameCommand("ChangeSuperManMode", "进入/退出无敌模式(进入模式后人物不会死亡)", 10)]
     public class ChangeSuperManModeCommand : BaseCommond
     {
         [DefaultCommand]
@@ -18,7 +18,7 @@ namespace GameSvr
                 var sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (!string.IsNullOrEmpty(sParam1) && sParam1[0] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

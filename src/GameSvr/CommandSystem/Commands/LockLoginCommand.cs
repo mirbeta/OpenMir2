@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 锁定登录
     /// </summary>
-    [GameCommand("LockLogin", "锁定登录", 10)]
+    [GameCommand("LockLogin", "锁定登录", 0)]
     public class LockLoginCommand : BaseCommond
     {
         [DefaultCommand]

@@ -5,23 +5,23 @@ using GameSvr.CommandSystem;
 namespace GameSvr
 {
     /// <summary>
-    /// 调整当前玩家等级
+    /// 调整自己的等级
     /// </summary>
-    [GameCommand("ChangeLevel", "调整当前玩家等级", 10)]
+    [GameCommand("ChangeLevel", "调整自己的等级", "等级(1-65535)", 10)]
     public class ChangeLevelCommand : BaseCommond
     {
         [DefaultCommand]
         public void ChangeLevel(string[] @Params, TPlayObject PlayObject)
         {
-            if (@Params == null)
+            var sParam1 = string.Empty;
+            if (@Params != null)
             {
-                return;
-            }
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
+                sParam1 = @Params.Length > 0 ? @Params[0] : "";
+                if (sParam1 != "" && sParam1[0] == '?')
+                {
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
             }
             var nLevel = HUtil32.Str_ToInt(sParam1, 1);
             int nOLevel = PlayObject.m_Abil.Level;

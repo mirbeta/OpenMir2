@@ -8,7 +8,7 @@ namespace GameSvr
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
     /// 要求权限默认等级：10
     /// </summary>
-    [GameCommand("Make", "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", 10)]
+    [GameCommand("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: M2Share.g_sGamecommandMakeHelpMsg, minUserLevel: 10)]
     public class MakeItemCommond : BaseCommond
     {
         [DefaultCommand]
@@ -20,12 +20,12 @@ namespace GameSvr
             var sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, Attributes.Name, M2Share.g_sGamecommandMakeHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
-            if (PlayObject.m_btPermission < Attributes.nPermissionMax)
+            if (PlayObject.m_btPermission < CommandAttribute.nPermissionMax)
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
@@ -62,7 +62,7 @@ namespace GameSvr
                             StdItem.RandomUpgradeItem(UserItem);
                         }
                     }
-                    if (PlayObject.m_btPermission >= Attributes.nPermissionMax)
+                    if (PlayObject.m_btPermission >= CommandAttribute.nPermissionMax)
                     {
                         UserItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }
@@ -89,7 +89,7 @@ namespace GameSvr
                     PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName), TMsgColor.c_Red, TMsgType.t_Hint);
                     break;
                 }
-                PlayObject.SysMsg( PlayObject.m_ItemList.Count.ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(PlayObject.m_ItemList.Count.ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

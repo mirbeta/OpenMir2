@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家属性点
     /// </summary>
-    [GameCommand("BonuPoint", "调整指定玩家属性点", 10)]
+    [GameCommand("BonuPoint", "调整指定玩家属性点","人物名称 属性点数(不输入为查看点数)", 10)]
     public class BonuPointCommand : BaseCommond
     {
         [DefaultCommand]
@@ -18,7 +18,7 @@ namespace GameSvr
             string sMsg;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 属性点数(不输入为查看点数)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " 人物名称 属性点数(不输入为查看点数)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

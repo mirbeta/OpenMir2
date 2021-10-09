@@ -6,27 +6,30 @@ namespace GameSvr
 {
     /// <summary>
     /// 给指定纯度的矿石
-    /// 命令格式:GIVEMINE 矿名称 数量 纯度
     /// </summary>
-    [GameCommand("GiveMine", "给指定纯度的矿石", 10)]
+    [GameCommand("GiveMine", "给指定纯度的矿石", "矿石名称 数量 持久", 10)]
     public class GiveMineCommand : BaseCommond
     {
         [DefaultCommand]
         public void GiveMine(string[] @Params, TPlayObject PlayObject)
         {
-            var sMINEName= @Params.Length > 0 ? @Params[0] : "";
-            var nMineCount= @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
-            var nDura= @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
+            if (@Params == null)
+            {
+                return;
+            }
+            var sMINEName = @Params.Length > 0 ? @Params[0] : "";
+            var nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
+            var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             TUserItem UserItem = null;
             GameItem StdItem;
-            if (PlayObject.m_btPermission < this.Attributes.nPermissionMin)
+            if (PlayObject.m_btPermission < this.CommandAttribute.nPermissionMin)
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)
             {
-                //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandGIVEMINEHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (nDura <= 0)
@@ -49,12 +52,12 @@ namespace GameSvr
                             {
                                 UserItem.Dura = UserItem.DuraMax;
                             }
-                            PlayObject. m_ItemList.Add(UserItem);
-                            PlayObject.  SendAddItem(UserItem);
+                            PlayObject.m_ItemList.Add(UserItem);
+                            PlayObject.SendAddItem(UserItem);
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.AddGameDataLog("5" + "\09" + PlayObject.m_sMapName + "\09" + PlayObject.m_nCurrX + "\09" + PlayObject.m_nCurrY + "\09" +
-                                                       PlayObject.  m_sCharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + UserItem.Dura + "/"
+                                                       PlayObject.m_sCharName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + UserItem.Dura + "/"
                                     + UserItem.DuraMax + "\09" + PlayObject.m_sCharName);
                             }
                         }

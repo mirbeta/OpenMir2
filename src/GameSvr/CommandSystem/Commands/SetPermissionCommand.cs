@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家权限
     /// </summary>
-    [GameCommand("SetPermission", "调整指定玩家权限", 10)]
+    [GameCommand("SetPermission", "调整指定玩家权限", "人物名称 权限等级(0 - 10)", 10)]
     public class SetPermissionCommand : BaseCommond
     {
         [DefaultCommand]
@@ -19,7 +19,7 @@ namespace GameSvr
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 权限等级(0 - 10)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

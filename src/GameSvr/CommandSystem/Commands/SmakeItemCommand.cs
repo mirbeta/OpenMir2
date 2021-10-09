@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整身上装备附加属性
     /// </summary>
-    [GameCommand("SmakeItem", "制造物品", 10)]
+    [GameCommand("SmakeItem", "调整身上装备附加属性", 10)]
     public class SmakeItemCommand : BaseCommond
     {
         [DefaultCommand]
@@ -27,7 +27,7 @@ namespace GameSvr
                     {
                         return;
                     }
-                    PlayObject.  m_UseItems[nWhere].btValue[9] = (byte)HUtil32._MIN(255,PlayObject. m_UseItems[nWhere].btValue[9] + 1);// 累积升级次数
+                    PlayObject.m_UseItems[nWhere].btValue[9] = (byte)HUtil32._MIN(255, PlayObject.m_UseItems[nWhere].btValue[9] + 1);// 累积升级次数
                     if (nValueType == 16 && StdItem.Shape == 188)// 吸伤属性
                     {
                         PlayObject.m_UseItems[nWhere].btValue[20] = Convert.ToByte(nValue);

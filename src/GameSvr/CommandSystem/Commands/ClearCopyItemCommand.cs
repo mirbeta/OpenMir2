@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 清除游戏中指定玩家复制物品
     /// </summary>
-    [GameCommand("ClearCopyItem", "清除游戏中指定玩家复制物品", 10)]
+    [GameCommand("ClearCopyItem", "清除游戏中指定玩家复制物品", "人物名称", 10)]
     public class ClearCopyItemCommand : BaseCommond
     {
         [DefaultCommand]
@@ -18,21 +18,17 @@ namespace GameSvr
             TUserItem UserItem;
             TUserItem UserItem1;
             string s14;
-
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-
             TargerObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (TargerObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, new string[] {sHumanName}),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-
             for (var i = TargerObject.m_ItemList.Count - 1; i >= 0; i--)
             {
                 if (TargerObject.m_ItemList.Count <= 0)
@@ -42,13 +38,12 @@ namespace GameSvr
 
                 UserItem = TargerObject.m_ItemList[i];
                 s14 = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
-                for (var II = i - 1; II >= 0; II--)
+                for (var j = i - 1; j >= 0; j--)
                 {
-                    UserItem1 = TargerObject.m_ItemList[II];
-                    if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 &&
-                        UserItem.MakeIndex == UserItem1.MakeIndex)
+                    UserItem1 = TargerObject.m_ItemList[j];
+                    if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 && UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
-                        PlayObject.m_ItemList.RemoveAt(II);
+                        PlayObject.m_ItemList.RemoveAt(j);
                         break;
                     }
                 }
@@ -60,16 +55,15 @@ namespace GameSvr
                 {
                     break;
                 }
-
                 UserItem = TargerObject.m_StorageItemList[i];
                 s14 = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
-                for (var II = i - 1; II >= 0; II--)
+                for (var j = i - 1; j >= 0; j--)
                 {
-                    UserItem1 = TargerObject.m_StorageItemList[II];
+                    UserItem1 = TargerObject.m_StorageItemList[j];
                     if (M2Share.UserEngine.GetStdItemName(UserItem1.wIndex) == s14 &&
                         UserItem.MakeIndex == UserItem1.MakeIndex)
                     {
-                        PlayObject.m_StorageItemList.RemoveAt(II);
+                        PlayObject.m_StorageItemList.RemoveAt(j);
                         break;
                     }
                 }

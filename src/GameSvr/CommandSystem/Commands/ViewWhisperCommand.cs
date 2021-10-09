@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 监听指定玩家私聊信息
     /// </summary>
-    [GameCommand("ViewWhisper", "监听指定玩家私聊信息", 10)]
+    [GameCommand("ViewWhisper", "监听指定玩家私聊信息", M2Share.g_sGameCommandViewWhisperHelpMsg, 10)]
     public class ViewWhisperCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,9 +17,10 @@ namespace GameSvr
             var sParam2 = @Params.Length > 1 ? @Params[1] : "";
             if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandViewWhisperHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
+
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sCharName);
             if (m_PlayObject != null)
             {

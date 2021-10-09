@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("DenyAccountLogon", "", 10)]
+    [GameCommand("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
     public class DenyAccountLogonCommand : BaseCommond
     {
         [DefaultCommand]
@@ -14,7 +14,7 @@ namespace GameSvr
 
             if (sAccount == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 登录帐号 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             try

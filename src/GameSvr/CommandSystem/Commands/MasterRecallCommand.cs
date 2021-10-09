@@ -16,7 +16,7 @@ namespace GameSvr
             TPlayObject MasterHuman;
             if (sParam != "" && sParam[0] == '?')
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " (师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " (师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
             if (!PlayObject.m_boMaster)

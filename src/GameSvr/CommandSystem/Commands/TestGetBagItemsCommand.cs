@@ -13,7 +13,7 @@ namespace GameSvr
             var sParam = @Params.Length > 0 ? @Params[0] : "";
             if (sParam != "" && sParam[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandTestGetBagItemsHelpMsg),
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandTestGetBagItemsHelpMsg),
                     TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }

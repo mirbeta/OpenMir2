@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家能量值
     /// </summary>
-    [GameCommand("Hunger", "调整指定玩家能量值", 10)]
+    [GameCommand("Hunger", "调整指定玩家能量值", "人物名称 能量值", 10)]
     public class HungerCommand : BaseCommond
     {
         [DefaultCommand]
@@ -26,7 +26,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sHumanName) || nHungerPoint < 0)
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 能量值", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

@@ -29,17 +29,32 @@ namespace GameSvr.CommandSystem
         /// 命令等级最小权限
         /// </summary>
         public byte nPermissionMin { get; private set; }
+
         /// <summary>
         /// 命令等级最大权限
         /// </summary>
         public byte nPermissionMax { get; private set; }
 
-        public GameCommandAttribute(string name, string help, byte minUserLevel = 0, byte maxUserLevel = 0)
+        public GameCommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
         {
-            this.Name = name.ToLower();
-            this.Desc = help;
+            this.Name = name;
+            this.Desc = desc;
             this.nPermissionMin = minUserLevel;
             this.nPermissionMax = maxUserLevel;
+        }
+
+        public GameCommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10)
+        {
+            this.Name = name;
+            this.Desc = desc;
+            this.Help = help;
+            this.nPermissionMin = minUserLevel;
+            this.nPermissionMax = maxUserLevel;
+        }
+
+        public string CommandHelp()
+        {
+            return $"命令格式: @{Name} {Help}";
         }
     }
 
@@ -68,7 +83,7 @@ namespace GameSvr.CommandSystem
 
         public CommandAttribute(string command, string desc,string help, byte minUserLevel = 0)
         {
-            this.Name = command.ToLower();
+            this.Name = command;
             this.Desc = desc;
             this.Help = help;
             this.MinUserLevel = minUserLevel;

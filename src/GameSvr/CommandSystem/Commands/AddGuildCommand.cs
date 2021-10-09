@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 创建行会
     /// </summary>
-    [GameCommand("AddGuild", "创建行会", 10)]
+    [GameCommand("AddGuild", "新建一个行会","行会名称 掌门人名称", 10)]
     public class AddGuildCommand : BaseCommond
     {
         [DefaultCommand]
@@ -24,7 +24,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sGuildName) || sGuildChief == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 行会名称 掌门人名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             boAddState = false;

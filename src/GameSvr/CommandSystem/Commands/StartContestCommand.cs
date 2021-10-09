@@ -25,7 +25,7 @@ namespace GameSvr
             if (sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg("开始行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(string.Format("命令格式: @{0}", this.Attributes.Name), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format("命令格式: @{0}", this.CommandAttribute.Name), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (!PlayObject.m_PEnvir.Flag.boFight3Zone)

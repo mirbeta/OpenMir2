@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家PK值
     /// </summary>
-    [GameCommand("IncPkPoint", "调整指定玩家PK值", 10)]
+    [GameCommand("IncPkPoint", "调整指定玩家PK值", M2Share.g_sGameCommandIncPkPointHelpMsg, 10)]
     public class IncPkPointCommand : BaseCommond
     {
         [DefaultCommand]
@@ -16,8 +16,7 @@ namespace GameSvr
             var nPoint = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandIncPkPointHelpMsg),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 显示物品信息
     /// </summary>
-    [GameCommand("ShowUseItem", "显示物品信息", 10)]
+    [GameCommand("ShowUseItem", "显示物品信息", M2Share.g_sGameCommandShowUseItemInfoHelpMsg, 10)]
     public class ShowUseItemInfoCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,7 +17,7 @@ namespace GameSvr
             TUserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShowUseItemInfoHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

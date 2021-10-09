@@ -2,12 +2,12 @@
 using System;
 using GameSvr.CommandSystem;
 
-namespace GameSvr.Command
+namespace GameSvr
 {
     /// <summary>
     /// 增加AI玩家
     /// </summary>
-    [GameCommand("AddAIUser", "增加AI玩家", 0)]
+    [GameCommand("AddAIUser", "增加机器人玩家", "数量", 0)]
     public class CreateAIUserCommand : BaseCommond
     {
         [DefaultCommand]

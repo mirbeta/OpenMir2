@@ -6,12 +6,16 @@ namespace GameSvr.Command
     /// <summary>
     /// 调整指定玩家性别
     /// </summary>
-    [GameCommand("ChangeGender", "调整指定玩家性别", 10)]
+    [GameCommand("ChangeGender", "调整指定玩家性别", "人物名称 性别(男、女)", 10)]
     public class ChangeGenderCommand : BaseCommond
     {
         [DefaultCommand]
         public void ChangeGender(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSex = @Params.Length > 1 ? @Params[1] : "";
             var nSex = -1;
@@ -25,7 +29,7 @@ namespace GameSvr.Command
             }
             if (string.IsNullOrEmpty(sHumanName) || nSex == -1)
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 性别(男、女)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

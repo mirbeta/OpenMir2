@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 夫妻传送，将对方传送到自己身边，对方必须允许传送。
     /// </summary>
-    [GameCommand("DearRecall", "夫妻传送", 0)]
+    [GameCommand("DearRecall", "夫妻传送", "(夫妻传送，将对方传送到自己身边，对方必须允许传送。)", 0)]
     public class DearRecallCommond : BaseCommond
     {
         [DefaultCommand]
@@ -19,7 +19,7 @@ namespace GameSvr
             }
             if (sParam != "" && sParam[0] == '?')
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " (夫妻传送，将对方传送到自己身边，对方必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Green, TMsgType.t_Hint);
                 return;
             }
             if (PlayObject.m_sDearName == "")

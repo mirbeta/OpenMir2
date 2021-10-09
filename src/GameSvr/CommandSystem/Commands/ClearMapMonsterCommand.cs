@@ -1,14 +1,14 @@
-﻿using SystemModule;
+﻿using System;
+using SystemModule;
 using System.Collections.Generic;
 using GameSvr.CommandSystem;
-using System.Collections;
 
 namespace GameSvr
 {
     /// <summary>
     /// 清楚指定地图怪物
     /// </summary>
-    [GameCommand("ClearMapMonster", "清楚指定地图怪物", 10)]
+    [GameCommand("ClearMapMonster", "清楚指定地图怪物", "地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", 10)]
     public class ClearMapMonsterCommand : BaseCommond
     {
         [DefaultCommand]
@@ -30,7 +30,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             boKillAll = false;
@@ -58,7 +58,7 @@ namespace GameSvr
                     Envir = M2Share.g_MapManager.Maps[i];
                     if (Envir != null)
                     {
-                        if (boKillAllMap || Envir.sMapName.ToLower().CompareTo(sMapName.ToLower()) == 0)
+                        if (boKillAllMap || string.Compare(Envir.sMapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.UserEngine.GetMapMonster(Envir, MonList);
                             if (MonList.Count > 0)
@@ -75,7 +75,7 @@ namespace GameSvr
                                                 continue;
                                             }
                                         }
-                                        if (boKillAll || sMonName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0)
+                                        if (boKillAll || string.Compare(sMonName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                                         {
                                             BaseObject.m_boNoItem = boNotItem;
                                             BaseObject.m_WAbil.HP = 0;

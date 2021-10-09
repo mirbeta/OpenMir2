@@ -7,20 +7,20 @@ namespace GameSvr
     /// <summary>
     /// 取指定地图怪物数量
     /// </summary>
-    [GameCommand("MobCount", "取指定地图怪物数量", 10)]
+    [GameCommand("MobCount", "取指定地图怪物数量", M2Share.g_sGameCommandMobCountHelpMsg, 10)]
     public class MobCountCommand : BaseCommond
     {
         [DefaultCommand]
         public void MobCount(string[] @Params, TPlayObject PlayObject)
         {
-            if (@Params ==null)
+            if (@Params == null)
             {
                 return;
             }
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             if (sMapName == "" || sMapName != "" && sMapName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMobCountHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var FindEnvir = M2Share.g_MapManager.FindMap(sMapName);

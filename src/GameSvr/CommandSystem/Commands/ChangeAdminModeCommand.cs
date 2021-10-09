@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整当前玩家管理模式
     /// </summary>
-    [GameCommand("ChangeAdminMode", "调整当前玩家管理模式", 10)]
+    [GameCommand("ChangeAdminMode", "进入/退出管理员模式(进入模式后不会受到任何角色攻击)", 10)]
     public class ChangeAdminModeCommand : BaseCommond
     {
         public void ChangeAdminMode(string[] @Params, TPlayObject PlayObject)
@@ -16,7 +16,7 @@ namespace GameSvr
                 var sParam1 = @Params.Length > 0 ? Params[0] : "";
                 if (sParam1 != "" && sParam1[0] == '?')
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
             }

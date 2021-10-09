@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家等级
     /// </summary>
-    [GameCommand("AdjuestLevel", "调整指定玩家等级", 10)]
+    [GameCommand("AdjuestLevel", "调整指定玩家等级","人物名称 等级", 10)]
     public class AdjuestLevelCommand : BaseCommond
     {
         [DefaultCommand]
@@ -21,7 +21,7 @@ namespace GameSvr
             int nOLevel;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 等级", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

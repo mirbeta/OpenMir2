@@ -1,34 +1,32 @@
 ﻿using System.Collections.Generic;
+using GameSvr.CommandSystem;
 using SystemModule;
-using GameSvr;
-using System.Collections;
 
-namespace GameSvr.CommandSystem.Command
+namespace GameSvr
 {
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
-    /// MOVEMOBTO 怪物名称 原地图 原X 原Y 新地图 新X 新Y
     /// </summary>
-    [GameCommand("MoveMobTo", "", 10)]
-    public class MoveMobToCommand: BaseCommond
+    [GameCommand("MoveMobTo", "将指定坐标的怪物移动到新坐标", "怪物名称 原地图 原X 原Y 新地图 新X 新Y", 10)]
+    public class MoveMobToCommand : BaseCommond
     {
         [DefaultCommand]
         public void MoveMobTo(string[] @Params, TPlayObject PlayObject)
         {
-            var sMonName= @Params[0];
-            var OleMap=  @Params[1];
+            var sMonName = @Params[0];
+            var OleMap = @Params[1];
             var NewMap = @Params[2];
-            var nX = @Params[3] == null ?(short)0 : System.Convert.ToInt16(@Params[3]);
-            var nY=  @Params[4] == null ? (short)0 : System.Convert.ToInt16(@Params[4]);
-            var OnX= @Params[5] == null ? (short)0 : System.Convert.ToInt16(@Params[5]);
-            var OnY =  @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
+            var nX = @Params[3] == null ? (short)0 : System.Convert.ToInt16(@Params[3]);
+            var nY = @Params[4] == null ? (short)0 : System.Convert.ToInt16(@Params[4]);
+            var OnX = @Params[5] == null ? (short)0 : System.Convert.ToInt16(@Params[5]);
+            var OnY = @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
             TEnvirnoment SrcEnvir;
             TEnvirnoment DenEnvir;
             IList<TBaseObject> MonList;
             TBaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
-                //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMOVEMOBTOHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var boMoveAll = false;
@@ -90,7 +88,6 @@ namespace GameSvr.CommandSystem.Command
                     }
                 }
             }
-
             MonList = null;
         }
     }

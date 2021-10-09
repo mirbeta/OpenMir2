@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 将指定玩家添加到禁止人物列表
     /// </summary>
-    [GameCommand("DenyCharNameLogon", "将指定玩家添加到禁止人物列表", 10)]
+    [GameCommand("DenyCharNameLogon", "将指定玩家添加到禁止人物列表", "人物名称 是否永久封(0,1)", 10)]
     public class DenyCharNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,7 +17,7 @@ namespace GameSvr
 
             if (sCharName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 是否永久封(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             try

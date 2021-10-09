@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 搜索指定玩家所在地图XY坐标
     /// </summary>
-    [GameCommand("SearchHuman", "搜索指定玩家所在地图XY坐标", 0)]
+    [GameCommand("SearchHuman", "搜索指定玩家所在地图XY坐标", "人物名称", 0)]
     public class SearchHumanCommand : BaseCommond
     {
         [DefaultCommand]
@@ -18,7 +18,7 @@ namespace GameSvr
             {
                 if (string.IsNullOrEmpty(sHumanName))
                 {
-                    PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;
                 }
                 if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)

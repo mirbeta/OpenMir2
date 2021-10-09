@@ -4,7 +4,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("BindUseItem", "", 10)]
+    [GameCommand("BindUseItem", "",M2Share.g_sGameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
@@ -43,7 +43,7 @@ namespace GameSvr
             boLight = sLight == "1";
             if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

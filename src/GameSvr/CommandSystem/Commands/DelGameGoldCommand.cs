@@ -7,21 +7,22 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("DelGameGold", "调整指定玩家游戏币", 10)]
+    [GameCommand("DelGameGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
     public class DelGameGoldCommand : BaseCommond
     {
         [DefaultCommand]
         public void DelGameGold(string[] @params, TPlayObject PlayObject)
         {
-            TPlayObject m_PlayObject;
-            var sHumName = @params.Length > 0 ? @params[0] : "";//玩家名称
-            var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0;//数量
-            if (PlayObject.m_btPermission < 6)
+            if (@params == null)
             {
                 return;
             }
+            TPlayObject m_PlayObject;
+            var sHumName = @params.Length > 0 ? @params[0] : ""; //玩家名称
+            var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
             if (sHumName == "" || nPoint <= 0)
             {
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

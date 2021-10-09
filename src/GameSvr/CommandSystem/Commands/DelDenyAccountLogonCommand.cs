@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("DelDenyAccountLogon", "", 10)]
+    [GameCommand("DelDenyAccountLogon", "", "登录帐号", 10)]
     public class DelDenyAccountLogonCommand : BaseCommond
     {
         [DefaultCommand]
@@ -13,7 +13,7 @@ namespace GameSvr
             var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 登录帐号", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var boDelete = false;

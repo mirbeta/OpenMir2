@@ -23,14 +23,14 @@ namespace GameSvr.Command
             var sItemName = @params.Length > 2 ? @params[2] : "";
             if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
             nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 物品编号 物品ID号 物品名称", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (M2Share.ItemUnit.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))

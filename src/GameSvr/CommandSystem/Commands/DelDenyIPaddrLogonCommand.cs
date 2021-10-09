@@ -3,7 +3,7 @@ using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("DelDenyIPaddrLogon", "", 10)]
+    [GameCommand("DelDenyIPaddrLogon", "", "IP地址", 10)]
     public class DelDenyIPaddrLogonCommand : BaseCommond
     {
         [DefaultCommand]
@@ -13,7 +13,7 @@ namespace GameSvr
 
             if (sIPaddr == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " IP地址", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var boDelete = false;

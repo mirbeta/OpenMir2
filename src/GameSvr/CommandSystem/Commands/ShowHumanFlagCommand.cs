@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 取用户任务状态
     /// </summary>
-    [GameCommand("ShowHumanFlag", "取用户任务状态", 10)]
+    [GameCommand("ShowHumanFlag", "取用户任务状态", M2Share.g_sGameCommandShowHumanFlagHelpMsg, 10)]
     public class ShowHumanFlagCommand : BaseCommond
     {
         [DefaultCommand]
@@ -18,7 +18,7 @@ namespace GameSvr
 
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandShowHumanFlagHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

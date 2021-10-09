@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 在当前XY坐标创建NPC
     /// </summary>
-    [GameCommand("MobNpc", "在当前XY坐标创建NPC", 10)]
+    [GameCommand("MobNpc", "在当前XY坐标创建NPC", M2Share.g_sGameCommandMobNpcHelpMsg, 10)]
     public class MobNpcCommand : BaseCommond
     {
         [DefaultCommand]
@@ -23,19 +23,19 @@ namespace GameSvr
             var sParam4 = @Params.Length > 3 ? @Params[3] : "";
             if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandMobNpcHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var nAppr = HUtil32.Str_ToInt(sParam3, 0);
             var boIsCastle = HUtil32.Str_ToInt(sParam4, 0) == 1;
             if (sParam1 == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " NPC名称 脚本文件名 外形(数字) 属沙城(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " NPC名称 脚本文件名 外形(数字) 属沙城(0,1)", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             short nX = 0;
             short nY = 0;
-            TMerchant  Merchant = new TMerchant();
+            TMerchant Merchant = new TMerchant();
             Merchant.m_sCharName = sParam1;
             Merchant.m_sMapName = PlayObject.m_sMapName;
             Merchant.m_PEnvir = PlayObject.m_PEnvir;

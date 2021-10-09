@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 显示指定地图信息
     /// </summary>
-    [GameCommand("ShowMapMode", "显示指定地图信息", 10)]
+    [GameCommand("ShowMapMode", "显示指定地图信息", "地图号", 10)]
     public class ShowMapModeCommand : BaseCommond
     {
         [DefaultCommand]
@@ -20,7 +20,7 @@ namespace GameSvr
             }
             if (sMapName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMapName);

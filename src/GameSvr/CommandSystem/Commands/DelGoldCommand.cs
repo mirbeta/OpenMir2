@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("DelGold", "调整指定玩家游戏币", 10)]
+    [GameCommand("DelGold", "调整指定玩家游戏币", help:"人物名称 数量", 10)]
     public class DelGoldCommand : BaseCommond
     {
         [DefaultCommand]
@@ -19,9 +19,9 @@ namespace GameSvr
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
-            var nServerIndex = 0;
             if (sHumName == "" || nCount <= 0)
             {
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
@@ -46,6 +46,7 @@ namespace GameSvr
             }
             else
             {
+                var nServerIndex = 0;
                 if (M2Share.UserEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", TMsgColor.c_Green, TMsgType.t_Hint);

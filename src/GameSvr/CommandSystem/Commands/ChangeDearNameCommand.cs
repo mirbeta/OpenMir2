@@ -1,5 +1,4 @@
 ﻿using SystemModule;
-using System;
 using GameSvr.CommandSystem;
 
 namespace GameSvr
@@ -7,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家配偶名称
     /// </summary>
-    [GameCommand("ChangeDearName", "调整指定玩家配偶名称", 10)]
+    [GameCommand("ChangeDearName", "调整指定玩家配偶名称", help: "人物名称 配偶名称(如果为 无 则清除)", 10)]
     public class ChangeDearNameCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,7 +16,7 @@ namespace GameSvr
             var sDearName = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sDearName == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 人物名称 配偶名称(如果为 无 则清除)", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

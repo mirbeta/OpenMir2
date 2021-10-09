@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 剔除面对面玩家下线
     /// </summary>
-    [GameCommand("Kill", "剔除面对面玩家下线", 10)]
+    [GameCommand("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
     public class KillCommand : BaseCommond
     {
         [DefaultCommand]

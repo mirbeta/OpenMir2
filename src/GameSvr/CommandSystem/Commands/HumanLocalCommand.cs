@@ -7,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 查看指定玩家所在IP地址
     /// </summary>
-    [GameCommand("HumanLocal", "查看指定玩家所在IP地址", 10)]
+    [GameCommand("HumanLocal", "查看指定玩家所在IP地址", M2Share.g_sGameCommandHumanLocalHelpMsg, 10)]
     public class HumanLocalCommand : BaseCommond
     {
         [DefaultCommand]
@@ -17,7 +17,7 @@ namespace GameSvr
             var m_sIPLocal = "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandHumanLocalHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
