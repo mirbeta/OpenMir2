@@ -215,15 +215,15 @@ namespace GameGate
                         var userSession = userClinet.SessionArray[nSocketIndex];
                         if (userSession.Socket == token.Socket)
                         {
-                            var nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+                            var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                             if (nPos > -1)
                             {
-                                Console.WriteLine("ReviceMsg:" + sReviceMsg);
                                 userSession.boSendAvailable = true;
                                 userSession.boSendCheck = false;
                                 userSession.nCheckSendLength = 0;
                                 userSession.dwReceiveTick = HUtil32.GetTickCount();
-                                sReviceMsg = sReviceMsg.Substring(0, nPos);
+                                sReviceMsg = sReviceMsg.Remove(nPos);
+                                //sReviceMsg = sReviceMsg.Substring(0, nPos);
                                 //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                             }
                             if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady)

@@ -6,6 +6,10 @@ namespace GameSvr
 {
     public partial class TPlayObject
     {
+        /// <summary>
+        /// 处理玩家说话
+        /// </summary>
+        /// <param name="sData"></param>
         protected override void ProcessSayMsg(string sData)
         {
             bool boDisableSayMsg;

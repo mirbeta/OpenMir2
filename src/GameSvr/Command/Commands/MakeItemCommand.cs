@@ -89,7 +89,6 @@ namespace GameSvr
                     PlayObject.SysMsg(string.Format(M2Share.g_sGamecommandMakeItemNameNotFound, sItemName), TMsgColor.c_Red, TMsgType.t_Hint);
                     break;
                 }
-                PlayObject.SysMsg(PlayObject.m_ItemList.Count.ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
             }
         }
     }

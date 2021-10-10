@@ -8,8 +8,8 @@ namespace GameSvr.CommandSystem
 {
     public class CommandManager
     {
-        private static readonly Dictionary<string, BaseCommond> CommandGroups = new Dictionary<string, BaseCommond>();
-        private static readonly Dictionary<string, string> Commands = new Dictionary<string, string>();
+        private static readonly Dictionary<string, BaseCommond> CommandGroups = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, string> Commands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public CommandManager()
         {
@@ -38,7 +38,7 @@ namespace GameSvr.CommandSystem
                 var groupAttribute = attributes[0];
                 if (CommandGroups.ContainsKey(groupAttribute.Name))
                 {
-                    M2Share.ErrorMessage(string.Format("游戏命令重复: {0}", groupAttribute.Name));
+                    M2Share.ErrorMessage($"重复游戏命令: {groupAttribute.Name}");
                 }
 
                 if (Commands.TryGetValue(groupAttribute.Name,out cmdName))
@@ -84,7 +84,7 @@ namespace GameSvr.CommandSystem
         /// 执行游戏命令
         /// </summary>
         /// <param name="line">命令字符串</param>
-        /// <param name="PlayObject">命令对象</param>
+        /// <param name="playObject">命令对象</param>
         /// <returns><see cref="bool"/></returns>
         public bool ExecCmd(string line, TPlayObject playObject)
         {
@@ -107,7 +107,7 @@ namespace GameSvr.CommandSystem
 
             if (!found)
             {
-                output = string.Format("未知命令: {0} {1}", command, parameters);
+                output = $"未知命令: {command} {parameters}";
             }
 
             //把返回结果给玩家
@@ -137,7 +137,7 @@ namespace GameSvr.CommandSystem
 
             if (!found)
             {
-                output = string.Format("未知命令: {0} {1}", command, parameters);
+                output = $"未知命令: {command} {parameters}";
             }
         }
 
