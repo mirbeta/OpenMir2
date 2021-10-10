@@ -6,6 +6,12 @@ namespace GameSvr
 {
     public partial class TNormNpc
     {
+        /// <summary>
+        /// 取随机值赋给变量
+        /// 拓展可以随机参数2到参数3之间的数
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void MovrData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             var n14 = 0;
@@ -178,7 +184,7 @@ namespace GameSvr
                 case 2:
                     if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 1))
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, new string[] { sParam1, sParam2 }), QuestActionInfo, M2Share.sMOV);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, M2Share.sMOV);
                     }
                     break;
                 case 3:
@@ -1391,9 +1397,25 @@ namespace GameSvr
                     {
                         n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
                     }
-                    else if (HUtil32.RangeInDefined(n14, 800, 1999))//G变量
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n18 = PlayObject.m_nInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        n18 = HUtil32.Str_ToInt(PlayObject.m_sString[n14 - 600], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        n18 = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 700], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//A变量
                     {
                         n18 = M2Share.g_Config.GlobalVal[n14 - 700];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
+                    {
+                        n18 = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1436,9 +1458,25 @@ namespace GameSvr
                     {
                         n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
                     }
-                    else if (HUtil32.RangeInDefined(n14, 800, 1999))//G变量
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n1C =PlayObject.m_nInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        n1C = HUtil32.Str_ToInt(PlayObject.m_sString[n14 - 600], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        n1C = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 700], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
                     {
                         n1C = M2Share.g_Config.GlobalVal[n14 - 700];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
+                    {
+                        n1C = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else
                     {
@@ -1485,9 +1523,25 @@ namespace GameSvr
                 {
                     M2Share.g_Config.GlobaDyMval[n14 - 400] = n18 * n1C;
                 }
-                else if (HUtil32.RangeInDefined(n14, 800, 1999))//G变量
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.m_nInteger[n14 - 500]= n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    PlayObject.m_sString[n14 - 600]= (n18 * n1C).ToString();
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    M2Share.g_Config.GlobalAVal[n14 - 700] = (n18 * n1C).ToString();
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
                 {
                     M2Share.g_Config.GlobalVal[n14 - 700] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量(100-499)
+                {
+                    M2Share.g_Config.GlobalAVal[n14 - 1100] =( n18 * n1C).ToString();
                 }
             }
         }
@@ -1527,7 +1581,11 @@ namespace GameSvr
                     {
                         n18 = M2Share.g_Config.GlobaDyMval[n14 - 400];
                     }
-                    else if (HUtil32.RangeInDefined(n14, 800, 1999))//G变量
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n18 = PlayObject.m_nInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
                         n18 = M2Share.g_Config.GlobalVal[n14 - 700];
                     }
@@ -1572,7 +1630,11 @@ namespace GameSvr
                     {
                         n1C = M2Share.g_Config.GlobaDyMval[n14 - 400];
                     }
-                    else if (HUtil32.RangeInDefined(n14, 800, 1999))//G变量
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n1C = PlayObject.m_nInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
                         n1C = M2Share.g_Config.GlobalVal[n14 - 700];
                     }
@@ -1637,7 +1699,7 @@ namespace GameSvr
                 {
                     M2Share.g_Config.GlobalVal[n14 - 700] = n18 / n1C * 100;
                 }
-                else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
                 {
                     M2Share.g_Config.GlobalAVal[n14 - 1100] = $"{n18 / n1C * 100}%";
                 }

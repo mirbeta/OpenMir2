@@ -77,34 +77,34 @@ namespace GameSvr
                     {
                         SayingProcedure = SayingRecord.ProcedureList[i];
                         bo11 = false;
-                        if (GotoLable_QuestCheckCondition(PlayObject, SayingProcedure.ConditionList, ref sC, ref UserItem))
+                        if (GotoLableQuestCheckCondition(PlayObject, SayingProcedure.ConditionList, ref sC, ref UserItem))
                         {
                             sSendMsg = sSendMsg + SayingProcedure.sSayMsg;
-                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(PlayObject, SayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
                             {
                                 break;
                             }
                             if (bo11)
                             {
-                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
+                                GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, true);
                             }
                         }
                         else
                         {
                             sSendMsg = sSendMsg + SayingProcedure.sElseSayMsg;
-                            if (!GotoLable_QuestActionProcess(PlayObject, SayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(PlayObject, SayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
                             {
                                 break;
                             }
                             if (bo11)
                             {
-                                GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, true);
+                                GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, true);
                             }
                         }
                     }
                     if (!string.IsNullOrEmpty(sSendMsg))
                     {
-                        GotoLable_SendMerChantSayMsg(PlayObject, sSendMsg, false);
+                        GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, false);
                     }
                 }
             }
@@ -255,13 +255,13 @@ namespace GameSvr
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    if (LoadList[i].Trim().ToLower().CompareTo(sHumName.ToLower()) == 0)
+                    if (string.Compare(LoadList[i].Trim(), sHumName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;
                     }
                 }
-                //LoadList.Free;
+                LoadList = null;
             }
             else
             {
@@ -275,7 +275,6 @@ namespace GameSvr
             var n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
-                //根据不同的索引进行赋值
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
                     PlayObject.m_nVal[n14] = nCount;
@@ -387,7 +386,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool GotoLable_QuestCheckCondition(TPlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
+        private bool GotoLableQuestCheckCondition(TPlayObject PlayObject, IList<TQuestConditionInfo> ConditionList, ref string sC, ref TUserItem UserItem)
         {
             bool result = true;
             TQuestConditionInfo QuestConditionInfo;
@@ -766,94 +765,10 @@ namespace GameSvr
                         result = EqualData(PlayObject, QuestConditionInfo);
                         break;
                     case M2Share.nLARGE:
-                        n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
-                        if (n10 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n10, 0, 99))
-                            {
-                                if (PlayObject.m_nVal[n10] <= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 100, 119))
-                            {
-                                if (M2Share.g_Config.GlobalVal[n10 - 100] <= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 200, 299))
-                            {
-                                if (PlayObject.m_DyVal[n10 - 200] <= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 300, 399))
-                            {
-                                if (PlayObject.m_nMval[n10 - 300] <= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 400, 499))
-                            {
-                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] <= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            result = false;
-                        }
+                        result = LargeData(PlayObject, QuestConditionInfo);
                         break;
                     case M2Share.nSMALL:
-                        n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
-                        if (n10 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n10, 0, 99))
-                            {
-                                if (PlayObject.m_nVal[n10] >= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 100, 119))
-                            {
-                                if (M2Share.g_Config.GlobalVal[n10 - 100] >= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 200, 299))
-                            {
-                                if (PlayObject.m_DyVal[n10 - 200] >= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 300, 399))
-                            {
-                                if (PlayObject.m_nMval[n10 - 300] >= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                            else if (HUtil32.RangeInDefined(n10, 400, 499))
-                            {
-                                if (M2Share.g_Config.GlobaDyMval[n10 - 400] >= QuestConditionInfo.nParam2)
-                                {
-                                    result = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            result = false;
-                        }
+                        result = Smalldata(PlayObject, QuestConditionInfo);
                         break;
                     case M2Share.nSC_ISSYSOP:
                         if (!(PlayObject.m_btPermission >= 4))
@@ -1803,7 +1718,7 @@ namespace GameSvr
             }
         }
 
-        private bool GotoLable_QuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(TPlayObject PlayObject, IList<TQuestActionInfo> ActionList, ref string sC, ref TUserItem UserItem, ref bool bo11)
         {
             bool result = true;
             TQuestActionInfo QuestActionInfo;
@@ -2027,7 +1942,7 @@ namespace GameSvr
                     case M2Share.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
                         ActionOfTHROWITEM(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nMOVR://取随机值赋给变量   拓展可以随机参数2到参数3之间的数
+                    case M2Share.nMOVR:
                         MovrData(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nEXCHANGEMAP:
@@ -2474,7 +2389,7 @@ namespace GameSvr
             return result;
         }
 
-        private void GotoLable_SendMerChantSayMsg(TPlayObject PlayObject, string sMsg, bool boFlag)
+        private void GotoLableSendMerChantSayMsg(TPlayObject PlayObject, string sMsg, bool boFlag)
         {
             string s10 = string.Empty;
             string s14 = sMsg;

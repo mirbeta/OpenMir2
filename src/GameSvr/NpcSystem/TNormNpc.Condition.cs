@@ -2635,6 +2635,82 @@ namespace GameSvr
             return false;
         }
 
+        private bool LargeData(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        {
+            var result = false;
+            int n14 = 0;
+            int n18 = 0;
+            if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))
+            {
+                if (n14 <= n18)
+                {
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+            else
+            {
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref n14))
+                {
+                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1),  -1);
+                }
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam2, ref n18))
+                {
+                    n18 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
+                }
+                if (n14 > n18)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        private bool Smalldata(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
+        {
+            var result = false;
+            int n14 = 0;
+            int n18 = 0;
+            if (CheckVarNameNo(PlayObject,QuestConditionInfo, ref n14, ref n18))
+            {
+                if (n14 >= n18)
+                {
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+            else
+            {
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref n14))
+                {
+                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1),  -1);
+                }
+                if (!GetValValue(PlayObject, QuestConditionInfo.sParam2, ref n18))
+                {
+                    n18 =HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
+                }
+                if (n14 < n18)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
         private bool EqualData(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             var result = false;

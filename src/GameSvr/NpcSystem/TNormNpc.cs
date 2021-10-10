@@ -1516,56 +1516,56 @@ namespace GameSvr
             if (HUtil32.CompareLStr(sVariable, "$STR(", "$STR(".Length))
             {
                 HUtil32.ArrestStringEx(sVariable, '(', ')', ref s14);
-                var n18 = M2Share.GetValNameNo(s14);
-                if (n18 >= 0)
+                var nVarValue = M2Share.GetValNameNo(s14);
+                if (nVarValue >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n18, 0, 99))
+                    if (HUtil32.RangeInDefined(nVarValue, 0, 99))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nVal[n18]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nVal[nVarValue]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 100, 199))
+                    else if (HUtil32.RangeInDefined(nVarValue, 100, 199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[n18 - 100]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[nVarValue - 100]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 200, 299))
+                    else if (HUtil32.RangeInDefined(nVarValue, 200, 299))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_DyVal[n18 - 200]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_DyVal[nVarValue - 200]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 300, 399))
+                    else if (HUtil32.RangeInDefined(nVarValue, 300, 399))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nMval[n18 - 300]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nMval[nVarValue - 300]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 400, 499))
+                    else if (HUtil32.RangeInDefined(nVarValue, 400, 499))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobaDyMval[n18 - 400]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobaDyMval[nVarValue - 400]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 500, 599))
+                    else if (HUtil32.RangeInDefined(nVarValue, 500, 599))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nInteger[n18 - 500]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nInteger[nVarValue - 500]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 600, 699))
+                    else if (HUtil32.RangeInDefined(nVarValue, 600, 699))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_sString[n18 - 600]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_sString[nVarValue - 600]);
                     }
-                    else if (HUtil32.RangeInDefined(n18, 700, 799))
+                    else if (HUtil32.RangeInDefined(nVarValue, 700, 799))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[n18 - 700]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[nVarValue - 700]);
                     }
-                    else if (HUtil32.RangeInDefined(n18, 800, 1199))
+                    else if (HUtil32.RangeInDefined(nVarValue, 800, 1199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[n18 - 700]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[nVarValue - 700]).ToString());
                     }
-                    else if (HUtil32.RangeInDefined(n18, 1200, 1599))
+                    else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[n18 - 1100]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalAVal[nVarValue - 1100]);
                     }
-                    else if (HUtil32.RangeInDefined(n18, 1600, 1699)) //个人服务器字符串变量E
+                    else if (HUtil32.RangeInDefined(nVarValue, 1600, 1699)) //个人服务器字符串变量E
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_ServerStrVal[n18 - 1600]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_ServerStrVal[nVarValue - 1600]);
                     }
-                    else if (HUtil32.RangeInDefined(n18, 1700, 1799)) //个人服务器字符串变量W
+                    else if (HUtil32.RangeInDefined(nVarValue, 1700, 1799)) //个人服务器字符串变量W
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_ServerIntVal[n18 - 1700]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_ServerIntVal[nVarValue - 1700]).ToString());
                     }
                 }
             }
