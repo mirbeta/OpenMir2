@@ -12,6 +12,10 @@ namespace GameSvr.Command
         [DefaultCommand]
         public void Reconnection(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var sIPaddr = @params.Length > 0 ? @params[0] : "";
             var sPort = @params.Length > 1 ? @params[1] : "";
             if (PlayObject.m_btPermission < 10)

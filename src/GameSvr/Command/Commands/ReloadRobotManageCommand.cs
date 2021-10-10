@@ -7,7 +7,7 @@ namespace GameSvr
     public class ReloadRobotManageCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadRobotManage(string[] @params, TPlayObject PlayObject)
+        public void ReloadRobotManage(TPlayObject PlayObject)
         {
             if (M2Share.g_RobotNPC != null)
             {

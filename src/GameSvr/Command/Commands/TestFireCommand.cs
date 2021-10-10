@@ -8,6 +8,10 @@ namespace GameSvr
         [DefaultCommand]
         public void TestFire(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var nRange = @params.Length > 0 ? int.Parse(@params[0]) : 0;
             var nType = @params.Length > 1 ? int.Parse(@params[1]) : 0;
             var nTime = @params.Length > 2 ? int.Parse(@params[2]) : 0;

@@ -12,16 +12,11 @@ namespace GameSvr
         [DefaultCommand]
         public void SpirtStart(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg("此命令用于开始祈祷生效宝宝叛变。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             var nTime = HUtil32.Str_ToInt(sParam1, -1);
             var dwTime = 0;
             if (nTime > 0)

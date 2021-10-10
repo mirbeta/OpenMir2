@@ -15,6 +15,10 @@ namespace GameSvr
         [DefaultCommand]
         public void MapMoveHuman(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             var sDenMap = @Params.Length > 1 ? @Params[1] : "";
             IList<TBaseObject> HumanList;

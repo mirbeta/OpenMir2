@@ -10,19 +10,9 @@ namespace GameSvr
     public class SearchMasterCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SearchMaster(string[] @Params, TPlayObject PlayObject)
+        public void SearchMaster(TPlayObject PlayObject)
         {
-            if (@Params == null)
-            {
-                return;
-            }
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject Human;
-            if (sParam != "" && sParam[0] == '?')
-            {
-                PlayObject.SysMsg("此命令用于查询师徒当前所在位置。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             if (PlayObject.m_sMasterName == "")
             {
                 PlayObject.SysMsg(M2Share.g_sYouAreNotMasterMsg, TMsgColor.c_Red, TMsgType.t_Hint);

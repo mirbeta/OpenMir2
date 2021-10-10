@@ -13,8 +13,11 @@ namespace GameSvr
         [DefaultCommand]
         public void PrvMsg(string[] @Params, TPlayObject PlayObject)
         {
-            var nPermission = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
-            var sHumanName = @Params.Length > 1 ? @Params[1] : "";
+            if (@Params == null)
+            {
+                return;
+            }
+            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

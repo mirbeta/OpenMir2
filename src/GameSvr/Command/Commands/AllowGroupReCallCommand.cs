@@ -10,14 +10,8 @@ namespace GameSvr
     public class AllowGroupReCallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void AllowGroupReCall(string[] @Params, TPlayObject PlayObject)
+        public void AllowGroupReCall(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam != "" && sParam[0] == '?')
-            {
-                PlayObject.SysMsg("此命令用于允许或禁止编组传送功能。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             PlayObject.m_boAllowGroupReCall = !PlayObject.m_boAllowGroupReCall;
             if (PlayObject.m_boAllowGroupReCall) 
             {

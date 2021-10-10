@@ -10,18 +10,8 @@ namespace GameSvr
     public class DearRecallCommond : BaseCommond
     {
         [DefaultCommand]
-        public void DearRecall(string[] @params, TPlayObject PlayObject)
+        public void DearRecall(TPlayObject PlayObject)
         {
-            var sParam = @params.Length > 0 ? @params[0] : "";
-            if (sParam == "")
-            {
-                return;
-            }
-            if (sParam != "" && sParam[0] == '?')
-            {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Green, TMsgType.t_Hint);
-                return;
-            }
             if (PlayObject.m_sDearName == "")
             {
                 PlayObject.SysMsg("你没有结婚!!!", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -57,7 +47,6 @@ namespace GameSvr
             else
             {
                 PlayObject.SysMsg(PlayObject.m_DearHuman.m_sCharName + " 不允许传送!!!", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
             }
         }
     }

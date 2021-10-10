@@ -14,6 +14,10 @@ namespace GameSvr
         [DefaultCommand]
         public void GamePoint(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             TPlayObject m_PlayObject;
             char Ctr = '1';
             string sHumanName = @params.Length > 0 ? @params[0] : "";

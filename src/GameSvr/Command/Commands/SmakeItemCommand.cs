@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void SmakeItem(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var nWhere = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var nValueType = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;//参数16为吸伤属性
             var nValue = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;

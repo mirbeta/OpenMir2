@@ -15,10 +15,13 @@ namespace GameSvr
         [DefaultCommand]
         public void ShowSbkGold(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
             var sCtr = @Params.Length > 1 ? @Params[1] : "";
             var sGold = @Params.Length > 2 ? @Params[2] : "";
-
             char Ctr;
             int nGold;
             TUserCastle Castle;

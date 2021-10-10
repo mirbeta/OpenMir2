@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void MoveMobTo(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sMonName = @Params[0];
             var OleMap = @Params[1];
             var NewMap = @Params[2];

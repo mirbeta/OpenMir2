@@ -13,11 +13,15 @@ namespace GameSvr
         [DefaultCommand]
         public void ReloadGuild(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sParam1 = string.Empty;
             if (@Params != null && @Params.Length > 0)
             {
-                sParam1 = @Params.Length > 1 ? @Params[1] : "";
-                if (sParam1 == "" || sParam1 != "" && sParam1[0] == '?')
+                sParam1 = @Params.Length > 0 ? @Params[0] : "";
+                if (string.IsNullOrEmpty(sParam1))
                 {
                     PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandReloadGuildHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                     return;

@@ -10,17 +10,8 @@ namespace GameSvr
     public class ChangeObModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeObMode(string[] @Params, TPlayObject PlayObject)
+        public void ChangeObMode(TPlayObject PlayObject)
         {
-            if (Params != null && Params.Length > 0)
-            {
-                var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-                if (sParam1 != "" && sParam1[0] == '?')
-                {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
-            }
             var boFlag = !PlayObject.m_boObMode;
             if (boFlag)
             {

@@ -10,18 +10,8 @@ namespace GameSvr
     public class DisableFilterCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DisableFilter(string[] @Params, TPlayObject PlayObject)
+        public void DisableFilter(TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg("启用/禁止文字过滤功能。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             M2Share.boFilterWord = !M2Share.boFilterWord;
             if (M2Share.boFilterWord)
             {

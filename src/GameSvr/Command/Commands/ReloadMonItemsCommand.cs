@@ -10,7 +10,7 @@ namespace GameSvr
     public class ReloadMonItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadMonItems(string[] @Params, TPlayObject PlayObject)
+        public void ReloadMonItems(TPlayObject PlayObject)
         {
             TMonInfo Monster;
             try

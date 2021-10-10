@@ -12,9 +12,13 @@ namespace GameSvr
         [DefaultCommand]
         public void IncPkPoint(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var nPoint = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
+            if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

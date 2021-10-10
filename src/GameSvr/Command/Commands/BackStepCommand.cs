@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void BackStep(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var nType = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             var nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (PlayObject.m_btPermission < 6)

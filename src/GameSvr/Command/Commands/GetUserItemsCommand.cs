@@ -14,6 +14,10 @@ namespace GameSvr
         [DefaultCommand]
         public void GetUserItems(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sItemName = @Params.Length > 1 ? @Params[1] : "";
             var sItemCount = @Params.Length > 2 ? @Params[2] : "";

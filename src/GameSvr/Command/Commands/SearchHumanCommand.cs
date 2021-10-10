@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void SearchHuman(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject m_PlayObject;
             if (PlayObject.m_boProbeNecklace || PlayObject.m_btPermission >= 6)

@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void PositionMove(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             try
             {
                 var sMapName = @Params.Length > 0 ? @Params[0] : "";

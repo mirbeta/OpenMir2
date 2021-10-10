@@ -12,12 +12,12 @@ namespace GameSvr
         [DefaultCommand]
         public void ReNewLevel(string[] @Params, TPlayObject PlayObject)
         {
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sLevel = @Params.Length > 1 ? @Params[1] : "";
-            if (PlayObject.m_btPermission < 6)
+            if (@Params == null)
             {
                 return;
             }
+            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            var sLevel = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

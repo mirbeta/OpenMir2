@@ -12,13 +12,13 @@ namespace GameSvr
         [DefaultCommand]
         public void ShowMapMode(string[] @Params, TPlayObject PlayObject)
         {
-            var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            string sMsg;
-            if (PlayObject.m_btPermission < 6)
+            if (@Params == null)
             {
                 return;
             }
-            if (sMapName == "")
+            var sMapName = @Params.Length > 0 ? @Params[0] : "";
+            string sMsg;
+            if (string.IsNullOrEmpty(sMapName))
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

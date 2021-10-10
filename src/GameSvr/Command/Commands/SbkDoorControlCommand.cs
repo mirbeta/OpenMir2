@@ -6,7 +6,7 @@ namespace GameSvr
     public class SbkDoorControlCommand : BaseCommond
     {
         [DefaultCommand]
-        public void SbkDoorControl(string[] @Parasm, TPlayObject PlayObject)
+        public void SbkDoorControl(TPlayObject PlayObject)
         {
         }
     }

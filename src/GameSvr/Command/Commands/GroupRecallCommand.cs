@@ -10,7 +10,7 @@ namespace GameSvr
     public class GroupRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GroupRecall(string[] @Params, TPlayObject PlayObject)
+        public void GroupRecall(TPlayObject PlayObject)
         {
             TPlayObject m_PlayObject;
             if (PlayObject.m_boRecallSuite || PlayObject.m_btPermission >= 6)
@@ -40,7 +40,7 @@ namespace GameSvr
                             {
                                 if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
                                 {
-                                    PlayObject.SysMsg(string.Format("{0} 所在的地图不允许传送。", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                                    PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", TMsgColor.c_Red, TMsgType.t_Hint);
                                 }
                                 else
                                 {
@@ -49,7 +49,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                PlayObject.SysMsg(string.Format("{0} 不允许天地合一!!!", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许天地合一!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                         }
                         PlayObject.m_dwGroupRcallTick = HUtil32.GetTickCount();
@@ -58,7 +58,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(string.Format("{0} 秒之后才可以再使用此功能!!!", PlayObject.m_wGroupRcallTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 }
             }
             else

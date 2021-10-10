@@ -8,14 +8,9 @@ namespace GameSvr
     public class ReloadAbuseCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadAbuse(string[] @Params, TPlayObject PlayObject)
+        public void ReloadAbuse(TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
+ 
         }
     }
 }

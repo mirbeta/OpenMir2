@@ -1563,8 +1563,8 @@ namespace GameSvr
         public const string g_sGamecommandMakeItemNameNotFound = "%s 物品名称不正确!!!";
         public const string g_sGamecommandSuperMakeHelpMsg = "身上没指定物品!!!";
         public const string g_sGameCommandViewWhisperHelpMsg = " 人物名称";
-        public const string g_sGameCommandViewWhisperMsg1 = "已停止侦听%s的私聊信息...";
-        public const string g_sGameCommandViewWhisperMsg2 = "正在侦听%s的私聊信息...";
+        public const string g_sGameCommandViewWhisperMsg1 = "已停止侦听{0}的私聊信息...";
+        public const string g_sGameCommandViewWhisperMsg2 = "正在侦听{0}的私聊信息...";
         public const string g_sGameCommandReAliveHelpMsg = " 人物名称";
         public const string g_sGameCommandReAliveMsg = "%s 已获重生.";
         public const string g_sGameCommandChangeJobHelpMsg = " 人物名称 职业类型(Warr Wizard Taos)";

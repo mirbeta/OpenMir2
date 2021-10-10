@@ -7,7 +7,7 @@ namespace GameSvr
     public class ShowDenyIPaddrLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowDenyIPaddrLogon(string[] @Params, TPlayObject PlayObject)
+        public void ShowDenyIPaddrLogon(TPlayObject PlayObject)
         {
             int nCount;
             try

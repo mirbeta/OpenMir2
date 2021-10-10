@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeDearName(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sDearName = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sDearName == "")

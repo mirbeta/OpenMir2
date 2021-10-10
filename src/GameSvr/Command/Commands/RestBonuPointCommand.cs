@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void RestBonuPoint(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             int nTotleUsePoint;
             if (sHumName == "")

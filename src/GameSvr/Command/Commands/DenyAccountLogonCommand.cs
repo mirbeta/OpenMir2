@@ -9,9 +9,12 @@ namespace GameSvr
         [DefaultCommand]
         public void DenyAccountLogon(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sAccount = @Params.Length > 0 ? @Params[0] : "";
             var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
-
             if (sAccount == "")
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

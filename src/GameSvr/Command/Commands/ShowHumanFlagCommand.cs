@@ -12,10 +12,12 @@ namespace GameSvr
         [DefaultCommand]
         public void ShowHumanFlag(string[] @Params, TPlayObject PlayObject)
         {
-            var nPermission = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
-            var sHumanName = @Params.Length > 1 ? @Params[1] : "";
-            var sFlag = @Params.Length > 2 ? @Params[2] : "";
-
+            if (@Params == null)
+            {
+                return;
+            }
+            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            var sFlag = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

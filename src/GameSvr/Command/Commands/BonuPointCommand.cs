@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void BonuPoint(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             var nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             string sMsg;

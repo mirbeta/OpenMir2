@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void SetPermission(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sPermission = @Params.Length > 1 ? @Params[1] : "";
             var nPerission = HUtil32.Str_ToInt(sPermission, 0);

@@ -11,17 +11,8 @@ namespace GameSvr
     public class MobLevelCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MobLevel(string[] @Params, TPlayObject PlayObject)
+        public void MobLevel(TPlayObject PlayObject)
         {
-            if (@Params != null && @Params.Length > 0)
-            {
-                var sParam = @Params.Length > 0 ? @Params[0] : "";
-                if (sParam != "" && sParam[0] == '?')
-                {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
-            }
             TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             PlayObject.m_PEnvir.GetRangeBaseObject(PlayObject.m_nCurrX, PlayObject.m_nCurrY, 2, true, BaseObjectList);

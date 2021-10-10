@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void SetMapMode(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             var sMapMode = @Params.Length > 1 ? @Params[1] : "";
             var sParam1 = @Params.Length > 2 ? @Params[2] : "";

@@ -9,8 +9,11 @@ namespace GameSvr
         [DefaultCommand]
         public void DelDenyIPaddrLogon(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sIPaddr = @Params.Length > 0 ? @Params[0] : "";
-
             if (sIPaddr == "")
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

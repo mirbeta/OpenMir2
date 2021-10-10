@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void EnableSendMsg(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {

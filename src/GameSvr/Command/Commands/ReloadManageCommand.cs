@@ -8,17 +8,8 @@ namespace GameSvr
     public class ReloadManageCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadManage(string[] @params, TPlayObject PlayObject)
+        public void ReloadManage(TPlayObject PlayObject)
         {
-            if (@params != null && @params.Length > 0)
-            {
-                var sParam = @params.Length > 0 ? @params[0] : "";
-                if (sParam != "" && sParam[1] == '?')
-                {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
-            }
             if (M2Share.g_ManageNPC != null)
             {
                 M2Share.g_ManageNPC.ClearScript();

@@ -13,15 +13,15 @@ namespace GameSvr
         [DefaultCommand]
         public void PKpoint(string[] @Params, TPlayObject PlayObject)
         {
-            var sHumanName = string.Empty;
             if (@Params == null)
             {
-                sHumanName = @Params.Length > 0 ? @Params[0] : "";
-                if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
-                {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
+                return;
+            }
+            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            if (!string.IsNullOrEmpty(sHumanName))
+            {
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)

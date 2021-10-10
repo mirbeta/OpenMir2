@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ClearMission(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {

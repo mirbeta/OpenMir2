@@ -10,19 +10,9 @@ namespace GameSvr
     public class DelNpcCommand : BaseCommond
     {
         [DefaultCommand]
-        public void DelNpc(string[] @Params, TPlayObject PlayObject)
+        public void DelNpc(TPlayObject PlayObject)
         {
-            if (@Params == null)
-            {
-                return;
-            }
             const string sDelOK = "删除NPC成功...";
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             TBaseObject BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
             {

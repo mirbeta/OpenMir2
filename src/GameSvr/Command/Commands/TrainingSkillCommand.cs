@@ -13,10 +13,13 @@ namespace GameSvr
         [DefaultCommand]
         public void TrainingSkill(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sSkillName = @Params.Length > 1 ? @Params[1] : "";
             var nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
-
             TUserMagic UserMagic;
             TPlayObject m_PlayObject;
             if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)

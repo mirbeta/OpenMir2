@@ -102,13 +102,21 @@ namespace GameSvr
             }
             string result;
             var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
-            if (methodsParamsCount > 1) //默认参数为当前对象，即：PlayObject
+            if (methodsParamsCount == 2) //默认参数为当前对象，即：PlayObject
             {
                 if (@params == null)
                 {
                     return CommandAttribute.CommandHelp();
                 }
+                if (@params.Length < methodsParamsCount - 1) //参数数量小于实际需要传递的数量
+                {
+                    return CommandAttribute.CommandHelp();
+                }
                 result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
+            }
+            else if (methodsParamsCount == 1)
+            {
+                result = (string)this._commands[target].Invoke(this, new object[] { null, playObject });
             }
             else
             {

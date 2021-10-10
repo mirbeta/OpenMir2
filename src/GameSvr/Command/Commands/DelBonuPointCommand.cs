@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void DelBonuPoint(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             if (sHumName == "")
             {

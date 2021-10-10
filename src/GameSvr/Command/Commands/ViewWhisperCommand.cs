@@ -13,14 +13,16 @@ namespace GameSvr
         [DefaultCommand]
         public void ViewWhisper(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
-            var sParam2 = @Params.Length > 1 ? @Params[1] : "";
             if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sCharName);
             if (m_PlayObject != null)
             {

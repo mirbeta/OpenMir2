@@ -8,15 +8,8 @@ namespace GameSvr
     public class TakeOnHorseCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TakeOnHorse(string[] @Params, TPlayObject PlayObject)
+        public void TakeOnHorse(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam != "" && sParam[1] == '?')
-            {
-                PlayObject.SysMsg("上马命令，在戴好马牌后输入此命令就可以骑上马。", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(string.Format("命令格式: @%s", this.CommandAttribute.Name), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             if (PlayObject.m_boOnHorse)
             {
                 return;
@@ -30,13 +23,7 @@ namespace GameSvr
             PlayObject.FeatureChanged();
             if (PlayObject.m_boOnHorse)
             {
-                try
-                {
-                    // M2Share.g_FunctionNPC.GotoLable(PlayObject, "@OnHorse", false);
-                }
-                catch
-                {
-                }
+                M2Share.g_FunctionNPC.GotoLable(PlayObject, "@OnHorse", false);
             }
         }
     }

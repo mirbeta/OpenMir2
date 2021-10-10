@@ -13,8 +13,12 @@ namespace GameSvr
         [DefaultCommand]
         public void MapMove(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            if (sMapName == "" || sMapName != "" && sMapName[0] == '?')
+            if (string.IsNullOrEmpty(sMapName))
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

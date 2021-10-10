@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void AddAIUser(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var userCount = @params.Length > 0 ? int.Parse(@params[0]) : 1;
             //todo 可以指定是随机刷还是指定地图和坐标
             if (userCount == 0)

@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeLevel(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sParam1 = string.Empty;
             if (@Params != null)
             {

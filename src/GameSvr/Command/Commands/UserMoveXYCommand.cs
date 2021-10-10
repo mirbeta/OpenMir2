@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void UserMoveXY(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sX = @Params.Length > 0 ? @Params[0] : "";
             var sY = @Params.Length > 1 ? @Params[1] : "";
             if (PlayObject.m_boTeleport)
@@ -22,8 +26,7 @@ namespace GameSvr
                 {
                     if (PlayObject.m_PEnvir.CanWalkOfItem(nX, nY, M2Share.g_Config.boUserMoveCanDupObj, M2Share.g_Config.boUserMoveCanOnItem))
                     {
-                        // 10000
-                        if (HUtil32.GetTickCount() - PlayObject.m_dwTeleportTick > M2Share.g_Config.dwUserMoveTime * 1000)
+                        if ((HUtil32.GetTickCount() - PlayObject.m_dwTeleportTick) > M2Share.g_Config.dwUserMoveTime * 1000)
                         {
                             PlayObject.m_dwTeleportTick = HUtil32.GetTickCount();
                             PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");

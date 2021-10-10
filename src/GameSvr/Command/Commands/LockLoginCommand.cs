@@ -10,7 +10,7 @@ namespace GameSvr
     public class LockLoginCommand : BaseCommond
     {
         [DefaultCommand]
-        public void LockLogin(string[] @Params, TPlayObject PlayObject)
+        public void LockLogin(TPlayObject PlayObject)
         {
             if (!M2Share.g_Config.boLockHumanLogin)
             {

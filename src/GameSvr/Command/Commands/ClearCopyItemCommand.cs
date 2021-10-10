@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void ClearCopyItem(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject TargerObject;
             TUserItem UserItem;

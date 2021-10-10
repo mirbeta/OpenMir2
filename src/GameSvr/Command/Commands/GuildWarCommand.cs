@@ -6,7 +6,7 @@ namespace GameSvr
     public class GuildWarCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GuildWar(string[] @Parsms, TPlayObject PlayObject)
+        public void GuildWar(TPlayObject PlayObject)
         {
             if (PlayObject.m_btPermission < 6)
             {

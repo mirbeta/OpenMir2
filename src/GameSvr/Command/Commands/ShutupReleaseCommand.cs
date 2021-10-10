@@ -10,10 +10,13 @@ namespace GameSvr
         [DefaultCommand]
         public void ShutupRelease(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
-
-            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

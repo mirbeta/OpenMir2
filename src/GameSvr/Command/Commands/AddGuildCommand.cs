@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void AddGuild(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             TPlayObject Human;
             bool boAddState;
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";

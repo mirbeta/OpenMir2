@@ -9,6 +9,10 @@ namespace GameSvr
         [DefaultCommand]
         public void StartQuest(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             var sQuestName = @params.Length > 0 ? @params[0] : "";
             if (sQuestName == "")
             {

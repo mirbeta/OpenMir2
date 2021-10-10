@@ -12,17 +12,8 @@ namespace GameSvr
     public class ReloadLineNoticeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ReloadLineNotice(string[] @Params, TPlayObject PlayObject)
+        public void ReloadLineNotice(TPlayObject PlayObject)
         {
-            if (@Params != null && @Params.Length > 0)
-            {
-                var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-                if (sParam1 != "" && sParam1[0] == '?')
-                {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
-            }
             if (M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);

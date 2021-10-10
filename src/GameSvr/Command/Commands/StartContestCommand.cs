@@ -13,26 +13,20 @@ namespace GameSvr
     public class StartContestCommand : BaseCommond
     {
         [DefaultCommand]
-        public void StartContest(string[] @Params, TPlayObject PlayObject)
+        public void StartContest(TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
             IList<TBaseObject> List10;
             IList<TPlayObject> List14;
             IList<TGuild> guildList;
             TPlayObject m_PlayObject;
             TPlayObject PlayObjectA;
             bool bo19;
-            if (sParam1 != "" && sParam1[0] == '?')
-            {
-                PlayObject.SysMsg("开始行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(string.Format("命令格式: @{0}", this.CommandAttribute.Name), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             if (!PlayObject.m_PEnvir.Flag.boFight3Zone)
             {
                 PlayObject.SysMsg("此命令不能在当前地图中使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
+            PlayObject.SysMsg("开始行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
             List10 = new List<TBaseObject>();
             List14 = new List<TPlayObject>();
             guildList = new List<TGuild>();
@@ -63,8 +57,7 @@ namespace GameSvr
                 }
             }
             PlayObject.SysMsg("行会争霸赛已经开始。", TMsgColor.c_Green, TMsgType.t_Hint);
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
-                M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
             TGuild Guild;
             for (int i = 0; i < guildList.Count; i++)
@@ -81,8 +74,7 @@ namespace GameSvr
                 }
                 s20 = s20 + Guild.sGuildName + ' ';
             }
-            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
-                M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
+            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, " -参加的门派:" + s20);
             List10 = null;
             List14 = null;
         }

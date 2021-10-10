@@ -10,14 +10,8 @@ namespace GameSvr
     public class SearchDearCommand
     {
         [DefaultCommand]
-        public void SearchDear(string[] @Params, TPlayObject PlayObject)
+        public void SearchDear(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam != "" && sParam[0] == '?')
-            {
-                PlayObject.SysMsg("此命令用于查询配偶当前所在位置。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             if (PlayObject.m_sDearName == "")
             {
                 // '你都没结婚查什么？'

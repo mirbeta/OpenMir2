@@ -8,15 +8,8 @@ namespace GameSvr
     public class TestGetBagItemsCommand : BaseCommond
     {
         [DefaultCommand]
-        public void TestGetBagItems(string[] @Params, TPlayObject PlayObject)
+        public void TestGetBagItems(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam != "" && sParam[1] == '?')
-            {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandTestGetBagItemsHelpMsg),
-                    TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             byte btDc = 0;
             byte btSc = 0;
             byte btMc = 0;

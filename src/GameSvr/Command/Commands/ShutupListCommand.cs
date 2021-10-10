@@ -7,22 +7,12 @@ namespace GameSvr
     /// <summary>
     /// 查看禁言列表中的内容(支持权限分配)
     /// </summary>
-    [GameCommand("ShutupList", "查看禁言列表中的内容(支持权限分配)", 10)]
+    [GameCommand("ShutupList", "查看禁言列表中的内容", 10)]
     public class ShutupListCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShutupList(string[] @Params, TPlayObject PlayObject)
+        public void ShutupList(TPlayObject PlayObject)
         {
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam1 != "" && sParam1[1] == '?')
-            {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
-            if (PlayObject.m_btPermission < 6)
-            {
-                return;
-            }
             HUtil32.EnterCriticalSection(M2Share.g_DenySayMsgList);
             try
             {

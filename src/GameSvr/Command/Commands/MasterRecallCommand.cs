@@ -10,15 +10,9 @@ namespace GameSvr
     public class MasterRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void MasterRecall(string[] @Params, TPlayObject PlayObject)
+        public void MasterRecall(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
             TPlayObject MasterHuman;
-            if (sParam != "" && sParam[0] == '?')
-            {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " (师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。)", TMsgColor.c_Green, TMsgType.t_Hint);
-                return;
-            }
             if (!PlayObject.m_boMaster)
             {
                 PlayObject.SysMsg("只能师父才能使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);

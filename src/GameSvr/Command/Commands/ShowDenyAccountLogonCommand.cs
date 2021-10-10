@@ -7,7 +7,7 @@ namespace GameSvr
     public class ShowDenyAccountLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowDenyAccountLogon(string[] @Params, TPlayObject PlayObject)
+        public void ShowDenyAccountLogon(TPlayObject PlayObject)
         {
             if (PlayObject.m_btPermission < 6)
             {

@@ -12,6 +12,10 @@ namespace GameSvr
         [DefaultCommand]
         public void Mission(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sX = @Params.Length > 0 ? @Params[0] : "";
             var sY = @Params.Length > 1 ? @Params[1] : "";
             short nX;

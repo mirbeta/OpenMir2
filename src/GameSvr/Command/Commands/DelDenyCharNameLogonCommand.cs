@@ -9,8 +9,11 @@ namespace GameSvr
         [DefaultCommand]
         public void DelDenyCharNameLogon(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
-
             if (sCharName == "")
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

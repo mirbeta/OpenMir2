@@ -10,7 +10,7 @@ namespace GameSvr
     public class ChangeSalveStatusCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeSalveStatus(string[] @Params, TPlayObject PlayObject)
+        public void ChangeSalveStatus(TPlayObject PlayObject)
         {
             PlayObject.m_boSlaveRelax = !PlayObject.m_boSlaveRelax;
             if (PlayObject.m_SlaveList.Count > 0)

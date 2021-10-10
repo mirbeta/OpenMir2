@@ -9,6 +9,10 @@ namespace GameSvr
         [DefaultCommand]
         public void DisableSendMsg(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {

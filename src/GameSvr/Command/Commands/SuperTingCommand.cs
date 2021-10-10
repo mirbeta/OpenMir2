@@ -15,6 +15,10 @@ namespace GameSvr
         [DefaultCommand]
         public void SuperTing(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sRange = @Params.Length > 1 ? @Params[1] : "";
             TPlayObject m_PlayObject;

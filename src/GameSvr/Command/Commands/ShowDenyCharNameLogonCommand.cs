@@ -7,7 +7,7 @@ namespace GameSvr
     public class ShowDenyCharNameLogonCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ShowDenyCharNameLogon(string[] @Params, TPlayObject PlayObject)
+        public void ShowDenyCharNameLogon(TPlayObject PlayObject)
         {
             try
             {

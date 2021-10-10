@@ -11,14 +11,8 @@ namespace GameSvr
     public class GuildRecallCommand : BaseCommond
     {
         [DefaultCommand]
-        public void GuildRecall(string[] @Params, TPlayObject PlayObject)
+        public void GuildRecall(TPlayObject PlayObject)
         {
-            var sParam = @Params.Length > 0 ? @Params[0] : "";
-            if (sParam != "" && sParam[1] == '?')
-            {
-                PlayObject.SysMsg("命令功能: 行会传送，行会掌门人可以将整个行会成员全部集中。", TMsgColor.c_Red, TMsgType.t_Hint);
-                return;
-            }
             if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
             {
                 PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -60,7 +54,7 @@ namespace GameSvr
             }
             if (PlayObject.m_wGroupRcallTime > 0)
             {
-                PlayObject.SysMsg(string.Format("{0} 秒之后才可以再使用此功能!!!", PlayObject.m_wGroupRcallTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             TPlayObject m_PlayObject;
@@ -85,7 +79,7 @@ namespace GameSvr
                         {
                             if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
                             {
-                                PlayObject.SysMsg(string.Format("{0} 所在的地图不允许传送。", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", TMsgColor.c_Red, TMsgType.t_Hint);
                             }
                             else
                             {
@@ -96,12 +90,12 @@ namespace GameSvr
                         else
                         {
                             nNoRecallCount++;
-                            PlayObject.SysMsg(string.Format("{0} 不允许行会合一!!!", m_PlayObject.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许行会合一!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                         }
                     }
                 }
             }
-            PlayObject.SysMsg(string.Format("已传送{0}个成员，{1}个成员未被传送。", nRecallCount, nNoRecallCount), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", TMsgColor.c_Green, TMsgType.t_Hint);
             PlayObject.m_dwGroupRcallTick = HUtil32.GetTickCount();
             PlayObject.m_wGroupRcallTime = (short)M2Share.g_Config.nGuildRecallTime;
         }
