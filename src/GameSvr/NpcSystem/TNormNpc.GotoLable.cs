@@ -276,7 +276,7 @@ namespace GameSvr
             if (n14 >= 0)
             {
                 //根据不同的索引进行赋值
-                if (HUtil32.RangeInDefined(n14, 0, 9))
+                if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
                     PlayObject.m_nVal[n14] = nCount;
                 }
@@ -769,7 +769,7 @@ namespace GameSvr
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
-                            if (HUtil32.RangeInDefined(n10, 0, 9))
+                            if (HUtil32.RangeInDefined(n10, 0, 99))
                             {
                                 if (PlayObject.m_nVal[n10] <= QuestConditionInfo.nParam2)
                                 {
@@ -814,7 +814,7 @@ namespace GameSvr
                         n10 = M2Share.GetValNameNo(QuestConditionInfo.sParam1);
                         if (n10 >= 0)
                         {
-                            if (HUtil32.RangeInDefined(n10, 0, 9))
+                            if (HUtil32.RangeInDefined(n10, 0, 99))
                             {
                                 if (PlayObject.m_nVal[n10] >= QuestConditionInfo.nParam2)
                                 {
@@ -2027,39 +2027,8 @@ namespace GameSvr
                     case M2Share.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
                         ActionOfTHROWITEM(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nMOVR:
-                        n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
-                        if (n14 >= 0)
-                        {
-                            if (HUtil32.RangeInDefined(n14, 0, 9))
-                            {
-                                PlayObject.m_nVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 100, 119))
-                            {
-                                M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 200, 299))
-                            {
-                                PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 300, 399))
-                            {
-                                PlayObject.m_nMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                            }
-                            else if (HUtil32.RangeInDefined(n14, 400, 499))
-                            {
-                                M2Share.g_Config.GlobaDyMval[n14 - 400] = (short)M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
-                            }
-                            else
-                            {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
-                            }
-                        }
-                        else
-                        {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
-                        }
+                    case M2Share.nMOVR://取随机值赋给变量   拓展可以随机参数2到参数3之间的数
+                        MovrData(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nEXCHANGEMAP:
                         Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);

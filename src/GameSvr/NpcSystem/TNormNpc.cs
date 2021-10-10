@@ -22,7 +22,7 @@ namespace GameSvr
         /// </summary>
         public bool m_boIsHide = false;
         /// <summary>
-        ///  NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
+        /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
         public bool m_boIsQuest = false;
         protected string m_sPath = string.Empty;
@@ -1573,11 +1573,10 @@ namespace GameSvr
 
         public void LoadNPCScript()
         {
-            string s08;
             if (m_boIsQuest)
             {
                 m_sPath = M2Share.sNpc_def;
-                s08 = this.m_sCharName + '-' + this.m_sMapName;
+                var s08 = this.m_sCharName + '-' + this.m_sMapName;
                 M2Share.ScriptSystem.LoadNpcScript(this, m_sFilePath, s08);
             }
             else
@@ -1755,9 +1754,29 @@ namespace GameSvr
                     nValue = PlayObject.m_nInteger[n01 - 500];
                     result = true;
                 }
+                else if (HUtil32.RangeInDefined(n01, 600, 699))
+                {
+                    nValue = HUtil32.Str_ToInt(PlayObject.m_sString[n01 - 600], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 700, 799))
+                {
+                    nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n01 - 700], 0);
+                    result = true;
+                }
                 else if (HUtil32.RangeInDefined(n01, 800, 1199))
                 {
                     nValue = M2Share.g_Config.GlobalVal[n01 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1200, 1599))
+                {
+                    nValue = HUtil32.Str_ToInt(M2Share.g_Config.GlobalAVal[n01 - 1100], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1600, 1699))
+                {
+                    nValue = HUtil32.Str_ToInt(PlayObject.m_ServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1700, 1799))

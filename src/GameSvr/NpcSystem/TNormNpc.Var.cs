@@ -6,6 +6,109 @@ namespace GameSvr
 {
     public partial class TNormNpc
     {
+        private void MovrData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
+        {
+            var n14 = 0;
+            var s34 = string.Empty;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.m_nVal[n14] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.m_nVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 119))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.g_Config.GlobalVal[n14 - 100] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.g_Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.m_DyVal[n14 - 200] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.m_nMval[n14 - 300] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.m_nMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.g_Config.GlobaDyMval[n14 - 400] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.g_Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.m_nInteger[n14 - 500] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.m_nInteger[n14 - 500] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.g_Config.GlobalVal[n14 - 700] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.g_Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
+                }
+            }
+            else
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sMOVR);
+            }
+        }
+
         private void MovData(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sParam1 = string.Empty;
@@ -1268,7 +1371,7 @@ namespace GameSvr
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
                 if (n14 >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n14, 0, 9))
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
                         n18 = PlayObject.m_nVal[n14];
                     }
@@ -1313,7 +1416,7 @@ namespace GameSvr
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
                 if (n14 >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n14, 0, 9))
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
                         n1C = PlayObject.m_nVal[n14];
                     }
@@ -1362,7 +1465,7 @@ namespace GameSvr
             }
             if (n14 >= 0)
             {
-                if (HUtil32.RangeInDefined(n14, 0, 9))
+                if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
                     PlayObject.m_nVal[n14] = n18 * n1C;
                 }
@@ -1404,7 +1507,7 @@ namespace GameSvr
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2); // 取第一个变量,并传值给n18
                 if (n14 >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n14, 0, 9))
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
                         n18 = PlayObject.m_nVal[n14];
                     }
@@ -1449,7 +1552,7 @@ namespace GameSvr
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3); // 取第一个变量,并传值给n1C
                 if (n14 >= 0)
                 {
-                    if (HUtil32.RangeInDefined(n14, 0, 9))
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
                         n1C = PlayObject.m_nVal[n14];
                     }
@@ -1498,7 +1601,7 @@ namespace GameSvr
             }
             if (n14 >= 0)
             {
-                if (HUtil32.RangeInDefined(n14, 0, 9))
+                if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
                     PlayObject.m_nVal[n14] = n18 * n1C;
                 }

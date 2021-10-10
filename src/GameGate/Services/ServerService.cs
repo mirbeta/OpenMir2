@@ -226,7 +226,7 @@ namespace GameGate
                                 //sReviceMsg = sReviceMsg.Substring(0, nPos);
                                 //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
                             }
-                            if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady)
+                            if (GateShare.boGateReady && !string.IsNullOrEmpty(sReviceMsg))
                             {
                                 var userData = new TSendUserData();
                                 userData.nSocketIdx = nSocketIndex;

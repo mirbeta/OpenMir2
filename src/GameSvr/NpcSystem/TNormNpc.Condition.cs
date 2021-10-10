@@ -2855,7 +2855,7 @@ namespace GameSvr
             int n100 = M2Share.GetValNameNo(sValName);
             if (n100 >= 0)
             {
-                if (HUtil32.RangeInDefined(n100, 0, 9))
+                if (HUtil32.RangeInDefined(n100, 0, 99))
                 {
                     nValue = PlayObject.m_nVal[n100];
                     result = true;

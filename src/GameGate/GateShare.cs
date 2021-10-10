@@ -72,11 +72,11 @@ namespace GameGate
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
-        public static List<string> BlockIPList = null;
+        public static IList<string> BlockIPList = null;
         /// <summary>
         /// 临时禁止连接IP列表
         /// </summary>
-        public static List<string> TempBlockIPList = null;
+        public static IList<string> TempBlockIPList = null;
         public static int nMaxConnOfIPaddr = 50;
         public static int nMaxClientPacketSize = 7000;
         public static int nNomClientPacketSize = 150;
