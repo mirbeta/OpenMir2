@@ -10,16 +10,11 @@ namespace GameSvr
     public class ChangeAttackModeCommand : BaseCommond
     {
         [DefaultCommand]
-        public void ChangeAttackMode(string[] @Params, TPlayObject PlayObject)
+        public void ChangeAttackMode(TPlayObject PlayObject)
         {
-            var nMode = 0;
-            if (Params != null)
+            if (PlayObject.m_btAttatckMode >= M2Share.HAM_PKATTACK)
             {
-                nMode = Params.Length > 0 ? int.Parse(Params[0]) : 0;
-            }
-            if (nMode >= M2Share.HAM_ALL && nMode <= M2Share.HAM_PKATTACK)
-            {
-                PlayObject.m_btAttatckMode = (byte)nMode;
+                PlayObject.m_btAttatckMode = 0;
             }
             else
             {
@@ -32,20 +27,13 @@ namespace GameSvr
                     PlayObject.m_btAttatckMode = M2Share.HAM_ALL;
                 }
             }
-            if (nMode >= 0 && nMode <= 4)
+            if (PlayObject.m_btAttatckMode < M2Share.HAM_PKATTACK)
             {
-                PlayObject.m_btAttatckMode = (byte)nMode;
+                PlayObject.m_btAttatckMode++;
             }
             else
             {
-                if (PlayObject.m_btAttatckMode < M2Share.HAM_PKATTACK)
-                {
-                    PlayObject.m_btAttatckMode++;
-                }
-                else
-                {
-                    PlayObject.m_btAttatckMode = M2Share.HAM_ALL;
-                }
+                PlayObject.m_btAttatckMode = M2Share.HAM_ALL;
             }
             switch (PlayObject.m_btAttatckMode)
             {

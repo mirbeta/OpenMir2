@@ -116,7 +116,7 @@ namespace GameSvr
             }
             else if (methodsParamsCount == 1)
             {
-                result = (string)this._commands[target].Invoke(this, new object[] { null, playObject });
+                result = (string)this._commands[target].Invoke(this, new object[] { playObject });
             }
             else
             {

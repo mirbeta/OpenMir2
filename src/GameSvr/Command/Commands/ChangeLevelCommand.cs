@@ -17,16 +17,7 @@ namespace GameSvr
             {
                 return;
             }
-            var sParam1 = string.Empty;
-            if (@Params != null)
-            {
-                sParam1 = @Params.Length > 0 ? @Params[0] : "";
-                if (sParam1 != "" && sParam1[0] == '?')
-                {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return;
-                }
-            }
+            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
             var nLevel = HUtil32.Str_ToInt(sParam1, 1);
             int nOLevel = PlayObject.m_Abil.Level;
             PlayObject.m_Abil.Level = (ushort)HUtil32._MIN(M2Share.MAXUPLEVEL, nLevel);
