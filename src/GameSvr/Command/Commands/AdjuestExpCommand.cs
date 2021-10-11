@@ -13,6 +13,10 @@ namespace GameSvr
         [DefaultCommand]
         public void AdjuestExp(string[] @Params, TPlayObject PlayObject)
         {
+            if (@Params == null)
+            {
+                return;
+            }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             var sExp = @Params.Length > 1 ? @Params[1] : "";
             var dwExp = 0;

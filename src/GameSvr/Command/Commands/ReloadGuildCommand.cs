@@ -18,7 +18,7 @@ namespace GameSvr
                 return;
             }
             var sParam1 = string.Empty;
-            if (@Params != null && @Params.Length > 0)
+            if (@Params.Length > 0)
             {
                 sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (string.IsNullOrEmpty(sParam1))

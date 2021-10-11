@@ -161,7 +161,7 @@ namespace GameSvr
             for (var i = 0; i < _castleList.Count; i++)
             {
                 Castle = _castleList[i];
-                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, new { Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome }));
+                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg,Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome ));
             }
         }
 

@@ -12,8 +12,7 @@ namespace GameSvr
         [DefaultCommand]
         public void ChangeAdminMode(TPlayObject PlayObject)
         {
-            var boFlag = !PlayObject.m_boAdminMode;
-            PlayObject.m_boAdminMode = boFlag;
+            PlayObject.m_boAdminMode = !PlayObject.m_boAdminMode;
             PlayObject.SysMsg(PlayObject.m_boAdminMode ? M2Share.sGameMasterMode : M2Share.sReleaseGameMasterMode,
                 TMsgColor.c_Green, TMsgType.t_Hint);
         }

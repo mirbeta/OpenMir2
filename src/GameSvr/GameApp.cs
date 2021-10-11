@@ -250,7 +250,7 @@ namespace GameSvr
             M2Share.g_Config.nWinLotteryLevel5 = 0;
             M2Share.g_Config.nWinLotteryLevel6 = 0;
             M2Share.LoadConfig();
-            M2Share.DataServer = new DataServer();
+            M2Share.DataServer = new DBService();
             M2Share.ObjectSystem = new ObjectSystem();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.g_FindPath = new TFindPath();

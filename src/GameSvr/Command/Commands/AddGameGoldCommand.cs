@@ -13,6 +13,10 @@ namespace GameSvr.Command
         [DefaultCommand]
         public void AddGameGold(string[] @params, TPlayObject PlayObject)
         {
+            if (@params == null)
+            {
+                return;
+            }
             TPlayObject m_PlayObject;
             var sHumName = @params.Length > 0 ? @params[0] : "";
             var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0;

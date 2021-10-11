@@ -10,17 +10,22 @@ namespace GameSvr
     public class TUserCastle
     {
         public TObjUnit[] m_Archer = new TObjUnit[12];
-        public IList<TGuild> m_AttackGuildList;
-        public IList<TAttackerInfo> m_AttackWarList;
+        /// <summary>
+        /// 攻城行会列表
+        /// </summary>
+        private IList<TGuild> m_AttackGuildList;
+        /// <summary>
+        /// 攻城列表
+        /// </summary>
+        private IList<TAttackerInfo> m_AttackWarList;
+        /// <summary>
+        /// 是否显示攻城战役结束消息
+        /// </summary>
         public bool m_boShowOverMsg;
         /// <summary>
         /// 是否开始攻城
         /// </summary>
         private bool m_boStartWar;
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool m_boStatus = false;
         public bool m_boUnderWar;
         private TObjUnit m_CenterWall;
         public DateTime m_ChangeDate;
@@ -31,20 +36,22 @@ namespace GameSvr
         /// <summary>
         /// 是否已显示攻城结束信息
         /// </summary>
-        public int m_dwSaveTick;
+        private int m_dwSaveTick;
         public int m_dwStartCastleWarTick;
         public IList<string> m_EnvirList;
         public TObjUnit[] m_Guard = new TObjUnit[4];
-        public DateTime m_IncomeToday;
-        public TObjUnit m_LeftWall;
+        private DateTime m_IncomeToday;
+        private TObjUnit m_LeftWall;
         public TObjUnit m_MainDoor;
         /// <summary>
         /// 城堡所在地图
         /// </summary>
         public TEnvirnoment m_MapCastle;
-        /// 皇宫所在地图 
+        /// <summary>
+        /// 皇宫所在地图
+        /// </summary>
         public TEnvirnoment m_MapPalace;
-        public TEnvirnoment m_MapSecret;
+        private TEnvirnoment m_MapSecret;
         /// <summary>
         /// 所属行会名称
         /// </summary>
@@ -52,23 +59,29 @@ namespace GameSvr
         /// <summary>
         /// 行会回城点X
         /// </summary>
-        public int m_nHomeX;
+        private int m_nHomeX;
         /// <summary>
         /// 行会回城点Y
         /// </summary>
-        public int m_nHomeY;
-        public int m_nPalaceDoorX;
+        private int m_nHomeY;
+        private int m_nPalaceDoorX;
         /// <summary>
         /// 科技等级
         /// </summary>
-        public int m_nPalaceDoorY;
-        public int m_nPower;
-        public int m_nTechLevel;
+        private int m_nPalaceDoorY;
+        private int m_nPower;
+        private int m_nTechLevel;
+        /// <summary>
+        /// 今日收入
+        /// </summary>
         public int m_nTodayIncome;
+        /// <summary>
+        /// 收入多少金币
+        /// </summary>
         public int m_nTotalGold;
-        public int m_nWarRangeX;
-        public int m_nWarRangeY;
-        public TObjUnit m_RightWall;
+        private int m_nWarRangeX;
+        private int m_nWarRangeY;
+        private TObjUnit m_RightWall;
         /// <summary>
         /// 皇宫门状态
         /// </summary>
@@ -89,8 +102,8 @@ namespace GameSvr
         /// <summary>
         /// 皇宫所在地图
         /// </summary>
-        public string m_sPalaceMap = string.Empty;
-        public string m_sSecretMap = string.Empty;
+        private string m_sPalaceMap = string.Empty;
+        private string m_sSecretMap = string.Empty;
         public DateTime m_WarDate;
 
         public TUserCastle(string sCastleDir)
@@ -191,8 +204,7 @@ namespace GameSvr
                     {
                         ObjUnit = m_Archer[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject =
-                            M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
                             ObjUnit.BaseObject.m_WAbil.HP = m_Archer[i].nHP;
@@ -211,8 +223,7 @@ namespace GameSvr
                     {
                         ObjUnit = m_Guard[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject =
-                            M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                             ObjUnit.BaseObject.m_WAbil.HP = m_Guard[i].nHP;
                         else
@@ -521,7 +532,7 @@ namespace GameSvr
                             StartWallconquestWar();
                             SaveAttackSabukWall();
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
-                            s20 = string.Format(sWarStartMsg, new[] { m_sName });
+                            s20 = string.Format(sWarStartMsg, m_sName);
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
@@ -553,7 +564,7 @@ namespace GameSvr
                         if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            s20 = string.Format(sWarStopTimeMsg, new object[] { m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000) });
+                            s20 = string.Format(sWarStopTimeMsg,  m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
@@ -670,7 +681,7 @@ namespace GameSvr
             SaveConfigFile();
             if (oldGuild != null) oldGuild.RefMemberName();
             if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
-            var s10 = string.Format(sGetCastleMsg, new object[] { m_sName, m_sOwnGuild });
+            var s10 = string.Format(sGetCastleMsg,  m_sName, m_sOwnGuild);
             M2Share.UserEngine.SendBroadCastMsgExt(s10, TMsgType.t_System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
             M2Share.MainOutMessage(s10);
@@ -688,23 +699,27 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 停止沙巴克攻城战役
+        /// </summary>
         public void StopWallconquestWar()
         {
-            ArrayList ListC;
             TPlayObject PlayObject;
-            string s14;
             const string sWallWarStop = "[{0} 攻城战已经结束]";
             m_boUnderWar = false;
             m_AttackGuildList.Clear();
-            ListC = new ArrayList();
+            IList<TPlayObject> ListC = new List<TPlayObject>();
             M2Share.UserEngine.GetMapOfRangeHumanCount(m_MapCastle, m_nHomeX, m_nHomeY, 100);
             for (var i = 0; i < ListC.Count; i++)
             {
-                PlayObject = (TPlayObject)ListC[i];
+                PlayObject = ListC[i];
                 PlayObject.ChangePKStatus(false);
-                if (PlayObject.m_MyGuild != m_MasterGuild) PlayObject.MapRandomMove(PlayObject.m_sHomeMap, 0);
+                if (PlayObject.m_MyGuild != m_MasterGuild)
+                {
+                    PlayObject.MapRandomMove(PlayObject.m_sHomeMap, 0);
+                }
             }
-            s14 = string.Format(sWallWarStop, new[] { m_sName });
+            var s14 = string.Format(sWallWarStop, m_sName);
             M2Share.UserEngine.SendBroadCastMsgExt(s14, TMsgType.t_System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s14);
             M2Share.MainOutMessage(s14);
@@ -773,16 +788,14 @@ namespace GameSvr
 
         public string GetWarDate()
         {
-            TAttackerInfo AttackerInfo;
             const string sMsg = "{0}年{1}月{2}日";
             var result = string.Empty;
             if (m_AttackWarList.Count <= 0) return result;
-            AttackerInfo = m_AttackWarList[0];
+            var AttackerInfo = m_AttackWarList[0];
             var Year = AttackerInfo.AttackDate.Year;
             var Month = AttackerInfo.AttackDate.Month;
             var Day = AttackerInfo.AttackDate.Day;
-            result = string.Format(sMsg, Year, Month, Day);
-            return result;
+            return string.Format(sMsg, Year, Month, Day);
         }
 
         public string GetAttackWarList()
@@ -820,6 +833,10 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 增加每日收入
+        /// </summary>
+        /// <param name="nGold"></param>
         public void IncRateGold(int nGold)
         {
             var nInGold = HUtil32.Round(nGold * (M2Share.g_Config.nCastleTaxRate / 100));
@@ -855,6 +872,12 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 提取每日收入
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="nGold"></param>
+        /// <returns></returns>
         public int WithDrawalGolds(TPlayObject PlayObject, int nGold)
         {
             var result = -1;
@@ -863,9 +886,9 @@ namespace GameSvr
                 result = -4;
                 return result;
             }
-            if (m_MasterGuild == PlayObject.m_MyGuild && PlayObject.m_nGuildRankNo == 1 && nGold > 0)
+            if (m_MasterGuild == PlayObject.m_MyGuild && PlayObject.m_nGuildRankNo == 1)
             {
-                if (nGold > 0 && nGold <= m_nTotalGold)
+                if (nGold <= m_nTotalGold)
                 {
                     if (PlayObject.m_nGold + nGold <= PlayObject.m_nGoldMax)
                     {
@@ -888,7 +911,6 @@ namespace GameSvr
                     result = -2;
                 }
             }
-
             return result;
         }
 
@@ -900,7 +922,6 @@ namespace GameSvr
                 result = -4;
                 return result;
             }
-
             if (m_MasterGuild == PlayObject.m_MyGuild && PlayObject.m_nGuildRankNo == 1 && nGold > 0)
             {
                 if (nGold <= PlayObject.m_nGold)

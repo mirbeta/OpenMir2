@@ -19,7 +19,7 @@ namespace GameSvr
             }
             var sFastStep = @Params.Length > 0 ? @Params[0] : "";
             var nFastStep = HUtil32.Str_ToInt(sFastStep, -1);
-            if (sFastStep == "" || nFastStep < 1 || sFastStep != "" && sFastStep[0] == '?')
+            if (sFastStep == "" || nFastStep < 1 || sFastStep != "")
             {
                 PlayObject.SysMsg("设置怪物行动速度。", TMsgColor.c_Red, TMsgType.t_Hint);
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

@@ -48,7 +48,7 @@ namespace GameSvr
         public static CommonDB CommonDB = null;
         public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
-        public static DataServer DataServer = null;
+        public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GateSystem RunSocket = null;
         public static ArrayList LogStringList = null;

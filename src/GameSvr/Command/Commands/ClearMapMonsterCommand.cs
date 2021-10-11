@@ -21,23 +21,17 @@ namespace GameSvr
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             var sMonName = @Params.Length > 1 ? @Params[1] : "";
             var sItems = @Params.Length > 2 ? @Params[2] : "";
-            IList<TBaseObject> MonList;
-            TEnvirnoment Envir;
-            int nMonCount;
-            bool boKillAll;
-            bool boKillAllMap;
-            bool boNotItem;
             TBaseObject BaseObject;
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            boKillAll = false;
-            boKillAllMap = false;
-            boNotItem = true;
-            nMonCount = 0;
-            Envir = null;
+            var boKillAll = false;
+            var boKillAllMap = false;
+            var boNotItem = true;
+            var nMonCount = 0;
+            TEnvirnoment Envir = null;
             if (sMonName == "*")
             {
                 boKillAll = true;
@@ -50,7 +44,7 @@ namespace GameSvr
             {
                 boNotItem = false;
             }
-            MonList = new List<TBaseObject>();
+            IList<TBaseObject> MonList = new List<TBaseObject>();
             try
             {
                 for (var i = 0; i < M2Share.g_MapManager.Maps.Count; i++)

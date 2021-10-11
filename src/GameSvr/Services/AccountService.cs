@@ -6,13 +6,13 @@ using SystemModule.Sockets;
 
 namespace GameSvr
 {
-    public class TFrmIDSoc
+    public class AccountService
     {
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
         private readonly IClientScoket IDSocket;
 
-        public TFrmIDSoc()
+        public AccountService()
         {
             m_SessionList = new List<TSessInfo>();
             M2Share.g_Config.boIDSocketConnected = false;
@@ -417,15 +417,15 @@ namespace GameSvr
 {
     public class IdSrvClient
     {
-        private static TFrmIDSoc instance = null;
+        private static AccountService instance = null;
 
-        public static TFrmIDSoc Instance
+        public static AccountService Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new TFrmIDSoc();
+                    instance = new AccountService();
                 }
                 return instance;
             }

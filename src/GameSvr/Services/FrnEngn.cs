@@ -66,10 +66,13 @@ namespace GameSvr
                 case 16:
                 case 17:
                 case 18:
+                case 19:
+                case 21:
                     M2Share.g_nGameTime = 1;//白天
                     break;
                 case 11:
                 case 23:
+                case 20:
                     M2Share.g_nGameTime = 2;//日落
                     break;
                 case 4:
@@ -83,9 +86,6 @@ namespace GameSvr
                 case 12:
                 case 13:
                 case 14:
-                case 19:
-                case 20:
-                case 21:
                 case 22:
                     M2Share.g_nGameTime = 3;//夜晚
                     break;

@@ -28,9 +28,9 @@ namespace GameSvr
             //    PlayObject.SysMsg("本地图禁止师徒传送!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            if (HUtil32.GetTickCount() - PlayObject.m_dwMasterRecallTick < 10000)
+            if ((HUtil32.GetTickCount() - PlayObject.m_dwMasterRecallTick) < 10000)
             {
-                PlayObject.SysMsg("稍等伙才能再次使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("稍等一会才能再次使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             for (var i = 0; i < PlayObject.m_MasterList.Count; i++)

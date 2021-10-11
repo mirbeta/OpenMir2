@@ -3,7 +3,7 @@
 namespace GameSvr
 {
     /// <summary>
-    /// 神兽
+    /// 神兽攻击形态
     /// </summary>
     public class TElfWarriorMonster : TSpitSpider
     {

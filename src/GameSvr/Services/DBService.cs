@@ -4,12 +4,12 @@ using SystemModule.Sockets;
 
 namespace GameSvr
 {
-    public class DataServer
+    public class DBService
     {
         private readonly IClientScoket _clientScoket;
         private AsynQueue<SaveHumData> _saveQueue;
 
-        public DataServer()
+        public DBService()
         {
             _clientScoket = new IClientScoket();
             _clientScoket.OnConnected += DbScoketConnected;

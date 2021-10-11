@@ -2,17 +2,12 @@
 
 namespace GameSvr
 {
+    /// <summary>
+    /// 神兽普通跟随形态
+    /// </summary>
     public class TElfMonster : TMonster
     {
-        private bool boIsFirst;
-
-        public void AppearNow()
-        {
-            boIsFirst = false;
-            m_boFixedHideMode = false;
-            RecalcAbilitys();
-            m_dwWalkTick = m_dwWalkTick + 800;
-        }
+        private bool boIsFirst= false;
 
         public TElfMonster() : base()
         {
@@ -22,6 +17,13 @@ namespace GameSvr
             boIsFirst = true;
         }
 
+        public void AppearNow()
+        {
+            m_boFixedHideMode = false;
+            RecalcAbilitys();
+            m_dwWalkTick = m_dwWalkTick + 800;
+        }
+        
         public override void RecalcAbilitys()
         {
             base.RecalcAbilitys();
@@ -36,8 +38,7 @@ namespace GameSvr
 
         public override void Run()
         {
-            bool boChangeFace;
-            TBaseObject ElfMon;
+            bool boChangeFace = false;
             if (boIsFirst)
             {
                 boIsFirst = false;
@@ -54,7 +55,6 @@ namespace GameSvr
             }
             else
             {
-                boChangeFace = false;
                 if (m_TargetCret != null)
                 {
                     boChangeFace = true;
@@ -65,7 +65,7 @@ namespace GameSvr
                 }
                 if (boChangeFace)
                 {
-                    ElfMon = MakeClone(M2Share.g_Config.sDragon1, this);
+                    var ElfMon = MakeClone(M2Share.g_Config.sDragon1, this);
                     if (ElfMon != null)
                     {
                         ElfMon.m_boAutoChangeColor = m_boAutoChangeColor;

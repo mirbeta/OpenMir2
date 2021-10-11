@@ -72,9 +72,9 @@ namespace GameSvr
                 playObject.m_btPermission = 10;
 #endif
             }
-            if (playObject != null && this.CommandAttribute.nPermissionMin > playObject.m_btPermission)
+            if (playObject != null && playObject.m_btPermission < this.CommandAttribute.nPermissionMin)
             {
-                return M2Share.g_sGameCommandPermissionTooLow;//权限不足
+                return M2Share.g_sGameCommandPermissionTooLow; //权限不足
             }
             string[] @params = null;
             CommandAttribute target = null;
@@ -90,15 +90,6 @@ namespace GameSvr
                 {
                     @params = @params.Skip(1).ToArray();
                 }
-            }
-            // 检查用户是否有足够的权限来调用命令
-            if (playObject != null && target.MinUserLevel > playObject.m_btPermission)
-            {
-                return M2Share.g_sGameCommandPermissionTooLow;//权限不足
-            }
-            if (playObject.m_btPermission < target.MinUserLevel)
-            {
-                return M2Share.g_sGameCommandPermissionTooLow;//权限不足
             }
             string result;
             var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数

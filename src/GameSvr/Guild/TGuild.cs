@@ -45,8 +45,13 @@ namespace GameSvr
             get => m_nChiefItemCount;
             set => SetChiefItemCount(value);
         }
-        
+        /// <summary>
+        /// 行会名称
+        /// </summary>
         public string sGuildName;
+        /// <summary>
+        /// 行会公告
+        /// </summary>
         public ArrayList NoticeList = null;
         public IList<TWarGuild> GuildWarList = null;
         public IList<TGuild> GuildAllList = null;
