@@ -146,7 +146,7 @@ namespace GameSvr
             {
                 M2Share.MainOutMessage("行会信息保存失败!!!");
             }
-            //SaveList.Free;
+            SaveList = null;
         }
 
         public void Run()

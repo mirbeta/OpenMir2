@@ -375,9 +375,8 @@ namespace GameSvr
                             return result;
                         }
                     }
-                    if (m_Abil.Level <= M2Share.g_Config.nPKProtectLevel)
+                    if (m_Abil.Level <= M2Share.g_Config.nPKProtectLevel)// 如果小于指定等级
                     {
-                        // 如果小于指定等级
                         if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
                         {
                             result = false;

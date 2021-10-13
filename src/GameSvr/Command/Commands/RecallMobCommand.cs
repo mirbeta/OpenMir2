@@ -52,7 +52,6 @@ namespace GameSvr
                 {
                     mon.m_Master = PlayObject;
                     mon.m_dwMasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
-                    //mon.m_dwMasterRoyaltyTime = HUtil32.GetTickCount();
                     mon.m_btSlaveMakeLevel = 3;
                     mon.m_btSlaveExpLevel = (byte)nLevel;
                     if (nAutoChangeColor == 1)
