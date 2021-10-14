@@ -14,9 +14,11 @@ namespace GameGate
         private ISocketServer _serverSocket;
         public int NReviceMsgSize = 0;
         private long _dwProcessClientMsgTime = 0;
+        private readonly SessionManager _sessionManager;
 
-        public ServerService()
+        public ServerService(SessionManager sessionManager)
         {
+            _sessionManager = sessionManager;
             _serverSocket = new ISocketServer(2000, 10);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -42,7 +44,7 @@ namespace GameGate
         /// <param name="e"></param>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo userSession;
+            TSessionInfo userSession = null;
             var sRemoteAddress = e.RemoteIPaddr;
             var nSockIdx = 0;
             //todo 新玩家链接的时候要随机分配一个可用网关客户端
@@ -96,7 +98,7 @@ namespace GameGate
                 gateclient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
-                GateShare.UserSessions.TryAdd(e.ConnectionId, new UserClientSession());
+                _sessionManager.AddSession(e.ConnectionId, new UserClientSession());
             }
             else
             {
@@ -128,7 +130,7 @@ namespace GameGate
                     }
                     GateShare.DelSocketIndex(e.ConnectionId);
                     GateShare.DeleteUserClient(e.ConnectionId);
-                    GateShare.UserSessions.TryRemove(e.ConnectionId, out var clientSession);
+                    _sessionManager.Remove(e.ConnectionId);
                 }
             }
             else
@@ -152,20 +154,19 @@ namespace GameGate
         /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            if (!GateShare.UserSessions.ContainsKey(token.ConnectionId))
-            {
-                return;
-            }
-            var clientSession = GateShare.UserSessions[token.ConnectionId];
+            var clientSession = _sessionManager.GetSession(token.ConnectionId);
             if (clientSession != null)
             {
-                var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
-                var userClinet = GateShare.GetUserClient(token.ConnectionId);
+                var userClient = GateShare.GetUserClient(token.ConnectionId);
                 string sRemoteAddress = token.RemoteIPaddr;
-                if (userClinet == null)
+                if (userClient == null)
                 {
                     GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
                     Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{token.ConnectionId}]");
+                    return;
+                }
+                if (!userClient.SessionArray[userClient.GateIdx].Socket.Connected)
+                {
                     return;
                 }
                 try
@@ -175,7 +176,8 @@ namespace GameGate
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
                     var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    if (nSocketIndex >= 0 && nSocketIndex < userClinet.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
+                    var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
+                    if (nSocketIndex >= 0 && nSocketIndex < userClient.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                     {
                         if (nReviceLen > GateShare.nNomClientPacketSize)
                         {
@@ -204,7 +206,7 @@ namespace GameGate
                             }
                         }
                         GateShare.NReviceMsgSize += sReviceMsg.Length;
-                        if (userClinet.SessionArray[nSocketIndex].sUserName == GateShare.boMsgUserName)
+                        if (userClient.SessionArray[nSocketIndex].sUserName == GateShare.boMsgUserName)
                         {
                             GateShare.AddMainLogMsg(sReviceMsg, 3);   //封包显示
                         }
@@ -212,7 +214,7 @@ namespace GameGate
                         {
                             GateShare.AddMainLogMsg(sReviceMsg, 0);
                         }
-                        var userSession = userClinet.SessionArray[nSocketIndex];
+                        var userSession = userClient.SessionArray[nSocketIndex];
                         if (userSession.Socket == token.Socket)
                         {
                             var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
@@ -233,7 +235,7 @@ namespace GameGate
                                 userData.nSocketHandle = (int)token.Socket.Handle;
                                 userData.sMsg = sReviceMsg;
                                 userData.UserCientId = token.ConnectionId;
-                                userData.UserClient = userClinet;
+                                userData.UserClient = userClient;
                                 GateShare.ReviceMsgList.Writer.TryWrite(userData);
                             }
                         }

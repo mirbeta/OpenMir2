@@ -361,7 +361,6 @@ namespace GameGate
         public static bool[] Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
         public static ConcurrentDictionary<string, ForwardClientService> ServerGateList;
-        public static ConcurrentDictionary<string, UserClientSession> UserSessions;
         public static List<WeightedItem<ForwardClientService>> m_ServerGateList = new List<WeightedItem<ForwardClientService>>();
         public static Dictionary<string, UserClientSession> PunishList;
 
@@ -464,7 +463,6 @@ namespace GameGate
             _ClientGateMap = new ConcurrentDictionary<string, ForwardClientService>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
             ServerGateList = new ConcurrentDictionary<string, ForwardClientService>();
-            UserSessions = new ConcurrentDictionary<string, UserClientSession>();
             GameSpeedList = new ConcurrentDictionary<string, string>();
             InitMagicAttackMap();
         }

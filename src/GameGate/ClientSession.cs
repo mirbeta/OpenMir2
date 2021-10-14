@@ -27,7 +27,8 @@ namespace GameGate
         private GateConfig _gateConfig;
         private byte _handleLogin = 0;
         private bool _SpeedLimit;
-
+        private TSessionInfo _session;
+        
         public UserClientSession()
         {
             _gameSpeed = new GameSpeed();
@@ -91,17 +92,18 @@ namespace GameGate
             {
                 n14 = 0;
                 //nProcessMsgSize += UserData.sMsg.Length;
+                _session = UserData.UserClient.SessionArray[UserData.nSocketIdx];
                 if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
                 {
-                    if (UserData.nSocketHandle == UserData.UserClient.SessionArray[UserData.nSocketIdx].nSckHandle && UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount < 10)
+                    if (UserData.nSocketHandle == _session.nSckHandle && _session.nPacketErrCount < 10)
                     {
-                        if (UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData.Length > GateShare.MSGMAXLENGTH)
+                        if (_session.sSocData.Length > GateShare.MSGMAXLENGTH)
                         {
-                            UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
-                            UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount = 99;
+                            _session.sSocData = "";
+                            _session.nPacketErrCount = 99;
                             UserData.sMsg = "";
                         }
-                        sMsg = UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData + UserData.sMsg;
+                        sMsg = _session.sSocData + UserData.sMsg;
                         while (true)
                         {
                             sData = "";
@@ -109,43 +111,42 @@ namespace GameGate
                             if (sData.Length > 2)
                             {
                                 nPacketIdx = HUtil32.Str_ToInt(sData[0].ToString(), 99); // 将数据名第一位的序号取出
-                                if (UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx == nPacketIdx)
+                                if (_session.nPacketIdx == nPacketIdx)
                                 {
                                     // 如果序号重复则增加错误计数
-                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketErrCount++;
+                                    _session.nPacketErrCount++;
                                 }
                                 else
                                 {
-                                    nOPacketIdx = UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx;
-                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nPacketIdx = nPacketIdx;
+                                    nOPacketIdx = _session.nPacketIdx;
+                                    _session.nPacketIdx = nPacketIdx;
                                     sData = sData.Substring(1, sData.Length - 1);
                                     nDataLen = sData.Length;
                                     if (nDataLen >= Grobal2.DEFBLOCKSIZE)
                                     {
-                                        if (UserData.UserClient.SessionArray[UserData.nSocketIdx].boStartLogon)// 第一个人物登录数据包
+                                        if (_session.boStartLogon)// 第一个人物登录数据包
                                         {
                                             // 第一个人物登录数据包   **1111/小小/6/120040918/0
                                             sDataText = EDcode.DeCodeString(sData);
                                             if ((sDataText[0] != '*') || (sDataText[1] != '*'))// 非法登陆
                                             {
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].nSckHandle = -1;
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].sSendData = "";
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Close();
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket = null;
+                                                _session.nSckHandle = -1;
+                                                _session.sSocData = "";
+                                                _session.sSendData = "";
+                                                _session.Socket.Close();
+                                                _session.Socket = null;
                                                 return;
                                             }
                                             //HandleLogin();
                                             sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { "/" });
-                                            sDataText = HUtil32.GetValidStr3(sDataText, ref UserData.UserClient.SessionArray[UserData.nSocketIdx].sUserName, new string[] { "/" }); // 取角色名
+                                            sDataText = HUtil32.GetValidStr3(sDataText, ref _session.sUserName, new string[] { "/" }); // 取角色名
                                             sDataText = "";
                                             sHumName = "";
                                             //nHumLogonMsgSize += sData.Length;
-                                            UserData.UserClient.SessionArray[UserData.nSocketIdx].boStartLogon = false;
+                                            _session.boStartLogon = false;
                                             sData = "#" + nPacketIdx + sData + "!";
                                             var sendBuff = HUtil32.GetBytes(sData);
-                                            Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
-                                                UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, sendBuff.Length, sendBuff);
+                                            Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, sendBuff.Length, sendBuff);
                                         }
                                         else
                                         {
@@ -164,25 +165,25 @@ namespace GameGate
                                             DefMsg = EDcode.DecodeMessage(sDefMsg); // 检查数据
                                             if (GateShare.boStartSpeedCheck) //游戏速度控制
                                             {
-                                                if (!UserData.UserClient.SessionArray[UserData.nSocketIdx].boSendAvailable)
+                                                if (!_session.boSendAvailable)
                                                 {
                                                     break;
                                                 }
-                                                var btSpeedControlMode = CheckDefMsg(DefMsg, UserData.UserClient.SessionArray[UserData.nSocketIdx], ref sDataMsg);
+                                                var btSpeedControlMode = CheckDefMsg(DefMsg, _session, ref sDataMsg);
                                                 switch (btSpeedControlMode)
                                                 {
                                                     case 0:// 0停顿操作
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";// 清空所有当前动作
+                                                        _session.sSocData = "";// 清空所有当前动作
                                                         _gameSpeed.dwContinueTick = HUtil32.GetTickCount();// 保存停顿操作时间
-                                                        SendWarnMsg(UserData.UserClient.SessionArray[UserData.nSocketIdx], GateShare.jWarningMsg, GateShare.btMsgFColorJ, GateShare.btMsgBColorJ);// 提示文字警告
+                                                        SendWarnMsg(_session, GateShare.jWarningMsg, GateShare.btMsgFColorJ, GateShare.btMsgBColorJ);// 提示文字警告
                                                         continue;
                                                     case 1:// 1延迟处理
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].bosendAvailableStart = true;
-                                                        SendWarnMsg(UserData.UserClient.SessionArray[UserData.nSocketIdx], GateShare.yWarningMsg, GateShare.btMsgFColorY, GateShare.btMsgBColorY);// 提示文字警告
+                                                        _session.bosendAvailableStart = true;
+                                                        SendWarnMsg(_session, GateShare.yWarningMsg, GateShare.btMsgFColorY, GateShare.btMsgBColorY);// 提示文字警告
                                                         break;
                                                     case 2:// 2游戏掉线
                                                         mSpeedCount++;// 统计防御
-                                                        sHumName = UserData.UserClient.SessionArray[UserData.nSocketIdx].sUserName;
+                                                        sHumName = _session.sUserName;
                                                         if (!GateShare.GameSpeedList.ContainsKey(sHumName))
                                                         {
                                                             GateShare.GameSpeedList.TryAdd(sHumName, sHumName);
@@ -191,19 +192,18 @@ namespace GameGate
                                                         {
                                                             GateShare.AddMainLogMsg("[超速提示]:" + sHumName + " 使用非法加速，已被T下线。", 3);
                                                         }
-                                                        SendWarnMsg(UserData.UserClient.SessionArray[UserData.nSocketIdx], GateShare.sWarningMsg, GateShare.btMsgFColorS, GateShare.btMsgBColorS);// 提示文字警告
-                                                        Send(Grobal2.GM_CLOSE, 0, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle, 0, 0, null);// 发送给M2，通知T人
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].nSckHandle = -1;
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSendData = "";
+                                                        SendWarnMsg(_session, GateShare.sWarningMsg, GateShare.btMsgFColorS, GateShare.btMsgBColorS);// 提示文字警告
+                                                        Send(Grobal2.GM_CLOSE, 0, (int)_session.Socket.Handle, 0, 0, null);// 发送给M2，通知T人
+                                                        _session.nSckHandle = -1;
+                                                        _session.sSocData = "";
+                                                        _session.sSendData = "";
+                                                        _session.Socket.Close();
+                                                        _session.Socket = null;
                                                         _gameSpeed.nErrorCount = 0;// 清理累计
-                                                        //UserData.UserClient.SessionCount -= 1;
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Close();
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket = null;
                                                         return;
                                                     case 3:// 3 执行脚本
                                                         nSpeedCount++;// 统计防御
-                                                        sHumName = UserData.UserClient.SessionArray[UserData.nSocketIdx].sUserName;
+                                                        sHumName = _session.sUserName;
                                                         if (!GateShare.GameSpeedList.ContainsKey(sHumName))
                                                         {
                                                             GateShare.GameSpeedList.TryAdd(sHumName, sHumName);
@@ -212,17 +212,18 @@ namespace GameGate
                                                         {
                                                             GateShare.AddMainLogMsg("[超速提示]:" + sHumName + " 使用非法加速，已脚本处理。", 3);
                                                         }
-                                                        SendWarnMsg(UserData.UserClient.SessionArray[UserData.nSocketIdx], GateShare.sWarningMsg, GateShare.btMsgFColorS, GateShare.btMsgBColorS);// 提示文字警告
+                                                        SendWarnMsg(_session, GateShare.sWarningMsg, GateShare.btMsgFColorS, GateShare.btMsgBColorS);// 提示文字警告
                                                         _gameSpeed.nErrorCount = 0;// 清理累计
                                                         Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SAY, 0, 0, 0, 0);
-                                                        sMsg = "#" + 0 + EDcode.EncodeMessage(Msg) + EDcode.EncodeString("@加速处理") + "!" + sMsg;
+                                                        sMsg = "#" + 0 + EDcode.EncodeMessage(Msg) + EDcode.EncodeString("@@加速处理") + "!" + sMsg;
+                                                        //todo 应该直接抄送一份数据给M2，进行直接处理
                                                         break;
                                                     case 4:// 4 抛出封包
                                                         continue;
                                                     case 10:// 0 + 10 抛出封包      转身、挖肉、拣取  说话过滤
                                                         continue;
                                                     case 11:// 1 + 10 延迟处理      喝药
-                                                        UserData.UserClient.SessionArray[UserData.nSocketIdx].bosendAvailableStart = true;
+                                                        _session.bosendAvailableStart = true;
                                                         break;
                                                 }
                                             }
@@ -232,14 +233,12 @@ namespace GameGate
                                                 Buffer.BlockCopy(DefMsg.GetPacket(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
                                                 var msgBuff = HUtil32.GetBytes(sDataMsg);
                                                 Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
-                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
-                                                         UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, DataBuffer.Length, DataBuffer);
+                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, DataBuffer.Length, DataBuffer);
                                             }
                                             else
                                             {
                                                 DataBuffer = DefMsg.GetPacket();
-                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)UserData.UserClient.SessionArray[UserData.nSocketIdx].Socket.Handle,
-                                                    UserData.UserClient.SessionArray[UserData.nSocketIdx].nUserListIndex, 12, DataBuffer);
+                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, 12, DataBuffer);
                                             }
                                         }
                                     }
@@ -261,11 +260,11 @@ namespace GameGate
                                 break;
                             }
                         }
-                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = sMsg;
+                        _session.sSocData = sMsg;
                     }
                     else
                     {
-                        UserData.UserClient.SessionArray[UserData.nSocketIdx].sSocData = "";
+                        _session.sSocData = "";
                     }
                 }
             }
@@ -273,7 +272,7 @@ namespace GameGate
             {
                 if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
                 {
-                    sData = "[" + UserData.UserClient.SessionArray[UserData.nSocketIdx].sRemoteAddr + "]";
+                    sData = "[" + _session.sRemoteAddr + "]";
                 }
                 GateShare.AddMainLogMsg("[Exception] ProcessUserPacket" + sData, 1);
             }
@@ -909,16 +908,14 @@ namespace GameGate
                         // 原理:外挂利用挖地.自身不显示下蹲动作,而达到比正常玩家快1步.
                         // 每次保存上一次动作,判断挖地操作后,少下蹲动作,作为挖地暗杀处理.
                         // ------------------------------------
-                        if (GateShare.boDarkHitCheck)
+                        if (GateShare.boDarkHitCheck) // 封挖地暗杀
                         {
-                            // 封挖地暗杀
                             if (_gameSpeed.dwUserDoTick == Grobal2.CM_BUTCH)
                             {
                                 result = 2;// 返回掉线处理
                                 return result;
                             }
                         }
-                        // ------------------------------------
                         if ((HUtil32.GetTickCount() - _gameSpeed.dwContinueTick) < 3000)// 停顿操作后3秒内数据全部抛出
                         {
                             result = 4; // 返回抛出数据
@@ -927,9 +924,8 @@ namespace GameGate
                         // ------------------------------------
                         // 原理:判断大于10条封包时，含有攻击操作，连续触犯2次，当秒杀处理。
                         // ------------------------------------
-                        if (GateShare.boStartConHitMaxCheck)
+                        if (GateShare.boStartConHitMaxCheck)// 带有攻击并发控制
                         {
-                            // 带有攻击并发控制
                             nMsgCount = HUtil32.TagCount(SessionInfo.sSocData, '!');
                             if (nMsgCount > GateShare.dwSpinEditConHitMaxTime)
                             {
@@ -1496,28 +1492,19 @@ namespace GameGate
         /// </summary>
         private void SendWarnMsg(TSessionInfo SessionInfo, string sMsg, byte FColor, byte BColor)
         {
-            TDefaultMessage DefMsg;
-            string sSendText;
-            try
+            if ((SessionInfo == null))
             {
-                if ((SessionInfo == null))
-                {
-                    return;
-                }
-                if ((SessionInfo.Socket == null))
-                {
-                    return;
-                }
-                if (SessionInfo.Socket.Connected)
-                {
-                    DefMsg = Grobal2.MakeDefaultMsg(103, (int)SessionInfo.Socket.Handle, HUtil32.MakeWord(FColor, BColor), 0, 1);
-                    sSendText = "#" + EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sMsg) + "!";
-                    SessionInfo.Socket.SendText(sSendText);
-                }
+                return;
             }
-            catch
+            if ((SessionInfo.Socket == null))
             {
-                GateShare.AddMainLogMsg("[异常] TFrmMain.SendWarnMsg", 1);
+                return;
+            }
+            if (SessionInfo.Socket.Connected)
+            {
+                var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, (int)SessionInfo.Socket.Handle, HUtil32.MakeWord(FColor, BColor), 0, 1);
+                var sSendText = "#" + EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sMsg) + "!";
+                SessionInfo.Socket.SendText(sSendText);
             }
         }
 
@@ -1555,7 +1542,6 @@ namespace GameGate
 
         private void Send(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] dataBuff)
         {
-            
             GateShare.ForwardMsgList.Writer.TryWrite(new ForwardMessage()
             {
                 nIdent = nIdent,

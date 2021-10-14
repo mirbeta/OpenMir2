@@ -23,6 +23,7 @@ namespace GameGate
                 {
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
+                    services.AddSingleton<SessionManager>();
                     services.AddTransient<RunGateClient>();
                     services.AddHostedService<AppService>();
                 });

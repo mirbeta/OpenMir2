@@ -51,85 +51,93 @@ namespace GameSvr
                 {
                     M2Share.g_ChatLoggingList.Add('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + m_sCharName + ": " + sData);
                     m_sOldSayMsg = sData;
-                    if (sData[0] == '/')
+                    if (sData.StartsWith("@@加速处理"))
                     {
-                        sC = sData.Substring(1, sData.Length - 1);
-                        //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.WHO.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0)
-                        //{
-                        //    if (m_btPermission < M2Share.g_GameCommand.WHO.nPerMissionMin)
-                        //    {
-                        //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                        //        return;
-                        //    }
-                        //    HearMsg(format(M2Share.g_sOnlineCountMsg, M2Share.UserEngine.PlayObjectCount));
-                        //    return;
-                        //}
-                        //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.TOTAL.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0) //统计在线人数
-                        //{
-                        //    if (m_btPermission < M2Share.g_GameCommand.TOTAL.nPerMissionMin)
-                        //    {
-                        //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
-                        //        return;
-                        //    }
-                        //    HearMsg(format(M2Share.g_sTotalOnlineCountMsg, M2Share.g_nTotalHumCount));
-                        //    return;
-                        //}
-                        sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { " " });
-                        if (!m_boFilterSendMsg)
-                        {
-                            Whisper(sParam1, sC);
-                        }
+                        M2Share.g_FunctionNPC.GotoLable(this, "@加速处理", false);
                         return;
                     }
-                    if (sData[0] == '!')
+                    switch (sData[0])
                     {
-                        if (sData.Length >= 1)
+                        case '/':
                         {
-                            if (sData[1] == '!') //发送组队消息
+                            sC = sData.Substring(1, sData.Length - 1);
+                            //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.WHO.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0)
+                            //{
+                            //    if (m_btPermission < M2Share.g_GameCommand.WHO.nPerMissionMin)
+                            //    {
+                            //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
+                            //        return;
+                            //    }
+                            //    HearMsg(format(M2Share.g_sOnlineCountMsg, M2Share.UserEngine.PlayObjectCount));
+                            //    return;
+                            //}
+                            //if (string.Compare(sC.Trim(), M2Share.g_GameCommand.TOTAL.sCmd.Trim(), StringComparison.OrdinalIgnoreCase) == 0) //统计在线人数
+                            //{
+                            //    if (m_btPermission < M2Share.g_GameCommand.TOTAL.nPerMissionMin)
+                            //    {
+                            //        SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
+                            //        return;
+                            //    }
+                            //    HearMsg(format(M2Share.g_sTotalOnlineCountMsg, M2Share.g_nTotalHumCount));
+                            //    return;
+                            //}
+                            sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { " " });
+                            if (!m_boFilterSendMsg)
                             {
-                                sC = sData.Substring(3 - 1, sData.Length - 2);
-                                SendGroupText(m_sCharName + ": " + sC);
-                                M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_sCharName + "/:" + sC);
-                                return;
+                                Whisper(sParam1, sC);
                             }
-                            if (sData[1] == '~') //发送行会消息
-                            {
-                                if (m_MyGuild != null)
-                                {
-                                    sC = sData.Substring(2, sData.Length - 2);
-                                    m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
-                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
-                                }
-                                return;
-                            }
-                        }
-                        if (!m_PEnvir.Flag.boQUIZ)
-                        {
-                            if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
-                            {
-                                if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
-                                {
-                                    SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), TMsgColor.c_Red, TMsgType.t_Hint);
-                                    return;
-                                }
-                                m_dwShoutMsgTick = HUtil32.GetTickCount();
-                                sC = sData.Substring(1, sData.Length - 1);
-                                sCryCryMsg = "(!)" + m_sCharName + ": " + sC;
-                                if (m_boFilterSendMsg)
-                                {
-                                    SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
-                                }
-                                else
-                                {
-                                    M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
-                                }
-                                return;
-                            }
-                            SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
                             return;
                         }
-                        SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                        return;
+                        case '!':
+                        {
+                            if (sData.Length >= 1)
+                            {
+                                if (sData[1] == '!') //发送组队消息
+                                {
+                                    sC = sData.Substring(3 - 1, sData.Length - 2);
+                                    SendGroupText(m_sCharName + ": " + sC);
+                                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_sCharName + "/:" + sC);
+                                    return;
+                                }
+                                if (sData[1] == '~') //发送行会消息
+                                {
+                                    if (m_MyGuild != null)
+                                    {
+                                        sC = sData.Substring(2, sData.Length - 2);
+                                        m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
+                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
+                                    }
+                                    return;
+                                }
+                            }
+                            if (!m_PEnvir.Flag.boQUIZ)
+                            {
+                                if ((HUtil32.GetTickCount() - m_dwShoutMsgTick) > 10 * 1000)
+                                {
+                                    if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
+                                    {
+                                        SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        return;
+                                    }
+                                    m_dwShoutMsgTick = HUtil32.GetTickCount();
+                                    sC = sData.Substring(1, sData.Length - 1);
+                                    sCryCryMsg = "(!)" + m_sCharName + ": " + sC;
+                                    if (m_boFilterSendMsg)
+                                    {
+                                        SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
+                                    }
+                                    else
+                                    {
+                                        M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 50, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, sCryCryMsg);
+                                    }
+                                    return;
+                                }
+                                SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
+                                return;
+                            }
+                            SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            return;
+                        }
                     }
                     if (m_boFilterSendMsg)
                     {

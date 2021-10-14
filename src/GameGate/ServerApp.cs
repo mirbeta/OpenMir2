@@ -29,11 +29,13 @@ namespace GameGate
         private Timer sendTime;
         private readonly ServerService _serverService;
         private readonly RunGateClient _runGateClient;
+        private readonly SessionManager _sessionManager;
 
-        public ServerApp(ServerService serverService, RunGateClient runGateClient)
+        public ServerApp(ServerService serverService, RunGateClient runGateClient, SessionManager sessionManager)
         {
             _serverService = serverService;
             _runGateClient = runGateClient;
+            _sessionManager = sessionManager;
             TempLogList = new ArrayList();
             dwLoopCheckTick = HUtil32.GetTickCount();
         }
@@ -55,20 +57,13 @@ namespace GameGate
         /// </summary>
         private async Task ProcessReviceMessage()
         {
-            try
+            while (await GateShare.ReviceMsgList.Reader.WaitToReadAsync())
             {
-                while (await GateShare.ReviceMsgList.Reader.WaitToReadAsync())
+                if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
                 {
-                    if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
-                    {
-                        var clientSession = GateShare.UserSessions[message.UserCientId];
-                        clientSession?.HangdleUserPacket(message);
-                    }
+                    var clientSession = _sessionManager.GetSession(message.UserCientId);
+                    clientSession?.HangdleUserPacket(message);
                 }
-            }
-            catch (Exception E)
-            {
-                GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessUserPacket", 1);
             }
         }
 

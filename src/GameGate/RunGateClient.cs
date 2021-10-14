@@ -12,9 +12,11 @@ namespace GameGate
         /// </summary>
         private readonly ForwardClientService[] _gateClient = new ForwardClientService[10];
         private Timer clientTimer = null;
+        private readonly SessionManager _sessionManager;
         
-        public RunGateClient( )
+        public RunGateClient(SessionManager sessionManager)
         {
+            _sessionManager = sessionManager;
         }
 
         public void LoadConfig()
@@ -88,7 +90,7 @@ namespace GameGate
                 {
                     continue;
                 }
-                for (int j = 0; j < _gateClient[i].SessionArray.Length; j++)
+                for (var j = 0; j < _gateClient[i].SessionArray.Length; j++)
                 {
                     var session = _gateClient[i].SessionArray[j];
                     if (session == null)
@@ -99,11 +101,12 @@ namespace GameGate
                     {
                         continue;
                     }
-                    if (GateShare.UserSessions[session.SocketId] == null)
+                    var userClient = _sessionManager.GetSession(session.SocketId);
+                    if (userClient == null)
                     {
                         continue;
                     }
-                    var gameSpeed = GateShare.UserSessions[session.SocketId].GetGameSpeed();
+                    var gameSpeed = userClient.GetGameSpeed();
                     if ((HUtil32.GetTickCount() - gameSpeed.dwGameTick) > 600000)
                     {
                         gameSpeed.dwWalkTick =HUtil32. GetTickCount();      //走路间隔
