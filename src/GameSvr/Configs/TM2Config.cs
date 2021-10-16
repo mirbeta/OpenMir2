@@ -76,7 +76,6 @@ namespace GameSvr
         public string sMapDir;
         public string sNoticeDir;
         public string sLogDir;
-        public string sPlugDir;
         public string sClientFile1;
         public string sClientFile2;
         public string sClientFile3;
@@ -824,7 +823,7 @@ namespace GameSvr
         public int nLevelValueOfWarrHP;
         public double nLevelValueOfWarrHPRate;
         /// <summary>
-        /// 刷新间隔
+        /// 怪物刷新间隔
         /// </summary>
         public int nProcessMonsterInterval;
         public bool boCheckFail;
@@ -994,11 +993,9 @@ namespace GameSvr
             sMapDir = ".\\Map\\";
             sNoticeDir = ".\\Notice\\";
             sLogDir = ".\\Log\\";
-            sPlugDir = ".\\";
             sClientFile1 = "mir.1";
             sClientFile2 = "mir.Dat";
             sClientFile3 = "mir.3";
-
             sClothsMan = "布衣(男)";
             sClothsWoman = "布衣(女)";
             sWoodenSword = "木剑";
@@ -1073,7 +1070,6 @@ namespace GameSvr
                 {0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0}}
                 };
-
             sHomeMap = "0";
             nHomeX = 289;
             nHomeY = 618;
@@ -1110,7 +1106,6 @@ namespace GameSvr
             sFireBallSkill = "火球术";
             sHealSkill = "治愈术";
             ReNewNameColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 0xB4, 0xFC };
-
             dwReNewNameColorTime = 2000;
             boReNewChangeColor = true;
             boReNewLevelClearExp = true;
