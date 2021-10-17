@@ -5,6 +5,9 @@ namespace GameSvr
 {
     public class TEvent : IDisposable
     {
+        /// <summary>
+        /// 事件ID
+        /// </summary>
         public int Id;
         public int nVisibleFlag = 0;
         public TEnvirnoment m_Envir = null;

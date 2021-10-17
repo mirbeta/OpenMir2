@@ -392,7 +392,6 @@ namespace GameGate
                     userData.nSocketIdx = nSocketIndex;
                     userData.nSocketHandle = nSocket;
                     userData.sMsg = sSendMsg;
-                    userData.UserClient = this;
                     GateShare.SendMsgList.Writer.TryWrite(userData);
                 }
             }

@@ -1621,7 +1621,6 @@ namespace GameSvr
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
                         if (M2Share.g_Config.boOldClientShowHiLevel && m_Abil.Level > 255)
                         {
-                            // '由于您使用的客户端版本太老了，无法正确显示人物信息!!!'
                             SysMsg(M2Share.g_sClientVersionTooOld, TMsgColor.c_Red, TMsgType.t_Hint);
                             SysMsg("Level: " + m_Abil.Level, TMsgColor.c_Green, TMsgType.t_Hint);
                             SysMsg("HP: " + m_WAbil.HP + '-' + m_WAbil.MaxHP, TMsgColor.c_Blue, TMsgType.t_Hint);

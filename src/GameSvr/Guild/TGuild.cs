@@ -1088,7 +1088,7 @@ namespace GameSvr
             return result;
         }
 
-        public void sub_499B4C(TGuild Guild)
+        public void EndGuildWar(TGuild Guild)
         {
             SendGuildMsg("***" + Guild.sGuildName + "行会战争结束");
         }

@@ -5,7 +5,6 @@ namespace GameGate
         public int nSocketIdx;
         public int nSocketHandle;
         public string sMsg;
-        public ForwardClientService UserClient;
         public string UserCientId;
     }
 }

@@ -163,7 +163,7 @@ namespace GameSvr
                     WarGuild = Guild.GuildWarList[j];
                     if ((HUtil32.GetTickCount() - WarGuild.dwWarTick) > WarGuild.dwWarTime)
                     {
-                        Guild.sub_499B4C(WarGuild.Guild);
+                        Guild.EndGuildWar(WarGuild.Guild);
                         Guild.GuildWarList.RemoveAt(j);
                         WarGuild = null;
                         boChanged = true;

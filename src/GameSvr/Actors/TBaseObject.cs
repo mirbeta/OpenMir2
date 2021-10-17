@@ -2639,7 +2639,7 @@ namespace GameSvr
             }
         }
 
-        public byte GetCharColor(TBaseObject BaseObject)
+        protected byte GetCharColor(TBaseObject BaseObject)
         {
             int n10;
             TUserCastle Castle;

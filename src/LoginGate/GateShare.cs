@@ -16,7 +16,6 @@ namespace LoginGate
         public static IList<TSockaddr> CurrIPaddrList = null;
         public static int nIPCountLimit1 = 20;
         public static int nIPCountLimit2 = 40;
-        public static int nShowLogLevel = 3;
         public static string GateClass = "LoginGate";
         public static int ServerPort = 5500;
         public static string ServerAddr = "10.10.0.168";
@@ -74,11 +73,8 @@ namespace LoginGate
 
         public static void MainOutMessage(string sMsg, int nMsgLevel)
         {
-            if (nMsgLevel <= GateShare.nShowLogLevel)
-            {
-                string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
-                MainLogMsgList.Add(tMsg);
-            }
+            string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+            MainLogMsgList.Add(tMsg);
         }
 
         public static void SaveBlockIPList()

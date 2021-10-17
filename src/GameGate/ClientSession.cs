@@ -29,7 +29,7 @@ namespace GameGate
         private bool _SpeedLimit;
         private TSessionInfo _session;
         
-        public UserClientSession()
+        public UserClientSession(TSessionInfo session)
         {
             _gameSpeed = new GameSpeed();
             _gameSpeed.nErrorCount = 0; // 加速的累计值
@@ -57,6 +57,7 @@ namespace GameGate
             _gameSpeed.dwCombinationCount = 0; // 智能攻击累计
             _gameSpeed.dwGameTick = HUtil32.GetTickCount(); // 在线时间
             _msgList = new List<TDelayMsg>();
+            _session = session;
         }
 
         public GameSpeed GetGameSpeed()
@@ -64,8 +65,14 @@ namespace GameGate
             return _gameSpeed;
         }
 
+        public TSessionInfo GetSession()
+        {
+            return _session;
+        }
+
         /// <summary>
         /// 处理客户端发送过来的封包
+        /// todo 这里只需要封包就好 不需要在额外处理
         /// </summary>
         /// <param name="UserData"></param>
         public void HangdleUserPacket(TSendUserData UserData)
@@ -92,8 +99,8 @@ namespace GameGate
             {
                 n14 = 0;
                 //nProcessMsgSize += UserData.sMsg.Length;
-                _session = UserData.UserClient.SessionArray[UserData.nSocketIdx];
-                if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
+                //_session = UserData.UserClient.SessionArray[UserData.nSocketIdx];
+                if (UserData.nSocketIdx >= 0)
                 {
                     if (UserData.nSocketHandle == _session.nSckHandle && _session.nPacketErrCount < 10)
                     {
@@ -270,7 +277,7 @@ namespace GameGate
             }
             catch
             {
-                if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
+                if (UserData.nSocketIdx >= 0)
                 {
                     sData = "[" + _session.sRemoteAddr + "]";
                 }

@@ -98,116 +98,109 @@ namespace GameGate
             ShowMainLogMsg();
             if (!GateShare.boDecodeMsgLock)
             {
+
+                if ((HUtil32.GetTickCount() - dwRefConsoleMsgTick) >= 10000)
+                {
+                    dwRefConsoleMsgTick = HUtil32.GetTickCount();
+                    if (!GateShare.boShowBite)
+                    {
+                        Debug.WriteLine("接收: " + _serverService.NReviceMsgSize / 1024 + " KB");
+                        //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
+                        Debug.WriteLine("编码: " + nProcessMsgSize / 1024 + " KB");
+                        Debug.WriteLine("登录: " + nHumLogonMsgSize / 1024 + " KB");
+                        Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
+                        Debug.WriteLine("解码: " + nDeCodeMsgSize / 1024 + " KB");
+                        Debug.WriteLine("发送: " + nSendBlockSize / 1024 + " KB");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("接收: " + _serverService.NReviceMsgSize + " B");
+                        //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size + " B");
+                        Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
+                        Debug.WriteLine("编码: " + nProcessMsgSize + " B");
+                        Debug.WriteLine("登录: " + nHumLogonMsgSize + " B");
+                        Debug.WriteLine("普通: " + nHumPlayMsgSize + " B");
+                        Debug.WriteLine("解码: " + nDeCodeMsgSize + " B");
+                        Debug.WriteLine("发送: " + nSendBlockSize + " B");
+                        if (GateShare.dwCheckServerTimeMax > 1)
+                        {
+                            GateShare.dwCheckServerTimeMax -= 1;
+                        }
+                    }
+                    //_userClient.nBufferOfM2Size = 0;
+                    _serverService.NReviceMsgSize = 0;
+                    nDeCodeMsgSize = 0;
+                    nSendBlockSize = 0;
+                    nProcessMsgSize = 0;
+                    nHumLogonMsgSize = 0;
+                    nHumPlayMsgSize = 0;
+                }
                 try
                 {
-                    if ((HUtil32.GetTickCount() - dwRefConsoleMsgTick) >= 10000)
+                    dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
+                    if ((HUtil32.GetTickCount() - dwProcessPacketTick) > 300)
                     {
-                        dwRefConsoleMsgTick = HUtil32.GetTickCount();
-                        if (!GateShare.boShowBite)
+                        dwProcessPacketTick = HUtil32.GetTickCount();
+                        if (GateShare.ReviceMsgList.Reader.Count > 0)
                         {
-                            Debug.WriteLine("接收: " + _serverService.NReviceMsgSize / 1024 + " KB");
-                            //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size / 1024 + " KB");
-                            Debug.WriteLine("编码: " + nProcessMsgSize / 1024 + " KB");
-                            Debug.WriteLine("登录: " + nHumLogonMsgSize / 1024 + " KB");
-                            Debug.WriteLine("普通: " + nHumPlayMsgSize / 1024 + " KB");
-                            Debug.WriteLine("解码: " + nDeCodeMsgSize / 1024 + " KB");
-                            Debug.WriteLine("发送: " + nSendBlockSize / 1024 + " KB");
+                            if (GateShare.dwProcessReviceMsgTimeLimit < 300)
+                            {
+                                GateShare.dwProcessReviceMsgTimeLimit++;
+                            }
                         }
                         else
                         {
-                            Debug.WriteLine("接收: " + _serverService.NReviceMsgSize + " B");
-                            //Debug.WriteLine( "服务器通讯: " + _userClient.nBufferOfM2Size + " B");
-                            Debug.WriteLine("通讯自检: " + GateShare.dwCheckServerTimeMin + "/" + GateShare.dwCheckServerTimeMax);
-                            Debug.WriteLine("编码: " + nProcessMsgSize + " B");
-                            Debug.WriteLine("登录: " + nHumLogonMsgSize + " B");
-                            Debug.WriteLine("普通: " + nHumPlayMsgSize + " B");
-                            Debug.WriteLine("解码: " + nDeCodeMsgSize + " B");
-                            Debug.WriteLine("发送: " + nSendBlockSize + " B");
-                            if (GateShare.dwCheckServerTimeMax > 1)
+                            if (GateShare.dwProcessReviceMsgTimeLimit > 30)
                             {
-                                GateShare.dwCheckServerTimeMax -= 1;
+                                GateShare.dwProcessReviceMsgTimeLimit -= 1;
                             }
                         }
-                        //_userClient.nBufferOfM2Size = 0;
-                        _serverService.NReviceMsgSize = 0;
-                        nDeCodeMsgSize = 0;
-                        nSendBlockSize = 0;
-                        nProcessMsgSize = 0;
-                        nHumLogonMsgSize = 0;
-                        nHumPlayMsgSize = 0;
-                    }
-                    try
-                    {
-                        dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
-                        if ((HUtil32.GetTickCount() - dwProcessPacketTick) > 300)
+                        if (GateShare.SendMsgList.Reader.Count > 0)
                         {
-                            dwProcessPacketTick = HUtil32.GetTickCount();
-                            if (GateShare.ReviceMsgList.Reader.Count > 0)
+                            if (GateShare.dwProcessSendMsgTimeLimit < 300)
                             {
-                                if (GateShare.dwProcessReviceMsgTimeLimit < 300)
-                                {
-                                    GateShare.dwProcessReviceMsgTimeLimit++;
-                                }
+                                GateShare.dwProcessSendMsgTimeLimit++;
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (GateShare.dwProcessSendMsgTimeLimit > 30)
                             {
-                                if (GateShare.dwProcessReviceMsgTimeLimit > 30)
-                                {
-                                    GateShare.dwProcessReviceMsgTimeLimit -= 1;
-                                }
+                                GateShare.dwProcessSendMsgTimeLimit -= 1;
                             }
-                            if (GateShare.SendMsgList.Reader.Count > 0)
+                        }
+                        var clientList = _runGateClient.GetAllClient();
+                        for (var i = 0; i < clientList.Count; i++)
+                        {
+                            if (clientList[i] == null)
                             {
-                                if (GateShare.dwProcessSendMsgTimeLimit < 300)
-                                {
-                                    GateShare.dwProcessSendMsgTimeLimit++;
-                                }
+                                continue;
                             }
-                            else
+                            for (var j = 0; j < clientList[i].GetMaxSession(); j++)
                             {
-                                if (GateShare.dwProcessSendMsgTimeLimit > 30)
+                                UserSession = clientList[i].SessionArray[j];
+                                if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
                                 {
-                                    GateShare.dwProcessSendMsgTimeLimit -= 1;
-                                }
-                            }
-                            var clientList = _runGateClient.GetAllClient();
-                            for (var i = 0; i < clientList.Count; i++)
-                            {
-                                if (clientList[i] == null)
-                                {
-                                    continue;
-                                }
-                                for (var j = 0; j < clientList[i].GetMaxSession(); j++)
-                                {
-                                    UserSession = clientList[i].SessionArray[j];
-                                    if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
+                                    tUserData = new TSendUserData();
+                                    tUserData.nSocketIdx = j;
+                                    tUserData.nSocketHandle = UserSession.nSckHandle;
+                                    tUserData.sMsg = "";
+                                    tUserData.UserCientId = UserSession.SocketId;
+                                    ProcessPacket(tUserData);
+                                    if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
                                     {
-                                        tUserData = new TSendUserData();
-                                        tUserData.nSocketIdx = j;
-                                        tUserData.nSocketHandle = UserSession.nSckHandle;
-                                        tUserData.sMsg = "";
-                                        tUserData.UserClient = clientList[i];
-                                        ProcessPacket(tUserData);
-                                        if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
-                                        {
-                                            break;
-                                        }
+                                        break;
                                     }
                                 }
                             }
                         }
                     }
-                    catch (Exception E)
-                    {
-                        GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessPacket 2", 1);
-                    }
-                    GateShare.boDecodeMsgLock = false;
                 }
                 catch (Exception E)
                 {
-                    GateShare.AddMainLogMsg("[Exception] DecodeTimer", 1);
-                    GateShare.boDecodeMsgLock = false;
+                    GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessPacket 2", 1);
                 }
+                GateShare.boDecodeMsgLock = false;
                 dwLoopProcessTime = HUtil32.GetTickCount() - dwLoopCheckTick;
                 dwLoopCheckTick = HUtil32.GetTickCount();
                 if (dwLoopTime < dwLoopProcessTime)
@@ -231,9 +224,14 @@ namespace GameGate
             string sData;
             string sSendBlock;
             TSessionInfo UserSession;
-            if (UserData.nSocketIdx >= 0 && UserData.nSocketIdx < UserData.UserClient.GetMaxSession())
+            if (UserData.nSocketIdx >= 0)
             {
-                UserSession = UserData.UserClient.SessionArray[UserData.nSocketIdx];
+                var userSession = _sessionManager.GetSession(UserData.UserCientId);
+                if (userSession == null)
+                {
+                    return;
+                }
+                UserSession = userSession?.GetSession();
                 if (UserSession.nSckHandle == UserData.nSocketHandle)
                 {
                     nDeCodeMsgSize += UserData.sMsg.Length;

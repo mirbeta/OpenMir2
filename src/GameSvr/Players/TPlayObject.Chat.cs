@@ -6,6 +6,96 @@ namespace GameSvr
 {
     public partial class TPlayObject
     {
+        protected virtual void Whisper(string whostr, string saystr)
+        {
+            var svidx = 0;
+            var PlayObject = M2Share.UserEngine.GetPlayObject(whostr);
+            if (PlayObject != null)
+            {
+                if (!PlayObject.m_boReadyRun)
+                {
+                    SysMsg(whostr + M2Share.g_sCanotSendmsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
+                if (!PlayObject.m_boHearWhisper || PlayObject.IsBlockWhisper(m_sCharName))
+                {
+                    SysMsg(whostr + M2Share.g_sUserDenyWhisperMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    return;
+                }
+                if (!m_boOffLineFlag && PlayObject.m_boOffLineFlag)
+                {
+                    if (PlayObject.m_sOffLineLeaveword != "")
+                    {
+                        PlayObject.Whisper(m_sCharName, PlayObject.m_sOffLineLeaveword);
+                    }
+                    else
+                    {
+                        PlayObject.Whisper(m_sCharName, M2Share.g_Config.sServerName + '[' + M2Share.g_Config.sServerIPaddr + "]提示您");
+                    }
+                    return;
+                }
+                if (m_btPermission > 0)
+                {
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
+                    {
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                    }
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
+                    {
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor, M2Share.g_Config.btGMWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                    }
+                }
+                else
+                {
+                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=> " + saystr);
+                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.m_boGhost)
+                    {
+                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                    }
+                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.m_boGhost)
+                    {
+                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor, M2Share.g_Config.btWhisperMsgBColor, 0, m_sCharName + "=>" + PlayObject.m_sCharName + ' ' + saystr);
+                    }
+                }
+            }
+            else
+            {
+                if (M2Share.UserEngine.FindOtherServerUser(whostr, ref svidx))
+                {
+                    M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + m_sCharName + "=> " + saystr);
+                }
+                else
+                {
+                    SysMsg(whostr + M2Share.g_sUserNotOnLine, TMsgColor.c_Red, TMsgType.t_Hint);
+                }
+            }
+        }
+
+        public void WhisperRe(string SayStr, byte MsgType)
+        {
+            var sendwho = string.Empty;
+            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] { "[", " ", "=", ">" });
+            if (m_boHearWhisper && !IsBlockWhisper(sendwho))
+            {
+                switch (MsgType)
+                {
+                    case 0:
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btGMWhisperMsgFColor,
+                            M2Share.g_Config.btGMWhisperMsgBColor, 0, SayStr);
+                        break;
+                    case 1:
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btWhisperMsgFColor,
+                            M2Share.g_Config.btWhisperMsgBColor, 0, SayStr);
+                        break;
+                    case 2:
+                        SendMsg(this, Grobal2.RM_WHISPER, 0, M2Share.g_Config.btPurpleMsgFColor,
+                            M2Share.g_Config.btPurpleMsgBColor, 0, SayStr);
+                        break;
+                }
+            }
+        }
+
         /// <summary>
         /// 处理玩家说话
         /// </summary>
