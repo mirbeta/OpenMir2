@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Sockets;
 
 namespace GameGate
 {
@@ -176,15 +175,13 @@ namespace GameGate
                             {
                                 continue;
                             }
-                            for (var j = 0; j < clientList[i].GetMaxSession(); j++)
+                            for (var j = 0; j < clientList[i].MaxSession; j++)
                             {
                                 UserSession = clientList[i].SessionArray[j];
                                 if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
                                 {
                                     tUserData = new TSendUserData();
-                                    tUserData.nSocketIdx = j;
                                     tUserData.nSocketHandle = UserSession.nSckHandle;
-                                    tUserData.sMsg = "";
                                     tUserData.UserCientId = UserSession.SocketId;
                                     ProcessPacket(tUserData);
                                     if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
@@ -221,82 +218,12 @@ namespace GameGate
 
         private void ProcessPacket(TSendUserData UserData)
         {
-            string sData;
-            string sSendBlock;
-            TSessionInfo UserSession;
-            if (UserData.nSocketIdx >= 0)
+            var userSession = _sessionManager.GetSession(UserData.UserCientId);
+            if (userSession == null)
             {
-                var userSession = _sessionManager.GetSession(UserData.UserCientId);
-                if (userSession == null)
-                {
-                    return;
-                }
-                UserSession = userSession?.GetSession();
-                if (UserSession.nSckHandle == UserData.nSocketHandle)
-                {
-                    nDeCodeMsgSize += UserData.sMsg.Length;
-                    sData = UserSession.sSendData + UserData.sMsg;
-                    while (!string.IsNullOrEmpty(sData))
-                    {
-                        if (sData.Length > GateShare.nClientSendBlockSize)
-                        {
-                            sSendBlock = sData.Substring(0, GateShare.nClientSendBlockSize);
-                            sData = sData.Substring(GateShare.nClientSendBlockSize, sData.Length - GateShare.nClientSendBlockSize);
-                        }
-                        else
-                        {
-                            sSendBlock = sData;
-                            sData = "";
-                        }
-                        //检查延迟处理
-                        // if (!UserSession.bosendAvailableStart)
-                        // {
-                        //     UserSession.bosendAvailableStart = false;
-                        //     UserSession.boSendAvailable = false;
-                        //     UserSession.dwTimeOutTime = HUtil32.GetTickCount();
-                        // }
-                        if (!UserSession.boSendAvailable) //用户延迟处理
-                        {
-                            if (HUtil32.GetTickCount() > UserSession.dwTimeOutTime)
-                            {
-                                UserSession.boSendAvailable = true;
-                                UserSession.nCheckSendLength = 0;
-                                GateShare.boSendHoldTimeOut = true;
-                                GateShare.dwSendHoldTick = HUtil32.GetTickCount();
-                            }
-                        }
-                        if (UserSession.boSendAvailable)
-                        {
-                            if (UserSession.nCheckSendLength >= GateShare.SENDCHECKSIZE)
-                            {
-                                //M2发送大于512字节封包加'*'
-                                if (!UserSession.boSendCheck)
-                                {
-                                    UserSession.boSendCheck = true;
-                                    sSendBlock = "*" + sSendBlock;
-                                }
-                                if (UserSession.nCheckSendLength >= GateShare.SENDCHECKSIZEMAX)
-                                {
-                                    UserSession.boSendAvailable = false;
-                                    UserSession.dwTimeOutTime = HUtil32.GetTickCount() + GateShare.dwClientCheckTimeOut;
-                                }
-                            }
-                            if (UserSession.Socket != null && UserSession.Socket.Connected)
-                            {
-                                nSendBlockSize += sSendBlock.Length;
-                                UserSession.Socket.SendText(sSendBlock);
-                            }
-                            UserSession.nCheckSendLength += sSendBlock.Length;
-                        }
-                        else
-                        {
-                            sData = sSendBlock + sData;
-                            break;
-                        }
-                    }
-                    UserSession.sSendData = sData;
-                }
+                return;
             }
+            userSession.SeneMessage(UserData);
         }
 
         public void StartService()
@@ -492,7 +419,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    for (var j = 0; j < clientList[i].GetMaxSession(); j++)
+                    for (var j = 0; j < clientList[i].MaxSession; j++)
                     {
                         UserSession = clientList[i].SessionArray[j];
                         if (UserSession.Socket != null)

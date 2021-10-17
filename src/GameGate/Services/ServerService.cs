@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Microsoft.Extensions.Logging.Console;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -19,7 +18,7 @@ namespace GameGate
         public ServerService(SessionManager sessionManager)
         {
             _sessionManager = sessionManager;
-            _serverSocket = new ISocketServer(2000, 10);
+            _serverSocket = new ISocketServer(2000, 50);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -46,7 +45,6 @@ namespace GameGate
         {
             TSessionInfo userSession = null;
             var sRemoteAddress = e.RemoteIPaddr;
-            var nSockIdx = 0;
             //todo 新玩家链接的时候要随机分配一个可用网关客户端
             //根据配置文件有三种模式
             //1.轮询分配
@@ -65,7 +63,7 @@ namespace GameGate
 
             Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏服务器[{gateclient.GateIdx}] Server:{gateclient.GetSocketIp()}");
 
-            for (var nIdx = 0; nIdx < gateclient.SessionArray.Length; nIdx++)
+            for (var nIdx = 0; nIdx < gateclient.MaxSession; nIdx++)
             {
                 userSession = gateclient.SessionArray[nIdx];
                 if (userSession.Socket == null)
@@ -88,14 +86,14 @@ namespace GameGate
                     userSession.boSendAvailable = true; // 用户延迟处理。
                     userSession.bosendAvailableStart = false; // 开启用户延迟处理。
                     userSession.dwClientCheckTimeOut = 200; // 延迟发送给客户端间隔
-                    nSockIdx = nIdx;
+                    userSession.SocketIdx = nIdx;
                     GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
                     break;
                 }
             }
-            if (nSockIdx < gateclient.GetMaxSession())
+            if (userSession.SocketIdx < gateclient.MaxSession)
             {
-                gateclient.SendServerMsg(Grobal2.GM_OPEN, nSockIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
+                gateclient.SendServerMsg(Grobal2.GM_OPEN, userSession.SocketIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
                 _sessionManager.AddSession(e.ConnectionId, new UserClientSession(userSession));
@@ -116,7 +114,7 @@ namespace GameGate
             var userClinet = GateShare.GetUserClient(e.ConnectionId);
             if (userClinet != null)
             {
-                if (nSockIndex >= 0 && nSockIndex < userClinet.GetMaxSession())
+                if (nSockIndex >= 0 && nSockIndex < userClinet.MaxSession)
                 {
                     userSession = userClinet.SessionArray[nSockIndex];
                     userSession.Socket = null;
@@ -171,13 +169,13 @@ namespace GameGate
                 }
                 try
                 {
-                    long dwProcessMsgTick = HUtil32.GetTickCount();
+                    int dwProcessMsgTick = HUtil32.GetTickCount();
                     var nReviceLen = token.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
                     var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                     var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
-                    if (nSocketIndex >= 0 && nSocketIndex < userClient.GetMaxSession() && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
+                    if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                     {
                         if (nReviceLen > GateShare.nNomClientPacketSize)
                         {
@@ -231,7 +229,6 @@ namespace GameGate
                             if (GateShare.boGateReady && !string.IsNullOrEmpty(sReviceMsg))
                             {
                                 var userData = new TSendUserData();
-                                userData.nSocketIdx = nSocketIndex;
                                 userData.nSocketHandle = (int)token.Socket.Handle;
                                 userData.sMsg = sReviceMsg;
                                 userData.UserCientId = token.ConnectionId;

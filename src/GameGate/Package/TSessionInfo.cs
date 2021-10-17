@@ -5,6 +5,9 @@ namespace GameGate
     public class TSessionInfo
     {
         public Socket Socket;
+        public int SocketIdx;
+        public string SocketId;
+        public int nSckHandle;
         public string sSocData;
         public string sSendData;
         public int nUserListIndex;
@@ -20,9 +23,7 @@ namespace GameGate
         public bool boSendCheck;
         public long dwTimeOutTime;
         public long dwReceiveTick;
-        public int nSckHandle;
         public string sRemoteAddr;
-        public string SocketId;
         /// <summary>
         /// 发言间隔控制
         /// </summary>

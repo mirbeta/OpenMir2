@@ -99,8 +99,7 @@ namespace GameGate
             {
                 n14 = 0;
                 //nProcessMsgSize += UserData.sMsg.Length;
-                //_session = UserData.UserClient.SessionArray[UserData.nSocketIdx];
-                if (UserData.nSocketIdx >= 0)
+                if (_session.SocketIdx >= 0)
                 {
                     if (UserData.nSocketHandle == _session.nSckHandle && _session.nPacketErrCount < 10)
                     {
@@ -153,7 +152,7 @@ namespace GameGate
                                             _session.boStartLogon = false;
                                             sData = "#" + nPacketIdx + sData + "!";
                                             var sendBuff = HUtil32.GetBytes(sData);
-                                            Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, sendBuff.Length, sendBuff);
+                                            Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, sendBuff.Length, sendBuff);
                                         }
                                         else
                                         {
@@ -240,12 +239,12 @@ namespace GameGate
                                                 Buffer.BlockCopy(DefMsg.GetPacket(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
                                                 var msgBuff = HUtil32.GetBytes(sDataMsg);
                                                 Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
-                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, DataBuffer.Length, DataBuffer);
+                                                Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, DataBuffer.Length, DataBuffer);
                                             }
                                             else
                                             {
                                                 DataBuffer = DefMsg.GetPacket();
-                                                Send(Grobal2.GM_DATA, UserData.nSocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, 12, DataBuffer);
+                                                Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, 12, DataBuffer);
                                             }
                                         }
                                     }
@@ -277,7 +276,7 @@ namespace GameGate
             }
             catch
             {
-                if (UserData.nSocketIdx >= 0)
+                if (_session.SocketIdx >= 0)
                 {
                     sData = "[" + _session.sRemoteAddr + "]";
                 }
@@ -440,6 +439,78 @@ namespace GameGate
                 result = true;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 发送消息到客户端
+        /// </summary>
+        public void SeneMessage(TSendUserData UserData)
+        {
+            string sData;
+            string sSendBlock;
+            if (_session.nSckHandle == UserData.nSocketHandle)
+            {
+                //nDeCodeMsgSize += UserData.sMsg.Length;
+                sData = _session.sSendData + UserData.sMsg;
+                while (!string.IsNullOrEmpty(sData))
+                {
+                    if (sData.Length > GateShare.nClientSendBlockSize)
+                    {
+                        sSendBlock = sData.Substring(0, GateShare.nClientSendBlockSize);
+                        sData = sData.Substring(GateShare.nClientSendBlockSize, sData.Length - GateShare.nClientSendBlockSize);
+                    }
+                    else
+                    {
+                        sSendBlock = sData;
+                        sData = "";
+                    }
+                    //检查延迟处理
+                    // if (!UserSession.bosendAvailableStart)
+                    // {
+                    //     UserSession.bosendAvailableStart = false;
+                    //     UserSession.boSendAvailable = false;
+                    //     UserSession.dwTimeOutTime = HUtil32.GetTickCount();
+                    // }
+                    if (!_session.boSendAvailable) //用户延迟处理
+                    {
+                        if (HUtil32.GetTickCount() > _session.dwTimeOutTime)
+                        {
+                            _session.boSendAvailable = true;
+                            _session.nCheckSendLength = 0;
+                            GateShare.boSendHoldTimeOut = true;
+                            GateShare.dwSendHoldTick = HUtil32.GetTickCount();
+                        }
+                    }
+                    if (_session.boSendAvailable)
+                    {
+                        if (_session.nCheckSendLength >= GateShare.SENDCHECKSIZE)//M2发送大于512字节封包加'*'
+                        {
+                            if (!_session.boSendCheck)
+                            {
+                                _session.boSendCheck = true;
+                                sSendBlock = "*" + sSendBlock;
+                            }
+                            if (_session.nCheckSendLength >= GateShare.SENDCHECKSIZEMAX)
+                            {
+                                _session.boSendAvailable = false;
+                                _session.dwTimeOutTime = HUtil32.GetTickCount() + GateShare.dwClientCheckTimeOut;
+                            }
+                        }
+                        if (_session.Socket != null && _session.Socket.Connected)
+                        {
+                            //nSendBlockSize += sSendBlock.Length;
+                            _session.Socket.SendText(sSendBlock);
+                        }
+                        _session.nCheckSendLength += sSendBlock.Length;
+                    }
+                    else
+                    {
+                        sData = sSendBlock + sData;
+                        break;
+                    }
+                }
+                _session.sSendData = sData;
+            }
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, short nParam, short nTag, short nSeries, string sMsg)

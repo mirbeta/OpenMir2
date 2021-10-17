@@ -22,7 +22,7 @@ namespace GameGate
         /// <summary>
         /// 最大用户数
         /// </summary>
-        private const int GATEMAXSESSION = 1000;
+        public int MaxSession = 1000;
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -53,17 +53,12 @@ namespace GameGate
             ClientSocket.OnError += ClientSocketError;
             ClientSocket.Address = serverAddr;
             ClientSocket.Port = serverPort;
-            SessionArray = new TSessionInfo[GATEMAXSESSION];
+            SessionArray = new TSessionInfo[MaxSession];
         }
 
         public string GetSocketIp()
         {
             return $"{ClientSocket.Address}:{ClientSocket.Port}";
-        }
-
-        public int GetMaxSession()
-        {
-            return GATEMAXSESSION;
         }
 
         public void Start()
@@ -116,7 +111,7 @@ namespace GameGate
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             TSessionInfo UserSession;
-            for (var i = 0; i < GATEMAXSESSION; i++)
+            for (var i = 0; i < MaxSession; i++)
             {
                 UserSession = SessionArray[i];
                 if (UserSession.Socket != null)
@@ -178,7 +173,7 @@ namespace GameGate
         public void RestSessionArray()
         {
             TSessionInfo tSession;
-            for (var i = 0; i < GATEMAXSESSION; i++)
+            for (var i = 0; i < MaxSession; i++)
             {
                 if (SessionArray[i] == null)
                 {
@@ -282,7 +277,7 @@ namespace GameGate
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
-                                    if (pMsg.wGSocketIdx < GATEMAXSESSION && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
+                                    if (pMsg.wGSocketIdx < MaxSession && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
                                     {
                                         SessionArray[pMsg.wGSocketIdx].nUserListIndex = pMsg.wUserListIndex;
                                     }
@@ -386,10 +381,9 @@ namespace GameGate
                             break;
                         }
                 }
-                if (nSocketIndex >= 0 && nSocketIndex < GATEMAXSESSION && !string.IsNullOrEmpty(sSendMsg))
+                if (nSocketIndex >= 0 && nSocketIndex < MaxSession && !string.IsNullOrEmpty(sSendMsg))
                 {
                     var userData = new TSendUserData();
-                    userData.nSocketIdx = nSocketIndex;
                     userData.nSocketHandle = nSocket;
                     userData.sMsg = sSendMsg;
                     GateShare.SendMsgList.Writer.TryWrite(userData);

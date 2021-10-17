@@ -11,7 +11,7 @@ namespace GameGate
             _userSessions = new ConcurrentDictionary<string, UserClientSession>();
         }
 
-        public void AddSession(string sessionId,UserClientSession userClientSession)
+        public void AddSession(string sessionId, UserClientSession userClientSession)
         {
             _userSessions.TryAdd(sessionId, userClientSession);
         }
