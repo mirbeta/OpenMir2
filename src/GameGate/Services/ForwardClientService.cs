@@ -138,7 +138,7 @@ namespace GameGate
         {
             try
             {
-                long dwTick14 = HUtil32.GetTickCount();
+                int dwTick14 = HUtil32.GetTickCount();
                 var nMsgLen = e.Buff.Length;
                 ProcReceiveBuffer(e.Buff, nMsgLen);
                 nBufferOfM2Size += nMsgLen;
@@ -246,7 +246,7 @@ namespace GameGate
             const int HeaderMessageSize = 20;
             try
             {
-                if (nBuffLen > 0) //有位处理完成的buff
+                if (nBuffLen > 0) //有未处理完成的buff
                 {
                     var tempBuff = new byte[nBuffLen + nMsgLen];
                     Buffer.BlockCopy(SocketBuffer, 0, tempBuff, 0, nBuffLen);

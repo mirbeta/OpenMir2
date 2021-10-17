@@ -97,7 +97,6 @@ namespace GameGate
             ShowMainLogMsg();
             if (!GateShare.boDecodeMsgLock)
             {
-
                 if ((HUtil32.GetTickCount() - dwRefConsoleMsgTick) >= 10000)
                 {
                     dwRefConsoleMsgTick = HUtil32.GetTickCount();
@@ -406,7 +405,7 @@ namespace GameGate
         private void SendTimerTimer(object obj)
         {
             TSessionInfo UserSession;
-            if (HUtil32.GetTickCount() - GateShare.dwSendHoldTick > 3000)
+            if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3000)
             {
                 GateShare.boSendHoldTimeOut = false;
             }

@@ -152,15 +152,16 @@ namespace GameGate
         /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var clientSession = _sessionManager.GetSession(token.ConnectionId);
+            var connectionId = token.ConnectionId;
+            var clientSession = _sessionManager.GetSession(connectionId);
             if (clientSession != null)
             {
-                var userClient = GateShare.GetUserClient(token.ConnectionId);
+                var userClient = GateShare.GetUserClient(connectionId);
                 string sRemoteAddress = token.RemoteIPaddr;
                 if (userClient == null)
                 {
                     GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
-                    Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{token.ConnectionId}]");
+                    Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                     return;
                 }
                 if (!userClient.SessionArray[userClient.GateIdx].Socket.Connected)
@@ -174,7 +175,7 @@ namespace GameGate
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
                     var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    var nSocketIndex = GateShare.GetSocketIndex(token.ConnectionId);
+                    var nSocketIndex = GateShare.GetSocketIndex(connectionId);
                     if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                     {
                         if (nReviceLen > GateShare.nNomClientPacketSize)
@@ -212,6 +213,7 @@ namespace GameGate
                         {
                             GateShare.AddMainLogMsg(sReviceMsg, 0);
                         }
+                        //此从需要优化处理
                         var userSession = userClient.SessionArray[nSocketIndex];
                         if (userSession.Socket == token.Socket)
                         {
