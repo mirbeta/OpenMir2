@@ -4,7 +4,7 @@ namespace GameSvr
 {
     public class TSpitSpider : TATMonster
     {
-        protected bool m_boUsePoison = false;
+        protected bool m_boUsePoison;
 
         public TSpitSpider() : base()
         {
@@ -15,12 +15,11 @@ namespace GameSvr
 
         private void SpitAttack(byte btDir)
         {
-            TAbility WAbil;
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject;
             this.m_btDirection = btDir;
-            WAbil = this.m_WAbil;
+            var WAbil = this.m_WAbil;
             var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
@@ -59,23 +58,21 @@ namespace GameSvr
 
         protected override bool AttackTarget()
         {
-            var result = false;
             byte btDir = 0;
             if (this.m_TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (this.TargetInSpitRange(this.m_TargetCret, ref btDir))
             {
-                if (HUtil32.GetTickCount() - this.m_dwHitTick > this.m_nNextHitTime)
+                if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
                 {
                     this.m_dwHitTick = HUtil32.GetTickCount();
                     this.m_dwTargetFocusTick = HUtil32.GetTickCount();
                     SpitAttack(btDir);
                     this.BreakHolySeizeMode();
                 }
-                result = true;
-                return result;
+                return true;
             }
             if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
             {
@@ -85,7 +82,7 @@ namespace GameSvr
             {
                 this.DelTargetCreat();
             }
-            return result;
+            return false;
         }
     }
 

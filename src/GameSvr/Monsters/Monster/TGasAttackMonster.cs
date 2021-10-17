@@ -10,9 +10,8 @@ namespace GameSvr
             m_boAnimal = true;
         }
 
-        public virtual TBaseObject sub_4A9C78(byte bt05)
+        protected virtual TBaseObject sub_4A9C78(byte bt05)
         {
-            TBaseObject BaseObject;
             TBaseObject result = null;
             m_btDirection = bt05;
             var WAbil = m_WAbil;
@@ -20,7 +19,7 @@ namespace GameSvr
             if (n10 > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
-                BaseObject = GetPoseCreate();
+                var BaseObject = GetPoseCreate();
                 if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
                 {
                     n10 = BaseObject.GetMagStruckDamage(this, n10);

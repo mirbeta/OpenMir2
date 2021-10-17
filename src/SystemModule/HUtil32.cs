@@ -313,7 +313,7 @@ namespace SystemModule
             string result;
             int i;
             result = "";
-            for (i = 1; i <= str.Length; i++)
+            for (i = 0; i <= str.Length; i++)
                 if (str[i] != ' ')
                     result = result + str[i];
             return result;
@@ -528,7 +528,7 @@ namespace SystemModule
                 }
                 else
                 {
-                    for (var i = 1; i <= srclen; i++)
+                    for (var i = 0; i <= srclen; i++)
                         if (Source[i - 1].ToString() == SearchAfter)
                         {
                             result = Source.Substring(i - 1, srclen - i + 1);
@@ -597,7 +597,7 @@ namespace SystemModule
                 }
                 else
                 {
-                    for (var i = 1; i <= srclen; i++)
+                    for (var i = 0; i <= srclen; i++)
                         if (Source[i - 1].ToString() == SearchAfter.ToString())
                         {
                             result = Source.Substring(i - 1, srclen - i + 1);
@@ -643,7 +643,7 @@ namespace SystemModule
         public static bool IsEnglishStr(string sEngStr)
         {
             var result = false;
-            for (var i = 1; i <= sEngStr.Length; i++)
+            for (var i = 0; i <= sEngStr.Length; i++)
             {
                 result = IsEnglish(sEngStr[i]);
                 if (result) break;

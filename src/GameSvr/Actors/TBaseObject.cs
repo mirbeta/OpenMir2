@@ -806,7 +806,7 @@ namespace GameSvr
             var n24 = 999;
             var n28 = 0;
             var n2C = 0;
-            for (var i = 1; i <= nRange; i++)
+            for (var i = 0; i <= nRange; i++)
             {
                 for (var ii = -i; ii <= i; ii++)
                 {

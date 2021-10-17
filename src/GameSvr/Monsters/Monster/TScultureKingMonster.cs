@@ -23,13 +23,12 @@ namespace GameSvr
 
         private void MeltStone()
         {
-            TEvent __Event;
             m_nCharStatusEx = 0;
             m_nCharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
             m_boStoneMode = false;
-            __Event = new TEvent(m_PEnvir, m_nCurrX, m_nCurrY, 6, 5 * 60 * 1000, true);
-            M2Share.EventManager.AddEvent(__Event);
+            var stoneEvent = new TEvent(m_PEnvir, m_nCurrX, m_nCurrY, 6, 5 * 60 * 1000, true);
+            M2Share.EventManager.AddEvent(stoneEvent);
         }
 
         private void CallSlave()
@@ -39,7 +38,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             var nCount = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref nX, ref nY);
-            for (var i = 1; i <= nCount; i++)
+            for (var i = 0; i <= nCount; i++)
             {
                 if (m_SlaveObjectList.Count >= 30)
                 {
@@ -55,10 +54,8 @@ namespace GameSvr
 
         public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
         {
-            TAbility WAbil;
-            int nPower;
-            WAbil = m_WAbil;
-            nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
+            var WAbil = m_WAbil;
+            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
         }
 

@@ -3565,9 +3565,6 @@ namespace GameSvr
         public bool ActionOfTHROWITEM_RobotGetDropPosition(TEnvirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
         {
             bool result;
-            int I;
-            int II;
-            int III;
             int nItemCount = 0;
             int n24;
             int n28;
@@ -3576,14 +3573,14 @@ namespace GameSvr
             result = false;
             n28 = 0;
             n2C = 0;
-            for (I = 1; I <= nRange; I++)
+            for (var i = 0; i <= nRange; i++)
             {
-                for (II = -I; II <= I; II++)
+                for (var j = -i; j <= i; j++)
                 {
-                    for (III = -I; III <= I; III++)
+                    for (var k = -i; k <= i; k++)
                     {
-                        nDX = nOrgX + III;
-                        nDY = nOrgY + II;
+                        nDX = nOrgX + k;
+                        nDY = nOrgY + j;
                         if (neEnvir.GetItemEx(nDX, nDY, ref nItemCount) == null)
                         {
                             if (neEnvir.bo2C)

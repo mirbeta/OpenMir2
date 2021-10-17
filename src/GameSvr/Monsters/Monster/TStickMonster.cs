@@ -25,10 +25,9 @@ namespace GameSvr
         protected virtual bool AttackTarget()
         {
             byte btDir=0;
-            var result = false;
             if (this.m_TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (this.GetAttackDir(this.m_TargetCret, ref btDir))
             {
@@ -38,8 +37,7 @@ namespace GameSvr
                     this.m_dwTargetFocusTick =HUtil32.GetTickCount();
                     this.Attack(this.m_TargetCret, btDir);
                 }
-                result = true;
-                return result;
+                return true;
             }
             if (this.m_TargetCret.m_PEnvir == this.m_PEnvir)
             {
@@ -49,7 +47,7 @@ namespace GameSvr
             {
                 this.DelTargetCreat();
             }
-            return result;
+            return false;
         }
 
         protected virtual void ComeOut()

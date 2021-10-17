@@ -295,7 +295,7 @@ namespace GameSvr
                     I++;
                 }
                 n01 = 0;
-                for (I = 1; I < WalkPath.Length; I++)
+                for (I = 0; I < WalkPath.Length; I++)
                 {
                     if ((WalkPath[I].nX != -1) && (WalkPath[I].nX != -1))
                     {
@@ -309,7 +309,7 @@ namespace GameSvr
             if ((Path != null) && (Path.Length > 0))
             {
                 result = new PointInfo[Path.Length - 1];
-                for (I = 1; I < Path.Length; I++)
+                for (I = 0; I < Path.Length; I++)
                 {
                     result[I - 1] = Path[I];
                 }

@@ -1632,7 +1632,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             short nCurrX = nX;
             short nCurrY = nY;
-            for (var i = 1; i <= nRange; i++)
+            for (var i = 0; i <= nRange; i++)
             {
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
@@ -2031,7 +2031,7 @@ namespace GameSvr
             short nX = m_nCurrX;
             short nY = m_nCurrY;
             byte btDir = M2Share.GetNextDirection(nX, nY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-            for (var i = 1; i <= nStep; i++)
+            for (var i = 0; i <= nStep; i++)
             {
                 if (m_TargetCret.m_nCurrX == nX && m_TargetCret.m_nCurrY == nY)
                 {
@@ -2057,7 +2057,7 @@ namespace GameSvr
             short nX = 0;
             short nY = 0;
             btDir = M2Share.GetNextDirection(nCurrX, nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
-            for (var i = 1; i <= nRange; i++)
+            for (var i = 0; i <= nRange; i++)
             {
                 if (!m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
@@ -2078,7 +2078,7 @@ namespace GameSvr
             short nY = 0;
             bool result = false;
             btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, BaseObject.m_nCurrX, BaseObject.m_nCurrY);
-            for (var i = 1; i <= nRange; i++)
+            for (var i = 0; i <= nRange; i++)
             {
                 if (!m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nX, ref nY))
                 {

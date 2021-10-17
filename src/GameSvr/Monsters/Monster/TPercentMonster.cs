@@ -93,8 +93,7 @@ namespace GameSvr
         {
             short nX = 0;
             short nY = 0;
-            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode &&
-                m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            if (!m_boGhost && !m_boDeath && !m_boFixedHideMode && !m_boStoneMode && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if (Think())
                 {

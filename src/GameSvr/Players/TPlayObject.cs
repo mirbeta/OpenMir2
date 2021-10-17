@@ -1298,7 +1298,7 @@ namespace GameSvr
             var hi = HUtil32.HiByte(abil);
             lov = 0;
             hiv = 0;
-            for (var i = 1; i <= val; i++)
+            for (var i = 0; i <= val; i++)
             {
                 if (lo + 1 < hi)
                 {

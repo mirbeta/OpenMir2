@@ -24,10 +24,9 @@ namespace GameSvr
 
         private void MeltStoneAll()
         {
-            IList<TBaseObject> List10;
             TBaseObject BaseObject;
             MeltStone();
-            List10 = new List<TBaseObject>();
+            IList<TBaseObject> List10 = new List<TBaseObject>();
             GetMapBaseObjects(m_PEnvir, m_nCurrX, m_nCurrY, 7, List10);
             for (var i = 0; i < List10.Count; i++)
             {

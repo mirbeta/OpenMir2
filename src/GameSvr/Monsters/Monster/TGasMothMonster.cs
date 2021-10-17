@@ -9,7 +9,7 @@ namespace GameSvr
             m_nViewRange = 7;
         }
 
-        public override TBaseObject sub_4A9C78(byte bt05)
+        protected override TBaseObject sub_4A9C78(byte bt05)
         {
             TBaseObject result;
             var BaseObject = base.sub_4A9C78(bt05);

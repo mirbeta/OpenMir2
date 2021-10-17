@@ -33,7 +33,7 @@ namespace GameSvr
                 {
                     if (PlayObject.m_GroupOwner == PlayObject)
                     {
-                        for (var i = 1; i < PlayObject.m_GroupMembers.Count; i++)
+                        for (var i = 0; i < PlayObject.m_GroupMembers.Count; i++)
                         {
                             m_PlayObject = PlayObject.m_GroupMembers[i];
                             if (m_PlayObject.m_boAllowGroupReCall)

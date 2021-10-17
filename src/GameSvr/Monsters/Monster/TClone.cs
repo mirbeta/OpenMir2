@@ -21,7 +21,6 @@ namespace GameSvr
                     {
                         m_WAbil.HP = 0;
                     }
-                    // kill slave if your mp is 0
                     if (ProcessMsg.wIdent == Grobal2.RM_SPELL)
                     {
                         M2Share.MainOutMessage("rmSpell: " + ProcessMsg.nParam3);
@@ -67,7 +66,6 @@ namespace GameSvr
 
         public override void Run()
         {
-            int nAttackDir;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0 && HUtil32.GetTickCount() - m_dwSearchEnemyTick > 8000)
             {
                 if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) > 1000 && m_TargetCret == null)
@@ -87,7 +85,7 @@ namespace GameSvr
                 if (m_TargetCret != null && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) < 6 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) < 6 && (HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
                 {
                     m_dwHitTick = HUtil32.GetTickCount();
-                    nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                    int nAttackDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
                     LightingAttack(nAttackDir);
                 }
             }
