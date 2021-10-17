@@ -225,7 +225,7 @@ namespace GameSvr
             return result;
         }
 
-        private static int GetQueryID(TM2Config Config)
+        private static int GetQueryID(GameSvrConfig Config)
         {
             Config.nDBQueryID ++;
             if (Config.nDBQueryID > int.MaxValue - 1)

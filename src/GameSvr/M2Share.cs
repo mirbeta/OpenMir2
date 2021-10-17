@@ -188,7 +188,7 @@ namespace GameSvr
         public static object g_HighSCHuman = null;
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
-        public static TM2Config g_Config = null;
+        public static GameSvrConfig g_Config = null;
         public static int[] g_dwOldNeedExps = new int[Grobal2.MAXCHANGELEVEL];
         public static TGameCommand g_GameCommand = new TGameCommand();
         public static string sClientSoftVersionError = "游戏版本错误!!!";
@@ -1699,7 +1699,7 @@ namespace GameSvr
             StringConf = new StringConfig();
             ExpConf = new ExpsConfig();
             LogSystem = new MirLog();
-            g_Config = new TM2Config();
+            g_Config = new GameSvrConfig();
             GlobalConf = new GlobalConfig();
             RandomNumber = RandomNumber.GetInstance();
         }

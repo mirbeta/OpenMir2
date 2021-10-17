@@ -2,7 +2,7 @@
 
 namespace GameSvr
 {
-    public class TM2Config
+    public class GameSvrConfig
     {
         public string sDBType;
         public string sConnctionString;
@@ -934,7 +934,7 @@ namespace GameSvr
         /// </summary>
         public bool boSpeedHackCheck;
 
-        public TM2Config()
+        public GameSvrConfig()
         {
             sServerName = "SKY引擎";
             sServerIPaddr = "127.0.0.1";
