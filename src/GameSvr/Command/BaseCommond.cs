@@ -50,7 +50,7 @@ namespace GameSvr
             {
                 var attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) continue;
-                if (method.Name.ToLower() == "fallback") continue;
+                if (method.Name == "fallback") continue;
                 this._commands.Add(new DefaultCommand(this.CommandAttribute.nPermissionMin), method);
                 return;
             }

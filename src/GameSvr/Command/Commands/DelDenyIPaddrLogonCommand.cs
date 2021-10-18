@@ -28,7 +28,7 @@ namespace GameSvr
                     {
                         break;
                     }
-                    //if ((sIPaddr).ToLower().CompareTo((M2Share.g_DenyIPAddrList[i]).ToLower()) == 0)
+                    //if ((sIPaddr).CompareTo((M2Share.g_DenyIPAddrList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyIPAddrList[i]) != 0)
                     //    //{

@@ -2370,7 +2370,7 @@ namespace GameSvr
             //try {
             //    for (I = 0; I < g_DisableMakeItemList.Count; I ++ )
             //    {
-            //        if ((g_DisableMakeItemList[I]).ToLower().CompareTo((sItemName).ToLower()) == 0)
+            //        if ((g_DisableMakeItemList[I]).CompareTo((sItemName)) == 0)
             //        {
             //            result = false;
             //            return result;
@@ -2383,7 +2383,7 @@ namespace GameSvr
             //try {
             //    for (I = 0; I < g_EnableMakeItemList.Count; I ++ )
             //    {
-            //        if ((g_EnableMakeItemList[I]).ToLower().CompareTo((sItemName).ToLower()) == 0)
+            //        if ((g_EnableMakeItemList[I]).CompareTo((sItemName)) == 0)
             //        {
             //            result = true;
             //            break;
@@ -2404,7 +2404,7 @@ namespace GameSvr
             {
                 for (I = 0; I < g_DisableMoveMapList.Count; I++)
                 {
-                    //if ((g_DisableMoveMapList[I]).ToLower().CompareTo((sMapName).ToLower()) == 0)
+                    //if ((g_DisableMoveMapList[I]).CompareTo((sMapName)) == 0)
                     //{
                     //    result = false;
                     //    break;
@@ -2426,7 +2426,7 @@ namespace GameSvr
             {
                 for (i = 0; i < g_DisableSellOffList.Count; i++)
                 {
-                    //if ((g_DisableSellOffList[i]).ToLower().CompareTo((sItemName).ToLower()) == 0)
+                    //if ((g_DisableSellOffList[i]).CompareTo((sItemName)) == 0)
                     //{
                     //    result = false;
                     //    break;
@@ -3221,7 +3221,7 @@ namespace GameSvr
             result = false;
             //for (I = 0; I < g_DisableSendMsgList.Count; I ++ )
             //{
-            //    if ((sHumanName).ToLower().CompareTo((g_DisableSendMsgList[I]).ToLower()) == 0)
+            //    if ((sHumanName).CompareTo((g_DisableSendMsgList[I])) == 0)
             //    {
             //        result = true;
             //        break;
@@ -3267,7 +3267,7 @@ namespace GameSvr
             byte result= 0;
             //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
             //{
-            //    if ((sItemName).ToLower().CompareTo((g_GameLogItemNameList[I]).ToLower()) == 0)
+            //    if ((sItemName).CompareTo((g_GameLogItemNameList[I])) == 0)
             //    {
             //        result = 1;
             //        break;
@@ -3331,7 +3331,7 @@ namespace GameSvr
             {
                 for (var i = 0; i < g_DenyIPAddrList.Count; i++)
                 {
-                    //if ((sIPaddr).ToLower().CompareTo((g_DenyIPAddrList[I]).ToLower()) == 0)
+                    //if ((sIPaddr).CompareTo((g_DenyIPAddrList[I])) == 0)
                     //{
                     //    result = true;
                     //    break;
@@ -3411,7 +3411,7 @@ namespace GameSvr
             {
                 //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
                 //{
-                //    if ((sChrName).ToLower().CompareTo((g_DenyChrNameList[I]).ToLower()) == 0)
+                //    if ((sChrName).CompareTo((g_DenyChrNameList[I])) == 0)
                 //    {
                 //        result = true;
                 //        break;
@@ -3489,7 +3489,7 @@ namespace GameSvr
             {
                 for (var I = 0; I < g_DenyAccountList.Count; I++)
                 {
-                    //if ((sAccount).ToLower().CompareTo((g_DenyAccountList[I]).ToLower()) == 0)
+                    //if ((sAccount).CompareTo((g_DenyAccountList[I])) == 0)
                     //{
                     //    result = true;
                     //    break;
@@ -3557,7 +3557,7 @@ namespace GameSvr
             {
                 //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)
                 //{
-                //    if ((sMonName).ToLower().CompareTo((g_NoHptoexpMonLIst[i]).ToLower()) == 0)
+                //    if ((sMonName).CompareTo((g_NoHptoexpMonLIst[i])) == 0)
                 //    {
                 //        result = true;
                 //        break;
@@ -3575,7 +3575,7 @@ namespace GameSvr
             var result = false;
             //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
             //{
-            //    if ((sMonName).ToLower().CompareTo((g_NoClearMonLIst[I]).ToLower()) == 0)
+            //    if ((sMonName).CompareTo((g_NoClearMonLIst[I])) == 0)
             //    {
             //        result = true;
             //        break;
@@ -3707,7 +3707,7 @@ namespace GameSvr
                                 MonSayMsg.sSayMsg = sSayMsg;
                                 //for (II = 0; II < g_MonSayMsgList.Count; II ++ )
                                 //{
-                                //    if ((g_MonSayMsgList[II]).ToLower().CompareTo((sMonName).ToLower()) == 0)
+                                //    if ((g_MonSayMsgList[II]).CompareTo((sMonName)) == 0)
                                 //    {
 
                                 //        ((g_MonSayMsgList.Values[II]) as ArrayList).Add(MonSayMsg);
@@ -3783,7 +3783,7 @@ namespace GameSvr
             }
             else
             {
-                result = sIPaddr.ToLower().CompareTo(dIPaddr.ToLower()) == 0;
+                result = sIPaddr.CompareTo(dIPaddr) == 0;
             }
             return result;
         }

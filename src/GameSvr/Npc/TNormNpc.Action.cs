@@ -193,7 +193,7 @@ namespace GameSvr
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if (((DealOffInfo.sBuyCharName).ToLower().CompareTo((PlayObject.m_sCharName).ToLower()) == 0) && (DealOffInfo.N == 0))
+                                if ((string.Compare(DealOffInfo.sBuyCharName, PlayObject.m_sCharName, StringComparison.Ordinal) == 0) && (DealOffInfo.N == 0))
                                 {
                                     for (var k = 0; k < 9; k++)
                                     {
@@ -305,7 +305,7 @@ namespace GameSvr
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                if (string.Compare(sHumName.ToLower(), PlayObject.m_sCharName.ToLower(), StringComparison.Ordinal) == 0)
+                if (string.Compare(sHumName, PlayObject.m_sCharName, StringComparison.Ordinal) == 0)
                 {
                     LoadList[i] = PlayObject.m_sCharName + "\t" + DateTime.Today;
                     boFound = true;
@@ -351,7 +351,7 @@ namespace GameSvr
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                if (sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0)
+                if (String.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
                     boFound = true;
@@ -403,7 +403,7 @@ namespace GameSvr
 
         private void ActionOfAutoAddGameGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("START".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (nPoint > 0 && nTime > 0)
                 {
@@ -414,7 +414,7 @@ namespace GameSvr
                     return;
                 }
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("STOP".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_boIncGameGold = false;
                 return;
@@ -470,7 +470,7 @@ namespace GameSvr
 
         private void ActionOfAutoSubGameGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("START".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if ((nPoint > 0) && (nTime > 0))
                 {
@@ -481,7 +481,7 @@ namespace GameSvr
                     return;
                 }
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("STOP".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_boDecGameGold = false;
                 return;
@@ -1026,7 +1026,7 @@ namespace GameSvr
                 return;
             }
             // sREQUESTMARRY
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("REQUESTMARRY".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "REQUESTMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                 {
@@ -1047,11 +1047,11 @@ namespace GameSvr
                 return;
             }
             // sRESPONSEMARRY
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("RESPONSEMARRY".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "RESPONSEMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if ((PlayObject.m_btGender == ObjBase.gWoMan) && (PoseHuman.m_btGender == ObjBase.gMan))
                 {
-                    if (QuestActionInfo.sParam2.ToLower().CompareTo("OK".ToLower()) == 0)
+                    if (String.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                         {
@@ -1131,7 +1131,7 @@ namespace GameSvr
                 }
                 return;
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("REQUESTMASTER".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "REQUESTMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (PlayObject.m_boStartMaster && PoseHuman.m_boStartMaster)
                 {
@@ -1142,9 +1142,9 @@ namespace GameSvr
                 }
                 return;
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("RESPONSEMASTER".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "RESPONSEMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (QuestActionInfo.sParam2.ToLower().CompareTo("OK".ToLower()) == 0)
+                if (String.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if ((PlayObject.m_PoseBaseObject == PoseHuman) && (PoseHuman.m_PoseBaseObject == PlayObject))
                     {
@@ -1392,7 +1392,7 @@ namespace GameSvr
                 }
             }
             // sREQUESTUNMARRY
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("REQUESTUNMARRY".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "REQUESTUNMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (QuestActionInfo.sParam2 == "")
                 {
@@ -1427,7 +1427,7 @@ namespace GameSvr
                 else
                 {
                     // 强行离婚
-                    if (QuestActionInfo.sParam2.ToLower().CompareTo("FORCE".ToLower()) == 0)
+                    if (String.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         M2Share.UserEngine.SendBroadCastMsg('[' + this.m_sCharName + "]: " + "我宣布" + PlayObject.m_sCharName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", TMsgType.t_Say);
                         PoseHuman = M2Share.UserEngine.GetPlayObject(PlayObject.m_sDearName);
@@ -1507,7 +1507,7 @@ namespace GameSvr
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];
-                if (DynamicVar.sName.ToLower().CompareTo(sVarName.ToLower()) == 0)
+                if (String.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -1572,7 +1572,7 @@ namespace GameSvr
                         for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
                         {
                             DynamicVar = PlayObject.m_DynamicVarList[i];
-                            if ((DynamicVar.sName).ToLower().CompareTo((sVarValue).ToLower()) == 0)
+                            if (String.Compare(DynamicVar.sName, sVarValue, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 switch (DynamicVar.VarType)
                                 {
@@ -1891,11 +1891,11 @@ namespace GameSvr
             var sVarValue = QuestActionInfo.sParam4;
             var nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
             var VarType = TVarType.None;
-            if ((QuestActionInfo.sParam1).ToLower().CompareTo(("Integer").ToLower()) == 0)
+            if (String.Compare((QuestActionInfo.sParam1), ("Integer"), StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.Integer;
             }
-            if ((QuestActionInfo.sParam1).ToLower().CompareTo(("String").ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.String;
             }
@@ -1904,11 +1904,11 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("Integer".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.Integer;
             }
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("String".ToLower()) == 0)
+            if (String.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.String;
             }
@@ -1932,7 +1932,7 @@ namespace GameSvr
             }
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
-                if (DynamicVarList[i].sName.ToLower().CompareTo(sVarName.ToLower()) == 0)
+                if (String.Compare(DynamicVarList[i].sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     boFoundVar = true;
                     break;
@@ -2066,7 +2066,7 @@ namespace GameSvr
                     continue;
                 }
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (!boMatchName || ((StdItem != null) && (StdItem.Name.ToLower().CompareTo(sItemName.ToLower()) == 0)))
+                if (!boMatchName || ((StdItem != null) && (StdItem.Name.CompareTo(sItemName) == 0)))
                 {
                     PlayObject.SendDelItems(UserItem);
                     Dispose(UserItem);
@@ -2081,7 +2081,7 @@ namespace GameSvr
                     continue;
                 }
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (!boMatchName || ((StdItem != null) && (StdItem.Name.ToLower().CompareTo(sItemName.ToLower()) == 0)))
+                if (!boMatchName || ((StdItem != null) && (StdItem.Name.CompareTo(sItemName) == 0)))
                 {
                     Dispose(UserItem);
                     PlayObject.m_StorageItemList.RemoveAt(i);
@@ -2095,7 +2095,7 @@ namespace GameSvr
                     continue;
                 }
                 StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (!boMatchName || ((StdItem != null) && (StdItem.Name.ToLower().CompareTo(sItemName.ToLower()) == 0)))
+                if (!boMatchName || ((StdItem != null) && (StdItem.Name.CompareTo(sItemName) == 0)))
                 {
                     UserItem.wIndex = 0;
                 }
@@ -2146,7 +2146,7 @@ namespace GameSvr
                 }
             }
             // sREQUESTUNMARRY
-            if (QuestActionInfo.sParam1.ToLower().CompareTo("REQUESTUNMASTER".ToLower()) == 0)
+            if (QuestActionInfo.sParam1.CompareTo("REQUESTUNMASTER") == 0)
             {
                 if (QuestActionInfo.sParam2 == "")
                 {
@@ -2179,7 +2179,7 @@ namespace GameSvr
                 else
                 {
                     // 强行出师
-                    if (QuestActionInfo.sParam2.ToLower().CompareTo("FORCE".ToLower()) == 0)
+                    if (QuestActionInfo.sParam2.CompareTo("FORCE") == 0)
                     {
                         sMsg = M2Share.g_sNPCSayForceUnMasterMsg.Replace("%n", this.m_sCharName);
                         sMsg = sMsg.Replace("%s", PlayObject.m_sCharName);
@@ -2217,7 +2217,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SETMAPMODE);
                 return;
             }
-            if (sMapMode.ToLower().CompareTo("SAFE".ToLower()) == 0)
+            if (sMapMode.CompareTo("SAFE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2228,7 +2228,7 @@ namespace GameSvr
                     Envir.Flag.boSAFE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DARK".ToLower()) == 0)
+            else if (sMapMode.CompareTo("DARK") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2239,7 +2239,7 @@ namespace GameSvr
                     Envir.Flag.boDarkness = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("FIGHT".ToLower()) == 0)
+            else if (sMapMode.CompareTo("FIGHT") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2250,7 +2250,7 @@ namespace GameSvr
                     Envir.Flag.boFightZone = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("FIGHT3".ToLower()) == 0)
+            else if (sMapMode.CompareTo("FIGHT3") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2261,7 +2261,7 @@ namespace GameSvr
                     Envir.Flag.boFight3Zone = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DAY".ToLower()) == 0)
+            else if (sMapMode.CompareTo("DAY") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2272,7 +2272,7 @@ namespace GameSvr
                     Envir.Flag.boDayLight = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("QUIZ".ToLower()) == 0)
+            else if (sMapMode.CompareTo("QUIZ") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2283,7 +2283,7 @@ namespace GameSvr
                     Envir.Flag.boQUIZ = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORECONNECT".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NORECONNECT") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2295,7 +2295,7 @@ namespace GameSvr
                     Envir.Flag.boNORECONNECT = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MUSIC".ToLower()) == 0)
+            else if (sMapMode.CompareTo("MUSIC") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2307,7 +2307,7 @@ namespace GameSvr
                     Envir.Flag.boMUSIC = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("EXPRATE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("EXPRATE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2319,7 +2319,7 @@ namespace GameSvr
                     Envir.Flag.boEXPRATE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKWINLEVEL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("PKWINLEVEL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2331,7 +2331,7 @@ namespace GameSvr
                     Envir.Flag.boPKWINLEVEL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKWINEXP".ToLower()) == 0)
+            else if (sMapMode.CompareTo("PKWINEXP") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2343,7 +2343,7 @@ namespace GameSvr
                     Envir.Flag.boPKWINEXP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKLOSTLEVEL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("PKLOSTLEVEL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2355,7 +2355,7 @@ namespace GameSvr
                     Envir.Flag.boPKLOSTLEVEL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("PKLOSTEXP".ToLower()) == 0)
+            else if (sMapMode.CompareTo("PKLOSTEXP") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2367,7 +2367,7 @@ namespace GameSvr
                     Envir.Flag.boPKLOSTEXP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DECHP".ToLower()) == 0)
+            else if (sMapMode.CompareTo("DECHP") == 0)
             {
                 if ((sParam1 != "") && (sParam2 != ""))
                 {
@@ -2380,7 +2380,7 @@ namespace GameSvr
                     Envir.Flag.boDECHP = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("DECGAMEGOLD".ToLower()) == 0)
+            else if (sMapMode.CompareTo("DECGAMEGOLD") == 0)
             {
                 if ((sParam1 != "") && (sParam2 != ""))
                 {
@@ -2393,7 +2393,7 @@ namespace GameSvr
                     Envir.Flag.boDECGAMEGOLD = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("RUNHUMAN".ToLower()) == 0)
+            else if (sMapMode.CompareTo("RUNHUMAN") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2404,7 +2404,7 @@ namespace GameSvr
                     Envir.Flag.boRUNHUMAN = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("RUNMON".ToLower()) == 0)
+            else if (sMapMode.CompareTo("RUNMON") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2415,7 +2415,7 @@ namespace GameSvr
                     Envir.Flag.boRUNMON = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NEEDHOLE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NEEDHOLE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2426,7 +2426,7 @@ namespace GameSvr
                     Envir.Flag.boNEEDHOLE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORECALL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NORECALL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2437,7 +2437,7 @@ namespace GameSvr
                     Envir.Flag.boNORECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOGUILDRECALL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOGUILDRECALL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2448,7 +2448,7 @@ namespace GameSvr
                     Envir.Flag.boNOGUILDRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODEARRECALL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NODEARRECALL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2459,7 +2459,7 @@ namespace GameSvr
                     Envir.Flag.boNODEARRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOMASTERRECALL".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOMASTERRECALL") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2470,7 +2470,7 @@ namespace GameSvr
                     Envir.Flag.boNOMASTERRECALL = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NORANDOMMOVE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NORANDOMMOVE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2481,7 +2481,7 @@ namespace GameSvr
                     Envir.Flag.boNORANDOMMOVE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODRUG".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NODRUG") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2492,7 +2492,7 @@ namespace GameSvr
                     Envir.Flag.boNODRUG = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MINE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("MINE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2503,7 +2503,7 @@ namespace GameSvr
                     Envir.Flag.boMINE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("MINE2".ToLower()) == 0)
+            else if (sMapMode.CompareTo("MINE2") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2514,7 +2514,7 @@ namespace GameSvr
                     Envir.Flag.boMINE2 = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOTHROWITEM".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOTHROWITEM") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2525,7 +2525,7 @@ namespace GameSvr
                     Envir.Flag.boNOTHROWITEM = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NODROPITEM".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NODROPITEM") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2536,7 +2536,7 @@ namespace GameSvr
                     Envir.Flag.boNODROPITEM = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOPOSITIONMOVE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOPOSITIONMOVE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2547,7 +2547,7 @@ namespace GameSvr
                     Envir.Flag.boNOPOSITIONMOVE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOHORSE".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOHORSE") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2558,7 +2558,7 @@ namespace GameSvr
                     Envir.Flag.boNOHORSE = false;
                 }
             }
-            else if (sMapMode.ToLower().CompareTo("NOCHAT".ToLower()) == 0)
+            else if (sMapMode.CompareTo("NOCHAT") == 0)
             {
                 if (sParam1 != "")
                 {
@@ -2652,7 +2652,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GIVE);
                 return;
             }
-            if (sItemName.ToLower().CompareTo(Grobal2.sSTRING_GOLDNAME.ToLower()) == 0)
+            if (sItemName.CompareTo(Grobal2.sSTRING_GOLDNAME) == 0)
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -2716,7 +2716,7 @@ namespace GameSvr
             string sParam4 = QuestActionInfo.sParam4;
             string sParam5 = QuestActionInfo.sParam5;
             string sParam6 = QuestActionInfo.sParam6;
-            if (sParam2.ToLower().CompareTo("Self".ToLower()) == 0)
+            if (sParam2.CompareTo("Self") == 0)
             {
                 sParam2 = PlayObject.m_sCharName;
             }
@@ -3460,7 +3460,7 @@ namespace GameSvr
                 {
                     nCount = 1;
                 }
-                if ((sItemName).ToLower().CompareTo((Grobal2.sSTRING_GOLDNAME).ToLower()) == 0)// 金币
+                if (String.Compare((sItemName), (Grobal2.sSTRING_GOLDNAME), StringComparison.Ordinal) == 0)// 金币
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {

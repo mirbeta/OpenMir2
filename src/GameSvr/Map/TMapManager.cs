@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SystemModule;
@@ -7,7 +8,7 @@ namespace GameSvr
 {
     public class TMapManager
     {
-        private readonly Dictionary<string, TEnvirnoment> m_MapList = new Dictionary<string, TEnvirnoment>();
+        private readonly Dictionary<string, TEnvirnoment> m_MapList = new Dictionary<string, TEnvirnoment>(StringComparer.OrdinalIgnoreCase);
 
         public IList<TEnvirnoment> Maps => m_MapList.Values.ToList();
 
@@ -99,15 +100,15 @@ namespace GameSvr
                 Flag = MapFlag,
                 QuestNPC = QuestNPC
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.sMapName.ToLower(), out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.sMapName, out var minMap))
             {
                 envirnoment.nMinMap = minMap;
             }
             if (envirnoment.LoadMapData(Path.Combine(M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
             {
-                if (!m_MapList.ContainsKey(sMapName.ToLower()))
+                if (!m_MapList.ContainsKey(sMapName))
                 {
-                    m_MapList.Add(sMapName.ToLower(), envirnoment);
+                    m_MapList.Add(sMapName, envirnoment);
                 }
                 else
                 {
@@ -144,13 +145,13 @@ namespace GameSvr
         public TEnvirnoment FindMap(string sMapName)
         {
             TEnvirnoment Map = null;
-            return m_MapList.TryGetValue(sMapName.ToLower(), out Map) ? Map : null;
+            return m_MapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 
         public TEnvirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             TEnvirnoment result = null;
-            if (m_MapList.TryGetValue(sMapName.ToLower(), out var envirnoment))
+            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
                 if (envirnoment.nServerIndex == nServerIdx)
                 {
@@ -167,7 +168,7 @@ namespace GameSvr
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (m_MapList.TryGetValue(sMapName.ToLower(), out var envirnoment))
+            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
                 return envirnoment.nServerIndex;
             }
@@ -193,7 +194,7 @@ namespace GameSvr
             //     var Envirnoment = ((this.Items[I]) as TEnvirnoment);
             //     for (var II = 0; II < M2Share.MiniMapList.Count; II ++ )
             //     {
-            //         if ((M2Share.MiniMapList[II]).ToLower().CompareTo((Envirnoment.sMapName).ToLower()) == 0)
+            //         if ((M2Share.MiniMapList[II]).CompareTo((Envirnoment.sMapName)) == 0)
             //         {
             //             Envirnoment.nMinMap = ((int)M2Share.MiniMapList.Values[II]);
             //             break;

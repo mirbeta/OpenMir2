@@ -419,7 +419,7 @@ namespace GameSvr
             for (var i = 0; i < m_MagicList.Count; i++)
             {
                 TUserMagic UserMagic = m_MagicList[i];
-                if (UserMagic.MagicInfo.sMagicName.ToLower().CompareTo(sMagicName.ToLower()) == 0)
+                if (String.Compare(UserMagic.MagicInfo.sMagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UserMagic;
                     break;
@@ -3728,7 +3728,7 @@ namespace GameSvr
                                                     if (StdItem != null)
                                                     {
                                                         boFind = false;
-                                                        if (StdItem.Name.ToLower().CompareTo(m_BagItemNames[i].ToLower()) == 0)
+                                                        if (StdItem.Name.CompareTo(m_BagItemNames[i]) == 0)
                                                         {
                                                             boFind = true;
                                                             break;

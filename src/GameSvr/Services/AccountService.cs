@@ -154,7 +154,7 @@ namespace GameSvr
                     {
                         break;
                     }
-                    var sBody = HUtil32.GetValidStr3(sData, ref sCode, "/");
+                    var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
                     switch (HUtil32.Str_ToInt(sCode, 0))
                     {
                         case Grobal2.SS_OPENSESSION:// 100
@@ -210,11 +210,11 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] TFrmIdSoc::GetPasswdSuccess";
             try
             {
-                sData = HUtil32.GetValidStr3(sData, ref sAccount, "/");
-                sData = HUtil32.GetValidStr3(sData, ref sSessionID, "/");
-                sData = HUtil32.GetValidStr3(sData, ref sPayCost, "/");// boPayCost
-                sData = HUtil32.GetValidStr3(sData, ref sPayMode, "/");// nPayMode
-                sData = HUtil32.GetValidStr3(sData, ref sIPaddr, "/");// sIPaddr
+                sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
+                sData = HUtil32.GetValidStr3(sData, ref sSessionID, HUtil32.Backslash);
+                sData = HUtil32.GetValidStr3(sData, ref sPayCost, HUtil32.Backslash);// boPayCost
+                sData = HUtil32.GetValidStr3(sData, ref sPayMode, HUtil32.Backslash);// nPayMode
+                sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// sIPaddr
                 NewSession(sAccount, sIPaddr, HUtil32.Str_ToInt(sSessionID, 0), HUtil32.Str_ToInt(sPayCost, 0), HUtil32.Str_ToInt(sPayMode, 0));
             }
             catch
@@ -229,7 +229,7 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] TFrmIdSoc::GetCancelAdmission";
             try
             {
-                var sSessionID = HUtil32.GetValidStr3(sData, ref sC, "/");
+                var sSessionID = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
                 DelSession(HUtil32.Str_ToInt(sSessionID, 0));
             }
             catch (Exception e)
@@ -341,7 +341,7 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] FrmIdSoc::GetCancelAdmissionA";
             try
             {
-                var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, "/");
+                var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
                 if (!M2Share.g_Config.boTestServer)
                 {
@@ -362,11 +362,11 @@ namespace GameSvr
             var s14 = string.Empty;
             var s18 = string.Empty;
             var s1C = string.Empty;
-            sData = HUtil32.GetValidStr3(sData, ref sC, "/");
-            sData = HUtil32.GetValidStr3(sData, ref s10, "/");
-            sData = HUtil32.GetValidStr3(sData, ref s14, "/");
-            sData = HUtil32.GetValidStr3(sData, ref s18, "/");
-            sData = HUtil32.GetValidStr3(sData, ref s1C, "/");
+            sData = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s10, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s1C, HUtil32.Backslash);
             M2Share.nCurrentMonthly = HUtil32.Str_ToInt(sC, 0);
             M2Share.nLastMonthlyTotalUsage = HUtil32.Str_ToInt(s10, 0);
             M2Share.nTotalTimeUsage = HUtil32.Str_ToInt(s14, 0);

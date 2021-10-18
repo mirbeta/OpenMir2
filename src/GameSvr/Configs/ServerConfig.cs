@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
@@ -46,10 +47,10 @@ namespace GameSvr.Configs
             M2Share.g_Config.nServerNumber = _config.ReadInteger("Server", "ServerNumber", M2Share.g_Config.nServerNumber);
             if (_config.ReadString("Server", "VentureServer", "") == "")
                 _config.WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.g_Config.boVentureServer));
-            M2Share.g_Config.boVentureServer = _config.ReadString("Server", "VentureServer", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boVentureServer = String.Compare(_config.ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
             if (_config.ReadString("Server", "TestServer", "") == "")
                 _config.WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.g_Config.boTestServer));
-            M2Share.g_Config.boTestServer = _config.ReadString("Server", "TestServer", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boTestServer = String.Compare(_config.ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.Ordinal) == 0;
             if (_config.ReadInteger("Server", "TestLevel", -1) < 0)
                 _config.WriteInteger("Server", "TestLevel", M2Share.g_Config.nTestLevel);
             M2Share.g_Config.nTestLevel = _config.ReadInteger("Server", "TestLevel", M2Share.g_Config.nTestLevel);
@@ -61,18 +62,18 @@ namespace GameSvr.Configs
             M2Share.g_Config.nTestUserLimit = _config.ReadInteger("Server", "TestServerUserLimit", M2Share.g_Config.nTestUserLimit);
             if (_config.ReadString("Server", "ServiceMode", "") == "")
                 _config.WriteString("Server", "ServiceMode", HUtil32.BoolToStr(M2Share.g_Config.boServiceMode));
-            M2Share.g_Config.boServiceMode = _config.ReadString("Server", "ServiceMode", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boServiceMode = _config.ReadString("Server", "ServiceMode", "FALSE").CompareTo("TRUE") == 0;
             if (_config.ReadString("Server", "NonPKServer", "") == "")
                 _config.WriteString("Server", "NonPKServer", HUtil32.BoolToStr(M2Share.g_Config.boNonPKServer));
-            M2Share.g_Config.boNonPKServer = _config.ReadString("Server", "NonPKServer", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boNonPKServer = _config.ReadString("Server", "NonPKServer", "FALSE").CompareTo("TRUE") == 0;
             if (_config.ReadString("Server", "ViewHackMessage", "") == "")
                 _config.WriteString("Server", "ViewHackMessage", HUtil32.BoolToStr(M2Share.g_Config.boViewHackMessage));
-            M2Share.g_Config.boViewHackMessage = _config.ReadString("Server", "ViewHackMessage", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boViewHackMessage = _config.ReadString("Server", "ViewHackMessage", "FALSE").CompareTo("TRUE") == 0;
             if (_config.ReadString("Server", "ViewAdmissionFailure", "") == "")
             {
                 _config.WriteString("Server", "ViewAdmissionFailure", HUtil32.BoolToStr(M2Share.g_Config.boViewAdmissionFailure));
             }
-            M2Share.g_Config.boViewAdmissionFailure = _config.ReadString("Server", "ViewAdmissionFailure", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boViewAdmissionFailure = _config.ReadString("Server", "ViewAdmissionFailure", "FALSE").CompareTo("TRUE") == 0;
             if (_config.ReadString("Server", "GateAddr", "") == "")
             {
                 _config.WriteString("Server", "GateAddr", M2Share.g_Config.sGateAddr);
@@ -109,7 +110,7 @@ namespace GameSvr.Configs
             M2Share.g_Config.nLogServerPort = _config.ReadInteger("Server", "LogServerPort", M2Share.g_Config.nLogServerPort);
             if (_config.ReadString("Server", "DiscountForNightTime", "") == "")
                 _config.WriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.g_Config.boDiscountForNightTime));
-            M2Share.g_Config.boDiscountForNightTime = _config.ReadString("Server", "DiscountForNightTime", "FALSE").ToLower().CompareTo("TRUE".ToLower()) == 0;
+            M2Share.g_Config.boDiscountForNightTime = _config.ReadString("Server", "DiscountForNightTime", "FALSE").CompareTo("TRUE".ToLower()) == 0;
             if (_config.ReadInteger("Server", "HalfFeeStart", -1) < 0)
                 _config.WriteInteger("Server", "HalfFeeStart", M2Share.g_Config.nHalfFeeStart);
             M2Share.g_Config.nHalfFeeStart = _config.ReadInteger("Server", "HalfFeeStart", M2Share.g_Config.nHalfFeeStart);

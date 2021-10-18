@@ -926,7 +926,7 @@ namespace GameSvr
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKINMAPRANGE);
                 return result;
             }
-            if (PlayObject.m_sMapName.ToLower().CompareTo(sMapName.ToLower()) != 0)
+            if (String.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 return result;
             }
@@ -1040,15 +1040,15 @@ namespace GameSvr
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             var nDoorStatus = -1;
-            if (QuestConditionInfo.sParam1.ToLower().CompareTo("损坏".ToLower()) == 0)
+            if (String.Compare(QuestConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 0;
             }
-            if (QuestConditionInfo.sParam1.ToLower().CompareTo("开启".ToLower()) == 0)
+            if (String.Compare(QuestConditionInfo.sParam1, "开启", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 1;
             }
-            if (QuestConditionInfo.sParam1.ToLower().CompareTo("关闭".ToLower()) == 0)
+            if (String.Compare(QuestConditionInfo.sParam1, "关闭", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 2;
             }
@@ -1304,11 +1304,11 @@ namespace GameSvr
                     for (var i = 0; i < LoadList.Count; i++)
                     {
                         sLine = LoadList[i].Trim();
-                        if (sLine[1] == ';')
+                        if (sLine[0] == ';')
                         {
                             continue;
                         }
-                        if (sLine.ToLower().CompareTo(sCharName.ToLower()) == 0)
+                        if (String.Compare(sLine, sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             nNamePostion = i;
                             break;
@@ -1553,19 +1553,19 @@ namespace GameSvr
         {
             var result = false;
             byte btSex = 0;
-            if (QuestConditionInfo.sParam1.ToLower().CompareTo("MAN".ToLower()) == 0)
+            if (String.Compare(QuestConditionInfo.sParam1, "MAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 0;
             }
-            else if (QuestConditionInfo.sParam1.ToLower().CompareTo("男".ToLower()) == 0)
+            else if (String.Compare(QuestConditionInfo.sParam1, "男", StringComparison.Ordinal) == 0)
             {
                 btSex = 0;
             }
-            else if (QuestConditionInfo.sParam1.ToLower().CompareTo("WOMAN".ToLower()) == 0)
+            else if (String.Compare(QuestConditionInfo.sParam1, "WOMAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 1;
             }
-            else if (QuestConditionInfo.sParam1.ToLower().CompareTo("女".ToLower()) == 0)
+            else if (String.Compare(QuestConditionInfo.sParam1, "女", StringComparison.Ordinal) == 0)
             {
                 btSex = 1;
             }
@@ -1762,9 +1762,9 @@ namespace GameSvr
                     s18 = LoadList[i].Trim();
                     if ((s18 != "") && (s18[1] != ';'))
                     {
-                        s18 = HUtil32.GetValidStr3(s18, ref Petname, "/");
-                        s18 = HUtil32.GetValidStr3(s18, ref lvl, "/");
-                        s18 = HUtil32.GetValidStr3(s18, ref lvlexp, "/");
+                        s18 = HUtil32.GetValidStr3(s18, ref Petname, HUtil32.Backslash);
+                        s18 = HUtil32.GetValidStr3(s18, ref lvl, HUtil32.Backslash);
+                        s18 = HUtil32.GetValidStr3(s18, ref lvlexp, HUtil32.Backslash);
                         // PlayObject.ReviveSlave(PetName,str_ToInt(lvl,0),str_ToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
                         resultc = i;
                     }
@@ -2059,7 +2059,7 @@ namespace GameSvr
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];
-                if (DynamicVar.sName.ToLower().CompareTo(sVarName.ToLower()) == 0)
+                if (String.Compare(DynamicVar.sName, sVarName, StringComparison.Ordinal) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -2256,7 +2256,7 @@ namespace GameSvr
             }
             if (PlayObject.m_MyGuild != null)
             {
-                if (PlayObject.m_MyGuild.sGuildName.ToLower().CompareTo(QuestConditionInfo.sParam1.ToLower()) == 0)
+                if (String.Compare(PlayObject.m_MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                 }
@@ -2384,7 +2384,7 @@ namespace GameSvr
             for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.m_SlaveList[i];
-                if (sSlaveName.ToLower().CompareTo(BaseObject.m_sCharName.ToLower()) == 0)
+                if (String.Compare(sSlaveName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -2406,8 +2406,8 @@ namespace GameSvr
             var nDayCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
             var nValNo = M2Share.GetValNameNo(QuestConditionInfo.sParam4);
             var nValNoDay = M2Share.GetValNameNo(QuestConditionInfo.sParam5);
-            var boDeleteExprie = QuestConditionInfo.sParam6.ToLower().CompareTo("清理".ToLower()) == 0;
-            var boNoCompareHumanName = QuestConditionInfo.sParam6.ToLower().CompareTo("1".ToLower()) == 0;
+            var boDeleteExprie = String.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
+            var boNoCompareHumanName = String.Compare(QuestConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
             var cMethod = QuestConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
@@ -2432,7 +2432,7 @@ namespace GameSvr
                     sLineText = LoadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                    if ((sHumName.ToLower().CompareTo(PlayObject.m_sCharName.ToLower()) == 0) || boNoCompareHumanName)
+                    if ((String.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;
                         //if (TryStrToDateTime(sDate, dOldDate))
@@ -2740,7 +2740,7 @@ namespace GameSvr
                 {
                     s02 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);//  支持变量
                 }
-                if ((s01).ToLower().CompareTo((s02).ToLower()) == 0)
+                if ((s01).CompareTo((s02)) == 0)
                 {
                     result = true;
                 }
@@ -2904,7 +2904,7 @@ namespace GameSvr
                         DynamicVar = DynamicVarList[i];
                         if (DynamicVar != null)
                         {
-                            if ((DynamicVar.sName).ToLower().CompareTo((sValName).ToLower()) == 0)
+                            if ((DynamicVar.sName).CompareTo((sValName)) == 0)
                             {
                                 switch (DynamicVar.VarType)
                                 {

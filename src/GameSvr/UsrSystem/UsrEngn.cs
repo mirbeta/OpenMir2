@@ -119,7 +119,7 @@ namespace GameSvr
             m_ListOfGateIdx = new ArrayList();
             m_ListOfSocket = new ArrayList();
             OldMagicList = new ArrayList();
-            m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>();
+            m_OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             m_UserLogonList = new List<TAILogon>();
             _userEngineThread = new Thread(PrcocessData) { IsBackground = true };
             _processTheread = new Thread(ProcessPlayObjectData) { IsBackground = true };
@@ -1521,8 +1521,8 @@ namespace GameSvr
         {
             var Name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
-            m_OtherUserNameList.Remove(Name.ToLower());
-            m_OtherUserNameList.Add(Name.ToLower(), new ServerGruopInfo()
+            m_OtherUserNameList.Remove(Name);
+            m_OtherUserNameList.Add(Name, new ServerGruopInfo()
             {
                 nServerIdx = sNum,
                 sCharName = uname
@@ -1533,7 +1533,7 @@ namespace GameSvr
         {
             var Name = string.Empty;
             var apmode = HUtil32.GetValidStr3(uname, ref Name, ":");
-            m_OtherUserNameList.Remove(Name.ToLower());
+            m_OtherUserNameList.Remove(Name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
             //     if (string.Compare(m_OtherUserNameList[i].sCharName, Name, StringComparison.OrdinalIgnoreCase) == 0 && m_OtherUserNameList[i].nServerIdx == sNum)

@@ -53,7 +53,7 @@ namespace GameSvr
                         }
                         UserItem = m_PlayObject.m_UseItems[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
+                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.Ordinal) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {
@@ -88,7 +88,7 @@ namespace GameSvr
                         }
                         UserItem = m_PlayObject.m_ItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
+                        if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {
@@ -121,7 +121,7 @@ namespace GameSvr
                         }
                         UserItem = m_PlayObject.m_StorageItemList[i];
                         StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                        if (StdItem != null && sItemName.ToLower().CompareTo(StdItem.Name.ToLower()) == 0)
+                        if (StdItem != null && String.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!m_PlayObject.IsEnoughBag())
                             {

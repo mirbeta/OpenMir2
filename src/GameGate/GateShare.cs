@@ -80,7 +80,7 @@ namespace GameGate
         public static int nMaxConnOfIPaddr = 50;
         public static int nMaxClientPacketSize = 7000;
         public static int nNomClientPacketSize = 150;
-        public static long dwClientCheckTimeOut = 50;
+        public static int dwClientCheckTimeOut = 50;
         public static int nMaxOverNomSizeCount = 2;
         public static int nMaxClientMsgCount = 15;
         public static TBlockIPMethod BlockMethod = TBlockIPMethod.mDisconnect;

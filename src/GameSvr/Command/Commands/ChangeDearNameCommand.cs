@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using System;
+using SystemModule;
 using GameSvr.CommandSystem;
 
 namespace GameSvr
@@ -26,7 +27,7 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (sDearName.ToLower().CompareTo("无".ToLower()) == 0)
+                if (String.Compare(sDearName, "无", StringComparison.Ordinal) == 0)
                 {
                     m_PlayObject.m_sDearName = "";
                     m_PlayObject.RefShowName();

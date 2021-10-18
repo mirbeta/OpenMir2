@@ -29,7 +29,7 @@ namespace GameSvr
                 {
                     break;
                 }
-                //if ((PlayObject.m_BlockWhisperList[i]).ToLower().CompareTo((sHumanName).ToLower()) == 0)
+                //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
                 //{
                 //    PlayObject.m_BlockWhisperList.RemoveAt(i);
                 //    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);

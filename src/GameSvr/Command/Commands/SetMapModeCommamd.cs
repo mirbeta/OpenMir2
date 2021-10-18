@@ -39,7 +39,7 @@ namespace GameSvr
             //    PlayObject.   SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            //if ((sMapMode).ToLower().CompareTo(("SAFE").ToLower()) == 0)
+            //if ((sMapMode).CompareTo(("SAFE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -50,7 +50,7 @@ namespace GameSvr
             //        Envir.m_boSAFE = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("DARK").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("DARK")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -61,7 +61,7 @@ namespace GameSvr
             //        Envir.m_boDARK = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("DARK").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("DARK")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -72,7 +72,7 @@ namespace GameSvr
             //        Envir.m_boDARK = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("FIGHT").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("FIGHT")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -83,7 +83,7 @@ namespace GameSvr
             //        Envir.m_boFightZone = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("FIGHT2").ToLower()) == 0) // PK掉装备地图
+            //else if ((sMapMode).CompareTo(("FIGHT2")) == 0) // PK掉装备地图
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -94,7 +94,7 @@ namespace GameSvr
             //        Envir.m_boFight2Zone = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("FIGHT3").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("FIGHT3")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -105,7 +105,7 @@ namespace GameSvr
             //        Envir.m_boFight3Zone = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("FIGHT4").ToLower()) == 0) // 挑战地图
+            //else if ((sMapMode).CompareTo(("FIGHT4")) == 0) // 挑战地图
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -116,7 +116,7 @@ namespace GameSvr
             //        Envir.m_boFight4Zone = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("DAY").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("DAY")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -127,7 +127,7 @@ namespace GameSvr
             //        Envir.m_boDAY = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("QUIZ").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("QUIZ")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -138,7 +138,7 @@ namespace GameSvr
             //        Envir.m_boQUIZ = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NORECONNECT").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NORECONNECT")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -150,7 +150,7 @@ namespace GameSvr
             //        Envir.m_boNORECONNECT = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("MUSIC").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("MUSIC")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -162,7 +162,7 @@ namespace GameSvr
             //        Envir.m_boMUSIC = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("EXPRATE").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("EXPRATE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -174,7 +174,7 @@ namespace GameSvr
             //        Envir.m_boEXPRATE = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("PKWINLEVEL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("PKWINLEVEL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -186,7 +186,7 @@ namespace GameSvr
             //        Envir.m_boPKWINLEVEL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("PKWINEXP").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("PKWINEXP")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -198,7 +198,7 @@ namespace GameSvr
             //        Envir.m_boPKWINEXP = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("PKLOSTLEVEL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("PKLOSTLEVEL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -210,7 +210,7 @@ namespace GameSvr
             //        Envir.m_boPKLOSTLEVEL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("PKLOSTEXP").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("PKLOSTEXP")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -222,7 +222,7 @@ namespace GameSvr
             //        Envir.m_boPKLOSTEXP = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("DECHP").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("DECHP")) == 0)
             //{
             //    if ((sParam1 != "") && (sParam2 != ""))
             //    {
@@ -235,7 +235,7 @@ namespace GameSvr
             //        Envir.m_boDECHP = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("DECGAMEGOLD").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("DECGAMEGOLD")) == 0)
             //{
             //    if ((sParam1 != "") && (sParam2 != ""))
             //    {
@@ -248,7 +248,7 @@ namespace GameSvr
             //        Envir.m_boDecGameGold = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("KILLFUNC").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("KILLFUNC")) == 0)
             //{
             //    // 20080415 地图杀人触发
             //    if ((sParam1 != ""))
@@ -261,7 +261,7 @@ namespace GameSvr
             //        Envir.m_boKILLFUNC = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("INCGAMEGOLD").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("INCGAMEGOLD")) == 0)
             //{
             //    if ((sParam1 != "") && (sParam2 != ""))
             //    {
@@ -274,7 +274,7 @@ namespace GameSvr
             //        Envir.m_boIncGameGold = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("INCGAMEPOINT").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("INCGAMEPOINT")) == 0)
             //{
             //    if ((sParam1 != "") && (sParam2 != ""))
             //    {
@@ -288,7 +288,7 @@ namespace GameSvr
             //    }
             //}
             //// ------------------------------------------------------------------------------
-            //else if ((sMapMode).ToLower().CompareTo(("NEEDLEVELTIME").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NEEDLEVELTIME")) == 0)
             //{
             //    // 雪域地图传送,判断等级,地图时间 20081228
             //    if ((sParam1 != "") && (sParam2 != ""))
@@ -303,7 +303,7 @@ namespace GameSvr
             //    }
             //}
             //// 20080124 禁止召唤英雄
-            //else if ((sMapMode).ToLower().CompareTo(("NOCALLHERO").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NOCALLHERO")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -315,7 +315,7 @@ namespace GameSvr
             //    }
             //}
             //// 禁止英雄守护 20080629
-            //else if ((sMapMode).ToLower().CompareTo(("NOHEROPROTECT").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NOHEROPROTECT")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -327,7 +327,7 @@ namespace GameSvr
             //    }
             //}
             //// 20080503 禁止死亡掉物品
-            //else if ((sMapMode).ToLower().CompareTo(("NODROPITEM").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NODROPITEM")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -339,7 +339,7 @@ namespace GameSvr
             //    }
             //}
             //// 20080124 不允许使用任何物品和技能
-            //else if ((sMapMode).ToLower().CompareTo(("MISSION").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("MISSION")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -352,7 +352,7 @@ namespace GameSvr
 
             //    // ------------------------------------------------------------------------------
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("RUNHUMAN").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("RUNHUMAN")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -363,7 +363,7 @@ namespace GameSvr
             //        Envir.m_boRUNHUMAN = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("RUNMON").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("RUNMON")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -374,7 +374,7 @@ namespace GameSvr
             //        Envir.m_boRUNMON = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NEEDHOLE").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NEEDHOLE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -385,7 +385,7 @@ namespace GameSvr
             //        Envir.m_boNEEDHOLE = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NORECALL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NORECALL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -396,7 +396,7 @@ namespace GameSvr
             //        Envir.m_boNORECALL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NOGUILDRECALL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NOGUILDRECALL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -407,7 +407,7 @@ namespace GameSvr
             //        Envir.m_boNOGUILDRECALL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NODEARRECALL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NODEARRECALL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -418,7 +418,7 @@ namespace GameSvr
             //        Envir.m_boNODEARRECALL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NOMASTERRECALL").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NOMASTERRECALL")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -429,7 +429,7 @@ namespace GameSvr
             //        Envir.m_boNOMASTERRECALL = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NORANDOMMOVE").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NORANDOMMOVE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -440,7 +440,7 @@ namespace GameSvr
             //        Envir.m_boNORANDOMMOVE = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NODRUG").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NODRUG")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -451,7 +451,7 @@ namespace GameSvr
             //        Envir.m_boNODRUG = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("MINE").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("MINE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {
@@ -462,7 +462,7 @@ namespace GameSvr
             //        Envir.m_boMINE = false;
             //    }
             //}
-            //else if ((sMapMode).ToLower().CompareTo(("NOPOSITIONMOVE").ToLower()) == 0)
+            //else if ((sMapMode).CompareTo(("NOPOSITIONMOVE")) == 0)
             //{
             //    if ((sParam1 != ""))
             //    {

@@ -55,7 +55,7 @@ namespace GameSvr.CommandSystem
 
         public void RegisterCommand(string command, string commandName)
         {
-            Commands.Add(command.ToLower(), commandName);
+            Commands.Add(command, commandName);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace GameSvr.CommandSystem
                 return false;
 
             line = line.Substring(1);
-            command = line.Split(' ')[0].ToLower(); // 取命令
+            command = line.Split(' ')[0]; // 取命令
             parameters = string.Empty;
             if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // 取命令参数
 

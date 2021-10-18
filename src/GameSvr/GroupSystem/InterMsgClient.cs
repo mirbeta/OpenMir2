@@ -72,8 +72,8 @@ namespace GameSvr
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
                     if (!string.IsNullOrEmpty(Str))
                     {
-                        Body = HUtil32.GetValidStr3(Str, ref Head, "/");
-                        Body = HUtil32.GetValidStr3(Body, ref sNumStr, "/");
+                        Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
+                        Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
                         Ident = HUtil32.Str_ToInt(Head, 0);
                         sNum = HUtil32.Str_ToInt(sNumStr, -1);
                         _groupMessageHandle.ProcessData(Ident, sNum, Body);

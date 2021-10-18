@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GameSvr.CommandSystem;
 using SystemModule;
 
@@ -71,7 +72,7 @@ namespace GameSvr
                         MoveMon = MonList[i] as TBaseObject;
                         if (MoveMon != PlayObject)
                         {
-                            if (MoveMon.m_sCharName.ToLower().CompareTo(sMonName.ToLower()) == 0) // 是否是指定名称的怪
+                            if (string.Compare(MoveMon.m_sCharName, sMonName, StringComparison.Ordinal) == 0) // 是否是指定名称的怪
                             {
                                 MoveMon.SpaceMove(NewMap, nX, nY, 0);
                             }

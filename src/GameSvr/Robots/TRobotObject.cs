@@ -210,48 +210,48 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new string[] { " ", "/", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new string[] { " ", "/", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new string[] { " ", "/", "\t" });
-                        if (string.Compare(sActionType.ToLower(), ObjRobot.sROAUTORUN.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sActionType, ObjRobot.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (string.Compare(sRunCmd.ToLower(), ObjRobot.sRONPCLABLEJMP.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(sRunCmd, ObjRobot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 AutoRunInfo = new AutoRunInfo();
                                 AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                 AutoRunInfo.dwRunTimeLen = 0;
                                 AutoRunInfo.boStatus = false;
                                 AutoRunInfo.nRunCmd = ObjRobot.nRONPCLABLEJMP;
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRODAY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRODAY, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRODAY;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sROHOUR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sROHOUR, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nROHOUR;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sROMIN.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sROMIN, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nROMIN;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sROSEC.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sROSEC, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nROSEC;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRUNONWEEK.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRUNONWEEK, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRUNONWEEK;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRUNONDAY.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRUNONDAY, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRUNONDAY;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRUNONHOUR.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRUNONHOUR, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRUNONHOUR;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRUNONMIN.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRUNONMIN, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRUNONMIN;
                                 }
-                                if (string.Compare(sMoethod.ToLower(), ObjRobot.sRUNONSEC.ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, ObjRobot.sRUNONSEC, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     AutoRunInfo.nMoethod = ObjRobot.nRUNONSEC;
                                 }

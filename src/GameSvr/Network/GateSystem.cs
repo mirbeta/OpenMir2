@@ -283,10 +283,10 @@ namespace GameSvr
                 if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.Substring(2, sData.Length - 2);
-                    sData = HUtil32.GetValidStr3(sData, ref sAccount, "/");
-                    sData = HUtil32.GetValidStr3(sData, ref sChrName, "/");
-                    sData = HUtil32.GetValidStr3(sData, ref sCodeStr, "/");
-                    sData = HUtil32.GetValidStr3(sData, ref sClientVersion, "/");
+                    sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
+                    sData = HUtil32.GetValidStr3(sData, ref sChrName, HUtil32.Backslash);
+                    sData = HUtil32.GetValidStr3(sData, ref sCodeStr, HUtil32.Backslash);
+                    sData = HUtil32.GetValidStr3(sData, ref sClientVersion, HUtil32.Backslash);
                     var sIdx = sData;
                     nSessionID = HUtil32.Str_ToInt(sCodeStr, 0);
                     if (sIdx == "0")

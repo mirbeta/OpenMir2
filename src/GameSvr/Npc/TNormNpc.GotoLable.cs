@@ -29,7 +29,7 @@ namespace GameSvr
                 for (var i = 0; i < m_ScriptList.Count; i++)
                 {
                     Script3C = m_ScriptList[i];
-                    if (Script3C.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
+                    if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord))
                     {
                         Script = Script3C;
                         PlayObject.m_Script = Script;
@@ -66,7 +66,7 @@ namespace GameSvr
             // 跳转到指定示签，执行
             if (Script != null)
             {
-                if (Script.RecordList.TryGetValue(sLabel.ToLower(), out SayingRecord))
+                if (Script.RecordList.TryGetValue(sLabel, out SayingRecord))
                 {
                     if (boExtJmp && SayingRecord.boExtJmp == false)
                     {
@@ -446,7 +446,7 @@ namespace GameSvr
                         }
                         break;
                     case M2Share.nGENDER:
-                        if (QuestConditionInfo.sParam1.ToLower().CompareTo(M2Share.sMAN.ToLower()) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (PlayObject.m_btGender != ObjBase.gMan)
                             {
@@ -462,28 +462,28 @@ namespace GameSvr
                         }
                         break;
                     case M2Share.nDAYTIME:
-                        if (QuestConditionInfo.sParam1.ToLower().CompareTo(M2Share.sSUNRAISE.ToLower()) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 0)
                             {
                                 result = false;
                             }
                         }
-                        if (QuestConditionInfo.sParam1.ToLower().CompareTo(M2Share.sDAY.ToLower()) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 1)
                             {
                                 result = false;
                             }
                         }
-                        if (QuestConditionInfo.sParam1.ToLower().CompareTo(M2Share.sSUNSET.ToLower()) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 2)
                             {
                                 result = false;
                             }
                         }
-                        if (QuestConditionInfo.sParam1.ToLower().CompareTo(M2Share.sNIGHT.ToLower()) == 0)
+                        if (String.Compare(QuestConditionInfo.sParam1, M2Share.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (M2Share.g_nGameTime != 3)
                             {
@@ -1358,7 +1358,7 @@ namespace GameSvr
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
-                if (sHumName.ToLower().CompareTo(s10.ToLower()) == 0)
+                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
                     break;
@@ -1366,7 +1366,7 @@ namespace GameSvr
             }
             if (!bo15)
             {
-                s10 = string.Format("%s    %s", new string[] { sHumName, DateTime.Today.ToString() });
+                s10 = string.Format("{0}    {1}", new object[] { sHumName, DateTime.Today });
                 LoadList.Add(s10);
                 try
                 {
@@ -1400,7 +1400,7 @@ namespace GameSvr
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s10 = LoadList[i].Trim();
-                if (sHumName.ToLower().CompareTo(s10.ToLower()) == 0)
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
                     break;
@@ -1436,7 +1436,7 @@ namespace GameSvr
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
-                if (sHumName.ToLower().CompareTo(s10.ToLower()) == 0)
+                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
                     LoadList.RemoveAt(i);
@@ -1471,7 +1471,7 @@ namespace GameSvr
             for (var i = 0; i < LoadList.Count; i++)
             {
                 s10 = LoadList[i].Trim();
-                if (sHumName.ToLower().CompareTo(s10.ToLower()) == 0)
+                if (String.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
                     bo15 = true;
@@ -1489,7 +1489,7 @@ namespace GameSvr
         {
             TUserItem UserItem;
             GameItem StdItem;
-            if (sItemName.ToLower().CompareTo(Grobal2.sSTRING_GOLDNAME.ToLower()) == 0)
+            if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.DecGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -1506,7 +1506,7 @@ namespace GameSvr
                     break;
                 }
                 UserItem = PlayObject.m_ItemList[i];
-                if (M2Share.UserEngine.GetStdItemName(UserItem.wIndex).ToLower().CompareTo(sItemName.ToLower()) == 0)
+                if (String.Compare(M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                     if (StdItem.NeedIdentify == 1)
@@ -1526,7 +1526,7 @@ namespace GameSvr
         {
             TUserItem UserItem;
             GameItem StdItem;
-            if (sItemName.ToLower().CompareTo(Grobal2.sSTRING_GOLDNAME.ToLower()) == 0)
+            if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
@@ -1708,7 +1708,7 @@ namespace GameSvr
                 if (PlayObject.m_UseItems[i].wIndex > 0)
                 {
                     sName = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[i].wIndex);
-                    if (sName.ToLower().CompareTo(sItemName.ToLower()) == 0)
+                    if (String.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendDelItems(PlayObject.m_UseItems[i]);
                         PlayObject.m_UseItems[i].wIndex = 0;

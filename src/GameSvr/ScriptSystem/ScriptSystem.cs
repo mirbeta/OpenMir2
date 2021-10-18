@@ -178,7 +178,7 @@ namespace GameSvr
                 boQuest = false,
                 //FillChar(ScriptInfo.QuestInfo, sizeof(grobal2.TScriptQuestInfo), '\0');
                 //nQuestIdx = 0;
-                RecordList = new Dictionary<string, TSayingRecord>()
+                RecordList = new Dictionary<string, TSayingRecord>(StringComparer.OrdinalIgnoreCase)
             };
             NPC.m_ScriptList.Add(ScriptInfo);
             result = ScriptInfo;
@@ -2067,7 +2067,7 @@ namespace GameSvr
                                         ((TMerchant)NPC).m_boOffLineMsg = true;
                                         continue;
                                     }
-                                    if ((s30).ToLower().CompareTo((M2Share.sybdeal).ToLower()) == 0)
+                                    if (String.Compare(s30, (M2Share.sybdeal), StringComparison.OrdinalIgnoreCase) == 0)
                                     {
                                         ((TMerchant)(NPC)).m_boYBDeal = true;
                                         continue;
@@ -2133,7 +2133,7 @@ namespace GameSvr
                         SayingRecord = new TSayingRecord
                         {
                             ProcedureList = new List<TSayingProcedure>(),
-                            sLabel = slabName.ToLower()
+                            sLabel = slabName
                         };
                         s34 = HUtil32.GetValidStrCap(s34, ref slabName, new[] { " ", "\t" });
                         if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))

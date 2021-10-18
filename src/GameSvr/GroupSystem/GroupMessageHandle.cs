@@ -177,7 +177,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -195,7 +195,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -213,7 +213,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 TPlayObject hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -233,7 +233,7 @@ namespace GameSvr
         private void MsgGetAddGuild(int sNum, string Body)
         {
             var gname = string.Empty;
-            var mname = HUtil32.GetValidStr3(Body, ref gname, "/");
+            var mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
             M2Share.GuildManager.AddGuild(gname, mname);
         }
 
@@ -272,7 +272,7 @@ namespace GameSvr
         {
             var gname = string.Empty;
             string Str = Body;
-            Str = HUtil32.GetValidStr3(Str, ref gname, "/");
+            Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
             if (gname != "")
             {
                 var g = M2Share.GuildManager.FindGuild(gname);
@@ -296,9 +296,9 @@ namespace GameSvr
             if (sNum == 0)
             {
                 Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref gname, "/");
-                Str = HUtil32.GetValidStr3(Str, ref warguildname, "/");
-                Str = HUtil32.GetValidStr3(Str, ref StartTime, "/");
+                Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref warguildname, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref StartTime, HUtil32.Backslash);
                 remaintime = Str;
                 if (gname != "" && warguildname != "")
                 {
@@ -351,8 +351,8 @@ namespace GameSvr
             var whostr = string.Empty;
             var minstr = string.Empty;
             string Str = Body;
-            Str = HUtil32.GetValidStr3(Str, ref whostr, "/");
-            Str = HUtil32.GetValidStr3(Str, ref minstr, "/");
+            Str = HUtil32.GetValidStr3(Str, ref whostr, HUtil32.Backslash);
+            Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
             if (whostr != "")
             {
                 //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
@@ -393,7 +393,7 @@ namespace GameSvr
         {
             var UserName = string.Empty;
             string Str = Body;
-            string msgbody = HUtil32.GetValidStr3(Str, ref UserName, "/");
+            string msgbody = HUtil32.GetValidStr3(Str, ref UserName, HUtil32.Backslash);
             // UserMgrEngine.OnExternInterMsg(sNum, Ident_, UserName, msgbody);
         }
 
@@ -411,9 +411,9 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                Str = HUtil32.GetValidStr3(Str, ref dxstr, "/");
-                Str = HUtil32.GetValidStr3(Str, ref dystr, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
                 var dy = (short)HUtil32.Str_ToInt(dystr, 0);
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
@@ -443,8 +443,8 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                Str = HUtil32.GetValidStr3(Str, ref lovername, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref lovername, HUtil32.Backslash);
                 humlover = M2Share.UserEngine.GetPlayObject(lovername);
                 if (humlover != null)
                 {
@@ -464,7 +464,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 var lovername = Str;
                 var hum = M2Share.UserEngine.GetPlayObject(lovername);
                 if (hum != null)
@@ -485,7 +485,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -502,9 +502,9 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
-                Str = HUtil32.GetValidStr3(Str, ref dxstr, "/");
-                Str = HUtil32.GetValidStr3(Str, ref dystr, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
+                Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 var dx = (short)HUtil32.Str_ToInt(dxstr, 0);
                 var dy = (short)HUtil32.Str_ToInt(dystr, 0);
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
@@ -522,7 +522,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -537,7 +537,7 @@ namespace GameSvr
             if (sNum == M2Share.nServerIndex)
             {
                 var Str = Body;
-                Str = HUtil32.GetValidStr3(Str, ref uname, "/");
+                Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {

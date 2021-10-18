@@ -28,7 +28,7 @@ namespace GameSvr
                 {
                     break;
                 }
-                //if ((sHumanName).ToLower().CompareTo((M2Share.g_DisableSendMsgList[i]).ToLower()) == 0)
+                //if ((sHumanName).CompareTo((M2Share.g_DisableSendMsgList[i])) == 0)
                 //{
                 //    m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                 //    if (m_PlayObject != null)

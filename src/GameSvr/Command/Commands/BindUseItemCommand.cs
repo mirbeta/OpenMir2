@@ -1,5 +1,5 @@
-﻿using SystemModule;
-using System;
+﻿using System;
+using SystemModule;
 using GameSvr.CommandSystem;
 
 namespace GameSvr
@@ -24,19 +24,19 @@ namespace GameSvr
             bool boFind;
             bool boLight;
             var nItem = M2Share.GetUseItemIdx(sItem);
-            if (sType.ToLower().CompareTo("帐号".ToLower()) == 0)
+            if (String.Compare(sType, "帐号", StringComparison.Ordinal) == 0)
             {
                 nBind = 0;
             }
-            if (sType.ToLower().CompareTo("人物".ToLower()) == 0)
+            if (String.Compare(sType, "人物", StringComparison.Ordinal) == 0)
             {
                 nBind = 1;
             }
-            if (sType.ToLower().CompareTo("IP".ToLower()) == 0)
+            if (String.Compare(sType, "IP", StringComparison.Ordinal) == 0)
             {
                 nBind = 2;
             }
-            if (sType.ToLower().CompareTo("死亡".ToLower()) == 0)
+            if (String.Compare(sType, "死亡", StringComparison.Ordinal) == 0)
             {
                 nBind = 3;
             }

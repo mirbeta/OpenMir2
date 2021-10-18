@@ -29,19 +29,19 @@ namespace GameSvr
             //int nItemIdx;
             //int nMakeIdex;
             //string sBindName;
-            //if ((sType).ToLower().CompareTo(("帐号").ToLower()) == 0)
+            //if ((sType).CompareTo(("帐号")) == 0)
             //{
             //    nBind = 0;
             //}
-            //if ((sType).ToLower().CompareTo(("人物").ToLower()) == 0)
+            //if ((sType).CompareTo(("人物")) == 0)
             //{
             //    nBind = 1;
             //}
-            //if ((sType).ToLower().CompareTo(("IP").ToLower()) == 0)
+            //if ((sType).CompareTo(("IP")) == 0)
             //{
             //    nBind = 2;
             //}
-            //if ((sType).ToLower().CompareTo(("死亡").ToLower()) == 0) // 死亡不爆出
+            //if ((sType).CompareTo(("死亡")) == 0) // 死亡不爆出
             //{
             //    nBind = 3;
             //}

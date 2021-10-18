@@ -49,7 +49,7 @@ namespace GameSvr
             var bo15 = true;
             for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
             {
-                if (string.Compare(NoticeList[i].sMsg.ToLower(), sStr.ToLower(), StringComparison.OrdinalIgnoreCase) != 0) continue;
+                if (string.Compare(NoticeList[i].sMsg, sStr, StringComparison.OrdinalIgnoreCase) != 0) continue;
                 if (NoticeList[i].sList != null)
                 {
                     for (var j = 0; j < NoticeList[i].sList.Count; j++)

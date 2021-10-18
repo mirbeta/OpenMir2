@@ -1181,7 +1181,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
@@ -1198,7 +1198,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
@@ -1215,7 +1215,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
                 //}
@@ -1232,7 +1232,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
                 //}
@@ -1249,7 +1249,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
@@ -1266,7 +1266,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
@@ -1283,7 +1283,7 @@ namespace GameSvr
                 //{
                 //    return;
                 //}
-                //if ((s14[0]).ToLower().CompareTo(("$").ToLower()) == 0)
+                //if ((s14[0]).CompareTo(("$")) == 0)
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}

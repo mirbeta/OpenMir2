@@ -24,7 +24,7 @@ namespace GameSvr
             {
                 for (var i = 0; i < M2Share.g_DenyChrNameList.Count; i++)
                 {
-                    //if ((sCharName).ToLower().CompareTo((M2Share.g_DenyChrNameList[i]).ToLower()) == 0)
+                    //if ((sCharName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)
                     //    //{

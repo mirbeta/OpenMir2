@@ -90,10 +90,6 @@ namespace GameGate
 
         private void DecodeTimer(object obj)
         {
-            long dwLoopProcessTime;
-            long dwProcessReviceMsgLimiTick;
-            TSendUserData tUserData = null;
-            TSessionInfo UserSession = null;
             ShowMainLogMsg();
             if (!GateShare.boDecodeMsgLock)
             {
@@ -135,7 +131,7 @@ namespace GameGate
                 }
                 try
                 {
-                    dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
+                    var dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
                     if ((HUtil32.GetTickCount() - dwProcessPacketTick) > 300)
                     {
                         dwProcessPacketTick = HUtil32.GetTickCount();
@@ -176,10 +172,10 @@ namespace GameGate
                             }
                             for (var j = 0; j < clientList[i].MaxSession; j++)
                             {
-                                UserSession = clientList[i].SessionArray[j];
+                                var UserSession = clientList[i].SessionArray[j];
                                 if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
                                 {
-                                    tUserData = new TSendUserData();
+                                    var tUserData = new TSendUserData();
                                     tUserData.nSocketHandle = UserSession.nSckHandle;
                                     tUserData.UserCientId = UserSession.SocketId;
                                     ProcessPacket(tUserData);
@@ -197,7 +193,7 @@ namespace GameGate
                     GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessPacket 2", 1);
                 }
                 GateShare.boDecodeMsgLock = false;
-                dwLoopProcessTime = HUtil32.GetTickCount() - dwLoopCheckTick;
+                var dwLoopProcessTime = HUtil32.GetTickCount() - dwLoopCheckTick;
                 dwLoopCheckTick = HUtil32.GetTickCount();
                 if (dwLoopTime < dwLoopProcessTime)
                 {
@@ -255,7 +251,7 @@ namespace GameGate
                 GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
                 GateShare.AddMainLogMsg("智能反外挂程序已启动...", 0);
                 GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
-                GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
+                //GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
             }
             catch (Exception E)
             {
@@ -295,12 +291,12 @@ namespace GameGate
                 GateShare.nNomClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "NomClientPacketSize", GateShare.nNomClientPacketSize);
                 GateShare.nMaxClientMsgCount = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientMsgCount", GateShare.nMaxClientMsgCount);
                 GateShare.bokickOverPacketSize = GateShare.Conf.ReadBool(GateShare.GateClass, "kickOverPacket", GateShare.bokickOverPacketSize);
-                GateShare.dwCheckServerTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ServerCheckTimeOut", GateShare.dwCheckServerTimeOutTime);
+                GateShare.dwCheckServerTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "ServerCheckTimeOut", GateShare.dwCheckServerTimeOutTime);
                 GateShare.nClientSendBlockSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "ClientSendBlockSize", GateShare.nClientSendBlockSize);
-                GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
-                GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
+                GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
+                GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
                 GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
-                GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<long>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
+                GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
 
                 //防外挂配置参数
                 GateShare.boStartHitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartHitCheck", GateShare.boStartHitCheck);
@@ -483,7 +479,7 @@ namespace GameGate
             int nCount = 0;
             // for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i ++ )
             // {
-            //     if ((sIPaddr).ToLower().CompareTo((ServerSocket.Connections[i].RemoteAddress).ToLower()) == 0)
+            //     if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
             //     {
             //         nCount ++;
             //     }

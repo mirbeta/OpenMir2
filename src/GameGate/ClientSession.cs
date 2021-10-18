@@ -144,8 +144,8 @@ namespace GameGate
                                                 return;
                                             }
                                             //HandleLogin();
-                                            sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, new string[] { "/" });
-                                            sDataText = HUtil32.GetValidStr3(sDataText, ref _session.sUserName, new string[] { "/" }); // 取角色名
+                                            sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);
+                                            sDataText = HUtil32.GetValidStr3(sDataText, ref _session.sUserName, HUtil32.Backslash); // 取角色名
                                             sDataText = "";
                                             sHumName = "";
                                             //nHumLogonMsgSize += sData.Length;
@@ -389,12 +389,6 @@ namespace GameGate
         /// <summary>
         /// 发送延时处理消息
         /// </summary>
-        /// <param name="nMid"></param>
-        /// <param name="nDir"></param>
-        /// <param name="nIdx"></param>
-        /// <param name="nLen"></param>
-        /// <param name="pMsg"></param>
-        /// <param name="dwDelay"></param>
         private void SendDelayMsg(int nMid, int nDir, int nIdx, int nLen, string pMsg, long dwDelay)
         {
             const int DELAY_BUFFER_LEN = 1024;

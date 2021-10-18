@@ -142,27 +142,27 @@ namespace GameSvr
                                 MapFlag.boSAFE = true;
                                 continue;
                             }
-                            if (string.Compare(s34, "DARK".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(s34, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 MapFlag.boDarkness = true;
                                 continue;
                             }
-                            if (string.Compare(s34, "FIGHT".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(s34, "FIGHT", StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 MapFlag.boFightZone = true;
                                 continue;
                             }
-                            if (string.Compare(s34, "FIGHT3".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(s34, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 MapFlag.boFight3Zone = true;
                                 continue;
                             }
-                            if (string.Compare(s34, "DAY".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(s34, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 MapFlag.boDayLight = true;
                                 continue;
                             }
-                            if (string.Compare(s34, "QUIZ".ToLower(), StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(s34, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 MapFlag.boQUIZ = true;
                                 continue;
@@ -244,7 +244,7 @@ namespace GameSvr
                             {
                                 MapFlag.boDECHP = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nDECHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nDECHPTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -252,7 +252,7 @@ namespace GameSvr
                             {
                                 MapFlag.boINCHP = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nINCHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nINCHPTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -260,7 +260,7 @@ namespace GameSvr
                             {
                                 MapFlag.boDECGAMEGOLD = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nDECGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nDECGAMEGOLDTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -268,7 +268,7 @@ namespace GameSvr
                             {
                                 MapFlag.boDECGAMEPOINT = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nDECGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nDECGAMEPOINTTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -276,7 +276,7 @@ namespace GameSvr
                             {
                                 MapFlag.boINCGAMEGOLD = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nINCGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nINCGAMEGOLDTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -284,7 +284,7 @@ namespace GameSvr
                             {
                                 MapFlag.boINCGAMEPOINT = true;
                                 HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, "/"), -1);
+                                MapFlag.nINCGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
                                 MapFlag.nINCGAMEPOINTTIME = HUtil32.Str_ToInt(s38, -1);
                                 continue;
                             }
@@ -440,12 +440,12 @@ namespace GameSvr
                         var nIdx = HUtil32.Str_ToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
-                            if (M2Share.MiniMapList.ContainsKey(sMapNO.ToLower()))
+                            if (M2Share.MiniMapList.ContainsKey(sMapNO))
                             {
                                 M2Share.ErrorMessage($"重复小地图配置信息[{sMapNO}]");
                                 continue;
                             }
-                            M2Share.MiniMapList.Add(sMapNO.ToLower(), nIdx);
+                            M2Share.MiniMapList.Add(sMapNO, nIdx);
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace GameSvr
             var boDelete = false;
             for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
             {
-                //if ((sAccount).ToLower().CompareTo((M2Share.g_DenyAccountList[i]).ToLower()) == 0)
+                //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{
                 //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)
                 //    //{

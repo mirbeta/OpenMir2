@@ -3454,7 +3454,7 @@ namespace GameSvr
                         foreach (Match item in match)
                         {
                             sCmdStr = item.Value;
-                            var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, "/");
+                            var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
                             if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
                             {
                                 m_CanJmpScriptLableList.Add(sLabel, sLabel);

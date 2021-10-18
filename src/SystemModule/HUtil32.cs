@@ -6,8 +6,8 @@ namespace SystemModule
 {
     public class HUtil32
     {
-        private const int V = 0;
-
+        public const string Backslash = "/";
+        
         /// <summary>
         /// 根据GUID获取唯一数字序列
         /// </summary>
@@ -756,7 +756,7 @@ namespace SystemModule
 
         public static int GetDayCount(DateTime MaxDate, DateTime MinDate)
         {
-            int result = V;
+            int result = 0;
             if (MaxDate < MinDate) return result;
             int YearMax = MaxDate.Year;
             int MonthMax = MaxDate.Month;
