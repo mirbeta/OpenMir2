@@ -71,20 +71,13 @@ namespace GameGate
         /// </summary>
         private async Task ProcessSendMessage()
         {
-            try
+            while (await GateShare.SendMsgList.Reader.WaitToReadAsync())
             {
-                while (await GateShare.SendMsgList.Reader.WaitToReadAsync())
+                if (GateShare.SendMsgList.Reader.TryRead(out var message))
                 {
-                    if (GateShare.SendMsgList.Reader.TryRead(out var message))
-                    {
-                        //todo 需要处理多个网关的数据
-                        ProcessPacket(message);
-                    }
+                    //todo 需要处理多个网关的数据
+                    ProcessPacket(message);
                 }
-            }
-            catch (Exception E)
-            {
-                GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessPacket", 1);
             }
         }
 
