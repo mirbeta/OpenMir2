@@ -69,17 +69,17 @@ namespace GameSvr.Configs
                     {
                         oldNeedExp = _conf.ReadInteger("Exp", "Level" + i, 0);
                         _conf.WriteString("Exp", "Level" + i, oldNeedExp);
-                        M2Share.g_Config.dwNeedExps[i - 1] = oldNeedExp;
+                        M2Share.g_Config.dwNeedExps[i] = oldNeedExp;
                     }
                     else
                     {
                         _conf.WriteString("Exp", "Level" + i, oldNeedExp);
-                        M2Share.g_Config.dwNeedExps[i - 1] = oldNeedExp;
+                        M2Share.g_Config.dwNeedExps[i] = oldNeedExp;
                     }
                 }
                 else
                 {
-                    M2Share.g_Config.dwNeedExps[i - 1] = LoadInteger;
+                    M2Share.g_Config.dwNeedExps[i] = LoadInteger;
                 }
             }
             LoadInteger = _conf.ReadInteger("Exp", "UseFixExp", -1);

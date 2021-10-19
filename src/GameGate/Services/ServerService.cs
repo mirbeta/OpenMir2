@@ -18,7 +18,7 @@ namespace GameGate
         public ServerService(SessionManager sessionManager)
         {
             _sessionManager = sessionManager;
-            _serverSocket = new ISocketServer(2000, 50);
+            _serverSocket = new ISocketServer(2000, 512);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -63,7 +63,7 @@ namespace GameGate
 
             Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏服务器[{gateclient.GateIdx}] Server:{gateclient.GetSocketIp()}");
 
-            for (var nIdx = 0; nIdx < gateclient.MaxSession; nIdx++)
+            for (ushort nIdx = 0; nIdx < gateclient.MaxSession; nIdx++)
             {
                 userSession = gateclient.SessionArray[nIdx];
                 if (userSession.Socket == null)
@@ -91,12 +91,12 @@ namespace GameGate
                     break;
                 }
             }
-            if (userSession.SocketIdx < gateclient.MaxSession)
+            if (userSession != null && userSession.SocketIdx < gateclient.MaxSession)
             {
                 gateclient.SendServerMsg(Grobal2.GM_OPEN, userSession.SocketIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
-                _sessionManager.AddSession(e.ConnectionId, new UserClientSession(userSession));
+                _sessionManager.AddSession(e.ConnectionId, userSession.SocketIdx, new UserClientSession(userSession));
             }
             else
             {
@@ -217,16 +217,23 @@ namespace GameGate
                         var userSession = userClient.SessionArray[nSocketIndex];
                         if (userSession.Socket == token.Socket)
                         {
-                            var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
-                            if (nPos > -1)
+                            if (sReviceMsg.StartsWith("**"))
                             {
+                                sReviceMsg = sReviceMsg.Remove(0, 2);
                                 userSession.boSendAvailable = true;
                                 userSession.boSendCheck = false;
                                 userSession.nCheckSendLength = 0;
                                 userSession.dwReceiveTick = HUtil32.GetTickCount();
-                                sReviceMsg = sReviceMsg.Remove(nPos);
-                                //sReviceMsg = sReviceMsg.Substring(0, nPos);
-                                //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
+                            }
+                            else
+                            {
+                                var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
+                                if (nPos > -1)
+                                {
+                                    sReviceMsg = sReviceMsg.Remove(nPos);
+                                    //sReviceMsg = sReviceMsg.Substring(0, nPos);
+                                    //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
+                                }
                             }
                             if (GateShare.boGateReady && !string.IsNullOrEmpty(sReviceMsg))
                             {

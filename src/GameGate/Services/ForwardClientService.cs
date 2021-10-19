@@ -203,7 +203,7 @@ namespace GameGate
             SendServerMsg(message.nIdent, message.wSocketIndex, message.nSocket, message.nUserListIndex, message.nLen, message.Data);
         }
 
-        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, string Data)
+        public void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, string Data)
         {
             if (!string.IsNullOrEmpty(Data))
             {
@@ -216,14 +216,14 @@ namespace GameGate
             }
         }
 
-        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, int nUserListIndex, int nLen, byte[] Data)
+        private void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new TMsgHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = nSocket;
-            GateMsg.wGSocketIdx = (ushort)wSocketIndex;
+            GateMsg.wGSocketIdx = wSocketIndex;
             GateMsg.wIdent = nIdent;
-            GateMsg.wUserListIndex = (ushort)nUserListIndex;
+            GateMsg.wUserListIndex = nUserListIndex;
             GateMsg.nLength = nLen;
             var sendBuffer = GateMsg.GetPacket();
             if (Data is { Length: > 0 })
@@ -279,7 +279,7 @@ namespace GameGate
                                 case Grobal2.GM_SERVERUSERINDEX:
                                     if (pMsg.wGSocketIdx < MaxSession && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
                                     {
-                                        SessionArray[pMsg.wGSocketIdx].nUserListIndex = pMsg.wUserListIndex;
+                                        SessionArray[pMsg.wGSocketIdx].nUserListIndex = (ushort)pMsg.wUserListIndex;
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
@@ -385,6 +385,7 @@ namespace GameGate
                 {
                     var userData = new TSendUserData();
                     userData.nSocketHandle = nSocket;
+                    userData.SocketIndex = nSocketIndex;
                     userData.sMsg = sSendMsg;
                     GateShare.SendMsgList.Writer.TryWrite(userData);
                 }
@@ -438,9 +439,9 @@ namespace GameGate
     public class ForwardMessage
     {
         public ushort nIdent;
-        public int wSocketIndex;
+        public ushort wSocketIndex;
         public int nSocket;
-        public int nUserListIndex;
+        public ushort nUserListIndex;
         public int nLen;
         public byte[] Data;
     }

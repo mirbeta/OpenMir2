@@ -21,7 +21,7 @@
       <Optimize>False</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' " />
-    <ItemGroup>
+   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.26" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
   </ItemGroup>
@@ -35,5 +35,9 @@
   <ItemGroup>
     <ProjectReference Include="..\SystemModule\SystemModule.csproj">
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Groups" />
+    <Folder Include="Quests" />
   </ItemGroup>
 </Project>

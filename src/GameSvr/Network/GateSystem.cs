@@ -620,7 +620,7 @@ namespace GameSvr
             }
         }
 
-        private int OpenNewUser(int nSocket, int nGSocketIdx, string sIPaddr, IList<TGateUserInfo> UserList)
+        private int OpenNewUser(int nSocket, ushort nGSocketIdx, string sIPaddr, IList<TGateUserInfo> UserList)
         {
             int result;
             var GateUser = new TGateUserInfo

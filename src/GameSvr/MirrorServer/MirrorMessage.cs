@@ -4,11 +4,11 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class GroupMessageHandle
+    public class MirrorMessage
     {
         private readonly TPlayObject PlayObject = null;
 
-        public GroupMessageHandle()
+        public MirrorMessage()
         { 
             
         }

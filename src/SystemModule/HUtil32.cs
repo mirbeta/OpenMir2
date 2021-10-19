@@ -458,12 +458,13 @@ namespace SystemModule
         {
             var result = true;
             for (var i = 0; i <= str.Length - 1; i++)
-                if ((byte) str[i] < (byte) '0' || (byte) str[i] > (byte) '9')
+            {
+                if ((byte)str[i] < (byte)'0' || (byte)str[i] > (byte)'9')
                 {
                     result = false;
                     break;
                 }
-
+            }
             return result;
         }
 
@@ -475,8 +476,7 @@ namespace SystemModule
         /// <param name="ArrestBefore">需要匹配的符号</param>
         /// <param name="ArrestStr">截取之后的结果</param>
         /// <returns></returns>
-        public static string ArrestStringEx(string Source, string SearchAfter, string ArrestBefore,
-            ref string ArrestStr)
+        public static string ArrestStringEx(string Source, string SearchAfter, string ArrestBefore, ref string ArrestStr)
         {
             var result = string.Empty;
             int srclen;
@@ -503,7 +503,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        n = Source.IndexOf(SearchAfter) + 1;
+                        n = Source.IndexOf(SearchAfter, StringComparison.Ordinal) + 1;
                         if (n > 0)
                         {
                             Source = Source.Substring(n, srclen - n);
@@ -512,10 +512,9 @@ namespace SystemModule
                         }
                     }
                 }
-
                 if (GoodData)
                 {
-                    n = Source.IndexOf(ArrestBefore) + 1;
+                    n = Source.IndexOf(ArrestBefore, StringComparison.Ordinal) + 1;
                     if (n > 0)
                     {
                         ArrestStr = Source.Substring(0, n - 1);
@@ -529,11 +528,13 @@ namespace SystemModule
                 else
                 {
                     for (var i = 0; i <= srclen; i++)
+                    {
                         if (Source[i - 1].ToString() == SearchAfter)
                         {
                             result = Source.Substring(i - 1, srclen - i + 1);
                             break;
                         }
+                    }
                 }
             }
             catch
@@ -541,7 +542,6 @@ namespace SystemModule
                 ArrestStr = "";
                 result = "";
             }
-
             return result;
         }
 

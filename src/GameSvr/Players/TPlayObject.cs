@@ -292,7 +292,7 @@ namespace GameSvr
                 {
                     dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
-                    wGSocketIdx = (ushort)m_nGSocketIdx,
+                    wGSocketIdx = m_nGSocketIdx,
                     wIdent = Grobal2.GM_DATA
                 };
                 byte[] Buff = null;

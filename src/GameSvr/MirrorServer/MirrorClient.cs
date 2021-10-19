@@ -4,11 +4,14 @@ using SystemModule.Sockets;
 
 namespace GameSvr
 {
+    /// <summary>
+    /// 镜像服务器
+    /// </summary>
     public class TFrmMsgClient
     {
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket MsgClient;
-        private GroupMessageHandle _groupMessageHandle;
+        private MirrorMessage _groupMessageHandle;
 
         public TFrmMsgClient()
         {
@@ -17,7 +20,7 @@ namespace GameSvr
             MsgClient.ReceivedDatagram += MsgClientRead;
             MsgClient.OnError += MsgClientError;
             MsgClient.OnDisconnected += MsgClientDisconnected;
-            _groupMessageHandle = new GroupMessageHandle();
+            _groupMessageHandle = new MirrorMessage();
         }
 
         public void ConnectMsgServer()

@@ -569,8 +569,16 @@ namespace GameGate
         }
     }
 
-    public class THardwareHeader
+    public class THardwareHeader : Packets
     {
-        public long dwMagicCode;
+        public uint dwMagicCode;
+        public byte[] xMd5Digest;
+
+        public THardwareHeader(byte[] buffer)
+        {
+            var binaryReader = new BinaryReader(new MemoryStream(buffer));
+            dwMagicCode = binaryReader.ReadUInt32();
+            xMd5Digest = binaryReader.ReadBytes(16);
+        }
     }
 }

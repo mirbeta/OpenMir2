@@ -31,7 +31,7 @@ namespace GameSvr
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
         /// </summary>
-        public int m_nGSocketIdx = 0;
+        public ushort m_nGSocketIdx = 0;
         /// <summary>
         /// 人物所在网关号
         /// </summary>

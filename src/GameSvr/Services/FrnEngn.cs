@@ -288,7 +288,7 @@ namespace GameSvr
             return result;
         }
 
-        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, int nGSocketIdx, int nGateIdx)
+        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx)
         {
             TLoadDBInfo LoadRcdInfo = new TLoadDBInfo
             {

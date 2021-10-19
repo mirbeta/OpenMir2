@@ -9,7 +9,7 @@ namespace GameSvr
     {
         private readonly TServerMsgInfo[] m_SrvArray;
         private readonly ISocketServer _msgServer;
-        private GroupMessageHandle _groupMessageHandle;
+        private MirrorMessage _groupMessageHandle;
 
         public TFrmSrvMsg()
         {
@@ -19,7 +19,7 @@ namespace GameSvr
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;
             _msgServer.Init();
-            _groupMessageHandle = new GroupMessageHandle();
+            _groupMessageHandle = new MirrorMessage();
         }
 
         public void StartMsgServer()

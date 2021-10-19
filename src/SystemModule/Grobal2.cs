@@ -271,7 +271,7 @@ namespace SystemModule
         public int nSoftVersionDate;
         public int nPayMent;
         public int nPayMode;
-        public int nGSocketIdx;
+        public ushort nGSocketIdx;
         public int dwNewUserTick;
         public object PlayObject;
         public int nReLoadCount;
@@ -564,20 +564,20 @@ namespace SystemModule
         public const int HOWMANYMAGICS = 20;
 
         //摆摊
-        public const int       CM_SENDSELL =9050;   //开始摆摊
- public const int SM_SENDSELL =9051;
- public const int RM_SENDSELL =9052;
- public const int CM_MYSHOPEXIT =9053;
- public const int SM_MYSHOPEXIT =9054;
- public const int CM_MYSHOPHAM =9055;
- public const int SM_MYSHOPHAM =9056;
- public const int CM_HAMSHOPBUY =9057;
- public const int SM_HAMSHOPBUYA =9058;
- public const int SM_HAMSHOPBUYB =9059;
- public const int SM_HAMSHOPTYPE =9060;
- public const int CM_OPHAMSHOP =9061;
- public const int SM_OPHAMSHOP =9062;
- public const int CM_CHACKITEM =9063;
+        public const int CM_SENDSELL = 9050;   //开始摆摊
+        public const int SM_SENDSELL = 9051;
+        public const int RM_SENDSELL = 9052;
+        public const int CM_MYSHOPEXIT = 9053;
+        public const int SM_MYSHOPEXIT = 9054;
+        public const int CM_MYSHOPHAM = 9055;
+        public const int SM_MYSHOPHAM = 9056;
+        public const int CM_HAMSHOPBUY = 9057;
+        public const int SM_HAMSHOPBUYA = 9058;
+        public const int SM_HAMSHOPBUYB = 9059;
+        public const int SM_HAMSHOPTYPE = 9060;
+        public const int CM_OPHAMSHOP = 9061;
+        public const int SM_OPHAMSHOP = 9062;
+        public const int CM_CHACKITEM = 9063;
         public const int SM_CHACKITEM = 9064;
 
         /// <summary>
@@ -1080,7 +1080,7 @@ namespace SystemModule
         public const int GS_USERACCOUNT = 32102;
         public const int GS_CHANGEACCOUNTINFO = 32103;
         public const int WM_SENDPROCMSG = 32104;
-        public const uint RUNGATECODE = 0xAA55AA55;
+        public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
         public const int GM_OPEN = 1;
         public const int GM_CLOSE = 2;
         public const int GM_CHECKSERVER = 3;
@@ -1603,7 +1603,7 @@ namespace SystemModule
         public const int SKILL_57 = 57;
         public const int SKILL_58 = 58;
         public const int SKILL_59 = 59;
-        
+
         public const int LA_UNDEAD = 1;
         public const string sENCYPTSCRIPTFLAG = "不知道是什么字符串";
         public const string sSTATUS_FAIL = "+FAIL/";
@@ -1631,4 +1631,3 @@ namespace SystemModule
         }
     }
 }
-

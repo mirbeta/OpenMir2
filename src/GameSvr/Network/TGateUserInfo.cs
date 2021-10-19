@@ -13,7 +13,7 @@ namespace GameSvr
         /// 账号
         /// </summary>
         public string sAccount;
-        public int nGSocketIdx;
+        public ushort nGSocketIdx;
         /// <summary>
         /// 玩家IP
         /// </summary>

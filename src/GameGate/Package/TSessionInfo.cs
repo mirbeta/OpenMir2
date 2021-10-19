@@ -5,12 +5,12 @@ namespace GameGate
     public class TSessionInfo
     {
         public Socket Socket;
-        public int SocketIdx;
+        public ushort SocketIdx;
         public string SocketId;
         public int nSckHandle;
         public string sSocData;
         public string sSendData;
-        public int nUserListIndex;
+        public ushort nUserListIndex;
         public int nPacketIdx;
         /// <summary>
         /// 数据包序号重复计数（客户端用封包发送数据检测）

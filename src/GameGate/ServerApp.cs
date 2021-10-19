@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -156,34 +157,25 @@ namespace GameGate
                                 GateShare.dwProcessSendMsgTimeLimit -= 1;
                             }
                         }
-                        var clientList = _runGateClient.GetAllClient();
-                        for (var i = 0; i < clientList.Count; i++)
+                        //处理ClientSession中的延时消息
+                        var sessionList = _sessionManager.GetAllSession();
+                        for (var i = 0; i < sessionList.Count(); i++)
                         {
-                            if (clientList[i] == null)
+                            if (string.IsNullOrEmpty(sessionList[i].sSendData))
                             {
-                                continue;
+                                return;
                             }
-                            for (var j = 0; j < clientList[i].MaxSession; j++)
+                            sessionList[i].SeneMessage();
+                            if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
                             {
-                                var UserSession = clientList[i].SessionArray[j];
-                                if (UserSession.Socket != null && !string.IsNullOrEmpty(UserSession.sSendData))
-                                {
-                                    var tUserData = new TSendUserData();
-                                    tUserData.nSocketHandle = UserSession.nSckHandle;
-                                    tUserData.UserCientId = UserSession.SocketId;
-                                    ProcessPacket(tUserData);
-                                    if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
-                                    {
-                                        break;
-                                    }
-                                }
+                                break;
                             }
                         }
                     }
                 }
                 catch (Exception E)
                 {
-                    GateShare.AddMainLogMsg("[Exception] DecodeTimerTImer->ProcessPacket 2", 1);
+                    GateShare.AddMainLogMsg($"[Exception] ProcessPacket :{E.Message}", 1);
                 }
                 GateShare.boDecodeMsgLock = false;
                 var dwLoopProcessTime = HUtil32.GetTickCount() - dwLoopCheckTick;
@@ -206,12 +198,20 @@ namespace GameGate
 
         private void ProcessPacket(TSendUserData UserData)
         {
-            var userSession = _sessionManager.GetSession(UserData.UserCientId);
+            UserClientSession userSession = null;
+            if (string.IsNullOrEmpty(UserData.UserCientId))
+            {
+                userSession = _sessionManager.GetSession(UserData.SocketIndex);
+            }
+            else
+            {
+                userSession = _sessionManager.GetSession(UserData.UserCientId);
+            }
             if (userSession == null)
             {
                 return;
             }
-            userSession.SeneMessage(UserData);
+            userSession.SeneMessage(UserData.sMsg);
         }
 
         public void StartService()
@@ -235,7 +235,7 @@ namespace GameGate
                 _runGateClient.LoadConfig();
                 _runGateClient.Start();
                 GateShare.boServerReady = true;
-                decodeTimer = new Timer(DecodeTimer, null, 0, 200);
+                decodeTimer = new Timer(DecodeTimer, null, 0, 1);
                 sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
 
                 GateShare.AddMainLogMsg("服务已启动成功...", 2);
