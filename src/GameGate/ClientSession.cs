@@ -634,12 +634,12 @@ namespace GameGate
                 }
             }
             var sDataText = loginData;
-            var sHumName = string.Empty;
-            var sAccount = string.Empty;
+            var sHumName = string.Empty;//人物名称
+            var sAccount = string.Empty;//账号
             var szCert = string.Empty;
             var szClientVerNO = string.Empty;//客户端版本号
             var szCode = string.Empty;
-            var szHarewareID = string.Empty;
+            var szHarewareID = string.Empty;//硬件ID
             var sData = string.Empty;
 
             sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
