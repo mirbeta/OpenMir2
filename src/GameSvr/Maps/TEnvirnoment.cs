@@ -1074,7 +1074,7 @@ namespace GameSvr
             return result;
         }
 
-        public object GetQuestNPC(object BaseObject, string sCharName, string sItem, bool boFlag)
+        public object GetQuestNPC(TBaseObject BaseObject, string sCharName, string sItem, bool boFlag)
         {
             object result = null;
             TMapQuestInfo MapQuestFlag;
@@ -1083,7 +1083,7 @@ namespace GameSvr
             for (var i = 0; i < m_QuestList.Count; i++)
             {
                 MapQuestFlag = m_QuestList[i];
-                nFlagValue = ((TBaseObject)BaseObject).GetQuestFalgStatus(MapQuestFlag.nFlag);
+                nFlagValue = BaseObject.GetQuestFalgStatus(MapQuestFlag.nFlag);
                 if (nFlagValue == MapQuestFlag.nValue)
                 {
                     if (boFlag == MapQuestFlag.boGrouped || !boFlag)

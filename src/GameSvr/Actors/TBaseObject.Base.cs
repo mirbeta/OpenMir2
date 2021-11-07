@@ -437,13 +437,12 @@ namespace GameSvr
         /// <param name="ItemOfCreat"></param>
         protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
         {
-            int DropWide;
             TUserItem UserItem;
             GameItem StdItem;
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
+                var DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
                 if ((m_btRaceServer == Grobal2.RC_PLAYCLONE) && (m_Master != null))
                 {
                     return;
@@ -842,7 +841,6 @@ namespace GameSvr
         public virtual void Run()
         {
             TProcessMessage ProcessMsg = null;
-            int nInteger;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
             const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
@@ -851,7 +849,7 @@ namespace GameSvr
             const string sExceptionMsg5 = "[Exception] TBaseObject::Run 5";
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
             const string sExceptionMsg7 = "[Exception] TBaseObject::Run 7";
-            int dwRunTick = HUtil32.GetTickCount();
+            var dwRunTick = HUtil32.GetTickCount();
             try
             {
                 while (GetMessage(ref ProcessMsg))
@@ -1178,6 +1176,7 @@ namespace GameSvr
                 {
                     m_boNoItem = true;
                     // 宝宝变色
+                    int nInteger;
                     if (m_boAutoChangeColor && (HUtil32.GetTickCount() - m_dwAutoChangeColorTick > M2Share.g_Config.dwBBMonAutoChangeColorTime))
                     {
                         m_dwAutoChangeColorTick = HUtil32.GetTickCount();

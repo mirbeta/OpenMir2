@@ -471,15 +471,7 @@ namespace GameSvr
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 var n38 = HUtil32.Str_ToInt(s34, 0);
                                 var n3C = HUtil32.Str_ToInt(s20, 0);
-                                var boGrouped = false;
-                                if (HUtil32.CompareLStr(s30, "GROUP", "GROUP".Length))
-                                {
-                                    boGrouped = true;
-                                }
-                                else
-                                {
-                                    boGrouped = false;
-                                }
+                                bool boGrouped = HUtil32.CompareLStr(s30, "GROUP", "GROUP".Length);
                                 if (!Map.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped))
                                 {
                                     result = -i;

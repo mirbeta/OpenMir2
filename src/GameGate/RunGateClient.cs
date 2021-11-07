@@ -5,12 +5,15 @@ using SystemModule;
 
 namespace GameGate
 {
+    /// <summary>
+    /// GameGate->GameSvr
+    /// </summary>
     public class RunGateClient
     {
         /// <summary>
-        /// 点击最多链接10个客户端(GameGate->M2)
+        /// 点击最多链接10个客户端
         /// </summary>
-        private readonly ForwardClientService[] _gateClient = new ForwardClientService[10];
+        private readonly ForwardClient[] _gateClient = new ForwardClient[10];
         private Timer clientTimer = null;
         private readonly SessionManager _sessionManager;
         
@@ -42,7 +45,7 @@ namespace GameGate
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient[i] = new ForwardClientService(serverAddr, serverPort);
+                _gateClient[i] = new ForwardClient(serverAddr, serverPort);
                 _gateClient[i].GateIdx = i;
             }
         }
@@ -73,7 +76,7 @@ namespace GameGate
             }
         }
 
-        public IList<ForwardClientService> GetAllClient()
+        public IList<ForwardClient> GetAllClient()
         {
             return _gateClient;
         }

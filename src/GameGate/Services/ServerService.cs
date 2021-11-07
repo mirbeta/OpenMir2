@@ -96,7 +96,7 @@ namespace GameGate
                 gateclient.SendServerMsg(Grobal2.GM_OPEN, userSession.SocketIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
-                _sessionManager.AddSession(e.ConnectionId, userSession.SocketIdx, new UserClientSession(userSession));
+                _sessionManager.AddSession(e.ConnectionId, userSession.SocketIdx, new ClientSession(userSession, gateclient));
             }
             else
             {

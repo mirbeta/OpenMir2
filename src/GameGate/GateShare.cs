@@ -115,254 +115,15 @@ namespace GameGate
         public const int SENDCHECKSIZE = 512;
         public const int SENDCHECKSIZEMAX = 2048;
         /// <summary>
-        /// 超速显示
-        /// </summary>
-        public static bool boCheckBoxShowData = true;
-        // 外挂控制相关变量
-        /// <summary>
-        /// 是否启动了外挂控制
-        /// </summary>
-        public static bool boStartSpeedCheck = true;
-        /// <summary>
-        /// 是否启动了攻击控制
-        /// </summary>
-        public static bool boStartHitCheck = true;
-        /// <summary>
-        /// 是否启动了魔法控制
-        /// </summary>
-        public static bool boStartSpellCheck = true;
-        /// <summary>
-        /// 是否启动了走路控制
-        /// </summary>
-        public static bool boStartWalkCheck = true;
-        /// <summary>
-        /// 是否启动了跑步控制
-        /// </summary>
-        public static bool boStartRunCheck = true;
-        /// <summary>
-        /// 是否启动了转身控制
-        /// </summary>
-        public static bool boStartTurnCheck = true;
-        /// <summary>
-        /// 是否启动了挖肉控制
-        /// </summary>
-        public static bool boStartButchCheck = true;
-        /// <summary>
-        /// 是否启动了吃药控制
-        /// </summary>
-        public static bool boStartEatCheck = true;
-        /// <summary>
-        /// 是否启动了移动攻击控制
-        /// </summary>
-        public static bool boStartRunhitCheck = true;
-        /// <summary>
-        /// 是否启动了移动魔法控制
-        /// </summary>
-        public static bool boStartRunspellCheck = true;
-        /// <summary>
-        /// 是否启动了带有攻击并发控制
-        /// </summary>
-        public static bool boStartConHitMaxCheck = true;
-        /// <summary>
-        /// 是否启动了带有魔法并发控制
-        /// </summary>
-        public static bool boStartConSpellMaxCheck = true;
-        /// <summary>
-        /// 攻击速度间隔
-        /// </summary>
-        public static int dwSpinEditHitTime = 672;
-        /// <summary>
-        /// 魔法速度间隔
-        /// </summary>
-        public static int dwSpinEditSpellTime = 1100;
-        /// <summary>
-        /// 走路速度间隔
-        /// </summary>
-        public static int dwSpinEditWalkTime = 540;
-        /// <summary>
-        /// 跑步速度间隔
-        /// </summary>
-        public static int dwSpinEditRunTime = 520;
-        /// <summary>
-        /// 转身速度间隔
-        /// </summary>
-        public static int dwSpinEditTurnTime = 100;
-        /// <summary>
-        /// 挖肉速度间隔
-        /// </summary>
-        public static int dwSpinEditButchTime = 500;
-        /// <summary>
-        /// 吃药速度间隔
-        /// </summary>
-        public static int dwSpinEditEatTime = 200;
-        /// <summary>
-        /// 捡起速度间隔
-        /// </summary>
-        public static int dwSpinEditPickupTime = 100;
-        /// <summary>
-        /// 移动攻击速度间隔
-        /// </summary>
-        public static int dwSpinEditRunhitTime = 320;
-        /// <summary>
-        /// 移动魔法速度间隔
-        /// </summary>
-        public static int dwSpinEditRunspellTime = 350;
-        /// <summary>
-        /// 带有攻击并发个数
-        /// </summary>
-        public static byte dwSpinEditConHitMaxTime = 10;
-        /// <summary>
-        /// 带有魔法并发个数
-        /// </summary>
-        public static byte dwSpinEditConSpellMaxTime = 10;
-        /// <summary>
-        /// 攻击加速处理
-        /// </summary>
-        public static byte dwComboBoxHitCheck = 2;
-        /// <summary>
-        /// 魔法加速处理
-        /// </summary>
-        public static byte dwComboBoxSpellCheck = 2;
-        /// <summary>
-        /// 走路加速处理
-        /// </summary>
-        public static byte dwComboBoxWalkCheck = 3;
-        /// <summary>
-        /// 跑步加速处理
-        /// </summary>
-        public static byte dwComboBoxRunCheck = 3;
-        /// <summary>
-        /// 转身加速处理
-        /// </summary>
-        public static byte dwComboBoxTurnCheck = 0;
-        /// <summary>
-        /// 挖肉加速处理
-        /// </summary>
-        public static byte dwComboBoxButchCheck = 0;
-        /// <summary>
-        /// 吃药加速处理
-        /// </summary>
-        public static byte dwComboBoxEatCheck = 1;
-        /// <summary>
-        /// 移动攻击加速处理
-        /// </summary>
-        public static byte dwComboBoxRunhitCheck = 1;
-        /// <summary>
-        /// 移动魔法加速处理
-        /// </summary>
-        public static byte dwComboBoxRunspellCheck = 1;
-        /// <summary>
-        /// 带有攻击并发处理
-        /// </summary>
-        public static byte dwComboBoxConHitMaxCheck = 2;
-        /// <summary>
-        /// 带有魔法并发处理
-        /// </summary>
-        public static byte dwComboBoxConSpellMaxCheck = 2;
-        /// <summary>
-        /// 每次加速的累加值
-        /// </summary>
-        public static int nIncErrorCount = 5;
-        /// <summary>
-        /// 正常动作的减少值
-        /// </summary>
-        public static int nDecErrorCount = 1;
-        /// <summary>
-        /// 装备加速校正因数
-        /// </summary>
-        public static int nItemSpeedCount = 60;
-        /// <summary>
-        /// 攻击累加值限制
-        /// </summary>
-        public static int nSpinEditHitCount = 50;
-        /// <summary>
-        /// 魔法累加值限制
-        /// </summary>
-        public static int nSpinEditSpellCount = 50;
-        /// <summary>
-        /// 走路累加值限制
-        /// </summary>
-        public static int nSpinEditWalkCount = 50;
-        /// <summary>
-        /// 跑步累加值限制
-        /// </summary>
-        public static int nSpinEditRunCount = 50;
-        /// <summary>
-        /// 去掉引擎广告(100%)
-        /// </summary>
-        public static bool boAdvertiCheck = true;
-        /// <summary>
-        /// 封掉变速齿轮( 99%)
-        /// </summary>
-        public static bool boSupSpeederCheck = true;
-        /// <summary>
-        /// 封掉超级加速(100%)
-        /// </summary>
-        public static bool boSuperNeverCheck = true;
-        /// <summary>
-        /// 封掉特殊攻击( 85%)
-        /// </summary>
-        public static bool boAfterHitCheck = true;
-        /// <summary>
-        /// 封掉挖地暗杀( 99%)
-        /// </summary>
-        public static bool boDarkHitCheck = true;
-        /// <summary>
-        /// 封掉一步三格(100%)
-        /// </summary>
-        public static bool boWalk3caseCheck = true;
-        /// <summary>
-        /// 封掉飞取装备( 75%)
-        /// </summary>
-        public static bool boFeiDnItemsCheck = true;
-        /// <summary>
-        /// 封掉组合攻击(100%)
-        /// </summary>
-        public static bool boCombinationCheck = true;
-        /// <summary>
-        /// 发言间隔时间
-        /// </summary>
-        public static long TrinidadMsgTime = 3000;
-        /// <summary>
-        /// 传送间隔时间
-        /// </summary>
-        public static long dwSayMoveTime = 10000;
-        public static byte boFilterMode = 4;
-        public static string sMsgFilter = "@传";
-        public static string sModeFilter = "@传送";
-        public static string sCharFilter = "您发送的信息里包含了非法字符.";
-        public static string boMsgUserName = "$$$$$";
-        public static string sWarningMsg = "[提示]: 请爱护游戏环境，关闭加速外挂重新登陆!";
-        public static string yWarningMsg = "[提示]: 发现超速动作，服务器将延迟您当前操作!";
-        public static string jWarningMsg = "[提示]: 发现超速动作，服务器将停顿您当前操作!";
-        public static string fWarningMsg = "[提示]: 短时间内无法使用此功能!";
-        public static string gWarningMsg = "[提示]: 发言速度太快了!";
-        public static byte btMsgFColorS = 251;
-        public static byte btMsgBColorS = 0;
-        public static byte btMsgFColorY = 219;
-        public static byte btMsgBColorY = 255;
-        public static byte btMsgFColorJ = 255;
-        public static byte btMsgBColorJ = 56;
-        public static byte btRedMsgFColor = 0xFF;
-        public static byte btRedMsgBColor = 0x38;
-        public static byte btGreenMsgFColor = 0xDB;
-        public static byte btGreenMsgBColor = 0xFF;
-        public static byte btBlueMsgFColor = 0xFF;
-        public static byte btBlueMsgBColor = 0xFC;
-        public static byte btOLMsgFColor = 0xFC;
-        public static byte btOLMsgBColor = 0x0;
-        public static byte btYYMsgFColor = 0xFD;
-        public static byte btYYMsgBColor = 0xFF;
-        /// <summary>
         /// 玩家开挂记录列表
         /// </summary>
         public static ConcurrentDictionary<string, string> GameSpeedList = null;
-        public static ConcurrentDictionary<string, ForwardClientService> _ClientGateMap;
+        public static ConcurrentDictionary<string, ForwardClient> _ClientGateMap;
         public static bool[] Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
-        public static ConcurrentDictionary<string, ForwardClientService> ServerGateList;
-        public static List<WeightedItem<ForwardClientService>> m_ServerGateList = new List<WeightedItem<ForwardClientService>>();
-        public static Dictionary<string, UserClientSession> PunishList;
+        public static ConcurrentDictionary<string, ForwardClient> ServerGateList;
+        public static List<WeightedItem<ForwardClient>> m_ServerGateList = new List<WeightedItem<ForwardClient>>();
+        public static Dictionary<string, ClientSession> PunishList;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
@@ -430,7 +191,7 @@ namespace GameGate
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns></returns>
-        public static ForwardClientService GetUserClient(string connectionId)
+        public static ForwardClient GetUserClient(string connectionId)
         {
             return _ClientGateMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
         }
@@ -460,9 +221,9 @@ namespace GameGate
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();
             SessionIndex = new ConcurrentDictionary<string, int>();
-            _ClientGateMap = new ConcurrentDictionary<string, ForwardClientService>();
+            _ClientGateMap = new ConcurrentDictionary<string, ForwardClient>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
-            ServerGateList = new ConcurrentDictionary<string, ForwardClientService>();
+            ServerGateList = new ConcurrentDictionary<string, ForwardClient>();
             GameSpeedList = new ConcurrentDictionary<string, string>();
             InitMagicAttackMap();
         }
@@ -523,7 +284,7 @@ namespace GameGate
             MagicDelayTimeMap[47] = 1000; //火龙焰
         }
 
-        public static void Add(string name, ForwardClientService userClientService)
+        public static void Add(string name, ForwardClient userClientService)
         {
             if (ServerGateList.ContainsKey(name))
             {
@@ -537,14 +298,14 @@ namespace GameGate
             ServerGateList.TryRemove(name, out var userClientService);
         }
 
-        public static ForwardClientService GetClientService()
+        public static ForwardClient GetClientService()
         {
             //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             //4.按权重分配
-            var userList = new List<ForwardClientService>(ServerGateList.Values);
+            var userList = new List<ForwardClient>(ServerGateList.Values);
             if (userList.Any())
             {
                 var random = new System.Random().Next(userList.Count);

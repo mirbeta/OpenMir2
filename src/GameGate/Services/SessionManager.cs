@@ -6,22 +6,22 @@ namespace GameGate
 {
     public class SessionManager
     {
-        private ConcurrentDictionary<string, UserClientSession> _connectionSessions;
-        private ConcurrentDictionary<int, UserClientSession> _idxSessions;
+        private ConcurrentDictionary<string, ClientSession> _connectionSessions;
+        private ConcurrentDictionary<int, ClientSession> _idxSessions;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<string, UserClientSession>();
-            _idxSessions = new ConcurrentDictionary<int, UserClientSession>();
+            _connectionSessions = new ConcurrentDictionary<string, ClientSession>();
+            _idxSessions = new ConcurrentDictionary<int, ClientSession>();
         }
 
-        public void AddSession(string sessionId,int idx, UserClientSession userClientSession)
+        public void AddSession(string sessionId,int idx, ClientSession userClientSession)
         {
             _connectionSessions.TryAdd(sessionId, userClientSession);
             _idxSessions.TryAdd(idx, userClientSession);
         }
         
-        public UserClientSession GetSession(string sessionId)
+        public ClientSession GetSession(string sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {
@@ -30,7 +30,7 @@ namespace GameGate
             return null;
         }
         
-        public UserClientSession GetSession(int sessionId)
+        public ClientSession GetSession(int sessionId)
         {
             if (_idxSessions.ContainsKey(sessionId))
             {
@@ -56,7 +56,7 @@ namespace GameGate
             return false;
         }
 
-        public IList<UserClientSession> GetAllSession()
+        public IList<ClientSession> GetAllSession()
         {
             return _connectionSessions.Values.ToList();
         }

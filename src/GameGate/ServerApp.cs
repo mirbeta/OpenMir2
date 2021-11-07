@@ -62,7 +62,7 @@ namespace GameGate
                 if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
                 {
                     var clientSession = _sessionManager.GetSession(message.UserCientId);
-                    clientSession?.HangdleUserPacket(message);
+                    clientSession?.HandleUserPacket(message);
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace GameGate
 
         private void ProcessPacket(TSendUserData UserData)
         {
-            UserClientSession userSession = null;
+            ClientSession userSession = null;
             if (string.IsNullOrEmpty(UserData.UserCientId))
             {
                 userSession = _sessionManager.GetSession(UserData.SocketIndex);

@@ -200,8 +200,8 @@ namespace SystemModule
 
         private static void MD5Update(ref MD5Context Context, ref byte[] Input, int Length)
         {
-            int i = 0;
-            int Index = (int)((Context.Count[0] >> 3) & 0x3F);
+            var i = 0;
+            var Index = (int)((Context.Count[0] >> 3) & 0x3F);
             Context.Count[0] += (uint)(Length << 3);
             if (Context.Count[0] < (Length << 3))
             {
@@ -211,9 +211,9 @@ namespace SystemModule
             var PartLen = 64 - Index;
             if (Length >= PartLen)
             {
-                Buffer.BlockCopy(Input, 0, Context.Buffer, Index, (int)PartLen);
+                Buffer.BlockCopy(Input, 0, Context.Buffer, Index, PartLen);
                 Transform(Context.Buffer, ref Context.State);
-                i = (int)PartLen;
+                i = PartLen;
                 while (i + 63 < Length)
                 {
                     //Transform(Input[i], ref Context.State);
@@ -248,7 +248,7 @@ namespace SystemModule
             //ZeroMemory(Context, sizeof(MD5Context));
         }
 
-        public static byte[] MD5String(string m)
+        private static byte[] MD5String(string m)
         {
             var buff = HUtil32.GetBytes(m);
             byte[] result = new byte[16];
@@ -272,9 +272,8 @@ namespace SystemModule
 
         public static byte[] MD5UnPrInt(string s)
         {
-            byte[] result;
+            byte[] result = null;
             byte[] Digest = new byte[16];
-            //FillChar(result, sizeof(byte), 0);
             if (s.Length == 32)
             {
                 try
@@ -286,10 +285,9 @@ namespace SystemModule
                 }
                 catch
                 {
-                    //FillChar(Digest, sizeof(byte), 0);
+                    result = Digest;
                 }
             }
-            result = Digest;
             return result;
         }
 
