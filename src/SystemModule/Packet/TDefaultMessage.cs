@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace SystemModule.Packages
@@ -54,47 +55,65 @@ namespace SystemModule.Packages
 
         }
 
-        public byte[] GetPacket()
+        public byte[] GetPacket(byte msgType)
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(Recog);
-
-            backingStream.Write(UID);
-            backingStream.Write(Cmd);
-            backingStream.Write(X);
-            backingStream.Write(Y);
-            backingStream.Write(Direct);
-            backingStream.Write(ID1);
-            backingStream.Write(Cmd1);
-            backingStream.Write(ID2);
-            backingStream.Write(PosX);
-            backingStream.Write(PosY);
-            backingStream.Write(Cmd2);
-            backingStream.Write(IDLo);
-            backingStream.Write(Magic);
-            backingStream.Write(IDHi);
-            backingStream.Write(UID1);
-            backingStream.Write(Cmd3);
-            backingStream.Write(b1);
-            backingStream.Write(b2);
-            backingStream.Write(b3);
-            backingStream.Write(b4);
-            backingStream.Write(NID);
-            backingStream.Write(Command);
-            backingStream.Write(Pos);
-            backingStream.Write(Dir);
-            backingStream.Write(WID);
-            backingStream.Write(Head);
-            backingStream.Write(Cmd4);
-            backingStream.Write(Zero1);
-            backingStream.Write(Tail);
-            backingStream.Write(Recog);
-            backingStream.Write(Ident);
-            backingStream.Write(Param);
-            backingStream.Write(Tag);
-            backingStream.Write(Series);
-
+            if (msgType == 0)
+            {
+                backingStream.Write(UID);
+                backingStream.Write(Cmd);
+                backingStream.Write(X);
+                backingStream.Write(Y);
+                backingStream.Write(Direct);
+            }
+            if (msgType == 1)
+            {
+                backingStream.Write(ID1);
+                backingStream.Write(Cmd1);
+                backingStream.Write(ID2);
+            }
+            if (msgType == 2)
+            {
+                backingStream.Write(PosX);
+                backingStream.Write(PosY);
+                backingStream.Write(Cmd2);
+                backingStream.Write(IDLo);
+                backingStream.Write(Magic);
+                backingStream.Write(IDHi);
+            }
+            if (msgType == 3)
+            {
+                backingStream.Write(UID1);
+                backingStream.Write(Cmd3);
+                backingStream.Write(b1);
+                backingStream.Write(b2);
+                backingStream.Write(b3);
+                backingStream.Write(b4);
+            }
+            if (msgType == 4)
+            {
+                backingStream.Write(NID);
+                backingStream.Write(Command);
+                backingStream.Write(Pos);
+                backingStream.Write(Dir);
+                backingStream.Write(WID);
+            }
+            if (msgType == 5)
+            {
+                backingStream.Write(Head);
+                backingStream.Write(Cmd4);
+                backingStream.Write(Zero1);
+                backingStream.Write(Tail);
+            }
+            if (msgType == 6)
+            {
+                backingStream.Write(Recog);
+                backingStream.Write(Ident);
+                backingStream.Write(Param);
+                backingStream.Write(Tag);
+                backingStream.Write(Series);
+            }
             var stream = backingStream.BaseStream as MemoryStream;
             return stream?.ToArray();
         }
@@ -129,6 +148,9 @@ namespace SystemModule.Packages
                     Param = binaryReader.ReadUInt16();
                     Tag = binaryReader.ReadUInt16();
                     Series = binaryReader.ReadUInt16();
+                    break;
+                default:
+                    Console.WriteLine(buffSize);
                     break;
             }
         }

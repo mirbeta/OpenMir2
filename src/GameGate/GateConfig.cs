@@ -10,6 +10,9 @@ namespace GameGate
         public int m_nGateCount;
         public bool m_fCheckNullSession;
         public bool m_fOverSpeedSendBack;
+        /// <summary>
+        /// 开启防御CC攻击
+        /// </summary>
         public bool m_fDefenceCCPacket;
         public bool m_fKickOverSpeed;
         public bool m_fDenyPresend;

@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -138,7 +140,8 @@ namespace GameGate
         {
             try
             {
-                int dwTick14 = HUtil32.GetTickCount();
+                Console.WriteLine("收到M2消息.");
+                var dwTick14 = HUtil32.GetTickCount();
                 var nMsgLen = e.Buff.Length;
                 ProcReceiveBuffer(e.Buff, nMsgLen);
                 nBufferOfM2Size += nMsgLen;
@@ -239,6 +242,11 @@ namespace GameGate
             }
         }
 
+        public void SendServerMsg(byte[] buffer,int buffLen)
+        {
+            SendSocket(buffer);
+        }
+        
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             TMsgHeader pMsg;

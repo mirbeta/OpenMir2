@@ -50,7 +50,7 @@ namespace GameSvr
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GateSystem RunSocket = null;
+        public static GameGate RunSocket = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static TMapManager g_MapManager = null;

@@ -969,6 +969,10 @@ namespace LoginSvr
             }
         }
 
+        /// <summary>
+        /// 获取服务器信息
+        /// </summary>
+        /// <returns></returns>
         private string GetServerListInfo()
         {
             var result = string.Empty;
@@ -1008,7 +1012,7 @@ namespace LoginSvr
             int nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
             var sServerName = EDcode.DeCodeString(sData);
-            if ((UserInfo.sAccount != "") && (sServerName != "") && IsLogin(Config, UserInfo.nSessionID))
+            if(!string.IsNullOrEmpty(UserInfo.sAccount) && !string.IsNullOrEmpty(sServerName)&& IsLogin(Config, UserInfo.nSessionID))
             {
                 GetSelGateInfo(Config, sServerName, Config.sGateIPaddr, ref sSelGateIP, ref nSelGatePort);
                 if ((sSelGateIP != "") && (nSelGatePort > 0))
@@ -1060,6 +1064,12 @@ namespace LoginSvr
             }
         }
 
+        /// <summary>
+        /// 更新账号信息
+        /// </summary>
+        /// <param name="Config"></param>
+        /// <param name="UserInfo"></param>
+        /// <param name="sData"></param>
         private void AccountUpdateUserInfo(TConfig Config, TUserInfo UserInfo, string sData)
         {
             TUserEntry UserEntry = null;

@@ -23,7 +23,7 @@ namespace SystemModule
             return result;
         }
 
-        public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf)
+        public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf,int dstOffset=0)
         {
             int result;
             byte temp;
@@ -33,7 +33,7 @@ namespace SystemModule
             byte bySeed = 0xAC;
             byte byBase = 0x3C;
             var pos = 0;
-            var dstPos = 0;
+            var dstPos = dstOffset;
             for (var i = 0; i < Len; i++)
             {
                 c = (byte)(Buf[pos] ^ bySeed);
@@ -61,7 +61,7 @@ namespace SystemModule
                 DstBuf[dstPos]= (byte)(remainder + byBase);
                 dstPos++;
             }
-            result = dstPos;
+            result = dstPos - dstOffset;
             DstBuf[dstPos + 1] = (byte)('\0');
             return result;
         }

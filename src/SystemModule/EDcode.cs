@@ -141,7 +141,7 @@ namespace SystemModule
         {
             var EncBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.GetBytes(Src);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
+            Misc.DecodeBuf(bSrc, bSrc.Length, EncBuf);
             return EncBuf;
         }
         
@@ -149,7 +149,7 @@ namespace SystemModule
         {
             var EncBuf = new byte[size];
             var bSrc = HUtil32.GetBytes(Src);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
+            Misc.DecodeBuf(bSrc, bSrc.Length, EncBuf);
             return EncBuf;
         }
 
@@ -162,8 +162,8 @@ namespace SystemModule
         {
             string result;
             var EncBuf = new byte[BUFFERSIZE];
-            var bSrc = HUtil32.StringToByteAry(str);
-            var DestLen = Encode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
+            var bSrc = HUtil32.GetBytes(str);
+            var DestLen = Misc.EncodeBuf(bSrc, bSrc.Length, EncBuf);
             fixed (byte* pb = EncBuf)
             {
                 result = HUtil32.SBytePtrToString((sbyte*) pb, 0, DestLen);
@@ -176,8 +176,16 @@ namespace SystemModule
             var result = string.Empty;
             var type = typeof(T);
             var targetsMethord = type.GetMethod("GetPacket");
-            if (targetsMethord == null) throw new Exception(string.Format("序列化{0}失败", type.Name));
-            var methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { });
+            if (targetsMethord == null) throw new Exception($"序列化{type.Name}失败");
+            byte[] methordResult;
+            if (targetsMethord.GetParameters().Length > 0)
+            {
+                methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { (byte)6 });
+            }
+            else
+            {
+                methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { });
+            }
             var buffSize = methordResult.Length;
             if (buffSize > 0)
             {
@@ -186,7 +194,7 @@ namespace SystemModule
                     var encBuf = new byte[BUFFERSIZE];
                     var tempBuf = new byte[BUFFERSIZE];
                     Buffer.BlockCopy(methordResult, 0, tempBuf, 0, buffSize);
-                    var destLen = Encode6BitBuf(tempBuf, encBuf, buffSize, BUFFERSIZE);
+                    var destLen = Misc.EncodeBuf(tempBuf, buffSize, encBuf);
                     fixed (byte* pb = encBuf)
                     {
                         result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
@@ -215,7 +223,7 @@ namespace SystemModule
             if (bufsize < BUFFERSIZE)
             {
                 Array.Copy(Buf, 0, TempBuf, 0, bufsize);
-                var destLen = Encode6BitBuf(TempBuf, EncBuf, bufsize, BUFFERSIZE);
+                var destLen = Misc.EncodeBuf(TempBuf, bufsize, EncBuf);
                 fixed (byte* pb = EncBuf)
                 {
                     result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
@@ -237,8 +245,8 @@ namespace SystemModule
         {
             string result = string.Empty;
             byte[] EncBuf = new byte[1024];
-            byte[] TempBuf = smsg.GetPacket();
-            int DestLen = Encode6BitBuf(TempBuf, EncBuf, 12, BUFFERSIZE);
+            byte[] msgBuf = smsg.GetPacket(6);
+            int DestLen = Misc.EncodeBuf(msgBuf, 12, EncBuf);
             fixed (byte* pb = EncBuf)
             {
                 result = HUtil32.SBytePtrToString((sbyte*)pb, 0, DestLen);

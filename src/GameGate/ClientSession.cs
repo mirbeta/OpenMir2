@@ -68,6 +68,8 @@ namespace GameGate
             _sessionIdx = session.SocketIdx;
             m_fOverClientCount = false;
             lastGameSvr = forwardThread;
+            _gateConfig = new GateConfig();
+            m_xHWID = MD5.g_MD5EmptyDigest;
         }
 
         public int SessionId => _sessionIdx;
@@ -84,7 +86,6 @@ namespace GameGate
 
         /// <summary>
         /// 处理客户端发送过来的封包
-        /// todo 这里只需要封包就好 不需要在额外处理
         /// </summary>
         /// <param name="UserData"></param>
         public void HandleUserPacket(TSendUserData UserData)
@@ -106,7 +107,7 @@ namespace GameGate
                 m_fKickFlag = false;
                 return;
             }
-            sMsg = HUtil32.GetString(UserData.Buffer, 0, UserData.BufferLen);
+            sMsg = HUtil32.GetString(UserData.Buffer, 2, UserData.BufferLen - 3);
             if ((UserData.BufferLen >= 5) && _gateConfig.m_fDefenceCCPacket)
             {
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
@@ -146,7 +147,7 @@ namespace GameGate
             int dwDelay;
             int dwNextMove;
             int dwNextAtt;
-            int nABuf;
+            byte[] nABuf;
             int nBBuf;
             int nBuffer;
             int nInterval;
@@ -172,7 +173,12 @@ namespace GameGate
             var success = false;
             if (_handleLogin == 0)
             {
-                HandleLogin(sMsg, UserData.BufferLen, "", ref success);
+                //nABuf = new byte[UserData.BufferLen];
+                //nDeCodeLen = Misc.DecodeBuf(UserData.Buffer, UserData.BufferLen, nABuf);
+                //sMsg = HUtil32.GetString(nABuf, 0, nDeCodeLen);
+                var tempStr = sMsg;
+                tempStr = EDcode.DeCodeString(sMsg);
+                HandleLogin(tempStr, UserData.BufferLen, "", ref success);
                 if (!success)
                 {
                     //KickUser("ip");
@@ -616,14 +622,14 @@ namespace GameGate
                 if (!string.IsNullOrEmpty(sDataMsg))
                 {
                     DataBuffer = new byte[sDataMsg.Length + 12 + 1]; //GetMem(Buffer, sDataMsg.Length + 12 + 1);
-                    Buffer.BlockCopy(CltCmd.GetPacket(), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
+                    Buffer.BlockCopy(CltCmd.GetPacket(6), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
                     var msgBuff = HUtil32.GetBytes(sDataMsg);
                     Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
                     Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, DataBuffer.Length, DataBuffer);
                 }
                 else
                 {
-                    DataBuffer = CltCmd.GetPacket();
+                    DataBuffer = CltCmd.GetPacket(6);
                     Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, 12, DataBuffer);
                 }
             }
@@ -631,7 +637,6 @@ namespace GameGate
 
         /// <summary>
         /// 处理延时消息
-        /// todo 外部调用此方法处理数据
         /// </summary>
         public void HandleDelayMsg()
         {
@@ -640,13 +645,12 @@ namespace GameGate
                 return;
             }
             TDelayMsg delayMsg = null;
-            int dwCurrentTick = 0;
+            var dwCurrentTick = 0;
             while (GetDelayMsg(ref delayMsg))
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    //todo 发送延时消息到GameSvr
-
+                    lastGameSvr.SendServerMsg(delayMsg.pBuffer, delayMsg.nBufLen);//发送消息到M2
                     dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
@@ -796,12 +800,12 @@ namespace GameGate
                     continue;
                 }
                 _msgList.RemoveAt(count);
+                delayMsg = new TDelayMsg();
                 delayMsg.nMag = _delayMsg.nMag;
                 delayMsg.nDir = _delayMsg.nDir;
                 delayMsg.nCmd = _delayMsg.nCmd;
                 delayMsg.nBufLen = _delayMsg.nBufLen;
                 delayMsg.pBuffer = _delayMsg.pBuffer;
-                //Move(pDelayMsg.pBuffer[0], pMsg.pBuffer[0], pMsg.nBufLen);
                 _delayMsg = null;
                 result = true;
             }
@@ -1087,7 +1091,7 @@ namespace GameGate
                     success = false;
                     return;
                 }
-                var sDataText = loginData;
+                var sDataText = loginData.Remove(0, 2);
                 var sHumName = string.Empty;//人物名称
                 var sAccount = string.Empty;//账号
                 var szCert = string.Empty;
@@ -1095,7 +1099,7 @@ namespace GameGate
                 var szCode = string.Empty;
                 var szHarewareID = string.Empty;//硬件ID
                 var sData = string.Empty;
-
+                
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);
                 if ((sAccount.Length > 4) && (sAccount.Length <= 12) && (sHumName.Length > 2) && (sHumName.Length < 15))
@@ -1215,18 +1219,17 @@ namespace GameGate
                             return;
                         }
                     }
-                    //FillChar(pszLoginPacket, sizeof(pszLoginPacket), 0);
-                    var pszLoginPacket = new byte[1047];
-                    var szTemp = string.Format("**{0}/{1}/{2}/{3}/{4}/{5}", new[] { sAccount, sHumName, szCert, szClientVerNO, szCode, MD5.MD5Print(m_xHWID) });
+                    var szTemp = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNO}/{szCode}/{MD5.MD5Print(m_xHWID)}";
                     // #0.........!
-                    var tempBuff = HUtil32.GetBytes(szTemp);
-                    Buffer.BlockCopy(tempBuff, 0, pszLoginPacket, 2, tempBuff.Length);
-                    //var Len = Misc.EncodeBuf(szTemp[0], szTemp.Length, pszLoginPacket[2]);
+                    var tempBuf = HUtil32.GetBytes(szTemp);
+                    var pszLoginPacket = new byte[tempBuf.Length + 100];
+                    var encodelen = Misc.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
-                    pszLoginPacket[tempBuff.Length + 2] = (byte)'!';
+                    pszLoginPacket[encodelen + 2] = (byte)'!';
                     m_fHandleLogin = 2;
-                    SendFirstPack(pszLoginPacket);
+                    Console.WriteLine("发送延时消息:" + HUtil32.GetString(pszLoginPacket, 0, encodelen + 3));
+                    SendFirstPack(pszLoginPacket, encodelen + 3);
                 }
                 else
                 {
@@ -1245,9 +1248,17 @@ namespace GameGate
         /// 发送消息到GameSvr
         /// </summary>
         /// <param name="packet"></param>
-        private void SendFirstPack(byte[] packet)
+        private void SendFirstPack(byte[] packet, int len = 0)
         {
-            var tempBuff = new byte[20 + packet.Length];
+            byte[] tempBuff;
+            if (len == 0)
+            {
+                tempBuff = new byte[20 + packet.Length];
+            }
+            else
+            {
+                tempBuff = new byte[20 + len];
+            }
             var GateMsg = new TMsgHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = (int)_session.Socket.Handle;
@@ -1257,7 +1268,14 @@ namespace GameGate
             GateMsg.nLength = tempBuff.Length;
             var sendBuffer = GateMsg.GetPacket();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-            Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
+            if (len == 0)
+            {
+                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
+            }
+            else
+            {
+                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, len);
+            }
             SendDelayMsg(0, 0, 0, tempBuff.Length, tempBuff, 1);
         }
 

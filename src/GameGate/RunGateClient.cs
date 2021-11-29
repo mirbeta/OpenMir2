@@ -14,8 +14,8 @@ namespace GameGate
         /// 点击最多链接10个客户端
         /// </summary>
         private readonly ForwardClient[] _gateClient = new ForwardClient[10];
-        private Timer clientTimer = null;
         private readonly SessionManager _sessionManager;
+        private Thread _delayThread;
         
         public RunGateClient(SessionManager sessionManager)
         {
@@ -61,7 +61,10 @@ namespace GameGate
                 _gateClient[i].Start();
                 _gateClient[i].RestSessionArray();
             }
-            clientTimer = new Timer(CloseAllUser, null, 10000, 5000);
+
+            _delayThread = new Thread(ProcessDelayMsg);
+            _delayThread.IsBackground = true;
+            _delayThread.Start();
         }
 
         public void Stop()
@@ -81,51 +84,41 @@ namespace GameGate
             return _gateClient;
         }
 
-        private void CloseAllUser(object obj)
+        private void ProcessDelayMsg(object obj)
         {
-            for (int i = 0; i < _gateClient.Length; i++)
+            while (true)
             {
-                if (_gateClient[i] == null)
+                for (int i = 0; i < _gateClient.Length; i++)
                 {
-                    continue;
-                }
-                if (_gateClient[i].SessionArray == null)
-                {
-                    continue;
-                }
-                for (var j = 0; j < _gateClient[i].SessionArray.Length; j++)
-                {
-                    var session = _gateClient[i].SessionArray[j];
-                    if (session == null)
+                    if (_gateClient[i] == null)
                     {
                         continue;
                     }
-                    if (session.Socket == null)
+                    if (_gateClient[i].SessionArray == null)
                     {
                         continue;
                     }
-                    var userClient = _sessionManager.GetSession(session.SocketId);
-                    if (userClient == null)
+                    for (var j = 0; j < _gateClient[i].SessionArray.Length; j++)
                     {
-                        continue;
-                    }
-                    var gameSpeed = userClient.GetGameSpeed();
-                    if ((HUtil32.GetTickCount() - gameSpeed.dwGameTick) > 600000)
-                    {
-                        gameSpeed.dwWalkTick =HUtil32. GetTickCount();      //走路间隔
-                        gameSpeed.dwRunTick = HUtil32.GetTickCount();       //跑步间隔
-                        gameSpeed.dwAttackTick = HUtil32.GetTickCount();       //攻击间隔
-                        gameSpeed.dwSpellTick = HUtil32.GetTickCount();     //魔法间隔
-                        gameSpeed.dwTurnTick = HUtil32.GetTickCount();      //转身间隔
-                        gameSpeed.dwPickupTick =HUtil32. GetTickCount();    //捡起间隔
-                        gameSpeed.dwButchTick = HUtil32.GetTickCount();     //挖肉间隔
-                        gameSpeed.dwEatTick = HUtil32.GetTickCount();       //吃药间隔
-                        gameSpeed.dwRunWalkTick = HUtil32.GetTickCount();       //移动时间
-                        gameSpeed.dwFeiDnItemsTick = HUtil32.GetTickCount();    //传送时间
-                        gameSpeed.dwSuperNeverTick = HUtil32.GetTickCount();    //超级加速时间
-                        gameSpeed.dwGameTick = HUtil32.GetTickCount();    //在线时间
+                        var session = _gateClient[i].SessionArray[j];
+                        if (session == null)
+                        {
+                            continue;
+                        }
+                        if (session.Socket == null)
+                        {
+                            continue;
+                        }
+                        var userClient = _sessionManager.GetSession(session.SocketId);
+                        if (userClient == null)
+                        {
+                            continue;
+                        }
+                        userClient.HandleDelayMsg();
+                        //todo 清理超时会话
                     }
                 }
+                Thread.Sleep(1000);
             }
         }
     }

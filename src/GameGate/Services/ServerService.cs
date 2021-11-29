@@ -183,6 +183,7 @@ namespace GameGate
                             var userData = new TSendUserData();
                             userData.nSocketHandle = (int)token.Socket.Handle;
                             userData.Buffer = data;
+                            userData.BufferLen = data.Length;
                             userData.UserCientId = token.ConnectionId;
                             GateShare.ReviceMsgList.Writer.TryWrite(userData);
                         }

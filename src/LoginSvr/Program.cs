@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace LoginSvr
 {

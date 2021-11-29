@@ -226,6 +226,7 @@ namespace GameGate
             ServerGateList = new ConcurrentDictionary<string, ForwardClient>();
             GameSpeedList = new ConcurrentDictionary<string, string>();
             InitMagicAttackMap();
+            PunishList = new Dictionary<string, ClientSession>();
         }
 
         public static void InitMagicAttackMap()

@@ -255,7 +255,7 @@ namespace GameSvr
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
-            M2Share.RunSocket = new GateSystem();
+            M2Share.RunSocket = new GameGate();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.g_MapManager = new TMapManager();

@@ -44,9 +44,10 @@ namespace GameSvr
                 {
                     Run();
                 }
-                catch
+                catch(Exception ex)
                 {
                     M2Share.ErrorMessage(sExceptionMsg);
+                    M2Share.ErrorMessage(ex.StackTrace);
                 }
                 Thread.Sleep(200);
             }
