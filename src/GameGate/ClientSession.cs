@@ -31,7 +31,6 @@ namespace GameGate
         private TSessionInfo _session;
         public string sSendData = string.Empty;
         private bool m_fOverClientCount;
-        private byte m_fHandleLogin;
         private byte[] m_xHWID;
         public bool m_fKickFlag = false;
         public bool m_fSpeedLimit = false;
@@ -142,9 +141,9 @@ namespace GameGate
                     SendKickMsg(12);
                 }
             }
-            bool fConvertPacket;
-            bool fPacketOverSpeed;
-            int dwDelay;
+            bool fConvertPacket = false;
+            bool fPacketOverSpeed = false;
+            int dwDelay = 0;
             int dwNextMove;
             int dwNextAtt;
             byte[] nABuf;
@@ -169,7 +168,6 @@ namespace GameGate
             double res;
             double res2;
             string log;
-            fConvertPacket = false;
             var success = false;
             if (_handleLogin == 0)
             {
@@ -619,19 +617,88 @@ namespace GameGate
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(sDataMsg))
+                if (fPacketOverSpeed)
                 {
-                    DataBuffer = new byte[sDataMsg.Length + 12 + 1]; //GetMem(Buffer, sDataMsg.Length + 12 + 1);
-                    Buffer.BlockCopy(CltCmd.GetPacket(6), 0, DataBuffer, 0, 12);//Move(DefMsg, Buffer, 12);
-                    var msgBuff = HUtil32.GetBytes(sDataMsg);
-                    Buffer.BlockCopy(msgBuff, 0, DataBuffer, 12, msgBuff.Length); //Move(sDataMsg[1], Buffer[12], sDataMsg.Length + 1);
-                    Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, DataBuffer.Length, DataBuffer);
+                    if (fConvertPacket)
+                    {
+                        CltCmd.Cmd = Grobal2.CM_TURN;
+                    }
+                    else
+                    {
+                        if (_gateConfig.m_fOverSpeedSendBack)
+                        {
+                            if (_gateConfig.m_tSpeedHackWarnMethod == TOverSpeedMsgMethod.ptSysmsg)
+                            {
+                                CltCmd.Cmd = Grobal2.RM_WHISPER;
+                                CltCmd.UID = 0xFF; // FrontColor
+                                CltCmd.X = 0xF9; // BackColor
+                            }
+                            else
+                            {
+                                CltCmd.Cmd = Grobal2.CM_SPEEDHACKMSG;
+                            }
+                            nBuffer = ((int)m_pOverlapRecv.BBuffer[sizeof(TSvrCmdPack)]);
+                            TSvrCmdPack _wvar1 = ((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
+                            _wvar1.Flag = Protocol.Units.Protocol.RUNGATECODE;
+                            _wvar1.SockID = m_dwSessionID;
+                            _wvar1.Cmd = Grobal2.GM_DATA;
+                            _wvar1.GGSock = m_nSvrListIdx;
+                            _wvar1.DataLen = sizeof(TCmdPack);
+                            Move((nABuf as object), (nBuffer as object), sizeof(TCmdPack));
+                            Move(_gateConfig.m_szOverSpeedSendBack, (nBuffer + sizeof(TCmdPack) as string), _gateConfig.m_szOverSpeedSendBack.Length);
+                            _wvar1.DataLen += _gateConfig.m_szOverSpeedSendBack.Length + 1;
+                            ((byte)nBuffer + _wvar1.DataLen - 1) = 0;
+                            lastGameSvr.SendBuffer(m_pOverlapRecv.BBuffer, _wvar1.DataLen + sizeof(TSvrCmdPack));
+                            return;
+                        }
+                        switch(_gateConfig.m_tOverSpeedPunishMethod)
+                        {
+                            case TPunishMethod.ptTurnPack:
+                                CltCmd.Cmd = Grobal2.CM_TURN;
+                                break;
+                            case TPunishMethod.ptDropPack:
+                                return;
+                                break;
+                            case TPunishMethod.ptNullPack:
+                                CltCmd.Cmd = 0xFFFF;
+                                break;
+                            case TPunishMethod.ptDelaySend:
+                                if (dwDelay > 0)
+                                {
+                                    nBuffer = ((int)m_pOverlapRecv.BBuffer[sizeof(TSvrCmdPack)]);
+                                    TSvrCmdPack _wvar2 = ((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
+                                    _wvar2.Flag = Protocol.Units.Protocol.RUNGATECODE;
+                                    _wvar2.SockID = m_dwSessionID;
+                                    _wvar2.Cmd = Grobal2.GM_DATA;
+                                    _wvar2.GGSock = m_nSvrListIdx;
+                                    _wvar2.DataLen = sizeof(TCmdPack);
+                                    Move((nABuf as object), (nBuffer as object), sizeof(TCmdPack));
+                                    if (nDeCodeLen > sizeof(TCmdPack))
+                                    {
+                                        _wvar2.DataLen += Misc.EncodeBuf(nABuf + sizeof(TCmdPack), nDeCodeLen - sizeof(TCmdPack), nBuffer + sizeof(TCmdPack)) + 1;
+                                        ((byte)nBuffer + _wvar2.DataLen - 1) = 0;
+                                    }
+                                    SendDelayMsg(CltCmd.Magic, CltCmd.Dir, CltCmd.Cmd, _wvar2.DataLen + sizeof(TSvrCmdPack), m_pOverlapRecv.BBuffer, dwDelay);
+                                    return;
+                                }
+                                break;
+                        }
+                    }
                 }
-                else
+                nBuffer = ((int)m_pOverlapRecv.BBuffer[sizeof(TSvrCmdPack)]);
+                TSvrCmdPack _wvar3 = ((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
+                _wvar3.Flag = Protocol.Units.Protocol.RUNGATECODE;
+                _wvar3.SockID = m_dwSessionID;
+                _wvar3.Cmd = Grobal2.GM_DATA;
+                _wvar3.GGSock = m_nSvrListIdx;
+                _wvar3.DataLen = sizeof(TCmdPack);
+                Move((nABuf as object), (nBuffer as object), sizeof(TCmdPack));
+                if (nDeCodeLen > sizeof(TCmdPack))
                 {
-                    DataBuffer = CltCmd.GetPacket(6);
-                    Send(Grobal2.GM_DATA, _session.SocketIdx, (int)_session.Socket.Handle, _session.nUserListIndex, 12, DataBuffer);
+                    _wvar3.DataLen += Misc.EncodeBuf(nABuf + sizeof(TCmdPack), nDeCodeLen - sizeof(TCmdPack), nBuffer + sizeof(TCmdPack)) + 1;
+                    ((byte)nBuffer + _wvar3.DataLen - 1) = 0;
                 }
+                lastGameSvr.SendBuffer(m_pOverlapRecv.BBuffer, _wvar3.DataLen + sizeof(TSvrCmdPack));
             }
         }
 
@@ -650,7 +717,7 @@ namespace GameGate
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    lastGameSvr.SendServerMsg(delayMsg.pBuffer, delayMsg.nBufLen);//发送消息到M2
+                    lastGameSvr.SendBuffer(delayMsg.pBuffer, delayMsg.nBufLen);//发送消息到M2
                     dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
@@ -1227,7 +1294,7 @@ namespace GameGate
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
                     pszLoginPacket[encodelen + 2] = (byte)'!';
-                    m_fHandleLogin = 2;
+                    _handleLogin = 2;
                     Console.WriteLine("发送延时消息:" + HUtil32.GetString(pszLoginPacket, 0, encodelen + 3));
                     SendFirstPack(pszLoginPacket, encodelen + 3);
                 }

@@ -6,7 +6,7 @@ namespace SystemModule.Packages
     public class TCmdPack
     {
         public int UID;
-        public short Cmd;
+        public ushort Cmd;
         public short X;
         public short Y;
         public short Direct;

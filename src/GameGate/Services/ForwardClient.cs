@@ -242,7 +242,7 @@ namespace GameGate
             }
         }
 
-        public void SendServerMsg(byte[] buffer,int buffLen)
+        public void SendBuffer(byte[] buffer,int buffLen)
         {
             SendSocket(buffer);
         }
@@ -394,7 +394,8 @@ namespace GameGate
                     var userData = new TSendUserData();
                     userData.nSocketHandle = nSocket;
                     userData.SocketIndex = nSocketIndex;
-                    //userData.sMsg = sSendMsg;
+                    userData.Buffer = HUtil32.GetBytes(sSendMsg);
+                    userData.BufferLen = userData.Buffer.Length;
                     GateShare.SendMsgList.Writer.TryWrite(userData);
                 }
             }

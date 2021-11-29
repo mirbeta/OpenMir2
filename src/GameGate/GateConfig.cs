@@ -41,14 +41,38 @@ namespace GameGate
         /// </summary>
         public bool m_fChatInterval;
         public bool m_fChatCmdFilter;
+        /// <summary>
+        /// 是否开启转向间隔
+        /// </summary>
         public bool m_fTurnInterval;
+        /// <summary>
+        /// 是否开启移动间隔
+        /// </summary>
         public bool m_fMoveInterval;
+        /// <summary>
+        /// 是否开启施法间隔
+        /// </summary>
         public bool m_fSpellInterval;
+        /// <summary>
+        /// 是否开启攻击间隔
+        /// </summary>
         public bool m_fAttackInterval;
+        /// <summary>
+        /// 是否开启挖取间隔
+        /// </summary>
         public bool m_fButchInterval;
+        /// <summary>
+        /// 是否开启蹲下间隔
+        /// </summary>
         public bool m_fSitDownInterval;
         public bool m_fSpaceMoveNextPickupInterval;
+        /// <summary>
+        /// 是否开启拾取间隔
+        /// </summary>
         public bool m_fPickupInterval;
+        /// <summary>
+        /// 是否开启吃东西间隔
+        /// </summary>
         public bool m_fEatInterval;
         /// <summary>
         /// 是否开启客户端机器码控制

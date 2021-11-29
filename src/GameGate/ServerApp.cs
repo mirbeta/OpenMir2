@@ -211,7 +211,8 @@ namespace GameGate
             {
                 return;
             }
-            //userSession.SeneMessage(UserData.sMsg);
+            var sMsg = HUtil32.GetString(UserData.Buffer, 0, UserData.BufferLen);
+            userSession.SeneMessage(sMsg);
         }
 
         public void StartService()

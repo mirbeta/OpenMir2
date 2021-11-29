@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-
-namespace GameGate
+﻿namespace GameGate
 {
-
     public struct TSvrCmdPack
     {
         public double Flag;
