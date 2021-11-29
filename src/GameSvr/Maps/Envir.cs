@@ -48,7 +48,7 @@ namespace GameSvr
     {
         Walk = 0,
         HighWall = 1,
-        LowWall = 2,
+        LowWall = 2
     }
 
     public class TMapCellinfo

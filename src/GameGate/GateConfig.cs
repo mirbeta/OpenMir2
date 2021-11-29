@@ -110,25 +110,4 @@ namespace GameGate
         public TChatFilterMethod m_tChatFilterMethod;
         public TOverSpeedMsgMethod m_tSpeedHackWarnMethod;
     }
-
-    public enum TPunishMethod
-    {
-        ptTurnPack,
-        ptDropPack,
-        ptNullPack,
-        ptDelaySend
-    }
-
-    public enum TChatFilterMethod
-    {
-        ctReplaceAll,
-        ctReplaceOne,
-        ctDropconnect
-    }
-
-    public enum TOverSpeedMsgMethod
-    {
-        ptSysmsg,
-        ptMenuOK
-    }
 }

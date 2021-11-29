@@ -211,7 +211,7 @@ namespace GameGate
             {
                 return;
             }
-            userSession.SeneMessage(UserData.sMsg);
+            //userSession.SeneMessage(UserData.sMsg);
         }
 
         public void StartService()
@@ -290,66 +290,6 @@ namespace GameGate
                 GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
                 GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
                 GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
-
-                //防外挂配置参数
-                GateShare.boStartHitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartHitCheck", GateShare.boStartHitCheck);
-                GateShare.boStartSpellCheck = GateShare.Conf.ReadBool("GameSpeed", "StartSpellCheck", GateShare.boStartSpellCheck);
-                GateShare.boStartWalkCheck = GateShare.Conf.ReadBool("GameSpeed", "StartWalkCheck", GateShare.boStartWalkCheck);
-                GateShare.boStartRunCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunCheck", GateShare.boStartRunCheck);
-                GateShare.boStartTurnCheck = GateShare.Conf.ReadBool("GameSpeed", "StartTurnCheck", GateShare.boStartTurnCheck);
-                GateShare.boStartButchCheck = GateShare.Conf.ReadBool("GameSpeed", "StartButchCheck", GateShare.boStartButchCheck);
-                GateShare.boStartEatCheck = GateShare.Conf.ReadBool("GameSpeed", "StartEatCheck", GateShare.boStartEatCheck);
-                GateShare.boStartRunhitCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunhitCheck", GateShare.boStartRunhitCheck);
-                GateShare.boStartRunspellCheck = GateShare.Conf.ReadBool("GameSpeed", "StartRunspellCheck", GateShare.boStartRunspellCheck);
-                GateShare.boStartConHitMaxCheck = GateShare.Conf.ReadBool("GameSpeed", "StartConHitMaxCheck", GateShare.boStartConHitMaxCheck);
-                GateShare.boStartConSpellMaxCheck = GateShare.Conf.ReadBool("GameSpeed", "StartConSpellMaxCheck", GateShare.boStartConSpellMaxCheck);
-                GateShare.dwSpinEditHitTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditHitTime", GateShare.dwSpinEditHitTime);
-                GateShare.dwSpinEditSpellTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditSpellTime", GateShare.dwSpinEditSpellTime);
-                GateShare.dwSpinEditWalkTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditWalkTime", GateShare.dwSpinEditWalkTime);
-                GateShare.dwSpinEditRunTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunTime", GateShare.dwSpinEditRunTime);
-                GateShare.dwSpinEditTurnTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditTurnTime", GateShare.dwSpinEditTurnTime);
-                GateShare.dwSpinEditButchTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditButchTime", GateShare.dwSpinEditButchTime);
-                GateShare.dwSpinEditEatTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditEatTime", GateShare.dwSpinEditEatTime);
-                GateShare.dwSpinEditPickupTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditPickupTime", GateShare.dwSpinEditPickupTime);
-                GateShare.dwSpinEditRunhitTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunhitTime", GateShare.dwSpinEditRunhitTime);
-                GateShare.dwSpinEditRunspellTime = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunspellTime", GateShare.dwSpinEditRunspellTime);
-                GateShare.dwSpinEditConHitMaxTime = GateShare.Conf.ReadInteger<byte>("GameSpeed", "SpinEditConHitMaxTime", GateShare.dwSpinEditConHitMaxTime);
-                GateShare.dwSpinEditConSpellMaxTime = GateShare.Conf.ReadInteger<byte>("GameSpeed", "SpinEditConSpellMaxTime", GateShare.dwSpinEditConSpellMaxTime);
-                GateShare.dwComboBoxHitCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxHitCheck", GateShare.dwComboBoxHitCheck);
-                GateShare.dwComboBoxSpellCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxSpellCheck", GateShare.dwComboBoxSpellCheck);
-                GateShare.dwComboBoxWalkCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxWalkCheck", GateShare.dwComboBoxWalkCheck);
-                GateShare.dwComboBoxRunCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunCheck", GateShare.dwComboBoxRunCheck);
-                GateShare.dwComboBoxTurnCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxTurnCheck", GateShare.dwComboBoxTurnCheck);
-                GateShare.dwComboBoxButchCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxButchCheck", GateShare.dwComboBoxButchCheck);
-                GateShare.dwComboBoxEatCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxEatCheck", GateShare.dwComboBoxEatCheck);
-                GateShare.dwComboBoxRunhitCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunhitCheck", GateShare.dwComboBoxRunhitCheck);
-                GateShare.dwComboBoxRunspellCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxRunspellCheck", GateShare.dwComboBoxRunspellCheck);
-                GateShare.dwComboBoxConHitMaxCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxConHitMaxCheck", GateShare.dwComboBoxConHitMaxCheck);
-                GateShare.dwComboBoxConSpellMaxCheck = GateShare.Conf.ReadInteger<byte>("GameSpeed", "ComboBoxConSpellMaxCheck", GateShare.dwComboBoxConSpellMaxCheck);
-                GateShare.nIncErrorCount = GateShare.Conf.ReadInteger("GameSpeed", "IncErrorCount", GateShare.nIncErrorCount);
-                GateShare.nDecErrorCount = GateShare.Conf.ReadInteger("GameSpeed", "DecErrorCount", GateShare.nDecErrorCount);
-                GateShare.nItemSpeedCount = GateShare.Conf.ReadInteger("GameSpeed", "ItemSpeedCount", GateShare.nItemSpeedCount);
-                GateShare.nSpinEditHitCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditHitCount", GateShare.nSpinEditHitCount);
-                GateShare.nSpinEditSpellCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditSpellCount", GateShare.nSpinEditSpellCount);
-                GateShare.nSpinEditWalkCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditWalkCount", GateShare.nSpinEditWalkCount);
-                GateShare.nSpinEditRunCount = GateShare.Conf.ReadInteger("GameSpeed", "SpinEditRunCount", GateShare.nSpinEditRunCount);
-                GateShare.boAdvertiCheck = GateShare.Conf.ReadBool("GameSpeed", "AdvertiCheck", GateShare.boAdvertiCheck);
-                GateShare.boSupSpeederCheck = GateShare.Conf.ReadBool("GameSpeed", "SupSpeederCheck", GateShare.boSupSpeederCheck);
-                GateShare.boSuperNeverCheck = GateShare.Conf.ReadBool("GameSpeed", "SuperNeverCheck", GateShare.boSuperNeverCheck);
-                GateShare.boAfterHitCheck = GateShare.Conf.ReadBool("GameSpeed", "AfterHitCheck", GateShare.boAfterHitCheck);
-                GateShare.boDarkHitCheck = GateShare.Conf.ReadBool("GameSpeed", "DarkHitCheck", GateShare.boDarkHitCheck);
-                GateShare.boWalk3caseCheck = GateShare.Conf.ReadBool("GameSpeed", "Walk3caseCheck", GateShare.boWalk3caseCheck);
-                GateShare.boFeiDnItemsCheck = GateShare.Conf.ReadBool("GameSpeed", "FeiDnItemsCheck", GateShare.boFeiDnItemsCheck);
-                GateShare.boCombinationCheck = GateShare.Conf.ReadBool("GameSpeed", "CombinationCheck", GateShare.boCombinationCheck);
-                GateShare.sWarningMsg = GateShare.Conf.ReadString("GameSpeed", "sWarningMsg", GateShare.sWarningMsg);
-                GateShare.yWarningMsg = GateShare.Conf.ReadString("GameSpeed", "yWarningMsg", GateShare.yWarningMsg);
-                GateShare.jWarningMsg = GateShare.Conf.ReadString("GameSpeed", "jWarningMsg", GateShare.jWarningMsg);
-                GateShare.btMsgFColorS = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorS", GateShare.btMsgFColorS);
-                GateShare.btMsgBColorS = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorS", GateShare.btMsgBColorS);
-                GateShare.btMsgFColorY = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorY", GateShare.btMsgFColorY);
-                GateShare.btMsgBColorY = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorY", GateShare.btMsgBColorY);
-                GateShare.btMsgFColorJ = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgFColorJ", GateShare.btMsgFColorJ);
-                GateShare.btMsgBColorJ = GateShare.Conf.ReadInteger<byte>("GameSpeed", "MsgBColorJ", GateShare.btMsgBColorJ);
             }
             GateShare.AddMainLogMsg("配置信息加载完成...", 3);
             GateShare.LoadAbuseFile();

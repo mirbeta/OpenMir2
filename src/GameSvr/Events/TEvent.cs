@@ -87,15 +87,13 @@ namespace GameSvr
         public void Close()
         {
             m_dwCloseTick = HUtil32.GetTickCount();
-            if (m_boVisible)
+            if (!m_boVisible) return;
+            m_boVisible = false;
+            if (m_Envir != null)
             {
-                m_boVisible = false;
-                if (m_Envir != null)
-                {
-                    m_Envir.DeleteFromMap(m_nX, m_nY, Grobal2.OS_EVENTOBJECT, this);
-                }
-                m_Envir = null;
+                m_Envir.DeleteFromMap(m_nX, m_nY, Grobal2.OS_EVENTOBJECT, this);
             }
+            m_Envir = null;
         }
 
         public void Dispose()

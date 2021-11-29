@@ -315,21 +315,6 @@ namespace GameGate
         }
     }
 
-    public class TDelayMsg
-    {
-        public long dwDelayTime;
-        public int nMag;
-        public int nCmd;
-        public int nDir;
-        public int nBufLen;
-        public byte[] pBuffer;
-
-        public TDelayMsg()
-        {
-            pBuffer = new byte[1024];
-        }
-    }
-
     public class THardwareHeader : Packets
     {
         public uint dwMagicCode;

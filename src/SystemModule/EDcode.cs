@@ -102,9 +102,15 @@ namespace SystemModule
         public static TDefaultMessage DecodeMessage(string str)
         {
             var EncBuf = new byte[str.Length];
+#if ISWOL
+            var tempBuf = HUtil32.GetBytes(str);
+            var buffLen = (byte)Misc.DecodeBuf(tempBuf, str.Length, EncBuf);
+            return new TDefaultMessage(EncBuf, buffLen);
+#else
             var bSrc = HUtil32.StringToByteAry(str);
             Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
             return new TDefaultMessage(EncBuf);
+#endif
         }
 
         /// <summary>
@@ -117,7 +123,7 @@ namespace SystemModule
         {
             var encBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            var nLen = Decode6BitBuf(bSrc, encBuf, bSrc.Length, BUFFERSIZE);
+            var nLen = Misc.DecodeBuf(bSrc, bSrc.Length, encBuf);
             if (chinese)
             {
                 return HUtil32.GetString(encBuf, 0, nLen);

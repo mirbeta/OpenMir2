@@ -4,7 +4,8 @@ namespace GameGate
     {
         public int SocketIndex;
         public int nSocketHandle;
-        public string sMsg;
+        public byte[] Buffer;
+        public int BufferLen;
         public string UserCientId;
     }
 }

@@ -174,75 +174,17 @@ namespace GameGate
                     var nReviceLen = token.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
-                    var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                     var nSocketIndex = GateShare.GetSocketIndex(connectionId);
-                    if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession && !string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
+                    if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession && GateShare.boServerReady)
                     {
-                        if (nReviceLen > GateShare.nNomClientPacketSize)
+                        GateShare.NReviceMsgSize += data.Length;
+                        if (GateShare.boGateReady && data.Length > 0)
                         {
-                            var nMsgCount = HUtil32.TagCount(sReviceMsg, '!');
-                            if (nMsgCount > GateShare.nMaxClientMsgCount || nReviceLen > GateShare.nMaxClientPacketSize)
-                            {
-                                if (GateShare.bokickOverPacketSize)
-                                {
-                                    switch (GateShare.BlockMethod)
-                                    {
-                                        case TBlockIPMethod.mDisconnect:
-                                            break;
-                                        case TBlockIPMethod.mBlock:
-                                            GateShare.TempBlockIPList.Add(sRemoteAddress);
-                                            token.Socket.Close();
-                                            break;
-                                        case TBlockIPMethod.mBlockList:
-                                            GateShare.BlockIPList.Add(sRemoteAddress);
-                                            token.Socket.Close();
-                                            break;
-                                    }
-                                    GateShare.AddMainLogMsg("踢除连接: IP(" + sRemoteAddress + "),信息数量(" + nMsgCount + "),数据包长度(" + nReviceLen + ")", 1);
-                                    token.Socket.Close();
-                                }
-                                return;
-                            }
-                        }
-                        GateShare.NReviceMsgSize += sReviceMsg.Length;
-                        if (userClient.SessionArray[nSocketIndex].sUserName == GateShare.boMsgUserName)
-                        {
-                            GateShare.AddMainLogMsg(sReviceMsg, 3);   //封包显示
-                        }
-                        if (GateShare.boShowSckData)
-                        {
-                            GateShare.AddMainLogMsg(sReviceMsg, 0);
-                        }
-                        //此从需要优化处理
-                        var userSession = userClient.SessionArray[nSocketIndex];
-                        if (userSession.Socket == token.Socket)
-                        {
-                            if (sReviceMsg.StartsWith("**"))
-                            {
-                                sReviceMsg = sReviceMsg.Remove(0, 2);
-                                userSession.boSendAvailable = true;
-                                userSession.boSendCheck = false;
-                                userSession.nCheckSendLength = 0;
-                                userSession.dwReceiveTick = HUtil32.GetTickCount();
-                            }
-                            else
-                            {
-                                var nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
-                                if (nPos > -1)
-                                {
-                                    sReviceMsg = sReviceMsg.Remove(nPos);
-                                    //sReviceMsg = sReviceMsg.Substring(0, nPos);
-                                    //sReviceMsg = sReviceMsg.Substring(nPos + 1, sReviceMsg.Length);
-                                }
-                            }
-                            if (GateShare.boGateReady && !string.IsNullOrEmpty(sReviceMsg))
-                            {
-                                var userData = new TSendUserData();
-                                userData.nSocketHandle = (int)token.Socket.Handle;
-                                userData.sMsg = sReviceMsg;
-                                userData.UserCientId = token.ConnectionId;
-                                GateShare.ReviceMsgList.Writer.TryWrite(userData);
-                            }
+                            var userData = new TSendUserData();
+                            userData.nSocketHandle = (int)token.Socket.Handle;
+                            userData.Buffer = data;
+                            userData.UserCientId = token.ConnectionId;
+                            GateShare.ReviceMsgList.Writer.TryWrite(userData);
                         }
                     }
                     var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;

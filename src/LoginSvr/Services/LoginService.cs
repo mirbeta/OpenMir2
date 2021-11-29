@@ -19,7 +19,7 @@ namespace LoginSvr
         {
             _accountDB = accountDB;
             _masSock = masSock;
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new ISocketServer(short.MaxValue, 1024);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
             _serverSocket.OnClientRead += GSocketClientRead;

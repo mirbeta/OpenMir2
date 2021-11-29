@@ -10,9 +10,11 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
       <None Remove="System.Data.SQLite.Core" />
