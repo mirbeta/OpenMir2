@@ -7,32 +7,32 @@ namespace SystemModule.Packages
     {
         public int UID;
         public ushort Cmd;
-        public short X;
-        public short Y;
-        public short Direct;
+        public ushort X;
+        public ushort Y;
+        public ushort Direct;
         public int ID1;
-        public short Cmd1;
+        public ushort Cmd1;
         public int ID2;
-        public short PosX;
-        public short PosY;
-        public short Cmd2;
-        public short IDLo;
-        public short Magic;
-        public short IDHi;
+        public ushort PosX;
+        public ushort PosY;
+        public ushort Cmd2;
+        public ushort IDLo;
+        public ushort Magic;
+        public ushort IDHi;
         public int UID1;
-        public short Cmd3;
+        public ushort Cmd3;
         public byte b1;
         public byte b2;
         public byte b3;
         public byte b4;
         public int NID;
-        public short Command;
-        public short Pos;
-        public short Dir;
-        public short WID;
+        public ushort Command;
+        public ushort Pos;
+        public ushort Dir;
+        public ushort WID;
         public double Head;
-        public short Cmd4;
-        public short Zero1;
+        public ushort Cmd4;
+        public ushort Zero1;
         public double Tail;
         public int Recog;
         public ushort Ident;
@@ -40,6 +40,8 @@ namespace SystemModule.Packages
         public ushort Tag;
         public ushort Series;
 
+        public const int PackSize = 12;
+        
         public byte[] ToByte()
         {
             return null;
@@ -50,9 +52,32 @@ namespace SystemModule.Packages
 
         }
 
-        public TCmdPack(byte[] buffer)
+        public TCmdPack(byte[] buffer,int decodeLen)
         {
-
+            var binaryReader = new BinaryReader(new MemoryStream(buffer));
+            switch (decodeLen)
+            {
+                case 8:
+                    ID1 = binaryReader.ReadInt32();
+                    Cmd1 = binaryReader.ReadUInt16();
+                    ID2 = binaryReader.ReadInt32();
+                    break;
+                case 14:
+                    UID = binaryReader.ReadInt32();
+                    Cmd = binaryReader.ReadUInt16();
+                    X = binaryReader.ReadUInt16();
+                    Y = binaryReader.ReadUInt16();
+                    Direct = binaryReader.ReadUInt16();
+                    break;
+                case 12:
+                    Recog = binaryReader.ReadInt32();
+                    Ident = binaryReader.ReadUInt16();
+                    Param = binaryReader.ReadUInt16();
+                    Tag = binaryReader.ReadUInt16();
+                    Series = binaryReader.ReadUInt16();
+                    Cmd = Ident;
+                    break;
+            }
         }
 
         public byte[] GetPacket(byte msgType)

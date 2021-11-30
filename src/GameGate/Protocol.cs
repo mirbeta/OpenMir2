@@ -1,13 +1,47 @@
-﻿namespace GameGate
+﻿using System.IO;
+
+namespace GameGate
 {
-    public struct TSvrCmdPack
+    public class TSvrCmdPack
     {
-        public double Flag;
-        public double SockID;
+        public uint Flag;
+        public int SockID;
         public ushort Seq;
         public ushort Cmd;
         public int GGSock;
         public int DataLen;
+
+        public const int PackSize = 20;
+
+        public TSvrCmdPack()
+        {
+            
+        }
+
+        public TSvrCmdPack(byte[] buff)
+        {
+            var binaryReader = new BinaryReader(new MemoryStream(buff));
+            Flag = binaryReader.ReadUInt32();
+            SockID = binaryReader.ReadInt32();
+            Seq = binaryReader.ReadUInt16();
+            Cmd = binaryReader.ReadUInt16();
+            GGSock = binaryReader.ReadInt32();
+            DataLen = binaryReader.ReadInt32();
+        }
+        
+        public byte[] GetPacket()
+        {
+            using var memoryStream = new MemoryStream();
+            var backingStream = new BinaryWriter(memoryStream);
+            backingStream.Write(Flag);
+            backingStream.Write(SockID);
+            backingStream.Write(Seq);
+            backingStream.Write(Cmd);
+            backingStream.Write(GGSock);
+            backingStream.Write(DataLen);
+            var stream = backingStream.BaseStream as MemoryStream;
+            return stream?.ToArray();
+        }
     }
 
     public struct _tagCmdHeader
@@ -62,7 +96,7 @@
         mDisconnect,
         mBlock,
         mBlockList
-    } // end TBlockIPMethod
+    }
 
     public enum TPunishMethod
     {
@@ -70,14 +104,14 @@
         ptDropPack,
         ptNullPack,
         ptDelaySend
-    } // end TPunishMethod
+    }
 
     public enum TChatFilterMethod
     {
         ctReplaceAll,
         ctReplaceOne,
         ctDropconnect
-    } // end TChatFilterMethod
+    }
 
     public enum TOverSpeedMsgMethod
     {
@@ -106,8 +140,6 @@ namespace Protocol.Units
         public const string _STR_GRID_IO_RECV_BYTES = "接收";
         public const string _STR_KEEP_ALIVE = "**";
         public const string _STR_CMD_FILTER = "%s 此命令禁止使用！";
-        public const string _STR_LIB_MMSYSTEM = "winmm.dll";
-        public const string _STR_LIB_KERNEL32 = "kernel32.dll";
         public const string _STR_CONFIG_FILE = ".\\Config.ini";
         public const string _STR_BLOCK_FILE = ".\\BlockIPList.txt";
         public const string _STR_BLOCK_AREA_FILE = ".\\BlockIPAreaList.txt";

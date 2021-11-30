@@ -45,8 +45,9 @@ namespace GameGate
         /// 上次剩下多少字节未处理
         /// </summary>
         private int nBuffLen = 0;
+        private readonly SessionManager _sessionManager;
 
-        public ForwardClient(string serverAddr, int serverPort)
+        public ForwardClient(string serverAddr, int serverPort,SessionManager sessionManager)
         {
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
@@ -56,6 +57,7 @@ namespace GameGate
             ClientSocket.Address = serverAddr;
             ClientSocket.Port = serverPort;
             SessionArray = new TSessionInfo[MaxSession];
+            _sessionManager = sessionManager;
         }
 
         public string GetSocketIp()
@@ -285,10 +287,15 @@ namespace GameGate
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
-                                    if (pMsg.wGSocketIdx < MaxSession && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
+                                    var userSession = _sessionManager.GetSession(pMsg.wGSocketIdx);
+                                    if (userSession != null)
                                     {
-                                        SessionArray[pMsg.wGSocketIdx].nUserListIndex = (ushort)pMsg.wUserListIndex;
+                                        userSession.m_nSvrListIdx = pMsg.wUserListIndex;
                                     }
+                                    // if (pMsg.wGSocketIdx < MaxSession && pMsg.nSocket == SessionArray[pMsg.wGSocketIdx].nSckHandle)
+                                    // {
+                                    //     SessionArray[pMsg.wGSocketIdx].nUserListIndex = (ushort)pMsg.wUserListIndex;
+                                    // }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
                                     GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckRecviceTick;

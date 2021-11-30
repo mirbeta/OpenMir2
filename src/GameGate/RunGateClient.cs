@@ -45,7 +45,7 @@ namespace GameGate
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient[i] = new ForwardClient(serverAddr, serverPort);
+                _gateClient[i] = new ForwardClient(serverAddr, serverPort, _sessionManager);
                 _gateClient[i].GateIdx = i;
             }
         }
@@ -118,7 +118,7 @@ namespace GameGate
                         //todo 清理超时会话
                     }
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(20);
             }
         }
     }

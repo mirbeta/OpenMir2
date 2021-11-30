@@ -129,10 +129,6 @@ namespace GameSvr
                             }
                         }
                         Gate.UserList = null;
-                        if (Gate.Buffer != null)
-                        {
-                            Gate.Buffer = null;
-                        }
                         Gate.Buffer = null;
                         Gate.nBuffLen = 0;
                         Gate.boUsed = false;
@@ -716,6 +712,7 @@ namespace GameSvr
                                 if (GateUser != null && GateUser.nSocket != MsgHeader.nSocket)
                                 {
                                     GateUser = null;
+                                    Console.WriteLine("SocketID错误，关闭用户.");
                                 }
                             }
                         }

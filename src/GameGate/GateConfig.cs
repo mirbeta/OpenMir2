@@ -9,6 +9,9 @@ namespace GameGate
         public int m_nShowLogLevel;
         public int m_nGateCount;
         public bool m_fCheckNullSession;
+        /// <summary>
+        /// 加速方式
+        /// </summary>
         public bool m_fOverSpeedSendBack;
         /// <summary>
         /// 开启防御CC攻击
