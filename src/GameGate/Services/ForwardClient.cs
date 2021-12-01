@@ -244,11 +244,11 @@ namespace GameGate
             }
         }
 
-        public void SendBuffer(byte[] buffer,int buffLen)
+        public void SendBuffer(byte[] buffer, int buffLen = 0)
         {
             SendSocket(buffer);
         }
-        
+
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             TMsgHeader pMsg;

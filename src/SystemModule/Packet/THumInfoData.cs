@@ -132,7 +132,7 @@ namespace SystemModule
             }
 
             this.BagItems = new TUserItem[46];
-            var bagItemBuff = ReadBytes(24 * 46);
+            var bagItemBuff = ReadBytes(24 * BagItems.Length);
 
             for (var i = 0; i < BagItems.Length; i++)
             {
@@ -142,7 +142,7 @@ namespace SystemModule
             }
 
             this.Magic = new TMagicRcd[20];
-            var hubMagicBuff = ReadBytes(160);
+            var hubMagicBuff = ReadBytes(Magic.Length * 8);
             for (var i = 0; i < Magic.Length; i++)
             {
                 var itemBuff = new byte[8];
@@ -151,13 +151,13 @@ namespace SystemModule
             }
 
             this.StorageItems = new TUserItem[50];
-            var storageBuff = ReadBytes(1200);
-            for (var i = 0; i < StorageItems.Length; i++)
-            {
-                var itemBuff = new byte[24];
-                Buffer.BlockCopy(storageBuff, i * 24, itemBuff, 0, 24);
-                StorageItems[i] = new TUserItem(itemBuff);
-            }
+            // var storageBuff = ReadBytes(24 * StorageItems.Length);
+            // for (var i = 0; i < StorageItems.Length; i++)
+            // {
+            //     var itemBuff = new byte[24];
+            //     Buffer.BlockCopy(storageBuff, i * 24, itemBuff, 0, 24);
+            //     StorageItems[i] = new TUserItem(itemBuff);
+            // }
         }
 
         public byte[] GetPacket()

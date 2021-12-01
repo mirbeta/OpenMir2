@@ -18,7 +18,7 @@ namespace GameGate
         public ServerService(SessionManager sessionManager)
         {
             _sessionManager = sessionManager;
-            _serverSocket = new ISocketServer(2000, 512);
+            _serverSocket = new ISocketServer(2000, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;

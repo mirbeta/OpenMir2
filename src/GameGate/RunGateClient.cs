@@ -88,7 +88,7 @@ namespace GameGate
         {
             while (true)
             {
-                for (int i = 0; i < _gateClient.Length; i++)
+                for (var i = 0; i < _gateClient.Length; i++)
                 {
                     if (_gateClient[i] == null)
                     {
@@ -118,7 +118,7 @@ namespace GameGate
                         //todo 清理超时会话
                     }
                 }
-                Thread.Sleep(20);
+                Thread.Sleep(10);
             }
         }
     }

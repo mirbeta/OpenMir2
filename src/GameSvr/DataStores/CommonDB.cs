@@ -135,7 +135,7 @@ namespace GameSvr
         public int LoadMagicDB()
         {
             TMagic Magic;
-            const string sSQLString = "select * from TBL_Magic";
+            const string sSQLString = "select * from TBL_Magics";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -203,7 +203,7 @@ namespace GameSvr
         {
             var result = 0;
             TMonInfo Monster;
-            const string sSQLString = "select * from TBL_Monster";
+            const string sSQLString = "select * from TBL_Monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {

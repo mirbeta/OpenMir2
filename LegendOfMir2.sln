@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SelGate", "src\SelGate\SelG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr", "src\DBSvr\DBSvr.csproj", "{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameZone", "GameZone\GameZone.csproj", "{62077B1B-8567-4C87-8EBC-6737E7F26A15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62077B1B-8567-4C87-8EBC-6737E7F26A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62077B1B-8567-4C87-8EBC-6737E7F26A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62077B1B-8567-4C87-8EBC-6737E7F26A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62077B1B-8567-4C87-8EBC-6737E7F26A15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

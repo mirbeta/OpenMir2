@@ -7,49 +7,6 @@ namespace GameSvr
 {
     public class Maps
     {
-        private static TMerchant LoadMapInfo_LoadMapQuest(string sName)
-        {
-            TMerchant result;
-            TMerchant QuestNPC;
-            QuestNPC = new TMerchant
-            {
-                m_sMapName = "0",
-                m_nCurrX = 0,
-                m_nCurrY = 0,
-                m_sCharName = sName,
-                m_nFlag = 0,
-                m_wAppr = 0,
-                m_sFilePath = "MapQuest_def",
-                m_boIsHide = true,
-                m_boIsQuest = false
-            };
-            M2Share.UserEngine.QuestNPCList.Add(QuestNPC);
-            result = QuestNPC;
-            return result;
-        }
-
-        private static void LoadMapInfo_LoadSubMapInfo(StringList LoadList, string sFileName)
-        {
-            string sFilePatchName;
-            StringList LoadMapList;
-            string sFileDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MapInfo");
-            if (!Directory.Exists(sFileDir))
-            {
-                Directory.CreateDirectory(sFileDir);
-            }
-            sFilePatchName = sFileDir + sFileName;
-            if (File.Exists(sFilePatchName))
-            {
-                LoadMapList = new StringList();
-                LoadMapList.LoadFromFile(sFilePatchName);
-                for (var i = 0; i < LoadMapList.Count; i++)
-                {
-                    LoadList.Add(LoadMapList[i]);
-                }
-                LoadMapList = null;
-            }
-        }
-
         public static int LoadMapInfo()
         {
             var sFlag = string.Empty;
@@ -452,5 +409,46 @@ namespace GameSvr
             }
             return result;
         }
+        
+        private static TMerchant LoadMapInfo_LoadMapQuest(string sName)
+        {
+            var questNPC = new TMerchant
+            {
+                m_sMapName = "0",
+                m_nCurrX = 0,
+                m_nCurrY = 0,
+                m_sCharName = sName,
+                m_nFlag = 0,
+                m_wAppr = 0,
+                m_sFilePath = "MapQuest_def",
+                m_boIsHide = true,
+                m_boIsQuest = false
+            };
+            M2Share.UserEngine.QuestNPCList.Add(questNPC);
+            return questNPC;
+        }
+
+        private static void LoadMapInfo_LoadSubMapInfo(StringList LoadList, string sFileName)
+        {
+            string sFilePatchName;
+            StringList LoadMapList;
+            string sFileDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MapInfo");
+            if (!Directory.Exists(sFileDir))
+            {
+                Directory.CreateDirectory(sFileDir);
+            }
+            sFilePatchName = sFileDir + sFileName;
+            if (File.Exists(sFilePatchName))
+            {
+                LoadMapList = new StringList();
+                LoadMapList.LoadFromFile(sFilePatchName);
+                for (var i = 0; i < LoadMapList.Count; i++)
+                {
+                    LoadList.Add(LoadMapList[i]);
+                }
+                LoadMapList = null;
+            }
+        }
+
     }
 }

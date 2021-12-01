@@ -3542,7 +3542,7 @@ namespace GameSvr
                 }
                 result = true;
             }
-            else
+            if (LoadList != null)
             {
                 LoadList.SaveToFile(sFileName);
             }

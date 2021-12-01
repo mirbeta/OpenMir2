@@ -40,9 +40,12 @@ namespace GameGate
         /// </summary>
         public bool m_fChatFilter;
         /// <summary>
-        /// 发言间隔
+        /// 是否开启发言间隔控制
         /// </summary>
         public bool m_fChatInterval;
+        /// <summary>
+        /// 是否开启发言命令过滤
+        /// </summary>
         public bool m_fChatCmdFilter;
         /// <summary>
         /// 是否开启转向间隔

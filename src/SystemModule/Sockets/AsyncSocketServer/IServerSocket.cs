@@ -66,23 +66,23 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 客户端已经连接事件
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientConnect;        // 客户端已经连接事件        
+        public event EventHandler<AsyncUserToken> OnClientConnect;               
         /// <summary>
         /// 客户端错误事件
         /// </summary>
-        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;     // 客户端错误事件       
+        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;           
         /// <summary>
         /// 接收到数据事件
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientRead;           // 接收到数据事件
+        public event EventHandler<AsyncUserToken> OnClientRead;          
         /// <summary>
         /// 数据发送完成
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnDataSendCompleted;// 数据发送完成
+        public event EventHandler<AsyncUserToken> OnDataSendCompleted;
         /// <summary>
         /// 客户端断开连接事件
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientDisconnect;     // 客户端断开连接事件
+        public event EventHandler<AsyncUserToken> OnClientDisconnect;
         
         /// <summary>
         /// 客户端是否在线

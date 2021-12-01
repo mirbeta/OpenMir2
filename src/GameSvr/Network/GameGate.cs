@@ -160,7 +160,7 @@ namespace GameSvr
             {
                 if (data.Length > 0)
                 {
-                    int buffSize = GameGate.nBuffLen + nMsgLen;
+                    var buffSize = GameGate.nBuffLen + nMsgLen;
                     if (GameGate.Buffer != null && buffSize > GameGate.nBuffLen)
                     {
                         var tempBuff = new byte[buffSize];
@@ -184,12 +184,12 @@ namespace GameSvr
             {
                 nLen = GameGate.nBuffLen + nMsgLen;
                 Buff = GameGate.Buffer;
-                if (nLen >= 20)//sizeof(TMsgHeader)
+                if (nLen >= TMsgHeader.PacketSize)//sizeof(TMsgHeader)
                 {
                     while (true)
                     {
                         var msgHeader = new TMsgHeader(Buff);
-                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + 20;
+                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + TMsgHeader.PacketSize;
                         if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
                             if (nLen < nCheckMsgLen)
@@ -203,21 +203,21 @@ namespace GameSvr
                             else
                             {
                                 byte[] msgBuff = new byte[msgHeader.nLength];
-                                Buffer.BlockCopy(Buff, 20, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
+                                Buffer.BlockCopy(Buff, TMsgHeader.PacketSize, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
                                 ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
                             }
-                            var newLen = 20 + msgHeader.nLength;
+                            var newLen = TMsgHeader.PacketSize + msgHeader.nLength;
                             var tempBuff = new byte[Buff.Length - newLen];
                             Buffer.BlockCopy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
                             buffIndex = 0;
-                            nLen -= (msgHeader.nLength + 20);
+                            nLen -= (msgHeader.nLength + TMsgHeader.PacketSize);
                         }
                         else
                         {
                             buffIndex++;
                             var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, buffIndex, messageBuff, 0, 20);
+                            Array.Copy(Buff, buffIndex, messageBuff, 0, TMsgHeader.PacketSize);
                             Buff = messageBuff;
                             nLen -= 1;
                         }

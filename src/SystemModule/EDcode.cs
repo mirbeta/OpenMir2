@@ -104,7 +104,7 @@ namespace SystemModule
             var EncBuf = new byte[str.Length];
 #if ISWOL
             var tempBuf = HUtil32.GetBytes(str);
-            var buffLen = (byte)Misc.DecodeBuf(tempBuf, str.Length, EncBuf);
+            var buffLen = (byte)Misc.DecodeBuf(tempBuf, str.Length, ref EncBuf);
             return new TDefaultMessage(EncBuf, buffLen);
 #else
             var bSrc = HUtil32.StringToByteAry(str);
@@ -123,7 +123,7 @@ namespace SystemModule
         {
             var encBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.StringToByteAry(str);
-            var nLen = Misc.DecodeBuf(bSrc, bSrc.Length, encBuf);
+            var nLen = Misc.DecodeBuf(bSrc, bSrc.Length, ref encBuf);
             if (chinese)
             {
                 return HUtil32.GetString(encBuf, 0, nLen);
@@ -141,7 +141,7 @@ namespace SystemModule
         {
             var EncBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.GetBytes(Src);
-            Misc.DecodeBuf(bSrc, bSrc.Length, EncBuf);
+            Misc.DecodeBuf(bSrc, bSrc.Length, ref EncBuf);
             return EncBuf;
         }
         
@@ -149,7 +149,7 @@ namespace SystemModule
         {
             var EncBuf = new byte[size];
             var bSrc = HUtil32.GetBytes(Src);
-            Misc.DecodeBuf(bSrc, bSrc.Length, EncBuf);
+            Misc.DecodeBuf(bSrc, bSrc.Length, ref EncBuf);
             return EncBuf;
         }
 

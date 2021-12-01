@@ -588,7 +588,7 @@ namespace DBSvr
             {
                 return result;
             }
-            const string sSQL6 = "SELECT * FROM TBL_STORAGE WHERE FLD_CHARNAME='{0}'";
+            const string sSQL6 = "SELECT * FROM TBL_Storages WHERE FLD_CHARNAME='{0}'";
             var command = new MySqlCommand();
             try
             {
@@ -612,9 +612,10 @@ namespace DBSvr
                 dr.Dispose();
                 result = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetStorageRecord");
+                Console.WriteLine(ex.StackTrace);
                 return false;
             }
             finally
@@ -1055,14 +1056,14 @@ namespace DBSvr
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
-            command.CommandText = $"DELETE FROM TBL_STORAGE WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
+            command.CommandText = $"DELETE FROM TBL_Storages WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
 
                 var strSql = new StringBuilder();
-                strSql.AppendLine("INSERT INTO TBL_STORAGE(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
+                strSql.AppendLine("INSERT INTO TBL_Storages(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
                 strSql.AppendLine("FLD_VALUE0, FLD_VALUE1, FLD_VALUE2, FLD_VALUE3, FLD_VALUE4, FLD_VALUE5, FLD_VALUE6, FLD_VALUE7, FLD_VALUE8, FLD_VALUE9, FLD_VALUE10, FLD_VALUE11, FLD_VALUE12, FLD_VALUE13) ");
                 strSql.AppendLine(" VALUES ");
                 strSql.AppendLine("(@FLD_CHARID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");

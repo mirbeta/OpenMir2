@@ -11,6 +11,8 @@ namespace SystemModule.Packages
         public int wUserListIndex;
         public int nLength;
 
+        public const int PacketSize = 20;
+
         public byte[] GetPacket()
         {
             using var memoryStream = new MemoryStream();

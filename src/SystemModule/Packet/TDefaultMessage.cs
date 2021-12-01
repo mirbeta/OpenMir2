@@ -70,6 +70,7 @@ namespace SystemModule.Packages
                     Direct = binaryReader.ReadUInt16();
                     break;
                 case 12:
+                default:
                     Recog = binaryReader.ReadInt32();
                     Ident = binaryReader.ReadUInt16();
                     Param = binaryReader.ReadUInt16();

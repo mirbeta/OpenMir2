@@ -6,12 +6,16 @@ namespace SystemModule.Sockets
 {
     public class DSCClientConnectedEventArgs : EventArgs
     {
-        public Socket socket;
+        private Socket socket;
         public string RemoteAddress;
         public int RemotePort;
 
         public DSCClientConnectedEventArgs(Socket soc)
         {
+            if (soc.Connected == false)
+            {
+                return;
+            }
             this.socket = soc;
             if (soc.RemoteEndPoint != null)
             {

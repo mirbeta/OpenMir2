@@ -18,7 +18,7 @@ namespace SystemModule
         {
             byte[] EncBuf = new byte[4096];
             var tempBuf = HUtil32.GetBytes(Str);
-            var buffLen = DecodeBuf(tempBuf, Str.Length, EncBuf);
+            var buffLen = DecodeBuf(tempBuf, Str.Length, ref EncBuf);
             string result = HUtil32.GetString(EncBuf, 0, buffLen);
             return result;
         }
@@ -66,7 +66,7 @@ namespace SystemModule
             return result;
         }
 
-        public static int DecodeBuf(byte[] Buf, int Len, byte[] DstBuf)
+        public static int DecodeBuf(byte[] Buf, int Len, ref byte[] DstBuf)
         {
             int result = 0;
             int CurCycleBegin;
@@ -117,6 +117,9 @@ namespace SystemModule
             }
             result = dstPos;
             DstBuf[dstPos + 1] = (byte)'\0';
+            var newDstBuf = new byte[dstPos];
+            Buffer.BlockCopy(DstBuf, 0, newDstBuf, 0, dstPos);
+            DstBuf = newDstBuf;
             return result;
         }
     } 
