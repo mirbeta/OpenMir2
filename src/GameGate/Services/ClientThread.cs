@@ -37,6 +37,10 @@ namespace GameGate
         /// </summary>
         private bool boCheckServerFail = false;
         /// <summary>
+        /// 网关游戏服务器之间检测是否失败次数
+        /// </summary>
+        private int CheckServerFailCount = 0;
+        /// <summary>
         /// 独立Buffer分区
         /// </summary>
         private byte[] SocketBuffer = null;
@@ -445,13 +449,16 @@ namespace GameGate
             if (boGateReady)
             {
                 SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
+                CheckServerFailCount = 0;
             }
-            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime)
+            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && CheckServerFailCount <= 20)
             {
                 boCheckServerFail = true;
                 ClientSocket.Disconnect();
-                Console.WriteLine("与服务器断开连接.");
+                CheckServerFailCount++;
+                Debug.WriteLine($"链接服务器超时.失败次数:[{CheckServerFailCount}]");
             }
+
             //if (dwLoopTime > 30)
             //{
             //    dwLoopTime -= 20;

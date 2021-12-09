@@ -1312,27 +1312,6 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 发送警告文字
-        /// </summary>
-        private void SendWarnMsg(TSessionInfo SessionInfo, string sMsg, byte FColor, byte BColor)
-        {
-            if ((SessionInfo == null))
-            {
-                return;
-            }
-            if ((SessionInfo.Socket == null))
-            {
-                return;
-            }
-            if (SessionInfo.Socket.Connected)
-            {
-                var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, (int)SessionInfo.Socket.Handle, HUtil32.MakeWord(FColor, BColor), 0, 1);
-                var sSendText = "#" + EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sMsg) + "!";
-                SessionInfo.Socket.SendText(sSendText);
-            }
-        }
-
-        /// <summary>
         /// 文字消息处理(过滤，已经发言间隔)
         /// </summary>
         /// <param name="sMsg"></param>
@@ -1362,19 +1341,6 @@ namespace GameGate
             {
                 HUtil32.LeaveCriticalSection(GateShare.CS_FilterMsg);
             }
-        }
-
-        private void Send(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] dataBuff)
-        {
-            GateShare.ForwardMsgList.Writer.TryWrite(new ForwardMessage()
-            {
-                nIdent = nIdent,
-                wSocketIndex = wSocketIndex,
-                nSocket = nSocket,
-                nUserListIndex = nUserListIndex,
-                nLen = nLen,
-                Data = dataBuff
-            });
         }
     }
 
