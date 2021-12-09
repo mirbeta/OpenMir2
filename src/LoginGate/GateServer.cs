@@ -102,7 +102,7 @@ namespace LoginGate
                         break;
                     }
                 }
-                if (!string.IsNullOrEmpty(e.ConnectionId) && gateClient.ClientSocket.IsConnected)
+                if (e.ConnectionId > 0 && gateClient.ClientSocket.IsConnected)
                 {
                     gateClient.ClientSocket.SendText("%O" + (int)e.Socket.Handle + "/" + sRemoteIPaddr + "/" + sLocalIPaddr + "$");
                     GateShare.MainOutMessage("客户端链接: " + sRemoteIPaddr, 5);

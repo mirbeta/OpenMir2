@@ -28,13 +28,13 @@ namespace GameGate
         private Timer decodeTimer;
         private Timer sendTime;
         private readonly ServerService _serverService;
-        private readonly RunGateClient _runGateClient;
+        private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
 
-        public ServerApp(ServerService serverService, RunGateClient runGateClient, SessionManager sessionManager)
+        public ServerApp(ServerService serverService, ClientManager clientManager, SessionManager sessionManager)
         {
             _serverService = serverService;
-            _runGateClient = runGateClient;
+            _clientManager = clientManager;
             _sessionManager = sessionManager;
             TempLogList = new ArrayList();
             dwLoopCheckTick = HUtil32.GetTickCount();
@@ -43,43 +43,13 @@ namespace GameGate
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
+            var consumerTask1 = Task.Factory.StartNew(_serverService.ProcessReviceMessage);
             gTasks[0] = consumerTask1;
 
-            var consumerTask2 = Task.Factory.StartNew(ProcessSendMessage);
+            var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
             gTasks[1] = consumerTask2;
 
             await Task.WhenAll(gTasks);
-        }
-
-        /// <summary>
-        /// 处理客户端发过来的消息
-        /// </summary>
-        private async Task ProcessReviceMessage()
-        {
-            while (await GateShare.ReviceMsgList.Reader.WaitToReadAsync())
-            {
-                if (GateShare.ReviceMsgList.Reader.TryRead(out var message))
-                {
-                    var clientSession = _sessionManager.GetSession(message.UserCientId);
-                    clientSession?.HandleUserPacket(message);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 处理M2发过来的消息
-        /// </summary>
-        private async Task ProcessSendMessage()
-        {
-            while (await GateShare.SendMsgList.Reader.WaitToReadAsync())
-            {
-                if (GateShare.SendMsgList.Reader.TryRead(out var message))
-                {
-                    //todo 需要处理多个网关的数据
-                    ProcessPacket(message);
-                }
-            }
         }
 
         private void DecodeTimer(object obj)
@@ -125,52 +95,51 @@ namespace GameGate
                 }
                 try
                 {
-                    var dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
+                    //var dwProcessReviceMsgLimiTick = HUtil32.GetTickCount();
                     if ((HUtil32.GetTickCount() - dwProcessPacketTick) > 300)
                     {
                         dwProcessPacketTick = HUtil32.GetTickCount();
-                        if (GateShare.ReviceMsgList.Reader.Count > 0)
-                        {
-                            if (GateShare.dwProcessReviceMsgTimeLimit < 300)
-                            {
-                                GateShare.dwProcessReviceMsgTimeLimit++;
-                            }
-                        }
-                        else
-                        {
-                            if (GateShare.dwProcessReviceMsgTimeLimit > 30)
-                            {
-                                GateShare.dwProcessReviceMsgTimeLimit -= 1;
-                            }
-                        }
-                        if (GateShare.SendMsgList.Reader.Count > 0)
-                        {
-                            if (GateShare.dwProcessSendMsgTimeLimit < 300)
-                            {
-                                GateShare.dwProcessSendMsgTimeLimit++;
-                            }
-                        }
-                        else
-                        {
-                            if (GateShare.dwProcessSendMsgTimeLimit > 30)
-                            {
-                                GateShare.dwProcessSendMsgTimeLimit -= 1;
-                            }
-                        }
-                        //处理ClientSession中的延时消息
-                        var sessionList = _sessionManager.GetAllSession();
-                        for (var i = 0; i < sessionList.Count(); i++)
-                        {
-                            if (string.IsNullOrEmpty(sessionList[i].sSendData))
-                            {
-                                return;
-                            }
-                            sessionList[i].SeneMessage();
-                            if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
-                            {
-                                break;
-                            }
-                        }
+                        // if (_serverService.ReviceMsgList.Reader.Count > 0)
+                        // {
+                        //     if (GateShare.dwProcessReviceMsgTimeLimit < 300)
+                        //     {
+                        //         GateShare.dwProcessReviceMsgTimeLimit++;
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     if (GateShare.dwProcessReviceMsgTimeLimit > 30)
+                        //     {
+                        //         GateShare.dwProcessReviceMsgTimeLimit -= 1;
+                        //     }
+                        // }
+                        // if (GateShare.SendMsgList.Reader.Count > 0)
+                        // {
+                        //     if (GateShare.dwProcessSendMsgTimeLimit < 300)
+                        //     {
+                        //         GateShare.dwProcessSendMsgTimeLimit++;
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     if (GateShare.dwProcessSendMsgTimeLimit > 30)
+                        //     {
+                        //         GateShare.dwProcessSendMsgTimeLimit -= 1;
+                        //     }
+                        // }
+                        // var sessionList = _sessionManager.GetAllSession();
+                        // for (var i = 0; i < sessionList.Count(); i++)
+                        // {
+                        //     if (string.IsNullOrEmpty(sessionList[i].sSendData))
+                        //     {
+                        //         return;
+                        //     }
+                        //     sessionList[i].ProcessSvrData();
+                        //     if ((HUtil32.GetTickCount() - dwProcessReviceMsgLimiTick) > 20)
+                        //     {
+                        //         break;
+                        //     }
+                        // }
                     }
                 }
                 catch (Exception E)
@@ -196,68 +165,38 @@ namespace GameGate
             }
         }
 
-        private void ProcessPacket(TSendUserData UserData)
-        {
-            ClientSession userSession = null;
-            if (string.IsNullOrEmpty(UserData.UserCientId))
-            {
-                userSession = _sessionManager.GetSession(UserData.SocketIndex);
-            }
-            else
-            {
-                userSession = _sessionManager.GetSession(UserData.UserCientId);
-            }
-            if (userSession == null)
-            {
-                return;
-            }
-            var sMsg = HUtil32.GetString(UserData.Buffer, 0, UserData.BufferLen);
-            userSession.SeneMessage(sMsg);
-        }
-
         public void StartService()
         {
-            try
-            {
-                GateShare.Initialization();
-                GateShare.AddMainLogMsg("正在启动服务...", 2);
-                GateShare.boServiceStart = true;
-                GateShare.boGateReady = false;
-                //GateShare.boCheckServerFail = false;
-                GateShare.boSendHoldTimeOut = false;
-                LoadConfig();
-                GateShare.dwProcessReviceMsgTimeLimit = 50;
-                GateShare.dwProcessSendMsgTimeLimit = 50;
-                GateShare.boServerReady = false;
-                dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
-                dwRefConsolMsgTick = HUtil32.GetTickCount();
+            GateShare.Initialization();
+            GateShare.AddMainLogMsg("正在启动服务...", 2);
+            GateShare.boServiceStart = true;
+            //GateShare.boCheckServerFail = false;
+            GateShare.boSendHoldTimeOut = false;
+            LoadConfig();
+            GateShare.dwProcessReviceMsgTimeLimit = 50;
+            GateShare.dwProcessSendMsgTimeLimit = 50;
+            dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
+            dwRefConsolMsgTick = HUtil32.GetTickCount();
 
-                _serverService.Start();
-                _runGateClient.LoadConfig();
-                _runGateClient.Start();
-                GateShare.boServerReady = true;
-                decodeTimer = new Timer(DecodeTimer, null, 0, 1);
-                sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
+            _serverService.Start();
+            _clientManager.LoadConfig();
+            _clientManager.Start();
+            decodeTimer = new Timer(DecodeTimer, null, 0, 1);
+            //sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
 
-                GateShare.AddMainLogMsg("服务已启动成功...", 2);
-                GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
-                GateShare.AddMainLogMsg("网站:http://www.gameofmir.com", 0);
-                GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
-                GateShare.AddMainLogMsg("智能反外挂程序已启动...", 0);
-                GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
-                //GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
-            }
-            catch (Exception E)
-            {
-                GateShare.AddMainLogMsg(E.Message, 0);
-            }
+            GateShare.AddMainLogMsg("服务已启动成功...", 2);
+            GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
+            GateShare.AddMainLogMsg("网站:http://www.gameofmir.com", 0);
+            GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
+            GateShare.AddMainLogMsg("智能反外挂程序已启动...", 0);
+            GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
+            //GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
         }
 
         public void StopService()
         {
             GateShare.AddMainLogMsg("正在停止服务...", 2);
             GateShare.boServiceStart = false;
-            GateShare.boGateReady = false;
             // for (var nSockIdx = 0; nSockIdx < GateShare.GATEMAXSESSION; nSockIdx ++ )
             // {
             //     if (GateShare.SessionArray[nSockIdx].Socket != null)
@@ -266,7 +205,7 @@ namespace GameGate
             //     }
             // }
             _serverService.Stop();
-            _runGateClient.Stop();
+            _clientManager.Stop();
             GateShare.AddMainLogMsg("服务停止成功...", 2);
         }
 
@@ -289,8 +228,6 @@ namespace GameGate
                 GateShare.nClientSendBlockSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "ClientSendBlockSize", GateShare.nClientSendBlockSize);
                 GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
                 GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
-                GateShare.nSayMsgMaxLen = GateShare.Conf.ReadInteger(GateShare.GateClass, "SayMsgMaxLen", GateShare.nSayMsgMaxLen);
-                GateShare.dwSayMsgTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SayMsgTime", GateShare.dwSayMsgTime);
             }
             GateShare.AddMainLogMsg("配置信息加载完成...", 3);
             GateShare.LoadAbuseFile();
@@ -339,45 +276,44 @@ namespace GameGate
             {
                 GateShare.boSendHoldTimeOut = false;
             }
-            if (GateShare.boGateReady) //清理超时用户会话   && !GateShare.boCheckServerFail
+            var clientList = _clientManager.GetAllClient();
+            for (var i = 0; i < clientList.Count; i++)
             {
-                var clientList = _runGateClient.GetAllClient();
-                for (var i = 0; i < clientList.Count; i++)
+                if (clientList[i] == null)
                 {
-                    if (clientList[i] == null)
+                    continue;
+                }
+                for (var j = 0; j < clientList[i].MaxSession; j++)
+                {
+                    UserSession = clientList[i].SessionArray[j];
+                    if (UserSession.Socket != null)
                     {
-                        continue;
-                    }
-                    for (var j = 0; j < clientList[i].MaxSession; j++)
-                    {
-                        UserSession = clientList[i].SessionArray[j];
-                        if (UserSession.Socket != null)
+                        if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
                         {
-                            if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)
-                            {
-                                UserSession.Socket.Close();
-                                UserSession.Socket = null;
-                                UserSession.nSckHandle = -1;
-                            }
+                            UserSession.Socket.Close();
+                            UserSession.Socket = null;
+                            UserSession.nSckHandle = -1;
                         }
                     }
                 }
-            }
-            if (!GateShare.boGateReady)
-            {
-                if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
+                if (!clientList[i].boGateReady)
                 {
-                    dwReConnectServerTime = HUtil32.GetTickCount();
-                    //_runGateClient.Start();
-                    //判断是否连接然后在开始
+                    if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
+                    {
+                        dwReConnectServerTime = HUtil32.GetTickCount();
+                        if (!clientList[i].IsConnected)
+                        {
+                            clientList[i].ReConnected();
+                        }
+                    }
                 }
-            }
-            else
-            {
-                GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
+                else
                 {
-                    GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
+                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
+                    {
+                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                    }
                 }
             }
         }

@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -14,16 +16,23 @@ namespace GameGate
         public int NReviceMsgSize = 0;
         private long _dwProcessClientMsgTime = 0;
         private readonly SessionManager _sessionManager;
+        /// <summary>
+        /// 接收封包（客户端-》网关）
+        /// </summary>
+        private Channel<TSendUserData> _reviceMsgList = null;
+        private readonly ClientManager _clientManager;
 
-        public ServerService(SessionManager sessionManager)
+        public ServerService(SessionManager sessionManager, ClientManager clientManager)
         {
-            _sessionManager = sessionManager;
             _serverSocket = new ISocketServer(2000, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _serverSocket.Init();
+            _reviceMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _sessionManager = sessionManager;
+            _clientManager = clientManager;
         }
 
         public void Start()
@@ -34,6 +43,21 @@ namespace GameGate
         public void Stop()
         {
             _serverSocket.Shutdown();
+        }
+        
+        /// <summary>
+        /// 处理客户端发过来的消息
+        /// </summary>
+        public async Task ProcessReviceMessage()
+        {
+            while (await _reviceMsgList.Reader.WaitToReadAsync())
+            {
+                if (_reviceMsgList.Reader.TryRead(out var message))
+                {
+                    var clientSession = _sessionManager.GetSession(message.UserCientId);
+                    clientSession?.HandleUserPacket(message);
+                }
+            }
         }
 
         /// <summary>
@@ -54,53 +78,37 @@ namespace GameGate
             //从全局服务获取可用网关服务进行分配 
 
             //需要记录socket会话ID和链接网关
-            var gateclient = GateShare.GetClientService();
-            if (gateclient == null)
+            var clientThread = _clientManager.GetClientThread();
+            if (clientThread == null)
             {
                 Console.WriteLine("获取GameSvr链接错误");
                 return;
             }
 
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏服务器[{gateclient.GateIdx}] Server:{gateclient.GetSocketIp()}");
+            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.GateIdx}] Server:{clientThread.GetSocketIp()}");
 
-            for (ushort nIdx = 0; nIdx < gateclient.MaxSession; nIdx++)
+            for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
-                userSession = gateclient.SessionArray[nIdx];
+                userSession = clientThread.SessionArray[nIdx];
                 if (userSession.Socket == null)
                 {
                     userSession.Socket = e.Socket;
-                    userSession.sSocData = "";
-                    userSession.sSendData = "";
                     userSession.nUserListIndex = 0;
-                    userSession.nPacketIdx = -1;
-                    userSession.nPacketErrCount = 0;
-                    userSession.boStartLogon = true;
-                    userSession.boSendLock = false;
-                    userSession.boSendCheck = false;
-                    userSession.nCheckSendLength = 0;
                     userSession.SocketId = e.ConnectionId;
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
-                    userSession.sRemoteAddr = sRemoteAddress;
-                    userSession.dwSayMsgTick = HUtil32.GetTickCount();
                     userSession.nSckHandle = (int)e.Socket.Handle;
-                    userSession.boSendAvailable = true; // 用户延迟处理。
-                    userSession.bosendAvailableStart = false; // 开启用户延迟处理。
-                    userSession.dwClientCheckTimeOut = 200; // 延迟发送给客户端间隔
-                    userSession.SocketIdx = nIdx;
-                    GateShare.SessionIndex.TryAdd(e.ConnectionId, nIdx);
                     break;
                 }
             }
-            if (userSession != null && userSession.SocketIdx < gateclient.MaxSession)
+            if (userSession != null && userSession.SocketId < clientThread.MaxSession)
             {
-                gateclient.SendServerMsg(Grobal2.GM_OPEN, userSession.SocketIdx, (int)e.Socket.Handle, 0, sRemoteAddress.Length, sRemoteAddress); //通知M2有新玩家进入游戏
+                clientThread.UserEnter(userSession.SocketId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
-                GateShare._ClientGateMap.TryAdd(e.ConnectionId, gateclient);//链接成功后建立对应关系
-                _sessionManager.AddSession(e.ConnectionId, userSession.SocketIdx, new ClientSession(userSession, gateclient));
+                _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
+                _sessionManager.AddSession(userSession.SocketId, new ClientSession(userSession, clientThread));
             }
             else
             {
-                GateShare.DelSocketIndex(e.ConnectionId);
                 e.Socket.Close();
                 GateShare.AddMainLogMsg("禁止连接: " + sRemoteAddress, 1);
             }
@@ -110,31 +118,27 @@ namespace GameGate
         {
             TSessionInfo userSession;
             var sRemoteAddr = e.RemoteIPaddr;
-            var nSockIndex = GateShare.GetSocketIndex(e.ConnectionId);
-            var userClinet = GateShare.GetUserClient(e.ConnectionId);
-            if (userClinet != null)
+            var nSockIndex = e.ConnectionId;
+            var clientThread = _clientManager.GetClientThread(nSockIndex);
+            if (clientThread != null)
             {
-                if (nSockIndex >= 0 && nSockIndex < userClinet.MaxSession)
+                if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
-                    userSession = userClinet.SessionArray[nSockIndex];
+                    userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
                     userSession.nSckHandle = -1;
-                    userSession.sSocData = "";
-                    userSession.sSendData = "";
-                    if (GateShare.boGateReady)
+                    if (clientThread.boGateReady)
                     {
-                        userClinet.SendServerMsg(Grobal2.GM_CLOSE, 0, (int)e.Socket.Handle, 0, 0, ""); //发送消息给M2断开链接
+                        clientThread.UserLeave((int)e.Socket.Handle); //发送消息给M2断开链接
                         GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
                     }
-                    GateShare.DelSocketIndex(e.ConnectionId);
-                    GateShare.DeleteUserClient(e.ConnectionId);
+                    _clientManager.DeleteClientThread(e.ConnectionId);
                     _sessionManager.Remove(e.ConnectionId);
                 }
             }
             else
             {
-                GateShare.DelSocketIndex(e.ConnectionId);
-                GateShare.DeleteUserClient(e.ConnectionId);
+                _clientManager.DeleteClientThread(e.ConnectionId);
                 GateShare.AddMainLogMsg("断开链接: " + sRemoteAddr, 5);
                 Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
@@ -156,7 +160,7 @@ namespace GameGate
             var clientSession = _sessionManager.GetSession(connectionId);
             if (clientSession != null)
             {
-                var userClient = GateShare.GetUserClient(connectionId);
+                var userClient = _clientManager.GetClientThread(connectionId);
                 string sRemoteAddress = token.RemoteIPaddr;
                 if (userClient == null)
                 {
@@ -170,22 +174,21 @@ namespace GameGate
                 }
                 try
                 {
-                    int dwProcessMsgTick = HUtil32.GetTickCount();
+                    var dwProcessMsgTick = HUtil32.GetTickCount();
                     var nReviceLen = token.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
-                    var nSocketIndex = GateShare.GetSocketIndex(connectionId);
-                    if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession && GateShare.boServerReady)
+                    var nSocketIndex = token.ConnectionId;
+                    if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession)
                     {
                         GateShare.NReviceMsgSize += data.Length;
-                        if (GateShare.boGateReady && data.Length > 0)
+                        if (userClient.boGateReady && data.Length > 0)
                         {
                             var userData = new TSendUserData();
-                            userData.nSocketHandle = (int)token.Socket.Handle;
                             userData.Buffer = data;
                             userData.BufferLen = data.Length;
                             userData.UserCientId = token.ConnectionId;
-                            GateShare.ReviceMsgList.Writer.TryWrite(userData);
+                            _reviceMsgList.Writer.TryWrite(userData);
                         }
                     }
                     var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;

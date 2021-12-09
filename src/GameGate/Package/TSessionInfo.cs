@@ -5,37 +5,9 @@ namespace GameGate
     public class TSessionInfo
     {
         public Socket Socket;
-        public ushort SocketIdx;
-        public string SocketId;
+        public int SocketId;
         public int nSckHandle;
-        public string sSocData;
-        public string sSendData;
         public ushort nUserListIndex;
-        public int nPacketIdx;
-        /// <summary>
-        /// 数据包序号重复计数（客户端用封包发送数据检测）
-        /// </summary>
-        public int nPacketErrCount;
-        public bool boStartLogon;
-        public bool boSendLock;
-        public int nCheckSendLength;
-        public bool boSendAvailable;
-        public bool boSendCheck;
-        public int dwTimeOutTime;
         public int dwReceiveTick;
-        public string sRemoteAddr;
-        /// <summary>
-        /// 发言间隔控制
-        /// </summary>
-        public int dwSayMsgTick;
-        /// <summary>
-        /// 开启用户延迟处理
-        /// </summary>
-        public bool bosendAvailableStart;
-        /// <summary>
-        /// 延迟发送给客户端间隔
-        /// </summary>
-        public int dwClientCheckTimeOut;
-        public string sUserName;
     }
 }

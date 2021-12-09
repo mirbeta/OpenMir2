@@ -210,7 +210,7 @@ namespace GameSvr
     {
         public Socket Socket;
         public string SocData;
-        public string SocketId;
+        public int SocketId;
     }
 
     public class ServerGruopInfo

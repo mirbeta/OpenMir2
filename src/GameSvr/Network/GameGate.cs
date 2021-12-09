@@ -253,7 +253,7 @@ namespace GameSvr
             }
         }
 
-        private void SocketRead(string connectionId,byte[] buffer)
+        private void SocketRead(int connectionId,byte[] buffer)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
             if (RunSock.GataSocket.TryGetValue(connectionId, out var gate))
@@ -1345,6 +1345,6 @@ namespace GameSvr
         /// </summary>
         public static TGateInfo[] g_GateArr = new TGateInfo[6];
 
-        public static ConcurrentDictionary<string, TGateInfo> GataSocket = new ConcurrentDictionary<string, TGateInfo>();
+        public static ConcurrentDictionary<int, TGateInfo> GataSocket = new ConcurrentDictionary<int, TGateInfo>();
     }
 }

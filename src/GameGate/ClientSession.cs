@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
+using System.Diagnostics;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -60,15 +59,15 @@ namespace GameGate
         public int m_SendCheckTick = 0;
         public TCheckStep m_Stat;
         public long m_FinishTick = 0;
-        private readonly ForwardClient lastGameSvr;
+        private readonly ClientThread lastGameSvr;
 
-        public ClientSession(TSessionInfo session, ForwardClient forwardThread)
+        public ClientSession(TSessionInfo session, ClientThread clientThread)
         {
             _msgList = new List<TDelayMsg>();
             _session = session;
-            _sessionIdx = session.SocketIdx;
+            _sessionIdx = session.SocketId;
             m_fOverClientCount = false;
-            lastGameSvr = forwardThread;
+            lastGameSvr = clientThread;
             _gateConfig = new GateConfig();
             m_xHWID = MD5.g_MD5EmptyDigest;
         }
@@ -152,6 +151,7 @@ namespace GameGate
                 {
                     if (UserData.BufferLen <= 1) //bug 收到为1的数据封包
                     {
+                        Debug.WriteLine("无效的数据分包.");
                         return;
                     }
 
@@ -915,70 +915,12 @@ namespace GameGate
         /// <summary>
         /// 发送消息到客户端
         /// </summary>
-        public void SeneMessage(string sMsg = "")
+        public void ProcessSvrData(byte[] sendBuffer)
         {
-            string sData;
-            string sSendBlock;
-            sData = sSendData + sMsg;
-            while (!string.IsNullOrEmpty(sData))
+            if (_session.Socket != null && _session.Socket.Connected)
             {
-                if (sData.Length > GateShare.nClientSendBlockSize)
-                {
-                    sSendBlock = sData.Substring(0, GateShare.nClientSendBlockSize);
-                    sData = sData.Substring(GateShare.nClientSendBlockSize, sData.Length - GateShare.nClientSendBlockSize);
-                }
-                else
-                {
-                    sSendBlock = sData;
-                    sData = "";
-                }
-                //检查延迟处理
-                // if (!UserSession.bosendAvailableStart)
-                // {
-                //     UserSession.bosendAvailableStart = false;
-                //     UserSession.boSendAvailable = false;
-                //     UserSession.dwTimeOutTime = HUtil32.GetTickCount();
-                // }
-                if (!_session.boSendAvailable) //用户延迟处理
-                {
-                    if (HUtil32.GetTickCount() > _session.dwTimeOutTime)
-                    {
-                        _session.boSendAvailable = true;
-                        _session.nCheckSendLength = 0;
-                        GateShare.boSendHoldTimeOut = true;
-                        GateShare.dwSendHoldTick = HUtil32.GetTickCount();
-                    }
-                }
-                if (_session.boSendAvailable)
-                {
-                    if (_session.nCheckSendLength >= GateShare.SENDCHECKSIZE) //M2发送大于512字节封包加'*'
-                    {
-                        if (!_session.boSendCheck)
-                        {
-                            _session.boSendCheck = true;
-                            sSendBlock = "*" + sSendBlock;
-                        }
-                        if (_session.nCheckSendLength >= GateShare.SENDCHECKSIZEMAX)
-                        {
-                            _session.boSendAvailable = false;
-                            _session.dwTimeOutTime = HUtil32.GetTickCount() + GateShare.dwClientCheckTimeOut;
-                        }
-                    }
-                    if (_session.Socket != null && _session.Socket.Connected)
-                    {
-                        //nSendBlockSize += sSendBlock.Length;
-                        _session.Socket.SendText(sSendBlock);
-                    }
-                    _session.nCheckSendLength += sSendBlock.Length;
-                }
-                else
-                {
-                    sData = sSendBlock + sData; //延时处理消息 需要单独额外的处理
-                    GateShare.AddMainLogMsg("延时处理消息:" + sData, 1);
-                    break;
-                }
+                _session.Socket.Send(sendBuffer);
             }
-            sSendData = sData;
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, short nParam, short nTag, short nSeries, string sMsg)
@@ -1329,7 +1271,7 @@ namespace GameGate
             var GateMsg = new TMsgHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = (int)_session.Socket.Handle;
-            GateMsg.wGSocketIdx = _session.SocketIdx;
+            GateMsg.wGSocketIdx = (ushort)_session.SocketId;
             GateMsg.wIdent = Grobal2.GM_DATA;
             GateMsg.wUserListIndex = _session.nUserListIndex;
             GateMsg.nLength = tempBuff.Length;

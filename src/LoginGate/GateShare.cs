@@ -34,7 +34,7 @@ namespace LoginGate
         public static long dwKeepConnectTimeOut = 60 * 1000;
         public static bool g_boDynamicIPDisMode = false;
         public static int GATEMAXSESSION = 10000;
-        public static ConcurrentDictionary<string, int> socketMap = null;
+        public static ConcurrentDictionary<int, int> socketMap = null;
         public static TUserSession[] g_SessionArray;
         public static int nSessionCount = 0;
         public static bool boServerReady = false;
@@ -92,7 +92,7 @@ namespace LoginGate
         {
             g_SessionArray = new TUserSession[GATEMAXSESSION];
             MainLogMsgList = new List<string>();
-            socketMap = new ConcurrentDictionary<string, int>();
+            socketMap = new ConcurrentDictionary<int, int>();
         }
     }
 

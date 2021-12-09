@@ -20,35 +20,21 @@ namespace GameGate
         public static string GateClass = "GameGate";
         public static string GateAddr = "*";
         public static int GatePort = 7200;
-        public static bool boServerReady;
         /// <summary>
         /// 显示B 或 KB
         /// </summary>
         public static bool boShowBite = true;
         public static bool boServiceStart = false;
         /// <summary>
-        /// 网关是否就绪
-        /// </summary>
-        public static bool boGateReady = false;
-        /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
         public static IList<string> AbuseList = null;
-        public static ConcurrentDictionary<string, int> SessionIndex;
         /// <summary>
         /// 是否显示SOCKET接收的信息
         /// </summary>
         public static bool boShowSckData = true;
         public static string sReplaceWord = "*";
-        /// <summary>
-        /// 接收封包（客户端-》网关）
-        /// </summary>
-        public static Channel<TSendUserData> ReviceMsgList = null;
-        /// <summary>
-        /// 发送封包（网关-》客户端）
-        /// </summary>
-        public static Channel<TSendUserData> SendMsgList = null;
         /// <summary>
         /// 转发封包（数据引擎-》网关）
         /// </summary>
@@ -96,33 +82,12 @@ namespace GameGate
         public static IniFile Conf = null;
         private static string sConfigFileName = "config.conf";
         /// <summary>
-        /// 发言字符长度
-        /// </summary>
-        public static int nSayMsgMaxLen = 70;
-        /// <summary>
-        /// 发言间隔时间
-        /// </summary>
-        public static long dwSayMsgTime = 1000;
-        /// <summary>
-        /// 攻击间隔时间
-        /// </summary>
-        public static long dwHitTime = 300;
-        /// <summary>
         /// 会话超时时间
         /// </summary>
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
-        public const int MSGMAXLENGTH = 20000;
-        public const int SENDCHECKSIZE = 512;
-        public const int SENDCHECKSIZEMAX = 2048;
-        /// <summary>
-        /// 玩家开挂记录列表
-        /// </summary>
-        public static ConcurrentDictionary<string, string> GameSpeedList = null;
-        public static ConcurrentDictionary<string, ForwardClient> _ClientGateMap;
         public static bool[] Magic_Attack_Array;
         private static ConcurrentDictionary<int, int> MagicDelayTimeMap;
-        public static ConcurrentDictionary<string, ForwardClient> ServerGateList;
-        public static List<WeightedItem<ForwardClient>> m_ServerGateList = new List<WeightedItem<ForwardClient>>();
+        public static IList<ClientThread> ServerGateList;
         public static Dictionary<string, ClientSession> PunishList;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
@@ -170,41 +135,6 @@ namespace GameGate
             AddMainLogMsg("IP过滤配置信息加载完成...", 4);
         }
 
-        public static int GetSocketIndex(string connectionId)
-        {
-            var socketIndex = 0;
-            if (SessionIndex.TryGetValue(connectionId, out socketIndex))
-            {
-                return socketIndex;
-            }
-            return socketIndex;
-        }
-
-        public static void DelSocketIndex(string connectionId)
-        {
-            var socketIndex = 0;
-            SessionIndex.TryRemove(connectionId, out socketIndex);
-        }
-
-        /// <summary>
-        /// 获取用户链接对应网关
-        /// </summary>
-        /// <param name="connectionId"></param>
-        /// <returns></returns>
-        public static ForwardClient GetUserClient(string connectionId)
-        {
-            return _ClientGateMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
-        }
-
-        /// <summary>
-        /// 从字典删除用户和网关对应关系
-        /// </summary>
-        /// <param name="connectionId"></param>
-        public static void DeleteUserClient(string connectionId)
-        {
-            _ClientGateMap.TryRemove(connectionId, out var userClinet);
-        }
-
         public static void Initialization()
         {
             Conf = new IniFile(Path.Combine(AppContext.BaseDirectory, sConfigFileName));
@@ -214,17 +144,12 @@ namespace GameGate
             CS_FilterMsg = new object();
             MainLogMsgList = new List<string>();
             AbuseList = new List<string>();
-            ReviceMsgList = Channel.CreateUnbounded<TSendUserData>();
-            SendMsgList = Channel.CreateUnbounded<TSendUserData>();
             ForwardMsgList = Channel.CreateUnbounded<ForwardMessage>();
             boShowSckData = false;
             BlockIPList = new List<string>();
             TempBlockIPList = new List<string>();
-            SessionIndex = new ConcurrentDictionary<string, int>();
-            _ClientGateMap = new ConcurrentDictionary<string, ForwardClient>();
             MagicDelayTimeMap = new ConcurrentDictionary<int, int>();
-            ServerGateList = new ConcurrentDictionary<string, ForwardClient>();
-            GameSpeedList = new ConcurrentDictionary<string, string>();
+            ServerGateList = new List<ClientThread>();
             InitMagicAttackMap();
             PunishList = new Dictionary<string, ClientSession>();
         }
@@ -283,36 +208,6 @@ namespace GameGate
             MagicDelayTimeMap[45] = 1000; //灭天火
             MagicDelayTimeMap[46] = 1000; //分身术
             MagicDelayTimeMap[47] = 1000; //火龙焰
-        }
-
-        public static void Add(string name, ForwardClient userClientService)
-        {
-            if (ServerGateList.ContainsKey(name))
-            {
-                return;
-            }
-            ServerGateList.TryAdd(name, userClientService);
-        }
-
-        public static void Delete(string name)
-        {
-            ServerGateList.TryRemove(name, out var userClientService);
-        }
-
-        public static ForwardClient GetClientService()
-        {
-            //TODO 根据配置文件有四种模式  默认随机
-            //1.轮询分配
-            //2.总是分配到最小资源 即网关在线人数最小的那个
-            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-            //4.按权重分配
-            var userList = new List<ForwardClient>(ServerGateList.Values);
-            if (userList.Any())
-            {
-                var random = new System.Random().Next(userList.Count);
-                return userList[random];
-            }
-            return null;
         }
     }
 

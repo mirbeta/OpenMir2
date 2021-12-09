@@ -60,7 +60,7 @@ namespace SelGate
         public const int GATEMAXSESSION = 10000;
         public static int nSessionCount = 0;
         public static TUserSession[] g_SessionArray;
-        public static ConcurrentDictionary<string, int> _sessionMap = new ConcurrentDictionary<string, int>();
+        public static ConcurrentDictionary<int, int> _sessionMap = new ConcurrentDictionary<int, int>();
         public static IList<string> ClientSockeMsgList = null;
 
         public static void LoadBlockIPFile()

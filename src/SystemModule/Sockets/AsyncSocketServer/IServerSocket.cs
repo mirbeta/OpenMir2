@@ -14,34 +14,69 @@ namespace SystemModule.Sockets
     /// </summary>
     public class ISocketServer
     {
-        // 缓冲区同步对象
+        /// <summary>
+        /// 缓冲区同步对象
+        /// </summary>
         private Object m_bufferLock = new Object();
-        // 读对象池同步对象
+        /// <summary>
+        /// 读对象池同步对象
+        /// </summary>
         private Object m_readPoolLock = new Object();
-        // 写对象池同步对象
+        /// <summary>
+        /// 写对象池同步对象
+        /// </summary>
         private Object m_writePoolLock = new Object();
-        // 接收数据事件对象集合
-        Dictionary<string, AsyncUserToken> m_tokens;
-
-        // 添加功能
-        int m_numConnections;           // 设计同时处理的连接最大数
-        int m_BufferSize;               // 用于每一个Socket I/O操作使用的缓冲区大小
-        BufferManager m_bufferManager;  // 为所有Socket操作准备的一个大的可重用的缓冲区集合        
-        const int opsToPreAlloc = 2;    // 需要分配空间的操作数目:为 读、写、接收等 操作预分配空间(接受操作可以不分配)
-        Socket listenSocket;            // 用来侦听到达的连接请求的Socket
-        // 读Socket操作的SocketAsyncEventArgs可重用对象池        
+        /// <summary>
+        /// 接收数据事件对象集合
+        /// </summary>
+        Dictionary<int, AsyncUserToken> m_tokens;
+        /// <summary>
+        /// 设计同时处理的连接最大数
+        /// </summary>
+        int m_numConnections;           
+        /// <summary>
+        /// 用于每一个Socket I/O操作使用的缓冲区大小
+        /// </summary>
+        int m_BufferSize;               
+        /// <summary>
+        /// 为所有Socket操作准备的一个大的可重用的缓冲区集合
+        /// </summary>
+        BufferManager m_bufferManager;  
+        /// <summary>
+        /// 需要分配空间的操作数目:为 读、写、接收等 操作预分配空间(接受操作可以不分配)
+        /// </summary>
+        const int opsToPreAlloc = 2; 
+        /// <summary>
+        /// 用来侦听到达的连接请求的Socket
+        /// </summary>
+        Socket listenSocket;  
+        /// <summary>
+        /// 读Socket操作的SocketAsyncEventArgs可重用对象池
+        /// </summary>
         SocketAsyncEventArgsPool m_readPool;
-        // 写Socket操作的SocketAsyncEventArgs可重用对象池
+        /// <summary>
+        /// 写Socket操作的SocketAsyncEventArgs可重用对象池
+        /// </summary>
         SocketAsyncEventArgsPool m_writePool;
-
         bool isActive = false;
-
         // 测试用
-        long m_totalBytesRead;          // 服务器接收到的总字节数计数器
-        long m_totalBytesWrite;         // 服务器发送的字节总数
-
-        long m_numConnectedSockets;      // 连接到服务器的Socket总数
-        Semaphore m_maxNumberAcceptedClients;//最大接受请求数信号量
+        /// <summary>
+        /// 服务器接收到的总字节数计数器
+        /// </summary>
+        long m_totalBytesRead; 
+        /// <summary>
+        /// 服务器发送的字节总数
+        /// </summary>
+        long m_totalBytesWrite; 
+        /// <summary>
+        /// 连接到服务器的Socket总数
+        /// </summary>
+        long m_numConnectedSockets;
+        /// <summary>
+        /// 最大接受请求数信号量
+        /// </summary>
+        Semaphore m_maxNumberAcceptedClients;
+        
         /// <summary>
         /// 获取已经连接的Socket总数
         /// </summary>
@@ -89,7 +124,7 @@ namespace SystemModule.Sockets
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns>在线返回true，否则返回false</returns>
-        public bool IsOnline(string connectionId)
+        public bool IsOnline(int connectionId)
         {
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
@@ -138,7 +173,7 @@ namespace SystemModule.Sockets
             m_writePool = new SocketAsyncEventArgsPool(numConnections);
 
             // 接收数据事件参数对象集合
-            m_tokens = new Dictionary<string, AsyncUserToken>();
+            m_tokens = new Dictionary<int, AsyncUserToken>();
 
             // 初始信号量
             m_maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
@@ -353,7 +388,7 @@ namespace SystemModule.Sockets
             // 把它放到ReadEventArg对象的user token中
             token.Socket = e.AcceptSocket;
             // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-            token.ConnectionId = Guid.NewGuid().ToString("N");
+            token.ConnectionId = (int)m_numConnectedSockets;//Guid.NewGuid().ToString("N");
 
             lock (((ICollection)this.m_tokens).SyncRoot)
             {
@@ -483,7 +518,7 @@ namespace SystemModule.Sockets
             }
         }
 
-        public void Send(string connectionId, byte[] buffer)
+        public void Send(int connectionId, byte[] buffer)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -559,7 +594,7 @@ namespace SystemModule.Sockets
         /// <param name="connectionId">连接的ID号</param>
         /// <param name="buffer">缓冲区大小</param>
         /// <param name="operation">操作自定义枚举</param>
-        public void Send(string connectionId, byte[] buffer, object operation)
+        public void Send(int connectionId, byte[] buffer, object operation)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -719,7 +754,7 @@ namespace SystemModule.Sockets
             }
         }
         
-        public void Disconnect(string connectionId)//断开连接(形参 连接ID)
+        public void Disconnect(int connectionId)//断开连接(形参 连接ID)
         {
             AsyncUserToken token;
 

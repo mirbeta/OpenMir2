@@ -11,7 +11,7 @@ namespace GameSvr
         /// </summary>
         public bool boUsed;
         public Socket Socket;
-        public string SocketId;
+        public int SocketId;
         public int GateIndex;
         /// <summary>
         /// 网关IP

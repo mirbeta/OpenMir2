@@ -44,31 +44,6 @@ namespace GameGate
         }
     }
 
-    public struct _tagCmdHeader
-    {
-        public double Header;
-        public ushort Cmd;
-        public ushort Cmd1;
-        public double Tail;
-    }
-
-    public struct TMagic
-    {
-        public char[] Reserved1;
-        public ushort MagicID;
-        public char[] Reserved2;
-        public ushort Delay;
-        public char[] Reserved3;
-    }
-
-    public struct TEnDeInfo
-    {
-        public double Head;
-        public ushort Cmd;
-        public ushort Cmd1;
-        public double Tail;
-    }
-
     public class TDelayMsg
     {
         public int dwDelayTime;
@@ -77,19 +52,7 @@ namespace GameGate
         public int nDir;
         public int nBufLen;
         public byte[] pBuffer;
-    } 
-
-    public struct TPerIPAddr
-    {
-        public long IPaddr;
-        public int Count;
     }
-
-    public struct TIPArea
-    {
-        public double Low;
-        public double High;
-    } 
 
     public enum TBlockIPMethod
     {
@@ -118,13 +81,6 @@ namespace GameGate
         ptSysmsg,
         ptMenuOK
     }
-
-    public enum TSockThreadStutas
-    {
-        stConnecting,
-        stConnected,
-        stTimeOut
-    } 
 }
 
 namespace Protocol.Units

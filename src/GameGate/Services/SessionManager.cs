@@ -1,27 +1,50 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace GameGate
 {
     public class SessionManager
     {
-        private ConcurrentDictionary<string, ClientSession> _connectionSessions;
-        private ConcurrentDictionary<int, ClientSession> _idxSessions;
+        /// <summary>
+        /// 发送封包（网关-》客户端）
+        /// </summary>
+        public Channel<TSendUserData> SendMsgList = null;
+        private ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<string, ClientSession>();
-            _idxSessions = new ConcurrentDictionary<int, ClientSession>();
-        }
-
-        public void AddSession(string sessionId,int idx, ClientSession userClientSession)
-        {
-            _connectionSessions.TryAdd(sessionId, userClientSession);
-            _idxSessions.TryAdd(idx, userClientSession);
+            _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
+            SendMsgList = Channel.CreateUnbounded<TSendUserData>();
         }
         
-        public ClientSession GetSession(string sessionId)
+        /// <summary>
+        /// 处理M2发过来的消息
+        /// </summary>
+        public async Task ProcessSendMessage()
+        {
+            while (await SendMsgList.Reader.WaitToReadAsync())
+            {
+                if (SendMsgList.Reader.TryRead(out var message))
+                {
+                    var userSession = GetSession(message.UserCientId);
+                    if (userSession == null)
+                    {
+                        return;
+                    }
+                    userSession.ProcessSvrData(message.Buffer);
+                }
+            }
+        }
+
+        public void AddSession(int sessionId, ClientSession userClientSession)
+        {
+            _connectionSessions.TryAdd(sessionId, userClientSession);
+        }
+
+        public ClientSession GetSession(int sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {
@@ -30,24 +53,15 @@ namespace GameGate
             return null;
         }
         
-        public ClientSession GetSession(int sessionId)
-        {
-            if (_idxSessions.ContainsKey(sessionId))
-            {
-                return _idxSessions[sessionId];
-            }
-            return null;
-        }
-
-        public void Remove(string sessionId)
+        public void Remove(int sessionId)
         {
             if (_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
-                _idxSessions.TryRemove(clientSession.SessionId, out clientSession);
+               
             }
         }
 
-        public bool CheckSession(string sessionId)
+        public bool CheckSession(int sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {
