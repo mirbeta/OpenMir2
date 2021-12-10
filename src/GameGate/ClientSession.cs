@@ -896,6 +896,9 @@ namespace GameGate
             }
         }
 
+        /// <summary>
+        /// 发送延时处理消息
+        /// </summary>
         private void SendDelayMsg(int nMid, int nDir, int nIdx, int nLen, byte[] pMsg, int dwDelay)
         {
             const int DELAY_BUFFER_LEN = 1024;
@@ -923,34 +926,34 @@ namespace GameGate
             }
         }
 
-        private void SendDefMessage(ushort wIdent, int nRecog, short nParam, short nTag, short nSeries, string sMsg)
+        private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
         {
-            //int i;
-            //int iLen;
-            //TCmdPack Cmd;
-            //char[] TempBuf = new char[1048 - 1 + 1];
-            //char[] SendBuf = new char[1048 - 1 + 1];
-            //if ((m_tLastGameSvr == null) || !m_tLastGameSvr.Active)
-            //{
-            //    return;
-            //}
-            //Cmd.Recog = nRecog;
-            //Cmd.ident = wIdent;
-            //Cmd.param = nParam;
-            //Cmd.tag = nTag;
-            //Cmd.Series = nSeries;
-            //SendBuf[0] = "#";
+            int iLen = 0;
+            TCmdPack Cmd;
+            byte[] TempBuf = new byte[1048 - 1 + 1];
+            byte[] SendBuf = new byte[1048 - 1 + 1];
+            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
+            {
+                return;
+            }
+            Cmd = new TCmdPack();
+            Cmd.Recog = nRecog;
+            Cmd.Ident = wIdent;
+            Cmd.Param = nParam;
+            Cmd.Tag = nTag;
+            Cmd.Series = nSeries;
+            SendBuf[0] = (byte)'#';
             //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
-            //if (sMsg != "")
-            //{
-            //    Move(sMsg[1], TempBuf[TCmdPack.PackSize + 1], sMsg.Length);
-            //    iLen = Misc.Units.Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize + sMsg.Length, ((int)SendBuf[1]));
-            //}
-            //else
-            //{
-            //    iLen = Misc.Units.Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize, ((int)SendBuf[1]));
-            //}
-            //SendBuf[iLen + 1] = "!";
+            if (sMsg != "")
+            {
+                //Move(sMsg[1], TempBuf[TCmdPack.PackSize + 1], sMsg.Length);
+                //iLen = Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize + sMsg.Length, ((int)SendBuf[1]));
+            }
+            else
+            {
+                //iLen = Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize, ((int)SendBuf[1]));
+            }
+            SendBuf[iLen + 1] = (byte)'!';
             //m_tIOCPSender.SendData(m_pOverlapSend, SendBuf[0], iLen + 2);
         }
 
