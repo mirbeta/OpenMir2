@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -325,13 +323,13 @@ namespace GameGate
         {
             bool result = false;
             int nCount = 0;
-            // for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i ++ )
-            // {
-            //     if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
-            //     {
-            //         nCount ++;
-            //     }
-            // }
+            //for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
+            //{
+            //    if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
+            //    {
+            //        nCount++;
+            //    }
+            //}
             if (nCount > GateShare.nMaxConnOfIPaddr)
             {
                 result = true;

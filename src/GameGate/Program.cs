@@ -28,7 +28,7 @@ namespace GameGate
                     services.AddSingleton<SessionManager>();
                     services.AddTransient<ClientManager>();
                     services.AddHostedService<AppService>();
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, GateShare.sConfigFileName)));
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                 });
 
             await builder.RunConsoleAsync();

@@ -686,7 +686,7 @@ namespace GameGate
 
                     byte[] nBuffer;
                     TSvrCmdPack cmdPack = new TSvrCmdPack();
-                    cmdPack.Flag = Protocol.Units.Protocol.RUNGATECODE;
+                    cmdPack.Flag = Protocol.RUNGATECODE;
                     cmdPack.SockID = _session.nSckHandle;
                     cmdPack.Cmd = Grobal2.GM_DATA;
                     cmdPack.GGSock = m_nSvrListIdx;

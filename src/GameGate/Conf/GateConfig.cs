@@ -87,14 +87,41 @@ namespace GameGate
         /// 是否开启客户端机器码控制
         /// </summary>
         public bool m_fProcClientHWID;
+        /// <summary>
+        /// 聊天间隔时间
+        /// </summary>
         public int m_nChatInterval;
+        /// <summary>
+        /// 转身间隔时间
+        /// </summary>
         public int m_nTurnInterval;
+        /// <summary>
+        /// 移动间隔时间
+        /// </summary>
         public int m_nMoveInterval;
+        /// <summary>
+        /// 施法间隔时间
+        /// </summary>
         public int m_nSpellNextInterval;
+        /// <summary>
+        /// 攻击间隔时间
+        /// </summary>
         public int m_nAttackInterval;
+        /// <summary>
+        /// 挖取间隔时间
+        /// </summary>
         public int m_nButchInterval;
+        /// <summary>
+        /// 蹲下间隔时间
+        /// </summary>
         public int m_nSitDownInterval;
+        /// <summary>
+        /// 拾取间隔时间
+        /// </summary>
         public int m_nPickupInterval;
+        /// <summary>
+        /// 使用物品间隔时间
+        /// </summary>
         public int m_nEatInterval;
         /// <summary>
         /// 移动后对攻击动作的补偿时间，数值越小，封加速越严厉，默认280。
@@ -169,7 +196,7 @@ namespace GameGate
             m_szOverClientCntMsg = "开启游戏过多，链接被断开！";
             m_szHWIDBlockedMsg = "机器码已被封，链接被断开！";
             m_szChatFilterReplace = "说话内容被屏蔽";
-            m_szBlockHWIDFileName = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + "BlockHWID.txt";
+            m_szBlockHWIDFileName = Path.Combine(AppContext.BaseDirectory, "BlockHWID.txt");
             m_fChatCmdFilter = false;
             m_fChatFilter = true;
             m_fChatInterval = true;

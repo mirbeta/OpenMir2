@@ -3,7 +3,7 @@ using SystemModule.Common;
 
 namespace GameGate
 {
-    public class ConfigManager : IniFile
+    public partial class ConfigManager : IniFile
     {
         public GateConfig GateConfig;
         public TGameGateList[] m_xGameGateList;
@@ -17,10 +17,6 @@ namespace GameGate
 
         public void LoadConfig()
         {
-            if (GateConfig == null)
-            {
-                throw new Exception("读取配置文件失败.");
-            }
             GateShare.nShowLogLevel = ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
             GateShare.AddMainLogMsg("正在加载配置信息...", 3);
             GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
@@ -108,7 +104,7 @@ namespace GameGate
                 m_xGameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
                 m_xGameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, m_xGameGateList[i].nGatePort);
             }
-            // Magic
+            //魔法间隔控制
             for (var i = 0; i <= TableDef.MAIGIC_DELAY_TIME_LIST.GetUpperBound(0); i++)
             {
                 if (!string.IsNullOrEmpty(TableDef.MAIGIC_NAME_LIST[i]))
@@ -119,13 +115,6 @@ namespace GameGate
             GateShare.AddMainLogMsg("配置信息加载完成...", 3);
             GateShare.LoadAbuseFile();
             GateShare.LoadBlockIPFile();
-        }
-
-        public class TGameGateList
-        {
-            public string sServerAdress;
-            public int nServerPort;
-            public int nGatePort;
         }
     }
 }

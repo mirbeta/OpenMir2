@@ -81,10 +81,7 @@ namespace GameGate
         ptSysmsg,
         ptMenuOK
     }
-}
 
-namespace Protocol.Units
-{
     public class Protocol
     {
         public static bool g_fServiceStarted = false;
