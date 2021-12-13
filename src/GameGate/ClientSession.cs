@@ -59,6 +59,7 @@ namespace GameGate
         public long m_FinishTick = 0;
         private readonly ClientThread lastGameSvr;
         private readonly ConfigManager _configManager;
+        private readonly HWIDFilter _hwidFilter;
 
         public ClientSession(TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
         {
@@ -67,6 +68,7 @@ namespace GameGate
             m_fOverClientCount = false;
             lastGameSvr = clientThread;
             _configManager = configManager;
+            _hwidFilter = GateShare._HwidFilter;
             m_xHWID = MD5.g_MD5EmptyDigest;
         }
 
@@ -1228,7 +1230,7 @@ namespace GameGate
                                 return;
                             }
                             m_xHWID = pHardwareHeader.xMd5Digest;
-                            if (Filter.g_HWIDFilter.IsFilter(m_xHWID, ref m_fOverClientCount))
+                            if (_hwidFilter.IsFilter(m_xHWID, ref m_fOverClientCount))
                             {
                                 GateShare.AddMainLogMsg($"[HandleLogin] Kicked 7: {sHumName}", 1);
                                 if (m_fOverClientCount)

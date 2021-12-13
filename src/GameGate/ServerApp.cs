@@ -178,13 +178,12 @@ namespace GameGate
             GateShare.dwProcessSendMsgTimeLimit = 50;
             dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
             dwRefConsolMsgTick = HUtil32.GetTickCount();
-
             _serverService.Start();
             _clientManager.LoadConfig();
             _clientManager.Start();
             decodeTimer = new Timer(DecodeTimer, null, 0, 1);
             //sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
-
+            GateShare._HwidFilter = new HWIDFilter(_configManager);
             GateShare.AddMainLogMsg("服务已启动成功...", 2);
             GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
             GateShare.AddMainLogMsg("网站:http://www.gameofmir.com", 0);

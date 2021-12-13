@@ -81,6 +81,7 @@ namespace GameGate
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         public static IList<ClientThread> ServerGateList;
         public static Dictionary<string, ClientSession> PunishList;
+        public static HWIDFilter _HwidFilter;
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
