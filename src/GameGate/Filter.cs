@@ -47,7 +47,7 @@ namespace GameGate
             int result = -1;
             for (var i = 0; i < m_xDenyList.Count; i++)
             {
-                pHWIDCnt = ((m_xDenyList[i]) as THWIDCnt);
+                pHWIDCnt = m_xDenyList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
                 {
                     pHWIDCnt = null;

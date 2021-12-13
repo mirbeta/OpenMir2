@@ -23,7 +23,7 @@ namespace GameGate
         /// <summary>
         /// 最大用户数
         /// </summary>
-        public int MaxSession = 1000;
+        public int MaxSession = 2000;
         /// <summary>
         /// 用户会话
         /// </summary>

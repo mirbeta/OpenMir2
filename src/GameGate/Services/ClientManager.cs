@@ -92,7 +92,11 @@ namespace GameGate
         /// <returns></returns>
         public ClientThread GetClientThread(int connectionId)
         {
-            return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
+            if (connectionId > 0)
+            {
+                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : GetClientThread();
+            }
+            return null;
         }
 
         /// <summary>

@@ -429,7 +429,6 @@ namespace SystemModule.Sockets
             catch (Exception exception_debug)
             {
                 Debug.WriteLine("调试：" + exception_debug.Message);
-                throw exception_debug;
             }
             finally
             {
@@ -872,7 +871,6 @@ namespace SystemModule.Sockets
                     catch (Exception exception_debug)
                     {
                         Debug.WriteLine("调试:" + exception_debug.Message);
-                        throw exception_debug;
                     }
                 }
                 this.m_tokens.Clear();

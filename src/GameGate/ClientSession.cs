@@ -28,9 +28,7 @@ namespace GameGate
         private IList<TDelayMsg> _msgList;
         private byte _handleLogin = 0;
         private bool _SpeedLimit;
-        private int _sessionIdx;
         private TSessionInfo _session;
-        public string sSendData = string.Empty;
         private bool m_fOverClientCount;
         private byte[] m_xHWID;
         public bool m_fKickFlag = false;
@@ -66,14 +64,11 @@ namespace GameGate
         {
             _msgList = new List<TDelayMsg>();
             _session = session;
-            _sessionIdx = session.SocketId;
             m_fOverClientCount = false;
             lastGameSvr = clientThread;
             _configManager = configManager;
             m_xHWID = MD5.g_MD5EmptyDigest;
         }
-
-        public int SessionId => _sessionIdx;
 
         public GameSpeed GetGameSpeed()
         {
@@ -93,8 +88,8 @@ namespace GameGate
         /// <param name="UserData"></param>
         public void HandleUserPacket(TSendUserData UserData)
         {
-            string sMsg = string.Empty;
-            int dwCurrentTick = 0;
+            var sMsg = string.Empty;
+            var dwCurrentTick = 0;
             if (m_fKickFlag)
             {
                 m_fKickFlag = false;
@@ -158,7 +153,7 @@ namespace GameGate
                         return;
                     }
 
-                    //todo 需要优化此处
+                    //todo 优化此处
                     var packBuff = new byte[UserData.BufferLen];
                     var tempBuff = new byte[UserData.BufferLen - 3];//跳过#1....!
                     Buffer.BlockCopy(UserData.Buffer, 2, tempBuff, 0, tempBuff.Length);
@@ -199,7 +194,6 @@ namespace GameGate
                     var dwDelay = 0;
                     switch (CltCmd.Cmd)
                     {
-                        
                         case Grobal2.CM_LOGINNOTICEOK:
                             if (m_Stat == TCheckStep.csCheckLogin)
                             {
@@ -779,7 +773,7 @@ namespace GameGate
                             _gameSpeed.dwSpellTick = dwCurrentTick;
                             int nNextMov = 0;
                             int nNextAtt = 0;
-                            if (GateShare.Magic_Attack_Array[delayMsg.nMag])
+                            if (TableDef.MAIGIC_ATTACK_ARRAY[delayMsg.nMag])
                             {
                                 nNextMov = Config.m_nSpellNextMoveCompensate;
                                 nNextAtt = Config.m_nSpellNextAttackCompensate;

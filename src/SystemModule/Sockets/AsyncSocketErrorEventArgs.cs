@@ -17,5 +17,10 @@ namespace SystemModule.Sockets
         {
             this._exception = exception;
         }
+
+        public AsyncSocketException Exception
+        {
+            get { return _exception; }
+        }
     }
 }

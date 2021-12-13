@@ -79,7 +79,6 @@ namespace GameGate
         /// 会话超时时间
         /// </summary>
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
-        public static bool[] Magic_Attack_Array;
         public static IList<ClientThread> ServerGateList;
         public static Dictionary<string, ClientSession> PunishList;
 

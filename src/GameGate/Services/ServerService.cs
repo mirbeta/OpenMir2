@@ -69,26 +69,15 @@ namespace GameGate
         /// <param name="e"></param>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo userSession = null;
-            var sRemoteAddress = e.RemoteIPaddr;
-            //todo 新玩家链接的时候要随机分配一个可用网关客户端
-            //根据配置文件有三种模式
-            //1.轮询分配
-            //2.总是分配到最小资源 即网关在线人数最小的那个
-            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-
-            //从全局服务获取可用网关服务进行分配 
-
-            //需要记录socket会话ID和链接网关
-            var clientThread = _clientManager.GetClientThread();
+            var clientThread = _clientManager.GetClientThread(e.ConnectionId);
             if (clientThread == null)
             {
-                Console.WriteLine("获取GameSvr链接错误");
+                Console.WriteLine("分配GameSvr链接错误");
                 return;
             }
-
+            var sRemoteAddress = e.RemoteIPaddr;
             Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.GateIdx}] Server:{clientThread.GetSocketIp()}");
-
+            TSessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
                 userSession = clientThread.SessionArray[nIdx];
@@ -102,12 +91,12 @@ namespace GameGate
                     break;
                 }
             }
-            if (userSession != null && userSession.SocketId < clientThread.MaxSession)
+            if (userSession != null)
             {
                 clientThread.UserEnter(userSession.SocketId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                _sessionManager.AddSession(userSession.SocketId, new ClientSession(userSession, clientThread,_configManager));
+                _sessionManager.AddSession(userSession.SocketId, new ClientSession(userSession, clientThread, _configManager));
             }
             else
             {
@@ -148,7 +137,7 @@ namespace GameGate
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            Console.WriteLine("客户端链接错误.");
+            Console.WriteLine($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
         /// <summary>
