@@ -13,21 +13,21 @@ namespace DBSvr
     {
         private IList<TGlobaSessionInfo> GlobaSessionList = null;
         private string m_sSockMsg = string.Empty;
-        private string sIDAddr = string.Empty;
+        private string sIDAddr;
         private int nIDPort = 0;
         private readonly IClientScoket _socket;
+        private readonly ConfigManager _configManager;
 
-        public LoginSocService()
+        public LoginSocService(ConfigManager configManager)
         {
             _socket = new IClientScoket();
             _socket.ReceivedDatagram += IDSocketRead;
             _socket.OnConnected += IDSocketConnected;
             _socket.OnDisconnected += IDSocketDisconnected;
             _socket.OnError += IDSocketError;
-            IniFile Conf = new IniFile(DBShare.sConfFileName);
-            sIDAddr = Conf.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
-            nIDPort = Conf.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
-            Conf = null;
+            _configManager = configManager;
+            sIDAddr = _configManager.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
+            nIDPort = _configManager.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
             GlobaSessionList = new List<TGlobaSessionInfo>();
         }
 

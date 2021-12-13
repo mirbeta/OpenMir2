@@ -70,20 +70,21 @@ namespace GameSvr
         /// <summary>
         /// 建筑度
         /// </summary>
-        private int m_nBuildPoint = 0;
+        public int m_nBuildPoint = 0;
         /// <summary>
         /// 人气度
         /// </summary>        
-        private int m_nAurae = 0;
+        public int m_nAurae = 0;
         /// <summary>
         /// 安定度
         /// </summary>        
-        private int m_nStability = 0;
+        public int m_nStability = 0;
         /// <summary>
         /// 繁荣度
         /// </summary>        
-        private int m_nFlourishing = 0;
-        private int m_nChiefItemCount = 0;
+        public int m_nFlourishing = 0;
+        public int m_nChiefItemCount = 0;
+        private GuildConf _guildConf;
 
         private void ClearRank()
         {
@@ -109,18 +110,14 @@ namespace GameSvr
             nContestPoint = 0;
             boTeamFight = false;
             m_boEnableAuthAlly = false;
-            var sFileName = M2Share.g_Config.sGuildDir + sName + ".ini";
-            m_Config = new IniFile(sFileName);
-            if (!File.Exists(sFileName))
-            {
-                m_Config.WriteString("Guild", "GuildName", sName);
-            }
             m_nBuildPoint = 0;
             m_nAurae = 0;
             m_nStability = 0;
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
             m_DynamicVarList = new List<TDynamicVar>();
+            var sFileName = M2Share.g_Config.sGuildDir + sName + ".ini";
+            _guildConf = new GuildConf(sName, sFileName);
         }
 
         public bool DelAllyGuild(TGuild Guild)
@@ -198,18 +195,13 @@ namespace GameSvr
         {
             var sFileName = sGuildName + ".txt";
             var result = LoadGuildFile(sFileName);
-            LoadGuildConfig(sGuildName + ".ini");
+            LoadGuildConfig();
             return result;
         }
 
-        public bool LoadGuildConfig(string sGuildFileName)
+        private void LoadGuildConfig()
         {
-            m_nBuildPoint = m_Config.ReadInteger("Guild", "BuildPoint", m_nBuildPoint);
-            m_nAurae = m_Config.ReadInteger("Guild", "Aurae", m_nAurae);
-            m_nStability = m_Config.ReadInteger("Guild", "Stability", m_nStability);
-            m_nFlourishing = m_Config.ReadInteger("Guild", "Flourishing", m_nFlourishing);
-            m_nChiefItemCount = m_Config.ReadInteger("Guild", "ChiefItemCount", m_nChiefItemCount);
-            return true;
+            _guildConf.LoadConfig(this);
         }
 
         public bool LoadGuildFile(string sGuildFileName)
@@ -384,7 +376,7 @@ namespace GameSvr
             if (M2Share.nServerIndex == 0)
             {
                 SaveGuildFile(M2Share.g_Config.sGuildDir + sGuildName + ".txt");
-                SaveGuildConfig(M2Share.g_Config.sGuildDir + sGuildName + ".ini");
+                SaveGuildConfig();
             }
             else
             {
@@ -392,14 +384,9 @@ namespace GameSvr
             }
         }
 
-        private void SaveGuildConfig(string sFileName)
+        private void SaveGuildConfig()
         {
-            m_Config.WriteString("Guild", "GuildName", sGuildName);
-            m_Config.WriteInteger("Guild", "BuildPoint", m_nBuildPoint);
-            m_Config.WriteInteger("Guild", "Aurae", m_nAurae);
-            m_Config.WriteInteger("Guild", "Stability", m_nStability);
-            m_Config.WriteInteger("Guild", "Flourishing", m_nFlourishing);
-            m_Config.WriteInteger("Guild", "ChiefItemCount", m_nChiefItemCount);
+            _guildConf.SaveGuildConfig(this);
         }
 
         private void SaveGuildFile(string sFileName)

@@ -1471,7 +1471,7 @@ namespace GameSvr
             TDynamicVar DynamicVar = null;
             bool boFoundVar;
             IList<TDynamicVar> DynamicVarList;
-            IniFile IniFile;
+            ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam1;
@@ -1503,11 +1503,11 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            IniFile = new IniFile(sFileName);
+            IniFile = new ConfFile(sFileName);
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];
-                if (String.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -1948,15 +1948,19 @@ namespace GameSvr
             }
         }
 
-        // 读取变量值
-        // LOADVAR 变量类型 变量名 文件名
+        /// <summary>
+        /// 读取变量值
+        /// LOADVAR 变量类型 变量名 文件名
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfLoadVar(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
             bool boFoundVar;
             IList<TDynamicVar> DynamicVarList;
-            IniFile IniFile;
+            ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam1;
@@ -1988,7 +1992,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            IniFile = new IniFile(sFileName);
+            IniFile = new ConfFile(sFileName);
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];

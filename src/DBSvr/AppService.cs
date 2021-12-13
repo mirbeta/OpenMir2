@@ -12,14 +12,16 @@ namespace DBSvr
         private readonly UserSocService _userSoc;
         private readonly LoginSocService _LoginSoc;
         private readonly HumDataService _dataService;
+        private readonly ConfigManager _configManager;
         private Timer _threadTimer;
 
-        public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSocService idSoc, HumDataService dataService)
+        public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSocService idSoc, HumDataService dataService, ConfigManager configManager)
         {
             _logger = logger;
             _userSoc = userSoc;
             _LoginSoc = idSoc;
             _dataService = dataService;
+            _configManager = configManager;
             _threadTimer = new Timer(ThreadServerTimer, null, 1000, 5000);
         }
 
@@ -36,6 +38,7 @@ namespace DBSvr
         {
             _logger.LogDebug($"DBSvr is starting.");
             DBShare.Initialization();
+            _configManager.LoadConfig();
             DBShare.LoadConfig();
             DBShare.nHackerNewChrCount = 0;
             DBShare.nHackerDelChrCount = 0;

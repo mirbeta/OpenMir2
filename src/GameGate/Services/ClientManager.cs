@@ -16,33 +16,26 @@ namespace GameGate
         /// </summary>
         private readonly ClientThread[] _gateClient = new ClientThread[10];
         private readonly SessionManager _sessionManager;
+        private readonly ConfigManager _configManager;
         private Thread _delayThread;
         private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         
-        public ClientManager(SessionManager sessionManager)
+        public ClientManager(SessionManager sessionManager,ConfigManager configManager)
         {
             _sessionManager = sessionManager;
+            _configManager = configManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
 
         public void LoadConfig()
         {
-            if (GateShare.Conf == null)
-            {
-                Console.WriteLine("获取网关配置文件错误.");
-                return;
-            }
-            GateShare.ServerCount = GateShare.Conf.ReadInteger<int>("Servers", "ServerCount", GateShare.ServerCount);
-            if (GateShare.ServerCount > _gateClient.Length)
-            {
-                GateShare.ServerCount = _gateClient.Length;//最大不能超过10个网关
-            }
+            var serverCount =_configManager.GateConfig.m_nGateCount;
             var serverAddr = string.Empty;
             var serverPort = 0;
-            for (var i = 0; i < GateShare.ServerCount; i++)
+            for (var i = 0; i < serverCount; i++)
             {
-                serverAddr = GateShare.Conf.GetString("Servers", $"ServerAddr{i}");
-                serverPort = GateShare.Conf.ReadInteger<int>("Servers", $"ServerPort{i}", -1);
+                serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
+                serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");

@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Channels;
 using SystemModule;
-using SystemModule.Common;
 
 namespace GameGate
 {
@@ -16,7 +13,6 @@ namespace GameGate
         public static object CS_FilterMsg = null;
         public static IList<string> MainLogMsgList = null;
         public static int nShowLogLevel = 0;
-        public static int ServerCount = 1;
         public static string GateClass = "GameGate";
         public static string GateAddr = "*";
         public static int GatePort = 7200;
@@ -79,8 +75,7 @@ namespace GameGate
         /// 客户端连接会话超时(指定时间内未有数据传输)
         /// </summary>
         public static long dwClientTimeOutTime = 5000;
-        public static IniFile Conf = null;
-        private static string sConfigFileName = "config.conf";
+        public static string sConfigFileName = "config.conf";
         /// <summary>
         /// 会话超时时间
         /// </summary>
@@ -137,9 +132,6 @@ namespace GameGate
 
         public static void Initialization()
         {
-            Conf = new IniFile(Path.Combine(AppContext.BaseDirectory, sConfigFileName));
-            Conf.Load();
-            nShowLogLevel = Conf.ReadInteger(GateClass, "ShowLogLevel", nShowLogLevel);
             CS_MainLog = new object();
             CS_FilterMsg = new object();
             MainLogMsgList = new List<string>();
@@ -209,6 +201,7 @@ namespace GameGate
             MagicDelayTimeMap[46] = 1000; //分身术
             MagicDelayTimeMap[47] = 1000; //火龙焰
         }
+        
     }
 
     public class THardwareHeader : Packets

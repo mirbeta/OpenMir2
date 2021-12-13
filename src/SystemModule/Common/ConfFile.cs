@@ -8,14 +8,14 @@ namespace SystemModule.Common
     /// <summary>
     /// Provides methods for reading and writing to an conf file.
     /// </summary>
-    public abstract class IniFile
+    public class ConfFile
     {
         private string fileName;
         private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>();
 
         private bool largeCommentFlag = false;
 
-        protected IniFile(string fileName)
+        public ConfFile(string fileName)
         {
             this.FileName = fileName;
         }
@@ -112,7 +112,7 @@ namespace SystemModule.Common
             return (T)Convert.ChangeType(defValue, typeof(T));
         }
 
-        protected int ReadInteger(string section, string key, byte defValue)
+        public int ReadInteger(string section, string key, byte defValue)
         {
             return GetInt(section, key, defValue);
         }
@@ -139,7 +139,7 @@ namespace SystemModule.Common
             return defValue;
         }
 
-        private static string GetSecString(string str)
+        public static string GetSecString(string str)
         {
             int len = str.Length;
             if (str[0] == '[')
@@ -357,27 +357,27 @@ namespace SystemModule.Common
             return null;
         }
 
-        protected void WriteInt(string section, string key, int val)
+        public void WriteInt(string section, string key, int val)
         {
             this.WriteString(section, key, val.ToString());
         }
 
-        protected void WriteBool(string section, string key, bool val)
+        public void WriteBool(string section, string key, bool val)
         {
             //Console.WriteLine("todo ini WriteBool");
         }
 
-        protected void WriteInteger(string section, string key, object val)
+        public void WriteInteger(string section, string key, object val)
         {
             //Console.WriteLine("todo ini WriteInteger");
         }
 
-        protected void WriteDateTime(string section, string key, DateTime val)
+        public void WriteDateTime(string section, string key, DateTime val)
         {
             //Console.WriteLine("todo ini WriteDateTime");
         }
 
-        protected void WriteString(string section, string key, object str)
+        public void WriteString(string section, string key, object str)
         {
             if (str == null)
             {

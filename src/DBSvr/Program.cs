@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,7 @@ namespace DBSvr
                     services.AddSingleton<MySqlHumRecordDB>();
                     services.AddSingleton<MySqlHumDB>();
                     services.AddHostedService<AppService>();
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory,"dbsvr.conf")));
                 });
 
             await builder.RunConsoleAsync();

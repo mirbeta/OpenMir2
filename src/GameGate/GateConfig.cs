@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace GameGate
 {
     /// <summary>
@@ -142,5 +145,75 @@ namespace GameGate
         public TBlockIPMethod m_tBlockIPMethod;
         public TChatFilterMethod m_tChatFilterMethod;
         public TOverSpeedMsgMethod m_tSpeedHackWarnMethod;
+
+        public GateConfig()
+        {
+            m_fCheckNullSession = true;
+            m_fOverSpeedSendBack = false;
+            m_fDefenceCCPacket = false;
+            m_fKickOverSpeed = false;
+            m_fDenyPresend = false;
+            m_fItemSpeedCompensate = false;
+            m_fDoMotaeboSpeedCheck = true;
+            m_fKickOverPacketSize = true;
+            m_tBlockIPMethod = TBlockIPMethod.mDisconnect;
+            m_nNomClientPacketSize = 400;
+            m_nMaxClientPacketSize = 10240;
+            m_nMaxConnectOfIP = 50;
+            m_nMaxClientCount = 50;
+            m_nClientTimeOutTime = 15 * 1000;
+            m_nMaxClientPacketCount = 15;
+            m_szOverSpeedSendBack = "[提示]：请爱护游戏环境，关闭加速外挂重新登陆！";
+            m_szCMDSpaceMove = "Move";
+            m_szPacketDecryptFailed = "[警告]：游戏连接被断开，请重新登陆！原因：使用非法外挂，客户端不配套，开启的客户端数量过多。";
+            m_szOverClientCntMsg = "开启游戏过多，链接被断开！";
+            m_szHWIDBlockedMsg = "机器码已被封，链接被断开！";
+            m_szChatFilterReplace = "说话内容被屏蔽";
+            m_szBlockHWIDFileName = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + "BlockHWID.txt";
+            m_fChatCmdFilter = false;
+            m_fChatFilter = true;
+            m_fChatInterval = true;
+            m_fTurnInterval = true;
+            m_fMoveInterval = true;
+            m_fSpellInterval = true;
+            m_fAttackInterval = true;
+            m_fButchInterval = true;
+            m_fSitDownInterval = true;
+            m_fSpaceMoveNextPickupInterval = true;
+            m_fPickupInterval = true;
+            m_fEatInterval = true;
+            m_fProcClientHWID = false;
+            m_nChatInterval = 800;
+            m_nTurnInterval = 350;
+            m_nMoveInterval = 570;
+            m_nAttackInterval = 900;
+            m_nButchInterval = 450;
+            m_nSitDownInterval = 450;
+            m_nPickupInterval = 330;
+            m_nEatInterval = 330;
+            m_nMoveNextSpellCompensate = 100;
+            m_nMoveNextAttackCompensate = 250;
+            m_nAttackNextMoveCompensate = 200;
+            m_nAttackNextSpellCompensate = 200;
+            m_nSpellNextMoveCompensate = 200;
+            m_nSpellNextAttackCompensate = 200;
+            m_nSpaceMoveNextPickupInterval = 600;
+            m_nPunishBaseInterval = 20;
+            m_nPunishIntervalRate = 1.00;
+            m_tOverSpeedPunishMethod = TPunishMethod.ptDelaySend;
+            m_nPunishMoveInterval = 150;
+            m_nPunishSpellInterval = 150;
+            m_nPunishAttackInterval = 150;
+            m_tChatFilterMethod = TChatFilterMethod.ctReplaceAll;
+            m_tSpeedHackWarnMethod = TOverSpeedMsgMethod.ptSysmsg;
+            m_nMaxItemSpeed = 6;
+            m_nMaxItemSpeedRate = 60;
+            m_fClientShowHintNewType = true;
+            m_fOpenClientSpeedRate = false;
+            m_fSyncClientSpeed = false;
+            m_nClientMoveSpeedRate = 0;
+            m_nClientSpellSpeedRate = 0;
+            m_nClientAttackSpeedRate = 0;
+        }
     }
 }

@@ -2735,7 +2735,7 @@ namespace GameSvr
             return result;
         }
 
-        protected int GetLevelExp(int nLevel)
+        public int GetLevelExp(int nLevel)
         {
             int result;
             if (nLevel <= Grobal2.MAXLEVEL)

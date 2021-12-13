@@ -18,12 +18,14 @@ namespace DBSvr
         private readonly MySqlHumRecordDB HumChrDB;
         private readonly ISocketServer UserSocket;
         private readonly LoginSocService _LoginSoc;
+        private readonly ConfigManager _configManager;
 
-        public UserSocService(LoginSocService loginSoc, MySqlHumRecordDB humChrDb, MySqlHumDB humDb)
+        public UserSocService(LoginSocService loginSoc, MySqlHumRecordDB humChrDb, MySqlHumDB humDb, ConfigManager configManager)
         {
             _LoginSoc = loginSoc;
             HumChrDB = humChrDb;
             HumDB = humDb;
+            _configManager = configManager;
             GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             UserSocket = new ISocketServer(ushort.MaxValue,1024);
@@ -233,8 +235,7 @@ namespace DBSvr
                     nRouteIdx++;
                 }
             }
-            var DBConf = new IniFile(DBShare.sConfFileName);
-            DBShare.sMapFile = DBConf.ReadString("Setup", "MapFile", DBShare.sMapFile);
+            DBShare.sMapFile = _configManager.ReadString("Setup", "MapFile", DBShare.sMapFile);
             MapList.Clear();
             if (File.Exists(DBShare.sMapFile))
             {
@@ -253,7 +254,6 @@ namespace DBSvr
                     }
                 }
             }
-            DBConf = null;
             LoadList = null;
         }
 

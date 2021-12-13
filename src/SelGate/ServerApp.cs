@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
@@ -10,11 +11,14 @@ namespace SelGate
     {
         private int dwShowMainLogTick = 0;
         private ArrayList TempLogList = null;
+        private readonly ConfigManager _configManager;
+        private readonly string sConfigFileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
 
         public ServerApp()
         {
             GateShare.Initialization();
             TempLogList = new ArrayList();
+            _configManager = new ConfigManager(sConfigFileName);
         }
         
         /// <summary>
@@ -49,29 +53,6 @@ namespace SelGate
             }
         }
 
-        private void LoadConfig()
-        {
-            IniFile Conf;
-            string sConfigFileName;
-            sConfigFileName = ".\\Config.ini";
-            Conf = new IniFile(sConfigFileName);
-            GateShare.ServerPort = Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
-            GateShare.ServerAddr = Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
-            GateShare.GatePort = Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
-            GateShare.GateAddr = Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
-            GateShare.nShowLogLevel = Conf.ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
-            GateShare.BlockMethod = ((TBlockIPMethod)(Conf.ReadInteger(GateShare.GateClass, "BlockMethod", ((int)GateShare.BlockMethod))));
-            if (Conf.ReadInteger(GateShare.GateClass, "KeepConnectTimeOut", -1) <= 0)
-            {
-                Conf.WriteInteger(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
-            }
-            GateShare.nMaxConnOfIPaddr = Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
-            GateShare.dwKeepConnectTimeOut = Conf.ReadInteger<long>(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
-            GateShare.g_boDynamicIPDisMode = Conf.ReadBool(GateShare.GateClass, "DynamicIPDisMode", GateShare.g_boDynamicIPDisMode);
-            //Conf.Free;
-            GateShare.LoadBlockIPFile();
-        }
-
         public void StartService()
         {
             try
@@ -92,7 +73,7 @@ namespace SelGate
                 GateShare.CurrIPaddrList = new List<TSockaddr>();
                 GateShare.BlockIPList = new List<TSockaddr>();
                 GateShare.TempBlockIPList = new List<TSockaddr>();
-                LoadConfig();
+                _configManager.LoadConfig();
                 GateShare.MainOutMessage("启动服务完成...", 3);
             }
             catch (Exception E)

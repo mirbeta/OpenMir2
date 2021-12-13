@@ -177,7 +177,6 @@ namespace LoginSvr
 
     public class TConfig
     {
-        public IniFile IniConf;
         public string sDBServer;
         public int nDBSPort;
         public string sFeeServer;

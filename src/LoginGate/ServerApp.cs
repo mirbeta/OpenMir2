@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using SystemModule;
 using SystemModule.Common;
@@ -13,11 +14,13 @@ namespace LoginGate
         private long dwShowMainLogTick = 0;
         private ArrayList TempLogList = null;
         private Timer logTimer;
+        private readonly ConfigManager _configManager;
 
         public ServerApp()
         {
             GateShare.Initialization();
             IniUserSessionArray();
+            _configManager = new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logingate.conf"));
         }
 
         public void SendTimerTimer()
@@ -61,22 +64,7 @@ namespace LoginGate
 
         private void LoadConfig()
         {
-            var sConfigFileName = "logingate.conf";
-            var Conf = new IniFile(sConfigFileName);
-            Conf.Load();
-            GateShare.ServerPort = Conf.ReadInteger(GateShare.GateClass, "ServerPort", GateShare.ServerPort);
-            GateShare.ServerAddr = Conf.ReadString(GateShare.GateClass, "ServerAddr", GateShare.ServerAddr);
-            GateShare.GatePort = Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
-            GateShare.GateAddr = Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
-            GateShare.BlockMethod = ((TBlockIPMethod)(Conf.ReadInteger(GateShare.GateClass, "BlockMethod", ((int)GateShare.BlockMethod))));
-            if (Conf.ReadInteger(GateShare.GateClass, "KeepConnectTimeOut", -1) <= 0)
-            {
-                Conf.WriteInteger(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
-            }
-            GateShare.nMaxConnOfIPaddr = Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
-            GateShare.dwKeepConnectTimeOut = Conf.ReadInteger<long>(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
-            GateShare.g_boDynamicIPDisMode = Conf.ReadBool(GateShare.GateClass, "DynamicIPDisMode", GateShare.g_boDynamicIPDisMode);
-            Conf = null;
+            _configManager.LoadConfig();
             GateShare.LoadBlockIPFile();
         }
 

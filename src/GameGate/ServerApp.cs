@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,12 +28,14 @@ namespace GameGate
         private int nHumPlayMsgSize = 0;
         private Timer decodeTimer;
         private Timer sendTime;
+        private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
 
-        public ServerApp(ServerService serverService, ClientManager clientManager, SessionManager sessionManager)
+        public ServerApp(ServerService serverService, ClientManager clientManager, SessionManager sessionManager,ConfigManager configManager)
         {
+            _configManager = configManager;
             _serverService = serverService;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
@@ -172,7 +175,7 @@ namespace GameGate
             GateShare.boServiceStart = true;
             //GateShare.boCheckServerFail = false;
             GateShare.boSendHoldTimeOut = false;
-            LoadConfig();
+            _configManager.LoadConfig();
             GateShare.dwProcessReviceMsgTimeLimit = 50;
             GateShare.dwProcessSendMsgTimeLimit = 50;
             dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
@@ -207,31 +210,6 @@ namespace GameGate
             _serverService.Stop();
             _clientManager.Stop();
             GateShare.AddMainLogMsg("服务停止成功...", 2);
-        }
-
-        private void LoadConfig()
-        {
-            GateShare.AddMainLogMsg("正在加载配置信息...", 3);
-            if (GateShare.Conf != null)
-            {
-                GateShare.GateAddr = GateShare.Conf.ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
-                GateShare.GatePort = GateShare.Conf.ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
-                GateShare.nShowLogLevel = GateShare.Conf.ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
-                GateShare.boShowBite = GateShare.Conf.ReadBool(GateShare.GateClass, "ShowBite", GateShare.boShowBite);
-                GateShare.nMaxConnOfIPaddr = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxConnOfIPaddr", GateShare.nMaxConnOfIPaddr);
-                GateShare.BlockMethod = (TBlockIPMethod)GateShare.Conf.ReadInteger(GateShare.GateClass, "BlockMethod", (int)GateShare.BlockMethod);
-                GateShare.nMaxClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientPacketSize", GateShare.nMaxClientPacketSize);
-                GateShare.nNomClientPacketSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "NomClientPacketSize", GateShare.nNomClientPacketSize);
-                GateShare.nMaxClientMsgCount = GateShare.Conf.ReadInteger(GateShare.GateClass, "MaxClientMsgCount", GateShare.nMaxClientMsgCount);
-                GateShare.bokickOverPacketSize = GateShare.Conf.ReadBool(GateShare.GateClass, "kickOverPacket", GateShare.bokickOverPacketSize);
-                GateShare.dwCheckServerTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "ServerCheckTimeOut", GateShare.dwCheckServerTimeOutTime);
-                GateShare.nClientSendBlockSize = GateShare.Conf.ReadInteger(GateShare.GateClass, "ClientSendBlockSize", GateShare.nClientSendBlockSize);
-                GateShare.dwClientTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "ClientTimeOutTime", GateShare.dwClientTimeOutTime);
-                GateShare.dwSessionTimeOutTime = GateShare.Conf.ReadInteger<int>(GateShare.GateClass, "SessionTimeOutTime", GateShare.dwSessionTimeOutTime);
-            }
-            GateShare.AddMainLogMsg("配置信息加载完成...", 3);
-            GateShare.LoadAbuseFile();
-            GateShare.LoadBlockIPFile();
         }
 
         private void ShowMainLogMsg()

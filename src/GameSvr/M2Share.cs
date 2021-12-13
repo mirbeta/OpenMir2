@@ -1682,7 +1682,7 @@ namespace GameSvr
 
         static M2Share()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major>=11)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major >= 11)
             {
                 sConfigPath = "/Volumes/Data/MirServer/Mir200";
             }
@@ -1694,13 +1694,13 @@ namespace GameSvr
             {
                 sConfigPath = "D:/MirServer/Mir200";
             }
-            ServerConf = new ServerConfig();
-            CommandConf = new GameCmdConfig();
-            StringConf = new StringConfig();
-            ExpConf = new ExpsConfig();
+            ServerConf = new ServerConfig(Path.Combine(M2Share.sConfigPath, M2Share.sConfigFileName));
+            CommandConf = new GameCmdConfig(Path.Combine(M2Share.sConfigPath, M2Share.sCommandFileName));
+            StringConf = new StringConfig(Path.Combine(M2Share.sConfigPath, M2Share.sStringFileName));
+            ExpConf = new ExpsConfig(Path.Combine(M2Share.sConfigPath, M2Share.sExpConfigFileName));
+            GlobalConf = new GlobalConfig(Path.Combine(M2Share.sConfigPath, M2Share.sGlobalConfigFileName));
             LogSystem = new MirLog();
             g_Config = new GameSvrConfig();
-            GlobalConf = new GlobalConfig();
             RandomNumber = RandomNumber.GetInstance();
         }
 

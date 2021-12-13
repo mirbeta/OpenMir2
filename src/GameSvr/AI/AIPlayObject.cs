@@ -110,6 +110,7 @@ namespace GameSvr
         /// 假人掉装备机率
         /// </summary>
         public int m_nDropUseItemRate;
+        private readonly AIObjectConf _conf = null;
 
         public TAIPlayObject() : base()
         {
@@ -159,6 +160,101 @@ namespace GameSvr
             m_nWalkSpeed = 300;
             m_RunPos = new TRunPos();
             m_Path = new PointInfo[0];
+            var sFileName = GetRandomConfigFileName(m_sCharName, 0);
+            if (sFileName == "" || !File.Exists(sFileName))
+            {
+                if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
+                {
+                    sFileName = m_sConfigFileName;
+                }
+            }
+            _conf = new AIObjectConf(sFileName);
+        }
+        
+                /// <summary>
+        /// 取随机配置
+        /// </summary>
+        /// <param name="sName"></param>
+        /// <param name="nType"></param>
+        /// <returns></returns>
+        private string GetRandomConfigFileName(string sName, byte nType)
+        {
+            string result = string.Empty;
+            int nIndex;
+            string sFileName;
+            string Str;
+            StringList LoadList;
+            if (!Directory.Exists(m_sFilePath + "RobotIni"))
+            {
+                Directory.CreateDirectory(m_sFilePath + "RobotIni");
+            }
+            sFileName = Path.Combine(m_sFilePath, "RobotIni", sName + ".txt");
+            if (File.Exists(sFileName))
+            {
+                result = sFileName;
+                return result;
+            }
+            result = sFileName = Path.Combine(m_sFilePath, "RobotIni", "默认.txt");
+            switch (nType)
+            {
+                case 0:
+                    if (m_sConfigListFileName != "" && File.Exists(m_sConfigListFileName))
+                    {
+                        LoadList = new StringList();
+                        LoadList.LoadFromFile(m_sConfigListFileName);
+                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
+                        if (nIndex >= 0 && nIndex < LoadList.Count)
+                        {
+                            Str = LoadList[nIndex];
+                            if (!string.IsNullOrEmpty(Str))
+                            {
+                                if (Str[1] == '\\')
+                                {
+                                    Str = Str.Substring(1, Str.Length - 1);
+                                }
+                                if (Str[2] == '\\')
+                                {
+                                    Str = Str.Substring(2, Str.Length - 2);
+                                }
+                                if (Str[3] == '\\')
+                                {
+                                    Str = Str.Substring(3, Str.Length - 3);
+                                }
+                            }
+                            result = m_sFilePath + Str;
+                        }
+                    }
+                    break;
+                case 1:
+                    if (m_sHeroConfigListFileName != "" && File.Exists(m_sHeroConfigListFileName))
+                    {
+                        LoadList = new StringList();
+                        LoadList.LoadFromFile(m_sHeroConfigListFileName);
+                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
+                        if (nIndex >= 0 && nIndex < LoadList.Count)
+                        {
+                            Str = LoadList[nIndex];
+                            if (Str != "")
+                            {
+                                if (Str[1] == '\\')
+                                {
+                                    Str = Str.Substring(1, Str.Length - 1);
+                                }
+                                if (Str[2] == '\\')
+                                {
+                                    Str = Str.Substring(2, Str.Length - 2);
+                                }
+                                if (Str[3] == '\\')
+                                {
+                                    Str = Str.Substring(3, Str.Length - 3);
+                                }
+                            }
+                            result = m_sFilePath + Str;
+                        }
+                    }
+                    break;
+            }
+            return result;
         }
 
         public void Start(TPathType PathType)
@@ -516,257 +612,8 @@ namespace GameSvr
             }
         }
 
-        /// <summary>
-        /// 取随机配置
-        /// </summary>
-        /// <param name="sName"></param>
-        /// <param name="nType"></param>
-        /// <returns></returns>
-        private string GetRandomConfigFileName(string sName, byte nType)
-        {
-            string result = string.Empty;
-            int nIndex;
-            string sFileName;
-            string Str;
-            StringList LoadList;
-            if (!Directory.Exists(m_sFilePath + "RobotIni"))
-            {
-                Directory.CreateDirectory(m_sFilePath + "RobotIni");
-            }
-            sFileName = Path.Combine(m_sFilePath, "RobotIni", sName + ".txt");
-            if (File.Exists(sFileName))
-            {
-                result = sFileName;
-                return result;
-            }
-            result = sFileName = Path.Combine(m_sFilePath, "RobotIni", "默认.txt");
-            switch (nType)
-            {
-                case 0:
-                    if (m_sConfigListFileName != "" && File.Exists(m_sConfigListFileName))
-                    {
-                        LoadList = new StringList();
-                        LoadList.LoadFromFile(m_sConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
-                        if (nIndex >= 0 && nIndex < LoadList.Count)
-                        {
-                            Str = LoadList[nIndex];
-                            if (!string.IsNullOrEmpty(Str))
-                            {
-                                if (Str[1] == '\\')
-                                {
-                                    Str = Str.Substring(1, Str.Length - 1);
-                                }
-                                if (Str[2] == '\\')
-                                {
-                                    Str = Str.Substring(2, Str.Length - 2);
-                                }
-                                if (Str[3] == '\\')
-                                {
-                                    Str = Str.Substring(3, Str.Length - 3);
-                                }
-                            }
-                            result = m_sFilePath + Str;
-                        }
-                    }
-                    break;
-                case 1:
-                    if (m_sHeroConfigListFileName != "" && File.Exists(m_sHeroConfigListFileName))
-                    {
-                        LoadList = new StringList();
-                        LoadList.LoadFromFile(m_sHeroConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(LoadList.Count);
-                        if (nIndex >= 0 && nIndex < LoadList.Count)
-                        {
-                            Str = LoadList[nIndex];
-                            if (Str != "")
-                            {
-                                if (Str[1] == '\\')
-                                {
-                                    Str = Str.Substring(1, Str.Length - 1);
-                                }
-                                if (Str[2] == '\\')
-                                {
-                                    Str = Str.Substring(2, Str.Length - 2);
-                                }
-                                if (Str[3] == '\\')
-                                {
-                                    Str = Str.Substring(3, Str.Length - 3);
-                                }
-                            }
-                            result = m_sFilePath + Str;
-                        }
-                    }
-                    break;
-            }
-            return result;
-        }
-
         public override void Initialize()
         {
-            byte nAttatckMode;
-            string sLineText;
-            string sMagicName;
-            string sItemName;
-            string sSayMsg;
-            IniFile ItemIni;
-            IList<string> TempList;
-            TUserItem UserItem;
-            TMagic Magic;
-            TUserMagic UserMagic;
-            GameItem StdItem;
-            var sFileName = GetRandomConfigFileName(m_sCharName, 0);
-            if (sFileName == "" || !File.Exists(sFileName))
-            {
-                if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
-                {
-                    sFileName = m_sConfigFileName;
-                }
-            }
-            if (!string.IsNullOrEmpty(sFileName) && File.Exists(sFileName))
-            {
-                ItemIni = new IniFile(sFileName);
-                ItemIni.Load();
-                if (ItemIni != null)
-                {
-                    m_boNoDropItem = ItemIni.ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
-                    m_boNoDropUseItem = ItemIni.ReadBool("Info", "DropUseItem", true);// 是否掉装备
-                    m_nDropUseItemRate = ItemIni.ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率
-                    m_btJob = (byte)ItemIni.ReadInteger("Info", "Job", 0);
-                    m_btGender = (byte)ItemIni.ReadInteger("Info", "Gender", 0);
-                    m_btHair = (byte)ItemIni.ReadInteger("Info", "Hair", 0);
-                    m_Abil.Level = (byte)ItemIni.ReadInteger("Info", "Level", 1);
-                    m_Abil.MaxExp = GetLevelExp(m_Abil.Level);
-                    m_boProtectStatus = ItemIni.ReadBool("Info", "ProtectStatus", false);// 是否守护模式
-                    nAttatckMode = (byte)ItemIni.ReadInteger("Info", "AttatckMode", 6);// 攻击模式
-                    if (nAttatckMode >= 0 && nAttatckMode <= 6)
-                    {
-                        m_btAttatckMode = nAttatckMode;
-                    }
-                    sLineText = ItemIni.ReadString("Info", "UseSkill", "");
-                    if (sLineText != "")
-                    {
-                        TempList = new List<string>();
-                        try
-                        {
-                            //HUtil32.ArrestStringEx(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
-                            TempList = sLineText.Split(",").ToList();
-                            for (var i = 0; i < TempList.Count; i++)
-                            {
-                                sMagicName = TempList[i].Trim();
-                                if (FindMagic(sMagicName) == null)
-                                {
-                                    Magic = M2Share.UserEngine.FindMagic(sMagicName);
-                                    if (Magic != null)
-                                    {
-                                        if (Magic.btJob == 99 || Magic.btJob == m_btJob)
-                                        {
-                                            UserMagic = new TUserMagic();
-                                            UserMagic.MagicInfo = Magic;
-                                            UserMagic.wMagIdx = Magic.wMagicID;
-                                            UserMagic.btLevel = 3;
-                                            UserMagic.btKey = 0;
-                                            UserMagic.nTranPoint = Magic.MaxTrain[3];
-                                            m_MagicList.Add(UserMagic);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            //TempList.Free;
-                        }
-                    }
-                    sLineText = ItemIni.ReadString("Info", "InitItems", "");
-                    if (sLineText != "")
-                    {
-                        TempList = new List<string>();
-                        try
-                        {
-                            //ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
-                            TempList = sLineText.Split(",").ToList();
-                            for (var i = 0; i < TempList.Count; i++)
-                            {
-                                sItemName = TempList[i].Trim();
-                                StdItem = M2Share.UserEngine.GetStdItem(sItemName);
-                                if (StdItem != null)
-                                {
-                                    UserItem = new TUserItem();
-                                    if (M2Share.UserEngine.CopyToUserItemFromName(sItemName, ref UserItem))
-                                    {
-                                        if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
-                                        {
-                                            if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
-                                            {
-                                                //M2Share.UserEngine.GetUnknowItemValue(UserItem);
-                                            }
-                                        }
-                                        if (!AddItemToBag(UserItem))
-                                        {
-                                            Dispose(UserItem);
-                                            break;
-                                        }
-                                        m_BagItemNames.Add(StdItem.Name);
-                                    }
-                                    else
-                                    {
-                                        Dispose(UserItem);
-                                    }
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            //TempList.Free;
-                        }
-                    }
-                    for (var i = 0; i <= 9; i++)
-                    {
-                        sSayMsg = ItemIni.ReadString("MonSay", i.ToString(), "");
-                        if (sSayMsg != "")
-                        {
-                            m_AISayMsgList.Add(sSayMsg);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    m_UseItemNames[Grobal2.U_DRESS] = ItemIni.ReadString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
-                    m_UseItemNames[Grobal2.U_WEAPON] = ItemIni.ReadString("UseItems", "UseItems1", "木剑"); // '武器';
-                    m_UseItemNames[Grobal2.U_RIGHTHAND] = ItemIni.ReadString("UseItems", "UseItems2", ""); // '照明物';
-                    m_UseItemNames[Grobal2.U_NECKLACE] = ItemIni.ReadString("UseItems", "UseItems3", ""); // '项链';
-                    m_UseItemNames[Grobal2.U_HELMET] = ItemIni.ReadString("UseItems", "UseItems4", ""); // '头盔';
-                    m_UseItemNames[Grobal2.U_ARMRINGL] = ItemIni.ReadString("UseItems", "UseItems5", ""); // '左手镯';
-                    m_UseItemNames[Grobal2.U_ARMRINGR] = ItemIni.ReadString("UseItems", "UseItems6", ""); // '右手镯';
-                    m_UseItemNames[Grobal2.U_RINGL] = ItemIni.ReadString("UseItems", "UseItems7", ""); // '左戒指';
-                    m_UseItemNames[Grobal2.U_RINGR] = ItemIni.ReadString("UseItems", "UseItems8", ""); // '右戒指';
-                    for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
-                    {
-                        if (!string.IsNullOrEmpty(m_UseItemNames[i]))
-                        {
-                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItemNames[i]);
-                            if (StdItem != null)
-                            {
-                                UserItem = new TUserItem();
-                                if (M2Share.UserEngine.CopyToUserItemFromName(m_UseItemNames[i], ref UserItem))
-                                {
-                                    if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
-                                    {
-                                        if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
-                                        {
-                                            //M2Share.UserEngine.GetUnknowItemValue(UserItem);
-                                        }
-                                    }
-                                }
-                                m_UseItems[i] = UserItem;
-                                Dispose(UserItem);
-                            }
-                        }
-                    }
-                }
-            }
             base.Initialize();
         }
 

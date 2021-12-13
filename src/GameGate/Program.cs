@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.IO;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Text;
@@ -26,6 +28,7 @@ namespace GameGate
                     services.AddSingleton<SessionManager>();
                     services.AddTransient<ClientManager>();
                     services.AddHostedService<AppService>();
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, GateShare.sConfigFileName)));
                 });
 
             await builder.RunConsoleAsync();

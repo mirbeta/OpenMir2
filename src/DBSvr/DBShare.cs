@@ -114,29 +114,6 @@ namespace DBSvr
 
         public static void LoadConfig()
         {
-            int LoadInteger;
-            IniFile Conf = new IniFile(sConfFileName);
-            sLogPath = Conf.ReadString("DB", "LogDir", sLogPath);
-            nServerPort = Conf.ReadInteger("Setup", "ServerPort", nServerPort);
-            sServerAddr = Conf.ReadString("Setup", "ServerAddr", sServerAddr);
-            g_nGatePort = Conf.ReadInteger("Setup", "GatePort", g_nGatePort);
-            g_sGateAddr = Conf.ReadString("Setup", "GateAddr", g_sGateAddr);
-            sIDServerAddr = Conf.ReadString("Server", "IDSAddr", sIDServerAddr);
-            nIDServerPort = Conf.ReadInteger("Server", "IDSPort", nIDServerPort);
-            sServerName = Conf.ReadString("Setup", "ServerName", sServerName);
-            boDenyChrName = Conf.ReadBool("Setup", "DenyChrName", boDenyChrName);
-            nDELMaxLevel = Conf.ReadInteger("Setup", "DELMaxLevel", nDELMaxLevel);
-            dwInterval = Conf.ReadInteger<int>("DBClear", "Interval", dwInterval);
-            LoadInteger = Conf.ReadInteger("Setup", "DynamicIPMode", -1);
-            if (LoadInteger < 0)
-            {
-                Conf.WriteBool("Setup", "DynamicIPMode", g_boDynamicIPMode);
-            }
-            else
-            {
-                g_boDynamicIPMode = LoadInteger == 1;
-            }
-            g_boEnglishNames = Conf.ReadBool("Setup", "EnglishNameOnly", g_boEnglishNames);
             LoadIPTable();
             LoadGateID();
         }

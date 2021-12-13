@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
@@ -25,9 +24,9 @@ namespace GameSvr
         /// <summary>
         /// 是否开始攻城
         /// </summary>
-        private bool m_boStartWar;
+        public bool m_boStartWar;
         public bool m_boUnderWar;
-        private TObjUnit m_CenterWall;
+        public TObjUnit m_CenterWall;
         public DateTime m_ChangeDate;
         /// <summary>
         /// 城门状态
@@ -40,8 +39,8 @@ namespace GameSvr
         public int m_dwStartCastleWarTick;
         public IList<string> m_EnvirList;
         public TObjUnit[] m_Guard = new TObjUnit[4];
-        private DateTime m_IncomeToday;
-        private TObjUnit m_LeftWall;
+        public DateTime m_IncomeToday;
+        public TObjUnit m_LeftWall;
         public TObjUnit m_MainDoor;
         /// <summary>
         /// 城堡所在地图
@@ -59,16 +58,16 @@ namespace GameSvr
         /// <summary>
         /// 行会回城点X
         /// </summary>
-        private int m_nHomeX;
+        public int m_nHomeX;
         /// <summary>
         /// 行会回城点Y
         /// </summary>
-        private int m_nHomeY;
-        private int m_nPalaceDoorX;
+        public int m_nHomeY;
+        public int m_nPalaceDoorX;
         /// <summary>
         /// 科技等级
         /// </summary>
-        private int m_nPalaceDoorY;
+        public int m_nPalaceDoorY;
         private int m_nPower;
         private int m_nTechLevel;
         /// <summary>
@@ -79,9 +78,12 @@ namespace GameSvr
         /// 收入多少金币
         /// </summary>
         public int m_nTotalGold;
-        private int m_nWarRangeX;
-        private int m_nWarRangeY;
-        private TObjUnit m_RightWall;
+        public int m_nWarRangeX;
+        public int m_nWarRangeY;
+        /// <summary>
+        /// 皇宫右城墙
+        /// </summary>
+        public TObjUnit m_RightWall;
         /// <summary>
         /// 皇宫门状态
         /// </summary>
@@ -102,9 +104,10 @@ namespace GameSvr
         /// <summary>
         /// 皇宫所在地图
         /// </summary>
-        private string m_sPalaceMap = string.Empty;
-        private string m_sSecretMap = string.Empty;
+        public string m_sPalaceMap = string.Empty;
+        public string m_sSecretMap = string.Empty;
         public DateTime m_WarDate;
+        private readonly CastleConfManager castleConf;
 
         public TUserCastle(string sCastleDir)
         {
@@ -127,6 +130,13 @@ namespace GameSvr
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
             m_EnvirList = new List<string>();
+            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            var sConfigFile = "SabukW.txt";
+            castleConf = new CastleConfManager(Path.Combine(filePath, sConfigFile));
         }
 
         public int nTechLevel
@@ -247,182 +257,13 @@ namespace GameSvr
 
         private void LoadConfig()
         {
-            var mapSplit = new[] { ',' };
-            TObjUnit objUnit;
-            var sMap = string.Empty;
-            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
-            if (!Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath);
-            }
-            var sConfigFile = "SabukW.txt";
-            var sFileName = Path.Combine(filePath, sConfigFile);
-            var CastleConf = new IniFile(sFileName);
-            m_sName = CastleConf.ReadString("Setup", "CastleName", m_sName);
-            m_sOwnGuild = CastleConf.ReadString("Setup", "OwnGuild", "");
-            m_ChangeDate = CastleConf.ReadDateTime("Setup", "ChangeDate", DateTime.Now);
-            m_WarDate = CastleConf.ReadDateTime("Setup", "WarDate", DateTime.Now);
-            m_IncomeToday = CastleConf.ReadDateTime("Setup", "IncomeToday", DateTime.Now);
-            m_nTotalGold = CastleConf.ReadInteger("Setup", "TotalGold", 0);
-            m_nTodayIncome = CastleConf.ReadInteger("Setup", "TodayIncome", 0);
-            var sMapList = CastleConf.ReadString("Defense", "CastleMapList", "");
-            if (!string.IsNullOrEmpty(sMapList))
-            {
-                while (!string.IsNullOrEmpty(sMapList))
-                {
-                    sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, mapSplit);
-                    if (sMap == "") break;
-                    m_EnvirList.Add(sMap);
-                }
-            }
-            for (var i = 0; i < m_EnvirList.Count; i++)
-            {
-                m_EnvirList[i] = M2Share.g_MapManager.FindMap(m_EnvirList[i]).sMapName;
-            }
-            m_sMapName = CastleConf.ReadString("Defense", "CastleMap", "3");
-            m_sHomeMap = CastleConf.ReadString("Defense", "CastleHomeMap", m_sHomeMap);
-            m_nHomeX = CastleConf.ReadInteger("Defense", "CastleHomeX", m_nHomeX);
-            m_nHomeY = CastleConf.ReadInteger("Defense", "CastleHomeY", m_nHomeY);
-            m_nWarRangeX = CastleConf.ReadInteger("Defense", "CastleWarRangeX", m_nWarRangeX);
-            m_nWarRangeY = CastleConf.ReadInteger("Defense", "CastleWarRangeY", m_nWarRangeY);
-            m_sPalaceMap = CastleConf.ReadString("Defense", "CastlePlaceMap", m_sPalaceMap);
-            m_sSecretMap = CastleConf.ReadString("Defense", "CastleSecretMap", m_sSecretMap);
-            m_nPalaceDoorX = CastleConf.ReadInteger("Defense", "CastlePalaceDoorX", 631);
-            m_nPalaceDoorY = CastleConf.ReadInteger("Defense", "CastlePalaceDoorY", 274);
-            m_MainDoor = new TObjUnit();
-            m_MainDoor.nX = CastleConf.ReadInteger<short>("Defense", "MainDoorX", (short)672);
-            m_MainDoor.nY = CastleConf.ReadInteger<short>("Defense", "MainDoorY", (short)330);
-            m_MainDoor.sName = CastleConf.ReadString("Defense", "MainDoorName", "MainDoor");
-            m_MainDoor.nStatus = CastleConf.ReadBool("Defense", "MainDoorOpen", true);
-            m_MainDoor.nHP = CastleConf.ReadInteger<ushort>("Defense", "MainDoorHP", (short)2000);
-            m_MainDoor.BaseObject = null;
-            m_LeftWall = new TObjUnit();
-            m_LeftWall.nX = CastleConf.ReadInteger<short>("Defense", "LeftWallX", (short)624);
-            m_LeftWall.nY = CastleConf.ReadInteger<short>("Defense", "LeftWallY", (short)278);
-            m_LeftWall.sName = CastleConf.ReadString("Defense", "LeftWallName", "LeftWall");
-            m_LeftWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "LeftWallHP", (short)2000);
-            m_LeftWall.BaseObject = null;
-            m_CenterWall = new TObjUnit();
-            m_CenterWall.nX = CastleConf.ReadInteger<short>("Defense", "CenterWallX", (short)627);
-            m_CenterWall.nY = CastleConf.ReadInteger<short>("Defense", "CenterWallY", (short)278);
-            m_CenterWall.sName = CastleConf.ReadString("Defense", "CenterWallName", "CenterWall");
-            m_CenterWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "CenterWallHP", (short)2000);
-            m_CenterWall.BaseObject = null;
-            m_RightWall = new TObjUnit();
-            m_RightWall.nX = CastleConf.ReadInteger<short>("Defense", "RightWallX", (short)634);
-            m_RightWall.nY = CastleConf.ReadInteger<short>("Defense", "RightWallY", (short)271);
-            m_RightWall.sName = CastleConf.ReadString("Defense", "RightWallName", "RightWall");
-            m_RightWall.nHP = CastleConf.ReadInteger<ushort>("Defense", "RightWallHP", (short)2000);
-            m_RightWall.BaseObject = null;
-            for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
-            {
-                objUnit = new TObjUnit();
-                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_X", (short)0);
-                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Archer_" + i + 1 + "_Y", (short)0);
-                objUnit.sName = CastleConf.ReadString("Defense", "Archer_" + i + 1 + "_Name", "弓箭手");
-                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Archer_" + i + 1 + "_HP", (short)2000);
-                objUnit.BaseObject = null;
-                m_Archer[i] = objUnit;
-            }
-
-            for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
-            {
-                objUnit = new TObjUnit();
-                objUnit.nX = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_X", (short)0);
-                objUnit.nY = CastleConf.ReadInteger<short>("Defense", "Guard_" + i + 1 + "_Y", (short)0);
-                objUnit.sName = CastleConf.ReadString("Defense", "Guard_" + i + 1 + "_Name", "守卫");
-                objUnit.nHP = CastleConf.ReadInteger<ushort>("Defense", "Guard_" + i + 1 + "_HP", (short)2000);
-                objUnit.BaseObject = null;
-                m_Guard[i] = objUnit;
-            }
-
-            CastleConf = null;
+            castleConf.LoadConfig(this);
             m_MasterGuild = M2Share.GuildManager.FindGuild(m_sOwnGuild);
         }
 
         private void SaveConfigFile()
         {
-            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
-            var sMapList = string.Empty;
-            if (!Directory.Exists(filePath))
-                Directory.CreateDirectory(filePath);
-            if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) != M2Share.nServerIndex) return;
-            var sConfigFile = "SabukW.txt";
-            var sFileName = Path.Combine(filePath, sConfigFile);
-            var castleConf = new IniFile(sFileName);
-            if (!string.IsNullOrEmpty(m_sName))
-            {
-                castleConf.WriteString("Setup", "CastleName", m_sName);
-            }
-            if (!string.IsNullOrEmpty(m_sOwnGuild))
-            {
-                castleConf.WriteString("Setup", "OwnGuild", m_sOwnGuild);
-            }
-            castleConf.WriteDateTime("Setup", "ChangeDate", m_ChangeDate);
-            castleConf.WriteDateTime("Setup", "WarDate", m_WarDate);
-            castleConf.WriteDateTime("Setup", "IncomeToday", m_IncomeToday);
-            if (m_nTotalGold != 0) castleConf.WriteInteger("Setup", "TotalGold", m_nTotalGold);
-            if (m_nTodayIncome != 0) castleConf.WriteInteger("Setup", "TodayIncome", m_nTodayIncome);
-            for (var i = 0; i < m_EnvirList.Count; i++) sMapList = sMapList + m_EnvirList[i] + ',';
-            if (!string.IsNullOrEmpty(sMapList)) castleConf.WriteString("Defense", "CastleMapList", sMapList);
-            if (m_sMapName != "") castleConf.WriteString("Defense", "CastleMap", m_sMapName);
-            if (m_sHomeMap != "") castleConf.WriteString("Defense", "CastleHomeMap", m_sHomeMap);
-            if (m_nHomeX != 0) castleConf.WriteInteger("Defense", "CastleHomeX", m_nHomeX);
-            if (m_nHomeY != 0) castleConf.WriteInteger("Defense", "CastleHomeY", m_nHomeY);
-            if (m_nWarRangeX != 0) castleConf.WriteInteger("Defense", "CastleWarRangeX", m_nWarRangeX);
-            if (m_nWarRangeY != 0) castleConf.WriteInteger("Defense", "CastleWarRangeY", m_nWarRangeY);
-            if (m_sPalaceMap != "") castleConf.WriteString("Defense", "CastlePlaceMap", m_sPalaceMap);
-            if (m_sSecretMap != "") castleConf.WriteString("Defense", "CastleSecretMap", m_sSecretMap);
-            if (m_nPalaceDoorX != 0) castleConf.WriteInteger("Defense", "CastlePalaceDoorX", m_nPalaceDoorX);
-            if (m_nPalaceDoorY != 0) castleConf.WriteInteger("Defense", "CastlePalaceDoorY", m_nPalaceDoorY);
-            if (m_MainDoor.nX != 0) castleConf.WriteInteger("Defense", "MainDoorX", m_MainDoor.nX);
-            if (m_MainDoor.nY != 0) castleConf.WriteInteger("Defense", "MainDoorY", m_MainDoor.nY);
-            if (m_MainDoor.sName != "") castleConf.WriteString("Defense", "MainDoorName", m_MainDoor.sName);
-            if (m_MainDoor.BaseObject != null)
-            {
-                castleConf.WriteBool("Defense", "MainDoorOpen", m_MainDoor.nStatus);
-                castleConf.WriteInteger("Defense", "MainDoorHP", m_MainDoor.BaseObject.m_WAbil.HP);
-            }
-            if (m_LeftWall.nX != 0) castleConf.WriteInteger("Defense", "LeftWallX", m_LeftWall.nX);
-            if (m_LeftWall.nY != 0) castleConf.WriteInteger("Defense", "LeftWallY", m_LeftWall.nY);
-            if (m_LeftWall.sName != "") castleConf.WriteString("Defense", "LeftWallName", m_LeftWall.sName);
-            if (m_LeftWall.BaseObject != null)
-                castleConf.WriteInteger("Defense", "LeftWallHP", m_LeftWall.BaseObject.m_WAbil.HP);
-            if (m_CenterWall.nX != 0) castleConf.WriteInteger("Defense", "CenterWallX", m_CenterWall.nX);
-            if (m_CenterWall.nY != 0) castleConf.WriteInteger("Defense", "CenterWallY", m_CenterWall.nY);
-            if (m_CenterWall.sName != "") castleConf.WriteString("Defense", "CenterWallName", m_CenterWall.sName);
-            if (m_CenterWall.BaseObject != null)
-                castleConf.WriteInteger("Defense", "CenterWallHP", m_CenterWall.BaseObject.m_WAbil.HP);
-            if (m_RightWall.nX != 0) castleConf.WriteInteger("Defense", "RightWallX", m_RightWall.nX);
-            if (m_RightWall.nY != 0) castleConf.WriteInteger("Defense", "RightWallY", m_RightWall.nY);
-            if (m_RightWall.sName != "") castleConf.WriteString("Defense", "RightWallName", m_RightWall.sName);
-            if (m_RightWall.BaseObject != null)
-                castleConf.WriteInteger("Defense", "RightWallHP", m_RightWall.BaseObject.m_WAbil.HP);
-            TObjUnit objUnit;
-            for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
-            {
-                objUnit = m_Archer[i];
-                if (objUnit.nX != 0) castleConf.WriteInteger("Defense", "Archer_" + (i + 1) + "_X", objUnit.nX);
-                if (objUnit.nY != 0) castleConf.WriteInteger("Defense", "Archer_" + (i + 1) + "_Y", objUnit.nY);
-                if (objUnit.sName != "")
-                    castleConf.WriteString("Defense", "Archer_" + (i + 1) + "_Name", objUnit.sName);
-                if (objUnit.BaseObject != null)
-                    castleConf.WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", objUnit.BaseObject.m_WAbil.HP);
-                else
-                    castleConf.WriteInteger("Defense", "Archer_" + (i + 1) + "_HP", 0);
-            }
-
-            for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
-            {
-                objUnit = m_Guard[i];
-                if (objUnit.nX != 0) castleConf.WriteInteger("Defense", "Guard_" + (i + 1) + "_X", objUnit.nX);
-                if (objUnit.nY != 0) castleConf.WriteInteger("Defense", "Guard_" + (i + 1) + "_Y", objUnit.nY);
-                if (objUnit.sName != "") castleConf.WriteString("Defense", "Guard_" + (i + 1) + "_Name", objUnit.sName);
-                if (objUnit.BaseObject != null)
-                    castleConf.WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", objUnit.BaseObject.m_WAbil.HP);
-                else
-                    castleConf.WriteInteger("Defense", "Guard_" + (i + 1) + "_HP", 0);
-            }
+            castleConf.SaveConfig(this);
         }
 
         private void LoadAttackSabukWall()
@@ -947,7 +788,6 @@ namespace GameSvr
                     result = -2;
                 }
             }
-
             return result;
         }
 

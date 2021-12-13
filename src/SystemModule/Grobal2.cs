@@ -700,6 +700,9 @@ namespace SystemModule
         public const int CM_USERGETDETAILITEM = 1015;
         public const int CM_DROPGOLD = 1016;
         public const int CM_1017 = 1017;
+        /// <summary>
+        /// 检测客户是否有下载好的client
+        /// </summary>
         public const int CM_LOGINNOTICEOK = 1018;
         public const int CM_GROUPMODE = 1019;
         public const int CM_CREATEGROUP = 1020;
@@ -1398,6 +1401,9 @@ namespace SystemModule
         public const int SM_SELLOFFBUY_OK = 23027;
         // 购买成功
         public const int RM_SELLOFFBUY_OK = 23028;
+        
+        
+        public const  int CM_CHECKCLIENT_RES = 41905;
 
 
         public const int OS_EVENTOBJECT = 1;

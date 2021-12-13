@@ -1,16 +1,12 @@
-using System.IO;
 using SystemModule.Common;
 
 namespace GameSvr.Configs
 {
-    public class GlobalConfig
+    public class GlobalConfig:IniFile
     {
-        private readonly IniFile _config;
-
-        public GlobalConfig()
+        public GlobalConfig(string fileName):base(fileName)
         {
-            _config = new IniFile(Path.Combine(M2Share.sConfigPath, M2Share.sGlobalConfigFileName));
-            _config.Load();
+            Load();
         }
 
         public void LoadConfig()
@@ -19,10 +15,10 @@ namespace GameSvr.Configs
             var sLoadString = string.Empty;
             for (var i = M2Share.g_Config.GlobalVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalVal.GetUpperBound(0); i++)
             {
-                nLoadInteger = _config.ReadInteger("Integer", "GlobalVal" + i, -1);
+                nLoadInteger = ReadInteger("Integer", "GlobalVal" + i, -1);
                 if (nLoadInteger < 0)
                 {
-                    _config.WriteInteger("Integer", "GlobalVal" + i, M2Share.g_Config.GlobalVal[i]);
+                    WriteInteger("Integer", "GlobalVal" + i, M2Share.g_Config.GlobalVal[i]);
                 }
                 else
                 {
@@ -32,10 +28,10 @@ namespace GameSvr.Configs
             
             for (var i = M2Share.g_Config.GlobalAVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalAVal.GetUpperBound(0); i++)
             {
-                sLoadString = _config.ReadString("String", "GlobalStrVal" + i, "");
+                sLoadString = ReadString("String", "GlobalStrVal" + i, "");
                 if (string.IsNullOrEmpty(sLoadString))
                 {
-                    _config.WriteString("String", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
+                    WriteString("String", "GlobalStrVal" + i, M2Share.g_Config.GlobalAVal[i]);
                 }
                 else
                 {

@@ -14,6 +14,8 @@ namespace LoginSvr
         private readonly ISocketServer _serverSocket;
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
+        private readonly ConfigManager _configManager;
+        const string sConfigFile = ".\\Logsrv.ini";
 
         public LoginService(AccountDB accountDB, MasSocService masSock)
         {
@@ -25,6 +27,7 @@ namespace LoginSvr
             _serverSocket.OnClientRead += GSocketClientRead;
             _serverSocket.OnClientError += GSocketClientError;
             _serverSocket.Init();
+            _configManager = new ConfigManager(sConfigFile);
         }
 
         public void Start()
@@ -1132,7 +1135,7 @@ namespace LoginSvr
             }
         }
 
-        public void AccountGetBackPassword(TUserInfo UserInfo, string sData)
+        private void AccountGetBackPassword(TUserInfo UserInfo, string sData)
         {
             string sAccount = string.Empty;
             string sQuest1 = string.Empty;
@@ -1232,7 +1235,7 @@ namespace LoginSvr
             Socket.SendText(sSendMsg);
         }
 
-        public bool IsLogin(TConfig Config, int nSessionID)
+        private bool IsLogin(TConfig Config, int nSessionID)
         {
             bool result = false;
             TConnInfo ConnInfo;
@@ -1248,7 +1251,7 @@ namespace LoginSvr
             return result;
         }
 
-        public bool IsLogin(TConfig Config, string sLoginID)
+        private bool IsLogin(TConfig Config, string sLoginID)
         {
             bool result = false;
             TConnInfo ConnInfo;
@@ -1269,7 +1272,7 @@ namespace LoginSvr
         /// </summary>
         /// <param name="Config"></param>
         /// <param name="sLoginID"></param>
-        public void SessionKick(TConfig Config, string sLoginID)
+        private void SessionKick(TConfig Config, string sLoginID)
         {
             TConnInfo ConnInfo;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -1284,7 +1287,7 @@ namespace LoginSvr
             }
         }
 
-        public void SessionAdd(TConfig Config, string sAccount, string sIPaddr, int nSessionID, bool boPayCost, bool bo11)
+        private void SessionAdd(TConfig Config, string sAccount, string sIPaddr, int nSessionID, bool boPayCost, bool bo11)
         {
             TConnInfo ConnInfo = new TConnInfo();
             ConnInfo.sAccount = sAccount;
@@ -1298,13 +1301,13 @@ namespace LoginSvr
             Config.SessionList.Add(ConnInfo);
         }
 
-        public void SendGateKickMsg(Socket Socket, string sSockIndex)
+        private void SendGateKickMsg(Socket Socket, string sSockIndex)
         {
             var sSendMsg = "%+-" + sSockIndex + "$";
             Socket.SendText(sSendMsg);
         }
 
-        public void SessionUpdate(TConfig Config, int nSessionID, string sServerName, bool boPayCost)
+        private void SessionUpdate(TConfig Config, int nSessionID, string sServerName, bool boPayCost)
         {
             TConnInfo ConnInfo;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -1319,31 +1322,24 @@ namespace LoginSvr
             }
         }
 
-        public void GenServerNameList(TConfig Config)
+        private void GenServerNameList(TConfig Config)
         {
             bool boD;
-            try
+            Config.ServerNameList.Clear();
+            for (var i = 0; i < Config.nRouteCount; i++)
             {
-                Config.ServerNameList.Clear();
-                for (var i = 0; i < Config.nRouteCount; i++)
+                boD = true;
+                for (var j = 0; j < Config.ServerNameList.Count; j++)
                 {
-                    boD = true;
-                    for (var j = 0; j < Config.ServerNameList.Count; j++)
+                    if (Config.ServerNameList[j] == Config.GateRoute[i].sServerName)
                     {
-                        if (Config.ServerNameList[j] == Config.GateRoute[i].sServerName)
-                        {
-                            boD = false;
-                        }
-                    }
-                    if (boD)
-                    {
-                        Config.ServerNameList.Add(Config.GateRoute[i].sServerName);
+                        boD = false;
                     }
                 }
-            }
-            catch
-            {
-                LSShare.MainOutMessage("TFrmMain.GenServerNameList");
+                if (boD)
+                {
+                    Config.ServerNameList.Add(Config.GateRoute[i].sServerName);
+                }
             }
         }
 
@@ -1469,7 +1465,8 @@ namespace LoginSvr
         public void StartService(TConfig Config)
         {
             InitializeConfig(Config);
-            LoadConfig(Config);
+            _configManager.LoadConfig(Config);
+            LoadAddrTable(Config);
             _accountDB.Initialization();
         }
 
@@ -1480,109 +1477,14 @@ namespace LoginSvr
 
         public void InitializeConfig(TConfig Config)
         {
-            const string sConfigFile = ".\\Logsrv.ini";
-            Config.IniConf = new IniFile(sConfigFile);
             Config.GateCriticalSection = new object();
         }
 
         public void UnInitializeConfig(TConfig Config)
         {
-            Config.IniConf = null;
             Config.GateCriticalSection = null;
         }
 
-        public string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
-        {
-            string result;
-            string sString = LSShare.g_Config.IniConf.ReadString(sSection, sIdent, "");
-            if (sString == "")
-            {
-                LSShare.g_Config.IniConf.WriteString(sSection, sIdent, sDefault);
-                result = sDefault;
-            }
-            else
-            {
-                result = sString;
-            }
-            return result;
-        }
 
-        public int LoadConfig_LoadConfigInteger(string sSection, string sIdent, int nDefault)
-        {
-            int result;
-            int nLoadInteger;
-            nLoadInteger = LSShare.g_Config.IniConf.ReadInteger(sSection, sIdent, -1);
-            if (nLoadInteger < 0)
-            {
-                LSShare.g_Config.IniConf.WriteInteger(sSection, sIdent, nDefault);
-                result = nDefault;
-            }
-            else
-            {
-                result = nLoadInteger;
-            }
-            return result;
-        }
-
-        public bool LoadConfig_LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
-        {
-            bool result;
-            int nLoadInteger;
-            nLoadInteger = LSShare.g_Config.IniConf.ReadInteger(sSection, sIdent, -1);
-            if (nLoadInteger < 0)
-            {
-                LSShare.g_Config.IniConf.WriteBool(sSection, sIdent, boDefault);
-                result = boDefault;
-            }
-            else
-            {
-                result = nLoadInteger == 1;
-            }
-            return result;
-        }
-
-        public void LoadConfig(TConfig Config)
-        {
-            const string sSectionServer = "Server";
-            const string sSectionDB = "DB";
-            const string sIdentDBServer = "DBServer";
-            const string sIdentFeeServer = "FeeServer";
-            const string sIdentLogServer = "LogServer";
-            const string sIdentGateAddr = "GateAddr";
-            const string sIdentGatePort = "GatePort";
-            const string sIdentServerAddr = "ServerAddr";
-            const string sIdentServerPort = "ServerPort";
-            const string sIdentMonAddr = "MonAddr";
-            const string sIdentMonPort = "MonPort";
-            const string sIdentDBSPort = "DBSPort";
-            const string sIdentFeePort = "FeePort";
-            const string sIdentLogPort = "LogPort";
-            const string sIdentReadyServers = "ReadyServers";
-            const string sIdentTestServer = "TestServer";
-            const string sIdentDynamicIPMode = "DynamicIPMode";
-            const string sIdentIdDir = "IdDir";
-            const string sIdentWebLogDir = "WebLogDir";
-            const string sIdentCountLogDir = "CountLogDir";
-            const string sIdentFeedIDList = "FeedIDList";
-            const string sIdentFeedIPList = "FeedIPList";
-            Config.sDBServer = LoadConfig_LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
-            Config.sFeeServer = LoadConfig_LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
-            Config.sLogServer = LoadConfig_LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
-            Config.sGateAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
-            Config.nGatePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
-            Config.sServerAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
-            Config.nServerPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
-            Config.sMonAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
-            Config.nMonPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
-            Config.nDBSPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
-            Config.nFeePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
-            Config.nLogPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.nReadyServers = LoadConfig_LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
-            Config.boEnableMakingID = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
-            Config.boDynamicIPMode = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
-            Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
-            Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
-            LoadAddrTable(Config);
-        }
     }
 }

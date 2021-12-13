@@ -21,8 +21,9 @@ namespace GameGate
         /// </summary>
         private Channel<TSendUserData> _reviceMsgList = null;
         private readonly ClientManager _clientManager;
+        private readonly ConfigManager _configManager;
 
-        public ServerService(SessionManager sessionManager, ClientManager clientManager)
+        public ServerService(SessionManager sessionManager, ClientManager clientManager, ConfigManager configManager)
         {
             _serverSocket = new ISocketServer(2000, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
@@ -33,6 +34,7 @@ namespace GameGate
             _reviceMsgList = Channel.CreateUnbounded<TSendUserData>();
             _sessionManager = sessionManager;
             _clientManager = clientManager;
+            _configManager = configManager;
         }
 
         public void Start()
@@ -105,7 +107,7 @@ namespace GameGate
                 clientThread.UserEnter(userSession.SocketId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                _sessionManager.AddSession(userSession.SocketId, new ClientSession(userSession, clientThread));
+                _sessionManager.AddSession(userSession.SocketId, new ClientSession(userSession, clientThread,_configManager));
             }
             else
             {
