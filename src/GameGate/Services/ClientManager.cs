@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using SystemModule;
 
 namespace GameGate
 {
@@ -11,28 +13,27 @@ namespace GameGate
     /// </summary>
     public class ClientManager
     {
-        /// <summary>
-        /// 点击最多链接10个客户端
-        /// </summary>
-        private readonly ClientThread[] _gateClient = new ClientThread[10];
+        private long dwReConnectServerTime = 0;
+        private Thread _delayThread;
+        private readonly ClientThread[] _gateClient;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private Thread _delayThread;
         private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private Timer _clearSessionTimer = null;
         
         public ClientManager(SessionManager sessionManager,ConfigManager configManager)
         {
             _sessionManager = sessionManager;
             _configManager = configManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
+            _gateClient = new ClientThread[_configManager.GateConfig.m_nGateCount];
         }
 
         public void LoadConfig()
         {
-            var serverCount =_configManager.GateConfig.m_nGateCount;
             var serverAddr = string.Empty;
             var serverPort = 0;
-            for (var i = 0; i < serverCount; i++)
+            for (var i = 0; i < _gateClient.Length; i++)
             {
                 serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
                 serverPort = _configManager.m_xGameGateList[i].nServerPort;
@@ -57,10 +58,12 @@ namespace GameGate
                 _gateClient[i].Start();
                 _gateClient[i].RestSessionArray();
             }
-
+            dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
             _delayThread = new Thread(ProcessDelayMsg);
             _delayThread.IsBackground = true;
             _delayThread.Start();
+
+            _clearSessionTimer = new Timer(ClearIdeaSession, null, 10000, 20000);
         }
 
         public void Stop()
@@ -107,8 +110,8 @@ namespace GameGate
         {
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }
-        
-        public ClientThread GetClientThread()
+
+        private ClientThread GetClientThread()
         {
             //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
@@ -123,8 +126,8 @@ namespace GameGate
             }
             return null;
         }
-        
-        public IList<ClientThread> GetAllClient()
+
+        private IList<ClientThread> GetAllClient()
         {
             return _gateClient;
         }
@@ -160,11 +163,62 @@ namespace GameGate
                             continue;
                         }
                         userClient.HandleDelayMsg();
-                        //todo 清理超时会话
                     }
                 }
                 Thread.Sleep(10);
             }
         }
+        
+        private void ClearIdeaSession(object obj)
+        {
+            Debug.WriteLine("清理超时会话开始工作...");
+            TSessionInfo UserSession;
+            if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3000)
+            {
+                GateShare.boSendHoldTimeOut = false;
+            }
+            var clientList = GetAllClient();
+            for (var i = 0; i < clientList.Count; i++)
+            {
+                if (clientList[i] == null)
+                {
+                    continue;
+                }
+                for (var j = 0; j < clientList[i].MaxSession; j++)
+                {
+                    UserSession = clientList[i].SessionArray[j];
+                    if (UserSession.Socket != null)
+                    {
+                        if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
+                        {
+                            UserSession.Socket.Close();
+                            UserSession.Socket = null;
+                            UserSession.nSckHandle = -1;
+                        }
+                    }
+                }
+                if (!clientList[i].boGateReady)
+                {
+                    if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
+                    {
+                        dwReConnectServerTime = HUtil32.GetTickCount();
+                        if (!clientList[i].IsConnected)
+                        {
+                            clientList[i].ReConnected();
+                        }
+                    }
+                }
+                else
+                {
+                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
+                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
+                    {
+                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                    }
+                }
+            }
+            Debug.WriteLine("清理超时会话工作完成...");
+        }
+
     }
 }

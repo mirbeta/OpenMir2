@@ -16,7 +16,6 @@ namespace GameGate
         private long dwLoopCheckTick = 0;
         private long dwLoopTime = 0;
         private long dwProcessServerMsgTime = 0;
-        private long dwReConnectServerTime = 0;
         private long dwRefConsolMsgTick = 0;
         private long dwRefConsoleMsgTick = 0;
         private int nDeCodeMsgSize = 0;
@@ -176,7 +175,6 @@ namespace GameGate
             _configManager.LoadConfig();
             GateShare.dwProcessReviceMsgTimeLimit = 50;
             GateShare.dwProcessSendMsgTimeLimit = 50;
-            dwReConnectServerTime = HUtil32.GetTickCount() - 25000;
             dwRefConsolMsgTick = HUtil32.GetTickCount();
             _serverService.Start();
             _clientManager.LoadConfig();
@@ -244,54 +242,6 @@ namespace GameGate
             }
         }
 
-        private void SendTimerTimer(object obj)
-        {
-            TSessionInfo UserSession;
-            if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3000)
-            {
-                GateShare.boSendHoldTimeOut = false;
-            }
-            var clientList = _clientManager.GetAllClient();
-            for (var i = 0; i < clientList.Count; i++)
-            {
-                if (clientList[i] == null)
-                {
-                    continue;
-                }
-                for (var j = 0; j < clientList[i].MaxSession; j++)
-                {
-                    UserSession = clientList[i].SessionArray[j];
-                    if (UserSession.Socket != null)
-                    {
-                        if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
-                        {
-                            UserSession.Socket.Close();
-                            UserSession.Socket = null;
-                            UserSession.nSckHandle = -1;
-                        }
-                    }
-                }
-                if (!clientList[i].boGateReady)
-                {
-                    if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
-                    {
-                        dwReConnectServerTime = HUtil32.GetTickCount();
-                        if (!clientList[i].IsConnected)
-                        {
-                            clientList[i].ReConnected();
-                        }
-                    }
-                }
-                else
-                {
-                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
-                    {
-                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
-                    }
-                }
-            }
-        }
 
         private bool IsBlockIP(string sIPaddr)
         {

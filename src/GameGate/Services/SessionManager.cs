@@ -11,13 +11,13 @@ namespace GameGate
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        public Channel<TSendUserData> SendMsgList = null;
-        private ConcurrentDictionary<int, ClientSession> _connectionSessions;
+        public readonly Channel<TSendUserData> _sendMsgList = null;
+        private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
             _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
-            SendMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _sendMsgList = Channel.CreateUnbounded<TSendUserData>();
         }
         
         /// <summary>
@@ -25,9 +25,9 @@ namespace GameGate
         /// </summary>
         public async Task ProcessSendMessage()
         {
-            while (await SendMsgList.Reader.WaitToReadAsync())
+            while (await _sendMsgList.Reader.WaitToReadAsync())
             {
-                if (SendMsgList.Reader.TryRead(out var message))
+                if (_sendMsgList.Reader.TryRead(out var message))
                 {
                     var userSession = GetSession(message.UserCientId);
                     if (userSession == null)
@@ -39,9 +39,9 @@ namespace GameGate
             }
         }
 
-        public void AddSession(int sessionId, ClientSession userClientSession)
+        public void AddSession(int sessionId, ClientSession clientSession)
         {
-            _connectionSessions.TryAdd(sessionId, userClientSession);
+            _connectionSessions.TryAdd(sessionId, clientSession);
         }
 
         public ClientSession GetSession(int sessionId)

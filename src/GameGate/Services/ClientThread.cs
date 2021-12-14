@@ -423,7 +423,7 @@ namespace GameGate
                     userData.UserCientId = nSocketIndex;
                     userData.Buffer = HUtil32.GetBytes(sSendMsg);
                     userData.BufferLen = userData.Buffer.Length;
-                    _sessionManager.SendMsgList.Writer.TryWrite(userData);
+                    _sessionManager._sendMsgList.Writer.TryWrite(userData);
                 }
             }
             catch (Exception E)

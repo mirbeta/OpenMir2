@@ -14,8 +14,6 @@ namespace GameGate
     public class ClientSession
     {
         private GameSpeed _gameSpeed;
-        private int nSpeedCount = 0;
-        private int mSpeedCount = 0;
         /// <summary>
         /// 最高的人物身上所有装备+速度，默认6。
         /// </summary>
