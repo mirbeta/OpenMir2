@@ -80,6 +80,7 @@ namespace GameGate
         /// </summary>
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         public static IList<ClientThread> ServerGateList;
+        public static ConcurrentDictionary<string, byte> g_ChatCmdFilterList;
         public static Dictionary<string, ClientSession> PunishList;
         public static HWIDFilter _HwidFilter;
 
@@ -140,6 +141,7 @@ namespace GameGate
             ServerGateList = new List<ClientThread>();
             PunishList = new Dictionary<string, ClientSession>();
             ForwardMsgList = Channel.CreateUnbounded<ForwardMessage>();
+            g_ChatCmdFilterList = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
         }
     }
 

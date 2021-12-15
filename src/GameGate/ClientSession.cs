@@ -136,6 +136,7 @@ namespace GameGate
                         var nDeCodeLen = Misc.DecodeBuf(tempBuff, UserData.BufferLen - 3, ref packBuff);
                         var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
                         var fPacketOverSpeed = false;
+                        
                         switch (CltCmd.Cmd)
                         {
                             case Grobal2.CM_GUILDUPDATENOTICE:
@@ -144,8 +145,8 @@ namespace GameGate
                                 {
                                     // if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(3))
                                     // {
-                                    //     LogManager.Units.LogManager.g_pLogMgr.Add("Kick off user,over max client packet size: " + (Len).ToString());
                                     // }
+                                    // LogManager.g_pLogMgr.Add("Kick off user,over max client packet size: " + (Len).ToString());
                                     // Misc.Units.Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     //Succeed = false;
                                     return;
@@ -154,11 +155,8 @@ namespace GameGate
                             default:
                                 if (UserData.BufferLen > Config.m_nNomClientPacketSize)
                                 {
-                                    // if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(3))
-                                    // {
-                                    //     LogManager.Units.LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
-                                    // }
-                                    // Misc.KickUser(m_pUserOBJ.nIPAddr);
+                                    //LogManager.Units.LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
+                                    //Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     //Succeed = false;
                                     //return;
                                 }
@@ -466,7 +464,7 @@ namespace GameGate
                                     if ((dwCurrentTick - -_gameSpeed.dwWaringTick > 2000))
                                     {
                                         _gameSpeed.dwWaringTick = dwCurrentTick;
-                                        SendSysMsg($"攻击状态不能交易！请稍等{new double[] { (10000 - dwCurrentTick + _gameSpeed.dwDealTick) / 1000 + 1 }}秒……");
+                                        SendSysMsg($"攻击状态不能交易！请稍等{(10000 - dwCurrentTick + _gameSpeed.dwDealTick) / 1000 + 1 }秒……");
                                     }
                                     return;
                                 }
@@ -504,22 +502,24 @@ namespace GameGate
                                         // {
                                         //     Move(pszChatBuffer[0], pszChatCmd[0], pszChatBuffer.Length);
                                         // }
-                                        // if (g_ChatCmdFilterList.IndexOf(pszChatCmd) >= 0)
-                                        // {
-                                        //     var Cmd = new TCmdPack();
-                                        //     Cmd.UID = m_nSvrObject;
-                                        //     Cmd.Cmd = Grobal2.SM_WHISPER;
-                                        //     Cmd.X = HUtil32.MakeWord(0xFF, 56);
-                                        //     //StrFmt(pszChatBuffer, Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
-                                        //     pszChatBuffer = HUtil32.GetBytes(string.Format(Protocol._STR_CMD_FILTER, pszChatCmd));
-                                        //     pszSendBuf[0] = "#";
-                                        //     Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
-                                        //     Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
-                                        //     nEnCodeLen = Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
-                                        //     pszSendBuf[nEnCodeLen + 1] = "!";
-                                        //     m_tIOCPSender.SendData(m_pOverlapSend, pszSendBuf[0], nEnCodeLen + 2);
-                                        //     return;
-                                        // }
+                                        if (GateShare.g_ChatCmdFilterList.ContainsKey(pszChatCmd))
+                                        {
+                                           var Cmd = new TCmdPack();
+                                           Cmd.UID = m_nSvrObject;
+                                           Cmd.Cmd = Grobal2.SM_WHISPER;
+                                           Cmd.X = HUtil32.MakeWord(0xFF, 56);
+                                           //StrFmt(pszChatBuffer, Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
+                                           pszChatBuffer = HUtil32.GetBytes(string.Format(Protocol._STR_CMD_FILTER, pszChatCmd));
+                                           var pszSendBuf = new byte[255];
+                                           pszSendBuf[0] = (byte)'#';
+                                           Array.Copy(Cmd.ToByte(), 0, pszSendBuf, 0, pszSendBuf.Length);
+                                           //Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
+                                           //Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
+                                           //var nEnCodeLen = Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
+                                           //pszSendBuf[nEnCodeLen + 1] = (byte)'!';
+                                           //m_tIOCPSender.SendData(m_pOverlapSend, pszSendBuf[0], nEnCodeLen + 2);
+                                           return;
+                                        }
                                         if (Config.m_fSpaceMoveNextPickupInterval)
                                         {
                                             var buffString = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
@@ -541,7 +541,7 @@ namespace GameGate
                                             //     Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);
                                             //     pszChatCmd[nChatStrPos - 1] = '\0';
                                             //     szChatBuffer = (pszChatBuffer[nChatStrPos] as string);
-                                            //     fChatFilter = AbusiveFilter.Units.AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
+                                            //     fChatFilter = AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
                                             //     if ((fChatFilter > 0) && !Succeed)
                                             //     {
                                             //         //g_pLogMgr.Add("Kick off user,saying in filter");
@@ -558,7 +558,7 @@ namespace GameGate
                                         else if (!sMsg.StartsWith("@"))
                                         {
                                             // szChatBuffer = (nABuf + TCmdPack.PackSize as string);
-                                            // fChatFilter = AbusiveFilter.Units.AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
+                                            // fChatFilter = AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
                                             // if ((fChatFilter > 0) && !Succeed)
                                             // {
                                             //     //g_pLogMgr.Add("Kick off user,saying in filter");
@@ -599,12 +599,12 @@ namespace GameGate
                                         }
                                         else
                                         {
-                                            var Cmd = new TCmdPack();
-                                            Cmd.UID = CltCmd.UID;
-                                            Cmd.Cmd = Grobal2.SM_EAT_FAIL;
-                                            var pszSendBuf = new byte[255];
+                                            var eatCmd = new TCmdPack();
+                                            eatCmd.UID = CltCmd.UID;
+                                            eatCmd.Cmd = Grobal2.SM_EAT_FAIL;
+                                            var pszSendBuf = new byte[TCmdPack.PackSize];
                                             pszSendBuf[0] = (byte)'#';
-                                            var nEnCodeLen = Misc.EncodeBuf(Cmd.GetPacket(0), TCmdPack.PackSize, pszSendBuf);
+                                            var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetPacket(0), TCmdPack.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
                                             lastGameSvr.SendBuffer(pszSendBuf, nEnCodeLen + 2);
                                             return;
