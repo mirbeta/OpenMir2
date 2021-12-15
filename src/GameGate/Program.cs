@@ -23,12 +23,12 @@ namespace GameGate
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
                     services.AddSingleton<SessionManager>();
-                    services.AddTransient<ClientManager>();
+                    services.AddSingleton<ClientManager>();
                     services.AddHostedService<AppService>();
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                 });
 
             await builder.RunConsoleAsync();

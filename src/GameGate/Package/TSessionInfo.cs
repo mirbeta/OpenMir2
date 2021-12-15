@@ -9,5 +9,7 @@ namespace GameGate
         public int nSckHandle;
         public ushort nUserListIndex;
         public int dwReceiveTick;
+        public string sAccount;
+        public string sChrName;
     }
 }

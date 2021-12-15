@@ -6,7 +6,7 @@ namespace SystemModule.Sockets
 {
     public class DSCClientConnectedEventArgs : EventArgs
     {
-        private Socket socket;
+        public Socket socket;
         public string RemoteAddress;
         public int RemotePort;
 

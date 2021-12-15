@@ -63,10 +63,22 @@ namespace GameGate
 
     public enum TPunishMethod
     {
-        ptTurnPack,
-        ptDropPack,
-        ptNullPack,
-        ptDelaySend
+        /// <summary>
+        /// 转换封包
+        /// </summary>
+        TurnPack,
+        /// <summary>
+        /// 丢去封包
+        /// </summary>
+        DropPack,
+        /// <summary>
+        /// 无效封包
+        /// </summary>
+        NullPack,
+        /// <summary>
+        /// 延时处理
+        /// </summary>
+        DelaySend
     }
 
     public enum TChatFilterMethod

@@ -77,6 +77,7 @@ namespace SystemModule.Packages
                     Tag = binaryReader.ReadUInt16();
                     Series = binaryReader.ReadUInt16();
                     Cmd = Ident;
+                    Magic = Tag;
                     break;
             }
         }

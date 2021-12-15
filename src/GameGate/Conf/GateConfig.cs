@@ -227,7 +227,7 @@ namespace GameGate
             m_nSpaceMoveNextPickupInterval = 600;
             m_nPunishBaseInterval = 20;
             m_nPunishIntervalRate = 1.00;
-            m_tOverSpeedPunishMethod = TPunishMethod.ptDelaySend;
+            m_tOverSpeedPunishMethod = TPunishMethod.DelaySend;
             m_nPunishMoveInterval = 150;
             m_nPunishSpellInterval = 150;
             m_nPunishAttackInterval = 150;

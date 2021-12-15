@@ -13,12 +13,19 @@ namespace GameGate
             Load();
             GateConfig = new GateConfig();
             m_xGameGateList = new TGameGateList[32];
+            for (int i = 0; i < m_xGameGateList.Length; i++)
+            {
+                m_xGameGateList[i] = new TGameGateList();
+                m_xGameGateList[i].sServerAdress = "127.0.0.1";
+                m_xGameGateList[i].nGatePort = 7200 + i - 1;
+                m_xGameGateList[i].nServerPort = 5000;
+            }
         }
 
         public void LoadConfig()
         {
-            GateShare.nShowLogLevel = ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
             GateShare.AddMainLogMsg("正在加载配置信息...", 3);
+            GateShare.nShowLogLevel = ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
             GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
             GateConfig.m_szOverClientCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.m_szOverClientCntMsg);
             GateConfig.m_szHWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.m_szHWIDBlockedMsg);
@@ -99,7 +106,6 @@ namespace GameGate
             GateConfig.m_nGateCount = ReadInteger("GameGate", "Count", GateConfig.m_nGateCount);
             for (var i = 0; i <= GateConfig.m_nGateCount; i++)
             {
-                m_xGameGateList[i] = new TGameGateList();
                 m_xGameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);
                 m_xGameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
                 m_xGameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, m_xGameGateList[i].nGatePort);

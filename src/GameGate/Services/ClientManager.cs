@@ -15,25 +15,25 @@ namespace GameGate
     {
         private long dwReConnectServerTime = 0;
         private Thread _delayThread;
-        private readonly ClientThread[] _gateClient;
+        private readonly IList<ClientThread> _gateClient;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
         private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private Timer _clearSessionTimer = null;
         
-        public ClientManager(SessionManager sessionManager,ConfigManager configManager)
+        public ClientManager(ConfigManager configManager,SessionManager sessionManager)
         {
             _sessionManager = sessionManager;
             _configManager = configManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
-            _gateClient = new ClientThread[_configManager.GateConfig.m_nGateCount];
+            _gateClient = new List<ClientThread>();
         }
 
         public void LoadConfig()
         {
             var serverAddr = string.Empty;
             var serverPort = 0;
-            for (var i = 0; i < _gateClient.Length; i++)
+            for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
             {
                 serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
                 serverPort = _configManager.m_xGameGateList[i].nServerPort;
@@ -42,14 +42,13 @@ namespace GameGate
                     Console.WriteLine($"网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient[i] = new ClientThread(serverAddr, serverPort, _sessionManager);
-                _gateClient[i].GateIdx = i;
+                _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
             }
         }
 
         public void Start()
         {
-            for (var i = 0; i < _gateClient.Length; i++)
+            for (var i = 0; i < _gateClient.Count; i++)
             {
                 if (_gateClient[i] == null)
                 {
@@ -62,13 +61,12 @@ namespace GameGate
             _delayThread = new Thread(ProcessDelayMsg);
             _delayThread.IsBackground = true;
             _delayThread.Start();
-
             _clearSessionTimer = new Timer(ClearIdeaSession, null, 10000, 20000);
         }
 
         public void Stop()
         {
-            for (var i = 0; i < _gateClient.Length; i++)
+            for (var i = 0; i < _gateClient.Count; i++)
             {
                 if (_gateClient[i] == null)
                 {
@@ -111,18 +109,17 @@ namespace GameGate
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }
 
-        private ClientThread GetClientThread()
+        public ClientThread GetClientThread()
         {
             //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
             //2.总是分配到最小资源 即网关在线人数最小的那个
             //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
             //4.按权重分配
-            var userList = new List<ClientThread>(GateShare.ServerGateList.Count);
-            if (userList.Any())
+            if (GateShare.ServerGateList.Any())
             {
-                var random = new System.Random().Next(userList.Count);
-                return userList[random];
+                var random = new System.Random().Next(GateShare.ServerGateList.Count);
+                return GateShare.ServerGateList[random];
             }
             return null;
         }
@@ -136,7 +133,7 @@ namespace GameGate
         {
             while (true)
             {
-                for (var i = 0; i < _gateClient.Length; i++)
+                for (var i = 0; i < _gateClient.Count; i++)
                 {
                     if (_gateClient[i] == null)
                     {

@@ -760,6 +760,7 @@ namespace SystemModule
         public const int CM_WIDEHIT = 3024;
         public const int CM_FIREHIT = 3025;
         public const int CM_SAY = 3030;
+        public const int CM_SPEEDHACKMSG = 3500;
         public const int SM_41 = 4;
         public const int SM_THROW = 5;
         public const int SM_RUSH = 6;

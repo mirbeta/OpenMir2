@@ -30,12 +30,12 @@ namespace GameGate
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
 
-        public ServerApp(ServerService serverService, ClientManager clientManager, SessionManager sessionManager,ConfigManager configManager)
+        public ServerApp(ConfigManager configManager, ServerService serverService, SessionManager sessionManager, ClientManager clientManager)
         {
-            _configManager = configManager;
             _serverService = serverService;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
+            _configManager = configManager;
             TempLogList = new ArrayList();
             dwLoopCheckTick = HUtil32.GetTickCount();
         }
@@ -241,7 +241,6 @@ namespace GameGate
                 boShowLocked = false;
             }
         }
-
 
         private bool IsBlockIP(string sIPaddr)
         {

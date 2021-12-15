@@ -58,8 +58,9 @@ namespace GameGate
         private bool isConnected = false;
         private readonly SessionManager _sessionManager;
 
-        public ClientThread(string serverAddr, int serverPort,SessionManager sessionManager)
+        public ClientThread(int idx, string serverAddr, int serverPort, SessionManager sessionManager)
         {
+            GateIdx = idx;
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
@@ -129,7 +130,7 @@ namespace GameGate
             //GateShare.boServerReady = true;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
-            GateShare.ServerGateList.Remove(this);
+            GateShare.ServerGateList.Add(this);
             GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             Debug.WriteLine($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
@@ -137,15 +138,14 @@ namespace GameGate
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            TSessionInfo UserSession;
             for (var i = 0; i < MaxSession; i++)
             {
-                UserSession = SessionArray[i];
-                if (UserSession.Socket != null)
+                var userSession = SessionArray[i];
+                if (userSession.Socket != null && userSession.Socket == e.socket)
                 {
-                    UserSession.Socket.Close();
-                    UserSession.Socket = null;
-                    UserSession.nSckHandle = -1;
+                    userSession.Socket.Close();
+                    userSession.Socket = null;
+                    userSession.nSckHandle = -1;
                 }
             }
             RestSessionArray();
@@ -329,15 +329,16 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
+                                    byte[] MsgBuff = null;
                                     if (pMsg.nLength > 0)
                                     {
-                                        byte[] MsgBuff = new byte[pMsg.nLength];
+                                        MsgBuff = new byte[pMsg.nLength];
                                         Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
                                         ProcessMakeSocketStr(pMsg.nSocket, pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
                                     else
                                     {
-                                        byte[] MsgBuff = new byte[Buff.Length - 20];
+                                        MsgBuff = new byte[Buff.Length - 20];
                                         Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
                                         ProcessMakeSocketStr(pMsg.nSocket, pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
