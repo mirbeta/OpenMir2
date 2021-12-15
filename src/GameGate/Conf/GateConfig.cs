@@ -74,6 +74,9 @@ namespace GameGate
         /// 是否开启蹲下间隔
         /// </summary>
         public bool m_fSitDownInterval;
+        /// <summary>
+        /// 使用传送命令之后,多久才能拾取物品  
+        /// </summary>
         public bool m_fSpaceMoveNextPickupInterval;
         /// <summary>
         /// 是否开启拾取间隔

@@ -488,38 +488,45 @@ namespace GameGate
                                 {
                                     if (sMsg.StartsWith("@"))
                                     {
-                                        //Move((nABuf + TCmdPack.PackSize), pszChatBuffer[0], nDeCodeLen - TCmdPack.PackSize);
-                                        //pszChatBuffer[nDeCodeLen - TCmdPack.PackSize] = '\0';
-                                        //nChatStrPos = pszChatBuffer.IndexOf(" ");
-                                        //if (nChatStrPos > 0)
-                                        //{
-                                        //    Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);
-                                        //    pszChatCmd[nChatStrPos - 1] = '\0';
-                                        //}
-                                        //else
-                                        //{
-                                        //    Move(pszChatBuffer[0], pszChatCmd[0], pszChatBuffer.Length);
-                                        //}
-                                        //if (g_ChatCmdFilterList.IndexOf(pszChatCmd) >= 0)
-                                        //{
-                                        //    Cmd.UID = m_nSvrObject;
-                                        //    Cmd.Cmd = Grobal2.SM_WHISPER;
-                                        //    Cmd.X = MakeWord(0xFF, 56);
-                                        //    StrFmt(pszChatBuffer, Protocol.Units.Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
-                                        //    pszSendBuf[0] = "#";
-                                        //    Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
-                                        //    Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
-                                        //    nEnCodeLen = Misc.Units.Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
-                                        //    pszSendBuf[nEnCodeLen + 1] = "!";
-                                        //    m_tIOCPSender.SendData(m_pOverlapSend, pszSendBuf[0], nEnCodeLen + 2);
-                                        //    return;
-                                        //}
+                                        var pszChatBuffer = new byte[255];
+                                        var pszChatCmd = string.Empty;
+                                        // Move((nABuf + TCmdPack.PackSize), pszChatBuffer[0], nDeCodeLen - TCmdPack.PackSize);
+                                        Array.Copy(UserData.Buffer, TCmdPack.PackSize, pszChatBuffer, 0, nDeCodeLen - TCmdPack.PackSize);
+                                        pszChatBuffer[nDeCodeLen - TCmdPack.PackSize] = (byte)'\0';
+                                        var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
+                                        var nChatStrPos = tempStr.IndexOf(" ", StringComparison.Ordinal);
+                                        // if (nChatStrPos > 0)
+                                        // {
+                                        //     Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);
+                                        //     pszChatCmd[nChatStrPos - 1] = '\0';
+                                        // }
+                                        // else
+                                        // {
+                                        //     Move(pszChatBuffer[0], pszChatCmd[0], pszChatBuffer.Length);
+                                        // }
+                                        // if (g_ChatCmdFilterList.IndexOf(pszChatCmd) >= 0)
+                                        // {
+                                        //     var Cmd = new TCmdPack();
+                                        //     Cmd.UID = m_nSvrObject;
+                                        //     Cmd.Cmd = Grobal2.SM_WHISPER;
+                                        //     Cmd.X = HUtil32.MakeWord(0xFF, 56);
+                                        //     //StrFmt(pszChatBuffer, Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
+                                        //     pszChatBuffer = HUtil32.GetBytes(string.Format(Protocol._STR_CMD_FILTER, pszChatCmd));
+                                        //     pszSendBuf[0] = "#";
+                                        //     Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
+                                        //     Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
+                                        //     nEnCodeLen = Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
+                                        //     pszSendBuf[nEnCodeLen + 1] = "!";
+                                        //     m_tIOCPSender.SendData(m_pOverlapSend, pszSendBuf[0], nEnCodeLen + 2);
+                                        //     return;
+                                        // }
                                         if (Config.m_fSpaceMoveNextPickupInterval)
                                         {
-                                            // if ((pszChatBuffer).ToLower().CompareTo((Config.m_szCMDSpaceMove).ToLower()) == 0)
-                                            // {
-                                            //     m_dwPickupTick = HUtil32.GetTickCount() + Config.m_nSpaceMoveNextPickupInterval;
-                                            // }
+                                            var buffString = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
+                                            if (String.Compare(buffString, Config.m_szCMDSpaceMove, StringComparison.OrdinalIgnoreCase) == 0)
+                                            {
+                                                _gameSpeed.dwPickupTick = HUtil32.GetTickCount() + Config.m_nSpaceMoveNextPickupInterval;
+                                            }
                                         }
                                     }
                                     else if (Config.m_fChatFilter)

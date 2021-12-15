@@ -104,7 +104,7 @@ namespace GameGate
         public const string _STR_GRID_IO_SEND_BYTES = "发送";
         public const string _STR_GRID_IO_RECV_BYTES = "接收";
         public const string _STR_KEEP_ALIVE = "**";
-        public const string _STR_CMD_FILTER = "%s 此命令禁止使用！";
+        public const string _STR_CMD_FILTER = "{0} 此命令禁止使用！";
         public const string _STR_CONFIG_FILE = ".\\Config.ini";
         public const string _STR_BLOCK_FILE = ".\\BlockIPList.txt";
         public const string _STR_BLOCK_AREA_FILE = ".\\BlockIPAreaList.txt";
