@@ -19,11 +19,6 @@ namespace SystemModule
         {
             TQuickID QuickID;
             IList<TQuickID> ChrList;
-            int nLow;
-            int nHigh;
-            int nMed;
-            int n1C;
-            int n20;
             QuickID = new TQuickID();
             QuickID.sAccount = sAccount;
             QuickID.sChrName = sChrName;
@@ -36,8 +31,16 @@ namespace SystemModule
                 m_List.Add(sAccount, ChrList);
                 _quickList.Add(QuickID);
             }
+            else if (!m_List.ContainsKey(sAccount))
+            {
+                ChrList = new List<TQuickID>();
+                ChrList.Add(QuickID);
+                m_List.Add(sAccount, ChrList);
+                _quickList.Add(QuickID);
+            }
             else
             {
+                int nMed;
                 if (m_List.Count == 1)
                 {
                     nMed = string.Compare(sAccount, _quickList[0].sAccount, StringComparison.OrdinalIgnoreCase);
@@ -67,14 +70,14 @@ namespace SystemModule
                 }
                 else
                 {
-                    nLow = 0;
-                    nHigh = m_List.Count - 1;
+                    var nLow = 0;
+                    var nHigh = m_List.Count - 1;
                     nMed = (nHigh - nLow) / 2 + nLow;
                     while (true)
                     {
                         if ((nHigh - nLow) == 1)
                         {
-                            n20 = string.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase);
+                            var n20 = string.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase);
                             if (n20 > 0)
                             {
                                 ChrList = new List<TQuickID>();
@@ -86,7 +89,7 @@ namespace SystemModule
                             }
                             else
                             {
-                                if (sAccount.CompareTo(_quickList[nHigh]) == 0)
+                                if (String.Compare(sAccount, _quickList[nHigh].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     ChrList = m_List[_quickList[nHigh].sAccount] as List<TQuickID>;
                                     ChrList.Add(QuickID);
@@ -128,7 +131,7 @@ namespace SystemModule
                         }
                         else
                         {
-                            n1C = string.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
+                            var n1C = string.Compare(sAccount, _quickList[nMed].sAccount, StringComparison.OrdinalIgnoreCase);
                             if (n1C > 0)
                             {
                                 nLow = nMed;

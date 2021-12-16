@@ -1,5 +1,6 @@
 using System;
 using SystemModule;
+using SystemModule.Packet;
 
 namespace LoginSvr
 {
@@ -12,62 +13,6 @@ namespace LoginSvr
         {
             sAccount = account;
             nIndex = index;
-        }
-    }
-
-    public class TUserEntry : Packets
-    {
-        public string sAccount;
-        public string sPassword;
-        public string sUserName;
-        public string sSSNo;
-        public string sPhone;
-        public string sQuiz;
-        public string sAnswer;
-        public string sEMail;
-
-        public TUserEntry()
-        {
-            
-        }
-
-        public TUserEntry(byte[] buff)
-            : base(buff)
-        {
-            this.sAccount = ReadPascalString(10); 
-            this.sPassword = ReadPascalString(10); 
-            this.sUserName = ReadPascalString(20);
-            this.sSSNo = ReadPascalString(14);
-            this.sPhone = ReadPascalString(14);
-            this.sQuiz = ReadPascalString(20);
-            this.sAnswer = ReadPascalString(12);
-            this.sEMail = ReadPascalString(40); 
-        }
-    }
-
-    public class TUserEntryAdd: Packets
-    {
-        public string sQuiz2;
-        public string sAnswer2;
-        public string sBirthDay;
-        public string sMobilePhone;
-        public string sMemo;
-        public string sMemo2;
-
-        public TUserEntryAdd()
-        {
-            
-        }
-
-        public TUserEntryAdd(byte[] buff)
-            : base(buff)
-        {
-            this.sQuiz2 = ReadPascalString(20); 
-            this.sAnswer2 = ReadPascalString(12); 
-            this.sBirthDay = ReadPascalString(10);
-            this.sMobilePhone = ReadPascalString(13);
-            this.sMemo = ReadPascalString(20);
-            this.sMemo2 = ReadPascalString(20);
         }
     }
     

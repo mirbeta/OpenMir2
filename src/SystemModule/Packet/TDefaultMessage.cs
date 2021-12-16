@@ -41,11 +41,6 @@ namespace SystemModule.Packages
         public ushort Series;
 
         public const int PackSize = 12;
-        
-        public byte[] ToByte()
-        {
-            return null;
-        }
 
         public TCmdPack()
         {

@@ -71,8 +71,8 @@ namespace SystemModule.Sockets
                 asyncState.EndConnect(iar); //结束异步连接
                 if (null != this.OnConnected)
                 {
-                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli)); //引发连接成功事件
                     IsConnected = true;
+                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli)); //引发连接成功事件
                 }
                 this.StartWaitingForData(asyncState); //开始接收数据
             }

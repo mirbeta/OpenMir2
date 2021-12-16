@@ -356,6 +356,7 @@ namespace SelGate
                 {
                     GateShare.boKeepAliveTimcOut = true;
                     //ClientSocket.Close();
+                    Console.WriteLine("与数据库服务器链接超时。");
                 }
             }
             finally

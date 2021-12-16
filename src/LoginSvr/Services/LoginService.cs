@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
+using SystemModule.Packet;
 using SystemModule.Sockets;
 
 namespace LoginSvr
@@ -224,6 +225,10 @@ namespace LoginSvr
                         II = 0;
                         while (true)
                         {
+                            if (GateInfo.UserList == null)
+                            {
+                                break;
+                            }
                             if (GateInfo.UserList.Count <= II)
                             {
                                 break;
@@ -447,7 +452,7 @@ namespace LoginSvr
                     {
                         if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
                         {
-                            sMsg = sMsg.Substring(2 - 1, sMsg.Length - 1);
+                            sMsg = sMsg.Substring(1, sMsg.Length - 1);
                             ProcessUserMsg(Config, UserInfo, sMsg);
                         }
                     }
@@ -571,25 +576,17 @@ namespace LoginSvr
 
         private void AccountCreate(TConfig Config, TUserInfo UserInfo, string sData)
         {
-            TUserEntry UserEntry = null;
-            TUserEntryAdd UserAddEntry = null;
-            TAccountDBRecord DBRecord = null;
-            int nLen = 0;
-            string sUserEntryMsg;
-            string sUserAddEntryMsg;
-            int nErrCode;
-            TDefaultMessage DefMsg;
-            bool bo21;
-            int n10;
+            int nLen = 198;
+            bool bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
             const string sLogFlag = "new";
             try
             {
-                nErrCode = -1;
-                nLen = 198;
-                bo21 = false;
-                sUserEntryMsg = sData.Substring(0, nLen);
-                sUserAddEntryMsg = sData.Substring(nLen, sData.Length - nLen);
+                int nErrCode = -1;
+                var sUserEntryMsg = sData.Substring(0, nLen);
+                var sUserAddEntryMsg = sData.Substring(nLen, sData.Length - nLen);
+                TUserEntryAdd UserAddEntry = null;
+                TUserEntry UserEntry = null;
                 if ((sUserEntryMsg != "") && (sUserAddEntryMsg != ""))
                 {
                     UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg, sUserEntryMsg.Length));
@@ -604,10 +601,10 @@ namespace LoginSvr
                         {
                             if (_accountDB.Open())
                             {
-                                n10 = _accountDB.Index(UserEntry.sAccount);
+                                int n10 = _accountDB.Index(UserEntry.sAccount);
                                 if (n10 <= 0)
                                 {
-                                    DBRecord = new TAccountDBRecord();
+                                    TAccountDBRecord DBRecord = new TAccountDBRecord();
                                     DBRecord.UserEntry = UserEntry;
                                     DBRecord.UserEntryAdd = UserAddEntry;
                                     if (UserEntry.sAccount != "")
@@ -634,6 +631,7 @@ namespace LoginSvr
                         LSShare.MainOutMessage(string.Format(sAddNewuserFail, UserEntry.sAccount, UserAddEntry.sQuiz2));
                     }
                 }
+                TDefaultMessage DefMsg;
                 if (nErrCode == 1)
                 {
                     WriteLogMsg(Config, sLogFlag, ref UserEntry, ref UserAddEntry);
@@ -772,29 +770,20 @@ namespace LoginSvr
         private void AccountLogin(TConfig Config, TUserInfo UserInfo, string sData)
         {
             string sLoginID = string.Empty;
-            string sPassword;
-            int nCode;
-            bool boNeedUpdate;
-            TDefaultMessage DefMsg;
             TUserEntry UserEntry = null;
-            int nIDCost;
-            int nIPCost;
             int nIDCostIndex = -1;
             int nIPCostIndex = -1;
             TAccountDBRecord DBRecord = null;
-            int n10;
-            bool boPayCost;
-            string sServerName;
             try
             {
-                sPassword = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sLoginID, new string[] { "/" });
-                nCode = 0;
-                boNeedUpdate = false;
+                var sPassword = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sLoginID, new string[] { "/" });
+                var nCode = 0;
+                var boNeedUpdate = false;
                 try
                 {
                     if (_accountDB.Open())
                     {
-                        n10 = _accountDB.Index(sLoginID);
+                        var n10 = _accountDB.Index(sLoginID);
                         if ((n10 >= 0) && (_accountDB.Get(n10, ref DBRecord) >= 0))
                         {
                             if ((DBRecord.nErrorCount < 5) || ((HUtil32.GetTickCount() - DBRecord.dwActionTick) > 60000))
@@ -836,6 +825,7 @@ namespace LoginSvr
                     SessionKick(Config, sLoginID);
                     nCode = -3;
                 }
+                TDefaultMessage DefMsg;
                 if (boNeedUpdate)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
@@ -854,9 +844,8 @@ namespace LoginSvr
                     {
                         nIPCostIndex = Config.IPaddrCostList[UserInfo.sUserIPaddr];
                     }
-                    nIDCost = 0;
-                    nIPCost = 0;
-                    boPayCost = false;
+                    var nIDCost = 0;
+                    var nIPCost = 0;
                     if (nIDCostIndex >= 0)
                     {
                         nIDCost = nIDCostIndex;//Config.AccountCostList[nIDCostIndex];
@@ -864,7 +853,6 @@ namespace LoginSvr
                     if (nIPCostIndex >= 0)
                     {
                         nIPCost = nIPCostIndex;//Config.IPaddrCostList[nIPCostIndex];
-                        boPayCost = true;
                     }
                     if ((nIDCost >= 0) || (nIPCost >= 0))
                     {
@@ -886,7 +874,7 @@ namespace LoginSvr
                     {
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSOK_SELECTSERVER, nIDCost, HUtil32.LoWord(nIPCost), HUtil32.HiWord(nIPCost), Config.ServerNameList.Count);
                     }
-                    sServerName = GetServerListInfo();
+                    var sServerName = GetServerListInfo();
                     SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sServerName));
                     SessionAdd(Config, UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID, UserInfo.boPayCost, false);
                 }

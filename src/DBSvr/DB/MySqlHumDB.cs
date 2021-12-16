@@ -222,6 +222,7 @@ namespace DBSvr
                 if (AddRecord(ref nIndex, ref HumanRCD))
                 {
                     m_MirQuickList.Add(sChrName, nIndex);
+                    m_QuickIndexNameList.Add(nIndex, sChrName);
                     result = true;
                 }
                 else

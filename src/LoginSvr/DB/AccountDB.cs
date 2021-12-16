@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using SystemModule;
+using SystemModule.Packet;
 
 namespace LoginSvr
 {
@@ -147,7 +148,15 @@ namespace LoginSvr
         {
             const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE FLD_LOGINID='{0}'";
             var result = true;
-            string sAccount = m_QuickList[nIndex - 1].sAccount;
+            if (nIndex <= 0)
+            {
+                nIndex = 0;
+            }
+            else
+            {
+                nIndex = nIndex - 1;
+            }
+            string sAccount = m_QuickList[nIndex].sAccount;
             if (!Open())
             {
                 return false;

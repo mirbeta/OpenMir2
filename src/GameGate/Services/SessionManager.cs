@@ -34,7 +34,7 @@ namespace GameGate
                     {
                         return;
                     }
-                    userSession.ProcessSvrData(message.Buffer);
+                    userSession.ProcessSvrData(message);
                 }
             }
         }

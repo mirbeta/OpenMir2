@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -311,13 +309,13 @@ namespace GameGate
                                     {
                                         MsgBuff = new byte[pMsg.nLength];
                                         Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.nSocket, pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
+                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
                                     else
                                     {
                                         MsgBuff = new byte[Buff.Length - 20];
                                         Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.nSocket, pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
+                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
                                     break;
                                 case Grobal2.GM_TEST:
@@ -363,50 +361,15 @@ namespace GameGate
             }
         }
 
-        private void ProcessMakeSocketStr(int nSocket, int nSocketIndex, byte[] buffer, int nMsgLen)
+        private void ProcessMakeSocketStr(int nSocketIndex, byte[] buffer, int nMsgLen)
         {
-            string sSendMsg = string.Empty;
-            TDefaultMessage pDefMsg;
-            try
+            if (nSocketIndex >= 0 && nSocketIndex < MaxSession)
             {
-                switch (nMsgLen)
-                {
-                    case < 0:
-                        sSendMsg = "#" + HUtil32.GetString(buffer, 0, buffer.Length - 1) + "!";
-                        break;
-                    case >= 12:
-                        {
-                            pDefMsg = new TDefaultMessage(buffer);
-                            if (nMsgLen > 12)
-                            {
-                                var sb = new System.Text.StringBuilder();
-                                sb.Append('#');
-                                sb.Append(EDcode.EncodeMessage(pDefMsg));
-                                var strBuff = new byte[nMsgLen - 12];
-                                Buffer.BlockCopy(buffer, 12, strBuff, 0, strBuff.Length);
-                                sb.Append(HUtil32.StrPasTest(strBuff));
-                                sb.Append('!');
-                                sSendMsg = sb.ToString();
-                            }
-                            else
-                            {
-                                sSendMsg = "#" + EDcode.EncodeMessage(pDefMsg) + "!";
-                            }
-                            break;
-                        }
-                }
-                if (nSocketIndex >= 0 && nSocketIndex < MaxSession && !string.IsNullOrEmpty(sSendMsg))
-                {
-                    var userData = new TSendUserData();
-                    userData.UserCientId = nSocketIndex;
-                    userData.Buffer = HUtil32.GetBytes(sSendMsg);
-                    userData.BufferLen = userData.Buffer.Length;
-                    _sessionManager._sendMsgList.Writer.TryWrite(userData);
-                }
-            }
-            catch (Exception E)
-            {
-                GateShare.AddMainLogMsg("[Exception] ProcessMakeSocketStr", 1);
+                var userData = new TSendUserData();
+                userData.UserCientId = nSocketIndex;
+                userData.Buffer = buffer;
+                userData.BufferLen = nMsgLen;
+                _sessionManager._sendMsgList.Writer.TryWrite(userData);
             }
         }
 

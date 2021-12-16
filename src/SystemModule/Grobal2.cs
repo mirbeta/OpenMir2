@@ -826,6 +826,7 @@ namespace SystemModule
         public const int SM_HEALTHSPELLCHANGED = 53;
         public const int SM_MAPDESCRIPTION = 54;
         public const int SM_SPELL2 = 117;
+        public const int SM_HWID = 113;
         public const int SM_SYSMESSAGE = 100;
         public const int SM_GROUPMESSAGE = 101;
         public const int SM_CRY = 102;
@@ -1092,6 +1093,8 @@ namespace SystemModule
         public const int GM_DATA = 5;
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
+        public const int SM_RUNGATELOGOUT = 599;
+        public const int SM_PLAYERCONFIG = 560;
         public const int GM_TEST = 20;
         public const int GROUPMAX = 11;
         public const int CM_42HIT = 42;
