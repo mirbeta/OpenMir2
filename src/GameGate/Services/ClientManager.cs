@@ -19,9 +19,9 @@ namespace GameGate
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
         private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        private Timer _clearSessionTimer = null;
-        
-        public ClientManager(ConfigManager configManager,SessionManager sessionManager)
+        private Timer _checkSessionTimer = null;
+
+        public ClientManager(ConfigManager configManager, SessionManager sessionManager)
         {
             _sessionManager = sessionManager;
             _configManager = configManager;
@@ -61,7 +61,7 @@ namespace GameGate
             _delayThread = new Thread(ProcessDelayMsg);
             _delayThread.IsBackground = true;
             _delayThread.Start();
-            _clearSessionTimer = new Timer(ClearIdeaSession, null, 10000, 20000);
+            _checkSessionTimer = new Timer(CheckSession, null, 10000, 20000);
         }
 
         public void Stop()
@@ -165,8 +165,8 @@ namespace GameGate
                 Thread.Sleep(10);
             }
         }
-        
-        private void ClearIdeaSession(object obj)
+
+        private void CheckSession(object obj)
         {
             Debug.WriteLine("清理超时会话开始工作...");
             TSessionInfo UserSession;
@@ -194,28 +194,56 @@ namespace GameGate
                         }
                     }
                 }
-                if (!clientList[i].boGateReady)
+                GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
+                if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
                 {
-                    if (HUtil32.GetTickCount() - dwReConnectServerTime > 1000 && GateShare.boServiceStart)
-                    {
-                        dwReConnectServerTime = HUtil32.GetTickCount();
-                        if (!clientList[i].IsConnected)
-                        {
-                            clientList[i].ReConnected();
-                        }
-                    }
+                    GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
                 }
-                else
-                {
-                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
-                    {
-                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
-                    }
-                }
+                CheckSessionStatus(clientList[i]);
             }
             Debug.WriteLine("清理超时会话工作完成...");
         }
 
+        /// <summary>
+        /// 检查客户端和服务端之间的状态以及心跳维护
+        /// </summary>
+        /// <param name="clientThread"></param>
+        private void CheckSessionStatus(ClientThread clientThread)
+        {
+            if (clientThread.boGateReady)
+            {
+                clientThread.SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
+                clientThread.CheckServerFailCount = 0;
+                return;
+            }
+            if (clientThread.boCheckServerFail && clientThread.CheckServerFailCount <= 20)
+            {
+                clientThread.ReConnected();
+                clientThread.CheckServerFailCount++;
+                Debug.WriteLine($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                return;
+            }
+            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
+            {
+                clientThread.boCheckServerFail = true;
+                clientThread.Stop();
+                clientThread.CheckServerFailCount++;
+                Debug.WriteLine($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                return;
+            }
+            //if (dwLoopTime > 30)
+            //{
+            //    dwLoopTime -= 20;
+            //}
+            //if (dwProcessServerMsgTime > 1)
+            //{
+            //    dwProcessServerMsgTime -= 1;
+            //}
+            //if (_serverService.dwProcessClientMsgTime > 1)
+            //{
+            //    _serverService.dwProcessClientMsgTime -= 1;
+            //}
+            GateShare.boDecodeMsgLock = false;
+        }
     }
 }

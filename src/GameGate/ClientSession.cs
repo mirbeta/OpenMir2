@@ -143,9 +143,6 @@ namespace GameGate
                             case Grobal2.CM_GUILDUPDATERANKINFO:
                                 if (UserData.BufferLen > Config.m_nMaxClientPacketSize)
                                 {
-                                    // if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(3))
-                                    // {
-                                    // }
                                     // LogManager.g_pLogMgr.Add("Kick off user,over max client packet size: " + (Len).ToString());
                                     // Misc.Units.Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     //Succeed = false;
@@ -155,7 +152,7 @@ namespace GameGate
                             default:
                                 if (UserData.BufferLen > Config.m_nNomClientPacketSize)
                                 {
-                                    //LogManager.Units.LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
+                                    //LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
                                     //Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     //Succeed = false;
                                     //return;

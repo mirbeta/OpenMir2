@@ -19,7 +19,7 @@ namespace GameGate
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
-        public int GateIdx = 0;
+        public int ClientId = 0;
         /// <summary>
         /// 最大用户数
         /// </summary>
@@ -29,17 +29,13 @@ namespace GameGate
         /// </summary>
         public TSessionInfo[] SessionArray;
         /// <summary>
-        /// 心跳线程
-        /// </summary>
-        private Timer _heartTimer;
-        /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
-        private bool boCheckServerFail = false;
+        public bool boCheckServerFail = false;
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
-        private int CheckServerFailCount = 0;
+        public int CheckServerFailCount = 0;
         /// <summary>
         /// 独立Buffer分区
         /// </summary>
@@ -58,9 +54,9 @@ namespace GameGate
         private bool isConnected = false;
         private readonly SessionManager _sessionManager;
 
-        public ClientThread(int idx, string serverAddr, int serverPort, SessionManager sessionManager)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
         {
-            GateIdx = idx;
+            ClientId = clientId;
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
@@ -82,11 +78,6 @@ namespace GameGate
         public void Start()
         {
             ClientSocket.Connect();
-            Task.Factory.StartNew(async () =>
-            {
-                await ProcessMessage();
-            });
-            _heartTimer = new Timer(Heart, null, 5000, 10000);
         }
 
         public void ReConnected()
@@ -105,20 +96,6 @@ namespace GameGate
         public TSessionInfo[] GetSession()
         {
             return SessionArray;
-        }
-
-        /// <summary>
-        /// 这里有问题 会导致多个监听到一个
-        /// </summary>
-        private async Task ProcessMessage()
-        {
-            while (await GateShare.ForwardMsgList.Reader.WaitToReadAsync())
-            {
-                if (GateShare.ForwardMsgList.Reader.TryRead(out var message))
-                {
-                    SendServerMsg(message);
-                }
-            }
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -439,40 +416,6 @@ namespace GameGate
             {
                 ClientSocket.Send(sendBuffer);
             }
-        }
-
-        /// <summary>
-        /// 每二秒向游戏服务器发送一个检查信号
-        /// </summary>
-        /// <param name="obj"></param>
-        private void Heart(object obj)
-        {
-            if (boGateReady)
-            {
-                SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
-                CheckServerFailCount = 0;
-            }
-            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && CheckServerFailCount <= 20)
-            {
-                boCheckServerFail = true;
-                ClientSocket.Disconnect();
-                CheckServerFailCount++;
-                Debug.WriteLine($"链接服务器超时.失败次数:[{CheckServerFailCount}]");
-            }
-
-            //if (dwLoopTime > 30)
-            //{
-            //    dwLoopTime -= 20;
-            //}
-            //if (dwProcessServerMsgTime > 1)
-            //{
-            //    dwProcessServerMsgTime -= 1;
-            //}
-            //if (_serverService.dwProcessClientMsgTime > 1)
-            //{
-            //    _serverService.dwProcessClientMsgTime -= 1;
-            //}
-            GateShare.boDecodeMsgLock = false;
         }
     }
 

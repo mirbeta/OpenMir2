@@ -76,7 +76,7 @@ namespace GameGate
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.GateIdx}] Server:{clientThread.GetSocketIp()}");
+            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -161,7 +161,7 @@ namespace GameGate
                     Debug.WriteLine($"服务端未就绪 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                     return;
                 }
-                if (!userClient.SessionArray[userClient.GateIdx].Socket.Connected)
+                if (!userClient.SessionArray[userClient.ClientId].Socket.Connected)
                 {
                     return;
                 }

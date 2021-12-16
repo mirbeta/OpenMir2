@@ -24,7 +24,6 @@ namespace GameGate
         private int nHumLogonMsgSize = 0;
         private int nHumPlayMsgSize = 0;
         private Timer decodeTimer;
-        private Timer sendTime;
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;

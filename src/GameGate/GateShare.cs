@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
 
@@ -32,10 +31,6 @@ namespace GameGate
         /// </summary>
         public static bool boShowSckData = true;
         public static string sReplaceWord = "*";
-        /// <summary>
-        /// 转发封包（数据引擎-》网关）
-        /// </summary>
-        public static Channel<ForwardMessage> ForwardMsgList = null;
         public static int nCurrConnCount = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
@@ -140,7 +135,6 @@ namespace GameGate
             TempBlockIPList = new List<string>();
             ServerGateList = new List<ClientThread>();
             PunishList = new Dictionary<string, ClientSession>();
-            ForwardMsgList = Channel.CreateUnbounded<ForwardMessage>();
             g_ChatCmdFilterList = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
         }
     }
