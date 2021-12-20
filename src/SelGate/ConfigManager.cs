@@ -16,7 +16,7 @@ namespace SelGate
             GateShare.GatePort = ReadInteger(GateShare.GateClass, "GatePort", GateShare.GatePort);
             GateShare.GateAddr = ReadString(GateShare.GateClass, "GateAddr", GateShare.GateAddr);
             GateShare.nShowLogLevel = ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
-            GateShare.BlockMethod = ((TBlockIPMethod)(ReadInteger(GateShare.GateClass, "BlockMethod", ((int)GateShare.BlockMethod))));
+            GateShare.BlockMethod = ((TBlockIPMethod)(ReadInteger(GateShare.GateClass, "BlockMethod", (int)GateShare.BlockMethod)));
             if (ReadInteger(GateShare.GateClass, "KeepConnectTimeOut", -1) <= 0)
             {
                 WriteInteger(GateShare.GateClass, "KeepConnectTimeOut", GateShare.dwKeepConnectTimeOut);
@@ -26,6 +26,5 @@ namespace SelGate
             GateShare.g_boDynamicIPDisMode = ReadBool(GateShare.GateClass, "DynamicIPDisMode", GateShare.g_boDynamicIPDisMode);
             GateShare.LoadBlockIPFile();
         }
-
     }
 }

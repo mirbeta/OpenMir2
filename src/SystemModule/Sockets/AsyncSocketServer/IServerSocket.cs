@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace SystemModule.Sockets
     /// </summary>
     public class ISocketServer
     {
+        private IdWorker _idWorker;
         /// <summary>
         /// 缓冲区同步对象
         /// </summary>
@@ -29,7 +31,7 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 接收数据事件对象集合
         /// </summary>
-        Dictionary<int, AsyncUserToken> m_tokens;
+        ConcurrentDictionary<long, AsyncUserToken> m_tokens;
         /// <summary>
         /// 设计同时处理的连接最大数
         /// </summary>
@@ -126,25 +128,19 @@ namespace SystemModule.Sockets
         /// <returns>在线返回true，否则返回false</returns>
         public bool IsOnline(int connectionId)
         {
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            if (!this.m_tokens.ContainsKey(connectionId))
             {
-                if (!this.m_tokens.ContainsKey(connectionId))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
         public IList<AsyncUserToken> GetSockets()
         {
-            lock (((ICollection)this.m_tokens).SyncRoot)
-            {
-                return this.m_tokens.Values.ToList();
-            }
+            return this.m_tokens.Values.ToList();
         }
 
         /// <summary>
@@ -157,7 +153,6 @@ namespace SystemModule.Sockets
             // 重置接收和发送字节总数
             m_totalBytesRead = 0;
             m_totalBytesWrite = 0;
-            // 已??拥目突Ф俗苁?
             m_numConnectedSockets = 0;
             // 数据库设计连接容量
             m_numConnections = numConnections;
@@ -173,10 +168,12 @@ namespace SystemModule.Sockets
             m_writePool = new SocketAsyncEventArgsPool(numConnections);
 
             // 接收数据事件参数对象集合
-            m_tokens = new Dictionary<int, AsyncUserToken>();
+            m_tokens = new ConcurrentDictionary<long, AsyncUserToken>();
 
             // 初始信号量
             m_maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
+
+            _idWorker = new IdWorker(new Random().Next(10));
         }
 
         /// <summary>
@@ -388,11 +385,15 @@ namespace SystemModule.Sockets
             // 把它放到ReadEventArg对象的user token中
             token.Socket = e.AcceptSocket;
             // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-            token.ConnectionId = (int)m_numConnectedSockets;//Guid.NewGuid().ToString("N");
-
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            token.ConnectionId = (int)_idWorker.nextId();//Guid.NewGuid().ToString("N");
+            if (token.ConnectionId <= 0)
             {
-                this.m_tokens.Add(token.ConnectionId, token);// 添加到集合中
+                token.ConnectionId = (int)token.Socket.Handle;
+            }
+            if (!this.m_tokens.TryAdd(token.ConnectionId, token)) // 添加到集合中
+            {
+                Console.WriteLine("Socket链接异常");
+                return;
             }
 
             EventHandler<AsyncUserToken> handler = OnClientConnect;
@@ -521,19 +522,14 @@ namespace SystemModule.Sockets
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
-
             //if (buffer.Length <= m_receiveSendBufferSize)
             //{
             //    throw new ArgumentException("数据包长度超过缓冲区大小", "buffer");
             //}
-
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            if (!this.m_tokens.TryGetValue(connectionId, out token))
             {
-                if (!this.m_tokens.TryGetValue(connectionId, out token))
-                {
-                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
-                    //return;
-                }
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+                //return;
             }
             SocketAsyncEventArgs writeEventArgs;
             lock (m_writePool)
@@ -597,19 +593,14 @@ namespace SystemModule.Sockets
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
-
             //if (buffer.Length <= m_receiveSendBufferSize)
             //{
             //    throw new ArgumentException("数据包长度超过缓冲区大小", "buffer");
             //}
-
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            if (!this.m_tokens.TryGetValue(connectionId, out token))
             {
-                if (!this.m_tokens.TryGetValue(connectionId, out token))
-                {
-                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
-                    //return;
-                }
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+                //return;
             }
             SocketAsyncEventArgs writeEventArgs;
             lock (m_writePool)
@@ -756,16 +747,11 @@ namespace SystemModule.Sockets
         public void Disconnect(int connectionId)//断开连接(形参 连接ID)
         {
             AsyncUserToken token;
-
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            if (!this.m_tokens.TryGetValue(connectionId, out token))
             {
-                if (!this.m_tokens.TryGetValue(connectionId, out token))
-                {
-                    throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
-                    //return;//不存在该ID客户端
-                }
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+                //return;//不存在该ID客户端
             }
-
             RaiseDisconnectedEvent(token);//抛出断开连接事件            
         }
         
@@ -773,18 +759,15 @@ namespace SystemModule.Sockets
         {
             if (null != token)
             {
-                lock (((ICollection)this.m_tokens).SyncRoot)
+                if (this.m_tokens.ContainsKey(token.ConnectionId))
                 {
-                    if (this.m_tokens.ContainsValue(token))
+                    this.m_tokens.TryRemove(token.ConnectionId, out token);
+                    CloseClientSocket(token);
+                    EventHandler<AsyncUserToken> handler = OnClientDisconnect;
+                    // 如果订户事件将为空(null)
+                    if ((handler != null) && (null != token))
                     {
-                        this.m_tokens.Remove(token.ConnectionId);
-                        CloseClientSocket(token);
-                        EventHandler<AsyncUserToken> handler = OnClientDisconnect;
-                        // 如果订户事件将为空(null)
-                        if ((handler != null) && (null != token))
-                        {
-                            handler(this, token);//抛出连接断开事件
-                        }
+                        handler(this, token);//抛出连接断开事件
                     }
                 }
             }
@@ -851,30 +834,27 @@ namespace SystemModule.Sockets
             {
                 this.listenSocket.Close();//停止侦听
             }
-            lock (((ICollection)this.m_tokens).SyncRoot)
+            foreach (AsyncUserToken token in this.m_tokens.Values)
             {
-                foreach (AsyncUserToken token in this.m_tokens.Values)
+                try
                 {
-                    try
+                    CloseClientSocket(token);
+                    EventHandler<AsyncUserToken> handler = OnClientDisconnect;
+                    // 如果订户事件将为空(null)
+                    if ((handler != null) && (null != token))
                     {
-                        CloseClientSocket(token);
-                        EventHandler<AsyncUserToken> handler = OnClientDisconnect;
-                        // 如果订户事件将为空(null)
-                        if ((handler != null) && (null != token))
-                        {
-                            handler(this, token);//抛出连接断开事件
-                        }
-                    }
-                    // 编译时打开注释调试时关闭
-                    //catch(Exception){ }
-                    // 编译时关闭调试时打开
-                    catch (Exception exception_debug)
-                    {
-                        Debug.WriteLine("调试:" + exception_debug.Message);
+                        handler(this, token);//抛出连接断开事件
                     }
                 }
-                this.m_tokens.Clear();
+                // 编译时打开注释调试时关闭
+                //catch(Exception){ }
+                // 编译时关闭调试时打开
+                catch (Exception exception_debug)
+                {
+                    Debug.WriteLine("调试:" + exception_debug.Message);
+                }
             }
+            this.m_tokens.Clear();
             isActive = false;
         }
         

@@ -139,7 +139,6 @@ namespace GameGate
         /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            Console.WriteLine("收到M2消息.");
             var dwTick14 = HUtil32.GetTickCount();
             var nMsgLen = e.Buff.Length;
             ProcReceiveBuffer(e.Buff, nMsgLen);
@@ -363,14 +362,11 @@ namespace GameGate
 
         private void ProcessMakeSocketStr(int nSocketIndex, byte[] buffer, int nMsgLen)
         {
-            if (nSocketIndex >= 0 && nSocketIndex < MaxSession)
-            {
-                var userData = new TSendUserData();
-                userData.UserCientId = nSocketIndex;
-                userData.Buffer = buffer;
-                userData.BufferLen = nMsgLen;
-                _sessionManager._sendMsgList.Writer.TryWrite(userData);
-            }
+            var userData = new TSendUserData();
+            userData.UserCientId = nSocketIndex;
+            userData.Buffer = buffer;
+            userData.BufferLen = nMsgLen;
+            _sessionManager._sendMsgList.Writer.TryWrite(userData);
         }
 
         private void SendSocket(byte[] sendBuffer)

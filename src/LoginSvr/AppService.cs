@@ -55,15 +55,14 @@ namespace LoginSvr
         {
             while (true)
             {
-                TConfig Config = LSShare.g_Config;
                 for (var i = 0; i < LSShare.g_MainMsgList.Count; i++)
                 {
                     Console.WriteLine(LSShare.g_MainMsgList[i]);
                 }
                 LSShare.g_MainMsgList.Clear();
                 _loginService.ProceDataTimer();
-                _loginService.SessionClearKick(Config);
-                _loginService.SessionClearNoPayMent(Config);
+                _loginService.SessionClearKick(LSShare.g_Config);
+                _loginService.SessionClearNoPayMent(LSShare.g_Config);
                 Thread.Sleep(1);
             }
         }

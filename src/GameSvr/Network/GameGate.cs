@@ -253,22 +253,6 @@ namespace GameSvr
             }
         }
 
-        private void SocketRead(int connectionId,byte[] buffer)
-        {
-            const string sExceptionMsg1 = "[Exception] TRunSocket::SocketRead";
-            if (RunSock.GataSocket.TryGetValue(connectionId, out var gate))
-            {
-                try
-                {
-                    ExecGateBuffers(gate.GateIndex, gate, buffer, buffer.Length);
-                }
-                catch
-                {
-                    M2Share.MainOutMessage(sExceptionMsg1);
-                }
-            }
-        }
-        
         private bool DoClientCertification_GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionID, ref int nClientVersion, ref bool boFlag,ref byte[] tHWID)
         {
             var result = false;
@@ -731,7 +715,6 @@ namespace GameSvr
                                 }
                             }
                         }
-
                         if (GateUser != null)
                         {
                             if (GateUser.PlayObject != null && GateUser.UserEngine != null)
@@ -817,7 +800,7 @@ namespace GameSvr
                 RunSock.g_GateArr[i] = Gate;
             }
             LoadRunAddr();
-            _gateSocket = new ISocketServer(20, 2048);
+            _gateSocket = new ISocketServer(ushort.MaxValue, 2048);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
@@ -1182,14 +1165,17 @@ namespace GameSvr
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
         {
-            var data = new byte[e.BytesReceived];
-            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
             var nMsgLen = e.BytesReceived;
             if (nMsgLen <= 0)
             {
                 return;
             }
-            SocketRead(e.ConnectionId, data);
+            var data = new byte[e.BytesReceived];
+            Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
+            if (RunSock.GataSocket.TryGetValue(e.ConnectionId, out var gate))
+            {
+                ExecGateBuffers(gate.GateIndex, gate, data, nMsgLen);
+            }
         }
         
         public async Task StartConsumer(CancellationToken cancellation)

@@ -5,11 +5,7 @@ namespace MakePlayer
 {
     class Program
     {
-        private static object _obj = new object();
         private static ClientManager _clientManager;
-        private static int g_dwProcessTimeMin = 0;
-        private static int g_dwProcessTimeMax = 0;
-        private static int g_nPosition = 0;
         /// <summary>
         /// 服务器名称
         /// </summary>
@@ -33,7 +29,7 @@ namespace MakePlayer
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 1;
+        private static int g_nTotalChrCount = 10000;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -57,11 +53,11 @@ namespace MakePlayer
             g_sServerName = "热血传奇";
             g_sGameIPaddr = "10.10.0.168";
             g_nGamePort = 7001;
-            g_boNewAccount = false;
+            g_boNewAccount = true;
 
             g_nChrCount = HUtil32._MIN(g_nChrCount, g_nTotalChrCount);
             g_dwLogonTick = HUtil32.GetTickCount() - 1000 * g_nChrCount;
-            g_sAccount = "play";
+            g_sAccount = "mplay";
 
             _playTimer = new Thread(Start);
             _playTimer.Start();
@@ -82,8 +78,6 @@ namespace MakePlayer
         {
             while (true)
             {
-                int dwRunTick;
-                bool boProcessLimit;
                 if (g_nTotalChrCount > 0)
                 {
                     if (((HUtil32.GetTickCount() - g_dwLogonTick) > 1000 * g_nChrCount))
@@ -113,33 +107,7 @@ namespace MakePlayer
                         }
                     }
                 }
-                dwRunTick = HUtil32.GetTickCount();
-                boProcessLimit = false;
-                var clientList = _clientManager._Clients;
-                for (var i = g_nPosition; i < clientList.Count; i++)
-                {
-                    clientList[i].Run();
-                    if (((HUtil32.GetTickCount() - dwRunTick) > 20))
-                    {
-                        g_nPosition = i;
-                        boProcessLimit = true;
-                        break;
-                    }
-                    if (clientList[i].m_boLogin && (HUtil32.GetTickCount() - clientList[i].m_dwSayTick > 3000))
-                    {
-                        clientList[i].m_dwSayTick = HUtil32.GetTickCount();
-                        clientList[i].ClientLoginSay();
-                    }
-                }
-                if (!boProcessLimit)
-                {
-                    g_nPosition = 0;
-                }
-                g_dwProcessTimeMin = HUtil32.GetTickCount() - dwRunTick;
-                if (g_dwProcessTimeMin > g_dwProcessTimeMax)
-                {
-                    g_dwProcessTimeMax = g_dwProcessTimeMin;
-                }
+                _clientManager.Run();
                 Thread.Sleep(1000);
             }
         }

@@ -20,12 +20,12 @@ namespace GameGate
         private TSessionInfo _session;
         private bool m_fOverClientCount;
         private byte[] m_xHWID;
-        public bool m_KickFlag = false;
+        private bool m_KickFlag = false;
         public int m_nSvrListIdx = 0;
-        public int m_nSvrObject = 0;
-        public int m_SendCheckTick = 0;
-        public TCheckStep m_Stat;
-        public long m_FinishTick = 0;
+        private int m_nSvrObject = 0;
+        private int m_SendCheckTick = 0;
+        private TCheckStep m_Stat;
+        private long m_FinishTick = 0;
         private readonly object _syncObj;
         private readonly ClientThread lastGameSvr;
         private readonly ConfigManager _configManager;
@@ -51,9 +51,9 @@ namespace GameGate
             return _gameSpeed;
         }
 
-        public TSessionInfo GetSession()
+        public TSessionInfo Session
         {
-            return _session;
+            get { return _session; }
         }
 
         private GateConfig Config => _configManager.GateConfig;
@@ -953,7 +953,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 发送消息到客户端
+        /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
         public void ProcessSvrData(TSendUserData sendData)
         {
@@ -968,6 +968,13 @@ namespace GameGate
                     var pDefMsg = new TDefaultMessage(sendData.Buffer);
                     if (sendData.BufferLen > 12)
                     {
+                        // var tempBuff = new byte[sendData.BufferLen];
+                        // tempBuff[0] = (byte)'#';
+                        // var msgBuff = EDcode.EncodeMessage(sendData.Buffer, ref tempBuff);
+                        // var strBuff = new byte[sendData.BufferLen - 12];
+                        // Buffer.BlockCopy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
+                        // Array.Copy(strBuff, 0, tempBuff, 12, strBuff.Length);
+                        // tempBuff[tempBuff.Length - 1] = (byte)'!';
                         var sb = new System.Text.StringBuilder();
                         sb.Append('#');
                         sb.Append(EDcode.EncodeMessage(pDefMsg));
@@ -1406,7 +1413,7 @@ namespace GameGate
             GateMsg.wGSocketIdx = (ushort)_session.SocketId;
             GateMsg.wIdent = Grobal2.GM_DATA;
             GateMsg.wUserListIndex = _session.nUserListIndex;
-            GateMsg.nLength = tempBuff.Length;
+            GateMsg.nLength = tempBuff.Length - 20;//修复客户端进入游戏困难问题，只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetPacket();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)

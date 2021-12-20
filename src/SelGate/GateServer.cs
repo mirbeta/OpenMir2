@@ -36,9 +36,7 @@ namespace SelGate
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TUserSession UserSession;
             string sLocalIPaddr = string.Empty;
-            int nSockIndex;
             TSockaddr IPaddr;
             var sRemoteIPaddr = e.RemoteIPaddr;
             if (GateShare.g_boDynamicIPDisMode)
@@ -80,9 +78,10 @@ namespace SelGate
             }
             if (GateShare.boGateReady)
             {
+                int nSockIndex;
                 for (nSockIndex = 0; nSockIndex < GateShare.GATEMAXSESSION; nSockIndex++)
                 {
-                    UserSession = GateShare.g_SessionArray[nSockIndex];
+                    var UserSession = GateShare.g_SessionArray[nSockIndex];
                     if (UserSession.Socket == null)
                     {
                         UserSession.Socket = e.Socket;
@@ -144,7 +143,7 @@ namespace SelGate
                     break;
                 }
             }
-            if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
+            if (nSockIndex >= 0 && nSockIndex < GateShare.GATEMAXSESSION)
             {
                 UserSession = GateShare.g_SessionArray[nSockIndex];
                 UserSession.Socket = null;
@@ -167,16 +166,15 @@ namespace SelGate
 
         private void ServerSocketClientRead(object Sender, AsyncUserToken e)
         {
-            TUserSession UserSession;
             int nSockIndex = GateShare._sessionMap[e.ConnectionId];
-            if ((nSockIndex >= 0) && (nSockIndex < GateShare.GATEMAXSESSION))
+            if (nSockIndex >= 0 && nSockIndex < GateShare.GATEMAXSESSION)
             {
-                UserSession = GateShare.g_SessionArray[nSockIndex];
+                var UserSession = GateShare.g_SessionArray[nSockIndex];
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                 var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                if ((sReviceMsg != "") && GateShare.boServerReady)
+                if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boServerReady)
                 {
                     int nPos = sReviceMsg.IndexOf("*", StringComparison.Ordinal);
                     if (nPos > 0)
@@ -184,15 +182,15 @@ namespace SelGate
                         UserSession.boSendAvailable = true;
                         UserSession.boSendCheck = false;
                         UserSession.nCheckSendLength = 0;
-                        string s10 = sReviceMsg.Substring(0, nPos - 1);
-                        string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
+                        var s10 = sReviceMsg.Substring(0, nPos - 1);
+                        var s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
                         sReviceMsg = s10 + s1C;
                     }
-                    int nMsgLen = sReviceMsg.Length;
-                    if ((sReviceMsg != "") && (GateShare.boGateReady) && (!GateShare.boKeepAliveTimcOut))
+                    if (!string.IsNullOrEmpty(sReviceMsg) && GateShare.boGateReady && !GateShare.boKeepAliveTimcOut)
                     {
+                        var nMsgLen = sReviceMsg.Length;
                         UserSession.dwConnctCheckTick = HUtil32.GetTickCount();
-                        if ((HUtil32.GetTickCount() - UserSession.dwUserTimeOutTick) < 1000)
+                        if (HUtil32.GetTickCount() - UserSession.dwUserTimeOutTick < 1000)
                         {
                             UserSession.n20 += nMsgLen;
                         }
@@ -210,10 +208,7 @@ namespace SelGate
         {
             string sSocketMsg = string.Empty;
             string sSocketHandle = string.Empty;
-            string sRemoteIPaddr;
-            TUserSession UserSession;
-            TSockaddr IPaddr;
-            if (GateShare.boDecodeLock || (!GateShare.boGateReady))
+            if (GateShare.boDecodeLock || !GateShare.boGateReady)
             {
                 return;
             }
@@ -239,7 +234,7 @@ namespace SelGate
                             break;
                         }
                         sProcessMsg = HUtil32.ArrestStringEx(sProcessMsg, "%", "$", ref sSocketMsg);
-                        if (sSocketMsg == "")
+                        if (string.IsNullOrEmpty(sSocketMsg))
                         {
                             break;
                         }
@@ -258,7 +253,7 @@ namespace SelGate
                             }
                         }
                         sSocketMsg = HUtil32.GetValidStr3(sSocketMsg, ref sSocketHandle, new string[] { "/" });
-                        int nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
+                        var nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
                         if (nSocketHandle < 0)
                         {
                             continue;
@@ -273,7 +268,7 @@ namespace SelGate
                         }
                     }
                 }
-                if (sProcessMsg != "")
+                if (!string.IsNullOrEmpty(sProcessMsg))
                 {
                     sProcMsg = sProcessMsg;
                 }
@@ -284,9 +279,11 @@ namespace SelGate
                     {
                         continue;
                     }
+#if !DEBUG
                     if ((HUtil32.GetTickCount() - GateShare.g_SessionArray[nSocketIndex].dwConnctCheckTick) > GateShare.dwKeepConnectTimeOut)
                     {
-                        sRemoteIPaddr = GateShare.g_SessionArray[nSocketIndex].sRemoteIPaddr;
+                        var sRemoteIPaddr = GateShare.g_SessionArray[nSocketIndex].sRemoteIPaddr;
+                        TSockaddr IPaddr;
                         switch (GateShare.BlockMethod)
                         {
                             case TBlockIPMethod.mDisconnect:
@@ -294,13 +291,13 @@ namespace SelGate
                                 break;
                             case TBlockIPMethod.mBlock:
                                 IPaddr = new TSockaddr();
-                                IPaddr.nIPaddr = HUtil32.IpToInt((sRemoteIPaddr as string));
+                                IPaddr.nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
                                 GateShare.TempBlockIPList.Add(IPaddr);
                                 CloseConnect(sRemoteIPaddr);
                                 break;
                             case TBlockIPMethod.mBlockList:
                                 IPaddr = new TSockaddr();
-                                IPaddr.nIPaddr = HUtil32.IpToInt((sRemoteIPaddr as string));
+                                IPaddr.nIPaddr = HUtil32.IpToInt(sRemoteIPaddr);
                                 GateShare.BlockIPList.Add(IPaddr);
                                 CloseConnect(sRemoteIPaddr);
                                 break;
@@ -308,15 +305,16 @@ namespace SelGate
                         GateShare.MainOutMessage("端口空连接攻击: " + sRemoteIPaddr, 1);
                         continue;
                     }
+#endif
                     while (true)
                     {
                         if (GateShare.g_SessionArray[nSocketIndex].MsgList.Count <= 0)
                         {
                             break;
                         }
-                        UserSession = GateShare.g_SessionArray[nSocketIndex];
+                        var UserSession = GateShare.g_SessionArray[nSocketIndex];
                         int nSendRetCode = SendUserMsg(UserSession, UserSession.MsgList[0]);
-                        if ((nSendRetCode >= 0))
+                        if (nSendRetCode >= 0)
                         {
                             if (nSendRetCode == 1)
                             {
@@ -326,7 +324,7 @@ namespace SelGate
                             }
                             if (UserSession.MsgList.Count > 100)
                             {
-                                int nMsgCount = 0;
+                                var nMsgCount = 0;
                                 while (nMsgCount != 51)
                                 {
                                     UserSession.MsgList.RemoveAt(0);
@@ -344,7 +342,7 @@ namespace SelGate
                         }
                     }
                 }
-                if ((HUtil32.GetTickCount() - dwSendKeepAliveTick) > 2 * 1000)
+                if (HUtil32.GetTickCount() - dwSendKeepAliveTick > 2 * 1000)
                 {
                     dwSendKeepAliveTick = HUtil32.GetTickCount();
                     if (GateShare.boGateReady)
@@ -352,7 +350,7 @@ namespace SelGate
                         gateClient.ClientSocket.SendText("%--$");
                     }
                 }
-                if ((HUtil32.GetTickCount() - GateShare.dwKeepAliveTick) > 10 * 1000)
+                if (HUtil32.GetTickCount() - GateShare.dwKeepAliveTick > 10 * 1000)
                 {
                     GateShare.boKeepAliveTimcOut = true;
                     //ClientSocket.Close();
@@ -381,7 +379,7 @@ namespace SelGate
             {
                 if (!UserSession.bo0C)
                 {
-                    if (!UserSession.boSendAvailable && (HUtil32.GetTickCount() > UserSession.dwSendLockTimeOut))
+                    if (!UserSession.boSendAvailable && HUtil32.GetTickCount() > UserSession.dwSendLockTimeOut)
                     {
                         UserSession.boSendAvailable = true;
                         UserSession.nCheckSendLength = 0;
@@ -425,7 +423,7 @@ namespace SelGate
         {
             bool result = false;
             TSockaddr IPaddr;
-            long nIPaddr = HUtil32.IpToInt(sIPaddr);
+            var nIPaddr = HUtil32.IpToInt(sIPaddr);
             for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {
                 IPaddr = GateShare.TempBlockIPList[i];
@@ -449,6 +447,9 @@ namespace SelGate
 
         private bool IsConnLimited(string sIPaddr)
         {
+#if DEBUG
+            return false;
+#endif
             TSockaddr IPaddr;
             var result = false;
             var boDenyConnect = false;
@@ -531,7 +532,7 @@ namespace SelGate
             for (var nIndex = 0; nIndex < GateShare.GATEMAXSESSION; nIndex++)
             {
                 UserSession = GateShare.g_SessionArray[nIndex];
-                if ((UserSession.Socket != null) && (UserSession.SocketHandle == nSocketHandle))
+                if (UserSession.Socket != null && UserSession.SocketHandle == nSocketHandle)
                 {
                     UserSession.Socket.Close();
                     break;

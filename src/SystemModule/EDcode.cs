@@ -239,6 +239,15 @@ namespace SystemModule
         /// <summary>
         /// 加密消息
         /// </summary>
+        /// <returns></returns>
+        public static int EncodeMessage(byte[] msgBuf,ref byte[] encBuff)
+        {
+            return Misc.EncodeBuf(msgBuf, 12, encBuff);
+        }
+        
+        /// <summary>
+        /// 加密消息
+        /// </summary>
         /// <param name="smsg"></param>
         /// <returns></returns>
         public static unsafe string EncodeMessage(TDefaultMessage smsg)

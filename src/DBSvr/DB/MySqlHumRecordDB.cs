@@ -211,20 +211,17 @@ namespace DBSvr
 
         public int FindByAccount(string sAccount, ref IList<TQuickID> ChrList)
         {
-            int result;
             IList<TQuickID> ChrNameList = null;
-            TQuickID QuickID;
             m_QuickIDList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
                 for (var i = 0; i < ChrNameList.Count; i++)
                 {
-                    QuickID = ChrNameList[i];
-                    ChrList.Add(QuickID);
+                    var quickId = ChrNameList[i];
+                    ChrList.Add(quickId);
                 }
             }
-            result = ChrList.Count;
-            return result;
+            return ChrList.Count;
         }
 
         public int ChrCountOfAccount(string sAccount)

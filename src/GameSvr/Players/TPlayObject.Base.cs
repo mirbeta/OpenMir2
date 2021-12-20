@@ -1006,7 +1006,7 @@ namespace GameSvr
             catch (Exception e)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                M2Share.ErrorMessage(e.StackTrace);
             }
             // ReadAllBook();
         }

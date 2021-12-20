@@ -14,7 +14,7 @@ namespace GameSvr
         public TFrmSrvMsg()
         {
             m_SrvArray = new TServerMsgInfo[10];
-            _msgServer = new ISocketServer(10, 512);
+            _msgServer = new ISocketServer(ushort.MaxValue, 512);
             _msgServer.OnClientConnect += MsgServerClientConnect;
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;

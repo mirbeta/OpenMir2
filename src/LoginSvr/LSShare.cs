@@ -254,7 +254,6 @@ namespace LoginSvr
     {
         public Socket Socket;
         public string sIPaddr;
-        public string sReceiveMsg;
         public IList<TUserInfo> UserList;
         public long dwKeepAliveTick;
     }
@@ -280,7 +279,6 @@ namespace LoginSvr
         public bool boSelServer;
         public bool bo51;
         public Socket Socket;
-        public string sReceiveMsg;
         public long dwTime5C;
         public bool bo60;
         public bool bo61;

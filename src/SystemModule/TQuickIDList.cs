@@ -191,11 +191,17 @@ namespace SystemModule
             {
                 return result;
             }
+            if (m_List.ContainsKey(sAccount))
+            {
+                ChrNameList = m_List[sAccount];
+                result = ChrNameList.Count;
+                return result;
+            }
             if (m_List.Count == 1)
             {
                 if (string.Compare(sAccount, _quickList[0].sAccount, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    ChrNameList = m_List[_quickList[0].sAccount] as List<TQuickID>;
+                    ChrNameList = m_List[_quickList[0].sAccount];
                     result = 0;
                 }
             }
@@ -240,7 +246,7 @@ namespace SystemModule
                 }
                 if (n24 != -1)
                 {
-                    ChrNameList = m_List[_quickList[n24].sAccount] as List<TQuickID>;
+                    ChrNameList = m_List[_quickList[n24].sAccount];
                 }
                 result = n24;
             }

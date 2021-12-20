@@ -81,7 +81,7 @@ namespace LoginSvr
             int nIndex = 0;
             bool boDeleted;
             string sAccount;
-            const string sSQL = "SELECT FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
+            const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
             nRecordCount = -1;
             m_QuickList.Clear();
             try
@@ -96,15 +96,15 @@ namespace LoginSvr
                 using  var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
+                    nIndex = dr.GetInt32("Id");
                     boDeleted = dr.GetBoolean("FLD_DELETED");
                     sAccount = dr.GetString("FLD_LOGINID");
-                    nIndex++;
-                    if (!boDeleted && (sAccount != ""))
+                    if (!boDeleted && (!string.IsNullOrEmpty(sAccount)))
                     {
                         m_QuickList.Add(new AccountQuick(sAccount, nIndex));
                     }
                 }
-                nRecordCount = nIndex;
+                nRecordCount = m_QuickList.Count;
                 dr.Close();
                 dr.Dispose();
             }
@@ -146,23 +146,14 @@ namespace LoginSvr
 
         private bool GetRecord(int nIndex, ref TAccountDBRecord DBRecord)
         {
-            const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE FLD_LOGINID='{0}'";
+            const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE ID={0}";
             var result = true;
-            if (nIndex <= 0)
-            {
-                nIndex = 0;
-            }
-            else
-            {
-                nIndex = nIndex - 1;
-            }
-            string sAccount = m_QuickList[nIndex].sAccount;
             if (!Open())
             {
                 return false;
             }
             var command = new MySqlCommand();
-            command.CommandText = string.Format(sSQL, sAccount);
+            command.CommandText = string.Format(sSQL, nIndex);
             command.Connection = (MySqlConnection)_dbConnection;
             IDataReader dr;
             try
@@ -198,7 +189,18 @@ namespace LoginSvr
                     DBRecord.UserEntryAdd.sMemo = "";
                     DBRecord.UserEntryAdd.sMemo2 = "";
                 }
-                return result;
+                var quickAccount = m_QuickList.SingleOrDefault(x => x.nIndex == nIndex);
+                if (quickAccount != null)
+                {
+                    if (DBRecord.Header.sAccount == quickAccount.sAccount)
+                    {
+                        result = true;
+                    }
+                }
+                else
+                {
+                    result = false;
+                }
             }
             catch
             {
@@ -210,6 +212,7 @@ namespace LoginSvr
             {
                 Close();
             }
+            return result;
         }
 
         public int Index(string sName)
@@ -229,10 +232,10 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (m_QuickList.Count < nIndex)
-            {
-                return result;
-            }
+            // if (m_QuickList.Count < nIndex)
+            // {
+            //     return result;
+            // }
             if (GetRecord(nIndex, ref DBRecord))
             {
                 result = nIndex;
@@ -240,18 +243,18 @@ namespace LoginSvr
             return result;
         }
 
-        private bool UpdateRecord(int nIndex, TAccountDBRecord DBRecord, byte btFlag)
+        private int UpdateRecord(TAccountDBRecord DBRecord, byte btFlag)
         {
-            bool result = true;
+            var result = 0;
             string sdt = "now()";
-            const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (FLD_LOGINID, FLD_PASSWORD, FLD_USERNAME, FLD_CREATEDATE, FLD_LASTUPDATE, FLD_DELETED, FLD_ERRORCOUNT, FLD_ACTIONTICK, FLD_SSNO, FLD_BIRTHDAY, FLD_PHONE, FLD_MOBILEPHONE, FLD_EMAIL, FLD_QUIZ1, FLD_ANSWER1, FLD_QUIZ2, FLD_ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}')";
+            const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (FLD_LOGINID, FLD_PASSWORD, FLD_USERNAME, FLD_CREATEDATE, FLD_LASTUPDATE, FLD_DELETED, FLD_ERRORCOUNT, FLD_ACTIONTICK, FLD_SSNO, FLD_BIRTHDAY, FLD_PHONE, FLD_MOBILEPHONE, FLD_EMAIL, FLD_QUIZ1, FLD_ANSWER1, FLD_QUIZ2, FLD_ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
             const string sUpdateRecord2 = "UPDATE TBL_ACCOUNT SET FLD_DELETED=1, FLD_CREATEDATE='{0}' WHERE FLD_LOGINID='{1}'";
             const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET FLD_PASSWORD='{0}', FLD_USERNAME='{1}',FLD_LASTUPDATE={2}, FLD_ERRORCOUNT={3}, FLD_ACTIONTICK={4},FLD_SSNO='{5}', FLD_BIRTHDAY='{6}', FLD_PHONE='{7}',FLD_MOBILEPHONE='{8}', FLD_EMAIL='{9}', FLD_QUIZ1='{10}', FLD_ANSWER1='{11}', FLD_QUIZ2='{12}',FLD_ANSWER2='{13}' WHERE FLD_LOGINID='{14}'";
             try
             {
                 if (!Open())
                 {
-                    return false;
+                    return 0;
                 }
                 var command = new MySqlCommand();
                 command.Connection = (MySqlConnection)_dbConnection;
@@ -262,13 +265,13 @@ namespace LoginSvr
                         try
                         {
                             command.ExecuteNonQuery();
+                            result = (int)command.LastInsertedId;
                         }
                         catch (Exception E)
                         {
-                            result = false;
                             LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord");
                             LSShare.MainOutMessage(E.Message);
-                            return result;
+                            return 0;
                         }
                         break;
                     case 2:
@@ -279,7 +282,7 @@ namespace LoginSvr
                         }
                         catch
                         {
-                            result = false;
+                            result = 0;
                             LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord (3)");
                         }
                         break;
@@ -291,7 +294,7 @@ namespace LoginSvr
                         }
                         catch (Exception E)
                         {
-                            result = false;
+                            result = 0;
                             LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord (0)");
                             LSShare.MainOutMessage(E.Message);
                             return result;
@@ -317,7 +320,7 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (UpdateRecord(nIndex, DBRecord, 0))
+            if (UpdateRecord(DBRecord, 0) > 0)
             {
                 result = true;
             }
@@ -327,7 +330,6 @@ namespace LoginSvr
         public bool Add(ref TAccountDBRecord DBRecord)
         {
             bool result;
-            int nIndex;
             var sAccount = DBRecord.UserEntry.sAccount;
             if (Index(sAccount) > 0)
             {
@@ -335,9 +337,9 @@ namespace LoginSvr
             }
             else
             {
-                nIndex = nRecordCount;
+                var nIndex = UpdateRecord(DBRecord, 1);
                 nRecordCount++;
-                if (UpdateRecord(nIndex, DBRecord, 1))
+                if (nIndex > 0)
                 {
                     m_QuickList.Add(new AccountQuick(sAccount, nIndex));
                     result = true;
@@ -361,7 +363,8 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (UpdateRecord(nIndex, DBRecord, 2))
+            var up = UpdateRecord(DBRecord, 2);
+            if (up > 0)
             {
                 m_QuickList.RemoveAt(nIndex);
                 result = true;

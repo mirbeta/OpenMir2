@@ -100,7 +100,6 @@ namespace MakePlayer
 
         private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            Console.WriteLine("asdasdasdasd");
             m_sSockText = "";
             m_sBufferText = "";
             if (m_ConnectionStep == TConnectionStep.cnsConnect)
@@ -133,7 +132,7 @@ namespace MakePlayer
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
         {
             string sData = e.ReceiveText;
-            var nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+            var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
                 var sData2 = sData.Substring(0, nIdx - 1);
@@ -171,10 +170,10 @@ namespace MakePlayer
 
         private void SendNewAccount(string sAccount, string sPassword)
         {
-            TUserEntry ue = new TUserEntry();
-            TUserEntryAdd ua = new TUserEntryAdd();
             MainOutMessage(string.Format("[{0}] 创建帐号", new object?[] { m_sLoginAccount }));
             m_ConnectionStep = TConnectionStep.cnsNewAccount;
+            TUserEntry ue = new TUserEntry();
+            TUserEntryAdd ua = new TUserEntryAdd();
             ue.sAccount = sAccount;
             ue.sPassword = sPassword;
             ue.sUserName = sAccount;
@@ -271,7 +270,7 @@ namespace MakePlayer
 
         private void DoNotifyEvent()
         {
-            if ((FNotifyEvent != null))
+            if (FNotifyEvent != null)
             {
                 if (HUtil32.GetTickCount() > m_dwNotifyEventTick)
                 {
@@ -434,8 +433,7 @@ namespace MakePlayer
             // ClientSocket.Host = "";
             ClientSocket.Disconnect();
             ClientSocket = null;
-
-
+            
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected -= SocketConnect;
             ClientSocket.OnDisconnected -= SocketDisconnect;
@@ -649,7 +647,7 @@ namespace MakePlayer
             ClientSocket.Disconnect();
         }
 
-        public void Login()
+        private void Login()
         {
             if (m_ConnectionStep == TConnectionStep.cnsConnect && (FNotifyEvent == null) && !ClientSocket.IsConnected)
             {
@@ -689,7 +687,7 @@ namespace MakePlayer
                             {
                                 break;
                             }
-                            if (m_sBufferText.IndexOf("!") <= 0)
+                            if (m_sBufferText.IndexOf("!", StringComparison.Ordinal) <= 0)
                             {
                                 break;
                             }
@@ -722,7 +720,7 @@ namespace MakePlayer
             }
             string sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
             string sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
-            TCmdPack DefMsg = EDcode.DecodeMessage(sDefMsg);
+            var DefMsg = EDcode.DecodeMessage(sDefMsg);
             switch (DefMsg.Ident)
             {
                 case Grobal2.SM_NEWID_SUCCESS:

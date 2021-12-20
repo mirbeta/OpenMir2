@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -16,7 +17,10 @@ namespace LoginSvr
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
         private readonly ConfigManager _configManager;
-        const string sConfigFile = ".\\Logsrv.ini";
+        private const string sConfigFile = "Logsrv.ini";
+        private readonly ConcurrentQueue<ReceiveData> _ReceiveQueue = null;
+        private readonly ConcurrentQueue<ReceiveUserData> _ReceiveUserQueue = null;
+        private readonly object _obj = new object();
 
         public LoginService(AccountDB accountDB, MasSocService masSock)
         {
@@ -29,6 +33,8 @@ namespace LoginSvr
             _serverSocket.OnClientError += GSocketClientError;
             _serverSocket.Init();
             _configManager = new ConfigManager(sConfigFile);
+            _ReceiveQueue = new ConcurrentQueue<ReceiveData>();
+            _ReceiveUserQueue = new ConcurrentQueue<ReceiveUserData>();
         }
 
         public void Start()
@@ -36,14 +42,13 @@ namespace LoginSvr
             _serverSocket.Start(LSShare.g_Config.sGateAddr, LSShare.g_Config.nGatePort);
             LSShare.MainOutMessage($"4) 账号登陆服务[{LSShare.g_Config.sGateAddr}:{LSShare.g_Config.nGatePort}]已启动.");
         }
-        
+
         private void GSocketClientConnect(object sender, AsyncUserToken e)
         {
             var Config = LSShare.g_Config;
             var GateInfo = new TGateInfo();
             GateInfo.Socket = e.Socket;
             GateInfo.sIPaddr = LSShare.GetGatePublicAddr(Config, e.RemoteIPaddr);
-            GateInfo.sReceiveMsg = "";
             GateInfo.UserList = new List<TUserInfo>();
             GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
             Config.GateList.Add(GateInfo);
@@ -69,8 +74,7 @@ namespace LoginSvr
                         UserInfo = null;
                     }
                     GateInfo.UserList = null;
-                    GateInfo = null;
-                    Config.GateList.RemoveAt(i);
+                    Config.GateList.Remove(GateInfo);
                     break;
                 }
             }
@@ -79,24 +83,27 @@ namespace LoginSvr
 
         private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            
+
         }
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            TGateInfo GateInfo;
             TConfig Config = LSShare.g_Config;
             for (var i = 0; i < Config.GateList.Count; i++)
             {
-                GateInfo = Config.GateList[i];
+                var GateInfo = Config.GateList[i];
                 if (GateInfo.Socket == e.Socket)
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     var sReviceMsg = HUtil32.GetString(data, 0, data.Length);
-                    GateInfo.sReceiveMsg += sReviceMsg;
-                    LSShare.MainOutMessage("收到数据:" + GateInfo.sReceiveMsg);
+                    _ReceiveQueue.Enqueue(new ReceiveData()
+                    {
+                        Config = GateInfo,
+                        ReceiveMsg = sReviceMsg
+                    });
+                    LSShare.MainOutMessage("收到数据:" + sReviceMsg);
                     break;
                 }
             }
@@ -181,31 +188,41 @@ namespace LoginSvr
         {
             return Config.AccountCostList.ContainsKey(sAccount) || Config.IPaddrCostList.ContainsKey(sIPaddr);
         }
-        
+
         public void ProceDataTimer()
         {
-            if (LSShare.bo470D20 && !LSShare.g_boDataDBReady)
+            if (LSShare.bo470D20)
             {
                 return;
             }
             LSShare.bo470D20 = true;
             try
             {
-                TConfig Config = LSShare.g_Config;
-                ProcessGate(Config);
+                HUtil32.EnterCriticalSection(_obj);
+                if (_ReceiveQueue.IsEmpty)
+                {
+                    return;
+                }
+                if (_ReceiveQueue.TryDequeue(out var receiveData))
+                {
+                    ProcessGate(LSShare.g_Config, receiveData);
+                }
+                if (_ReceiveUserQueue.TryDequeue(out var userData))
+                {
+                    DecodeUserData(LSShare.g_Config, userData.UserInfo, userData.Msg);
+                }
             }
             finally
             {
                 LSShare.bo470D20 = false;
+                HUtil32.LeaveCriticalSection(_obj);
             }
         }
 
-        private void ProcessGate(TConfig Config)
+        private void ProcessGate(TConfig Config, ReceiveData receiveData)
         {
             int I;
-            int II;
             TGateInfo GateInfo;
-            TUserInfo UserInfo;
             HUtil32.EnterCriticalSection(Config.GateCriticalSection);
             try
             {
@@ -218,28 +235,10 @@ namespace LoginSvr
                         break;
                     }
                     GateInfo = Config.GateList[I];
-                    if (!string.IsNullOrEmpty(GateInfo.sReceiveMsg) && GateInfo.UserList != null)
+                    if (!string.IsNullOrEmpty(receiveData.ReceiveMsg) && GateInfo.UserList != null)
                     {
-                        DecodeGateData(Config, GateInfo);
+                        DecodeGateData(Config, GateInfo, receiveData.ReceiveMsg);
                         Config.sGateIPaddr = GateInfo.sIPaddr;
-                        II = 0;
-                        while (true)
-                        {
-                            if (GateInfo.UserList == null)
-                            {
-                                break;
-                            }
-                            if (GateInfo.UserList.Count <= II)
-                            {
-                                break;
-                            }
-                            UserInfo = GateInfo.UserList[II];
-                            if (!string.IsNullOrEmpty(UserInfo.sReceiveMsg))
-                            {
-                                DecodeUserData(Config, UserInfo);
-                            }
-                            II++;
-                        }
                     }
                     I++;
                 }
@@ -258,55 +257,54 @@ namespace LoginSvr
             }
         }
 
-        private void DecodeGateData(TConfig Config, TGateInfo GateInfo)
+        private void DecodeGateData(TConfig Config, TGateInfo GateInfo, string receiveMsg)
         {
-            int nCount;
             string sMsg = string.Empty;
             string sSockIndex = string.Empty;
             string sData;
-            char Code;
             try
             {
-                nCount = 0;
-                while (true)
+                var nCount = 0;
+                if (HUtil32.TagCount(receiveMsg, '$') <= 0)
                 {
-                    if (HUtil32.TagCount(GateInfo.sReceiveMsg, '$') <= 0)
+                    return;
+                }
+                var tempReceiveMsg = HUtil32.ArrestStringEx(receiveMsg, "%", "$", ref sMsg);
+                if (!string.IsNullOrEmpty(tempReceiveMsg))
+                {
+                    Console.WriteLine("TempReceiveMsg不为空." + tempReceiveMsg);
+                }
+                if (!string.IsNullOrEmpty(sMsg))
+                {
+                    var Code = sMsg[0];
+                    sMsg = sMsg.Substring(1, sMsg.Length - 1);
+                    switch (Code)
                     {
-                        break;
+                        case '-':
+                            SendKeepAlivePacket(GateInfo.Socket);
+                            GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
+                            break;
+                        case 'A':
+                            sData = HUtil32.GetValidStr3(sMsg, ref sSockIndex, new string[] { "/" });
+                            ReceiveSendUser(sSockIndex, GateInfo, sData);
+                            break;
+                        case 'O':
+                            sData = HUtil32.GetValidStr3(sMsg, ref sSockIndex, new string[] { "/" });
+                            ReceiveOpenUser(Config, sSockIndex, sData, GateInfo);
+                            break;
+                        case 'X':
+                            sSockIndex = sMsg;
+                            ReceiveCloseUser(Config, sSockIndex, GateInfo);
+                            break;
                     }
-                    GateInfo.sReceiveMsg = HUtil32.ArrestStringEx(GateInfo.sReceiveMsg, "%", "$", ref sMsg);
-                    if (sMsg != "")
-                    {
-                        Code = sMsg[0];
-                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                        switch (Code)
-                        {
-                            case '-':
-                                SendKeepAlivePacket(GateInfo.Socket);
-                                GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
-                                break;
-                            case 'A':
-                                sData = HUtil32.GetValidStr3(sMsg, ref sSockIndex, new string[] { "/" });
-                                ReceiveSendUser(Config, sSockIndex, GateInfo, sData);
-                                break;
-                            case 'O':
-                                sData = HUtil32.GetValidStr3(sMsg, ref sSockIndex, new string[] { "/" });
-                                ReceiveOpenUser(Config, sSockIndex, sData, GateInfo);
-                                break;
-                            case 'X':
-                                sSockIndex = sMsg;
-                                ReceiveCloseUser(Config, sSockIndex, GateInfo);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        if (nCount >= 1)
-                        {
-                            GateInfo.sReceiveMsg = "";
-                        }
-                        nCount++;
-                    }
+                }
+                else
+                {
+                    // if (nCount >= 1)
+                    // {
+                    //     GateInfo.sReceiveMsg = string.Empty;
+                    // }
+                    nCount++;
                 }
             }
             catch
@@ -364,7 +362,6 @@ namespace LoginSvr
                         UserInfo.sGateIPaddr = sGateIPaddr;
                         UserInfo.sAccount = "";
                         UserInfo.nSessionID = 0;
-                        UserInfo.sReceiveMsg = "";
                         UserInfo.dwTime5C = HUtil32.GetTickCount();
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
                         return;
@@ -380,7 +377,6 @@ namespace LoginSvr
                 UserInfo.nSessionID = 0;
                 UserInfo.bo51 = false;
                 UserInfo.Socket = GateInfo.Socket;
-                UserInfo.sReceiveMsg = "";
                 UserInfo.dwTime5C = HUtil32.GetTickCount();
                 UserInfo.dwClientTick = HUtil32.GetTickCount();
                 UserInfo.bo60 = false;
@@ -397,27 +393,24 @@ namespace LoginSvr
             }
         }
 
-        private void ReceiveSendUser(TConfig Config, string sSockIndex, TGateInfo GateInfo, string sData)
+        private void ReceiveSendUser(string sSockIndex, TGateInfo GateInfo, string sData)
         {
-            TUserInfo UserInfo;
-            try
+            for (var i = 0; i < GateInfo.UserList.Count; i++)
             {
-                for (var i = 0; i < GateInfo.UserList.Count; i++)
+                var UserInfo = GateInfo.UserList[i];
+                if (UserInfo.sSockIndex == sSockIndex)
                 {
-                    UserInfo = GateInfo.UserList[i];
-                    if (UserInfo.sSockIndex == sSockIndex)
+                    // if (UserInfo.sReceiveMsg.Length < 4069)
+                    // {
+                    //     UserInfo.sReceiveMsg = UserInfo.sReceiveMsg + sData;
+                    // }
+                    _ReceiveUserQueue.Enqueue(new ReceiveUserData()
                     {
-                        if (UserInfo.sReceiveMsg.Length < 4069)
-                        {
-                            UserInfo.sReceiveMsg = UserInfo.sReceiveMsg + sData;
-                        }
-                        break;
-                    }
+                        UserInfo = UserInfo,
+                        Msg = sData
+                    });
+                    break;
                 }
-            }
-            catch
-            {
-                LSShare.MainOutMessage("TFrmMain.ReceiveSendUser");
             }
         }
 
@@ -435,7 +428,7 @@ namespace LoginSvr
             }
         }
 
-        private void DecodeUserData(TConfig Config, TUserInfo UserInfo)
+        private void DecodeUserData(TConfig Config, TUserInfo UserInfo,string userData)
         {
             string sMsg = string.Empty;
             var nCount = 0;
@@ -443,12 +436,12 @@ namespace LoginSvr
             {
                 while (true)
                 {
-                    if (HUtil32.TagCount(UserInfo.sReceiveMsg, '!') <= 0)
+                    if (HUtil32.TagCount(userData, '!') <= 0)
                     {
                         break;
                     }
-                    UserInfo.sReceiveMsg = HUtil32.ArrestStringEx(UserInfo.sReceiveMsg, "#", "!", ref sMsg);
-                    if (sMsg != "")
+                    userData = HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+                    if (!string.IsNullOrEmpty(sMsg))
                     {
                         if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
                         {
@@ -460,11 +453,11 @@ namespace LoginSvr
                     {
                         if (nCount >= 1)
                         {
-                            UserInfo.sReceiveMsg = "";
+                            userData = string.Empty;
                         }
                         nCount++;
                     }
-                    if (UserInfo.sReceiveMsg == "")
+                    if (string.IsNullOrEmpty(userData))
                     {
                         break;
                     }
@@ -1003,7 +996,7 @@ namespace LoginSvr
             int nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
             var sServerName = EDcode.DeCodeString(sData);
-            if(!string.IsNullOrEmpty(UserInfo.sAccount) && !string.IsNullOrEmpty(sServerName)&& IsLogin(Config, UserInfo.nSessionID))
+            if (!string.IsNullOrEmpty(UserInfo.sAccount) && !string.IsNullOrEmpty(sServerName) && IsLogin(Config, UserInfo.nSessionID))
             {
                 GetSelGateInfo(Config, sServerName, Config.sGateIPaddr, ref sSelGateIP, ref nSelGatePort);
                 if ((sSelGateIP != "") && (nSelGatePort > 0))
@@ -1219,8 +1212,11 @@ namespace LoginSvr
 
         private void SendGateMsg(Socket Socket, string sSockIndex, string sMsg)
         {
-            var sSendMsg = "%" + sSockIndex + "/#" + sMsg + "!$";
-            Socket.SendText(sSendMsg);
+            if (Socket.Connected)
+            {
+                var sSendMsg = "%" + sSockIndex + "/#" + sMsg + "!$";
+                Socket.SendText(sSendMsg);
+            }
         }
 
         private bool IsLogin(TConfig Config, int nSessionID)
@@ -1472,7 +1468,6 @@ namespace LoginSvr
         {
             Config.GateCriticalSection = null;
         }
-
 
     }
 }

@@ -554,6 +554,10 @@ namespace DBSvr
                     }
                     else
                     {
+                        if (i > HumanRCD.Data.BagItems.Length - 1)
+                        {
+                            break;
+                        }
                         HumanRCD.Data.BagItems[i] = new TUserItem();
                         HumanRCD.Data.BagItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
                         HumanRCD.Data.BagItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
@@ -572,7 +576,7 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetItemRecord");
+                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetItemRecord:" + ex.StackTrace);
                 return false;
             }
             finally

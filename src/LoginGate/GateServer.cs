@@ -450,6 +450,9 @@ namespace LoginGate
 
         private bool IsConnLimited(string sIPaddr)
         {
+#if DEBUG
+            return false;
+#endif
             bool result = false;
             TSockaddr IPaddr;
             bool boDenyConnect = false;

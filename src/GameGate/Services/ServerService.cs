@@ -25,7 +25,7 @@ namespace GameGate
 
         public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
         {
-            _serverSocket = new ISocketServer(2000, 1024);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -142,26 +142,26 @@ namespace GameGate
         /// <param name="sender"></param>
         /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
-        {
+        {            
             var connectionId = token.ConnectionId;
+            var userClient = _clientManager.GetClientThread(connectionId);
+            var sRemoteAddress = token.RemoteIPaddr;
+            if (userClient == null)
+            {
+                GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
+                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                return;
+            }
+            if (!userClient.boGateReady)
+            {
+                GateShare.AddMainLogMsg("未就绪: " + sRemoteAddress, 5);
+                Debug.WriteLine($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                return;
+            }
             var clientSession = _sessionManager.GetSession(connectionId);
             if (clientSession != null)
             {
-                var userClient = _clientManager.GetClientThread(connectionId);
-                var sRemoteAddress = token.RemoteIPaddr;
-                if (userClient == null)
-                {
-                    GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
-                    Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
-                    return;
-                }
-                if (!userClient.boGateReady)
-                {
-                    GateShare.AddMainLogMsg("未就绪: " + sRemoteAddress, 5);
-                    Debug.WriteLine($"服务端未就绪 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
-                    return;
-                }
-                if (!userClient.SessionArray[userClient.ClientId].Socket.Connected)
+                if (!clientSession.Session.Socket.Connected)
                 {
                     return;
                 }
@@ -170,7 +170,7 @@ namespace GameGate
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
                 var nSocketIndex = token.ConnectionId;
-                if (nSocketIndex >= 0 && nSocketIndex < userClient.MaxSession)
+                if (nSocketIndex >= 0)
                 {
                     GateShare.NReviceMsgSize += data.Length;
                     var userData = new TSendUserData();
