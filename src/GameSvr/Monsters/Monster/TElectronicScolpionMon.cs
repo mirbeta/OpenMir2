@@ -5,7 +5,7 @@ namespace GameSvr
 {
     public class TElectronicScolpionMon : TMonster
     {
-        private bool m_boUseMagic = false;
+        public bool m_boUseMagic = false;
 
         public TElectronicScolpionMon() : base()
         {

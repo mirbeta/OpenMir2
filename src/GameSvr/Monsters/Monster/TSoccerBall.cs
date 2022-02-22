@@ -6,7 +6,7 @@ namespace GameSvr
     {
         public int n548 = 0;
         public int n54C = 0;
-        private int n550 = 0;
+        public int n550 = 0;
 
         public TSoccerBall() : base()
         {

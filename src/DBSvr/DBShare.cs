@@ -10,13 +10,12 @@ namespace DBSvr
 {
     public class DBShare
     {
-        public static string sLogPath = ".\\Log\\";
         public static int nServerPort = 6000;
         public static string sServerAddr = "*";
         public static int g_nGatePort = 5100;
         public static string g_sGateAddr = "*";
         public static int nIDServerPort = 5600;
-        public static string sIDServerAddr = "10.10.0.168";
+        public static string sIDServerAddr = "127.0.0.1";
         public static bool g_boEnglishNames = false;
         public static int g_nQueryChrCount = 0;
         public static int nHackerNewChrCount = 0;

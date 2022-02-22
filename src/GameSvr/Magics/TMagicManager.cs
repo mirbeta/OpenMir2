@@ -728,6 +728,24 @@ namespace GameSvr
                                             {
                                                 TargeTBaseObject.m_WAbil.HP = (ushort)(TargeTBaseObject.m_WAbil.HP / 10);
                                             }
+
+                                            if (TargeTBaseObject.m_boCanReAlive && TargeTBaseObject.m_Master == null)
+                                            {
+                                                TargeTBaseObject.m_boCanReAlive = false;
+                                                if (TargeTBaseObject.m_pMonGen != null)
+                                                {
+                                                    if (TargeTBaseObject.m_pMonGen.nActiveCount > 0)
+                                                    {
+                                                        TargeTBaseObject.m_pMonGen.nActiveCount--;
+                                                    }
+                                                    else
+                                                    {
+                                                        TargeTBaseObject.m_pMonGen = null;
+                                                    }
+                                                }
+                                            }
+
+
                                             TargeTBaseObject.m_Master = BaseObject;
                                             TargeTBaseObject.m_dwMasterRoyaltyTick = (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level * 2) + (nMagicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();
                                             TargeTBaseObject.m_btSlaveMakeLevel = (byte)nMagicLevel;

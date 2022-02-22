@@ -5,7 +5,6 @@ namespace GameSvr
 {
     public class TDualAxeMonster : TMonster
     {
-        private bool bo558 = false;
         private int m_nAttackCount = 0;
         protected int m_nAttackMax = 0;
 
@@ -74,7 +73,6 @@ namespace GameSvr
 
         public TDualAxeMonster() : base()
         {
-            bo558 = false;
             m_nViewRange = 5;
             m_nRunTime = 250;
             m_dwSearchTime = 3000;
@@ -86,12 +84,10 @@ namespace GameSvr
         public override void Run()
         {
             int nAbs;
-            int nRage;
+            int nRage = 9999;
             TBaseObject BaseObject;
-            TBaseObject TargetBaseObject;
-            nRage = 9999;
-            TargetBaseObject = null;
-            if (!m_boDeath && !bo558 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
+            TBaseObject TargetBaseObject = null;
+            if (!m_boDeath && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - m_dwSearchEnemyTick) >= 5000)
                 {

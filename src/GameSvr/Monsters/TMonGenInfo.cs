@@ -10,6 +10,7 @@ namespace GameSvr
         public string sMonName;
         public int nRange;
         public int nCount;
+        public int nActiveCount;
         public int dwZenTime;
         public int nMissionGenRate;
         public IList<TBaseObject> CertList;

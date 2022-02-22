@@ -1076,6 +1076,10 @@ namespace DBSvr
 
                 for (var i = 0; i <= hd.StorageItems.GetUpperBound(0); i++)
                 {
+                    if (hd.StorageItems[i] == null)
+                    {
+                        continue;
+                    }
                     if ((hd.StorageItems[i].wIndex > 0) && (hd.StorageItems[i].MakeIndex > 0))
                     {
                         command.CommandText = strSql.ToString();

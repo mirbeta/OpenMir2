@@ -415,7 +415,7 @@ namespace GameSvr
         /// <summary>
         /// 个人定时器 时间间隔
         /// </summary>
-    public int[] AutoTimerStatus;
+        public int[] AutoTimerStatus;
         /// <summary>
         /// 包裹刷新时间
         /// </summary>
@@ -1091,7 +1091,7 @@ namespace GameSvr
             var nDura = HUtil32._MIN(5000, UserItem.DuraMax - UserItem.Dura);
             if (nDura <= 0) return false;
             UserItem.Dura += (ushort)nDura;
-            SendMsg(this, Grobal2.RM_DURACHANGE, 1, UserItem.Dura, UserItem.DuraMax, 0, "");// '武器修复成功...'
+            SendMsg(this, Grobal2.RM_DURACHANGE, 1, UserItem.Dura, UserItem.DuraMax, 0, "");
             SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
             return true;
         }
@@ -1107,8 +1107,7 @@ namespace GameSvr
                 return false;
             }
             m_UseItems[Grobal2.U_WEAPON].Dura = m_UseItems[Grobal2.U_WEAPON].DuraMax;
-            SendMsg(this, Grobal2.RM_DURACHANGE, 1, m_UseItems[Grobal2.U_WEAPON].Dura,
-                m_UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+            SendMsg(this, Grobal2.RM_DURACHANGE, 1, m_UseItems[Grobal2.U_WEAPON].Dura, m_UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
             return true;
         }
@@ -1274,11 +1273,11 @@ namespace GameSvr
             var nEndY = m_nCurrY + m_nViewRange;
             try
             {
-                for (var n18 = nStartX; n18 <= nEndX; n18++)
+                for (var n20 = nStartX; n20 <= nEndX; n20++)
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && MapCellInfo.ObjList != null)
+                        if (m_PEnvir.GetMapCellInfo(n20, n1C, ref MapCellInfo) && MapCellInfo.ObjList != null)
                         {
                             var nIdx = 0;
                             while (true)
@@ -1303,8 +1302,8 @@ namespace GameSvr
                                             MapCellInfo.ObjList = null;
                                             break;
                                         }
-                                        BaseObject = OSObject.CellObj as TBaseObject;
-                                        if (BaseObject != null)
+                                        BaseObject = (TBaseObject)OSObject.CellObj;
+                                        if (BaseObject != null && !BaseObject.m_boInvisible)
                                         {
                                             if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                             {
@@ -1321,7 +1320,7 @@ namespace GameSvr
                                         {
                                             if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                Dispose((TMapItem)OSObject.CellObj);
+                                                Dispose(OSObject.CellObj);
                                                 Dispose(OSObject);
                                                 MapCellInfo.ObjList.RemoveAt(nIdx);
                                                 if (MapCellInfo.ObjList.Count > 0)
@@ -1332,7 +1331,7 @@ namespace GameSvr
                                                 break;
                                             }
                                             var MapItem = (TMapItem)OSObject.CellObj;
-                                            UpdateVisibleItem(n18, n1C, MapItem);
+                                            UpdateVisibleItem(n20, n1C, MapItem);
                                             if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
                                                 if ((HUtil32.GetTickCount() - MapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
@@ -1364,7 +1363,7 @@ namespace GameSvr
                                             MapEvent = (TEvent)OSObject.CellObj;
                                             if (MapEvent.m_boVisible)
                                             {
-                                                UpdateVisibleEvent(n18, n1C, MapEvent);
+                                                UpdateVisibleEvent(n20, n1C, MapEvent);
                                             }
                                         }
                                     }
@@ -1374,15 +1373,6 @@ namespace GameSvr
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                M2Share.ErrorMessage(e.StackTrace);
-                KickException();
-            }
-
-            try
-            {
                 var n18 = 0;
                 while (true)
                 {
@@ -1429,14 +1419,7 @@ namespace GameSvr
                     }
                     n18++;
                 }
-            }
-            catch (Exception ex)
-            {
-                M2Share.ErrorMessage(ex.StackTrace);
-                KickException();
-            }
-            try
-            {
+
                 var I = 0;
                 while (true)
                 {
@@ -1479,9 +1462,9 @@ namespace GameSvr
                     I++;
                 }
             }
-            catch
+            catch (Exception e)
             {
-                M2Share.MainOutMessage(m_sCharName + ',' + m_sMapName + ',' + m_nCurrX + ',' + m_nCurrY + ',' + " SearchViewRange 3");
+                M2Share.ErrorMessage(e.StackTrace);
                 KickException();
             }
         }

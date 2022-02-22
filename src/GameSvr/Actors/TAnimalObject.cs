@@ -119,18 +119,19 @@ namespace GameSvr
         {
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
             {
-                if (ProcessMsg.BaseObject == this.ObjectId && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != null)
+                var struckObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                if (ProcessMsg.BaseObject == this.ObjectId && struckObject != null)
                 {
-                    this.SetLastHiter(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
-                    Struck(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
+                    this.SetLastHiter(struckObject);
+                    Struck(struckObject);
                     this.BreakHolySeizeMode();
-                    if (this.m_Master != null && M2Share.ObjectSystem.Get(ProcessMsg.nParam3) != this.m_Master && M2Share.ObjectSystem.Get(ProcessMsg.nParam3).m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    if (this.m_Master != null && struckObject != this.m_Master && struckObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                     {
-                        this.m_Master.SetPKFlag(M2Share.ObjectSystem.Get(ProcessMsg.nParam3));
+                        this.m_Master.SetPKFlag(struckObject);
                     }
                     if (M2Share.g_Config.boMonSayMsg)
                     {
-                        this.MonsterSayMsg(M2Share.ObjectSystem.Get(ProcessMsg.nParam3), TMonStatus.s_UnderFire);
+                        this.MonsterSayMsg(struckObject, TMonStatus.s_UnderFire);
                     }
                 }
                 return true;

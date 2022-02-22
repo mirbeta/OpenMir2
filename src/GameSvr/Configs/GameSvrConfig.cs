@@ -265,7 +265,7 @@ namespace GameSvr
         /// <summary>
         /// NPC点击间隔
         /// </summary>
-        public int dwclickNpcTime;
+        public int dwClickNpcTime;
         /// <summary>
         /// 踢出未登陆人物
         /// </summary>
@@ -1177,7 +1177,7 @@ namespace GameSvr
             nItemsACPowerRate = 10;
             boSendOnlineCount = true;
             nSendOnlineCountRate = 10;
-            dwclickNpcTime = 1000;  //NPC点击间隔
+            dwClickNpcTime = 1000;  //NPC点击间隔
             dwQueryBagItemsTick = 2 * 60 * 1000;  //包裹刷新间隔
             dwSendOnlineTime = 5 * 60 * 1000;
             dwSaveHumanRcdTime = 10 * 60 * 1000;
@@ -1536,7 +1536,6 @@ namespace GameSvr
             nAddExp = 1000000;
             nLimitExpLevel = 1000;
             nLimitExpValue = 1;
-
             boAddUserItemNewValue = true;
             sLineNoticePreFix = "〖公告〗";
             sSysMsgPreFix = "〖系统〗";

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SystemModule;
 
 namespace GameSvr
@@ -21,11 +20,10 @@ namespace GameSvr
         private void CallSlave()
         {
             string[] sMonName = { "BoneCaptain", "BoneArcher", "BoneSpearman" };
-            int nC;
             short n10 = 0;
             short n14 = 0;
             TBaseObject BaseObject;
-            nC = M2Share.RandomNumber.Random(6) + 6;
+            int nC = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref n10, ref n14);
             for (var i = 0; i <= nC; i++)
             {

@@ -7,7 +7,7 @@ namespace GameSvr
     /// </summary>
     public class TElfWarriorMonster : TSpitSpider
     {
-        private bool boIsFirst = false;
+        public bool boIsFirst = false;
         private int dwDigDownTick = 0;
 
         public void AppearNow()

@@ -7,7 +7,7 @@ namespace LoginSvr
     /// <summary>
     /// 远程监控服务(无用)
     /// </summary>
-    public class MonSocService
+    public class MonSocService : IService
     {
         private readonly ISocketServer socketServer;
         private Timer monThreandTime;

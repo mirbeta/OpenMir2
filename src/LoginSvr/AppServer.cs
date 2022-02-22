@@ -43,7 +43,6 @@ namespace LoginSvr
             const string sFormatMsg = "{0}/{1}";
             TConfig Config = LSShare.g_Config;
             string sLogMsg = string.Format(sFormatMsg, LSShare.nOnlineCountMin, LSShare.nOnlineCountMax);
-            _loginService.SaveContLogMsg(Config, sLogMsg);
             LSShare.nOnlineCountMax = 0;
         }
 

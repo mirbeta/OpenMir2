@@ -5,7 +5,7 @@ namespace GameSvr
 {
     public class TMagicMonObject : TMonster
     {
-        private bool m_boUseMagic = false;
+        public bool m_boUseMagic = false;
 
         public TMagicMonObject() : base()
         {

@@ -29,7 +29,7 @@ namespace MakePlayer
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 10000;
+        private static int g_nTotalChrCount = 1;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -51,15 +51,15 @@ namespace MakePlayer
             _clientManager = new ClientManager();
 
             g_sServerName = "热血传奇";
-            g_sGameIPaddr = "10.10.0.168";
-            g_nGamePort = 7001;
-            g_boNewAccount = true;
+            g_sGameIPaddr = "127.0.0.1";
+            g_nGamePort = 7000;
+            g_boNewAccount = false;
 
             g_nChrCount = HUtil32._MIN(g_nChrCount, g_nTotalChrCount);
             g_dwLogonTick = HUtil32.GetTickCount() - 1000 * g_nChrCount;
             g_sAccount = "mplay";
 
-            _playTimer = new Thread(Start);
+            _playTimer = new Thread(start: Start);
             _playTimer.Start();
 
             while (true)
@@ -74,7 +74,7 @@ namespace MakePlayer
             }
         }
 
-        static void Start(object obj)
+        static void Start(object? obj)
         {
             while (true)
             {
@@ -108,7 +108,7 @@ namespace MakePlayer
                     }
                 }
                 _clientManager.Run();
-                Thread.Sleep(1000);
+                Thread.Sleep(1);
             }
         }
     }

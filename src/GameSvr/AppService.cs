@@ -27,9 +27,9 @@ namespace GameSvr
             CheckIntervalTime = HUtil32.GetTickCount();
             SaveIntervalTime = HUtil32.GetTickCount();
             ClearIntervalTime = HUtil32.GetTickCount();
-            _connectTimer = new Timer(CheckConnectTimer, null, 1000, 3000);
             if (M2Share.boStartReady)
             {
+                _connectTimer = new Timer(ServiceTimer, null, 1000, 3000);
                 await M2Share.RunSocket.StartConsumer(stoppingToken);
             }
         }
@@ -100,7 +100,7 @@ namespace GameSvr
             return base.StopAsync(cancellationToken);
         }
 
-        private void CheckConnectTimer(object obj)
+        private void ServiceTimer(object obj)
         {
             if ((HUtil32.GetTickCount() - CheckIntervalTime) > 3000) //3s一次检查链接
             {

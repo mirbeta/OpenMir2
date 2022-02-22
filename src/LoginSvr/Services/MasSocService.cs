@@ -8,7 +8,7 @@ using SystemModule.Sockets;
 
 namespace LoginSvr
 {
-    public class MasSocService
+    public class MasSocService: IService
     {
         public readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
@@ -109,7 +109,7 @@ namespace LoginSvr
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     sReviceMsg = MsgServer.sReceiveMsg + HUtil32.GetString(data, 0, data.Length);
-                    while ((sReviceMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0))
+                    while (sReviceMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
                     {
                         sReviceMsg = HUtil32.ArrestStringEx(sReviceMsg, "(", ")", ref sMsg);
                         if (sMsg == "")
@@ -173,28 +173,21 @@ namespace LoginSvr
         {
             int nCount = 0;
             TMsgServerInfo MsgServer;
-            try
+            for (var i = 0; i < m_ServerList.Count; i++)
             {
-                for (var i = 0; i < m_ServerList.Count; i++)
+                MsgServer = m_ServerList[i];
+                if ((MsgServer.nServerIndex != 99) && (MsgServer.sServerName == sServerName))
                 {
-                    MsgServer = m_ServerList[i];
-                    if ((MsgServer.nServerIndex != 99) && (MsgServer.sServerName == sServerName))
-                    {
-                        nCount += MsgServer.nOnlineCount;
-                    }
-                }
-                for (var i = MasSock.UserLimit.GetLowerBound(0); i <= MasSock.UserLimit.GetUpperBound(0); i++)
-                {
-                    if (MasSock.UserLimit[i].sServerName == sServerName)
-                    {
-                        MasSock.UserLimit[i].nLimitCountMin = nCount;
-                        break;
-                    }
+                    nCount += MsgServer.nOnlineCount;
                 }
             }
-            catch
+            for (var i = MasSock.UserLimit.GetLowerBound(0); i <= MasSock.UserLimit.GetUpperBound(0); i++)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.RefServerLimit");
+                if (MasSock.UserLimit[i].sServerName == sServerName)
+                {
+                    MasSock.UserLimit[i].nLimitCountMin = nCount;
+                    break;
+                }
             }
         }
 
@@ -406,20 +399,13 @@ namespace LoginSvr
         private string LimitName(string sServerName)
         {
             string result = string.Empty;
-            try
+            for (var i = MasSock.UserLimit.GetLowerBound(0); i <= MasSock.UserLimit.GetUpperBound(0); i++)
             {
-                for (var i = MasSock.UserLimit.GetLowerBound(0); i <= MasSock.UserLimit.GetUpperBound(0); i++)
+                if (string.Compare(MasSock.UserLimit[i].sServerName, sServerName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (string.Compare(MasSock.UserLimit[i].sServerName, sServerName, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        result = MasSock.UserLimit[i].sName;
-                        break;
-                    }
+                    result = MasSock.UserLimit[i].sName;
+                    break;
                 }
-            }
-            catch
-            {
-                LSShare.MainOutMessage("TFrmMasSoc.LimitName");
             }
             return result;
         }
@@ -457,7 +443,7 @@ namespace LoginSvr
             }
             else
             {
-                LSShare.MainOutMessage("[Critical Failure] file not found. .\\!UserLimit.txt");
+                LSShare.MainOutMessage("[Critical Failure] file not found. !UserLimit.txt");
             }
         }
 

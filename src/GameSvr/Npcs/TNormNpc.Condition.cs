@@ -11,43 +11,35 @@ namespace GameSvr
         private bool ConditionOfCheckAccountIPList(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
-            StringList LoadList;
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            try
+            var sCharName = PlayObject.m_sCharName;
+            var sCharAccount = PlayObject.m_sUserID;
+            var sCharIPaddr = PlayObject.m_sIPaddr;
+            var LoadList = new StringList();
+            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
-                var sCharName = PlayObject.m_sCharName;
-                var sCharAccount = PlayObject.m_sUserID;
-                var sCharIPaddr = PlayObject.m_sIPaddr;
-                LoadList = new StringList();
-                if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    sLine = LoadList[i];
+                    if (sLine[0] == ';')
                     {
-                        sLine = LoadList[i];
-                        if (sLine[1] == ';')
-                        {
-                            continue;
-                        }
-                        sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
-                        sIPaddr = sIPaddr.Trim();
-                        if ((sName == sCharAccount) && (sIPaddr == sCharIPaddr))
-                        {
-                            result = true;
-                            break;
-                        }
+                        continue;
+                    }
+                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
+                    sIPaddr = sIPaddr.Trim();
+                    if ((sName == sCharAccount) && (sIPaddr == sCharIPaddr))
+                    {
+                        result = true;
+                        break;
                     }
                 }
-                else
-                {
-                    ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKACCOUNTIPLIST);
-                }
             }
-            finally
+            else
             {
-                //LoadList.Free;
+                ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKACCOUNTIPLIST);
             }
             return result;
         }
@@ -328,7 +320,6 @@ namespace GameSvr
                     }
                     break;
             }
-            result = false;
             return result;
         }
 
@@ -386,7 +377,6 @@ namespace GameSvr
                     }
                     break;
                 case '>':
-
                     if (HUtil32.LoWord(PlayObject.m_WAbil.MC) > nMin)
                     {
                         result = ConditionOfCheckMC_CheckHigh(PlayObject, cMethodMax, nMax);
@@ -456,28 +446,24 @@ namespace GameSvr
             switch (cMethodMin)
             {
                 case '=':
-
                     if (HUtil32.LoWord(PlayObject.m_WAbil.SC) == nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '>':
-
                     if (HUtil32.LoWord(PlayObject.m_WAbil.SC) > nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 case '<':
-
                     if (HUtil32.LoWord(PlayObject.m_WAbil.SC) < nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
                     }
                     break;
                 default:
-
                     if (HUtil32.LoWord(PlayObject.m_WAbil.SC) >= nMin)
                     {
                         result = ConditionOfCheckSC_CheckHigh(PlayObject, cMethodMax, nMax);
@@ -926,7 +912,7 @@ namespace GameSvr
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKINMAPRANGE);
                 return result;
             }
-            if (String.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 return result;
             }
@@ -939,18 +925,16 @@ namespace GameSvr
 
         private bool ConditionOfCheckIsAttackGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             if (this.m_Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_ISATTACKGUILD);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
-            result = this.m_Castle.IsAttackGuild(PlayObject.m_MyGuild);
-            return result;
+            return this.m_Castle.IsAttackGuild(PlayObject.m_MyGuild);
         }
 
         private bool ConditionOfCheckCastleChageDay(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1001,7 +985,7 @@ namespace GameSvr
             if ((nDay < 0) || (this.m_Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CASTLEWARDAY);
-                return result;
+                return false;
             }
             var nWarDay = HUtil32.GetDayCount(DateTime.Now, this.m_Castle.m_WarDate);
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -1040,15 +1024,15 @@ namespace GameSvr
             var result = false;
             var nDay = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             var nDoorStatus = -1;
-            if (String.Compare(QuestConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 0;
             }
-            if (String.Compare(QuestConditionInfo.sParam1, "开启", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestConditionInfo.sParam1, "开启", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 1;
             }
-            if (String.Compare(QuestConditionInfo.sParam1, "关闭", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestConditionInfo.sParam1, "关闭", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 2;
             }
@@ -1084,72 +1068,54 @@ namespace GameSvr
 
         private bool ConditionOfCheckIsAttackAllyGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             if (this.m_Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_ISATTACKALLYGUILD);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
-            result = this.m_Castle.IsAttackAllyGuild(PlayObject.m_MyGuild);
-            return result;
+            return this.m_Castle.IsAttackAllyGuild(PlayObject.m_MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseAllyGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             if (this.m_Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_ISDEFENSEALLYGUILD);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
-            result = this.m_Castle.IsDefenseAllyGuild(PlayObject.m_MyGuild);
-            return result;
+            return this.m_Castle.IsDefenseAllyGuild(PlayObject.m_MyGuild);
         }
 
         private bool ConditionOfCheckIsDefenseGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             if (this.m_Castle == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_ISDEFENSEGUILD);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
-            result = this.m_Castle.IsDefenseGuild(PlayObject.m_MyGuild);
-            return result;
+            return this.m_Castle.IsDefenseGuild(PlayObject.m_MyGuild);
         }
 
         private bool ConditionOfCheckIsCastleaGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            // if (PlayObject.m_MyGuild <> nil) and (UserCastle.m_MasterGuild = PlayObject.m_MyGuild) then
-            if (M2Share.CastleManager.IsCastleMember(PlayObject) != null)
-            {
-                result = true;
-            }
-            return result;
+            return M2Share.CastleManager.IsCastleMember(PlayObject) != null;
         }
 
         private bool ConditionOfCheckIsCastleMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            // if PlayObject.IsGuildMaster and (UserCastle.m_MasterGuild = PlayObject.m_MyGuild) then
-            if (PlayObject.IsGuildMaster() && (M2Share.CastleManager.IsCastleMember(PlayObject) != null))
-            {
-                result = true;
-            }
-            return result;
+            return PlayObject.IsGuildMaster() && (M2Share.CastleManager.IsCastleMember(PlayObject) != null);
         }
 
         private bool ConditionOfCheckIsGuildMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1159,18 +1125,12 @@ namespace GameSvr
 
         private bool ConditionOfCheckIsMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            if ((PlayObject.m_sMasterName != "") && PlayObject.m_boMaster)
-            {
-                result = true;
-            }
-            return result;
+            return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && PlayObject.m_boMaster;
         }
 
         private bool ConditionOfCheckListCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result = false;
-            return result;
+            return false;
         }
 
         private bool ConditionOfCheckItemAddValue(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1290,39 +1250,31 @@ namespace GameSvr
 
         private bool ConditionOfCheckNameListPostion(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            StringList LoadList;
             string sLine;
             var result = false;
             var nNamePostion = -1;
-            try
+            var sCharName = PlayObject.m_sCharName;
+            var LoadList = new StringList();
+            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
-                var sCharName = PlayObject.m_sCharName;
-                LoadList = new StringList();
-                if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    sLine = LoadList[i].Trim();
+                    if (sLine[0] == ';')
                     {
-                        sLine = LoadList[i].Trim();
-                        if (sLine[0] == ';')
-                        {
-                            continue;
-                        }
-                        if (String.Compare(sLine, sCharName, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            nNamePostion = i;
-                            break;
-                        }
+                        continue;
+                    }
+                    if (string.Compare(sLine, sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        nNamePostion = i;
+                        break;
                     }
                 }
-                else
-                {
-                    ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKNAMELISTPOSITION);
-                }
             }
-            finally
+            else
             {
-                //LoadList.Free;
+                ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKNAMELISTPOSITION);
             }
             var nPostion = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nPostion < 0)
@@ -1339,12 +1291,7 @@ namespace GameSvr
 
         private bool ConditionOfCheckMarry(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            if (PlayObject.m_sDearName != "")
-            {
-                result = true;
-            }
-            return result;
+            return !string.IsNullOrEmpty(PlayObject.m_sDearName);
         }
 
         private bool ConditionOfCheckMarryCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1389,12 +1336,7 @@ namespace GameSvr
 
         private bool ConditionOfCheckMaster(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            if ((PlayObject.m_sMasterName != "") && (!PlayObject.m_boMaster))
-            {
-                result = true;
-            }
-            return result;
+            return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && !PlayObject.m_boMaster;
         }
 
         private bool ConditionOfCheckMemBerLevel(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1484,39 +1426,32 @@ namespace GameSvr
             string sName = string.Empty;
             string sIPaddr;
             var result = false;
-            try
+            var sCharName = PlayObject.m_sCharName;
+            var sCharAccount = PlayObject.m_sUserID;
+            var sCharIPaddr = PlayObject.m_sIPaddr;
+            LoadList = new StringList();
+            if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
-                var sCharName = PlayObject.m_sCharName;
-                var sCharAccount = PlayObject.m_sUserID;
-                var sCharIPaddr = PlayObject.m_sIPaddr;
-                LoadList = new StringList();
-                if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
+                LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    sLine = LoadList[i];
+                    if (sLine[0] == ';')
                     {
-                        sLine = LoadList[i];
-                        if (sLine[1] == ';')
-                        {
-                            continue;
-                        }
-                        sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
-                        sIPaddr = sIPaddr.Trim();
-                        if ((sName == sCharName) && (sIPaddr == sCharIPaddr))
-                        {
-                            result = true;
-                            break;
-                        }
+                        continue;
+                    }
+                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
+                    sIPaddr = sIPaddr.Trim();
+                    if ((sName == sCharName) && (sIPaddr == sCharIPaddr))
+                    {
+                        result = true;
+                        break;
                     }
                 }
-                else
-                {
-                    ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKNAMEIPLIST);
-                }
             }
-            finally
+            else
             {
-                //LoadList.Free;
+                ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKNAMEIPLIST);
             }
             return result;
         }
@@ -1553,19 +1488,19 @@ namespace GameSvr
         {
             var result = false;
             byte btSex = 0;
-            if (String.Compare(QuestConditionInfo.sParam1, "MAN", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestConditionInfo.sParam1, "MAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 0;
             }
-            else if (String.Compare(QuestConditionInfo.sParam1, "男", StringComparison.Ordinal) == 0)
+            else if (string.Compare(QuestConditionInfo.sParam1, "男", StringComparison.Ordinal) == 0)
             {
                 btSex = 0;
             }
-            else if (String.Compare(QuestConditionInfo.sParam1, "WOMAN", StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(QuestConditionInfo.sParam1, "WOMAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 btSex = 1;
             }
-            else if (String.Compare(QuestConditionInfo.sParam1, "女", StringComparison.Ordinal) == 0)
+            else if (string.Compare(QuestConditionInfo.sParam1, "女", StringComparison.Ordinal) == 0)
             {
                 btSex = 1;
             }
@@ -1864,7 +1799,6 @@ namespace GameSvr
             return result;
         }
 
-
         private bool ConditionOfCheckRangeMonCount(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
             TBaseObject BaseObject;
@@ -2052,14 +1986,13 @@ namespace GameSvr
             var DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
-                // ,format(sVarTypeError,[sType])
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKVAR);
                 return result;
             }
             for (var i = 0; i < DynamicVarList.Count; i++)
             {
                 DynamicVar = DynamicVarList[i];
-                if (String.Compare(DynamicVar.sName, sVarName, StringComparison.Ordinal) == 0)
+                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.Ordinal) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -2101,7 +2034,6 @@ namespace GameSvr
             }
             if (!boFoundVar)
             {
-                // format(sVarFound,[sVarName,sType]),
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKVAR);
             }
             return result;
@@ -2256,7 +2188,7 @@ namespace GameSvr
             }
             if (PlayObject.m_MyGuild != null)
             {
-                if (String.Compare(PlayObject.m_MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObject.m_MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                 }
@@ -2384,7 +2316,7 @@ namespace GameSvr
             for (var i = 0; i < PlayObject.m_SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.m_SlaveList[i];
-                if (String.Compare(sSlaveName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sSlaveName, BaseObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -2406,8 +2338,8 @@ namespace GameSvr
             var nDayCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
             var nValNo = M2Share.GetValNameNo(QuestConditionInfo.sParam4);
             var nValNoDay = M2Share.GetValNameNo(QuestConditionInfo.sParam5);
-            var boDeleteExprie = String.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
-            var boNoCompareHumanName = String.Compare(QuestConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
+            var boDeleteExprie = string.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
+            var boNoCompareHumanName = string.Compare(QuestConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
             var cMethod = QuestConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
@@ -2432,7 +2364,7 @@ namespace GameSvr
                     sLineText = LoadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                    if ((String.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
+                    if ((string.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;
                         //if (TryStrToDateTime(sDate, dOldDate))

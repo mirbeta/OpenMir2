@@ -970,7 +970,10 @@ namespace DBSvr
 
         private void SendUserSocket(Socket Socket, string sSessionID, string sSendMsg)
         {
-            Socket.SendText("%" + sSessionID + "/#" + sSendMsg + "!$");
+            if (Socket.Connected)
+            {
+                Socket.SendText("%" + sSessionID + "/#" + sSendMsg + "!$");
+            }
         }
 
         /// <summary>

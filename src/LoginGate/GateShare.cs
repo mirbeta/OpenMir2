@@ -18,7 +18,7 @@ namespace LoginGate
         public static int nIPCountLimit2 = 40;
         public static string GateClass = "LoginGate";
         public static int ServerPort = 5500;
-        public static string ServerAddr = "10.10.0.168";
+        public static string ServerAddr = "127.0.0.1";
         public static int GatePort = 7000;
         public static string GateAddr = "*";
         public static bool boGateReady = false;

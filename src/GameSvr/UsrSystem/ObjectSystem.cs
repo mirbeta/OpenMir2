@@ -21,7 +21,7 @@ namespace GameSvr
 
         public ObjectSystem()
         {
-            Debug.WriteLine("Start Clear Actor Thread...");
+            Debug.WriteLine("Start Clear Object Thread...");
         }
 
         public void Add(int actorId, TBaseObject actor)
@@ -81,10 +81,20 @@ namespace GameSvr
         {
             var actorIds = _actors.Keys;
             TBaseObject actor = null;
+            var playCount = 0;
+            var monsterCount = 0;
             foreach (var actorId in actorIds)
             {
                 if (_actors.TryGetValue(actorId, out actor))
                 {
+                    if (actor.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                    {
+                        playCount++;
+                    }
+                    else
+                    {
+                        monsterCount++;
+                    }
                     if (actor.m_boGhost && actor.m_dwGhostTick > 0)
                     {
                         if ((HUtil32.GetTickCount() - actor.m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime) //超过清理时间
@@ -94,6 +104,7 @@ namespace GameSvr
                     }
                 }
             }
+            Debug.WriteLine($"在线人物:[{playCount}] 怪物总数:[{monsterCount}]");
         }
     }
 }

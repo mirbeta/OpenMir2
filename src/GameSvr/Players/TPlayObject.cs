@@ -806,7 +806,7 @@ namespace GameSvr
             {
                 return;
             }
-            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwclickNpcTime) // NPC点击间隔
+            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwClickNpcTime) // NPC点击间隔
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
                 var normNpc = (TNormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (TNormNpc)M2Share.UserEngine.FindNPC(NPC);

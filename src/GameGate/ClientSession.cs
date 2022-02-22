@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Sockets;
-using System.Xml.Serialization;
 using SystemModule;
 using SystemModule.Packages;
 
@@ -137,7 +136,6 @@ namespace GameGate
                         var nDeCodeLen = Misc.DecodeBuf(tempBuff, UserData.BufferLen - 3, ref packBuff);
                         var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
                         var fPacketOverSpeed = false;
-                        
                         switch (CltCmd.Cmd)
                         {
                             case Grobal2.CM_GUILDUPDATENOTICE:
@@ -166,15 +164,15 @@ namespace GameGate
                         var dwDelay = 0;
                         switch (CltCmd.Cmd)
                         {
-                            case Grobal2.CM_LOGINNOTICEOK:
-                                if (m_Stat == TCheckStep.CheckLogin)
-                                {
-                                    // m_checkstr = GenRandString(10);
-                                    // SendDefMessage(SM_CHECKCLIENT, 0, 0, 0, 0, m_checkstr);
-                                    // m_SendCheckTick = GetTickCount;
-                                    m_Stat = TCheckStep.SendCheck;
-                                }
-                                break;
+                            //case Grobal2.CM_LOGINNOTICEOK:
+                            //    if (m_Stat == TCheckStep.CheckLogin)
+                            //    {
+                            //        // m_checkstr = GenRandString(10);
+                            //        // SendDefMessage(SM_CHECKCLIENT, 0, 0, 0, 0, m_checkstr);
+                            //        // m_SendCheckTick = GetTickCount;
+                            //        m_Stat = TCheckStep.SendCheck;
+                            //    }
+                            //    break;
                             // case Grobal2.CM_CHECKCLIENT_RES:
                             //     if (m_Stat == TCheckStep.csSendCheck)
                             //     {

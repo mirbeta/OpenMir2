@@ -287,6 +287,11 @@ namespace GameSvr
         public int m_dwGhostTick = 0;
         public bool m_boDeath = false;
         public int m_dwDeathTick = 0;
+        public bool m_boInvisible=false;
+        public bool m_boCanReAlive = false;
+        public int m_dwReAliveTick = 0;
+        public TMonGenInfo m_pMonGen = null;
+
         /// <summary>
         /// 怪物所拿的武器
         /// </summary>
@@ -1875,6 +1880,7 @@ namespace GameSvr
                         m_nCurrY = (short)nOldY;
                         m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
                     }
+                    OnEnvirnomentChanged();
                 }
                 else
                 {
@@ -3605,8 +3611,10 @@ namespace GameSvr
             {
                 if (m_Abil.Level < Envir.nRequestLevel)
                 {
+                    SysMsg(string.Format("需要 {0} 级以上才能进入 {1}", Envir.Flag.nL - 1, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
                     return result;
                 }
+
                 if (Envir.QuestNPC != null)
                 {
                     ((TMerchant)Envir.QuestNPC).Click(this as TPlayObject);
@@ -3662,6 +3670,27 @@ namespace GameSvr
                     m_dwMapMoveTick = HUtil32.GetTickCount();
                     m_bo316 = true;
                     result = true;
+
+                    //if (m_Escort != null && !m_Escort.m_boGhost && !m_Escort.m_boDeath)
+                    //{
+                    //    if ((OldEnvir = m_Escort.m_PEnvir) && ((abs(nOldX - m_Escort.m_nCurrX) <= 8) && (abs(nOldY - m_Escort.m_nCurrY) <= 8)))
+                    //    {
+                    //        if (GetRecallXY(m_nCurrX, m_nCurrY, 3, nrX, nrY))
+                    //        {
+                    //            m_Escort.m_PEnvir.DeleteFromMap(m_Escort.m_nCurrX, m_Escort.m_nCurrY, OS_MOVINGOBJECT, m_Escort);
+                    //            m_Escort.SendRefMsg(RM_DISAPPEAR, 0, 0, 0, 0, '');
+                    //            m_Escort.m_nCurrX = nrX;
+                    //            m_Escort.m_nCurrY = nrY;
+                    //            m_Escort.m_PEnvir = Envir;
+                    //            m_Escort.m_PEnvir.AddToMap(m_Escort.m_nCurrX, m_Escort.m_nCurrY, OS_MOVINGOBJECT, m_Escort);
+                    //            m_Escort.m_Master = Self;
+                    //            m_Escort.OnEnvirnomentChanged();
+                    //            m_Escort.SendRefMsg(RM_DIGUP, m_Escort.m_btDirection, m_Escort.m_nCurrX, m_Escort.m_nCurrY, 0, '');
+                    //            m_Escort.SendRefMsg(RM_TURN, m_Escort.m_btDirection, m_Escort.m_nCurrX, m_Escort.m_nCurrY, m_Escort.GetFeatureToLong, m_Escort.GetShowName);
+                    //        }
+                    //    }
+                    //}
+
                 }
                 else
                 {
@@ -3670,6 +3699,7 @@ namespace GameSvr
                     m_nCurrY = (short)nOldY;
                     m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
                 }
+                OnEnvirnomentChanged();
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)  // 复位泡点，及金币，时间
                 {
                     (this as TPlayObject).m_dwIncGamePointTick = HUtil32.GetTickCount();
@@ -3818,7 +3848,6 @@ namespace GameSvr
         /// <param name="MonStatus"></param>
         public void MonsterSayMsg(TBaseObject AttackBaseObject, TMonStatus MonStatus)
         {
-            string sAttackName = string.Empty;
             if (m_SayMsgList == null)
             {
                 return;
@@ -3827,6 +3856,7 @@ namespace GameSvr
             {
                 return;
             }
+            string sAttackName = string.Empty;
             if (AttackBaseObject != null)
             {
                 if ((AttackBaseObject.m_btRaceServer != Grobal2.RC_PLAYOBJECT) && (AttackBaseObject.m_Master == null))
@@ -5462,6 +5492,336 @@ namespace GameSvr
                 return MasterObject;
             }
             return null;
+        }
+
+        public bool ReAliveEx(TMonGenInfo MonGen)
+        {
+            m_WAbil = m_Abil;
+            m_nGold = 0;
+            //m_boStrike = false;
+            m_boNoItem = false;
+            m_boStoneMode = false;
+            m_boSkeleton = false;
+            m_boHolySeize = false;
+            m_boCrazyMode = false;
+            m_boShowHP = false;
+            //m_boPlayerDupMode = false;
+            m_boFixedHideMode = false;
+
+            if (this is TCastleDoor)
+            {
+                ((TCastleDoor)(this)).m_boOpened = false;
+                ((TCastleDoor)(this)).m_boStickMode = true;
+            }
+            if (this is TMagicMonster)
+            {
+                ((TMagicMonster)(this)).m_boDupMode = false;
+            }
+            if (this is TMagicMonObject)
+            {
+                ((TMagicMonObject)(this)).m_boUseMagic = false;
+            }
+            if (this is TRockManObject)
+            {
+                ((TRockManObject)(this)).m_boHideMode = false;
+            }
+            if (this is TWallStructure)
+            {
+                ((TWallStructure)(this)).boSetMapFlaged = false;
+            }
+            if (this is TSoccerBall)
+            {
+                ((TSoccerBall)(this)).n550 = 0;
+                ((TSoccerBall)(this)).m_nTargetX = -1;
+            }
+            if (this is TFrostTiger)
+            {
+                //((TFrostTiger)(this)).m_boApproach = false;
+            }
+            if (this is TCowKingMonster) {
+                /*((TCowKingMonster)(this)).m_boCowKingMon = true;
+                ((TCowKingMonster)(this)).m_nDangerLevel = 0;
+                ((TCowKingMonster)(this)).m_boDanger = false;
+                ((TCowKingMonster)(this)).m_boCrazy = false;*/
+            }
+            if (this is TDigOutZombi)
+            {
+                ((TDigOutZombi)(this)).m_boFixedHideMode = true;
+            }
+            if (this is TWhiteSkeleton)
+            {
+               ((TWhiteSkeleton)(this)).m_boIsFirst = true;
+               ((TWhiteSkeleton)(this)).m_boFixedHideMode = true;
+            }
+            if (this is TScultureMonster)
+            {
+                ((TDigOutZombi)(this)).m_boFixedHideMode = true;
+            }
+            if (this is TScultureKingMonster)
+            {
+               ((TScultureKingMonster)(this)).m_boStoneMode = true;
+               ((TScultureKingMonster)(this)).m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
+            }
+            if (this is TElfMonster)
+            {
+                ((TElfMonster)(this)).m_boFixedHideMode = true;
+                ((TElfMonster)(this)).m_boNoAttackMode = true;
+                ((TElfMonster)(this)).boIsFirst = true;
+            }
+            if (this is TElfWarriorMonster)
+            {
+                 ((TElfWarriorMonster)(this)).m_boFixedHideMode = true;
+                 ((TElfWarriorMonster)(this)).boIsFirst = true;
+                 ((TElfWarriorMonster)(this)).m_boUsePoison = false;
+            }
+            if (this is TElectronicScolpionMon)
+            {
+               ((TElectronicScolpionMon)(this)).m_boUseMagic = false;
+               //((TElectronicScolpionMon)(this)).m_boApproach = false;
+            }
+            if (this is TDoubleCriticalMonster)
+            {
+                //((TDoubleCriticalMonster)(this)).m_n7A0 = 0;
+            }
+            if (this is TStickMonster)
+            {
+                 ((TStickMonster)(this)).m_dwSearchTick = HUtil32.GetTickCount();
+                 ((TStickMonster)(this)).m_boFixedHideMode = true;
+                 ((TStickMonster)(this)).m_boStickMode = true;
+            }
+
+            m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+            //m_nBodyLeathery = m_nPerBodyLeathery;
+            m_nProcessRunCount = 0;
+            //m_nPushedCount = 0;
+            //m_nBodyState = 0;
+
+            switch (this.m_btRaceServer)
+            {
+                case 51:
+                    m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+                    m_nBodyLeathery = 50;
+                    break;
+                case 52:
+                    if (M2Share.RandomNumber.Random(30) == 0) {
+                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
+                        m_nBodyLeathery = 150;
+                    }
+                    else {
+                        m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                        m_nBodyLeathery = 150;
+                    }
+                    break;
+                case 53:
+                    m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                    m_nBodyLeathery = 150;
+                    break;
+                case 54:
+                    m_boAnimal = true;
+                    break;
+                case 95:
+                    if (M2Share.RandomNumber.Random(2) == 0)
+                    {
+                       // m_boSafeWalk = true;
+                    }
+                    break;
+                case 96:
+                    if (M2Share.RandomNumber.Random(4) == 0)
+                    {
+                       // m_boSafeWalk = true;
+                    }
+                    break;
+                case 97:
+                    if (M2Share.RandomNumber.Random(2) == 0)
+                    {
+                       // m_boSafeWalk = true;
+                    }
+                    break;
+                case 169:
+                    m_boStickMode = false;
+                    break;
+                case 170:
+                    m_boStickMode = true;
+                    break;
+            }
+
+            m_wStatusTimeArr = new ushort[8];
+            m_UseItems = new TUserItem[8];
+            for (int i = 0; i < m_ItemList.Count; i++)
+            {
+                m_ItemList[i] = null;
+            }
+            m_ItemList.Clear();
+
+            OnEnvirnomentChanged();
+            m_nCharStatus = GetCharStatus();
+            StatusChanged();
+            if (m_PEnvir == null)
+            {
+                return false;
+            }
+            var nX = (MonGen.nX - MonGen.nRange) + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1);
+            var nY = (MonGen.nY - MonGen.nRange) + M2Share.RandomNumber.Random(MonGen.nRange * 2 + 1);
+            var m_boErrorOnInit = true;
+            if (m_PEnvir.CanWalk(nX, nY, true))
+            {
+                m_nCurrX = (short)nX;
+                m_nCurrY = (short)nY;
+                if (AddToMap())
+                {
+                    m_boErrorOnInit = false;
+                }
+            }
+            var nRange = 0;
+            var nRange2 = 0;
+            if (m_boErrorOnInit)
+            {
+                if (m_PEnvir.wWidth < 50)
+                {
+                    nRange = 2;
+                }
+                else {
+                    nRange = 3;
+                }
+                if ((m_PEnvir.wHeight < 250))
+                {
+                    if ((m_PEnvir.wHeight < 30))
+                    {
+                        nRange2 = 2;
+                    }
+                    else
+                    {
+                        nRange2 = 20;
+                    }
+                }
+                else {
+                    nRange2 = 50;
+                }
+            }
+
+            var nC = 0;
+            object addObj = null;
+            var nX2 = m_nCurrX;
+            var nY2 = m_nCurrY;
+            while (true)
+            {
+                if (!m_PEnvir.CanWalk(nX, nY, false))
+                {
+                    if ((m_PEnvir.wWidth - nRange2 - 1) > nX)
+                    {
+                        nX = nX + nRange;
+                    }
+                    else
+                    {
+                        nX = M2Share.RandomNumber.Random(m_PEnvir.wWidth / 2) + nRange2;
+                    }
+                    if (m_PEnvir.wHeight - nRange2 - 1 > nY)
+                    {
+                        nY = nY + nRange;
+                    }
+                    else
+                    {
+                        nY = M2Share.RandomNumber.Random(m_PEnvir.wHeight / 2) + nRange2;
+                    }
+                }
+                else {
+                    m_nCurrX = (short)nX;
+                    m_nCurrY = (short)nY;
+                    addObj = m_PEnvir.AddToMap(nX, nY, Grobal2.OS_MOVINGOBJECT, this);
+                    break;
+                }
+                nC++;
+                if (nC > 46)
+                {
+                    break;
+                }
+            }
+            if (addObj == null)
+            {
+                m_nCurrX = nX2;
+                m_nCurrY = nY2;
+                m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+            }
+
+            m_Abil.HP = m_Abil.MaxHP;
+            m_Abil.MP = m_Abil.MaxMP;
+            m_WAbil.HP = m_WAbil.MaxHP;
+            m_WAbil.MP = m_WAbil.MaxMP;
+
+            RecalcAbilitys();
+
+            m_boDeath = false;
+            m_boInvisible = false;
+
+            //if not m_boFixedHideMode then
+            SendRefMsg(Grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, GetFeatureToLong(), "");
+
+            if (M2Share.g_Config.boMonSayMsg)
+            {
+                MonsterSayMsg(null, TMonStatus.s_MonGen);
+            }
+            return true;
+        }
+
+        internal void OnEnvirnomentChanged()
+        {
+            if (m_boCanReAlive)
+            {
+                if ((m_pMonGen != null) && (m_pMonGen.Envir != m_PEnvir))
+                {
+                    m_boCanReAlive = false;
+                    if (m_pMonGen.nActiveCount > 0)
+                    {
+                        m_pMonGen.nActiveCount--;
+                    }
+                    m_pMonGen = null;
+                }
+            }
+            //if ((m_PEnvir != null))
+            //{
+            //    if (m_nLastMapSecret != m_PEnvir.Flag.nSecret)
+            //    {
+            //        if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+            //        {
+            //            if ((m_btRaceServer = Grobal2.RC_PLAYOBJECT) && (m_nLastMapSecret != -1))
+            //            {
+            //                var i = GetFeatureToLong();
+            //                var sSENDMSG = string.Empty;
+            //                var nSafeX = GetTitleIndex();
+            //                if (nSafeX > 0)
+            //                {
+            //                    var MessageBodyW = new TMessageBodyW();
+            //                    MessageBodyW.Param1 = HUtil32.MakeWord(nSafeX, 0);
+            //                    MessageBodyW.Param2 = 0;
+            //                    MessageBodyW.Tag1 = 0;
+            //                    MessageBodyW.Tag2 = 0;
+            //                    sSENDMSG = EDcode.EncodeBuffer(@MessageBodyW);
+            //                }
+            //                ((TPlayObject)(this)).m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
+            //                ((TPlayObject)(this)).SendSocket(((TPlayObject)(this)).m_DefMsg, sSENDMSG);
+            //                ((TPlayObject)(this)).InternalPowerPointChanged();
+            //                SendUpdateMsg(this, Grobal2.RM_USERNAME, 0, 0, 0, 0, GetShowName());
+            //            }
+            //            HealthSpellChanged();
+            //        }
+            //        m_nLastMapSecret = m_PEnvir.Flag.nSecret;
+            //    }
+            //}
+            //m_nCurEnvirIdx = -1;
+            //m_nCastleEnvirListIdx = -1;
+            //m_CurSafeZoneList.Clear();
+            //for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            //{
+            //    var StartPointInfo = M2Share.StartPointList[i];
+            //    if (StartPointInfo.m_sMapName == m_PEnvir.sMapName)
+            //    {
+            //        m_CurSafeZoneList.Add(StartPointInfo);
+            //    }
+            //}
+            //if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT) && !((TPlayObject)(this)).m_boOffLineFlag)
+            //{
+            //   ((TPlayObject)(this)).CheckMapEvent(5, "");
+            //}
         }
 
         internal void Dispose(object obj)

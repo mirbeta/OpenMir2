@@ -14,20 +14,23 @@ namespace SystemModule
         private static RandomNumber singleton;
         //定义一个只读静态对象 
         //且这个对象是在程序运行时创建的
-        private static readonly object syncObject = new object(); 
+        private static readonly object syncObject = new object();
 
         private RandomNumber() { }
 
-        public static RandomNumber GetInstance() {
-            if (singleton == null) {
-                lock (syncObject) {
+        public static RandomNumber GetInstance()
+        {
+            if (singleton == null)
+            {
+                lock (syncObject)
+                {
                     if (singleton == null)
                     {
                         random = new Random();
                         singleton = new RandomNumber();
                     }
                 }
-               
+
             }
             return singleton;
         }
@@ -80,7 +83,8 @@ namespace SystemModule
         /// </summary>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public int Random(int Value) {
+        public int Random(int Value)
+        {
             return random.Next(Value);
         }
 

@@ -37,7 +37,7 @@ namespace SelGate
         public static int nShowLogLevel = 3;
         public static string GateClass = "SelGate";
         public static int ServerPort = 5100;
-        public static string ServerAddr = "10.10.0.168";
+        public static string ServerAddr = "127.0.0.1";
         public static int GatePort = 7100;
         public static string GateAddr = "*";
         public static bool boGateReady = false;

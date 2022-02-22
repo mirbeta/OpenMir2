@@ -286,6 +286,7 @@ namespace LoginGate
                     {
                         continue;
                     }
+#if !DEBUG
                     if ((HUtil32.GetTickCount() - GateShare.g_SessionArray[nSocketIndex].dwConnctCheckTick) > GateShare.dwKeepConnectTimeOut)// 踢除超时无数据传输连接
                     {
                         string sRemoteIPaddr = GateShare.g_SessionArray[nSocketIndex].sRemoteIPaddr;
@@ -310,6 +311,7 @@ namespace LoginGate
                         GateShare.MainOutMessage("端口空连接攻击: " + sRemoteIPaddr, 1);
                         continue;
                     }
+#endif
                     while (true)
                     {
                         if (GateShare.g_SessionArray[nSocketIndex].MsgList.Count <= 0)

@@ -7,7 +7,7 @@ namespace GameSvr
     /// </summary>
     public class TElfMonster : TMonster
     {
-        private bool boIsFirst= false;
+        public bool boIsFirst= false;
 
         public TElfMonster() : base()
         {

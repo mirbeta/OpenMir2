@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -184,6 +185,7 @@ namespace GameSvr
                 Merchant.m_PEnvir = M2Share.g_MapManager.FindMap(Merchant.m_sMapName);
                 if (Merchant.m_PEnvir != null)
                 {
+                    Merchant.OnEnvirnomentChanged();
                     Merchant.Initialize();
                     if (Merchant.m_boAddtoMapSuccess && !Merchant.m_boIsHide)
                     {
@@ -215,6 +217,7 @@ namespace GameSvr
                 NormNpc.m_PEnvir = M2Share.g_MapManager.FindMap(NormNpc.m_sMapName);
                 if (NormNpc.m_PEnvir != null)
                 {
+                    NormNpc.OnEnvirnomentChanged();
                     NormNpc.Initialize();
                     if (NormNpc.m_boAddtoMapSuccess && !NormNpc.m_boIsHide)
                     {
@@ -437,6 +440,7 @@ namespace GameSvr
                         PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                     }
                     PlayObject.m_PEnvir = Envir;
+                    PlayObject.OnEnvirnomentChanged();
                     if (PlayObject.m_PEnvir == null)
                     {
                         M2Share.MainOutMessage(sErrorEnvirIsNil);
@@ -480,6 +484,7 @@ namespace GameSvr
 
                         PlayObject.AbilCopyToWAbil();
                         PlayObject.m_PEnvir = Envir;
+                        PlayObject.OnEnvirnomentChanged();
                         if (PlayObject.m_PEnvir == null)
                         {
                             M2Share.MainOutMessage(sErrorEnvirIsNil);
@@ -949,7 +954,7 @@ namespace GameSvr
             
         }
 
-        private int ProcessMonsters_GetZenTime(int dwTime)
+        public int ProcessMonsters_GetZenTime(int dwTime)
         {
             int result;
             if (dwTime < 30 * 60 * 1000)
@@ -1000,9 +1005,9 @@ namespace GameSvr
                         var nTemp = HUtil32.GetTickCount() - MonGen.dwStartTick;
                         if (MonGen.dwStartTick == 0 || nTemp > ProcessMonsters_GetZenTime(MonGen.dwZenTime))
                         {
-                            var nGenCount = GetGenMonCount(MonGen); //取已刷出来的怪数量
+                            var nGenCount = MonGen.nActiveCount;//GetGenMonCount(MonGen); //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = MonGen.nCount;
+                            var nGenModCount = (int)Math.Round((decimal)(MonGen.nCount / M2Share.g_Config.nMonGenRate * 10));// MonGen.nCount;
                             var map = M2Share.g_MapManager.FindMap(MonGen.sMapName);
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 boCanCreate = false;
@@ -1015,12 +1020,14 @@ namespace GameSvr
                             if (boRegened)
                             {
                                 MonGen.dwStartTick = HUtil32.GetTickCount();
+                                Debug.WriteLine(string.Format("{0}/{1}/{2} ({3}/{4})", MonGen.sMonName, m_nCurrMonGen, m_MonGenList.Count, nGenCount, nGenModCount));
                             }
                         }
                     }
                 }
                 // 刷新怪物结束
                 var dwMonProcTick = HUtil32.GetTickCount();
+
                 nMonsterProcessCount = 0;
                 var currentMongen = 0;
                 var monGenTotal = m_MonGenList.Count;
@@ -1047,21 +1054,54 @@ namespace GameSvr
                                 if ((dwCurrentTick - Monster.m_dwRunTick) > Monster.m_nRunTime)
                                 {
                                     Monster.m_dwRunTick = dwRunTick;
-                                    if ((dwCurrentTick - Monster.m_dwSearchTick) > Monster.m_dwSearchTime)
+
+
+                                    //if ((dwCurrentTick - Monster.m_dwSearchTick) > Monster.m_dwSearchTime)
+                                    //{
+                                    //    Monster.m_dwSearchTick = HUtil32.GetTickCount();
+                                    //    Monster.SearchViewRange();
+                                    //}
+                                    //if (!Monster.m_boIsVisibleActive && Monster.m_nProcessRunCount < M2Share.g_Config.nProcessMonsterInterval)
+                                    //{
+                                    //    Monster.m_nProcessRunCount++;
+                                    //}
+                                    //else
+                                    //{
+                                    //    Monster.m_nProcessRunCount = 0;
+                                    //    Monster.Run();
+                                    //}
+
+                                    if (Monster.m_boDeath && Monster.m_boCanReAlive && Monster.m_boInvisible && (Monster.m_pMonGen != null))
                                     {
-                                        Monster.m_dwSearchTick = HUtil32.GetTickCount();
-                                        Monster.SearchViewRange();
+                                        if ((HUtil32.GetTickCount() - Monster.m_dwReAliveTick) > M2Share.UserEngine.ProcessMonsters_GetZenTime(Monster.m_pMonGen.dwZenTime))
+                                        {
+                                            if (Monster.ReAliveEx(Monster.m_pMonGen))
+                                            {
+                                                Monster.m_dwReAliveTick = HUtil32.GetTickCount();
+                                            }
+                                        }
                                     }
-                                    if (!Monster.m_boIsVisibleActive && Monster.m_nProcessRunCount < M2Share.g_Config.nProcessMonsterInterval)
+                                    if (!Monster.m_boIsVisibleActive && (Monster.m_nProcessRunCount < M2Share.g_Config.nProcessMonsterInterval))
                                     {
-                                        Monster.m_nProcessRunCount++;
+                                        nMonsterProcessCount++;
                                     }
                                     else
                                     {
+                                        if ((dwCurrentTick - Monster.m_dwSearchTick) > Monster.m_dwSearchTime)
+                                        {
+                                            Monster.m_dwSearchTick = HUtil32.GetTickCount();
+                                            if (!Monster.m_boDeath)
+                                            {
+                                                Monster.SearchViewRange();
+                                            }
+                                            else
+                                            {
+                                                Monster.SearchViewRange_Death();
+                                            }
+                                        }
                                         Monster.m_nProcessRunCount = 0;
                                         Monster.Run();
                                     }
-                                    nMonsterProcessCount++;
                                 }
                                 nMonsterProcessPostion++;
                             }
@@ -1775,6 +1815,7 @@ namespace GameSvr
                 Cert.m_btDirection = (byte)M2Share.RandomNumber.Random(8);
                 Cert.m_sCharName = sMonName;
                 Cert.m_WAbil = Cert.m_Abil;
+                Cert.OnEnvirnomentChanged();
                 if (M2Share.RandomNumber.Random(100) < Cert.m_btCoolEye) Cert.m_boCoolEye = true;
                 MonGetRandomItems(Cert);
                 Cert.Initialize();
@@ -1863,7 +1904,10 @@ namespace GameSvr
                                 (short)(nY - 10 + M2Share.RandomNumber.Random(20)), MonGen.nRace, MonGen.sMonName);
                             if (Cert != null)
                             {
-                                MonGen.CertCount++;
+                                Cert.m_boCanReAlive = true;
+                                Cert.m_dwReAliveTick = HUtil32.GetTickCount();
+                                Cert.m_pMonGen = MonGen;
+                                MonGen.nActiveCount++;
                                 MonGen.CertList.Add(Cert);
                             }
                             if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.g_dwZenLimit)
@@ -1882,7 +1926,10 @@ namespace GameSvr
                             Cert = AddBaseObject(MonGen.sMapName, nX, nY, MonGen.nRace, MonGen.sMonName);
                             if (Cert != null)
                             {
-                                MonGen.CertCount++;
+                                Cert.m_boCanReAlive = true;
+                                Cert.m_dwReAliveTick = HUtil32.GetTickCount();
+                                Cert.m_pMonGen = MonGen;
+                                MonGen.nActiveCount++;
                                 MonGen.CertList.Add(Cert);
                             }
                             if (HUtil32.GetTickCount() - dwStartTick > M2Share.g_dwZenLimit)

@@ -4,7 +4,7 @@ namespace GameSvr
 {
     public class TSpitSpider : TATMonster
     {
-        protected bool m_boUsePoison;
+        public bool m_boUsePoison;
 
         public TSpitSpider() : base()
         {
@@ -85,6 +85,5 @@ namespace GameSvr
             return false;
         }
     }
-
 }
 

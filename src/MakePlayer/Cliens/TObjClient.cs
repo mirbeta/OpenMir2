@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Packet;
@@ -58,8 +59,9 @@ namespace MakePlayer
         public TAbility m_Abil = null;
         public bool m_boLogin = false;
         public long m_dwSayTick = 0;
-        private Action FNotifyEvent = null;
+        private Action? FNotifyEvent = null;
         public IClientScoket ClientSocket = null;
+        private ConcurrentQueue<string> _msgList = new ConcurrentQueue<string>();
 
         public TObjClient()
         {
@@ -69,7 +71,7 @@ namespace MakePlayer
             ClientSocket.ReceivedDatagram += SocketRead;
             ClientSocket.OnError += SocketError;
             m_btCode = 0;
-            m_sSockText = "";
+            //m_sSockText = "";
             m_sBufferText = "";
             m_sLoginAccount = "";
             m_sLoginPasswd = "";
@@ -100,8 +102,9 @@ namespace MakePlayer
 
         private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            m_sSockText = "";
-            m_sBufferText = "";
+            Console.WriteLine("链接" + e.RemotePort);
+            //m_sSockText = "";
+            //m_sBufferText = "";
             if (m_ConnectionStep == TConnectionStep.cnsConnect)
             {
                 if (m_boNewAccount)
@@ -116,7 +119,7 @@ namespace MakePlayer
             else if (m_ConnectionStep == TConnectionStep.cnsQueryChr)
             {
                 // Socket.SendText('#' + '+' + '!');
-                SendQueryChr();
+                //SendQueryChr();
             }
             else if (m_ConnectionStep == TConnectionStep.cnsPlay)
             {
@@ -126,12 +129,13 @@ namespace MakePlayer
 
         private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            MainOutMessage(string.Format("[{0}] 断开链接", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 断开链接");
         }
 
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
         {
             string sData = e.ReceiveText;
+            Console.WriteLine("收到消息" + e.socket.RemoteEndPoint + "   Data:" + sData);
             var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
@@ -139,8 +143,8 @@ namespace MakePlayer
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
                 ClientSocket.SendText("*");
             }
-            m_sSockText = m_sSockText + sData;
-            MainOutMessage(string.Format("[{0}] 收到数据 Data:[{1}]", m_sLoginAccount, sData));
+            _msgList.Enqueue(sData);
+            //m_sSockText = m_sSockText + sData;
         }
 
         private void SocketError(object sender, DSCClientErrorEventArgs e)
@@ -170,7 +174,7 @@ namespace MakePlayer
 
         private void SendNewAccount(string sAccount, string sPassword)
         {
-            MainOutMessage(string.Format("[{0}] 创建帐号", new object?[] { m_sLoginAccount }));
+            MainOutMessage($"[{m_sLoginAccount}] 创建帐号");
             m_ConnectionStep = TConnectionStep.cnsNewAccount;
             TUserEntry ue = new TUserEntry();
             TUserEntryAdd ua = new TUserEntryAdd();
@@ -184,7 +188,7 @@ namespace MakePlayer
             ue.sEMail = "";
             ua.sQuiz2 = sAccount;
             ua.sAnswer2 = sAccount;
-            ua.sBirthDay = "1999/01/01";
+            ua.sBirthDay = "1978/01/01";
             ua.sMobilePhone = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue) + EDcode.EncodeBuffer(ua));
@@ -195,13 +199,13 @@ namespace MakePlayer
             string sHair = string.Empty;
             string sJob = string.Empty;
             string sSex = string.Empty;
-            switch ((new System.Random(1)).Next())
+            switch (new Random(1).Next())
             {
                 case 0:
                     sHair = "2";
                     break;
                 case 1:
-                    switch ((new System.Random(1)).Next())
+                    switch (new Random(1).Next())
                     {
                         case 0:
                             sHair = "1";
@@ -212,14 +216,14 @@ namespace MakePlayer
                     }
                     break;
             }
-            sJob = ((new System.Random(2)).Next()).ToString();
-            sSex = ((new System.Random(1)).Next()).ToString();
+            sJob = new Random(2).Next().ToString();
+            sSex = new Random(1).Next().ToString();
             SendNewChr(m_sLoginAccount, sCharName, sHair, sJob, sSex);
         }
 
         private void SendSelChr(string sCharName)
         {
-            MainOutMessage(string.Format("[{0}] 选择人物：{1}", new[] { m_sLoginAccount, sCharName }));
+            MainOutMessage($"[{m_sLoginAccount}] 选择人物：{sCharName}");
             m_ConnectionStep = TConnectionStep.cnsSelChr;
             m_sCharName = sCharName;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
@@ -228,7 +232,7 @@ namespace MakePlayer
 
         private void SendLogin(string sAccount, string sPassword)
         {
-            MainOutMessage(string.Format("[{0}] 开始登录", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 开始登录");
             m_ConnectionStep = TConnectionStep.cnsLogin;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sAccount + "/" + sPassword));
@@ -237,7 +241,7 @@ namespace MakePlayer
 
         private void SendNewChr(string sAccount, string sChrName, string sHair, string sJob, string sSex)
         {
-            MainOutMessage(string.Format("[{0}] 创建人物：{1}", new[] { m_sLoginAccount, sChrName }));
+            MainOutMessage($"[{m_sLoginAccount}] 创建人物：{sChrName}");
             m_ConnectionStep = TConnectionStep.cnsNewChr;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
@@ -245,15 +249,15 @@ namespace MakePlayer
 
         private void SendQueryChr()
         {
-            MainOutMessage(string.Format("[{0}] 查询人物", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 查询人物");
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(m_sLoginAccount + "/" + (m_nCertification).ToString()));
+            SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(m_sLoginAccount + "/" + m_nCertification.ToString()));
         }
 
         private void SendSelectServer(string sServerName)
         {
-            MainOutMessage(string.Format("[{0}] 选择服务器：{1}", new[] { m_sLoginAccount, sServerName }));
+            MainOutMessage($"[{m_sLoginAccount}] 选择服务器：{sServerName}");
             m_ConnectionStep = TConnectionStep.cnsSelServer;
             var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sServerName));
@@ -262,7 +266,7 @@ namespace MakePlayer
         private void SendRunLogin()
         {
             string sSendMsg;
-            MainOutMessage(string.Format("[{0}] 进入游戏", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 进入游戏");
             m_ConnectionStep = TConnectionStep.cnsPlay;
             sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sCharName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 0 });
             SendSocket(EDcode.EncodeString(sSendMsg));
@@ -292,21 +296,8 @@ namespace MakePlayer
             var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, new[] { "/" });
             m_nRunServerPort = Convert.ToInt32(sRunPort);
             ClientSocket.Disconnect();
-            ClientSocket = null;
-
-            ClientSocket = new IClientScoket();
-            ClientSocket.OnConnected -= SocketConnect;
-            ClientSocket.OnDisconnected -= SocketDisconnect;
-            ClientSocket.ReceivedDatagram -= SocketRead;
-            ClientSocket.OnError -= SocketError;
-
-            ClientSocket.OnConnected += SocketConnect;
-            ClientSocket.OnDisconnected += SocketDisconnect;
-            ClientSocket.ReceivedDatagram += SocketRead;
-            ClientSocket.OnError += SocketError;
-
             m_ConnectionStep = TConnectionStep.cnsPlay;
-            MainOutMessage(string.Format("[{0}] 准备进入游戏", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
             ClientSocket.Address = m_sRunServerAddr;
             ClientSocket.Port = m_nRunServerPort;
@@ -316,7 +307,7 @@ namespace MakePlayer
 
         private void ClientStartPlayFail()
         {
-            MainOutMessage(string.Format("[{0}] 此服务器满员！", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 此服务器满员！");
         }
 
         private void ClientVersionFail()
@@ -326,7 +317,7 @@ namespace MakePlayer
 
         private void ClientGetSendNotice(string sData)
         {
-            MainOutMessage(string.Format("[{0}] 发送公告", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 发送公告");
             SendClientMessage(Grobal2.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
@@ -335,7 +326,7 @@ namespace MakePlayer
             m_boLogin = true;
             m_ConnectionStep = TConnectionStep.cnsPlay;
             m_ConnectionStatus = TConnectionStatus.cns_Success;
-            MainOutMessage(string.Format("[{0}] 成功进入游戏", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 成功进入游戏");
             MainOutMessage("-----------------------------------------------");
         }
 
@@ -351,7 +342,7 @@ namespace MakePlayer
             m_nGold = DefMsg.Recog;
             m_btJob = (byte)DefMsg.Param;
             m_nGameGold = HUtil32.MakeLong(DefMsg.Tag, DefMsg.Series);
-            var buff = EDcode.DecodeBuffer(sData);//
+            var buff = EDcode.DecodeBuffer(sData);
             m_Abil = new TAbility(buff);
         }
 
@@ -377,19 +368,19 @@ namespace MakePlayer
             switch (nFailCode)
             {
                 case 0:
-                    MainOutMessage(string.Format("[{0}] [错误信息] 输入的角色名称包含非法字符！ 错误代码 = 0", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] [错误信息] 输入的角色名称包含非法字符！ 错误代码 = 0");
                     break;
                 case 2:
-                    MainOutMessage(string.Format("[{0}] [错误信息] 创建角色名称已被其他人使用！ 错误代码 = 2", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] [错误信息] 创建角色名称已被其他人使用！ 错误代码 = 2");
                     break;
                 case 3:
-                    MainOutMessage(string.Format("[{0}] [错误信息] 您只能创建二个游戏角色！ 错误代码 = 3", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] [错误信息] 您只能创建二个游戏角色！ 错误代码 = 3");
                     break;
                 case 4:
-                    MainOutMessage(string.Format("[{0}] [错误信息] 创建角色时出现错误！ 错误代码 = 4", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] [错误信息] 创建角色时出现错误！ 错误代码 = 4");
                     break;
                 default:
-                    MainOutMessage(string.Format("[{0}] [错误信息] 创建角色时出现未知错误！", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] [错误信息] 创建角色时出现未知错误！");
                     break;
             }
         }
@@ -404,16 +395,16 @@ namespace MakePlayer
             switch (nFailCode)
             {
                 case 0:
-                    MainOutMessage(string.Format("[{0}] 帐号 \"" + m_sLoginAccount + "\" 已被其他的玩家使用了。\r请选择其它帐号名注册。", m_sLoginAccount));
+                    MainOutMessage(string.Format("[{0}] 帐号已被其他的玩家使用了。请选择其它帐号名注册。", m_sLoginAccount));
                     break;
                 case 1:
-                    MainOutMessage(string.Format("[{0}] 验证码输入错误，请重新输入！！！", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] 验证码输入错误，请重新输入！！！");
                     break;
                 case -2:
-                    MainOutMessage(string.Format("[{0}] 此帐号名被禁止使用！", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] 此帐号名被禁止使用！");
                     break;
                 default:
-                    MainOutMessage(string.Format("[{0}] 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: " + (nFailCode).ToString(), m_sLoginAccount));
+                    MainOutMessage(string.Format("[{0}] 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: " + nFailCode.ToString(), m_sLoginAccount));
                     break;
             }
         }
@@ -422,29 +413,14 @@ namespace MakePlayer
         {
             string sSelChrPort = string.Empty;
             string sCertification = string.Empty;
-            MainOutMessage(string.Format("[{0}] 帐号登录成功！", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
             var sText = EDcode.DeCodeString(sData);
             sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, new[] { "/" });
             sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, new[] { "/" });
             sText = HUtil32.GetValidStr3(sText, ref sCertification, new[] { "/" });
             m_nCertification = Convert.ToInt32(sCertification);
             m_nSelChrPort = Convert.ToInt32(sSelChrPort);
-            // ClientSocket.Active = false;
-            // ClientSocket.Host = "";
             ClientSocket.Disconnect();
-            ClientSocket = null;
-            
-            ClientSocket = new IClientScoket();
-            ClientSocket.OnConnected -= SocketConnect;
-            ClientSocket.OnDisconnected -= SocketDisconnect;
-            ClientSocket.ReceivedDatagram -= SocketRead;
-            ClientSocket.OnError -= SocketError;
-
-            ClientSocket.OnConnected += SocketConnect;
-            ClientSocket.OnDisconnected += SocketDisconnect;
-            ClientSocket.ReceivedDatagram += SocketRead;
-            ClientSocket.OnError += SocketError;
-
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
             ClientSocket.Address = m_sSelChrAddr;
             ClientSocket.Port = m_nSelChrPort;
@@ -579,7 +555,7 @@ namespace MakePlayer
             if (nFailCode == -3)
             {
                 SendLogin(m_sLoginAccount, m_sLoginPasswd);
-                MainOutMessage(string.Format("[{0}] 此帐号已经登录或被异常锁定，请稍候再登录！", m_sLoginAccount));
+                MainOutMessage($"[{m_sLoginAccount}] 此帐号已经登录或被异常锁定，请稍候再登录！");
             }
             else
             {
@@ -587,22 +563,22 @@ namespace MakePlayer
                 switch (nFailCode)
                 {
                     case -1:
-                        MainOutMessage(string.Format("[{0}] 密码错误！！", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 密码错误！！");
                         break;
                     case -2:
-                        MainOutMessage(string.Format("[{0}] 密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！");
                         break;
                     case -3:
-                        MainOutMessage(string.Format("[{0}] 此帐号已经登录或被异常锁定，请稍候再登录！", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 此帐号已经登录或被异常锁定，请稍候再登录！");
                         break;
                     case -4:
-                        MainOutMessage(string.Format("[{0}] 这个帐号访问失败！\\请使用其他帐号登录，\\或者申请付费注册。", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 这个帐号访问失败！请使用其他帐号登录，或者申请付费注册。");
                         break;
                     case -5:
-                        MainOutMessage(string.Format("[{0}] 这个帐号被锁定！", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 这个帐号被锁定！");
                         break;
                     default:
-                        MainOutMessage(string.Format("[{0}] 此帐号不存在或出现未知错误！！", m_sLoginAccount));
+                        MainOutMessage($"[{m_sLoginAccount}] 此帐号不存在或出现未知错误！！");
                         break;
                 }
                 m_boSendLogin = false;
@@ -636,7 +612,7 @@ namespace MakePlayer
         private void ClientGetPasswordOK(string sData)
         {
             string sServerName = string.Empty;
-            MainOutMessage(string.Format("[{0}] 帐号登录成功！", m_sLoginAccount));
+            MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
             string sText = EDcode.DeCodeString(sData);
             HUtil32.GetValidStr3(sText, ref sServerName, new[] { "/" });
             SendSelectServer(sServerName);
@@ -663,18 +639,21 @@ namespace MakePlayer
                         m_ConnectionStatus = TConnectionStatus.cns_Failure;
                     }
                 }
-                return;
             }
         }
 
         public void Run()
         {
             Login();
-            string sData = string.Empty;
             DoNotifyEvent();
             m_boTimerMainBusy = true;
             try
             {
+                var msgData = string.Empty;
+                if (_msgList.TryDequeue(out msgData))
+                {
+                    m_sSockText = msgData;
+                }
                 if (!string.IsNullOrEmpty(m_sSockText))
                 {
                     m_sBufferText = m_sBufferText + m_sSockText;
@@ -691,6 +670,7 @@ namespace MakePlayer
                             {
                                 break;
                             }
+                            string sData = string.Empty;
                             m_sBufferText = HUtil32.ArrestStringEx(m_sBufferText, "#", "!", ref sData);
                             if (string.IsNullOrEmpty(sData))
                             {
@@ -700,7 +680,6 @@ namespace MakePlayer
                         }
                     }
                 }
-
             }
             finally
             {

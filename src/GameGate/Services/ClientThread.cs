@@ -13,7 +13,7 @@ namespace GameGate
     {
         private IClientScoket ClientSocket;
         private int nBufferOfM2Size = 0;
-        private long dwProcessServerMsgTime = 0;
+        private int dwProcessServerMsgTime = 0;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>

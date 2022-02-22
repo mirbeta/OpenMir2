@@ -84,7 +84,6 @@ namespace SelGate
 
         public void StopService()
         {
-            //int I;
             //int nSockIdx;
             //TSockaddr IPaddr;
             //MainOutMessage("正在停止服务...", 3);
@@ -101,20 +100,17 @@ namespace SelGate
             //GateShare.SaveBlockIPList();
             //ServerSocket.Close;
             //ClientSocket.Close;
-            //ClientSockeMsgList.Free;
-            //for (I = 0; I < GateShare.CurrIPaddrList.Count; I++)
+            //for (var I = 0; I < GateShare.CurrIPaddrList.Count; I++)
             //{
             //    IPaddr = GateShare.CurrIPaddrList[I];
             //    this.Dispose(IPaddr);
             //}
-            //GateShare.CurrIPaddrList.Free;
-            //for (I = 0; I < GateShare.BlockIPList.Count; I++)
+            //for (var I = 0; I < GateShare.BlockIPList.Count; I++)
             //{
             //    IPaddr = GateShare.BlockIPList[I];
             //    this.Dispose(IPaddr);
             //}
-            //GateShare.BlockIPList.Free;
-            //for (I = 0; I < GateShare.TempBlockIPList.Count; I++)
+            //for (var I = 0; I < GateShare.TempBlockIPList.Count; I++)
             //{
             //    IPaddr = GateShare.TempBlockIPList[I];
             //    this.Dispose(IPaddr);

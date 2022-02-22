@@ -8,7 +8,8 @@ namespace MakePlayer
         private int g_dwProcessTimeMin = 0;
         private int g_dwProcessTimeMax = 0;
         private int g_nPosition = 0;
-        
+        private int dwRunTick = 0;
+
         public ClientManager()
         {
             _Clients = new List<TObjClient>();
@@ -26,22 +27,21 @@ namespace MakePlayer
 
         public void Run()
         {
-            var dwRunTick = HUtil32.GetTickCount();
+            dwRunTick = HUtil32.GetTickCount();
             var boProcessLimit = false;
-            var clientList = _Clients;
-            for (var i = g_nPosition; i < clientList.Count; i++)
+            for (var i = g_nPosition; i < _Clients.Count; i++)
             {
-                clientList[i].Run();
+                _Clients[i].Run();
                 if (((HUtil32.GetTickCount() - dwRunTick) > 20))
                 {
                     g_nPosition = i;
                     boProcessLimit = true;
                     break;
                 }
-                if (clientList[i].m_boLogin && (HUtil32.GetTickCount() - clientList[i].m_dwSayTick > 3000))
+                if (_Clients[i].m_boLogin && (HUtil32.GetTickCount() - _Clients[i].m_dwSayTick > 3000))
                 {
-                    clientList[i].m_dwSayTick = HUtil32.GetTickCount();
-                    clientList[i].ClientLoginSay();
+                    _Clients[i].m_dwSayTick = HUtil32.GetTickCount();
+                    _Clients[i].ClientLoginSay();
                 }
             }
             if (!boProcessLimit)

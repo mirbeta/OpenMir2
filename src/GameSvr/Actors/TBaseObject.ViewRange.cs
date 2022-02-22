@@ -171,11 +171,14 @@ namespace GameSvr
                                         BaseObject = OSObject.CellObj as TBaseObject;
                                         if (BaseObject != null)
                                         {
-                                            if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
+                                            if ((BaseObject != null) && !BaseObject.m_boDeath && !BaseObject.m_boInvisible)
                                             {
-                                                if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                                if (!BaseObject.m_boGhost && !BaseObject.m_boFixedHideMode && !BaseObject.m_boObMode)
                                                 {
-                                                    UpdateVisibleGay(BaseObject);
+                                                    if ((m_btRaceServer < Grobal2.RC_ANIMAL) || (m_Master != null) || m_boCrazyMode || m_boNastyMode || m_boWantRefMsg || ((BaseObject.m_Master != null) && (Math.Abs(BaseObject.m_nCurrX - m_nCurrX) <= 3) && (Math.Abs(BaseObject.m_nCurrY - m_nCurrY) <= 3)) || (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                                    {
+                                                        UpdateVisibleGay(BaseObject);
+                                                    }
                                                 }
                                             }
                                         }
@@ -218,6 +221,93 @@ namespace GameSvr
             {
                 M2Share.ErrorMessage(format(sExceptionMsg2, new object[] { n24, m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
+            }
+        }
+
+
+        public virtual void SearchViewRange_Death()
+        {
+            if (m_PEnvir == null)
+            {
+                //MainOutMessage("TBaseObject::SearchViewRange_Death nil PEnvir");
+                return;
+            }
+            m_boIsVisibleActive = false;
+            for (int i = 0; i < m_VisibleActors.Count; i++)
+            {
+                m_VisibleActors[i].nVisibleFlag = 0;
+            }
+            var nStartX = m_nCurrX - m_nViewRange;
+            var nEndX = m_nCurrX + m_nViewRange;
+            var nStartY = m_nCurrY - m_nViewRange;
+            var nEndY = m_nCurrY + m_nViewRange;
+            TMapCellinfo MapCellInfo = null;
+            for (var n18 = nStartX; n18 <= nEndX; n18++)
+            {
+                for (var n1C = nStartY; n1C <= nEndY; n1C++)
+                {
+                    if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                    {
+                        var nIdx = 0;
+                        while (true)
+                        {
+                            if (MapCellInfo.ObjList.Count <= nIdx)
+                            {
+                                break;
+                            }
+                            var OSObject = MapCellInfo.ObjList[nIdx];
+                            if (OSObject != null)
+                            {
+                                if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                                {
+                                    if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
+                                    {
+                                        OSObject = null;
+                                        MapCellInfo.ObjList.RemoveAt(nIdx);
+                                        if (MapCellInfo.ObjList.Count > 0)
+                                        {
+                                            continue;
+                                        }
+                                        MapCellInfo.ObjList = null;
+                                        break;
+                                    }
+
+                                }
+                                if ((OSObject.btType == Grobal2.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
+                                {
+                                    if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
+                                    {
+                                        Dispose(OSObject.CellObj);
+                                        Dispose(OSObject);
+                                        MapCellInfo.ObjList.RemoveAt(nIdx);
+                                        if (MapCellInfo.ObjList.Count > 0)
+                                        {
+                                            continue;
+                                        }
+                                        Dispose(MapCellInfo.ObjList);
+                                    }
+                                }
+                            }
+                            nIdx++;
+                        }
+                    }
+                }
+            }
+
+            var n17 = 0;
+            while (true)
+            {
+                if (m_VisibleActors.Count < n17)
+                {
+                    var VisibleBaseObject = m_VisibleActors[n17];
+                    if (VisibleBaseObject.nVisibleFlag == 0)
+                    {
+                        m_VisibleActors.RemoveAt(n17);
+                        VisibleBaseObject = null;
+                        continue;
+                    }
+                    n17++;
+                }
             }
         }
     }

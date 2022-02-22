@@ -11,13 +11,13 @@ using SystemModule.Sockets;
 
 namespace LoginSvr
 {
-    public class LoginService
+    public class LoginService : IService
     {
         private readonly ISocketServer _serverSocket;
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
         private readonly ConfigManager _configManager;
-        private const string sConfigFile = "Logsrv.ini";
+        private const string sConfigFile = "Logsrv.conf";
         private readonly ConcurrentQueue<ReceiveData> _ReceiveQueue = null;
         private readonly ConcurrentQueue<ReceiveUserData> _ReceiveUserQueue = null;
         private readonly object _obj = new object();
@@ -428,7 +428,7 @@ namespace LoginSvr
             }
         }
 
-        private void DecodeUserData(TConfig Config, TUserInfo UserInfo,string userData)
+        private void DecodeUserData(TConfig Config, TUserInfo UserInfo, string userData)
         {
             string sMsg = string.Empty;
             var nCount = 0;
@@ -516,7 +516,7 @@ namespace LoginSvr
                         if ((HUtil32.GetTickCount() - UserInfo.dwClientTick) > 5000)
                         {
                             UserInfo.dwClientTick = HUtil32.GetTickCount();
-                            AccountCreate(Config, UserInfo, sData);
+                            AccountCreate(UserInfo, sData);
                         }
                         else
                         {
@@ -567,12 +567,11 @@ namespace LoginSvr
             }
         }
 
-        private void AccountCreate(TConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountCreate(TUserInfo UserInfo, string sData)
         {
             int nLen = 198;
             bool bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
-            const string sLogFlag = "new";
             try
             {
                 int nErrCode = -1;
@@ -627,7 +626,6 @@ namespace LoginSvr
                 TDefaultMessage DefMsg;
                 if (nErrCode == 1)
                 {
-                    WriteLogMsg(Config, sLogFlag, ref UserEntry, ref UserAddEntry);
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_SUCCESS, 0, 0, 0, 0);
                 }
                 else
@@ -647,9 +645,7 @@ namespace LoginSvr
             string sLoginID = string.Empty;
             string sOldPassword = string.Empty;
             TDefaultMessage DefMsg;
-            int n10;
             TAccountDBRecord DBRecord = null;
-            const string sChgMsg = "chg";
             try
             {
                 string sMsg = EDcode.DeCodeString(sData);
@@ -660,7 +656,7 @@ namespace LoginSvr
                 {
                     if (_accountDB.Open() && (sNewPassword.Length >= 3))
                     {
-                        n10 = _accountDB.Index(sLoginID);
+                        int n10 = _accountDB.Index(sLoginID);
                         if ((n10 >= 0) && (_accountDB.Get(n10, ref DBRecord) >= 0))
                         {
                             if ((DBRecord.nErrorCount < 5) || ((HUtil32.GetTickCount() - DBRecord.dwActionTick) > 180000))
@@ -698,7 +694,6 @@ namespace LoginSvr
                 if (nCode == 1)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHGPASSWD_SUCCESS, 0, 0, 0, 0);
-                    WriteLogMsg(Config, sChgMsg, ref DBRecord.UserEntry, ref DBRecord.UserEntryAdd);
                 }
                 else
                 {
@@ -1101,7 +1096,6 @@ namespace LoginSvr
                 }
                 if (nCode == 1)
                 {
-                    WriteLogMsg(Config, "upg", ref UserEntry, ref UserAddEntry);
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
                 }
                 else
@@ -1360,92 +1354,7 @@ namespace LoginSvr
             Config.AccountCostList.Clear();
             Config.AccountCostList.Add(accountConst.s1C, accountConst.nC);
         }
-
-        public void SaveContLogMsg(TConfig Config, string sLogMsg)
-        {
-            // int Year = 0;
-            // int Month = 0;
-            // int Day = 0;
-            // int Hour = 0;
-            // int Min = 0;
-            // int Sec = 0;
-            // int MSec = 0;
-            // string sLogDir;
-            // string sLogFileName;
-            // System.IO.FileInfo LogFile;
-            // if (sLogMsg == "")
-            // {
-            //     return;
-            // }
-            // Year = DateTime.Today.Year;
-            // Month = DateTime.Today.Month;
-            // Day = DateTime.Today.Day;
-            // Hour = DateTime.Now.Hour;
-            // Min = DateTime.Now.Minute;
-            // Sec = DateTime.Now.Second;
-            // MSec = DateTime.Now.Millisecond;
-            // if (!Directory.Exists(Config.sCountLogDir))
-            // {
-            //     Directory.CreateDirectory(Config.sCountLogDir);
-            // }
-            // sLogDir = Config.sCountLogDir + (Year).ToString() + "-" + HUtil32.IntToStr2(Month);
-            // if (!Directory.Exists(sLogDir))
-            // {
-            //     CreateDirectory((sLogDir as string), null);
-            // }
-            // sLogFileName = sLogDir + "\\" + (Year).ToString() + "-" + HUtil32.IntToStr2(Month) + "-" + HUtil32.IntToStr2(Day) + ".txt";
-            // LogFile = new FileInfo(sLogFileName);
-            // if (!File.Exists(sLogFileName))
-            // {
-            //     StreamWriter _W_0 = LogFile.CreateText();
-            // }
-            // else
-            // {
-            //     _W_0 = LogFile.AppendText();
-            // }
-            // sLogMsg = sLogMsg + "\09" + DateTime.Now.ToString();
-            // _W_0.WriteLine(sLogMsg);
-            // _W_0.Close();
-        }
-
-        public void WriteLogMsg(TConfig Config, string sType, ref TUserEntry UserEntry, ref TUserEntryAdd UserAddEntry)
-        {
-            // short Year;
-            // short Month;
-            // short Day;
-            // string sLogDir;
-            // string sLogFileName;
-            // System.IO.FileInfo LogFile;
-            // string sLogFormat;
-            // string sLogMsg;
-            // Year = DateTime.Today.Year;
-            // Month = DateTime.Today.Month;
-            // Day = DateTime.Today.Day;
-            // if (!Directory.Exists(Config.sChrLogDir))
-            // {
-            //     Directory.CreateDirectory(Config.sChrLogDir);
-            // }
-            // sLogDir = Config.sChrLogDir + (Year).ToString() + "-" + HUtil32.IntToStr2(Month);
-            // if (!Directory.Exists(sLogDir))
-            // {
-            //     CreateDirectory((sLogDir as string), null);
-            // }
-            // sLogFileName = sLogDir + "\\Id_" + HUtil32.IntToStr2(Day) + ".log";
-            // LogFile = new FileInfo(sLogFileName);
-            // if (!File.Exists(sLogFileName))
-            // {
-            //     _W_0 = LogFile.CreateText();
-            // }
-            // else
-            // {
-            //     _W_0 = LogFile.AppendText();
-            // }
-            // sLogFormat = "*%s*\09%s\09\"%s\"\09%s\09%s\09%s\09%s\09%s\09%s\09%s\09%s\09%s\09[%s]";
-            // sLogMsg = format(sLogFormat, new string[] { sType, UserEntry.sAccount, UserEntry.sPassword, UserEntry.sUserName, UserEntry.sSSNo, UserEntry.sQuiz, UserEntry.sAnswer, UserEntry.sEMail, UserAddEntry.sQuiz2, UserAddEntry.sAnswer2, UserAddEntry.sBirthDay, UserAddEntry.sMobilePhone, DateTime.Now.ToString() });
-            // _W_0.WriteLine(sLogMsg);
-            // _W_0.Close();
-        }
-
+      
         public void StartService(TConfig Config)
         {
             InitializeConfig(Config);

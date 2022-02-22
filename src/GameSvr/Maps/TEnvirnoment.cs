@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
@@ -16,6 +16,7 @@ namespace GameSvr
         public string m_sMapFileName = string.Empty;
         public string sMapName = string.Empty;
         public string sMapDesc = string.Empty;
+        private ArrayPool<TMapCellinfo> samePool;
         private TMapCellinfo[] MapCellArray;
         public int nMinMap = 0;
         public int nServerIndex = 0;
@@ -33,6 +34,24 @@ namespace GameSvr
         private int m_nHumCount = 0;
         public IList<PointInfo> m_PointList;
 
+        public TEnvirnoment()
+        {
+            samePool = ArrayPool<TMapCellinfo>.Shared;
+            sMapName = string.Empty;
+            nServerIndex = 0;
+            nMinMap = 0;
+            Flag = new TMapFlag();
+            m_nMonCount = 0;
+            m_nHumCount = 0;
+            m_DoorList = new List<TDoorInfo>();
+            m_QuestList = new List<TMapQuestInfo>();
+            m_dwWhisperTick = 0;
+        }
+
+        ~TEnvirnoment()
+        {
+            samePool.Return(MapCellArray);
+        }
 
         public bool AllowMagics(string magicName)
         {
@@ -683,19 +702,6 @@ namespace GameSvr
             }
         }
 
-        public TEnvirnoment()
-        {
-            sMapName = string.Empty;
-            nServerIndex = 0;
-            nMinMap = 0;
-            Flag = new TMapFlag();
-            m_nMonCount = 0;
-            m_nHumCount = 0;
-            m_DoorList = new List<TDoorInfo>();
-            m_QuestList = new List<TMapQuestInfo>();
-            m_dwWhisperTick = 0;
-        }
-
         public bool LoadMapData(string sMapFile)
         {
             var result = false;
@@ -846,7 +852,8 @@ namespace GameSvr
                 }
                 wWidth = nWidth;
                 wHeight = nHeight;
-                MapCellArray = new TMapCellinfo[nWidth * nHeight];
+                //MapCellArray = new TMapCellinfo[nWidth * nHeight];
+                MapCellArray = samePool.Rent(nWidth * nHeight);
             }
         }
 

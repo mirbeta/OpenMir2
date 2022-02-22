@@ -7,837 +7,6 @@ namespace GameSvr
 {
     public partial class TBaseObject
     {
-        public virtual void Die()
-        {
-            int tExp;
-            bool tCheck;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::Die 1";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::Die 2";
-            const string sExceptionMsg3 = "[Exception] TBaseObject::Die 3";
-            if (m_boSuperMan)
-            {
-                return;
-            }
-            if (m_boSupermanItem)
-            {
-                return;
-            }
-            m_boDeath = true;
-            m_dwDeathTick = HUtil32.GetTickCount();
-            if (m_Master != null)
-            {
-                m_ExpHitter = null;
-                m_LastHiter = null;
-            }
-            m_nIncSpell = 0;
-            m_nIncHealth = 0;
-            m_nIncHealing = 0;
-            KillFunc();
-            try
-            {
-                if (m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_LastHiter != null)
-                {
-                    if (M2Share.g_Config.boMonSayMsg)
-                    {
-                        MonsterSayMsg(m_LastHiter, TMonStatus.s_Die);
-                    }
-                    if (m_ExpHitter != null)
-                    {
-                        if (m_ExpHitter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                        {
-                            if (M2Share.g_FunctionNPC != null)
-                            {
-                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as TPlayObject, "@PlayKillMob", false);
-                            }
-                            tExp = m_ExpHitter.CalcGetExp(m_Abil.Level, m_dwFightExp);
-                            if (!M2Share.g_Config.boVentureServer)
-                            {
-                                if (m_ExpHitter.m_boAI)
-                                {
-                                    (m_ExpHitter as TAIPlayObject).GainExp(tExp);
-                                }
-                                else
-                                {
-                                    (m_ExpHitter as TPlayObject).GainExp(tExp);
-                                }
-                            }
-                            // 是否执行任务脚本
-                            if (m_PEnvir.IsCheapStuff())
-                            {
-                                TMerchant QuestNPC;
-                                if (m_ExpHitter.m_GroupOwner != null)
-                                {
-                                    for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
-                                    {
-                                        TPlayObject GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
-                                        if (!GroupHuman.m_boDeath && m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && m_ExpHitter == GroupHuman)
-                                        {
-                                            tCheck = false;
-                                        }
-                                        else
-                                        {
-                                            tCheck = true;
-                                        }
-                                        QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(GroupHuman, m_sCharName, "", tCheck);
-                                        if (QuestNPC != null)
-                                        {
-                                            QuestNPC.Click(GroupHuman);
-                                        }
-                                    }
-                                }
-                                QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(m_ExpHitter, m_sCharName, "", false);
-                                if (QuestNPC != null)
-                                {
-                                    QuestNPC.Click(m_ExpHitter as TPlayObject);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (m_ExpHitter.m_Master != null)
-                            {
-                                m_ExpHitter.GainSlaveExp(m_Abil.Level);
-                                tExp = m_ExpHitter.m_Master.CalcGetExp(m_Abil.Level, m_dwFightExp);
-                                if (!M2Share.g_Config.boVentureServer)
-                                {
-                                    if (m_ExpHitter.m_Master.m_boAI)
-                                    {
-                                        (m_ExpHitter.m_Master as TAIPlayObject).GainExp(tExp);
-                                    }
-                                    else
-                                    {
-                                        (m_ExpHitter.m_Master as TPlayObject).GainExp(tExp);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                        {
-                            if (M2Share.g_FunctionNPC != null)
-                            {
-                                M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@PlayKillMob", false);
-                            }
-                            tExp = m_LastHiter.CalcGetExp(m_Abil.Level, m_dwFightExp);
-                            if (!M2Share.g_Config.boVentureServer)
-                            {
-                                if (m_LastHiter.m_boAI)
-                                {
-                                    (m_LastHiter as TAIPlayObject).GainExp(tExp);
-                                }
-                                else
-                                {
-                                    (m_LastHiter as TPlayObject).GainExp(tExp);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (M2Share.g_Config.boMonSayMsg && m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null)
-                {
-                    m_LastHiter.MonsterSayMsg(this, TMonStatus.s_KillHuman);
-                }
-                m_Master = null;
-            }
-            catch (Exception e)
-            {
-                M2Share.ErrorMessage(sExceptionMsg1);
-                M2Share.ErrorMessage(e.Message);
-            }
-            try
-            {
-                var boPK = false;
-                if (!M2Share.g_Config.boVentureServer && !m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone)
-                {
-                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null && PKLevel() < 2)
-                    {
-                        if ((m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_LastHiter.m_btRaceServer == Grobal2.RC_NPC))//允许NPC杀死人物
-                        {
-                            boPK = true;
-                        }
-                        if (m_LastHiter.m_Master != null)
-                        {
-                            if (m_LastHiter.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                            {
-                                m_LastHiter = m_LastHiter.m_Master;
-                                boPK = true;
-                            }
-                        }
-                    }
-                }
-                if (boPK && m_LastHiter != null)
-                {
-                    var guildwarkill = false;
-                    if (m_MyGuild != null && m_LastHiter.m_MyGuild != null)
-                    {
-                        if (GetGuildRelation(this, m_LastHiter) == 2)
-                        {
-                            guildwarkill = true;    
-                        }
-                    }
-                    var Castle = M2Share.CastleManager.InCastleWarArea(this);
-                    if (Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
-                    {
-                        guildwarkill = true;
-                    }
-                    if (!guildwarkill)
-                    {
-                        if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                        {
-                            (this as TPlayObject).PKDie(m_LastHiter as TPlayObject);
-                        }
-                        else
-                        {
-                            if (!m_LastHiter.IsGoodKilling(this))
-                            {
-                                m_LastHiter.IncPkPoint(M2Share.g_Config.nKillHumanAddPKPoint);
-                                m_LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                                SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
-                                m_LastHiter.AddBodyLuck(-M2Share.g_Config.nKillHumanDecLuckPoint);
-                                if (PKLevel() < 1)
-                                {
-                                    if (M2Share.RandomNumber.Random(5) == 0)
-                                    {
-                                        m_LastHiter.MakeWeaponUnlock();
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                m_LastHiter.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, TMsgColor.c_Green, TMsgType.t_Hint);
-                            }
-                        }
-                        // 检查攻击人是否用了着经验或等级装备
-                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                        {
-                            if (m_LastHiter.m_dwPKDieLostExp > 0)
-                            {
-                                if (m_Abil.Exp >= m_LastHiter.m_dwPKDieLostExp)
-                                {
-                                    m_Abil.Exp -= (short)m_LastHiter.m_dwPKDieLostExp;
-                                }
-                                else
-                                {
-                                    m_Abil.Exp = 0;
-                                }
-                            }
-                            if (m_LastHiter.m_nPKDieLostLevel > 0)
-                            {
-                                if (m_Abil.Level >= m_LastHiter.m_nPKDieLostLevel)
-                                {
-                                    m_Abil.Level -= (ushort)m_LastHiter.m_nPKDieLostLevel;
-                                }
-                                else
-                                {
-                                    m_Abil.Level = 0;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg2);
-            }
-            try
-            {
-                if (!m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone && !m_boAnimal)
-                {
-                    var AttackBaseObject = m_ExpHitter;
-                    if (m_ExpHitter != null && m_ExpHitter.m_Master != null)
-                    {
-                        AttackBaseObject = m_ExpHitter.m_Master;
-                    }
-                    if (m_btRaceServer != Grobal2.RC_PLAYOBJECT)
-                    {
-                        DropUseItems(AttackBaseObject);
-                        if (m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
-                        {
-                            ScatterBagItems(AttackBaseObject);
-                        }
-                        if (m_btRaceServer >= Grobal2.RC_ANIMAL && m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
-                        {
-                            ScatterGolds(AttackBaseObject);
-                        }
-                    }
-                    else
-                    {
-                        if (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM)//允许设置 m_boNoItem 后人物死亡不掉物品
-                        {
-                            if (AttackBaseObject != null)
-                            {
-                                if (M2Share.g_Config.boKillByHumanDropUseItem && AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boKillByMonstDropUseItem && AttackBaseObject.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
-                                {
-                                    DropUseItems(null);
-                                }
-                            }
-                            else
-                            {
-                                DropUseItems(null);
-                            }
-                            if (M2Share.g_Config.boDieScatterBag)
-                            {
-                                ScatterBagItems(null);
-                            }
-                            if (M2Share.g_Config.boDieDropGold)
-                            {
-                                ScatterGolds(null);
-                            }
-                        }
-                        AddBodyLuck(-(50 - (50 - m_Abil.Level * 5)));
-                    }
-                }
-                string tStr;
-                if (m_PEnvir.Flag.boFight3Zone)
-                {
-                    m_nFightZoneDieCount++;
-                    if (m_MyGuild != null)
-                    {
-                        m_MyGuild.TeamFightWhoDead(m_sCharName);
-                    }
-                    if (m_LastHiter != null)
-                    {
-                        if (m_LastHiter.m_MyGuild != null && m_MyGuild != null)
-                        {
-                            m_LastHiter.m_MyGuild.TeamFightWhoWinPoint(m_LastHiter.m_sCharName, 100);
-                            tStr = m_LastHiter.m_MyGuild.sGuildName + ':' + m_LastHiter.m_MyGuild.nContestPoint + "  " + m_MyGuild.sGuildName + ':' + m_MyGuild.nContestPoint;
-                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- " + tStr);
-                        }
-                    }
-                }
-                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                {
-                    if (m_GroupOwner != null)
-                    {
-                        m_GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
-                    }
-                    if (m_LastHiter != null)
-                    {
-                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                        {
-                            tStr = m_LastHiter.m_sCharName;
-                        }
-                        else
-                        {
-                            tStr = '#' + m_LastHiter.m_sCharName;
-                        }
-                    }
-                    else
-                    {
-                        tStr = "####";
-                    }
-                    M2Share.AddGameDataLog("19" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + "FZ-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
-                }
-                // 减少地图上怪物计数
-                if (m_Master == null && !m_boDelFormMaped)
-                {
-                    m_PEnvir.DelObjectCount(this);
-                    m_boDelFormMaped = true;
-                }
-                SendRefMsg(Grobal2.RM_DEATH, m_btDirection, m_nCurrX, m_nCurrY, 1, "");
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg3);
-            }
-        }
-
-        internal virtual void ReAlive()
-        {
-            m_boDeath = false;
-            SendRefMsg(Grobal2.RM_ALIVE, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
-        }
-
-        protected virtual bool IsProtectTarget(TBaseObject BaseObject)
-        {
-            var result = true;
-            if (BaseObject == null)
-            {
-                return result;
-            }
-            if (InSafeZone() || BaseObject.InSafeZone())
-            {
-                result = false;
-            }
-            if (!BaseObject.m_boInFreePKArea)
-            {
-                if (M2Share.g_Config.boPKLevelProtect)// 新人保护
-                {
-                    if (m_Abil.Level > M2Share.g_Config.nPKProtectLevel)// 如果大于指定等级
-                    {
-                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel && 
-                            BaseObject.PKLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
-                        {
-                            result = false;
-                            return result;
-                        }
-                    }
-                    if (m_Abil.Level <= M2Share.g_Config.nPKProtectLevel)// 如果小于指定等级
-                    {
-                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
-                        {
-                            result = false;
-                            return result;
-                        }
-                    }
-                }
-                // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if (PKLevel() >= 2 && m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
-                {
-                    if (BaseObject.m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && BaseObject.PKLevel() < 2)
-                    {
-                        result = false;
-                        return result;
-                    }
-                }
-                // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if (m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && PKLevel() < 2)
-                {
-                    if (BaseObject.PKLevel() >= 2 && BaseObject.m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
-                    {
-                        result = false;
-                        return result;
-                    }
-                }
-                if (((HUtil32.GetTickCount() - m_dwMapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick) < 3000))
-                {
-                    result = false;
-                }
-            }
-            return result;
-        }
-
-        protected virtual void ProcessSayMsg(string sMsg)
-        {
-            string sCharName;
-            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-            {
-                sCharName = m_sCharName;
-            }
-            else
-            {
-                sCharName = M2Share.FilterShowName(m_sCharName);
-            }
-            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, sCharName + ':' + sMsg);
-        }
-
-        public virtual void MakeGhost()
-        {
-            m_boGhost = true;
-            m_dwGhostTick = HUtil32.GetTickCount();
-            DisappearA();
-        }
-
-        /// <summary>
-        /// 散落包裹物品
-        /// </summary>
-        /// <param name="ItemOfCreat"></param>
-        protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
-        {
-            TUserItem UserItem;
-            GameItem StdItem;
-            const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
-            try
-            {
-                var DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
-                if ((m_btRaceServer == Grobal2.RC_PLAYCLONE) && (m_Master != null))
-                {
-                    return;
-                }
-                for (var i = m_ItemList.Count - 1; i >= 0; i--)
-                {
-                    UserItem = m_ItemList[i];
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    var boCanNotDrop = false;
-                    if (StdItem != null)
-                    {
-                        TMonDrop MonDrop = null;
-                        if (M2Share.g_MonDropLimitLIst.TryGetValue(StdItem.Name, out MonDrop))
-                        {
-                            if (MonDrop.nDropCount < MonDrop.nCountLimit)
-                            {
-                                MonDrop.nDropCount++;
-                                M2Share.g_MonDropLimitLIst[StdItem.Name] = MonDrop;
-                            }
-                            else
-                            {
-                                MonDrop.nNoDropCount++;
-                                boCanNotDrop = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (boCanNotDrop)
-                    {
-                        continue;
-                    }
-                    if (DropItemDown(UserItem, DropWide, true, ItemOfCreat, this))
-                    {
-                        Dispose(UserItem);
-                        m_ItemList.RemoveAt(i);
-                    }
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg);
-            }
-        }
-
-        protected virtual void DropUseItems(TBaseObject BaseObject)
-        {
-            int nC;
-            int nRate;
-            GameItem StdItem;
-            IList<TDeleteItem> DropItemList = null;
-            const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
-            try
-            {
-                if (m_boNoDropUseItem)
-                {
-                    return;
-                }
-                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                {
-                    nC = 0;
-                    while (true)
-                    {
-                        if (m_UseItems[nC] == null)
-                        {
-                            nC++;
-                            continue;
-                        }
-                        StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nC].wIndex);
-                        if (StdItem != null)
-                        {
-                            if ((StdItem.Reserved & 8) != 0)
-                            {
-                                if (DropItemList == null)
-                                {
-                                    DropItemList = new List<TDeleteItem>();
-                                }
-                                DropItemList.Add(new TDeleteItem()
-                                {
-                                    MakeIndex = m_UseItems[nC].MakeIndex
-                                });
-                                if (StdItem.NeedIdentify == 1)
-                                {
-                                    M2Share.AddGameDataLog("16" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
-                                }
-                                m_UseItems[nC].wIndex = 0;
-                            }
-                        }
-                        nC++;
-                        if (nC >= 9)
-                        {
-                            break;
-                        }
-                    }
-                }
-                if (PKLevel() > 2)
-                {
-                    nRate = 15;
-                }
-                else
-                {
-                    nRate = 30;
-                }
-                nC = 0;
-                while (true)
-                {
-                    if (M2Share.RandomNumber.Random(nRate) == 0)
-                    {
-                        if (m_UseItems[nC] == null)
-                        {
-                            nC++;
-                            continue;
-                        }
-                        if (DropItemDown(m_UseItems[nC], 2, true, BaseObject, this))
-                        {
-                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nC].wIndex);
-                            if (StdItem != null)
-                            {
-                                if ((StdItem.Reserved & 10) == 0)
-                                {
-                                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                                    {
-                                        if (DropItemList == null)
-                                        {
-                                            DropItemList = new List<TDeleteItem>();
-                                        }
-                                        DropItemList.Add(new TDeleteItem()
-                                        {
-                                            sItemName = M2Share.UserEngine.GetStdItemName(m_UseItems[nC].wIndex),
-                                            MakeIndex = m_UseItems[nC].MakeIndex
-                                        });
-                                    }
-                                    m_UseItems[nC].wIndex = 0;
-                                }
-                            }
-                        }
-                    }
-                    nC++;
-                    if (nC >= 9)
-                    {
-                        break;
-                    }
-                }
-                if (DropItemList != null)
-                {
-                    var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectSystem.AddOhter(ObjectId, DropItemList);
-                    SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
-                }
-            }
-            catch
-            {
-                M2Share.ErrorMessage(sExceptionMsg);
-            }
-        }
-
-        public virtual void SetTargetCreat(TBaseObject BaseObject)
-        {
-            m_TargetCret = BaseObject;
-            m_dwTargetFocusTick = HUtil32.GetTickCount();
-        }
-
-        protected virtual void DelTargetCreat()
-        {
-            m_TargetCret = null;
-        }
-
-        public virtual bool IsProperFriend(TBaseObject BaseObject)
-        {
-            bool result = false;
-            if (BaseObject == null)
-            {
-                return result;
-            }
-            if (m_btRaceServer >= Grobal2.RC_ANIMAL)
-            {
-                if (BaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL)
-                {
-                    result = true;
-                }
-                if (BaseObject.m_Master != null)
-                {
-                    result = false;
-                }
-                return result;
-            }
-            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-            {
-                result = IsProperFriend_IsFriend(BaseObject);
-                if (BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL)
-                {
-                    return result;
-                }
-                if (BaseObject.m_Master == this)
-                {
-                    result = true;
-                    return result;
-                }
-                if (BaseObject.m_Master != null)
-                {
-                    result = IsProperFriend_IsFriend(BaseObject.m_Master);
-                    return result;
-                }
-            }
-            else
-            {
-                result = true;
-            }
-            return result;
-        }
-
-        public virtual bool Operate(TProcessMessage ProcessMsg)
-        {
-            int nDamage;
-            int nTargetX;
-            int nTargetY;
-            int nPower;
-            int nRage;
-            TBaseObject TargetBaseObject;
-            const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
-            bool result = false;
-            try
-            {
-                switch (ProcessMsg.wIdent)
-                {
-                    case Grobal2.RM_MAGSTRUCK:
-                    case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (m_btRaceServer >= Grobal2.RC_ANIMAL) && !bo2BF && (m_Abil.Level < 50))
-                        {
-                            m_dwWalkTick = m_dwWalkTick + 800 + M2Share.RandomNumber.Random(1000);
-                        }
-                        nDamage = GetMagStruckDamage(null, ProcessMsg.nParam1);
-                        if (nDamage > 0)
-                        {
-                            StruckDamage(nDamage);
-                            HealthSpellChanged();
-                            SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.BaseObject);
-                            if (M2Share.g_Config.boMonDelHptoExp)
-                            {
-                                if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                                {
-                                    if ((TargetBaseObject as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
-                                    {
-                                        if (!M2Share.GetNoHptoexpMonList(m_sCharName))
-                                        {
-                                            if (TargetBaseObject.m_boAI)
-                                            {
-                                                (TargetBaseObject as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
-                                            }
-                                            else
-                                            {
-                                                (TargetBaseObject as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYCLONE)
-                                {
-                                    if (TargetBaseObject.m_Master != null)
-                                    {
-                                        if ((TargetBaseObject.m_Master as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
-                                        {
-                                            if (!M2Share.GetNoHptoexpMonList(m_sCharName))
-                                            {
-                                                if (TargetBaseObject.m_Master.m_boAI)
-                                                {
-                                                    (TargetBaseObject.m_Master as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
-                                                }
-                                                else
-                                                {
-                                                    (TargetBaseObject.m_Master as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (m_btRaceServer != Grobal2.RC_PLAYOBJECT)
-                            {
-                                if (m_boAnimal)
-                                {
-                                    m_nMeatQuality -= (ushort)(nDamage * 1000);
-                                }
-                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
-                            }
-                        }
-                        if (m_boFastParalysis)
-                        {
-                            m_wStatusTimeArr[Grobal2.POISON_STONE] = 1;
-                            m_boFastParalysis = false;
-                        }
-                        break;
-                    case Grobal2.RM_MAGHEALING:
-                        if ((m_nIncHealing + ProcessMsg.nParam1) < 300)
-                        {
-                            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                            {
-                                m_nIncHealing += ProcessMsg.nParam1;
-                                m_nPerHealing = 5;
-                            }
-                            else
-                            {
-                                m_nIncHealing += ProcessMsg.nParam1;
-                                m_nPerHealing = 5;
-                            }
-                        }
-                        else
-                        {
-                            m_nIncHealing = 300;
-                        }
-                        break;
-                    case Grobal2.RM_10101:
-                        SendRefMsg(ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
-                        if ((ProcessMsg.BaseObject == Grobal2.RM_STRUCK) && (m_btRaceServer != Grobal2.RC_PLAYOBJECT))
-                        {
-                            SendMsg(this, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
-                        }
-                        if (m_boFastParalysis)
-                        {
-                            m_wStatusTimeArr[Grobal2.POISON_STONE] = 1;
-                            m_boFastParalysis = false;
-                        }
-                        break;
-                    case Grobal2.RM_DELAYMAGIC:
-                        nPower = ProcessMsg.wParam;
-                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
-                        nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
-                        if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
-                        {
-                            SetTargetCreat(TargetBaseObject);
-                            if (TargetBaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL)
-                            {
-                                nPower = HUtil32.Round(nPower / 1.2);
-                            }
-                            if ((Math.Abs(nTargetX - TargetBaseObject.m_nCurrX) <= nRage) && (Math.Abs(nTargetY - TargetBaseObject.m_nCurrY) <= nRage))
-                            {
-                                TargetBaseObject.SendMsg(this, Grobal2.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
-                            }
-                        }
-                        break;
-                    case Grobal2.RM_10155:
-                        MapRandomMove(ProcessMsg.sMsg, ProcessMsg.wParam);
-                        break;
-                    case Grobal2.RM_DELAYPUSHED:
-                        nPower = ProcessMsg.wParam;
-                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
-                        nRage = ProcessMsg.nParam2;
-                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
-                        if (TargetBaseObject != null)
-                        {
-                            TargetBaseObject.CharPushed((byte)nPower, nRage);
-                        }
-                        break;
-                    case Grobal2.RM_POISON:
-                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
-                        if (TargetBaseObject != null)
-                        {
-                            if (IsProperTarget(TargetBaseObject))
-                            {
-                                SetTargetCreat(TargetBaseObject);
-                                if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
-                                {
-                                    SetPKFlag(TargetBaseObject);
-                                }
-                                SetLastHiter(TargetBaseObject);
-                            }
-                            MakePosion(ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
-                        }
-                        else
-                        {
-                            MakePosion(ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
-                        }
-                        break;
-                    case Grobal2.RM_TRANSPARENT:
-                        M2Share.MagicManager.MagMakePrivateTransparent(this, ProcessMsg.nParam1);
-                        break;
-                    case Grobal2.RM_DOOPENHEALTH:
-                        MakeOpenHealth();
-                        break;
-                    /*default:
-                        Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                        break;*/
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
-            }
-            return result;
-        }
-
         public virtual void Run()
         {
             TProcessMessage ProcessMsg = null;
@@ -925,12 +94,29 @@ namespace GameSvr
                     {
                         m_nSpellTick = 0;
                     }
+
+
                 }
                 else
                 {
-                    if ((HUtil32.GetTickCount() - m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime)// 3 * 60 * 1000
+                    if (m_boCanReAlive && m_pMonGen != null)
                     {
-                        MakeGhost();
+                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.UserEngine.ProcessMonsters_GetZenTime(m_pMonGen.dwZenTime) - 20 * 1000);
+                        if (dwMakeGhostTime > M2Share.g_Config.dwMakeGhostTime)
+                        {
+                            dwMakeGhostTime = M2Share.g_Config.dwMakeGhostTime;
+                        }
+                        if ((HUtil32.GetTickCount() - m_dwDeathTick > dwMakeGhostTime))
+                        {
+                            MakeGhost();
+                        }
+                    }
+                    else
+                    {
+                        if ((HUtil32.GetTickCount() - m_dwDeathTick) > M2Share.g_Config.dwMakeGhostTime)// 3 * 60 * 1000
+                        {
+                            MakeGhost();
+                        }
                     }
                 }
             }
@@ -1500,6 +686,862 @@ namespace GameSvr
                 M2Share.g_nBaseObjTimeMax = M2Share.g_nBaseObjTimeMin;
             }
         }
+
+        public virtual void Die()
+        {
+            int tExp;
+            bool tCheck;
+            const string sExceptionMsg1 = "[Exception] TBaseObject::Die 1";
+            const string sExceptionMsg2 = "[Exception] TBaseObject::Die 2";
+            const string sExceptionMsg3 = "[Exception] TBaseObject::Die 3";
+            if (m_boSuperMan)
+            {
+                return;
+            }
+            if (m_boSupermanItem)
+            {
+                return;
+            }
+            m_boDeath = true;
+            m_dwDeathTick = HUtil32.GetTickCount();
+            if (m_Master != null)
+            {
+                m_ExpHitter = null;
+                m_LastHiter = null;
+            }
+
+            if (m_boCanReAlive)
+            {
+                if ((m_pMonGen != null) && (m_pMonGen.Envir != m_PEnvir))
+                {
+                    m_boCanReAlive = false;
+                    if (m_pMonGen.nActiveCount > 0)
+                    {
+                        m_pMonGen.nActiveCount--;
+                    }
+                    m_pMonGen = null;
+                }
+            }
+
+            m_nIncSpell = 0;
+            m_nIncHealth = 0;
+            m_nIncHealing = 0;
+            KillFunc();
+            try
+            {
+                if (m_btRaceServer != Grobal2.RC_PLAYOBJECT && m_LastHiter != null)
+                {
+                    if (M2Share.g_Config.boMonSayMsg)
+                    {
+                        MonsterSayMsg(m_LastHiter, TMonStatus.s_Die);
+                    }
+                    if (m_ExpHitter != null)
+                    {
+                        if (m_ExpHitter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        {
+                            if (M2Share.g_FunctionNPC != null)
+                            {
+                                M2Share.g_FunctionNPC.GotoLable(m_ExpHitter as TPlayObject, "@PlayKillMob", false);
+                            }
+                            tExp = m_ExpHitter.CalcGetExp(m_Abil.Level, m_dwFightExp);
+                            if (!M2Share.g_Config.boVentureServer)
+                            {
+                                if (m_ExpHitter.m_boAI)
+                                {
+                                    (m_ExpHitter as TAIPlayObject).GainExp(tExp);
+                                }
+                                else
+                                {
+                                    (m_ExpHitter as TPlayObject).GainExp(tExp);
+                                }
+                            }
+                            // 是否执行任务脚本
+                            if (m_PEnvir.IsCheapStuff())
+                            {
+                                TMerchant QuestNPC;
+                                if (m_ExpHitter.m_GroupOwner != null)
+                                {
+                                    for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
+                                    {
+                                        TPlayObject GroupHuman = m_ExpHitter.m_GroupOwner.m_GroupMembers[i];
+                                        if (!GroupHuman.m_boDeath && m_ExpHitter.m_PEnvir == GroupHuman.m_PEnvir && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && Math.Abs(m_ExpHitter.m_nCurrX - GroupHuman.m_nCurrX) <= 12 && m_ExpHitter == GroupHuman)
+                                        {
+                                            tCheck = false;
+                                        }
+                                        else
+                                        {
+                                            tCheck = true;
+                                        }
+                                        QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(GroupHuman, m_sCharName, "", tCheck);
+                                        if (QuestNPC != null)
+                                        {
+                                            QuestNPC.Click(GroupHuman);
+                                        }
+                                    }
+                                }
+                                QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(m_ExpHitter, m_sCharName, "", false);
+                                if (QuestNPC != null)
+                                {
+                                    QuestNPC.Click(m_ExpHitter as TPlayObject);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (m_ExpHitter.m_Master != null)
+                            {
+                                m_ExpHitter.GainSlaveExp(m_Abil.Level);
+                                tExp = m_ExpHitter.m_Master.CalcGetExp(m_Abil.Level, m_dwFightExp);
+                                if (!M2Share.g_Config.boVentureServer)
+                                {
+                                    if (m_ExpHitter.m_Master.m_boAI)
+                                    {
+                                        (m_ExpHitter.m_Master as TAIPlayObject).GainExp(tExp);
+                                    }
+                                    else
+                                    {
+                                        (m_ExpHitter.m_Master as TPlayObject).GainExp(tExp);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        {
+                            if (M2Share.g_FunctionNPC != null)
+                            {
+                                M2Share.g_FunctionNPC.GotoLable(m_LastHiter as TPlayObject, "@PlayKillMob", false);
+                            }
+                            tExp = m_LastHiter.CalcGetExp(m_Abil.Level, m_dwFightExp);
+                            if (!M2Share.g_Config.boVentureServer)
+                            {
+                                if (m_LastHiter.m_boAI)
+                                {
+                                    (m_LastHiter as TAIPlayObject).GainExp(tExp);
+                                }
+                                else
+                                {
+                                    (m_LastHiter as TPlayObject).GainExp(tExp);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (M2Share.g_Config.boMonSayMsg && m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null)
+                {
+                    m_LastHiter.MonsterSayMsg(this, TMonStatus.s_KillHuman);
+                }
+                m_Master = null;
+            }
+            catch (Exception e)
+            {
+                M2Share.ErrorMessage(sExceptionMsg1);
+                M2Share.ErrorMessage(e.Message);
+            }
+            try
+            {
+                var boPK = false;
+                if (!M2Share.g_Config.boVentureServer && !m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone)
+                {
+                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null && PKLevel() < 2)
+                    {
+                        if ((m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT) || (m_LastHiter.m_btRaceServer == Grobal2.RC_NPC))//允许NPC杀死人物
+                        {
+                            boPK = true;
+                        }
+                        if (m_LastHiter.m_Master != null)
+                        {
+                            if (m_LastHiter.m_Master.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                            {
+                                m_LastHiter = m_LastHiter.m_Master;
+                                boPK = true;
+                            }
+                        }
+                    }
+                }
+                if (boPK && m_LastHiter != null)
+                {
+                    var guildwarkill = false;
+                    if (m_MyGuild != null && m_LastHiter.m_MyGuild != null)
+                    {
+                        if (GetGuildRelation(this, m_LastHiter) == 2)
+                        {
+                            guildwarkill = true;    
+                        }
+                    }
+                    var Castle = M2Share.CastleManager.InCastleWarArea(this);
+                    if (Castle != null && Castle.m_boUnderWar || m_boInFreePKArea)
+                    {
+                        guildwarkill = true;
+                    }
+                    if (!guildwarkill)
+                    {
+                        if ((M2Share.g_Config.boKillHumanWinLevel || M2Share.g_Config.boKillHumanWinExp || m_PEnvir.Flag.boPKWINLEVEL || m_PEnvir.Flag.boPKWINEXP) && m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        {
+                            (this as TPlayObject).PKDie(m_LastHiter as TPlayObject);
+                        }
+                        else
+                        {
+                            if (!m_LastHiter.IsGoodKilling(this))
+                            {
+                                m_LastHiter.IncPkPoint(M2Share.g_Config.nKillHumanAddPKPoint);
+                                m_LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                                m_LastHiter.AddBodyLuck(-M2Share.g_Config.nKillHumanDecLuckPoint);
+                                if (PKLevel() < 1)
+                                {
+                                    if (M2Share.RandomNumber.Random(5) == 0)
+                                    {
+                                        m_LastHiter.MakeWeaponUnlock();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                m_LastHiter.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, TMsgColor.c_Green, TMsgType.t_Hint);
+                            }
+                        }
+                        // 检查攻击人是否用了着经验或等级装备
+                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        {
+                            if (m_LastHiter.m_dwPKDieLostExp > 0)
+                            {
+                                if (m_Abil.Exp >= m_LastHiter.m_dwPKDieLostExp)
+                                {
+                                    m_Abil.Exp -= (short)m_LastHiter.m_dwPKDieLostExp;
+                                }
+                                else
+                                {
+                                    m_Abil.Exp = 0;
+                                }
+                            }
+                            if (m_LastHiter.m_nPKDieLostLevel > 0)
+                            {
+                                if (m_Abil.Level >= m_LastHiter.m_nPKDieLostLevel)
+                                {
+                                    m_Abil.Level -= (ushort)m_LastHiter.m_nPKDieLostLevel;
+                                }
+                                else
+                                {
+                                    m_Abil.Level = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg2);
+            }
+            try
+            {
+                if (!m_PEnvir.Flag.boFightZone && !m_PEnvir.Flag.boFight3Zone && !m_boAnimal)
+                {
+                    var AttackBaseObject = m_ExpHitter;
+                    if (m_ExpHitter != null && m_ExpHitter.m_Master != null)
+                    {
+                        AttackBaseObject = m_ExpHitter.m_Master;
+                    }
+                    if (m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                    {
+                        DropUseItems(AttackBaseObject);
+                        if (m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
+                        {
+                            ScatterBagItems(AttackBaseObject);
+                        }
+                        if (m_btRaceServer >= Grobal2.RC_ANIMAL && m_Master == null && (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM))
+                        {
+                            ScatterGolds(AttackBaseObject);
+                        }
+                    }
+                    else
+                    {
+                        if (!m_boNoItem || !m_PEnvir.Flag.boNODROPITEM)//允许设置 m_boNoItem 后人物死亡不掉物品
+                        {
+                            if (AttackBaseObject != null)
+                            {
+                                if (M2Share.g_Config.boKillByHumanDropUseItem && AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT || M2Share.g_Config.boKillByMonstDropUseItem && AttackBaseObject.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                                {
+                                    DropUseItems(null);
+                                }
+                            }
+                            else
+                            {
+                                DropUseItems(null);
+                            }
+                            if (M2Share.g_Config.boDieScatterBag)
+                            {
+                                ScatterBagItems(null);
+                            }
+                            if (M2Share.g_Config.boDieDropGold)
+                            {
+                                ScatterGolds(null);
+                            }
+                        }
+                        AddBodyLuck(-(50 - (50 - m_Abil.Level * 5)));
+                    }
+                }
+                string tStr;
+                if (m_PEnvir.Flag.boFight3Zone)
+                {
+                    m_nFightZoneDieCount++;
+                    if (m_MyGuild != null)
+                    {
+                        m_MyGuild.TeamFightWhoDead(m_sCharName);
+                    }
+                    if (m_LastHiter != null)
+                    {
+                        if (m_LastHiter.m_MyGuild != null && m_MyGuild != null)
+                        {
+                            m_LastHiter.m_MyGuild.TeamFightWhoWinPoint(m_LastHiter.m_sCharName, 100);
+                            tStr = m_LastHiter.m_MyGuild.sGuildName + ':' + m_LastHiter.m_MyGuild.nContestPoint + "  " + m_MyGuild.sGuildName + ':' + m_MyGuild.nContestPoint;
+                            M2Share.UserEngine.CryCry(Grobal2.RM_CRY, m_PEnvir, m_nCurrX, m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- " + tStr);
+                        }
+                    }
+                }
+                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                {
+                    if (m_GroupOwner != null)
+                    {
+                        m_GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
+                    }
+                    if (m_LastHiter != null)
+                    {
+                        if (m_LastHiter.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        {
+                            tStr = m_LastHiter.m_sCharName;
+                        }
+                        else
+                        {
+                            tStr = '#' + m_LastHiter.m_sCharName;
+                        }
+                    }
+                    else
+                    {
+                        tStr = "####";
+                    }
+                    M2Share.AddGameDataLog("19" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + "FZ-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(m_PEnvir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+                }
+                // 减少地图上怪物计数
+                if (m_Master == null && !m_boDelFormMaped)
+                {
+                    m_PEnvir.DelObjectCount(this);
+                    m_boDelFormMaped = true;
+                }
+                SendRefMsg(Grobal2.RM_DEATH, m_btDirection, m_nCurrX, m_nCurrY, 1, "");
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg3);
+            }
+        }
+
+        internal virtual void ReAlive()
+        {
+            m_boDeath = false;
+            SendRefMsg(Grobal2.RM_ALIVE, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+        }
+
+        protected virtual bool IsProtectTarget(TBaseObject BaseObject)
+        {
+            var result = true;
+            if (BaseObject == null)
+            {
+                return result;
+            }
+            if (InSafeZone() || BaseObject.InSafeZone())
+            {
+                result = false;
+            }
+            if (!BaseObject.m_boInFreePKArea)
+            {
+                if (M2Share.g_Config.boPKLevelProtect)// 新人保护
+                {
+                    if (m_Abil.Level > M2Share.g_Config.nPKProtectLevel)// 如果大于指定等级
+                    {
+                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel && 
+                            BaseObject.PKLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                        {
+                            result = false;
+                            return result;
+                        }
+                    }
+                    if (m_Abil.Level <= M2Share.g_Config.nPKProtectLevel)// 如果小于指定等级
+                    {
+                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level > M2Share.g_Config.nPKProtectLevel && BaseObject.PKLevel() < 2)
+                        {
+                            result = false;
+                            return result;
+                        }
+                    }
+                }
+                // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
+                if (PKLevel() >= 2 && m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
+                {
+                    if (BaseObject.m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && BaseObject.PKLevel() < 2)
+                    {
+                        result = false;
+                        return result;
+                    }
+                }
+                // 小于指定级别的非红名人物不可以杀指定级别红名人物。
+                if (m_Abil.Level <= M2Share.g_Config.nRedPKProtectLevel && PKLevel() < 2)
+                {
+                    if (BaseObject.PKLevel() >= 2 && BaseObject.m_Abil.Level > M2Share.g_Config.nRedPKProtectLevel)
+                    {
+                        result = false;
+                        return result;
+                    }
+                }
+                if (((HUtil32.GetTickCount() - m_dwMapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.m_dwMapMoveTick) < 3000))
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        protected virtual void ProcessSayMsg(string sMsg)
+        {
+            string sCharName;
+            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+            {
+                sCharName = m_sCharName;
+            }
+            else
+            {
+                sCharName = M2Share.FilterShowName(m_sCharName);
+            }
+            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.g_Config.btHearMsgFColor, M2Share.g_Config.btHearMsgBColor, 0, sCharName + ':' + sMsg);
+        }
+
+        public virtual void MakeGhost()
+        {
+            if (m_boCanReAlive)
+            {
+                m_boInvisible = true;
+                m_dwGhostTick = HUtil32.GetTickCount();
+                m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+            }
+            else
+            {
+                m_boGhost = true;
+                m_dwGhostTick = HUtil32.GetTickCount();
+                DisappearA();
+            }
+        }
+
+        /// <summary>
+        /// 散落包裹物品
+        /// </summary>
+        /// <param name="ItemOfCreat"></param>
+        protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
+        {
+            TUserItem UserItem;
+            GameItem StdItem;
+            const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
+            try
+            {
+                var DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
+                if ((m_btRaceServer == Grobal2.RC_PLAYCLONE) && (m_Master != null))
+                {
+                    return;
+                }
+                for (var i = m_ItemList.Count - 1; i >= 0; i--)
+                {
+                    UserItem = m_ItemList[i];
+                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                    var boCanNotDrop = false;
+                    if (StdItem != null)
+                    {
+                        TMonDrop MonDrop = null;
+                        if (M2Share.g_MonDropLimitLIst.TryGetValue(StdItem.Name, out MonDrop))
+                        {
+                            if (MonDrop.nDropCount < MonDrop.nCountLimit)
+                            {
+                                MonDrop.nDropCount++;
+                                M2Share.g_MonDropLimitLIst[StdItem.Name] = MonDrop;
+                            }
+                            else
+                            {
+                                MonDrop.nNoDropCount++;
+                                boCanNotDrop = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (boCanNotDrop)
+                    {
+                        continue;
+                    }
+                    if (DropItemDown(UserItem, DropWide, true, ItemOfCreat, this))
+                    {
+                        Dispose(UserItem);
+                        m_ItemList.RemoveAt(i);
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+            }
+        }
+
+        protected virtual void DropUseItems(TBaseObject BaseObject)
+        {
+            int nC;
+            int nRate;
+            GameItem StdItem;
+            IList<TDeleteItem> DropItemList = null;
+            const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
+            try
+            {
+                if (m_boNoDropUseItem)
+                {
+                    return;
+                }
+                if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                {
+                    nC = 0;
+                    while (true)
+                    {
+                        if (m_UseItems[nC] == null)
+                        {
+                            nC++;
+                            continue;
+                        }
+                        StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nC].wIndex);
+                        if (StdItem != null)
+                        {
+                            if ((StdItem.Reserved & 8) != 0)
+                            {
+                                if (DropItemList == null)
+                                {
+                                    DropItemList = new List<TDeleteItem>();
+                                }
+                                DropItemList.Add(new TDeleteItem()
+                                {
+                                    MakeIndex = m_UseItems[nC].MakeIndex
+                                });
+                                if (StdItem.NeedIdentify == 1)
+                                {
+                                    M2Share.AddGameDataLog("16" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + m_UseItems[nC].MakeIndex + "\t" + HUtil32.BoolToIntStr(m_btRaceServer == Grobal2.RC_PLAYOBJECT) + "\t" + '0');
+                                }
+                                m_UseItems[nC].wIndex = 0;
+                            }
+                        }
+                        nC++;
+                        if (nC >= 9)
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (PKLevel() > 2)
+                {
+                    nRate = 15;
+                }
+                else
+                {
+                    nRate = 30;
+                }
+                nC = 0;
+                while (true)
+                {
+                    if (M2Share.RandomNumber.Random(nRate) == 0)
+                    {
+                        if (m_UseItems[nC] == null)
+                        {
+                            nC++;
+                            continue;
+                        }
+                        if (DropItemDown(m_UseItems[nC], 2, true, BaseObject, this))
+                        {
+                            StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[nC].wIndex);
+                            if (StdItem != null)
+                            {
+                                if ((StdItem.Reserved & 10) == 0)
+                                {
+                                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                    {
+                                        if (DropItemList == null)
+                                        {
+                                            DropItemList = new List<TDeleteItem>();
+                                        }
+                                        DropItemList.Add(new TDeleteItem()
+                                        {
+                                            sItemName = M2Share.UserEngine.GetStdItemName(m_UseItems[nC].wIndex),
+                                            MakeIndex = m_UseItems[nC].MakeIndex
+                                        });
+                                    }
+                                    m_UseItems[nC].wIndex = 0;
+                                }
+                            }
+                        }
+                    }
+                    nC++;
+                    if (nC >= 9)
+                    {
+                        break;
+                    }
+                }
+                if (DropItemList != null)
+                {
+                    var ObjectId = HUtil32.Sequence();
+                    M2Share.ObjectSystem.AddOhter(ObjectId, DropItemList);
+                    SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                }
+            }
+            catch
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+            }
+        }
+
+        public virtual void SetTargetCreat(TBaseObject BaseObject)
+        {
+            m_TargetCret = BaseObject;
+            m_dwTargetFocusTick = HUtil32.GetTickCount();
+        }
+
+        protected virtual void DelTargetCreat()
+        {
+            m_TargetCret = null;
+        }
+
+        public virtual bool IsProperFriend(TBaseObject BaseObject)
+        {
+            bool result = false;
+            if (BaseObject == null)
+            {
+                return result;
+            }
+            if (m_btRaceServer >= Grobal2.RC_ANIMAL)
+            {
+                if (BaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL)
+                {
+                    result = true;
+                }
+                if (BaseObject.m_Master != null)
+                {
+                    result = false;
+                }
+                return result;
+            }
+            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+            {
+                result = IsProperFriend_IsFriend(BaseObject);
+                if (BaseObject.m_btRaceServer < Grobal2.RC_ANIMAL)
+                {
+                    return result;
+                }
+                if (BaseObject.m_Master == this)
+                {
+                    result = true;
+                    return result;
+                }
+                if (BaseObject.m_Master != null)
+                {
+                    result = IsProperFriend_IsFriend(BaseObject.m_Master);
+                    return result;
+                }
+            }
+            else
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        public virtual bool Operate(TProcessMessage ProcessMsg)
+        {
+            int nDamage;
+            int nTargetX;
+            int nTargetY;
+            int nPower;
+            int nRage;
+            TBaseObject TargetBaseObject;
+            const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
+            bool result = false;
+            try
+            {
+                switch (ProcessMsg.wIdent)
+                {
+                    case Grobal2.RM_MAGSTRUCK:
+                    case Grobal2.RM_MAGSTRUCK_MINE:
+                        if ((ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (m_btRaceServer >= Grobal2.RC_ANIMAL) && !bo2BF && (m_Abil.Level < 50))
+                        {
+                            m_dwWalkTick = m_dwWalkTick + 800 + M2Share.RandomNumber.Random(1000);
+                        }
+                        nDamage = GetMagStruckDamage(null, ProcessMsg.nParam1);
+                        if (nDamage > 0)
+                        {
+                            StruckDamage(nDamage);
+                            HealthSpellChanged();
+                            SendRefMsg(Grobal2.RM_STRUCK_MAG, (short)nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
+                            TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.BaseObject);
+                            if (M2Share.g_Config.boMonDelHptoExp)
+                            {
+                                if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                {
+                                    if ((TargetBaseObject as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    {
+                                        if (!M2Share.GetNoHptoexpMonList(m_sCharName))
+                                        {
+                                            if (TargetBaseObject.m_boAI)
+                                            {
+                                                (TargetBaseObject as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                            }
+                                            else
+                                            {
+                                                (TargetBaseObject as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                            }
+                                        }
+                                    }
+                                }
+                                if (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYCLONE)
+                                {
+                                    if (TargetBaseObject.m_Master != null)
+                                    {
+                                        if ((TargetBaseObject.m_Master as TPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                        {
+                                            if (!M2Share.GetNoHptoexpMonList(m_sCharName))
+                                            {
+                                                if (TargetBaseObject.m_Master.m_boAI)
+                                                {
+                                                    (TargetBaseObject.m_Master as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                }
+                                                else
+                                                {
+                                                    (TargetBaseObject.m_Master as TPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                            {
+                                if (m_boAnimal)
+                                {
+                                    m_nMeatQuality -= (ushort)(nDamage * 1000);
+                                }
+                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, m_WAbil.HP, m_WAbil.MaxHP, ProcessMsg.BaseObject, "");
+                            }
+                        }
+                        if (m_boFastParalysis)
+                        {
+                            m_wStatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            m_boFastParalysis = false;
+                        }
+                        break;
+                    case Grobal2.RM_MAGHEALING:
+                        if ((m_nIncHealing + ProcessMsg.nParam1) < 300)
+                        {
+                            if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                            {
+                                m_nIncHealing += ProcessMsg.nParam1;
+                                m_nPerHealing = 5;
+                            }
+                            else
+                            {
+                                m_nIncHealing += ProcessMsg.nParam1;
+                                m_nPerHealing = 5;
+                            }
+                        }
+                        else
+                        {
+                            m_nIncHealing = 300;
+                        }
+                        break;
+                    case Grobal2.RM_10101:
+                        SendRefMsg(ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
+                        if ((ProcessMsg.BaseObject == Grobal2.RM_STRUCK) && (m_btRaceServer != Grobal2.RC_PLAYOBJECT))
+                        {
+                            SendMsg(this, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg);
+                        }
+                        if (m_boFastParalysis)
+                        {
+                            m_wStatusTimeArr[Grobal2.POISON_STONE] = 1;
+                            m_boFastParalysis = false;
+                        }
+                        break;
+                    case Grobal2.RM_DELAYMAGIC:
+                        nPower = ProcessMsg.wParam;
+                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
+                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
+                        nRage = ProcessMsg.nParam2;
+                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        if ((TargetBaseObject != null) && (TargetBaseObject.GetMagStruckDamage(this, nPower) > 0))
+                        {
+                            SetTargetCreat(TargetBaseObject);
+                            if (TargetBaseObject.m_btRaceServer >= Grobal2.RC_ANIMAL)
+                            {
+                                nPower = HUtil32.Round(nPower / 1.2);
+                            }
+                            if ((Math.Abs(nTargetX - TargetBaseObject.m_nCurrX) <= nRage) && (Math.Abs(nTargetY - TargetBaseObject.m_nCurrY) <= nRage))
+                            {
+                                TargetBaseObject.SendMsg(this, Grobal2.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
+                            }
+                        }
+                        break;
+                    case Grobal2.RM_10155:
+                        MapRandomMove(ProcessMsg.sMsg, ProcessMsg.wParam);
+                        break;
+                    case Grobal2.RM_DELAYPUSHED:
+                        nPower = ProcessMsg.wParam;
+                        nTargetX = HUtil32.LoWord(ProcessMsg.nParam1);
+                        nTargetY = HUtil32.HiWord(ProcessMsg.nParam1);
+                        nRage = ProcessMsg.nParam2;
+                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);// M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        if (TargetBaseObject != null)
+                        {
+                            TargetBaseObject.CharPushed((byte)nPower, nRage);
+                        }
+                        break;
+                    case Grobal2.RM_POISON:
+                        TargetBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam2);// ((ProcessMsg.nParam2) as TBaseObject);
+                        if (TargetBaseObject != null)
+                        {
+                            if (IsProperTarget(TargetBaseObject))
+                            {
+                                SetTargetCreat(TargetBaseObject);
+                                if ((m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (TargetBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
+                                {
+                                    SetPKFlag(TargetBaseObject);
+                                }
+                                SetLastHiter(TargetBaseObject);
+                            }
+                            MakePosion(ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
+                        }
+                        else
+                        {
+                            MakePosion(ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam3);// 中毒类型
+                        }
+                        break;
+                    case Grobal2.RM_TRANSPARENT:
+                        M2Share.MagicManager.MagMakePrivateTransparent(this, ProcessMsg.nParam1);
+                        break;
+                    case Grobal2.RM_DOOPENHEALTH:
+                        MakeOpenHealth();
+                        break;
+                    /*default:
+                        Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
+                        break;*/
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.Message);
+            }
+            return result;
+        }
+
 
         public virtual string GetShowName()
         {

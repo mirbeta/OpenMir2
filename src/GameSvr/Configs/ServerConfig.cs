@@ -2260,9 +2260,9 @@ namespace GameSvr.Configs
             M2Share.g_Config.dwShowCastleWarEndMsgTime = ReadInteger("Setup", "ShowCastleWarEndMsgTime", M2Share.g_Config.dwShowCastleWarEndMsgTime);
             if (ReadInteger("Server", "ClickNPCTime", -1) < 0)
             {
-                WriteInteger("Server", "ClickNPCTime", M2Share.g_Config.dwclickNpcTime);
+                WriteInteger("Server", "ClickNPCTime", M2Share.g_Config.dwClickNpcTime);
             }
-            M2Share.g_Config.dwclickNpcTime = ReadInteger("Server", "ClickNPCTime", M2Share.g_Config.dwclickNpcTime);
+            M2Share.g_Config.dwClickNpcTime = ReadInteger("Server", "ClickNPCTime", M2Share.g_Config.dwClickNpcTime);
             if (ReadInteger("Setup", "CastleWarTime", -1) < 0)
             {
                 WriteInteger("Setup", "CastleWarTime", M2Share.g_Config.dwCastleWarTime);

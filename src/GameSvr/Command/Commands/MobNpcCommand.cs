@@ -47,6 +47,7 @@ namespace GameSvr
             Merchant.m_nCurrX = nX;
             Merchant.m_nCurrY = nY;
             Merchant.Initialize();
+            Merchant.OnEnvirnomentChanged();
             M2Share.UserEngine.AddMerchant(Merchant);
         }
     }

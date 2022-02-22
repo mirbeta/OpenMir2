@@ -7,7 +7,7 @@ namespace GameSvr
     {
         public int n55C = 0;
         private int dw560 = 0;
-        private bool boSetMapFlaged = false;
+        public bool boSetMapFlaged = false;
 
         public TWallStructure() : base()
         {

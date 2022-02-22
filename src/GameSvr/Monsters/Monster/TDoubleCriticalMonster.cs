@@ -11,11 +11,10 @@ namespace GameSvr
 
         protected override bool AttackTarget()
         {
-            var result = false;
             byte btDir = 0;
             if (m_TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (TargetInSpitRange(m_TargetCret, ref btDir))
             {
@@ -26,8 +25,7 @@ namespace GameSvr
                     DoubleAttack(btDir);
                     BreakHolySeizeMode();
                 }
-                result = true;
-                return result;
+                return true;
             }
             if (m_TargetCret.m_PEnvir == m_PEnvir)
             {
@@ -37,7 +35,7 @@ namespace GameSvr
             {
                 DelTargetCreat();
             }
-            return result;
+            return false;
         }
 
         private void DoubleAttack(byte btDir)

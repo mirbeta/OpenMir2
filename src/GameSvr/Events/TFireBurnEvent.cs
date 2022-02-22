@@ -18,12 +18,11 @@ namespace GameSvr
 
         public override void Run()
         {
-            IList<TBaseObject> BaseObjectList;
             TBaseObject TargeTBaseObject;
             if ((HUtil32.GetTickCount() - m_fireRunTick) > 3000)
             {
                 m_fireRunTick = HUtil32.GetTickCount();
-                BaseObjectList = new List<TBaseObject>();
+                IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
                 if (m_Envir != null)
                 {
                     m_Envir.GetBaseObjects(m_nX, m_nY, true, BaseObjectList);

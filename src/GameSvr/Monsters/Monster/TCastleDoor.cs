@@ -8,7 +8,6 @@ namespace GameSvr
     public class TCastleDoor : TGuardUnit
     {
         public int dw55C = 0;
-        private int dw560 = 0;
         public bool m_boOpened = false;
         public bool bo565n = false;
         public bool bo566n = false;
@@ -88,13 +87,11 @@ namespace GameSvr
         public override void Die()
         {
             base.Die();
-            dw560 = HUtil32.GetTickCount();
             SetMapXYFlag(2);
         }
 
         public override void Run()
         {
-            int n08;
             if (m_boDeath && m_Castle != null)
             {
                 m_dwDeathTick = HUtil32.GetTickCount();
@@ -105,7 +102,7 @@ namespace GameSvr
             }
             if (!m_boOpened)
             {
-                n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
+                int n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
                 if (m_btDirection != n08 && n08 < 3)
                 {
                     m_btDirection = (byte)n08;

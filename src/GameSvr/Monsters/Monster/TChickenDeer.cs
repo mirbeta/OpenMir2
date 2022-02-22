@@ -12,9 +12,9 @@ namespace GameSvr
 
         public override void Run()
         {
-            int n10= 9999;
-            TBaseObject BaseObject1C= null;
-            TBaseObject BaseObject= null;
+            int n10 = 9999;
+            TBaseObject BaseObject1C = null;
+            TBaseObject BaseObject = null;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
                 if ((HUtil32.GetTickCount() - m_dwWalkTick) >= m_nWalkSpeed)
@@ -63,4 +63,3 @@ namespace GameSvr
         }
     }
 }
-

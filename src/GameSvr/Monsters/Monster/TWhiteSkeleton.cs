@@ -4,7 +4,7 @@ namespace GameSvr
 {
     public class TWhiteSkeleton: TATMonster
     {
-        private bool m_boIsFirst = false;
+        public bool m_boIsFirst = false;
 
         public TWhiteSkeleton() : base()
         {

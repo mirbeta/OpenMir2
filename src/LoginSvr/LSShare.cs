@@ -213,11 +213,11 @@ namespace LoginSvr
 
         public TConfig()
         {
-            sDBServer = "10.10.0.168";
+            sDBServer = "127.0.0.1";
             nDBSPort = 16300;
-            sFeeServer = "10.10.0.168";
+            sFeeServer = "127.0.0.1";
             nFeePort = 16301;
-            sLogServer = "10.10.0.168";
+            sLogServer = "127.0.0.1";
             nLogPort = 16301;
             sGateAddr = "*";
             nGatePort = 5500;
