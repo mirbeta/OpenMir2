@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using SelGate.Conf;
 using SystemModule;
 
 namespace SelGate.Services
@@ -180,7 +179,6 @@ namespace SelGate.Services
                         {
                             UserSession.Socket.Close();
                             UserSession.Socket = null;
-                            UserSession.nSckHandle = -1;
                         }
                     }
                 }

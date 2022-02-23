@@ -7,7 +7,7 @@ using SystemModule.Sockets;
 namespace SelGate.Services
 {
     /// <summary>
-    /// 网关客户端(GameGate-GameSvr)
+    /// 网关客户端(SelGate-DBSvr)
     /// </summary>
     public class ClientThread
     {
@@ -100,9 +100,7 @@ namespace SelGate.Services
         {
             boGateReady = true;
             GateShare.dwCheckServerTick = HUtil32.GetTickCount();
-            GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            //GateShare.boServerReady = true;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.Add(this);
@@ -120,7 +118,6 @@ namespace SelGate.Services
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
-                    userSession.nSckHandle = -1;
                 }
             }
             RestSessionArray();
@@ -129,25 +126,20 @@ namespace SelGate.Services
             GateShare.ServerGateList.Remove(this);
             GateShare.AddMainLogMsg($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
-            //GateShare.boServerReady = false;
         }
 
         /// <summary>
-        /// 收到M2发来的消息
+        /// 收到数据库服务器 直接发送给客户端
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var dwTick14 = HUtil32.GetTickCount();
-            var nMsgLen = e.Buff.Length;
-            ProcReceiveBuffer(e.Buff, nMsgLen);
-            nBufferOfM2Size += nMsgLen;
-            var dwTime10 = HUtil32.GetTickCount() - dwTick14;
-            if (dwProcessServerMsgTime < dwTime10)
-            {
-                dwProcessServerMsgTime = dwTime10;
-            }
+            var pMsg = new TMsgHeader(e.Buff);
+            var userData = new TMessageData();
+            userData.UserCientId = pMsg.wGSocketIdx;
+            userData.Body = e.Buff;
+            _sessionManager.SendQueue.TryWrite(userData);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -180,16 +172,10 @@ namespace SelGate.Services
                 }
                 tSession = SessionArray[i];
                 tSession.Socket = null;
-                tSession.nUserListIndex = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
-                tSession.nSckHandle = 0;
                 tSession.SocketId = 0;
+                tSession.ClientIP = string.Empty;
             }
-        }
-
-        private void SendServerMsg(ForwardMessage message)
-        {
-            SendServerMsg(message.nIdent, message.wSocketIndex, message.nSocket, message.nUserListIndex, message.nLen, message.Data);
         }
 
         public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, string Data)
@@ -203,22 +189,6 @@ namespace SelGate.Services
             {
                 SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, Array.Empty<byte>());
             }
-        }
-
-        /// <summary>
-        /// 通知M2有新玩家进入游戏
-        /// </summary>
-        public void UserEnter(int wSocketIndex, int nSocket, string Data)
-        {
-            SendServerMsg(Grobal2.GM_OPEN,  wSocketIndex, nSocket, 0, Data.Length, Data);
-        }
-
-        /// <summary>
-        /// 用户退出游戏
-        /// </summary>
-        public void UserLeave(int scoket)
-        {
-            SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, ""); 
         }
 
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
@@ -249,126 +219,11 @@ namespace SelGate.Services
             SendSocket(buffer);
         }
 
-        private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
+        public void SendData(string sendText)
         {
-            TMsgHeader pMsg;
-            var BuffIndex = 0;
-            const int HeaderMessageSize = 20;
-            try
-            {
-                if (nBuffLen > 0) //有未处理完成的buff
-                {
-                    var tempBuff = new byte[nBuffLen + nMsgLen];
-                    Buffer.BlockCopy(SocketBuffer, 0, tempBuff, 0, nBuffLen);
-                    Buffer.BlockCopy(tBuffer, 0, tempBuff, nBuffLen, tBuffer.Length);
-                    SocketBuffer = tempBuff;
-                }
-                else
-                {
-                    SocketBuffer = tBuffer;
-                }
-                var nLen = nBuffLen + nMsgLen;
-                var Buff = SocketBuffer;
-                if (nLen >= HeaderMessageSize)
-                {
-                    while (true)
-                    {
-                        pMsg = new TMsgHeader(Buff);
-                        if (pMsg.dwCode == Grobal2.RUNGATECODE)
-                        {
-                            if ((Math.Abs(pMsg.nLength) + HeaderMessageSize) > nLen)
-                            {
-                                break;
-                            }
-                            switch (pMsg.wIdent)
-                            {
-                                case Grobal2.GM_CHECKSERVER:
-                                    boCheckServerFail = false;
-                                    GateShare.dwCheckServerTick = HUtil32.GetTickCount();
-                                    break;
-                                case Grobal2.GM_SERVERUSERINDEX:
-                                    var userSession = _sessionManager.GetSession(pMsg.wGSocketIdx);
-                                    if (userSession != null)
-                                    {
-                                        userSession.m_nSvrListIdx = pMsg.wUserListIndex;
-                                    }
-                                    break;
-                                case Grobal2.GM_RECEIVE_OK:
-                                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckRecviceTick;
-                                    if (GateShare.dwCheckServerTimeMin > GateShare.dwCheckServerTimeMax)
-                                    {
-                                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
-                                    }
-                                    GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
-                                    SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
-                                    break;
-                                case Grobal2.GM_DATA:
-                                    byte[] MsgBuff = null;
-                                    if (pMsg.nLength > 0)
-                                    {
-                                        MsgBuff = new byte[pMsg.nLength];
-                                        Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
-                                    }
-                                    else
-                                    {
-                                        MsgBuff = new byte[Buff.Length - 20];
-                                        Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
-                                    }
-                                    break;
-                                case Grobal2.GM_TEST:
-                                    break;
-                            }
-                            var newLen = HeaderMessageSize + Math.Abs(pMsg.nLength);
-                            var tempBuff = new byte[Buff.Length - newLen];
-                            Buffer.BlockCopy(Buff, newLen, tempBuff, 0, tempBuff.Length);
-                            Buff = tempBuff;
-                            BuffIndex = 0;
-                            nLen -= Math.Abs(pMsg.nLength) + HeaderMessageSize;
-                        }
-                        else
-                        {
-                            BuffIndex++;
-                            var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, BuffIndex, messageBuff, 0, HeaderMessageSize);
-                            Buff = messageBuff;
-                            nLen -= 1;
-                        }
-                        if (nLen < HeaderMessageSize)
-                        {
-                            break;
-                        }
-                    }
-                }
-                if (nLen > 0)
-                {
-                    var tempBuff = new byte[nLen];
-                    Buffer.BlockCopy(Buff, 0, tempBuff, 0, nLen);
-                    SocketBuffer = tempBuff;
-                    nBuffLen = nLen;
-                }
-                else
-                {
-                    SocketBuffer = null;
-                    nBuffLen = 0;
-                }
-            }
-            catch (Exception E)
-            {
-                GateShare.AddMainLogMsg($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
-            }
+            SendSocket(HUtil32.GetBytes(sendText));
         }
-
-        private void ProcessMakeSocketStr(int nSocketIndex, byte[] buffer, int nMsgLen)
-        {
-            var userData = new TSendUserData();
-            userData.UserCientId = nSocketIndex;
-            userData.Buffer = buffer;
-            userData.BufferLen = nMsgLen;
-            _sessionManager._sendMsgList.Writer.TryWrite(userData);
-        }
-
+        
         private void SendSocket(byte[] sendBuffer)
         {
             if (ClientSocket.IsConnected)
@@ -376,15 +231,5 @@ namespace SelGate.Services
                 ClientSocket.Send(sendBuffer);
             }
         }
-    }
-
-    public class ForwardMessage
-    {
-        public ushort nIdent;
-        public ushort wSocketIndex;
-        public int nSocket;
-        public ushort nUserListIndex;
-        public int nLen;
-        public byte[] Data;
     }
 }

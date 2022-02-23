@@ -8,18 +8,17 @@ using SystemModule.Sockets;
 namespace SelGate.Services
 {
     /// <summary>
-    /// 客户端服务端(Mir2-GameGate)
+    /// 客户端服务端(Mir2-SelGate)
     /// </summary>
     public class ServerService
     {
         public int NReviceMsgSize = 0;
-        private long _dwProcessClientMsgTime = 0;
         private readonly ISocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private Channel<TSendUserData> _reviceMsgList = null;
+        private Channel<TMessageData> _snedQueue = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
 
@@ -31,7 +30,7 @@ namespace SelGate.Services
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _serverSocket.Init();
-            _reviceMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _snedQueue = Channel.CreateUnbounded<TMessageData>();
             _sessionManager = sessionManager;
             _clientManager = clientManager;
             _configManager = configManager;
@@ -52,9 +51,9 @@ namespace SelGate.Services
         /// </summary>
         public async Task ProcessReviceMessage()
         {
-            while (await _reviceMsgList.Reader.WaitToReadAsync())
+            while (await _snedQueue.Reader.WaitToReadAsync())
             {
-                if (_reviceMsgList.Reader.TryRead(out var message))
+                if (_snedQueue.Reader.TryRead(out var message))
                 {
                     var clientSession = _sessionManager.GetSession(message.UserCientId);
                     clientSession?.HandleUserPacket(message);
@@ -62,11 +61,6 @@ namespace SelGate.Services
             }
         }
 
-        /// <summary>
-        /// 新玩家链接
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             var clientThread = _clientManager.GetClientThread();
@@ -76,27 +70,27 @@ namespace SelGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
-            TSessionInfo userSession = null;
+            Console.WriteLine($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
-                userSession = clientThread.SessionArray[nIdx];
-                if (userSession.Socket == null)
+                sessionInfo = clientThread.SessionArray[nIdx];
+                if (sessionInfo.Socket == null)
                 {
-                    userSession.Socket = e.Socket;
-                    userSession.nUserListIndex = 0;
-                    userSession.SocketId = e.ConnectionId;
-                    userSession.dwReceiveTick = HUtil32.GetTickCount();
-                    userSession.nSckHandle = (int)e.Socket.Handle;
+                    sessionInfo.Socket = e.Socket;
+                    sessionInfo.SocketId = e.ConnectionId;
+                    sessionInfo.dwReceiveTick = HUtil32.GetTickCount();
+                    sessionInfo.ClientIP = e.RemoteIPaddr;
                     break;
                 }
             }
-            if (userSession != null)
+            if (sessionInfo != null)
             {
-                clientThread.UserEnter(userSession.SocketId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                _sessionManager.AddSession(userSession.SocketId, new ClientSession(_configManager, userSession, clientThread));
+                var userSession = new ClientSession(_configManager, sessionInfo, clientThread);
+                userSession.UserEnter();
+                _sessionManager.AddSession(sessionInfo.SocketId, userSession);
             }
             else
             {
@@ -111,14 +105,14 @@ namespace SelGate.Services
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
+            var clientSession = _sessionManager.GetSession(e.ConnectionId);
             if (clientThread != null && clientThread.boGateReady)
             {
                 if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
                     userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
-                    userSession.nSckHandle = -1;
-                    clientThread.UserLeave((int)e.Socket.Handle); //发送消息给M2断开链接
+                    clientSession.UserLeave();
                     GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
                 }
             }
@@ -136,11 +130,6 @@ namespace SelGate.Services
             Console.WriteLine($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
-        /// <summary>
-        /// 收到客户端消息
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {            
             var connectionId = token.ConnectionId;
@@ -158,37 +147,12 @@ namespace SelGate.Services
                 Debug.WriteLine($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
-            var clientSession = _sessionManager.GetSession(connectionId);
-            if (clientSession != null)
-            {
-                if (!clientSession.Session.Socket.Connected)
-                {
-                    return;
-                }
-                var dwProcessMsgTick = HUtil32.GetTickCount();
-                var nReviceLen = token.BytesReceived;
-                var data = new byte[nReviceLen];
-                Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
-                var nSocketIndex = token.ConnectionId;
-                if (nSocketIndex >= 0)
-                {
-                    GateShare.NReviceMsgSize += data.Length;
-                    var userData = new TSendUserData();
-                    userData.Buffer = data;
-                    userData.BufferLen = data.Length;
-                    userData.UserCientId = token.ConnectionId;
-                    _reviceMsgList.Writer.TryWrite(userData);
-                }
-                var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
-                if (dwProcessMsgTime > _dwProcessClientMsgTime)
-                {
-                    _dwProcessClientMsgTime = dwProcessMsgTime;
-                }
-            }
-            else
-            {
-                GateShare.AddMainLogMsg("非法攻击: " + token.RemoteIPaddr, 5);
-            }
+            var data = new byte[token.BytesReceived];
+            Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
+            var userData = new TMessageData();
+            userData.Body = data;
+            userData.UserCientId = connectionId;
+            _snedQueue.Writer.TryWrite(userData);
         }
     }
 }

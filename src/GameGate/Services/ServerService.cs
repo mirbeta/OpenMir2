@@ -166,19 +166,13 @@ namespace GameGate
                     return;
                 }
                 var dwProcessMsgTick = HUtil32.GetTickCount();
-                var nReviceLen = token.BytesReceived;
-                var data = new byte[nReviceLen];
-                Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, nReviceLen);
-                var nSocketIndex = token.ConnectionId;
-                if (nSocketIndex >= 0)
-                {
-                    GateShare.NReviceMsgSize += data.Length;
-                    var userData = new TSendUserData();
-                    userData.Buffer = data;
-                    userData.BufferLen = data.Length;
-                    userData.UserCientId = token.ConnectionId;
-                    _reviceMsgList.Writer.TryWrite(userData);
-                }
+                var data = new byte[token.BytesReceived];
+                Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
+                GateShare.NReviceMsgSize += data.Length;
+                var userData = new TSendUserData();
+                userData.Buffer = data;
+                userData.UserCientId = connectionId;
+                _reviceMsgList.Writer.TryWrite(userData);
                 var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
                 if (dwProcessMsgTime > _dwProcessClientMsgTime)
                 {

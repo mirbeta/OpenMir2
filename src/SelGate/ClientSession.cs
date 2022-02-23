@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Net.Sockets;
 using SelGate.Conf;
 using SelGate.Services;
@@ -46,8 +43,8 @@ namespace SelGate
         /// 处理客户端发送过来的封包
         /// 发送创建角色，删除角色，恢复角色，创建名字等功能
         /// </summary>
-        /// <param name="UserData"></param>
-        public void HandleUserPacket(TSendUserData UserData)
+        /// <param name="userData"></param>
+        public void HandleUserPacket(TMessageData userData)
         {
             int dwCurrentTick = 0;
             if (m_KickFlag)
@@ -55,9 +52,9 @@ namespace SelGate
                 m_KickFlag = false;
                 return;
             }
-            if ((UserData.BufferLen >= 5) && Config.m_fDefenceCCPacket)
+            if ((userData.MsgLen >= 5) && Config.m_fDefenceCCPacket)
             {
-                var sMsg = HUtil32.GetString(UserData.Buffer, 2, UserData.BufferLen - 3);
+                var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     //if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(6))
@@ -91,14 +88,30 @@ namespace SelGate
                 }
             }
             var success = false;//todo 优化此段代码
-            var packBuff = new byte[UserData.BufferLen];
-            var tempBuff = new byte[UserData.BufferLen - 3];//跳过#1....!
-            Buffer.BlockCopy(UserData.Buffer, 2, tempBuff, 0, tempBuff.Length);
-            var nDeCodeLen = Misc.DecodeBuf(tempBuff, UserData.BufferLen - 3, ref packBuff);
+            var packBuff = new byte[userData.MsgLen];
+            var tempBuff = new byte[userData.MsgLen - 3];//跳过#1....!
+            Buffer.BlockCopy(userData.Body, 2, tempBuff, 0, tempBuff.Length);
+            var nDeCodeLen = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref packBuff);
             var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
             if (_handleLogin == 0)
             {
-                HandleLogin(CltCmd, UserData.Buffer, nDeCodeLen, ref success);
+                switch (CltCmd.Cmd)
+                {
+                    //case Grobal2.CM_QUERYSELCHARCODE:
+                    case Grobal2.CM_QUERYCHR:
+                    case Grobal2.CM_NEWCHR:
+                    case Grobal2.CM_DELCHR:
+                    case Grobal2.CM_SELCHR:
+                        //case Grobal2.CM_QUERYDELCHR:
+                        //case Grobal2.CM_GETBACKDELCHR:
+                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                        var sendStr = $"%A{(int) _session.Socket.Handle}/{HUtil32.GetString(userData.Body, 0, userData.MsgLen)}$";
+                        lastGameSvr.SendData(sendStr);
+                        break;
+                    default:
+                        Console.WriteLine($"错误的数据包索引:[{CltCmd.Cmd}]");
+                        break;
+                }
                 if (!success)
                 {
                     //KickUser("ip");
@@ -137,38 +150,11 @@ namespace SelGate
         /// <summary>
         /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
-        public void ProcessSvrData(TSendUserData sendData)
+        public void ProcessSvrData(TMessageData sendData)
         {
-            var sSendMsg = string.Empty;
-            switch (sendData.BufferLen)
-            {
-                case < 0:
-                    sSendMsg = "#" + HUtil32.GetString(sendData.Buffer, 0, sendData.Buffer.Length - 1) + "!";
-                    break;
-                case >= 12:
-                {
-                    var pDefMsg = new TDefaultMessage(sendData.Buffer);
-                    if (sendData.BufferLen > 12)
-                    {
-                        var sb = new System.Text.StringBuilder();
-                        sb.Append('#');
-                        sb.Append(EDcode.EncodeMessage(pDefMsg));
-                        var strBuff = new byte[sendData.BufferLen - 12];
-                        Buffer.BlockCopy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
-                        sb.Append(HUtil32.StrPasTest(strBuff));
-                        sb.Append('!');
-                        sSendMsg = sb.ToString();
-                    }
-                    else
-                    {
-                        sSendMsg = "#" + EDcode.EncodeMessage(pDefMsg) + "!";
-                    }
-                    break;
-                }
-            }
             if (_session.Socket != null && _session.Socket.Connected)
             {
-                _session.Socket.Send(HUtil32.GetBytes(sSendMsg));
+                _session.Socket.Send(sendData.Body);
             }
         }
 
@@ -207,60 +193,23 @@ namespace SelGate
         }
 
         /// <summary>
-        /// 处理登录数据
+        /// 通知DBSvr有客户端链接
         /// </summary>
-        private void HandleLogin(TCmdPack ctlCmd,byte[] buffer, int nDeCodeLen, ref bool success)
+        public void UserEnter()
         {
-            switch (ctlCmd.Cmd)
-            {
-                //case Grobal2.CM_QUERYSELCHARCODE:
-                case Grobal2.CM_QUERYCHR:
-                case Grobal2.CM_NEWCHR:
-                case Grobal2.CM_DELCHR:
-                case Grobal2.CM_SELCHR:
-                //case Grobal2.CM_QUERYDELCHR:
-                //case Grobal2.CM_GETBACKDELCHR:
-                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    var tempBuff = new byte[nDeCodeLen];
-                    var nEnCodeLen = Misc.EncodeBuf(buffer, nDeCodeLen, tempBuff, 1);
-                    //StrFmt函数 必须保证格式化的字符串是AnsiString 否则消息错误.
-                    tempBuff[0] = (byte)'%';
-                    //StrFmt(@pszBuf[1], AnsiString('>%d/#1%s!$'), [m_pUserOBJ._SendObj.Socket, PAnsiChar(nBBuf)]);
-                    Array.Copy(buffer, nDeCodeLen, tempBuff, 1, tempBuff.Length - 1);
-                    lastGameSvr.SendBuffer(tempBuff, tempBuff.Length);
-                    break;
-                default:
-                    Console.WriteLine($"错误的数据包索引:[{ctlCmd.Cmd}]");
-                    break;
-            }
+            _handleLogin = 0;
+            var sendStr = $"%K{(int)_session.Socket.Handle}/{_session.ClientIP}/{_session.ClientIP}$";
+            lastGameSvr.SendData(sendStr);
         }
 
-        private void SendSysMsg(string szMsg)
+        /// <summary>
+        /// 通知DBSvr客户端断开链接
+        /// </summary>
+        public void UserLeave()
         {
-            TCmdPack Cmd;
-            byte[] TempBuf = new byte[1023 + 1];
-            byte[] SendBuf = new byte[1023 + 1];
-            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
-            {
-                return;
-            }
-            Cmd = new TCmdPack();
-            Cmd.UID = m_nSvrObject;
-            Cmd.Cmd = Grobal2.SM_SYSMESSAGE;
-            Cmd.X = HUtil32.MakeWord(0xFF, 0xF9);
-            Cmd.Y = 0;
-            Cmd.Direct = 0;
-            SendBuf[0] = (byte)'#';
-            //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
-            Array.Copy(Cmd.GetPacket(0), 0, TempBuf, 0, TCmdPack.PackSize);
-            var sBuff = HUtil32.GetBytes(szMsg);
-            Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-            //Move(szMsg[1], TempBuf[13], szMsg.Length);
-            var iLen = TCmdPack.PackSize + szMsg.Length;
-            iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
-            SendBuf[iLen + 1] = (byte)'!';
-            //m_tIOCPSender.SendData(m_pOverlapSend, SendBuf[0], iLen + 2);
-            _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
+            _handleLogin = 0;
+            var szSenfBuf = $"%L{(int)_session.Socket.Handle}$";
+            lastGameSvr.SendData(szSenfBuf);
         }
     }
 

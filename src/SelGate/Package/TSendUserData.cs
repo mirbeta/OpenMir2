@@ -1,9 +1,9 @@
 namespace SelGate
 {
-    public class TSendUserData
+    public struct TMessageData
     {
-        public byte[] Buffer;
-        public int BufferLen;
+        public byte[] Body;
+        public int MsgLen => Body.Length;
         public int UserCientId;
     }
 }

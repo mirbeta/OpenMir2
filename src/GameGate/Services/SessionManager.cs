@@ -11,7 +11,7 @@ namespace GameGate
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        public readonly Channel<TSendUserData> _sendMsgList = null;
+        private readonly Channel<TSendUserData> _sendMsgList = null;
         private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
@@ -19,6 +19,8 @@ namespace GameGate
             _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
             _sendMsgList = Channel.CreateUnbounded<TSendUserData>();
         }
+        
+        public ChannelWriter<TSendUserData> SendQueue => _sendMsgList.Writer;
         
         /// <summary>
         /// 处理M2发过来的消息

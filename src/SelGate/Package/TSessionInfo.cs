@@ -6,10 +6,9 @@ namespace SelGate
     {
         public Socket Socket;
         public int SocketId;
-        public int nSckHandle;
-        public ushort nUserListIndex;
         public int dwReceiveTick;
         public string sAccount;
         public string sChrName;
+        public string ClientIP;
     }
 }

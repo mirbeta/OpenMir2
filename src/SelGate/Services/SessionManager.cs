@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +12,25 @@ namespace SelGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        public readonly Channel<TSendUserData> _sendMsgList = null;
+        private readonly Channel<TMessageData> _sendQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
             _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
-            _sendMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _sendQueue = Channel.CreateUnbounded<TMessageData>();
         }
-        
+
+        public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
+
         /// <summary>
-        /// 处理M2发过来的消息
+        /// 处理DBSvr发过来的消息
         /// </summary>
         public async Task ProcessSendMessage()
         {
-            while (await _sendMsgList.Reader.WaitToReadAsync())
+            while (await _sendQueue.Reader.WaitToReadAsync())
             {
-                if (_sendMsgList.Reader.TryRead(out var message))
+                if (_sendQueue.Reader.TryRead(out var message))
                 {
                     var userSession = GetSession(message.UserCientId);
                     if (userSession == null)
@@ -55,9 +58,9 @@ namespace SelGate.Services
         
         public void Remove(int sessionId)
         {
-            if (_connectionSessions.TryRemove(sessionId, out var clientSession))
+            if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
-               
+               Console.WriteLine($"移除用户会话失败:[{sessionId}]");
             }
         }
 

@@ -13,6 +13,9 @@ namespace SelGate
         public static object CS_MainLog = null;
         public static IList<string> MainLogMsgList = null;
         public static string GateAddr = "*";
+        /// <summary>
+        /// 角色网关端口
+        /// </summary>
         public static int GatePort = 7100;
         /// <summary>
         /// 显示B 或 KB
@@ -22,17 +25,9 @@ namespace SelGate
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static long dwSendHoldTick = 0;
-        public static long dwCheckRecviceTick = 0;
-        public static long dwCheckRecviceMin = 0;
-        public static long dwCheckRecviceMax = 0;
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-        /// <summary>
-        /// 累计接受数据大小
-        /// </summary>
-        public static int NReviceMsgSize;
         public static bool boDecodeMsgLock = false;
         /// <summary>
         /// 禁止连接IP列表

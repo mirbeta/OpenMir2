@@ -365,8 +365,7 @@ namespace GameGate
             var userData = new TSendUserData();
             userData.UserCientId = nSocketIndex;
             userData.Buffer = buffer;
-            userData.BufferLen = nMsgLen;
-            _sessionManager._sendMsgList.Writer.TryWrite(userData);
+            _sessionManager.SendQueue.TryWrite(userData);
         }
 
         private void SendSocket(byte[] sendBuffer)
