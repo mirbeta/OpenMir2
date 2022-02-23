@@ -176,7 +176,7 @@ namespace LoginGate
                 TUserSession UserSession = GateShare.g_SessionArray[nSockIndex];
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
-                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                 string sReviceMsg = HUtil32.GetString(data, 0, data.Length);
                 if ((sReviceMsg != "") && GateShare.boServerReady)
                 {

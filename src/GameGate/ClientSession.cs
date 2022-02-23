@@ -132,7 +132,7 @@ namespace GameGate
                         //todo 优化此处
                         var packBuff = new byte[UserData.BufferLen];
                         var tempBuff = new byte[UserData.BufferLen - 3];//跳过#1....!
-                        Buffer.BlockCopy(UserData.Buffer, 2, tempBuff, 0, tempBuff.Length);
+                        Array.Copy(UserData.Buffer, 2, tempBuff, 0, tempBuff.Length);
                         var nDeCodeLen = Misc.DecodeBuf(tempBuff, UserData.BufferLen - 3, ref packBuff);
                         var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
                         var fPacketOverSpeed = false;
@@ -970,14 +970,14 @@ namespace GameGate
                         // tempBuff[0] = (byte)'#';
                         // var msgBuff = EDcode.EncodeMessage(sendData.Buffer, ref tempBuff);
                         // var strBuff = new byte[sendData.BufferLen - 12];
-                        // Buffer.BlockCopy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
+                        // Array.Copy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
                         // Array.Copy(strBuff, 0, tempBuff, 12, strBuff.Length);
                         // tempBuff[tempBuff.Length - 1] = (byte)'!';
                         var sb = new System.Text.StringBuilder();
                         sb.Append('#');
                         sb.Append(EDcode.EncodeMessage(pDefMsg));
                         var strBuff = new byte[sendData.BufferLen - 12];
-                        Buffer.BlockCopy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
+                        Array.Copy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
                         sb.Append(HUtil32.StrPasTest(strBuff));
                         sb.Append('!');
                         sSendMsg = sb.ToString();
@@ -1413,14 +1413,14 @@ namespace GameGate
             GateMsg.wUserListIndex = _session.nUserListIndex;
             GateMsg.nLength = tempBuff.Length - 20;//修复客户端进入游戏困难问题，只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetPacket();
-            Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+            Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
-                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
+                Array.Copy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
             }
             else
             {
-                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, len);
+                Array.Copy(packet, 0, tempBuff, sendBuffer.Length, len);
             }
             SendDelayMsg(0, 0, 0, tempBuff.Length, tempBuff, 1);
         }

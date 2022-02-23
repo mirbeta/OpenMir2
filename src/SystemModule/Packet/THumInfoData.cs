@@ -137,7 +137,7 @@ namespace SystemModule
             for (var i = 0; i < BagItems.Length; i++)
             {
                 var itemBuff = new byte[24];
-                Buffer.BlockCopy(bagItemBuff, i * 24, itemBuff, 0, 24);
+                Array.Copy(bagItemBuff, i * 24, itemBuff, 0, 24);
                 BagItems[i] = new TUserItem(itemBuff);
             }
 
@@ -146,7 +146,7 @@ namespace SystemModule
             for (var i = 0; i < Magic.Length; i++)
             {
                 var itemBuff = new byte[8];
-                Buffer.BlockCopy(hubMagicBuff, i * 8, itemBuff, 0, 8);
+                Array.Copy(hubMagicBuff, i * 8, itemBuff, 0, 8);
                 Magic[i] = new TMagicRcd(itemBuff);
             }
 
@@ -155,7 +155,7 @@ namespace SystemModule
             // for (var i = 0; i < StorageItems.Length; i++)
             // {
             //     var itemBuff = new byte[24];
-            //     Buffer.BlockCopy(storageBuff, i * 24, itemBuff, 0, 24);
+            //     Array.Copy(storageBuff, i * 24, itemBuff, 0, 24);
             //     StorageItems[i] = new TUserItem(itemBuff);
             // }
         }

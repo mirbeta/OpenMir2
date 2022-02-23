@@ -90,7 +90,7 @@ namespace SelGate
             var success = false;//todo 优化此段代码
             var packBuff = new byte[userData.MsgLen];
             var tempBuff = new byte[userData.MsgLen - 3];//跳过#1....!
-            Buffer.BlockCopy(userData.Body, 2, tempBuff, 0, tempBuff.Length);
+            Array.Copy(userData.Body, 2, tempBuff, 0, tempBuff.Length);
             var nDeCodeLen = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref packBuff);
             var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
             if (_handleLogin == 0)

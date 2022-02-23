@@ -127,7 +127,7 @@ namespace DBSvr
                     CurGate = GateInfo;
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     GateInfo.sText += HUtil32.GetString(data, 0, data.Length);
                     if (GateInfo.sText.Length < 81920)
                     {

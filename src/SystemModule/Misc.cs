@@ -117,7 +117,7 @@ namespace SystemModule
             result = dstPos;
             DstBuf[dstPos + 1] = (byte)'\0';
             var newDstBuf = new byte[dstPos];
-            Buffer.BlockCopy(DstBuf, 0, newDstBuf, 0, dstPos);
+            Array.Copy(DstBuf, 0, newDstBuf, 0, dstPos);
             DstBuf = newDstBuf;
             return result;
         }

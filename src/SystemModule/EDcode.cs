@@ -193,7 +193,7 @@ namespace SystemModule
                 {
                     var encBuf = new byte[BUFFERSIZE];
                     var tempBuf = new byte[BUFFERSIZE];
-                    Buffer.BlockCopy(methordResult, 0, tempBuf, 0, buffSize);
+                    Array.Copy(methordResult, 0, tempBuf, 0, buffSize);
                     var destLen = Misc.EncodeBuf(tempBuf, buffSize, encBuf);
                     fixed (byte* pb = encBuf)
                     {

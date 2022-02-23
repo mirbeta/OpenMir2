@@ -87,7 +87,7 @@ namespace DBSvr
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     s10 = HUtil32.GetString(data, 0, data.Length);
                     if (!string.IsNullOrEmpty(s10))
                     {

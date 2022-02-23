@@ -208,8 +208,8 @@ namespace SelGate.Services
             if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];
-                Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
+                Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+                Array.Copy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
                 SendSocket(tempBuff);
             }
             else

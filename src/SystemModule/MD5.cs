@@ -211,7 +211,7 @@ namespace SystemModule
             var PartLen = 64 - Index;
             if (Length >= PartLen)
             {
-                Buffer.BlockCopy(Input, 0, Context.Buffer, Index, PartLen);
+                Array.Copy(Input, 0, Context.Buffer, Index, PartLen);
                 Transform(Context.Buffer, ref Context.State);
                 i = PartLen;
                 while (i + 63 < Length)
@@ -225,7 +225,7 @@ namespace SystemModule
             {
                 i = 0;
             }
-            Buffer.BlockCopy(Input, 0, Context.Buffer, 0, (int)PartLen);
+            Array.Copy(Input, 0, Context.Buffer, 0, (int)PartLen);
         }
 
         private static void MD5Final(ref MD5Context Context, ref byte[] Digest)

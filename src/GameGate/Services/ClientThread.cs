@@ -232,8 +232,8 @@ namespace GameGate
             if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];
-                Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
+                Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+                Array.Copy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
                 SendSocket(tempBuff);
             }
             else
@@ -257,8 +257,8 @@ namespace GameGate
                 if (nBuffLen > 0) //有未处理完成的buff
                 {
                     var tempBuff = new byte[nBuffLen + nMsgLen];
-                    Buffer.BlockCopy(SocketBuffer, 0, tempBuff, 0, nBuffLen);
-                    Buffer.BlockCopy(tBuffer, 0, tempBuff, nBuffLen, tBuffer.Length);
+                    Array.Copy(SocketBuffer, 0, tempBuff, 0, nBuffLen);
+                    Array.Copy(tBuffer, 0, tempBuff, nBuffLen, tBuffer.Length);
                     SocketBuffer = tempBuff;
                 }
                 else
@@ -305,13 +305,13 @@ namespace GameGate
                                     if (pMsg.nLength > 0)
                                     {
                                         MsgBuff = new byte[pMsg.nLength];
-                                        Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
+                                        Array.Copy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
                                         ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
                                     else
                                     {
                                         MsgBuff = new byte[Buff.Length - 20];
-                                        Buffer.BlockCopy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
+                                        Array.Copy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
                                         ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
                                     }
                                     break;
@@ -320,7 +320,7 @@ namespace GameGate
                             }
                             var newLen = HeaderMessageSize + Math.Abs(pMsg.nLength);
                             var tempBuff = new byte[Buff.Length - newLen];
-                            Buffer.BlockCopy(Buff, newLen, tempBuff, 0, tempBuff.Length);
+                            Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
                             BuffIndex = 0;
                             nLen -= Math.Abs(pMsg.nLength) + HeaderMessageSize;
@@ -342,7 +342,7 @@ namespace GameGate
                 if (nLen > 0)
                 {
                     var tempBuff = new byte[nLen];
-                    Buffer.BlockCopy(Buff, 0, tempBuff, 0, nLen);
+                    Array.Copy(Buff, 0, tempBuff, 0, nLen);
                     SocketBuffer = tempBuff;
                     nBuffLen = nLen;
                 }

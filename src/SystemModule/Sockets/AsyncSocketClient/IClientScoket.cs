@@ -129,7 +129,7 @@ namespace SystemModule.Sockets
                 else
                 {
                     var destinationArray = new byte[length];//目的字节数组
-                    Buffer.BlockCopy(this.databuffer, 0, destinationArray, 0, length);
+                    Array.Copy(this.databuffer, 0, destinationArray, 0, length);
                     ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(this.cli, destinationArray)); //引发接收数据事件
                     this.StartWaitingForData(asyncState);//继续接收数据
                 }
