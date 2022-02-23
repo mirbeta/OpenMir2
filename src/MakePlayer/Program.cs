@@ -25,11 +25,11 @@ namespace MakePlayer
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        private static int g_nChrCount = 1;
+        private static int g_nChrCount = 3;
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 1;
+        private static int g_nTotalChrCount = 100;
         /// <summary>
         /// 是否创建帐号
         /// </summary>

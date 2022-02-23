@@ -19,7 +19,7 @@ namespace GameGate
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private Channel<TSendUserData> _reviceMsgList = null;
+        private Channel<TMessageData> _reviceMsgList = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
 
@@ -31,7 +31,7 @@ namespace GameGate
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _serverSocket.Init();
-            _reviceMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _reviceMsgList = Channel.CreateUnbounded<TMessageData>();
             _sessionManager = sessionManager;
             _clientManager = clientManager;
             _configManager = configManager;
@@ -168,10 +168,11 @@ namespace GameGate
                 var dwProcessMsgTick = HUtil32.GetTickCount();
                 var data = new byte[token.BytesReceived];
                 Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                var userData = new TSendUserData();
-                userData.Buffer = data;
-                userData.UserCientId = connectionId;
-                _reviceMsgList.Writer.TryWrite(userData);
+                var message = new TMessageData();
+                message.Buffer = data;
+                message.UserCientId = connectionId;
+                message.DataLen = data.Length;
+                _reviceMsgList.Writer.TryWrite(message);
                 var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
                 if (dwProcessMsgTime > _dwProcessClientMsgTime)
                 {

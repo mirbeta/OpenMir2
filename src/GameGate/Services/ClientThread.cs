@@ -50,6 +50,9 @@ namespace GameGate
         /// 是否链接成功
         /// </summary>
         private bool isConnected = false;
+        /// <summary>
+        /// Session管理
+        /// </summary>
         private readonly SessionManager _sessionManager;
 
         public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
@@ -301,19 +304,13 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    byte[] MsgBuff = null;
-                                    if (pMsg.nLength > 0)
-                                    {
-                                        MsgBuff = new byte[pMsg.nLength];
-                                        Array.Copy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
-                                    }
-                                    else
-                                    {
-                                        MsgBuff = new byte[Buff.Length - 20];
-                                        Array.Copy(Buff, HeaderMessageSize, MsgBuff, 0, MsgBuff.Length);//跳过消息头20字节
-                                        ProcessMakeSocketStr(pMsg.wGSocketIdx, MsgBuff, pMsg.nLength);
-                                    }
+                                    byte[] msgBuff = pMsg.nLength > 0 ? new byte[pMsg.nLength] : new byte[Buff.Length - 20];
+                                    Array.Copy(Buff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
+                                    var message = new TMessageData();
+                                    message.UserCientId = pMsg.wGSocketIdx;
+                                    message.Buffer = msgBuff;
+                                    message.DataLen = pMsg.nLength;
+                                    _sessionManager.SendQueue.TryWrite(message);
                                     break;
                                 case Grobal2.GM_TEST:
                                     break;
@@ -356,14 +353,6 @@ namespace GameGate
             {
                 GateShare.AddMainLogMsg($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
             }
-        }
-
-        private void ProcessMakeSocketStr(int nSocketIndex, byte[] buffer, int nMsgLen)
-        {
-            var userData = new TSendUserData();
-            userData.UserCientId = nSocketIndex;
-            userData.Buffer = buffer;
-            _sessionManager.SendQueue.TryWrite(userData);
         }
 
         private void SendSocket(byte[] sendBuffer)

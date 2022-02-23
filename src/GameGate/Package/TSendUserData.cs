@@ -1,9 +1,9 @@
 namespace GameGate
 {
-    public class TSendUserData
+    public struct TMessageData
     {
         public byte[] Buffer;
-        public int BufferLen => Buffer.Length;
+        public int DataLen;
         public int UserCientId;
     }
 }

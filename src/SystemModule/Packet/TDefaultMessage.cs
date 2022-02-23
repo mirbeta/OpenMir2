@@ -49,7 +49,7 @@ namespace SystemModule.Packages
 
         public TCmdPack(byte[] buffer,int decodeLen)
         {
-            var binaryReader = new BinaryReader(new MemoryStream(buffer));
+            var binaryReader = new BinaryReader(new MemoryStream(buffer, 0, decodeLen));
             switch (decodeLen)
             {
                 case 8:

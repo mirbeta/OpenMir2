@@ -11,16 +11,16 @@ namespace GameGate
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TSendUserData> _sendMsgList = null;
+        private readonly Channel<TMessageData> _sendMsgList = null;
         private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
             _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
-            _sendMsgList = Channel.CreateUnbounded<TSendUserData>();
+            _sendMsgList = Channel.CreateUnbounded<TMessageData>();
         }
         
-        public ChannelWriter<TSendUserData> SendQueue => _sendMsgList.Writer;
+        public ChannelWriter<TMessageData> SendQueue => _sendMsgList.Writer;
         
         /// <summary>
         /// 处理M2发过来的消息
