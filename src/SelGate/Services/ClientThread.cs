@@ -106,7 +106,7 @@ namespace SelGate.Services
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.Add(this);
-            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            GateShare.AddMainLogMsg($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             Debug.WriteLine($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
         }
@@ -127,7 +127,7 @@ namespace SelGate.Services
             SocketBuffer = null;
             boGateReady = false;
             GateShare.ServerGateList.Remove(this);
-            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
+            GateShare.AddMainLogMsg($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
             //GateShare.boServerReady = false;
         }
@@ -155,15 +155,15 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    GateShare.AddMainLogMsg("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    GateShare.AddMainLogMsg("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    GateShare.AddMainLogMsg("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }

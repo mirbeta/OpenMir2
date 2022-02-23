@@ -19,7 +19,7 @@ namespace LoginGate
         public static string GateClass = "LoginGate";
         public static int ServerPort = 5500;
         public static string ServerAddr = "127.0.0.1";
-        public static int GatePort = 7000;
+        public static int GatePort = 7001;
         public static string GateAddr = "*";
         public static bool boGateReady = false;
         public static bool boServiceStart = false;
