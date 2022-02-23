@@ -361,7 +361,7 @@ namespace GameSvr
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
                     backingStream.Write(MsgHdr.GetPacket());
-                    backingStream.Write(defMsg.GetPacket(6));
+                    backingStream.Write(defMsg.GetPacket());
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         backingStream.Write(bMsg);

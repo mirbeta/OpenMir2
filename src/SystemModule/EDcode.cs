@@ -254,7 +254,7 @@ namespace SystemModule
         {
             string result = string.Empty;
             byte[] EncBuf = new byte[1024];
-            byte[] msgBuf = smsg.GetPacket(6);
+            byte[] msgBuf = smsg.GetPacket();
             int DestLen = Misc.EncodeBuf(msgBuf, 12, EncBuf);
             fixed (byte* pb = EncBuf)
             {

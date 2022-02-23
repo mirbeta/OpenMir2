@@ -136,7 +136,7 @@ namespace GameGate
                         var tempBuff = new byte[message.DataLen - 3];//跳过#1....!
                         Array.Copy(message.Buffer, 2, tempBuff, 0, tempBuff.Length);
                         var nDeCodeLen = Misc.DecodeBuf(tempBuff, message.DataLen - 3, ref packBuff);
-                        var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
+                        var CltCmd = new TCmdPack(packBuff);
                         var fPacketOverSpeed = false;
                         switch (CltCmd.Cmd)
                         {
@@ -967,9 +967,7 @@ namespace GameGate
                 SendData(pzsSendBuf);
                 return;
             }
-            
-            var cmd = new TCmdPack(message.Buffer, TCmdPack.PackSize);
-
+            var cmd = new TCmdPack(message.Buffer);
             switch (cmd.Cmd)
             {
                 case Grobal2.SM_RUSH:
@@ -1030,7 +1028,7 @@ namespace GameGate
             }
 
             pzsSendBuf = new byte[message.DataLen + TCmdPack.PackSize];
-            var nLen = Misc.EncodeBuf(cmd.GetPacket(6), TCmdPack.PackSize, pzsSendBuf);
+            var nLen = Misc.EncodeBuf(cmd.GetPacket(), TCmdPack.PackSize, pzsSendBuf);
             if (message.DataLen > TCmdPack.PackSize)
             {
                 Array.Copy(message.Buffer, TCmdPack.PackSize, pzsSendBuf, nLen, message.DataLen - TCmdPack.PackSize);
@@ -1118,7 +1116,7 @@ namespace GameGate
             Cmd.Series = nSeries;
             SendBuf[0] = (byte)'#';
             //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
-            Array.Copy(Cmd.GetPacket(6), 0, TempBuf, 0, TCmdPack.PackSize);
+            Array.Copy(Cmd.GetPacket(), 0, TempBuf, 0, TCmdPack.PackSize);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 //Move(sMsg[1], TempBuf[TCmdPack.PackSize + 1], sMsg.Length);

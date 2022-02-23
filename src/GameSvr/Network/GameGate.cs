@@ -845,7 +845,7 @@ namespace GameSvr
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
             backingStream.Write(msgHeader.GetPacket());
-            backingStream.Write(defMsg.GetPacket(6));
+            backingStream.Write(defMsg.GetPacket());
             var stream = backingStream.BaseStream as MemoryStream;
             var buff = stream.ToArray();
             if (!AddGateBuffer(nGateIdx, buff))
@@ -987,7 +987,7 @@ namespace GameSvr
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
             backingStream.Write(msgHdr.GetPacket());
-            backingStream.Write(defMsg.GetPacket(6));
+            backingStream.Write(defMsg.GetPacket());
             var stream = backingStream.BaseStream as MemoryStream;
             var buff = stream.ToArray();
             if (!AddGateBuffer(nIndex, buff))

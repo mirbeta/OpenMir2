@@ -47,95 +47,101 @@ namespace SystemModule.Packages
 
         }
 
-        public TCmdPack(byte[] buffer,int decodeLen)
+        public TCmdPack(byte[] buffer)
         {
-            var binaryReader = new BinaryReader(new MemoryStream(buffer, 0, decodeLen));
-            switch (decodeLen)
-            {
-                case 8:
-                    ID1 = binaryReader.ReadInt32();
-                    Cmd1 = binaryReader.ReadUInt16();
-                    ID2 = binaryReader.ReadInt32();
-                    break;
-                case 14:
-                    UID = binaryReader.ReadInt32();
-                    Cmd = binaryReader.ReadUInt16();
-                    X = binaryReader.ReadUInt16();
-                    Y = binaryReader.ReadUInt16();
-                    Direct = binaryReader.ReadUInt16();
-                    break;
-                case 12:
-                default:
-                    Recog = binaryReader.ReadInt32();
-                    Ident = binaryReader.ReadUInt16();
-                    Param = binaryReader.ReadUInt16();
-                    Tag = binaryReader.ReadUInt16();
-                    Series = binaryReader.ReadUInt16();
-                    Cmd = Ident;
-                    Magic = Tag;
-                    break;
-            }
+            var binaryReader = new BinaryReader(new MemoryStream(buffer, 0, PackSize));
+            Recog = binaryReader.ReadInt32();
+            Ident = binaryReader.ReadUInt16();
+            Param = binaryReader.ReadUInt16();
+            Tag = binaryReader.ReadUInt16();
+            Series = binaryReader.ReadUInt16();
+                    
+            Cmd = Ident;
+            Cmd1 = Ident;
+            Cmd2 = Ident;
+            Cmd3 = Ident;
+            Cmd4 = Ident;
+            Command = Ident;
+                    
+            UID = Recog;
+            Head = Recog;
+            NID = Recog;
+            UID1 = Recog;
+            PosX = (ushort)Recog;
+            ID1 = Recog;
+
+            X = Param;
+            IDLo = Param;
+            b1 =(byte) Param;
+            Pos = Param;
+            Zero1 = Param;
+
+            Y = Tag;
+            Dir = Tag;
+            b3 = (byte)Tag;
+            Magic = Tag;
+
+            Direct = Series;
+            WID = Series;
+            IDHi = Series;
         }
 
-        public byte[] GetPacket(byte msgType)
+        public byte[] GetPacket(byte msgType = 6)
         {
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
-            if (msgType == 0)
+            switch (msgType)
             {
-                backingStream.Write(UID);
-                backingStream.Write(Cmd);
-                backingStream.Write(X);
-                backingStream.Write(Y);
-                backingStream.Write(Direct);
+                case 0:
+                    backingStream.Write(UID);
+                    backingStream.Write(Cmd);
+                    backingStream.Write(X);
+                    backingStream.Write(Y);
+                    backingStream.Write(Direct);
+                    break;
+                case 1:
+                    backingStream.Write(ID1);
+                    backingStream.Write(Cmd1);
+                    backingStream.Write(ID2);
+                    break;
+                case 2:
+                    backingStream.Write(PosX);
+                    backingStream.Write(PosY);
+                    backingStream.Write(Cmd2);
+                    backingStream.Write(IDLo);
+                    backingStream.Write(Magic);
+                    backingStream.Write(IDHi);
+                    break;
+                case 3:
+                    backingStream.Write(UID1);
+                    backingStream.Write(Cmd3);
+                    backingStream.Write(b1);
+                    backingStream.Write(b2);
+                    backingStream.Write(b3);
+                    backingStream.Write(b4);
+                    break;
+                case 4:
+                    backingStream.Write(NID);
+                    backingStream.Write(Command);
+                    backingStream.Write(Pos);
+                    backingStream.Write(Dir);
+                    backingStream.Write(WID);
+                    break;
+                case 5:
+                    backingStream.Write(Head);
+                    backingStream.Write(Cmd4);
+                    backingStream.Write(Zero1);
+                    backingStream.Write(Tail);
+                    break;
+                case 6:
+                    backingStream.Write(Recog);
+                    backingStream.Write(Ident);
+                    backingStream.Write(Param);
+                    backingStream.Write(Tag);
+                    backingStream.Write(Series);
+                    break;
             }
-            if (msgType == 1)
-            {
-                backingStream.Write(ID1);
-                backingStream.Write(Cmd1);
-                backingStream.Write(ID2);
-            }
-            if (msgType == 2)
-            {
-                backingStream.Write(PosX);
-                backingStream.Write(PosY);
-                backingStream.Write(Cmd2);
-                backingStream.Write(IDLo);
-                backingStream.Write(Magic);
-                backingStream.Write(IDHi);
-            }
-            if (msgType == 3)
-            {
-                backingStream.Write(UID1);
-                backingStream.Write(Cmd3);
-                backingStream.Write(b1);
-                backingStream.Write(b2);
-                backingStream.Write(b3);
-                backingStream.Write(b4);
-            }
-            if (msgType == 4)
-            {
-                backingStream.Write(NID);
-                backingStream.Write(Command);
-                backingStream.Write(Pos);
-                backingStream.Write(Dir);
-                backingStream.Write(WID);
-            }
-            if (msgType == 5)
-            {
-                backingStream.Write(Head);
-                backingStream.Write(Cmd4);
-                backingStream.Write(Zero1);
-                backingStream.Write(Tail);
-            }
-            if (msgType == 6)
-            {
-                backingStream.Write(Recog);
-                backingStream.Write(Ident);
-                backingStream.Write(Param);
-                backingStream.Write(Tag);
-                backingStream.Write(Series);
-            }
+
             var stream = backingStream.BaseStream as MemoryStream;
             return stream?.ToArray();
         }

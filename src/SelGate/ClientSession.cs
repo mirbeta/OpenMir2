@@ -92,7 +92,7 @@ namespace SelGate
             var tempBuff = new byte[userData.MsgLen - 3];//跳过#1....!
             Array.Copy(userData.Body, 2, tempBuff, 0, tempBuff.Length);
             var nDeCodeLen = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref packBuff);
-            var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
+            var CltCmd = new TCmdPack(packBuff);
             if (_handleLogin == 0)
             {
                 switch (CltCmd.Cmd)
@@ -176,7 +176,7 @@ namespace SelGate
             Cmd.Series = nSeries;
             SendBuf[0] = (byte)'#';
             //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
-            Array.Copy(Cmd.GetPacket(6), 0, TempBuf, 0, TCmdPack.PackSize);
+            Array.Copy(Cmd.GetPacket(), 0, TempBuf, 0, TCmdPack.PackSize);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 //Move(sMsg[1], TempBuf[TCmdPack.PackSize + 1], sMsg.Length);
