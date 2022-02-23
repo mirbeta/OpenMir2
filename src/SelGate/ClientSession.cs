@@ -1,324 +1,430 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
+using System.Net.Sockets;
+using SelGate.Conf;
+using SelGate.Services;
 using SystemModule;
 using SystemModule.Packages;
 
 namespace SelGate
 {
-    public class TSessionObj
-    {
-        //public _tagUserObj m_pUserOBJ = null;
-        //public _tagIOCPCommObj m_pOverlapRecv = null;
-        //public _tagIOCPCommObj m_pOverlapSend = null;
-        //public TIOCPWriter m_tIOCPSender = null;
-        //public TClientThread m_tLastGameSvr = null;
-        private UserSession userSession;
-        public bool m_fKickFlag = false;
-        public byte m_fHandleLogin = 0;
-        public long m_dwSessionID = 0;
-        public int m_nSvrListIdx = 0;
-        public int m_nSvrObject = 0;
-        public short m_wRandKey = 0;
-        public long m_dwClientTimeOutTick = 0;
-        public int m_status = 0;
-        private readonly TConfigMgr configMgr;
-        private readonly int sessionId;
-
-        public TSessionObj()
-        {
-            sessionId = HUtil32.Sequence();
-            m_fKickFlag = false;
-            m_nSvrObject = 0;
-            m_dwClientTimeOutTick = HUtil32.GetTickCount();
-            m_fHandleLogin = 0;
-            m_nSvrListIdx = 0;
-            m_status = 0;
-        }
-
-        public void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
-        {
-            //int iLen;
-            //TCmdPack Cmd;
-            //byte[] TempBuf = new byte[2048];
-            //byte[] SendBuf = new byte[2048];
-            //string sAnsiCharMsg = sMsg;
-            //if ((m_tLastGameSvr == null) || !m_tLastGameSvr.Active)
-            //{
-            //    return;
-            //}
-            //Cmd = new TCmdPack();
-            //Cmd.Recog = nRecog;
-            //Cmd.Ident = wIdent;
-            //Cmd.Param = nParam;
-            //Cmd.Tag = nTag;
-            //Cmd.Param = nSeries;
-            //SendBuf[0] = (byte)'#';
-            //TempBuf = Cmd.GetPacket(6);//Move(Cmd, TempBuf[1], sizeof(TCmdPack));
-            //// °ÑCmdµÄÄÚÈİ£¬¸´ÖÆµ½TempBufÖĞ
-            //if (sAnsiCharMsg != "")
-            //{
-            //    Move(sAnsiCharMsg[1], TempBuf[sizeof(TCmdPack) + 1], sAnsiCharMsg.Length);
-            //    // ¼ÓÃÜ±àÂëTempBufÖĞµÄÄÚÈİ£¬±£´æµ½SendBufÖĞÈ¥
-            //    iLen = Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize + sAnsiCharMsg.Length, ((int)SendBuf[1]));
-            //}
-            //else
-            //{
-            //    iLen = Misc.EncodeBuf(((int)TempBuf[1]), TCmdPack.PackSize, ((int)SendBuf[1]));
-            //}
-            //SendBuf[iLen + 1] = (byte)'!';
-            //m_tIOCPSender.SendData(m_pOverlapSend, SendBuf[0], iLen + 2);
-        }
-
-        // ·¢ËÍ´´½¨½ÇÉ«£¬É¾³ı½ÇÉ«£¬»Ö¸´½ÇÉ«£¬´´½¨Ãû×ÖµÈ¹¦ÄÜ
-        public void ProcessCltData(byte[] Addr, int Len, ref bool Succeed, bool fCDPacket)
-        {
-            int i;
-            byte[] nABuf;
-            byte[] nBBuf;
-            int nBuffer;
-            int nNewIDCode;
-            int nRand;
-            int nDeCodeLen;
-            int nEnCodeLen;
-            TCmdPack Cmd;
-            TCmdPack CltCmd;
-            var pszBuf = new byte[1024];
-            if (m_fKickFlag)
-            {
-                // m_fKickFlagÎªÕæ£¬±íÊ¾Á¬½Ó½øÀ´µÄÓÃ»§ÒÑ±»Ìßµô£¬Ö±½Ó·´×ªm_fKickFlag±êÖ¾£¬ÍË³ö
-                m_fKickFlag = false;
-                Succeed = false;
-                return;
-            }
-            if (Len > configMgr.m_nNomClientPacketSize)
-            {
-                //if (g_pLogMgr.CheckLevel(4))
-                //{
-                //    g_pLogMgr.Add("Êı¾İ°ü³¬³¤: " + (Len).ToString());
-                //}
-                KickUser(userSession.nIPAddr);
-                Succeed = false;
-                return;
-            }
-            //((byte)Addr + Len) = 0;
-            var sData = HUtil32.GetString(Addr, 0, Addr.Length);
-            if ((Len >= 5) && configMgr.m_fDefenceCCPacket)
-            {
-                if (sData.IndexOf("HTTP/") > -1)
-                {
-                    // StrPos·µ»ØµÚ¶ş¸ö²ÎÊıÔÚµÚÒ»¸ö²ÎÊıÖĞµÚÒ»´Î³öÏÖµÄÎ»ÖÃÖ¸Õë
-                    //if (g_pLogMgr.CheckLevel(6))
-                    //{
-                    //    g_pLogMgr.Add("CC Attack, Kick: " + m_pUserOBJ.pszIPAddr);
-                    //}
-                    KickUser(userSession.nIPAddr);// Kick¼´Ó¢ÎÄÌßµÄÒâË¼
-                    Succeed = false;
-                    return;
-                }
-            }
-            if ((Len >= 1))
-            {
-                if (sData.IndexOf("$")>-1)
-                {
-                    //if (g_pLogMgr.CheckLevel(6))
-                    //{
-                    //    g_pLogMgr.Add("$ Attack, Kick: " + m_pUserOBJ.pszIPAddr);
-                    //}
-                    KickUser(userSession.nIPAddr);
-                    Succeed = false;
-                    return;
-                }
-            }
-            if (ClientSession.gDeny)
-            {
-                KickUser(userSession.nIPAddr);
-                Succeed = false;
-                return;
-            }
-            // µ½ÕâÀï£¬m_pOverlapRecv.ABufferºÍm_pOverlapRecv.BBuffer£¬Ó¦¸ÃÒÑ¾­±»¸³¹ıÖµÁË
-            nABuf = Addr;//m_pOverlapRecv.ABuffer;
-            // ÕâÊ±µÄnABufÊÇÕûÊı£¬×÷ÎªÄÚ´æµØÖ·À´Ê¹ÓÃ
-            nBBuf = Addr;//m_pOverlapRecv.BBuffer;
-            nDeCodeLen = Misc.DecodeBuf(Addr, Len, ref nABuf);
-            // °Ñ²ÎÊıAddrµÄÖµ£¬½øĞĞ½âÃÜ£¬Êı¾İµÄ³¤¶ÈÊÇLen£¬½âÃÜºó´æµ½nABufÖĞ
-            // nDeCodeLenÊÇÊµ¼Ê½âÃÜ³öµÄ³¤¶È
-            CltCmd = new TCmdPack(nABuf, 12);
-            // °ÑnABufµØÖ·Î»ÖÃÖĞµÄÄÚÈİ£¬×ª»»³ÉPCmdPack
-            if (m_fHandleLogin == 0)
-            {
-                switch (CltCmd.Cmd)
-                {
-                    //case Grobal2.CM_QUERYSELCHARCODE:
-                    case Grobal2.CM_QUERYCHR:
-                    case Grobal2.CM_NEWCHR:
-                    case Grobal2.CM_DELCHR:
-                    case Grobal2.CM_SELCHR:
-                    //case Grobal2.CM_QUERYDELCHR:
-                    //case Grobal2.CM_GETBACKDELCHR:
-                        // ËùÓĞ½ÇÉ«Ñ¡Ïî²Ù×÷Êı¾İ°ü
-                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        nEnCodeLen = Misc.EncodeBuf(nABuf, nDeCodeLen, nBBuf);
-                        // StrFmtº¯Êı ±ØĞë±£Ö¤¸ñÊ½»¯µÄ×Ö·û´®ÊÇAnsiString ·ñÔòÏûÏ¢´íÎó.
-                        pszBuf[0] = (byte)'%';
-                        pszBuf[1] = (byte)'>';
-                        pszBuf[2] = (byte)'#';
-                        pszBuf[3] = (byte)'1';
-                        Array.Copy(nBBuf, 0, pszBuf, 4, nBBuf.Length);
-                        pszBuf[pszBuf.Length - 1] = (byte)'$';
-                        //StrFmt(pszBuf[1], ">%d/#1%s!$", new object[] { m_pUserOBJ._SendObj.Socket, nBBuf });
-                        userSession.SendBuffer(pszBuf);
-                        break;
-                    default:
-                        //if (g_pLogMgr.CheckLevel(4))
-                        //{
-                        //    g_pLogMgr.Add(string.Format("´íÎóµÄÊı¾İ°üË÷Òı: {0}", CltCmd.Cmd));
-                        //}
-                        KickUser(userSession.nIPAddr);
-                        Succeed = false;
-                        break;
-                }
-            }
-        }
-
-        public void ProcessSvrData(byte[] Addr, int Len)
-        {
-            if (m_fKickFlag)
-            {
-                m_fKickFlag = false;
-                //SHSocket.FreeSocket(ref m_pOverlapSend.Socket);
-                return;
-            }
-            //m_tIOCPSender.SendData(m_pOverlapSend, Addr, Len);
-        }
-
-        /// <summary>
-        /// ÓÃ»§Á´½Ó
-        /// </summary>
-        public void UserEnter()
-        {
-            ClientSession.EnterCount++;
-            m_fHandleLogin = 0;
-            var szSenfBuf = "%" + string.Format("K{0}/{1}/{2}$", new object[] { userSession.SocketId, userSession.IPAddr, userSession.LocalIPAddr });
-            m_tLastGameSvr.SendBuffer(szSenfBuf[1], szSenfBuf.Length);//·¢ËÍ·şÎñÆ÷IPµØÖ·µ½DBServer
-        }
-
-        /// <summary>
-        /// ÓÃ»§Àë¿ª É¾³ısession²¢É¾³ıËùÓĞÏûÏ¢
-        /// </summary>
-        public void UserLeave()
-        {
-            string szSenfBuf;
-            int nCode;
-            //TDynPacket DynPacket;
-            nCode = 0;
-            try
-            {
-                //nCode = 1;
-                //m_fHandleLogin = 0;
-                //szSenfBuf = "%" + string.Format("L%d$", new object[] { m_pUserOBJ._SendObj.Socket });
-                //m_tLastGameSvr.SendBuffer(szSenfBuf[1], szSenfBuf.Length);
-                //nCode = 2;
-                //IPAddrFilter.DeleteConnectOfIP(this.m_pUserOBJ.nIPAddr);
-                //nCode = 3;
-                //EnterCriticalSection(((_tagSendQueueNode)(m_pOverlapSend)).QueueLock);
-                //try
-                //{
-                //    while (true)
-                //    {
-                //        if (((_tagSendQueueNode)(m_pOverlapSend)).DynSendList.Count == 0)
-                //        {
-                //            break;
-                //        }
-                //        DynPacket = m_tIOCPSender.SendQueue.GetDynPacket(m_pOverlapSend);
-                //        if (DynPacket == null)
-                //        {
-                //            break;
-                //        }
-                //        FreeMem(DynPacket.Buf);
-                //        Dispose(DynPacket);
-                //        ((_tagSendQueueNode)(m_pOverlapSend)).DynSendList.Delete(0);
-                //    }
-                //}
-                //finally
-                //{
-                //    LeaveCriticalSection(((_tagSendQueueNode)(m_pOverlapSend)).QueueLock);
-                //}
-                //nCode = 4;
-                //if (g_ProcMsgThread != null)
-                //{
-                //    g_ProcMsgThread.DelSession(this);
-                //}
-            }
-            catch (Exception M)
-            {
-                //g_pLogMgr.Add(Format("TSessionObj.UserLeave: %d %s", new object[] { nCode, M.Message }));
-            }
-        }
-
-        public void ReCreate()
-        {
-            m_fKickFlag = false;
-            m_nSvrObject = 0;
-            m_fHandleLogin = 0;
-            m_dwClientTimeOutTick = HUtil32.GetTickCount();
-            m_status = 0;
-        }
-
-        public void KickUser(int remoteIP)
-        {
-
-        }
-    }
-}
-
-namespace SelGate
-{
+    /// <summary>
+    /// ç”¨æˆ·ä¼šè¯å°åŒ…å¤„ç†
+    /// </summary>
     public class ClientSession
     {
-        public static TSessionObj g_pFillUserObj = null;
+        private int LastDirection = -1;
+        private byte _handleLogin = 0;
+        private TSessionInfo _session;
+        private bool m_fOverClientCount;
+        private bool m_KickFlag = false;
+        public int m_nSvrListIdx = 0;
+        private int m_nSvrObject = 0;
+        private int m_SendCheckTick = 0;
+        private TCheckStep m_Stat;
+        private long m_FinishTick = 0;
+        private int m_dwClientTimeOutTick = 0;
+        private readonly ClientThread lastGameSvr;
+        private readonly ConfigManager _configManager;
+
+        public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        {
+            _session = session;
+            lastGameSvr = clientThread;
+            _configManager = configManager;
+            m_fOverClientCount = false;
+            m_Stat = TCheckStep.CheckLogin;
+        }
+
+        public TSessionInfo Session => _session;
+
+        private GateConfig Config => _configManager.GateConfig;
+
         /// <summary>
-        /// »á»°¶ÔÏóÁĞ±í
+        /// å¤„ç†å®¢æˆ·ç«¯å‘é€è¿‡æ¥çš„å°åŒ…
+        /// å‘é€åˆ›å»ºè§’è‰²ï¼Œåˆ é™¤è§’è‰²ï¼Œæ¢å¤è§’è‰²ï¼Œåˆ›å»ºåå­—ç­‰åŠŸèƒ½
         /// </summary>
-        public static TSessionObj[] g_UserList = new TSessionObj[1000];
-        public static double lastqueryTick = 0;
-        public static double starttick = 0;
-        public static int EnterCount = 0;
-        //public static HWND mainhwnd = null;
-        public static bool gDeny = false;
-        public static int n4ErrCount = 0;
-
-        public static void FillUserList()
+        /// <param name="UserData"></param>
+        public void HandleUserPacket(TSendUserData UserData)
         {
-            //if (g_pFillUserObj == null)
-            //{
-            //    g_pFillUserObj = new TSessionObj();
-            //}
-            //g_pFillUserObj.m_tLastGameSvr = null;
-            //for (var i = 0; i < 1000; i++)
-            //{
-            //    g_UserList[i] = g_pFillUserObj;
-            //}
+            int dwCurrentTick = 0;
+            if (m_KickFlag)
+            {
+                m_KickFlag = false;
+                return;
+            }
+            if ((UserData.BufferLen >= 5) && Config.m_fDefenceCCPacket)
+            {
+                var sMsg = HUtil32.GetString(UserData.Buffer, 2, UserData.BufferLen - 3);
+                if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    //if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(6))
+                    //{
+                    //    Console.WriteLine("CC Attack, Kick: " + m_pUserOBJ.pszIPAddr);
+                    //}
+                    //Misc.KickUser(m_pUserOBJ.nIPAddr);
+                    //Succeed = false;
+                    //return;
+                }
+            }
+            if ((m_Stat == TCheckStep.CheckLogin) || (m_Stat == TCheckStep.SendCheck))
+            {
+                dwCurrentTick = HUtil32.GetTickCount();
+                if (0 == m_SendCheckTick)
+                {
+                    m_SendCheckTick = dwCurrentTick;
+                }
+                if ((dwCurrentTick - m_SendCheckTick) > 1000 * 5)// å¦‚æœ5 ç§’ æ²¡æœ‰å›æ•°æ® å°±ä¸‹å‘æ•°æ®
+                {
+                    m_Stat = TCheckStep.SendSmu;
+                }
+            }
+            // å¦‚æœä¸‹å‘æˆåŠŸ  å¾—å¤šå°‘ç§’æœ‰æ•°æ®å¦‚æœæ²¡æœ‰çš„è¯ï¼Œé‚£å°±æ˜¯æœ‰é—®é¢˜
+            if ((m_Stat == TCheckStep.SendFinsh))
+            {
+                dwCurrentTick = HUtil32.GetTickCount();
+                if ((dwCurrentTick - m_FinishTick) > 1000 * 10)
+                {
+                    //todo 
+                }
+            }
+            var success = false;//todo ä¼˜åŒ–æ­¤æ®µä»£ç 
+            var packBuff = new byte[UserData.BufferLen];
+            var tempBuff = new byte[UserData.BufferLen - 3];//è·³è¿‡#1....!
+            Buffer.BlockCopy(UserData.Buffer, 2, tempBuff, 0, tempBuff.Length);
+            var nDeCodeLen = Misc.DecodeBuf(tempBuff, UserData.BufferLen - 3, ref packBuff);
+            var CltCmd = new TCmdPack(packBuff, nDeCodeLen);
+            if (_handleLogin == 0)
+            {
+                HandleLogin(CltCmd, UserData.Buffer, nDeCodeLen, ref success);
+                if (!success)
+                {
+                    //KickUser("ip");
+                }
+            }
         }
 
-        public static void CleanupUserList()
+        /// <summary>
+        /// å¤„ç†æ¶ˆæ¯
+        /// </summary>
+        public void HandleDelayMsg()
         {
-            
+            if (!m_KickFlag)
+            {
+                if(_handleLogin<3)
+                {
+                    if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                    {
+                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                        SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0, "");
+                        m_KickFlag = true;
+                        //BlockUser(this);
+                    }
+                }
+            }
+            else
+            {
+                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                {
+                    m_dwClientTimeOutTick =HUtil32.GetTickCount();
+                    _session.Socket.Close();
+                }
+            }
         }
 
-        public void initialization()
+        /// <summary>
+        /// å¤„ç†æœåŠ¡ç«¯å‘é€è¿‡æ¥çš„æ¶ˆæ¯å¹¶å‘é€åˆ°æ¸¸æˆå®¢æˆ·ç«¯
+        /// </summary>
+        public void ProcessSvrData(TSendUserData sendData)
         {
-            FillUserList();
-            gDeny = false;
-            starttick = HUtil32.GetTickCount();
-            lastqueryTick = starttick;
-            EnterCount = 0;
-            n4ErrCount = 0;
+            var sSendMsg = string.Empty;
+            switch (sendData.BufferLen)
+            {
+                case < 0:
+                    sSendMsg = "#" + HUtil32.GetString(sendData.Buffer, 0, sendData.Buffer.Length - 1) + "!";
+                    break;
+                case >= 12:
+                {
+                    var pDefMsg = new TDefaultMessage(sendData.Buffer);
+                    if (sendData.BufferLen > 12)
+                    {
+                        var sb = new System.Text.StringBuilder();
+                        sb.Append('#');
+                        sb.Append(EDcode.EncodeMessage(pDefMsg));
+                        var strBuff = new byte[sendData.BufferLen - 12];
+                        Buffer.BlockCopy(sendData.Buffer, 12, strBuff, 0, strBuff.Length);
+                        sb.Append(HUtil32.StrPasTest(strBuff));
+                        sb.Append('!');
+                        sSendMsg = sb.ToString();
+                    }
+                    else
+                    {
+                        sSendMsg = "#" + EDcode.EncodeMessage(pDefMsg) + "!";
+                    }
+                    break;
+                }
+            }
+            if (_session.Socket != null && _session.Socket.Connected)
+            {
+                _session.Socket.Send(HUtil32.GetBytes(sSendMsg));
+            }
         }
 
-        public void finalization()
+        private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
         {
-            CleanupUserList();
+            int iLen = 0;
+            TCmdPack Cmd;
+            byte[] TempBuf = new byte[1048 - 1 + 1];
+            byte[] SendBuf = new byte[1048 - 1 + 1];
+            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
+            {
+                return;
+            }
+            Cmd = new TCmdPack();
+            Cmd.Recog = nRecog;
+            Cmd.Ident = wIdent;
+            Cmd.Param = nParam;
+            Cmd.Tag = nTag;
+            Cmd.Series = nSeries;
+            SendBuf[0] = (byte)'#';
+            //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
+            Array.Copy(Cmd.GetPacket(6), 0, TempBuf, 0, TCmdPack.PackSize);
+            if (!string.IsNullOrEmpty(sMsg))
+            {
+                //Move(sMsg[1], TempBuf[TCmdPack.PackSize + 1], sMsg.Length);
+                var sBuff = HUtil32.GetBytes(sMsg);
+                Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
+                iLen = Misc.EncodeBuf(TempBuf, TCmdPack.PackSize + sMsg.Length, SendBuf);
+            }
+            else
+            {
+                iLen = Misc.EncodeBuf(TempBuf, TCmdPack.PackSize, SendBuf);
+            }
+            SendBuf[iLen + 1] = (byte)'!';
+            _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
         }
 
+        /// <summary>
+        /// å¤„ç†ç™»å½•æ•°æ®
+        /// </summary>
+        private void HandleLogin(TCmdPack ctlCmd,byte[] buffer, int nDeCodeLen, ref bool success)
+        {
+            switch (ctlCmd.Cmd)
+            {
+                //case Grobal2.CM_QUERYSELCHARCODE:
+                case Grobal2.CM_QUERYCHR:
+                case Grobal2.CM_NEWCHR:
+                case Grobal2.CM_DELCHR:
+                case Grobal2.CM_SELCHR:
+                //case Grobal2.CM_QUERYDELCHR:
+                //case Grobal2.CM_GETBACKDELCHR:
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                    var tempBuff = new byte[nDeCodeLen];
+                    var nEnCodeLen = Misc.EncodeBuf(buffer, nDeCodeLen, tempBuff, 1);
+                    //StrFmtå‡½æ•° å¿…é¡»ä¿è¯æ ¼å¼åŒ–çš„å­—ç¬¦ä¸²æ˜¯AnsiString å¦åˆ™æ¶ˆæ¯é”™è¯¯.
+                    tempBuff[0] = (byte)'%';
+                    //StrFmt(@pszBuf[1], AnsiString('>%d/#1%s!$'), [m_pUserOBJ._SendObj.Socket, PAnsiChar(nBBuf)]);
+                    Array.Copy(buffer, nDeCodeLen, tempBuff, 1, tempBuff.Length - 1);
+                    lastGameSvr.SendBuffer(tempBuff, tempBuff.Length);
+                    break;
+                default:
+                    Console.WriteLine($"é”™è¯¯çš„æ•°æ®åŒ…ç´¢å¼•:[{ctlCmd.Cmd}]");
+                    break;
+            }
+        }
+
+        private void SendSysMsg(string szMsg)
+        {
+            TCmdPack Cmd;
+            byte[] TempBuf = new byte[1023 + 1];
+            byte[] SendBuf = new byte[1023 + 1];
+            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
+            {
+                return;
+            }
+            Cmd = new TCmdPack();
+            Cmd.UID = m_nSvrObject;
+            Cmd.Cmd = Grobal2.SM_SYSMESSAGE;
+            Cmd.X = HUtil32.MakeWord(0xFF, 0xF9);
+            Cmd.Y = 0;
+            Cmd.Direct = 0;
+            SendBuf[0] = (byte)'#';
+            //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
+            Array.Copy(Cmd.GetPacket(0), 0, TempBuf, 0, TCmdPack.PackSize);
+            var sBuff = HUtil32.GetBytes(szMsg);
+            Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
+            //Move(szMsg[1], TempBuf[13], szMsg.Length);
+            var iLen = TCmdPack.PackSize + szMsg.Length;
+            iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
+            SendBuf[iLen + 1] = (byte)'!';
+            //m_tIOCPSender.SendData(m_pOverlapSend, SendBuf[0], iLen + 2);
+            _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
+        }
+    }
+
+    public enum TCheckStep
+    {
+        CheckLogin,
+        SendCheck,
+        SendSmu,
+        SendFinsh,
+        CheckTick
+    }
+
+    public class GameSpeed
+    {
+        /// <summary>
+        /// æ˜¯å¦é€Ÿåº¦é™åˆ¶
+        /// </summary>
+        public bool SpeedLimit = false;
+        /// <summary>
+        /// æœ€é«˜çš„äººç‰©èº«ä¸Šæ‰€æœ‰è£…å¤‡+é€Ÿåº¦ï¼Œé»˜è®¤6ã€‚
+        /// </summary>
+        public int ItemSpeed = 0;
+        /// <summary>
+        /// ç©å®¶åŠ é€Ÿåº¦è£…å¤‡å› æ•°ï¼Œæ•°å€¼è¶Šå°ï¼Œå°åŠ é€Ÿè¶Šä¸¥å‰ï¼Œé»˜è®¤60ã€‚
+        /// </summary>
+        public int DefItemSpeed;
+        /// <summary>
+        /// åŠ é€Ÿçš„ç´¯è®¡å€¼
+        /// </summary>
+        public int nErrorCount;
+        /// <summary>
+        /// äº¤æ˜“æ—¶é—´
+        /// </summary>
+        public int dwDealTick;
+        /// <summary>
+        /// è£…å¤‡åŠ é€Ÿ
+        /// </summary>
+        public int m_nHitSpeed;
+        /// <summary>
+        /// å‘è¨€æ—¶é—´
+        /// </summary>
+        public int dwSayMsgTick;
+        /// <summary>
+        /// ç§»åŠ¨æ—¶é—´
+        /// </summary>
+        public int dwMoveTick;
+        /// <summary>
+        /// æ”»å‡»æ—¶é—´
+        /// </summary>
+        public int dwAttackTick;
+        /// <summary>
+        /// é­”æ³•æ—¶é—´
+        /// </summary>
+        public int dwSpellTick;
+        /// <summary>
+        /// èµ°è·¯æ—¶é—´
+        /// </summary>
+        public long dwWalkTick;
+        /// <summary>
+        /// è·‘æ­¥æ—¶é—´
+        /// </summary>
+        public long dwRunTick;
+        /// <summary>
+        /// è½¬èº«æ—¶é—´
+        /// </summary>
+        public long dwTurnTick;
+        /// <summary>
+        /// æŒ–è‚‰æ—¶é—´
+        /// </summary>
+        public int dwButchTick;
+        /// <summary>
+        /// è¹²ä¸‹æ—¶é—´
+        /// </summary>
+        public int dwSitDownTick;
+        /// <summary>
+        /// åƒè¯æ—¶é—´
+        /// </summary>
+        public long dwEatTick;
+        /// <summary>
+        /// æ¡èµ·æ—¶é—´
+        /// </summary>
+        public long dwPickupTick;
+        /// <summary>
+        /// ç§»åŠ¨æ—¶é—´
+        /// </summary>
+        public long dwRunWalkTick;
+        /// <summary>
+        /// ä¼ é€æ—¶é—´
+        /// </summary>
+        public long dwFeiDnItemsTick;
+        /// <summary>
+        /// å˜é€Ÿé½¿è½®æ—¶é—´
+        /// </summary>
+        public long dwSupSpeederTick;
+        /// <summary>
+        /// å˜é€Ÿé½¿è½®ç´¯è®¡
+        /// </summary>
+        public int dwSupSpeederCount;
+        /// <summary>
+        /// è¶…çº§åŠ é€Ÿæ—¶é—´
+        /// </summary>
+        public long dwSuperNeverTick;
+        /// <summary>
+        /// è¶…çº§åŠ é€Ÿç´¯è®¡
+        /// </summary>
+        public int dwSuperNeverCount;
+        /// <summary>
+        /// è®°å½•ä¸Šä¸€æ¬¡æ“ä½œ
+        /// </summary>
+        public int dwUserDoTick;
+        /// <summary>
+        /// ä¿å­˜åœé¡¿æ“ä½œæ—¶é—´
+        /// </summary>
+        public long dwContinueTick;
+        /// <summary>
+        /// å¸¦æœ‰æ”»å‡»å¹¶å‘ç´¯è®¡
+        /// </summary>
+        public int dwConHitMaxCount;
+        /// <summary>
+        /// å¸¦æœ‰é­”æ³•å¹¶å‘ç´¯è®¡
+        /// </summary>
+        public int dwConSpellMaxCount;
+        /// <summary>
+        /// è®°å½•ä¸Šä¸€æ¬¡ç§»åŠ¨æ–¹å‘
+        /// </summary>
+        public int dwCombinationTick;
+        /// <summary>
+        /// æ™ºèƒ½æ”»å‡»ç´¯è®¡
+        /// </summary>
+        public int dwCombinationCount;
+        public long dwGameTick;
+        public int dwWaringTick;
+
+        public GameSpeed()
+        {
+            var dwCurrentTick = HUtil32.GetTickCount();
+            nErrorCount = dwCurrentTick;
+            dwDealTick = dwCurrentTick;
+            m_nHitSpeed = dwCurrentTick;
+            dwSayMsgTick = dwCurrentTick;
+            dwMoveTick = dwCurrentTick;
+            dwAttackTick = dwCurrentTick;
+            dwSpellTick = dwCurrentTick;
+            dwWalkTick = dwCurrentTick;
+            dwRunTick = dwCurrentTick;
+            dwTurnTick = dwCurrentTick;
+            dwButchTick = dwCurrentTick;
+            dwSitDownTick = dwCurrentTick;
+            dwEatTick = dwCurrentTick;
+            dwPickupTick = dwCurrentTick;
+            dwRunWalkTick = dwCurrentTick;
+            dwFeiDnItemsTick = dwCurrentTick;
+            dwSupSpeederTick = dwCurrentTick;
+            dwSupSpeederCount = dwCurrentTick;
+            dwSuperNeverTick = dwCurrentTick;
+            dwSuperNeverCount = dwCurrentTick;
+            dwUserDoTick = dwCurrentTick;
+            dwContinueTick = dwCurrentTick;
+            dwConHitMaxCount = dwCurrentTick;
+            dwConSpellMaxCount = dwCurrentTick;
+            dwCombinationTick = dwCurrentTick;
+            dwCombinationCount = dwCurrentTick;
+            dwGameTick = dwCurrentTick;
+            dwWaringTick = dwCurrentTick;
+        }
     }
 }
-

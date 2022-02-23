@@ -168,12 +168,9 @@ namespace GameGate
         {
             GateShare.Initialization();
             GateShare.AddMainLogMsg("正在启动服务...", 2);
-            GateShare.boServiceStart = true;
             //GateShare.boCheckServerFail = false;
             GateShare.boSendHoldTimeOut = false;
             _configManager.LoadConfig();
-            GateShare.dwProcessReviceMsgTimeLimit = 50;
-            GateShare.dwProcessSendMsgTimeLimit = 50;
             dwRefConsolMsgTick = HUtil32.GetTickCount();
             _serverService.Start();
             _clientManager.LoadConfig();
@@ -193,7 +190,6 @@ namespace GameGate
         public void StopService()
         {
             GateShare.AddMainLogMsg("正在停止服务...", 2);
-            GateShare.boServiceStart = false;
             // for (var nSockIdx = 0; nSockIdx < GateShare.GATEMAXSESSION; nSockIdx ++ )
             // {
             //     if (GateShare.SessionArray[nSockIdx].Socket != null)

@@ -94,8 +94,6 @@ namespace GameSvr
                     {
                         m_nSpellTick = 0;
                     }
-
-
                 }
                 else
                 {

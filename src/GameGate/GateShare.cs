@@ -20,18 +20,12 @@ namespace GameGate
         /// 显示B 或 KB
         /// </summary>
         public static bool boShowBite = true;
-        public static bool boServiceStart = false;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
         public static IList<string> AbuseList = null;
-        /// <summary>
-        /// 是否显示SOCKET接收的信息
-        /// </summary>
-        public static bool boShowSckData = true;
         public static string sReplaceWord = "*";
-        public static int nCurrConnCount = 0;
         public static bool boSendHoldTimeOut = false;
         public static long dwSendHoldTick = 0;
         public static long dwCheckRecviceTick = 0;
@@ -45,8 +39,6 @@ namespace GameGate
         /// </summary>
         public static int NReviceMsgSize;
         public static bool boDecodeMsgLock = false;
-        public static long dwProcessReviceMsgTimeLimit = 0;
-        public static long dwProcessSendMsgTimeLimit = 0;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -56,20 +48,6 @@ namespace GameGate
         /// </summary>
         public static IList<string> TempBlockIPList = null;
         public static int nMaxConnOfIPaddr = 50;
-        public static int nMaxClientPacketSize = 7000;
-        public static int nNomClientPacketSize = 150;
-        public static int dwClientCheckTimeOut = 50;
-        public static int nMaxOverNomSizeCount = 2;
-        public static int nMaxClientMsgCount = 15;
-        public static bool bokickOverPacketSize = true;
-        /// <summary>
-        /// 发送给客户端数据包大小限制
-        /// </summary>
-        public static int nClientSendBlockSize = 1000;
-        /// <summary>
-        /// 客户端连接会话超时(指定时间内未有数据传输)
-        /// </summary>
-        public static long dwClientTimeOutTime = 5000;
         /// <summary>
         /// 会话超时时间
         /// </summary>
@@ -81,11 +59,10 @@ namespace GameGate
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
-            string tMsg;
             try
             {
                 HUtil32.EnterCriticalSection(CS_MainLog);
-                tMsg = "[" + DateTime.Now + "] " + Msg;
+                var tMsg = "[" + DateTime.Now + "] " + Msg;
                 MainLogMsgList.Add(tMsg);
             }
             finally
@@ -130,7 +107,6 @@ namespace GameGate
             CS_FilterMsg = new object();
             MainLogMsgList = new List<string>();
             AbuseList = new List<string>();
-            boShowSckData = false;
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
             ServerGateList = new List<ClientThread>();

@@ -991,7 +991,10 @@ namespace GameSvr
                 if ((HUtil32.GetTickCount() - dwRegenMonstersTick) > M2Share.g_Config.dwRegenMonstersTime)
                 {
                     dwRegenMonstersTick = HUtil32.GetTickCount();
-                    if (m_nCurrMonGen < m_MonGenList.Count) MonGen = m_MonGenList[m_nCurrMonGen];
+                    if (m_nCurrMonGen < m_MonGenList.Count)
+                    {
+                        MonGen = m_MonGenList[m_nCurrMonGen];
+                    }
                     if (m_nCurrMonGen < m_MonGenList.Count - 1)
                     {
                         m_nCurrMonGen++;
@@ -1035,14 +1038,14 @@ namespace GameSvr
                 {
                     MonGen = m_MonGenList[currentMongen];
                     int nProcessPosition;
-                    if (m_nMonGenCertListPosition < MonGen.CertCount) //TODO 耗CPU MonGen.CertList.Count, 修改为计数
+                    if (m_nMonGenCertListPosition < MonGen.CertCount)
                         nProcessPosition = m_nMonGenCertListPosition;
                     else
                         nProcessPosition = 0;
                     m_nMonGenCertListPosition = 0;
                     while (true)
                     {
-                        if (nProcessPosition >= MonGen.CertCount) //MonGen.CertList.Count 修改为计数
+                        if (nProcessPosition >= MonGen.CertCount) 
                         {
                             break;
                         }
@@ -1054,23 +1057,6 @@ namespace GameSvr
                                 if ((dwCurrentTick - Monster.m_dwRunTick) > Monster.m_nRunTime)
                                 {
                                     Monster.m_dwRunTick = dwRunTick;
-
-
-                                    //if ((dwCurrentTick - Monster.m_dwSearchTick) > Monster.m_dwSearchTime)
-                                    //{
-                                    //    Monster.m_dwSearchTick = HUtil32.GetTickCount();
-                                    //    Monster.SearchViewRange();
-                                    //}
-                                    //if (!Monster.m_boIsVisibleActive && Monster.m_nProcessRunCount < M2Share.g_Config.nProcessMonsterInterval)
-                                    //{
-                                    //    Monster.m_nProcessRunCount++;
-                                    //}
-                                    //else
-                                    //{
-                                    //    Monster.m_nProcessRunCount = 0;
-                                    //    Monster.Run();
-                                    //}
-
                                     if (Monster.m_boDeath && Monster.m_boCanReAlive && Monster.m_boInvisible && (Monster.m_pMonGen != null))
                                     {
                                         if ((HUtil32.GetTickCount() - Monster.m_dwReAliveTick) > M2Share.UserEngine.ProcessMonsters_GetZenTime(Monster.m_pMonGen.dwZenTime))

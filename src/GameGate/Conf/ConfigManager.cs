@@ -17,7 +17,7 @@ namespace GameGate
             {
                 m_xGameGateList[i] = new TGameGateList();
                 m_xGameGateList[i].sServerAdress = "127.0.0.1";
-                m_xGameGateList[i].nGatePort = 7200 + i - 1;
+                m_xGameGateList[i].nGatePort = 7200 + i;
                 m_xGameGateList[i].nServerPort = 5000;
             }
         }

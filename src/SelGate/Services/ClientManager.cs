@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using SelGate.Conf;
 using SystemModule;
 
-namespace GameGate
+namespace SelGate.Services
 {
     /// <summary>
     /// GameGate->GameSvr
@@ -38,7 +39,7 @@ namespace GameGate
                 serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    Console.WriteLine($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    Console.WriteLine($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
                 _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
@@ -109,11 +110,6 @@ namespace GameGate
 
         public ClientThread GetClientThread()
         {
-            //TODO 根据配置文件有四种模式  默认随机
-            //1.轮询分配
-            //2.总是分配到最小资源 即网关在线人数最小的那个
-            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-            //4.按权重分配
             if (GateShare.ServerGateList.Any())
             {
                 var random = new System.Random().Next(GateShare.ServerGateList.Count);
@@ -168,10 +164,6 @@ namespace GameGate
         {
             Debug.WriteLine("清理超时会话开始工作...");
             TSessionInfo UserSession;
-            if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3000)
-            {
-                GateShare.boSendHoldTimeOut = false;
-            }
             var clientList = GetAllClient();
             for (var i = 0; i < clientList.Count; i++)
             {

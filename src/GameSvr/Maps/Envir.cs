@@ -24,26 +24,6 @@ namespace GameSvr
         public bool boObjectDisPose;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct TMapHeader
-    {
-        public short wWidth;
-        public short wHeight;
-    }
-
-    public struct TMapUnitInfo
-    {
-        public short wBkImg;
-        public short wMidImg;
-        public short wFrImg;
-        public byte btDoorIndex;
-        public byte btDoorOffset;
-        public byte btAniFrame;
-        public byte btAniTick;
-        public byte btArea;
-        public byte btLight;
-    }
-
     public enum CellAttribute : byte
     {
         Walk = 0,

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/../../Data/Mirserver/Mir200/Server.conf" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/SelGate/ClientSession.cs" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/SelGate/Conf/ConfigManager.cs" charset="GB2312" />
+  </component>
+</project>
