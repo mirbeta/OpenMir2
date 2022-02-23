@@ -8,6 +8,7 @@ namespace SystemModule.Sockets
         public byte[] Buff;
         public Socket socket;
         public string ReceiveText;
+        public int SocketId => (int) socket.Handle;
 
         public DSCClientDataInEventArgs(Socket soc, byte[] dataIn)
         {

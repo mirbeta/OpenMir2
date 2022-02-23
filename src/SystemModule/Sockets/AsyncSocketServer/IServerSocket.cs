@@ -386,9 +386,14 @@ namespace SystemModule.Sockets
             token.Socket = e.AcceptSocket;
             // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
             token.ConnectionId = (int)_idWorker.nextId();//Guid.NewGuid().ToString("N");
-            if (token.ConnectionId <= 0)
+            if (token.ConnectionId <= 0 || token.ConnectionId > ushort.MaxValue)
             {
                 token.ConnectionId = (int)token.Socket.Handle;
+            }
+            if (token.ConnectionId > ushort.MaxValue)
+            {
+                Console.WriteLine("生成SocketId异常.");
+                return;
             }
             if (!this.m_tokens.TryAdd(token.ConnectionId, token)) // 添加到集合中
             {

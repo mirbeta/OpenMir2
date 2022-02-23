@@ -1023,7 +1023,7 @@ namespace GameSvr
                             if (boRegened)
                             {
                                 MonGen.dwStartTick = HUtil32.GetTickCount();
-                                Debug.WriteLine(string.Format("{0}/{1}/{2} ({3}/{4})", MonGen.sMonName, m_nCurrMonGen, m_MonGenList.Count, nGenCount, nGenModCount));
+                                //Debug.WriteLine(string.Format("{0}/{1}/{2} ({3}/{4})", MonGen.sMonName, m_nCurrMonGen, m_MonGenList.Count, nGenCount, nGenModCount));
                             }
                         }
                     }

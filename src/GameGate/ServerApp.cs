@@ -168,15 +168,12 @@ namespace GameGate
         {
             GateShare.Initialization();
             GateShare.AddMainLogMsg("正在启动服务...", 2);
-            //GateShare.boCheckServerFail = false;
-            GateShare.boSendHoldTimeOut = false;
             _configManager.LoadConfig();
             dwRefConsolMsgTick = HUtil32.GetTickCount();
             _serverService.Start();
             _clientManager.LoadConfig();
             _clientManager.Start();
             decodeTimer = new Timer(DecodeTimer, null, 0, 1);
-            //sendTime = new Timer(SendTimerTimer, null, 3000, 3000);
             GateShare._HwidFilter = new HWIDFilter(_configManager);
             GateShare.AddMainLogMsg("服务已启动成功...", 2);
             GateShare.AddMainLogMsg("欢迎使用翎风系列游戏软件...", 0);
@@ -184,7 +181,6 @@ namespace GameGate
             GateShare.AddMainLogMsg("论坛:http://bbs.gameofmir.com", 0);
             GateShare.AddMainLogMsg("智能反外挂程序已启动...", 0);
             GateShare.AddMainLogMsg("智能反外挂程序云端已连接...", 0);
-            //GateShare.AddMainLogMsg("网关集群模式已启动,当前运行[随机分配]...", 0);
         }
 
         public void StopService()

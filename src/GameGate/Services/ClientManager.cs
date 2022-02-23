@@ -168,10 +168,6 @@ namespace GameGate
         {
             Debug.WriteLine("清理超时会话开始工作...");
             TSessionInfo UserSession;
-            if ((HUtil32.GetTickCount() - GateShare.dwSendHoldTick) > 3000)
-            {
-                GateShare.boSendHoldTimeOut = false;
-            }
             var clientList = GetAllClient();
             for (var i = 0; i < clientList.Count; i++)
             {

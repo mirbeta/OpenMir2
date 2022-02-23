@@ -31,7 +31,7 @@ namespace GameSvr
         public int nUserCount;
         public byte[] Buffer;
         public int nBuffLen;
-        public Channel<byte[]> BufferChannel;
+        public Channel<byte[]> Queue;
         public bool boSendKeepAlive;
         public int nSendChecked;
         public int nSendBlockCount;
@@ -67,5 +67,10 @@ namespace GameSvr
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
+
+        public void Send(byte[] buffer)
+        {
+            Queue.Writer.TryWrite(buffer);
+        }
     }
 }

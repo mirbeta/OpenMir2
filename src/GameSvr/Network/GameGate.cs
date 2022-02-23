@@ -795,7 +795,7 @@ namespace GameSvr
                     dwSendTick = HUtil32.GetTickCount(),
                     nSendMsgBytes = 0,
                     nSendedMsgCount = 0,
-                    BufferChannel = Channel.CreateUnbounded<byte[]>()
+                    Queue = Channel.CreateUnbounded<byte[]>()
                 };
                 RunSock.g_GateArr[i] = Gate;
             }
@@ -811,25 +811,17 @@ namespace GameSvr
         public bool AddGateBuffer(int gateIdx, byte[] buffer)
         {
             var result = false;
-            HUtil32.EnterCriticalSection(m_RunSocketSection);
-            try
+            if (gateIdx < Grobal2.RUNGATEMAX)
             {
-                if (gateIdx < Grobal2.RUNGATEMAX)
+                var gameGate = RunSock.g_GateArr[gateIdx];
+                if (buffer != null && buffer.Length > 0)
                 {
-                    var gameGate = RunSock.g_GateArr[gateIdx];
-                    if (gameGate.BufferChannel != null && buffer != null)
+                    if (gameGate.boUsed && gameGate.Socket != null)
                     {
-                        if (gameGate.boUsed && gameGate.Socket != null)
-                        {
-                            gameGate.BufferChannel.Writer.TryWrite(buffer);
-                            result = true;
-                        }
+                        gameGate.Send(buffer);
+                        result = true;
                     }
                 }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(m_RunSocketSection);
             }
             return result;
         }
@@ -1093,7 +1085,7 @@ namespace GameSvr
                             for (var i = RunSock.g_GateArr.GetLowerBound(0); i <= RunSock.g_GateArr.GetUpperBound(0); i++)
                             {
                                 Gate = RunSock.g_GateArr[i];
-                                if (Gate.BufferChannel != null)
+                                if (Gate.Queue != null)
                                 {
                                     for (var nG = 0; nG < M2Share.g_Config.nGateLoad; nG++)
                                     {
@@ -1192,7 +1184,7 @@ namespace GameSvr
     }
 
     /// <summary>
-    /// 网关消费者
+    /// 游戏网关消费者
     /// </summary>
     public class GateConsumer
     {
@@ -1202,7 +1194,7 @@ namespace GameSvr
 
         public GateConsumer(TGateInfo gate,int identifier)
         {
-            _reader = gate.BufferChannel.Reader;
+            _reader = gate.Queue.Reader;
             _identifier = identifier;
             _gate = gate;
         }

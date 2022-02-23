@@ -168,7 +168,6 @@ namespace GameGate
                 var dwProcessMsgTick = HUtil32.GetTickCount();
                 var data = new byte[token.BytesReceived];
                 Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                GateShare.NReviceMsgSize += data.Length;
                 var userData = new TSendUserData();
                 userData.Buffer = data;
                 userData.UserCientId = connectionId;

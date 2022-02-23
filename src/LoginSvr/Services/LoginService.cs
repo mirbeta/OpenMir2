@@ -129,14 +129,14 @@ namespace LoginSvr
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if ((sLineText != "") && (sLineText[0] != ';'))
+                    if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " " });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new string[] { " " });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, new string[] { " " });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, new string[] { " " });
                         sLineText = sLineText.Trim();
-                        if ((sTitle != "") && (sRemote != "") && (sPublic != "") && (nRouteIdx < 60))
+                        if (sTitle != "" && sRemote != "" && sPublic != "" && nRouteIdx < 60)
                         {
                             Config.GateRoute[nRouteIdx] = new TGateRoute();
                             Config.GateRoute[nRouteIdx].sServerName = sServerName;
@@ -144,7 +144,7 @@ namespace LoginSvr
                             Config.GateRoute[nRouteIdx].sRemoteAddr = sRemote;
                             Config.GateRoute[nRouteIdx].sPublicAddr = sPublic;
                             nSelGateIdx = 0;
-                            while ((sLineText != ""))
+                            while (sLineText != "")
                             {
                                 if (nSelGateIdx > 9)
                                 {
@@ -420,7 +420,7 @@ namespace LoginSvr
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)
             {
                 ConnInfo = Config.SessionList[i];
-                if (ConnInfo.boKicked && ((HUtil32.GetTickCount() - ConnInfo.dwKickTick) > 5 * 1000))
+                if (ConnInfo.boKicked && HUtil32.GetTickCount() - ConnInfo.dwKickTick > 5 * 1000)
                 {
                     ConnInfo = null;
                     Config.SessionList.RemoveAt(i);
@@ -513,7 +513,7 @@ namespace LoginSvr
                 case Grobal2.CM_ADDNEWUSER:
                     if (Config.boEnableMakingID)
                     {
-                        if ((HUtil32.GetTickCount() - UserInfo.dwClientTick) > 5000)
+                        if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
                             UserInfo.dwClientTick = HUtil32.GetTickCount();
                             AccountCreate(UserInfo, sData);
@@ -527,7 +527,7 @@ namespace LoginSvr
                 case Grobal2.CM_CHANGEPASSWORD:
                     if (UserInfo.sAccount == "")
                     {
-                        if ((HUtil32.GetTickCount() - UserInfo.dwClientTick) > 5000)
+                        if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
                             UserInfo.dwClientTick = HUtil32.GetTickCount();
                             AccountChangePassword(Config, UserInfo, sData);
@@ -543,7 +543,7 @@ namespace LoginSvr
                     }
                     break;
                 case Grobal2.CM_UPDATEUSER:
-                    if ((HUtil32.GetTickCount() - UserInfo.dwClientTick) > 5000)
+                    if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                     {
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
                         AccountUpdateUserInfo(Config, UserInfo, sData);
@@ -554,7 +554,7 @@ namespace LoginSvr
                     }
                     break;
                 case Grobal2.CM_GETBACKPASSWORD:
-                    if ((HUtil32.GetTickCount() - UserInfo.dwClientTick) > 5000)
+                    if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                     {
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
                         AccountGetBackPassword(UserInfo, sData);
@@ -579,7 +579,7 @@ namespace LoginSvr
                 var sUserAddEntryMsg = sData.Substring(nLen, sData.Length - nLen);
                 TUserEntryAdd UserAddEntry = null;
                 TUserEntry UserEntry = null;
-                if ((sUserEntryMsg != "") && (sUserAddEntryMsg != ""))
+                if (sUserEntryMsg != "" && sUserAddEntryMsg != "")
                 {
                     UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg, sUserEntryMsg.Length));
                     UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg, sUserAddEntryMsg.Length));
@@ -654,12 +654,12 @@ namespace LoginSvr
                 int nCode = 0;
                 try
                 {
-                    if (_accountDB.Open() && (sNewPassword.Length >= 3))
+                    if (_accountDB.Open() && sNewPassword.Length >= 3)
                     {
                         int n10 = _accountDB.Index(sLoginID);
-                        if ((n10 >= 0) && (_accountDB.Get(n10, ref DBRecord) >= 0))
+                        if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
                         {
-                            if ((DBRecord.nErrorCount < 5) || ((HUtil32.GetTickCount() - DBRecord.dwActionTick) > 180000))
+                            if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                             {
                                 if (DBRecord.UserEntry.sPassword == sOldPassword)
                                 {
@@ -772,14 +772,14 @@ namespace LoginSvr
                     if (_accountDB.Open())
                     {
                         var n10 = _accountDB.Index(sLoginID);
-                        if ((n10 >= 0) && (_accountDB.Get(n10, ref DBRecord) >= 0))
+                        if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
                         {
-                            if ((DBRecord.nErrorCount < 5) || ((HUtil32.GetTickCount() - DBRecord.dwActionTick) > 60000))
+                            if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 60000)
                             {
                                 if (DBRecord.UserEntry.sPassword == sPassword)
                                 {
                                     DBRecord.nErrorCount = 0;
-                                    if ((DBRecord.UserEntry.sUserName == "") || (DBRecord.UserEntryAdd.sQuiz2 == ""))
+                                    if (DBRecord.UserEntry.sUserName == "" || DBRecord.UserEntryAdd.sQuiz2 == "")
                                     {
                                         UserEntry = DBRecord.UserEntry;
                                         boNeedUpdate = true;
@@ -808,7 +808,7 @@ namespace LoginSvr
                 {
                     _accountDB.Close();
                 }
-                if ((nCode == 1) && IsLogin(Config, sLoginID))
+                if (nCode == 1 && IsLogin(Config, sLoginID))
                 {
                     SessionKick(Config, sLoginID);
                     nCode = -3;
@@ -842,7 +842,7 @@ namespace LoginSvr
                     {
                         nIPCost = nIPCostIndex;//Config.IPaddrCostList[nIPCostIndex];
                     }
-                    if ((nIDCost >= 0) || (nIPCost >= 0))
+                    if (nIDCost >= 0 || nIPCost >= 0)
                     {
                         UserInfo.boPayCost = true;
                     }
@@ -893,13 +893,13 @@ namespace LoginSvr
                 nSelGatePort = 0;
                 for (var i = 0; i < Config.nRouteCount; i++)
                 {
-                    if (Config.boDynamicIPMode || ((Config.GateRoute[i].sServerName == sServerName) && (Config.GateRoute[i].sPublicAddr == sIPaddr)))
+                    if (Config.boDynamicIPMode || (Config.GateRoute[i].sServerName == sServerName && Config.GateRoute[i].sPublicAddr == sIPaddr))
                     {
                         nGateCount = 0;
                         nGateIdx = 0;
                         while (true)
                         {
-                            if ((Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "") && (Config.GateRoute[i].Gate[nGateIdx].boEnable))
+                            if (Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "" && Config.GateRoute[i].Gate[nGateIdx].boEnable)
                             {
                                 nGateCount++;
                             }
@@ -917,7 +917,7 @@ namespace LoginSvr
                         boSelected = false;
                         for (nGateIdx = nSelIdx + 1; nGateIdx <= 9; nGateIdx++)
                         {
-                            if ((Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "") && (Config.GateRoute[i].Gate[nGateIdx].boEnable))
+                            if (Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "" && Config.GateRoute[i].Gate[nGateIdx].boEnable)
                             {
                                 Config.GateRoute[i].nSelIdx = nGateIdx;
                                 boSelected = true;
@@ -928,7 +928,7 @@ namespace LoginSvr
                         {
                             for (nGateIdx = 0; nGateIdx < nSelIdx; nGateIdx++)
                             {
-                                if ((Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "") && (Config.GateRoute[i].Gate[nGateIdx].boEnable))
+                                if (Config.GateRoute[i].Gate[nGateIdx].sIPaddr != "" && Config.GateRoute[i].Gate[nGateIdx].boEnable)
                                 {
                                     Config.GateRoute[i].nSelIdx = nGateIdx;
                                     break;
@@ -994,7 +994,7 @@ namespace LoginSvr
             if (!string.IsNullOrEmpty(UserInfo.sAccount) && !string.IsNullOrEmpty(sServerName) && IsLogin(Config, UserInfo.nSessionID))
             {
                 GetSelGateInfo(Config, sServerName, Config.sGateIPaddr, ref sSelGateIP, ref nSelGatePort);
-                if ((sSelGateIP != "") && (nSelGatePort > 0))
+                if (sSelGateIP != "" && nSelGatePort > 0)
                 {
                     if (Config.boDynamicIPMode)
                     {
@@ -1026,9 +1026,10 @@ namespace LoginSvr
                     if (_masSock.IsNotUserFull(sServerName))
                     {
                         SessionUpdate(Config, UserInfo.nSessionID, sServerName, boPayCost);
-                        _masSock.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + (UserInfo.nSessionID).ToString() + "/" + ((UserInfo.boPayCost == true ? 1 : 0)).ToString() + "/" + (nPayMode).ToString() + "/" + UserInfo.sUserIPaddr);
+                        //向DBServer握手
+                        _masSock.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + UserInfo.nSessionID + "/" + (UserInfo.boPayCost ? 1 : 0) + "/" + nPayMode + "/" + UserInfo.sUserIPaddr);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, UserInfo.nSessionID, 0, 0, 0);
-                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + (nSelGatePort).ToString() + "/" + (UserInfo.nSessionID).ToString()));
+                        SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + nSelGatePort + "/" + UserInfo.nSessionID));
                         LSShare.MainOutMessage($"同步会话消息到[{sServerName}]成功.");
                     }
                     else
@@ -1066,16 +1067,16 @@ namespace LoginSvr
                 UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg));
                 UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg));
                 int nCode = -1;
-                if ((UserInfo.sAccount == UserEntry.sAccount) && LSShare.CheckAccountName(UserEntry.sAccount))
+                if (UserInfo.sAccount == UserEntry.sAccount && LSShare.CheckAccountName(UserEntry.sAccount))
                 {
                     try
                     {
                         if (_accountDB.Open())
                         {
                             int n10 = _accountDB.Index(UserEntry.sAccount);
-                            if ((n10 >= 0))
+                            if (n10 >= 0)
                             {
-                                if ((_accountDB.Get(n10, ref DBRecord) >= 0))
+                                if (_accountDB.Get(n10, ref DBRecord) >= 0)
                                 {
                                     DBRecord.UserEntry = UserEntry;
                                     DBRecord.UserEntryAdd = UserAddEntry;
@@ -1110,6 +1111,11 @@ namespace LoginSvr
             }
         }
 
+        /// <summary>
+        /// 找回密码
+        /// </summary>
+        /// <param name="UserInfo"></param>
+        /// <param name="sData"></param>
         private void AccountGetBackPassword(TUserInfo UserInfo, string sData)
         {
             string sAccount = string.Empty;
@@ -1132,15 +1138,15 @@ namespace LoginSvr
             int nCode = 0;
             try
             {
-                if ((sAccount != "") && _accountDB.Open())
+                if (sAccount != "" && _accountDB.Open())
                 {
                     nIndex = _accountDB.Index(sAccount);
-                    if ((nIndex >= 0) && (_accountDB.Get(nIndex, ref DBRecord) >= 0))
+                    if (nIndex >= 0 && _accountDB.Get(nIndex, ref DBRecord) >= 0)
                     {
-                        if ((DBRecord.nErrorCount < 5) || ((HUtil32.GetTickCount() - DBRecord.dwActionTick) > 180000))
+                        if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                         {
                             nCode = -1;
-                            if ((DBRecord.UserEntry.sQuiz == sQuest1))
+                            if (DBRecord.UserEntry.sQuiz == sQuest1)
                             {
                                 nCode = -3;
                                 if (DBRecord.UserEntry.sAnswer == sAnswer1)
@@ -1153,7 +1159,7 @@ namespace LoginSvr
                             }
                             if (nCode != 1)
                             {
-                                if ((DBRecord.UserEntryAdd.sQuiz2 == sQuest2))
+                                if (DBRecord.UserEntryAdd.sQuiz2 == sQuest2)
                                 {
                                     nCode = -3;
                                     if (DBRecord.UserEntryAdd.sAnswer2 == sAnswer2)
@@ -1220,7 +1226,7 @@ namespace LoginSvr
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
                 ConnInfo = Config.SessionList[i];
-                if ((ConnInfo.nSessionID == nSessionID))
+                if (ConnInfo.nSessionID == nSessionID)
                 {
                     result = true;
                     break;
@@ -1236,7 +1242,7 @@ namespace LoginSvr
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
                 ConnInfo = Config.SessionList[i];
-                if ((ConnInfo.sAccount == sLoginID))
+                if (ConnInfo.sAccount == sLoginID)
                 {
                     result = true;
                     break;
@@ -1256,7 +1262,7 @@ namespace LoginSvr
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
                 ConnInfo = Config.SessionList[i];
-                if ((ConnInfo.sAccount == sLoginID) && !ConnInfo.boKicked)
+                if (ConnInfo.sAccount == sLoginID && !ConnInfo.boKicked)
                 {
                     _masSock.SendServerMsg(Grobal2.SS_CLOSESESSION, ConnInfo.sServerName, ConnInfo.sAccount + "/" + ConnInfo.nSessionID);
                     ConnInfo.dwKickTick = HUtil32.GetTickCount();
@@ -1291,7 +1297,7 @@ namespace LoginSvr
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
                 ConnInfo = Config.SessionList[i];
-                if ((ConnInfo.nSessionID == nSessionID))
+                if (ConnInfo.nSessionID == nSessionID)
                 {
                     ConnInfo.sServerName = sServerName;
                     ConnInfo.bo11 = boPayCost;
@@ -1329,7 +1335,7 @@ namespace LoginSvr
                 ConnInfo = Config.SessionList[i];
                 if (!ConnInfo.boKicked && !Config.boTestServer && !ConnInfo.bo11)
                 {
-                    if ((HUtil32.GetTickCount() - ConnInfo.dwStartTick) > 60 * 60 * 1000)
+                    if (HUtil32.GetTickCount() - ConnInfo.dwStartTick > 60 * 60 * 1000)
                     {
                         ConnInfo.dwStartTick = HUtil32.GetTickCount();
                         if (!IsPayMent(Config, ConnInfo.sIPaddr, ConnInfo.sAccount))

@@ -130,14 +130,18 @@ namespace SelGate.Services
 
         /// <summary>
         /// 收到数据库服务器 直接发送给客户端
+        /// todo 需要优化封包处理
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var pMsg = new TMsgHeader(e.Buff);
+            var sText = string.Empty;
+            string sSessionId = string.Empty;
+            HUtil32.ArrestStringEx(e.ReceiveText, "%", "$", ref sText);
+            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
             var userData = new TMessageData();
-            userData.UserCientId = pMsg.wGSocketIdx;
+            userData.SessionId = int.Parse(sSessionId);
             userData.Body = e.Buff;
             _sessionManager.SendQueue.TryWrite(userData);
         }

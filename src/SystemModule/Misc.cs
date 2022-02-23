@@ -5,6 +5,9 @@ namespace SystemModule
 {
     public class Misc
     {
+        const byte bySeed = 0xAC;
+        const byte byBase = 0x3C;
+        
         public static string EncodeString(string Str)
         {
             byte[] EncBuf = new byte[4096];
@@ -30,8 +33,6 @@ namespace SystemModule
             byte c;
             var no = 2;
             byte remainder = 0;
-            byte bySeed = 0xAC;
-            byte byBase = 0x3C;
             var pos = 0;
             var dstPos = dstOffset;
             for (var i = 0; i < Len; i++)
@@ -75,8 +76,6 @@ namespace SystemModule
             byte c;
             var nCycles = Len / 4;
             var nBytesLeft = Len % 4;
-            byte bySeed = 0xAC;
-            byte byBase = 0x3C;
             var dstPos = 0;
             for (var i = 0; i < nCycles; i++)
             {

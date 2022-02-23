@@ -70,7 +70,6 @@ namespace DBSvr
 
         private void UserSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TGateInfo GateInfo;
             string sIPaddr = e.RemoteIPaddr;
             const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
             if (!DBShare.CheckServerIP(sIPaddr))
@@ -79,7 +78,7 @@ namespace DBSvr
                 e.Socket.Close();
                 return;
             }
-            GateInfo = new TGateInfo();
+            var GateInfo = new TGateInfo();
             GateInfo.Socket = e.Socket;
             GateInfo.sGateaddr = sIPaddr;
             GateInfo.sText = "";
@@ -355,11 +354,25 @@ namespace DBSvr
                             }
                             break;
                         case 'O':
+                        case 'K':
                             s10 = HUtil32.GetValidStr3(s10, ref s0C, new string[] { "/" });
                             OpenUser(s0C, s10, ref GateInfo);
+                            /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
+                            if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
+                            {
+                                dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
+                                dwCheckUserSocTick = HUtil32.GetTickCount();
+                            }*/
                             break;
                         case 'X':
+                        case 'L':
                             CloseUser(s10, ref GateInfo);
+                            /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
+                            if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
+                            {
+                                dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
+                                dwCheckUserSocTick = HUtil32.GetTickCount();
+                            }*/
                             break;
                     }
                 }
@@ -385,7 +398,7 @@ namespace DBSvr
                     break;
                 }
                 UserInfo.s2C = HUtil32.ArrestStringEx(UserInfo.s2C, "#", "!", ref s10);
-                if (s10 != "")
+                if (!string.IsNullOrEmpty(s10))
                 {
                     s10 = s10.Substring(1, s10.Length - 1);
                     if (s10.Length >= Grobal2.DEFBLOCKSIZE)

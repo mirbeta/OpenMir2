@@ -55,7 +55,7 @@ namespace SelGate.Services
             {
                 if (_snedQueue.Reader.TryRead(out var message))
                 {
-                    var clientSession = _sessionManager.GetSession(message.UserCientId);
+                    var clientSession = _sessionManager.GetSession(message.SessionId);
                     clientSession?.HandleUserPacket(message);
                 }
             }
@@ -151,7 +151,7 @@ namespace SelGate.Services
             Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
             var userData = new TMessageData();
             userData.Body = data;
-            userData.UserCientId = connectionId;
+            userData.SessionId = connectionId;
             _snedQueue.Writer.TryWrite(userData);
         }
     }

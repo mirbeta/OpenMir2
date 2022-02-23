@@ -47,11 +47,11 @@ namespace SelGate
         public void HandleUserPacket(TMessageData userData)
         {
             int dwCurrentTick = 0;
-            if (m_KickFlag)
+            /*if (m_KickFlag)
             {
                 m_KickFlag = false;
                 return;
-            }
+            }*/
             if ((userData.MsgLen >= 5) && Config.m_fDefenceCCPacket)
             {
                 var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
@@ -210,6 +210,7 @@ namespace SelGate
             _handleLogin = 0;
             var szSenfBuf = $"%L{(int)_session.Socket.Handle}$";
             lastGameSvr.SendData(szSenfBuf);
+            m_KickFlag = false;
         }
     }
 

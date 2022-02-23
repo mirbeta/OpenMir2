@@ -102,7 +102,6 @@ namespace GameGate
             GateShare.dwCheckServerTick = HUtil32.GetTickCount();
             GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            //GateShare.boServerReady = true;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.Add(this);
@@ -129,7 +128,6 @@ namespace GameGate
             GateShare.ServerGateList.Remove(this);
             GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
-            //GateShare.boServerReady = false;
         }
 
         /// <summary>

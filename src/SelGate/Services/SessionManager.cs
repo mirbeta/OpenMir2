@@ -24,7 +24,7 @@ namespace SelGate.Services
         public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
 
         /// <summary>
-        /// 处理DBSvr发过来的消息
+        /// 处理DBSvr发送过来的消息
         /// </summary>
         public async Task ProcessSendMessage()
         {
@@ -32,7 +32,7 @@ namespace SelGate.Services
             {
                 if (_sendQueue.Reader.TryRead(out var message))
                 {
-                    var userSession = GetSession(message.UserCientId);
+                    var userSession = GetSession(message.SessionId);
                     if (userSession == null)
                     {
                         return;
