@@ -40,11 +40,14 @@ namespace GameSvr
 
         public void CheckConnected()
         {
-            if (MsgClient.IsConnected)
+            if (M2Share.g_Config.nServerNumber > 0)
             {
-                return;
+                if (MsgClient.IsConnected)
+                {
+                    return;
+                }
+                MsgClient.Connect();
             }
-            MsgClient.Connect();
         }
 
         private bool IsConnect()

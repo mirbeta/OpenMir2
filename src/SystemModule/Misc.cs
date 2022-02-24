@@ -1,32 +1,28 @@
-﻿using System;
-using SystemModule;
-
+﻿
 namespace SystemModule
 {
     public class Misc
     {
         const byte bySeed = 0xAC;
         const byte byBase = 0x3C;
-        
+
         public static string EncodeString(string Str)
         {
             byte[] EncBuf = new byte[4096];
             var tempBuf = HUtil32.GetBytes(Str);
             var buffLen = EncodeBuf(tempBuf, Str.Length, EncBuf);
-            string result = HUtil32.GetString(EncBuf, 0, buffLen);
-            return result;
+            return HUtil32.GetString(EncBuf, 0, buffLen);
         }
 
         public static string DecodeString(string Str)
         {
-            byte[] EncBuf = new byte[4096];
             var tempBuf = HUtil32.GetBytes(Str);
-            var buffLen = DecodeBuf(tempBuf, Str.Length, ref EncBuf);
-            string result = HUtil32.GetString(EncBuf, 0, buffLen);
-            return result;
+            var buffLen = 0;
+            var encBuf = DecodeBuf(tempBuf, Str.Length, ref buffLen);
+            return HUtil32.GetString(encBuf, 0, buffLen);
         }
 
-        public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf,int dstOffset=0)
+        public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf, int dstOffset = 0)
         {
             int result;
             byte temp;
@@ -59,39 +55,39 @@ namespace SystemModule
             }
             if (no != 2)
             {
-                DstBuf[dstPos]= (byte)(remainder + byBase);
+                DstBuf[dstPos] = (byte)(remainder + byBase);
                 dstPos++;
             }
             result = dstPos - dstOffset;
-            DstBuf[dstPos + 1] = (byte)('\0');
+            DstBuf[dstPos + 1] = (byte)'\0';
             return result;
         }
-
-        public static int DecodeBuf(byte[] Buf, int Len, ref byte[] DstBuf)
+     
+        public static byte[] DecodeBuf(byte[] Buf, int Len, ref int decodeLen)
         {
-            int result = 0;
-            int CurCycleBegin;
             byte temp;
             byte remainder;
             byte c;
             var nCycles = Len / 4;
             var nBytesLeft = Len % 4;
             var dstPos = 0;
+            decodeLen = GetDecodeLen(nCycles, nBytesLeft);
+            var dstBuffer = new byte[decodeLen];
             for (var i = 0; i < nCycles; i++)
             {
-                CurCycleBegin = i * 4;
-                remainder = (byte)((Buf[CurCycleBegin + 3]) - byBase);
-                temp = (byte)(Buf[CurCycleBegin] - byBase);
+                var curCycleBegin = i * 4;
+                remainder = (byte)((Buf[curCycleBegin + 3]) - byBase);
+                temp = (byte)(Buf[curCycleBegin] - byBase);
                 c = (byte)(((temp << 2) & 0xF0) | (remainder & 0x0C) | (temp & 0x3));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
                 dstPos++;
-                temp = (byte)((Buf[CurCycleBegin + 1]) - byBase);
+                temp = (byte)((Buf[curCycleBegin + 1]) - byBase);
                 c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
                 dstPos++;
-                temp = (byte)(Buf[CurCycleBegin + 2] - byBase);
-                c =(byte)( temp | ((remainder << 2) & 0xC0));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
+                temp = (byte)(Buf[curCycleBegin + 2] - byBase);
+                c = (byte)(temp | ((remainder << 2) & 0xC0));
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
                 dstPos++;
             }
             if (nBytesLeft == 2)
@@ -99,28 +95,36 @@ namespace SystemModule
                 remainder = (byte)(Buf[Len - 1] - byBase);
                 temp = (byte)(Buf[Len - 2] - byBase);
                 c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
-                dstPos++;
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
             }
             else if (nBytesLeft == 3)
             {
                 remainder = (byte)(Buf[Len - 1] - byBase);
-                temp =(byte) (Buf[Len - 3] - byBase);
+                temp = (byte)(Buf[Len - 3] - byBase);
                 c = (byte)(((temp << 2) & 0xF0) | (remainder & 0x0C) | (temp & 0x3));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
                 dstPos++;
                 temp = (byte)(Buf[Len - 2] - byBase);
                 c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
-                DstBuf[dstPos] = (byte)(c ^ bySeed);
-                dstPos++;
+                dstBuffer[dstPos] = (byte)(c ^ bySeed);
             }
-            result = dstPos;
-            DstBuf[dstPos + 1] = (byte)'\0';
-            var newDstBuf = new byte[dstPos];
-            Array.Copy(DstBuf, 0, newDstBuf, 0, dstPos);
-            DstBuf = newDstBuf;
-            return result;
+            return dstBuffer;
         }
-    } 
-}
 
+        private static int GetDecodeLen(int cycles, int bytesLeft)
+        {
+            var dstPos = cycles * 3;
+            switch (bytesLeft)
+            {
+                case 2:
+                    dstPos++;
+                    break;
+                case 3:
+                    dstPos += 2;
+                    break;
+            }
+            return dstPos;
+        }
+
+    }
+}

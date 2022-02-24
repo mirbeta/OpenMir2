@@ -78,7 +78,7 @@ namespace GameGate
                 sMsg = HUtil32.GetString(message.Buffer, 2, message.DataLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    //if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(6))
+                    //if (LogManager.g_pLogMgr.CheckLevel(6))
                     //{
                     //    Console.WriteLine("CC Attack, Kick: " + m_pUserOBJ.pszIPAddr);
                     //}
@@ -114,8 +114,7 @@ namespace GameGate
                 case 0:
                     {
                         sMsg = HUtil32.GetString(message.Buffer, 2, message.DataLen - 3);
-                        var tempStr = sMsg;
-                        tempStr = EDcode.DeCodeString(sMsg);
+                        var tempStr = EDcode.DeCodeString(sMsg);
                         HandleLogin(tempStr, message.DataLen, "", ref success);
                         if (!success)
                         {
@@ -130,12 +129,11 @@ namespace GameGate
                             Debug.WriteLine("无效的数据分包.");
                             return;
                         }
-
-                        //todo 优化此处
-                        var packBuff = new byte[message.DataLen];
-                        var tempBuff = new byte[message.DataLen - 3];//跳过#1....!
-                        Array.Copy(message.Buffer, 2, tempBuff, 0, tempBuff.Length);
-                        var nDeCodeLen = Misc.DecodeBuf(tempBuff, message.DataLen - 3, ref packBuff);
+          
+                        var tempBuff = message.Buffer[3..^2];//跳过#1....! 只保留消息内容
+                        var nDeCodeLen = 0;
+                        var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
+                        
                         var CltCmd = new TCmdPack(packBuff);
                         var fPacketOverSpeed = false;
                         switch (CltCmd.Cmd)
@@ -612,8 +610,7 @@ namespace GameGate
                                 break;
                         }
 
-                        byte[] nBuffer;
-                        byte[] cmdBuffer;
+                        byte[] BodyBuffer;
                         
                         // if (fPacketOverSpeed)
                         // {
@@ -717,19 +714,18 @@ namespace GameGate
                             var len = message.DataLen - 19;
                             cmdPack.DataLen = TCmdPack.PackSize + len + 1;
                             var bufferLen = TSvrCmdPack.PackSize + cmdPack.DataLen;
-                            nBuffer = new byte[bufferLen];
-                            Array.Copy(packBuff, 0, nBuffer, 20, TCmdPack.PackSize);
-                            Array.Copy(tempBuff, 16, nBuffer, 32, len); //消息体
+                            BodyBuffer = new byte[bufferLen];
+                            Array.Copy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, TCmdPack.PackSize);
+                            Array.Copy(tempBuff, 16, BodyBuffer, 32, len); //消息体
                         }
                         else
                         {
-                            nBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
+                            BodyBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
                             cmdPack.DataLen = TCmdPack.PackSize;
-                            Array.Copy(packBuff, 0, nBuffer, 20, packBuff.Length);
+                            Array.Copy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
                         }
-                        cmdBuffer = cmdPack.GetPacket();
-                        Array.Copy(cmdBuffer, 0, nBuffer, 0, 20);
-                        lastGameSvr.SendBuffer(nBuffer, cmdPack.DataLen + TSvrCmdPack.PackSize);
+                        Array.Copy(cmdPack.GetPacket(), 0, BodyBuffer, 0, TSvrCmdPack.PackSize);//复制消息头
+                        lastGameSvr.SendBuffer(BodyBuffer, cmdPack.DataLen + TSvrCmdPack.PackSize);
                         break;
                     }
             }
@@ -1338,7 +1334,7 @@ namespace GameGate
                                 SrcAsc = Convert.ToInt32("$" + Src.Substring(SrcPos - 1, 2));
                                 if (KeyPos < KeyLen)
                                 {
-                                    KeyPos = KeyPos + 1;
+                                    KeyPos += 1;
                                 }
                                 else
                                 {
@@ -1351,12 +1347,12 @@ namespace GameGate
                                 }
                                 else
                                 {
-                                    TmpSrcAsc = TmpSrcAsc - OffSet;
+                                    TmpSrcAsc -= OffSet;
                                 }
                                 dest[i] = (byte)(TmpSrcAsc);
                                 i++;
                                 OffSet = SrcAsc;
-                                SrcPos = SrcPos + 2;
+                                SrcPos += 2;
                             } while (!(SrcPos >= Src.Length));
                         }
                         catch (Exception e)

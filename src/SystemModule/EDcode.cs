@@ -101,16 +101,10 @@ namespace SystemModule
 
         public static TDefaultMessage DecodeMessage(string str)
         {
-            var EncBuf = new byte[str.Length];
-#if ISWOL
             var tempBuf = HUtil32.GetBytes(str);
-            var buffLen = (byte)Misc.DecodeBuf(tempBuf, str.Length, ref EncBuf);
-            return new TDefaultMessage(EncBuf, buffLen);
-#else
-            var bSrc = HUtil32.StringToByteAry(str);
-            Decode6BitBuf(bSrc, EncBuf, bSrc.Length, BUFFERSIZE);
-            return new TDefaultMessage(EncBuf);
-#endif
+            var buffLen = 0;
+            var EncBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
+            return new TDefaultMessage(EncBuf, (byte)buffLen);
         }
 
         /// <summary>
@@ -121,9 +115,9 @@ namespace SystemModule
         /// <returns></returns>
         public static unsafe string DeCodeString(string str, bool chinese = true)
         {
-            var encBuf = new byte[BUFFERSIZE];
+            var nLen = 0;
             var bSrc = HUtil32.StringToByteAry(str);
-            var nLen = Misc.DecodeBuf(bSrc, bSrc.Length, ref encBuf);
+            var encBuf = Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
             if (chinese)
             {
                 return HUtil32.GetString(encBuf, 0, nLen);
@@ -139,18 +133,16 @@ namespace SystemModule
 
         public static byte[] DecodeBuffer(string Src)
         {
-            var EncBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.GetBytes(Src);
-            Misc.DecodeBuf(bSrc, bSrc.Length, ref EncBuf);
-            return EncBuf;
+            var nLen = 0;
+            return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
         }
         
         public static byte[] DecodeBuffer(string Src,int size)
         {
-            var EncBuf = new byte[size];
             var bSrc = HUtil32.GetBytes(Src);
-            Misc.DecodeBuf(bSrc, bSrc.Length, ref EncBuf);
-            return EncBuf;
+            var nLen = 0;
+            return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
         }
 
         /// <summary>

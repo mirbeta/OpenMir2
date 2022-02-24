@@ -36,7 +36,7 @@ namespace SystemModule.Sockets
             }
             else
             {
-                new Exception("IP地址或端口号错误");
+                throw new Exception("IP地址或端口号错误");
             }
         }
 

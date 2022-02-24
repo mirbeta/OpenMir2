@@ -87,11 +87,10 @@ namespace SelGate
                     //todo 
                 }
             }
-            var success = false;//todo 优化此段代码
-            var packBuff = new byte[userData.MsgLen];
-            var tempBuff = new byte[userData.MsgLen - 3];//跳过#1....!
-            Array.Copy(userData.Body, 2, tempBuff, 0, tempBuff.Length);
-            var nDeCodeLen = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref packBuff);
+            var success = false;
+            var tempBuff = userData.Body[3..^2];//跳过#1....! 只保留消息内容
+            var nDeCodeLen = 0;
+            var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             var CltCmd = new TCmdPack(packBuff);
             if (_handleLogin == 0)
             {
