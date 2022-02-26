@@ -27,7 +27,7 @@ namespace GameSvr
             StringList LoadList;
             var sRobotName = string.Empty;
             var sScriptFileName = string.Empty;
-            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Robot.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Robot.txt");
             if (!File.Exists(sFileName)) return;
             LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);

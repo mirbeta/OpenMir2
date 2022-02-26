@@ -15,6 +15,8 @@ namespace SystemModule.Common
 
         private bool largeCommentFlag = false;
 
+        public int ConfigCount => iniCahce.Count;
+
         protected IniFile(string fileName)
         {
             this.FileName = fileName;
@@ -176,18 +178,14 @@ namespace SystemModule.Common
         public string ReadString(string section, string key, string defval)
         {
             var result = GetString(section, key);
-            if (string.IsNullOrEmpty(result))
-            {
-                return defval;
-            }
-            return result;
+            return string.IsNullOrEmpty(result) ? defval : result;
         }
 
-        protected string GetString(string section, string key)
+        private string GetString(string section, string key)
         {
             if (this.iniCahce.ContainsKey(section))
             {
-                Dictionary<string, string> hash = this.iniCahce[section];
+                var hash = this.iniCahce[section];
                 if (hash.ContainsKey(key))
                 {
                     return hash[key];
@@ -196,18 +194,14 @@ namespace SystemModule.Common
             return "";
         }
 
-        protected bool Load()
+        protected void Load()
         {
             if (!File.Exists(this.FileName))
             {
                 File.Create(this.FileName).Close();
-                return false;
+                return;
             }
             StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
-            if (rd == null)
-            {
-                return false;
-            }
             bool isCurSecComment = false;
             Dictionary<string, string> curSec = null;
             string str = "";
@@ -253,7 +247,7 @@ namespace SystemModule.Common
                         }
                         else if (!isCurSecComment)
                         {
-                            int index = str.IndexOf(";;");
+                            int index = str.IndexOf(";;", StringComparison.Ordinal);
                             if (index >= 0)
                             {
                                 str = str.Substring(0, index).Trim();
@@ -280,7 +274,10 @@ namespace SystemModule.Common
             }
         Label_02AE:
             rd.Close();
-            return true;
+            if (ConfigCount <= 0)
+            {
+                throw new Exception($"配置文件[{FileName}]不存在或配置文件内容为空。");
+            }
         }
 
         private string ReadLine(StreamReader rd)
@@ -292,7 +289,7 @@ namespace SystemModule.Common
                 return null;
             }
             s = s.Trim();
-            if (!(s == ""))
+            if (s != "")
             {
                 str = str + s;
             }
@@ -309,7 +306,7 @@ namespace SystemModule.Common
                 }
                 FileInfo fi = new FileInfo(this.FileName);
                 bool isRealOnly = fi.IsReadOnly;
-                if (!Directory.Exists(fi.Directory.FullName))
+                if (!Directory.Exists(fi.Directory?.FullName))
                 {
                     Directory.CreateDirectory(fi.Directory.FullName);
                 }

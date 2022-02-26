@@ -1687,7 +1687,7 @@ namespace GameSvr
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "PetData", PlayObject.m_sCharName + ".txt");
+            string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "PetData", PlayObject.m_sCharName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();

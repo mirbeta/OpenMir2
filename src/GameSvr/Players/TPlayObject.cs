@@ -3537,12 +3537,10 @@ namespace GameSvr
 
         private void CheckMarry()
         {
-            bool boIsfound;
-            string sUnMarryFileName;
             StringList LoadList;
             string sSayMsg;
-            boIsfound = false;
-            sUnMarryFileName = M2Share.g_Config.sEnvirDir + "UnMarry.txt";
+            var boIsfound = false;
+            var sUnMarryFileName = M2Share.sConfigPath + M2Share.g_Config.sEnvirDir + "UnMarry.txt";
             if (File.Exists(sUnMarryFileName))
             {
                 LoadList = new StringList();

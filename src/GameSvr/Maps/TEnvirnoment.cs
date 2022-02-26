@@ -800,7 +800,7 @@ namespace GameSvr
                     result = true;
                 }
 
-                var pointFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "Point", $"{sMapFile}.txt");
+                var pointFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Point", $"{sMapFile}.txt");
                 if (File.Exists(pointFileName))
                 {
                     var loadList = new StringList();

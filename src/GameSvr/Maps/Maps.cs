@@ -26,7 +26,7 @@ namespace GameSvr
             TMerchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
-            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MapInfo.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -381,7 +381,7 @@ namespace GameSvr
             var sMapNO = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = Path.Combine(M2Share.g_Config.sEnvirDir, "MiniMap.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
@@ -432,7 +432,7 @@ namespace GameSvr
         {
             string sFilePatchName;
             StringList LoadMapList;
-            string sFileDir = Path.Combine(M2Share.g_Config.sEnvirDir, "MapInfo");
+            string sFileDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);

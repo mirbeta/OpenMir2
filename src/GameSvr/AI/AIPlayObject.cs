@@ -171,7 +171,7 @@ namespace GameSvr
             _conf = new AIObjectConf(sFileName);
         }
         
-                /// <summary>
+        /// <summary>
         /// 取随机配置
         /// </summary>
         /// <param name="sName"></param>

@@ -119,7 +119,7 @@ namespace GameSvr
                     M2Share.MainOutMessage("加载文字过滤信息成功...");
                 }
                 M2Share.MainOutMessage("正在加载公告提示信息...");
-                if (!M2Share.LoadLineNotice(Path.Combine(M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
+                if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath,M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
                 {
                     M2Share.MainOutMessage("加载公告提示信息失败!!!");
                 }
@@ -322,7 +322,7 @@ namespace GameSvr
             var sMapName = string.Empty;
             var sMapInfo = string.Empty;
             var sServerIndex = string.Empty;
-            var sFileName = Path.Combine(M2Share.g_Config.sBaseDir, "!servertable.txt");
+            var sFileName = Path.Combine(M2Share.sConfigPath,M2Share.g_Config.sBaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();

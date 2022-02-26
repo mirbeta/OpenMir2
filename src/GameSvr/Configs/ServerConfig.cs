@@ -171,7 +171,6 @@ namespace GameSvr.Configs
             if (ReadString("Share", "GuildFile", "") == "")
                 WriteString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
             M2Share.g_Config.sGuildFile = ReadString("Share", "GuildFile", M2Share.g_Config.sGuildFile);
-            M2Share.g_Config.sGuildFile = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sGuildFile);
             if (ReadString("Share", "VentureDir", "") == "")
                 WriteString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
             M2Share.g_Config.sVentureDir = ReadString("Share", "VentureDir", M2Share.g_Config.sVentureDir);
@@ -184,23 +183,19 @@ namespace GameSvr.Configs
             if (ReadString("Share", "CastleFile", "") == "")
                 WriteString("Share", "CastleFile", M2Share.g_Config.sCastleDir + "List.txt");
             M2Share.g_Config.sCastleFile = ReadString("Share", "CastleFile", M2Share.g_Config.sCastleFile);
-            M2Share.g_Config.sCastleFile = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sCastleFile);
             if (ReadString("Share", "EnvirDir", "") == "")
             {
                 WriteString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
             }
             M2Share.g_Config.sEnvirDir = ReadString("Share", "EnvirDir", M2Share.g_Config.sEnvirDir);
-            M2Share.g_Config.sEnvirDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sEnvirDir);
             if (ReadString("Share", "MapDir", "") == "")
                 WriteString("Share", "MapDir", M2Share.g_Config.sMapDir);
             M2Share.g_Config.sMapDir = ReadString("Share", "MapDir", M2Share.g_Config.sMapDir);
-            M2Share.g_Config.sMapDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sMapDir);
             if (ReadString("Share", "NoticeDir", "") == "")
             {
                 WriteString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
             }
             M2Share.g_Config.sNoticeDir = ReadString("Share", "NoticeDir", M2Share.g_Config.sNoticeDir);
-            M2Share.g_Config.sNoticeDir = Path.Combine(M2Share.g_Config.sBaseDir, M2Share.g_Config.sNoticeDir);
             sLoadString = ReadString("Share", "LogDir", "");
             if (sLoadString == "")
             {

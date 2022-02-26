@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
 
@@ -77,7 +78,7 @@ namespace GameSvr
                 {
                     s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
                     s20 = s1C.Trim();
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         if (s20.StartsWith("\\\\"))
                         {
@@ -88,7 +89,7 @@ namespace GameSvr
                             s20 = s20.Remove(0, 1);
                         }
                     }
-                    if (Environment.OSVersion.Platform == PlatformID.MacOSX || Environment.OSVersion.Platform== PlatformID.Unix)
+                    else
                     {
                         if (s20.StartsWith("\\\\"))
                         {
@@ -101,7 +102,7 @@ namespace GameSvr
                         s20 = s20.Replace("\\", "/");
                     }
                     s18 = s14.Trim();
-                    s34 = Path.Combine(M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
+                    s34 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
                     if (LoadScriptFile_LoadCallScript(s34, s18, LoadList))
                     {
                         LoadList[i] = "#ACT";
@@ -151,7 +152,7 @@ namespace GameSvr
                     if (HUtil32.CompareLStr(s14, "#INCLUDE", "#INCLUDE".Length))
                     {
                         s28 = HUtil32.GetValidStr3(s14, ref s1C, new[] { " ", "\t" }).Trim();
-                        s28 = Path.Combine(M2Share.g_Config.sEnvirDir, "Defines", s28);
+                        s28 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Defines", s28);
                         if (File.Exists(s28))
                         {
                             LoadStrList = new StringList();
@@ -171,18 +172,13 @@ namespace GameSvr
 
         private TScript LoadScriptFile_MakeNewScript(TNormNpc NPC)
         {
-            TScript result;
-            TScript ScriptInfo;
-            ScriptInfo = new TScript
+            TScript ScriptInfo = new TScript
             {
                 boQuest = false,
-                //FillChar(ScriptInfo.QuestInfo, sizeof(grobal2.TScriptQuestInfo), '\0');
-                //nQuestIdx = 0;
                 RecordList = new Dictionary<string, TSayingRecord>(StringComparer.OrdinalIgnoreCase)
             };
             NPC.m_ScriptList.Add(ScriptInfo);
-            result = ScriptInfo;
-            return result;
+            return ScriptInfo;
         }
 
         private bool LoadScriptFile_QuestCondition(string sText, TQuestConditionInfo QuestConditionInfo)
@@ -204,389 +200,256 @@ namespace GameSvr
             sText = HUtil32.GetValidStrCap(sText, ref sParam5, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
             sCmd = sCmd.ToUpper();
-            if (sCmd == M2Share.sCHECK)
+            switch (sCmd)
             {
-                nCMDCode = M2Share.nCHECK;
-                HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
+                case M2Share.sCHECK:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nCHECK;
+                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    goto L001;
                 }
-                if (!HUtil32.IsStringNumber(sParam2))
+                case M2Share.sCHECKOPEN:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nCHECKOPEN;
+                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    goto L001;
                 }
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKOPEN)
-            {
-                nCMDCode = M2Share.nCHECKOPEN;
-                HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
+                case M2Share.sCHECKUNIT:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nCHECKUNIT;
+                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    goto L001;
                 }
-                if (!HUtil32.IsStringNumber(sParam2))
-                {
-                    nCMDCode = 0;
-                }
-                goto L001;
+                case M2Share.sCHECKPKPOINT:
+                    nCMDCode = M2Share.nCHECKPKPOINT;
+                    goto L001;
+                case M2Share.sCHECKGOLD:
+                    nCMDCode = M2Share.nCHECKGOLD;
+                    goto L001;
+                case M2Share.sCHECKLEVEL:
+                    nCMDCode = M2Share.nCHECKLEVEL;
+                    goto L001;
+                case M2Share.sCHECKJOB:
+                    nCMDCode = M2Share.nCHECKJOB;
+                    goto L001;
+                case M2Share.sRANDOM:
+                    nCMDCode = M2Share.nRANDOM;
+                    goto L001;
+                case M2Share.sCHECKITEM:
+                    nCMDCode = M2Share.nCHECKITEM;
+                    goto L001;
+                case M2Share.sGENDER:
+                    nCMDCode = M2Share.nGENDER;
+                    goto L001;
+                case M2Share.sCHECKBAGGAGE:
+                    nCMDCode = M2Share.nCHECKBAGGAGE;
+                    goto L001;
+                case M2Share.sCHECKNAMELIST:
+                    nCMDCode = M2Share.nCHECKNAMELIST;
+                    goto L001;
+                case M2Share.sSC_HASGUILD:
+                    nCMDCode = M2Share.nSC_HASGUILD;
+                    goto L001;
+                case M2Share.sSC_ISGUILDMASTER:
+                    nCMDCode = M2Share.nSC_ISGUILDMASTER;
+                    goto L001;
+                case M2Share.sSC_CHECKCASTLEMASTER:
+                    nCMDCode = M2Share.nSC_CHECKCASTLEMASTER;
+                    goto L001;
+                case M2Share.sSC_ISNEWHUMAN:
+                    nCMDCode = M2Share.nSC_ISNEWHUMAN;
+                    goto L001;
+                case M2Share.sSC_CHECKMEMBERTYPE:
+                    nCMDCode = M2Share.nSC_CHECKMEMBERTYPE;
+                    goto L001;
+                case M2Share.sSC_CHECKMEMBERLEVEL:
+                    nCMDCode = M2Share.nSC_CHECKMEMBERLEVEL;
+                    goto L001;
+                case M2Share.sSC_CHECKGAMEGOLD:
+                    nCMDCode = M2Share.nSC_CHECKGAMEGOLD;
+                    goto L001;
+                case M2Share.sSC_CHECKGAMEPOINT:
+                    nCMDCode = M2Share.nSC_CHECKGAMEPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKNAMELISTPOSITION:
+                    nCMDCode = M2Share.nSC_CHECKNAMELISTPOSITION;
+                    goto L001;
+                case M2Share.sSC_CHECKGUILDLIST:
+                    nCMDCode = M2Share.nSC_CHECKGUILDLIST;
+                    goto L001;
+                case M2Share.sSC_CHECKRENEWLEVEL:
+                    nCMDCode = M2Share.nSC_CHECKRENEWLEVEL;
+                    goto L001;
+                case M2Share.sSC_CHECKSLAVELEVEL:
+                    nCMDCode = M2Share.nSC_CHECKSLAVELEVEL;
+                    goto L001;
+                case M2Share.sSC_CHECKSLAVENAME:
+                    nCMDCode = M2Share.nSC_CHECKSLAVENAME;
+                    goto L001;
+                case M2Share.sSC_CHECKCREDITPOINT:
+                    nCMDCode = M2Share.nSC_CHECKCREDITPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKOFGUILD:
+                    nCMDCode = M2Share.nSC_CHECKOFGUILD;
+                    goto L001;
+                case M2Share.sSC_CHECKPAYMENT:
+                    nCMDCode = M2Share.nSC_CHECKPAYMENT;
+                    goto L001;
+                case M2Share.sSC_CHECKUSEITEM:
+                    nCMDCode = M2Share.nSC_CHECKUSEITEM;
+                    goto L001;
+                case M2Share.sSC_CHECKBAGSIZE:
+                    nCMDCode = M2Share.nSC_CHECKBAGSIZE;
+                    goto L001;
+                case M2Share.sSC_CHECKLISTCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKLISTCOUNT;
+                    goto L001;
+                case M2Share.sSC_CHECKDC:
+                    nCMDCode = M2Share.nSC_CHECKDC;
+                    goto L001;
+                case M2Share.sSC_CHECKMC:
+                    nCMDCode = M2Share.nSC_CHECKMC;
+                    goto L001;
+                case M2Share.sSC_CHECKSC:
+                    nCMDCode = M2Share.nSC_CHECKSC;
+                    goto L001;
+                case M2Share.sSC_CHECKHP:
+                    nCMDCode = M2Share.nSC_CHECKHP;
+                    goto L001;
+                case M2Share.sSC_CHECKMP:
+                    nCMDCode = M2Share.nSC_CHECKMP;
+                    goto L001;
+                case M2Share.sSC_CHECKITEMTYPE:
+                    nCMDCode = M2Share.nSC_CHECKITEMTYPE;
+                    goto L001;
+                case M2Share.sSC_CHECKEXP:
+                    nCMDCode = M2Share.nSC_CHECKEXP;
+                    goto L001;
+                case M2Share.sSC_CHECKCASTLEGOLD:
+                    nCMDCode = M2Share.nSC_CHECKCASTLEGOLD;
+                    goto L001;
+                case M2Share.sSC_PASSWORDERRORCOUNT:
+                    nCMDCode = M2Share.nSC_PASSWORDERRORCOUNT;
+                    goto L001;
+                case M2Share.sSC_ISLOCKPASSWORD:
+                    nCMDCode = M2Share.nSC_ISLOCKPASSWORD;
+                    goto L001;
+                case M2Share.sSC_ISLOCKSTORAGE:
+                    nCMDCode = M2Share.nSC_ISLOCKSTORAGE;
+                    goto L001;
+                case M2Share.sSC_CHECKBUILDPOINT:
+                    nCMDCode = M2Share.nSC_CHECKBUILDPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKAURAEPOINT:
+                    nCMDCode = M2Share.nSC_CHECKAURAEPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKSTABILITYPOINT:
+                    nCMDCode = M2Share.nSC_CHECKSTABILITYPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKFLOURISHPOINT:
+                    nCMDCode = M2Share.nSC_CHECKFLOURISHPOINT;
+                    goto L001;
+                case M2Share.sSC_CHECKCONTRIBUTION:
+                    nCMDCode = M2Share.nSC_CHECKCONTRIBUTION;
+                    goto L001;
+                case M2Share.sSC_CHECKRANGEMONCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKRANGEMONCOUNT;
+                    goto L001;
+                case M2Share.sSC_CHECKITEMADDVALUE:
+                    nCMDCode = M2Share.nSC_CHECKITEMADDVALUE;
+                    goto L001;
+                case M2Share.sSC_CHECKINMAPRANGE:
+                    nCMDCode = M2Share.nSC_CHECKINMAPRANGE;
+                    goto L001;
+                case M2Share.sSC_CASTLECHANGEDAY:
+                    nCMDCode = M2Share.nSC_CASTLECHANGEDAY;
+                    goto L001;
+                case M2Share.sSC_CASTLEWARDAY:
+                    nCMDCode = M2Share.nSC_CASTLEWARDAY;
+                    goto L001;
+                case M2Share.sSC_ONLINELONGMIN:
+                    nCMDCode = M2Share.nSC_ONLINELONGMIN;
+                    goto L001;
+                case M2Share.sSC_CHECKGUILDCHIEFITEMCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKGUILDCHIEFITEMCOUNT;
+                    goto L001;
+                case M2Share.sSC_CHECKNAMEDATELIST:
+                    nCMDCode = M2Share.nSC_CHECKNAMEDATELIST;
+                    goto L001;
+                case M2Share.sSC_CHECKMAPHUMANCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKMAPHUMANCOUNT;
+                    goto L001;
+                case M2Share.sSC_CHECKMAPMONCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKMAPMONCOUNT;
+                    goto L001;
+                case M2Share.sSC_CHECKVAR:
+                    nCMDCode = M2Share.nSC_CHECKVAR;
+                    goto L001;
+                case M2Share.sSC_CHECKSERVERNAME:
+                    nCMDCode = M2Share.nSC_CHECKSERVERNAME;
+                    goto L001;
+                case M2Share.sSC_ISATTACKGUILD:
+                    nCMDCode = M2Share.nSC_ISATTACKGUILD;
+                    goto L001;
+                case M2Share.sSC_ISDEFENSEGUILD:
+                    nCMDCode = M2Share.nSC_ISDEFENSEGUILD;
+                    goto L001;
+                case M2Share.sSC_ISATTACKALLYGUILD:
+                    nCMDCode = M2Share.nSC_ISATTACKALLYGUILD;
+                    goto L001;
+                case M2Share.sSC_ISDEFENSEALLYGUILD:
+                    nCMDCode = M2Share.nSC_ISDEFENSEALLYGUILD;
+                    goto L001;
+                case M2Share.sSC_ISCASTLEGUILD:
+                    nCMDCode = M2Share.nSC_ISCASTLEGUILD;
+                    goto L001;
+                case M2Share.sSC_CHECKCASTLEDOOR:
+                    nCMDCode = M2Share.nSC_CHECKCASTLEDOOR;
+                    goto L001;
+                case M2Share.sSC_ISSYSOP:
+                    nCMDCode = M2Share.nSC_ISSYSOP;
+                    goto L001;
+                case M2Share.sSC_ISADMIN:
+                    nCMDCode = M2Share.nSC_ISADMIN;
+                    goto L001;
+                case M2Share.sSC_CHECKGROUPCOUNT:
+                    nCMDCode = M2Share.nSC_CHECKGROUPCOUNT;
+                    goto L001;
+                case M2Share.sCHECKACCOUNTLIST:
+                    nCMDCode = M2Share.nCHECKACCOUNTLIST;
+                    goto L001;
+                case M2Share.sCHECKIPLIST:
+                    nCMDCode = M2Share.nCHECKIPLIST;
+                    goto L001;
+                case M2Share.sCHECKBBCOUNT:
+                    nCMDCode = M2Share.nCHECKBBCOUNT;
+                    goto L001;
             }
-            if (sCmd == M2Share.sCHECKUNIT)
-            {
-                nCMDCode = M2Share.nCHECKUNIT;
-                HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
-                {
-                    nCMDCode = 0;
-                }
-                if (!HUtil32.IsStringNumber(sParam2))
-                {
-                    nCMDCode = 0;
-                }
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKPKPOINT)
-            {
-                nCMDCode = M2Share.nCHECKPKPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKGOLD)
-            {
-                nCMDCode = M2Share.nCHECKGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKLEVEL)
-            {
-                nCMDCode = M2Share.nCHECKLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKJOB)
-            {
-                nCMDCode = M2Share.nCHECKJOB;
-                goto L001;
-            }
-            if (sCmd == M2Share.sRANDOM)
-            {
 
-                nCMDCode = M2Share.nRANDOM;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKITEM)
-            {
-                nCMDCode = M2Share.nCHECKITEM;
-                goto L001;
-            }
-            if (sCmd == M2Share.sGENDER)
-            {
-                nCMDCode = M2Share.nGENDER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKBAGGAGE)
-            {
-                nCMDCode = M2Share.nCHECKBAGGAGE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKNAMELIST)
-            {
-                nCMDCode = M2Share.nCHECKNAMELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HASGUILD)
-            {
-                nCMDCode = M2Share.nSC_HASGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISGUILDMASTER)
-            {
-                nCMDCode = M2Share.nSC_ISGUILDMASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKCASTLEMASTER)
-            {
-                nCMDCode = M2Share.nSC_CHECKCASTLEMASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISNEWHUMAN)
-            {
-                nCMDCode = M2Share.nSC_ISNEWHUMAN;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMEMBERTYPE)
-            {
-                nCMDCode = M2Share.nSC_CHECKMEMBERTYPE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMEMBERLEVEL)
-            {
-                nCMDCode = M2Share.nSC_CHECKMEMBERLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKGAMEGOLD)
-            {
-                nCMDCode = M2Share.nSC_CHECKGAMEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKGAMEPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKGAMEPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKNAMELISTPOSITION)
-            {
-                nCMDCode = M2Share.nSC_CHECKNAMELISTPOSITION;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKGUILDLIST)
-            {
-                nCMDCode = M2Share.nSC_CHECKGUILDLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKRENEWLEVEL)
-            {
-                nCMDCode = M2Share.nSC_CHECKRENEWLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKSLAVELEVEL)
-            {
-                nCMDCode = M2Share.nSC_CHECKSLAVELEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKSLAVENAME)
-            {
-                nCMDCode = M2Share.nSC_CHECKSLAVENAME;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKCREDITPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKCREDITPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKOFGUILD)
-            {
-                nCMDCode = M2Share.nSC_CHECKOFGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKPAYMENT)
-            {
-                nCMDCode = M2Share.nSC_CHECKPAYMENT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKUSEITEM)
-            {
-                nCMDCode = M2Share.nSC_CHECKUSEITEM;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKBAGSIZE)
-            {
-                nCMDCode = M2Share.nSC_CHECKBAGSIZE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKLISTCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKLISTCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKDC)
-            {
-                nCMDCode = M2Share.nSC_CHECKDC;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMC)
-            {
-                nCMDCode = M2Share.nSC_CHECKMC;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKSC)
-            {
-                nCMDCode = M2Share.nSC_CHECKSC;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKHP)
-            {
-                nCMDCode = M2Share.nSC_CHECKHP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMP)
-            {
-                nCMDCode = M2Share.nSC_CHECKMP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKITEMTYPE)
-            {
-                nCMDCode = M2Share.nSC_CHECKITEMTYPE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKEXP)
-            {
-                nCMDCode = M2Share.nSC_CHECKEXP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKCASTLEGOLD)
-            {
-                nCMDCode = M2Share.nSC_CHECKCASTLEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PASSWORDERRORCOUNT)
-            {
-                nCMDCode = M2Share.nSC_PASSWORDERRORCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISLOCKPASSWORD)
-            {
-                nCMDCode = M2Share.nSC_ISLOCKPASSWORD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISLOCKSTORAGE)
-            {
-                nCMDCode = M2Share.nSC_ISLOCKSTORAGE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKBUILDPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKBUILDPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKAURAEPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKAURAEPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKSTABILITYPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKSTABILITYPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKFLOURISHPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHECKFLOURISHPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKCONTRIBUTION)
-            {
-                nCMDCode = M2Share.nSC_CHECKCONTRIBUTION;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKRANGEMONCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKRANGEMONCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKITEMADDVALUE)
-            {
-                nCMDCode = M2Share.nSC_CHECKITEMADDVALUE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKINMAPRANGE)
-            {
-                nCMDCode = M2Share.nSC_CHECKINMAPRANGE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CASTLECHANGEDAY)
-            {
-                nCMDCode = M2Share.nSC_CASTLECHANGEDAY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CASTLEWARDAY)
-            {
-                nCMDCode = M2Share.nSC_CASTLEWARDAY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ONLINELONGMIN)
-            {
-                nCMDCode = M2Share.nSC_ONLINELONGMIN;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKGUILDCHIEFITEMCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKGUILDCHIEFITEMCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKNAMEDATELIST)
-            {
-                nCMDCode = M2Share.nSC_CHECKNAMEDATELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMAPHUMANCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKMAPHUMANCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKMAPMONCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKMAPMONCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKVAR)
-            {
-                nCMDCode = M2Share.nSC_CHECKVAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKSERVERNAME)
-            {
-                nCMDCode = M2Share.nSC_CHECKSERVERNAME;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISATTACKGUILD)
-            {
-                nCMDCode = M2Share.nSC_ISATTACKGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISDEFENSEGUILD)
-            {
-                nCMDCode = M2Share.nSC_ISDEFENSEGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISATTACKALLYGUILD)
-            {
-                nCMDCode = M2Share.nSC_ISATTACKALLYGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISDEFENSEALLYGUILD)
-            {
-                nCMDCode = M2Share.nSC_ISDEFENSEALLYGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISCASTLEGUILD)
-            {
-                nCMDCode = M2Share.nSC_ISCASTLEGUILD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKCASTLEDOOR)
-            {
-                nCMDCode = M2Share.nSC_CHECKCASTLEDOOR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISSYSOP)
-            {
-                nCMDCode = M2Share.nSC_ISSYSOP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISADMIN)
-            {
-                nCMDCode = M2Share.nSC_ISADMIN;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKGROUPCOUNT)
-            {
-                nCMDCode = M2Share.nSC_CHECKGROUPCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKACCOUNTLIST)
-            {
-                nCMDCode = M2Share.nCHECKACCOUNTLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKIPLIST)
-            {
-                nCMDCode = M2Share.nCHECKIPLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKBBCOUNT)
-            {
-                nCMDCode = M2Share.nCHECKBBCOUNT;
-                goto L001;
-            }
             if (sCmd == M2Share.sCHECKCREDITPOINT)
             {
                 nCMDCode = M2Share.nCHECKCREDITPOINT;
@@ -922,7 +785,6 @@ namespace GameSvr
 
         private bool LoadScriptFile_QuestAction(string sText, TQuestActionInfo QuestActionInfo)
         {
-            bool result;
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
             var sParam2 = string.Empty;
@@ -931,7 +793,7 @@ namespace GameSvr
             var sParam5 = string.Empty;
             var sParam6 = string.Empty;
             int nCMDCode;
-            result = false;
+            var result = false;
             sText = HUtil32.GetValidStrCap(sText, ref sCmd, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam1, new[] { " ", "\t" });
             sText = HUtil32.GetValidStrCap(sText, ref sParam2, new[] { " ", "\t" });
@@ -941,837 +803,536 @@ namespace GameSvr
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, new[] { " ", "\t" });
             sCmd = sCmd.ToUpper();
             nCMDCode = 0;
-            if (sCmd == M2Share.sSET)
+            switch (sCmd)
             {
-                nCMDCode = M2Share.nSET;
-                HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
+                case M2Share.sSET:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nSET;
+                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    break;
                 }
-                if (!HUtil32.IsStringNumber(sParam2))
+                case M2Share.sRESET:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nRESET;
+                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    break;
                 }
-            }
-            if (sCmd == M2Share.sRESET)
-            {
-                nCMDCode = M2Share.nRESET;
-                HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
+                case M2Share.sSETOPEN:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nSETOPEN;
+                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    break;
                 }
-                if (!HUtil32.IsStringNumber(sParam2))
+                case M2Share.sSETUNIT:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nSETUNIT;
+                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+                    break;
                 }
-            }
-            if (sCmd == M2Share.sSETOPEN)
-            {
-                nCMDCode = M2Share.nSETOPEN;
-                HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
+                case M2Share.sRESETUNIT:
                 {
-                    nCMDCode = 0;
+                    nCMDCode = M2Share.nRESETUNIT;
+                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                    if (!HUtil32.IsStringNumber(sParam1))
+                    {
+                        nCMDCode = 0;
+                    }
+                    if (!HUtil32.IsStringNumber(sParam2))
+                    {
+                        nCMDCode = 0;
+                    }
+
+                    break;
                 }
-                if (!HUtil32.IsStringNumber(sParam2))
-                {
-                    nCMDCode = 0;
-                }
-            }
-            if (sCmd == M2Share.sSETUNIT)
-            {
-                nCMDCode = M2Share.nSETUNIT;
-                HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
-                {
-                    nCMDCode = 0;
-                }
-                if (!HUtil32.IsStringNumber(sParam2))
-                {
-                    nCMDCode = 0;
-                }
-            }
-            if (sCmd == M2Share.sRESETUNIT)
-            {
-                nCMDCode = M2Share.nRESETUNIT;
-                HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                if (!HUtil32.IsStringNumber(sParam1))
-                {
-                    nCMDCode = 0;
-                }
-                if (!HUtil32.IsStringNumber(sParam2))
-                {
-                    nCMDCode = 0;
-                }
-            }
-            if (sCmd == M2Share.sTAKE)
-            {
-                nCMDCode = M2Share.nTAKE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GIVE)
-            {
-                nCMDCode = M2Share.nSC_GIVE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCLOSE)
-            {
-                nCMDCode = M2Share.nCLOSE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sBREAK)
-            {
-                nCMDCode = M2Share.nBREAK;
-                goto L001;
-            }
-            if (sCmd == M2Share.sGOTO)
-            {
-                nCMDCode = M2Share.nGOTO;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDNAMELIST)
-            {
-                nCMDCode = M2Share.nADDNAMELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDELNAMELIST)
-            {
-                nCMDCode = M2Share.nDELNAMELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDGUILDLIST)
-            {
-                nCMDCode = M2Share.nADDGUILDLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDELGUILDLIST)
-            {
-                nCMDCode = M2Share.nDELGUILDLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MAPTING)
-            {
-                nCMDCode = M2Share.nSC_MAPTING;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_LINEMSG)
-            {
-                nCMDCode = M2Share.nSC_LINEMSG;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDACCOUNTLIST)
-            {
-                nCMDCode = M2Share.nADDACCOUNTLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDELACCOUNTLIST)
-            {
-                nCMDCode = M2Share.nDELACCOUNTLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDIPLIST)
-            {
-                nCMDCode = M2Share.nADDIPLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDELIPLIST)
-            {
-                nCMDCode = M2Share.nDELIPLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSENDMSG)
-            {
-                nCMDCode = M2Share.nSENDMSG;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHANGEMODE)
-            {
-                nCMDCode = M2Share.nCHANGEMODE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sPKPOINT)
-            {
-                nCMDCode = M2Share.nPKPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHANGEXP)
-            {
-                nCMDCode = M2Share.nCHANGEXP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RECALLMOB)
-            {
-                nCMDCode = M2Share.nSC_RECALLMOB;
-                goto L001;
-            }
-            if (sCmd == M2Share.sKICK)
-            {
-                nCMDCode = M2Share.nKICK;
-                goto L001;
-            }
-            if (sCmd == M2Share.sTAKEW)
-            {
-                nCMDCode = M2Share.nTAKEW;
-                goto L001;
-            }
-            if (sCmd == M2Share.sTIMERECALL)
-            {
-                nCMDCode = M2Share.nTIMERECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PARAM1)
-            {
-                nCMDCode = M2Share.nSC_PARAM1;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PARAM2)
-            {
-                nCMDCode = M2Share.nSC_PARAM2;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PARAM3)
-            {
-                nCMDCode = M2Share.nSC_PARAM3;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PARAM4)
-            {
-                nCMDCode = M2Share.nSC_PARAM4;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_EXEACTION)
-            {
-                nCMDCode = M2Share.nSC_EXEACTION;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMAPMOVE)
-            {
-                nCMDCode = M2Share.nMAPMOVE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMAP)
-            {
-                nCMDCode = M2Share.nMAP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sTAKECHECKITEM)
-            {
-                nCMDCode = M2Share.nTAKECHECKITEM;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMONGEN)
-            {
-                nCMDCode = M2Share.nMONGEN;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMONCLEAR)
-            {
-                nCMDCode = M2Share.nMONCLEAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMOV)
-            {
-                nCMDCode = M2Share.nMOV;
-                goto L001;
-            }
-            if (sCmd == M2Share.sINC)
-            {
-                nCMDCode = M2Share.nINC;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDEC)
-            {
-                nCMDCode = M2Share.nDEC;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSUM)
-            {
-                nCMDCode = M2Share.nSUM;
-                goto L001;
-            }
-            //变量运算
-            if (sCmd == M2Share.sSC_DIV) //除法
-            {
-                nCMDCode = M2Share.nSC_DIV;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MUL) //除法
-            {
-                nCMDCode = M2Share.nSC_MUL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PERCENT) //除法
-            {
-                nCMDCode = M2Share.nSC_PERCENT;
-                goto L001;
-            }
-            if ((sCmd == M2Share.sTHROWITEM) || (sCmd == M2Share.sDROPITEMMAP))
-            {
-                nCMDCode = M2Share.nTHROWITEM;
-                goto L001; 
-            }
-            if (sCmd == M2Share.sBREAKTIMERECALL)
-            {
-                nCMDCode = M2Share.nBREAKTIMERECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sMOVR)
-            {
-                nCMDCode = M2Share.nMOVR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sEXCHANGEMAP)
-            {
-                nCMDCode = M2Share.nEXCHANGEMAP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sRECALLMAP)
-            {
-                nCMDCode = M2Share.nRECALLMAP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDBATCH)
-            {
-                nCMDCode = M2Share.nADDBATCH;
-                goto L001;
-            }
-            if (sCmd == M2Share.sBATCHDELAY)
-            {
-                nCMDCode = M2Share.nBATCHDELAY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sBATCHMOVE)
-            {
-                nCMDCode = M2Share.nBATCHMOVE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sPLAYDICE)
-            {
-                nCMDCode = M2Share.nPLAYDICE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sGOQUEST)
-            {
-                nCMDCode = M2Share.nGOQUEST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sENDQUEST)
-            {
-                nCMDCode = M2Share.nENDQUEST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HAIRCOLOR)
-            {
-                nCMDCode = M2Share.nSC_HAIRCOLOR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_WEARCOLOR)
-            {
-                nCMDCode = M2Share.nSC_WEARCOLOR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HAIRSTYLE)
-            {
-                nCMDCode = M2Share.nSC_HAIRSTYLE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MONRECALL)
-            {
-                nCMDCode = M2Share.nSC_MONRECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HORSECALL)
-            {
-                nCMDCode = M2Share.nSC_HORSECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HAIRRNDCOL)
-            {
-                nCMDCode = M2Share.nSC_HAIRRNDCOL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILLHORSE)
-            {
-                nCMDCode = M2Share.nSC_KILLHORSE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RANDSETDAILYQUEST)
-            {
-                nCMDCode = M2Share.nSC_RANDSETDAILYQUEST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGELEVEL)
-            {
-                nCMDCode = M2Share.nSC_CHANGELEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MARRY)
-            {
-                nCMDCode = M2Share.nSC_MARRY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_UNMARRY)
-            {
-                nCMDCode = M2Share.nSC_UNMARRY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GETMARRY)
-            {
-                nCMDCode = M2Share.nSC_GETMARRY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GETMASTER)
-            {
-                nCMDCode = M2Share.nSC_GETMASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARSKILL)
-            {
-                nCMDCode = M2Share.nSC_CLEARSKILL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_DELNOJOBSKILL)
-            {
-                nCMDCode = M2Share.nSC_DELNOJOBSKILL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_DELSKILL)
-            {
-                nCMDCode = M2Share.nSC_DELSKILL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ADDSKILL)
-            {
-                nCMDCode = M2Share.nSC_ADDSKILL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SKILLLEVEL)
-            {
-                nCMDCode = M2Share.nSC_SKILLLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEPKPOINT)
-            {
-                nCMDCode = M2Share.nSC_CHANGEPKPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEEXP)
-            {
-                nCMDCode = M2Share.nSC_CHANGEEXP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEJOB)
-            {
-                nCMDCode = M2Share.nSC_CHANGEJOB;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MISSION)
-            {
-                nCMDCode = M2Share.nSC_MISSION;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MOBPLACE)
-            {
-                nCMDCode = M2Share.nSC_MOBPLACE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETMEMBERTYPE)
-            {
-                nCMDCode = M2Share.nSC_SETMEMBERTYPE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETMEMBERLEVEL)
-            {
-                nCMDCode = M2Share.nSC_SETMEMBERLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GAMEGOLD)
-            {
-                nCMDCode = M2Share.nSC_GAMEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GAMEPOINT)
-            {
-                nCMDCode = M2Share.nSC_GAMEPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_PKZONE)
-            {
-                nCMDCode = M2Share.nSC_PKZONE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RESTBONUSPOINT)
-            {
-                nCMDCode = M2Share.nSC_RESTBONUSPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_TAKECASTLEGOLD)
-            {
-                nCMDCode = M2Share.nSC_TAKECASTLEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HUMANHP)
-            {
-                nCMDCode = M2Share.nSC_HUMANHP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_HUMANMP)
-            {
-                nCMDCode = M2Share.nSC_HUMANMP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_BUILDPOINT)
-            {
-                nCMDCode = M2Share.nSC_BUILDPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_AURAEPOINT)
-            {
-                nCMDCode = M2Share.nSC_AURAEPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_STABILITYPOINT)
-            {
-                nCMDCode = M2Share.nSC_STABILITYPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_FLOURISHPOINT)
-            {
-                nCMDCode = M2Share.nSC_FLOURISHPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_OPENMAGICBOX)
-            {
-                nCMDCode = M2Share.nSC_OPENMAGICBOX;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETRANKLEVELNAME)
-            {
-                nCMDCode = M2Share.nSC_SETRANKLEVELNAME;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GMEXECUTE)
-            {
-                nCMDCode = M2Share.nSC_GMEXECUTE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GUILDCHIEFITEMCOUNT)
-            {
-                nCMDCode = M2Share.nSC_GUILDCHIEFITEMCOUNT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ADDNAMEDATELIST)
-            {
-                nCMDCode = M2Share.nSC_ADDNAMEDATELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_DELNAMEDATELIST)
-            {
-                nCMDCode = M2Share.nSC_DELNAMEDATELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MOBFIREBURN)
-            {
-                nCMDCode = M2Share.nSC_MOBFIREBURN;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MESSAGEBOX)
-            {
-                nCMDCode = M2Share.nSC_MESSAGEBOX;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETSCRIPTFLAG)
-            {
-                nCMDCode = M2Share.nSC_SETSCRIPTFLAG;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETAUTOGETEXP)
-            {
-                nCMDCode = M2Share.nSC_SETAUTOGETEXP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_VAR)
-            {
-                nCMDCode = M2Share.nSC_VAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_LOADVAR)
-            {
-                nCMDCode = M2Share.nSC_LOADVAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SAVEVAR)
-            {
-                nCMDCode = M2Share.nSC_SAVEVAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CALCVAR)
-            {
-                nCMDCode = M2Share.nSC_CALCVAR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_AUTOADDGAMEGOLD)
-            {
-                nCMDCode = M2Share.nSC_AUTOADDGAMEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_AUTOSUBGAMEGOLD)
-            {
-                nCMDCode = M2Share.nSC_AUTOSUBGAMEGOLD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RECALLGROUPMEMBERS)
-            {
-                nCMDCode = M2Share.nSC_RECALLGROUPMEMBERS;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARNAMELIST)
-            {
-                nCMDCode = M2Share.nSC_CLEARNAMELIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGENAMECOLOR)
-            {
-                nCMDCode = M2Share.nSC_CHANGENAMECOLOR;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARPASSWORD)
-            {
-                nCMDCode = M2Share.nSC_CLEARPASSWORD;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RENEWLEVEL)
-            {
-                nCMDCode = M2Share.nSC_RENEWLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILLMONEXPRATE)
-            {
-                nCMDCode = M2Share.nSC_KILLMONEXPRATE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_POWERRATE)
-            {
-                nCMDCode = M2Share.nSC_POWERRATE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEMODE)
-            {
-                nCMDCode = M2Share.nSC_CHANGEMODE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEPERMISSION)
-            {
-                nCMDCode = M2Share.nSC_CHANGEPERMISSION;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILL)
-            {
-                nCMDCode = M2Share.nSC_KILL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KICK)
-            {
-                nCMDCode = M2Share.nSC_KICK;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_BONUSPOINT)
-            {
-                nCMDCode = M2Share.nSC_BONUSPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_RESTRENEWLEVEL)
-            {
-                nCMDCode = M2Share.nSC_RESTRENEWLEVEL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_DELMARRY)
-            {
-                nCMDCode = M2Share.nSC_DELMARRY;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_DELMASTER)
-            {
-                nCMDCode = M2Share.nSC_DELMASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MASTER)
-            {
-                nCMDCode = M2Share.nSC_MASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_UNMASTER)
-            {
-                nCMDCode = M2Share.nSC_UNMASTER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CREDITPOINT)
-            {
-                nCMDCode = M2Share.nSC_CREDITPOINT;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARNEEDITEMS)
-            {
-                nCMDCode = M2Share.nSC_CLEARNEEDITEMS;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARMAKEITEMS)
-            {
-                nCMDCode = M2Share.nSC_CLEARMAEKITEMS;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETSENDMSGFLAG)
-            {
-                nCMDCode = M2Share.nSC_SETSENDMSGFLAG;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_UPGRADEITEMS)
-            {
-                nCMDCode = M2Share.nSC_UPGRADEITEMS;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_UPGRADEITEMSEX)
-            {
-                nCMDCode = M2Share.nSC_UPGRADEITEMSEX;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MONGENEX)
-            {
-                nCMDCode = M2Share.nSC_MONGENEX;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARMAPMON)
-            {
-                nCMDCode = M2Share.nSC_CLEARMAPMON;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SETMAPMODE)
-            {
-                nCMDCode = M2Share.nSC_SETMAPMODE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILLSLAVE)
-            {
-                nCMDCode = M2Share.nSC_KILLSLAVE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHANGEGENDER)
-            {
-                nCMDCode = M2Share.nSC_CHANGEGENDER;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_MAPTING)
-            {
-                nCMDCode = M2Share.nSC_MAPTING;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GUILDRECALL)
-            {
-                nCMDCode = M2Share.nSC_GUILDRECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GROUPRECALL)
-            {
-                nCMDCode = M2Share.nSC_GROUPRECALL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GROUPADDLIST)
-            {
-                nCMDCode = M2Share.nSC_GROUPADDLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CLEARLIST)
-            {
-                nCMDCode = M2Share.nSC_CLEARLIST;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_GROUPMOVEMAP)
-            {
-                nCMDCode = M2Share.nSC_GROUPMOVEMAP;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_SAVESLAVES)
-            {
-                nCMDCode = M2Share.nSC_SAVESLAVES;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCHECKUSERDATE)
-            {
-                nCMDCode = M2Share.nCHECKUSERDATE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sADDUSERDATE)
-            {
-                nCMDCode = M2Share.nADDUSERDATE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCheckDiemon)
-            {
-                nCMDCode = M2Share.nCheckDiemon;
-                goto L001;
-            }
-            if (sCmd == M2Share.scheckkillplaymon)
-            {
-                nCMDCode = M2Share.ncheckkillplaymon;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKRANDOMNO)
-            {
-                nCMDCode = M2Share.nSC_CHECKRANDOMNO;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_CHECKISONMAP)
-            {
-                nCMDCode = M2Share.nSC_CHECKISONMAP;
-                goto L001;
-            }
-            // 检测是否安全区
-            if (sCmd == M2Share.sSC_CHECKINSAFEZONE)
-            {
-                nCMDCode = M2Share.nSC_CHECKINSAFEZONE;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILLBYHUM)
-            {
-                nCMDCode = M2Share.nSC_KILLBYHUM;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_KILLBYMON)
-            {
-                nCMDCode = M2Share.nSC_KILLBYMON;
-                goto L001;
-            }
-            if (sCmd == M2Share.sSC_ISHIGH)
-            {
-                nCMDCode = M2Share.nSC_ISHIGH;
-                goto L001;
-            }
-            if (sCmd == M2Share.sOPENYBDEAL)
-            {
-                nCMDCode = M2Share.nOPENYBDEAL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sQUERYYBSELL)
-            {
-                nCMDCode = M2Share.nQUERYYBSELL;
-                goto L001; 
-            }
-            if (sCmd == M2Share.sQUERYYBDEAL)
-            {
-                nCMDCode = M2Share.nQUERYYBDEAL;
-                goto L001;
-            }
-            if (sCmd == M2Share.sDELAYGOTO)
-            {
-                nCMDCode = M2Share.nDELAYGOTO;
-                goto L001;
-            }
-            if (sCmd == M2Share.sCLEARDELAYGOTO)
-            {
-                nCMDCode = M2Share.nCLEARDELAYGOTO;
-                goto L001;
+                case M2Share.sTAKE:
+                    nCMDCode = M2Share.nTAKE;
+                    goto L001;
+                case M2Share.sSC_GIVE:
+                    nCMDCode = M2Share.nSC_GIVE;
+                    goto L001;
+                case M2Share.sCLOSE:
+                    nCMDCode = M2Share.nCLOSE;
+                    goto L001;
+                case M2Share.sBREAK:
+                    nCMDCode = M2Share.nBREAK;
+                    goto L001;
+                case M2Share.sGOTO:
+                    nCMDCode = M2Share.nGOTO;
+                    goto L001;
+                case M2Share.sADDNAMELIST:
+                    nCMDCode = M2Share.nADDNAMELIST;
+                    goto L001;
+                case M2Share.sDELNAMELIST:
+                    nCMDCode = M2Share.nDELNAMELIST;
+                    goto L001;
+                case M2Share.sADDGUILDLIST:
+                    nCMDCode = M2Share.nADDGUILDLIST;
+                    goto L001;
+                case M2Share.sDELGUILDLIST:
+                    nCMDCode = M2Share.nDELGUILDLIST;
+                    goto L001;
+                case M2Share.sSC_LINEMSG:
+                    nCMDCode = M2Share.nSC_LINEMSG;
+                    goto L001;
+                case M2Share.sADDACCOUNTLIST:
+                    nCMDCode = M2Share.nADDACCOUNTLIST;
+                    goto L001;
+                case M2Share.sDELACCOUNTLIST:
+                    nCMDCode = M2Share.nDELACCOUNTLIST;
+                    goto L001;
+                case M2Share.sADDIPLIST:
+                    nCMDCode = M2Share.nADDIPLIST;
+                    goto L001;
+                case M2Share.sDELIPLIST:
+                    nCMDCode = M2Share.nDELIPLIST;
+                    goto L001;
+                case M2Share.sSENDMSG:
+                    nCMDCode = M2Share.nSENDMSG;
+                    goto L001;
+                case M2Share.sCHANGEMODE:
+                    nCMDCode = M2Share.nCHANGEMODE;
+                    nCMDCode = M2Share.nSC_CHANGEMODE;
+                    goto L001;
+                case M2Share.sPKPOINT:
+                    nCMDCode = M2Share.nPKPOINT;
+                    goto L001;
+                case M2Share.sCHANGEXP:
+                    nCMDCode = M2Share.nCHANGEXP;
+                    goto L001;
+                case M2Share.sSC_RECALLMOB:
+                    nCMDCode = M2Share.nSC_RECALLMOB;
+                    goto L001;
+                case M2Share.sTAKEW:
+                    nCMDCode = M2Share.nTAKEW;
+                    goto L001;
+                case M2Share.sTIMERECALL:
+                    nCMDCode = M2Share.nTIMERECALL;
+                    goto L001;
+                case M2Share.sSC_PARAM1:
+                    nCMDCode = M2Share.nSC_PARAM1;
+                    goto L001;
+                case M2Share.sSC_PARAM2:
+                    nCMDCode = M2Share.nSC_PARAM2;
+                    goto L001;
+                case M2Share.sSC_PARAM3:
+                    nCMDCode = M2Share.nSC_PARAM3;
+                    goto L001;
+                case M2Share.sSC_PARAM4:
+                    nCMDCode = M2Share.nSC_PARAM4;
+                    goto L001;
+                case M2Share.sSC_EXEACTION:
+                    nCMDCode = M2Share.nSC_EXEACTION;
+                    goto L001;
+                case M2Share.sMAPMOVE:
+                    nCMDCode = M2Share.nMAPMOVE;
+                    goto L001;
+                case M2Share.sMAP:
+                    nCMDCode = M2Share.nMAP;
+                    goto L001;
+                case M2Share.sTAKECHECKITEM:
+                    nCMDCode = M2Share.nTAKECHECKITEM;
+                    goto L001;
+                case M2Share.sMONGEN:
+                    nCMDCode = M2Share.nMONGEN;
+                    goto L001;
+                case M2Share.sMONCLEAR:
+                    nCMDCode = M2Share.nMONCLEAR;
+                    goto L001;
+                case M2Share.sMOV:
+                    nCMDCode = M2Share.nMOV;
+                    goto L001;
+                case M2Share.sINC:
+                    nCMDCode = M2Share.nINC;
+                    goto L001;
+                case M2Share.sDEC:
+                    nCMDCode = M2Share.nDEC;
+                    goto L001;
+                case M2Share.sSUM:
+                    nCMDCode = M2Share.nSUM;
+                    goto L001;
+                //变量运算
+                //除法
+                case M2Share.sSC_DIV:
+                    nCMDCode = M2Share.nSC_DIV;
+                    goto L001;
+                //除法
+                case M2Share.sSC_MUL:
+                    nCMDCode = M2Share.nSC_MUL;
+                    goto L001;
+                //除法
+                case M2Share.sSC_PERCENT:
+                    nCMDCode = M2Share.nSC_PERCENT;
+                    goto L001;
+                case M2Share.sTHROWITEM:
+                case M2Share.sDROPITEMMAP:
+                    nCMDCode = M2Share.nTHROWITEM;
+                    goto L001;
+                case M2Share.sBREAKTIMERECALL:
+                    nCMDCode = M2Share.nBREAKTIMERECALL;
+                    goto L001;
+                case M2Share.sMOVR:
+                    nCMDCode = M2Share.nMOVR;
+                    goto L001;
+                case M2Share.sEXCHANGEMAP:
+                    nCMDCode = M2Share.nEXCHANGEMAP;
+                    goto L001;
+                case M2Share.sRECALLMAP:
+                    nCMDCode = M2Share.nRECALLMAP;
+                    goto L001;
+                case M2Share.sADDBATCH:
+                    nCMDCode = M2Share.nADDBATCH;
+                    goto L001;
+                case M2Share.sBATCHDELAY:
+                    nCMDCode = M2Share.nBATCHDELAY;
+                    goto L001;
+                case M2Share.sBATCHMOVE:
+                    nCMDCode = M2Share.nBATCHMOVE;
+                    goto L001;
+                case M2Share.sPLAYDICE:
+                    nCMDCode = M2Share.nPLAYDICE;
+                    goto L001;
+                case M2Share.sGOQUEST:
+                    nCMDCode = M2Share.nGOQUEST;
+                    goto L001;
+                case M2Share.sENDQUEST:
+                    nCMDCode = M2Share.nENDQUEST;
+                    goto L001;
+                case M2Share.sSC_HAIRCOLOR:
+                    nCMDCode = M2Share.nSC_HAIRCOLOR;
+                    goto L001;
+                case M2Share.sSC_WEARCOLOR:
+                    nCMDCode = M2Share.nSC_WEARCOLOR;
+                    goto L001;
+                case M2Share.sSC_HAIRSTYLE:
+                    nCMDCode = M2Share.nSC_HAIRSTYLE;
+                    goto L001;
+                case M2Share.sSC_MONRECALL:
+                    nCMDCode = M2Share.nSC_MONRECALL;
+                    goto L001;
+                case M2Share.sSC_HORSECALL:
+                    nCMDCode = M2Share.nSC_HORSECALL;
+                    goto L001;
+                case M2Share.sSC_HAIRRNDCOL:
+                    nCMDCode = M2Share.nSC_HAIRRNDCOL;
+                    goto L001;
+                case M2Share.sSC_KILLHORSE:
+                    nCMDCode = M2Share.nSC_KILLHORSE;
+                    goto L001;
+                case M2Share.sSC_RANDSETDAILYQUEST:
+                    nCMDCode = M2Share.nSC_RANDSETDAILYQUEST;
+                    goto L001;
+                case M2Share.sSC_CHANGELEVEL:
+                    nCMDCode = M2Share.nSC_CHANGELEVEL;
+                    goto L001;
+                case M2Share.sSC_MARRY:
+                    nCMDCode = M2Share.nSC_MARRY;
+                    goto L001;
+                case M2Share.sSC_UNMARRY:
+                    nCMDCode = M2Share.nSC_UNMARRY;
+                    goto L001;
+                case M2Share.sSC_GETMARRY:
+                    nCMDCode = M2Share.nSC_GETMARRY;
+                    goto L001;
+                case M2Share.sSC_GETMASTER:
+                    nCMDCode = M2Share.nSC_GETMASTER;
+                    goto L001;
+                case M2Share.sSC_CLEARSKILL:
+                    nCMDCode = M2Share.nSC_CLEARSKILL;
+                    goto L001;
+                case M2Share.sSC_DELNOJOBSKILL:
+                    nCMDCode = M2Share.nSC_DELNOJOBSKILL;
+                    goto L001;
+                case M2Share.sSC_DELSKILL:
+                    nCMDCode = M2Share.nSC_DELSKILL;
+                    goto L001;
+                case M2Share.sSC_ADDSKILL:
+                    nCMDCode = M2Share.nSC_ADDSKILL;
+                    goto L001;
+                case M2Share.sSC_SKILLLEVEL:
+                    nCMDCode = M2Share.nSC_SKILLLEVEL;
+                    goto L001;
+                case M2Share.sSC_CHANGEPKPOINT:
+                    nCMDCode = M2Share.nSC_CHANGEPKPOINT;
+                    goto L001;
+                case M2Share.sSC_CHANGEEXP:
+                    nCMDCode = M2Share.nSC_CHANGEEXP;
+                    goto L001;
+                case M2Share.sSC_CHANGEJOB:
+                    nCMDCode = M2Share.nSC_CHANGEJOB;
+                    goto L001;
+                case M2Share.sSC_MISSION:
+                    nCMDCode = M2Share.nSC_MISSION;
+                    goto L001;
+                case M2Share.sSC_MOBPLACE:
+                    nCMDCode = M2Share.nSC_MOBPLACE;
+                    goto L001;
+                case M2Share.sSC_SETMEMBERTYPE:
+                    nCMDCode = M2Share.nSC_SETMEMBERTYPE;
+                    goto L001;
+                case M2Share.sSC_SETMEMBERLEVEL:
+                    nCMDCode = M2Share.nSC_SETMEMBERLEVEL;
+                    goto L001;
+                case M2Share.sSC_GAMEGOLD:
+                    nCMDCode = M2Share.nSC_GAMEGOLD;
+                    goto L001;
+                case M2Share.sSC_GAMEPOINT:
+                    nCMDCode = M2Share.nSC_GAMEPOINT;
+                    goto L001;
+                case M2Share.sSC_PKZONE:
+                    nCMDCode = M2Share.nSC_PKZONE;
+                    goto L001;
+                case M2Share.sSC_RESTBONUSPOINT:
+                    nCMDCode = M2Share.nSC_RESTBONUSPOINT;
+                    goto L001;
+                case M2Share.sSC_TAKECASTLEGOLD:
+                    nCMDCode = M2Share.nSC_TAKECASTLEGOLD;
+                    goto L001;
+                case M2Share.sSC_HUMANHP:
+                    nCMDCode = M2Share.nSC_HUMANHP;
+                    goto L001;
+                case M2Share.sSC_HUMANMP:
+                    nCMDCode = M2Share.nSC_HUMANMP;
+                    goto L001;
+                case M2Share.sSC_BUILDPOINT:
+                    nCMDCode = M2Share.nSC_BUILDPOINT;
+                    goto L001;
+                case M2Share.sSC_AURAEPOINT:
+                    nCMDCode = M2Share.nSC_AURAEPOINT;
+                    goto L001;
+                case M2Share.sSC_STABILITYPOINT:
+                    nCMDCode = M2Share.nSC_STABILITYPOINT;
+                    goto L001;
+                case M2Share.sSC_FLOURISHPOINT:
+                    nCMDCode = M2Share.nSC_FLOURISHPOINT;
+                    goto L001;
+                case M2Share.sSC_OPENMAGICBOX:
+                    nCMDCode = M2Share.nSC_OPENMAGICBOX;
+                    goto L001;
+                case M2Share.sSC_SETRANKLEVELNAME:
+                    nCMDCode = M2Share.nSC_SETRANKLEVELNAME;
+                    goto L001;
+                case M2Share.sSC_GMEXECUTE:
+                    nCMDCode = M2Share.nSC_GMEXECUTE;
+                    goto L001;
+                case M2Share.sSC_GUILDCHIEFITEMCOUNT:
+                    nCMDCode = M2Share.nSC_GUILDCHIEFITEMCOUNT;
+                    goto L001;
+                case M2Share.sSC_ADDNAMEDATELIST:
+                    nCMDCode = M2Share.nSC_ADDNAMEDATELIST;
+                    goto L001;
+                case M2Share.sSC_DELNAMEDATELIST:
+                    nCMDCode = M2Share.nSC_DELNAMEDATELIST;
+                    goto L001;
+                case M2Share.sSC_MOBFIREBURN:
+                    nCMDCode = M2Share.nSC_MOBFIREBURN;
+                    goto L001;
+                case M2Share.sSC_MESSAGEBOX:
+                    nCMDCode = M2Share.nSC_MESSAGEBOX;
+                    goto L001;
+                case M2Share.sSC_SETSCRIPTFLAG:
+                    nCMDCode = M2Share.nSC_SETSCRIPTFLAG;
+                    goto L001;
+                case M2Share.sSC_SETAUTOGETEXP:
+                    nCMDCode = M2Share.nSC_SETAUTOGETEXP;
+                    goto L001;
+                case M2Share.sSC_VAR:
+                    nCMDCode = M2Share.nSC_VAR;
+                    goto L001;
+                case M2Share.sSC_LOADVAR:
+                    nCMDCode = M2Share.nSC_LOADVAR;
+                    goto L001;
+                case M2Share.sSC_SAVEVAR:
+                    nCMDCode = M2Share.nSC_SAVEVAR;
+                    goto L001;
+                case M2Share.sSC_CALCVAR:
+                    nCMDCode = M2Share.nSC_CALCVAR;
+                    goto L001;
+                case M2Share.sSC_AUTOADDGAMEGOLD:
+                    nCMDCode = M2Share.nSC_AUTOADDGAMEGOLD;
+                    goto L001;
+                case M2Share.sSC_AUTOSUBGAMEGOLD:
+                    nCMDCode = M2Share.nSC_AUTOSUBGAMEGOLD;
+                    goto L001;
+                case M2Share.sSC_RECALLGROUPMEMBERS:
+                    nCMDCode = M2Share.nSC_RECALLGROUPMEMBERS;
+                    goto L001;
+                case M2Share.sSC_CLEARNAMELIST:
+                    nCMDCode = M2Share.nSC_CLEARNAMELIST;
+                    goto L001;
+                case M2Share.sSC_CHANGENAMECOLOR:
+                    nCMDCode = M2Share.nSC_CHANGENAMECOLOR;
+                    goto L001;
+                case M2Share.sSC_CLEARPASSWORD:
+                    nCMDCode = M2Share.nSC_CLEARPASSWORD;
+                    goto L001;
+                case M2Share.sSC_RENEWLEVEL:
+                    nCMDCode = M2Share.nSC_RENEWLEVEL;
+                    goto L001;
+                case M2Share.sSC_KILLMONEXPRATE:
+                    nCMDCode = M2Share.nSC_KILLMONEXPRATE;
+                    goto L001;
+                case M2Share.sSC_POWERRATE:
+                    nCMDCode = M2Share.nSC_POWERRATE;
+                    goto L001;
+                case M2Share.sSC_CHANGEPERMISSION:
+                    nCMDCode = M2Share.nSC_CHANGEPERMISSION;
+                    goto L001;
+                case M2Share.sSC_KILL:
+                    nCMDCode = M2Share.nSC_KILL;
+                    goto L001;
+                case M2Share.sSC_KICK:
+                    nCMDCode = M2Share.nSC_KICK;
+                    goto L001;
+                case M2Share.sSC_BONUSPOINT:
+                    nCMDCode = M2Share.nSC_BONUSPOINT;
+                    goto L001;
+                case M2Share.sSC_RESTRENEWLEVEL:
+                    nCMDCode = M2Share.nSC_RESTRENEWLEVEL;
+                    goto L001;
+                case M2Share.sSC_DELMARRY:
+                    nCMDCode = M2Share.nSC_DELMARRY;
+                    goto L001;
+                case M2Share.sSC_DELMASTER:
+                    nCMDCode = M2Share.nSC_DELMASTER;
+                    goto L001;
+                case M2Share.sSC_MASTER:
+                    nCMDCode = M2Share.nSC_MASTER;
+                    goto L001;
+                case M2Share.sSC_UNMASTER:
+                    nCMDCode = M2Share.nSC_UNMASTER;
+                    goto L001;
+                case M2Share.sSC_CREDITPOINT:
+                    nCMDCode = M2Share.nSC_CREDITPOINT;
+                    goto L001;
+                case M2Share.sSC_CLEARNEEDITEMS:
+                    nCMDCode = M2Share.nSC_CLEARNEEDITEMS;
+                    goto L001;
+                case M2Share.sSC_CLEARMAKEITEMS:
+                    nCMDCode = M2Share.nSC_CLEARMAEKITEMS;
+                    goto L001;
+                case M2Share.sSC_SETSENDMSGFLAG:
+                    nCMDCode = M2Share.nSC_SETSENDMSGFLAG;
+                    goto L001;
+                case M2Share.sSC_UPGRADEITEMS:
+                    nCMDCode = M2Share.nSC_UPGRADEITEMS;
+                    goto L001;
+                case M2Share.sSC_UPGRADEITEMSEX:
+                    nCMDCode = M2Share.nSC_UPGRADEITEMSEX;
+                    goto L001;
+                case M2Share.sSC_MONGENEX:
+                    nCMDCode = M2Share.nSC_MONGENEX;
+                    goto L001;
+                case M2Share.sSC_CLEARMAPMON:
+                    nCMDCode = M2Share.nSC_CLEARMAPMON;
+                    goto L001;
+                case M2Share.sSC_SETMAPMODE:
+                    nCMDCode = M2Share.nSC_SETMAPMODE;
+                    goto L001;
+                case M2Share.sSC_KILLSLAVE:
+                    nCMDCode = M2Share.nSC_KILLSLAVE;
+                    goto L001;
+                case M2Share.sSC_CHANGEGENDER:
+                    nCMDCode = M2Share.nSC_CHANGEGENDER;
+                    goto L001;
+                case M2Share.sSC_MAPTING:
+                    nCMDCode = M2Share.nSC_MAPTING;
+                    goto L001;
+                case M2Share.sSC_GUILDRECALL:
+                    nCMDCode = M2Share.nSC_GUILDRECALL;
+                    goto L001;
+                case M2Share.sSC_GROUPRECALL:
+                    nCMDCode = M2Share.nSC_GROUPRECALL;
+                    goto L001;
+                case M2Share.sSC_GROUPADDLIST:
+                    nCMDCode = M2Share.nSC_GROUPADDLIST;
+                    goto L001;
+                case M2Share.sSC_CLEARLIST:
+                    nCMDCode = M2Share.nSC_CLEARLIST;
+                    goto L001;
+                case M2Share.sSC_GROUPMOVEMAP:
+                    nCMDCode = M2Share.nSC_GROUPMOVEMAP;
+                    goto L001;
+                case M2Share.sSC_SAVESLAVES:
+                    nCMDCode = M2Share.nSC_SAVESLAVES;
+                    goto L001;
+                case M2Share.sCHECKUSERDATE:
+                    nCMDCode = M2Share.nCHECKUSERDATE;
+                    goto L001;
+                case M2Share.sADDUSERDATE:
+                    nCMDCode = M2Share.nADDUSERDATE;
+                    goto L001;
+                case M2Share.sCheckDiemon:
+                    nCMDCode = M2Share.nCheckDiemon;
+                    goto L001;
+                case M2Share.scheckkillplaymon:
+                    nCMDCode = M2Share.ncheckkillplaymon;
+                    goto L001;
+                case M2Share.sSC_CHECKRANDOMNO:
+                    nCMDCode = M2Share.nSC_CHECKRANDOMNO;
+                    goto L001;
+                case M2Share.sSC_CHECKISONMAP:
+                    nCMDCode = M2Share.nSC_CHECKISONMAP;
+                    goto L001;
+                // 检测是否安全区
+                case M2Share.sSC_CHECKINSAFEZONE:
+                    nCMDCode = M2Share.nSC_CHECKINSAFEZONE;
+                    goto L001;
+                case M2Share.sSC_KILLBYHUM:
+                    nCMDCode = M2Share.nSC_KILLBYHUM;
+                    goto L001;
+                case M2Share.sSC_KILLBYMON:
+                    nCMDCode = M2Share.nSC_KILLBYMON;
+                    goto L001;
+                case M2Share.sSC_ISHIGH:
+                    nCMDCode = M2Share.nSC_ISHIGH;
+                    goto L001;
+                case M2Share.sOPENYBDEAL:
+                    nCMDCode = M2Share.nOPENYBDEAL;
+                    goto L001;
+                case M2Share.sQUERYYBSELL:
+                    nCMDCode = M2Share.nQUERYYBSELL;
+                    goto L001;
+                case M2Share.sQUERYYBDEAL:
+                    nCMDCode = M2Share.nQUERYYBDEAL;
+                    goto L001;
+                case M2Share.sDELAYGOTO:
+                    nCMDCode = M2Share.nDELAYGOTO;
+                    goto L001;
+                case M2Share.sCLEARDELAYGOTO:
+                    nCMDCode = M2Share.nCLEARDELAYGOTO;
+                    goto L001;
             }
             L001:
             if (nCMDCode > 0)
@@ -1836,11 +1397,20 @@ namespace GameSvr
             return result;
         }
 
+        private string GetScriptCrossPath(string path)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return path.Replace("\\", "/");
+            }
+            return path;
+        }
+
         public int LoadScriptFile(TNormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
             int I;
             var s30 = string.Empty;
-            var s34 = string.Empty;
+            var sScript = string.Empty;
             var s38 = string.Empty;
             var s3C = string.Empty;
             var s40 = string.Empty;
@@ -1868,7 +1438,7 @@ namespace GameSvr
             var result = -1;
             var n6C = 0;
             var n70 = 0;
-            var sScritpFileName = Path.Combine(M2Share.g_Config.sEnvirDir, sPatch, string.Concat(sScritpName, ".txt"));
+            var sScritpFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
             if (File.Exists(sScritpFileName))
             {
                 LoadList = new StringList();
@@ -1912,16 +1482,16 @@ namespace GameSvr
                 // 常量处理
                 for (I = 0; I < LoadList.Count; I++)
                 {
-                    s34 = LoadList[I].Trim();
-                    if (s34 != "")
+                    sScript = LoadList[I].Trim();
+                    if (sScript != "")
                     {
-                        if (s34[0] == '[')
+                        if (sScript[0] == '[')
                         {
                             bo8D = false;
                         }
                         else
                         {
-                            if (s34[0] == '#' && (HUtil32.CompareLStr(s34, "#IF", "#IF".Length) || HUtil32.CompareLStr(s34, "#ACT", "#ACT".Length) || HUtil32.CompareLStr(s34, "#ELSEACT", "#ELSEACT".Length)))
+                            if (sScript[0] == '#' && (HUtil32.CompareLStr(sScript, "#IF", "#IF".Length) || HUtil32.CompareLStr(sScript, "#ACT", "#ACT".Length) || HUtil32.CompareLStr(sScript, "#ELSEACT", "#ELSEACT".Length)))
                             {
                                 bo8D = true;
                             }
@@ -1936,15 +1506,15 @@ namespace GameSvr
                                         var n1C = 0;
                                         while (true)
                                         {
-                                            n24 = s34.ToUpper().IndexOf(DefineInfo.sName, StringComparison.OrdinalIgnoreCase);
+                                            n24 = sScript.ToUpper().IndexOf(DefineInfo.sName, StringComparison.OrdinalIgnoreCase);
                                             if (n24 <= 0)
                                             {
                                                 break;
                                             }
-                                            s58 = s34.Substring(0, n24);
-                                            s5C = s34.Substring(DefineInfo.sName.Length + n24);
-                                            s34 = s58 + DefineInfo.sText + s5C;
-                                            LoadList[I] = s34;
+                                            s58 = sScript.Substring(0, n24);
+                                            s5C = sScript.Substring(DefineInfo.sName.Length + n24);
+                                            sScript = s58 + DefineInfo.sText + s5C;
+                                            LoadList[I] = sScript;
                                             n1C++;
                                             if (n1C >= 10)
                                             {
@@ -1967,41 +1537,41 @@ namespace GameSvr
                 var nQuestIdx = 0;
                 for (I = 0; I < LoadList.Count; I++)
                 {
-                    s34 = LoadList[I].Trim();
-                    if (s34 == "" || s34[0] == ';' || s34[0] == '/')
+                    sScript = LoadList[I].Trim();
+                    if (sScript == "" || sScript[0] == ';' || sScript[0] == '/')
                     {
                         continue;
                     }
                     if (n6C == 0 && boFlag)
                     {
-                        if (s34.StartsWith("%")) // 物品价格倍率
+                        if (sScript.StartsWith("%")) // 物品价格倍率
                         {
-                            s34 = s34.Substring(1, s34.Length - 1);
-                            var nPriceRate = HUtil32.Str_ToInt(s34, -1);
+                            sScript = sScript.Substring(1, sScript.Length - 1);
+                            var nPriceRate = HUtil32.Str_ToInt(sScript, -1);
                             if (nPriceRate >= 55)
                             {
                                 ((TMerchant)NPC).m_nPriceRate = nPriceRate;
                             }
                             continue;
                         }
-                        if (s34.StartsWith("+")) // 物品交易类型
+                        if (sScript.StartsWith("+")) // 物品交易类型
                         {
-                            s34 = s34.Substring(1, s34.Length - 1);
-                            var nItemType = HUtil32.Str_ToInt(s34, -1);
+                            sScript = sScript.Substring(1, sScript.Length - 1);
+                            var nItemType = HUtil32.Str_ToInt(sScript, -1);
                             if (nItemType >= 0)
                             {
                                 ((TMerchant)NPC).m_ItemTypeList.Add(nItemType);
                             }
                             continue;
                         }
-                        if (s34.StartsWith("(")) // 增加处理NPC可执行命令设置
+                        if (sScript.StartsWith("(")) // 增加处理NPC可执行命令设置
                         {
-                            HUtil32.ArrestStringEx(s34, "(", ")", ref s34);
-                            if (s34 != "")
+                            HUtil32.ArrestStringEx(sScript, "(", ")", ref sScript);
+                            if (sScript != "")
                             {
-                                while (s34 != "")
+                                while (sScript != "")
                                 {
-                                    s34 = HUtil32.GetValidStr3(s34, ref s30, new[] { " ", ",", "\t" });
+                                    sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { " ", ",", "\t" });
                                     if (s30.Equals(M2Share.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((TMerchant)NPC).m_boBuy = true;
@@ -2078,29 +1648,29 @@ namespace GameSvr
                         }
                         // 增加处理NPC可执行命令设置
                     }
-                    if (s34.StartsWith("{"))
+                    if (sScript.StartsWith("{"))
                     {
-                        if (HUtil32.CompareLStr(s34, "{Quest", "{Quest".Length))
+                        if (HUtil32.CompareLStr(sScript, "{Quest", "{Quest".Length))
                         {
-                            s38 = HUtil32.GetValidStr3(s34, ref s3C, new[] { " ", "}", "\t" });
+                            s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { " ", "}", "\t" });
                             HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
                             n70 = HUtil32.Str_ToInt(s3C, 0);
                             Script = LoadScriptFile_MakeNewScript(NPC);
                             Script.nQuest = n70;
                             n70++;
                         }
-                        if (HUtil32.CompareLStr(s34, "{~Quest", "{~Quest".Length))
+                        if (HUtil32.CompareLStr(sScript, "{~Quest", "{~Quest".Length))
                         {
                             continue;
                         }
                     }
-                    if (n6C == 1 && Script != null && s34.StartsWith("#"))
+                    if (n6C == 1 && Script != null && sScript.StartsWith("#"))
                     {
-                        s38 = HUtil32.GetValidStr3(s34, ref s3C, new[] { "=", " ", "\t" });
+                        s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { "=", " ", "\t" });
                         Script.boQuest = true;
-                        if (HUtil32.CompareLStr(s34, "#IF", "#IF".Length))
+                        if (HUtil32.CompareLStr(sScript, "#IF", "#IF".Length))
                         {
-                            HUtil32.ArrestStringEx(s34, "[", "]", ref s40);
+                            HUtil32.ArrestStringEx(sScript, "[", "]", ref s40);
                             Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.Str_ToInt(s40, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { "=", " ", "\t" });
                             n24 = HUtil32.Str_ToInt(s44, 0);
@@ -2110,13 +1680,13 @@ namespace GameSvr
                             }
                             Script.QuestInfo[nQuestIdx].btValue = (byte)n24;
                         }
-                        if (HUtil32.CompareLStr(s34, "#RAND", "#RAND".Length))
+                        if (HUtil32.CompareLStr(sScript, "#RAND", "#RAND".Length))
                         {
                             Script.QuestInfo[nQuestIdx].nRandRage = HUtil32.Str_ToInt(s44, 0);
                         }
                         continue;
                     }
-                    if (s34.StartsWith("["))
+                    if (sScript.StartsWith("["))
                     {
                         n6C = 10;
                         if (Script == null)
@@ -2124,18 +1694,18 @@ namespace GameSvr
                             Script = LoadScriptFile_MakeNewScript(NPC);
                             Script.nQuest = n70;
                         }
-                        if (s34.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
+                        if (sScript.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
                         {
                             n6C = 20;
                             continue;
                         }
-                        s34 = HUtil32.ArrestStringEx(s34, "[", "]", ref slabName);
+                        sScript = HUtil32.ArrestStringEx(sScript, "[", "]", ref slabName);
                         SayingRecord = new TSayingRecord
                         {
                             ProcedureList = new List<TSayingProcedure>(),
                             sLabel = slabName
                         };
-                        s34 = HUtil32.GetValidStrCap(s34, ref slabName, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref slabName, new[] { " ", "\t" });
                         if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                         {
                             SayingRecord.boExtJmp = true;
@@ -2156,9 +1726,9 @@ namespace GameSvr
                     }
                     if (Script != null && SayingRecord != null)
                     {
-                        if (n6C >= 10 && n6C < 20 && s34[0] == '#')
+                        if (n6C >= 10 && n6C < 20 && sScript[0] == '#')
                         {
-                            if (s34.Equals("#IF", StringComparison.OrdinalIgnoreCase))
+                            if (sScript.Equals("#IF", StringComparison.OrdinalIgnoreCase))
                             {
                                 if (SayingProcedure.ConditionList.Count > 0 || SayingProcedure.sSayMsg != "")
                                 {
@@ -2167,19 +1737,19 @@ namespace GameSvr
                                 }
                                 n6C = 11;
                             }
-                            if (s34.Equals("#ACT", StringComparison.OrdinalIgnoreCase))
+                            if (sScript.Equals("#ACT", StringComparison.OrdinalIgnoreCase))
                             {
                                 n6C = 12;
                             }
-                            if (s34.Equals("#SAY", StringComparison.OrdinalIgnoreCase))
+                            if (sScript.Equals("#SAY", StringComparison.OrdinalIgnoreCase))
                             {
                                 n6C = 10;
                             }
-                            if (s34.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase))
+                            if (sScript.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase))
                             {
                                 n6C = 13;
                             }
-                            if (s34.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase))
+                            if (sScript.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase))
                             {
                                 n6C = 14;
                             }
@@ -2187,57 +1757,57 @@ namespace GameSvr
                         }
                         if (n6C == 10 && SayingProcedure != null)
                         {
-                            SayingProcedure.sSayMsg = SayingProcedure.sSayMsg + s34;
+                            SayingProcedure.sSayMsg += sScript;
                         }
                         if (n6C == 11)
                         {
                             QuestConditionInfo = new TQuestConditionInfo();
-                            if (LoadScriptFile_QuestCondition(s34.Trim(), QuestConditionInfo))
+                            if (LoadScriptFile_QuestCondition(sScript.Trim(), QuestConditionInfo))
                             {
                                 SayingProcedure.ConditionList.Add(QuestConditionInfo);
                             }
                             else
                             {
                                 QuestConditionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 12)
                         {
                             QuestActionInfo = new TQuestActionInfo();
-                            if (LoadScriptFile_QuestAction(s34.Trim(), QuestActionInfo))
+                            if (LoadScriptFile_QuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ActionList.Add(QuestActionInfo);
                             }
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 13)
                         {
                             QuestActionInfo = new TQuestActionInfo();
-                            if (LoadScriptFile_QuestAction(s34.Trim(), QuestActionInfo))
+                            if (LoadScriptFile_QuestAction(sScript.Trim(), QuestActionInfo))
                             {
                                 SayingProcedure.ElseActionList.Add(QuestActionInfo);
                             }
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + s34 + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 14)
                         {
-                            SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + s34;
+                            SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + sScript;
                         }
                     }
                     if (n6C == 20 && boFlag)
                     {
-                        s34 = HUtil32.GetValidStrCap(s34, ref s48, new[] { " ", "\t" });
-                        s34 = HUtil32.GetValidStrCap(s34, ref s4C, new[] { " ", "\t" });
-                        s34 = HUtil32.GetValidStrCap(s34, ref s50, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s48, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s4C, new[] { " ", "\t" });
+                        sScript = HUtil32.GetValidStrCap(sScript, ref s50, new[] { " ", "\t" });
                         if (s48 != "" && s50 != "")
                         {
                             if (s48[0] == '\"')
