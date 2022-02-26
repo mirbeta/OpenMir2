@@ -63,17 +63,14 @@ namespace GameSvr
             return result;
         }
 
-        private void LoadCallScript(string sScritpFileName,StringList LoadList)
+        private void LoadCallScript(StringList LoadList)
         {
             var s1C = string.Empty;
             StringList callList = new StringList();
-            for (int i = 0; i < LoadList.Count; i++)
-            {
-                callList[i] = LoadList[i];
-            }
             for (var i = 0; i < LoadList.Count; i++)
             {
                 var sLine = LoadList[i].Trim();
+                callList.AppendText(sLine);
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL", "#CALL".Length))
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, '[', ']', ref s1C);
@@ -1441,19 +1438,11 @@ namespace GameSvr
             if (File.Exists(sScritpFileName))
             {
                 LoadList = new StringList();
-                try
-                {
-                    LoadList.LoadFromFile(sScritpFileName);
-                }
-                catch
-                {
-                    LoadList = null;
-                    return -1;
-                }
+                LoadList.LoadFromFile(sScritpFileName);
                 var callCount = 0;
                 while (true)
                 {
-                    LoadCallScript(sScritpFileName, LoadList);
+                    LoadCallScript(LoadList);
                     callCount++;
                     if (callCount >= 101)
                     {
