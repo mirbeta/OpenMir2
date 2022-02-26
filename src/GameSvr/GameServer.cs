@@ -23,6 +23,7 @@ namespace GameSvr
             M2Share.RunSocket.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
+            M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
         }
 
         public void Stop()

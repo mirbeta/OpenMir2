@@ -1617,7 +1617,6 @@ namespace SystemModule
         public const int SKILL_59 = 59;
 
         public const int LA_UNDEAD = 1;
-        public const string sENCYPTSCRIPTFLAG = "不知道是什么字符串";
         public const string sSTATUS_FAIL = "+FAIL/";
         public const string sSTATUS_GOOD = "+GOOD/";
 

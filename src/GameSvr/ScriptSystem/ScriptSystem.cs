@@ -26,7 +26,6 @@ namespace GameSvr
             {
                 var LoadStrList = new StringList();
                 LoadStrList.LoadFromFile(sFileName);
-                DeCodeStringList(LoadStrList);
                 sLabel = '[' + sLabel + ']';
                 var bo1D = false;
                 for (var i = 0; i < LoadStrList.Count; i++)
@@ -64,56 +63,58 @@ namespace GameSvr
             return result;
         }
 
-        private void LoadScriptFile_LoadScriptcall(StringList LoadList)
+        private void LoadCallScript(string sScritpFileName,StringList LoadList)
         {
-            var s14 = string.Empty;
-            var s18 = string.Empty;
             var s1C = string.Empty;
-            var s20 = string.Empty;
-            var s34 = string.Empty;
+            StringList callList = new StringList();
+            for (int i = 0; i < LoadList.Count; i++)
+            {
+                callList[i] = LoadList[i];
+            }
             for (var i = 0; i < LoadList.Count; i++)
             {
-                s14 = LoadList[i].Trim();
-                if (!string.IsNullOrEmpty(s14) && s14[0] == '#' && HUtil32.CompareLStr(s14, "#CALL", "#CALL".Length))
+                var sLine = LoadList[i].Trim();
+                if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL", "#CALL".Length))
                 {
-                    s14 = HUtil32.ArrestStringEx(s14, '[', ']', ref s1C);
-                    s20 = s1C.Trim();
+                    sLine = HUtil32.ArrestStringEx(sLine, '[', ']', ref s1C);
+                    var sCallScriptFile = s1C.Trim();
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        if (s20.StartsWith("\\\\"))
+                        if (sCallScriptFile.StartsWith("\\\\"))
                         {
-                            s20 = s20.Remove(0, 2);
+                            sCallScriptFile = sCallScriptFile.Remove(0, 2);
                         }
-                        else if (s20.StartsWith("\\"))
+                        else if (sCallScriptFile.StartsWith("\\"))
                         {
-                            s20 = s20.Remove(0, 1);
+                            sCallScriptFile = sCallScriptFile.Remove(0, 1);
                         }
                     }
                     else
                     {
-                        if (s20.StartsWith("\\\\"))
+                        if (sCallScriptFile.StartsWith("\\\\"))
                         {
-                            s20 = s20.Remove(0, 2);
+                            sCallScriptFile = sCallScriptFile.Remove(0, 2);
                         }
-                        else if (s20.StartsWith("\\"))
+                        else if (sCallScriptFile.StartsWith("\\"))
                         {
-                            s20 = s20.Remove(0, 1);
+                            sCallScriptFile = sCallScriptFile.Remove(0, 1);
                         }
-                        s20 = s20.Replace("\\", "/");
+                        sCallScriptFile = sCallScriptFile.Replace("\\", "/");
                     }
-                    s18 = s14.Trim();
-                    s34 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", s20);
-                    if (LoadScriptFile_LoadCallScript(s34, s18, LoadList))
+                    var s18 = sLine.Trim();
+                    var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", sCallScriptFile);
+                    if (LoadScriptFile_LoadCallScript(sFileName, s18, callList))
                     {
-                        LoadList[i] = "#ACT";
-                        LoadList.InsertText(i + 1, "goto " + s18);
+                        callList[i] = "#ACT";
+                        callList.InsertText(i + 1, "goto " + s18);
                     }
                     else
                     {
-                        M2Share.MainOutMessage("script error, load fail: " + s20 + s18);
+                        M2Share.MainOutMessage("script error, load fail: " + sCallScriptFile + s18);
                     }
                 }
             }
+            LoadList = callList;
         }
 
         private string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
@@ -1408,7 +1409,6 @@ namespace GameSvr
 
         public int LoadScriptFile(TNormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
-            int I;
             var s30 = string.Empty;
             var sScript = string.Empty;
             var s38 = string.Empty;
@@ -1435,7 +1435,6 @@ namespace GameSvr
             List<TQuestActionInfo> GotoList = null;
             List<TQuestActionInfo> DelayGotoList = null;
             List<TQuestActionInfo> PlayDiceList = null;
-            var result = -1;
             var n6C = 0;
             var n70 = 0;
             var sScritpFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
@@ -1445,19 +1444,18 @@ namespace GameSvr
                 try
                 {
                     LoadList.LoadFromFile(sScritpFileName);
-                    DeCodeStringList(LoadList);
                 }
                 catch
                 {
                     LoadList = null;
-                    return result;
+                    return -1;
                 }
-                I = 0;
+                var callCount = 0;
                 while (true)
                 {
-                    LoadScriptFile_LoadScriptcall(LoadList);
-                    I++;
-                    if (I >= 101)
+                    LoadCallScript(sScritpFileName, LoadList);
+                    callCount++;
+                    if (callCount >= 101)
                     {
                         break;
                     }
@@ -1480,10 +1478,10 @@ namespace GameSvr
                 DefineList.Add(DefineInfo);
                 int n24;
                 // 常量处理
-                for (I = 0; I < LoadList.Count; I++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sScript = LoadList[I].Trim();
-                    if (sScript != "")
+                    sScript = LoadList[i].Trim();
+                    if (!string.IsNullOrEmpty(sScript))
                     {
                         if (sScript[0] == '[')
                         {
@@ -1514,7 +1512,7 @@ namespace GameSvr
                                             s58 = sScript.Substring(0, n24);
                                             s5C = sScript.Substring(DefineInfo.sName.Length + n24);
                                             sScript = s58 + DefineInfo.sText + s5C;
-                                            LoadList[I] = sScript;
+                                            LoadList[i] = sScript;
                                             n1C++;
                                             if (n1C >= 10)
                                             {
@@ -1527,17 +1525,16 @@ namespace GameSvr
                         }
                     }
                 }
-                // 常量处理
                 // 释放常量定义内容
-                for (I = 0; I < DefineList.Count; I++)
+                for (var i = 0; i < DefineList.Count; i++)
                 {
-                    DefineList[I] = null;
+                    DefineList[i] = null;
                 }
                 DefineList.Clear();
                 var nQuestIdx = 0;
-                for (I = 0; I < LoadList.Count; I++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sScript = LoadList[I].Trim();
+                    sScript = LoadList[i].Trim();
                     if (sScript == "" || sScript[0] == ';' || sScript[0] == '/')
                     {
                         continue;
@@ -1718,7 +1715,7 @@ namespace GameSvr
                         SayingRecord.ProcedureList.Add(SayingProcedure);
                         if (Script.RecordList.ContainsKey(SayingRecord.sLabel))
                         {
-                            SayingRecord.sLabel = SayingRecord.sLabel + M2Share.RandomNumber.GetRandomNumber(1, 200);
+                            SayingRecord.sLabel += M2Share.RandomNumber.GetRandomNumber(1, 200);
                         }
                         Script.RecordList.Add(SayingRecord.sLabel, SayingRecord);
                         ScriptNameList.Add(SayingRecord.sLabel);
@@ -1769,7 +1766,7 @@ namespace GameSvr
                             else
                             {
                                 QuestConditionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 12)
@@ -1782,7 +1779,7 @@ namespace GameSvr
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 13)
@@ -1795,7 +1792,7 @@ namespace GameSvr
                             else
                             {
                                 QuestActionInfo = null;
-                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + I + " 行: " + sScritpFileName);
+                                M2Share.ErrorMessage("脚本错误: " + sScript + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
                         if (n6C == 14)
@@ -1836,26 +1833,7 @@ namespace GameSvr
             {
                 M2Share.MainOutMessage("Script file not found: " + sScritpFileName);
             }
-            result = 1;
-            return result;
-        }
-
-        private void DeCodeStringList(StringList StringList)
-        {
-            string sLine;
-            if (StringList.Count > 0)
-            {
-                sLine = StringList[0];
-                if (!HUtil32.CompareLStr(sLine, Grobal2.sENCYPTSCRIPTFLAG, Grobal2.sENCYPTSCRIPTFLAG.Length))
-                {
-                    return;
-                }
-            }
-            for (var i = 0; i < StringList.Count; i++)
-            {
-                sLine = StringList[i];
-                StringList[i] = sLine;
-            }
+            return 1;
         }
         
         /// <summary>

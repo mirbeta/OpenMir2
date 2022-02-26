@@ -41,6 +41,7 @@ namespace GameSvr
             _mirApp.InitializeServer();
             M2Share.MainOutMessage("读取配置信息完成...");
             _mirApp.StartServer(cancellationToken);
+            _mirApp.Start();
             return base.StartAsync(cancellationToken);
         }
 

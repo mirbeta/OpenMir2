@@ -151,15 +151,14 @@ namespace GameSvr
 
         public void Initialize()
         {
-            TMonGenInfo MonGen;
             M2Share.MainOutMessage("正在初始化NPC脚本...");
             MerchantInitialize();
             NpCinitialize();
             M2Share.MainOutMessage("初始化NPC脚本完成...");
             for (var i = 0; i < m_MonGenList.Count; i++)
             {
-                MonGen = m_MonGenList[i];
-                if (MonGen != null) MonGen.nRace = GetMonRace(MonGen.sMonName);
+                if (m_MonGenList[i] != null) 
+                    m_MonGenList[i].nRace = GetMonRace(m_MonGenList[i].sMonName);
             }
         }
 
