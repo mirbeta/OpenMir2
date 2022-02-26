@@ -5,7 +5,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Configs
 {
-    public class ServerConfig:IniFile
+    public class ServerConfig : IniFile
     {
         public ServerConfig(string fileName) : base(fileName)
         {
@@ -2376,6 +2376,6 @@ namespace GameSvr.Configs
             WriteInteger("Setup", "WinLotteryLevel5", M2Share.g_Config.nWinLotteryLevel5);
             WriteInteger("Setup", "WinLotteryLevel6", M2Share.g_Config.nWinLotteryLevel6);
         }
-        
+
     }
 }

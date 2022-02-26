@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using SystemModule.Common;
 
 namespace GameSvr
@@ -68,7 +69,7 @@ namespace GameSvr
         public static TStartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
         public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
-        public static Dictionary<string,int> MiniMapList = null;
+        public static Dictionary<string, int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
         public static IList<TDealOffInfo> sSellOffItemList = null;
         /// <summary>
@@ -1416,7 +1417,7 @@ namespace GameSvr
         /// </summary>
         public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
         public const int nSCHECKDEATHPLAYMON = 257;
-        
+
         // =================================================================
         /// <summary>
         /// 元宝寄售:出售物品
@@ -1682,17 +1683,21 @@ namespace GameSvr
 
         static M2Share()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major >= 11)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 sConfigPath = "/Volumes/Data/MirServer/Mir200";
             }
-            else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
             {
                 sConfigPath = "/opt/MirServer/Mir200";
             }
-            else
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 sConfigPath = "D:/MirServer/Mir200";
+            }
+            else
+            {
+                throw new Exception("不受支持的操作系统");
             }
             ServerConf = new ServerConfig(Path.Combine(M2Share.sConfigPath, M2Share.sConfigFileName));
             CommandConf = new GameCmdConfig(Path.Combine(M2Share.sConfigPath, M2Share.sCommandFileName));
@@ -2291,7 +2296,7 @@ namespace GameSvr
         public static IList<TMakeItem> GetMakeItemInfo(string sItemName)
         {
             if (g_MakeItemList.TryGetValue(sItemName, out var itemList))
-            { 
+            {
                 return itemList;
             }
             return null;
@@ -2710,7 +2715,7 @@ namespace GameSvr
 
         public static bool SaveDisableMakeItem()
         {
-            string  sFileName = g_Config.sEnvirDir + "DisableMakeItem.txt";
+            string sFileName = g_Config.sEnvirDir + "DisableMakeItem.txt";
             //g_DisableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -2822,7 +2827,7 @@ namespace GameSvr
 
         public static bool SaveEnableMakeItem()
         {
-            string  sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
+            string sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
             //g_EnableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -2860,7 +2865,7 @@ namespace GameSvr
 
         public static bool SaveDisableMoveMap()
         {
-            string  sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
+            string sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
             //g_DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
@@ -2927,7 +2932,7 @@ namespace GameSvr
 
         public static int GetUseItemIdx(string sName)
         {
-            int result= -1;
+            int result = -1;
             if (string.Compare(sName, U_DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 0;
@@ -3189,7 +3194,7 @@ namespace GameSvr
 
         public static bool InDisableTakeOffList(int nItemIdx)
         {
-            bool result= false;
+            bool result = false;
             //for (I = 0; I < g_DisableTakeOffList.Count; I ++ )
             //{
             //    if (((int)g_DisableTakeOffList.Values[I]) == nItemIdx - 1)
@@ -3264,7 +3269,7 @@ namespace GameSvr
 
         public static byte GetGameLogItemNameList(string sItemName)
         {
-            byte result= 0;
+            byte result = 0;
             //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
             //{
             //    if ((sItemName).CompareTo((g_GameLogItemNameList[I])) == 0)
@@ -3326,7 +3331,7 @@ namespace GameSvr
 
         public static bool GetDenyIPAddrList(string sIPaddr)
         {
-            bool result= false;
+            bool result = false;
             try
             {
                 for (var i = 0; i < g_DenyIPAddrList.Count; i++)
@@ -3484,7 +3489,7 @@ namespace GameSvr
 
         public static bool GetDenyAccountList(string sAccount)
         {
-            bool result= false;
+            bool result = false;
             try
             {
                 for (var I = 0; I < g_DenyAccountList.Count; I++)
