@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 
@@ -15,7 +16,7 @@ namespace GameSvr
             {
                 sPatch = M2Share.sNpc_def;
             }
-            return LoadScriptFile(NPC, sPatch, sScritpName, false);;
+            return LoadScriptFile(NPC, sPatch, sScritpName, false); ;
         }
 
         private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
@@ -63,10 +64,48 @@ namespace GameSvr
             return result;
         }
 
-        private void LoadCallScript(StringList LoadList)
+        private int GetScriptCallCount(string sText)
+        {
+            var match = Regex.Matches(sText, "#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
+            return match.Count;
+        }
+
+        private string GetCallScriptPath(string path)
+        {
+            var sCallScriptFile = path;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                if (sCallScriptFile.StartsWith("\\\\"))
+                {
+                    sCallScriptFile = sCallScriptFile.Remove(0, 2);
+                }
+                else if (sCallScriptFile.StartsWith("\\"))
+                {
+                    sCallScriptFile = sCallScriptFile.Remove(0, 1);
+                }
+            }
+            else
+            {
+                if (sCallScriptFile.StartsWith("\\\\"))
+                {
+                    sCallScriptFile = sCallScriptFile.Remove(0, 2);
+                }
+                else if (sCallScriptFile.StartsWith("\\"))
+                {
+                    sCallScriptFile = sCallScriptFile.Remove(0, 1);
+                }
+                sCallScriptFile = sCallScriptFile.Replace("\\", "/");
+            }
+
+            return sCallScriptFile;
+        }
+
+        private Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
+
+        private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
             var s1C = string.Empty;
-            StringList callList = new StringList();
+            var callList = new StringList();
             for (var i = 0; i < LoadList.Count; i++)
             {
                 var sLine = LoadList[i].Trim();
@@ -74,36 +113,23 @@ namespace GameSvr
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL", "#CALL".Length))
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, '[', ']', ref s1C);
-                    var sCallScriptFile = s1C.Trim();
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        if (sCallScriptFile.StartsWith("\\\\"))
-                        {
-                            sCallScriptFile = sCallScriptFile.Remove(0, 2);
-                        }
-                        else if (sCallScriptFile.StartsWith("\\"))
-                        {
-                            sCallScriptFile = sCallScriptFile.Remove(0, 1);
-                        }
-                    }
-                    else
-                    {
-                        if (sCallScriptFile.StartsWith("\\\\"))
-                        {
-                            sCallScriptFile = sCallScriptFile.Remove(0, 2);
-                        }
-                        else if (sCallScriptFile.StartsWith("\\"))
-                        {
-                            sCallScriptFile = sCallScriptFile.Remove(0, 1);
-                        }
-                        sCallScriptFile = sCallScriptFile.Replace("\\", "/");
-                    }
+                    var sCallScriptFile = GetCallScriptPath(s1C.Trim());
                     var s18 = sLine.Trim();
                     var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", sCallScriptFile);
+                    if (sCallScriptDict.ContainsKey(sFileName))
+                    {
+                        callList[i] = "#ACT";
+                        callList.InsertText(i + 1, "goto " + s18);
+                        break;
+                    }
                     if (LoadScriptFile_LoadCallScript(sFileName, s18, callList))
                     {
                         callList[i] = "#ACT";
                         callList.InsertText(i + 1, "goto " + s18);
+                        if (!sCallScriptDict.ContainsKey(s18))
+                        {
+                            sCallScriptDict.Add(sFileName, s18);
+                        }
                     }
                     else
                     {
@@ -112,6 +138,12 @@ namespace GameSvr
                 }
             }
             LoadList = callList;
+            var callCount = GetScriptCallCount(LoadList.Text);
+            while (callCount <= 0)
+            {
+                success = true;
+                break;
+            }
         }
 
         private string LoadScriptFile_LoadDefineInfo(StringList LoadList, IList<TDefineInfo> List)
@@ -201,47 +233,47 @@ namespace GameSvr
             switch (sCmd)
             {
                 case M2Share.sCHECK:
-                {
-                    nCMDCode = M2Share.nCHECK;
-                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nCHECK;
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        goto L001;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    goto L001;
-                }
                 case M2Share.sCHECKOPEN:
-                {
-                    nCMDCode = M2Share.nCHECKOPEN;
-                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nCHECKOPEN;
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        goto L001;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    goto L001;
-                }
                 case M2Share.sCHECKUNIT:
-                {
-                    nCMDCode = M2Share.nCHECKUNIT;
-                    HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nCHECKUNIT;
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        goto L001;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    goto L001;
-                }
                 case M2Share.sCHECKPKPOINT:
                     nCMDCode = M2Share.nCHECKPKPOINT;
                     goto L001;
@@ -717,8 +749,8 @@ namespace GameSvr
                 nCMDCode = M2Share.nSCHECKDEATHPLAYMON;
                 goto L001;
             }
-            // ------------------------------
-            L001:
+        // ------------------------------
+        L001:
             if (nCMDCode > 0)
             {
                 QuestConditionInfo.nCmdCode = nCMDCode;
@@ -804,76 +836,76 @@ namespace GameSvr
             switch (sCmd)
             {
                 case M2Share.sSET:
-                {
-                    nCMDCode = M2Share.nSET;
-                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nSET;
+                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        break;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    break;
-                }
                 case M2Share.sRESET:
-                {
-                    nCMDCode = M2Share.nRESET;
-                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nRESET;
+                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        break;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    break;
-                }
                 case M2Share.sSETOPEN:
-                {
-                    nCMDCode = M2Share.nSETOPEN;
-                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nSETOPEN;
+                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        break;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    break;
-                }
                 case M2Share.sSETUNIT:
-                {
-                    nCMDCode = M2Share.nSETUNIT;
-                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
+                        nCMDCode = M2Share.nSETUNIT;
+                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
+                        break;
                     }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
-                    break;
-                }
                 case M2Share.sRESETUNIT:
-                {
-                    nCMDCode = M2Share.nRESETUNIT;
-                    HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
-                    if (!HUtil32.IsStringNumber(sParam1))
                     {
-                        nCMDCode = 0;
-                    }
-                    if (!HUtil32.IsStringNumber(sParam2))
-                    {
-                        nCMDCode = 0;
-                    }
+                        nCMDCode = M2Share.nRESETUNIT;
+                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        if (!HUtil32.IsStringNumber(sParam1))
+                        {
+                            nCMDCode = 0;
+                        }
+                        if (!HUtil32.IsStringNumber(sParam2))
+                        {
+                            nCMDCode = 0;
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case M2Share.sTAKE:
                     nCMDCode = M2Share.nTAKE;
                     goto L001;
@@ -1332,7 +1364,7 @@ namespace GameSvr
                     nCMDCode = M2Share.nCLEARDELAYGOTO;
                     goto L001;
             }
-            L001:
+        L001:
             if (nCMDCode > 0)
             {
                 QuestActionInfo.nCmdCode = nCMDCode;
@@ -1404,6 +1436,14 @@ namespace GameSvr
             return path;
         }
 
+        /// <summary>
+        /// 加载NPC脚本
+        /// </summary>
+        /// <param name="NPC"></param>
+        /// <param name="sPatch"></param>
+        /// <param name="sScritpName"></param>
+        /// <param name="boFlag"></param>
+        /// <returns></returns>
         public int LoadScriptFile(TNormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
             var s30 = string.Empty;
@@ -1437,18 +1477,15 @@ namespace GameSvr
             var sScritpFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
             if (File.Exists(sScritpFileName))
             {
+                sCallScriptDict.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sScritpFileName);
-                var callCount = 0;
-                while (true)
+                var success = false;
+                while (!success)
                 {
-                    LoadCallScript(LoadList);
-                    callCount++;
-                    if (callCount >= 101)
-                    {
-                        break;
-                    }
+                    LoadCallScript(ref LoadList, ref success);
                 }
+
                 DefineList = new List<TDefineInfo>();
                 ScriptNameList = new List<string>();
                 GotoList = new List<TQuestActionInfo>();
@@ -1824,7 +1861,7 @@ namespace GameSvr
             }
             return 1;
         }
-        
+
         /// <summary>
         /// 初始化脚本标签数组
         /// </summary>

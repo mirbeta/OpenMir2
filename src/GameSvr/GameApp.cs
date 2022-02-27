@@ -142,7 +142,6 @@ namespace GameSvr
                     InterMsgClient.Instance.ConnectMsgServer();
                     M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
                 }
-                StartEngine();
             }
             catch (Exception e)
             {
@@ -150,7 +149,7 @@ namespace GameSvr
             }
         }
         
-        private void StartEngine()
+        public void StartEngine()
         {
             try
             {
@@ -187,6 +186,7 @@ namespace GameSvr
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
