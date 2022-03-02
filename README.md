@@ -1,34 +1,16 @@
-热血传奇（Legend of Mir 2）全套服务端，还原热血传奇1.76（富甲天下）所有功能，支持联机和多人娱乐。  
+Legend of Mir 2 complete server, support classic 1.76 (reloaded) function, support online and multiplayer entertainment.
 
-本项目参考网络Delphi代码，可配合热血传奇原始1.76源码进行游戏体验，如有任何疑问或问题欢迎提交Issues.  
+This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
 
-**程序代码源于网络,仅供一些有兴趣的程序员本机测试,研究之用.目的是为了研究程序的结构,运行原理,作为学习的例子.**
+### Startup sequence and project description. 
+1. DBSvr (database service, responsible for data storage). 
+2. LoginSvr (account login service, responsible for account registration, login, server selection, etc.). 
+3. GameSvr (game data engine, responsible for game data processing interaction, spell casting, walking, etc.). 
+4. GameGate (game gateway, responsible for sending player data to the game engine, the data interacted by players are all in this service and then forwarded to the data engine for processing). 
+5. SelGate (role gateway, responsible for role query, new creation, deletion, etc., and finally processed by DBSvr, the service will not be able to obtain character data after the client logs in if the service is not activated). 
+6. LoginGate (login gateway, responsible for forwarding the login data to LoginSvr for processing, the service does not start the client and cannot connect to the game). 
 
-### 主要功能点
-1.支持多机负载，无缝切换到从节点体验游戏，随时切换其他游戏区体验跨服PK、攻城游戏.    
-2.兼容1.76传奇数据结构.    
-3.新的脚本系统.  
-4.支持大规模玩家在线  
-5.支持Windows、Linux、MacOS 服务端部署  
-6.支持机器人玩家(自动寻找目标进行攻击、施法等操作)  
-7.支持MySQL数据库,更多数据库后续支持    
-
-### 更新计划
-1.~~加入机器人玩家~~  
-2.配置文件支持（计划中）  
-3.~~优化和减少项目中的指针代码操作~~  
-4.提高程序稳定性和重构核心代码（测试中）
-
-
-### 启动顺序和项目说明
-1.DBSvr(数据库服务，负责数据存储)  
-2.LoginSvr(账号登陆服务,负责账号注册、登陆、选择服务器等)  
-3.GameSvr(游戏数据引擎,负责游戏数据处理 互动、施法、走路等)  
-4.GameGate(游戏网关,负责玩家数据发送给游戏引擎,玩家交互的数据均在此服务然后转发给数据引擎进行处理)  
-5.SelGate(角色网关,负责角色查询、新建、删除等,最终由DBSvr进行处理，该服务不启动客户端登陆后将无法获得人物数据)  
-6.LoginGate(登陆网关,负责将登陆数据转发给LoginSvr进行处理,该服务不启动客户端无法链接游戏)
-
-### 游戏截图
+### images
 ![](./Images/1632561445962.jpg)
 ![](./Images/1632561467819.jpg)
 ![](./Images/1632561488323.jpg)
