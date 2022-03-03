@@ -774,7 +774,7 @@ namespace GameSvr
                                     NPC = new TGuildOfficial();
                                     break;
                                 case 2:
-                                    NPC = new TCastleOfficial();
+                                    NPC = new CastleOfficial();
                                     break;
                             }
                             if (NPC != null)

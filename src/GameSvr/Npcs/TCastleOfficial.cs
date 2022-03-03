@@ -7,9 +7,9 @@ namespace GameSvr
     /// 沙城NPC类
     /// 沙城管理人员如：沙城管理员 沙城老人
     /// </summary>
-    public class TCastleOfficial : TMerchant
+    public class CastleOfficial : TMerchant
     {
-        public TCastleOfficial() : base()
+        public CastleOfficial() : base()
         {
             
         }
@@ -30,7 +30,6 @@ namespace GameSvr
         protected override void GetVariableText(TPlayObject PlayObject, ref string sMsg, string sVariable)
         {
             var sText = string.Empty;
-            TCastleDoor CastleDoor;
             base.GetVariableText(PlayObject, ref sMsg, sVariable);
             if (this.m_Castle == null)
             {
@@ -49,12 +48,12 @@ namespace GameSvr
                     break;
                 case "$CASTLEDOORSTATE":
                 {
-                    CastleDoor = (TCastleDoor)this.m_Castle.m_MainDoor.BaseObject;
-                    if (CastleDoor.m_boDeath)
+                    var castleDoor = (TCastleDoor)this.m_Castle.m_MainDoor.BaseObject;
+                    if (castleDoor.m_boDeath)
                     {
                         sText = "destroyed";
                     }
-                    else if (CastleDoor.m_boOpened)
+                    else if (castleDoor.m_boOpened)
                     {
                         sText = "opened";
                     }

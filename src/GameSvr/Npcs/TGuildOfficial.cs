@@ -108,6 +108,12 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 请求建立行会
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="sGuildName"></param>
+        /// <returns></returns>
         private int ReQuestBuildGuild(TPlayObject PlayObject, string sGuildName)
         {
             var result = 0;
@@ -168,9 +174,14 @@ namespace GameSvr
             return result;
         }
 
-        private int ReQuestGuildWar(TPlayObject PlayObject, string sGuildName)
+        /// <summary>
+        /// 请求行会战争
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="sGuildName"></param>
+        /// <returns></returns>
+        private void ReQuestGuildWar(TPlayObject PlayObject, string sGuildName)
         {
-            int result;
             if (M2Share.GuildManager.FindGuild(sGuildName) != null)
             {
                 if (PlayObject.m_nGold >= M2Share.g_Config.nGuildWarPrice)
@@ -188,8 +199,6 @@ namespace GameSvr
             {
                 PlayObject.SysMsg("行会 " + sGuildName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
-            result = 1;
-            return result;
         }
 
         private void DoNate(TPlayObject PlayObject)

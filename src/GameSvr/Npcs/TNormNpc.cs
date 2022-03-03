@@ -1482,20 +1482,19 @@ namespace GameSvr
                 HUtil32.ArrestStringEx(sVariable, '(', ')', ref s14);
                 boFoundVar = false;
                 if (M2Share.g_DynamicVarList.TryGetValue(s14, out DynamicVar))
-                    for (var i = 0; i < M2Share.g_DynamicVarList.Count; i++)
+                {
+                    switch (DynamicVar.VarType)
                     {
-                        switch (DynamicVar.VarType)
-                        {
-                            case TVarType.Integer:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
-                                boFoundVar = true;
-                                break;
-                            case TVarType.String:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
-                                boFoundVar = true;
-                                break;
-                        }
+                        case TVarType.Integer:
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                            boFoundVar = true;
+                            break;
+                        case TVarType.String:
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                            boFoundVar = true;
+                            break;
                     }
+                }
                 if (!boFoundVar)
                 {
                     sMsg = "??";
@@ -1630,7 +1629,7 @@ namespace GameSvr
             PlayObject.m_nScriptGotoCount = 0;
             if ((!string.IsNullOrEmpty(sData)) && (sData[0] == '@'))// 处理脚本命令 @back 返回上级标签内容
             {
-                HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
                     if (sLabel != M2Share.sBACK)
