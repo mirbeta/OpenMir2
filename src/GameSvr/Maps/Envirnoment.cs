@@ -7,7 +7,7 @@ using SystemModule.Common;
 
 namespace GameSvr
 {
-    public class TEnvirnoment
+    public class Envirnoment
     {
         public int MonCount => m_nMonCount;
         public int HumCount => m_nHumCount;
@@ -34,7 +34,7 @@ namespace GameSvr
         private int m_nHumCount = 0;
         public IList<PointInfo> m_PointList;
 
-        public TEnvirnoment()
+        public Envirnoment()
         {
             samePool = ArrayPool<TMapCellinfo>.Shared;
             sMapName = string.Empty;
@@ -48,7 +48,7 @@ namespace GameSvr
             m_dwWhisperTick = 0;
         }
 
-        ~TEnvirnoment()
+        ~Envirnoment()
         {
             samePool.Return(MapCellArray);
         }
@@ -76,7 +76,7 @@ namespace GameSvr
             object result = null;
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
-            TMapItem MapItem;
+            MapItem MapItem;
             int nGoldCount;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMap";
             try
@@ -92,17 +92,17 @@ namespace GameSvr
                     {
                         if (btType == Grobal2.OS_ITEMOBJECT)
                         {
-                            if (((TMapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
+                            if (((MapItem)pRemoveObject).Name == Grobal2.sSTRING_GOLDNAME)
                             {
                                 for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                                 {
                                     OSObject = MapCellInfo.ObjList[i];
                                     if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                                     {
-                                        MapItem = (TMapItem)MapCellInfo.ObjList[i].CellObj;
+                                        MapItem = (MapItem)MapCellInfo.ObjList[i].CellObj;
                                         if (MapItem.Name == Grobal2.sSTRING_GOLDNAME)
                                         {
-                                            nGoldCount = MapItem.Count + ((TMapItem)pRemoveObject).Count;
+                                            nGoldCount = MapItem.Count + ((MapItem)pRemoveObject).Count;
                                             if (nGoldCount <= 2000)
                                             {
                                                 MapItem.Count = nGoldCount;
@@ -527,12 +527,12 @@ namespace GameSvr
             return result;
         }
 
-        public TMapItem GetItem(int nX, int nY)
+        public MapItem GetItem(int nX, int nY)
         {
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            TMapItem result = null;
+            MapItem result = null;
             bo2C = false;
             if (GetMapCellInfo(nX, nY, ref MapCellInfo) && MapCellInfo.Valid)
             {
@@ -544,7 +544,7 @@ namespace GameSvr
                         OSObject = MapCellInfo.ObjList[i];
                         if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
                         {
-                            result = (TMapItem)OSObject.CellObj;
+                            result = (MapItem)OSObject.CellObj;
                             return result;
                         }
                         if (OSObject.btType == Grobal2.OS_GATEOBJECT)

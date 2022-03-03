@@ -50,7 +50,7 @@ namespace GameSvr
             return result;
         }
 
-        public TUserCastle InCastleWarArea(TEnvirnoment Envir, int nX, int nY)
+        public TUserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
@@ -96,7 +96,7 @@ namespace GameSvr
         }
 
         // 城堡皇宫所在地图
-        public TUserCastle IsCastlePalaceEnvir(TEnvirnoment Envir)
+        public TUserCastle IsCastlePalaceEnvir(Envirnoment Envir)
         {
             TUserCastle result = null;
             TUserCastle Castle = null;
@@ -113,7 +113,7 @@ namespace GameSvr
         }
 
         // 城堡所在地图
-        public TUserCastle IsCastleEnvir(TEnvirnoment Envir)
+        public TUserCastle IsCastleEnvir(Envirnoment Envir)
         {
             TUserCastle result = null;
             TUserCastle Castle = null;

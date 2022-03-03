@@ -22,7 +22,7 @@ namespace GameSvr
                 var sMapName = @Params.Length > 0 ? @Params[0] : "";
                 var sX = @Params.Length > 1 ? @Params[1] : "";
                 var sY = @Params.Length > 2 ? @Params[2] : "";
-                TEnvirnoment Envir = null;
+                Envirnoment Envir = null;
                 if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
                 {
                     PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);

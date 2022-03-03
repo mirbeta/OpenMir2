@@ -10,7 +10,7 @@ namespace GameSvr
         /// </summary>
         public int Id;
         public int nVisibleFlag = 0;
-        public TEnvirnoment m_Envir = null;
+        public Envirnoment m_Envir = null;
         public int m_nX = 0;
         public int m_nY = 0;
         public int m_nEventType = 0;
@@ -44,7 +44,7 @@ namespace GameSvr
         /// </summary>
         public bool m_boActive = false;
 
-        public TEvent(TEnvirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
+        public TEvent(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
         {
             Id = HUtil32.Sequence();
             m_dwOpenStartTick = HUtil32.GetTickCount();

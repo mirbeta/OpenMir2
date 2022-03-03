@@ -192,7 +192,7 @@ namespace GameSvr
 
         private void MakeStoneMines()
         {
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             var stoneList = new List<TStoneMineEvent>();
             var mineMapList = M2Share.g_MapManager.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
@@ -256,10 +256,10 @@ namespace GameSvr
             M2Share.RunSocket = new GameGate();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
-            M2Share.g_MapManager = new TMapManager();
+            M2Share.g_MapManager = new MapManager();
             M2Share.ItemUnit = new ItemUnit();
             M2Share.MagicManager = new MagicManager();
-            M2Share.NoticeManager = new TNoticeManager();
+            M2Share.NoticeManager = new NoticeManager();
             M2Share.GuildManager = new GuildManager();
             M2Share.EventManager = new EventManager();
             M2Share.CastleManager = new CastleManager();

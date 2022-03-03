@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GameSvr
 {
-    public class TMonGenInfo
+    public class MonGenInfo
     {
         public string sMapName;
         public int nX;

@@ -282,7 +282,7 @@ namespace GameSvr
         public int m_dwShowHPInterval = 0;
         public bool bo2F0 = false;
         public int m_dwDupObjTick = 0;
-        public TEnvirnoment m_PEnvir = null;
+        public Envirnoment m_PEnvir = null;
         public bool m_boGhost = false;
         public int m_dwGhostTick = 0;
         public bool m_boDeath = false;
@@ -290,7 +290,7 @@ namespace GameSvr
         public bool m_boInvisible=false;
         public bool m_boCanReAlive = false;
         public int m_dwReAliveTick = 0;
-        public TMonGenInfo m_pMonGen = null;
+        public MonGenInfo m_pMonGen = null;
 
         /// <summary>
         /// 怪物所拿的武器
@@ -869,8 +869,8 @@ namespace GameSvr
             int dx = 0;
             int dy = 0;
             int idura;
-            TMapItem MapItem;
-            TMapItem pr;
+            MapItem MapItem;
+            MapItem pr;
             string logcap;
             if (UserItem == null)
             {
@@ -889,7 +889,7 @@ namespace GameSvr
                     }
                     UserItem.Dura = (ushort)idura;
                 }
-                MapItem = new TMapItem
+                MapItem = new MapItem
                 {
                     UserItem = UserItem,
                     Name = ItmUnit.GetItemName(UserItem),// 取自定义物品名称
@@ -903,10 +903,10 @@ namespace GameSvr
                 MapItem.Reserved = 0;
                 MapItem.Count = 1;
                 MapItem.OfBaseObject = ItemOfCreat;
-                MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
+                MapItem.CanPickUpTick = HUtil32.GetTickCount();
                 MapItem.DropBaseObject = DropCreat;
                 GetDropPosition(m_nCurrX, m_nCurrY, nScatterRange, ref dx, ref dy);
-                pr = (TMapItem)m_PEnvir.AddToMap(dx, dy, Grobal2.OS_ITEMOBJECT, MapItem);
+                pr = (MapItem)m_PEnvir.AddToMap(dx, dy, Grobal2.OS_ITEMOBJECT, MapItem);
                 if (pr == MapItem)
                 {
                     SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dx, dy, MapItem.Name);
@@ -1240,17 +1240,17 @@ namespace GameSvr
             int nY = 0;
             string s20;
             int DropWide = HUtil32._MIN(M2Share.g_Config.nDropItemRage, 7);
-            TMapItem MapItem = new TMapItem
+            MapItem MapItem = new MapItem
             {
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
                 OfBaseObject = GoldOfCreat,
-                dwCanPickUpTick = HUtil32.GetTickCount(),
+                CanPickUpTick = HUtil32.GetTickCount(),
                 DropBaseObject = DropGoldCreat
             };
             GetDropPosition(m_nCurrX, m_nCurrY, 3, ref nX, ref nY);
-            TMapItem MapItemA = (TMapItem)m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+            MapItem MapItemA = (MapItem)m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
             if (MapItemA != null)
             {
                 if (MapItemA != MapItem)
@@ -1699,7 +1699,7 @@ namespace GameSvr
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
             bool result;
-            TEnvirnoment Envir = m_PEnvir;
+            Envirnoment Envir = m_PEnvir;
             nX = m_nCurrX;
             nY = m_nCurrY;
             switch (m_btDirection)
@@ -1761,7 +1761,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool SpaceMove_GetRandXY(TEnvirnoment Envir, ref short nX, ref short nY)
+        private bool SpaceMove_GetRandXY(Envirnoment Envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
@@ -1829,12 +1829,12 @@ namespace GameSvr
             int nOldY;
             bool bo21;
             TPlayObject PlayObject;
-            TEnvirnoment Envir = M2Share.g_MapManager.FindMap(sMap);
+            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMap);
             if (Envir != null)
             {
                 if (M2Share.nServerIndex == Envir.nServerIndex)
                 {
-                    TEnvirnoment OldEnvir = m_PEnvir;
+                    Envirnoment OldEnvir = m_PEnvir;
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
                     bo21 = false;
@@ -1944,7 +1944,7 @@ namespace GameSvr
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            TEnvirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
             if (Envir != null)
             {
                 if (Envir.wHeight < 150)
@@ -3127,7 +3127,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool GetMapBaseObjects(TEnvirnoment tEnvir, int nX, int nY, int nRage, IList<TBaseObject> rList)
+        public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<TBaseObject> rList)
         {
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
@@ -3598,11 +3598,11 @@ namespace GameSvr
         /// <param name="nDMapX"></param>
         /// <param name="nDMapY"></param>
         /// <returns></returns>
-        private bool EnterAnotherMap(TEnvirnoment Envir, int nDMapX, int nDMapY)
+        private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
             TMapCellinfo MapCellInfo = null;
-            TEnvirnoment OldEnvir;
+            Envirnoment OldEnvir;
             int nOldX;
             int nOldY;
             TUserCastle Castle;
@@ -4370,7 +4370,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool InSafeZone(TEnvirnoment Envir, int nX, int nY)
+        public bool InSafeZone(Envirnoment Envir, int nX, int nY)
         {
             int nSafeX;
             int nSafeY;
@@ -4708,7 +4708,7 @@ namespace GameSvr
         public bool GetBackPosition(ref short nX, ref short nY)
         {
             bool result;
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             Envir = m_PEnvir;
             nX = m_nCurrX;
             nY = m_nCurrY;
@@ -5494,7 +5494,7 @@ namespace GameSvr
             return null;
         }
 
-        public bool ReAliveEx(TMonGenInfo MonGen)
+        public bool ReAliveEx(MonGenInfo MonGen)
         {
             m_WAbil = m_Abil;
             m_nGold = 0;

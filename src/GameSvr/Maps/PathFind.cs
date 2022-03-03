@@ -581,7 +581,7 @@ namespace GameSvr
             }
         }
         private PointInfo[] FPath;
-        private TEnvirnoment FEnvir = null;
+        private Envirnoment FEnvir = null;
         public int BeginX = 0;
         public int BeginY = 0;
         public int EndX = 0;
@@ -612,7 +612,7 @@ namespace GameSvr
             return result;
         }
 
-        public PointInfo[] FindPath(TEnvirnoment Envir, short StartX, short StartY, short StopX, short StopY, bool Run)
+        public PointInfo[] FindPath(Envirnoment Envir, short StartX, short StartY, short StopX, short StopY, bool Run)
         {
             PointInfo[] result;
             this.Width = Envir.wWidth;

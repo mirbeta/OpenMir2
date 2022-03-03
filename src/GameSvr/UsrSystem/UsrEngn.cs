@@ -36,7 +36,7 @@ namespace GameSvr
         public IList<TMagic> m_MagicList;
         public IList<TMerchant> m_MerchantList;
         private ArrayList m_MonFreeList;
-        public IList<TMonGenInfo> m_MonGenList;
+        public IList<MonGenInfo> m_MonGenList;
         private int m_nCurrMonGen;
         private IList<TPlayObject> m_NewHumanList;
         /// <summary>
@@ -104,7 +104,7 @@ namespace GameSvr
             nNpcPosition = 0;
             StdItemList = new List<GameItem>();
             MonsterList = new List<TMonInfo>();
-            m_MonGenList = new List<TMonGenInfo>();
+            m_MonGenList = new List<MonGenInfo>();
             m_MonFreeList = new ArrayList();
             m_MagicList = new List<TMagic>();
             m_AdminList = new List<TAdminInfo>();
@@ -277,7 +277,7 @@ namespace GameSvr
             TPlayObject result = null;
             TPlayObject PlayObject = null;
             TAbility Abil = null;
-            TEnvirnoment Envir = null;
+            Envirnoment Envir = null;
             int nC;
             TSwitchDataInfo SwitchDataInfo = null;
             TUserCastle Castle = null;
@@ -985,7 +985,7 @@ namespace GameSvr
             {
                 var boProcessLimit = false;
                 var dwCurrentTick = HUtil32.GetTickCount();
-                TMonGenInfo MonGen = null;
+                MonGenInfo MonGen = null;
                 // 刷新怪物开始
                 if ((HUtil32.GetTickCount() - dwRegenMonstersTick) > M2Share.g_Config.dwRegenMonstersTime)
                 {
@@ -1133,7 +1133,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="MonGen"></param>
         /// <returns></returns>
-        private int GetGenMonCount(TMonGenInfo MonGen)
+        private int GetGenMonCount(MonGenInfo MonGen)
         {
             var nCount = 0;
             TBaseObject BaseObject;
@@ -1317,7 +1317,7 @@ namespace GameSvr
             return false;
         }
 
-        public void CryCry(short wIdent, TEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
+        public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
             TPlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
@@ -1867,7 +1867,7 @@ namespace GameSvr
         /// 在指定时间内创建完对象，则返加TRUE，如果超过指定时间则返回FALSE
         /// </summary>
         /// <returns></returns>
-        private bool RegenMonsters(TMonGenInfo MonGen, int nCount)
+        private bool RegenMonsters(MonGenInfo MonGen, int nCount)
         {
             TBaseObject Cert;
             const string sExceptionMsg = "[Exception] TUserEngine::RegenMonsters";
@@ -2032,7 +2032,7 @@ namespace GameSvr
         /// 获取指定地图范围对象数
         /// </summary>
         /// <returns></returns>
-        public int GetMapOfRangeHumanCount(TEnvirnoment Envir, int nX, int nY, int nRange)
+        public int GetMapOfRangeHumanCount(Envirnoment Envir, int nX, int nY, int nRange)
         {
             var result = 0;
             TPlayObject PlayObject;
@@ -2367,7 +2367,7 @@ namespace GameSvr
             }
         }
 
-        public bool OpenDoor(TEnvirnoment Envir, int nX, int nY)
+        public bool OpenDoor(Envirnoment Envir, int nX, int nY)
         {
             var result = false;
             var door = Envir.GetDoor(nX, nY);
@@ -2381,7 +2381,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool CloseDoor(TEnvirnoment Envir, TDoorInfo Door)
+        private bool CloseDoor(Envirnoment Envir, TDoorInfo Door)
         {
             var result = false;
             if (Door != null && Door.Status.boOpened)
@@ -2393,7 +2393,7 @@ namespace GameSvr
             return result;
         }
 
-        private void SendDoorStatus(TEnvirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
+        private void SendDoorStatus(Envirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
             int nA, string sStr)
         {
             TMapCellinfo MapCellInfo = null;
@@ -2428,7 +2428,7 @@ namespace GameSvr
 
         private void ProcessMapDoor()
         {
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             TDoorInfo Door;
             var dorrList = M2Share.g_MapManager.GetDoorMapList();
             for (var i = 0; i < dorrList.Count; i++)
@@ -2501,7 +2501,7 @@ namespace GameSvr
             return result;
         }
 
-        public int GetMapRangeMonster(TEnvirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> List)
+        public int GetMapRangeMonster(Envirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> List)
         {
             var result = 0;
             if (Envir == null) return result;
@@ -2529,7 +2529,7 @@ namespace GameSvr
             M2Share.UserEngine.m_MerchantList.Add(Merchant);
         }
 
-        public int GetMerchantList(TEnvirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
+        public int GetMerchantList(Envirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
             TMerchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
@@ -2541,7 +2541,7 @@ namespace GameSvr
             return TmpList.Count;
         }
 
-        public int GetNpcList(TEnvirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
+        public int GetNpcList(Envirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
             TNormNpc Npc;
             for (var i = 0; i < QuestNPCList.Count; i++)
@@ -2578,9 +2578,9 @@ namespace GameSvr
             }
         }
 
-        public int GetMapMonster(TEnvirnoment Envir, IList<TBaseObject> List)
+        public int GetMapMonster(Envirnoment Envir, IList<TBaseObject> List)
         {
-            TMonGenInfo MonGen;
+            MonGenInfo MonGen;
             TBaseObject BaseObject;
             var result = 0;
             if (Envir == null) return result;
@@ -2631,7 +2631,7 @@ namespace GameSvr
             return result;
         }
 
-        public int GetMapRageHuman(TEnvirnoment Envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> List)
+        public int GetMapRageHuman(Envirnoment Envir, int nRageX, int nRageY, int nRage, IList<TBaseObject> List)
         {
             var result = 0;
             TPlayObject PlayObject;
@@ -2703,7 +2703,7 @@ namespace GameSvr
 
         public void ClearMonSayMsg()
         {
-            TMonGenInfo MonGen;
+            MonGenInfo MonGen;
             TBaseObject MonBaseObject;
             for (var i = 0; i < m_MonGenList.Count; i++)
             {

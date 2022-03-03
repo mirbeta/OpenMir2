@@ -473,7 +473,7 @@ namespace GameSvr
             TMapCellinfo MapCellInfo = null;
             TOSObject OSObject;
             TBaseObject BaseObject;
-            TMapItem MapItem;
+            MapItem MapItem;
             TEvent MapEvent;
             TVisibleBaseObject VisibleBaseObject;
             TVisibleMapItem VisibleMapItem;
@@ -581,9 +581,9 @@ namespace GameSvr
                                                 {
                                                     if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                                     {
-                                                        if ((TMapItem)OSObject.CellObj != null)
+                                                        if ((MapItem)OSObject.CellObj != null)
                                                         {
-                                                            Dispose((TMapItem)OSObject.CellObj);
+                                                            Dispose((MapItem)OSObject.CellObj);
                                                         }
                                                         if (OSObject != null)
                                                         {
@@ -598,11 +598,11 @@ namespace GameSvr
                                                         }
                                                         continue;
                                                     }
-                                                    MapItem = (TMapItem)OSObject.CellObj;
+                                                    MapItem = (MapItem)OSObject.CellObj;
                                                     UpdateVisibleItem(n18, n1C, MapItem);
                                                     if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                                     {
-                                                        if (HUtil32.GetTickCount() - MapItem.dwCanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
+                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.g_Config.dwFloorItemCanPickUpTime)
                                                         {
                                                             MapItem.OfBaseObject = null;
                                                             MapItem.DropBaseObject = null;

@@ -400,7 +400,7 @@ namespace GameSvr
             int Min = 0;
             int Sec = 0;
             int MSec = 0;
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             GameItem StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
             {
@@ -1733,7 +1733,7 @@ namespace GameSvr
             string s34 = string.Empty;
             string s44 = string.Empty;
             string s48 = string.Empty;
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             IList<TBaseObject> List58;
             TPlayObject User;
             var n18 = 0;

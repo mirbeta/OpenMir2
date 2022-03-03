@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Threading;
 using SystemModule;
 
@@ -99,7 +100,7 @@ namespace GameSvr
         private void OutMessage(string Msg, MessageType messageType = MessageType.Success, ConsoleColor consoleColor = ConsoleColor.Black)
         {
             Console.ForegroundColor = consoleColor;
-            Console.WriteLine('[' + DateTime.Now.ToString() + "] " + Msg);
+            Console.WriteLine('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + Msg);
             Console.ResetColor();
         }
     }

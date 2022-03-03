@@ -57,7 +57,7 @@ namespace GameSvr
             {
                 return result;
             }
-            if ((HUtil32.GetTickCount() - mapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
+            if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
             {
                 mapItem.OfBaseObject = null;
             }
@@ -329,7 +329,7 @@ namespace GameSvr
         internal virtual void SendSocket(TDefaultMessage defMsg, string sMsg)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
-            TDefaultMessage? sendDefMsg = defMsg;
+            TDefaultMessage sendDefMsg = defMsg;
             if (m_boOffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
                 return;
@@ -1431,7 +1431,7 @@ namespace GameSvr
 
         private void ShowMapInfo(string sMap, string sX, string sY)
         {
-            TEnvirnoment Map;
+            Envirnoment Map;
             TMapCellinfo MapCellInfo = null;
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
