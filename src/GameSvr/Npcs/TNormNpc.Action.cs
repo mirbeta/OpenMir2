@@ -74,7 +74,7 @@ namespace GameSvr
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if ((String.Compare(DealOffInfo.sDealCharName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
+                                if ((string.Compare(DealOffInfo.sDealCharName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
                                 {
                                     for (var j = 0; j < 9; j++)
                                     {
@@ -86,14 +86,14 @@ namespace GameSvr
                                         if ((StdItem == null))
                                         {
                                             // 是金刚石
-                                            if (!bo12 && (DealOffInfo.UseItems[j].MakeIndex > 0) && (DealOffInfo.UseItems[j].wIndex == UInt16.MaxValue) && (DealOffInfo.UseItems[j].Dura == UInt16.MaxValue) && (DealOffInfo.UseItems[j].DuraMax == UInt16.MaxValue))
+                                            if (!bo12 && (DealOffInfo.UseItems[j].MakeIndex > 0) && (DealOffInfo.UseItems[j].wIndex == ushort.MaxValue) && (DealOffInfo.UseItems[j].Dura == ushort.MaxValue) && (DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue))
                                             {
                                                 TClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
-                                                _wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
-                                                _wvar1.Item.DuraMax = Int16.MaxValue;// 客户端金刚石特征
-                                                _wvar1.Item.Looks = UInt16.MaxValue;// 不显示图片
+                                                _wvar1.Dura = ushort.MaxValue;// 客户端金刚石特征
+                                                _wvar1.Item.DuraMax = short.MaxValue;// 客户端金刚石特征
+                                                _wvar1.Item.Looks = ushort.MaxValue;// 不显示图片
                                                 bo12 = true;
                                             }
                                             else
@@ -205,7 +205,7 @@ namespace GameSvr
                                         if (StdItem == null)
                                         {
                                             // 是金刚石
-                                            if (!bo12 && (DealOffInfo.UseItems[k].MakeIndex > 0) && (DealOffInfo.UseItems[k].wIndex == Int16.MaxValue) && (DealOffInfo.UseItems[k].Dura == Int16.MaxValue) && (DealOffInfo.UseItems[k].DuraMax == Int16.MaxValue))
+                                            if (!bo12 && (DealOffInfo.UseItems[k].MakeIndex > 0) && (DealOffInfo.UseItems[k].wIndex == short.MaxValue) && (DealOffInfo.UseItems[k].Dura == short.MaxValue) && (DealOffInfo.UseItems[k].DuraMax == short.MaxValue))
                                             {
                                                 TClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
@@ -351,7 +351,7 @@ namespace GameSvr
                 sLineText = LoadList[i].Trim();
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
-                if (String.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sHumName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
                     boFound = true;
@@ -403,7 +403,7 @@ namespace GameSvr
 
         private void ActionOfAutoAddGameGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
-            if (String.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (nPoint > 0 && nTime > 0)
                 {
@@ -414,7 +414,7 @@ namespace GameSvr
                     return;
                 }
             }
-            if (String.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_boIncGameGold = false;
                 return;
@@ -470,7 +470,7 @@ namespace GameSvr
 
         private void ActionOfAutoSubGameGold(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo, int nPoint, int nTime)
         {
-            if (String.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if ((nPoint > 0) && (nTime > 0))
                 {
@@ -481,7 +481,7 @@ namespace GameSvr
                     return;
                 }
             }
-            if (String.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.m_boDecGameGold = false;
                 return;
@@ -1026,7 +1026,7 @@ namespace GameSvr
                 return;
             }
             // sREQUESTMARRY
-            if (String.Compare(QuestActionInfo.sParam1, "REQUESTMARRY", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "REQUESTMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                 {
@@ -1047,11 +1047,11 @@ namespace GameSvr
                 return;
             }
             // sRESPONSEMARRY
-            if (String.Compare(QuestActionInfo.sParam1, "RESPONSEMARRY", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "RESPONSEMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if ((PlayObject.m_btGender == ObjBase.gWoMan) && (PoseHuman.m_btGender == ObjBase.gMan))
                 {
-                    if (String.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                         {
@@ -1131,7 +1131,7 @@ namespace GameSvr
                 }
                 return;
             }
-            if (String.Compare(QuestActionInfo.sParam1, "REQUESTMASTER", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "REQUESTMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (PlayObject.m_boStartMaster && PoseHuman.m_boStartMaster)
                 {
@@ -1142,9 +1142,9 @@ namespace GameSvr
                 }
                 return;
             }
-            if (String.Compare(QuestActionInfo.sParam1, "RESPONSEMASTER", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "RESPONSEMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (String.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if ((PlayObject.m_PoseBaseObject == PoseHuman) && (PoseHuman.m_PoseBaseObject == PlayObject))
                     {
@@ -1392,7 +1392,7 @@ namespace GameSvr
                 }
             }
             // sREQUESTUNMARRY
-            if (String.Compare(QuestActionInfo.sParam1, "REQUESTUNMARRY", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "REQUESTUNMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (QuestActionInfo.sParam2 == "")
                 {
@@ -1427,7 +1427,7 @@ namespace GameSvr
                 else
                 {
                     // 强行离婚
-                    if (String.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         M2Share.UserEngine.SendBroadCastMsg('[' + this.m_sCharName + "]: " + "我宣布" + PlayObject.m_sCharName + ' ' + '与' + PlayObject.m_sDearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", TMsgType.t_Say);
                         PoseHuman = M2Share.UserEngine.GetPlayObject(PlayObject.m_sDearName);
@@ -1470,7 +1470,7 @@ namespace GameSvr
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
             bool boFoundVar;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
@@ -1503,24 +1503,21 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            IniFile = new ConfFile(sFileName);
-            for (var i = 0; i < DynamicVarList.Count; i++)
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                DynamicVar = DynamicVarList[i];
-                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
+                IniFile = new ConfFile(sFileName);
+                IniFile.Load();
+                if (DynamicVar.VarType == TVarType.Integer)
                 {
-                    switch (DynamicVar.VarType)
-                    {
-                        case TVarType.Integer:
-                            IniFile.WriteInteger(sName, DynamicVar.sName, DynamicVar.nInternet);
-                            break;
-                        case TVarType.String:
-                            IniFile.WriteString(sName, DynamicVar.sName, DynamicVar.sString);
-                            break;
-                    }
-                    boFoundVar = true;
-                    break;
+                    DynamicVarList[sVarName].nInternet = DynamicVar.nInternet;
+                    IniFile.WriteInteger(sName, DynamicVar.sName, DynamicVar.nInternet);
                 }
+                else
+                {
+                    DynamicVarList[sVarName].sString = DynamicVar.sString;
+                    IniFile.WriteString(sName, DynamicVar.sName, DynamicVar.sString);
+                }
+                boFoundVar = true;
             }
             if (!boFoundVar)
             {
@@ -1547,7 +1544,7 @@ namespace GameSvr
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
             string sVarValue2 = string.Empty;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             string sType = QuestActionInfo.sParam1;//类型
@@ -1569,23 +1566,18 @@ namespace GameSvr
                     sVarValue = sVarValue2;
                     if (PlayObject.m_DynamicVarList.Count > 0)
                     {
-                        for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
+                        if (PlayObject.m_DynamicVarList.TryGetValue(sVarValue, out DynamicVar))
                         {
-                            DynamicVar = PlayObject.m_DynamicVarList[i];
-                            if (String.Compare(DynamicVar.sName, sVarValue, StringComparison.OrdinalIgnoreCase) == 0)
+                            switch (DynamicVar.VarType)
                             {
-                                switch (DynamicVar.VarType)
-                                {
-                                    case TVarType.Integer:
-                                        nVarValue = DynamicVar.nInternet;
-                                        break;
-                                    case TVarType.String:
-                                        sVarValue = DynamicVar.sString;
-                                        break;
-                                }
-                                boFoundVar = true;
-                                break;
+                                case TVarType.Integer:
+                                    nVarValue = DynamicVar.nInternet;
+                                    break;
+                                case TVarType.String:
+                                    sVarValue = DynamicVar.sString;
+                                    break;
                             }
+                            boFoundVar = true;
                         }
                     }
                     if (!boFoundVar)
@@ -1612,50 +1604,46 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_CALCVAR);
                 return;
             }
-            for (var i = 0; i < DynamicVarList.Count; i++)
+
+            if (PlayObject.m_DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                DynamicVar = DynamicVarList[i];
-                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
+                switch (DynamicVar.VarType)
                 {
-                    switch (DynamicVar.VarType)
-                    {
-                        case TVarType.Integer:
-                            switch (cMethod)
-                            {
-                                case '=':
-                                    DynamicVar.nInternet = nVarValue;
-                                    break;
-                                case '+':
-                                    DynamicVar.nInternet = DynamicVar.nInternet + nVarValue;
-                                    break;
-                                case '-':
-                                    DynamicVar.nInternet = DynamicVar.nInternet - nVarValue;
-                                    break;
-                                case '*':
-                                    DynamicVar.nInternet = DynamicVar.nInternet * nVarValue;
-                                    break;
-                                case '/':
-                                    DynamicVar.nInternet = DynamicVar.nInternet / nVarValue;
-                                    break;
-                            }
-                            break;
-                        case TVarType.String:
-                            switch (cMethod)
-                            {
-                                case '=':
-                                    DynamicVar.sString = sVarValue;
-                                    break;
-                                case '+':
-                                    DynamicVar.sString = DynamicVar.sString + sVarValue;
-                                    break;
-                                case '-':
-                                    break;
-                            }
-                            break;
-                    }
-                    boFoundVar = true;
-                    break;
+                    case TVarType.Integer:
+                        switch (cMethod)
+                        {
+                            case '=':
+                                DynamicVar.nInternet = nVarValue;
+                                break;
+                            case '+':
+                                DynamicVar.nInternet = DynamicVar.nInternet + nVarValue;
+                                break;
+                            case '-':
+                                DynamicVar.nInternet = DynamicVar.nInternet - nVarValue;
+                                break;
+                            case '*':
+                                DynamicVar.nInternet = DynamicVar.nInternet * nVarValue;
+                                break;
+                            case '/':
+                                DynamicVar.nInternet = DynamicVar.nInternet / nVarValue;
+                                break;
+                        }
+                        break;
+                    case TVarType.String:
+                        switch (cMethod)
+                        {
+                            case '=':
+                                DynamicVar.sString = sVarValue;
+                                break;
+                            case '+':
+                                DynamicVar.sString = DynamicVar.sString + sVarValue;
+                                break;
+                            case '-':
+                                break;
+                        }
+                        break;
                 }
+                boFoundVar = true;
             }
             if (!boFoundVar)
             {
@@ -1876,14 +1864,18 @@ namespace GameSvr
             PlayObject.SysMsg(StdItem.Name + ": " + UserItem.Dura + '/' + UserItem.DuraMax + '-' + UserItem.btValue[0] + '/' + UserItem.btValue[1] + '/' + UserItem.btValue[2] + '/' + UserItem.btValue[3] + '/' + UserItem.btValue[4] + '/' + UserItem.btValue[5] + '/' + UserItem.btValue[6] + '/' + UserItem.btValue[7] + '/' + UserItem.btValue[8] + '/' + UserItem.btValue[9] + '/' + UserItem.btValue[10] + '/' + UserItem.btValue[11] + '/' + UserItem.btValue[12] + '/' + UserItem.btValue[13], TMsgColor.c_Blue, TMsgType.t_Hint);
         }
 
-        // 声明变量
-        // VAR 数据类型(Integer String) 类型(HUMAN GUILD GLOBAL) 变量值
+        /// <summary>
+        /// 声明变量
+        /// VAR 数据类型(Integer String) 类型(HUMAN GUILD GLOBAL) 变量值
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
         private void ActionOfVar(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar;
             bool boFoundVar;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             const string sVarFound = "变量{0}已存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam2;
@@ -1891,11 +1883,11 @@ namespace GameSvr
             var sVarValue = QuestActionInfo.sParam4;
             var nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
             var VarType = TVarType.None;
-            if (String.Compare((QuestActionInfo.sParam1), ("Integer"), StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare((QuestActionInfo.sParam1), ("Integer"), StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.Integer;
             }
-            if (String.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.String;
             }
@@ -1904,11 +1896,11 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            if (String.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.Integer;
             }
-            if (String.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.String;
             }
@@ -1930,17 +1922,13 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            for (var i = 0; i < DynamicVarList.Count; i++)
+            if (DynamicVarList.ContainsKey(sVarName))
             {
-                if (String.Compare(DynamicVarList[i].sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    boFoundVar = true;
-                    break;
-                }
+                boFoundVar = true;
             }
             if (!boFoundVar)
             {
-                DynamicVarList.Add(DynamicVar);
+                DynamicVarList.Add(sVarName, DynamicVar);
             }
             else
             {
@@ -1959,7 +1947,7 @@ namespace GameSvr
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
             bool boFoundVar;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
@@ -1992,23 +1980,38 @@ namespace GameSvr
                 ScriptActionError(PlayObject, format(sVarTypeError, sType), QuestActionInfo, M2Share.sSC_VAR);
                 return;
             }
-            IniFile = new ConfFile(sFileName);
-            for (var i = 0; i < DynamicVarList.Count; i++)
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                DynamicVar = DynamicVarList[i];
-                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.OrdinalIgnoreCase) == 0)
+                //IniFile = new ConfFile(sFileName);
+                //IniFile.Load();
+                /*switch (DynamicVar.VarType)
                 {
-                    switch (DynamicVar.VarType)
+                    case TVarType.Integer:
+                        DynamicVar.nInternet = IniFile.ReadInteger(sName, DynamicVar.sName, 0);
+                        break;
+                    case TVarType.String:
+                        DynamicVar.sString = IniFile.ReadString(sName, DynamicVar.sName, "");
+                        break;
+                }*/
+                boFoundVar = true;
+            }
+            else
+            {
+                IniFile = new ConfFile(sFileName);
+                IniFile.Load();
+                var str = IniFile.ReadString(sName, sVarName, "");
+                if (!string.IsNullOrEmpty(str))
+                {
+                    if (!DynamicVarList.ContainsKey(sVarName))
                     {
-                        case TVarType.Integer:
-                            DynamicVar.nInternet = IniFile.ReadInteger(sName, DynamicVar.sName, 0);
-                            break;
-                        case TVarType.String:
-                            DynamicVar.sString = IniFile.ReadString(sName, DynamicVar.sName, "");
-                            break;
+                        DynamicVarList.Add(sVarName, new TDynamicVar()
+                        {
+                            sName = sVarName,
+                            sString = str,
+                            VarType = TVarType.String
+                        });
                     }
                     boFoundVar = true;
-                    break;
                 }
             }
             if (!boFoundVar)
@@ -2672,8 +2675,7 @@ namespace GameSvr
                 {
                     nItemCount = 1;
                 }
-                // 12.28 改上一条
-                for (var I = 0; I < nItemCount; I++)
+                for (var i = 0; i < nItemCount; i++)
                 {
                     // nItemCount 为0时出死循环
                     if (PlayObject.IsEnoughBag())
@@ -3269,7 +3271,6 @@ namespace GameSvr
                 int nRandY = M2Share.RandomNumber.Random(nRange * 2 + 1) + (nMapY - nRange);
                 if (M2Share.UserEngine.RegenMonsterByName(sMapName, (short)nRandX, (short)nRandY, sMonName) == null)
                 {
-                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_MONGENEX);
                     break;
                 }
             }
@@ -3464,7 +3465,7 @@ namespace GameSvr
                 {
                     nCount = 1;
                 }
-                if (String.Compare((sItemName), (Grobal2.sSTRING_GOLDNAME), StringComparison.Ordinal) == 0)// 金币
+                if (string.Compare((sItemName), (Grobal2.sSTRING_GOLDNAME), StringComparison.Ordinal) == 0)// 金币
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {

@@ -1426,23 +1426,18 @@ namespace GameSvr
             {
                 HUtil32.ArrestStringEx(sVariable, '(', ')', ref s14);
                 boFoundVar = false;
-                for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
+                if (PlayObject.m_DynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
-                    DynamicVar = PlayObject.m_DynamicVarList[i];
-                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
+                    switch (DynamicVar.VarType)
                     {
-                        switch (DynamicVar.VarType)
-                        {
-                            case TVarType.Integer:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
-                                boFoundVar = true;
-                                break;
-                            case TVarType.String:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
-                                boFoundVar = true;
-                                break;
-                        }
-                        break;
+                        case TVarType.Integer:
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                            boFoundVar = true;
+                            break;
+                        case TVarType.String:
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                            boFoundVar = true;
+                            break;
                     }
                 }
                 if (!boFoundVar)
@@ -1459,9 +1454,8 @@ namespace GameSvr
                 }
                 HUtil32.ArrestStringEx(sVariable, '(', ')', ref s14);
                 boFoundVar = false;
-                for (var i = 0; i < PlayObject.m_MyGuild.m_DynamicVarList.Count; i++)
+                if (PlayObject.m_MyGuild.m_DynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
-                    DynamicVar = PlayObject.m_MyGuild.m_DynamicVarList[i];
                     if (String.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
@@ -1475,7 +1469,6 @@ namespace GameSvr
                                 boFoundVar = true;
                                 break;
                         }
-                        break;
                     }
                 }
                 if (!boFoundVar)
@@ -1488,10 +1481,8 @@ namespace GameSvr
             {
                 HUtil32.ArrestStringEx(sVariable, '(', ')', ref s14);
                 boFoundVar = false;
-                for (var i = 0; i < M2Share.g_DynamicVarList.Count; i++)
-                {
-                    DynamicVar = M2Share.g_DynamicVarList[i];
-                    if (String.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
+                if (M2Share.g_DynamicVarList.TryGetValue(s14, out DynamicVar))
+                    for (var i = 0; i < M2Share.g_DynamicVarList.Count; i++)
                     {
                         switch (DynamicVar.VarType)
                         {
@@ -1504,9 +1495,7 @@ namespace GameSvr
                                 boFoundVar = true;
                                 break;
                         }
-                        break;
                     }
-                }
                 if (!boFoundVar)
                 {
                     sMsg = "??";
@@ -1593,7 +1582,7 @@ namespace GameSvr
 
         public override void Run()
         {
-            if (this.m_Master != null)// 不允许召唤为宝宝
+            if (m_Master != null)// 不允许召唤为宝宝
             {
                 this.m_Master = null;
             }
@@ -1684,9 +1673,9 @@ namespace GameSvr
             this.m_Castle = M2Share.CastleManager.InCastleWarArea(this);
         }
 
-        private IList<TDynamicVar> GetDynamicVarList(TPlayObject PlayObject, string sType, ref string sName)
+        private Dictionary<string, TDynamicVar> GetDynamicVarList(TPlayObject PlayObject, string sType, ref string sName)
         {
-            IList<TDynamicVar> result = null;
+            Dictionary<string, TDynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
             {
                 result = PlayObject.m_DynamicVarList;

@@ -11,7 +11,7 @@ namespace SystemModule.Common
     public class ConfFile
     {
         private string fileName;
-        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>();
+        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
 
         private bool largeCommentFlag = false;
 
@@ -196,7 +196,7 @@ namespace SystemModule.Common
             return "";
         }
 
-        protected bool Load()
+        public bool Load()
         {
             if (!File.Exists(this.FileName))
             {
@@ -248,7 +248,7 @@ namespace SystemModule.Common
                                 // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
                                 goto Label_02AE;
                             }
-                            curSec = new Dictionary<string, string>();
+                            curSec = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                             this.iniCahce.Add(sec, curSec);
                         }
                         else if (!isCurSecComment)
@@ -260,7 +260,7 @@ namespace SystemModule.Common
                             }
                             if (curSec == null)
                             {
-                                curSec = new Dictionary<string, string>();
+                                curSec = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                                 this.iniCahce.Add("", curSec);
                             }
                             string[] substr = this.SplitKeyVal(str);

@@ -271,7 +271,7 @@ namespace GameSvr
             int n3C = 0;
             string s01 = string.Empty;
             TDynamicVar DynamicVar;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             string sName = string.Empty;
             bool boVarFound;
             string sParam1 = string.Empty;
@@ -321,26 +321,18 @@ namespace GameSvr
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, M2Share.sINC);
                         return;
                     }
-                    if (DynamicVarList.Count > 0)
+                    if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
                     {
-                        for (var i = 0; i < DynamicVarList.Count; i++)
+                        switch (DynamicVar.VarType)
                         {
-                            DynamicVar = DynamicVarList[i];
-                            if (string.Compare(DynamicVar.sName, sParam3, StringComparison.CurrentCultureIgnoreCase) == 0)
-                            {
-                                switch (DynamicVar.VarType)
-                                {
-                                    case TVarType.Integer:
-                                        n3C = DynamicVar.nInternet;
-                                        break;
-                                    case TVarType.String:
-                                        s01 = DynamicVar.sString;
-                                        break;
-                                }
-                                boVarFound = true;
+                            case TVarType.Integer:
+                                n3C = DynamicVar.nInternet;
                                 break;
-                            }
+                            case TVarType.String:
+                                s01 = DynamicVar.sString;
+                                break;
                         }
+                        boVarFound = true;
                     }
                     if (!boVarFound)
                     {
@@ -520,33 +512,25 @@ namespace GameSvr
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, M2Share.sINC);
                         return;
                     }
-                    if (DynamicVarList.Count > 0)
+                    if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
                     {
-                        for (var i = 0; i < DynamicVarList.Count; i++)
+                        switch (DynamicVar.VarType)
                         {
-                            DynamicVar = DynamicVarList[i];
-                            if (string.Compare(DynamicVar.sName, sParam2, StringComparison.CurrentCultureIgnoreCase) == 0)
-                            {
-                                switch (DynamicVar.VarType)
+                            case TVarType.Integer:
+                                if (n3C > 1)
                                 {
-                                    case TVarType.Integer:
-                                        if (n3C > 1)
-                                        {
-                                            DynamicVar.nInternet += n3C;
-                                        }
-                                        else
-                                        {
-                                            DynamicVar.nInternet++;
-                                        }
-                                        break;
-                                    case TVarType.String:
-                                        DynamicVar.sString = DynamicVar.sString + s01;
-                                        break;
+                                    DynamicVar.nInternet += n3C;
                                 }
-                                boVarFound = true;
+                                else
+                                {
+                                    DynamicVar.nInternet++;
+                                }
                                 break;
-                            }
+                            case TVarType.String:
+                                DynamicVar.sString = DynamicVar.sString + s01;
+                                break;
                         }
+                        boVarFound = true;
                     }
                     if (!boVarFound)
                     {
@@ -733,7 +717,7 @@ namespace GameSvr
             int n14;
             int n3C = 0;
             TDynamicVar DynamicVar;
-            IList<TDynamicVar> DynamicVarList;
+            Dictionary<string, TDynamicVar> DynamicVarList;
             string sName = string.Empty;
             string s01 = string.Empty;
             string s02 = string.Empty;
@@ -786,26 +770,18 @@ namespace GameSvr
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, M2Share.sDEC);
                         return;
                     }
-                    if (DynamicVarList.Count > 0)
+                    if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
                     {
-                        for (var i = 0; i < DynamicVarList.Count; i++)
+                        switch (DynamicVar.VarType)
                         {
-                            DynamicVar = DynamicVarList[i];
-                            if (string.Compare(DynamicVar.sName, sParam3, StringComparison.CurrentCultureIgnoreCase) == 0)
-                            {
-                                switch (DynamicVar.VarType)
-                                {
-                                    case TVarType.Integer:
-                                        n3C = DynamicVar.nInternet;
-                                        break;
-                                    case TVarType.String:
-                                        s01 = DynamicVar.sString;
-                                        break;
-                                }
-                                boVarFound = true;
+                            case TVarType.Integer:
+                                n3C = DynamicVar.nInternet;
                                 break;
-                            }
+                            case TVarType.String:
+                                s01 = DynamicVar.sString;
+                                break;
                         }
+                        boVarFound = true;
                     }
                     if (!boVarFound)
                     {
@@ -994,36 +970,28 @@ namespace GameSvr
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, M2Share.sDEC);
                         return;
                     }
-                    if (DynamicVarList.Count > 0)
+                    if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
                     {
-                        for (var i = 0; i < DynamicVarList.Count; i++)
+                        switch (DynamicVar.VarType)
                         {
-                            DynamicVar = DynamicVarList[i];
-                            if (string.Compare(DynamicVar.sName, sParam2, StringComparison.CurrentCultureIgnoreCase) == 0)
-                            {
-                                switch (DynamicVar.VarType)
+                            case TVarType.Integer:
+                                if (n3C > 1)
                                 {
-                                    case TVarType.Integer:
-                                        if (n3C > 1)
-                                        {
-                                            DynamicVar.nInternet -= n3C;
-                                        }
-                                        else
-                                        {
-                                            DynamicVar.nInternet -= 1;
-                                        }
-                                        break;
-                                    case TVarType.String:
-                                        n10 = DynamicVar.sString.IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                                        s02 = DynamicVar.sString.Substring(0, n10 - 1);
-                                        s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
-                                        DynamicVar.sString = s02 + s03;
-                                        break;
+                                    DynamicVar.nInternet -= n3C;
                                 }
-                                boVarFound = true;
+                                else
+                                {
+                                    DynamicVar.nInternet -= 1;
+                                }
                                 break;
-                            }
+                            case TVarType.String:
+                                n10 = DynamicVar.sString.IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                                s02 = DynamicVar.sString.Substring(0, n10 - 1);
+                                s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
+                                DynamicVar.sString = s02 + s03;
+                                break;
                         }
+                        boVarFound = true;
                     }
                     if (!boVarFound)
                     {
@@ -1460,7 +1428,7 @@ namespace GameSvr
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C =PlayObject.m_nInteger[n14 - 500];
+                        n1C = PlayObject.m_nInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
@@ -1525,11 +1493,11 @@ namespace GameSvr
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nInteger[n14 - 500]= n18 * n1C;
+                    PlayObject.m_nInteger[n14 - 500] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.m_sString[n14 - 600]= (n18 * n1C).ToString();
+                    PlayObject.m_sString[n14 - 600] = (n18 * n1C).ToString();
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1541,7 +1509,7 @@ namespace GameSvr
                 }
                 else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量(100-499)
                 {
-                    M2Share.g_Config.GlobalAVal[n14 - 1100] =( n18 * n1C).ToString();
+                    M2Share.g_Config.GlobalAVal[n14 - 1100] = (n18 * n1C).ToString();
                 }
             }
         }
@@ -2456,59 +2424,63 @@ namespace GameSvr
                         return result;
                     }
             }
+            if (HUtil32.CompareLStr(sVariable, "$GLOBAL", 6))//  全局变量
+            {
+                HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
+                if (M2Share.g_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
+                {
+                    switch (DynamicVar.VarType)
+                    {
+                        case TVarType.Integer:
+                            nValue = DynamicVar.nInternet;
+                            nDataType = 1;
+                            result = true;
+                            return result;
+                        case TVarType.String:
+                            sValue = DynamicVar.sString;
+                            nDataType = 0;
+                            result = true;
+                            return result;
+                    }
+                }
+            }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN", 6))//  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.m_DynamicVarList.Count > 0)
+                if (PlayObject.m_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
                 {
-                    for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
+                    switch (DynamicVar.VarType)
                     {
-                        DynamicVar = PlayObject.m_DynamicVarList[i];
-                        if (string.Compare(DynamicVar.sName, sVarValue2, StringComparison.CurrentCultureIgnoreCase) == 0)
-                        {
-                            switch (DynamicVar.VarType)
-                            {
-                                case TVarType.Integer:
-                                    nValue = DynamicVar.nInternet;
-                                    nDataType = 1;
-                                    result = true;
-                                    return result;
-                                case TVarType.String:
-                                    sValue = DynamicVar.sString;
-                                    nDataType = 0;
-                                    result = true;
-                                    return result;
-                            }
-                            break;
-                        }
+                        case TVarType.Integer:
+                            nValue = DynamicVar.nInternet;
+                            nDataType = 1;
+                            result = true;
+                            return result;
+                        case TVarType.String:
+                            sValue = DynamicVar.sString;
+                            nDataType = 0;
+                            result = true;
+                            return result;
                     }
                 }
             }
             if (HUtil32.CompareLStr(sVariable, "$ACCOUNT", 8)) //  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.m_DynamicVarList.Count > 0)
+                if (PlayObject.m_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
                 {
-                    for (var i = 0; i < PlayObject.m_DynamicVarList.Count; i++)
+                    switch (DynamicVar.VarType)
                     {
-                        DynamicVar = PlayObject.m_DynamicVarList[i];
-                        if (string.Compare(DynamicVar.sName, sVarValue2, StringComparison.CurrentCultureIgnoreCase) == 0)
-                        {
-                            switch (DynamicVar.VarType)
-                            {
-                                case TVarType.Integer:
-                                    nValue = DynamicVar.nInternet;
-                                    nDataType = 1;
-                                    result = true;
-                                    return result;
-                                case TVarType.String:
-                                    sValue = DynamicVar.sString;
-                                    nDataType = 0;
-                                    result = true;
-                                    return result;
-                            }
-                            break;
-                        }
+                        case TVarType.Integer:
+                            nValue = DynamicVar.nInternet;
+                            nDataType = 1;
+                            result = true;
+                            return result;
+                        case TVarType.String:
+                            sValue = DynamicVar.sString;
+                            nDataType = 0;
+                            result = true;
+                            return result;
                     }
                 }
             }
@@ -2525,7 +2497,7 @@ namespace GameSvr
                 {
                     case 1:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
-                        {   
+                        {
                             PlayObject.m_nVal[n100] = nValue;
                             result = true;
                         }
@@ -2779,104 +2751,68 @@ namespace GameSvr
 
         private bool GetMovDataDynamicVarValue(TPlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
-            bool result;
             TDynamicVar DynamicVar;
             string sName = string.Empty;
-            bool boVarFound = false;
             sValue = "";
             nValue = -1;
             nDataType = -1;
-            IList<TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
-                result = false;
-                return result;
+                return false;
             }
-            if (DynamicVarList.Count > 0)
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                for (var i = 0; i < DynamicVarList.Count; i++)
+                switch (DynamicVar.VarType)
                 {
-                    DynamicVar = DynamicVarList[i];
-                    if (string.Compare(DynamicVar.sName, sVarName, StringComparison.CurrentCultureIgnoreCase) == 0)
-                    {
-                        switch (DynamicVar.VarType)
-                        {
-                            case TVarType.Integer:
-                                nValue = DynamicVar.nInternet;
-                                nDataType = 1;
-                                break;
-                            case TVarType.String:
-                                sValue = DynamicVar.sString;
-                                nDataType = 0;
-                                break;
-                        }
-                        boVarFound = true;
+                    case TVarType.Integer:
+                        nValue = DynamicVar.nInternet;
+                        nDataType = 1;
                         break;
-                    }
+                    case TVarType.String:
+                        sValue = DynamicVar.sString;
+                        nDataType = 0;
+                        break;
                 }
+                return true;
             }
-            if (!boVarFound)
-            {
-                result = false;
-            }
-            else
-            {
-                result = true;
-            }
-            return result;
+            return false;
         }
 
         private bool SetMovDataDynamicVarValue(TPlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
-            bool result;
             TDynamicVar DynamicVar;
             string sName = string.Empty;
             bool boVarFound = false;
-            IList<TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
-                result = false;
-                return result;
+                return false;
             }
-            if (DynamicVarList.Count > 0)
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                for (var i = 0; i < DynamicVarList.Count; i++)
+                if (nDataType == 1)
                 {
-                    DynamicVar = DynamicVarList[i];
-                    if (string.Compare(DynamicVar.sName, sVarName, StringComparison.CurrentCultureIgnoreCase) == 0)
+                    switch (DynamicVar.VarType)
                     {
-                        if (nDataType == 1)
-                        {
-                            switch (DynamicVar.VarType)
-                            {
-                                case TVarType.Integer:
-                                    DynamicVar.nInternet = nValue;
-                                    boVarFound = true;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (DynamicVar.VarType)
-                            {
-                                case TVarType.String:
-                                    DynamicVar.sString = sValue;
-                                    boVarFound = true;
-                                    break;
-                            }
-                        }
+                        case TVarType.Integer:
+                            DynamicVar.nInternet = nValue;
+                            boVarFound = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (DynamicVar.VarType)
+                    {
+                        case TVarType.String:
+                            DynamicVar.sString = sValue;
+                            boVarFound = true;
+                            break;
                     }
                 }
             }
-            if (!boVarFound)
-            {
-                result = false;
-            }
-            else
-            {
-                result = true;
-            }
-            return result;
+            return boVarFound;
         }
 
         private int GetMovDataType(TQuestActionInfo QuestActionInfo)

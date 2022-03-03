@@ -1989,48 +1989,43 @@ namespace GameSvr
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKVAR);
                 return result;
             }
-            for (var i = 0; i < DynamicVarList.Count; i++)
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
             {
-                DynamicVar = DynamicVarList[i];
-                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.Ordinal) == 0)
+                switch (DynamicVar.VarType)
                 {
-                    switch (DynamicVar.VarType)
-                    {
-                        case TVarType.Integer:
-                            switch (cMethod)
-                            {
-                                case '=':
-                                    if (DynamicVar.nInternet == nVarValue)
-                                    {
-                                        result = true;
-                                    }
-                                    break;
-                                case '>':
-                                    if (DynamicVar.nInternet > nVarValue)
-                                    {
-                                        result = true;
-                                    }
-                                    break;
-                                case '<':
-                                    if (DynamicVar.nInternet < nVarValue)
-                                    {
-                                        result = true;
-                                    }
-                                    break;
-                                default:
-                                    if (DynamicVar.nInternet >= nVarValue)
-                                    {
-                                        result = true;
-                                    }
-                                    break;
-                            }
-                            break;
-                        case TVarType.String:
-                            break;
-                    }
-                    boFoundVar = true;
-                    break;
+                    case TVarType.Integer:
+                        switch (cMethod)
+                        {
+                            case '=':
+                                if (DynamicVar.nInternet == nVarValue)
+                                {
+                                    result = true;
+                                }
+                                break;
+                            case '>':
+                                if (DynamicVar.nInternet > nVarValue)
+                                {
+                                    result = true;
+                                }
+                                break;
+                            case '<':
+                                if (DynamicVar.nInternet < nVarValue)
+                                {
+                                    result = true;
+                                }
+                                break;
+                            default:
+                                if (DynamicVar.nInternet >= nVarValue)
+                                {
+                                    result = true;
+                                }
+                                break;
+                        }
+                        break;
+                    case TVarType.String:
+                        break;
                 }
+                boFoundVar = true;
             }
             if (!boFoundVar)
             {
@@ -2574,14 +2569,7 @@ namespace GameSvr
             int n18 = 0;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))
             {
-                if (n14 <= n18)
-                {
-                    result = false;
-                }
-                else
-                {
-                    result = true;
-                }
+                result = n14 > n18;
             }
             else
             {
@@ -2593,14 +2581,7 @@ namespace GameSvr
                 {
                     n18 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
                 }
-                if (n14 > n18)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
+                result = n14 > n18;
             }
             return result;
         }
@@ -2612,14 +2593,7 @@ namespace GameSvr
             int n18 = 0;
             if (CheckVarNameNo(PlayObject,QuestConditionInfo, ref n14, ref n18))
             {
-                if (n14 >= n18)
-                {
-                    result = false;
-                }
-                else
-                {
-                    result = true;
-                }
+                result = n14 < n18;
             }
             else
             {
@@ -2631,14 +2605,7 @@ namespace GameSvr
                 {
                     n18 =HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
                 }
-                if (n14 < n18)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
+                result = n14 < n18;
             }
             return result;
         }
@@ -2652,18 +2619,10 @@ namespace GameSvr
             var s02 = string.Empty;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))// 比较数值
             {
-                if (n14 != n18)
-                {
-                    result = false;
-                }
-                else
-                {
-                    result = true;
-                }
+                result = n14 == n18;
             }
             else
             {
-                // 比较字符串
                 if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
                 {
                     s01 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);//  支持变量
@@ -2672,19 +2631,12 @@ namespace GameSvr
                 {
                     s02 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);//  支持变量
                 }
-                if ((s01).CompareTo((s02)) == 0)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
+                result = string.Compare(s01, s02, StringComparison.OrdinalIgnoreCase) == 0;
             }
             return result;
         }
 
-        public bool CheckVarNameNo(TPlayObject PlayObject, TQuestConditionInfo CheckQuestConditionInfo, ref int n140, ref int n180)
+        private bool CheckVarNameNo(TPlayObject PlayObject, TQuestConditionInfo CheckQuestConditionInfo, ref int n140, ref int n180)
         {
             bool result = false;
             string sParam1 = string.Empty;
@@ -2756,7 +2708,7 @@ namespace GameSvr
             return result;
         }
 
-        public int GotoLable_CheckVarNameNo_GetDataType(TQuestConditionInfo CheckQuestConditionInfo)
+        private int GotoLable_CheckVarNameNo_GetDataType(TQuestConditionInfo CheckQuestConditionInfo)
         {
             int result;
             string sParam1 = string.Empty;
@@ -2817,46 +2769,35 @@ namespace GameSvr
             return result;
         }
 
-        public bool GotoLable_CheckVarNameNo_GetDynamicVarValue(TPlayObject PlayObject, string sVarType, string sValName, ref int nValue)
+        private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(TPlayObject PlayObject, string sVarType, string sValName, ref int nValue)
         {
             bool result = false;
             TDynamicVar DynamicVar;
             string sName = string.Empty;
-            IList<TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string,TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return result;
             }
             else
             {
-                if (DynamicVarList.Count > 0)
+                if(DynamicVarList.TryGetValue(sValName,out DynamicVar))
                 {
-                    for (var i = 0; i < DynamicVarList.Count; i++)
+                    switch (DynamicVar.VarType)
                     {
-                        DynamicVar = DynamicVarList[i];
-                        if (DynamicVar != null)
-                        {
-                            if ((DynamicVar.sName).CompareTo((sValName)) == 0)
-                            {
-                                switch (DynamicVar.VarType)
-                                {
-                                    case TVarType.Integer:
-                                        nValue = DynamicVar.nInternet;
-                                        result = true;
-                                        break;
-                                    case TVarType.String:
-                                        break;
-                                }
-                                break;
-                            }
-                        }
+                        case TVarType.Integer:
+                            nValue = DynamicVar.nInternet;
+                            result = true;
+                            break;
+                        case TVarType.String:
+                            break;
                     }
                 }
             }
             return result;
         }
 
-        public bool GotoLable_CheckVarNameNo_GetValValue(TPlayObject PlayObject, string sValName, ref int nValue)
+        private bool GotoLable_CheckVarNameNo_GetValValue(TPlayObject PlayObject, string sValName, ref int nValue)
         {
             nValue = 0;
             bool result = false;
