@@ -37,7 +37,7 @@ namespace GameSvr
             }
         }
 
-        public TEvent GetEvent(TEnvirnoment Envir, int nX, int nY, int nType)
+        public TEvent GetEvent(Envirnoment Envir, int nX, int nY, int nType)
         {
             TEvent result = null;
             for (var i = _eventList.Count - 1; i >= 0; i--)

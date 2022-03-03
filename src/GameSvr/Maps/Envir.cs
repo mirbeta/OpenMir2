@@ -10,7 +10,7 @@ namespace GameSvr
     {
         public int nX;
         public int nY;
-        public TMapItem MapItem;
+        public MapItem MapItem;
         public string sName;
         public ushort wLooks;
         public int nVisibleFlag;

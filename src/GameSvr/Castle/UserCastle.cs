@@ -45,12 +45,12 @@ namespace GameSvr
         /// <summary>
         /// 城堡所在地图
         /// </summary>
-        public TEnvirnoment m_MapCastle;
+        public Envirnoment m_MapCastle;
         /// <summary>
         /// 皇宫所在地图
         /// </summary>
-        public TEnvirnoment m_MapPalace;
-        private TEnvirnoment m_MapSecret;
+        public Envirnoment m_MapPalace;
+        private Envirnoment m_MapSecret;
         /// <summary>
         /// 所属行会名称
         /// </summary>
@@ -435,7 +435,7 @@ namespace GameSvr
             SaveAttackSabukWall();
         }
 
-        public bool InCastleWarArea(TEnvirnoment envir, int nX, int nY)
+        public bool InCastleWarArea(Envirnoment envir, int nX, int nY)
         {
             if (envir == null)
             {

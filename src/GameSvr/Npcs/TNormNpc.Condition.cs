@@ -64,7 +64,7 @@ namespace GameSvr
         {
             var result = false;
             var nTotlePoint = this.m_BonusAbil.DC + this.m_BonusAbil.MC + this.m_BonusAbil.SC + this.m_BonusAbil.AC + this.m_BonusAbil.MAC + this.m_BonusAbil.HP + this.m_BonusAbil.MP + this.m_BonusAbil.Hit + this.m_BonusAbil.Speed + this.m_BonusAbil.X2;
-            nTotlePoint = nTotlePoint + this.m_nBonusPoint;
+            nTotlePoint += this.m_nBonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -520,11 +520,11 @@ namespace GameSvr
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKFLOURISHPOINT);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
             var Guild = PlayObject.m_MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -565,11 +565,11 @@ namespace GameSvr
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKFLOURISHPOINT);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
             var Guild = PlayObject.m_MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -610,11 +610,11 @@ namespace GameSvr
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKAURAEPOINT);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
             var Guild = PlayObject.m_MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -655,11 +655,11 @@ namespace GameSvr
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKBUILDPOINT);
-                return result;
+                return false;
             }
             if (PlayObject.m_MyGuild == null)
             {
-                return result;
+                return false;
             }
             var Guild = PlayObject.m_MyGuild;
             var cMethod = QuestConditionInfo.sParam1[0];
@@ -823,13 +823,13 @@ namespace GameSvr
             var result = false;
             if (PlayObject.m_GroupOwner == null)
             {
-                return result;
+                return false;
             }
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKGROUPCOUNT);
-                return result;
+                return false;
             }
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
@@ -868,7 +868,7 @@ namespace GameSvr
             if (QuestConditionInfo.sParam1 == "")
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_ISHIGH);
-                return result;
+                return false;
             }
             var cMode = QuestConditionInfo.sParam1[0];
             switch (cMode)
@@ -902,7 +902,6 @@ namespace GameSvr
 
         private bool ConditionOfCheckInMapRange(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
             var sMapName = QuestConditionInfo.sParam1;
             var nX = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
             var nY = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
@@ -910,17 +909,17 @@ namespace GameSvr
             if ((sMapName == "") || (nX < 0) || (nY < 0) || (nRange < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKINMAPRANGE);
-                return result;
+                return false;
             }
             if (string.Compare(PlayObject.m_sMapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0)
             {
-                return result;
+                return false;
             }
             if ((Math.Abs(PlayObject.m_nCurrX - nX) <= nRange) && (Math.Abs(PlayObject.m_nCurrY - nY) <= nRange))
             {
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         private bool ConditionOfCheckIsAttackGuild(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1254,9 +1253,9 @@ namespace GameSvr
             var result = false;
             var nNamePostion = -1;
             var sCharName = PlayObject.m_sCharName;
-            var LoadList = new StringList();
             if (File.Exists(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1))
             {
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(M2Share.g_Config.sEnvirDir + QuestConditionInfo.sParam1);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -1648,16 +1647,7 @@ namespace GameSvr
 
         private bool ConditionOfCheckMap(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
         {
-            bool result;
-            if (QuestConditionInfo.sParam1 == PlayObject.m_sMapName)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-            return result;
+            return QuestConditionInfo.sParam1 == PlayObject.m_sMapName;
         }
 
         private bool ConditionOfCheckPos(TPlayObject PlayObject, TQuestConditionInfo QuestConditionInfo)
@@ -1809,7 +1799,7 @@ namespace GameSvr
             int nRange = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             char cMethod = QuestConditionInfo.sParam5[0];
             int nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, -1);
-            TEnvirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
             if ((Envir == null) || (nX < 0) || (nY < 0) || (nRange < 0) || (nCount < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKRANGEMONCOUNT);
@@ -2105,7 +2095,7 @@ namespace GameSvr
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
-                case '=':
+                case '=': 
                     if (PlayObject.m_wContribution == nContribution)
                     {
                         result = true;

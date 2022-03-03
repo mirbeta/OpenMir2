@@ -35,7 +35,7 @@ namespace GameSvr
             m_VisibleActors.Add(VisibleBaseObject);
         }
 
-        protected void UpdateVisibleItem(int wX, int wY, TMapItem MapItem)
+        protected void UpdateVisibleItem(int wX, int wY, MapItem MapItem)
         {
             TVisibleMapItem VisibleMapItem;
             bool boIsVisible = false;

@@ -5,7 +5,7 @@ namespace GameSvr
 {
     public partial class TPlayObject
     {
-                private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
         {
             var result = false;
             short n14 = 0;
@@ -480,7 +480,7 @@ namespace GameSvr
             return result;
         }
 
-                private bool ClientRunXY(int wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
+        private bool ClientRunXY(int wIdent, int nX, int nY, int nFlag, ref int dwDelayTime)
         {
             bool result = false;
             byte nDir;
@@ -683,6 +683,5 @@ namespace GameSvr
             }
             return result;
         }
-
     }
 }

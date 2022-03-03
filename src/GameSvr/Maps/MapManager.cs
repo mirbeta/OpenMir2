@@ -6,17 +6,17 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TMapManager
+    public class MapManager
     {
-        private readonly Dictionary<string, TEnvirnoment> m_MapList = new Dictionary<string, TEnvirnoment>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Envirnoment> m_MapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
 
-        public IList<TEnvirnoment> Maps => m_MapList.Values.ToList();
+        public IList<Envirnoment> Maps => m_MapList.Values.ToList();
 
         public void MakeSafePkZone()
         {
             TSafeEvent SafeEvent;
             TStartPoint StartPoint;
-            TEnvirnoment Envir;
+            Envirnoment Envir;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 StartPoint = M2Share.StartPointList[i];
@@ -45,9 +45,9 @@ namespace GameSvr
             }
         }
 
-        public IList<TEnvirnoment> GetMineMaps()
+        public IList<Envirnoment> GetMineMaps()
         {
-            var list = new List<TEnvirnoment>();
+            var list = new List<Envirnoment>();
             foreach (var item in m_MapList.Values)
             {
                 if (item.Flag.boMINE || item.Flag.boMINE2)
@@ -58,9 +58,9 @@ namespace GameSvr
             return list;
         }
 
-        public IList<TEnvirnoment> GetDoorMapList()
+        public IList<Envirnoment> GetDoorMapList()
         {
-            var list = new List<TEnvirnoment>();
+            var list = new List<Envirnoment>();
             foreach (var item in m_MapList.Values)
             {
                 if (item.m_DoorList.Count > 0)
@@ -71,7 +71,7 @@ namespace GameSvr
             return list;
         }
 
-        public TEnvirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, object QuestNPC)
+        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, object QuestNPC)
         {
             var m_sMapFileName = string.Empty;
             var sTempName = sMapName;
@@ -91,7 +91,7 @@ namespace GameSvr
                     sMapName = sTempName;
                 }
             }
-            var envirnoment = new TEnvirnoment
+            var envirnoment = new Envirnoment
             {
                 sMapName = sMapName,
                 m_sMapFileName = m_sMapFileName,
@@ -125,8 +125,8 @@ namespace GameSvr
         public bool AddMapRoute(string sSMapNO, int nSMapX, int nSMapY, string sDMapNO, int nDMapX, int nDMapY)
         {
             bool result = false;
-            TEnvirnoment SEnvir = FindMap(sSMapNO);
-            TEnvirnoment DEnvir = FindMap(sDMapNO);
+            Envirnoment SEnvir = FindMap(sSMapNO);
+            Envirnoment DEnvir = FindMap(sDMapNO);
             if (SEnvir != null && DEnvir != null)
             {
                 var GateObj = new TGateObj
@@ -142,15 +142,15 @@ namespace GameSvr
             return result;
         }
         
-        public TEnvirnoment FindMap(string sMapName)
+        public Envirnoment FindMap(string sMapName)
         {
-            TEnvirnoment Map = null;
+            Envirnoment Map = null;
             return m_MapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 
-        public TEnvirnoment GetMapInfo(int nServerIdx, string sMapName)
+        public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
-            TEnvirnoment result = null;
+            Envirnoment result = null;
             if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
                 if (envirnoment.nServerIndex == nServerIdx)

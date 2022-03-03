@@ -9,7 +9,7 @@ namespace GameSvr
         public int m_dwAddStoneMineTick = 0;
         public bool m_boAddToMap = false;
 
-        public TStoneMineEvent(TEnvirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
+        public TStoneMineEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, 0, false)
         {
             m_boAddToMap = true;
             if (nType == 55 || nType == 56 || nType == 57)

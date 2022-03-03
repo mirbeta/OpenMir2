@@ -76,7 +76,7 @@ namespace GameSvr
         public int m_nPostion = 0;
         public byte m_btDirection = 0;
         public int m_nTurnCount = 0;
-        public TEnvirnoment m_PEnvir = null;
+        public Envirnoment m_PEnvir = null;
         private ArrayList FPointList = null;
         private TBaseObject FBaseObject = null;
         private TPathType FPathType;
@@ -100,7 +100,7 @@ namespace GameSvr
             return result;
         }
 
-        public void Initialize(TEnvirnoment Envir)
+        public void Initialize(Envirnoment Envir)
         {
             m_PEnvir = Envir;
             m_nPostion = 0;

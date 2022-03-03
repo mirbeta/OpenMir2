@@ -11,22 +11,20 @@ namespace GameSvr
     {
         private readonly GameApp _mirApp;
         private Timer _connectTimer;
-        private int CheckIntervalTime;
-        private int SaveIntervalTime;
-        private int ClearIntervalTime;
-        private MirLog _mirLog;
+        private int _checkIntervalTime;
+        private int _saveIntervalTime;
+        private int _clearIntervalTime;
 
-        public AppService(GameApp serverApp, MirLog mirLog)
+        public AppService(GameApp serverApp)
         {
             _mirApp = serverApp;
-            _mirLog = mirLog;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            CheckIntervalTime = HUtil32.GetTickCount();
-            SaveIntervalTime = HUtil32.GetTickCount();
-            ClearIntervalTime = HUtil32.GetTickCount();
+            _checkIntervalTime = HUtil32.GetTickCount();
+            _saveIntervalTime = HUtil32.GetTickCount();
+            _clearIntervalTime = HUtil32.GetTickCount();
             if (M2Share.boStartReady)
             {
                 _connectTimer = new Timer(ServiceTimer, null, 1000, 3000);
@@ -104,22 +102,22 @@ namespace GameSvr
 
         private void ServiceTimer(object obj)
         {
-            if ((HUtil32.GetTickCount() - CheckIntervalTime) > 3000) //3s一次检查链接
+            if ((HUtil32.GetTickCount() - _checkIntervalTime) > 3000) //3s一次检查链接
             {
                 M2Share.DataServer.CheckConnected();
                 IdSrvClient.Instance.CheckConnected();
                 InterMsgClient.Instance.CheckConnected();
-                CheckIntervalTime = HUtil32.GetTickCount();
+                _checkIntervalTime = HUtil32.GetTickCount();
             }
-            if ((HUtil32.GetTickCount() - SaveIntervalTime) > 50000) //保存游戏变量等
+            if ((HUtil32.GetTickCount() - _saveIntervalTime) > 50000) //保存游戏变量等
             {
                 _mirApp.SaveItemNumber();
-                SaveIntervalTime = HUtil32.GetTickCount();
+                _saveIntervalTime = HUtil32.GetTickCount();
             }
-            if ((HUtil32.GetTickCount() - ClearIntervalTime) > 60000)
+            if ((HUtil32.GetTickCount() - _clearIntervalTime) > 60000)
             {
                 M2Share.ObjectSystem.ClearGhost();
-                ClearIntervalTime = HUtil32.GetTickCount();
+                _clearIntervalTime = HUtil32.GetTickCount();
             }
         }
     }

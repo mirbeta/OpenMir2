@@ -25,8 +25,8 @@ namespace GameSvr
             var nY = @Params[4] == null ? (short)0 : System.Convert.ToInt16(@Params[4]);
             var OnX = @Params[5] == null ? (short)0 : System.Convert.ToInt16(@Params[5]);
             var OnY = @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
-            TEnvirnoment SrcEnvir;
-            TEnvirnoment DenEnvir;
+            Envirnoment SrcEnvir;
+            Envirnoment DenEnvir;
             IList<TBaseObject> MonList;
             TBaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')

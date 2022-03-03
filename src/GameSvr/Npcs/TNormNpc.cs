@@ -1057,7 +1057,7 @@ namespace GameSvr
             }
             if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[", "$MAPMONSTERCOUNT[".Length)) // 地图怪物数量
             {
-                TMonGenInfo MonGen = null;
+                MonGenInfo MonGen = null;
                 TBaseObject BaseObject = null;
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);

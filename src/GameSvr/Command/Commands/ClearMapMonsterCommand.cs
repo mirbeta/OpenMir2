@@ -31,7 +31,7 @@ namespace GameSvr
             var boKillAllMap = false;
             var boNotItem = true;
             var nMonCount = 0;
-            TEnvirnoment Envir = null;
+            Envirnoment Envir = null;
             if (sMonName == "*")
             {
                 boKillAll = true;

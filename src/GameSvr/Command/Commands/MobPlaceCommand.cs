@@ -23,7 +23,7 @@ namespace GameSvr
             var nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
-            TEnvirnoment MEnvir;
+            Envirnoment MEnvir;
             TBaseObject mon = null;
             byte nCode = 0;
             try

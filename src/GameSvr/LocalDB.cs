@@ -608,13 +608,13 @@ namespace GameSvr
                     }
                     i++;
                 }
-                TMonGenInfo MonGenInfo;
+                MonGenInfo MonGenInfo;
                 for (i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
                     if (sLineText != "" && sLineText[0] != ';')
                     {
-                        MonGenInfo = new TMonGenInfo();
+                        MonGenInfo = new MonGenInfo();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.sMapName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
@@ -652,7 +652,7 @@ namespace GameSvr
                         }
                     }
                 }
-                MonGenInfo = new TMonGenInfo
+                MonGenInfo = new MonGenInfo
                 {
                     sMapName = "",
                     sMonName = "",

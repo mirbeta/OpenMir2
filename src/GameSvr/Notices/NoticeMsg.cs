@@ -2,7 +2,7 @@ using SystemModule.Common;
 
 namespace GameSvr
 {
-    public struct TNoticeMsg
+    public struct NoticeMsg
     {
         public string sMsg;
         public StringList sList;

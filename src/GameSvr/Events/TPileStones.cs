@@ -2,7 +2,7 @@
 {
     public class TPileStones : TEvent
     {
-        public TPileStones(TEnvirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, nX, nY, nType, nTime, true)
+        public TPileStones(Envirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, nX, nY, nType, nTime, true)
         {
             m_nEventParam = 1;
         }

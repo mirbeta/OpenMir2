@@ -393,7 +393,7 @@ namespace GameSvr
         public int m_dwAutoGetExpTick = 0;
         public int m_nAutoGetExpTime = 0;
         public int m_nAutoGetExpPoint = 0;
-        public TEnvirnoment m_AutoGetExpEnvir = null;
+        public Envirnoment m_AutoGetExpEnvir = null;
         public bool m_boAutoGetExpInSafeZone = false;
         public Dictionary<string, TDynamicVar> m_DynamicVarList = null;
         public short m_dwClientTick = 0;
@@ -557,8 +557,6 @@ namespace GameSvr
             m_sString = new string[100];
             m_ServerStrVal = new string[100];
             m_ServerIntVal = new int[100];
-            //FillChar(m_nMval, sizeof(m_nMval), '\0');
-            //FillChar(m_nSval, sizeof(m_nSval), '\0');
             m_nClientFlagMode = -1;
             m_dwAutoGetExpTick = HUtil32.GetTickCount();
             m_nAutoGetExpPoint = 0;
@@ -1330,11 +1328,11 @@ namespace GameSvr
                                                 MapCellInfo.ObjList = null;
                                                 break;
                                             }
-                                            var MapItem = (TMapItem)OSObject.CellObj;
+                                            var MapItem = (MapItem)OSObject.CellObj;
                                             UpdateVisibleItem(n20, n1C, MapItem);
                                             if (MapItem.OfBaseObject != null || MapItem.DropBaseObject != null)
                                             {
-                                                if ((HUtil32.GetTickCount() - MapItem.dwCanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
+                                                if ((HUtil32.GetTickCount() - MapItem.CanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime) // 2 * 60 * 1000
                                                 {
                                                     MapItem.OfBaseObject = null;
                                                     MapItem.DropBaseObject = null;

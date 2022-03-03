@@ -425,7 +425,7 @@ namespace GameSvr
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
         private void ActionOfAutoGetExp(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TEnvirnoment Envir = null;
+            Envirnoment Envir = null;
             var nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             var boIsSafeZone = QuestActionInfo.sParam3[1] == '1';
@@ -2216,7 +2216,7 @@ namespace GameSvr
             string sMapMode = QuestActionInfo.sParam2;
             string sParam1 = QuestActionInfo.sParam3;
             string sParam2 = QuestActionInfo.sParam4;
-            TEnvirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
             if ((Envir == null) || (sMapMode == ""))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SETMAPMODE);
@@ -3418,9 +3418,9 @@ namespace GameSvr
             int nCount = 0;
             int dX = 0;
             int dY = 0;
-            TEnvirnoment Envir;
-            TMapItem MapItem;
-            TMapItem MapItemA;
+            Envirnoment Envir;
+            MapItem MapItem;
+            MapItem MapItemA;
             GameItem StdItem;
             TUserItem UserItem = null;
             try
@@ -3467,14 +3467,14 @@ namespace GameSvr
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {
-                        MapItem = new TMapItem();
+                        MapItem = new MapItem();
                         MapItem.Name = Grobal2.sSTRING_GOLDNAME;
                         MapItem.Count = nCount;
                         MapItem.Looks = M2Share.GetGoldShape(nCount);
                         MapItem.OfBaseObject = PlayObject; // 物品谁可以捡起
-                        MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
+                        MapItem.CanPickUpTick = HUtil32.GetTickCount();
                         MapItem.DropBaseObject = PlayObject; // 谁掉落的
-                        MapItemA = (TMapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
                         if (MapItemA != null)
                         {
                             if (MapItemA != MapItem)
@@ -3510,7 +3510,7 @@ namespace GameSvr
                                     }
                                     UserItem.Dura = (ushort)idura;
                                 }
-                                MapItem = new TMapItem();
+                                MapItem = new MapItem();
                                 MapItem.UserItem = UserItem;
                                 MapItem.Name = StdItem.Name;
                                 var NameCorlr = "@" + M2Share.ItemUnit.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
@@ -3532,10 +3532,10 @@ namespace GameSvr
                                 MapItem.Reserved = 0;
                                 MapItem.Count = nCount;
                                 MapItem.OfBaseObject = PlayObject;
-                                MapItem.dwCanPickUpTick = HUtil32.GetTickCount();
+                                MapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 MapItem.DropBaseObject = PlayObject;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                MapItemA = (TMapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
                                 if (MapItemA != null)
                                 {
                                     if (MapItemA != MapItem)
@@ -3565,7 +3565,7 @@ namespace GameSvr
             }
         }
 
-        public bool ActionOfTHROWITEM_RobotGetDropPosition(TEnvirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
+        public bool ActionOfTHROWITEM_RobotGetDropPosition(Envirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
         {
             bool result;
             int nItemCount = 0;

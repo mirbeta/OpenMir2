@@ -5,11 +5,11 @@ using SystemModule.Common;
 
 namespace GameSvr
 {
-    public class TNoticeManager
+    public class NoticeManager
     {
-        private readonly TNoticeMsg[] NoticeList = new TNoticeMsg[100];
+        private readonly NoticeMsg[] NoticeList = new NoticeMsg[100];
 
-        public TNoticeManager()
+        public NoticeManager()
         {
             for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
             {

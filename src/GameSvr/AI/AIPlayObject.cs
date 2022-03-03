@@ -21,7 +21,7 @@ namespace GameSvr
         /// <summary>
         /// 挂机地图
         /// </summary>
-        public TEnvirnoment m_ManagedEnvir = null;
+        public Envirnoment m_ManagedEnvir = null;
         public TPointManager m_PointManager = null;
         public PointInfo[] m_Path;
         public int m_nPostion = 0;
@@ -71,7 +71,7 @@ namespace GameSvr
         /// </summary>
         public int m_nGotoProtectXYCount = 0;
         public long m_dwPickUpItemTick = 0;
-        public TMapItem m_SelMapItem = null;
+        public MapItem m_SelMapItem = null;
         /// <summary>
         /// 跑步计时
         /// </summary>
@@ -617,7 +617,7 @@ namespace GameSvr
             base.Initialize();
         }
 
-        public void SearchPickUpItem_SetHideItem(TMapItem MapItem)
+        public void SearchPickUpItem_SetHideItem(MapItem MapItem)
         {
             TVisibleMapItem VisibleMapItem;
             for (var i = 0; i < m_VisibleItems.Count; i++)
@@ -639,7 +639,7 @@ namespace GameSvr
             bool result = false;
             TUserItem UserItem = null;
             GameItem StdItem;
-            TMapItem MapItem = m_PEnvir.GetItem(nX, nY);
+            MapItem MapItem = m_PEnvir.GetItem(nX, nY);
             if (MapItem == null)
             {
                 return result;
@@ -790,7 +790,7 @@ namespace GameSvr
                             {
                                 if (VisibleMapItem.nVisibleFlag > 0)
                                 {
-                                    TMapItem MapItem = VisibleMapItem.MapItem;
+                                    MapItem MapItem = VisibleMapItem.MapItem;
                                     if (MapItem != null)
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.UserEngine.GetStdItemWeight(MapItem.UserItem.wIndex)))
