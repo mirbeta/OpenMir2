@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Text;
 
 namespace SystemModule
@@ -268,9 +267,7 @@ namespace SystemModule
                 result = "";
                 return result;
             }
-
             c = 1;
-            // et := 0;
             len = source.Length;
             while (source[c] == ' ')
                 if (c < len)
@@ -308,17 +305,6 @@ namespace SystemModule
             return result;
         }
 
-        public static string RemoveSpace(string str)
-        {
-            string result;
-            int i;
-            result = "";
-            for (i = 0; i <= str.Length; i++)
-                if (str[i] != ' ')
-                    result = result + str[i];
-            return result;
-        }
-
         public static int Str_ToInt(string Str, int def)
         {
             var result = def;
@@ -343,44 +329,6 @@ namespace SystemModule
                 result = DateTime.Now;
             else
                 result = Convert.ToDateTime(Str);
-            return result;
-        }
-
-        public static double Str_ToFloat(string str)
-        {
-            double result;
-            if (str != "")
-                try
-                {
-                    result = Convert.ToSingle(str);
-                    return result;
-                }
-                catch
-                {
-                }
-
-            result = 0;
-            return result;
-        }
-
-        public static string ExtractFileNameOnly(string fname)
-        {
-            string result;
-            int extpos;
-            string ext;
-            string fn;
-            ext = Path.GetExtension(fname);
-            fn = Path.GetFileName(fname);
-            if (ext != "")
-            {
-                extpos = fn.IndexOf(ext);
-                result = fn.Substring(0, extpos - 1);
-            }
-            else
-            {
-                result = fn;
-            }
-
             return result;
         }
 
@@ -432,8 +380,6 @@ namespace SystemModule
             return Ary.Length > 1 ? Ary[1] : "";
         }
 
-        // " " capture => CaptureString (source: string; var rdstr: string): string;
-        // ** 贸澜俊 " 绰 亲惑 盖 贸澜俊 乐促绊 啊沥
         public static string GetValidStrCap(string Str, ref string Dest, string[] Divider)
         {
             string result;
