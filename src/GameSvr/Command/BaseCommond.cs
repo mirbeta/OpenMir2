@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -70,6 +71,7 @@ namespace GameSvr
             {
 #if DEBUG
                 playObject.m_btPermission = 10;
+                playObject.SysMsg("当前运行调试模式,权限等级：10", TMsgColor.c_Red, TMsgType.t_Hint);
 #endif
             }
             if (playObject != null && playObject.m_btPermission < this.CommandAttribute.nPermissionMin)
