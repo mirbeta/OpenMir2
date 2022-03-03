@@ -800,7 +800,7 @@ namespace GameSvr
         /// 打开出售物品窗口
         /// </summary>
         /// <param name="User"></param>
-        public void UserSelect_OpenDealOffForm(TPlayObject User)
+        private void UserSelect_OpenDealOffForm(TPlayObject User)
         {
             if (User.bo_YBDEAL)
             {

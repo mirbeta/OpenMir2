@@ -22,7 +22,6 @@ namespace GameSvr
             {
                 PlayObject.m_NPC = null;
                 PlayObject.m_Script = null;
-                //FillChar(PlayObject.m_nVal, sizeof(PlayObject.m_nVal), '\0');
             }
             if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -145,7 +144,7 @@ namespace GameSvr
             return result;
         }
 
-        public TUserItem GotoLable_CheckItemW(TPlayObject PlayObject, string sItemType, int nParam)
+        private TUserItem GotoLable_CheckItemW(TPlayObject PlayObject, string sItemType, int nParam)
         {
             TUserItem result = null;
             int nCount = 0;
@@ -302,13 +301,9 @@ namespace GameSvr
             }
         }
 
-        public bool GotoLable_QuestCheckCondition_CheckDieMon(TPlayObject PlayObject, string MonName)
+        private bool GotoLable_QuestCheckCondition_CheckDieMon(TPlayObject PlayObject, string MonName)
         {
-            bool result = false;
-            if (string.IsNullOrEmpty(MonName))
-            {
-                result = true;
-            }
+            bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.m_LastHiter != null) && (PlayObject.m_LastHiter.m_sCharName == MonName))
             {
                 result = true;
@@ -316,13 +311,9 @@ namespace GameSvr
             return result;
         }
 
-        public bool GotoLable_QuestCheckCondition_CheckKillMon(TPlayObject PlayObject, string MonName)
+        private bool GotoLable_QuestCheckCondition_CheckKillMon(TPlayObject PlayObject, string MonName)
         {
-            bool result = false;
-            if (MonName == "")
-            {
-                result = true;
-            }
+            bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.m_TargetCret != null) && (PlayObject.m_TargetCret.m_sCharName == MonName))
             {
                 result = true;
@@ -335,7 +326,7 @@ namespace GameSvr
             return PlayObject.m_sRandomNo == sNumber;
         }
 
-        public bool GotoLable_QuestCheckCondition_CheckUserDateType(TPlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
+        private bool GotoLable_QuestCheckCondition_CheckUserDateType(TPlayObject PlayObject, string charName, string sListFileName, string sDay, string param1, string param2)
         {
             string sText = string.Empty;
             string Name = string.Empty;
@@ -1377,7 +1368,6 @@ namespace GameSvr
                     M2Share.MainOutMessage("saving fail.... => " + sListFileName);
                 }
             }
-            //LoadList.Free;
         }
 
         private void GotoLable_AddList(string sHumName, string sListFileName)
@@ -1418,7 +1408,6 @@ namespace GameSvr
                     M2Share.MainOutMessage("saving fail.... => " + sListFileName);
                 }
             }
-            // LoadList.Free;
         }
 
         private void GotoLable_DELUseDateList(string sHumName, string sListFileName)
@@ -1447,7 +1436,6 @@ namespace GameSvr
             {
                 LoadList.SaveToFile(sListFileName);
             }
-            //LoadList.Free;
         }
 
         private void GotoLable_DelList(string sHumName, string sListFileName)
@@ -1482,7 +1470,6 @@ namespace GameSvr
             {
                 LoadList.SaveToFile(sListFileName);
             }
-            // LoadList.Free;
         }
 
         private void GotoLable_TakeItem(TPlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
@@ -1542,7 +1529,6 @@ namespace GameSvr
                 {
                     nItemCount = 1;
                 }
-                // 12.28 改上一条
                 for (var i = 0; i < nItemCount; i++)
                 {
                     if (PlayObject.IsEnoughBag())

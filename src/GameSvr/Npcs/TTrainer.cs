@@ -5,14 +5,14 @@ namespace GameSvr
     /// <summary>
     /// 练功师
     /// </summary>
-    public class TTrainer: TNormNpc
+    public class Trainer: TNormNpc
     {
         public int n564 = 0;
         private int m_dw568 = 0;
         private int n56C = 0;
         private int n570 = 0;
 
-        public TTrainer() : base()
+        public Trainer() : base()
         {
             m_dw568 = HUtil32.GetTickCount();
             n56C = 0;

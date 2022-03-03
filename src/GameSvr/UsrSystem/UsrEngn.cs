@@ -1627,7 +1627,7 @@ namespace GameSvr
                     };
                     break;
                 case M2Share.TRAINER:
-                    Cert = new TTrainer();
+                    Cert = new Trainer();
                     break;
                 case M2Share.MONSTER_OMA:
                     Cert = new TMonster();
@@ -2016,9 +2016,9 @@ namespace GameSvr
             {
                 npcObject = (TNormNpc)Convert.ChangeType(normNpc, typeof(TNormNpc));
             }
-            if (npcType == typeof(TCastleOfficial))
+            if (npcType == typeof(CastleOfficial))
             {
-                npcObject = (TCastleOfficial)Convert.ChangeType(normNpc, typeof(TCastleOfficial));
+                npcObject = (CastleOfficial)Convert.ChangeType(normNpc, typeof(CastleOfficial));
             }
             return npcObject;
         }
