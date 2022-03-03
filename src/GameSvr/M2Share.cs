@@ -173,7 +173,7 @@ namespace GameSvr
         public static TNormNpc g_ManageNPC = null;
         public static TNormNpc g_RobotNPC = null;
         public static TMerchant g_FunctionNPC = null;
-        public static IList<TDynamicVar> g_DynamicVarList = null;
+        public static Dictionary<string, TDynamicVar> g_DynamicVarList = null;
         public static int nCurrentMonthly = 0;
         public static int nTotalTimeUsage = 0;
         public static int nLastMonthlyTotalUsage = 0;

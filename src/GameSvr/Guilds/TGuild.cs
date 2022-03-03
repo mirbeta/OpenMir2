@@ -65,7 +65,7 @@ namespace GameSvr
         public bool m_boEnableAuthAlly = false;
         public int dwSaveTick = 0;
         public bool boChanged = false;
-        public IList<TDynamicVar> m_DynamicVarList = null;
+        public Dictionary<string, TDynamicVar> m_DynamicVarList = null;
         private readonly IniFile m_Config = null;
         /// <summary>
         /// 建筑度
@@ -115,7 +115,7 @@ namespace GameSvr
             m_nStability = 0;
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
-            m_DynamicVarList = new List<TDynamicVar>();
+            m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             var sFileName = M2Share.g_Config.sGuildDir + sName + ".ini";
             _guildConf = new GuildConf(sName, sFileName);
         }
@@ -261,7 +261,7 @@ namespace GameSvr
                     }
                     if (s18[0] == '#')
                     {
-                        s18 = s18.Substring(2 - 1, s18.Length - 1);
+                        s18 = s18.Substring(1, s18.Length - 1);
                         s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
                         n2C = HUtil32.Str_ToInt(s1C, 0);
                         s24 = s18.Trim();

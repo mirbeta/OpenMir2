@@ -395,7 +395,7 @@ namespace GameSvr
         public int m_nAutoGetExpPoint = 0;
         public TEnvirnoment m_AutoGetExpEnvir = null;
         public bool m_boAutoGetExpInSafeZone = false;
-        public IList<TDynamicVar> m_DynamicVarList = null;
+        public Dictionary<string, TDynamicVar> m_DynamicVarList = null;
         public short m_dwClientTick = 0;
         /// <summary>
         /// 进入速度测试模式
@@ -573,7 +573,7 @@ namespace GameSvr
             m_dwRunHitIntervalTime = M2Share.g_Config.dwRunHitIntervalTime;// 组合操作间隔
             m_dwWalkHitIntervalTime = M2Share.g_Config.dwWalkHitIntervalTime;// 组合操作间隔
             m_dwRunMagicIntervalTime = M2Share.g_Config.dwRunMagicIntervalTime;// 跑位魔法间隔
-            m_DynamicVarList = new List<TDynamicVar>();
+            m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             m_SessInfo = null;
             m_boTestSpeedMode = false;
             m_boLockLogon = true;

@@ -300,7 +300,7 @@ namespace GameSvr
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.g_Config.UserIDSection = new object();
             M2Share.UserDBSection = new object();
-            M2Share.g_DynamicVarList = new List<TDynamicVar>();
+            M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.sSellOffItemList = new List<TDealOffInfo>();
             LoadServerTable();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();

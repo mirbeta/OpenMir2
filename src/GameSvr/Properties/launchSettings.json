@@ -2,10 +2,11 @@
   "profiles": {
     "GameSvr": {
       "commandName": "Project",
-      "applicationUrl": "http://localhost:5000/",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:64480;http://localhost:64481"
     }
   }
 }
