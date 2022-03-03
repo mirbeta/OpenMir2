@@ -1405,6 +1405,7 @@ namespace GameSvr
         /// 延时跳转
         /// </summary>
         public const string sDELAYGOTO = "DELAYGOTO";
+        public const string sDELAYCALL = "DELAYCALL";
         public const int nDELAYGOTO = 255;
         public const string sCLEARDELAYGOTO = "CLEARDELAYGOTO";
         public const int nCLEARDELAYGOTO = 256;

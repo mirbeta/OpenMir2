@@ -1358,6 +1358,7 @@ namespace GameSvr
                     nCMDCode = M2Share.nQUERYYBDEAL;
                     goto L001;
                 case M2Share.sDELAYGOTO:
+                case M2Share.sDELAYCALL:
                     nCMDCode = M2Share.nDELAYGOTO;
                     goto L001;
                 case M2Share.sCLEARDELAYGOTO:
