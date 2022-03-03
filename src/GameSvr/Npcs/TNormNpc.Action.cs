@@ -74,7 +74,7 @@ namespace GameSvr
                             for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                             {
                                 DealOffInfo = M2Share.sSellOffItemList[i];
-                                if ((string.Compare(DealOffInfo.sDealCharName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) && (new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N)))
+                                if ((string.Compare(DealOffInfo.sDealCharName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0) && new ArrayList(new byte[] { 0, 3 }).Contains(DealOffInfo.N))
                                 {
                                     for (var j = 0; j < 9; j++)
                                     {
@@ -83,7 +83,7 @@ namespace GameSvr
                                             continue;
                                         }
                                         StdItem = M2Share.UserEngine.GetStdItem(DealOffInfo.UseItems[j].wIndex);
-                                        if ((StdItem == null))
+                                        if (StdItem == null)
                                         {
                                             // 是金刚石
                                             if (!bo12 && (DealOffInfo.UseItems[j].MakeIndex > 0) && (DealOffInfo.UseItems[j].wIndex == ushort.MaxValue) && (DealOffInfo.UseItems[j].Dura == ushort.MaxValue) && (DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue))
@@ -1883,7 +1883,7 @@ namespace GameSvr
             var sVarValue = QuestActionInfo.sParam4;
             var nVarValue = HUtil32.Str_ToInt(QuestActionInfo.sParam4, 0);
             var VarType = TVarType.None;
-            if (string.Compare((QuestActionInfo.sParam1), ("Integer"), StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = TVarType.Integer;
             }
@@ -1946,9 +1946,7 @@ namespace GameSvr
         {
             string sName = string.Empty;
             TDynamicVar DynamicVar = null;
-            bool boFoundVar;
             Dictionary<string, TDynamicVar> DynamicVarList;
-            ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam1;
@@ -1972,7 +1970,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_LOADVAR);
                 return;
             }
-            boFoundVar = false;
+            bool boFoundVar = false;
             DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
@@ -1997,7 +1995,7 @@ namespace GameSvr
             }
             else
             {
-                IniFile = new ConfFile(sFileName);
+                ConfFile IniFile = new ConfFile(sFileName);
                 IniFile.Load();
                 var str = IniFile.ReadString(sName, sVarName, "");
                 if (!string.IsNullOrEmpty(str))
@@ -2060,7 +2058,7 @@ namespace GameSvr
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
-            if ((string.IsNullOrEmpty(sItemName)) || (nMakeIndex <= 0))
+            if (string.IsNullOrEmpty(sItemName) || (nMakeIndex <= 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CLEARMAKEITEMS);
                 return;
@@ -2654,7 +2652,7 @@ namespace GameSvr
             GameItem StdItem;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
-            if ((string.IsNullOrEmpty(sItemName)) || (nItemCount <= 0))
+            if (string.IsNullOrEmpty(sItemName) || (nItemCount <= 0))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_GIVE);
                 return;
@@ -3451,7 +3449,7 @@ namespace GameSvr
                 {
                     nCount = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam6), -1);
                 }
-                if ((sMap == "") || (nX < 0) || (nY < 0) || (nRange < 0) || (string.IsNullOrEmpty(sItemName)) || (nCount <= 0))
+                if ((sMap == "") || (nX < 0) || (nY < 0) || (nRange < 0) || string.IsNullOrEmpty(sItemName) || (nCount <= 0))
                 {
                     ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sTHROWITEM);
                     return;
@@ -3465,7 +3463,7 @@ namespace GameSvr
                 {
                     nCount = 1;
                 }
-                if (string.Compare((sItemName), (Grobal2.sSTRING_GOLDNAME), StringComparison.Ordinal) == 0)// 金币
+                if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.Ordinal) == 0)// 金币
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {
