@@ -23,7 +23,7 @@ namespace GameSvr
             int n20;
             int nServerIndex;
             TMapFlag MapFlag = null;
-            TMerchant QuestNPC;
+            Merchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo.txt");
@@ -410,9 +410,9 @@ namespace GameSvr
             return result;
         }
         
-        private static TMerchant LoadMapInfo_LoadMapQuest(string sName)
+        private static Merchant LoadMapInfo_LoadMapQuest(string sName)
         {
-            var questNPC = new TMerchant
+            var questNPC = new Merchant
             {
                 m_sMapName = "0",
                 m_nCurrX = 0,

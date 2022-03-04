@@ -9,7 +9,7 @@ using SystemModule.Packages;
 
 namespace GameSvr
 {
-    public partial class TPlayObject : TAnimalObject
+    public partial class TPlayObject : AnimalObject
     {
         private bool ClientPickUpItem_IsSelf(TBaseObject BaseObject)
         {
@@ -809,7 +809,7 @@ namespace GameSvr
             if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwClickNpcTime) // NPC点击间隔
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                var normNpc = (TNormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (TNormNpc)M2Share.UserEngine.FindNPC(NPC);
+                var normNpc = (NormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (NormNpc)M2Share.UserEngine.FindNPC(NPC);
                 if (normNpc != null)
                 {
                     if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)

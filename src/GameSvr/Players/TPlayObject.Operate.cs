@@ -192,10 +192,10 @@ namespace GameSvr
             {
                 return;
             }
-            TNormNpc npc = (TNormNpc)M2Share.UserEngine.FindMerchant(nParam1);
+            NormNpc npc = (NormNpc)M2Share.UserEngine.FindMerchant(nParam1);
             if (npc == null)
             {
-                npc = (TNormNpc)M2Share.UserEngine.FindNPC(nParam1);
+                npc = (NormNpc)M2Share.UserEngine.FindNPC(nParam1);
             }
             if (npc == null)
             {
@@ -229,7 +229,7 @@ namespace GameSvr
             {
                 return;
             }
-            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
+            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant == null)
             {
                 return;
@@ -243,7 +243,7 @@ namespace GameSvr
         private void ClientUserSellItem(int nParam1, int nMakeIndex, string sMsg)
         {
             TUserItem UserItem;
-            TMerchant Merchant;
+            Merchant Merchant;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -252,7 +252,7 @@ namespace GameSvr
                     var sUserItemName = ItmUnit.GetItemName(UserItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
+                        Merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
                         if (Merchant != null && Merchant.m_boSell && Merchant.m_PEnvir == m_PEnvir && Math.Abs(Merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(Merchant.m_nCurrY - m_nCurrY) < 15)
                         {
                             if (Merchant.ClientSellItem(this, UserItem))
@@ -281,7 +281,7 @@ namespace GameSvr
                 {
                     return;
                 }
-                var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
+                var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
                 if (merchant == null || !merchant.m_boBuy || merchant.m_PEnvir != m_PEnvir || Math.Abs(merchant.m_nCurrX - m_nCurrX) > 15 || Math.Abs(merchant.m_nCurrY - m_nCurrY) > 15)
                 {
                     return;
@@ -1314,7 +1314,7 @@ namespace GameSvr
 
         private void ClientMakeDrugItem(int NPC, string nItemName)
         {
-            var Merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
+            var Merchant = (Merchant)M2Share.UserEngine.FindMerchant(NPC);
             if (Merchant == null || !Merchant.m_boMakeDrug)
             {
                 return;
@@ -1682,7 +1682,7 @@ namespace GameSvr
             {
                 return;
             }
-            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
+            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, UserItemA);
@@ -1706,7 +1706,7 @@ namespace GameSvr
             {
                 return;
             }
-            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(nParam1);
+            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(nParam1);
             if (merchant != null && merchant.m_PEnvir == m_PEnvir && Math.Abs(merchant.m_nCurrX - m_nCurrX) < 15 && Math.Abs(merchant.m_nCurrY - m_nCurrY) < 15)
             {
                 merchant.ClientRepairItem(this, UserItem);
@@ -1728,7 +1728,7 @@ namespace GameSvr
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            TMerchant merchant = (TMerchant)M2Share.UserEngine.FindMerchant(ObjectId);
+            Merchant merchant = (Merchant)M2Share.UserEngine.FindMerchant(ObjectId);
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -1771,7 +1771,7 @@ namespace GameSvr
             string sUserItemName;
             var bo19 = false;
             TUserItem UserItem = null;
-            var merchant = (TMerchant)M2Share.UserEngine.FindMerchant(NPC);
+            var merchant = (Merchant)M2Share.UserEngine.FindMerchant(NPC);
             if (merchant == null)
             {
                 return;

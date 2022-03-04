@@ -170,9 +170,9 @@ namespace GameSvr
         public const string sGlobalConfigFileName = "Global.conf";
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
-        public static TNormNpc g_ManageNPC = null;
-        public static TNormNpc g_RobotNPC = null;
-        public static TMerchant g_FunctionNPC = null;
+        public static NormNpc g_ManageNPC = null;
+        public static NormNpc g_RobotNPC = null;
+        public static Merchant g_FunctionNPC = null;
         public static Dictionary<string, TDynamicVar> g_DynamicVarList = null;
         public static int nCurrentMonthly = 0;
         public static int nTotalTimeUsage = 0;

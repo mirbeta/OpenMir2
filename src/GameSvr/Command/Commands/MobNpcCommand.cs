@@ -35,7 +35,7 @@ namespace GameSvr
             }
             short nX = 0;
             short nY = 0;
-            TMerchant Merchant = new TMerchant();
+            Merchant Merchant = new Merchant();
             Merchant.m_sCharName = sParam1;
             Merchant.m_sMapName = PlayObject.m_sMapName;
             Merchant.m_PEnvir = PlayObject.m_PEnvir;

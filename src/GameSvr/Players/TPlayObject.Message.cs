@@ -68,9 +68,9 @@ namespace GameSvr
                 if (m_boTimeGoto && (HUtil32.GetTickCount() > m_dwTimeGotoTick)) //Delaygoto延时跳转
                 {
                     m_boTimeGoto = false;
-                    if (m_TimeGotoNPC as TMerchant != null)
+                    if (m_TimeGotoNPC as Merchant != null)
                     {
-                        (m_TimeGotoNPC as TMerchant).GotoLable(this, m_sTimeGotoLable, false);
+                        (m_TimeGotoNPC as Merchant).GotoLable(this, m_sTimeGotoLable, false);
                     }
                 }
                 // 增加挂机
@@ -82,10 +82,10 @@ namespace GameSvr
                 if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
                 {
                     m_boDelayCall = false;
-                    TNormNpc normNpc = (TMerchant)M2Share.UserEngine.FindMerchant(m_DelayCallNPC);
+                    NormNpc normNpc = (Merchant)M2Share.UserEngine.FindMerchant(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = (TNormNpc)M2Share.UserEngine.FindNPC(m_DelayCallNPC);
+                        normNpc = (NormNpc)M2Share.UserEngine.FindNPC(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {

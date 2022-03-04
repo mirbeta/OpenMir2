@@ -10,7 +10,7 @@ namespace GameSvr
 {
     public class ScriptSystem
     {
-        public int LoadNpcScript(TNormNpc NPC, string sPatch, string sScritpName)
+        public int LoadNpcScript(NormNpc NPC, string sPatch, string sScritpName)
         {
             if (sPatch == "")
             {
@@ -200,7 +200,7 @@ namespace GameSvr
             return result;
         }
 
-        private TScript LoadScriptFile_MakeNewScript(TNormNpc NPC)
+        private TScript LoadScriptFile_MakeNewScript(NormNpc NPC)
         {
             TScript ScriptInfo = new TScript
             {
@@ -1445,7 +1445,7 @@ namespace GameSvr
         /// <param name="sScritpName"></param>
         /// <param name="boFlag"></param>
         /// <returns></returns>
-        public int LoadScriptFile(TNormNpc NPC, string sPatch, string sScritpName, bool boFlag)
+        public int LoadScriptFile(NormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
             var s30 = string.Empty;
             var sScript = string.Empty;
@@ -1574,7 +1574,7 @@ namespace GameSvr
                             var nPriceRate = HUtil32.Str_ToInt(sScript, -1);
                             if (nPriceRate >= 55)
                             {
-                                ((TMerchant)NPC).m_nPriceRate = nPriceRate;
+                                ((Merchant)NPC).m_nPriceRate = nPriceRate;
                             }
                             continue;
                         }
@@ -1584,7 +1584,7 @@ namespace GameSvr
                             var nItemType = HUtil32.Str_ToInt(sScript, -1);
                             if (nItemType >= 0)
                             {
-                                ((TMerchant)NPC).m_ItemTypeList.Add(nItemType);
+                                ((Merchant)NPC).m_ItemTypeList.Add(nItemType);
                             }
                             continue;
                         }
@@ -1598,72 +1598,72 @@ namespace GameSvr
                                     sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { " ", ",", "\t" });
                                     if (s30.Equals(M2Share.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boBuy = true;
+                                        ((Merchant)NPC).m_boBuy = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boSell = true;
+                                        ((Merchant)NPC).m_boSell = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boMakeDrug = true;
+                                        ((Merchant)NPC).m_boMakeDrug = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boPrices = true;
+                                        ((Merchant)NPC).m_boPrices = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boStorage = true;
+                                        ((Merchant)NPC).m_boStorage = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boGetback = true;
+                                        ((Merchant)NPC).m_boGetback = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boUpgradenow = true;
+                                        ((Merchant)NPC).m_boUpgradenow = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boGetBackupgnow = true;
+                                        ((Merchant)NPC).m_boGetBackupgnow = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boRepair = true;
+                                        ((Merchant)NPC).m_boRepair = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boS_repair = true;
+                                        ((Merchant)NPC).m_boS_repair = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boSendmsg = true;
+                                        ((Merchant)NPC).m_boSendmsg = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boUseItemName = true;
+                                        ((Merchant)NPC).m_boUseItemName = true;
                                         continue;
                                     }
                                     if (s30.Equals(M2Share.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((TMerchant)NPC).m_boOffLineMsg = true;
+                                        ((Merchant)NPC).m_boOffLineMsg = true;
                                         continue;
                                     }
                                     if (String.Compare(s30, (M2Share.sybdeal), StringComparison.OrdinalIgnoreCase) == 0)
                                     {
-                                        ((TMerchant)(NPC)).m_boYBDeal = true;
+                                        ((Merchant)(NPC)).m_boYBDeal = true;
                                         continue;
                                     }
                                 }
@@ -1847,7 +1847,7 @@ namespace GameSvr
                                     dwRefillTime = HUtil32.Str_ToInt(s50, 0),
                                     dwRefillTick = 0
                                 };
-                                ((TMerchant)NPC).m_RefillGoodsList.Add(Goods);
+                                ((Merchant)NPC).m_RefillGoodsList.Add(Goods);
                             }
                         }
                     }
@@ -1866,7 +1866,7 @@ namespace GameSvr
         /// <summary>
         /// 初始化脚本标签数组
         /// </summary>
-        private void InitializeLabel(TNormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
+        private void InitializeLabel(NormNpc NPC, TQuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<TQuestActionInfo> PlayDiceList, List<TQuestActionInfo> GotoList, List<TQuestActionInfo> DelayGotoList)
         {
             for (var i = NPC.FGotoLable.GetLowerBound(0); i <= NPC.FGotoLable.GetUpperBound(0); i++)
             {
@@ -1955,7 +1955,7 @@ namespace GameSvr
         /// <summary>
         /// 初始化脚本标签
         /// </summary>
-        private void InitializeAppendLabel(TNormNpc NPC, string sLabel, int nIdx)
+        private void InitializeAppendLabel(NormNpc NPC, string sLabel, int nIdx)
         {
             switch (sLabel)
             {

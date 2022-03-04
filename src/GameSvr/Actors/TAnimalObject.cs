@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TAnimalObject: TBaseObject
+    public class AnimalObject: TBaseObject
     {
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
@@ -21,7 +21,7 @@ namespace GameSvr
             base.AttackDir(TargeTBaseObject, 0, nDir);
         }
 
-        public TAnimalObject() : base()
+        public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;
             m_nTargetX =  -1;
