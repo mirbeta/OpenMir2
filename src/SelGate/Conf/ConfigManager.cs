@@ -17,7 +17,7 @@ namespace SelGate
             {
                 m_xGameGateList[i].sServerAdress = "127.0.0.1";
                 m_xGameGateList[i].nServerPort = 5100;
-                m_xGameGateList[i].nGatePort = (7100 + i);
+                m_xGameGateList[i].nGatePort = 7100 + i;
             }
         }
 
@@ -61,12 +61,12 @@ namespace SelGate
             GateConfig.m_fDenyTabsChar = ReadBool("Switch", "DenyTabsChar", GateConfig.m_fDenyTabsChar);
             //GateConfig.m_tBlockIPMethod = TBlockIPMethod(ReadInteger("Method", "BlockIPMethod", Integer(GateConfig.m_tBlockIPMethod)));
 
-            GateConfig.m_nGateCount = ReadInteger("GameGate", "Count", GateConfig.m_nGateCount);
+            GateConfig.m_nGateCount = ReadInteger("SelGate", "Count", GateConfig.m_nGateCount);
             for (int i = 0; i < GateConfig.m_nGateCount; i++)
             {
-                m_xGameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);
-                m_xGameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
-                m_xGameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, m_xGameGateList[i].nGatePort);
+                m_xGameGateList[i].sServerAdress = ReadString("SelGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);
+                m_xGameGateList[i].nServerPort = ReadInteger("SelGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
+                m_xGameGateList[i].nGatePort = ReadInteger("SelGate", "GatePort" + i, m_xGameGateList[i].nGatePort);
             }
         }
     }

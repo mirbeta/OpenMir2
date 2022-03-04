@@ -176,7 +176,7 @@ namespace GameSvr
             {
                 if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                 {
-                    Debug.WriteLine("[RunDB] 保存人物({0})数据成功", sCharName);
+                    Debug.WriteLine($"[RunDB] 保存人物({sCharName})数据成功");
                     result = true;
                 }
                 else

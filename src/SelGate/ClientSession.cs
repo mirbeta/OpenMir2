@@ -88,7 +88,7 @@ namespace SelGate
                 }
             }
             var success = false;
-            var tempBuff = userData.Body[3..^2];//跳过#1....! 只保留消息内容
+            var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             var CltCmd = new TCmdPack(packBuff);
