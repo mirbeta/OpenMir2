@@ -11,7 +11,7 @@ namespace GameSvr
             int nWhere;
             int nPercent;
             int nValue;
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;

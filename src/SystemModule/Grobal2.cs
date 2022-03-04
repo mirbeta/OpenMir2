@@ -589,30 +589,7 @@ namespace SystemModule
         // 物品类型(物品属性读取)
         /// </summary>
         public const int MAX_STATUS_ATTRIBUTE = 12;
-        /// <summary>
-        /// 武器
-        /// </summary>
-        public const int ITEM_WEAPON = 0;
-        /// <summary>
-        /// 装备
-        /// </summary>
-        public const int ITEM_ARMOR = 1;
-        /// <summary>
-        /// 辅助物品
-        /// </summary>
-        public const int ITEM_ACCESSORY = 2;
-        /// <summary>
-        /// 其它物品
-        /// </summary>
-        public const int ITEM_ETC = 3;
-        /// <summary>
-        /// 药水
-        /// </summary>
-        public const int ITEM_LEECHDOM = 4;
-        /// <summary>
-        /// 金币
-        /// </summary>
-        public const int ITEM_GOLD = 10;
+       
         /// <summary>
         /// 中毒类型 - 绿毒
         /// </summary>

@@ -57,8 +57,8 @@ namespace GameSvr
             string sSendStr;
             string sUserItemName;
             TClientDealOffInfo sClientDealOffInfo = null;
-            GameItem StdItem;
-            GameItem StdItem80;
+            GoodItem StdItem;
+            GoodItem StdItem80;
             bool bo12;
             try
             {
@@ -175,8 +175,8 @@ namespace GameSvr
             string sSendStr;
             string sUserItemName;
             TClientDealOffInfo sClientDealOffInfo = null;
-            GameItem StdItem;
-            GameItem StdItem80;
+            GoodItem StdItem;
+            GoodItem StdItem80;
             bool bo12;
             try
             {
@@ -2021,7 +2021,7 @@ namespace GameSvr
         private void ActionOfClearNeedItems(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             var nNeed = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
@@ -2054,7 +2054,7 @@ namespace GameSvr
         private void ActionOfClearMakeItems(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
@@ -2649,7 +2649,7 @@ namespace GameSvr
         private void ActionOfGiveItem(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || (nItemCount <= 0))
@@ -3421,7 +3421,7 @@ namespace GameSvr
             Envirnoment Envir;
             MapItem MapItem;
             MapItem MapItemA;
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem = null;
             try
             {

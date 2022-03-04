@@ -235,7 +235,7 @@ namespace GameSvr
                         int nCount;
                         int dCount;
                         int bCount;
-                        GameItem StdItem;
+                        GoodItem StdItem;
                         // 加HP
                         if ((m_nIncHealth == 0) && (m_UseItems[Grobal2.U_CHARM].wIndex > 0) && ((HUtil32.GetTickCount() - m_nIncHPStoneTime) > M2Share.g_Config.HPStoneIntervalTime) && ((m_WAbil.HP / m_WAbil.MaxHP * 100) < M2Share.g_Config.HPStoneStartRate))
                         {
@@ -1140,7 +1140,7 @@ namespace GameSvr
         protected virtual void ScatterBagItems(TBaseObject ItemOfCreat)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
@@ -1193,7 +1193,7 @@ namespace GameSvr
         {
             int nC;
             int nRate;
-            GameItem StdItem;
+            GoodItem StdItem;
             IList<TDeleteItem> DropItemList = null;
             const string sExceptionMsg = "[Exception] TBaseObject::DropUseItems";
             try
@@ -1557,7 +1557,7 @@ namespace GameSvr
         /// </summary>
         public virtual void RecalcAbilitys()
         {
-            GameItem StdItem;
+            GoodItem StdItem;
             bool[] boRecallSuite = new bool[4] { false, false, false, false };
             bool[] boMoXieSuite = new bool[3] { false, false, false };
             bool[] boSpirit = new bool[4] { false, false, false, false };

@@ -46,7 +46,7 @@ namespace GameSvr
         {
             TUserItem UseItems;
             TPlayObject PlayObject;
-            GameItem StdItem;
+            GoodItem StdItem;
             if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
             {
                 UseItems = new TUserItem(m_UseItems[Grobal2.U_WEAPON]);

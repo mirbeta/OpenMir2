@@ -21,7 +21,7 @@ namespace GameSvr
             var nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             TUserItem UserItem = null;
-            GameItem StdItem;
+            GoodItem StdItem;
             if (PlayObject.m_btPermission < this.CommandAttribute.nPermissionMin)
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);

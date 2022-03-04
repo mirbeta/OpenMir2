@@ -26,7 +26,7 @@ namespace GameSvr
             int nItemCount;
             int nCount;
             int nType;
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem = null;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || sItemCount == "" || sType == "")
             {

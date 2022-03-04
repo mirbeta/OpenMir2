@@ -638,7 +638,7 @@ namespace GameSvr
         {
             bool result = false;
             TUserItem UserItem = null;
-            GameItem StdItem;
+            GoodItem StdItem;
             MapItem MapItem = m_PEnvir.GetItem(nX, nY);
             if (MapItem == null)
             {
@@ -1601,7 +1601,7 @@ namespace GameSvr
             return CheckUserItemType(nItemType, nCount) || GetUserItemList(nItemType, nCount) >= 0;
         }
 
-        private bool CheckItemType(int nItemType, GameItem StdItem)
+        private bool CheckItemType(int nItemType, GoodItem StdItem)
         {
             bool result = false;
             switch (nItemType)
@@ -1641,7 +1641,7 @@ namespace GameSvr
             if (m_UseItems[Grobal2.U_ARMRINGL] != null && m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0 &&
                 Math.Round(Convert.ToDouble(m_UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount)
             {
-                GameItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
+                GoodItem StdItem = M2Share.UserEngine.GetStdItem(m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (StdItem != null)
                 {
                     result = CheckItemType(nItemType, StdItem);
@@ -1656,7 +1656,7 @@ namespace GameSvr
         {
             int result = -1;
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             for (var i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -1678,7 +1678,7 @@ namespace GameSvr
         {
             TUserItem UserItem;
             TUserItem AddUserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             bool result = false;
             if (nIndex >= 0 && nIndex < m_ItemList.Count)
             {
@@ -4269,7 +4269,7 @@ namespace GameSvr
         {
             bool result = false;
             TUserItem UserItem;
-            GameItem AmuletStdItem;
+            GoodItem AmuletStdItem;
             try
             {
                 result = false;
