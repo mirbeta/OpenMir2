@@ -300,7 +300,7 @@ namespace GameSvr
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_FunctionNPC = new TMerchant
+                    M2Share.g_FunctionNPC = new Merchant
                     {
                         m_sMapName = "0",
                         m_nCurrX = 0,
@@ -358,7 +358,7 @@ namespace GameSvr
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_ManageNPC = new TMerchant
+                    M2Share.g_ManageNPC = new Merchant
                     {
                         m_sMapName = "0",
                         m_nCurrX = 0,
@@ -402,7 +402,7 @@ namespace GameSvr
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_RobotNPC = new TMerchant
+                    M2Share.g_RobotNPC = new Merchant
                     {
                         m_sMapName = "0",
                         m_nCurrX = 0,
@@ -534,7 +534,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, new[] { " ", "\t" });
                         if (sScript != "" && sMapName != "" && sAppr != "")
                         {
-                            var tMerchantNPC = new TMerchant
+                            var tMerchantNPC = new Merchant
                             {
                                 m_sScript = sScript,
                                 m_sMapName = sMapName,
@@ -740,7 +740,7 @@ namespace GameSvr
             var s34 = string.Empty;
             var s38 = string.Empty;
             StringList LoadList;
-            TNormNpc NPC;
+            NormNpc NPC;
             string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Npcs.txt");
             if (File.Exists(sFileName))
             {
@@ -768,7 +768,7 @@ namespace GameSvr
                             switch (HUtil32.Str_ToInt(s24, 0))
                             {
                                 case 0:
-                                    NPC = new TMerchant();
+                                    NPC = new Merchant();
                                     break;
                                 case 1:
                                     NPC = new TGuildOfficial();
@@ -1001,7 +1001,7 @@ namespace GameSvr
             return result;
         }
 
-        public int SaveGoodRecord(TMerchant NPC, string sFile)
+        public int SaveGoodRecord(Merchant NPC, string sFile)
         {
             int result;
             string sFileName;
@@ -1042,7 +1042,7 @@ namespace GameSvr
             return result;
         }
 
-        public int SaveGoodPriceRecord(TMerchant NPC, string sFile)
+        public int SaveGoodPriceRecord(Merchant NPC, string sFile)
         {
             int result;
             string sFileName;
@@ -1094,7 +1094,7 @@ namespace GameSvr
             var sCastle = string.Empty;
             var sCanMove = string.Empty;
             var sMoveTime = string.Empty;
-            TMerchant Merchant;
+            Merchant Merchant;
             StringList LoadList;
             bool boNewNpc;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Merchant.txt");
@@ -1162,7 +1162,7 @@ namespace GameSvr
                         }
                         if (boNewNpc)
                         {
-                            Merchant = new TMerchant
+                            Merchant = new Merchant
                             {
                                 m_sMapName = sMapName
                             };
@@ -1218,7 +1218,7 @@ namespace GameSvr
             return -1;
         }
 
-        public int LoadGoodRecord(TMerchant NPC, string sFile)
+        public int LoadGoodRecord(Merchant NPC, string sFile)
         {
             int result;
             string sFileName;
@@ -1271,7 +1271,7 @@ namespace GameSvr
             return result;
         }
 
-        public int LoadGoodPriceRecord(TMerchant NPC, string sFile)
+        public int LoadGoodPriceRecord(Merchant NPC, string sFile)
         {
             int result;
             string sFileName;

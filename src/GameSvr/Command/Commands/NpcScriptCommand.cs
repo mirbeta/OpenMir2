@@ -12,8 +12,8 @@ namespace GameSvr
         public void NpcScript(TPlayObject PlayObject)
         {
             var sScriptFileName = string.Empty;
-            TMerchant Merchant;
-            TNormNpc NormNpc;
+            Merchant Merchant;
+            NormNpc NormNpc;
             StringList LoadList;
             string sScriptLine;
             var nNPCType = -1;
@@ -44,12 +44,12 @@ namespace GameSvr
             }
             if (nNPCType == 0)
             {
-                Merchant = (TMerchant)BaseObject;
+                Merchant = (Merchant)BaseObject;
                 sScriptFileName = M2Share.sConfigPath+M2Share.g_Config.sEnvirDir + M2Share.sMarket_Def + Merchant.m_sScript + "-" + Merchant.m_sMapName + ".txt";
             }
             if (nNPCType == 1)
             {
-                NormNpc = (TNormNpc)BaseObject;
+                NormNpc = (NormNpc)BaseObject;
                 sScriptFileName = M2Share.sConfigPath+M2Share.g_Config.sEnvirDir + M2Share.sNpc_def + NormNpc.m_sCharName + "-" + NormNpc.m_sMapName + ".txt";
             }
             if (File.Exists(sScriptFileName))

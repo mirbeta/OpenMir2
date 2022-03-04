@@ -756,7 +756,7 @@ namespace GameSvr
                             // 是否执行任务脚本
                             if (m_PEnvir.IsCheapStuff())
                             {
-                                TMerchant QuestNPC;
+                                Merchant QuestNPC;
                                 if (m_ExpHitter.m_GroupOwner != null)
                                 {
                                     for (var i = 0; i < m_ExpHitter.m_GroupOwner.m_GroupMembers.Count; i++)
@@ -770,14 +770,14 @@ namespace GameSvr
                                         {
                                             tCheck = true;
                                         }
-                                        QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(GroupHuman, m_sCharName, "", tCheck);
+                                        QuestNPC = (Merchant)m_PEnvir.GetQuestNPC(GroupHuman, m_sCharName, "", tCheck);
                                         if (QuestNPC != null)
                                         {
                                             QuestNPC.Click(GroupHuman);
                                         }
                                     }
                                 }
-                                QuestNPC = (TMerchant)m_PEnvir.GetQuestNPC(m_ExpHitter, m_sCharName, "", false);
+                                QuestNPC = (Merchant)m_PEnvir.GetQuestNPC(m_ExpHitter, m_sCharName, "", false);
                                 if (QuestNPC != null)
                                 {
                                     QuestNPC.Click(m_ExpHitter as TPlayObject);

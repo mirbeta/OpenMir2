@@ -173,7 +173,7 @@ namespace GameSvr
                         m_MainDoor.BaseObject.m_Castle = this;
                         if (m_MainDoor.nStatus)
                         {
-                            ((TCastleDoor)m_MainDoor.BaseObject).Open();
+                            ((CastleDoor)m_MainDoor.BaseObject).Open();
                         }
                     }
                     else
@@ -219,9 +219,9 @@ namespace GameSvr
                         {
                             ObjUnit.BaseObject.m_WAbil.HP = m_Archer[i].nHP;
                             ObjUnit.BaseObject.m_Castle = this;
-                            ((TGuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
-                            ((TGuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
-                            ((TGuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
+                            ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
+                            ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
+                            ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
                         }
                         else
                         {
@@ -801,16 +801,16 @@ namespace GameSvr
             {
                 if (boClose)
                 {
-                    if (((TCastleDoor)m_MainDoor.BaseObject).m_boOpened)
+                    if (((CastleDoor)m_MainDoor.BaseObject).m_boOpened)
                     {
-                        ((TCastleDoor)m_MainDoor.BaseObject).Close();
+                        ((CastleDoor)m_MainDoor.BaseObject).Close();
                     }
                 }
                 else
                 {
-                    if (!((TCastleDoor)m_MainDoor.BaseObject).m_boOpened)
+                    if (!((CastleDoor)m_MainDoor.BaseObject).m_boOpened)
                     {
-                        ((TCastleDoor)m_MainDoor.BaseObject).Open();
+                        ((CastleDoor)m_MainDoor.BaseObject).Open();
                     }
                 }
             }
@@ -833,7 +833,7 @@ namespace GameSvr
                 if ((HUtil32.GetTickCount() - CastleDoor.BaseObject.m_dwStruckTick) > 60 * 1000)
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
-                    ((TCastleDoor)CastleDoor.BaseObject).RefStatus();
+                    ((CastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
@@ -843,8 +843,8 @@ namespace GameSvr
                 {
                     CastleDoor.BaseObject.m_WAbil.HP = CastleDoor.BaseObject.m_WAbil.MaxHP;
                     CastleDoor.BaseObject.m_boDeath = false;
-                    ((TCastleDoor)CastleDoor.BaseObject).m_boOpened = false;
-                    ((TCastleDoor)CastleDoor.BaseObject).RefStatus();
+                    ((CastleDoor)CastleDoor.BaseObject).m_boOpened = false;
+                    ((CastleDoor)CastleDoor.BaseObject).RefStatus();
                     result = true;
                 }
             }
@@ -881,7 +881,7 @@ namespace GameSvr
                 if ((HUtil32.GetTickCount() - Wall.m_dwStruckTick) > 60 * 1000)
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
-                    ((TWallStructure)Wall).RefStatus();
+                    ((WallStructure)Wall).RefStatus();
                     result = true;
                 }
             }
@@ -891,7 +891,7 @@ namespace GameSvr
                 {
                     Wall.m_WAbil.HP = Wall.m_WAbil.MaxHP;
                     Wall.m_boDeath = false;
-                    ((TWallStructure)Wall).RefStatus();
+                    ((WallStructure)Wall).RefStatus();
                     result = true;
                 }
             }

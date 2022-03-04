@@ -11,12 +11,12 @@
 
         }
 
-        public void Condition(TNormNpc normNpc, TPlayObject playObject, TQuestConditionInfo questConditionInfo, ref bool result)
+        public void Condition(NormNpc normNpc, TPlayObject playObject, TQuestConditionInfo questConditionInfo, ref bool result)
         {
 
         }
 
-        public void Action(TNormNpc normNpc, TPlayObject playObject, TQuestActionInfo questActionInfo, ref bool result)
+        public void Action(NormNpc normNpc, TPlayObject playObject, TQuestActionInfo questActionInfo, ref bool result)
         {
 
         }

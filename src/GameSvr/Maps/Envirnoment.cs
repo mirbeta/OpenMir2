@@ -860,7 +860,7 @@ namespace GameSvr
         public bool CreateQuest(int nFlag, int nValue, string sMonName, string sItem, string sQuest, bool boGrouped)
         {
             TMapQuestInfo MapQuest;
-            TMerchant MapMerchant;
+            Merchant MapMerchant;
             var result = false;
             if (nFlag < 0)
             {
@@ -890,7 +890,7 @@ namespace GameSvr
                 sQuest = "";
             }
             MapQuest.boGrouped = boGrouped;
-            MapMerchant = new TMerchant
+            MapMerchant = new Merchant
             {
                 m_sMapName = "0",
                 m_nCurrX = 0,

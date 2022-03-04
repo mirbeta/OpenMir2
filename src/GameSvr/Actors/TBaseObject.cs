@@ -3617,7 +3617,7 @@ namespace GameSvr
 
                 if (Envir.QuestNPC != null)
                 {
-                    ((TMerchant)Envir.QuestNPC).Click(this as TPlayObject);
+                    ((Merchant)Envir.QuestNPC).Click(this as TPlayObject);
                 }
                 if (Envir.Flag.nNEEDSETONFlag >= 0)
                 {
@@ -5508,86 +5508,86 @@ namespace GameSvr
             //m_boPlayerDupMode = false;
             m_boFixedHideMode = false;
 
-            if (this is TCastleDoor)
+            if (this is CastleDoor)
             {
-                ((TCastleDoor)(this)).m_boOpened = false;
-                ((TCastleDoor)(this)).m_boStickMode = true;
+                ((CastleDoor)(this)).m_boOpened = false;
+                ((CastleDoor)(this)).m_boStickMode = true;
             }
-            if (this is TMagicMonster)
+            if (this is MagicMonster)
             {
-                ((TMagicMonster)(this)).m_boDupMode = false;
+                ((MagicMonster)(this)).m_boDupMode = false;
             }
-            if (this is TMagicMonObject)
+            if (this is MagicMonObject)
             {
-                ((TMagicMonObject)(this)).m_boUseMagic = false;
+                ((MagicMonObject)(this)).m_boUseMagic = false;
             }
-            if (this is TRockManObject)
+            if (this is RockManObject)
             {
-                ((TRockManObject)(this)).m_boHideMode = false;
+                ((RockManObject)(this)).m_boHideMode = false;
             }
-            if (this is TWallStructure)
+            if (this is WallStructure)
             {
-                ((TWallStructure)(this)).boSetMapFlaged = false;
+                ((WallStructure)(this)).boSetMapFlaged = false;
             }
-            if (this is TSoccerBall)
+            if (this is SoccerBall)
             {
-                ((TSoccerBall)(this)).n550 = 0;
-                ((TSoccerBall)(this)).m_nTargetX = -1;
+                ((SoccerBall)(this)).n550 = 0;
+                ((SoccerBall)(this)).m_nTargetX = -1;
             }
-            if (this is TFrostTiger)
+            if (this is FrostTiger)
             {
                 //((TFrostTiger)(this)).m_boApproach = false;
             }
-            if (this is TCowKingMonster) {
+            if (this is CowKingMonster) {
                 /*((TCowKingMonster)(this)).m_boCowKingMon = true;
                 ((TCowKingMonster)(this)).m_nDangerLevel = 0;
                 ((TCowKingMonster)(this)).m_boDanger = false;
                 ((TCowKingMonster)(this)).m_boCrazy = false;*/
             }
-            if (this is TDigOutZombi)
+            if (this is DigOutZombi)
             {
-                ((TDigOutZombi)(this)).m_boFixedHideMode = true;
+                ((DigOutZombi)(this)).m_boFixedHideMode = true;
             }
-            if (this is TWhiteSkeleton)
+            if (this is WhiteSkeleton)
             {
-               ((TWhiteSkeleton)(this)).m_boIsFirst = true;
-               ((TWhiteSkeleton)(this)).m_boFixedHideMode = true;
+               ((WhiteSkeleton)(this)).m_boIsFirst = true;
+               ((WhiteSkeleton)(this)).m_boFixedHideMode = true;
             }
-            if (this is TScultureMonster)
+            if (this is ScultureMonster)
             {
-                ((TDigOutZombi)(this)).m_boFixedHideMode = true;
+                ((DigOutZombi)(this)).m_boFixedHideMode = true;
             }
-            if (this is TScultureKingMonster)
+            if (this is ScultureKingMonster)
             {
-               ((TScultureKingMonster)(this)).m_boStoneMode = true;
-               ((TScultureKingMonster)(this)).m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
+               ((ScultureKingMonster)(this)).m_boStoneMode = true;
+               ((ScultureKingMonster)(this)).m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
             }
-            if (this is TElfMonster)
+            if (this is ElfMonster)
             {
-                ((TElfMonster)(this)).m_boFixedHideMode = true;
-                ((TElfMonster)(this)).m_boNoAttackMode = true;
-                ((TElfMonster)(this)).boIsFirst = true;
+                ((ElfMonster)(this)).m_boFixedHideMode = true;
+                ((ElfMonster)(this)).m_boNoAttackMode = true;
+                ((ElfMonster)(this)).boIsFirst = true;
             }
-            if (this is TElfWarriorMonster)
+            if (this is ElfWarriorMonster)
             {
-                 ((TElfWarriorMonster)(this)).m_boFixedHideMode = true;
-                 ((TElfWarriorMonster)(this)).boIsFirst = true;
-                 ((TElfWarriorMonster)(this)).m_boUsePoison = false;
+                 ((ElfWarriorMonster)(this)).m_boFixedHideMode = true;
+                 ((ElfWarriorMonster)(this)).boIsFirst = true;
+                 ((ElfWarriorMonster)(this)).m_boUsePoison = false;
             }
-            if (this is TElectronicScolpionMon)
+            if (this is ElectronicScolpionMon)
             {
-               ((TElectronicScolpionMon)(this)).m_boUseMagic = false;
+               ((ElectronicScolpionMon)(this)).m_boUseMagic = false;
                //((TElectronicScolpionMon)(this)).m_boApproach = false;
             }
-            if (this is TDoubleCriticalMonster)
+            if (this is DoubleCriticalMonster)
             {
                 //((TDoubleCriticalMonster)(this)).m_n7A0 = 0;
             }
-            if (this is TStickMonster)
+            if (this is StickMonster)
             {
-                 ((TStickMonster)(this)).m_dwSearchTick = HUtil32.GetTickCount();
-                 ((TStickMonster)(this)).m_boFixedHideMode = true;
-                 ((TStickMonster)(this)).m_boStickMode = true;
+                 ((StickMonster)(this)).m_dwSearchTick = HUtil32.GetTickCount();
+                 ((StickMonster)(this)).m_boFixedHideMode = true;
+                 ((StickMonster)(this)).m_boStickMode = true;
             }
 
             m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);

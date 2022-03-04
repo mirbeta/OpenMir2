@@ -22,8 +22,8 @@ namespace GameSvr
             }
             IList<TBaseObject> TmpMerList = null;
             IList<TBaseObject> TmpNorList = null;
-            TMerchant Merchant;
-            TNormNpc NPC;
+            Merchant Merchant;
+            NormNpc NPC;
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 M2Share.LocalDB.ReLoadMerchants();
@@ -42,7 +42,7 @@ namespace GameSvr
                     {
                         for (var i = 0; i < TmpMerList.Count; i++)
                         {
-                            Merchant = (TMerchant)TmpMerList[i];
+                            Merchant = (Merchant)TmpMerList[i];
                             Merchant.ClearScript();
                             Merchant.LoadNPCScript();
                             PlayObject.SysMsg(Merchant.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
@@ -57,7 +57,7 @@ namespace GameSvr
                     {
                         for (var i = 0; i < TmpNorList.Count; i++)
                         {
-                            NPC = TmpNorList[i] as TNormNpc;
+                            NPC = TmpNorList[i] as NormNpc;
                             NPC.ClearScript();
                             NPC.LoadNPCScript();
                             PlayObject.SysMsg(NPC.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);

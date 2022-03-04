@@ -34,7 +34,7 @@ namespace GameSvr
         private object m_LoadPlaySection;
         public IList<TMagicEvent> m_MagicEventList;
         public IList<TMagic> m_MagicList;
-        public IList<TMerchant> m_MerchantList;
+        public IList<Merchant> m_MerchantList;
         private ArrayList m_MonFreeList;
         public IList<MonGenInfo> m_MonGenList;
         private int m_nCurrMonGen;
@@ -74,7 +74,7 @@ namespace GameSvr
         private int nProcessHumanLoopTime;
 
         private ArrayList OldMagicList;
-        public IList<TNormNpc> QuestNPCList;
+        public IList<NormNpc> QuestNPCList;
         public IList<GameItem> StdItemList;
         public long m_dwAILogonTick;//处理假人间隔
         public IList<TAILogon> m_UserLogonList;//假人列表
@@ -108,8 +108,8 @@ namespace GameSvr
             m_MonFreeList = new ArrayList();
             m_MagicList = new List<TMagic>();
             m_AdminList = new List<TAdminInfo>();
-            m_MerchantList = new List<TMerchant>();
-            QuestNPCList = new List<TNormNpc>();
+            m_MerchantList = new List<Merchant>();
+            QuestNPCList = new List<NormNpc>();
             m_ChangeServerList = new List<TSwitchDataInfo>();
             m_MagicEventList = new List<TMagicEvent>();
             dwProcessMerchantTimeMin = 0;
@@ -177,7 +177,7 @@ namespace GameSvr
 
         private void MerchantInitialize()
         {
-            TMerchant Merchant;
+            Merchant Merchant;
             for (var i = m_MerchantList.Count - 1; i >= 0; i--)
             {
                 Merchant = m_MerchantList[i];
@@ -209,7 +209,7 @@ namespace GameSvr
 
         private void NpCinitialize()
         {
-            TNormNpc NormNpc;
+            NormNpc NormNpc;
             for (var i = QuestNPCList.Count - 1; i >= 0; i--)
             {
                 NormNpc = QuestNPCList[i];
@@ -980,7 +980,7 @@ namespace GameSvr
         {
             bool boCanCreate;
             var dwRunTick = HUtil32.GetTickCount();
-            TAnimalObject Monster = null;
+            AnimalObject Monster = null;
             try
             {
                 var boProcessLimit = false;
@@ -1048,7 +1048,7 @@ namespace GameSvr
                         {
                             break;
                         }
-                        Monster = (TAnimalObject)MonGen.CertList[nProcessPosition];
+                        Monster = (AnimalObject)MonGen.CertList[nProcessPosition];
                         if (Monster != null)
                         {
                             if (!Monster.m_boGhost)
@@ -1150,7 +1150,7 @@ namespace GameSvr
 
         private void ProcessNpcs()
         {
-            TNormNpc NPC;
+            NormNpc NPC;
             var dwRunTick = HUtil32.GetTickCount();
             var boProcessLimit = false;
             try
@@ -1586,16 +1586,16 @@ namespace GameSvr
             switch (nMonRace)
             {
                 case M2Share.SUPREGUARD:
-                    Cert = new TSuperGuard();
+                    Cert = new SuperGuard();
                     break;
                 case M2Share.PETSUPREGUARD:
-                    Cert = new TPetSuperGuard();
+                    Cert = new PetSuperGuard();
                     break;
                 case M2Share.ARCHER_POLICE:
-                    Cert = new TArcherPolice();
+                    Cert = new ArcherPolice();
                     break;
                 case M2Share.ANIMAL_CHICKEN:
-                    Cert = new TMonster
+                    Cert = new Monster
                     {
                         m_boAnimal = true,
                         m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
@@ -1604,14 +1604,14 @@ namespace GameSvr
                     break;
                 case M2Share.ANIMAL_DEER:
                     if (M2Share.RandomNumber.Random(30) == 0)
-                        Cert = new TChickenDeer
+                        Cert = new ChickenDeer
                         {
                             m_boAnimal = true,
                             m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
                             m_nBodyLeathery = 150
                         };
                     else
-                        Cert = new TMonster
+                        Cert = new Monster
                         {
                             m_boAnimal = true,
                             m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
@@ -1619,7 +1619,7 @@ namespace GameSvr
                         };
                     break;
                 case M2Share.ANIMAL_WOLF:
-                    Cert = new TATMonster
+                    Cert = new AtMonster
                     {
                         m_boAnimal = true,
                         m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
@@ -1630,56 +1630,56 @@ namespace GameSvr
                     Cert = new Trainer();
                     break;
                 case M2Share.MONSTER_OMA:
-                    Cert = new TMonster();
+                    Cert = new Monster();
                     break;
                 case M2Share.MONSTER_OMAKNIGHT:
-                    Cert = new TATMonster();
+                    Cert = new AtMonster();
                     break;
                 case M2Share.MONSTER_SPITSPIDER:
-                    Cert = new TSpitSpider();
+                    Cert = new SpitSpider();
                     break;
                 case 83:
-                    Cert = new TSlowATMonster();
+                    Cert = new SlowAtMonster();
                     break;
                 case 84:
-                    Cert = new TScorpion();
+                    Cert = new Scorpion();
                     break;
                 case M2Share.MONSTER_STICK:
-                    Cert = new TStickMonster();
+                    Cert = new StickMonster();
                     break;
                 case 86:
-                    Cert = new TATMonster();
+                    Cert = new AtMonster();
                     break;
                 case M2Share.MONSTER_DUALAXE:
-                    Cert = new TDualAxeMonster();
+                    Cert = new DualAxeMonster();
                     break;
                 case 88:
-                    Cert = new TATMonster();
+                    Cert = new AtMonster();
                     break;
                 case 89:
-                    Cert = new TATMonster();
+                    Cert = new AtMonster();
                     break;
                 case 90:
-                    Cert = new TGasAttackMonster();
+                    Cert = new GasAttackMonster();
                     break;
                 case 91:
-                    Cert = new TMagCowMonster();
+                    Cert = new MagCowMonster();
                     break;
                 case 92:
-                    Cert = new TCowKingMonster();
+                    Cert = new CowKingMonster();
                     break;
                 case M2Share.MONSTER_THONEDARK:
-                    Cert = new TThornDarkMonster();
+                    Cert = new ThornDarkMonster();
                     break;
                 case M2Share.MONSTER_LIGHTZOMBI:
-                    Cert = new TLightingZombi();
+                    Cert = new LightingZombi();
                     break;
                 case M2Share.MONSTER_DIGOUTZOMBI:
-                    Cert = new TDigOutZombi();
+                    Cert = new DigOutZombi();
                     if (M2Share.RandomNumber.Random(2) == 0) Cert.bo2BA = true;
                     break;
                 case M2Share.MONSTER_ZILKINZOMBI:
-                    Cert = new TZilKinZombi();
+                    Cert = new ZilKinZombi();
                     if (M2Share.RandomNumber.Random(4) == 0) Cert.bo2BA = true;
                     break;
                 case 97:
@@ -1687,106 +1687,106 @@ namespace GameSvr
                     if (M2Share.RandomNumber.Random(2) == 0) Cert.bo2BA = true;
                     break;
                 case M2Share.MONSTER_WHITESKELETON:
-                    Cert = new TWhiteSkeleton();
+                    Cert = new WhiteSkeleton();
                     break;
                 case M2Share.MONSTER_SCULTURE:
-                    Cert = new TScultureMonster
+                    Cert = new ScultureMonster
                     {
                         bo2BA = true
                     };
                     break;
                 case M2Share.MONSTER_SCULTUREKING:
-                    Cert = new TScultureKingMonster();
+                    Cert = new ScultureKingMonster();
                     break;
                 case M2Share.MONSTER_BEEQUEEN:
-                    Cert = new TBeeQueen();
+                    Cert = new BeeQueen();
                     break;
                 case 104:
-                    Cert = new TArcherMonster();
+                    Cert = new ArcherMonster();
                     break;
                 case 105:
-                    Cert = new TGasMothMonster();
+                    Cert = new GasMothMonster();
                     break;
                 case 106: // 楔蛾
-                    Cert = new TGasDungMonster();
+                    Cert = new GasDungMonster();
                     break;
                 case 107:
-                    Cert = new TCentipedeKingMonster();
+                    Cert = new CentipedeKingMonster();
                     break;
                 case 110:
-                    Cert = new TCastleDoor();
+                    Cert = new CastleDoor();
                     break;
                 case 111:
-                    Cert = new TWallStructure();
+                    Cert = new WallStructure();
                     break;
                 case M2Share.MONSTER_ARCHERGUARD:
-                    Cert = new TArcherGuard();
+                    Cert = new ArcherGuard();
                     break;
                 case M2Share.MONSTER_ELFMONSTER:
-                    Cert = new TElfMonster();
+                    Cert = new ElfMonster();
                     break;
                 case M2Share.MONSTER_ELFWARRIOR:
-                    Cert = new TElfWarriorMonster();
+                    Cert = new ElfWarriorMonster();
                     break;
                 case 115:
-                    Cert = new TBigHeartMonster();
+                    Cert = new BigHeartMonster();
                     break;
                 case 116:
-                    Cert = new TSpiderHouseMonster();
+                    Cert = new SpiderHouseMonster();
                     break;
                 case 117:
-                    Cert = new TExplosionSpider();
+                    Cert = new ExplosionSpider();
                     break;
                 case 118:
-                    Cert = new THighRiskSpider();
+                    Cert = new HighRiskSpider();
                     break;
                 case 119:
-                    Cert = new TBigPoisionSpider();
+                    Cert = new BigPoisionSpider();
                     break;
                 case 120:
-                    Cert = new TSoccerBall();
+                    Cert = new SoccerBall();
                     break;
                 case 130:
-                    Cert = new TDoubleCriticalMonster();
+                    Cert = new DoubleCriticalMonster();
                     break;
                 case 131:
-                    Cert = new TRonObject();
+                    Cert = new RonObject();
                     break;
                 case 132:
-                    Cert = new TSandMobObject();
+                    Cert = new SandMobObject();
                     break;
                 case 133:
-                    Cert = new TMagicMonObject();
+                    Cert = new MagicMonObject();
                     break;
                 case 134:
-                    Cert = new TBoneKingMonster();
+                    Cert = new BoneKingMonster();
                     break;
                 case 200:
-                    Cert = new TElectronicScolpionMon();
+                    Cert = new ElectronicScolpionMon();
                     break;
                 case 201:
-                    Cert = new TClone();
+                    Cert = new CloneMonster();
                     break;
                 case 203:
-                    Cert = new TTeleMonster();
+                    Cert = new TeleMonster();
                     break;
                 case 206:
-                    Cert = new TKhazard();
+                    Cert = new Khazard();
                     break;
                 case 208:
-                    Cert = new TGreenMonster();
+                    Cert = new GreenMonster();
                     break;
                 case 209:
-                    Cert = new TRedMonster();
+                    Cert = new RedMonster();
                     break;
                 case 210:
-                    Cert = new TFrostTiger();
+                    Cert = new FrostTiger();
                     break;
                 case 214:
-                    Cert = new TFireMonster();
+                    Cert = new FireMonster();
                     break;
                 case 215:
-                    Cert = new TFireballMonster();
+                    Cert = new FireballMonster();
                     break;
             }
 
@@ -2002,19 +2002,19 @@ namespace GameSvr
         public object FindMerchant(int merchantId)
         {
             var normNpc = M2Share.ObjectSystem.Get(merchantId);
-            TNormNpc npcObject = null;
+            NormNpc npcObject = null;
             var npcType = normNpc.GetType();
-            if (npcType == typeof(TMerchant))
+            if (npcType == typeof(Merchant))
             {
-                npcObject = (TMerchant)Convert.ChangeType(normNpc, typeof(TMerchant));
+                npcObject = (Merchant)Convert.ChangeType(normNpc, typeof(Merchant));
             }
             if (npcType == typeof(TGuildOfficial))
             {
                 npcObject = (TGuildOfficial) Convert.ChangeType(normNpc, typeof(TGuildOfficial));
             }
-            if (npcType == typeof(TNormNpc))
+            if (npcType == typeof(NormNpc))
             {
-                npcObject = (TNormNpc)Convert.ChangeType(normNpc, typeof(TNormNpc));
+                npcObject = (NormNpc)Convert.ChangeType(normNpc, typeof(NormNpc));
             }
             if (npcType == typeof(CastleOfficial))
             {
@@ -2524,14 +2524,14 @@ namespace GameSvr
             return result;
         }
 
-        public void AddMerchant(TMerchant Merchant)
+        public void AddMerchant(Merchant Merchant)
         {
             M2Share.UserEngine.m_MerchantList.Add(Merchant);
         }
 
         public int GetMerchantList(Envirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
-            TMerchant Merchant;
+            Merchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
             {
                 Merchant = m_MerchantList[i];
@@ -2543,7 +2543,7 @@ namespace GameSvr
 
         public int GetNpcList(Envirnoment Envir, int nX, int nY, int nRange, IList<TBaseObject> TmpList)
         {
-            TNormNpc Npc;
+            NormNpc Npc;
             for (var i = 0; i < QuestNPCList.Count; i++)
             {
                 Npc = QuestNPCList[i];
@@ -2555,7 +2555,7 @@ namespace GameSvr
 
         public void ReloadMerchantList()
         {
-            TMerchant Merchant;
+            Merchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
             {
                 Merchant = m_MerchantList[i];
@@ -2569,7 +2569,7 @@ namespace GameSvr
 
         public void ReloadNpcList()
         {
-            TNormNpc Npc;
+            NormNpc Npc;
             for (var i = 0; i < QuestNPCList.Count; i++)
             {
                 Npc = QuestNPCList[i];
@@ -2916,7 +2916,7 @@ namespace GameSvr
 
         private void ClearMerchantData()
         {
-            TMerchant Merchant;
+            Merchant Merchant;
             for (var i = 0; i < m_MerchantList.Count; i++)
             {
                 Merchant = m_MerchantList[i];

@@ -822,12 +822,12 @@ namespace GameSvr
             {
                 return result;
             }
-            ((TAnimalObject)TargeTBaseObject).Struck(BaseObject);
+            ((AnimalObject)TargeTBaseObject).Struck(BaseObject);
             if (TargeTBaseObject.m_TargetCret == null)
             {
-                ((TAnimalObject)TargeTBaseObject).m_boRunAwayMode = true;
-                ((TAnimalObject)TargeTBaseObject).m_dwRunAwayStart = HUtil32.GetTickCount();
-                ((TAnimalObject)TargeTBaseObject).m_dwRunAwayTime = 10 * 1000;
+                ((AnimalObject)TargeTBaseObject).m_boRunAwayMode = true;
+                ((AnimalObject)TargeTBaseObject).m_dwRunAwayStart = HUtil32.GetTickCount();
+                ((AnimalObject)TargeTBaseObject).m_dwRunAwayTime = 10 * 1000;
             }
             BaseObject.SetTargetCreat(TargeTBaseObject);
             if (M2Share.RandomNumber.Random(2) + (BaseObject.m_Abil.Level - 1) > TargeTBaseObject.m_Abil.Level)
