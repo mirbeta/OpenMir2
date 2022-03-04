@@ -304,7 +304,7 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    byte[] msgBuff = pMsg.nLength > 0 ? new byte[pMsg.nLength] : new byte[Buff.Length - 20];
+                                    var msgBuff = pMsg.nLength > 0 ? new byte[pMsg.nLength] : new byte[Buff.Length - 20];
                                     Array.Copy(Buff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
                                     var message = new TMessageData();
                                     message.UserCientId = pMsg.wGSocketIdx;
