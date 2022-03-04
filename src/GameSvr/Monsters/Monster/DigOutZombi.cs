@@ -16,7 +16,7 @@ namespace GameSvr
 
         private void sub_4AA8DC()
         {
-            var digEvent = new TEvent(m_PEnvir, m_nCurrX, m_nCurrY, 1, 5 * 60 * 1000, true);
+            var digEvent = new Event(m_PEnvir, m_nCurrX, m_nCurrY, 1, 5 * 60 * 1000, true);
             M2Share.EventManager.AddEvent(digEvent);
             m_boFixedHideMode = false;
             SendRefMsg(Grobal2.RM_DIGUP, m_btDirection, m_nCurrX, m_nCurrY, digEvent.Id, "");

@@ -5,9 +5,9 @@ namespace GameSvr
     /// <summary>
     /// 安全区光环
     /// </summary>
-    public class TSafeEvent : TEvent
+    public class SafeEvent : Event
     {
-        public TSafeEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, HUtil32.GetTickCount(), true)
+        public SafeEvent(Envirnoment Envir, int nX, int nY, int nType) : base(Envir, nX, nY, nType, HUtil32.GetTickCount(), true)
         {
 
         }

@@ -1252,7 +1252,7 @@ namespace GameSvr
         {
             MapCellinfo MapCellInfo = null;
             TBaseObject BaseObject = null;
-            TEvent MapEvent = null;
+            Event MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
             {
                 m_VisibleItems[i].nVisibleFlag = 0;
@@ -1358,7 +1358,7 @@ namespace GameSvr
                                         }
                                         if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                                         {
-                                            MapEvent = (TEvent)OSObject.CellObj;
+                                            MapEvent = (Event)OSObject.CellObj;
                                             if (MapEvent.m_boVisible)
                                             {
                                                 UpdateVisibleEvent(n20, n1C, MapEvent);

@@ -193,7 +193,7 @@ namespace GameSvr
         private void MakeStoneMines()
         {
             Envirnoment Envir;
-            var stoneList = new List<TStoneMineEvent>();
+            var stoneList = new List<StoneMineEvent>();
             var mineMapList = M2Share.g_MapManager.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
@@ -202,8 +202,8 @@ namespace GameSvr
                 {
                     for (var nH = 0; nH < Envir.wHeight; nH++)
                     {
-                        var mine = new TStoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
-                        if (!mine.m_boAddToMap)
+                        var mine = new StoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
+                        if (!mine.AddToMap)
                         {
                             mine.Dispose();
                         }

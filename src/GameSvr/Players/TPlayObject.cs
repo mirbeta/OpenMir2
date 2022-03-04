@@ -1793,18 +1793,18 @@ namespace GameSvr
         {
             var result = false;
             var s1C = string.Empty;
-            var mineEvent = (TStoneMineEvent)m_PEnvir.GetEvent(nX, nY);
+            var mineEvent = (StoneMineEvent)m_PEnvir.GetEvent(nX, nY);
             if (mineEvent != null && mineEvent.m_nEventType == Grobal2.ET_MINE)
             {
-                if (mineEvent.m_nMineCount > 0)
+                if (mineEvent.MineCount > 0)
                 {
-                    mineEvent.m_nMineCount -= 1;
+                    mineEvent.MineCount -= 1;
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nMakeMineHitRate) == 0)
                     {
-                        var pileEvent = (TPileStones)m_PEnvir.GetEvent(m_nCurrX, m_nCurrY);
+                        var pileEvent = (PileStones)m_PEnvir.GetEvent(m_nCurrX, m_nCurrY);
                         if (pileEvent == null)
                         {
-                            pileEvent = new TPileStones(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_PILESTONES, 5 * 60 * 1000);
+                            pileEvent = new PileStones(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_PILESTONES, 5 * 60 * 1000);
                             M2Share.EventManager.AddEvent(pileEvent);
                         }
                         else
@@ -1832,7 +1832,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    if ((HUtil32.GetTickCount() - mineEvent.m_dwAddStoneMineTick) > 10 * 60 * 1000)
+                    if ((HUtil32.GetTickCount() - mineEvent.AddStoneMineTick) > 10 * 60 * 1000)
                     {
                         mineEvent.AddStoneMine();
                     }

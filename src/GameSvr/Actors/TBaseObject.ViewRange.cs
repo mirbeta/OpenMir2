@@ -65,10 +65,10 @@ namespace GameSvr
             m_VisibleItems.Add(VisibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(int wX, int wY, TEvent MapEvent)
+        protected void UpdateVisibleEvent(int wX, int wY, Event MapEvent)
         {
             bool boIsVisible = false;
-            TEvent __Event;
+            Event __Event;
             for (int i = 0; i < m_VisibleEvents.Count; i++)
             {
                 __Event = m_VisibleEvents[i];

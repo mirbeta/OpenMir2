@@ -14,7 +14,7 @@ namespace GameSvr
 
         public void MakeSafePkZone()
         {
-            TSafeEvent SafeEvent;
+            SafeEvent SafeEvent;
             TStartPoint StartPoint;
             Envirnoment Envir;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
@@ -35,7 +35,7 @@ namespace GameSvr
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    SafeEvent = new TSafeEvent(Envir, nX, nY, StartPoint.m_nType);
+                                    SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
                                     M2Share.EventManager.AddEvent(SafeEvent);
                                 }
                             }

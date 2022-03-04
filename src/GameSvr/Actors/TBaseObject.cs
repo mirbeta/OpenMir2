@@ -485,7 +485,7 @@ namespace GameSvr
         public IList<SendMessage> m_MsgList = null;
         public IList<TBaseObject> m_VisibleHumanList = null;
         public IList<VisibleMapItem> m_VisibleItems = null;
-        public IList<TEvent> m_VisibleEvents = null;
+        public IList<Event> m_VisibleEvents = null;
         public int m_SendRefMsgTick = 0;
         /// <summary>
         /// 是否在开行会战
@@ -691,7 +691,7 @@ namespace GameSvr
             m_VisibleHumanList = new List<TBaseObject>();
             m_VisibleActors = new List<TVisibleBaseObject>();
             m_VisibleItems = new List<VisibleMapItem>();
-            m_VisibleEvents = new List<TEvent>();
+            m_VisibleEvents = new List<Event>();
             m_ItemList = new List<TUserItem>();
             m_DealItemList = new List<TUserItem>();
             m_boIsVisibleActive = false;
@@ -3491,7 +3491,7 @@ namespace GameSvr
             CellObject OSObject;
             TGateObj GateObj;
             bool bo1D;
-            TEvent __Event;
+            Event __Event;
             TPlayObject PlayObject;
             const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
             bool result = true;
@@ -3516,9 +3516,9 @@ namespace GameSvr
                         }
                         if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                         {
-                            if (((TEvent)OSObject.CellObj).m_OwnBaseObject != null)
+                            if (((Event)OSObject.CellObj).m_OwnBaseObject != null)
                             {
-                                __Event = (TEvent)OSObject.CellObj;
+                                __Event = (Event)OSObject.CellObj;
                             }
                         }
                         if (OSObject.CellType == CellType.OS_MAPEVENT)

@@ -27,7 +27,7 @@ namespace GameSvr
             m_nCharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
             m_boStoneMode = false;
-            var stoneEvent = new TEvent(m_PEnvir, m_nCurrX, m_nCurrY, 6, 5 * 60 * 1000, true);
+            var stoneEvent = new Event(m_PEnvir, m_nCurrX, m_nCurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventManager.AddEvent(stoneEvent);
         }
 
