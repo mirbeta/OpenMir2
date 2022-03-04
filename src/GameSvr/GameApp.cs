@@ -134,7 +134,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("城堡城初始完成...");
                 if (M2Share.nServerIndex == 0)
                 {
-                    InterServerMsg.Instance.StartMsgServer();
+                    SnapsmService.Instance.StartSnapsServer();
                     M2Share.MainOutMessage("当前服务器运行主节点模式...");
                 }
                 else

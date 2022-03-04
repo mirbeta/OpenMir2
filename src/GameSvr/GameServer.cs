@@ -44,7 +44,7 @@ namespace GameSvr
                 ProcessGameRun();
                 if (M2Share.nServerIndex == 0)
                 {
-                    InterServerMsg.Instance.Run();
+                    SnapsmService.Instance.Run();
                 }
                 else
                 {
