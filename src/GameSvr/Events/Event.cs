@@ -3,7 +3,7 @@ using System;
 
 namespace GameSvr
 {
-    public class TEvent : IDisposable
+    public class Event : IDisposable
     {
         /// <summary>
         /// 事件ID
@@ -20,6 +20,9 @@ namespace GameSvr
         /// 持续时间
         /// </summary>
         private int m_dwContinueTime = 0;
+        /// <summary>
+        /// 关闭时间
+        /// </summary>
         public int m_dwCloseTick = 0;
         /// <summary>
         /// 是否关闭
@@ -44,7 +47,7 @@ namespace GameSvr
         /// </summary>
         public bool m_boActive = false;
 
-        public TEvent(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
+        public Event(Envirnoment envir, int ntX, int ntY, int nType, int dwETime, bool boVisible)
         {
             Id = HUtil32.Sequence();
             m_dwOpenStartTick = HUtil32.GetTickCount();

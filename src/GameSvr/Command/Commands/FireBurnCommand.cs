@@ -25,7 +25,7 @@ namespace GameSvr
                 PlayObject.SysMsg("命令格式: @" + M2Share.g_GameCommand.FIREBURN.sCmd + " nInt nTime nN", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            var FireBurnEvent = new TFireBurnEvent(PlayObject, PlayObject.m_nCurrX, PlayObject.m_nCurrY, nInt, nTime, nN);
+            var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.m_nCurrX, PlayObject.m_nCurrY, nInt, nTime, nN);
             M2Share.EventManager.AddEvent(FireBurnEvent);
         }
     }

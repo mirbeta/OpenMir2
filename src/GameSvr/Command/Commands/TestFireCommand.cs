@@ -17,7 +17,7 @@ namespace GameSvr
             var nTime = @params.Length > 2 ? int.Parse(@params[2]) : 0;
             var nPoint = @params.Length > 3 ? int.Parse(@params[3]) : 0;
 
-            TFireBurnEvent FireBurnEvent;
+            FireBurnEvent FireBurnEvent;
             var nMinX = PlayObject.m_nCurrX - nRange;
             var nMaxX = PlayObject.m_nCurrX + nRange;
             var nMinY = PlayObject.m_nCurrY - nRange;
@@ -28,7 +28,7 @@ namespace GameSvr
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
-                        FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                        FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                         M2Share.EventManager.AddEvent(FireBurnEvent);
                     }
                 }

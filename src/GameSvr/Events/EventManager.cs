@@ -5,12 +5,12 @@ namespace GameSvr
 {
     public class EventManager
     {
-        private readonly IList<TEvent> _eventList = null;
-        private readonly IList<TEvent> _closedEventList = null;
+        private readonly IList<Event> _eventList = null;
+        private readonly IList<Event> _closedEventList = null;
 
         public void Run()
         {
-            TEvent executeEvent;
+            Event executeEvent;
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _eventList[i];
@@ -37,12 +37,12 @@ namespace GameSvr
             }
         }
 
-        public TEvent GetEvent(Envirnoment Envir, int nX, int nY, int nType)
+        public Event GetEvent(Envirnoment Envir, int nX, int nY, int nType)
         {
-            TEvent result = null;
+            Event result = null;
             for (var i = _eventList.Count - 1; i >= 0; i--)
             {
-                TEvent currentEvent = _eventList[i];
+                Event currentEvent = _eventList[i];
                 if (currentEvent.m_nEventType == nType)
                 {
                     if (currentEvent.m_Envir == Envir && currentEvent.m_nX == nX && currentEvent.m_nY == nY)
@@ -55,15 +55,15 @@ namespace GameSvr
             return result;
         }
 
-        public void AddEvent(TEvent @event)
+        public void AddEvent(Event @event)
         {
             _eventList.Add(@event);
         }
 
         public EventManager()
         {
-            _eventList = new List<TEvent>();
-            _closedEventList = new List<TEvent>();
+            _eventList = new List<Event>();
+            _closedEventList = new List<Event>();
         }
     }
 }

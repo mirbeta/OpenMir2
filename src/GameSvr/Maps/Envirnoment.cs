@@ -615,14 +615,14 @@ namespace GameSvr
         }
 
         /// <summary>
-        /// 添加矿石道地图
+        /// 添加矿石到地图上
         /// </summary>
         /// <param name="nX"></param>
         /// <param name="nY"></param>
         /// <param name="nType"></param>
         /// <param name="stoneMineEvent"></param>
         /// <returns></returns>
-        public object AddToMapMineEvent(int nX, int nY, CellType nType, TStoneMineEvent stoneMineEvent)
+        public object AddToMapMineEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
         {
             MapCellinfo MapCellInfo = null;
             MapCellinfo Mc = new MapCellinfo();
@@ -634,7 +634,7 @@ namespace GameSvr
                 var bo1A = false;
                 if (bo19 && MapCellInfo.Attribute != 0)
                 {
-                    var Space = false;// 人物可以走到的地方才放上矿藏
+                    var isSpace = false;// 人物可以走到的地方才放上矿藏
                     for (var X = nX - 1; X <= nX + 1; X ++ )
                     {
                         for (var Y = nY - 1; Y <= nY + 1; Y ++ )
@@ -643,20 +643,20 @@ namespace GameSvr
                             {
                                 if ((Mc.Valid))
                                 {
-                                    Space = true;
+                                    isSpace = true;
                                 }
                             }
-                            if (Space)
+                            if (isSpace)
                             {
                                 break;
                             }
                         }
-                        if (Space)
+                        if (isSpace)
                         {
                             break;
                         }
                     }
-                    if (Space)
+                    if (isSpace)
                     {
                         if (MapCellInfo.ObjList == null)
                         {
@@ -1039,7 +1039,7 @@ namespace GameSvr
                     OSObject = MapCellInfo.ObjList[i];
                     if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                     {
-                        if (((TEvent)OSObject.CellObj).m_nDamage > 0)
+                        if (((Event)OSObject.CellObj).m_nDamage > 0)
                         {
                             result = false;
                         }

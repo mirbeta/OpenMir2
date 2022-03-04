@@ -1,8 +1,8 @@
 ﻿namespace GameSvr
 {
-    public class TPileStones : TEvent
+    public class PileStones : Event
     {
-        public TPileStones(Envirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, nX, nY, nType, nTime, true)
+        public PileStones(Envirnoment Envir, int nX, int nY, int nType, int nTime) : base(Envir, nX, nY, nType, nTime, true)
         {
             m_nEventParam = 1;
         }

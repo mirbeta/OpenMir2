@@ -1066,27 +1066,27 @@ namespace GameSvr
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY - 1) == null)
             {
-                TFireBurnEvent   FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent   FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX - 1, nY) == null)
             {
-                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY) == null)
             {
-                TFireBurnEvent   FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent   FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX + 1, nY) == null)
             {
-                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY + 1) == null)
             {
-                TFireBurnEvent  FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             return 1;
@@ -1144,7 +1144,7 @@ namespace GameSvr
             if (BaseObject.m_PEnvir.CanWalk(nX, nY, true))
             {
                 IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
-                TMagicEvent MagicEvent = null;
+                MagicEvent MagicEvent = null;
                 BaseObject.GetMapBaseObjects(BaseObject.m_PEnvir, nX, nY, 1, BaseObjectList);
                 for (var i = 0; i < BaseObjectList.Count; i++)
                 {
@@ -1154,7 +1154,7 @@ namespace GameSvr
                         TargeTBaseObject.OpenHolySeizeMode(nPower * 1000);
                         if (MagicEvent == null)
                         {
-                            MagicEvent = new TMagicEvent
+                            MagicEvent = new MagicEvent
                             {
                                 BaseObjectList = new List<TBaseObject>(),
                                 dwStartTick = HUtil32.GetTickCount(),
@@ -1172,28 +1172,28 @@ namespace GameSvr
                 BaseObjectList = null;
                 if (result > 0 && MagicEvent != null)
                 {
-                    var HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    var HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[0] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX + 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX + 1, nY - 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[1] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX - 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[2] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX + 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX + 2, nY - 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[3] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX - 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[4] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX + 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX + 2, nY + 1, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[5] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX - 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[6] = HolyCurtainEvent;
-                    HolyCurtainEvent = new THolyCurtainEvent(BaseObject.m_PEnvir, nX + 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent = new HolyCurtainEvent(BaseObject.m_PEnvir, nX + 1, nY + 2, Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventManager.AddEvent(HolyCurtainEvent);
                     MagicEvent.Events[7] = HolyCurtainEvent;
                     M2Share.UserEngine.m_MagicEventList.Add(MagicEvent);

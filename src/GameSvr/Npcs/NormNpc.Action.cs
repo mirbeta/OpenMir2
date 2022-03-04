@@ -1219,7 +1219,7 @@ namespace GameSvr
             {
                 var OldEnvir = PlayObject.m_PEnvir;
                 PlayObject.m_PEnvir = Envir;
-                var FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
                 PlayObject.m_PEnvir = OldEnvir;
                 return;
@@ -3295,7 +3295,7 @@ namespace GameSvr
 
         private void ActionOfPkZone(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            TFireBurnEvent FireBurnEvent;
+            FireBurnEvent FireBurnEvent;
             int nRange = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             int nType = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             int nTime = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
@@ -3316,7 +3316,7 @@ namespace GameSvr
                     if (((nX < nMaxX) && (nY == nMinY)) || ((nY < nMaxY) && (nX == nMinX)) || (nX == nMaxX) ||
                         (nY == nMaxY))
                     {
-                        FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                        FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                         M2Share.EventManager.AddEvent(FireBurnEvent);
                     }
                 }

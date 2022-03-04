@@ -32,7 +32,7 @@ namespace GameSvr
         /// </summary>
         private IList<TUserOpenInfo> m_LoadPlayList;
         private object m_LoadPlaySection;
-        public IList<TMagicEvent> m_MagicEventList;
+        public IList<MagicEvent> m_MagicEventList;
         public IList<TMagic> m_MagicList;
         public IList<Merchant> m_MerchantList;
         private ArrayList m_MonFreeList;
@@ -111,7 +111,7 @@ namespace GameSvr
             m_MerchantList = new List<Merchant>();
             QuestNPCList = new List<NormNpc>();
             m_ChangeServerList = new List<TSwitchDataInfo>();
-            m_MagicEventList = new List<TMagicEvent>();
+            m_MagicEventList = new List<MagicEvent>();
             dwProcessMerchantTimeMin = 0;
             dwProcessMerchantTimeMax = 0;
             dwProcessNpcTimeMin = 0;
@@ -2451,7 +2451,7 @@ namespace GameSvr
         private void ProcessEvents()
         {
             int count;
-            TMagicEvent MagicEvent;
+            MagicEvent MagicEvent;
             TBaseObject BaseObject;
             for (var i = m_MagicEventList.Count - 1; i >= 0; i--)
             {

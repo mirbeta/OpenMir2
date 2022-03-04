@@ -49,7 +49,7 @@ namespace GameSvr
             {
                 var OldEnvir = PlayObject.m_PEnvir;
                 PlayObject.m_PEnvir = Envir;
-                var FireBurnEvent = new TFireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
+                var FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, nType, nTime * 1000, nPoint);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
                 PlayObject.m_PEnvir = OldEnvir;
                 return;

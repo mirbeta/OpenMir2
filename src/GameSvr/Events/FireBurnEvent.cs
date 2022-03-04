@@ -6,11 +6,11 @@ namespace GameSvr
     /// <summary>
     /// 火墙
     /// </summary>
-    public class TFireBurnEvent : TEvent
+    public class FireBurnEvent : Event
     {
         private int m_fireRunTick = 0;
 
-        public TFireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)
+        public FireBurnEvent(TBaseObject Creat, int nX, int nY, int nType, int nTime, int nDamage) : base(Creat.m_PEnvir, nX, nY, nType, nTime, true)
         {
             m_nDamage = nDamage;
             m_OwnBaseObject = Creat;

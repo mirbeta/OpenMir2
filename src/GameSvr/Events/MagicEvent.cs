@@ -2,16 +2,16 @@
 
 namespace GameSvr
 {
-    public class TMagicEvent
+    public class MagicEvent
     {
         public IList<TBaseObject> BaseObjectList;
         public int dwStartTick;
         public int dwTime;
-        public TEvent[] Events;
+        public Event[] Events;
 
-        public TMagicEvent()
+        public MagicEvent()
         {
-            Events = new TEvent[8];
+            Events = new Event[8];
         }
     }
 }

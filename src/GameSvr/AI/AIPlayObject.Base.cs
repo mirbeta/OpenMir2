@@ -474,7 +474,7 @@ namespace GameSvr
             CellObject OSObject;
             TBaseObject BaseObject;
             MapItem MapItem;
-            TEvent MapEvent;
+            Event MapEvent;
             TVisibleBaseObject VisibleBaseObject;
             VisibleMapItem VisibleMapItem;
             int nVisibleFlag;
@@ -632,7 +632,7 @@ namespace GameSvr
                                                 {
                                                     if (OSObject.CellObj != null)
                                                     {
-                                                        MapEvent = (TEvent)OSObject.CellObj;
+                                                        MapEvent = (Event)OSObject.CellObj;
                                                         UpdateVisibleEvent(n18, n1C, MapEvent);
                                                     }
                                                 }
