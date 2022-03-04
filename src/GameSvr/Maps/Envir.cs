@@ -56,11 +56,34 @@ namespace GameSvr
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;
+
+        /// <summary>
+        /// 对象数量
+        /// </summary>
+        public int Count => ObjList.Count;
+        
         public IList<CellObject> ObjList;
+
+        public void Add(CellObject @object)
+        {
+            ObjList.Add(@object);
+        }
+
+        public void Remove(int idx)
+        {
+            ObjList.RemoveAt(idx);
+        }
+
+        public void Dispose()
+        {
+            ObjList.Clear();
+            ObjList = null;
+        }
 
         public MapCellinfo()
         {
             ObjList = new List<CellObject>();
+            Attribute = CellAttribute.Walk;
         }
     }
 

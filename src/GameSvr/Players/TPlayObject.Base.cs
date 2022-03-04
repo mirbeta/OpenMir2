@@ -1250,7 +1250,7 @@ namespace GameSvr
 
         public override void SearchViewRange()
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             TBaseObject BaseObject = null;
             Event MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
@@ -1275,12 +1275,14 @@ namespace GameSvr
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        if (m_PEnvir.GetMapCellInfo(n20, n1C, ref MapCellInfo) && MapCellInfo.ObjList != null)
+                        var mapCell = false;
+                        MapCellInfo = m_PEnvir.GetMapCellInfo(n20, n1C, ref mapCell);
+                        if (mapCell && MapCellInfo.ObjList != null)
                         {
                             var nIdx = 0;
                             while (true)
                             {
-                                if (MapCellInfo.ObjList.Count <= nIdx)
+                                if (MapCellInfo.Count <= nIdx)
                                 {
                                     break;
                                 }
@@ -1292,12 +1294,12 @@ namespace GameSvr
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
                                             Dispose(OSObject);
-                                            MapCellInfo.ObjList.RemoveAt(nIdx);
-                                            if (MapCellInfo.ObjList.Count > 0)
+                                            MapCellInfo.Remove(nIdx);
+                                            if (MapCellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            MapCellInfo.ObjList = null;
+                                            MapCellInfo.Dispose();
                                             break;
                                         }
                                         BaseObject = (TBaseObject)OSObject.CellObj;
@@ -1320,12 +1322,12 @@ namespace GameSvr
                                             {
                                                 Dispose(OSObject.CellObj);
                                                 Dispose(OSObject);
-                                                MapCellInfo.ObjList.RemoveAt(nIdx);
-                                                if (MapCellInfo.ObjList.Count > 0)
+                                                MapCellInfo.Remove(nIdx);
+                                                if (MapCellInfo.Count > 0)
                                                 {
                                                     continue;
                                                 }
-                                                MapCellInfo.ObjList = null;
+                                                MapCellInfo.Dispose();
                                                 break;
                                             }
                                             var MapItem = (MapItem)OSObject.CellObj;

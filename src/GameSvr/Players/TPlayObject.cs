@@ -1160,22 +1160,23 @@ namespace GameSvr
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
         protected bool CretInNearXY(TBaseObject TargeTBaseObject, int nX, int nY)
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
-            var result = false;
             if (m_PEnvir == null)
             {
                 M2Share.MainOutMessage("CretInNearXY nil PEnvir");
-                return result;
+                return false;
             }
             for (var nCX = nX - 1; nCX <= nX + 1; nCX++)
             {
                 for (var nCY = nY - 1; nCY <= nY + 1; nCY++)
                 {
-                    if (m_PEnvir.GetMapCellInfo(nCX, nCY, ref MapCellInfo) && MapCellInfo.ObjList != null)
+                    var mapCell = false;
+                    MapCellInfo = m_PEnvir.GetMapCellInfo(nCX, nCY, ref mapCell);
+                    if (mapCell && MapCellInfo.ObjList != null)
                     {
-                        for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
+                        for (var i = 0; i < MapCellInfo.Count; i++)
                         {
                             OSObject = MapCellInfo.ObjList[i];
                             if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
@@ -1185,8 +1186,7 @@ namespace GameSvr
                                 {
                                     if (!BaseObject.m_boGhost && BaseObject == TargeTBaseObject)
                                     {
-                                        result = true;
-                                        return result;
+                                        return true;
                                     }
                                 }
                             }
@@ -1194,7 +1194,7 @@ namespace GameSvr
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         internal void SendUseitems()
@@ -1432,7 +1432,6 @@ namespace GameSvr
         private void ShowMapInfo(string sMap, string sX, string sY)
         {
             Envirnoment Map;
-            MapCellinfo MapCellInfo = null;
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
             if (sMap != "" && nX >= 0 && nY >= 0)
@@ -1440,12 +1439,14 @@ namespace GameSvr
                 Map = M2Share.g_MapManager.FindMap(sMap);
                 if (Map != null)
                 {
-                    if (Map.GetMapCellInfo(nX, nY, ref MapCellInfo))
+                    var mapCell = false;
+                    MapCellinfo MapCellInfo = Map.GetMapCellInfo(nX, nY, ref mapCell);
+                    if (mapCell)
                     {
                         SysMsg("标志: " + MapCellInfo.Attribute, TMsgColor.c_Green, TMsgType.t_Hint);
                         if (MapCellInfo.ObjList != null)
                         {
-                            SysMsg("对象数: " + MapCellInfo.ObjList.Count, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg("对象数: " + MapCellInfo.Count, TMsgColor.c_Green, TMsgType.t_Hint);
                         }
                     }
                     else

@@ -3129,7 +3129,7 @@ namespace GameSvr
 
         public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<TBaseObject> rList)
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
@@ -3147,9 +3147,11 @@ namespace GameSvr
                 {
                     for (var y = nStartY; y <= nEndY; y++)
                     {
-                        if (tEnvir.GetMapCellInfo(x, y, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                        var mapCell = false;
+                        MapCellInfo = tEnvir.GetMapCellInfo(x, y, ref mapCell);
+                        if (mapCell && (MapCellInfo.ObjList != null))
                         {
-                            for (var j = 0; j < MapCellInfo.ObjList.Count; j++)
+                            for (var j = 0; j < MapCellInfo.Count; j++)
                             {
                                 OSObject = MapCellInfo.ObjList[j];
                                 if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
@@ -3174,7 +3176,7 @@ namespace GameSvr
 
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
@@ -3203,11 +3205,13 @@ namespace GameSvr
                     {
                         for (var nCY = nLY; nCY <= nHY; nCY++)
                         {
-                            if (m_PEnvir.GetMapCellInfo(nCX, nCY, ref MapCellInfo))
+                            var mapCell = false;
+                            MapCellInfo = m_PEnvir.GetMapCellInfo(nCX, nCY, ref mapCell);
+                            if (mapCell)
                             {
                                 if (MapCellInfo.ObjList != null)
                                 {
-                                    for (var i = MapCellInfo.ObjList.Count - 1; i >= 0; i--)
+                                    for (var i = MapCellInfo.Count - 1; i >= 0; i--)
                                     {
                                         OSObject = MapCellInfo.ObjList[i];
                                         if (OSObject != null)
@@ -3217,10 +3221,10 @@ namespace GameSvr
                                                 if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                                 {
                                                     OSObject = null;
-                                                    MapCellInfo.ObjList.RemoveAt(i);
-                                                    if (MapCellInfo.ObjList.Count <= 0)
+                                                    MapCellInfo.Remove(i);
+                                                    if (MapCellInfo.Count <= 0)
                                                     {
-                                                        MapCellInfo.ObjList = null;
+                                                        MapCellInfo.Dispose();
                                                         break;
                                                     }
                                                 }
@@ -3248,10 +3252,10 @@ namespace GameSvr
                                                     }
                                                     catch (Exception e)
                                                     {
-                                                        MapCellInfo.ObjList.RemoveAt(i);
-                                                        if (MapCellInfo.ObjList.Count <= 0)
+                                                        MapCellInfo.Remove(i);
+                                                        if (MapCellInfo.Count <= 0)
                                                         {
-                                                            MapCellInfo.ObjList = null;
+                                                            MapCellInfo.Dispose();
                                                         }
                                                         M2Share.ErrorMessage(format(sExceptionMsg, m_sCharName));
                                                         M2Share.ErrorMessage(e.Message);
@@ -3487,11 +3491,8 @@ namespace GameSvr
 
         public bool Walk(int nIdent)
         {
-            MapCellinfo MapCellInfo = null;
             CellObject OSObject;
-            TGateObj GateObj;
-            bool bo1D;
-            Event __Event;
+            TGateObj GateObj = null;
             TPlayObject PlayObject;
             const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
             bool result = true;
@@ -3502,85 +3503,82 @@ namespace GameSvr
             }
             try
             {
-                bo1D = m_PEnvir.GetMapCellInfo(m_nCurrX, m_nCurrY, ref MapCellInfo);
-                GateObj = null;
-                __Event = null;
-                if (bo1D && (MapCellInfo.ObjList != null))
+                bool mapCell = false;
+                var MapCellInfo = m_PEnvir.GetMapCellInfo(m_nCurrX, m_nCurrY, ref mapCell);
+                if (mapCell && (MapCellInfo.ObjList != null))
                 {
-                    for (int i = 0; i < MapCellInfo.ObjList.Count; i++)
+                    for (int i = 0; i < MapCellInfo.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.CellType == CellType.OS_GATEOBJECT)
+                        switch (OSObject.CellType)
                         {
-                            GateObj = (TGateObj)OSObject.CellObj;
-                        }
-                        if (OSObject.CellType == CellType.OS_EVENTOBJECT)
-                        {
-                            if (((Event)OSObject.CellObj).m_OwnBaseObject != null)
-                            {
-                                __Event = (Event)OSObject.CellObj;
-                            }
-                        }
-                        if (OSObject.CellType == CellType.OS_MAPEVENT)
-                        {
-                        }
-                        if (OSObject.CellType == CellType.OS_DOOR)
-                        {
-                        }
-                        if (OSObject.CellType == CellType.OS_ROON)
-                        {
-                        }
-                    }
-                }
-                if (__Event != null)
-                {
-                    if (__Event.m_OwnBaseObject.IsProperTarget(this))
-                    {
-                        SendMsg(__Event.m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.m_nDamage, 0, 0, "");
-                    }
-                }
-                if (result && (GateObj != null))
-                {
-                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
-                    {
-                        if (m_PEnvir.ArroundDoorOpened(m_nCurrX, m_nCurrY))
-                        {
-                            if ((!GateObj.DEnvir.Flag.boNEEDHOLE) || (M2Share.EventManager.GetEvent(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_DIGOUTZOMBI) != null))
-                            {
-                                if (M2Share.nServerIndex == GateObj.DEnvir.nServerIndex)
+                            case CellType.OS_GATEOBJECT:
+                                GateObj = (TGateObj)OSObject.CellObj;
+                                if ((GateObj != null))
                                 {
-                                    if (!EnterAnotherMap(GateObj.DEnvir, GateObj.nDMapX, GateObj.nDMapY))
+                                    if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                                    {
+                                        if (m_PEnvir.ArroundDoorOpened(m_nCurrX, m_nCurrY))
+                                        {
+                                            if ((!GateObj.DEnvir.Flag.boNEEDHOLE) || (M2Share.EventManager.GetEvent(m_PEnvir, m_nCurrX, m_nCurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                            {
+                                                if (M2Share.nServerIndex == GateObj.DEnvir.nServerIndex)
+                                                {
+                                                    if (!EnterAnotherMap(GateObj.DEnvir, GateObj.nDMapX, GateObj.nDMapY))
+                                                    {
+                                                        result = false;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    DisappearA();
+                                                    m_bo316 = true;
+                                                    PlayObject = this as TPlayObject;
+                                                    PlayObject.m_sSwitchMapName = GateObj.DEnvir.sMapName;
+                                                    PlayObject.m_nSwitchMapX = GateObj.nDMapX;
+                                                    PlayObject.m_nSwitchMapY = GateObj.nDMapY;
+                                                    PlayObject.m_boSwitchData = true;
+                                                    PlayObject.m_nServerIndex = GateObj.DEnvir.nServerIndex;
+                                                    PlayObject.m_boEmergencyClose = true;
+                                                    PlayObject.m_boReconnection = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
                                     {
                                         result = false;
                                     }
                                 }
-                                else
+                                break;
+                            case CellType.OS_EVENTOBJECT:
+                            {
+                                Event __Event = null;
+                                if (((Event)OSObject.CellObj).m_OwnBaseObject != null)
                                 {
-                                    DisappearA();
-                                    m_bo316 = true;
-                                    PlayObject = this as TPlayObject;
-                                    PlayObject.m_sSwitchMapName = GateObj.DEnvir.sMapName;
-                                    PlayObject.m_nSwitchMapX = GateObj.nDMapX;
-                                    PlayObject.m_nSwitchMapY = GateObj.nDMapY;
-                                    PlayObject.m_boSwitchData = true;
-                                    PlayObject.m_nServerIndex = GateObj.DEnvir.nServerIndex;
-                                    PlayObject.m_boEmergencyClose = true;
-                                    PlayObject.m_boReconnection = true;
+                                    __Event = (Event)OSObject.CellObj;
                                 }
+                                if (__Event != null)
+                                {
+                                    if (__Event.m_OwnBaseObject.IsProperTarget(this))
+                                    {
+                                        SendMsg(__Event.m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.m_nDamage, 0, 0, "");
+                                    }
+                                }
+                                break;
                             }
+                            case CellType.OS_MAPEVENT:
+                                break;
+                            case CellType.OS_DOOR:
+                                break;
+                            case CellType.OS_ROON:
+                                break;
                         }
                     }
-                    else
-                    {
-                        result = false;
-                    }
                 }
-                else
+                if (result)
                 {
-                    if (result)
-                    {
-                        SendRefMsg(nIdent, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
-                    }
+                    SendRefMsg(nIdent, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
                 }
             }
             catch (Exception e)
@@ -3601,7 +3599,6 @@ namespace GameSvr
         private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
-            MapCellinfo MapCellInfo = null;
             Envirnoment OldEnvir;
             int nOldX;
             int nOldY;
@@ -3612,9 +3609,8 @@ namespace GameSvr
                 if (m_Abil.Level < Envir.nRequestLevel)
                 {
                     SysMsg(string.Format("需要 {0} 级以上才能进入 {1}", Envir.Flag.nL - 1, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
-                    return result;
+                    return false;
                 }
-
                 if (Envir.QuestNPC != null)
                 {
                     ((Merchant)Envir.QuestNPC).Click(this as TPlayObject);
@@ -3623,19 +3619,21 @@ namespace GameSvr
                 {
                     if (GetQuestFalgStatus(Envir.Flag.nNEEDSETONFlag) != Envir.Flag.nNeedONOFF)
                     {
-                        return result;
+                        return false;
                     }
                 }
-                if (!Envir.GetMapCellInfo(nDMapX, nDMapY, ref MapCellInfo))
+                var mapCell = false;
+                MapCellinfo MapCellInfo = Envir.GetMapCellInfo(nDMapX, nDMapY, ref mapCell);
+                if (!mapCell)
                 {
-                    return result;
+                    return false;
                 }
                 Castle = M2Share.CastleManager.IsCastlePalaceEnvir(Envir);
                 if ((Castle != null) && (m_btRaceServer == Grobal2.RC_PLAYOBJECT))
                 {
                     if (!Castle.CheckInPalace(m_nCurrX, m_nCurrY, this))
                     {
-                        return result;
+                        return false;
                     }
                 }
                 if (Envir.Flag.boNOHORSE)
@@ -5057,7 +5055,7 @@ namespace GameSvr
 
         public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
             int result = 0;
@@ -5069,9 +5067,11 @@ namespace GameSvr
             {
                 for (int j = nStartY; j <= nEndY; j++)
                 {
-                    if (m_PEnvir.GetMapCellInfo(i, j, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                    var mapCell = false;
+                    MapCellInfo = m_PEnvir.GetMapCellInfo(i, j, ref mapCell);
+                    if (mapCell && (MapCellInfo.ObjList != null))
                     {
-                        for (int k = 0; k < MapCellInfo.ObjList.Count; k++)
+                        for (int k = 0; k < MapCellInfo.Count; k++)
                         {
                             OSObject = MapCellInfo.ObjList[k];
                             if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
