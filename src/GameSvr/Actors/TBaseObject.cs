@@ -7,7 +7,7 @@ namespace GameSvr
 {
     public partial class TBaseObject
     {
-        public int ObjectId;
+        public readonly int ObjectId;
         public string m_sMapName;
         public string m_sMapFileName;
         /// <summary>
