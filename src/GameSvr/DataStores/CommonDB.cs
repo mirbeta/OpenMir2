@@ -18,7 +18,7 @@ namespace GameSvr
         {
             int result = -1;
             int Idx;
-            GameItem Item;
+            GoodItem Item;
             const string sSQLString = "SELECT * FROM TBL_StdItems";
             try
             {
@@ -39,7 +39,7 @@ namespace GameSvr
                 {
                     while (dr.Read())
                     {
-                        Item = new GameItem();
+                        Item = new GoodItem();
                         Idx = dr.GetInt32("Idx");// 序号
                         Item.Name = dr.GetString("Name");// 名称
                         Item.StdMode = (byte)dr.GetInt32("StdMode");// 分类号
@@ -69,15 +69,15 @@ namespace GameSvr
                             case 0:
                             case 55:
                             case 58: // 药品
-                                Item.ItemType = Grobal2.ITEM_LEECHDOM;
+                                Item.ItemType = GoodType.ITEM_LEECHDOM;
                                 break;
                             case 5:
                             case 6: // 武器
-                                Item.ItemType = Grobal2.ITEM_WEAPON;
+                                Item.ItemType = GoodType.ITEM_WEAPON;
                                 break;
                             case 10:
                             case 11: // 衣服
-                                Item.ItemType = Grobal2.ITEM_ARMOR;
+                                Item.ItemType = GoodType.ITEM_ARMOR;
                                 break;
                             case 15:
                             case 19:
@@ -95,10 +95,10 @@ namespace GameSvr
                             case 63:
                             case 64:
                             case 30: // 辅助物品
-                                Item.ItemType = Grobal2.ITEM_ACCESSORY;
+                                Item.ItemType = GoodType.ITEM_ACCESSORY;
                                 break;
                             default: // 其它物品
-                                Item.ItemType = Grobal2.ITEM_ETC;
+                                Item.ItemType = GoodType.ITEM_ETC;
                                 break;
                         }
                         if (M2Share.UserEngine.StdItemList.Count <= Idx)

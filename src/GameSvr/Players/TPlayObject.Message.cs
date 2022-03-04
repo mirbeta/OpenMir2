@@ -2052,7 +2052,7 @@ namespace GameSvr
                 {
                     return;
                 }
-                GameItem StdItem;
+                GoodItem StdItem;
                 for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
                 {
                     if (m_UseItems[i] == null)

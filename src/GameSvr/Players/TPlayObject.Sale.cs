@@ -184,7 +184,7 @@ namespace GameSvr
         private void ClientCancelSellOffIng()
         {
             TDealOffInfo DealOffInfo;
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem;
             try
             {
@@ -289,7 +289,7 @@ namespace GameSvr
         /// <param name="dealCharName"></param>
         private void ClientBuySellOffItme(string dealCharName)
         {
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem;
             TPlayObject PlayObject;
             try
@@ -531,7 +531,7 @@ namespace GameSvr
         private void ClientSellOffEnd(string sBuyCharName, int nSellGold, int nGameDiamond, int nCode)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             TDealOffInfo DealOffInfo;
             m_boSellOffOK = true;
             var bo11 = false;

@@ -392,7 +392,7 @@ namespace GameSvr
             int Sec = 0;
             int MSec = 0;
             Envirnoment Envir;
-            GameItem StdItem;
+            GoodItem StdItem;
             for (var i = 0; i < ConditionList.Count; i++)
             {
                 QuestConditionInfo = ConditionList[i];
@@ -1475,7 +1475,7 @@ namespace GameSvr
         private void GotoLable_TakeItem(TPlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.DecGold(nItemCount);
@@ -1512,7 +1512,7 @@ namespace GameSvr
         public void GotoLable_GiveItem(TPlayObject PlayObject, string sItemName, int nItemCount)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             if (String.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);

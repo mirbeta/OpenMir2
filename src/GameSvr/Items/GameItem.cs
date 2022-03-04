@@ -2,9 +2,9 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class GameItem
+    public class GoodItem
     {
-        public byte ItemType = 0;
+        public GoodType ItemType = 0;
         public string Name;
         public byte StdMode = 0;
         public byte Shape = 0;
@@ -33,11 +33,11 @@ namespace GameSvr
         private int GetRandomRange(int nCount, int nRate)
         {
             var result = 0;
-            for (var i = 0; i < nCount; i ++ )
+            for (var i = 0; i < nCount; i++)
             {
                 if (M2Share.RandomNumber.Random(nRate) == 0)
                 {
-                    result ++;
+                    result++;
                 }
             }
             return result;
@@ -63,9 +63,9 @@ namespace GameSvr
 
         public void GetItemAddValue(TUserItem userItem, ref TStdItem stdItem)
         {
-            switch(ItemType)
+            switch (ItemType)
             {
-                case Grobal2.ITEM_WEAPON:
+                case GoodType.ITEM_WEAPON:
                     stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[0]);
                     stdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[1]);
                     stdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[2]);
@@ -80,14 +80,14 @@ namespace GameSvr
                         stdItem.reserved = (byte)(stdItem.reserved | 1);
                     }
                     break;
-                case Grobal2.ITEM_ARMOR:
+                case GoodType.ITEM_ARMOR:
                     stdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
                     stdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
                     stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
                     stdItem.MC = HUtil32.MakeLong(Mc, Mc2 + userItem.btValue[3]);
                     stdItem.SC = HUtil32.MakeLong(Sc, Sc2 + userItem.btValue[4]);
                     break;
-                case Grobal2.ITEM_ACCESSORY:
+                case GoodType.ITEM_ACCESSORY:
                     stdItem.AC = HUtil32.MakeLong(Ac, Ac2 + userItem.btValue[0]);
                     stdItem.MAC = HUtil32.MakeLong(Mac, Mac2 + userItem.btValue[1]);
                     stdItem.DC = HUtil32.MakeLong(Dc, Dc2 + userItem.btValue[2]);
@@ -102,7 +102,7 @@ namespace GameSvr
                         stdItem.NeedLevel = userItem.btValue[6];
                     }
                     break;
-                case Grobal2.ITEM_LEECHDOM:
+                case GoodType.ITEM_LEECHDOM:
                     stdItem.AC = HUtil32.MakeLong(Ac, Ac2);
                     stdItem.MAC = HUtil32.MakeLong(Mac, Mac2);
                     stdItem.DC = HUtil32.MakeLong(Dc, Dc2);
@@ -120,15 +120,15 @@ namespace GameSvr
                     break;
             }
         }
-        
+
         public void RandomUpgradeItem(TUserItem userItem)
         {
             int nUpgrade;
             int nIncp;
             int nVal;
-            switch(ItemType)
+            switch (ItemType)
             {
-                case Grobal2.ITEM_WEAPON:
+                case GoodType.ITEM_WEAPON:
                     nUpgrade = GetRandomRange(M2Share.g_Config.nWeaponDCAddValueMaxLimit, M2Share.g_Config.nWeaponDCAddValueRate);
                     if (M2Share.RandomNumber.Random(15) == 0)
                     {
@@ -178,7 +178,7 @@ namespace GameSvr
                         userItem.btValue[7] = (byte)(nUpgrade / 2 + 1);
                     }
                     break;
-                case Grobal2.ITEM_ARMOR:
+                case GoodType.ITEM_ARMOR:
                     nUpgrade = GetRandomRange(6, 15);
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
@@ -212,8 +212,8 @@ namespace GameSvr
                         userItem.Dura = (byte)HUtil32._MIN(65000, userItem.Dura + nVal);
                     }
                     break;
-                case Grobal2.ITEM_ACCESSORY:
-                    switch(StdMode)
+                case GoodType.ITEM_ACCESSORY:
+                    switch (StdMode)
                     {
                         case 20:
                         case 21:
@@ -420,11 +420,11 @@ namespace GameSvr
         {
             switch (ItemType)
             {
-                case Grobal2.ITEM_WEAPON:
+                case GoodType.ITEM_WEAPON:
                     break;
-                case Grobal2.ITEM_ARMOR:
+                case GoodType.ITEM_ARMOR:
                     break;
-                case Grobal2.ITEM_ACCESSORY:
+                case GoodType.ITEM_ACCESSORY:
                     int nUpgrade;
                     int nRandPoint;
                     int nVal;
@@ -649,9 +649,9 @@ namespace GameSvr
 
         public void ApplyItemParameters(ref TAddAbility addAbility)
         {
-            switch(ItemType)
+            switch (ItemType)
             {
-                case Grobal2.ITEM_WEAPON:
+                case GoodType.ITEM_WEAPON:
                     addAbility.wHitPoint += Ac2;
                     if (Mac2 > 10)
                     {
@@ -664,14 +664,14 @@ namespace GameSvr
                     addAbility.btLuck += (byte)Ac;
                     addAbility.btUnLuck += (byte)Mac;
                     break;
-                case Grobal2.ITEM_ARMOR:
+                case GoodType.ITEM_ARMOR:
                     addAbility.wAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
                     addAbility.wMAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
                     addAbility.btLuck += HUtil32.LoByte(Source);
                     addAbility.btUnLuck += HUtil32.HiByte(Source);
                     break;
-                case Grobal2.ITEM_ACCESSORY:
-                    switch(StdMode)
+                case GoodType.ITEM_ACCESSORY:
+                    switch (StdMode)
                     {
                         case 19:
                             addAbility.wAntiMagic += Ac2;
@@ -758,5 +758,33 @@ namespace GameSvr
             addAbility.wMC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMC) + Mc, HUtil32.HiWord(addAbility.wMC) + Mc2);
             addAbility.wSC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wSC) + Sc, HUtil32.HiWord(addAbility.wSC) + Sc2);
         }
+    }
+    
+    public enum GoodType : byte
+    {
+        /// <summary>
+        /// 武器
+        /// </summary>
+        ITEM_WEAPON = 0,
+        /// <summary>
+        /// 装备
+        /// </summary>
+        ITEM_ARMOR = 1,
+        /// <summary>
+        /// 辅助物品
+        /// </summary>
+        ITEM_ACCESSORY = 2,
+        /// <summary>
+        /// 其它物品
+        /// </summary>
+        ITEM_ETC = 3,
+        /// <summary>
+        /// 药水
+        /// </summary>
+        ITEM_LEECHDOM = 4,
+        /// <summary>
+        /// 金币
+        /// </summary>
+        ITEM_GOLD = 10
     }
 }

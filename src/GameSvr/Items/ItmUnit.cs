@@ -135,7 +135,7 @@ namespace GameSvr
         {
             int result = 0;
             int ItemVlue= 0;
-            GameItem StdItem;
+            GoodItem StdItem;
             // if (M2Share.g_Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )

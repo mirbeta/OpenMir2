@@ -78,7 +78,7 @@ namespace GameSvr
         {
             TItemPrice ItemPrice;
             double n10;
-            GameItem StdItem;
+            GoodItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
                 ItemPrice = m_ItemPriceList[i];
@@ -255,7 +255,7 @@ namespace GameSvr
         {
             double result = -1;
             TItemPrice ItemPrice;
-            GameItem StdItem;
+            GoodItem StdItem;
             for (var i = 0; i < m_ItemPriceList.Count; i++)
             {
                 ItemPrice = m_ItemPriceList[i];
@@ -294,7 +294,7 @@ namespace GameSvr
         private void UpgradeWaponAddValue(TPlayObject User, IList<TUserItem> ItemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             TStdItem StdItem80 = null;
             IList<TDeleteItem> DelItemList = null;
             int nDc;
@@ -764,7 +764,7 @@ namespace GameSvr
         {
             IList<TUserItem> List14;
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             var sSendMsg = string.Empty;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -1151,7 +1151,7 @@ namespace GameSvr
         private double GetUserItemPrice(TUserItem UserItem)
         {
             double result;
-            GameItem StdItem;
+            GoodItem StdItem;
             double n20;
             int nC;
             int n14;
@@ -1240,7 +1240,7 @@ namespace GameSvr
         {
             IList<TUserItem> List20;
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             int nPrice;
             string sUserItemName;
             var bo29 = false;
@@ -1334,7 +1334,7 @@ namespace GameSvr
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
             var sSendMsg = string.Empty;
-            GameItem Item;
+            GoodItem Item;
             TUserItem UserItem;
             if (PlayObject.m_nSoftVersionDateEx == 0)
             {
@@ -1447,7 +1447,7 @@ namespace GameSvr
         public bool ClientSellItem(TPlayObject PlayObject, TUserItem UserItem)
         {
             var result = false;
-            GameItem StdItem;
+            GoodItem StdItem;
             var nPrice = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nPrice > 0 && ClientSellItem_sub_4A1C84(UserItem))
             {
@@ -1579,7 +1579,7 @@ namespace GameSvr
             IList<TUserItem> List1C;
             TUserItem MakeItem;
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             var n14 = 1;
             for (var i = 0; i < m_GoodsList.Count; i++)
             {
@@ -1708,7 +1708,7 @@ namespace GameSvr
             {
                 nPrice = nPrice * M2Share.g_Config.nSuperRepairPriceRate;
             }
-            GameItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 if (boCanRepair && nPrice > 0 && UserItem.DuraMax > UserItem.Dura && StdItem.StdMode != 43)

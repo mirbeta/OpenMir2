@@ -876,7 +876,7 @@ namespace GameSvr
             {
                 return false;
             }
-            GameItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
             if (StdItem != null)
             {
                 if (StdItem.StdMode == 40)
@@ -1654,7 +1654,7 @@ namespace GameSvr
 
         private void ItemDamageRevivalRing()
         {
-            GameItem pSItem;
+            GoodItem pSItem;
             ushort nDura;
             ushort tDura;
             TPlayObject PlayObject;
@@ -2355,7 +2355,7 @@ namespace GameSvr
         {
             ushort result = 0;
             TUserItem UserItem;
-            GameItem StdItem;
+            GoodItem StdItem;
             for (int i = 0; i < m_ItemList.Count; i++)
             {
                 UserItem = m_ItemList[i];
@@ -3321,7 +3321,7 @@ namespace GameSvr
         public int GetFeature(TBaseObject BaseObject)
         {
             int result;
-            GameItem StdItem;
+            GoodItem StdItem;
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
                 byte nDress = 0;
@@ -3916,7 +3916,7 @@ namespace GameSvr
         /// </summary>
         protected void ApplyMeatQuality()
         {
-            GameItem StdItem;
+            GoodItem StdItem;
             TUserItem UserItem;
             for (int i = 0; i < m_ItemList.Count; i++)
             {
@@ -4585,7 +4585,7 @@ namespace GameSvr
             int nDura;
             int nOldDura;
             TPlayObject PlayObject;
-            GameItem StdItem;
+            GoodItem StdItem;
             bool bo19;
             if (nDamage <= 0)
             {
