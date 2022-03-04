@@ -107,7 +107,7 @@ namespace GameSvr
 
         public virtual void SearchViewRange()
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
             TVisibleBaseObject VisibleBaseObject;
@@ -142,13 +142,15 @@ namespace GameSvr
                 {
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                        var mapCell = false;
+                        MapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
+                        if (mapCell && (MapCellInfo.ObjList != null))
                         {
                             n24 = 1;
                             var nIdx = 0;
                             while (true)
                             {
-                                if (MapCellInfo.ObjList.Count <= nIdx)
+                                if (MapCellInfo.Count <= nIdx)
                                 {
                                     break;
                                 }
@@ -160,12 +162,12 @@ namespace GameSvr
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
                                             OSObject = null;
-                                            MapCellInfo.ObjList.RemoveAt(nIdx);
-                                            if (MapCellInfo.ObjList.Count > 0)
+                                            MapCellInfo.Remove(nIdx);
+                                            if (MapCellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            MapCellInfo.ObjList = null;
+                                            MapCellInfo.Dispose();
                                             break;
                                         }
                                         BaseObject = OSObject.CellObj as TBaseObject;
@@ -196,7 +198,6 @@ namespace GameSvr
                 M2Share.ErrorMessage(e.Message);
                 KickException();
             }
-
             n24 = 2;
             try
             {
@@ -224,12 +225,10 @@ namespace GameSvr
             }
         }
 
-
         public virtual void SearchViewRange_Death()
         {
             if (m_PEnvir == null)
             {
-                //MainOutMessage("TBaseObject::SearchViewRange_Death nil PEnvir");
                 return;
             }
             m_boIsVisibleActive = false;
@@ -241,17 +240,19 @@ namespace GameSvr
             var nEndX = m_nCurrX + m_nViewRange;
             var nStartY = m_nCurrY - m_nViewRange;
             var nEndY = m_nCurrY + m_nViewRange;
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             for (var n18 = nStartX; n18 <= nEndX; n18++)
             {
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
                 {
-                    if (m_PEnvir.GetMapCellInfo(n18, n1C, ref MapCellInfo) && (MapCellInfo.ObjList != null))
+                    var mapCell = false;
+                    MapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
+                    if (mapCell && (MapCellInfo.ObjList != null))
                     {
                         var nIdx = 0;
                         while (true)
                         {
-                            if (MapCellInfo.ObjList.Count <= nIdx)
+                            if (MapCellInfo.Count <= nIdx)
                             {
                                 break;
                             }
@@ -263,12 +264,12 @@ namespace GameSvr
                                     if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                     {
                                         OSObject = null;
-                                        MapCellInfo.ObjList.RemoveAt(nIdx);
-                                        if (MapCellInfo.ObjList.Count > 0)
+                                        MapCellInfo.Remove(nIdx);
+                                        if (MapCellInfo.Count > 0)
                                         {
                                             continue;
                                         }
-                                        MapCellInfo.ObjList = null;
+                                        MapCellInfo.Dispose();
                                         break;
                                     }
                                 }
@@ -278,12 +279,12 @@ namespace GameSvr
                                     {
                                         Dispose(OSObject.CellObj);
                                         Dispose(OSObject);
-                                        MapCellInfo.ObjList.RemoveAt(nIdx);
-                                        if (MapCellInfo.ObjList.Count > 0)
+                                        MapCellInfo.Remove(nIdx);
+                                        if (MapCellInfo.Count > 0)
                                         {
                                             continue;
                                         }
-                                        Dispose(MapCellInfo.ObjList);
+                                        MapCellInfo.Dispose();
                                     }
                                 }
                             }

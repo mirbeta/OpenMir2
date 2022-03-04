@@ -2396,7 +2396,7 @@ namespace GameSvr
         private void SendDoorStatus(Envirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
             int nA, string sStr)
         {
-            MapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo;
             CellObject OSObject;
             TBaseObject BaseObject;
             int n1C = nX - 12;
@@ -2407,9 +2407,11 @@ namespace GameSvr
             {
                 for (var n14 = n20; n14 <= n28; n14++)
                 {
-                    if (Envir.GetMapCellInfo(n10, n14, ref MapCellInfo) && MapCellInfo.ObjList != null)
+                    var mapCell = false;
+                    MapCellInfo = Envir.GetMapCellInfo(n10, n14, ref mapCell);
+                    if (mapCell && MapCellInfo.ObjList != null)
                     {
-                        for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
+                        for (var i = 0; i < MapCellInfo.Count; i++)
                         {
                             OSObject = MapCellInfo.ObjList[i];
                             if (OSObject != null && OSObject.CellType == CellType.OS_MOVINGOBJECT)
