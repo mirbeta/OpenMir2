@@ -68,7 +68,7 @@ namespace GameSvr
             }
             if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
             {
-                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_ITEMOBJECT, mapItem) == 1)
                 {
                     if (IncGold(mapItem.Count))
                     {
@@ -83,14 +83,14 @@ namespace GameSvr
                     }
                     else
                     {
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_ITEMOBJECT, mapItem);
                     }
                 }
                 return result;
             }
             if (IsEnoughBag())
             {
-                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_ITEMOBJECT, mapItem) == 1)
                 {
                     var UserItem = mapItem.UserItem;
                     var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
@@ -116,7 +116,7 @@ namespace GameSvr
                     else
                     {
                         Dispose(UserItem);
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_ITEMOBJECT, mapItem);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_ITEMOBJECT, mapItem);
                     }
                 }
             }
@@ -1160,8 +1160,8 @@ namespace GameSvr
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
         protected bool CretInNearXY(TBaseObject TargeTBaseObject, int nX, int nY)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             var result = false;
             if (m_PEnvir == null)
@@ -1178,7 +1178,7 @@ namespace GameSvr
                         for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                         {
                             OSObject = MapCellInfo.ObjList[i];
-                            if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                            if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                             {
                                 BaseObject = OSObject.CellObj as TBaseObject;
                                 if (BaseObject != null)
@@ -1432,7 +1432,7 @@ namespace GameSvr
         private void ShowMapInfo(string sMap, string sX, string sY)
         {
             Envirnoment Map;
-            TMapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo = null;
             var nX = (short)HUtil32.Str_ToInt(sX, 0);
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
             if (sMap != "" && nX >= 0 && nY >= 0)

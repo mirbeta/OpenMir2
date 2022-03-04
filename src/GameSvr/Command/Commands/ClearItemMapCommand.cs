@@ -50,7 +50,7 @@ namespace GameSvr.Command
             //                     {
             //                         for (int nYY = nY - nRange; nYY <= nY + nRange; nYY++)
             //                         {
-            //                             Envir.DeleteFromMap(nXX, nYY, Grobal2.OS_ITEMOBJECT, MapItem);
+            //                             Envir.DeleteFromMap(nXX, nYY, CellType.OS_ITEMOBJECT, MapItem);
             //                             if (MapItem == null)
             //                             {
             //                                 break;
@@ -73,7 +73,7 @@ namespace GameSvr.Command
             //                 {
             //                     for (int nYY = nY - nRange; nYY <= nY + nRange; nYY++)
             //                     {
-            //                         Envir.DeleteFromMap(nXX, nYY, Grobal2.OS_ITEMOBJECT, MapItem);
+            //                         Envir.DeleteFromMap(nXX, nYY, CellType.OS_ITEMOBJECT, MapItem);
             //                         if (MapItem == null)
             //                         {
             //                             break;

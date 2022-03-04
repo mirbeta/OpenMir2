@@ -1412,13 +1412,6 @@ namespace SystemModule
         public const  int CM_SMUGGLE_SUCESS = 41903;
         public const  int SM_SMUGGLE = 41900; // 夹带数据
         
-        public const int OS_EVENTOBJECT = 1;
-        public const int OS_MOVINGOBJECT = 2;
-        public const int OS_ITEMOBJECT = 3;
-        public const int OS_GATEOBJECT = 4;
-        public const int OS_MAPEVENT = 5;
-        public const int OS_DOOR = 6;
-        public const int OS_ROON = 7;
         /// <summary>
         /// 火球术
         /// </summary>

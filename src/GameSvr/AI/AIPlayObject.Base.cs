@@ -470,13 +470,13 @@ namespace GameSvr
             int n18;
             int n1C;
             int nIdx;
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             MapItem MapItem;
             TEvent MapEvent;
             TVisibleBaseObject VisibleBaseObject;
-            TVisibleMapItem VisibleMapItem;
+            VisibleMapItem VisibleMapItem;
             int nVisibleFlag;
             long dwRunTick;
             const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
@@ -549,9 +549,9 @@ namespace GameSvr
                                 {
                                     if (!OSObject.boObjectDisPose)
                                     {
-                                        switch (OSObject.btType)
+                                        switch (OSObject.CellType)
                                         {
-                                            case Grobal2.OS_MOVINGOBJECT:
+                                            case CellType.OS_MOVINGOBJECT:
                                                 if (HUtil32.GetTickCount() - OSObject.dwAddTime >= 60000)
                                                 {
                                                     OSObject.boObjectDisPose = true;
@@ -576,7 +576,7 @@ namespace GameSvr
                                                     }
                                                 }
                                                 break;
-                                            case Grobal2.OS_ITEMOBJECT:
+                                            case CellType.OS_ITEMOBJECT:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (HUtil32.GetTickCount() - OSObject.dwAddTime > M2Share.g_Config.dwClearDropOnFloorItemTime)
@@ -627,7 +627,7 @@ namespace GameSvr
                                                     }
                                                 }
                                                 break;
-                                            case Grobal2.OS_EVENTOBJECT:
+                                            case CellType.OS_EVENTOBJECT:
                                                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                                 {
                                                     if (OSObject.CellObj != null)
