@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 可见的地图物品
     /// </summary>
-    public class TVisibleMapItem
+    public class VisibleMapItem
     {
         public int nX;
         public int nY;
@@ -16,34 +16,51 @@ namespace GameSvr
         public int nVisibleFlag;
     } 
     
-    public class TOSObject
+    /// <summary>
+    /// 地图上的对象
+    /// </summary>
+    public class CellObject
     {
-        public byte btType;
+        public CellType CellType;
         public object CellObj;
         public int dwAddTime;
         public bool boObjectDisPose;
     }
 
+    public enum CellType : byte
+    {
+        OS_EVENTOBJECT = 1,
+        OS_MOVINGOBJECT = 2,
+        OS_ITEMOBJECT = 3,
+        OS_GATEOBJECT = 4,
+        OS_MAPEVENT = 5,
+        OS_DOOR = 6,
+        OS_ROON = 7
+    }
+
     public enum CellAttribute : byte
     {
+        /// <summary>
+        /// 可以走动
+        /// </summary>
         Walk = 0,
         HighWall = 1,
         LowWall = 2
     }
 
-    public class TMapCellinfo
+    public class MapCellinfo
     {
-        public static TMapCellinfo LowWall => new TMapCellinfo { Attribute = CellAttribute.LowWall };
-        public static TMapCellinfo HighWall => new TMapCellinfo { Attribute = CellAttribute.HighWall };
+        public static MapCellinfo LowWall => new MapCellinfo { Attribute = CellAttribute.LowWall };
+        public static MapCellinfo HighWall => new MapCellinfo { Attribute = CellAttribute.HighWall };
 
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute;
-        public IList<TOSObject> ObjList;
+        public IList<CellObject> ObjList;
 
-        public TMapCellinfo()
+        public MapCellinfo()
         {
-            ObjList = new List<TOSObject>();
+            ObjList = new List<CellObject>();
         }
     }
 

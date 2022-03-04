@@ -3474,7 +3474,7 @@ namespace GameSvr
                         MapItem.OfBaseObject = PlayObject; // 物品谁可以捡起
                         MapItem.CanPickUpTick = HUtil32.GetTickCount();
                         MapItem.DropBaseObject = PlayObject; // 谁掉落的
-                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                        MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.OS_ITEMOBJECT, MapItem);
                         if (MapItemA != null)
                         {
                             if (MapItemA != MapItem)
@@ -3535,7 +3535,7 @@ namespace GameSvr
                                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 MapItem.DropBaseObject = PlayObject;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, Grobal2.OS_ITEMOBJECT, MapItem);
+                                MapItemA = (MapItem)Envir.AddToMap(dX, dY, CellType.OS_ITEMOBJECT, MapItem);
                                 if (MapItemA != null)
                                 {
                                     if (MapItemA != MapItem)

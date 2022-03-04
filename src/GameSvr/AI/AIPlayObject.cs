@@ -619,7 +619,7 @@ namespace GameSvr
 
         public void SearchPickUpItem_SetHideItem(MapItem MapItem)
         {
-            TVisibleMapItem VisibleMapItem;
+            VisibleMapItem VisibleMapItem;
             for (var i = 0; i < m_VisibleItems.Count; i++)
             {
                 VisibleMapItem = m_VisibleItems[i];
@@ -646,7 +646,7 @@ namespace GameSvr
             }
             if (string.Compare(MapItem.Name, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (m_PEnvir.DeleteFromMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem) == 1)
+                if (m_PEnvir.DeleteFromMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem) == 1)
                 {
                     if (this.IncGold(MapItem.Count))
                     {
@@ -658,12 +658,12 @@ namespace GameSvr
                     }
                     else
                     {
-                        m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
                     }
                 }
                 else
                 {
-                    m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+                    m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
                 }
             }
             else
@@ -672,7 +672,7 @@ namespace GameSvr
                 StdItem = M2Share.UserEngine.GetStdItem(MapItem.UserItem.wIndex);
                 if (StdItem != null)
                 {
-                    if (m_PEnvir.DeleteFromMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem) == 1)
+                    if (m_PEnvir.DeleteFromMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem) == 1)
                     {
                         UserItem = new TUserItem();
                         UserItem = MapItem.UserItem;
@@ -697,19 +697,19 @@ namespace GameSvr
                             else
                             {
                                 Dispose(UserItem);
-                                m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+                                m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
                             }
                         }
                         else
                         {
                             Dispose(UserItem);
-                            m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+                            m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
                         }
                     }
                     else
                     {
                         Dispose(UserItem);
-                        m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+                        m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
                     }
                 }
             }
@@ -719,7 +719,7 @@ namespace GameSvr
         private bool SearchPickUpItem(int nPickUpTime)
         {
             bool result = false;
-            TVisibleMapItem VisibleMapItem = null;
+            VisibleMapItem VisibleMapItem = null;
             bool boFound;
             int n01;
             int n02;
@@ -763,7 +763,7 @@ namespace GameSvr
                         }
                     }
                     n01 = 999;
-                    TVisibleMapItem SelVisibleMapItem = null;
+                    VisibleMapItem SelVisibleMapItem = null;
                     boFound = false;
                     if (m_SelMapItem != null)
                     {

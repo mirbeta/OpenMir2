@@ -1250,7 +1250,7 @@ namespace GameSvr
 
         public override void SearchViewRange()
         {
-            TMapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo = null;
             TBaseObject BaseObject = null;
             TEvent MapEvent = null;
             for (var i = m_VisibleItems.Count - 1; i >= 0; i--)
@@ -1287,7 +1287,7 @@ namespace GameSvr
                                 var OSObject = MapCellInfo.ObjList[nIdx];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
@@ -1314,7 +1314,7 @@ namespace GameSvr
                                     }
                                     if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                     {
-                                        if (OSObject.btType == Grobal2.OS_ITEMOBJECT)
+                                        if (OSObject.CellType == CellType.OS_ITEMOBJECT)
                                         {
                                             if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
@@ -1356,7 +1356,7 @@ namespace GameSvr
                                                 }
                                             }
                                         }
-                                        if (OSObject.btType == Grobal2.OS_EVENTOBJECT)
+                                        if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                                         {
                                             MapEvent = (TEvent)OSObject.CellObj;
                                             if (MapEvent.m_boVisible)

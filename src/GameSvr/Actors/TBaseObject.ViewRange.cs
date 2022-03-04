@@ -37,7 +37,7 @@ namespace GameSvr
 
         protected void UpdateVisibleItem(int wX, int wY, MapItem MapItem)
         {
-            TVisibleMapItem VisibleMapItem;
+            VisibleMapItem VisibleMapItem;
             bool boIsVisible = false;
             for (int i = 0; i < m_VisibleItems.Count; i++)
             {
@@ -53,7 +53,7 @@ namespace GameSvr
             {
                 return;
             }
-            VisibleMapItem = new TVisibleMapItem
+            VisibleMapItem = new VisibleMapItem
             {
                 nVisibleFlag = 2,
                 nX = wX,
@@ -107,8 +107,8 @@ namespace GameSvr
 
         public virtual void SearchViewRange()
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             TVisibleBaseObject VisibleBaseObject;
             const string sExceptionMsg1 = "[Exception] TBaseObject::SearchViewRange";
@@ -155,7 +155,7 @@ namespace GameSvr
                                 OSObject = MapCellInfo.ObjList[nIdx];
                                 if (OSObject != null)
                                 {
-                                    if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                                    if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                     {
                                         if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                         {
@@ -241,7 +241,7 @@ namespace GameSvr
             var nEndX = m_nCurrX + m_nViewRange;
             var nStartY = m_nCurrY - m_nViewRange;
             var nEndY = m_nCurrY + m_nViewRange;
-            TMapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo = null;
             for (var n18 = nStartX; n18 <= nEndX; n18++)
             {
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
@@ -258,7 +258,7 @@ namespace GameSvr
                             var OSObject = MapCellInfo.ObjList[nIdx];
                             if (OSObject != null)
                             {
-                                if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                                if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                 {
                                     if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                     {
@@ -271,9 +271,8 @@ namespace GameSvr
                                         MapCellInfo.ObjList = null;
                                         break;
                                     }
-
                                 }
-                                if ((OSObject.btType == Grobal2.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
+                                if ((OSObject.CellType == CellType.OS_ITEMOBJECT) && !m_boDeath && (m_btRaceServer > Grobal2.RC_MONSTER))
                                 {
                                     if ((HUtil32.GetTickCount() - OSObject.dwAddTime) > M2Share.g_Config.dwClearDropOnFloorItemTime)
                                     {

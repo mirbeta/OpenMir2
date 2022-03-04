@@ -14,7 +14,7 @@ namespace GameSvr
             m_boAddToMap = true;
             if (nType == 55 || nType == 56 || nType == 57)
             {
-                if (m_Envir.AddToMapItemEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
+                if (m_Envir.AddToMapItemEvent(nX, nY, CellType.OS_EVENTOBJECT, this) == null)
                 {
                     m_boAddToMap = false;
                 }
@@ -29,7 +29,7 @@ namespace GameSvr
             }
             else
             {
-                if (m_Envir.AddToMapMineEvent(nX, nY, Grobal2.OS_EVENTOBJECT, this) == null)
+                if (m_Envir.AddToMapMineEvent(nX, nY, CellType.OS_EVENTOBJECT, this) == null)
                 {
                     m_boAddToMap = false;
                 }

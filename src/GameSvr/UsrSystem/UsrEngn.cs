@@ -1844,7 +1844,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, Grobal2.OS_MOVINGOBJECT, Cert);
+                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
                             break;
                         }
 
@@ -2396,8 +2396,8 @@ namespace GameSvr
         private void SendDoorStatus(Envirnoment Envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY,
             int nA, string sStr)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             int n1C = nX - 12;
             int n24 = nX + 12;
@@ -2412,7 +2412,7 @@ namespace GameSvr
                         for (var i = 0; i < MapCellInfo.ObjList.Count; i++)
                         {
                             OSObject = MapCellInfo.ObjList[i];
-                            if (OSObject != null && OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                            if (OSObject != null && OSObject.CellType == CellType.OS_MOVINGOBJECT)
                             {
                                 BaseObject = (TBaseObject) OSObject.CellObj;
                                 if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -2869,7 +2869,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, Grobal2.OS_MOVINGOBJECT, Cert);
+                            p28 = Cert.m_PEnvir.AddToMap(Cert.m_nCurrX, Cert.m_nCurrY, CellType.OS_MOVINGOBJECT, Cert);
                             break;
                         }
                         n1C++;

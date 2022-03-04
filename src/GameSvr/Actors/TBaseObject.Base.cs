@@ -1122,7 +1122,7 @@ namespace GameSvr
             {
                 m_boInvisible = true;
                 m_dwGhostTick = HUtil32.GetTickCount();
-                m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                 SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
             }
             else

@@ -63,7 +63,7 @@ namespace GameSvr
             m_dwRunTick = 500;
             if (m_Envir != null && m_boVisible)
             {
-                m_Envir.AddToMap(m_nX, m_nY, Grobal2.OS_EVENTOBJECT, this);
+                m_Envir.AddToMap(m_nX, m_nY, CellType.OS_EVENTOBJECT, this);
             }
             else
             {
@@ -91,7 +91,7 @@ namespace GameSvr
             m_boVisible = false;
             if (m_Envir != null)
             {
-                m_Envir.DeleteFromMap(m_nX, m_nY, Grobal2.OS_EVENTOBJECT, this);
+                m_Envir.DeleteFromMap(m_nX, m_nY, CellType.OS_EVENTOBJECT, this);
             }
             m_Envir = null;
         }

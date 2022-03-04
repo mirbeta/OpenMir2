@@ -484,7 +484,7 @@ namespace GameSvr
         public int m_dwHPMPTick = 0;
         public IList<SendMessage> m_MsgList = null;
         public IList<TBaseObject> m_VisibleHumanList = null;
-        public IList<TVisibleMapItem> m_VisibleItems = null;
+        public IList<VisibleMapItem> m_VisibleItems = null;
         public IList<TEvent> m_VisibleEvents = null;
         public int m_SendRefMsgTick = 0;
         /// <summary>
@@ -690,7 +690,7 @@ namespace GameSvr
             m_MsgList = new List<SendMessage>();
             m_VisibleHumanList = new List<TBaseObject>();
             m_VisibleActors = new List<TVisibleBaseObject>();
-            m_VisibleItems = new List<TVisibleMapItem>();
+            m_VisibleItems = new List<VisibleMapItem>();
             m_VisibleEvents = new List<TEvent>();
             m_ItemList = new List<TUserItem>();
             m_DealItemList = new List<TUserItem>();
@@ -906,7 +906,7 @@ namespace GameSvr
                 MapItem.CanPickUpTick = HUtil32.GetTickCount();
                 MapItem.DropBaseObject = DropCreat;
                 GetDropPosition(m_nCurrX, m_nCurrY, nScatterRange, ref dx, ref dy);
-                pr = (MapItem)m_PEnvir.AddToMap(dx, dy, Grobal2.OS_ITEMOBJECT, MapItem);
+                pr = (MapItem)m_PEnvir.AddToMap(dx, dy, CellType.OS_ITEMOBJECT, MapItem);
                 if (pr == MapItem)
                 {
                     SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.Id, dx, dy, MapItem.Name);
@@ -1132,10 +1132,10 @@ namespace GameSvr
                     }
                     else
                     {
-                        m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                        m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                         m_nCurrX = nOX;
                         m_nCurrY = nOY;
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                     }
                 }
             }
@@ -1250,7 +1250,7 @@ namespace GameSvr
                 DropBaseObject = DropGoldCreat
             };
             GetDropPosition(m_nCurrX, m_nCurrY, 3, ref nX, ref nY);
-            MapItem MapItemA = (MapItem)m_PEnvir.AddToMap(nX, nY, Grobal2.OS_ITEMOBJECT, MapItem);
+            MapItem MapItemA = (MapItem)m_PEnvir.AddToMap(nX, nY, CellType.OS_ITEMOBJECT, MapItem);
             if (MapItemA != null)
             {
                 if (MapItemA != MapItem)
@@ -1838,7 +1838,7 @@ namespace GameSvr
                     nOldX = m_nCurrX;
                     nOldY = m_nCurrY;
                     bo21 = false;
-                    m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                    m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                     m_VisibleHumanList.Clear();
                     for (int i = 0; i < m_VisibleItems.Count; i++)
                     {
@@ -1858,7 +1858,7 @@ namespace GameSvr
                     m_nCurrY = nY;
                     if (SpaceMove_GetRandXY(m_PEnvir, ref m_nCurrX, ref m_nCurrY))
                     {
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                         SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, m_sMapFileName);
                         if (nInt == 1)
@@ -1878,7 +1878,7 @@ namespace GameSvr
                         m_PEnvir = OldEnvir;
                         m_nCurrX = (short)nOldX;
                         m_nCurrY = (short)nOldY;
-                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                        m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -2469,7 +2469,7 @@ namespace GameSvr
         private bool AddToMap()
         {
             bool result;
-            object Point = m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+            object Point = m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
             if (Point != null)
             {
                 result = true;
@@ -3129,8 +3129,8 @@ namespace GameSvr
 
         public bool GetMapBaseObjects(Envirnoment tEnvir, int nX, int nY, int nRage, IList<TBaseObject> rList)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
             if (rList == null)
@@ -3152,7 +3152,7 @@ namespace GameSvr
                             for (var j = 0; j < MapCellInfo.ObjList.Count; j++)
                             {
                                 OSObject = MapCellInfo.ObjList[j];
-                                if ((OSObject != null) && (OSObject.btType == Grobal2.OS_MOVINGOBJECT))
+                                if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
                                 {
                                     BaseObject = OSObject.CellObj as TBaseObject;
                                     if ((BaseObject != null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
@@ -3174,8 +3174,8 @@ namespace GameSvr
 
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (m_PEnvir == null)
@@ -3212,7 +3212,7 @@ namespace GameSvr
                                         OSObject = MapCellInfo.ObjList[i];
                                         if (OSObject != null)
                                         {
-                                            if (OSObject.btType == Grobal2.OS_MOVINGOBJECT)
+                                            if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
                                             {
                                                 if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                                 {
@@ -3463,7 +3463,7 @@ namespace GameSvr
 
         protected void DisappearA()
         {
-            m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+            m_PEnvir.DeleteFromMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
             SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
@@ -3487,8 +3487,8 @@ namespace GameSvr
 
         public bool Walk(int nIdent)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TGateObj GateObj;
             bool bo1D;
             TEvent __Event;
@@ -3510,24 +3510,24 @@ namespace GameSvr
                     for (int i = 0; i < MapCellInfo.ObjList.Count; i++)
                     {
                         OSObject = MapCellInfo.ObjList[i];
-                        if (OSObject.btType == Grobal2.OS_GATEOBJECT)
+                        if (OSObject.CellType == CellType.OS_GATEOBJECT)
                         {
                             GateObj = (TGateObj)OSObject.CellObj;
                         }
-                        if (OSObject.btType == Grobal2.OS_EVENTOBJECT)
+                        if (OSObject.CellType == CellType.OS_EVENTOBJECT)
                         {
                             if (((TEvent)OSObject.CellObj).m_OwnBaseObject != null)
                             {
                                 __Event = (TEvent)OSObject.CellObj;
                             }
                         }
-                        if (OSObject.btType == Grobal2.OS_MAPEVENT)
+                        if (OSObject.CellType == CellType.OS_MAPEVENT)
                         {
                         }
-                        if (OSObject.btType == Grobal2.OS_DOOR)
+                        if (OSObject.CellType == CellType.OS_DOOR)
                         {
                         }
-                        if (OSObject.btType == Grobal2.OS_ROON)
+                        if (OSObject.CellType == CellType.OS_ROON)
                         {
                         }
                     }
@@ -3601,7 +3601,7 @@ namespace GameSvr
         private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
-            TMapCellinfo MapCellInfo = null;
+            MapCellinfo MapCellInfo = null;
             Envirnoment OldEnvir;
             int nOldX;
             int nOldY;
@@ -3697,7 +3697,7 @@ namespace GameSvr
                     m_PEnvir = OldEnvir;
                     m_nCurrX = (short)nOldX;
                     m_nCurrY = (short)nOldY;
-                    m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                    m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
                 }
                 OnEnvirnomentChanged();
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)  // 复位泡点，及金币，时间
@@ -5057,8 +5057,8 @@ namespace GameSvr
 
         public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
         {
-            TMapCellinfo MapCellInfo = null;
-            TOSObject OSObject;
+            MapCellinfo MapCellInfo = null;
+            CellObject OSObject;
             TBaseObject BaseObject;
             int result = 0;
             int nStartX = nX - nRange;
@@ -5074,7 +5074,7 @@ namespace GameSvr
                         for (int k = 0; k < MapCellInfo.ObjList.Count; k++)
                         {
                             OSObject = MapCellInfo.ObjList[k];
-                            if ((OSObject != null) && (OSObject.btType == Grobal2.OS_MOVINGOBJECT))
+                            if ((OSObject != null) && (OSObject.CellType == CellType.OS_MOVINGOBJECT))
                             {
                                 BaseObject = OSObject.CellObj as TBaseObject;
                                 if ((BaseObject != null) && (!BaseObject.m_boGhost))
@@ -5727,7 +5727,7 @@ namespace GameSvr
                 else {
                     m_nCurrX = (short)nX;
                     m_nCurrY = (short)nY;
-                    addObj = m_PEnvir.AddToMap(nX, nY, Grobal2.OS_MOVINGOBJECT, this);
+                    addObj = m_PEnvir.AddToMap(nX, nY, CellType.OS_MOVINGOBJECT, this);
                     break;
                 }
                 nC++;
@@ -5740,7 +5740,7 @@ namespace GameSvr
             {
                 m_nCurrX = nX2;
                 m_nCurrY = nY2;
-                m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, Grobal2.OS_MOVINGOBJECT, this);
+                m_PEnvir.AddToMap(m_nCurrX, m_nCurrY, CellType.OS_MOVINGOBJECT, this);
             }
 
             m_Abil.HP = m_Abil.MaxHP;
