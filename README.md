@@ -12,7 +12,7 @@ This project refers to the network Delphi code, which can be used with the origi
 
 ## Server
     *  You can download a variety of game versions on your web (of course there will be a variety of game issues, such as: Script commands cannot be supported, etc.) or download the foundation version of us.  
-* You can download here (later, we are ready, you can also use the search engine search yourself, once we are ready, we will provide relevant documents immediately)
+* You can download here (later, we are ready, you can also use the search engine search yourself, once we are ready, we will provide relevant files immediately)
 
 ### Startup sequence and project description. 
 1. DBSvr (database service, responsible for data storage). 
@@ -22,7 +22,7 @@ This project refers to the network Delphi code, which can be used with the origi
 5. SelGate (role gateway, responsible for role query, new creation, deletion, etc., and finally processed by DBSvr, the service will not be able to obtain character data after the client logs in if the service is not activated). 
 6. LoginGate (login gateway, responsible for forwarding the login data to LoginSvr for processing, the service does not start the client and cannot connect to the game). 
 
-### images
+### Images
 ![](./Images/1632561445962.jpg)
 ![](./Images/1632561467819.jpg)
 ![](./Images/1632561488323.jpg)
