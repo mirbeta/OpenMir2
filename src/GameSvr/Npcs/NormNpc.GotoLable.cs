@@ -439,14 +439,14 @@ namespace GameSvr
                     case M2Share.nGENDER:
                         if (String.Compare(QuestConditionInfo.sParam1, M2Share.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (PlayObject.m_btGender != ObjBase.gMan)
+                            if (PlayObject.m_btGender != PlayGender.Man)
                             {
                                 result = false;
                             }
                         }
                         else
                         {
-                            if (PlayObject.m_btGender != ObjBase.gWoMan)
+                            if (PlayObject.m_btGender != PlayGender.WoMan)
                             {
                                 result = false;
                             }

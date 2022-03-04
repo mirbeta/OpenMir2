@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SystemModule;
 using SystemModule.Common;
 
@@ -633,9 +634,8 @@ namespace GameSvr
             SaveGuildInfoFile();
         }
 
-        public bool AddMember(TPlayObject PlayObject)
+        public void AddMember(TPlayObject PlayObject)
         {
-            bool result;
             TGuildRank GuildRank;
             TGuildRank GuildRank18 = null;
             for (var i = 0; i < m_RankList.Count; i++)
@@ -663,8 +663,6 @@ namespace GameSvr
                 sMemberName = PlayObject.m_sCharName
             });
             UpdateGuildFile();
-            result = true;
-            return result;
         }
 
         public bool DelMember(string sHumName)
@@ -1022,18 +1020,17 @@ namespace GameSvr
             return true;
         }
 
-        public bool AllyGuild(TGuild Guild)
+        public void AllyGuild(TGuild Guild)
         {
             for (var i = 0; i < GuildAllList.Count; i++)
             {
                 if (GuildAllList[i] == Guild)
                 {
-                    return false;
+                    return;
                 }
             }
             GuildAllList.Add(Guild);
             SaveGuildInfoFile();
-            return true;
         }
 
         public TWarGuild AddWarGuild(TGuild Guild)
@@ -1082,14 +1079,7 @@ namespace GameSvr
 
         private int GetMemberCount()
         {
-            var result = 0;
-            TGuildRank GuildRank;
-            for (var i = 0; i < m_RankList.Count; i++)
-            {
-                GuildRank = m_RankList[i];
-                result += GuildRank.MemberList.Count;
-            }
-            return result;
+            return m_RankList.Sum(t => t.MemberList.Count);
         }
 
         private bool GetMemgerIsFull()

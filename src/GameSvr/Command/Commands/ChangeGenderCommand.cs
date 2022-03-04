@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using System;
+using SystemModule;
 using GameSvr.CommandSystem;
 
 namespace GameSvr.Command
@@ -32,12 +33,17 @@ namespace GameSvr.Command
                 PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
+            var playSex = PlayGender.Man;
+            if (!Enum.TryParse(nSex.ToString(), out playSex))
+            {
+                return;
+            }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.m_btGender != nSex)
+                if (m_PlayObject.m_btGender != playSex)
                 {
-                    m_PlayObject.m_btGender = (byte)nSex;
+                    m_PlayObject.m_btGender = playSex;
                     m_PlayObject.FeatureChanged();
                     PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别已改变。", TMsgColor.c_Green, TMsgType.t_Hint);
                 }

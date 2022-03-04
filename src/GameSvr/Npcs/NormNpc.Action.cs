@@ -987,7 +987,7 @@ namespace GameSvr
                     {
                         GotoLable(PlayObject, "@StartMarry", false);
                         GotoLable(PoseHuman, "@StartMarry", false);
-                        if ((PlayObject.m_btGender == ObjBase.gMan) && (PoseHuman.m_btGender == ObjBase.gWoMan))
+                        if ((PlayObject.m_btGender == PlayGender.Man) && (PoseHuman.m_btGender == PlayGender.WoMan))
                         {
                             sSayMsg = M2Share.g_sStartMarryManMsg.Replace("%n", this.m_sCharName);
                             sSayMsg = sSayMsg.Replace("%s", PlayObject.m_sCharName);
@@ -998,7 +998,7 @@ namespace GameSvr
                             sSayMsg = sSayMsg.Replace("%d", PoseHuman.m_sCharName);
                             M2Share.UserEngine.SendBroadCastMsg(sSayMsg, TMsgType.t_Say);
                         }
-                        else if ((PlayObject.m_btGender == ObjBase.gWoMan) && (PoseHuman.m_btGender == ObjBase.gMan))
+                        else if ((PlayObject.m_btGender == PlayGender.WoMan) && (PoseHuman.m_btGender == PlayGender.Man))
                         {
                             sSayMsg = M2Share.g_sStartMarryWoManMsg.Replace("%n", this.m_sCharName);
                             sSayMsg = sSayMsg.Replace("%s", PlayObject.m_sCharName);
@@ -1030,7 +1030,7 @@ namespace GameSvr
             {
                 if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                 {
-                    if ((PlayObject.m_btGender == ObjBase.gMan) && (PoseHuman.m_btGender == ObjBase.gWoMan))
+                    if ((PlayObject.m_btGender == PlayGender.Man) && (PoseHuman.m_btGender == PlayGender.WoMan))
                     {
                         sSayMsg = M2Share.g_sMarryManAnswerQuestionMsg.Replace("%n", this.m_sCharName);
                         sSayMsg = sSayMsg.Replace("%s", PlayObject.m_sCharName);
@@ -1049,7 +1049,7 @@ namespace GameSvr
             // sRESPONSEMARRY
             if (string.Compare(QuestActionInfo.sParam1, "RESPONSEMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if ((PlayObject.m_btGender == ObjBase.gWoMan) && (PoseHuman.m_btGender == ObjBase.gMan))
+                if ((PlayObject.m_btGender == PlayGender.WoMan) && (PoseHuman.m_btGender == PlayGender.Man))
                 {
                     if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -3219,7 +3219,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_CHANGEGENDER);
                 return;
             }
-            PlayObject.m_btGender = (byte)nGender;
+            PlayObject.m_btGender = Enum.Parse<PlayGender>(nGender.ToString());
             PlayObject.FeatureChanged();
         }
 

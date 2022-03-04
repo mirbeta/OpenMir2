@@ -2016,12 +2016,12 @@ namespace GameSvr
         {
             var result = false;
             TUserCastle Castle;
-            if (StdItem.StdMode == 10 && m_btGender != ObjBase.gMan)
+            if (StdItem.StdMode == 10 && m_btGender != PlayGender.Man)
             {
                 SysMsg(M2Share.sWearNotOfWoMan, TMsgColor.c_Red, TMsgType.t_Hint);
                 return false;
             }
-            if (StdItem.StdMode == 11 && m_btGender != ObjBase.gWoMan)
+            if (StdItem.StdMode == 11 && m_btGender != PlayGender.WoMan)
             {
                 SysMsg(M2Share.sWearNotOfMan, TMsgColor.c_Red, TMsgType.t_Hint);
                 return false;
@@ -3005,7 +3005,7 @@ namespace GameSvr
             HumData.wCurY = m_nCurrY;
             HumData.btDir = m_btDirection;
             HumData.btHair = m_btHair;
-            HumData.btSex = m_btGender;
+            HumData.btSex = (byte)m_btGender;
             HumData.btJob = m_btJob;
             HumData.nGold = m_nGold;
             HumData.Abil.Level = m_Abil.Level;
@@ -3560,7 +3560,7 @@ namespace GameSvr
             }
             if (boIsfound)
             {
-                if (m_btGender == ObjBase.gMan)
+                if (m_btGender == PlayGender.Man)
                 {
                     sSayMsg = M2Share.g_sfUnMarryManLoginMsg.Replace("%d", m_sDearName);
                     sSayMsg = sSayMsg.Replace("%s", m_sDearName);
@@ -3578,7 +3578,7 @@ namespace GameSvr
             if (m_DearHuman != null)
             {
                 m_DearHuman.m_DearHuman = this;
-                if (m_btGender == ObjBase.gMan)
+                if (m_btGender == PlayGender.Man)
                 {
                     sSayMsg = M2Share.g_sManLoginDearOnlineSelfMsg.Replace("%d", m_sDearName);
                     sSayMsg = sSayMsg.Replace("%s", m_sCharName);
@@ -3611,7 +3611,7 @@ namespace GameSvr
             }
             else
             {
-                if (m_btGender == ObjBase.gMan)
+                if (m_btGender == PlayGender.Man)
                 {
                     SysMsg(M2Share.g_sManLoginDearNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 }

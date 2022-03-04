@@ -22,10 +22,10 @@ namespace GameSvr
         public TBaseObject BaseObject;
         public int nVisibleFlag;
     }
-    
-    public class ObjBase
+
+    public enum PlayGender : byte
     {
-        public const int gMan = 0;
-        public const int gWoMan = 1;
+        Man = 0,
+        WoMan = 1
     }
 }
