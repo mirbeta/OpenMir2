@@ -29,7 +29,7 @@ namespace GameSvr
         /// <summary>
         /// 性别
         /// </summary>
-        public byte m_btGender = 0;
+        public PlayGender m_btGender = 0;
         /// <summary>
         /// 人物的头发
         /// </summary>
@@ -3329,7 +3329,7 @@ namespace GameSvr
                         nDress = (byte)(StdItem.Shape * 2);
                     }
                 }
-                nDress += m_btGender;
+                nDress += (byte)m_btGender;
                 byte nWeapon = 0;
                 if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].wIndex > 0)// 武器
                 {
@@ -3339,8 +3339,8 @@ namespace GameSvr
                         nWeapon = (byte)(StdItem.Shape * 2);
                     }
                 }
-                nWeapon += m_btGender;
-                byte nHair = (byte)(m_btHair * 2 + m_btGender);
+                nWeapon += (byte)m_btGender;
+                byte nHair = (byte) (m_btHair * 2 + (byte) m_btGender);
                 result = Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
                 return result;
             }

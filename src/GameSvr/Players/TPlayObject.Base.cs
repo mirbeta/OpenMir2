@@ -756,7 +756,7 @@ namespace GameSvr
                         Dispose(UserItem);
                     }
                     UserItem = new TUserItem();
-                    var sItem = m_btGender == ObjBase.gMan
+                    var sItem = m_btGender == PlayGender.Man
                         ? M2Share.g_Config.sClothsMan
                         : M2Share.g_Config.sClothsWoman;
                     if (M2Share.UserEngine.CopyToUserItemFromName(sItem, ref UserItem))
@@ -1540,7 +1540,7 @@ namespace GameSvr
                 }
                 if (!string.IsNullOrEmpty(m_sDearName))
                 {
-                    if (m_btGender == ObjBase.gMan)
+                    if (m_btGender == PlayGender.Man)
                     {
                         sDearName = format(M2Share.g_sManDearName, m_sDearName);
                     }
@@ -1597,7 +1597,7 @@ namespace GameSvr
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 if (m_DearHuman != null)
                 {
-                    if (m_btGender == ObjBase.gMan)
+                    if (m_btGender == PlayGender.Man)
                     {
                         sSayMsg = M2Share.g_sManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);

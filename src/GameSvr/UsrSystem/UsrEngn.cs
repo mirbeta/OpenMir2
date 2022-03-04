@@ -2149,7 +2149,7 @@ namespace GameSvr
             PlayObject.m_nCurrY = HumData.wCurY;
             PlayObject.m_btDirection = HumData.btDir;
             PlayObject.m_btHair = HumData.btHair;
-            PlayObject.m_btGender = HumData.btSex;
+            PlayObject.m_btGender = Enum.Parse<PlayGender>(HumData.btSex.ToString());
             PlayObject.m_btJob = HumData.btJob;
             PlayObject.m_nGold = HumData.nGold;
             PlayObject.m_Abil.Level = HumData.Abil.Level;
