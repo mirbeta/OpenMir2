@@ -1520,7 +1520,7 @@ namespace GameSvr
         {
             if (M2Share.nServerIndex == 0)
             {
-                InterServerMsg.Instance.SendServerSocket(nCode + "/" + nServerIdx + "/" + sMsg);
+                SnapsmService.Instance.SendServerSocket(nCode + "/" + nServerIdx + "/" + sMsg);
             }
             else
             {
