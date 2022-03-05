@@ -2,7 +2,10 @@ using System.IO;
 
 namespace SystemModule.Packages
 {
-    public class TMsgHeader : Packets
+    /// <summary>
+    /// 封包消息头
+    /// </summary>
+    public class MessageHeader : Packets
     {
         public uint dwCode;
         public int nSocket;
@@ -13,11 +16,11 @@ namespace SystemModule.Packages
 
         public const int PacketSize = 20;
 
-        public TMsgHeader() { }
+        public MessageHeader() { }
 
-        public TMsgHeader(byte[] buff)
+        public MessageHeader(byte[] buffer)
         {
-            var binaryReader = new BinaryReader(new MemoryStream(buff));
+            using var binaryReader = new BinaryReader(new MemoryStream(buffer));
             dwCode = binaryReader.ReadUInt32();
             nSocket = binaryReader.ReadInt32();
             wGSocketIdx = binaryReader.ReadUInt16();

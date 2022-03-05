@@ -1439,7 +1439,7 @@ namespace GameGate
             {
                 tempBuff = new byte[20 + len];
             }
-            var GateMsg = new TMsgHeader();
+            var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = (int)_session.Socket.Handle;
             GateMsg.wGSocketIdx = (ushort)_session.SocketId;

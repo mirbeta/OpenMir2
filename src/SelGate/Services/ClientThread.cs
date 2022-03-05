@@ -197,7 +197,7 @@ namespace SelGate.Services
 
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
         {
-            var GateMsg = new TMsgHeader();
+            var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = nSocket;
             GateMsg.wGSocketIdx = (ushort)wSocketIndex;

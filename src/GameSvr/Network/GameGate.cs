@@ -189,12 +189,12 @@ namespace GameSvr
             {
                 nLen = GameGate.nBuffLen + nMsgLen;
                 Buff = GameGate.Buffer;
-                if (nLen >= TMsgHeader.PacketSize)//sizeof(TMsgHeader)
+                if (nLen >= MessageHeader.PacketSize)//sizeof(TMsgHeader)
                 {
                     while (true)
                     {
-                        var msgHeader = new TMsgHeader(Buff);
-                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + TMsgHeader.PacketSize;
+                        var msgHeader = new MessageHeader(Buff);
+                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
                         if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
                             if (nLen < nCheckMsgLen)
@@ -208,21 +208,21 @@ namespace GameSvr
                             else
                             {
                                 byte[] msgBuff = new byte[msgHeader.nLength];
-                                Array.Copy(Buff, TMsgHeader.PacketSize, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
+                                Array.Copy(Buff, MessageHeader.PacketSize, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
                                 ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
                             }
-                            var newLen = TMsgHeader.PacketSize + msgHeader.nLength;
+                            var newLen = MessageHeader.PacketSize + msgHeader.nLength;
                             var tempBuff = new byte[Buff.Length - newLen];
                             Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
                             buffIndex = 0;
-                            nLen -= (msgHeader.nLength + TMsgHeader.PacketSize);
+                            nLen -= (msgHeader.nLength + MessageHeader.PacketSize);
                         }
                         else
                         {
                             buffIndex++;
                             var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, buffIndex, messageBuff, 0, TMsgHeader.PacketSize);
+                            Array.Copy(Buff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
                             Buff = messageBuff;
                             nLen -= 1;
                         }
@@ -650,7 +650,7 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new TMsgHeader();
+            var MsgHeader = new MessageHeader();
             MsgHeader.dwCode = Grobal2.RUNGATECODE;
             MsgHeader.nSocket = nSocket;
             MsgHeader.wGSocketIdx = (ushort)nSocketIndex;
@@ -664,7 +664,7 @@ namespace GameSvr
             }
         }
 
-        private void ExecGateMsg(int GateIdx, TGateInfo Gate, TMsgHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
+        private void ExecGateMsg(int GateIdx, TGateInfo Gate, MessageHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
         {
             int nUserIdx;
             string sIPaddr;
@@ -759,7 +759,7 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new TMsgHeader
+            var MsgHeader = new MessageHeader
             {
                 dwCode = Grobal2.RUNGATECODE,
                 nSocket = 0,
@@ -834,7 +834,7 @@ namespace GameSvr
         public void SendOutConnectMsg(int nGateIdx, int nSocket, int nGsIdx)
         {
             var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var msgHeader = new TMsgHeader();
+            var msgHeader = new MessageHeader();
             msgHeader.dwCode = Grobal2.RUNGATECODE;
             msgHeader.nSocket = nSocket;
             msgHeader.wGSocketIdx = (ushort)nGsIdx;
@@ -858,7 +858,7 @@ namespace GameSvr
         {
             byte[] Buff = null;
             int nSendBytes;
-            TMsgHeader  MsgHdr = new TMsgHeader
+            MessageHeader  MsgHdr = new MessageHeader
             {
                 dwCode = Grobal2.RUNGATECODE,
                 nSocket = nSocket,
@@ -872,13 +872,13 @@ namespace GameSvr
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     MsgHdr.nLength = sMsg.Length + 12 + 1;
-                    nSendBytes = MsgHdr.nLength + TMsgHeader.PacketSize;
+                    nSendBytes = MsgHdr.nLength + MessageHeader.PacketSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                 }
                 else
                 {
                     MsgHdr.nLength = 12;
-                    nSendBytes = MsgHdr.nLength + TMsgHeader.PacketSize;
+                    nSendBytes = MsgHdr.nLength + MessageHeader.PacketSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                 }
             }
@@ -887,13 +887,13 @@ namespace GameSvr
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     MsgHdr.nLength = -(sMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PacketSize;
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + MessageHeader.PacketSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
                         //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        *(char*)(pb + TMsgHeader.PacketSize + sizeof(int) + sMsg.Length + 1) = sMsg[1];
+                        *(char*)(pb + MessageHeader.PacketSize + sizeof(int) + sMsg.Length + 1) = sMsg[1];
                     }
                 }
             }
@@ -938,14 +938,14 @@ namespace GameSvr
         private void SendGateTestMsg(int nIndex)
         {
             var defMsg = new TDefaultMessage();
-            var msgHdr = new TMsgHeader
+            var msgHdr = new MessageHeader
             {
                 dwCode = Grobal2.RUNGATECODE,
                 nSocket = 0,
                 wIdent = Grobal2.GM_TEST,
                 nLength = 100
             };
-            var nLen = msgHdr.nLength + Marshal.SizeOf(typeof(TMsgHeader));
+            var nLen = msgHdr.nLength + Marshal.SizeOf(typeof(MessageHeader));
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
@@ -1265,7 +1265,7 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new TMsgHeader
+            var MsgHeader = new MessageHeader
             {
                 dwCode = Grobal2.RUNGATECODE,
                 nSocket = 0,

@@ -224,7 +224,7 @@ namespace GameGate
 
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
         {
-            var GateMsg = new TMsgHeader();
+            var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = nSocket;
             GateMsg.wGSocketIdx = (ushort)wSocketIndex;
@@ -252,7 +252,7 @@ namespace GameGate
 
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
-            TMsgHeader pMsg;
+            MessageHeader pMsg;
             var BuffIndex = 0;
             const int HeaderMessageSize = 20;
             try
@@ -274,7 +274,7 @@ namespace GameGate
                 {
                     while (true)
                     {
-                        pMsg = new TMsgHeader(Buff);
+                        pMsg = new MessageHeader(Buff);
                         if (pMsg.dwCode == Grobal2.RUNGATECODE)
                         {
                             if ((Math.Abs(pMsg.nLength) + HeaderMessageSize) > nLen)
