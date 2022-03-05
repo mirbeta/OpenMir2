@@ -38,7 +38,7 @@
          dotnet build --configuration Release --no-restore
      - name: Create Release
        id: create_release
-       uses: actions/create-release@master
+       uses: actions/create-release@v1
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
@@ -48,7 +48,7 @@
          prerelease: false
      - name: Upload Release Asset
        id: upload-release-asset
-       uses: actions/upload-release-asset@master
+       uses: actions/upload-release-asset@v1
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
