@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SelGate", "src\SelGate\SelG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr", "src\DBSvr\DBSvr.csproj", "{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameZone", "src\GameZone\GameZone.csproj", "{9A2E2ADA-5440-40F7-8A87-F7600E355A9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapsmServer", "src\SnapsmServer\SnapsmServer.csproj", "{9A2E2ADA-5440-40F7-8A87-F7600E355A9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakePlayer", "src\MakePlayer\MakePlayer.csproj", "{9F27960B-B37F-43B6-A43A-227B0121242C}"
 EndProject

@@ -32,27 +32,24 @@ namespace SystemModule
             X2 = ReadByte(); //buff[20];
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(DC);
-                backingStream.Write(MC);
-                backingStream.Write(SC);
-                backingStream.Write(AC);
-                backingStream.Write(MAC);
-                backingStream.Write(HP);
-                backingStream.Write(MP);
-                backingStream.Write(Hit);
-                backingStream.Write(Speed);
-                backingStream.Write(X2);
-                backingStream.Write(0);
+            throw new System.NotImplementedException();
+        }
 
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(DC);
+            writer.Write(MC);
+            writer.Write(SC);
+            writer.Write(AC);
+            writer.Write(MAC);
+            writer.Write(HP);
+            writer.Write(MP);
+            writer.Write(Hit);
+            writer.Write(Speed);
+            writer.Write(X2);
+            writer.Write(0);
         }
     }
 }
-

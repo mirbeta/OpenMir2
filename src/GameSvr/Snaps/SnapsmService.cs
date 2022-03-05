@@ -18,7 +18,7 @@ namespace GameSvr
 
         public static SnapsmService Instance => instance ??= new SnapsmService();
 
-        public SnapsmService()
+        private SnapsmService()
         {
             m_SrvArray = new TServerMsgInfo[10];
             _msgServer = new ISocketServer(ushort.MaxValue, 512);

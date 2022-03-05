@@ -71,7 +71,7 @@ namespace SystemModule
             wStatusTimeArr = new ushort[12];
         }
 
-        public THumInfoData(byte[] buffer) 
+        public THumInfoData(byte[] buffer)
             : base(buffer)
         {
             this.sCharName = ReadPascalString(14);
@@ -160,116 +160,112 @@ namespace SystemModule
             // }
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-
-                backingStream.Write(sCharName.ToByte(15));
-                backingStream.Write(sCurMap.ToByte(17));
-
-                backingStream.Write(wCurX);
-                backingStream.Write(wCurY);
-                backingStream.Write(btDir);
-                backingStream.Write(btHair);
-                backingStream.Write(btSex);
-                backingStream.Write(btJob);
-                backingStream.Write(nGold);
-                backingStream.Write(Abil.GetPacket());//50
-                for (var i = 0; i < wStatusTimeArr.Length; i++)
-                { 
-                    backingStream.Write(wStatusTimeArr[i]); //24
-                }
-                backingStream.Write(sHomeMap.ToByte(17));
-                backingStream.Write(wHomeX);
-                backingStream.Write(wHomeY);
-                backingStream.Write(BonusAbil.GetPacket()); //24
-                backingStream.Write(nBonusPoint);
-                backingStream.Write(btCreditPoint);
-                backingStream.Write(btReLevel);
-                backingStream.Write(sMasterName.ToByte(15));
-                backingStream.Write(boMaster);
-                backingStream.Write(sDearName.ToByte(15));
-                backingStream.Write(sStoragePwd.ToByte(11));
-                backingStream.Write(nGameGold);
-                backingStream.Write(nGamePoint);
-                backingStream.Write(nPayMentPoint);
-                backingStream.Write(nPKPoint);
-                backingStream.Write(btAllowGroup);
-                backingStream.Write(btF9);
-                backingStream.Write(btAttatckMode);
-                backingStream.Write(btIncHealth);
-                backingStream.Write(btIncSpell);
-                backingStream.Write(btIncHealing);
-                backingStream.Write(btFightZoneDieCount);
-                backingStream.Write(btEE);
-                backingStream.Write(btEF);
-                backingStream.Write(sAccount.ToByte(17));
-                backingStream.Write(boLockLogon);
-                backingStream.Write(wContribution);
-                backingStream.Write(nHungerStatus);
-                backingStream.Write(boAllowGuildReCall);
-                backingStream.Write(wGroupRcallTime);
-                backingStream.Write(dBodyLuck);
-                backingStream.Write(boAllowGroupReCall);
-                backingStream.Write(QuestUnitOpen);
-                backingStream.Write(QuestUnit);
-                backingStream.Write(QuestFlag);
-                backingStream.Write(btMarryCount);
-                var nullItem = new TUserItem();
-                var nullBuffer = nullItem.GetPacket();
-                for (var i = 0; i < HumItems.Length; i++)
-                {
-                    if (HumItems[i] == null)
-                    {
-                        backingStream.Write(nullBuffer);
-                    }
-                    else
-                    {
-                        backingStream.Write(HumItems[i].GetPacket());
-                    }
-                }
-                for (var i = 0; i < BagItems.Length; i++)
-                {
-                    if (BagItems[i] == null)
-                    {
-                        backingStream.Write(nullBuffer);
-                    }
-                    else
-                    {
-                        backingStream.Write(BagItems[i].GetPacket());
-                    }
-                }
-                var userMagic = new TMagicRcd();
-                for (var i = 0; i < Magic.Length; i++)
-                {
-                    if (Magic[i] == null)
-                    {
-                        backingStream.Write(userMagic.GetPacket());
-                    }
-                    else
-                    {
-                        backingStream.Write(Magic[i].GetPacket());//16
-                    }
-                }
-                for (var i = 0; i < StorageItems.Length; i++)
-                {
-                    if (StorageItems[i] == null)
-                    {
-                        backingStream.Write(nullBuffer);
-                    }
-                    else
-                    {
-                        backingStream.Write(StorageItems[i].GetPacket());
-                    }
-                }
-                nullItem = null;
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            throw new NotImplementedException();
         }
 
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(sCharName.ToByte(15));
+            writer.Write(sCurMap.ToByte(17));
+
+            writer.Write(wCurX);
+            writer.Write(wCurY);
+            writer.Write(btDir);
+            writer.Write(btHair);
+            writer.Write(btSex);
+            writer.Write(btJob);
+            writer.Write(nGold);
+            writer.Write(Abil.GetPacket());//50
+            for (var i = 0; i < wStatusTimeArr.Length; i++)
+            {
+                writer.Write(wStatusTimeArr[i]); //24
+            }
+            writer.Write(sHomeMap.ToByte(17));
+            writer.Write(wHomeX);
+            writer.Write(wHomeY);
+            writer.Write(BonusAbil.GetPacket()); //24
+            writer.Write(nBonusPoint);
+            writer.Write(btCreditPoint);
+            writer.Write(btReLevel);
+            writer.Write(sMasterName.ToByte(15));
+            writer.Write(boMaster);
+            writer.Write(sDearName.ToByte(15));
+            writer.Write(sStoragePwd.ToByte(11));
+            writer.Write(nGameGold);
+            writer.Write(nGamePoint);
+            writer.Write(nPayMentPoint);
+            writer.Write(nPKPoint);
+            writer.Write(btAllowGroup);
+            writer.Write(btF9);
+            writer.Write(btAttatckMode);
+            writer.Write(btIncHealth);
+            writer.Write(btIncSpell);
+            writer.Write(btIncHealing);
+            writer.Write(btFightZoneDieCount);
+            writer.Write(btEE);
+            writer.Write(btEF);
+            writer.Write(sAccount.ToByte(17));
+            writer.Write(boLockLogon);
+            writer.Write(wContribution);
+            writer.Write(nHungerStatus);
+            writer.Write(boAllowGuildReCall);
+            writer.Write(wGroupRcallTime);
+            writer.Write(dBodyLuck);
+            writer.Write(boAllowGroupReCall);
+            writer.Write(QuestUnitOpen);
+            writer.Write(QuestUnit);
+            writer.Write(QuestFlag);
+            writer.Write(btMarryCount);
+            var nullItem = new TUserItem();
+            var nullBuffer = nullItem.GetPacket();
+            for (var i = 0; i < HumItems.Length; i++)
+            {
+                if (HumItems[i] == null)
+                {
+                    writer.Write(nullBuffer);
+                }
+                else
+                {
+                    writer.Write(HumItems[i].GetPacket());
+                }
+            }
+            for (var i = 0; i < BagItems.Length; i++)
+            {
+                if (BagItems[i] == null)
+                {
+                    writer.Write(nullBuffer);
+                }
+                else
+                {
+                    writer.Write(BagItems[i].GetPacket());
+                }
+            }
+            var userMagic = new TMagicRcd();
+            for (var i = 0; i < Magic.Length; i++)
+            {
+                if (Magic[i] == null)
+                {
+                    writer.Write(userMagic.GetPacket());
+                }
+                else
+                {
+                    writer.Write(Magic[i].GetPacket());//16
+                }
+            }
+            for (var i = 0; i < StorageItems.Length; i++)
+            {
+                if (StorageItems[i] == null)
+                {
+                    writer.Write(nullBuffer);
+                }
+                else
+                {
+                    writer.Write(StorageItems[i].GetPacket());
+                }
+            }
+            nullItem = null;
+        }
     }
 }
-

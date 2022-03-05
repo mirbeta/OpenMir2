@@ -33,30 +33,31 @@ namespace GameSvr
         /// </summary>
         public byte N;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using MemoryStream memoryStream = new();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(sDealCharName.ToByte(15));
-            backingStream.Write(sBuyCharName.ToByte(15));
-            backingStream.Write(dSellDateTime);
-            backingStream.Write(nSellGold);
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(sDealCharName.ToByte(15));
+            writer.Write(sBuyCharName.ToByte(15));
+            writer.Write(dSellDateTime);
+            writer.Write(nSellGold);
             var nullItem = new TClientItem();
             var nullBuff = nullItem.GetPacket();
             for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
                 {
-                    backingStream.Write(nullBuff);
+                    writer.Write(nullBuff);
                 }
                 else
                 {
-                    backingStream.Write(UseItems[i].GetPacket());
+                    writer.Write(UseItems[i].GetPacket());
                 }
             }
-            backingStream.Write(N);
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+            writer.Write(N);
         }
     }
 }

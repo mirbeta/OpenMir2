@@ -1,20 +1,22 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameSvr
 {
-    public struct TCharDesc
+    public class TCharDesc : Packets
     {
         public int Feature;
         public int Status;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(Feature);
-            backingStream.Write(Status);
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Feature);
+            writer.Write(Status);
         }
     }
 }

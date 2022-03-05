@@ -46,21 +46,18 @@ namespace SystemModule
             this.btValue = userItem.btValue;
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-                backingStream.Write(MakeIndex);
-                backingStream.Write(wIndex);
-                backingStream.Write(Dura);
-                backingStream.Write(DuraMax);
-                backingStream.Write(btValue);
-
-                return (backingStream.BaseStream as MemoryStream).ToArray();
-            }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(MakeIndex);
+            writer.Write(wIndex);
+            writer.Write(Dura);
+            writer.Write(DuraMax);
+            writer.Write(btValue);
         }
     }
 }
-

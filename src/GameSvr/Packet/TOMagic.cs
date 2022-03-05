@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameSvr
 {
-    public class TOMagic
+    public class TOMagic : Packets
     {
         public ushort wMagicID;
         public byte btEffectType;
@@ -17,31 +18,25 @@ namespace GameSvr
         public ushort wMaxPower;
         public byte btDefMaxPower;
 
-        public TOMagic()
+        protected override void ReadPacket(BinaryReader reader)
         {
+            throw new System.NotImplementedException();
         }
 
-        public byte[] GetPacket()
+        protected override void WritePacket(BinaryWriter writer)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(wMagicID);
-            backingStream.Write(btEffectType);
-            backingStream.Write(btEffect);
-            backingStream.Write(wSpell);
-            backingStream.Write(wPower);
-            backingStream.Write(btTrainLv);
-            backingStream.Write(btJob);
-            backingStream.Write(dwDelayTime);
-            backingStream.Write(btDefSpell);
-            backingStream.Write(btDefPower);
-            backingStream.Write(wMaxPower);
-            backingStream.Write(btDefMaxPower);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+            writer.Write(wMagicID);
+            writer.Write(btEffectType);
+            writer.Write(btEffect);
+            writer.Write(wSpell);
+            writer.Write(wPower);
+            writer.Write(btTrainLv);
+            writer.Write(btJob);
+            writer.Write(dwDelayTime);
+            writer.Write(btDefSpell);
+            writer.Write(btDefPower);
+            writer.Write(wMaxPower);
+            writer.Write(btDefMaxPower);
         }
-
     }
 }
-

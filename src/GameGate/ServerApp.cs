@@ -210,19 +210,11 @@ namespace GameGate
             try
             {
                 boShowLocked = true;
-                try
+                for (var i = 0; i < GateShare.MainLogMsgList.Count; i++)
                 {
-                    HUtil32.EnterCriticalSection(GateShare.CS_MainLog);
-                    for (var i = 0; i < GateShare.MainLogMsgList.Count; i++)
-                    {
-                        TempLogList.Add(GateShare.MainLogMsgList[i]);
-                    }
-                    GateShare.MainLogMsgList.Clear();
+                    TempLogList.Add(GateShare.MainLogMsgList[i]);
                 }
-                finally
-                {
-                    HUtil32.LeaveCriticalSection(GateShare.CS_MainLog);
-                }
+                GateShare.MainLogMsgList.Clear();
                 for (var i = 0; i < TempLogList.Count; i++)
                 {
                     Console.WriteLine(TempLogList[i]);

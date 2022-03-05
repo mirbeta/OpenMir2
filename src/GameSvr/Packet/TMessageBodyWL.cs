@@ -1,26 +1,26 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameSvr
 {
-    public class TMessageBodyWL
+    public class TMessageBodyWL : Packets
     {
         public int lParam1;
         public int lParam2;
         public int lTag1;
         public int lTag2;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(lParam1);
-            backingStream.Write(lParam2);
-            backingStream.Write(lTag1);
-            backingStream.Write(lTag2);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(lParam1);
+            writer.Write(lParam2);
+            writer.Write(lTag1);
+            writer.Write(lTag2);
         }
     }
 }

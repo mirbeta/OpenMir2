@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameSvr
 {
-    public class TOAbility
+    public class TOAbility : Packets
     {
         public ushort Level;
         public ushort AC;
@@ -24,33 +25,31 @@ namespace GameSvr
         public byte HandWeight;
         public byte MaxHandWeight;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(Level);
-            backingStream.Write(AC);
-            backingStream.Write(MAC);
-            backingStream.Write(DC);
-            backingStream.Write(MC);
-            backingStream.Write(SC);
-            backingStream.Write(HP);
-            backingStream.Write(MP);
-            backingStream.Write(MaxHP);
-            backingStream.Write(MaxMP);
-            backingStream.Write(Exp);
-            backingStream.Write(MaxExp);
-            backingStream.Write(Weight);
-            backingStream.Write(MaxWeight);
-            backingStream.Write(WearWeight);
-            backingStream.Write(MaxWearWeight);
-            backingStream.Write(HandWeight);
-            backingStream.Write(MaxHandWeight);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+            throw new System.NotImplementedException();
         }
 
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Level);
+            writer.Write(AC);
+            writer.Write(MAC);
+            writer.Write(DC);
+            writer.Write(MC);
+            writer.Write(SC);
+            writer.Write(HP);
+            writer.Write(MP);
+            writer.Write(MaxHP);
+            writer.Write(MaxMP);
+            writer.Write(Exp);
+            writer.Write(MaxExp);
+            writer.Write(Weight);
+            writer.Write(MaxWeight);
+            writer.Write(WearWeight);
+            writer.Write(MaxWearWeight);
+            writer.Write(HandWeight);
+            writer.Write(MaxHandWeight);
+        }
     }
 }
-

@@ -9,7 +9,6 @@ namespace GameGate
 {
     public class GateShare
     {
-        public static object CS_MainLog = null;
         public static object CS_FilterMsg = null;
         public static IList<string> MainLogMsgList = null;
         public static int nShowLogLevel = 0;
@@ -52,16 +51,8 @@ namespace GameGate
 
         public static void AddMainLogMsg(string Msg, int nLevel)
         {
-            try
-            {
-                HUtil32.EnterCriticalSection(CS_MainLog);
-                var tMsg = "[" + DateTime.Now + "] " + Msg;
-                MainLogMsgList.Add(tMsg);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(CS_MainLog);
-            }
+            var tMsg = "[" + DateTime.Now + "] " + Msg;
+            MainLogMsgList.Add(tMsg);
         }
 
         public static void LoadAbuseFile()
@@ -96,7 +87,6 @@ namespace GameGate
 
         public static void Initialization()
         {
-            CS_MainLog = new object();
             CS_FilterMsg = new object();
             MainLogMsgList = new List<string>();
             AbuseList = new List<string>();
@@ -113,11 +103,20 @@ namespace GameGate
         public uint dwMagicCode;
         public byte[] xMd5Digest;
 
-        public THardwareHeader(byte[] buffer)
+        public THardwareHeader(byte[] buffer) : base(buffer)
         {
-            var binaryReader = new BinaryReader(new MemoryStream(buffer));
-            dwMagicCode = binaryReader.ReadUInt32();
-            xMd5Digest = binaryReader.ReadBytes(16);
+
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            dwMagicCode = reader.ReadUInt32();
+            xMd5Digest = reader.ReadBytes(16);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,20 +9,6 @@ namespace SystemModule
         public string sUserAddr;
         public int nSessionID;
 
-        public byte[] GetPacket()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(sAccount.ToByte(17));
-                backingStream.Write(sChrName.ToByte(21));
-                backingStream.Write(sUserAddr.ToByte(18));
-                backingStream.Write(nSessionID);
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
-        }
-
         public TLoadHuman()
         {
 
@@ -34,6 +20,19 @@ namespace SystemModule
             sChrName = ReadPascalString(20);
             sUserAddr = ReadPascalString(17);
             nSessionID = ReadInt32();
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(sAccount.ToByte(17));
+            writer.Write(sChrName.ToByte(21));
+            writer.Write(sUserAddr.ToByte(18));
+            writer.Write(nSessionID);
         }
     }
 }

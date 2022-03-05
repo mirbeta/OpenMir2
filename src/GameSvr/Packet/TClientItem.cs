@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TClientItem
+    public class TClientItem : Packets
     {
         public TStdItem Item;
         public int MakeIndex;
@@ -15,19 +15,17 @@ namespace GameSvr
             Item = new TStdItem();
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(Item.GetPacket());
-            backingStream.Write(MakeIndex);
-            backingStream.Write(Dura);
-            backingStream.Write(DuraMax);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Item.GetPacket());
+            writer.Write(MakeIndex);
+            writer.Write(Dura);
+            writer.Write(DuraMax);
         }
     }
 }
-

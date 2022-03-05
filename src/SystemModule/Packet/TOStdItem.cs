@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public struct TOStdItem
+    public class TOStdItem : Packets
     {
         public string Name;
         public byte StdMode;
@@ -23,35 +23,32 @@ namespace SystemModule
         public byte NeedLevel;
         public int Price;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(Name.ToByte(15));
-                backingStream.Write(StdMode);
-                backingStream.Write(Shape);
-                backingStream.Write(Weight);
-                backingStream.Write(AniCount);
-                backingStream.Write(Source);
-                backingStream.Write(Reserved);
-                backingStream.Write(NeedIdentify);
-                backingStream.Write(Looks);
-                backingStream.Write(DuraMax);
-                backingStream.Write(AC);
-                backingStream.Write(MAC);
-                backingStream.Write(DC);
-                backingStream.Write(MC);
-                backingStream.Write(SC);
-                backingStream.Write(Need);
-                backingStream.Write(NeedLevel);
-                backingStream.Write(Price);
-
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            throw new System.NotImplementedException();
         }
 
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Name.ToByte(15));
+            writer.Write(StdMode);
+            writer.Write(Shape);
+            writer.Write(Weight);
+            writer.Write(AniCount);
+            writer.Write(Source);
+            writer.Write(Reserved);
+            writer.Write(NeedIdentify);
+            writer.Write(Looks);
+            writer.Write(DuraMax);
+            writer.Write(AC);
+            writer.Write(MAC);
+            writer.Write(DC);
+            writer.Write(MC);
+            writer.Write(SC);
+            writer.Write(Need);
+            writer.Write(NeedLevel);
+            writer.Write(Price);
+        }
     }
 }
 

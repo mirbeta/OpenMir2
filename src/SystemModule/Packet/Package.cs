@@ -1,15 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace SystemModule
 {
-
-    public class ClientPackets : Packets
-    {
-
-    }
-
     /// <summary>
     /// Reads primitive data types from an array of binary data.
     /// </summary>
@@ -84,6 +79,20 @@ namespace SystemModule
             }
             return shortarr;
         }
+        
+        public byte[] GetPacket()
+        {
+            using MemoryStream stream = new MemoryStream();
+            using BinaryWriter writer = new BinaryWriter(stream);
+            WritePacket(writer);
+            var data = new byte[stream.Length];
+            stream.Read(data, 0, data.Length);
+            return data;
+        }
+        
+        protected abstract void ReadPacket(BinaryReader reader);
+        
+        protected abstract void WritePacket(BinaryWriter writer);
     } 
 }
 
