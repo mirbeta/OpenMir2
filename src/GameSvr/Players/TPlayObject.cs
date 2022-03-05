@@ -27,22 +27,18 @@ namespace GameSvr
 
         private bool ClientPickUpItem_IsOfGroup(TBaseObject BaseObject)
         {
-            TBaseObject GroupMember;
-            var result = false;
             if (m_GroupOwner == null)
             {
-                return result;
+                return false;
             }
             for (var i = 0; i < m_GroupOwner.m_GroupMembers.Count; i++)
             {
-                GroupMember = m_GroupOwner.m_GroupMembers[i];
-                if (GroupMember == BaseObject)
+                if (m_GroupOwner.m_GroupMembers[i] == BaseObject)
                 {
-                    result = true;
-                    break;
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
         private bool ClientPickUpItem()
@@ -50,12 +46,12 @@ namespace GameSvr
             var result = false;
             if (m_boDealing)
             {
-                return result;
+                return false;
             }
             var mapItem = m_PEnvir.GetItem(m_nCurrX, m_nCurrY);
             if (mapItem == null)
             {
-                return result;
+                return false;
             }
             if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.g_Config.dwFloorItemCanPickUpTime)// 2 * 60 * 1000
             {
@@ -64,7 +60,7 @@ namespace GameSvr
             if (!ClientPickUpItem_IsSelf(mapItem.OfBaseObject as TBaseObject) && !ClientPickUpItem_IsOfGroup(mapItem.OfBaseObject as TBaseObject))
             {
                 SysMsg(M2Share.g_sCanotPickUpItem, TMsgColor.c_Red, TMsgType.t_Hint);
-                return result;
+                return false;
             }
             if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
             {
@@ -279,8 +275,6 @@ namespace GameSvr
 
         private void SendSocket(string sMsg)
         {
-            TMsgHeader MsgHdr;
-            int nSendBytes;
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
             if (m_boOffLineFlag)
             {
@@ -288,19 +282,18 @@ namespace GameSvr
             }
             try
             {
-                MsgHdr = new TMsgHeader
+                var MsgHdr = new TMsgHeader
                 {
                     dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
                     wGSocketIdx = m_nGSocketIdx,
                     wIdent = Grobal2.GM_DATA
                 };
-                byte[] Buff = null;
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     MsgHdr.nLength = -(bMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
+                    var nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
                     using var memoryStream = new MemoryStream();
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
@@ -310,10 +303,10 @@ namespace GameSvr
                         backingStream.Write(bMsg);
                         backingStream.Write((byte)0);
                     }
-                    var stream = backingStream.BaseStream as MemoryStream;
-                    Buff = stream?.ToArray();
+                    var Buff = new byte[memoryStream.Length];
+                    memoryStream.Read(Buff, 0, Buff.Length);
+                    M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
                 }
-                M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
             }
             catch
             {
@@ -329,7 +322,6 @@ namespace GameSvr
         internal virtual void SendSocket(TDefaultMessage defMsg, string sMsg)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::SendSocket..";
-            TDefaultMessage sendDefMsg = defMsg;
             if (m_boOffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
                 return;
@@ -340,23 +332,23 @@ namespace GameSvr
                 {
                     dwCode = Grobal2.RUNGATECODE,
                     nSocket = m_nSocket,
-                    wGSocketIdx = (ushort)m_nGSocketIdx,
+                    wGSocketIdx = m_nGSocketIdx,
                     wIdent = Grobal2.GM_DATA
                 };
                 int nSendBytes;
                 byte[] Buff = null;
-                if (sendDefMsg != null)
+                if (defMsg != null)
                 {
                     var bMsg = HUtil32.StringToByteAry(sMsg);
                     if (!string.IsNullOrEmpty(sMsg))
                     {
-                        MsgHdr.nLength = bMsg.Length + 12 + 1;
+                        MsgHdr.nLength = bMsg.Length + 13;
                     }
                     else
                     {
                         MsgHdr.nLength = 12;
                     }
-                    nSendBytes = MsgHdr.nLength + 20;
+                    nSendBytes = MsgHdr.nLength + TMsgHeader.PacketSize;
                     using var memoryStream = new MemoryStream();
                     var backingStream = new BinaryWriter(memoryStream);
                     backingStream.Write(nSendBytes);
@@ -367,8 +359,8 @@ namespace GameSvr
                         backingStream.Write(bMsg);
                         backingStream.Write((byte)0);
                     }
-                    var stream = backingStream.BaseStream as MemoryStream;
-                    Buff = stream.ToArray();
+                    Buff = new byte[memoryStream.Length];
+                    memoryStream.Read(Buff, 0, Buff.Length);
                 }
                 else
                 {
@@ -376,7 +368,7 @@ namespace GameSvr
                     {
                         var bMsg = HUtil32.StringToByteAry(sMsg);
                         MsgHdr.nLength = -(bMsg.Length + 1);
-                        nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
+                        nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PacketSize;
                         using var memoryStream = new MemoryStream();
                         var backingStream = new BinaryWriter(memoryStream);
                         backingStream.Write(nSendBytes);
@@ -386,8 +378,8 @@ namespace GameSvr
                             backingStream.Write(bMsg);
                             backingStream.Write((byte)0);
                         }
-                        var stream = backingStream.BaseStream as MemoryStream;
-                        Buff = stream.ToArray();
+                        Buff = new byte[memoryStream.Length];
+                        memoryStream.Read(Buff, 0, Buff.Length);
                     }
                 }
                 M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);

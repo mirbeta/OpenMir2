@@ -13,6 +13,8 @@ namespace SystemModule.Packages
 
         public const int PacketSize = 20;
 
+        public TMsgHeader() { }
+
         public TMsgHeader(byte[] buff)
         {
             var binaryReader = new BinaryReader(new MemoryStream(buff));
