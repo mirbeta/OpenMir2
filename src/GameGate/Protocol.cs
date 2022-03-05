@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameGate
 {
-    public class TSvrCmdPack
+    public class TSvrCmdPack : Packets
     {
         public uint Flag;
         public int SockID;
@@ -15,12 +16,11 @@ namespace GameGate
 
         public TSvrCmdPack()
         {
-            
+
         }
 
-        public TSvrCmdPack(byte[] buff)
+        public TSvrCmdPack(byte[] buff) : base(buff)
         {
-            var binaryReader = new BinaryReader(new MemoryStream(buff));
             Flag = binaryReader.ReadUInt32();
             SockID = binaryReader.ReadInt32();
             Seq = binaryReader.ReadUInt16();
@@ -28,19 +28,20 @@ namespace GameGate
             GGSock = binaryReader.ReadInt32();
             DataLen = binaryReader.ReadInt32();
         }
-        
-        public byte[] GetPacket()
+
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(Flag);
-            backingStream.Write(SockID);
-            backingStream.Write(Seq);
-            backingStream.Write(Cmd);
-            backingStream.Write(GGSock);
-            backingStream.Write(DataLen);
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream?.ToArray();
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Flag);
+            writer.Write(SockID);
+            writer.Write(Seq);
+            writer.Write(Cmd);
+            writer.Write(GGSock);
+            writer.Write(DataLen);
         }
     }
 
@@ -117,4 +118,3 @@ namespace GameGate
         public const int DELAY_BUFFER_LEN = 1024;
     }
 }
-

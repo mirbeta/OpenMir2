@@ -96,8 +96,7 @@ namespace SystemModule
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            var nameLen = 0;
-            var nameBuff = HUtil32.StringToByteAry(Name, out nameLen);
+            var nameBuff = HUtil32.StringToByteAry(Name, out int nameLen);
             nameBuff[0] = (byte) nameLen;
             Array.Resize(ref nameBuff, 21);
             writer.Write(nameBuff);

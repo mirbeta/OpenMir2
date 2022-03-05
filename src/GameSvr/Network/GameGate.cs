@@ -871,42 +871,15 @@ namespace GameSvr
             {
                 if (!string.IsNullOrEmpty(sMsg))
                 {
-                    //MsgHdr.nLength = sMsg.Length + sizeof(TDefaultMessage) + 1;
-                    //nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
-                    //GetMem(Buff, nSendBytes + sizeof(int));
-                    //Move(nSendBytes, Buff, sizeof(int));
-                    //Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
-                    //Move(DefMsg, Buff[sizeof(TMsgHeader) + sizeof(int)], sizeof(TDefaultMessage));
-                    //Move(sMsg[1], Buff[sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
                     MsgHdr.nLength = sMsg.Length + 12 + 1;
-                    nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
-                    Buff = new byte[nSendBytes + sizeof(int)];//GetMem(Buff, nSendBytes + sizeof(int));
-                    
-                    // fixed (byte* pb = Buff)
-                    // {
-                    //     *(int*)pb = nSendBytes;
-                    //     *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                    //     *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = *DefMsg;
-                    //     *(char*)(pb + sizeof(TDefaultMessage) + sizeof(TMsgHeader) + sizeof(int) + sMsg.Length + 1) = sMsg[0];//sMsg[1]
-                    // }
+                    nSendBytes = MsgHdr.nLength + TMsgHeader.PacketSize;
+                    Buff = new byte[nSendBytes + sizeof(int)];
                 }
                 else
                 {
-                    //MsgHdr.nLength = sizeof(TDefaultMessage);
-                    //nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
-                    //GetMem(Buff, nSendBytes + sizeof(int));
-                    //Move(nSendBytes, Buff, sizeof(int));
-                    //Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
-                    //Move(DefMsg, Buff[sizeof(TMsgHeader) + sizeof(int)], sizeof(TDefaultMessage));
                     MsgHdr.nLength = 12;
-                    nSendBytes = MsgHdr.nLength + sizeof(TMsgHeader);
+                    nSendBytes = MsgHdr.nLength + TMsgHeader.PacketSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
-                    // fixed (byte* pb = Buff)
-                    // {
-                    //     *(int*)pb = nSendBytes;
-                    //     *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                    //     *(TDefaultMessage*)(pb + sizeof(int) + sizeof(TMsgHeader)) = *DefMsg;
-                    // }
                 }
             }
             else
@@ -914,25 +887,15 @@ namespace GameSvr
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     MsgHdr.nLength = -(sMsg.Length + 1);
-                    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
+                    nSendBytes = Math.Abs(MsgHdr.nLength) + TMsgHeader.PacketSize;
                     Buff = new byte[nSendBytes + sizeof(int)];
                     fixed (byte* pb = Buff)
                     {
                         *(int*)pb = nSendBytes;
-                        *(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
-                        *(char*)(pb + sizeof(TMsgHeader) + sizeof(int) + sMsg.Length + 1) = sMsg[1];
+                        //*(TMsgHeader*)(pb + sizeof(int)) = MsgHdr;
+                        *(char*)(pb + TMsgHeader.PacketSize + sizeof(int) + sMsg.Length + 1) = sMsg[1];
                     }
-                    //Move(sMsg[1], Buff[sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
                 }
-                //if (sMsg != "")
-                //{
-                //    MsgHdr.nLength = -(sMsg.Length + 1);
-                //    nSendBytes = Math.Abs(MsgHdr.nLength) + sizeof(TMsgHeader);
-                //    GetMem(Buff, nSendBytes + sizeof(int));
-                //    Move(nSendBytes, Buff, sizeof(int));
-                //    Move(MsgHdr, Buff[sizeof(int)], sizeof(TMsgHeader));
-                //    Move(sMsg[1], Buff[sizeof(TMsgHeader) + sizeof(int)], sMsg.Length + 1);
-                //}
             }
             if (!M2Share.RunSocket.AddGateBuffer(nGateIdx, Buff))
             {
