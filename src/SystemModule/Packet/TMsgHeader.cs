@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SystemModule.Packages
 {
-    public struct TMsgHeader
+    public class TMsgHeader : Packets
     {
         public uint dwCode;
         public int nSocket;
@@ -13,20 +13,6 @@ namespace SystemModule.Packages
 
         public const int PacketSize = 20;
 
-        public byte[] GetPacket()
-        {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(dwCode);
-            backingStream.Write(nSocket);
-            backingStream.Write(wGSocketIdx);
-            backingStream.Write(wIdent);
-            backingStream.Write(wUserListIndex);
-            backingStream.Write(nLength);
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream?.ToArray();
-        }
-
         public TMsgHeader(byte[] buff)
         {
             var binaryReader = new BinaryReader(new MemoryStream(buff));
@@ -36,6 +22,21 @@ namespace SystemModule.Packages
             wIdent = binaryReader.ReadUInt16();
             wUserListIndex = binaryReader.ReadInt32();
             nLength = binaryReader.ReadInt32();
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(dwCode);
+            writer.Write(nSocket);
+            writer.Write(wGSocketIdx);
+            writer.Write(wIdent);
+            writer.Write(wUserListIndex);
+            writer.Write(nLength);
         }
     }
 }

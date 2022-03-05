@@ -27,22 +27,21 @@ namespace SystemModule
             this.CreateDate = ReadDouble();//BitConverter.ToDouble(buff, 59);
         }
 
-        public byte[] GetPacket()
+
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(sAccount.ToByte(17));
-            backingStream.Write(sName.ToByte(21));
-            backingStream.Write(nSelectID);
-            backingStream.Write(dCreateDate);
-            backingStream.Write(boDeleted);
-            backingStream.Write(UpdateDate);
-            backingStream.Write(CreateDate);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(sAccount.ToByte(17));
+            writer.Write(sName.ToByte(21));
+            writer.Write(nSelectID);
+            writer.Write(dCreateDate);
+            writer.Write(boDeleted);
+            writer.Write(UpdateDate);
+            writer.Write(CreateDate);
         }
     }
 }
-

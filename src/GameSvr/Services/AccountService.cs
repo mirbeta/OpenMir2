@@ -10,35 +10,35 @@ namespace GameSvr
     {
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
-        private readonly IClientScoket IDSocket;
+        private readonly IClientScoket _clientScoket;
 
         public AccountService()
         {
             m_SessionList = new List<TSessInfo>();
             M2Share.g_Config.boIDSocketConnected = false;
-            IDSocket = new IClientScoket();
-            IDSocket.OnConnected += IDSocketConnect;
-            IDSocket.OnDisconnected += IDSocketDisconnect;
-            IDSocket.OnError += IDSocketError;
-            IDSocket.ReceivedDatagram += IdSocketRead;
+            _clientScoket = new IClientScoket();
+            _clientScoket.OnConnected += IDSocketConnect;
+            _clientScoket.OnDisconnected += IDSocketDisconnect;
+            _clientScoket.OnError += IDSocketError;
+            _clientScoket.ReceivedDatagram += IdSocketRead;
             if (M2Share.g_Config != null)
             {
-                IDSocket.Address = M2Share.g_Config.sIDSAddr;
-                IDSocket.Port = M2Share.g_Config.nIDSPort;
+                _clientScoket.Address = M2Share.g_Config.sIDSAddr;
+                _clientScoket.Port = M2Share.g_Config.nIDSPort;
             }
         }
 
         public void CheckConnected()
         {
-            if (IDSocket.IsConnected)
+            if (_clientScoket.IsConnected)
             {
                 return;
             }
-            if (IDSocket.IsBusy)
+            if (_clientScoket.IsBusy)
             {
                 return;
             }
-            IDSocket.Connect(IDSocket.Address, IDSocket.Port);
+            _clientScoket.Connect(_clientScoket.Address, _clientScoket.Port);
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -59,13 +59,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]拒绝链接...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]关闭连接...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]链接超时...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]链接超时...");
                     break;
             }
         }
@@ -77,9 +77,9 @@ namespace GameSvr
 
         private void SendSocket(string sSendMsg)
         {
-            if (IDSocket == null || !IDSocket.IsConnected) return;
+            if (_clientScoket == null || !_clientScoket.IsConnected) return;
             var data = HUtil32.GetBytes(sSendMsg);
-            IDSocket.Send(data);
+            _clientScoket.Send(data);
         }
 
         public void SendHumanLogOutMsg(string sUserId, int nId)
@@ -377,7 +377,7 @@ namespace GameSvr
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.g_Config.boIDSocketConnected = true;
-            M2Share.MainOutMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
+            M2Share.MainOutMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
             SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
         }
 
@@ -389,13 +389,13 @@ namespace GameSvr
             // }
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
-            IDSocket.IsConnected = false;
-            M2Share.ErrorMessage("登录服务器[" + IDSocket.Address + ":" + IDSocket.Port + "]断开连接...");
+            _clientScoket.IsConnected = false;
+            M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]断开连接...");
         }
 
         public void Close()
         {
-            IDSocket.Disconnect();
+            _clientScoket.Disconnect();
         }
 
         public int GetSessionCount()

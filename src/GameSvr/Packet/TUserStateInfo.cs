@@ -18,38 +18,37 @@ namespace GameSvr
             UseItems = new TClientItem[13];
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new NotImplementedException();
+        }
 
-            backingStream.Write(Feature);
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Feature);
 
             var StrLen = 0;
             var NameBuff = HUtil32.StringToByteAry(UserName, out StrLen);
             NameBuff[0] = (byte)StrLen;
             Array.Resize(ref NameBuff, 20);
-            backingStream.Write(NameBuff, 0, NameBuff.Length);
+            writer.Write(NameBuff, 0, NameBuff.Length);
 
-            backingStream.Write(NameColor);
+            writer.Write(NameColor);
 
             NameBuff = HUtil32.StringToByteAry(GuildName, out StrLen);
             NameBuff[0] = (byte)StrLen;
             Array.Resize(ref NameBuff, 15);
-            backingStream.Write(NameBuff, 0, NameBuff.Length);
+            writer.Write(NameBuff, 0, NameBuff.Length);
 
             NameBuff = HUtil32.StringToByteAry(GuildRankName, out StrLen);
             NameBuff[0] = (byte)StrLen;
             Array.Resize(ref NameBuff, 15);
-            backingStream.Write(NameBuff, 0, NameBuff.Length);
+            writer.Write(NameBuff, 0, NameBuff.Length);
 
             for (var i = 0; i < UseItems.Length; i++)
             {
-                backingStream.Write(UseItems[i].GetPacket());
+                writer.Write(UseItems[i].GetPacket());
             }
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
         }
     }
 }

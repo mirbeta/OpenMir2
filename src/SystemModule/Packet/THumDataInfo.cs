@@ -23,18 +23,15 @@ namespace SystemModule
             Data = new THumInfoData(bodyBuff);
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-                backingStream.Write(Header.GetPacket());
-                backingStream.Write(Data.GetPacket());
-
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Header.GetPacket());
+            writer.Write(Data.GetPacket());
         }
     }
 }

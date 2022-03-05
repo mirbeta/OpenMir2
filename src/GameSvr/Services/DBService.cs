@@ -142,7 +142,7 @@ namespace GameSvr
         }
     }
 
-    public class SaveHumData
+    public struct SaveHumData
     {
         public string sAccount;
         public string sCharName;

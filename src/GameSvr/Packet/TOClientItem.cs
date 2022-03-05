@@ -3,26 +3,24 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TOClientItem
+    public class TOClientItem : Packets
     {
         public TOStdItem S;
         public int MakeIndex;
         public ushort Dura;
         public ushort DuraMax;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(S.GetPacket());
-            backingStream.Write(MakeIndex);
-            backingStream.Write(Dura);
-            backingStream.Write(DuraMax);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(S.GetPacket());
+            writer.Write(MakeIndex);
+            writer.Write(Dura);
+            writer.Write(DuraMax);
         }
     }
 }
-

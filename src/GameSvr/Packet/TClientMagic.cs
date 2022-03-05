@@ -15,20 +15,19 @@ namespace GameSvr
             Def = new TMagic();
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(Key);
-            backingStream.Write(Level);
-            backingStream.Write((byte)0);
-            backingStream.Write((byte)0);
-            backingStream.Write(CurTrain);
-            backingStream.Write(Def.GetPacket());
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Key);
+            writer.Write(Level);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
+            writer.Write(CurTrain);
+            writer.Write(Def.GetPacket());
         }
     }
 }

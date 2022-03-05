@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SystemModule
 {
-    public class TMagicRcd
+    public class TMagicRcd : Packets
     {
         /// <summary>
         /// 技能ID
@@ -22,21 +22,6 @@ namespace SystemModule
         /// </summary>
         public int nTranPoint;
 
-        public byte[] GetPacket()
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-
-                backingStream.Write(wMagIdx);
-                backingStream.Write(btLevel);
-                backingStream.Write(btKey);
-                backingStream.Write(nTranPoint);
-
-                return (backingStream.BaseStream as MemoryStream).ToArray();
-            }
-        }
-
         public TMagicRcd() { }
 
         public TMagicRcd(byte[] buff)
@@ -45,6 +30,19 @@ namespace SystemModule
             this.btLevel = buff[2];
             this.btKey = buff[3];
             this.nTranPoint = BitConverter.ToInt16(buff, 4);
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(wMagIdx);
+            writer.Write(btLevel);
+            writer.Write(btKey);
+            writer.Write(nTranPoint);
         }
     }
 }

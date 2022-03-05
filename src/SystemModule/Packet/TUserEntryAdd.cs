@@ -26,19 +26,20 @@ namespace SystemModule.Packet
             this.sMemo = ReadPascalString(20);
             this.sMemo2 = ReadPascalString(20);
         }
-        
-        public byte[] GetPacket()
+
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(sQuiz2.ToByte(21));
-            backingStream.Write(sAnswer2.ToByte(13));
-            backingStream.Write(sBirthDay.ToByte(11));
-            backingStream.Write(sMobilePhone.ToByte(14));
-            backingStream.Write(sMemo.ToByte(21));
-            backingStream.Write(sMemo2.ToByte(21));
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream?.ToArray();
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(sQuiz2.ToByte(21));
+            writer.Write(sAnswer2.ToByte(13));
+            writer.Write(sBirthDay.ToByte(11));
+            writer.Write(sMobilePhone.ToByte(14));
+            writer.Write(sMemo.ToByte(21));
+            writer.Write(sMemo2.ToByte(21));
         }
     }
 }

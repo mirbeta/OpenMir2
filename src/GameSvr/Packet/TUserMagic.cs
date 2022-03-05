@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TUserMagic
+    public class TUserMagic : Packets
     {
         public TMagic MagicInfo;
         public byte btLevel;
@@ -16,20 +16,18 @@ namespace GameSvr
             MagicInfo = new TMagic();
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using MemoryStream memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-
-            backingStream.Write(MagicInfo.GetPacket());//76
-            backingStream.Write(btLevel);
-            backingStream.Write(wMagIdx);
-            backingStream.Write(nTranPoint);
-            backingStream.Write(btKey);
-
-            return (backingStream.BaseStream as MemoryStream).ToArray();
+            throw new System.NotImplementedException();
         }
 
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(MagicInfo.GetPacket());
+            writer.Write(btLevel);
+            writer.Write(wMagIdx);
+            writer.Write(nTranPoint);
+            writer.Write(btKey);
+        }
     }
 }
-

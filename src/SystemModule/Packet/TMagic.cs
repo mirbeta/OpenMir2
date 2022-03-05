@@ -2,7 +2,7 @@
 
 namespace SystemModule
 {
-    public class TMagic
+    public class TMagic : Packets
     {
         /// <summary>
         /// 技能ID
@@ -75,41 +75,37 @@ namespace SystemModule
             MaxTrain = new int[4];
         }
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(wMagicID);
-                backingStream.Write(sMagicName.ToByte(13));
-                backingStream.Write(btEffectType);
-                backingStream.Write(btEffect);
-                backingStream.Write((byte)0);
-                backingStream.Write(wSpell);
-                backingStream.Write(wPower);
-                backingStream.Write(TrainLevel);
-                backingStream.Write((byte)0);
-                backingStream.Write((byte)0);
-                backingStream.Write(MaxTrain[0]);
-                backingStream.Write(MaxTrain[1]);
-                backingStream.Write(MaxTrain[2]);
-                backingStream.Write(MaxTrain[3]);
-                backingStream.Write(btTrainLv);
-                backingStream.Write(btJob);
-                backingStream.Write((byte)0);
-                backingStream.Write((byte)0);
-                backingStream.Write(dwDelayTime);
-                backingStream.Write(btDefSpell);
-                backingStream.Write(btDefPower);
-                backingStream.Write(wMaxPower);
-                backingStream.Write(btDefMaxPower);
-                backingStream.Write(sDescr.ToByte(19));
-
-                var stream = backingStream.BaseStream as MemoryStream;
-                return stream.ToArray();
-            }
+            throw new System.NotImplementedException();
         }
 
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(wMagicID);
+            writer.Write(sMagicName.ToByte(13));
+            writer.Write(btEffectType);
+            writer.Write(btEffect);
+            writer.Write((byte)0);
+            writer.Write(wSpell);
+            writer.Write(wPower);
+            writer.Write(TrainLevel);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
+            writer.Write(MaxTrain[0]);
+            writer.Write(MaxTrain[1]);
+            writer.Write(MaxTrain[2]);
+            writer.Write(MaxTrain[3]);
+            writer.Write(btTrainLv);
+            writer.Write(btJob);
+            writer.Write((byte)0);
+            writer.Write((byte)0);
+            writer.Write(dwDelayTime);
+            writer.Write(btDefSpell);
+            writer.Write(btDefPower);
+            writer.Write(wMaxPower);
+            writer.Write(btDefMaxPower);
+            writer.Write(sDescr.ToByte(19));
+        }
     }
 }
-

@@ -1,23 +1,22 @@
 ﻿using System.IO;
+using SystemModule;
 
 namespace GameSvr
 {
-    public class TShortMessage
+    public class TShortMessage : Packets
     {
         public ushort Ident;
         public ushort wMsg;
 
-        public byte[] GetPacket()
+        protected override void ReadPacket(BinaryReader reader)
         {
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
+            throw new System.NotImplementedException();
+        }
 
-            backingStream.Write(Ident);
-            backingStream.Write(wMsg);
-
-            var stream = backingStream.BaseStream as MemoryStream;
-            return stream.ToArray();
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Ident);
+            writer.Write(wMsg);
         }
     }
 }
-
