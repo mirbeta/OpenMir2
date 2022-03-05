@@ -21,12 +21,12 @@ namespace GameGate
 
         public TSvrCmdPack(byte[] buff) : base(buff)
         {
-            Flag = binaryReader.ReadUInt32();
-            SockID = binaryReader.ReadInt32();
-            Seq = binaryReader.ReadUInt16();
-            Cmd = binaryReader.ReadUInt16();
-            GGSock = binaryReader.ReadInt32();
-            DataLen = binaryReader.ReadInt32();
+            Flag = ReadUInt32();
+            SockID = ReadInt32();
+            Seq = ReadUInt16();
+            Cmd = ReadUInt16();
+            GGSock = ReadInt32();
+            DataLen = ReadInt32();
         }
 
         protected override void ReadPacket(BinaryReader reader)

@@ -10,7 +10,7 @@ namespace SystemModule
     /// </summary>
     public abstract class Packets
     {
-        public readonly BinaryReader binaryReader;
+        private readonly BinaryReader binaryReader;
 
         public Packets() { }
 

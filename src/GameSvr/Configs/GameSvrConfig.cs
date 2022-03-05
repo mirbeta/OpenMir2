@@ -229,6 +229,9 @@ namespace GameSvr
         public int nBuildGuildPrice;
         public int nGuildWarPrice;
         public int nMakeDurgPrice;
+        /// <summary>
+        /// 玩家最大金币上限
+        /// </summary>
         public int nHumanMaxGold;
         public int nHumanTryModeMaxGold;
         public int nTryModeLevel;
