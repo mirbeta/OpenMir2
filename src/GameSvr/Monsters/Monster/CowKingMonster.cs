@@ -93,6 +93,30 @@ namespace GameSvr
             }
             base.Run();
         }
+
+        public int sub_4C3538()
+        {
+            int result = 0;
+            int nC = -1;
+            int n10;
+            while (nC != 2)
+            {
+                n10 = -1;
+                while (n10 != 2)
+                {
+                    if (!m_PEnvir.CanWalk(m_nCurrX + nC, m_nCurrY + n10, false))
+                    {
+                        if ((nC != 0) || (n10 != 0))
+                        {
+                            result++;
+                        }
+                    }
+                    n10++;
+                }
+                nC++;
+            }
+            return result;
+        }
     }
 }
 
