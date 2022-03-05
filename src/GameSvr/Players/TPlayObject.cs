@@ -741,19 +741,15 @@ namespace GameSvr
 
         private bool AllowFireHitSkill()
         {
-            var result = false;
             if ((HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 10 * 1000)
             {
                 m_dwLatestFireHitTick = HUtil32.GetTickCount();
                 m_boFireHitSkill = true;
                 SysMsg(M2Share.sFireSpiritsSummoned, TMsgColor.c_Green, TMsgType.t_Hint);
-                result = true;
+                return true;
             }
-            else
-            {
-                SysMsg(M2Share.sFireSpiritsFail, TMsgColor.c_Red, TMsgType.t_Hint);
-            }
-            return result;
+            SysMsg(M2Share.sFireSpiritsFail, TMsgColor.c_Red, TMsgType.t_Hint);
+            return false;
         }
 
         private bool AllowTwinHitSkill()
@@ -764,7 +760,7 @@ namespace GameSvr
             return true;
         }
 
-        private void ClientClickNPC(int NPC)
+        private void ClientClickNPC(int npcId)
         {
             if (!m_boCanDeal)
             {
@@ -775,10 +771,10 @@ namespace GameSvr
             {
                 return;
             }
-            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwClickNpcTime) // NPC点击间隔
+            if ((HUtil32.GetTickCount() - m_dwClickNpcTime) > M2Share.g_Config.dwClickNpcTime)
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                var normNpc = (NormNpc)M2Share.UserEngine.FindMerchant(NPC) ?? (NormNpc)M2Share.UserEngine.FindNPC(NPC);
+                var normNpc = (NormNpc)M2Share.UserEngine.FindMerchant(npcId) ?? (NormNpc)M2Share.UserEngine.FindNPC(npcId);
                 if (normNpc != null)
                 {
                     if (normNpc.m_PEnvir == m_PEnvir && Math.Abs(normNpc.m_nCurrX - m_nCurrX) <= 15 && Math.Abs(normNpc.m_nCurrY - m_nCurrY) <= 15)
@@ -848,13 +844,12 @@ namespace GameSvr
 
         public bool DecGold(int nGold)
         {
-            var result = false;
             if (m_nGold >= nGold)
             {
                 m_nGold -= nGold;
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         public void GainExp(int dwExp)
@@ -892,8 +887,7 @@ namespace GameSvr
                             {
                                 if (M2Share.g_Config.boHighLevelKillMonFixExp)
                                 {
-                                    // 02/08 增加，在高等级经验不变时，把组队的经验平均分配
-                                    PlayObject.WinExp(HUtil32.Round(dwExp / n));
+                                    PlayObject.WinExp(HUtil32.Round(dwExp / n)); // 在高等级经验不变时，把组队的经验平均分配
                                 }
                                 else
                                 {
@@ -3660,24 +3654,18 @@ namespace GameSvr
                     else
                     {
                         // 如果师父不在线则保存到记录表中
-                        try
+                        boIsfound = false;
+                        for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
                         {
-                            boIsfound = false;
-                            for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
+                            if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
-                                {
-                                    boIsfound = true;
-                                    break;
-                                }
-                            }
-                            if (!boIsfound)
-                            {
-                                M2Share.g_UnMasterList.Add(m_sMasterName);
+                                boIsfound = true;
+                                break;
                             }
                         }
-                        finally
+                        if (!boIsfound)
                         {
+                            M2Share.g_UnMasterList.Add(m_sMasterName);
                         }
                         if (!boIsfound)
                         {
@@ -3691,21 +3679,15 @@ namespace GameSvr
             }
             // 处理出师记录
             boIsfound = false;
-            try
+            for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
             {
-                for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
+                if (string.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (String.Compare(M2Share.g_UnMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        M2Share.g_UnMasterList.RemoveAt(i);
-                        M2Share.SaveUnMasterList();
-                        boIsfound = true;
-                        break;
-                    }
+                    M2Share.g_UnMasterList.RemoveAt(i);
+                    M2Share.SaveUnMasterList();
+                    boIsfound = true;
+                    break;
                 }
-            }
-            finally
-            {
             }
             if (boIsfound && m_boMaster)
             {
@@ -3809,92 +3791,71 @@ namespace GameSvr
 
         private bool CheckItemBindUse(TUserItem UserItem)
         {
-            bool result;
             TItemBind ItemBind;
-            result = true;
-            try
+            bool result = true;
+            for (var i = 0; i < M2Share.g_ItemBindAccount.Count; i++)
             {
-                for (var i = 0; i < M2Share.g_ItemBindAccount.Count; i++)
+                ItemBind = M2Share.g_ItemBindAccount[i];
+                if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
                 {
-                    ItemBind = M2Share.g_ItemBindAccount[i];
-                    if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
+                    result = false;
+                    if (string.Compare(ItemBind.sBindName, m_sUserID, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        result = false;
-                        if (ItemBind.sBindName.CompareTo(m_sUserID) == 0)
-                        {
-                            result = true;
-                        }
-                        else
-                        {
-                            SysMsg(M2Share.g_sItemIsNotThisAccount, TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                        return result;
+                        result = true;
                     }
+                    else
+                    {
+                        SysMsg(M2Share.g_sItemIsNotThisAccount, TMsgColor.c_Red, TMsgType.t_Hint);
+                    }
+                    return result;
                 }
             }
-            finally
+            for (var i = 0; i < M2Share.g_ItemBindIPaddr.Count; i++)
             {
-            }
-            try
-            {
-                for (var i = 0; i < M2Share.g_ItemBindIPaddr.Count; i++)
+                ItemBind = M2Share.g_ItemBindIPaddr[i];
+                if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
                 {
-                    ItemBind = M2Share.g_ItemBindIPaddr[i];
-                    if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
+                    result = false;
+                    if (string.Compare(ItemBind.sBindName, m_sIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        result = false;
-                        if (ItemBind.sBindName.CompareTo(m_sIPaddr) == 0)
-                        {
-                            result = true;
-                        }
-                        else
-                        {
-                            SysMsg(M2Share.g_sItemIsNotThisIPaddr, TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                        return result;
+                        result = true;
                     }
+                    else
+                    {
+                        SysMsg(M2Share.g_sItemIsNotThisIPaddr, TMsgColor.c_Red, TMsgType.t_Hint);
+                    }
+                    return result;
                 }
             }
-            finally
+            for (var i = 0; i < M2Share.g_ItemBindCharName.Count; i++)
             {
-            }
-            try
-            {
-                for (var i = 0; i < M2Share.g_ItemBindCharName.Count; i++)
+                ItemBind = M2Share.g_ItemBindCharName[i];
+                if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
                 {
-                    ItemBind = M2Share.g_ItemBindCharName[i];
-                    if (ItemBind.nMakeIdex == UserItem.MakeIndex && ItemBind.nItemIdx == UserItem.wIndex)
+                    result = false;
+                    if (string.Compare(ItemBind.sBindName, m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        result = false;
-                        if (ItemBind.sBindName.CompareTo(m_sCharName) == 0)
-                        {
-                            result = true;
-                        }
-                        else
-                        {
-                            SysMsg(M2Share.g_sItemIsNotThisCharName, TMsgColor.c_Red, TMsgType.t_Hint);
-                        }
-                        return result;
+                        result = true;
                     }
+                    else
+                    {
+                        SysMsg(M2Share.g_sItemIsNotThisCharName, TMsgColor.c_Red, TMsgType.t_Hint);
+                    }
+                    return result;
                 }
-            }
-            finally
-            {
             }
             return result;
         }
 
         private void ProcessClientPassword(TProcessMessage ProcessMsg)
         {
-            int nLen;
-            string sData;
             if (ProcessMsg.wParam == 0)
             {
                 ProcessUserLineMsg('@' + M2Share.g_GameCommand.UNLOCK.sCmd);
                 return;
             }
-            sData = ProcessMsg.sMsg;
-            nLen = sData.Length;
+            string sData = ProcessMsg.sMsg;
+            int nLen = sData.Length;
             if (m_boSetStoragePwd)
             {
                 m_boSetStoragePwd = false;
@@ -4049,9 +4010,6 @@ namespace GameSvr
 
         public void ReQuestGuildWar(string sGuildName)
         {
-            TGuild Guild;
-            TWarGuild WarGuild;
-            bool boReQuestOK;
             if (!IsGuildMaster())
             {
                 SysMsg("只有行会掌门人才能申请!!!", TMsgColor.c_Red, TMsgType.t_Hint);
@@ -4062,14 +4020,14 @@ namespace GameSvr
                 SysMsg("这个命令不能在本服务器上使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            Guild = M2Share.GuildManager.FindGuild(sGuildName);
+            TGuild Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild == null)
             {
                 SysMsg("行会不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            boReQuestOK = false;
-            WarGuild = m_MyGuild.AddWarGuild(Guild);
+            bool boReQuestOK = false;
+            TWarGuild WarGuild = m_MyGuild.AddWarGuild(Guild);
             if (WarGuild != null)
             {
                 if (Guild.AddWarGuild(m_MyGuild) == null)
@@ -4118,7 +4076,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="sIPaddr"></param>
         /// <param name="nPort"></param>
-        public void CrossGroupServer(string sIPaddr, int nPort)
+        public void ChangeSnapsServer(string sIPaddr, int nPort)
         {
             this.SendMsg(this, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + nPort);
         }

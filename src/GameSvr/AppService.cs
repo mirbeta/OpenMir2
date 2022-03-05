@@ -85,7 +85,7 @@ namespace GameSvr
                             {
                                 foreach (var playObject in M2Share.UserEngine.PlayObjects)
                                 {
-                                    playObject.CrossGroupServer(sIPaddr, nPort);
+                                    playObject.ChangeSnapsServer(sIPaddr, nPort);
                                 }
                             }
                             break;

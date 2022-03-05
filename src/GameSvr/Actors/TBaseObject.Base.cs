@@ -1540,7 +1540,6 @@ namespace GameSvr
             return result;
         }
 
-
         public virtual string GetShowName()
         {
             var sShowName = m_sCharName;

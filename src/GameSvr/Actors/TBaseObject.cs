@@ -4037,12 +4037,7 @@ namespace GameSvr
 
         public bool IsGoodKilling(TBaseObject cert)
         {
-            bool result = false;
-            if (cert.m_boPKFlag)
-            {
-                result = true;
-            }
-            return result;
+            return cert.m_boPKFlag;
         }
 
         public bool IsAttackTarget_sub_4C88E4()
@@ -4805,14 +4800,12 @@ namespace GameSvr
         public bool sub_4DD704()
         {
             bool result = false;
-            SendMessage SendMessage;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
                 for (var i = 0; i < m_MsgList.Count; i++)
                 {
-                    SendMessage = m_MsgList[i];
-                    if (SendMessage.wIdent == Grobal2.RM_10401)
+                    if (m_MsgList[i].wIdent == Grobal2.RM_10401)
                     {
                         result = true;
                         break;
@@ -5219,30 +5212,6 @@ namespace GameSvr
                     result = UserItem;
                     break;
                 }
-            }
-            return result;
-        }
-
-        public int sub_4C3538()
-        {
-            int result = 0;
-            int nC = -1;
-            int n10;
-            while (nC != 2)
-            {
-                n10 = -1;
-                while (n10 != 2)
-                {
-                    if (!m_PEnvir.CanWalk(m_nCurrX + nC, m_nCurrY + n10, false))
-                    {
-                        if ((nC != 0) || (n10 != 0))
-                        {
-                            result++;
-                        }
-                    }
-                    n10++;
-                }
-                nC++;
             }
             return result;
         }
