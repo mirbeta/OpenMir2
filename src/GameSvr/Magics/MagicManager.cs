@@ -678,6 +678,7 @@ namespace GameSvr
                     }
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = (ushort)nHTime;
             BaseObject.m_nCharStatus = BaseObject.GetCharStatus();
@@ -690,7 +691,6 @@ namespace GameSvr
         private bool MagTamming(TBaseObject BaseObject, TBaseObject TargeTBaseObject, int nTargetX, int nTargetY, int nMagicLevel)
         {
             var result = false;
-            int n14;
             if (TargeTBaseObject.m_btRaceServer != Grobal2.RC_PLAYOBJECT && M2Share.RandomNumber.Random(4 - nMagicLevel) == 0)
             {
                 TargeTBaseObject.m_TargetCret = null;
@@ -711,7 +711,7 @@ namespace GameSvr
                                 {
                                     if (!TargeTBaseObject.m_boNoTame && TargeTBaseObject.m_btLifeAttrib != Grobal2.LA_UNDEAD && TargeTBaseObject.m_Abil.Level < M2Share.g_Config.nMagTammingLevel && BaseObject.m_SlaveList.Count < M2Share.g_Config.nMagTammingCount)
                                     {
-                                        n14 = TargeTBaseObject.m_WAbil.MaxHP / M2Share.g_Config.nMagTammingHPRate;
+                                        int n14 = TargeTBaseObject.m_WAbil.MaxHP / M2Share.g_Config.nMagTammingHPRate;
                                         if (n14 <= 2)
                                         {
                                             n14 = 2;
@@ -743,8 +743,6 @@ namespace GameSvr
                                                     }
                                                 }
                                             }
-
-
                                             TargeTBaseObject.m_Master = BaseObject;
                                             TargeTBaseObject.m_dwMasterRoyaltyTick = (M2Share.RandomNumber.Random(BaseObject.m_Abil.Level * 2) + (nMagicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();
                                             TargeTBaseObject.m_btSlaveMakeLevel = (byte)nMagicLevel;
@@ -929,6 +927,8 @@ namespace GameSvr
                     }
                 }
             }
+            BaseObjectList.Clear();
+            BaseObjectList = null;
             return result;
         }
 
@@ -968,6 +968,7 @@ namespace GameSvr
                 }
                 PlayObject.SendRefMsg(Grobal2.RM_10205, 0, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 1, "");
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             return result;
         }
@@ -1007,6 +1008,7 @@ namespace GameSvr
                     }
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             return result;
         }
@@ -1106,6 +1108,7 @@ namespace GameSvr
                     result = true;
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             return result;
         }
@@ -1133,6 +1136,7 @@ namespace GameSvr
                     result = true;
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             return result;
         }
@@ -1224,22 +1228,21 @@ namespace GameSvr
                     }
                 }
             }
+            BaseObjectList.Clear();
             BaseObjectList = null;
             return result;
         }
 
-        // =====================================================================================
-        // 名称：
-        // 功能：
-        // 参数：
-        // BaseObject       魔法发起人
-        // TargeTBaseObject 受攻击角色
-        // nPower           魔法力大小
-        // nLevel           技能修炼等级
-        // nTargetX         目标座标X
-        // nTargetY         目标座标Y
-        // 返回值：
-        // =====================================================================================
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="BaseObject">魔法发起人</param>
+        /// <param name="TargeTBaseObject">受攻击角色</param>
+        /// <param name="nPower">魔法力大小</param>
+        /// <param name="nLevel">技能修炼等级</param>
+        /// <param name="nTargetX">目标座标X</param>
+        /// <param name="nTargetY">目标座标Y</param>
+        /// <returns></returns>
         private bool MabMabe(TBaseObject BaseObject, TBaseObject TargeTBaseObject, int nPower, int nLevel, int nTargetX, int nTargetY)
         {
             var result = false;
@@ -1283,7 +1286,7 @@ namespace GameSvr
         private bool MagMakeSinSuSlave(TPlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
-            if (!PlayObject.sub_4DD704())
+            if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.g_Config.sDragon;
                 int nMakelevel = UserMagic.btLevel;
@@ -1318,7 +1321,7 @@ namespace GameSvr
         private bool MagMakeSlave(TPlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
-            if (!PlayObject.sub_4DD704())
+            if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.g_Config.sSkeleton;
                 int nMakeLevel = UserMagic.btLevel;
@@ -1355,7 +1358,7 @@ namespace GameSvr
         private bool MagMakeAngelSlave(TPlayObject PlayObject, TUserMagic UserMagic)
         {
             var result = false;
-            if (!PlayObject.sub_4DD704())
+            if (!PlayObject.CheckServerMakeSlave())
             {
                 var sMonName = M2Share.g_Config.sAngel;
                 int nMakeLevel = UserMagic.btLevel;

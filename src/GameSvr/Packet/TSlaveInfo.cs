@@ -10,5 +10,10 @@ namespace GameSvr
         public byte btSlaveExpLevel;
         public ushort nHP;
         public ushort nMP;
+
+        public TSlaveInfo()
+        { 
+            
+        }
     }
 }

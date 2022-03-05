@@ -1907,9 +1907,7 @@ namespace GameSvr
                     SendAdjustBonus();
                     break;
                 case Grobal2.RM_10401:
-                    Console.WriteLine("todo ChangeServerMakeSlave...");
-                    //ChangeServerMakeSlave(((TSlaveInfo)(ProcessMsg.nParam1)));
-                    //Dispose(((TSlaveInfo)(ProcessMsg.nParam1)));
+                    ChangeServerMakeSlave((TSlaveInfo)M2Share.ObjectSystem.GetOhter(ProcessMsg.nParam1));
                     break;
                 case Grobal2.RM_OPENHEALTH:
                     SendDefMessage(Grobal2.SM_OPENHEALTH, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, 0, "");
