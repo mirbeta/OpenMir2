@@ -416,7 +416,7 @@ namespace GameSvr
             //    M2Share.dwSaveDataTick = HUtil32.GetTickCount();
             //    if (M2Share.sSellOffItemList != null)
             //    {
-            //        M2Share.LocalDB.FrmDB.SaveSellOffItemList();
+            //        M2Share.LocalDB.SaveSellOffItemList();
             //    }
             //    if (M2Share.g_Storage != null)
             //    {

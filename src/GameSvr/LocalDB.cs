@@ -1,10 +1,9 @@
-using SystemModule;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using SystemModule;
 using SystemModule.Common;
-using System.Text.Json;
 
 namespace GameSvr
 {
@@ -31,7 +30,6 @@ namespace GameSvr
     {
         public bool LoadAdminList()
         {
-            bool result = false;
             var sLineText = string.Empty;
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
@@ -41,7 +39,7 @@ namespace GameSvr
             string sfilename = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "AdminList.txt");
             if (!File.Exists(sfilename))
             {
-                return result;
+                return false;
             }
             M2Share.UserEngine.m_AdminList.Clear();
             LoadList = new StringList();
@@ -112,8 +110,7 @@ namespace GameSvr
                     }
                 }
             }
-            result = true;
-            return result;
+            return true;
         }
 
         public bool SaveAdminList()
@@ -557,7 +554,6 @@ namespace GameSvr
                         }
                     }
                 }
-                //tMerchantList.Free;
             }
         }
 
@@ -576,7 +572,6 @@ namespace GameSvr
             {
                 MonGenList.Add(LoadList[i]);
             }
-            //LoadList.Free;
         }
 
         public int LoadMonGen()
@@ -634,8 +629,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.dwZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
-                        MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);
-                        // 集中座标刷新机率 1 -100
+                        MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 &&
                             M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
@@ -722,7 +716,6 @@ namespace GameSvr
                         }
                     }
                 }
-                //LoadList.Free;
             }
             return result;
         }
@@ -1003,10 +996,8 @@ namespace GameSvr
 
         public int SaveGoodRecord(Merchant NPC, string sFile)
         {
-            int result;
-            string sFileName;
-            result = -1;
-            sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
+            int result = -1;
+            string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Write | FileShare.ReadWrite);
@@ -1036,7 +1027,6 @@ namespace GameSvr
             //            FileWrite(FileHandle, UserItem, sizeof(TUserItem));
             //        }
             //    }
-            //    FileHandle.Close();
             //    result = 1;
             //}
             return result;
@@ -1044,10 +1034,8 @@ namespace GameSvr
 
         public int SaveGoodPriceRecord(Merchant NPC, string sFile)
         {
-            int result;
-            string sFileName;
-            result = -1;
-            sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
+            int result = -1;
+            string sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Write | FileShare.ReadWrite);
@@ -1069,7 +1057,6 @@ namespace GameSvr
             //        
             //        FileWrite(FileHandle, ItemPrice, sizeof(TItemPrice));
             //    }
-            //    FileHandle.Close();
             //    result = 1;
             //}
             return result;
@@ -1220,10 +1207,8 @@ namespace GameSvr
 
         public int LoadGoodRecord(Merchant NPC, string sFile)
         {
-            int result;
-            string sFileName;
-            result = -1;
-            sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
+            int result = -1;
+            string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
             //{
             //    FileHandle = File.Open(sFileName, (FileMode) FileAccess.Read | FileShare.ReadWrite);

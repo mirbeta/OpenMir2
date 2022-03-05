@@ -1941,6 +1941,11 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 地图随机移动
+        /// </summary>
+        /// <param name="sMapName"></param>
+        /// <param name="nInt"></param>
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
@@ -4797,7 +4802,11 @@ namespace GameSvr
             return result;
         }
 
-        public bool sub_4DD704()
+        /// <summary>
+        /// 检查是否正有跨服数据
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckServerMakeSlave()
         {
             bool result = false;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
