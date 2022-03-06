@@ -25,7 +25,7 @@ namespace GameSvr
             TUserMagic UserMagic;
             if ((string.IsNullOrEmpty(sHumanName)) || (sSkillName == ""))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.Compare(sSkillName, "All", StringComparison.OrdinalIgnoreCase) == 0)

@@ -22,7 +22,7 @@ namespace GameSvr
             short nY;
             if (sX == "" || sY == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " X  Y", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " X  Y", MsgColor.Red, MsgType.Hint);
                 return;
             }
             nX = (short)HUtil32.Str_ToInt(sX, 0);

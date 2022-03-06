@@ -26,7 +26,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sHumanName) || nHungerPoint < 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

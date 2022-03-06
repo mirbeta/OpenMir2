@@ -25,7 +25,7 @@ namespace GameSvr
             TPlayObject m_PlayObject;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

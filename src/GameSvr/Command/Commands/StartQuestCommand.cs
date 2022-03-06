@@ -16,7 +16,7 @@ namespace GameSvr
             var sQuestName = @params.Length > 0 ? @params[0] : "";
             if (sQuestName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.UserEngine.SendQuestMsg(sQuestName);

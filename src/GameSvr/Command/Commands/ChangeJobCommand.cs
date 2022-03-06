@@ -22,7 +22,7 @@ namespace GameSvr
             var sJobName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sJobName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

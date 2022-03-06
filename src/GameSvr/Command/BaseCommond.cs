@@ -8,7 +8,7 @@ namespace GameSvr
 {
     public class BaseCommond
     {
-        protected GameCommandAttribute CommandAttribute { get; private set; }
+        protected GameCommandAttribute Command { get; private set; }
 
         private readonly Dictionary<CommandAttribute, MethodInfo> _commands =
             new Dictionary<CommandAttribute, MethodInfo>();
@@ -19,7 +19,7 @@ namespace GameSvr
         /// <param name="attributes"></param>
         public void Register(GameCommandAttribute attributes)
         {
-            this.CommandAttribute = attributes;
+            this.Command = attributes;
             this.RegisterDefaultCommand();
             this.RegisterCommands();
         }
@@ -52,10 +52,10 @@ namespace GameSvr
                 var attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) continue;
                 if (method.Name == "fallback") continue;
-                this._commands.Add(new DefaultCommand(this.CommandAttribute.nPermissionMin), method);
+                this._commands.Add(new DefaultCommand(this.Command.nPermissionMin), method);
                 return;
             }
-            this._commands.Add(new DefaultCommand(this.CommandAttribute.nPermissionMin), this.GetType().GetMethod("Fallback"));
+            this._commands.Add(new DefaultCommand(this.Command.nPermissionMin), this.GetType().GetMethod("Fallback"));
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace GameSvr
                 playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
 #endif
             }
-            if (playObject != null && playObject.m_btPermission < this.CommandAttribute.nPermissionMin)
+            if (playObject != null && playObject.m_btPermission < this.Command.nPermissionMin)
             {
                 return M2Share.g_sGameCommandPermissionTooLow; //权限不足
             }
@@ -99,11 +99,11 @@ namespace GameSvr
             {
                 if (@params == null)
                 {
-                    return CommandAttribute.CommandHelp();
+                    return Command.CommandHelp;
                 }
                 if (@params.Length < methodsParamsCount - 1) //参数数量小于实际需要传递的数量
                 {
-                    return CommandAttribute.CommandHelp();
+                    return Command.CommandHelp;
                 }
                 result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
             }

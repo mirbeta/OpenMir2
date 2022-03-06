@@ -23,14 +23,14 @@ namespace GameSvr.Command
             var sItemName = @params.Length > 2 ? @params[2] : "";
             if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
             nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.ItemUnit.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))

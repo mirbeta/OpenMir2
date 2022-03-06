@@ -22,14 +22,14 @@ namespace GameSvr
             var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             TUserItem UserItem = null;
             GoodItem StdItem;
-            if (PlayObject.m_btPermission < this.CommandAttribute.nPermissionMin)
+            if (PlayObject.m_btPermission < this.Command.nPermissionMin)
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nDura <= 0)

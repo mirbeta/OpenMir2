@@ -26,7 +26,7 @@ namespace GameSvr
             IList<TBaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.Str_ToInt(sRange, 2));

@@ -23,7 +23,7 @@ namespace GameSvr
             var dwOExp = 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             dwExp = HUtil32.Str_ToInt(sExp, 0);

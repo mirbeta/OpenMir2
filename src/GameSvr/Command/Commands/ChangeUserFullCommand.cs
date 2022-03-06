@@ -22,7 +22,7 @@ namespace GameSvr
             if (sUserCount == "" || nCount < 1 || sUserCount != "")
             {
                 PlayObject.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " 人数", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " 人数", MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.g_Config.nUserFull = nCount;
