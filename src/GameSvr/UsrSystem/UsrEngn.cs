@@ -2001,7 +2001,7 @@ namespace GameSvr
 
         public object FindMerchant(int merchantId)
         {
-            var normNpc = M2Share.ObjectSystem.Get(merchantId);
+            var normNpc = M2Share.ObjectManager.Get(merchantId);
             NormNpc npcObject = null;
             var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
@@ -2025,7 +2025,7 @@ namespace GameSvr
 
         public object FindNPC(int npcId)
         {
-            return M2Share.ObjectSystem.Get(npcId);;
+            return M2Share.ObjectManager.Get(npcId);;
         }
 
         /// <summary>
@@ -2926,7 +2926,7 @@ namespace GameSvr
             }
         }
 
-        public void GuildMemberReGetRankName(TGuild guild)
+        public void GuildMemberReGetRankName(Association guild)
         {
             var nRankNo = 0;
             for (int i = 0; i < m_PlayObjectList.Count; i++)

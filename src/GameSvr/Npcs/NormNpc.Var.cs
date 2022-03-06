@@ -2397,7 +2397,7 @@ namespace GameSvr
                     {
                         if (PlayObject.m_MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.nAurae;
+                            nValue = PlayObject.m_MyGuild.Aurae;
                         }
                         nDataType = 0;
                         result = true;
@@ -2407,7 +2407,7 @@ namespace GameSvr
                     {
                         if (PlayObject.m_MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.nStability;
+                            nValue = PlayObject.m_MyGuild.Stability;
                         }
                         nDataType = 0;
                         result = true;
@@ -2417,7 +2417,7 @@ namespace GameSvr
                     {
                         if (PlayObject.m_MyGuild != null)
                         {
-                            nValue = PlayObject.m_MyGuild.nFlourishing;
+                            nValue = PlayObject.m_MyGuild.Flourishing;
                         }
                         nDataType = 0;
                         result = true;

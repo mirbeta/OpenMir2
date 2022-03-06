@@ -14,7 +14,7 @@ namespace GameSvr
             Load();
         }
 
-        public void LoadConfig(TGuild guild)
+        public void LoadConfig(Association guild)
         {
             guild.m_nBuildPoint = ReadInteger("Guild", "BuildPoint", guild.m_nBuildPoint);
             guild.m_nAurae = ReadInteger("Guild", "Aurae", guild.m_nAurae);
@@ -23,7 +23,7 @@ namespace GameSvr
             guild.m_nChiefItemCount = ReadInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
         }
         
-        public void SaveGuildConfig(TGuild guild)
+        public void SaveGuildConfig(Association guild)
         {
             WriteString("Guild", "GuildName", guild.sGuildName);
             WriteInteger("Guild", "BuildPoint", guild.m_nBuildPoint);

@@ -12,7 +12,7 @@ namespace GameSvr
         /// <summary>
         /// 攻城行会列表
         /// </summary>
-        private IList<TGuild> m_AttackGuildList;
+        private IList<Association> m_AttackGuildList;
         /// <summary>
         /// 攻城列表
         /// </summary>
@@ -54,7 +54,7 @@ namespace GameSvr
         /// <summary>
         /// 所属行会名称
         /// </summary>
-        public TGuild m_MasterGuild;
+        public Association m_MasterGuild;
         /// <summary>
         /// 行会回城点X
         /// </summary>
@@ -125,7 +125,7 @@ namespace GameSvr
             m_boUnderWar = false;
             m_boShowOverMsg = false;
             m_AttackWarList = new List<TAttackerInfo>();
-            m_AttackGuildList = new List<TGuild>();
+            m_AttackGuildList = new List<Association>();
             m_dwSaveTick = 0;
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
@@ -456,9 +456,9 @@ namespace GameSvr
         }
 
         // 检查是否为攻城方行会的联盟行会
-        public bool IsAttackAllyGuild(TGuild Guild)
+        public bool IsAttackAllyGuild(Association Guild)
         {
-            TGuild AttackGuild;
+            Association AttackGuild;
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
@@ -473,9 +473,9 @@ namespace GameSvr
         }
 
         // 检查是否为攻城方行会
-        public bool IsAttackGuild(TGuild Guild)
+        public bool IsAttackGuild(Association Guild)
         {
-            TGuild AttackGuild;
+            Association AttackGuild;
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
@@ -489,7 +489,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool CanGetCastle(TGuild guild)
+        public bool CanGetCastle(Association guild)
         {
             var result = false;
             if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.g_Config.dwGetCastleTime)
@@ -512,7 +512,7 @@ namespace GameSvr
             return result;
         }
 
-        public void GetCastle(TGuild Guild)
+        public void GetCastle(Association Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
             var oldGuild = m_MasterGuild;
@@ -571,7 +571,7 @@ namespace GameSvr
             return m_AttackGuildList.Count;
         }
 
-        public bool IsDefenseAllyGuild(TGuild guild)
+        public bool IsDefenseAllyGuild(Association guild)
         {
             var result = false;
             if (!m_boUnderWar) return result;
@@ -581,7 +581,7 @@ namespace GameSvr
         }
 
         // 检查是否为守城方行会
-        public bool IsDefenseGuild(TGuild guild)
+        public bool IsDefenseGuild(Association guild)
         {
             var result = false;
             if (!m_boUnderWar) return result;
@@ -590,7 +590,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool IsMasterGuild(TGuild guild)
+        public bool IsMasterGuild(Association guild)
         {
             return m_MasterGuild != null && m_MasterGuild == guild;
         }
@@ -898,7 +898,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool AddAttackerInfo(TGuild Guild)
+        public bool AddAttackerInfo(Association Guild)
         {
             var result = false;
             if (InAttackerList(Guild)) return result;
@@ -913,7 +913,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool InAttackerList(TGuild Guild)
+        private bool InAttackerList(Association Guild)
         {
             var result = false;
             for (var i = 0; i < m_AttackWarList.Count; i++)

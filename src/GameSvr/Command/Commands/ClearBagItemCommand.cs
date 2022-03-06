@@ -50,7 +50,7 @@ namespace GameSvr
             if (DelList != null)
             {
                 var ObjectId = HUtil32.Sequence();
-                M2Share.ObjectSystem.AddOhter(ObjectId, DelList);
+                M2Share.ObjectManager.AddOhter(ObjectId, DelList);
                 m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }
         }

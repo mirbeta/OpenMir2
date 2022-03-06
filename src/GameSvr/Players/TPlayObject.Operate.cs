@@ -8,7 +8,7 @@ namespace GameSvr
     {
         private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var BaseObject = M2Share.ObjectSystem.Get(targetId);
+            var BaseObject = M2Share.ObjectManager.Get(targetId);
             if (CretInNearXY(BaseObject, x, y))
             {
                 var tagColor = GetCharColor(BaseObject);
@@ -108,7 +108,7 @@ namespace GameSvr
             TClientItem ClientItem = null;
             TOClientItem OClientItem = null;
             TUserItem UserItem = null;
-            var PlayObject = (TPlayObject)M2Share.ObjectSystem.Get(charId);
+            var PlayObject = (TPlayObject)M2Share.ObjectManager.Get(charId);
             if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
             {
                 if (!CretInNearXY(PlayObject, nX, nY))
@@ -812,7 +812,7 @@ namespace GameSvr
         {
             var result = false;
             dwDelayTime = 0;
-            var BaseObject = M2Share.ObjectSystem.Get(charId);
+            var BaseObject = M2Share.ObjectManager.Get(charId);
             if (!M2Share.g_Config.boSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;

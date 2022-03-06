@@ -531,25 +531,25 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    if (Guild.nFlourishing == nPoint)
+                    if (Guild.Flourishing == nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (Guild.nFlourishing > nPoint)
+                    if (Guild.Flourishing > nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (Guild.nFlourishing < nPoint)
+                    if (Guild.Flourishing < nPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (Guild.nFlourishing >= nPoint)
+                    if (Guild.Flourishing >= nPoint)
                     {
                         result = true;
                     }
@@ -576,25 +576,25 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    if (Guild.nChiefItemCount == nCount)
+                    if (Guild.ChiefItemCount == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (Guild.nChiefItemCount > nCount)
+                    if (Guild.ChiefItemCount > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (Guild.nChiefItemCount < nCount)
+                    if (Guild.ChiefItemCount < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (Guild.nChiefItemCount >= nCount)
+                    if (Guild.ChiefItemCount >= nCount)
                     {
                         result = true;
                     }
@@ -621,25 +621,25 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    if (Guild.nAurae == nPoint)
+                    if (Guild.Aurae == nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (Guild.nAurae > nPoint)
+                    if (Guild.Aurae > nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (Guild.nAurae < nPoint)
+                    if (Guild.Aurae < nPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (Guild.nAurae >= nPoint)
+                    if (Guild.Aurae >= nPoint)
                     {
                         result = true;
                     }
@@ -711,25 +711,25 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    if (Guild.nStability == nPoint)
+                    if (Guild.Stability == nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (Guild.nStability > nPoint)
+                    if (Guild.Stability > nPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (Guild.nStability < nPoint)
+                    if (Guild.Stability < nPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (Guild.nStability >= nPoint)
+                    if (Guild.Stability >= nPoint)
                     {
                         result = true;
                     }

@@ -306,7 +306,7 @@ namespace GameSvr
         /// </summary>
         public int m_DealLastTick = 0;
         public TBaseObject m_DealCreat = null;
-        public TGuild m_MyGuild = null;
+        public Association m_MyGuild = null;
         public int m_nGuildRankNo = 0;
         public string m_sGuildRankName = string.Empty;
         public string m_sScriptLable = string.Empty;
@@ -792,7 +792,7 @@ namespace GameSvr
             m_boFastParalysis = false;
             m_boNastyMode = false;
             m_MagicArr = new TUserMagic[100];
-            M2Share.ObjectSystem.Add(ObjectId, this);
+            M2Share.ObjectManager.Add(ObjectId, this);
         }
 
         public void ChangePKStatus(bool boWarFlag)
@@ -2966,7 +2966,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SendMessage.BaseObject = M2Share.ObjectSystem.Get(BaseObject);
+                        SendMessage.BaseObject = M2Share.ObjectManager.Get(BaseObject);
                     }
                     if (!string.IsNullOrEmpty(sMsg))
                     {

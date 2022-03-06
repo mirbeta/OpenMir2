@@ -31,7 +31,7 @@ namespace GameSvr
         public static int g_dwStartTick = 0;
         public static int ShareFileNameNum = 0;
         public static int g_nServerTickDifference = 0;
-        public static ObjectSystem ObjectSystem = null;
+        public static ObjectManager ObjectManager = null;
         public static ServerConfig ServerConf = null;
         public static GameCmdConfig CommandConf = null;
         public static StringConfig StringConf = null;
@@ -58,7 +58,7 @@ namespace GameSvr
         public static ItemUnit ItemUnit = null;
         public static MagicManager MagicManager = null;
         public static NoticeManager NoticeManager = null;
-        public static GuildManager GuildManager = null;
+        public static AssociationManager GuildManager = null;
         public static EventManager EventManager = null;
         public static CastleManager CastleManager = null;
         public static TFrontEngine FrontEngine = null;

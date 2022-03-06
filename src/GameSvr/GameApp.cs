@@ -249,7 +249,7 @@ namespace GameSvr
             M2Share.g_Config.nWinLotteryLevel6 = 0;
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
-            M2Share.ObjectSystem = new ObjectSystem();
+            M2Share.ObjectManager = new ObjectManager();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
@@ -260,7 +260,7 @@ namespace GameSvr
             M2Share.ItemUnit = new ItemUnit();
             M2Share.MagicManager = new MagicManager();
             M2Share.NoticeManager = new NoticeManager();
-            M2Share.GuildManager = new GuildManager();
+            M2Share.GuildManager = new AssociationManager();
             M2Share.EventManager = new EventManager();
             M2Share.CastleManager = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();
