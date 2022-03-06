@@ -29,7 +29,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1.0.0
       env:
-        GITHUB_TOKEN: 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
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -39,7 +39,7 @@ jobs:
       id: upload-release-asset
       uses: actions/upload-release-asset@v1.0.1
       env:
-        GITHUB_TOKEN: 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
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./release.zip
