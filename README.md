@@ -4,14 +4,14 @@ This project refers to the network Delphi code, which can be used with the origi
 
 ### How to use    
 ## Client
-    *  You can build the game client yourself from the Delphi source code or use the game client files we provide.    
+>  You can build the game client yourself from the Delphi source code or use the game client files we provide.    
 * How to download the Delphi game client  
     * Please use the search engine to search for blood legend source code yourself.  
 * Use our game client  
     * download here (later, we are still preparing, if you can't wait for the experience, you can consider self-compilation of the game client, of course, this requires you to experience Delphi experience)  
 
 ## Server
-    *  You can download various game versions on the search engine or download our basic version to experience.   
+> You can download various game versions on the search engine or download our basic version to experience.   
 * download here (later, we are ready)
 
 ## Startup sequence and project description. 
