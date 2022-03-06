@@ -28,8 +28,9 @@ jobs:
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
-      with:
+      env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         draft: false
