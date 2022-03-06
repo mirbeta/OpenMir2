@@ -17,7 +17,7 @@ namespace GameSvr
             var nHair = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumanName) || nHair < 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

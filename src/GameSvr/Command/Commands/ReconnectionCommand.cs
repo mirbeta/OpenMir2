@@ -29,7 +29,7 @@ namespace GameSvr.Command
             }
             if (sIPaddr == "" || sPort == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " IP地址 端口", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " IP地址 端口", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sIPaddr != "" && sPort != "")

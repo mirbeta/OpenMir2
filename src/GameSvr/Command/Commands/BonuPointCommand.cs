@@ -22,7 +22,7 @@ namespace GameSvr
             string sMsg;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " 人物名称 属性点数(不输入为查看点数)", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " 人物名称 属性点数(不输入为查看点数)", MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

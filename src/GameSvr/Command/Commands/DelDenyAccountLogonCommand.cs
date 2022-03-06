@@ -17,7 +17,7 @@ namespace GameSvr
             var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;

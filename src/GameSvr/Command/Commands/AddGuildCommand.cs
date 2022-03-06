@@ -28,7 +28,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sGuildName) || sGuildChief == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             boAddState = false;

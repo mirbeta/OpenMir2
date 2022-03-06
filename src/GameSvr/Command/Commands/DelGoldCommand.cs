@@ -25,7 +25,7 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (sHumName == "" || nCount <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

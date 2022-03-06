@@ -52,10 +52,7 @@ namespace GameSvr.CommandSystem
             this.nPermissionMax = maxUserLevel;
         }
 
-        public string CommandHelp()
-        {
-            return $"命令格式: @{Name} {Help}";
-        }
+        public string CommandHelp => $"命令格式: @{Name} {Help}";
     }
 
     [AttributeUsage(AttributeTargets.Method)]

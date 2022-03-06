@@ -33,7 +33,7 @@ namespace GameSvr
                 nY = (short)HUtil32.Str_ToInt(sY, 0);
                 if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
                 {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCode = 1;
@@ -41,7 +41,7 @@ namespace GameSvr
                 if (!M2Share.g_boMission || MEnvir == null)
                 {
                     PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
-                    PlayObject.SysMsg("请先用命令" + this.CommandAttribute.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCode = 2;

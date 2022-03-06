@@ -20,7 +20,7 @@ namespace GameSvr
             string sMsg;
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMapName);

@@ -16,7 +16,7 @@ namespace GameSvr
             var sIPaddr = @Params.Length > 0 ? @Params[0] : "";
             if (sIPaddr == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;

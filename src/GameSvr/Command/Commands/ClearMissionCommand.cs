@@ -20,7 +20,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sHumanName[0] == '?')

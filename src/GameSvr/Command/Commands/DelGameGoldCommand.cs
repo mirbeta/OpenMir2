@@ -22,7 +22,7 @@ namespace GameSvr
             var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
             if (sHumName == "" || nPoint <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

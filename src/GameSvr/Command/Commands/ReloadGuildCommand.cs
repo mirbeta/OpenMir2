@@ -23,7 +23,7 @@ namespace GameSvr
                 sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (string.IsNullOrEmpty(sParam1))
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Command.Name, M2Share.g_sGameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }

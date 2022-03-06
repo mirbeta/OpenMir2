@@ -24,7 +24,7 @@ namespace GameSvr
             TPlayObject m_PlayObject;
             if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
