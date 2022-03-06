@@ -30,12 +30,10 @@ namespace SystemModule
                         singleton = new RandomNumber();
                     }
                 }
-
             }
             return singleton;
         }
 
-        /**/
         /// <summary>
         /// 从指定列表中随机取出指定个数整数以新列表返回
         /// </summary>
@@ -56,7 +54,7 @@ namespace SystemModule
             }
             return resultList;
         }
-        /**/
+        
         /// <summary>
         /// 生成一个整数大于等于最小值，小于等于最大值
         /// </summary>

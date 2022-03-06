@@ -4828,7 +4828,7 @@ namespace GameSvr
             return result;
         }
 
-        protected bool sub_4C5370(short nX, short nY, int nRange, ref short nDX, ref short nDY)
+        protected bool GetRecallXY(short nX, short nY, int nRange, ref short nDX, ref short nDY)
         {
             bool result = false;
             if (m_PEnvir.GetMovingObject(nX, nY, true) == null)
