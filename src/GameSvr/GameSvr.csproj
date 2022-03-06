@@ -37,8 +37,4 @@
     <ProjectReference Include="..\SystemModule\SystemModule.csproj">
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Groups" />
-    <Folder Include="Quests" />
-  </ItemGroup>
 </Project>

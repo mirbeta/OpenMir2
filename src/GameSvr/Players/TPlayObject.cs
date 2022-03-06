@@ -3991,7 +3991,7 @@ namespace GameSvr
             {
                 if (GetFrontPosition(ref nX, ref nY))
                 {
-                    if (sub_4C5370(nX, nY, 3, ref n18, ref n1C))
+                    if (GetRecallXY(nX, nY, 3, ref n18, ref n1C))
                     {
                         PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.SpaceMove(m_sMapName, n18, n1C, 0);

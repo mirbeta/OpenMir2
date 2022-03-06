@@ -13,29 +13,25 @@ namespace SystemModule
 
         private static uint F(uint x, uint y, uint z)
         {
-            var result = (x & y) | (~x & z);
-            return result;
+            return  (x & y) | (~x & z);
         }
 
         private static uint g(uint x, uint y, uint z)
         {
-            var result = (x & z) | (y & ~z);
-            return result;
+            return  (x & z) | (y & ~z);
         }
 
         private static uint H(uint x, uint y, uint z)
         {
-            var result = x ^ y ^ z;
-            return result;
+            return x ^ y ^ z;
         }
 
         private static uint i(uint x, uint y, uint z)
         {
-            var result = y ^ (x | ~z);
-            return result;
+            return y ^ (x | ~z);
         }
 
-        private static void rot(ref uint x, byte n)
+        private static void Rot(ref uint x, byte n)
         {
             x = (x << n) | (x >> (32 - n));
         }
@@ -44,28 +40,28 @@ namespace SystemModule
         {
             var calc = (x + AC);
             a += F(b, c, d) + calc;
-            rot(ref a, s);
+            Rot(ref a, s);
             a += b;
         }
 
         private static void GG(ref uint a, uint b, uint c, uint d, uint x, byte s, uint AC)
         {
             a += g(b, c, d) + x + AC;
-            rot(ref a, s);
+            Rot(ref a, s);
             a += b;
         }
 
         private static void HH(ref uint a, uint b, uint c, uint d, uint x, byte s, uint AC)
         {
             a += H(b, c, d) + x + AC;
-            rot(ref a, s);
+            Rot(ref a, s);
             a += b;
         }
 
         private static void ii(ref uint a, uint b, uint c, uint d, uint x, byte s, uint AC)
         {
             a += i(b, c, d) + x + AC;
-            rot(ref a, s);
+            Rot(ref a, s);
             a += b;
         }
 
@@ -86,7 +82,7 @@ namespace SystemModule
                 Target[i] = ((uint)(t | (s[c + 1] << 8)));
                 Target[i] = (uint)(Target[i] | (s[c + 2] << 16));
                 Target[i] = (uint)(Target[i] | (s[c + 3] << 24));
-                c = c + 4;
+                c += 4;
             }
         }
 
