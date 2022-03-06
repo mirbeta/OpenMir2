@@ -246,7 +246,7 @@ namespace GameSvr
         private void MsgGetReloadGuild(int sNum, string Body)
         {
             var gname = Body;
-            TGuild guild;
+            Association guild;
             if (sNum == 0)
             {
                 guild = M2Share.GuildManager.FindGuild(gname);
@@ -290,8 +290,8 @@ namespace GameSvr
             var warguildname = string.Empty;
             var StartTime = string.Empty;
             var remaintime = string.Empty;
-            TGuild g;
-            TGuild WarGuild;
+            Association g;
+            Association WarGuild;
             TWarGuild pgw;
             if (sNum == 0)
             {

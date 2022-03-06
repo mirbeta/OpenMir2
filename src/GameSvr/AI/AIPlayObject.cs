@@ -1338,7 +1338,7 @@ namespace GameSvr
                 {
                     if (ProcessMsg.BaseObject == this.ObjectId)
                     {
-                        AttackBaseObject = M2Share.ObjectSystem.Get(ProcessMsg.nParam3);
+                        AttackBaseObject = M2Share.ObjectManager.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
                             if (AttackBaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)

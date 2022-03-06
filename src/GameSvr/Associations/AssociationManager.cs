@@ -6,17 +6,17 @@ using SystemModule.Common;
 
 namespace GameSvr
 {
-    public class GuildManager
+    public class AssociationManager
     {
-        private IList<TGuild> GuildList = null;
+        private IList<Association> GuildList = null;
 
         public bool AddGuild(string sGuildName, string sChief)
         {
-            TGuild Guild;
+            Association Guild;
             var result = false;
             if (M2Share.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
             {
-                Guild = new TGuild(sGuildName);
+                Guild = new Association(sGuildName);
                 Guild.SetGuildInfo(sChief);
                 GuildList.Add(Guild);
                 SaveGuildList();
@@ -27,7 +27,7 @@ namespace GameSvr
 
         public bool DelGuild(string sGuildName)
         {
-            TGuild Guild;
+            Association Guild;
             var result = false;
             for (var i = 0; i < GuildList.Count; i++)
             {
@@ -57,14 +57,14 @@ namespace GameSvr
             GuildList.Clear();
         }
 
-        public GuildManager()
+        public AssociationManager()
         {
-            GuildList = new List<TGuild>();
+            GuildList = new List<Association>();
         }
 
-        public TGuild FindGuild(string sGuildName)
+        public Association FindGuild(string sGuildName)
         {
-            TGuild result = null;
+            Association result = null;
             for (var i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].sGuildName == sGuildName)
@@ -79,7 +79,7 @@ namespace GameSvr
         public void LoadGuildInfo()
         {
             StringList LoadList;
-            TGuild Guild;
+            Association Guild;
             string sGuildName;
             if (File.Exists(M2Share.g_Config.sGuildFile))
             {
@@ -90,7 +90,7 @@ namespace GameSvr
                     sGuildName = LoadList[i].Trim();
                     if (sGuildName != "")
                     {
-                        Guild = new TGuild(sGuildName);
+                        Guild = new Association(sGuildName);
                         GuildList.Add(Guild);
                     }
                 }
@@ -112,9 +112,9 @@ namespace GameSvr
             }
         }
 
-        public TGuild MemberOfGuild(string sName)
+        public Association MemberOfGuild(string sName)
         {
-            TGuild result = null;
+            Association result = null;
             for (var i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].IsMember(sName))
@@ -151,7 +151,7 @@ namespace GameSvr
 
         public void Run()
         {
-            TGuild Guild;
+            Association Guild;
             bool boChanged;
             TWarGuild WarGuild;
             for (var i = 0; i < GuildList.Count; i++)

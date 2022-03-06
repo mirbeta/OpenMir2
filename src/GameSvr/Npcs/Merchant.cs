@@ -442,7 +442,7 @@ namespace GameSvr
             if (DelItemList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ObjectSystem.AddOhter(objectId, DelItemList);
+                M2Share.ObjectManager.AddOhter(objectId, DelItemList);
                 User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
             if (DuraList != null)
@@ -1567,7 +1567,7 @@ namespace GameSvr
                 if (List28 != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ObjectSystem.AddOhter(ObjectId, List28);
+                    M2Share.ObjectManager.AddOhter(ObjectId, List28);
                     PlayObject.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }

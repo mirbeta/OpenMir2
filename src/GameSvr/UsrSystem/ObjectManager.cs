@@ -8,7 +8,7 @@ namespace GameSvr
     /// <summary>
     /// 对象管理系统
     /// </summary>
-    public class ObjectSystem
+    public class ObjectManager
     {
         /// <summary>
         /// 精灵对象列表
@@ -19,7 +19,7 @@ namespace GameSvr
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
 
-        public ObjectSystem()
+        public ObjectManager()
         {
             Debug.WriteLine("Start Clear Object Thread...");
         }

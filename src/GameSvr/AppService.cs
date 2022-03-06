@@ -116,7 +116,7 @@ namespace GameSvr
             }
             if ((HUtil32.GetTickCount() - _clearIntervalTime) > 60000)
             {
-                M2Share.ObjectSystem.ClearGhost();
+                M2Share.ObjectManager.ClearGhost();
                 _clearIntervalTime = HUtil32.GetTickCount();
             }
         }

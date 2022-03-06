@@ -7,7 +7,7 @@ using SystemModule.Packages;
 
 namespace GameSvr
 {
-    public class RobotObject: TPlayObject
+    public class RobotObject : TPlayObject
     {
         public string m_sScriptFileName = string.Empty;
         private IList<AutoRunInfo> m_AutoRunList = null;
@@ -18,36 +18,36 @@ namespace GameSvr
             {
                 return;
             }
-            if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > AutoRunInfo.dwRunTimeLen)
+            if ((HUtil32.GetTickCount() - AutoRunInfo.dwRunTick) > AutoRunInfo.dwRunTimeLen)
             {
-                switch(AutoRunInfo.nRunCmd)
+                switch (AutoRunInfo.nRunCmd)
                 {
                     case Robot.nRONPCLABLEJMP:
-                        switch(AutoRunInfo.nMoethod)
+                        switch (AutoRunInfo.nMoethod)
                         {
                             case Robot.nRODAY:
-                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (24 * 60 * 60 * 1000 * AutoRunInfo.nParam1))
+                                if ((HUtil32.GetTickCount() - AutoRunInfo.dwRunTick) > (24 * 60 * 60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case Robot.nROHOUR:
-                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (60 * 60 * 1000 * AutoRunInfo.nParam1))
+                                if ((HUtil32.GetTickCount() - AutoRunInfo.dwRunTick) > (60 * 60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case Robot.nROMIN:
-                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (60 * 1000 * AutoRunInfo.nParam1))
+                                if ((HUtil32.GetTickCount() - AutoRunInfo.dwRunTick) > (60 * 1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 }
                                 break;
                             case Robot.nROSEC:
-                                if ((HUtil32.GetTickCount()- AutoRunInfo.dwRunTick) > (1000 * AutoRunInfo.nParam1))
+                                if ((HUtil32.GetTickCount() - AutoRunInfo.dwRunTick) > (1000 * AutoRunInfo.nParam1))
                                 {
                                     AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                     M2Share.g_RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
@@ -94,7 +94,7 @@ namespace GameSvr
             var wMin = DateTime.Now.Minute;
             var wSec = DateTime.Now.Second;
             var wMSec = DateTime.Now.Millisecond;
-            if (nHour >= 0 && nHour<= 24 && nMin >= 0 && nMin<= 60)
+            if (nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
                 if (wHour == nHour)
                 {
@@ -142,7 +142,7 @@ namespace GameSvr
             var wSec = DateTime.Now.Second;
             var wMSec = DateTime.Now.Millisecond;
             var wWeek = DateTime.Now.DayOfWeek;
-            if (nWeek >= 1 && nWeek<= 7 && nHour >= 0 && nHour<= 24 && nMin >= 0 && nMin<= 60)
+            if (nWeek >= 1 && nWeek <= 7 && nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
                 if ((int)wWeek == nWeek && wHour == nHour)
                 {
@@ -162,7 +162,7 @@ namespace GameSvr
 
         private void ClearScript()
         {
-            for (var i = 0; i < m_AutoRunList.Count; i ++ )
+            for (var i = 0; i < m_AutoRunList.Count; i++)
             {
                 m_AutoRunList[i] = null;
             }
@@ -292,8 +292,7 @@ namespace GameSvr
 
         internal override void SendSocket(TDefaultMessage DefMsg, string sMsg)
         {
-            
+
         }
     }
 }
-

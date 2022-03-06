@@ -682,7 +682,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            sText = PlayObject.m_MyGuild.nAurae.ToString();
+                            sText = PlayObject.m_MyGuild.Aurae.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDAURAEPOINT>", sText);
                         return;
@@ -695,7 +695,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            sText = PlayObject.m_MyGuild.nStability.ToString();
+                            sText = PlayObject.m_MyGuild.Stability.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDSTABILITYPOINT>", sText);
                         return;
@@ -708,7 +708,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            sText = PlayObject.m_MyGuild.nFlourishing.ToString();
+                            sText = PlayObject.m_MyGuild.Flourishing.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDFLOURISHPOINT>", sText);
                         return;

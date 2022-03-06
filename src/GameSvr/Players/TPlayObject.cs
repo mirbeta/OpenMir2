@@ -4020,7 +4020,7 @@ namespace GameSvr
                 SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            TGuild Guild = M2Share.GuildManager.FindGuild(sGuildName);
+            Association Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild == null)
             {
                 SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);

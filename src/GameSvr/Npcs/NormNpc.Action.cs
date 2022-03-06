@@ -2755,32 +2755,32 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    Guild.nAurae = nAuraePoint;
+                    Guild.Aurae = nAuraePoint;
                     break;
                 case '-':
-                    if (Guild.nAurae >= nAuraePoint)
+                    if (Guild.Aurae >= nAuraePoint)
                     {
-                        Guild.nAurae = Guild.nAurae - nAuraePoint;
+                        Guild.Aurae = Guild.Aurae - nAuraePoint;
                     }
                     else
                     {
-                        Guild.nAurae = 0;
+                        Guild.Aurae = 0;
                     }
                     break;
                 case '+':
-                    if ((int.MaxValue - Guild.nAurae) >= nAuraePoint)
+                    if ((int.MaxValue - Guild.Aurae) >= nAuraePoint)
                     {
-                        Guild.nAurae = Guild.nAurae + nAuraePoint;
+                        Guild.Aurae = Guild.Aurae + nAuraePoint;
                     }
                     else
                     {
-                        Guild.nAurae = int.MaxValue;
+                        Guild.Aurae = int.MaxValue;
                     }
                     break;
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildAuraePointMsg, new int[] { Guild.nAurae }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptGuildAuraePointMsg, new int[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2849,32 +2849,32 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    Guild.nChiefItemCount = nItemCount;
+                    Guild.ChiefItemCount = nItemCount;
                     break;
                 case '-':
-                    if (Guild.nChiefItemCount >= nItemCount)
+                    if (Guild.ChiefItemCount >= nItemCount)
                     {
-                        Guild.nChiefItemCount = Guild.nChiefItemCount - nItemCount;
+                        Guild.ChiefItemCount = Guild.ChiefItemCount - nItemCount;
                     }
                     else
                     {
-                        Guild.nChiefItemCount = 0;
+                        Guild.ChiefItemCount = 0;
                     }
                     break;
                 case '+':
-                    if ((int.MaxValue - Guild.nChiefItemCount) >= nItemCount)
+                    if ((int.MaxValue - Guild.ChiefItemCount) >= nItemCount)
                     {
-                        Guild.nChiefItemCount = Guild.nChiefItemCount + nItemCount;
+                        Guild.ChiefItemCount = Guild.ChiefItemCount + nItemCount;
                     }
                     else
                     {
-                        Guild.nChiefItemCount = int.MaxValue;
+                        Guild.ChiefItemCount = int.MaxValue;
                     }
                     break;
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptChiefItemCountMsg, new int[] { Guild.nChiefItemCount }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptChiefItemCountMsg, new int[] { Guild.ChiefItemCount }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2896,32 +2896,32 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    Guild.nFlourishing = nFlourishPoint;
+                    Guild.Flourishing = nFlourishPoint;
                     break;
                 case '-':
-                    if (Guild.nFlourishing >= nFlourishPoint)
+                    if (Guild.Flourishing >= nFlourishPoint)
                     {
-                        Guild.nFlourishing = Guild.nFlourishing - nFlourishPoint;
+                        Guild.Flourishing = Guild.Flourishing - nFlourishPoint;
                     }
                     else
                     {
-                        Guild.nFlourishing = 0;
+                        Guild.Flourishing = 0;
                     }
                     break;
                 case '+':
-                    if ((int.MaxValue - Guild.nFlourishing) >= nFlourishPoint)
+                    if ((int.MaxValue - Guild.Flourishing) >= nFlourishPoint)
                     {
-                        Guild.nFlourishing = Guild.nFlourishing + nFlourishPoint;
+                        Guild.Flourishing = Guild.Flourishing + nFlourishPoint;
                     }
                     else
                     {
-                        Guild.nFlourishing = int.MaxValue;
+                        Guild.Flourishing = int.MaxValue;
                     }
                     break;
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildFlourishPointMsg, new int[] { Guild.nFlourishing }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptGuildFlourishPointMsg, new int[] { Guild.Flourishing }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2943,32 +2943,32 @@ namespace GameSvr
             switch (cMethod)
             {
                 case '=':
-                    Guild.nStability = nStabilityPoint;
+                    Guild.Stability = nStabilityPoint;
                     break;
                 case '-':
-                    if (Guild.nStability >= nStabilityPoint)
+                    if (Guild.Stability >= nStabilityPoint)
                     {
-                        Guild.nStability = Guild.nStability - nStabilityPoint;
+                        Guild.Stability = Guild.Stability - nStabilityPoint;
                     }
                     else
                     {
-                        Guild.nStability = 0;
+                        Guild.Stability = 0;
                     }
                     break;
                 case '+':
-                    if ((int.MaxValue - Guild.nStability) >= nStabilityPoint)
+                    if ((int.MaxValue - Guild.Stability) >= nStabilityPoint)
                     {
-                        Guild.nStability = Guild.nStability + nStabilityPoint;
+                        Guild.Stability = Guild.Stability + nStabilityPoint;
                     }
                     else
                     {
-                        Guild.nStability = int.MaxValue;
+                        Guild.Stability = int.MaxValue;
                     }
                     break;
             }
             if (M2Share.g_Config.boShowScriptActionMsg)
             {
-                PlayObject.SysMsg(format(M2Share.g_sScriptGuildStabilityPointMsg, new int[] { Guild.nStability }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(format(M2Share.g_sScriptGuildStabilityPointMsg, new int[] { Guild.Stability }), MsgColor.Green, MsgType.Hint);
             }
         }
 

@@ -12,7 +12,7 @@ namespace GameSvr
     {
         public DateTime AttackDate;
         public string sGuildName;
-        public TGuild Guild;
+        public Association Guild;
     }
     
     public struct TDefenseUnit
