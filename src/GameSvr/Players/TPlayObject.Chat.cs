@@ -881,7 +881,7 @@ namespace GameSvr
                         }
                     }
                 }
-                SysMsg('@' + sCMD + " 此命令不正确，或没有足够的权限!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg($"@{sCMD}此命令不正确，或没有足够的权限!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             }
             catch (Exception e)
             {

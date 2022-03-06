@@ -4,6 +4,9 @@ using SystemModule;
 
 namespace GameSvr
 {
+    /// <summary>
+    /// 元宝寄售相关
+    /// </summary>
     public partial class TPlayObject
     {
         /// <summary>
@@ -126,15 +129,14 @@ namespace GameSvr
         /// <param name="sItemName"></param>
         private void ClientDelSellOffItem(int nItemIdx, string sItemName)
         {
-            bool bo11;
             TUserItem UserItem;
-            string sUserItemName;
+            string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
                 HUtil32.GetValidStr3(sItemName, ref sItemName, new char[] { ' ' });
             }
-            bo11 = false;
+            bool bo11 = false;
             if (!m_boSellOffOK)
             {
                 for (var i = m_SellOffItemList.Count - 1; i >= 0; i--)
@@ -150,13 +152,11 @@ namespace GameSvr
                     }
                     if (UserItem.MakeIndex == nItemIdx)
                     {
-                        // 取自定义物品名称
-                        sUserItemName = "";
                         if (UserItem.btValue[13] == 1)
                         {
-                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex);
+                            sUserItemName = M2Share.ItemUnit.GetCustomItemName(UserItem.MakeIndex, UserItem.wIndex); // 取自定义物品名称
                         }
-                        if (sUserItemName == "")
+                        if (string.IsNullOrEmpty(sUserItemName))
                         {
                             sUserItemName = M2Share.UserEngine.GetStdItemName(UserItem.wIndex);
                         }
@@ -215,8 +215,6 @@ namespace GameSvr
                                 if (StdItem != null)
                                 {
                                     //UserItem = new TUserItem();
-                                    //FillChar(UserItem, sizeof(TUserItem), '\0');
-                                    //FillChar(UserItem^.btValue, SizeOf(UserItem^.btValue), 0);
                                     UserItem = DealOffInfo.UseItems[j];
                                     if (IsEnoughBag())// 人物的包裹是否满了
                                     {
@@ -240,7 +238,6 @@ namespace GameSvr
                                     this.GameGoldChanged(); // 更新金刚石数量
                                 }
                             }
-
                             M2Share.sSellOffItemList.RemoveAt(i);
                             Dispose(DealOffInfo);
                             this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ObjectId, 0, 0, "取消寄售成功!");
@@ -348,7 +345,6 @@ namespace GameSvr
                                     if (StdItem != null)
                                     {
                                         //UserItem = new TUserItem();
-                                        //FillChar(UserItem, sizeof(TUserItem), '\0');
                                         UserItem = dealOffInfo.UseItems[j];
                                         if (IsEnoughBag()) // 检查人物的包裹是否满了 
                                         {
