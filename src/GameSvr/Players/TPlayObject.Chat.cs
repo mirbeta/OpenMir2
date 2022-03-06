@@ -859,27 +859,6 @@ namespace GameSvr
                         }
                         return;
                     }
-                    if (m_btPermission >= 5 || M2Share.g_Config.boTestServer)
-                    {
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADITEMDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            M2Share.CommonDB.LoadItemsDB();
-                            SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMAGICDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            M2Share.CommonDB.LoadMagicDB();
-                            SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
-                            return;
-                        }
-                        if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMONSTERDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            M2Share.CommonDB.LoadMonsterDB();
-                            SysMsg("怪物数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
-                            return;
-                        }
-                    }
                 }
                 SysMsg($"@{sCMD}此命令不正确，或没有足够的权限!!!", MsgColor.Red, MsgType.Hint);
             }

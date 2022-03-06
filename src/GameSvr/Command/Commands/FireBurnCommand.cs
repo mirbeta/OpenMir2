@@ -22,7 +22,7 @@ namespace GameSvr
             }
             if (nInt == 0 || nTime == 0 || nN == 0)
             {
-                PlayObject.SysMsg("命令格式: @" + M2Share.g_GameCommand.FIREBURN.sCmd + " nInt nTime nN", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + Command.Help + " nInt nTime nN", MsgColor.Red, MsgType.Hint);
                 return;
             }
             var FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.m_nCurrX, PlayObject.m_nCurrY, nInt, nTime, nN);
