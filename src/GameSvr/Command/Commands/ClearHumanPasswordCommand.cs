@@ -20,8 +20,8 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg("清除玩家的仓库密码!!!", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("清除玩家的仓库密码!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
@@ -32,8 +32,8 @@ namespace GameSvr
             m_PlayObject.m_boPasswordLocked = false;
             m_PlayObject.m_boUnLockStoragePwd = false;
             m_PlayObject.m_sStoragePwd = "";
-            m_PlayObject.SysMsg("你的保护密码已被清除!!!", TMsgColor.c_Green, TMsgType.t_Hint);
-            PlayObject.SysMsg($"{sHumanName}的保护密码已被清除!!!", TMsgColor.c_Green, TMsgType.t_Hint);
+            m_PlayObject.SysMsg("你的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg($"{sHumanName}的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
         }
     }
 }

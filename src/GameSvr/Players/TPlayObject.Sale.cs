@@ -331,7 +331,7 @@ namespace GameSvr
                                         dealOffInfo.N = 2; // 交易结束
                                         PlayObject.m_nGameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
-                                        PlayObject.SysMsg(string.Format(M2Share.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.g_Config.sGameGoldName }), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        PlayObject.SysMsg(string.Format(M2Share.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.g_Config.sGameGoldName }), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.g_boGameLogGameGold)
                                         {
                                             M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, new object[] { Grobal2.LOG_GAMEGOLD, PlayObject.m_sMapName, PlayObject.m_nCurrX, PlayObject.m_nCurrY, PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, PlayObject.m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.m_sCharName }));
@@ -367,7 +367,7 @@ namespace GameSvr
                                     else if (dealOffInfo.UseItems[j].MakeIndex > 0 && dealOffInfo.UseItems[j].wIndex == short.MaxValue && dealOffInfo.UseItems[j].Dura == short.MaxValue && dealOffInfo.UseItems[j].DuraMax == short.MaxValue)
                                     {
                                         m_nGold += dealOffInfo.UseItems[j].MakeIndex; // 增加金刚石
-                                        this.SysMsg(dealOffInfo.UseItems[j].MakeIndex + " 颗金刚石增加", TMsgColor.c_Blue, TMsgType.t_Hint);
+                                        this.SysMsg(dealOffInfo.UseItems[j].MakeIndex + " 颗金刚石增加", MsgColor.Blue, MsgType.Hint);
                                     }
                                 }
                                 this.SendMsg(this, Grobal2.RM_SELLOFFBUY_OK, 0, 0, 0, 0, "");// 购买成功
@@ -418,7 +418,7 @@ namespace GameSvr
                             // sSellOffItemList.Add(DealOffInfo);
                             m_nGameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
-                            this.SysMsg(string.Format(M2Share.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.g_Config.sGameGoldName }), TMsgColor.c_Red, TMsgType.t_Hint);
+                            this.SysMsg(string.Format(M2Share.sGetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.g_Config.sGameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.g_boGameLogGameGold)
                             {
                                 M2Share.AddGameDataLog(string.Format(M2Share.g_sGameLogMsg1, new object[] { Grobal2.LOG_GAMEGOLD, this.m_sMapName, this.m_nCurrX, this.m_nCurrY,

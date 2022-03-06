@@ -21,7 +21,7 @@ namespace GameSvr
             var sDearName = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sDearName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
@@ -31,18 +31,18 @@ namespace GameSvr
                 {
                     m_PlayObject.m_sDearName = "";
                     m_PlayObject.RefShowName();
-                    PlayObject.SysMsg(sHumanName + " 的配偶名清除成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sHumanName + " 的配偶名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     m_PlayObject.m_sDearName = sDearName;
                     m_PlayObject.RefShowName();
-                    PlayObject.SysMsg(sHumanName + " 的配偶名更改成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sHumanName + " 的配偶名更改成功。", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

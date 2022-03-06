@@ -30,7 +30,7 @@ namespace GameSvr.Command
             }
             if (string.IsNullOrEmpty(sHumanName) || nSex == -1)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var playSex = PlayGender.Man;
@@ -45,16 +45,16 @@ namespace GameSvr.Command
                 {
                     m_PlayObject.m_btGender = playSex;
                     m_PlayObject.FeatureChanged();
-                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别已改变。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别已改变。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别未改变!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别未改变!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + "没有在线!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + "没有在线!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

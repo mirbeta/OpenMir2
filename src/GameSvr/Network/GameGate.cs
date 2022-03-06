@@ -992,11 +992,11 @@ namespace GameSvr
                                     {
                                         if (payMode == 0)
                                         {
-                                            GateUserInfo.PlayObject.SysMsg(sKickUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                            GateUserInfo.PlayObject.SysMsg(sKickUserMsg, MsgColor.Red, MsgType.Hint);
                                         }
                                         else
                                         {
-                                            GateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!", TMsgColor.c_Red, TMsgType.t_Hint);
+                                            GateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!", MsgColor.Red, MsgType.Hint);
                                         }
                                         GateUserInfo.PlayObject.m_boEmergencyClose = true;
                                         GateUserInfo.PlayObject.m_boSoftClose = true;

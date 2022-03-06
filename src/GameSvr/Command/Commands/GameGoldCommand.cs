@@ -27,13 +27,13 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nGold < 0 || nGold > 200000000 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0])
@@ -56,8 +56,8 @@ namespace GameSvr
                     m_PlayObject.m_sCharName, M2Share.g_Config.sGameGoldName, nGold, sCtr[1], PlayObject.m_sCharName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), TMsgColor.c_Green, TMsgType.t_Hint);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), TMsgColor.c_Green, TMsgType.t_Hint);
+            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldHumanMsg, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGoldGMMsg, sHumanName, M2Share.g_Config.sGameGoldName, nGold, m_PlayObject.m_nGameGold, M2Share.g_Config.sGameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

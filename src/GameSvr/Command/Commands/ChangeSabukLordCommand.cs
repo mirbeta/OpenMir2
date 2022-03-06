@@ -22,13 +22,13 @@ namespace GameSvr
             var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
             if (sCASTLENAME == "" || sGuildName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Castle = M2Share.CastleManager.Find(sCASTLENAME);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildManager.FindGuild(sGuildName);
@@ -40,11 +40,11 @@ namespace GameSvr
                 {
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.nServerIndex, sGuildName);
                 }
-                PlayObject.SysMsg(Castle.m_sName + " 所属行会已经更改为 " + sGuildName, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(Castle.m_sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg("行会 " + sGuildName + "还没建立!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("行会 " + sGuildName + "还没建立!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

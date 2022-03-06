@@ -22,7 +22,7 @@ namespace GameSvr
             var sJobName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sJobName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
@@ -41,12 +41,12 @@ namespace GameSvr
                     m_PlayObject.m_btJob = 2;
                 }
                 m_PlayObject.HasLevelUp(1);
-                m_PlayObject.SysMsg(M2Share.g_sGameCommandChangeJobHumanMsg, TMsgColor.c_Green, TMsgType.t_Hint);
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandChangeJobMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+                m_PlayObject.SysMsg(M2Share.g_sGameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

@@ -24,12 +24,12 @@ namespace GameSvr.Command
             }
             if (sIPaddr != "" && sIPaddr[0] == '?')
             {
-                PlayObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", TMsgColor.c_Blue, TMsgType.t_Hint);
+                PlayObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", MsgColor.Blue, MsgType.Hint);
                 return;
             }
             if (sIPaddr == "" || sPort == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " IP地址 端口", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " IP地址 端口", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sIPaddr != "" && sPort != "")

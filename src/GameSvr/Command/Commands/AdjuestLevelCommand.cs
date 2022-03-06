@@ -21,7 +21,7 @@ namespace GameSvr
             int nOLevel;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
@@ -31,7 +31,7 @@ namespace GameSvr
                 m_PlayObject.HasLevelUp(1);
                 M2Share.AddGameDataLog("17" + "\09" + m_PlayObject.m_sMapName + "\09" + m_PlayObject.m_nCurrX + "\09" + m_PlayObject.m_nCurrY + "\09"
                     + m_PlayObject.m_sCharName + "\09" + m_PlayObject.m_Abil.Level + "\09" + PlayObject.m_sCharName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
-                PlayObject.SysMsg(sHumanName + " 等级调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
                     M2Share.MainOutMessage("[等级调整] " + PlayObject.m_sCharName + "(" + m_PlayObject.m_sCharName + " " + nOLevel + " -> " + m_PlayObject.m_Abil.Level + ")");
@@ -39,7 +39,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, new string[] { sHumanName }), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, new string[] { sHumanName }), MsgColor.Red, MsgType.Hint);
             }
         }
     }

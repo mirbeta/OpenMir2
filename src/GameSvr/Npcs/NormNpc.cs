@@ -120,7 +120,7 @@ namespace GameSvr
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.m_Abil.Exp + '/' + PlayObject.m_Abil.MaxExp, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("您当前经验点数为: " + PlayObject.m_Abil.Exp + '/' + PlayObject.m_Abil.MaxExp, MsgColor.Green, MsgType.Hint);
                 return;
             }
             // ================================================
@@ -179,7 +179,7 @@ namespace GameSvr
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                 }
-                PlayObject.SysMsg("您当前等级为: " + PlayObject.m_Abil.Level, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("您当前等级为: " + PlayObject.m_Abil.Level, MsgColor.Green, MsgType.Hint);
                 return;
             }
             // ================================================
@@ -1430,11 +1430,11 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
                             break;
-                        case TVarType.String:
+                        case VarType.String:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                             boFoundVar = true;
                             break;
@@ -1460,11 +1460,11 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.Integer:
+                            case VarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
                                 break;
-                            case TVarType.String:
+                            case VarType.String:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                                 boFoundVar = true;
                                 break;
@@ -1485,11 +1485,11 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
                             break;
-                        case TVarType.String:
+                        case VarType.String:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
                             boFoundVar = true;
                             break;
@@ -1656,13 +1656,13 @@ namespace GameSvr
         {
             if (!M2Share.g_Config.boSendCustemMsg)
             {
-                PlayObject.SysMsg(M2Share.g_sSendCustMsgCanNotUseNowMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.UserEngine.SendBroadCastMsg(PlayObject.m_sCharName + ": " + sMsg, TMsgType.t_Cust);
+                M2Share.UserEngine.SendBroadCastMsg(PlayObject.m_sCharName + ": " + sMsg, MsgType.Cust);
             }
         }
 

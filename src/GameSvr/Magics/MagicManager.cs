@@ -1062,7 +1062,7 @@ namespace GameSvr
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
             if (M2Share.g_Config.boDisableInSafeZoneFireCross && PlayObject.InSafeZone(PlayObject.m_PEnvir, nX, nY))
             {
-                PlayObject.SysMsg(sDisableInSafeZoneFireCross, TMsgColor.c_Red, TMsgType.t_Notice);
+                PlayObject.SysMsg(sDisableInSafeZoneFireCross, MsgColor.Red, MsgType.Notice);
                 return 0;
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY - 1) == null)

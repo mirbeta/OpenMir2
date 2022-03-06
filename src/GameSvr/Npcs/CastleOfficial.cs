@@ -18,7 +18,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (this.m_Castle.IsMasterGuild(PlayObject.m_MyGuild) || PlayObject.m_btPermission >= 3)
@@ -96,7 +96,7 @@ namespace GameSvr
             {
                 if (this.m_Castle == null)
                 {
-                    PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 string s18;
@@ -263,7 +263,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireGuardPrice)
@@ -284,27 +284,27 @@ namespace GameSvr
                                 ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
-                                PlayObject.SysMsg("雇佣成功.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            PlayObject.SysMsg("现在无法雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg("现在无法雇佣!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("早已雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("早已雇佣!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("指令错误!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("指令错误!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -312,7 +312,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nHireArcherPrice)
@@ -333,27 +333,27 @@ namespace GameSvr
                                 ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
-                                PlayObject.SysMsg("雇佣成功.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            PlayObject.SysMsg("现在无法雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg("现在无法雇佣!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("早已雇佣!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("早已雇佣!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("指令错误!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("指令错误!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -361,7 +361,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nRepairDoorPrice)
@@ -369,16 +369,16 @@ namespace GameSvr
                 if (this.m_Castle.RepairDoor())
                 {
                     this.m_Castle.m_nTotalGold -= M2Share.g_Config.nRepairDoorPrice;
-                    PlayObject.SysMsg("修理成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg("城门不需要修理!!!", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("城门不需要修理!!!", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -386,7 +386,7 @@ namespace GameSvr
         {
             if (this.m_Castle == null)
             {
-                PlayObject.SysMsg("NPC不属于城堡!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (this.m_Castle.m_nTotalGold >= M2Share.g_Config.nRepairWallPrice)
@@ -394,16 +394,16 @@ namespace GameSvr
                 if (this.m_Castle.RepairWall(nWallIndex))
                 {
                     this.m_Castle.m_nTotalGold -= M2Share.g_Config.nRepairWallPrice;
-                    PlayObject.SysMsg("修理成功。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg("城门不需要修理!!!", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("城门不需要修理!!!", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("城内资金不足!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("城内资金不足!!!", MsgColor.Red, MsgType.Hint);
             }
         }
         
@@ -411,13 +411,13 @@ namespace GameSvr
         {
             if (!M2Share.g_Config.boSubkMasterSendMsg)
             {
-                PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.m_boSendMsgFlag)
             {
                 PlayObject.m_boSendMsgFlag = false;
-                M2Share.UserEngine.SendBroadCastMsg(PlayObject.m_sCharName + ": " + sMsg, TMsgType.t_Castle);
+                M2Share.UserEngine.SendBroadCastMsg(PlayObject.m_sCharName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

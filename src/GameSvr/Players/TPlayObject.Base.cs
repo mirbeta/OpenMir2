@@ -635,7 +635,7 @@ namespace GameSvr
                             {
                                 m_boLoginNoticeOK = true;
                                 m_dwClientTick = (short)Msg.nParam1;
-                                SysMsg(m_dwClientTick.ToString(), TMsgColor.c_Red, TMsgType.t_Notice);
+                                SysMsg(m_dwClientTick.ToString(), MsgColor.Red, MsgType.Notice);
                             }
                         }
                     }
@@ -716,7 +716,7 @@ namespace GameSvr
                     {
                         if (!M2Share.CompareIPaddr(m_sIPaddr, sIPaddr))
                         {
-                            SysMsg(sCheckIPaddrFail, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(sCheckIPaddrFail, MsgColor.Red, MsgType.Hint);
                             m_boEmergencyClose = true;
                         }
                     }
@@ -839,21 +839,21 @@ namespace GameSvr
                 {
                     if (m_nSoftVersionDate < M2Share.g_Config.nSoftVersionDate)
                     {
-                        SysMsg(M2Share.sClientSoftVersionError, TMsgColor.c_Red, TMsgType.t_Hint);
-                        SysMsg(M2Share.sDownLoadNewClientSoft, TMsgColor.c_Red, TMsgType.t_Hint);
-                        SysMsg(M2Share.sForceDisConnect, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
+                        SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
+                        SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
                         m_boEmergencyClose = true;
                         return;
                     }
                     if (m_nSoftVersionDateEx == 0 && M2Share.g_Config.boOldClientShowHiLevel)
                     {
-                        SysMsg(M2Share.sClientSoftVersionTooOld, TMsgColor.c_Blue, TMsgType.t_Hint);
-                        SysMsg(M2Share.sDownLoadAndUseNewClient, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.sClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(M2Share.sDownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
                         if (!M2Share.g_Config.boCanOldClientLogon)
                         {
-                            SysMsg(M2Share.sClientSoftVersionError, TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg(M2Share.sDownLoadNewClientSoft, TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg(M2Share.sForceDisConnect, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
+                            SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
+                            SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
                             m_boEmergencyClose = true;
                             return;
                         }
@@ -861,38 +861,38 @@ namespace GameSvr
                     switch (m_btAttatckMode)
                     {
                         case M2Share.HAM_ALL:// [攻击模式: 全体攻击]
-                            SysMsg(M2Share.sAttackModeOfAll, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_PEACE:// [攻击模式: 和平攻击]
-                            SysMsg(M2Share.sAttackModeOfPeaceful, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_DEAR:// [攻击模式: 和平攻击]
-                            SysMsg(M2Share.sAttackModeOfDear, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfDear, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_MASTER:// [攻击模式: 和平攻击]
-                            SysMsg(M2Share.sAttackModeOfMaster, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfMaster, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_GROUP:// [攻击模式: 编组攻击]
-                            SysMsg(M2Share.sAttackModeOfGroup, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfGroup, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_GUILD:// [攻击模式: 行会攻击]
-                            SysMsg(M2Share.sAttackModeOfGuild, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfGuild, MsgColor.Green, MsgType.Hint);
                             break;
                         case M2Share.HAM_PKATTACK:// [攻击模式: 红名攻击]
-                            SysMsg(M2Share.sAttackModeOfRedWhite, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.sAttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                             break;
                     }
-                    SysMsg(M2Share.sStartChangeAttackModeHelp, TMsgColor.c_Green, TMsgType.t_Hint);// 使用组合快捷键 CTRL-H 更改攻击...
+                    SysMsg(M2Share.sStartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
                     if (M2Share.g_Config.boTestServer)
                     {
-                        SysMsg(M2Share.sStartNoticeMsg, TMsgColor.c_Green, TMsgType.t_Hint);// 欢迎进入本服务器进行游戏...
+                        SysMsg(M2Share.sStartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
                     if (M2Share.UserEngine.PlayObjectCount > M2Share.g_Config.nTestUserLimit)
                     {
                         if (m_btPermission < 2)
                         {
-                            SysMsg(M2Share.sOnlineUserFull, TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg(M2Share.sForceDisConnect, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.sOnlineUserFull, MsgColor.Red, MsgType.Hint);
+                            SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
                             m_boEmergencyClose = true;
                         }
                     }
@@ -912,7 +912,7 @@ namespace GameSvr
                     m_sGuildRankName = m_MyGuild.GetRankName(this, ref m_nGuildRankNo);
                     for (var i = m_MyGuild.GuildWarList.Count - 1; i >= 0; i--)
                     {
-                        SysMsg(m_MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(m_MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
                     }
                 }
                 RefShowName();
@@ -920,23 +920,23 @@ namespace GameSvr
                 {
                     if (!bo6AB)
                     {
-                        SysMsg(M2Share.sYouNowIsTryPlayMode, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.sYouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
                     m_nGoldMax = M2Share.g_Config.nHumanTryModeMaxGold;
                     if (m_Abil.Level > M2Share.g_Config.nTryModeLevel)
                     {
-                        SysMsg("测试状态可以使用到第 " + M2Share.g_Config.nTryModeLevel, TMsgColor.c_Red, TMsgType.t_Hint);
-                        SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg("测试状态可以使用到第 " + M2Share.g_Config.nTryModeLevel, MsgColor.Red, MsgType.Hint);
+                        SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", MsgColor.Red, MsgType.Hint);
                         m_boEmergencyClose = true;
                     }
                 }
                 if (m_nPayMent == 3 && !bo6AB)
                 {
-                    SysMsg(M2Share.g_sNowIsFreePlayMode, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sNowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
                 if (M2Share.g_Config.boVentureServer)
                 {
-                    SysMsg("当前服务器运行于冒险模式.", TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
                 if (m_MagicArr[Grobal2.SKILL_ERGUM] != null && !m_boUseThrusting)
                 {
@@ -981,18 +981,18 @@ namespace GameSvr
                         m_boCanSendMsg = !M2Share.g_Config.boLockSendMsgAction;
                         m_boObMode = M2Share.g_Config.boLockInObModeAction;
                         m_boAdminMode = M2Share.g_Config.boLockInObModeAction;
-                        SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.LOCKLOGON.sCmd, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.LOCKLOGON.sCmd, MsgColor.Red, MsgType.Hint);
                         SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "密码命令: @" + M2Share.g_GameCommand.PASSWORDLOCK.sCmd);
                     }
                     if (!m_boPasswordLocked)
                     {
-                        SysMsg(format(M2Share.g_sPasswordNotSetMsg, M2Share.g_GameCommand.PASSWORDLOCK.sCmd), TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(format(M2Share.g_sPasswordNotSetMsg, M2Share.g_GameCommand.PASSWORDLOCK.sCmd), MsgColor.Red, MsgType.Hint);
                     }
                     if (!m_boLockLogon && m_boPasswordLocked)
                     {
-                        SysMsg(format(M2Share.g_sNotPasswordProtectMode, M2Share.g_GameCommand.LOCKLOGON.sCmd), TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(format(M2Share.g_sNotPasswordProtectMode, M2Share.g_GameCommand.LOCKLOGON.sCmd), MsgColor.Red, MsgType.Hint);
                     }
-                    SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sActionIsLockedMsg + " 开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd, MsgColor.Red, MsgType.Hint);
                     SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ObjectId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + M2Share.g_GameCommand.UNLOCK.sCmd + '\\' + "加锁命令: @" + M2Share.g_GameCommand.__LOCK.sCmd + '\\' + "设置密码命令: @" + M2Share.g_GameCommand.SETPASSWORD.sCmd + '\\' + "修改密码命令: @" + M2Share.g_GameCommand.CHGPASSWORD.sCmd);
                 }
                 // 重置泡点方面计时
@@ -1035,25 +1035,25 @@ namespace GameSvr
                 if (m_UseItems[Grobal2.U_WEAPON].btValue[4] > 0)
                 {
                     m_UseItems[Grobal2.U_WEAPON].btValue[4] -= 1;
-                    SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint1)
                 {
                     m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
-                    SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.g_Config.nWeaponMakeLuckPoint2Rate) == 1)
                 {
                     m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
-                    SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (m_UseItems[Grobal2.U_WEAPON].btValue[3] < M2Share.g_Config.nWeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.g_Config.nWeaponMakeLuckPoint3Rate) == 1)
                 {
                     m_UseItems[Grobal2.U_WEAPON].btValue[3]++;
-                    SysMsg(M2Share.g_sWeaptonMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -1064,7 +1064,7 @@ namespace GameSvr
                 }
                 if (!boMakeLuck)
                 {
-                    SysMsg(M2Share.g_sWeaptonNotMakeLuck, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWeaptonNotMakeLuck, MsgColor.Green, MsgType.Hint);
                 }
             }
             return true;
@@ -1090,7 +1090,7 @@ namespace GameSvr
             if (nDura <= 0) return false;
             UserItem.Dura += (ushort)nDura;
             SendMsg(this, Grobal2.RM_DURACHANGE, 1, UserItem.Dura, UserItem.DuraMax, 0, "");
-            SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(M2Share.g_sWeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
 
@@ -1106,7 +1106,7 @@ namespace GameSvr
             }
             m_UseItems[Grobal2.U_WEAPON].Dura = m_UseItems[Grobal2.U_WEAPON].DuraMax;
             SendMsg(this, Grobal2.RM_DURACHANGE, 1, m_UseItems[Grobal2.U_WEAPON].Dura, m_UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
-            SysMsg(M2Share.g_sWeaponRepairSuccess, TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(M2Share.g_sWeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
 
@@ -1174,22 +1174,22 @@ namespace GameSvr
                 switch (nWinLevel)
                 {
                     case 1:
-                        SysMsg(M2Share.g_sWinLottery1Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery1Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 2:
-                        SysMsg(M2Share.g_sWinLottery2Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery2Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 3:
-                        SysMsg(M2Share.g_sWinLottery3Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery3Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 4:
-                        SysMsg(M2Share.g_sWinLottery4Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery4Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 5:
-                        SysMsg(M2Share.g_sWinLottery5Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery5Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 6:
-                        SysMsg(M2Share.g_sWinLottery6Msg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sWinLottery6Msg, MsgColor.Green, MsgType.Hint);
                         break;
                 }
                 if (IncGold(nGold))
@@ -1204,7 +1204,7 @@ namespace GameSvr
             else
             {
                 M2Share.g_Config.nNoWinLotteryCount += 500;
-                SysMsg(M2Share.g_sNotWinLotteryMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sNotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -1606,7 +1606,7 @@ namespace GameSvr
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                        m_DearHuman.SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
                     else
                     {
@@ -1615,7 +1615,7 @@ namespace GameSvr
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                        m_DearHuman.SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        m_DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
                     m_DearHuman.m_DearHuman = null;
                     m_DearHuman = null;
@@ -1631,7 +1631,7 @@ namespace GameSvr
                             sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                             sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                            Human.SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                             Human.m_MasterHuman = null;
                         }
                     }
@@ -1646,7 +1646,7 @@ namespace GameSvr
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                        m_MasterHuman.SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        m_MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
                         if (m_MasterHuman.m_sMasterName == m_sCharName)
                         {

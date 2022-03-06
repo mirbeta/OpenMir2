@@ -12,7 +12,7 @@ namespace GameSvr
         public void ReloadRobot(TPlayObject PlayObject)
         {
             M2Share.RobotManage.ReLoadRobot();
-            PlayObject.SysMsg("重新加载机器人配置完成...", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg("重新加载机器人配置完成...", MsgColor.Green, MsgType.Hint);
         }
     }
 }

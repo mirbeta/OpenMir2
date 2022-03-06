@@ -21,17 +21,17 @@ namespace GameSvr
             var m_sIPLocal = "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             // GetIPLocal(PlayObject.m_sIPaddr)
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandHumanLocalMsg, sHumanName, m_sIPLocal), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandHumanLocalMsg, sHumanName, m_sIPLocal), MsgColor.Green, MsgType.Hint);
         }
     }
 }

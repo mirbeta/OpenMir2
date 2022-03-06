@@ -25,19 +25,19 @@ namespace GameSvr
             TPlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var SrcEnvir = M2Share.g_MapManager.FindMap(sSrcMap);
             var DenEnvir = M2Share.g_MapManager.FindMap(sDenMap);
             if (SrcEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sSrcMap), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (DenEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sDenMap), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red, MsgType.Hint);
                 return;
             }
             HumanList = new List<TBaseObject>();

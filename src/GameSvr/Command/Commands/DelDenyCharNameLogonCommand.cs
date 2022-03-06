@@ -16,7 +16,7 @@ namespace GameSvr
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
             if (sCharName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;
@@ -42,7 +42,7 @@ namespace GameSvr
             }
             if (!boDelete)
             {
-                PlayObject.SysMsg(sCharName + "没有被禁止登录。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sCharName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

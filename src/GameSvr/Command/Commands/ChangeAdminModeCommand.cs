@@ -14,7 +14,7 @@ namespace GameSvr
         {
             PlayObject.m_boAdminMode = !PlayObject.m_boAdminMode;
             PlayObject.SysMsg(PlayObject.m_boAdminMode ? M2Share.sGameMasterMode : M2Share.sReleaseGameMasterMode,
-                TMsgColor.c_Green, TMsgType.t_Hint);
+                MsgColor.Green, MsgType.Hint);
         }
     }
 }

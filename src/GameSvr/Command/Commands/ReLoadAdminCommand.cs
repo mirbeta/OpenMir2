@@ -13,7 +13,7 @@ namespace GameSvr.CommandSystem.Commands
         {
             M2Share.LocalDB.LoadAdminList();
             M2Share.UserEngine.SendServerGroupMsg(213, M2Share.nServerIndex, "");
-            playObject.SysMsg("管理员列表重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
+            playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }
 }

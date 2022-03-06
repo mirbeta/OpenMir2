@@ -19,12 +19,12 @@ namespace GameSvr
             var sGuildName = @Params.Length > 0 ? @Params[0] : "";
             if (M2Share.nServerIndex != 0)
             {
-                PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sGuildName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.GuildManager.DelGuild(sGuildName))
@@ -33,7 +33,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg("没找到" + sGuildName + "这个行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("没找到" + sGuildName + "这个行会!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

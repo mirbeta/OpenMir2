@@ -15,7 +15,7 @@ namespace GameSvr
                 nCount = M2Share.g_DenyIPAddrList.Count;
                 if (M2Share.g_DenyIPAddrList.Count <= 0)
                 {
-                    PlayObject.SysMsg("禁止登录角色列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0)
                 {

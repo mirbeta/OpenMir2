@@ -15,17 +15,17 @@ namespace GameSvr
         {
             if (!PlayObject.m_boGuildMove && PlayObject.m_btPermission < 6)
             {
-                PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!PlayObject.IsGuildMaster())
             {
-                PlayObject.SysMsg("行会掌门人才可以使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("行会掌门人才可以使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.m_PEnvir.Flag.boNOGUILDRECALL)
             {
-                PlayObject.SysMsg("本地图不允许使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             TGuildRank GuildRank;
@@ -33,7 +33,7 @@ namespace GameSvr
             m_Castle = M2Share.CastleManager.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.m_boUnderWar)
             {
-                PlayObject.SysMsg("攻城区域不允许使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nRecallCount = 0;
@@ -54,7 +54,7 @@ namespace GameSvr
             }
             if (PlayObject.m_wGroupRcallTime > 0)
             {
-                PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg($"{PlayObject.m_wGroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             TPlayObject m_PlayObject;
@@ -79,7 +79,7 @@ namespace GameSvr
                         {
                             if (m_PlayObject.m_PEnvir.Flag.boNORECALL)
                             {
-                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", TMsgColor.c_Red, TMsgType.t_Hint);
+                                PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                             }
                             else
                             {
@@ -90,12 +90,12 @@ namespace GameSvr
                         else
                         {
                             nNoRecallCount++;
-                            PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许行会合一!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg($"{m_PlayObject.m_sCharName} 不允许行会合一!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                 }
             }
-            PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", MsgColor.Green, MsgType.Hint);
             PlayObject.m_dwGroupRcallTick = HUtil32.GetTickCount();
             PlayObject.m_wGroupRcallTime = (short)M2Share.g_Config.nGuildRecallTime;
         }

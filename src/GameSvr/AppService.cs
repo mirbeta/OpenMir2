@@ -70,7 +70,7 @@ namespace GameSvr
                     {
                         foreach (var playObject in M2Share.UserEngine.PlayObjects)
                         {
-                            playObject.SysMsg($"服务器关闭倒计时 [{shutdownSeconds}].", TMsgColor.c_Red, TMsgType.t_Notice);
+                            playObject.SysMsg($"服务器关闭倒计时 [{shutdownSeconds}].", MsgColor.Red, MsgType.Notice);
                             shutdownSeconds--;
                         }
                         if (shutdownSeconds > 0)

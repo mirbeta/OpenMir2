@@ -65,7 +65,7 @@ namespace GameSvr
                         + '/' + PlayObject.m_UseItems[nWhere].btValue[6] + '/' + PlayObject.m_UseItems[nWhere].btValue[7] + '/' + PlayObject.m_UseItems[nWhere].btValue[8]
                         + '/' + PlayObject.m_UseItems[nWhere].btValue[9] + '/' + PlayObject.m_UseItems[nWhere].btValue[10] + '/' + PlayObject.m_UseItems[nWhere].btValue[11]
                         + '/' + PlayObject.m_UseItems[nWhere].btValue[12] + '/' + PlayObject.m_UseItems[nWhere].btValue[13];
-                    PlayObject.SysMsg(sShowMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
                     if (M2Share.g_Config.boShowMakeItemMsg)
                     {
                         M2Share.MainOutMessage("[物品调整] " + PlayObject.m_sCharName + '(' + StdItem.Name + " -> " + sShowMsg + ')');
@@ -73,7 +73,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.g_sGamecommandSuperMakeHelpMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sGamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }

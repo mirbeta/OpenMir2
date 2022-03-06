@@ -20,11 +20,11 @@ namespace GameSvr
                     Monster = M2Share.UserEngine.MonsterList[i];
                     M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
                 }
-                PlayObject.SysMsg("怪物爆物品列表重加载完成...", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("怪物爆物品列表重加载完成...", MsgColor.Green, MsgType.Hint);
             }
             catch
             {
-                PlayObject.SysMsg("怪物爆物品列表重加载失败!!!", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("怪物爆物品列表重加载失败!!!", MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -34,13 +34,13 @@ namespace GameSvr
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > 100000000
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[1])
@@ -63,8 +63,8 @@ namespace GameSvr
                 //    m_PlayObject.m_sCharName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sCharName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGamePointHumanMsg, nPoint, m_PlayObject.m_nGamePoint), TMsgColor.c_Green, TMsgType.t_Hint);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.m_nGamePoint), TMsgColor.c_Green, TMsgType.t_Hint);
+            m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGamePointHumanMsg, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.m_nGamePoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

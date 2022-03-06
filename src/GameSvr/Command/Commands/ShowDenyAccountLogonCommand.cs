@@ -17,7 +17,7 @@ namespace GameSvr
             {
                 if (M2Share.g_DenyAccountList.Count <= 0)
                 {
-                    PlayObject.SysMsg("禁止登录帐号列表为空。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg("禁止登录帐号列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
                 for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)

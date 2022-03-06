@@ -23,13 +23,13 @@ namespace GameSvr
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.g_Config.boShowMakeItemMsg)
@@ -37,7 +37,7 @@ namespace GameSvr
                 M2Share.MainOutMessage(string.Format(sOutFormatMsg, PlayObject.m_sCharName, m_PlayObject.m_sCharName, m_PlayObject.m_btPermission, nPerission));
             }
             m_PlayObject.m_btPermission = (byte)nPerission;
-            PlayObject.SysMsg(sHumanName + " 当前权限为: " + m_PlayObject.m_btPermission, TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg(sHumanName + " 当前权限为: " + m_PlayObject.m_btPermission, MsgColor.Red, MsgType.Hint);
         }
     }
 }

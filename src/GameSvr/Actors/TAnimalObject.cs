@@ -131,7 +131,7 @@ namespace GameSvr
                     }
                     if (M2Share.g_Config.boMonSayMsg)
                     {
-                        this.MonsterSayMsg(struckObject, TMonStatus.s_UnderFire);
+                        this.MonsterSayMsg(struckObject, MonStatus.UnderFire);
                     }
                 }
                 return true;

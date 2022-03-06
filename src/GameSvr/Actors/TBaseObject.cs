@@ -1379,14 +1379,14 @@ namespace GameSvr
             if (m_UseItems[Grobal2.U_WEAPON].btValue[3] > 0)
             {
                 m_UseItems[Grobal2.U_WEAPON].btValue[3] -= 1;
-                SysMsg(M2Share.g_sTheWeaponIsCursed, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
             else
             {
                 if (m_UseItems[Grobal2.U_WEAPON].btValue[4] < 10)
                 {
                     m_UseItems[Grobal2.U_WEAPON].btValue[4]++;
-                    SysMsg(M2Share.g_sTheWeaponIsCursed, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -3437,7 +3437,7 @@ namespace GameSvr
             LoadSayMsg();
             if (M2Share.g_Config.boMonSayMsg)
             {
-                MonsterSayMsg(null, TMonStatus.s_MonGen);
+                MonsterSayMsg(null, MonStatus.MonGen);
             }
         }
 
@@ -3613,7 +3613,7 @@ namespace GameSvr
             {
                 if (m_Abil.Level < Envir.nRequestLevel)
                 {
-                    SysMsg(string.Format("需要 {0} 级以上才能进入 {1}", Envir.Flag.nL - 1, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(string.Format("需要 {0} 级以上才能进入 {1}", Envir.Flag.nL - 1, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);
                     return false;
                 }
                 if (Envir.QuestNPC != null)
@@ -3727,34 +3727,34 @@ namespace GameSvr
             SendRefMsg(Grobal2.RM_TURN, nDir, m_nCurrX, m_nCurrY, 0, "");
         }
 
-        public void SysMsg(string sMsg, TMsgColor MsgColor, TMsgType MsgType)
+        public void SysMsg(string sMsg, MsgColor MsgColor, MsgType MsgType)
         {
             if (M2Share.g_Config.boShowPreFixMsg)
             {
                 switch (MsgType)
                 {
-                    case TMsgType.t_Mon:
+                    case MsgType.Mon:
                         sMsg = M2Share.g_Config.sMonSayMsgpreFix + sMsg;
                         break;
-                    case TMsgType.t_Hint:
+                    case MsgType.Hint:
                         sMsg = M2Share.g_Config.sHintMsgPreFix + sMsg;
                         break;
-                    case TMsgType.t_GM:
+                    case MsgType.GM:
                         sMsg = M2Share.g_Config.sGMRedMsgpreFix + sMsg;
                         break;
-                    case TMsgType.t_System:
+                    case MsgType.System:
                         sMsg = M2Share.g_Config.sSysMsgPreFix + sMsg;
                         break;
-                    case TMsgType.t_Cust:
+                    case MsgType.Cust:
                         sMsg = M2Share.g_Config.sCustMsgpreFix + sMsg;
                         break;
-                    case TMsgType.t_Castle:
+                    case MsgType.Castle:
                         sMsg = M2Share.g_Config.sCastleMsgpreFix + sMsg;
                         break;
                 }
             }
 
-            if (MsgType == TMsgType.t_Notice)// 如果发的是公告
+            if (MsgType == MsgType.Notice)// 如果发的是公告
             {
                 string str = string.Empty;
                 string FColor = string.Empty;
@@ -3796,21 +3796,21 @@ namespace GameSvr
                 {
                     switch (MsgColor)
                     {
-                        case TMsgColor.c_Red:// 控制公告的颜色
+                        case MsgColor.Red:// 控制公告的颜色
                             if (M2Share.g_Config.boShowPreFixMsg)
                             {
                                 sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                             }
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btRedMsgFColor, M2Share.g_Config.btRedMsgBColor, 0, sMsg);
                             break;
-                        case TMsgColor.c_Green:
+                        case MsgColor.Green:
                             if (M2Share.g_Config.boShowPreFixMsg)
                             {
                                 sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
                             }
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
                             break;
-                        case TMsgColor.c_Blue:
+                        case MsgColor.Blue:
                             if (M2Share.g_Config.boShowPreFixMsg)
                             {
                                 sMsg = M2Share.g_Config.sLineNoticePreFix + sMsg;
@@ -3824,14 +3824,14 @@ namespace GameSvr
             {
                 switch (MsgColor)
                 {
-                    case TMsgColor.c_Green:
+                    case MsgColor.Green:
                         SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btGreenMsgFColor, M2Share.g_Config.btGreenMsgBColor, 0, sMsg);
                         break;
-                    case TMsgColor.c_Blue:
+                    case MsgColor.Blue:
                         SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btBlueMsgFColor, M2Share.g_Config.btBlueMsgBColor, 0, sMsg);
                         break;
                     default:
-                        if (MsgType == TMsgType.t_Cust)
+                        if (MsgType == MsgType.Cust)
                         {
                             SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.g_Config.btCustMsgFColor, M2Share.g_Config.btCustMsgBColor, 0, sMsg);
                         }
@@ -3849,7 +3849,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="AttackBaseObject"></param>
         /// <param name="MonStatus"></param>
-        public void MonsterSayMsg(TBaseObject AttackBaseObject, TMonStatus MonStatus)
+        public void MonsterSayMsg(TBaseObject AttackBaseObject, MonStatus MonStatus)
         {
             if (m_SayMsgList == null)
             {
@@ -3884,18 +3884,18 @@ namespace GameSvr
                 sMsg = sMsg.Replace("%d", sAttackName);
                 if ((MonSayMsg.State == MonStatus) && (M2Share.RandomNumber.Random(MonSayMsg.nRate) == 0))
                 {
-                    if (MonStatus == TMonStatus.s_MonGen)
+                    if (MonStatus == MonStatus.MonGen)
                     {
-                        M2Share.UserEngine.SendBroadCastMsg(sMsg, TMsgType.t_Mon);
+                        M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
-                    if (MonSayMsg.Color == TMsgColor.c_White)
+                    if (MonSayMsg.Color == MsgColor.White)
                     {
                         ProcessSayMsg(sMsg);
                     }
                     else
                     {
-                        AttackBaseObject.SysMsg(sMsg, MonSayMsg.Color, TMsgType.t_Mon);
+                        AttackBaseObject.SysMsg(sMsg, MonSayMsg.Color, MsgType.Mon);
                     }
                     break;
                 }
@@ -4795,7 +4795,7 @@ namespace GameSvr
                 }
                 if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                 {
-                    SysMsg(format(M2Share.sYouPoisoned, nTime, nPoint), TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
                 }
                 result = true;
             }
@@ -5119,7 +5119,7 @@ namespace GameSvr
                 result = true;
             }
             m_dwStatusArrTick[Grobal2.STATE_DEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(format(M2Share.g_sDefenceUpTime, nSec), TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -5131,7 +5131,7 @@ namespace GameSvr
             m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + nTime * 1000;
             int nMin = nTime / 60;
             int nSec = nTime % 60;
-            SysMsg(format(M2Share.g_sAttPowerUpTime, nMin, nSec), TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(format(M2Share.g_sAttPowerUpTime, nMin, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;
@@ -5154,7 +5154,7 @@ namespace GameSvr
                 result = true;
             }
             m_dwStatusArrTick[Grobal2.STATE_MAGDEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(format(M2Share.g_sMagDefenceUpTime, nSec), TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -5736,7 +5736,7 @@ namespace GameSvr
 
             if (M2Share.g_Config.boMonSayMsg)
             {
-                MonsterSayMsg(null, TMonStatus.s_MonGen);
+                MonsterSayMsg(null, MonStatus.MonGen);
             }
             return true;
         }

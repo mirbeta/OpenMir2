@@ -24,7 +24,7 @@ namespace GameSvr
                 BaseObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                 if (BaseObject == null)
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
@@ -33,7 +33,7 @@ namespace GameSvr
                 BaseObject = PlayObject.GetPoseCreate();
                 if (BaseObject == null)
                 {
-                    PlayObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }

@@ -11,10 +11,10 @@ namespace GameSvr
         {
             if (M2Share.g_DisableSendMsgList.Count <= 0)
             {
-                PlayObject.SysMsg("禁言列表为空!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("禁言列表为空!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg("禁言列表:", TMsgColor.c_Blue, TMsgType.t_Hint);
+            PlayObject.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
             for (var i = 0; i < M2Share.g_DisableSendMsgList.Count; i++)
             {
                 //PlayObject.SysMsg(M2Share.g_DisableSendMsgList[i], TMsgColor.c_Green, TMsgType.t_Hint);

@@ -30,13 +30,13 @@ namespace GameSvr
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > int.MaxValue
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0])
@@ -65,9 +65,9 @@ namespace GameSvr
                     break;
             }
             m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandCreditPointHumanMsg, nPoint, m_PlayObject.m_btCreditPoint),
-                TMsgColor.c_Green, TMsgType.t_Hint);
+                MsgColor.Green, MsgType.Hint);
             PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.m_btCreditPoint),
-                TMsgColor.c_Green, TMsgType.t_Hint);
+                MsgColor.Green, MsgType.Hint);
         }
     }
 }

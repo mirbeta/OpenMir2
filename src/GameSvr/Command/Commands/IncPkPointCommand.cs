@@ -20,24 +20,24 @@ namespace GameSvr
             var nPoint = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject.m_nPkPoint += nPoint;
             m_PlayObject.RefNameColor();
             if (nPoint > 0)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandIncPkPointAddPointMsg, sHumanName, nPoint), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandIncPkPointAddPointMsg, sHumanName, nPoint), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandIncPkPointDecPointMsg, sHumanName, -nPoint), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandIncPkPointDecPointMsg, sHumanName, -nPoint), MsgColor.Green, MsgType.Hint);
             }
         }
     }

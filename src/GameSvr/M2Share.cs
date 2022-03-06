@@ -3620,37 +3620,37 @@ namespace GameSvr
                                 switch (nStatus)
                                 {
                                     case 0:
-                                        MonSayMsg.State = TMonStatus.s_KillHuman;
+                                        MonSayMsg.State = MonStatus.KillHuman;
                                         break;
                                     case 1:
-                                        MonSayMsg.State = TMonStatus.s_UnderFire;
+                                        MonSayMsg.State = MonStatus.UnderFire;
                                         break;
                                     case 2:
-                                        MonSayMsg.State = TMonStatus.s_Die;
+                                        MonSayMsg.State = MonStatus.Die;
                                         break;
                                     case 3:
-                                        MonSayMsg.State = TMonStatus.s_MonGen;
+                                        MonSayMsg.State = MonStatus.MonGen;
                                         break;
                                     default:
-                                        MonSayMsg.State = TMonStatus.s_UnderFire;
+                                        MonSayMsg.State = MonStatus.UnderFire;
                                         break;
                                 }
                                 switch (nColor)
                                 {
                                     case 0:
-                                        MonSayMsg.Color = TMsgColor.c_Red;
+                                        MonSayMsg.Color = MsgColor.Red;
                                         break;
                                     case 1:
-                                        MonSayMsg.Color = TMsgColor.c_Green;
+                                        MonSayMsg.Color = MsgColor.Green;
                                         break;
                                     case 2:
-                                        MonSayMsg.Color = TMsgColor.c_Blue;
+                                        MonSayMsg.Color = MsgColor.Blue;
                                         break;
                                     case 3:
-                                        MonSayMsg.Color = TMsgColor.c_White;
+                                        MonSayMsg.Color = MsgColor.White;
                                         break;
                                     default:
-                                        MonSayMsg.Color = TMsgColor.c_White;
+                                        MonSayMsg.Color = MsgColor.White;
                                         break;
                                 }
                                 MonSayMsg.nRate = nRate;

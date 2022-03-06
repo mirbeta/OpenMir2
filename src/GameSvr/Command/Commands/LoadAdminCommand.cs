@@ -18,7 +18,7 @@ namespace GameSvr
             }
             //LocalDB.GetInstance().LoadAdminList();
             // UserEngine.SendServerGroupMsg(213, nServerIndex, '');
-            PlayObject.SysMsg("管理员列表重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }
 }

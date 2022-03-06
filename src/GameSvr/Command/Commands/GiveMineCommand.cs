@@ -24,12 +24,12 @@ namespace GameSvr
             GoodItem StdItem;
             if (PlayObject.m_btPermission < this.CommandAttribute.nPermissionMin)
             {
-                PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.g_sGameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sMINEName == "" || sMINEName != "" && sMINEName[0] == '?' || nMineCount <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nDura <= 0)

@@ -19,7 +19,7 @@ namespace GameSvr
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = M2Share.g_DisableSendMsgList.Count - 1; i >= 0; i--)
@@ -41,7 +41,7 @@ namespace GameSvr
                 //    return;
                 //}
             }
-            PlayObject.SysMsg(sHumanName + " 没有被禁言!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg(sHumanName + " 没有被禁言!!!", MsgColor.Red, MsgType.Hint);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace GameSvr
             var sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
             if (sMAP == "" || sMAP != "" && sMAP[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnHelpMsg, this.CommandAttribute.Name, sMAP, sX, sY, sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnHelpMsg, this.CommandAttribute.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nX = HUtil32.Str_ToInt(sX, -1);
@@ -41,7 +41,7 @@ namespace GameSvr
             if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
                 PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnHelpMsg, this.CommandAttribute.Name, sMAP, sX, sY,
-                    sType, sTime, sPoint), TMsgColor.c_Red, TMsgType.t_Hint);
+                    sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMAP);
@@ -54,7 +54,7 @@ namespace GameSvr
                 PlayObject.m_PEnvir = OldEnvir;
                 return;
             }
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnMapNotFountMsg, this.CommandAttribute.Name, sMAP), TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMobFireBurnMapNotFountMsg, this.CommandAttribute.Name, sMAP), MsgColor.Red, MsgType.Hint);
         }
     }
 }

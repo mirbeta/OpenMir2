@@ -21,12 +21,12 @@ namespace GameSvr
             var nFastStep = HUtil32.Str_ToInt(sFastStep, -1);
             if (sFastStep == "" || nFastStep < 1 || sFastStep != "")
             {
-                PlayObject.SysMsg("设置怪物行动速度。", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("设置怪物行动速度。", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.g_Config.nZenFastStep = nFastStep;
-            PlayObject.SysMsg($"怪物行动速度: {nFastStep}", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"怪物行动速度: {nFastStep}", MsgColor.Green, MsgType.Hint);
         }
     }
 }

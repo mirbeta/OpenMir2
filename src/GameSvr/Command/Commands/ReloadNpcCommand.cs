@@ -28,9 +28,9 @@ namespace GameSvr
             {
                 M2Share.LocalDB.ReLoadMerchants();
                 M2Share.UserEngine.ReloadMerchantList();
-                PlayObject.SysMsg("交易NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 M2Share.UserEngine.ReloadNpcList();
-                PlayObject.SysMsg("管理NPC重新加载完成!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             else
@@ -45,12 +45,12 @@ namespace GameSvr
                             Merchant = (Merchant)TmpMerList[i];
                             Merchant.ClearScript();
                             Merchant.LoadNPCScript();
-                            PlayObject.SysMsg(Merchant.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
+                            PlayObject.SysMsg(Merchant.m_sCharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("附近未发现任何交易NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                     TmpNorList = new List<TBaseObject>();
                     if (M2Share.UserEngine.GetNpcList(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 9, TmpNorList) > 0)
@@ -60,12 +60,12 @@ namespace GameSvr
                             NPC = TmpNorList[i] as NormNpc;
                             NPC.ClearScript();
                             NPC.LoadNPCScript();
-                            PlayObject.SysMsg(NPC.m_sCharName + "重新加载成功...", TMsgColor.c_Green, TMsgType.t_Hint);
+                            PlayObject.SysMsg(NPC.m_sCharName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        PlayObject.SysMsg("附近未发现任何管理NPC!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg("附近未发现任何管理NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 finally

@@ -25,7 +25,7 @@ namespace GameSvr
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
             if (sHumName == "" || nCount <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
@@ -41,7 +41,7 @@ namespace GameSvr
                     m_PlayObject.m_nGold = 0;
                 }
                 m_PlayObject.GoldChanged();
-                PlayObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_boGameLogGold)
                 {
                     M2Share.AddGameDataLog("13" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() + "\09" 
@@ -53,12 +53,12 @@ namespace GameSvr
                 var nServerIndex = 0;
                 if (M2Share.UserEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
-                    PlayObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     M2Share.FrontEngine.AddChangeGoldList(PlayObject.m_sCharName, sHumName, -nCount);
-                    PlayObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
                 }
             }
         }

@@ -1355,7 +1355,7 @@ namespace GameSvr
                             UserItem = List20[j];
                             Item.GetStandardItem(ref StdItem);
                             Item.GetItemAddValue(UserItem, ref StdItem);
-                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
+                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
                             OClientItem.Dura = UserItem.Dura;
                             OClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                             OClientItem.MakeIndex = UserItem.MakeIndex;
