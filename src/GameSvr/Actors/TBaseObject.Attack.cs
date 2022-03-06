@@ -5,86 +5,6 @@ namespace GameSvr
 {
     public partial class TBaseObject
     {
-        protected void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
-        {
-            SendRefMsg(wIdent, btDir, nX, nY, 0, "");
-        }
-
-        /// <summary>
-        /// 检查武器升级状态
-        /// </summary>
-        /// <param name="UserItem"></param>
-        private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
-        {
-            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
-            {
-                if (UserItem.btValue[10] == 1)
-                {
-                    UserItem.wIndex = 0;
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 10, 13))
-                {
-                    UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 20, 23))
-                {
-                    UserItem.btValue[1] = (byte)(UserItem.btValue[1] + UserItem.btValue[10] - 19);
-                }
-                if (HUtil32.RangeInDefined(UserItem.btValue[10], 30, 33))
-                {
-                    UserItem.btValue[2] = (byte)(UserItem.btValue[2] + UserItem.btValue[10] - 29);
-                }
-            }
-            else
-            {
-                UserItem.wIndex = 0;
-            }
-            UserItem.btValue[10] = 0;
-        }
-
-        private void CheckWeaponUpgrade()
-        {
-            TUserItem UseItems;
-            TPlayObject PlayObject;
-            GoodItem StdItem;
-            if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
-            {
-                UseItems = new TUserItem(m_UseItems[Grobal2.U_WEAPON]);
-                CheckWeaponUpgradeStatus(ref m_UseItems[Grobal2.U_WEAPON]);
-                if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
-                {
-                    SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
-                    PlayObject = this as TPlayObject;
-                    PlayObject.SendDelItems(UseItems);
-                    SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
-                    if (StdItem != null)
-                    {
-                        if (StdItem.NeedIdentify == 1)
-                        {
-                            M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
-                        }
-                    }
-                    FeatureChanged();
-                }
-                else
-                {
-                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, TMsgColor.c_Red, TMsgType.t_Hint);
-                    PlayObject = this as TPlayObject;
-                    PlayObject.SendUpdateItem(m_UseItems[Grobal2.U_WEAPON]);
-                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
-                    if (StdItem.NeedIdentify == 1)
-                    {
-                        M2Share.AddGameDataLog("20" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
-                    }
-                    RecalcAbilitys();
-                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                }
-            }
-            UseItems = null;
-        }
-
         protected virtual void AttackDir(TBaseObject TargeTBaseObject, short wHitMode, byte nDir)
         {
             TBaseObject AttackTarget;
@@ -225,6 +145,86 @@ namespace GameSvr
                 M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(e.Message);
             }
+        }
+
+        protected void SendAttackMsg(short wIdent, byte btDir, int nX, int nY)
+        {
+            SendRefMsg(wIdent, btDir, nX, nY, 0, "");
+        }
+
+        /// <summary>
+        /// 检查武器升级状态
+        /// </summary>
+        /// <param name="UserItem"></param>
+        private void CheckWeaponUpgradeStatus(ref TUserItem UserItem)
+        {
+            if ((UserItem.btValue[0] + UserItem.btValue[1] + UserItem.btValue[2]) < M2Share.g_Config.nUpgradeWeaponMaxPoint)
+            {
+                if (UserItem.btValue[10] == 1)
+                {
+                    UserItem.wIndex = 0;
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 10, 13))
+                {
+                    UserItem.btValue[0] = (byte)(UserItem.btValue[0] + UserItem.btValue[10] - 9);
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 20, 23))
+                {
+                    UserItem.btValue[1] = (byte)(UserItem.btValue[1] + UserItem.btValue[10] - 19);
+                }
+                if (HUtil32.RangeInDefined(UserItem.btValue[10], 30, 33))
+                {
+                    UserItem.btValue[2] = (byte)(UserItem.btValue[2] + UserItem.btValue[10] - 29);
+                }
+            }
+            else
+            {
+                UserItem.wIndex = 0;
+            }
+            UserItem.btValue[10] = 0;
+        }
+
+        private void CheckWeaponUpgrade()
+        {
+            TUserItem UseItems;
+            TPlayObject PlayObject;
+            GoodItem StdItem;
+            if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].btValue[10] > 0)
+            {
+                UseItems = new TUserItem(m_UseItems[Grobal2.U_WEAPON]);
+                CheckWeaponUpgradeStatus(ref m_UseItems[Grobal2.U_WEAPON]);
+                if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
+                {
+                    SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject = this as TPlayObject;
+                    PlayObject.SendDelItems(UseItems);
+                    SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
+                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
+                    if (StdItem != null)
+                    {
+                        if (StdItem.NeedIdentify == 1)
+                        {
+                            M2Share.AddGameDataLog("21" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        }
+                    }
+                    FeatureChanged();
+                }
+                else
+                {
+                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject = this as TPlayObject;
+                    PlayObject.SendUpdateItem(m_UseItems[Grobal2.U_WEAPON]);
+                    StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);
+                    if (StdItem.NeedIdentify == 1)
+                    {
+                        M2Share.AddGameDataLog("20" + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + StdItem.Name + "\t" + UseItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                    }
+                    RecalcAbilitys();
+                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                    SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                }
+            }
+            UseItems = null;
         }
 
         // 攻击角色
