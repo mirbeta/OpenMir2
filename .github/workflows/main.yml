@@ -29,7 +29,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1.0.0
       env:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN: 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
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
