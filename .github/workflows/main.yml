@@ -2,6 +2,8 @@ name: ASP.NET Core Publish
 
 on:
   push:
+    branches:
+      - master
     tags:
       - 'v*'
 
