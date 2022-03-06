@@ -29,15 +29,15 @@ namespace GameSvr
                 }
                 if (m_boExpire)
                 {
-                    SysMsg(sPayMentExpire, TMsgColor.c_Red, TMsgType.t_Hint);
-                    SysMsg(sDisConnectMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
+                    SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
                     m_boEmergencyClose = true;
                     m_boExpire = false;
                 }
                 if (m_boFireHitSkill && (HUtil32.GetTickCount() - m_dwLatestFireHitTick) > 20 * 1000)
                 {
                     m_boFireHitSkill = false;
-                    SysMsg(M2Share.sSpiritsGone, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.sSpiritsGone, MsgColor.Red, MsgType.Hint);
                     SendSocket("+UFIR");
                 }
                 if (m_boTwinHitSkill && (HUtil32.GetTickCount() - m_dwLatestTwinHitTick) > 60 * 1000)
@@ -458,7 +458,7 @@ namespace GameSvr
                     if (m_dwKillMonExpRateTime == 0)
                     {
                         m_nKillMonExpRate = 100;
-                        SysMsg("经验倍数恢复正常...", TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg("经验倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 if (m_dwPowerRateTime > 0)
@@ -467,7 +467,7 @@ namespace GameSvr
                     if (m_dwPowerRateTime == 0)
                     {
                         m_nPowerRate = 100;
-                        SysMsg("攻击力倍数恢复正常...", TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg("攻击力倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
@@ -685,7 +685,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sQUERYBAGITEMS, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case Grobal2.CM_QUERYUSERSTATE:
@@ -735,7 +735,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -751,7 +751,7 @@ namespace GameSvr
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
                                 }
@@ -919,7 +919,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -936,7 +936,7 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
@@ -970,7 +970,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -982,7 +982,7 @@ namespace GameSvr
                                 SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
@@ -992,14 +992,14 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, (short)ProcessMsg.wIdent, (short)ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, "", dwDelayTime);
                                     result = false;
@@ -1030,7 +1030,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -1041,14 +1041,14 @@ namespace GameSvr
                                 SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());// 如果超速则发送攻击失败信息
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                                 SendDelayMsg(this, (short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, "", dwDelayTime);
                                 result = false;
@@ -1078,7 +1078,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -1095,14 +1095,14 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, (short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, Grobal2.CM_RUN, "", dwDelayTime);
                                     result = false;
@@ -1141,7 +1141,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -1158,14 +1158,14 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg("操作延迟 Ident: " + ProcessMsg.wIdent + " Time: " + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg("操作延迟 Ident: " + ProcessMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, (short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, "", dwDelayTime);
                                     result = false;
@@ -1196,7 +1196,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -1213,14 +1213,14 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, (short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, "", dwDelayTime);
                                     result = false;
@@ -1251,7 +1251,7 @@ namespace GameSvr
                                 {
                                     if (M2Share.g_Config.boKickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         m_boEmergencyClose = true;
                                     }
                                     if (M2Share.g_Config.boViewHackMessage)
@@ -1268,14 +1268,14 @@ namespace GameSvr
                                     SendSocket(Grobal2.sSTATUS_FAIL + HUtil32.GetTickCount());
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, (short)ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, "", dwDelayTime);
                                     result = false;
@@ -1621,15 +1621,15 @@ namespace GameSvr
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
                         if (M2Share.g_Config.boOldClientShowHiLevel && m_Abil.Level > 255)
                         {
-                            SysMsg(M2Share.g_sClientVersionTooOld, TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg("Level: " + m_Abil.Level, TMsgColor.c_Green, TMsgType.t_Hint);
-                            SysMsg("HP: " + m_WAbil.HP + '-' + m_WAbil.MaxHP, TMsgColor.c_Blue, TMsgType.t_Hint);
-                            SysMsg("MP: " + m_WAbil.MP + '-' + m_WAbil.MaxMP, TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg("AC: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC), TMsgColor.c_Green, TMsgType.t_Hint);
-                            SysMsg("MAC: " + HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC), TMsgColor.c_Blue, TMsgType.t_Hint);
-                            SysMsg("DC: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC), TMsgColor.c_Red, TMsgType.t_Hint);
-                            SysMsg("MC: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC), TMsgColor.c_Green, TMsgType.t_Hint);
-                            SysMsg("SC: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC), TMsgColor.c_Blue, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sClientVersionTooOld, MsgColor.Red, MsgType.Hint);
+                            SysMsg("Level: " + m_Abil.Level, MsgColor.Green, MsgType.Hint);
+                            SysMsg("HP: " + m_WAbil.HP + '-' + m_WAbil.MaxHP, MsgColor.Blue, MsgType.Hint);
+                            SysMsg("MP: " + m_WAbil.MP + '-' + m_WAbil.MaxMP, MsgColor.Red, MsgType.Hint);
+                            SysMsg("AC: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC), MsgColor.Green, MsgType.Hint);
+                            SysMsg("MAC: " + HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC), MsgColor.Blue, MsgType.Hint);
+                            SysMsg("DC: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC), MsgColor.Red, MsgType.Hint);
+                            SysMsg("MC: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC), MsgColor.Green, MsgType.Hint);
+                            SysMsg("SC: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC), MsgColor.Blue, MsgType.Hint);
                         }
                     }
                     else

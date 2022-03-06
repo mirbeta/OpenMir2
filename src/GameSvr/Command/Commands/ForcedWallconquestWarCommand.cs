@@ -20,7 +20,7 @@ namespace GameSvr
             var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
             if (sCASTLENAME == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Castle = M2Share.CastleManager.Find(sCASTLENAME);
@@ -35,7 +35,7 @@ namespace GameSvr
                     Castle.StartWallconquestWar();
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
                     var s20 = "[" + Castle.m_sName + " 攻城战已经开始]";
-                    M2Share.UserEngine.SendBroadCastMsg(s20, TMsgType.t_System);
+                    M2Share.UserEngine.SendBroadCastMsg(s20, MsgType.System);
                     M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
@@ -46,7 +46,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
             }
         }
     }

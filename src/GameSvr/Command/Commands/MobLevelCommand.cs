@@ -19,7 +19,7 @@ namespace GameSvr
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];
-                PlayObject.SysMsg(BaseObject.GeTBaseObjectInfo(), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(BaseObject.GeTBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
             }
             BaseObjectList.Clear();
             BaseObjectList = null;

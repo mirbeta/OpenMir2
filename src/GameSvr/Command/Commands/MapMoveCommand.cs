@@ -20,13 +20,13 @@ namespace GameSvr
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMapName);
             if (Envir == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapNotFound, sMapName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.m_btPermission >= this.CommandAttribute.nPermissionMin || M2Share.CanMoveMap(sMapName))
@@ -36,7 +36,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);//不允许传送
+                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
             }
         }
     }

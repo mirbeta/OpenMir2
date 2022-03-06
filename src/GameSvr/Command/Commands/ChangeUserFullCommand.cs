@@ -21,12 +21,12 @@ namespace GameSvr
             var nCount = HUtil32.Str_ToInt(sUserCount, -1);
             if (sUserCount == "" || nCount < 1 || sUserCount != "")
             {
-                PlayObject.SysMsg("设置服务器最高上线人数。", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " 人数", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " 人数", MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.g_Config.nUserFull = nCount;
-            PlayObject.SysMsg($"服务器上线人数限制: {nCount}", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"服务器上线人数限制: {nCount}", MsgColor.Green, MsgType.Hint);
         }
     }
 }

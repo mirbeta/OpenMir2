@@ -411,8 +411,8 @@ namespace SystemModule
 
     public class TMonSayMsg
     {
-        public TMonStatus State;
-        public TMsgColor Color;
+        public MonStatus State;
+        public MsgColor Color;
         public int nRate;
         public string sSayMsg;
     } 
@@ -420,7 +420,7 @@ namespace SystemModule
     public class TDynamicVar
     {
         public string sName;
-        public TVarType VarType;
+        public VarType VarType;
         public int nInternet;
         public string sString;
     }
@@ -448,35 +448,35 @@ namespace SystemModule
         public object NPC;
     } 
 
-    public enum TMsgColor
+    public enum MsgColor
     {
-        c_Red,
-        c_Green,
-        c_Blue,
-        c_White
+        Red,
+        Green,
+        Blue,
+        White
     }
 
-    public enum TMsgType
+    public enum MsgType
     {
-        t_System,
-        t_Notice,
-        t_Hint,
-        t_Say,
-        t_Castle,
-        t_Cust,
-        t_GM,
-        t_Mon
+        System,
+        Notice,
+        Hint,
+        Say,
+        Castle,
+        Cust,
+        GM,
+        Mon
     }
 
-    public enum TMonStatus
+    public enum MonStatus
     {
-        s_KillHuman,
-        s_UnderFire,
-        s_Die,
-        s_MonGen
+        KillHuman,
+        UnderFire,
+        Die,
+        MonGen
     }
 
-    public enum TVarType
+    public enum VarType
     {
         None,
         Integer,

@@ -21,7 +21,7 @@ namespace GameSvr
             int nTotleUsePoint;
             if (sHumName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
@@ -32,12 +32,12 @@ namespace GameSvr
                 m_PlayObject.m_nBonusPoint += nTotleUsePoint;
                 m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 m_PlayObject.HasLevelUp(0);
-                m_PlayObject.SysMsg("分配点数已复位!!!", TMsgColor.c_Red, TMsgType.t_Hint);
-                PlayObject.SysMsg(sHumName + " 的分配点数已复位.", TMsgColor.c_Green, TMsgType.t_Hint);
+                m_PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

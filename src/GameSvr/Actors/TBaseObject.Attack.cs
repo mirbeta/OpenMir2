@@ -195,7 +195,7 @@ namespace GameSvr
                 CheckWeaponUpgradeStatus(ref m_UseItems[Grobal2.U_WEAPON]);
                 if (m_UseItems[Grobal2.U_WEAPON].wIndex == 0)
                 {
-                    SysMsg(M2Share.g_sTheWeaponBroke, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sTheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as TPlayObject;
                     PlayObject.SendDelItems(UseItems);
                     SendRefMsg(Grobal2.RM_BREAKWEAPON, 0, 0, 0, 0, "");
@@ -211,7 +211,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.sTheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     PlayObject = this as TPlayObject;
                     PlayObject.SendUpdateItem(m_UseItems[Grobal2.U_WEAPON]);
                     StdItem = M2Share.UserEngine.GetStdItem(UseItems.wIndex);

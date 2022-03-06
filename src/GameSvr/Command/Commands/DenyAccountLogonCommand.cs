@@ -17,7 +17,7 @@ namespace GameSvr
             var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             try
@@ -26,12 +26,12 @@ namespace GameSvr
                 {
                     //M2Share.g_DenyAccountList.Add(sAccount, ((1) as Object));
                     M2Share.SaveDenyAccountList();
-                    PlayObject.SysMsg(sAccount + "已加入禁止登录帐号列表", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sAccount + "已加入禁止登录帐号列表", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     //M2Share.g_DenyAccountList.Add(sAccount, ((0) as Object));
-                    PlayObject.SysMsg(sAccount + "已加入临时禁止登录帐号列表", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sAccount + "已加入临时禁止登录帐号列表", MsgColor.Green, MsgType.Hint);
                 }
             }
             finally

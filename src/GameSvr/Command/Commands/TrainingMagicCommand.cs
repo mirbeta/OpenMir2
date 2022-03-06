@@ -25,26 +25,26 @@ namespace GameSvr
             TPlayObject m_PlayObject;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             Magic = M2Share.UserEngine.FindMagic(sSkillName);
             if (Magic == null)
             {
 
-                PlayObject.SysMsg($"{sSkillName} 技能名称不正确!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg($"{sSkillName} 技能名称不正确!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (m_PlayObject.IsTrainingSkill(Magic.wMagicID))
             {
 
-                PlayObject.SysMsg($"{sSkillName} 技能已修炼过了!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             UserMagic = new TUserMagic();
@@ -56,7 +56,7 @@ namespace GameSvr
             m_PlayObject.m_MagicList.Add(UserMagic);
             m_PlayObject.SendAddMagic(UserMagic);
             m_PlayObject.RecalcAbilitys();
-            PlayObject.SysMsg($"{sHumanName} 的 {sSkillName} 技能修炼成功!!!", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg($"{sHumanName} 的 {sSkillName} 技能修炼成功!!!", MsgColor.Green, MsgType.Hint);
         }
     }
 }

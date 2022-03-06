@@ -824,16 +824,16 @@ namespace GameSvr
                                                 switch (lineNoticeMsg[0])
                                                 {
                                                     case 'R':
-                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Red, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Red, MsgType.Notice);
                                                         break;
                                                     case 'G':
-                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Green, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Green, MsgType.Notice);
                                                         break;
                                                     case 'B':
-                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Blue, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), MsgColor.Blue, MsgType.Notice);
                                                         break;
                                                     default:
-                                                        PlayObject.SysMsg(lineNoticeMsg, (TMsgColor)M2Share.g_Config.nLineNoticeColor, TMsgType.t_Notice);
+                                                        PlayObject.SysMsg(lineNoticeMsg, (MsgColor)M2Share.g_Config.nLineNoticeColor, MsgType.Notice);
                                                         break;
                                                 }
                                             }
@@ -2672,18 +2672,18 @@ namespace GameSvr
        /// </summary>
        /// <param name="sMsg"></param>
        /// <param name="MsgType"></param>
-        public void SendBroadCastMsgExt(string sMsg, TMsgType MsgType)
+        public void SendBroadCastMsgExt(string sMsg, MsgType MsgType)
         {
             TPlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
                 if (!PlayObject.m_boGhost) 
-                    PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
+                    PlayObject.SysMsg(sMsg, MsgColor.Red, MsgType);
             }
         }
 
-        public void SendBroadCastMsg(string sMsg, TMsgType MsgType)
+        public void SendBroadCastMsg(string sMsg, MsgType MsgType)
         {
             TPlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
@@ -2691,7 +2691,7 @@ namespace GameSvr
                 PlayObject = m_PlayObjectList[i];
                 if (!PlayObject.m_boGhost)
                 {
-                    PlayObject.SysMsg(sMsg, TMsgColor.c_Red, MsgType);
+                    PlayObject.SysMsg(sMsg, MsgColor.Red, MsgType);
                 }
             }
         }

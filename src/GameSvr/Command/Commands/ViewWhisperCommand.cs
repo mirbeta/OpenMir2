@@ -20,7 +20,7 @@ namespace GameSvr
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
             if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sCharName);
@@ -29,17 +29,17 @@ namespace GameSvr
                 if (m_PlayObject.m_GetWhisperHuman == PlayObject)
                 {
                     m_PlayObject.m_GetWhisperHuman = null;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg1, sCharName), TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg1, sCharName), MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     m_PlayObject.m_GetWhisperHuman = PlayObject;
-                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg2, sCharName), TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandViewWhisperMsg2, sCharName), MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sCharName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

@@ -113,7 +113,7 @@ namespace GameSvr.CommandSystem
             //把返回结果给玩家
             if (!string.IsNullOrEmpty(output))
             {
-                playObject.SysMsg(output, TMsgColor.c_Red, TMsgType.t_Hint);
+                playObject.SysMsg(output, MsgColor.Red, MsgType.Hint);
             }
             return found;
         }

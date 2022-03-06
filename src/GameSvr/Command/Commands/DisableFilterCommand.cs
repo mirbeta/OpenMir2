@@ -15,11 +15,11 @@ namespace GameSvr
             M2Share.boFilterWord = !M2Share.boFilterWord;
             if (M2Share.boFilterWord)
             {
-                PlayObject.SysMsg("已启用文字过滤。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg("已禁止文字过滤。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg("已禁止文字过滤。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -2321,7 +2321,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.g_sQUERYBAGITEMS, TMsgColor.c_Red, TMsgType.t_Hint);
+                            PlayObject.SysMsg(M2Share.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
                     case M2Share.nSC_SETRANDOMNO:

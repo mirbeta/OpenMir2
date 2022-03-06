@@ -20,17 +20,17 @@ namespace GameSvr
             string sMsg;
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMapName);
             if (Envir == null)
             {
-                PlayObject.SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             sMsg = "地图模式: " + Envir.GetEnvirInfo();
-            PlayObject.SysMsg(sMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+            PlayObject.SysMsg(sMsg, MsgColor.Blue, MsgType.Hint);
         }
     }
 }

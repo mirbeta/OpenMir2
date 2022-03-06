@@ -12,11 +12,11 @@ namespace GameSvr
             PlayObject.m_boTestSpeedMode = !PlayObject.m_boTestSpeedMode;
             if (PlayObject.m_boTestSpeedMode)
             {
-                PlayObject.SysMsg("开启速度测试模式", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("开启速度测试模式", MsgColor.Red, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg("关闭速度测试模式", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("关闭速度测试模式", MsgColor.Red, MsgType.Hint);
             }
         }
     }

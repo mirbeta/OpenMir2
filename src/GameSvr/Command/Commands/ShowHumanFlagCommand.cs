@@ -20,23 +20,23 @@ namespace GameSvr
             var sFlag = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nFlag = HUtil32.Str_ToInt(sFlag, 0);
             if (m_PlayObject.GetQuestFalgStatus(nFlag) == 1)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShowHumanFlagONMsg, m_PlayObject.m_sCharName, nFlag), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShowHumanFlagONMsg, m_PlayObject.m_sCharName, nFlag), MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShowHumanFlagOFFMsg, m_PlayObject.m_sCharName, nFlag), TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandShowHumanFlagOFFMsg, m_PlayObject.m_sCharName, nFlag), MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -33,15 +33,15 @@ namespace GameSvr
                 nY = (short)HUtil32.Str_ToInt(sY, 0);
                 if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
                 {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCode = 1;
                 MEnvir = M2Share.g_MapManager.FindMap(M2Share.g_sMissionMap);
                 if (!M2Share.g_boMission || MEnvir == null)
                 {
-                    PlayObject.SysMsg("还没有设定怪物集中点!!!", TMsgColor.c_Red, TMsgType.t_Hint);
-                    PlayObject.SysMsg("请先用命令" + this.CommandAttribute.Name + "设置怪物的集中点。", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg("请先用命令" + this.CommandAttribute.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCode = 2;
@@ -66,7 +66,7 @@ namespace GameSvr
                 if (mon.m_btRaceServer != 136)
                 {
                     PlayObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + M2Share.g_sMissionMap + " " +
-                        M2Share.g_nMissionX + ":" + M2Share.g_nMissionY + " 集中。", TMsgColor.c_Green, TMsgType.t_Hint);
+                        M2Share.g_nMissionX + ":" + M2Share.g_nMissionY + " 集中。", MsgColor.Green, MsgType.Hint);
                 }
             }
             catch

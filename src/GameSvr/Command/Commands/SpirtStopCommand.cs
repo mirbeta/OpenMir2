@@ -13,7 +13,7 @@ namespace GameSvr
         public void SpirtStop(TPlayObject PlayObject)
         {
             M2Share.g_dwSpiritMutinyTick = 0;
-            PlayObject.SysMsg("祈祷叛变已停止。", TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg("祈祷叛变已停止。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace GameSvr
                                     dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
                                     if (m_boTestSpeedMode)
                                     {
-                                        SysMsg("攻击攻击忙复位忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg("攻击攻击忙复位忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
@@ -60,7 +60,7 @@ namespace GameSvr
                             {
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg("攻击步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg("攻击步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                 }
                                 return result;
                             }
@@ -193,7 +193,7 @@ namespace GameSvr
                                 dwDelayTime = M2Share.g_Config.dwDropOverSpeed;
                                 if (m_boTestSpeedMode)
                                 {
-                                    SysMsg("马跑步忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                    SysMsg("马跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
@@ -206,7 +206,7 @@ namespace GameSvr
                         {
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("马跑步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("马跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                             return result;
                         }
@@ -283,7 +283,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwMagicHitIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("魔法忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("魔法忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -296,7 +296,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("魔法忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("魔法忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                         }
                         return result;
                     }
@@ -515,7 +515,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwRunIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("跑步忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -528,7 +528,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("跑步忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                         }
                         return result;
                     }
@@ -598,7 +598,7 @@ namespace GameSvr
                             dwDelayTime = M2Share.g_Config.dwWalkIntervalTime / 3;
                             if (m_boTestSpeedMode)
                             {
-                                SysMsg("走路忙复位!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("走路忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -611,7 +611,7 @@ namespace GameSvr
                     {
                         if (m_boTestSpeedMode)
                         {
-                            SysMsg("走路忙!!!" + dwDelayTime, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("走路忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                         }
                         return result;
                     }

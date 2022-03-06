@@ -39,7 +39,7 @@ namespace GameSvr
             }
             if (nNPCType < 0)
             {
-                PlayObject.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nNPCType == 0)
@@ -61,13 +61,13 @@ namespace GameSvr
                 }
                 catch
                 {
-                    PlayObject.SysMsg("读取脚本文件错误: " + sScriptFileName, TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("读取脚本文件错误: " + sScriptFileName, MsgColor.Red, MsgType.Hint);
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sScriptLine = LoadList[i].Trim();
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
-                    PlayObject.SysMsg(i + "," + sScriptLine, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    PlayObject.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }
                 LoadList = null;
             }

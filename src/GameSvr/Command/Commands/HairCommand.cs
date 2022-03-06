@@ -17,7 +17,7 @@ namespace GameSvr
             var nHair = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumanName) || nHair < 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
@@ -25,11 +25,11 @@ namespace GameSvr
             {
                 m_PlayObject.m_btHair = (byte)nHair;
                 m_PlayObject.FeatureChanged();
-                PlayObject.SysMsg(sHumanName + " 的头发已改变。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 的头发已改变。", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

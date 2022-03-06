@@ -24,7 +24,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boKillAll = false;
@@ -88,10 +88,10 @@ namespace GameSvr
             }
             if (Envir == null)
             {
-                PlayObject.SysMsg("输入的地图不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("输入的地图不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg("已清除怪物数: " + nMonCount, TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg("已清除怪物数: " + nMonCount, MsgColor.Red, MsgType.Hint);
         }
     }
 }

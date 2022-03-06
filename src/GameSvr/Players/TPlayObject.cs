@@ -59,7 +59,7 @@ namespace GameSvr
             }
             if (!ClientPickUpItem_IsSelf(mapItem.OfBaseObject as TBaseObject) && !ClientPickUpItem_IsOfGroup(mapItem.OfBaseObject as TBaseObject))
             {
-                SysMsg(M2Share.g_sCanotPickUpItem, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sCanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
@@ -207,23 +207,23 @@ namespace GameSvr
                 Item.GetStandardItem(ref StdItem);
                 Item.GetItemAddValue(UserItem, ref StdItem);
                 StdItem.Name = ItmUnit.GetItemName(UserItem);
-                M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
+                M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
                 OClientItem.MakeIndex = UserItem.MakeIndex;
                 OClientItem.Dura = UserItem.Dura;
                 OClientItem.DuraMax = UserItem.DuraMax;
                 if (StdItem.StdMode == 50)
                 {
-                    OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
+                    OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
                 }
                 if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
                 {
                     if (UserItem.btValue[8] == 0)
                     {
-                        OClientItem.S.Shape = 0;
+                        OClientItem.Item.Shape = 0;
                     }
                     else
                     {
-                        OClientItem.S.Shape = 130;
+                        OClientItem.Item.Shape = 130;
                     }
                 }
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
@@ -465,8 +465,8 @@ namespace GameSvr
             }
             RecalcAbilitys();
             M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + M2Share.g_Config.dwSpiritMutinyTime;
-            M2Share.UserEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", TMsgType.t_System);
-            SysMsg("祈祷发出强烈的宇宙效应", TMsgColor.c_Green, TMsgType.t_Hint);
+            M2Share.UserEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
+            SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
 
         private void LogonTimcCost()
@@ -666,11 +666,11 @@ namespace GameSvr
             m_boUseThrusting = boSwitch;
             if (m_boUseThrusting)
             {
-                SysMsg(M2Share.sThrustingOn, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sThrustingOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sThrustingOff, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sThrustingOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -679,11 +679,11 @@ namespace GameSvr
             m_boUseHalfMoon = boSwitch;
             if (m_boUseHalfMoon)
             {
-                SysMsg(M2Share.sHalfMoonOn, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sHalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sHalfMoonOff, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sHalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -692,11 +692,11 @@ namespace GameSvr
             m_boRedUseHalfMoon = boSwitch;
             if (m_boRedUseHalfMoon)
             {
-                SysMsg(M2Share.sRedHalfMoonOn, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sRedHalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sRedHalfMoonOff, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sRedHalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -705,11 +705,11 @@ namespace GameSvr
             m_boCrsHitkill = boSwitch;
             if (m_boCrsHitkill)
             {
-                SysMsg(M2Share.sCrsHitOn, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sCrsHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sCrsHitOff, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sCrsHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -718,11 +718,11 @@ namespace GameSvr
             m_boTwinHitSkill = boSwitch;
             if (m_boTwinHitSkill)
             {
-                SysMsg(M2Share.sTwinHitOn, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sTwinHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sTwinHitOff, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sTwinHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -731,11 +731,11 @@ namespace GameSvr
             m_bo43kill = boSwitch;
             if (m_bo43kill)
             {
-                SysMsg("开启破空剑", TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg("开启破空剑", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg("关闭破空剑", TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg("关闭破空剑", MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -745,10 +745,10 @@ namespace GameSvr
             {
                 m_dwLatestFireHitTick = HUtil32.GetTickCount();
                 m_boFireHitSkill = true;
-                SysMsg(M2Share.sFireSpiritsSummoned, TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg(M2Share.sFireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
                 return true;
             }
-            SysMsg(M2Share.sFireSpiritsFail, TMsgColor.c_Red, TMsgType.t_Hint);
+            SysMsg(M2Share.sFireSpiritsFail, MsgColor.Red, MsgType.Hint);
             return false;
         }
 
@@ -756,7 +756,7 @@ namespace GameSvr
         {
             m_dwLatestTwinHitTick = HUtil32.GetTickCount();
             m_boTwinHitSkill = true;
-            SysMsg("twin hit skill charged", TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg("twin hit skill charged", MsgColor.Green, MsgType.Hint);
             return true;
         }
 
@@ -832,7 +832,7 @@ namespace GameSvr
             }
             m_DealCreat = null;
             GetBackDealItems();
-            SysMsg(M2Share.g_sDealActionCancelMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(M2Share.g_sDealActionCancelMsg, MsgColor.Green, MsgType.Hint);
             m_DealLastTick = HUtil32.GetTickCount();
         }
 
@@ -989,7 +989,7 @@ namespace GameSvr
                 s10 = "13";
                 s14 = "以删减";
             }
-            SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, TMsgColor.c_Green, TMsgType.t_Hint);
+            SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
             if (M2Share.g_boGameLogGold)
             {
                 M2Share.AddGameDataLog(s10 + "\t" + m_sMapName + "\t" + m_nCurrX + "\t" + m_nCurrY + "\t" + m_sCharName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
@@ -1179,7 +1179,7 @@ namespace GameSvr
                             Item.GetStandardItem(ref StdItem);
                             Item.GetItemAddValue(m_UseItems[i], ref StdItem);
                             StdItem.Name = ItmUnit.GetItemName(m_UseItems[i]);
-                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
+                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
                             OClientItem.Dura = m_UseItems[i].Dura;
                             OClientItem.DuraMax = m_UseItems[i].DuraMax;
                             OClientItem.MakeIndex = m_UseItems[i].MakeIndex;
@@ -1359,7 +1359,7 @@ namespace GameSvr
             }
             else
             {
-                SysMsg("非法数据调整!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("非法数据调整!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -1406,21 +1406,21 @@ namespace GameSvr
                     MapCellinfo MapCellInfo = Map.GetMapCellInfo(nX, nY, ref mapCell);
                     if (mapCell)
                     {
-                        SysMsg("标志: " + MapCellInfo.Attribute, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg("标志: " + MapCellInfo.Attribute, MsgColor.Green, MsgType.Hint);
                         if (MapCellInfo.ObjList != null)
                         {
-                            SysMsg("对象数: " + MapCellInfo.Count, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg("对象数: " + MapCellInfo.Count, MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg("取地图单元信息失败: " + sMap, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg("取地图单元信息失败: " + sMap, MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
             else
             {
-                SysMsg("请按正确格式输入: " + M2Share.g_GameCommand.MAPINFO.sCmd + " 地图号 X Y", TMsgColor.c_Green, TMsgType.t_Hint);
+                SysMsg("请按正确格式输入: " + M2Share.g_GameCommand.MAPINFO.sCmd + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -1459,8 +1459,8 @@ namespace GameSvr
                 if (!PlayObject.IsGoodKilling(this))
                 {
                     PlayObject.IncPkPoint(M2Share.g_Config.nKillHumanAddPKPoint);
-                    PlayObject.SysMsg(M2Share.g_sYouMurderedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                    SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), MsgColor.Red, MsgType.Hint);
                     PlayObject.AddBodyLuck(-M2Share.g_Config.nKillHumanDecLuckPoint);
                     if (PKLevel() < 1)
                     {
@@ -1477,7 +1477,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
@@ -1703,7 +1703,7 @@ namespace GameSvr
             {
                 GetFrontPosition(ref nX, ref nY);
                 SendRefMsg(Grobal2.RM_RUSHKUNG, m_btDirection, nX, nY, 0, "");
-                SysMsg(M2Share.sMateDoTooweak, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.sMateDoTooweak, MsgColor.Red, MsgType.Hint);
             }
             if (n28 > 0)
             {
@@ -1826,7 +1826,7 @@ namespace GameSvr
                         Item.GetStandardItem(ref StdItem);
                         Item.GetItemAddValue(UserItem, ref StdItem);
                         StdItem.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
+                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
                         OClientItem.MakeIndex = UserItem.MakeIndex;
@@ -1895,13 +1895,13 @@ namespace GameSvr
                     StdItem.GetStandardItem(ref StdItem80);
                     StdItem.GetItemAddValue(UserItem, ref StdItem80);
                     StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.S);
+                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
                     OClientItem.MakeIndex = UserItem.MakeIndex;
                     OClientItem.Dura = UserItem.Dura;
                     OClientItem.DuraMax = UserItem.DuraMax;
                     if (StdItem.StdMode == 50)
                     {
-                        OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
+                        OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
                     }
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
@@ -1942,13 +1942,13 @@ namespace GameSvr
                     StdItem.GetStandardItem(ref StdItem80);
                     StdItem.GetItemAddValue(UserItem, ref StdItem80);
                     StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.S);
+                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
                     OClientItem.MakeIndex = UserItem.MakeIndex;
                     OClientItem.Dura = UserItem.Dura;
                     OClientItem.DuraMax = UserItem.DuraMax;
                     if (StdItem.StdMode == 50)
                     {
-                        OClientItem.S.Name = OClientItem.S.Name + " #" + UserItem.Dura;
+                        OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
                     }
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
                     SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
@@ -1982,19 +1982,19 @@ namespace GameSvr
             TUserCastle Castle;
             if (StdItem.StdMode == 10 && m_btGender != PlayGender.Man)
             {
-                SysMsg(M2Share.sWearNotOfWoMan, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.sWearNotOfWoMan, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             if (StdItem.StdMode == 11 && m_btGender != PlayGender.WoMan)
             {
-                SysMsg(M2Share.sWearNotOfMan, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.sWearNotOfMan, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             if (nWhere == 1 || nWhere == 2)
             {
                 if (StdItem.Weight > m_WAbil.MaxHandWeight)
                 {
-                    SysMsg(M2Share.sHandWeightNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.sHandWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -2002,7 +2002,7 @@ namespace GameSvr
             {
                 if (StdItem.Weight + GetUserItemWeitht(nWhere) > m_WAbil.MaxWearWeight)
                 {
-                    SysMsg(M2Share.sWearWeightNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.sWearWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -2016,7 +2016,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 1:
@@ -2026,7 +2026,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 10:
@@ -2036,7 +2036,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sJobOrLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 11:
@@ -2046,7 +2046,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrDCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sJobOrDCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 12:
@@ -2056,7 +2056,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrMCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sJobOrMCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 13:
@@ -2066,7 +2066,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrSCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sJobOrSCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 2:
@@ -2076,7 +2076,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sMCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 3:
@@ -2086,7 +2086,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 4:
@@ -2096,7 +2096,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 40:
@@ -2108,12 +2108,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 41:
@@ -2125,12 +2125,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sDCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sDCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 42:
@@ -2142,12 +2142,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sMCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sMCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 43:
@@ -2159,12 +2159,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sSCNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sSCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 44:
@@ -2176,12 +2176,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sCreditPointNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 5:
@@ -2191,7 +2191,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sCreditPointNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 6:
@@ -2201,7 +2201,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sGuildNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sGuildNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 60:
@@ -2211,7 +2211,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sGuildMasterNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sGuildMasterNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 7:
@@ -2221,7 +2221,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSabukHumanNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSabukHumanNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 70:
@@ -2233,12 +2233,12 @@ namespace GameSvr
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sLevelNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSabukMasterManNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSabukMasterManNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 8:
@@ -2248,7 +2248,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sMemberNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 81:
@@ -2258,7 +2258,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberTypeNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 82:
@@ -2268,7 +2268,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberTypeNot, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
             }
@@ -2304,7 +2304,7 @@ namespace GameSvr
             var result = false;
             if (m_PEnvir.Flag.boNODRUG)
             {
-                SysMsg(M2Share.sCanotUseDrugOnThisMap, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.sCanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
                 return result;
             }
             switch (StdItem.StdMode)
@@ -2359,42 +2359,42 @@ namespace GameSvr
                             {
                                 m_wStatusArrValue[0] = StdItem.Dc;
                                 m_dwStatusArrTimeOutTick[0] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("攻击力增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("攻击力增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (StdItem.Mc > 0)
                             {
                                 m_wStatusArrValue[1] = StdItem.Mc;
                                 m_dwStatusArrTimeOutTick[1] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("魔法力增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("魔法力增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (StdItem.Sc > 0)
                             {
                                 m_wStatusArrValue[2] = StdItem.Sc;
                                 m_dwStatusArrTimeOutTick[2] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("道术增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("道术增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (StdItem.Ac2 > 0)
                             {
                                 m_wStatusArrValue[3] = StdItem.Ac2;
                                 m_dwStatusArrTimeOutTick[3] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("攻击速度增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("攻击速度增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (StdItem.Ac > 0)
                             {
                                 m_wStatusArrValue[4] = StdItem.Ac;
                                 m_dwStatusArrTimeOutTick[4] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("生命值增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("生命值增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (StdItem.Mac > 0)
                             {
                                 m_wStatusArrValue[5] = StdItem.Mac;
                                 m_dwStatusArrTimeOutTick[5] = HUtil32.GetTickCount() + StdItem.Mac2 * 1000;
-                                SysMsg("魔法值增加" + StdItem.Mac2 + "秒.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg("魔法值增加" + StdItem.Mac2 + "秒.", MsgColor.Green, MsgType.Hint);
                                 boNeedRecalc = true;
                             }
                             if (boNeedRecalc)
@@ -2526,13 +2526,13 @@ namespace GameSvr
                             }
                             else
                             {
-                                SysMsg("无效", TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg("无效", MsgColor.Red, MsgType.Hint);
                             }
                             result = true;
                         }
                         else
                         {
-                            SysMsg("此处无法使用", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg("此处无法使用", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     break;
@@ -2632,7 +2632,7 @@ namespace GameSvr
                         pStdItem.GetStandardItem(ref StdItem);
                         pStdItem.GetItemAddValue(UserItem, ref StdItem);
                         StdItem.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.S);
+                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
                         OClientItem.MakeIndex = UserItem.MakeIndex;
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
@@ -2677,7 +2677,7 @@ namespace GameSvr
                         StdItem.GetStandardItem(ref StdItem80);
                         StdItem.GetItemAddValue(UserItem, ref StdItem80);
                         StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.S);
+                        M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
                         OClientItem.MakeIndex = UserItem.MakeIndex;
                         OClientItem.Dura = UserItem.Dura;
                         OClientItem.DuraMax = UserItem.DuraMax;
@@ -3305,7 +3305,7 @@ namespace GameSvr
             dwCheckTime = HUtil32.GetTickCount() - m_dwActionTick;
             if (m_boTestSpeedMode)
             {
-                SysMsg("间隔: " + dwCheckTime, TMsgColor.c_Blue, TMsgType.t_Notice);
+                SysMsg("间隔: " + dwCheckTime, MsgColor.Blue, MsgType.Notice);
             }
             if (m_wOldIdent == wIdent)
             {
@@ -3534,7 +3534,7 @@ namespace GameSvr
                     sSayMsg = M2Share.g_sfUnMarryWoManLoginMsg.Replace("%d", m_sCharName);
                     sSayMsg = sSayMsg.Replace("%s", m_sCharName);
                 }
-                SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 m_sDearName = "";
                 RefShowName();
             }
@@ -3549,13 +3549,13 @@ namespace GameSvr
                     sSayMsg = sSayMsg.Replace("%m", m_DearHuman.m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_DearHuman.m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_DearHuman.m_nCurrY.ToString());
-                    SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = M2Share.g_sManLoginDearOnlineDearMsg.Replace("%d", m_sDearName);
                     sSayMsg = sSayMsg.Replace("%s", m_sCharName);
                     sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                    m_DearHuman.SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
@@ -3564,24 +3564,24 @@ namespace GameSvr
                     sSayMsg = sSayMsg.Replace("%m", m_DearHuman.m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_DearHuman.m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_DearHuman.m_nCurrY.ToString());
-                    SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = M2Share.g_sWoManLoginDearOnlineDearMsg.Replace("%d", m_sDearName);
                     sSayMsg = sSayMsg.Replace("%s", m_sCharName);
                     sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                    m_DearHuman.SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
             else
             {
                 if (m_btGender == PlayGender.Man)
                 {
-                    SysMsg(M2Share.g_sManLoginDearNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sWoManLoginDearNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sWoManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -3614,7 +3614,7 @@ namespace GameSvr
                     sSayMsg = M2Share.g_sfUnMasterListLoginMsg.Replace("%d", m_sMasterName);
                     sSayMsg = sSayMsg.Replace("%s", m_sMasterName);
                 }
-                SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 m_sMasterName = "";
                 RefShowName();
             }
@@ -3626,8 +3626,8 @@ namespace GameSvr
                     if (Human != null && !Human.m_boDeath && !Human.m_boGhost)
                     {
                         sSayMsg = M2Share.g_sYourMasterListUnMasterOKMsg.Replace("%d", m_sCharName);
-                        Human.SysMsg(sSayMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         // 如果大徒弟则将师父上的名字去掉
                         if (m_sCharName == Human.m_sMasterName)
                         {
@@ -3671,7 +3671,7 @@ namespace GameSvr
                         {
                             M2Share.SaveUnMasterList();
                         }
-                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         m_sMasterName = "";
                         RefShowName();
                     }
@@ -3691,7 +3691,7 @@ namespace GameSvr
             }
             if (boIsfound && m_boMaster)
             {
-                SysMsg(M2Share.g_sUnMasterLoginMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sUnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 m_sMasterName = "";
                 RefShowName();
                 if (m_btCreditPoint + M2Share.g_Config.nMasterOKCreditPoint <= byte.MaxValue)
@@ -3717,17 +3717,17 @@ namespace GameSvr
                     sSayMsg = sSayMsg.Replace("%m", m_MasterHuman.m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_MasterHuman.m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_MasterHuman.m_nCurrY.ToString());
-                    SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = M2Share.g_sMasterOnlineMasterListMsg.Replace("%d", m_sMasterName);
                     sSayMsg = sSayMsg.Replace("%s", m_sCharName);
                     sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                     sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                     sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                    m_MasterHuman.SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                    m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sMasterNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
@@ -3748,17 +3748,17 @@ namespace GameSvr
                         sSayMsg = sSayMsg.Replace("%m", m_MasterHuman.m_PEnvir.sMapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_MasterHuman.m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_MasterHuman.m_nCurrY.ToString());
-                        SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                         sSayMsg = M2Share.g_sMasterListOnlineMasterMsg.Replace("%d", m_sMasterName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);
                         sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
                         sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
-                        m_MasterHuman.SysMsg(sSayMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMasterListNotOnlineMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
@@ -3805,7 +3805,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisAccount, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sItemIsNotThisAccount, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3822,7 +3822,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisIPaddr, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sItemIsNotThisIPaddr, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3839,7 +3839,7 @@ namespace GameSvr
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisCharName, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sItemIsNotThisCharName, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3863,12 +3863,12 @@ namespace GameSvr
                 {
                     m_sTempPwd = sData;
                     m_boReConfigPwd = true;
-                    SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);// '请重复输入一次仓库密码：'
+                    SysMsg(M2Share.g_sReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
                     SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                    SysMsg(M2Share.g_sPasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                 }
                 return;
             }
@@ -3880,12 +3880,12 @@ namespace GameSvr
                     m_sStoragePwd = sData;
                     m_boPasswordLocked = true;
                     m_sTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
+                    SysMsg(M2Share.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else
                 {
                     m_sTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordNotMatchMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                 }
                 return;
             }
@@ -3934,7 +3934,7 @@ namespace GameSvr
                             m_boAdminMode = false;
                         }
                         m_boLockLogoned = true;
-                        SysMsg(M2Share.g_sPasswordUnLockOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     if (m_boUnLockStoragePwd)
                     {
@@ -3942,16 +3942,16 @@ namespace GameSvr
                         {
                             m_boCanGetBackItem = true;
                         }
-                        SysMsg(M2Share.g_sStorageUnLockOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                 }
                 else
                 {
                     m_btPwdFailCount++;
-                    SysMsg(M2Share.g_sUnLockPasswordFailMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sUnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                     if (m_btPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
                 m_boUnLockPwd = false;
@@ -3964,16 +3964,16 @@ namespace GameSvr
                 if (m_sStoragePwd == sData)
                 {
                     SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                    SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                     m_boSetStoragePwd = true;
                 }
                 else
                 {
                     m_btPwdFailCount++;
-                    SysMsg(M2Share.g_sOldPasswordIncorrectMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sOldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                     if (m_btPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
                     }
                 }
@@ -3999,12 +3999,12 @@ namespace GameSvr
                 }
                 else
                 {
-                    SysMsg("召唤失败!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg("召唤失败!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -4012,18 +4012,18 @@ namespace GameSvr
         {
             if (!IsGuildMaster())
             {
-                SysMsg("只有行会掌门人才能申请!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("只有行会掌门人才能申请!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.nServerIndex != 0)
             {
-                SysMsg("这个命令不能在本服务器上使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             TGuild Guild = M2Share.GuildManager.FindGuild(sGuildName);
             if (Guild == null)
             {
-                SysMsg("行会不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boReQuestOK = false;
@@ -4051,17 +4051,17 @@ namespace GameSvr
             var result = false;
             if (M2Share.GetDenyIPAddrList(m_sIPaddr))
             {
-                SysMsg(M2Share.g_sYourIPaddrDenyLogon, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sYourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyAccountList(m_sUserID))
             {
-                SysMsg(M2Share.g_sYourAccountDenyLogon, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sYourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyChrNameList(m_sCharName))
             {
-                SysMsg(M2Share.g_sYourCharNameDenyLogon, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sYourCharNameDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             if (result)

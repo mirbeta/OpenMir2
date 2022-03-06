@@ -79,7 +79,7 @@ namespace GameSvr
                             ItemDamageRevivalRing();
                             m_WAbil.HP = m_WAbil.MaxHP;
                             HealthSpellChanged();
-                            SysMsg(M2Share.g_sRevivalRecoverMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
                         }
                         if (m_WAbil.HP == 0)
                         {
@@ -592,11 +592,11 @@ namespace GameSvr
                                         break;
                                     case Grobal2.STATE_DEFENCEUP:
                                         boNeedRecalc = true;
-                                        SysMsg("Defense strength is back to normal.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                        SysMsg("Defense strength is back to normal.", MsgColor.Green, MsgType.Hint);
                                         break;
                                     case Grobal2.STATE_MAGDEFENCEUP:
                                         boNeedRecalc = true;
-                                        SysMsg("Magical defense strength is back to normal.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                        SysMsg("Magical defense strength is back to normal.", MsgColor.Green, MsgType.Hint);
                                         break;
                                     case Grobal2.STATE_BUBBLEDEFENCEUP:
                                         m_boAbilMagBubbleDefence = false;
@@ -617,25 +617,25 @@ namespace GameSvr
                             switch (i)
                             {
                                 case 0:
-                                    SysMsg("Removed temporarily increased destructive power.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased destructive power.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 1:
-                                    SysMsg("Removed temporarily increased magic power.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased magic power.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 2:
-                                    SysMsg("Removed temporarily increased zen power.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased zen power.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 3:
-                                    SysMsg("Removed temporarily increased hitting speed.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased hitting speed.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 4:
-                                    SysMsg("Removed temporarily increased HP.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased HP.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 5:
-                                    SysMsg("Removed temporarily increased MP.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily increased MP.", MsgColor.Green, MsgType.Hint);
                                     break;
                                 case 6:
-                                    SysMsg("Removed temporarily decreased attack ability.", TMsgColor.c_Green, TMsgType.t_Hint);
+                                    SysMsg("Removed temporarily decreased attack ability.", MsgColor.Green, MsgType.Hint);
                                     break;
                             }
                         }
@@ -731,7 +731,7 @@ namespace GameSvr
                 {
                     if (M2Share.g_Config.boMonSayMsg)
                     {
-                        MonsterSayMsg(m_LastHiter, TMonStatus.s_Die);
+                        MonsterSayMsg(m_LastHiter, MonStatus.Die);
                     }
                     if (m_ExpHitter != null)
                     {
@@ -829,7 +829,7 @@ namespace GameSvr
                 }
                 if (M2Share.g_Config.boMonSayMsg && m_btRaceServer == Grobal2.RC_PLAYOBJECT && m_LastHiter != null)
                 {
-                    m_LastHiter.MonsterSayMsg(this, TMonStatus.s_KillHuman);
+                    m_LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
                 }
                 m_Master = null;
             }
@@ -885,8 +885,8 @@ namespace GameSvr
                             if (!m_LastHiter.IsGoodKilling(this))
                             {
                                 m_LastHiter.IncPkPoint(M2Share.g_Config.nKillHumanAddPKPoint);
-                                m_LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
-                                SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), TMsgColor.c_Red, TMsgType.t_Hint);
+                                m_LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                                SysMsg(format(M2Share.g_sYouKilledByMsg, m_LastHiter.m_sCharName), MsgColor.Red, MsgType.Hint);
                                 m_LastHiter.AddBodyLuck(-M2Share.g_Config.nKillHumanDecLuckPoint);
                                 if (PKLevel() < 1)
                                 {
@@ -898,7 +898,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                m_LastHiter.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, TMsgColor.c_Green, TMsgType.t_Hint);
+                                m_LastHiter.SysMsg(M2Share.g_sYouProtectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                             }
                         }
                         // 检查攻击人是否用了着经验或等级装备

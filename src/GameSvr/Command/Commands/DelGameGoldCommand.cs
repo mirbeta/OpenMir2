@@ -22,7 +22,7 @@ namespace GameSvr
             var nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
             if (sHumName == "" || nPoint <= 0)
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
@@ -38,12 +38,12 @@ namespace GameSvr
                     m_PlayObject.m_nGameGold = 0;
                 }
                 m_PlayObject.GoldChanged();
-                PlayObject.SysMsg(sHumName + "的游戏点已减少" + nPoint + '.', TMsgColor.c_Green, TMsgType.t_Hint);
-                m_PlayObject.SysMsg("游戏点已减少" + nPoint + '.', TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumName + "的游戏点已减少" + nPoint + '.', MsgColor.Green, MsgType.Hint);
+                m_PlayObject.SysMsg("游戏点已减少" + nPoint + '.', MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

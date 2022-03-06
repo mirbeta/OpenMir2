@@ -5,7 +5,7 @@ namespace GameSvr
 {
     public class TOClientItem : Packets
     {
-        public TOStdItem S;
+        public TOStdItem Item;
         public int MakeIndex;
         public ushort Dura;
         public ushort DuraMax;
@@ -17,7 +17,7 @@ namespace GameSvr
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(S.GetPacket());
+            writer.Write(Item.GetPacket());
             writer.Write(MakeIndex);
             writer.Write(Dura);
             writer.Write(DuraMax);

@@ -20,11 +20,11 @@ namespace GameSvr
             PlayObject.m_boObMode = boFlag;
             if (PlayObject.m_boObMode)
             {
-                PlayObject.SysMsg(M2Share.sObserverMode, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.sObserverMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sReleaseObserverMode, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

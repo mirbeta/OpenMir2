@@ -22,7 +22,7 @@ namespace GameSvr
             short nY;
             if (sX == "" || sY == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " X  Y", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("命令格式: @" + this.CommandAttribute.Name + " X  Y", MsgColor.Red, MsgType.Hint);
                 return;
             }
             nX = (short)HUtil32.Str_ToInt(sX, 0);
@@ -31,7 +31,7 @@ namespace GameSvr
             M2Share.g_sMissionMap = PlayObject.m_sMapName;
             M2Share.g_nMissionX = nX;
             M2Share.g_nMissionY = nY;
-            PlayObject.SysMsg("怪物集中目标已设定为: " + PlayObject.m_sMapName + '(' + M2Share.g_nMissionX + ':' + M2Share.g_nMissionY + ')', TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg("怪物集中目标已设定为: " + PlayObject.m_sMapName + '(' + M2Share.g_nMissionX + ':' + M2Share.g_nMissionY + ')', MsgColor.Green, MsgType.Hint);
         }
     }
 }

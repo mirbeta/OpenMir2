@@ -23,7 +23,7 @@ namespace GameSvr
             var dwOExp = 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             dwExp = HUtil32.Str_ToInt(sExp, 0);
@@ -33,7 +33,7 @@ namespace GameSvr
                 dwOExp = PlayObject.m_Abil.Exp;
                 m_PlayObject.m_Abil.Exp = dwExp;
                 m_PlayObject.HasLevelUp(m_PlayObject.m_Abil.Level - 1);
-                PlayObject.SysMsg(sHumanName + " 经验调整完成。", TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_Config.boShowMakeItemMsg)
                 {
                     M2Share.MainOutMessage("[经验调整] " + PlayObject.m_sCharName + '(' + m_PlayObject.m_sCharName + ' ' + dwOExp + " -> " + m_PlayObject.m_Abil.Exp + ')');
@@ -41,7 +41,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

@@ -15,7 +15,7 @@ namespace GameSvr
             byte btMc = 0;
             byte btDura = 0;
             //PlayObject.GetBagUseItems(ref btDc, ref btSc, ref btMc, ref btDura);
-            PlayObject.SysMsg(string.Format("DC:%d SC:%d MC:%d DURA:%d", btDc, btSc, btMc, btDura), TMsgColor.c_Blue, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format("DC:%d SC:%d MC:%d DURA:%d", btDc, btSc, btMc, btDura), MsgColor.Blue, MsgType.Hint);
         }
     }
 }

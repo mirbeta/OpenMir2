@@ -24,7 +24,7 @@ namespace GameSvr
             var nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0)
@@ -49,7 +49,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.g_sGameCommandMobMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sGameCommandMobMsg, MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }

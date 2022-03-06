@@ -16,7 +16,7 @@ namespace GameSvr
             }
             if (PlayObject.m_btHorseType == 0)
             {
-                PlayObject.SysMsg("骑马必须先戴上马牌!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("骑马必须先戴上马牌!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject.m_boOnHorse = true;

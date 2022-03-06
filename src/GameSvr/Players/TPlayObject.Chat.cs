@@ -14,12 +14,12 @@ namespace GameSvr
             {
                 if (!PlayObject.m_boReadyRun)
                 {
-                    SysMsg(whostr + M2Share.g_sCanotSendmsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(whostr + M2Share.g_sCanotSendmsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!PlayObject.m_boHearWhisper || PlayObject.IsBlockWhisper(m_sCharName))
                 {
-                    SysMsg(whostr + M2Share.g_sUserDenyWhisperMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(whostr + M2Share.g_sUserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!m_boOffLineFlag && PlayObject.m_boOffLineFlag)
@@ -67,7 +67,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    SysMsg(whostr + M2Share.g_sUserNotOnLine, TMsgColor.c_Red, TMsgType.t_Hint);
+                    SysMsg(whostr + M2Share.g_sUserNotOnLine, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace GameSvr
                     {
                         m_boDisableSayMsg = true;
                         m_dwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.g_Config.dwDisableSayMsgTime;// 60 * 1000
-                        SysMsg(format(M2Share.g_sDisableSayMsg, M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000)), TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(format(M2Share.g_sDisableSayMsg, M2Share.g_Config.dwDisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -206,7 +206,7 @@ namespace GameSvr
                                 {
                                     if (m_Abil.Level <= M2Share.g_Config.nCanShoutMsgLevel)
                                     {
-                                        SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), TMsgColor.c_Red, TMsgType.t_Hint);
+                                        SysMsg(format(M2Share.g_sYouNeedLevelMsg, M2Share.g_Config.nCanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                         return;
                                     }
                                     m_dwShoutMsgTick = HUtil32.GetTickCount();
@@ -222,10 +222,10 @@ namespace GameSvr
                                     }
                                     return;
                                 }
-                                SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), TMsgColor.c_Red, TMsgType.t_Hint);
+                                SysMsg(format(M2Share.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - m_dwShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                                 return;
                             }
-                            SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                             return;
                         }
                     }
@@ -239,7 +239,7 @@ namespace GameSvr
                     }
                     return;
                 }
-                SysMsg(M2Share.g_sYouIsDisableSendMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg(M2Share.g_sYouIsDisableSendMsg, MsgColor.Red, MsgType.Hint);
             }
             catch (Exception e)
             {
@@ -278,12 +278,12 @@ namespace GameSvr
                     {
                         m_sTempPwd = sData;
                         m_boReConfigPwd = true;
-                        SysMsg(M2Share.g_sReSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sPasswordOverLongMsg, TMsgColor.c_Red, TMsgType.t_Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                        SysMsg(M2Share.g_sPasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                     }
                     return;
                 }
@@ -296,12 +296,12 @@ namespace GameSvr
                         m_boPasswordLocked = true;
                         m_boCanGetBackItem = false;
                         m_sTempPwd = "";
-                        SysMsg(M2Share.g_sReSetPasswordOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
                         m_sTempPwd = "";
-                        SysMsg(M2Share.g_sReSetPasswordNotMatchMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -350,7 +350,7 @@ namespace GameSvr
                                 m_boAdminMode = false;
                             }
                             m_boLockLogoned = true;
-                            SysMsg(M2Share.g_sPasswordUnLockOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                         if (m_boUnLockStoragePwd)
                         {
@@ -358,16 +358,16 @@ namespace GameSvr
                             {
                                 m_boCanGetBackItem = true;
                             }
-                            SysMsg(M2Share.g_sStorageUnLockOKMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                     }
                     else
                     {
                         m_btPwdFailCount++;
-                        SysMsg(M2Share.g_sUnLockPasswordFailMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sUnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                         if (m_btPwdFailCount > 3)
                         {
-                            SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     m_boUnLockPwd = false;
@@ -380,16 +380,16 @@ namespace GameSvr
                     if (m_sStoragePwd == sData)
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                        SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         m_boSetStoragePwd = true;
                     }
                     else
                     {
                         m_btPwdFailCount++;
-                        SysMsg(M2Share.g_sOldPasswordIncorrectMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sOldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                         if (m_btPwdFailCount > 3)
                         {
-                            SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                             m_boPasswordLocked = true;
                         }
                     }
@@ -435,19 +435,19 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (m_sStoragePwd == "")
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boSetStoragePwd = true;
-                        SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         return;
                     }
                     if (m_btPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
                         return;
                     }
@@ -455,7 +455,7 @@ namespace GameSvr
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boCheckOldPwd = true;
-                        SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
                         return;
                     }
                     return;
@@ -469,18 +469,18 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (m_sStoragePwd == "")
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boSetStoragePwd = true;
-                        SysMsg(M2Share.g_sSetPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sAlreadySetPasswordMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sAlreadySetPasswordMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -488,17 +488,17 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (!m_boPasswordLocked)
                     {
                         m_sStoragePwd = "";
-                        SysMsg(M2Share.g_sOldPasswordIsClearMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sOldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sPleaseUnLockPasswordMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sPleaseUnLockPasswordMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -506,12 +506,12 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (m_btPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
                         return;
                     }
@@ -519,11 +519,11 @@ namespace GameSvr
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boCheckOldPwd = true;
-                        SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sNoPasswordSetMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordSetMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -531,12 +531,12 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (m_btPwdFailCount > M2Share.g_Config.nPasswordErrorCountLock)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
                         return;
                     }
@@ -545,17 +545,17 @@ namespace GameSvr
                         if (!m_boUnLockStoragePwd)
                         {
                             SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                            SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                             m_boUnLockStoragePwd = true;
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sStorageAlreadyUnLockMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sStorageNoPasswordMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -563,12 +563,12 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (m_btPwdFailCount > M2Share.g_Config.nPasswordErrorCountLock)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         m_boPasswordLocked = true;
                         return;
                     }
@@ -577,17 +577,17 @@ namespace GameSvr
                         if (!m_boUnLockPwd)
                         {
                             SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                            SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                             m_boUnLockPwd = true;
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sStorageAlreadyUnLockMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sStorageNoPasswordMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -595,7 +595,7 @@ namespace GameSvr
                 {
                     if (!M2Share.g_Config.boPasswordLockSystem)
                     {
-                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (!m_boPasswordLocked)
@@ -604,16 +604,16 @@ namespace GameSvr
                         {
                             m_boPasswordLocked = true;
                             m_boCanGetBackItem = false;
-                            SysMsg(M2Share.g_sLockStorageSuccessMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sLockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sStorageNoPasswordMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sStorageNoPasswordMsg, MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sStorageAlreadyLockMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sStorageAlreadyLockMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -622,11 +622,11 @@ namespace GameSvr
                     m_boCanDearRecall = !m_boCanDearRecall;
                     if (m_boCanDearRecall)
                     {
-                        SysMsg(M2Share.g_sEnableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableDearRecall, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableDearRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableDearRecall, MsgColor.Blue, MsgType.Hint);
                     }
                     return;
                 }
@@ -635,17 +635,17 @@ namespace GameSvr
                     m_boCanMasterRecall = !m_boCanMasterRecall;
                     if (m_boCanMasterRecall)
                     {
-                        SysMsg(M2Share.g_sEnableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableMasterRecall, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableMasterRecall, TMsgColor.c_Blue, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableMasterRecall, MsgColor.Blue, MsgType.Hint);
                     }
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.DATA.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    SysMsg(M2Share.g_sNowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TMsgColor.c_Blue, TMsgType.t_Hint);
+                    SysMsg(M2Share.g_sNowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
                     return;
                 }
                 if (string.Compare(sCMD, M2Share.g_GameCommand.ALLOWMSG.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
@@ -653,11 +653,11 @@ namespace GameSvr
                     m_boHearWhisper = !m_boHearWhisper;
                     if (m_boHearWhisper)
                     {
-                        SysMsg(M2Share.g_sEnableHearWhisper, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableHearWhisper, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableHearWhisper, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableHearWhisper, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -666,11 +666,11 @@ namespace GameSvr
                     m_boBanShout = !m_boBanShout;
                     if (m_boBanShout)
                     {
-                        SysMsg(M2Share.g_sEnableShoutMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableShoutMsg, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableShoutMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableShoutMsg, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -679,11 +679,11 @@ namespace GameSvr
                     m_boAllowDeal = !m_boAllowDeal;
                     if (m_boAllowDeal)
                     {
-                        SysMsg(M2Share.g_sEnableDealMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableDealMsg, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableDealMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableDealMsg, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -692,11 +692,11 @@ namespace GameSvr
                     m_boBanGuildChat = !m_boBanGuildChat;
                     if (m_boBanGuildChat)
                     {
-                        SysMsg(M2Share.g_sEnableGuildChat, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableGuildChat, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableGuildChat, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableGuildChat, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -705,11 +705,11 @@ namespace GameSvr
                     m_boAllowGuild = !m_boAllowGuild;
                     if (m_boAllowGuild)
                     {
-                        SysMsg(M2Share.g_sEnableJoinGuild, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableJoinGuild, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableJoinGuild, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableJoinGuild, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -720,11 +720,11 @@ namespace GameSvr
                         m_MyGuild.m_boEnableAuthAlly = !m_MyGuild.m_boEnableAuthAlly;
                         if (m_MyGuild.m_boEnableAuthAlly)
                         {
-                            SysMsg(M2Share.g_sEnableAuthAllyGuild, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sEnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sDisableAuthAllyGuild, TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg(M2Share.g_sDisableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                         }
                     }
                     return;
@@ -734,11 +734,11 @@ namespace GameSvr
                     m_boAllowGuildReCall = !m_boAllowGuildReCall;
                     if (m_boAllowGuildReCall)
                     {
-                        SysMsg(M2Share.g_sEnableGuildRecall, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sEnableGuildRecall, MsgColor.Green, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDisableGuildRecall, TMsgColor.c_Green, TMsgType.t_Hint);
+                        SysMsg(M2Share.g_sDisableGuildRecall, MsgColor.Green, MsgType.Hint);
                     }
                     return;
                 }
@@ -783,7 +783,7 @@ namespace GameSvr
                             {
                                 sC = sData;
                             }
-                            M2Share.UserEngine.SendBroadCastMsg(sC, TMsgType.t_GM);
+                            M2Share.UserEngine.SendBroadCastMsg(sC, MsgType.GM);
                         }
                         return;
                     }
@@ -800,16 +800,16 @@ namespace GameSvr
                             PlayObject.SetQuestFlagStatus(nFlag, nValue);
                             if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            SysMsg('@' + M2Share.g_GameCommand.SETFLAG.sCmd + " 人物名称 标志号 数字(0 - 1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg('@' + M2Share.g_GameCommand.SETFLAG.sCmd + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
                         }
                         return;
                     }
@@ -823,16 +823,16 @@ namespace GameSvr
                             PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            SysMsg('@' + M2Share.g_GameCommand.SETOPEN.sCmd + " 人物名称 标志号 数字(0 - 1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg('@' + M2Share.g_GameCommand.SETOPEN.sCmd + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
                         }
                         return;
                     }
@@ -846,16 +846,16 @@ namespace GameSvr
                             PlayObject.SetQuestUnitStatus(nFlag, nValue);
                             if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                             }
                             else
                             {
-                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", TMsgColor.c_Green, TMsgType.t_Hint);
+                                SysMsg(PlayObject.m_sCharName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            SysMsg('@' + M2Share.g_GameCommand.SETUNIT.sCmd + " 人物名称 标志号 数字(0 - 1)", TMsgColor.c_Red, TMsgType.t_Hint);
+                            SysMsg('@' + M2Share.g_GameCommand.SETUNIT.sCmd + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
                         }
                         return;
                     }
@@ -864,24 +864,24 @@ namespace GameSvr
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADITEMDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.CommonDB.LoadItemsDB();
-                            SysMsg("物品数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
                             return;
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMAGICDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.CommonDB.LoadMagicDB();
-                            SysMsg("魔法数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
                             return;
                         }
                         if (string.Compare(sCMD, M2Share.g_GameCommand.RELOADMONSTERDB.sCmd, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.CommonDB.LoadMonsterDB();
-                            SysMsg("怪物数据库重新加载完成。", TMsgColor.c_Green, TMsgType.t_Hint);
+                            SysMsg("怪物数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
                             return;
                         }
                     }
                 }
-                SysMsg($"@{sCMD}此命令不正确，或没有足够的权限!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                SysMsg($"@{sCMD}此命令不正确，或没有足够的权限!!!", MsgColor.Red, MsgType.Hint);
             }
             catch (Exception e)
             {

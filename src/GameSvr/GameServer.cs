@@ -60,7 +60,7 @@ namespace GameSvr
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
                 var sMsg = M2Share.g_sSendOnlineCountMsg.Replace("%c", HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.g_Config.nSendOnlineCountRate / 10)).ToString());
-                M2Share.UserEngine.SendBroadCastMsg(sMsg, TMsgType.t_System);
+                M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
 

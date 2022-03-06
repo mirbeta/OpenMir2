@@ -22,7 +22,7 @@ namespace GameSvr
             {
                 if (string.IsNullOrEmpty(sHumanName))
                 {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)
@@ -32,21 +32,21 @@ namespace GameSvr
                     if (m_PlayObject != null)
                     {
                         PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.sMapDesc + '(' + m_PlayObject.m_PEnvir.sMapName + ") " + m_PlayObject.m_nCurrX + ':'
-                            + PlayObject.m_nCurrY, TMsgColor.c_Blue, TMsgType.t_Hint);
+                            + PlayObject.m_nCurrY, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        PlayObject.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg((HUtil32.GetTickCount() - PlayObject.m_dwProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("您现在还无法使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

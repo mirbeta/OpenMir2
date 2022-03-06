@@ -30,7 +30,7 @@ namespace GameSvr
             PlayObject.m_dwStatusArrTick[nType] = HUtil32.GetTickCount();
             PlayObject.m_nCharStatus = PlayObject.GetCharStatus();
             PlayObject.StatusChanged();
-            PlayObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GameSvr
             var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sCharName == "")
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             try
@@ -29,12 +29,12 @@ namespace GameSvr
                 {
                     //M2Share.g_DenyChrNameList.Add(sCharName, ((1) as Object));
                     M2Share.SaveDenyChrNameList();
-                    PlayObject.SysMsg(sCharName + "已加入禁止人物列表", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sCharName + "已加入禁止人物列表", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
                     //M2Share.g_DenyChrNameList.Add(sCharName, ((0) as Object));
-                    PlayObject.SysMsg(sCharName + "已加入临时禁止人物列表", TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(sCharName + "已加入临时禁止人物列表", MsgColor.Green, MsgType.Hint);
                 }
             }
             finally

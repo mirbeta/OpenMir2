@@ -25,7 +25,7 @@ namespace GameSvr
                 Envirnoment Envir = null;
                 if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
                 {
-                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (PlayObject.m_btPermission >= this.CommandAttribute.nPermissionMin || M2Share.CanMoveMap(sMapName))
@@ -41,13 +41,13 @@ namespace GameSvr
                         }
                         else
                         {
-                            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), TMsgColor.c_Green, TMsgType.t_Hint);
+                            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
                         }
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);
                 }
             }
             catch (Exception e)

@@ -28,7 +28,7 @@ namespace GameSvr
             ArrayList List;
             if (sCASTLENAME != "" && sCASTLENAME[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCASTLENAME == "")
@@ -37,7 +37,7 @@ namespace GameSvr
                 M2Share.CastleManager.GetCastleGoldInfo(List);
                 for (var i = 0; i < List.Count; i++)
                 {
-                    PlayObject.SysMsg(List[i] as string, TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(List[i] as string, MsgColor.Green, MsgType.Hint);
                 }
                 List = null;
                 return;
@@ -45,14 +45,14 @@ namespace GameSvr
             Castle = M2Share.CastleManager.Find(sCASTLENAME);
             if (Castle == null)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandSbkGoldCastleNotFoundMsg, sCASTLENAME), MsgColor.Red, MsgType.Hint);
                 return;
             }
             Ctr = sCtr[1];
             nGold = HUtil32.Str_ToInt(sGold, -1);
             if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandSbkGoldHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.CommandAttribute.Name, M2Share.g_sGameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (Ctr)

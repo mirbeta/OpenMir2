@@ -1983,7 +1983,7 @@ namespace GameSvr
             {
                 switch (DynamicVar.VarType)
                 {
-                    case TVarType.Integer:
+                    case VarType.Integer:
                         switch (cMethod)
                         {
                             case '=':
@@ -2012,7 +2012,7 @@ namespace GameSvr
                                 break;
                         }
                         break;
-                    case TVarType.String:
+                    case VarType.String:
                         break;
                 }
                 boFoundVar = true;
@@ -2775,11 +2775,11 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             nValue = DynamicVar.nInternet;
                             result = true;
                             break;
-                        case TVarType.String:
+                        case VarType.String:
                             break;
                     }
                 }

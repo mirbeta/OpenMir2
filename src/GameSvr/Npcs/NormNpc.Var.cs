@@ -325,10 +325,10 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.Integer:
+                            case VarType.Integer:
                                 n3C = DynamicVar.nInternet;
                                 break;
-                            case TVarType.String:
+                            case VarType.String:
                                 s01 = DynamicVar.sString;
                                 break;
                         }
@@ -516,7 +516,7 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.Integer:
+                            case VarType.Integer:
                                 if (n3C > 1)
                                 {
                                     DynamicVar.nInternet += n3C;
@@ -526,7 +526,7 @@ namespace GameSvr
                                     DynamicVar.nInternet++;
                                 }
                                 break;
-                            case TVarType.String:
+                            case VarType.String:
                                 DynamicVar.sString = DynamicVar.sString + s01;
                                 break;
                         }
@@ -774,10 +774,10 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.Integer:
+                            case VarType.Integer:
                                 n3C = DynamicVar.nInternet;
                                 break;
-                            case TVarType.String:
+                            case VarType.String:
                                 s01 = DynamicVar.sString;
                                 break;
                         }
@@ -974,7 +974,7 @@ namespace GameSvr
                     {
                         switch (DynamicVar.VarType)
                         {
-                            case TVarType.Integer:
+                            case VarType.Integer:
                                 if (n3C > 1)
                                 {
                                     DynamicVar.nInternet -= n3C;
@@ -984,7 +984,7 @@ namespace GameSvr
                                     DynamicVar.nInternet -= 1;
                                 }
                                 break;
-                            case TVarType.String:
+                            case VarType.String:
                                 n10 = DynamicVar.sString.IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
                                 s02 = DynamicVar.sString.Substring(0, n10 - 1);
                                 s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
@@ -2431,12 +2431,12 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             nValue = DynamicVar.nInternet;
                             nDataType = 1;
                             result = true;
                             return result;
-                        case TVarType.String:
+                        case VarType.String:
                             sValue = DynamicVar.sString;
                             nDataType = 0;
                             result = true;
@@ -2451,12 +2451,12 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             nValue = DynamicVar.nInternet;
                             nDataType = 1;
                             result = true;
                             return result;
-                        case TVarType.String:
+                        case VarType.String:
                             sValue = DynamicVar.sString;
                             nDataType = 0;
                             result = true;
@@ -2471,12 +2471,12 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             nValue = DynamicVar.nInternet;
                             nDataType = 1;
                             result = true;
                             return result;
-                        case TVarType.String:
+                        case VarType.String:
                             sValue = DynamicVar.sString;
                             nDataType = 0;
                             result = true;
@@ -2765,11 +2765,11 @@ namespace GameSvr
             {
                 switch (DynamicVar.VarType)
                 {
-                    case TVarType.Integer:
+                    case VarType.Integer:
                         nValue = DynamicVar.nInternet;
                         nDataType = 1;
                         break;
-                    case TVarType.String:
+                    case VarType.String:
                         sValue = DynamicVar.sString;
                         nDataType = 0;
                         break;
@@ -2795,7 +2795,7 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.Integer:
+                        case VarType.Integer:
                             DynamicVar.nInternet = nValue;
                             boVarFound = true;
                             break;
@@ -2805,7 +2805,7 @@ namespace GameSvr
                 {
                     switch (DynamicVar.VarType)
                     {
-                        case TVarType.String:
+                        case VarType.String:
                             DynamicVar.sString = sValue;
                             boVarFound = true;
                             break;

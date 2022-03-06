@@ -20,7 +20,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = PlayObject.m_BlockWhisperList.Count - 1; i >= 0; i--)
@@ -37,7 +37,7 @@ namespace GameSvr
                 //}
             }
             PlayObject.m_BlockWhisperList.Add(sHumanName);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPrvMsgLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

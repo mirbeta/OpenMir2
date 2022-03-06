@@ -374,7 +374,7 @@ namespace GameSvr
                             SaveAttackSabukWall();
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_212, M2Share.nServerIndex, "");
                             s20 = string.Format(sWarStartMsg, m_sName);
-                            M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
+                            M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
                             MainDoorControl(true);
@@ -406,7 +406,7 @@ namespace GameSvr
                         {
                             m_boShowOverMsg = true;
                             s20 = string.Format(sWarStopTimeMsg,  m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
-                            M2Share.UserEngine.SendBroadCastMsgExt(s20, TMsgType.t_System);
+                            M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
                         }
@@ -523,7 +523,7 @@ namespace GameSvr
             if (oldGuild != null) oldGuild.RefMemberName();
             if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
             var s10 = string.Format(sGetCastleMsg,  m_sName, m_sOwnGuild);
-            M2Share.UserEngine.SendBroadCastMsgExt(s10, TMsgType.t_System);
+            M2Share.UserEngine.SendBroadCastMsgExt(s10, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
             M2Share.MainOutMessage(s10);
         }
@@ -561,7 +561,7 @@ namespace GameSvr
                 }
             }
             var s14 = string.Format(sWallWarStop, m_sName);
-            M2Share.UserEngine.SendBroadCastMsgExt(s14, TMsgType.t_System);
+            M2Share.UserEngine.SendBroadCastMsgExt(s14, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s14);
             M2Share.MainOutMessage(s14);
         }

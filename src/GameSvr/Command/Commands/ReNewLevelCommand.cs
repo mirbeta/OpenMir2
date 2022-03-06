@@ -20,7 +20,7 @@ namespace GameSvr
             var sLevel = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(CommandAttribute.CommandHelp(), TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(CommandAttribute.CommandHelp(), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nLevel = HUtil32.Str_ToInt(sLevel, -1);
@@ -32,11 +32,11 @@ namespace GameSvr
                     m_PlayObject.m_btReLevel = (byte)nLevel;
                     m_PlayObject.RefShowName();
                 }
-                PlayObject.SysMsg(sHumanName + " 的转生等级为 " + PlayObject.m_btReLevel, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 的转生等级为 " + PlayObject.m_btReLevel, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + " 没在线上!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg(sHumanName + " 没在线上!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

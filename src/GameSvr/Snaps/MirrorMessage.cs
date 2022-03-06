@@ -227,7 +227,7 @@ namespace GameSvr
 
         private void MsgGetSysopMsg(int sNum, string Body)
         {
-            M2Share.UserEngine.SendBroadCastMsg(Body, TMsgType.t_System);
+            M2Share.UserEngine.SendBroadCastMsg(Body, MsgType.System);
         }
 
         private void MsgGetAddGuild(int sNum, string Body)
@@ -469,7 +469,7 @@ namespace GameSvr
                 var hum = M2Share.UserEngine.GetPlayObject(lovername);
                 if (hum != null)
                 {
-                    hum.SysMsg(uname + sLoverFindYouMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                    hum.SysMsg(uname + sLoverFindYouMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -489,7 +489,7 @@ namespace GameSvr
                 var hum = M2Share.UserEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    hum.SysMsg(Str, TMsgColor.c_Red, TMsgType.t_Hint);
+                    hum.SysMsg(Str, MsgColor.Red, MsgType.Hint);
                 }
             }
         }

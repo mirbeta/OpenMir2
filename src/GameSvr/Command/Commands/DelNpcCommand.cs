@@ -23,7 +23,7 @@ namespace GameSvr
                         BaseObject.m_boGhost = true;
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
                         BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                        PlayObject.SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                 }
@@ -34,12 +34,12 @@ namespace GameSvr
                         BaseObject.m_boGhost = true;
                         BaseObject.m_dwGhostTick = HUtil32.GetTickCount();
                         BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                        PlayObject.SysMsg(sDelOK, TMsgColor.c_Red, TMsgType.t_Hint);
+                        PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                 }
             }
-            PlayObject.SysMsg(M2Share.g_sGameCommandDelNpcMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+            PlayObject.SysMsg(M2Share.g_sGameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
         }
     }
 }

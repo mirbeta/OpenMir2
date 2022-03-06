@@ -19,7 +19,7 @@ namespace GameSvr
                 var nCount = M2Share.g_DenySayMsgList.Count;
                 if (M2Share.g_DenySayMsgList.Count <= 0)
                 {
-                    PlayObject.SysMsg(M2Share.g_sGameCommandShutupListIsNullMsg, TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.g_sGameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0)
                 {

@@ -22,17 +22,17 @@ namespace GameSvr
                         PlayObject.m_MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();
-                        PlayObject.SysMsg("你已经退出行会。", TMsgColor.c_Green, TMsgType.t_Hint);
+                        PlayObject.SysMsg("你已经退出行会。", MsgColor.Green, MsgType.Hint);
                     }
                 }
                 else
                 {
-                    PlayObject.SysMsg("行会掌门人不能这样退出行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg("行会掌门人不能这样退出行会!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayObject.SysMsg("你都没加入行会!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你都没加入行会!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

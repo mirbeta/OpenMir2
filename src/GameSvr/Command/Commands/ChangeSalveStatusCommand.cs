@@ -17,11 +17,11 @@ namespace GameSvr
             {
                 if (PlayObject.m_boSlaveRelax)
                 {
-                    PlayObject.SysMsg(M2Share.sPetRest, TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.sPetRest, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg(M2Share.sPetAttack, TMsgColor.c_Green, TMsgType.t_Hint);
+                    PlayObject.SysMsg(M2Share.sPetAttack, MsgColor.Green, MsgType.Hint);
                 }
             }
         }

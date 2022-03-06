@@ -15,12 +15,12 @@ namespace GameSvr
             TPlayObject MasterHuman;
             if (!PlayObject.m_boMaster)
             {
-                PlayObject.SysMsg("只能师父才能使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("只能师父才能使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.m_MasterList.Count == 0)
             {
-                PlayObject.SysMsg("你的徒弟一个都不在线!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("你的徒弟一个都不在线!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             //if (PlayObject.m_PEnvir.m_boNOMASTERRECALL)
@@ -30,7 +30,7 @@ namespace GameSvr
             //}
             if ((HUtil32.GetTickCount() - PlayObject.m_dwMasterRecallTick) < 10000)
             {
-                PlayObject.SysMsg("稍等一会才能再次使用此功能!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                PlayObject.SysMsg("稍等一会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = 0; i < PlayObject.m_MasterList.Count; i++)
@@ -42,7 +42,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(MasterHuman.m_sCharName + " 不允许传送!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+                    PlayObject.SysMsg(MasterHuman.m_sCharName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
         }

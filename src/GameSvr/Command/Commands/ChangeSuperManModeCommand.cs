@@ -17,11 +17,11 @@ namespace GameSvr
             PlayObject.m_boSuperMan = boFlag;
             if (PlayObject.m_boSuperMan)
             {
-                PlayObject.SysMsg(M2Share.sSupermanMode, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.sSupermanMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.sReleaseSupermanMode, TMsgColor.c_Green, TMsgType.t_Hint);
+                PlayObject.SysMsg(M2Share.sReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }
