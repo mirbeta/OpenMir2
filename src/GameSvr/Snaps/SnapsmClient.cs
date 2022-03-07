@@ -7,32 +7,46 @@ namespace GameSvr
     /// <summary>
     /// 镜像服务器
     /// </summary>
-    public class TFrmMsgClient
+    public class SnapsmClient
     {
         private string sRecvMsg = string.Empty;
-        private readonly IClientScoket MsgClient;
+        private readonly IClientScoket _msgClient;
         private MirrorMessage _groupMessageHandle;
 
-        public TFrmMsgClient()
+        private static SnapsmClient instance = null;
+
+        public static SnapsmClient Instance
         {
-            MsgClient = new IClientScoket();
-            MsgClient.OnConnected += MsgClientConnect;
-            MsgClient.ReceivedDatagram += MsgClientRead;
-            MsgClient.OnError += MsgClientError;
-            MsgClient.OnDisconnected += MsgClientDisconnected;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new SnapsmClient();
+                }
+                return instance;
+            }
+        }
+        
+        public SnapsmClient()
+        {
+            _msgClient = new IClientScoket();
+            _msgClient.OnConnected += MsgClientConnect;
+            _msgClient.ReceivedDatagram += MsgClientRead;
+            _msgClient.OnError += MsgClientError;
+            _msgClient.OnDisconnected += MsgClientDisconnected;
             _groupMessageHandle = new MirrorMessage();
         }
 
         public void ConnectMsgServer()
         {
-            MsgClient.Address = M2Share.g_Config.sMsgSrvAddr;
-            MsgClient.Port = M2Share.g_Config.nMsgSrvPort;
-            MsgClient.Connect();
+            _msgClient.Address = M2Share.g_Config.sMsgSrvAddr;
+            _msgClient.Port = M2Share.g_Config.nMsgSrvPort;
+            _msgClient.Connect();
         }
 
         public void Run()
         {
-            if (MsgClient.IsConnected)
+            if (_msgClient.IsConnected)
             {
                 DecodeSocStr();
             }
@@ -42,17 +56,17 @@ namespace GameSvr
         {
             if (M2Share.g_Config.nServerNumber > 0)
             {
-                if (MsgClient.IsConnected)
+                if (_msgClient.IsConnected)
                 {
                     return;
                 }
-                MsgClient.Connect();
+                _msgClient.Connect();
             }
         }
 
         private bool IsConnect()
         {
-            return MsgClient.IsConnected;
+            return _msgClient.IsConnected;
         }
 
         private void DecodeSocStr()
@@ -103,7 +117,7 @@ namespace GameSvr
             if (IsConnect())
             {
                 var buff = HUtil32.GetBytes("(" + sMsg + ")");
-                MsgClient.Send(buff);
+                _msgClient.Send(buff);
             }
         }
 
@@ -118,13 +132,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]拒绝链接...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]关闭连接...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("主游戏引擎[" + MsgClient.Address + ":" + MsgClient.Port + "]链接超时...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]链接超时...");
                     break;
             }
         }
@@ -146,22 +160,3 @@ namespace GameSvr
     }
 }
 
-namespace GameSvr
-{
-    public class InterMsgClient
-    {
-        private static TFrmMsgClient instance = null;
-
-        public static TFrmMsgClient Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new TFrmMsgClient();
-                }
-                return instance;
-            }
-        }
-    }
-}

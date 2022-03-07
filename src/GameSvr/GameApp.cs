@@ -139,7 +139,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    InterMsgClient.Instance.ConnectMsgServer();
+                    SnapsmClient.Instance.ConnectMsgServer();
                     M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
                 }
             }

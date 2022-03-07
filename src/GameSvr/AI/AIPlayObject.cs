@@ -2904,11 +2904,11 @@ namespace GameSvr
                                 }
                                 if (AllowUseMagic(39) && HUtil32.GetTickCount() - m_SkillUseTick[39] > 10000)
                                 {
-                                    m_SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
+                                    m_SkillUseTick[39] = HUtil32.GetTickCount();// 彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
                                 {
                                     if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
@@ -2968,7 +2968,7 @@ namespace GameSvr
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
                                 {
                                     if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
@@ -3019,7 +3019,7 @@ namespace GameSvr
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
                                 {
                                     if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
@@ -3062,7 +3062,7 @@ namespace GameSvr
                             {
                                 if (AllowUseMagic(Grobal2.SKILL_BANWOL))
                                 {
-                                    // 英雄半月弯刀
+                                    // 半月弯刀
                                     if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
                                     {
                                         m_SkillUseTick[25] = HUtil32.GetTickCount();
@@ -3123,7 +3123,7 @@ namespace GameSvr
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[25]) > 3000)
                     {
-                        if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 英雄半月弯刀
+                        if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
                         {
                             if (!m_boUseHalfMoon)
                             {

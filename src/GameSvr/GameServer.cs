@@ -48,7 +48,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    InterMsgClient.Instance.Run();
+                    SnapsmClient.Instance.Run();
                 }
                 Thread.Sleep(10);
             }

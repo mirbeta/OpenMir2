@@ -1524,7 +1524,7 @@ namespace GameSvr
             }
             else
             {
-                InterMsgClient.Instance.SendSocket(nCode + "/" + nServerIdx + "/" + sMsg);
+                SnapsmClient.Instance.SendSocket(nCode + "/" + nServerIdx + "/" + sMsg);
             }
         }
 
