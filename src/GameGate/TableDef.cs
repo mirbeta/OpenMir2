@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameGate
+﻿namespace GameGate
 {
     public class TableDef
     {
