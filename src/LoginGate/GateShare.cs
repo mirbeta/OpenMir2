@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
 using SystemModule;
@@ -40,7 +41,6 @@ namespace LoginGate
         public static bool boServerReady = false;
         public static IList<string> ClientSockeMsgList;
 
-
         public static void LoadBlockIPFile()
         {
             StringList LoadList;
@@ -73,7 +73,7 @@ namespace LoginGate
 
         public static void MainOutMessage(string sMsg, int nMsgLevel)
         {
-            string tMsg = "[" + DateTime.Now.ToString() + "] " + sMsg;
+            var tMsg = "[" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + sMsg;
             MainLogMsgList.Add(tMsg);
         }
 

@@ -21,7 +21,7 @@ namespace LoginGate
                 {
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<GateServer>();
-                    services.AddSingleton<GateClient>();
+                    services.AddSingleton<LoginSvrClient>();
                     services.AddHostedService<AppService>();
                 });
 
