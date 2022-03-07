@@ -1,4 +1,4 @@
-Legend of Mir 2 complete server, support classic 1.76 (reloaded) function, support online and multiplayer entertainment.
+Legend of Mir 2 complete game server, support 1.76 classic game functions, support online and multiplayer interaction.
 
 This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
 
