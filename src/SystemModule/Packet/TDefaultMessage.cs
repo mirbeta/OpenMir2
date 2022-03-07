@@ -141,9 +141,10 @@ namespace SystemModule.Packages
                     backingStream.Write(Series);
                     break;
             }
-            var buffer = new byte[memoryStream.Length];
-            memoryStream.Read(buffer, 0, buffer.Length);
-            return buffer;
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            return data;
         }
     }
 
