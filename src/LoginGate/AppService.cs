@@ -10,10 +10,10 @@ namespace LoginGate
         private readonly ILogger<AppService> _logger;
         private readonly ServerApp _serverApp;
         private readonly GateServer _gateServer;
-        private readonly GateClient _gateClient;
+        private readonly LoginSvrClient _gateClient;
         private Timer _appThreadTimer;
 
-        public AppService(ILogger<AppService> logger, ServerApp serverApp, GateServer gateServer, GateClient gateClient)
+        public AppService(ILogger<AppService> logger, ServerApp serverApp, GateServer gateServer, LoginSvrClient gateClient)
         {
             _logger = logger;
             _serverApp = serverApp;

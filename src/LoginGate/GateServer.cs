@@ -8,13 +8,13 @@ namespace LoginGate
     public class GateServer
     {
         private ISocketServer ServerSocket;
-        private readonly GateClient gateClient;
+        private readonly LoginSvrClient gateClient;
         private long dwDecodeMsgTime = 0;
         private long dwSendKeepAliveTick = 0;
         private string sProcMsg = string.Empty;
         private Timer decodeTimer;
 
-        public GateServer(GateClient gateClient)
+        public GateServer(LoginSvrClient gateClient)
         {
             this.gateClient = gateClient;
             ServerSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -208,14 +208,13 @@ namespace LoginGate
             }
         }
 
-        public void DecodeTimer(object obj)
+        private void DecodeTimer(object obj)
         {
             string sProcessMsg = string.Empty;
             string sSocketMsg = string.Empty;
             string sSocketHandle = string.Empty;
             int dwDecodeTick = 0;
             TUserSession UserSession;
-            TSockaddr IPaddr;
             if (GateShare.boDecodeLock || (!GateShare.boGateReady))
             {
                 return;
@@ -252,12 +251,9 @@ namespace LoginGate
                                 CloseSocket(HUtil32.Str_ToInt(sSocketMsg.Substring(2, sSocketMsg.Length - 2), 0));
                                 continue;
                             }
-                            else
-                            {
-                                GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
-                                GateShare.boKeepAliveTimcOut = false;
-                                continue;
-                            }
+                            GateShare.dwKeepAliveTick = HUtil32.GetTickCount();
+                            GateShare.boKeepAliveTimcOut = false;
+                            continue;
                         }
                         sSocketMsg = HUtil32.GetValidStr3(sSocketMsg, ref sSocketHandle, new string[] { "/" });
                         int nSocketHandle = HUtil32.Str_ToInt(sSocketHandle, -1);
@@ -426,28 +422,22 @@ namespace LoginGate
 
         private bool IsBlockIP(string sIPaddr)
         {
-            bool result = false;
             var nIPaddr = HUtil32.IpToInt(sIPaddr);
-            TSockaddr IPaddr = null;
             for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {
-                IPaddr = GateShare.TempBlockIPList[i];
-                if (IPaddr.nIPaddr == nIPaddr)
+                if (GateShare.TempBlockIPList[i].nIPaddr == nIPaddr)
                 {
-                    result = true;
-                    return result;
+                    return true;
                 }
             }
             for (var i = 0; i < GateShare.BlockIPList.Count; i++)
             {
-                IPaddr = GateShare.BlockIPList[i];
-                if (IPaddr.nIPaddr == nIPaddr)
+                if (GateShare.BlockIPList[i].nIPaddr == nIPaddr)
                 {
-                    result = true;
-                    return result;
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
         private bool IsConnLimited(string sIPaddr)
