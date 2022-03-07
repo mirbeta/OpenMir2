@@ -82,11 +82,17 @@ namespace SystemModule
         
         public byte[] GetPacket()
         {
-            using MemoryStream stream = new MemoryStream();
-            using BinaryWriter writer = new BinaryWriter(stream);
-            WritePacket(writer);
-            var data = new byte[stream.Length];
-            stream.Read(data, 0, data.Length);
+            byte[] data;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(stream))
+                {
+                    WritePacket(writer);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    data = new byte[stream.Length];
+                    stream.Read(data, 0, data.Length);
+                }
+            }
             return data;
         }
         

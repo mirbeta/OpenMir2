@@ -185,6 +185,7 @@ namespace GameSvr
                 M2Share.ErrorMessage(sExceptionMsg1);
             }
             byte[] Buff = null;
+            //todo 下面代码容易引起封包处理异常下，需要重构
             try
             {
                 nLen = GameGate.nBuffLen + nMsgLen;
@@ -194,6 +195,10 @@ namespace GameSvr
                     while (true)
                     {
                         var msgHeader = new MessageHeader(Buff);
+                        if (msgHeader.dwCode == 0)
+                        {
+                            return;
+                        }
                         var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
                         if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                         {
@@ -225,6 +230,8 @@ namespace GameSvr
                             Array.Copy(Buff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
                             Buff = messageBuff;
                             nLen -= 1;
+                            
+                            Console.WriteLine("todo 注意看这里，一般情况下不应该看到这句话.");
                         }
                         if (nLen < 20)
                         {
