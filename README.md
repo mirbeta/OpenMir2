@@ -1,20 +1,20 @@
-Legend of Mir 2 complete server, support classic 1.76 (reloaded) function, support online and multiplayer entertainment.
+Legend of Mir 2 complete game server, support 1.76 classic game functions, support online and multiplayer interaction.
 
 This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
 
 ### How to use    
 ## Client
-    *  You can build a game client using the Dephi source code you can also choose the game client we build for you.  
+>  You can build the game client yourself from the Delphi source code or use the game client files we provide.    
 * How to download the Delphi game client  
     * Please use the search engine to search for blood legend source code yourself.  
 * Use our game client  
-    * You can download here (later, we are still preparing, if you can't wait for the experience, you can consider self-compilation of the game client, of course, this requires you to experience Delphi experience)  
+    * download here (later, we are ready)  
 
 ## Server
-    *  You can download a variety of game versions on your web (of course there will be a variety of game issues, such as: Script commands cannot be supported, etc.) or download the foundation version of us.  
-* You can download here (later, we are ready, you can also use the search engine search yourself, once we are ready, we will provide relevant files immediately)
+> You can download various game versions on the search engine or download our basic version to experience.   
+* download here (later, we are ready)
 
-### Startup sequence and project description. 
+## Startup sequence and project description. 
 1. DBSvr (database service, responsible for data storage). 
 2. LoginSvr (account login service, responsible for account registration, login, server selection, etc.). 
 3. GameSvr (game data engine, responsible for game data processing interaction, spell casting, walking, etc.). 
