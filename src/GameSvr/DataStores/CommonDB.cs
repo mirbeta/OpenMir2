@@ -13,7 +13,7 @@ namespace GameSvr
     public class CommonDB
     {
         private IDbConnection _dbConnection;
-        
+
         public int LoadItemsDB()
         {
             int result = -1;
@@ -32,10 +32,7 @@ namespace GameSvr
                 {
                     return result;
                 }
-                var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)_dbConnection;
-                command.CommandText = sSQLString;
-                using (var dr = command.ExecuteReader())
+                using (var dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
@@ -145,46 +142,45 @@ namespace GameSvr
                 {
                     return result;
                 }
-                var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)_dbConnection;
-                command.CommandText = sSQLString;
-                using var dr = command.ExecuteReader();
-                while (dr.Read())
+                using (var dr = Query(sSQLString))
                 {
-                    Magic = new TMagic
+                    while (dr.Read())
                     {
-                        wMagicID = dr.GetUInt16("MagId"),
-                        sMagicName = dr.GetString("MagName"),
-                        btEffectType = (byte)dr.GetInt32("EffectType"),
-                        btEffect = (byte)dr.GetInt32("Effect"),
-                        wSpell = dr.GetUInt16("Spell"),
-                        wPower = dr.GetUInt16("Power"),
-                        wMaxPower = dr.GetUInt16("MaxPower"),
-                        btJob = (byte)dr.GetInt32("Job")
-                    };
-                    Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
-                    Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
-                    Magic.TrainLevel[2] = (byte)dr.GetInt32("NeedL3");
-                    Magic.TrainLevel[3] = (byte)dr.GetInt32("NeedL3");
-                    Magic.MaxTrain[0] = dr.GetInt32("L1Train");
-                    Magic.MaxTrain[1] = dr.GetInt32("L2Train");
-                    Magic.MaxTrain[2] = dr.GetInt32("L3Train");
-                    Magic.MaxTrain[3] = Magic.MaxTrain[2];
-                    Magic.btTrainLv = 3;
-                    Magic.dwDelayTime = dr.GetInt32("Delay");
-                    Magic.btDefSpell = (byte)dr.GetInt32("DefSpell");
-                    Magic.btDefPower = (byte)dr.GetInt32("DefPower");
-                    Magic.btDefMaxPower = (byte)dr.GetInt32("DefMaxPower");
-                    Magic.sDescr = dr.GetString("Descr");
-                    if (Magic.wMagicID > 0)
-                    {
-                        M2Share.UserEngine.m_MagicList.Add(Magic);
+                        Magic = new TMagic
+                        {
+                            wMagicID = dr.GetUInt16("MagId"),
+                            sMagicName = dr.GetString("MagName"),
+                            btEffectType = (byte)dr.GetInt32("EffectType"),
+                            btEffect = (byte)dr.GetInt32("Effect"),
+                            wSpell = dr.GetUInt16("Spell"),
+                            wPower = dr.GetUInt16("Power"),
+                            wMaxPower = dr.GetUInt16("MaxPower"),
+                            btJob = (byte)dr.GetInt32("Job")
+                        };
+                        Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
+                        Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
+                        Magic.TrainLevel[2] = (byte)dr.GetInt32("NeedL3");
+                        Magic.TrainLevel[3] = (byte)dr.GetInt32("NeedL3");
+                        Magic.MaxTrain[0] = dr.GetInt32("L1Train");
+                        Magic.MaxTrain[1] = dr.GetInt32("L2Train");
+                        Magic.MaxTrain[2] = dr.GetInt32("L3Train");
+                        Magic.MaxTrain[3] = Magic.MaxTrain[2];
+                        Magic.btTrainLv = 3;
+                        Magic.dwDelayTime = dr.GetInt32("Delay");
+                        Magic.btDefSpell = (byte)dr.GetInt32("DefSpell");
+                        Magic.btDefPower = (byte)dr.GetInt32("DefPower");
+                        Magic.btDefMaxPower = (byte)dr.GetInt32("DefMaxPower");
+                        Magic.sDescr = dr.GetString("Descr");
+                        if (Magic.wMagicID > 0)
+                        {
+                            M2Share.UserEngine.m_MagicList.Add(Magic);
+                        }
+                        else
+                        {
+                            Magic = null;
+                        }
+                        result = 1;
                     }
-                    else
-                    {
-                        Magic = null;
-                    }
-                    result = 1;
                 }
             }
             catch (Exception ex)
@@ -212,59 +208,58 @@ namespace GameSvr
                 {
                     return result;
                 }
-                var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)_dbConnection;
-                command.CommandText = sSQLString;
-                using var dr = command.ExecuteReader();
-                while (dr.Read())
+                using (var dr = Query(sSQLString))
                 {
-                    Monster = new TMonInfo
+                    while (dr.Read())
                     {
-                        ItemList = new List<TMonItem>(),
-                        sName = dr.GetString("NAME").Trim(),
-                        btRace = (byte)dr.GetInt32("Race"),
-                        btRaceImg = (byte)dr.GetInt32("RaceImg"),
-                        wAppr = dr.GetUInt16("Appr"),
-                        wLevel = dr.GetUInt16("Lvl"),
-                        btLifeAttrib = (byte)dr.GetInt32("Undead"),
-                        wCoolEye = dr.GetInt16("CoolEye"),
-                        dwExp = dr.GetInt32("Exp")
-                    };
-                    // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
-                    if (Monster.btRace == 110 || Monster.btRace == 111)
-                    {
-                        // 如果为城墙或城门由HP不加倍
-                        Monster.wHP = dr.GetUInt16("HP");
+                        Monster = new TMonInfo
+                        {
+                            ItemList = new List<TMonItem>(),
+                            sName = dr.GetString("NAME").Trim(),
+                            btRace = (byte)dr.GetInt32("Race"),
+                            btRaceImg = (byte)dr.GetInt32("RaceImg"),
+                            wAppr = dr.GetUInt16("Appr"),
+                            wLevel = dr.GetUInt16("Lvl"),
+                            btLifeAttrib = (byte)dr.GetInt32("Undead"),
+                            wCoolEye = dr.GetInt16("CoolEye"),
+                            dwExp = dr.GetInt32("Exp")
+                        };
+                        // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
+                        if (Monster.btRace == 110 || Monster.btRace == 111)
+                        {
+                            // 如果为城墙或城门由HP不加倍
+                            Monster.wHP = dr.GetUInt16("HP");
+                        }
+                        else
+                        {
+                            Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        }
+                        Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nMonsterPowerRate / 10));
+                        Monster.wSpeed = dr.GetUInt16("SPEED");
+                        Monster.wHitPoint = dr.GetUInt16("HIT");
+                        Monster.wWalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
+                        Monster.wWalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
+                        Monster.wWalkWait = (ushort)dr.GetInt32("WalkWait");
+                        Monster.wAttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
+                        if (Monster.wWalkSpeed < 200)
+                        {
+                            Monster.wWalkSpeed = 200;
+                        }
+                        if (Monster.wAttackSpeed < 200)
+                        {
+                            Monster.wAttackSpeed = 200;
+                        }
+                        Monster.ItemList = null;
+                        M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
+                        M2Share.UserEngine.MonsterList.Add(Monster);
+                        result = 1;
                     }
-                    else
-                    {
-                        Monster.wHP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    }
-                    Monster.wMP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wAC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wMAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wDC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wMaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wMC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wSC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nMonsterPowerRate / 10));
-                    Monster.wSpeed = dr.GetUInt16("SPEED");
-                    Monster.wHitPoint = dr.GetUInt16("HIT");
-                    Monster.wWalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
-                    Monster.wWalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
-                    Monster.wWalkWait = (ushort)dr.GetInt32("WalkWait");
-                    Monster.wAttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
-                    if (Monster.wWalkSpeed < 200)
-                    {
-                        Monster.wWalkSpeed = 200;
-                    }
-                    if (Monster.wAttackSpeed < 200)
-                    {
-                        Monster.wAttackSpeed = 200;
-                    }
-                    Monster.ItemList = null;
-                    M2Share.LocalDB.LoadMonitems(Monster.sName, ref Monster.ItemList);
-                    M2Share.UserEngine.MonsterList.Add(Monster);
-                    result = 1;
                 }
             }
             finally
@@ -289,10 +284,7 @@ namespace GameSvr
             {
                 TDealOffInfo DealOffInfo;
                 const string sSQLString = "select * from TBL_GOLDSALES";
-                var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)_dbConnection;
-                command.CommandText = sSQLString;
-                using (var dr = command.ExecuteReader())
+                using (var dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
@@ -342,10 +334,7 @@ namespace GameSvr
             {
                 if (M2Share.sSellOffItemList.Count > 0)
                 {
-                    var command = new MySqlCommand();
-                    command.Connection = (MySqlConnection)_dbConnection;
-                    command.CommandText = sSQLString;
-                    command.ExecuteNonQuery();
+                    Execute(sSQLString);
 
                     for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
                     {
@@ -355,8 +344,7 @@ namespace GameSvr
                             string InsertSql = "INSERT INTO sales (DealCharName, BuyCharName, SellDateTime, State, SellGold,UseItems) values " +
                                 "(" + DealOffInfo.sDealCharName + "," + DealOffInfo.sBuyCharName + "," + DealOffInfo.dSellDateTime + "," + DealOffInfo.N + ","
                                 + DealOffInfo.nSellGold + "," + JsonSerializer.Serialize(DealOffInfo.UseItems) + ")";
-                            command.CommandText = InsertSql;
-                            command.ExecuteNonQuery();
+                            Execute(InsertSql);
                         }
                     }
                 }
@@ -369,6 +357,22 @@ namespace GameSvr
             {
                 Close();
             }
+        }
+
+        private IDataReader Query(string sSQLString)
+        {
+            var command = new MySqlCommand();
+            command.Connection = (MySqlConnection)_dbConnection;
+            command.CommandText = sSQLString;
+            return command.ExecuteReader();
+        }
+
+        private int Execute(string sSQLString)
+        {
+            var command = new MySqlCommand();
+            command.Connection = (MySqlConnection)_dbConnection;
+            command.CommandText = sSQLString;
+            return command.ExecuteNonQuery();
         }
 
         private bool Open()
