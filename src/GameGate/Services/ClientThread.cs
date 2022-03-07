@@ -134,7 +134,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 收到M2发来的消息
+        /// 收到GameSvr发来的消息
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

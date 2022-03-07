@@ -112,7 +112,6 @@ namespace GameGate
         public const string _STR_CHAT_FILTER_FILE = ".\\ChatFilter.txt";
         public const string _STR_CHAT_CMD_FILTER_FILE = ".\\CharCmdFilter.txt";
         public const string _STR_PUNISH_USER_FILE = ".\\PunishList.txt";
-        public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
         public const int FIRST_PAKCET_MAX_LEN = 254;
         public const int MAGIC_NUM = 0128;
         public const int DELAY_BUFFER_LEN = 1024;

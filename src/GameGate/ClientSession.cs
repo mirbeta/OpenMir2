@@ -705,7 +705,7 @@ namespace GameGate
                         // }
 
                         var cmdPack = new TSvrCmdPack();
-                        cmdPack.Flag = Protocol.RUNGATECODE;
+                        cmdPack.Flag = Grobal2.RUNGATECODE;
                         cmdPack.SockID = _session.nSckHandle;
                         cmdPack.Cmd = Grobal2.GM_DATA;
                         cmdPack.GGSock = m_nSvrListIdx;

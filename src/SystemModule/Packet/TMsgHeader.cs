@@ -18,15 +18,14 @@ namespace SystemModule.Packages
 
         public MessageHeader() { }
 
-        public MessageHeader(byte[] buffer)
+        public MessageHeader(byte[] buffer) : base(buffer)
         {
-            using var binaryReader = new BinaryReader(new MemoryStream(buffer));
-            dwCode = binaryReader.ReadUInt32();
-            nSocket = binaryReader.ReadInt32();
-            wGSocketIdx = binaryReader.ReadUInt16();
-            wIdent = binaryReader.ReadUInt16();
-            wUserListIndex = binaryReader.ReadInt32();
-            nLength = binaryReader.ReadInt32();
+            dwCode = ReadUInt32();
+            nSocket = ReadInt32();
+            wGSocketIdx = ReadUInt16();
+            wIdent = ReadUInt16();
+            wUserListIndex = ReadInt32();
+            nLength = ReadInt32();
         }
 
         protected override void ReadPacket(BinaryReader reader)
