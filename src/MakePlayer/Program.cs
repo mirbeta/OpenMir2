@@ -25,11 +25,11 @@ namespace MakePlayer
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        private static int g_nChrCount = 3;
+        private static int g_nChrCount = 1;
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 100;
+        private static int g_nTotalChrCount = 1;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -51,7 +51,7 @@ namespace MakePlayer
             _clientManager = new ClientManager();
 
             g_sServerName = "热血传奇";
-            g_sGameIPaddr = "127.0.0.1";
+            g_sGameIPaddr = "10.10.0.112";
             g_nGamePort = 7000;
             g_boNewAccount = false;
 

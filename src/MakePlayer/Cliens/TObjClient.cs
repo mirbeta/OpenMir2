@@ -149,7 +149,18 @@ namespace MakePlayer
 
         private void SocketError(object sender, DSCClientErrorEventArgs e)
         {
-
+            switch (e.ErrorCode)
+            {
+                case System.Net.Sockets.SocketError.ConnectionRefused:
+                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...");
+                    break;
+                case System.Net.Sockets.SocketError.ConnectionReset:
+                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...");
+                    break;
+                case System.Net.Sockets.SocketError.TimedOut:
+                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...");
+                    break;
+            }
         }
 
         private void SendSocket(string sText)
@@ -653,30 +664,30 @@ namespace MakePlayer
                 if (_msgList.TryDequeue(out msgData))
                 {
                     m_sSockText = msgData;
-                }
-                if (!string.IsNullOrEmpty(m_sSockText))
-                {
-                    m_sBufferText = m_sBufferText + m_sSockText;
-                    m_sSockText = string.Empty;
-                    if (!string.IsNullOrEmpty(m_sBufferText))
+                    if (!string.IsNullOrEmpty(m_sSockText))
                     {
-                        while (m_sBufferText.Length >= 2)
+                        m_sBufferText = m_sBufferText + m_sSockText;
+                        m_sSockText = string.Empty;
+                        if (!string.IsNullOrEmpty(m_sBufferText))
                         {
-                            if (m_boMapMovingWait)
+                            while (m_sBufferText.Length >= 2)
                             {
-                                break;
+                                if (m_boMapMovingWait)
+                                {
+                                    break;
+                                }
+                                if (m_sBufferText.IndexOf("!", StringComparison.Ordinal) <= 0)
+                                {
+                                    break;
+                                }
+                                string sData = string.Empty;
+                                m_sBufferText = HUtil32.ArrestStringEx(m_sBufferText, "#", "!", ref sData);
+                                if (string.IsNullOrEmpty(sData))
+                                {
+                                    break;
+                                }
+                                DecodeMessagePacket(sData);
                             }
-                            if (m_sBufferText.IndexOf("!", StringComparison.Ordinal) <= 0)
-                            {
-                                break;
-                            }
-                            string sData = string.Empty;
-                            m_sBufferText = HUtil32.ArrestStringEx(m_sBufferText, "#", "!", ref sData);
-                            if (string.IsNullOrEmpty(sData))
-                            {
-                                break;
-                            }
-                            DecodeMessagePacket(sData);
                         }
                     }
                 }
