@@ -263,7 +263,7 @@ namespace LoginSvr
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public string sSockIndex;
+        public int sSockIndex;
         public int nVersionDate;
         public bool boCertificationOK;
         public bool bo29;

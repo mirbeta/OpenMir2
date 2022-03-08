@@ -26,9 +26,8 @@ namespace LoginSvr
 
         public void Start()
         {
-            TConfig Config = LSShare.g_Config;
-            serverSocket.Start(Config.sServerAddr, Config.nServerPort);
-            LSShare.MainOutMessage($"3) 账号数据服务[{Config.sServerAddr}:{Config.nServerPort}]已启动.");
+            serverSocket.Start(LSShare.g_Config.sServerAddr, LSShare.g_Config.nServerPort);
+            LSShare.MainOutMessage($"3) 账号数据服务[{LSShare.g_Config.sServerAddr}:{LSShare.g_Config.nServerPort}]已启动.");
             LoadServerAddr();
             LoadUserLimit();
         }
@@ -52,7 +51,6 @@ namespace LoginSvr
                 MsgServer.sReceiveMsg = "";
                 MsgServer.Socket = e.Socket;
                 m_ServerList.Add(MsgServer);
-                LSShare.MainOutMessage($"[{e.RemoteIPaddr}:{e.RemotePort}]建立链接.");
             }
             else
             {
@@ -86,7 +84,7 @@ namespace LoginSvr
 
         private void MSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-                
+
         }
 
         private void MSocketClientRead(object sender, AsyncUserToken e)
@@ -364,8 +362,7 @@ namespace LoginSvr
         public bool CheckReadyServers()
         {
             bool result = false;
-            TConfig Config = LSShare.g_Config;
-            if (m_ServerList.Count >= Config.nReadyServers)
+            if (m_ServerList.Count >= LSShare.g_Config.nReadyServers)
             {
                 result = true;
             }
@@ -374,24 +371,20 @@ namespace LoginSvr
 
         private void SendServerMsgA(short wIdent, string sMsg)
         {
-            string sSendMsg;
-            TMsgServerInfo MsgServer;
             const string sFormatMsg = "({0}/{1})";
             try
             {
-                sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
+                string sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
                 for (var i = 0; i < m_ServerList.Count; i++)
                 {
-                    MsgServer = m_ServerList[i];
-                    if (MsgServer.Socket.Connected)
+                    if (m_ServerList[i].Socket.Connected)
                     {
-                        MsgServer.Socket.SendText(sSendMsg);
+                        m_ServerList[i].Socket.SendText(sSendMsg);
                     }
                 }
             }
             catch (Exception e)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.SendServerMsgA");
                 LSShare.MainOutMessage(e.Message);
             }
         }
@@ -429,7 +422,7 @@ namespace LoginSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " ", "\09" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref s10, new string[] { " ", "\09" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref s14, new string[] { " ", "\09" });
-                    if (sServerName != "")
+                    if (!string.IsNullOrEmpty(sServerName))
                     {
                         MasSock.UserLimit[nC].sServerName = sServerName;
                         MasSock.UserLimit[nC].sName = s10;
