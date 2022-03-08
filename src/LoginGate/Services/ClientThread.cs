@@ -138,11 +138,23 @@ namespace LoginGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var sText = string.Empty;
-            string sSessionId = string.Empty;
-            HUtil32.ArrestStringEx(e.ReceiveText, "%", "$", ref sText);
-            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
+            int sSessionId = -1;
+            var sSocketMsg = e.ReceiveText;
+            HUtil32.ArrestStringEx(sSocketMsg, "%", "$", ref sText);
+            if (sText[0] == '+' && sText[1] == '-')
+            {
+                var tempStr = sSocketMsg.Substring(3, sSocketMsg.Length - 4);
+                if (!string.IsNullOrEmpty(tempStr))
+                {
+                    sSessionId = int.Parse(tempStr);
+                    _sessionManager.CloseSession(sSessionId);
+                    return;
+                }
+                return;
+            }
             var userData = new TMessageData();
-            userData.SessionId = int.Parse(sSessionId);
+            HUtil32.GetValidStr3(sText, ref sSessionId, new[] {"/"});
+            userData.SessionId = sSessionId;
             userData.Body = e.Buff;
             _sessionManager.SendQueue.TryWrite(userData);
         }

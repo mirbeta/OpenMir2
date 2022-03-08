@@ -107,14 +107,17 @@ namespace LoginGate.Services
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
-            var clientSession = _sessionManager.GetSession(e.ConnectionId);
             if (clientThread != null && clientThread.boGateReady)
             {
                 if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
                     userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
-                    clientSession.UserLeave();
+                    var clientSession = _sessionManager.GetSession(e.ConnectionId);
+                    if (clientSession != null)
+                    {
+                        clientSession.UserLeave();
+                    }
                     GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
                 }
             }

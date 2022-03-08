@@ -48,6 +48,15 @@ namespace LoginGate.Services
             _connectionSessions.TryAdd(sessionId, clientSession);
         }
 
+        public void CloseSession(int sessionId)
+        {
+            if (_connectionSessions.ContainsKey(sessionId))
+            {
+                _connectionSessions[sessionId].Session.Socket.Close();
+            }
+            Remove(sessionId);
+        }
+
         public ClientSession GetSession(int sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
@@ -61,7 +70,7 @@ namespace LoginGate.Services
         {
             if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
-               Console.WriteLine($"移除用户会话失败:[{sessionId}]");
+               Console.WriteLine($"删除用户会话失败:[{sessionId}]");
             }
         }
 

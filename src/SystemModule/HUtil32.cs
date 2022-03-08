@@ -371,6 +371,21 @@ namespace SystemModule
             return Ary.Length > 1 ? Ary[1] : "";
         }
         
+        public static string GetValidStr3(string Str, ref int Dest, string[] DividerAry)
+        {
+            var Div = new char[DividerAry.Length];
+            for (var i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i][0];
+            var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            if (Ary.Length > 0)
+            {
+                if (!int.TryParse(Ary[0], out Dest))
+                {
+                    Dest = -1;
+                }
+            }
+            return Ary.Length > 1 ? Ary[1] : "";
+        }
+        
         public static string GetValidStr3(string Str, ref string Dest, string DividerAry)
         {
             var div = new char[DividerAry.Length];
