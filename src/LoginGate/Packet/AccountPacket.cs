@@ -48,7 +48,7 @@ namespace LoginGate
                     break;
             }
             writer.Write(SocketId);
-            if (Buffer.Length > 0)
+            if (Buffer != null && Buffer.Length > 0)
             {
                 writer.Write('/');
                 writer.Write(Buffer);
