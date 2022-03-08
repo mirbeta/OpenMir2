@@ -60,12 +60,10 @@ namespace LoginSvr
                     Console.WriteLine(LSShare.g_MainMsgList[i]);
                 }
                 LSShare.g_MainMsgList.Clear();
-                _loginService.ProceDataTimer();
                 _loginService.SessionClearKick(LSShare.g_Config);
                 _loginService.SessionClearNoPayMent(LSShare.g_Config);
                 Thread.Sleep(1);
             }
         }
-       
     }
 }

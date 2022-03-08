@@ -1,6 +1,5 @@
 using LoginSvr.Packet;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -23,10 +22,10 @@ namespace LoginSvr
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
         private readonly ConfigManager _configManager;
-        private const string sConfigFile = "Logsrv.conf";
         private readonly Channel<LoginPacket> _receiveQueue = null;
-        private readonly ConcurrentQueue<ReceiveUserData> _ReceiveUserQueue = null;
-        private readonly object _obj = new object();
+        private readonly Channel<ReceiveUserData> _processUserQueue = null;
+        private readonly IList<TGateInfo> GateList;
+
 
         public LoginService(AccountDB accountDB, MasSocService masSock)
         {
@@ -38,9 +37,10 @@ namespace LoginSvr
             _serverSocket.OnClientRead += GSocketClientRead;
             _serverSocket.OnClientError += GSocketClientError;
             _serverSocket.Init();
-            _configManager = new ConfigManager(sConfigFile);
+            _configManager = new ConfigManager("Logsrv.conf");
             _receiveQueue = Channel.CreateUnbounded<LoginPacket>();
-            _ReceiveUserQueue = new ConcurrentQueue<ReceiveUserData>();
+            _processUserQueue = Channel.CreateUnbounded<ReceiveUserData>();
+            GateList = new List<TGateInfo>();
         }
 
         public void Start()
@@ -56,7 +56,8 @@ namespace LoginSvr
             GateInfo.sIPaddr = LSShare.GetGatePublicAddr(LSShare.g_Config, e.RemoteIPaddr);
             GateInfo.UserList = new List<TUserInfo>();
             GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
-            LSShare.g_Config.GateList.Add(GateInfo);
+            GateList.Add(GateInfo);
+            LSShare.MainOutMessage($"5) 登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -64,9 +65,9 @@ namespace LoginSvr
             TGateInfo GateInfo;
             TUserInfo UserInfo;
             TConfig Config = LSShare.g_Config;
-            for (var i = 0; i < Config.GateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                GateInfo = Config.GateList[i];
+                GateInfo = GateList[i];
                 if (GateInfo.Socket == e.Socket)
                 {
                     for (var j = 0; j < GateInfo.UserList.Count; j++)
@@ -79,7 +80,7 @@ namespace LoginSvr
                         UserInfo = null;
                     }
                     GateInfo.UserList = null;
-                    Config.GateList.Remove(GateInfo);
+                    GateList.Remove(GateInfo);
                     break;
                 }
             }
@@ -93,10 +94,9 @@ namespace LoginSvr
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            TConfig Config = LSShare.g_Config;
-            for (var i = 0; i < Config.GateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                var GateInfo = Config.GateList[i];
+                var GateInfo = GateList[i];
                 if (GateInfo.Socket == e.Socket)
                 {
                     var nReviceLen = e.BytesReceived;
@@ -189,87 +189,69 @@ namespace LoginSvr
             return Config.AccountCostList.ContainsKey(sAccount) || Config.IPaddrCostList.ContainsKey(sIPaddr);
         }
 
-
+        /// <summary>
+        /// 启动数据消费者
+        /// </summary>
+        /// <returns></returns>
         public async Task StartConsumer()
         {
-            var gTasks = new Task[1];
+            var gTasks = new Task[2];
             var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
             gTasks[0] = consumerTask1;
 
-            //var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
-            //gTasks[1] = consumerTask2;
+            var consumerTask2 = Task.Factory.StartNew(ProcessUserMessage);
+            gTasks[1] = consumerTask2;
 
             await Task.WhenAll(gTasks);
         }
 
+        /// <summary>
+        /// 处理网关消息
+        /// </summary>
+        /// <returns></returns>
         public async Task ProcessReviceMessage()
         {
             while (await _receiveQueue.Reader.WaitToReadAsync())
             {
                 if (_receiveQueue.Reader.TryRead(out var message))
                 {
-                    ProcessGate(message);
+                    ProcessGateData(message);
                 }
             }
         }
 
-        public void ProceDataTimer()
+        /// <summary>
+        /// 处理封包消息
+        /// </summary>
+        /// <returns></returns>
+        public async Task ProcessUserMessage()
         {
-            if (LSShare.bo470D20)
+            while (await _processUserQueue.Reader.WaitToReadAsync())
             {
-                return;
-            }
-            LSShare.bo470D20 = true;
-            try
-            {
-                HUtil32.EnterCriticalSection(_obj);
-                if (_ReceiveUserQueue.TryDequeue(out var userData))
+                if (_processUserQueue.Reader.TryRead(out var message))
                 {
-                    DecodeUserData(LSShare.g_Config, userData.UserInfo, userData.Msg);
+                    DecodeUserData(message.UserInfo, message.Msg);
                 }
-            }
-            finally
-            {
-                LSShare.bo470D20 = false;
-                HUtil32.LeaveCriticalSection(_obj);
             }
         }
 
-        private void ProcessGate(LoginPacket loginPacket)
+        private void ProcessGateData(LoginPacket loginPacket)
         {
             int I;
-            TGateInfo GateInfo;
-            HUtil32.EnterCriticalSection(LSShare.g_Config.GateCriticalSection);
-            try
+            I = 0;
+            while (true)
             {
-                LSShare.g_Config.dwProcessGateTick = HUtil32.GetTickCount();
-                I = 0;
-                while (true)
+                if (GateList.Count <= I)
                 {
-                    if (LSShare.g_Config.GateList.Count <= I)
-                    {
-                        break;
-                    }
-                    GateInfo = LSShare.g_Config.GateList[I];
-                    if (loginPacket.Body.Length > 0 && GateInfo.UserList != null)
-                    {
-                        DecodeGateData(GateInfo, loginPacket);
-                        LSShare.g_Config.sGateIPaddr = GateInfo.sIPaddr;
-                    }
-                    I++;
+                    break;
                 }
-                if (LSShare.g_Config.dwProcessGateTime < LSShare.g_Config.dwProcessGateTick)
+                TGateInfo GateInfo = GateList[I];
+                if (loginPacket.Body != null && GateInfo.UserList != null)
                 {
-                    LSShare.g_Config.dwProcessGateTime = HUtil32.GetTickCount() - LSShare.g_Config.dwProcessGateTick;
+                    DecodeGateData(GateInfo, loginPacket);
+                    LSShare.g_Config.sGateIPaddr = GateInfo.sIPaddr;
                 }
-                if (LSShare.g_Config.dwProcessGateTime > 100)
-                {
-                    LSShare.g_Config.dwProcessGateTime -= 100;
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(LSShare.g_Config.GateCriticalSection);
+                I++;
             }
         }
 
@@ -391,7 +373,7 @@ namespace LoginSvr
                 var UserInfo = GateInfo.UserList[i];
                 if (UserInfo.sSockIndex == sSockIndex)
                 {
-                    _ReceiveUserQueue.Enqueue(new ReceiveUserData()
+                    _processUserQueue.Writer.TryWrite(new ReceiveUserData()
                     {
                         UserInfo = UserInfo,
                         Msg = sData
@@ -415,7 +397,7 @@ namespace LoginSvr
             }
         }
 
-        private void DecodeUserData(TConfig Config, TUserInfo UserInfo, string userData)
+        private void DecodeUserData(TUserInfo UserInfo, string userData)
         {
             string sMsg = string.Empty;
             var nCount = 0;
@@ -433,7 +415,7 @@ namespace LoginSvr
                         if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
                         {
                             sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                            ProcessUserMsg(Config, UserInfo, sMsg);
+                            ProcessUserMsg(UserInfo, sMsg);
                         }
                     }
                     else
@@ -471,7 +453,7 @@ namespace LoginSvr
             }
         }
 
-        private void ProcessUserMsg(TConfig Config, TUserInfo UserInfo, string sMsg)
+        private void ProcessUserMsg(TUserInfo UserInfo, string sMsg)
         {
             string sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
             string sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
@@ -481,7 +463,7 @@ namespace LoginSvr
                 case Grobal2.CM_SELECTSERVER:
                     if (!UserInfo.boSelServer)
                     {
-                        AccountSelectServer(Config, UserInfo, sData);
+                        AccountSelectServer(LSShare.g_Config, UserInfo, sData);
                     }
                     break;
                 case Grobal2.CM_PROTOCOL:
@@ -490,15 +472,15 @@ namespace LoginSvr
                 case Grobal2.CM_IDPASSWORD:
                     if (UserInfo.sAccount == "")
                     {
-                        AccountLogin(Config, UserInfo, sData);
+                        AccountLogin(LSShare.g_Config, UserInfo, sData);
                     }
                     else
                     {
-                        KickUser(Config, UserInfo);
+                        KickUser(LSShare.g_Config, UserInfo);
                     }
                     break;
                 case Grobal2.CM_ADDNEWUSER:
-                    if (Config.boEnableMakingID)
+                    if (LSShare.g_Config.boEnableMakingID)
                     {
                         if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
@@ -517,7 +499,7 @@ namespace LoginSvr
                         if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
                             UserInfo.dwClientTick = HUtil32.GetTickCount();
-                            AccountChangePassword(Config, UserInfo, sData);
+                            AccountChangePassword(LSShare.g_Config, UserInfo, sData);
                         }
                         else
                         {
@@ -533,7 +515,7 @@ namespace LoginSvr
                     if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                     {
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
-                        AccountUpdateUserInfo(Config, UserInfo, sData);
+                        AccountUpdateUserInfo(LSShare.g_Config, UserInfo, sData);
                     }
                     else
                     {
@@ -716,9 +698,9 @@ namespace LoginSvr
             TUserInfo User;
             const string sKickMsg = "Kick: {0}";
             var result = false;
-            for (var i = 0; i < Config.GateList.Count; i++)
+            for (var i = 0; i < GateList.Count; i++)
             {
-                GateInfo = Config.GateList[i];
+                GateInfo = GateList[i];
                 for (var j = 0; j < GateInfo.UserList.Count; j++)
                 {
                     User = GateInfo.UserList[j];
@@ -1350,26 +1332,9 @@ namespace LoginSvr
       
         public void StartService(TConfig Config)
         {
-            InitializeConfig(Config);
             _configManager.LoadConfig(Config);
             LoadAddrTable(Config);
             _accountDB.Initialization();
         }
-
-        public void StopService(TConfig Config)
-        {
-            UnInitializeConfig(Config);
-        }
-
-        public void InitializeConfig(TConfig Config)
-        {
-            Config.GateCriticalSection = new object();
-        }
-
-        public void UnInitializeConfig(TConfig Config)
-        {
-            Config.GateCriticalSection = null;
-        }
-
     }
 }

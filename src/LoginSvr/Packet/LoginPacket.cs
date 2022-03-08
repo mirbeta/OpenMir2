@@ -18,10 +18,17 @@ namespace LoginSvr.Packet
             StartChar = ReadChar();
             PacketType = ReadChar();
             SocketId = ReadInt32();
-            ReadChar();
             var bodyLen = buffer.Length - 1 - 1 - 4 - 1 - 1;
-            Body = ReadBytes(bodyLen);
-            EndChar = ReadChar();
+            if (bodyLen > 0)
+            {
+                ReadChar();
+                Body = ReadBytes(bodyLen);
+                EndChar = ReadChar();
+            }
+            else
+            {
+                EndChar = ReadChar();
+            }
         }
 
         protected override void ReadPacket(BinaryReader reader)

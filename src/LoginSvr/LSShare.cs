@@ -145,7 +145,6 @@ namespace LoginSvr
             g_MainMsgList = new List<string>();
             g_Config = new TConfig();
             nSessionIdx = 1;
-            g_Config.GateList = new List<TGateInfo>();
             g_Config.SessionList = new List<TConnInfo>();
             g_Config.ServerNameList = new List<string>();
             g_Config.AccountCostList = new Dictionary<string, int>();
@@ -199,15 +198,11 @@ namespace LoginSvr
         public bool boEnableMakingID;
         public bool boDynamicIPMode;
         public int nReadyServers;
-        public object GateCriticalSection;
-        public IList<TGateInfo> GateList;
         public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
         public Dictionary<string, int> AccountCostList;
         public Dictionary<string, int> IPaddrCostList;
         public bool boShowDetailMsg;
-        public int dwProcessGateTick;
-        public int dwProcessGateTime;
         public int nRouteCount;
         public TGateRoute[] GateRoute;
 
