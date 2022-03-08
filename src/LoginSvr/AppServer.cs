@@ -20,7 +20,7 @@ namespace LoginSvr
             _massocService = masSocService;
         }
 
-        public void Start()
+        public async void Start()
         {
             TConfig Config = LSShare.g_Config;
             _loginService.StartService(Config);
@@ -35,6 +35,7 @@ namespace LoginSvr
                 Thread.Sleep(1);
             }
             _loginService.Start();
+            await _loginService.StartConsumer();
             parseListTimer = new ThreadParseList(_loginService);
         }
 

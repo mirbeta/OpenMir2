@@ -60,6 +60,16 @@ namespace SystemModule
             return binaryReader.ReadByte();
         }
 
+        public char ReadChar()
+        {
+            return binaryReader.ReadChar();
+        }
+
+        public int PeekChar()
+        {
+            return binaryReader.PeekChar();
+        }
+
         public bool ReadBoolean()
         {
             return binaryReader.ReadBoolean();
@@ -95,7 +105,7 @@ namespace SystemModule
             }
             return data;
         }
-        
+
         protected abstract void ReadPacket(BinaryReader reader);
         
         protected abstract void WritePacket(BinaryWriter writer);

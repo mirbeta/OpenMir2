@@ -28,9 +28,6 @@ namespace LoginSvr
             const string sIdentReadyServers = "ReadyServers";
             const string sIdentTestServer = "TestServer";
             const string sIdentDynamicIPMode = "DynamicIPMode";
-            const string sIdentIdDir = "IdDir";
-            const string sIdentWebLogDir = "WebLogDir";
-            const string sIdentCountLogDir = "CountLogDir";
             const string sIdentFeedIDList = "FeedIDList";
             const string sIdentFeedIPList = "FeedIPList";
             Config.sDBServer = LoadConfig_LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);

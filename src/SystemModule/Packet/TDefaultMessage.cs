@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace SystemModule.Packages
+namespace SystemModule
 {
     public class TCmdPack
     {

@@ -166,7 +166,7 @@ namespace GameGate
             }
         }
 
-        public void StartService()
+        public async void StartService()
         {
             GateShare.Initialization();
             GateShare.AddMainLogMsg("正在启动服务...", 2);

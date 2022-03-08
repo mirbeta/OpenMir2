@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Net.Sockets;
+using LoginGate.Services;
 using SystemModule;
 using SystemModule.Common;
 
@@ -11,127 +9,72 @@ namespace LoginGate
 {
     public class GateShare
     {
+        public static object CS_MainLog = null;
         public static IList<string> MainLogMsgList = null;
-        public static IList<TSockaddr> BlockIPList = null;
-        public static IList<TSockaddr> TempBlockIPList = null;
-        public static IList<TSockaddr> CurrIPaddrList = null;
-        public static int nIPCountLimit1 = 20;
-        public static int nIPCountLimit2 = 40;
-        public static string GateClass = "LoginGate";
-        public static int ServerPort = 5500;
-        public static string ServerAddr = "127.0.0.1";
-        public static int GatePort = 7000;
         public static string GateAddr = "*";
-        public static bool boGateReady = false;
-        public static bool boServiceStart = false;
-        public static long dwKeepAliveTick = 0;
-        public static bool boKeepAliveTimcOut = false;
-        public static int nSendMsgCount = 0;
-        public static bool boSendHoldTimeOut = false;
-        public static long dwSendHoldTick = 0;
-        public static bool boDecodeLock = false;
-        public static int nMaxConnOfIPaddr = 10;
-        public static TBlockIPMethod BlockMethod = TBlockIPMethod.mDisconnect;
-        public static long dwKeepConnectTimeOut = 60 * 1000;
-        public static bool g_boDynamicIPDisMode = false;
-        public static int GATEMAXSESSION = 10000;
-        public static ConcurrentDictionary<int, int> socketMap = null;
-        public static TUserSession[] g_SessionArray;
-        public static int nSessionCount = 0;
-        public static bool boServerReady = false;
-        public static IList<string> ClientSockeMsgList;
+        /// <summary>
+        /// 登录网关端口
+        /// </summary>
+        public static int GatePort = 7000;
+        /// <summary>
+        /// 显示B 或 KB
+        /// </summary>
+        public static bool boShowBite = true;
+        /// <summary>
+        ///  网关游戏服务器之间检测超时时间长度
+        /// </summary>
+        public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public static long dwCheckServerTick = 0;
+        public static long dwCheckServerTimeMin = 0;
+        public static long dwCheckServerTimeMax = 0;
+        public static bool boDecodeMsgLock = false;
+        /// <summary>
+        /// 禁止连接IP列表
+        /// </summary>
+        public static StringList BlockIPList = null;
+        /// <summary>
+        /// 临时禁止连接IP列表
+        /// </summary>
+        public static IList<string> TempBlockIPList = null;
+        public static int nMaxConnOfIPaddr = 50;
+        /// <summary>
+        /// 会话超时时间
+        /// </summary>
+        public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        public static IList<ClientThread> ServerGateList;
+
+        public static void AddMainLogMsg(string Msg, int nLevel)
+        {
+            try
+            {
+                HUtil32.EnterCriticalSection(CS_MainLog);
+                var tMsg = "[" + DateTime.Now + "] " + Msg;
+                MainLogMsgList.Add(tMsg);
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(CS_MainLog);
+            }
+        }
 
         public static void LoadBlockIPFile()
         {
-            StringList LoadList;
-            string sIPaddr;
-            long nIPaddr;
-            string sFileName = ".\\BlockIPList.txt";
+            AddMainLogMsg("正在加载IP过滤配置信息...", 4);
+            var sFileName = ".\\BlockIPList.txt";
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
-                LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
-                {
-                    sIPaddr = LoadList[0].Trim();
-                    if (sIPaddr == "")
-                    {
-                        continue;
-                    }
-                    nIPaddr = HUtil32.IpToInt(sIPaddr);
-                    if (nIPaddr == 0)
-                    {
-                        continue;
-                    }
-                    var IPaddr = new TSockaddr();
-                    IPaddr.nIPaddr = nIPaddr;
-                    BlockIPList.Add(IPaddr);
-                }
-                LoadList = null;
+                BlockIPList.LoadFromFile(sFileName);
             }
-        }
-
-        public static void MainOutMessage(string sMsg, int nMsgLevel)
-        {
-            var tMsg = "[" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + sMsg;
-            MainLogMsgList.Add(tMsg);
-        }
-
-        public static void SaveBlockIPList()
-        {
-            StringList SaveList = new StringList();
-            for (var i = 0; i < BlockIPList.Count; i++)
-            {
-                //SaveList.Add(inet_ntoa(TInAddr(((BlockIPList[i]) as TSockaddr).nIPaddr)));
-            }
-            SaveList.SaveToFile(".\\BlockIPList.txt");
-            SaveList = null;
+            AddMainLogMsg("IP过滤配置信息加载完成...", 4);
         }
 
         public static void Initialization()
         {
-            g_SessionArray = new TUserSession[GATEMAXSESSION];
+            CS_MainLog = new object();
             MainLogMsgList = new List<string>();
-            socketMap = new ConcurrentDictionary<int, int>();
+            BlockIPList = new StringList();
+            TempBlockIPList = new List<string>();
+            ServerGateList = new List<ClientThread>();
         }
     }
-
-    public class TUserSession
-    {
-        public Socket Socket;
-        public string sRemoteIPaddr;
-        public int nSendMsgLen;
-        public bool bo0C;
-        public long dw10Tick;
-        public int nCheckSendLength;
-        public bool boSendAvailable;
-        public bool boSendCheck;
-        public long dwSendLockTimeOut;
-        public int n20;
-        public long dwUserTimeOutTick;
-        public int SocketHandle;
-        public string sIP;
-        public IList<string> MsgList;
-        public long dwConnctCheckTick;
-    }
-
-    public class TSockaddr
-    {
-        public long nIPaddr;
-        public int nCount;
-        public long dwIPCountTick1;
-        public int nIPCount1;
-        public long dwIPCountTick2;
-        public int nIPCount2;
-        public long dwDenyTick;
-        public int nIPDenyCount;
-    }
-
-    public enum TBlockIPMethod
-    {
-        mDisconnect,
-        mBlock,
-        mBlockList
-    }
 }
-
