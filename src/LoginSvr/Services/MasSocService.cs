@@ -51,6 +51,7 @@ namespace LoginSvr
                 MsgServer.sReceiveMsg = "";
                 MsgServer.Socket = e.Socket;
                 m_ServerList.Add(MsgServer);
+                LSShare.MainOutMessage($"6) 数据库服务[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
             }
             else
             {
