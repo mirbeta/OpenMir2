@@ -1,9 +1,9 @@
+using LoginGate.Conf;
+using LoginGate.Package;
 using System;
 using System.Diagnostics;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using LoginGate.Conf;
-using LoginGate.Package;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -23,8 +23,9 @@ namespace LoginGate.Services
         private Channel<TMessageData> _snedQueue = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
+        private readonly LogQueue _logQueue;
 
-        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
+        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
         {
             _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
@@ -36,6 +37,7 @@ namespace LoginGate.Services
             _sessionManager = sessionManager;
             _clientManager = clientManager;
             _configManager = configManager;
+            _logQueue = logQueue;
         }
 
         public void Start()
@@ -92,7 +94,7 @@ namespace LoginGate.Services
             }
             if (sessionInfo != null)
             {
-                GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
+                _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
                 var userSession = new ClientSession(_configManager, sessionInfo, clientThread);
                 userSession.UserEnter();
@@ -101,7 +103,7 @@ namespace LoginGate.Services
             else
             {
                 e.Socket.Close();
-                GateShare.AddMainLogMsg("禁止连接: " + sRemoteAddress, 1);
+                _logQueue.Enqueue("禁止连接: " + sRemoteAddress, 1);
             }
         }
 
@@ -122,12 +124,12 @@ namespace LoginGate.Services
                     {
                         clientSession.UserLeave();
                     }
-                    GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
+                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }
             }
             else
             {
-                GateShare.AddMainLogMsg("断开链接: " + sRemoteAddr, 5);
+                _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
@@ -140,20 +142,20 @@ namespace LoginGate.Services
         }
 
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
-        {            
+        {
             var connectionId = token.ConnectionId;
             var userClient = _clientManager.GetClientThread(connectionId);
             var sRemoteAddress = token.RemoteIPaddr;
             if (userClient == null)
             {
-                GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
-                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
+                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
-                GateShare.AddMainLogMsg("未就绪: " + sRemoteAddress, 5);
-                Debug.WriteLine($"账号服务器链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
+                _logQueue.EnqueueDebugging($"账号服务器链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

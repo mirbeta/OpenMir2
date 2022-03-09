@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using LoginGate.Conf;
+﻿using LoginGate.Conf;
 using LoginGate.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LoginGate
 {
@@ -31,6 +31,7 @@ namespace LoginGate
                     services.AddSingleton<SessionManager>();
                     services.AddSingleton<ClientManager>();
                     services.AddHostedService<AppService>();
+                    services.AddSingleton<LogQueue>();
                 });
 
             await builder.RunConsoleAsync();

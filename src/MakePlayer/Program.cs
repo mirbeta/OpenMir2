@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using SystemModule;
+using SystemModule.Packet;
 
 namespace MakePlayer
 {
@@ -24,11 +25,11 @@ namespace MakePlayer
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        private static int g_nChrCount = 5;
+        private static int g_nChrCount = 20;
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 200;
+        private static int g_nTotalChrCount = 2000;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -46,8 +47,7 @@ namespace MakePlayer
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-
+         
             g_sServerName = "热血传奇";
             g_sGameIPaddr = "10.10.0.112";
             g_nGamePort = 7000;

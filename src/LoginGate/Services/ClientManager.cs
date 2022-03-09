@@ -1,11 +1,9 @@
-using System;
+using LoginGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using LoginGate.Conf;
-using LoginGate.Package;
 using SystemModule;
 
 namespace LoginGate.Services
@@ -16,18 +14,20 @@ namespace LoginGate.Services
     public class ClientManager
     {
         private Thread _delayThread;
-        private readonly IList<ClientThread> _gateClient;
+        private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly LogQueue _logQueue;
         private Timer _checkSessionTimer = null;
 
-        public ClientManager(ConfigManager configManager, SessionManager sessionManager)
+        public ClientManager(ConfigManager configManager, SessionManager sessionManager, LogQueue logQueue)
         {
             _sessionManager = sessionManager;
             _configManager = configManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
-            _gateClient = new List<ClientThread>();
+            _clientList = new List<ClientThread>();
+            _logQueue = logQueue;
         }
 
         public void LoadConfig()
@@ -40,23 +40,23 @@ namespace LoginGate.Services
                 serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    Console.WriteLine($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    _logQueue.EnqueueDebugging($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
+                _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
             }
         }
 
         public void Start()
         {
-            for (var i = 0; i < _gateClient.Count; i++)
+            for (var i = 0; i < _clientList.Count; i++)
             {
-                if (_gateClient[i] == null)
+                if (_clientList[i] == null)
                 {
                     continue;
                 }
-                _gateClient[i].Start();
-                _gateClient[i].RestSessionArray();
+                _clientList[i].Start();
+                _clientList[i].RestSessionArray();
             }
             _delayThread = new Thread(ProcessDelayMsg);
             _delayThread.IsBackground = true;
@@ -66,13 +66,13 @@ namespace LoginGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _gateClient.Count; i++)
+            for (var i = 0; i < _clientList.Count; i++)
             {
-                if (_gateClient[i] == null)
+                if (_clientList[i] == null)
                 {
                     continue;
                 }
-                _gateClient[i].Stop();
+                _clientList[i].Stop();
             }
         }
 
@@ -121,26 +121,26 @@ namespace LoginGate.Services
 
         private IList<ClientThread> GetAllClient()
         {
-            return _gateClient;
+            return _clientList;
         }
 
         private void ProcessDelayMsg(object obj)
         {
             while (true)
             {
-                for (var i = 0; i < _gateClient.Count; i++)
+                for (var i = 0; i < _clientList.Count; i++)
                 {
-                    if (_gateClient[i] == null)
+                    if (_clientList[i] == null)
                     {
                         continue;
                     }
-                    if (_gateClient[i].SessionArray == null)
+                    if (_clientList[i].SessionArray == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < _gateClient[i].SessionArray.Length; j++)
+                    for (var j = 0; j < _clientList[i].SessionArray.Length; j++)
                     {
-                        var session = _gateClient[i].SessionArray[j];
+                        var session = _clientList[i].SessionArray[j];
                         if (session == null)
                         {
                             continue;
@@ -159,7 +159,7 @@ namespace LoginGate.Services
                         if (success)
                         {
                             _sessionManager.Remove(session.SocketId);
-                            _gateClient[i].SessionArray[j].Socket = null;
+                            _clientList[i].SessionArray[j].Socket = null;
                         }
                     }
                 }
