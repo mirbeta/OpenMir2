@@ -43,6 +43,9 @@ namespace DBSvr
         public static bool g_boDynamicIPMode = false;
         public static StringList g_ClearMakeIndex = null;
         public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
+        /// <summary>
+        /// 是否禁止检测玩家名字
+        /// </summary>
         public static bool boDenyChrName = true;
         public static int nDELMaxLevel = 30;
         public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
@@ -256,7 +259,6 @@ namespace DBSvr
     {
         public Socket Socket;
         public string sGateaddr;
-        public string sText;
         public IList<TUserInfo> UserList;
         public long dwTick10;
         /// <summary>
@@ -273,7 +275,7 @@ namespace DBSvr
         public string sConnID;
         public int nSessionID;
         public Socket Socket;
-        public string s2C;
+        public string sText;
         public bool boChrSelected;
         public bool boChrQueryed;
         public long dwTick34;
