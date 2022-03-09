@@ -12,7 +12,6 @@ namespace SelGate.Services
     /// </summary>
     public class ServerService
     {
-        public int NReviceMsgSize = 0;
         private readonly ISocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -21,8 +20,9 @@ namespace SelGate.Services
         private Channel<TMessageData> _snedQueue = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
+        private readonly LogQueue _logQueue;
 
-        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
+        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
         {
             _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
@@ -34,6 +34,7 @@ namespace SelGate.Services
             _sessionManager = sessionManager;
             _clientManager = clientManager;
             _configManager = configManager;
+            _logQueue = logQueue;
         }
 
         public void Start()
@@ -70,7 +71,7 @@ namespace SelGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            Debug.WriteLine($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -86,7 +87,7 @@ namespace SelGate.Services
             }
             if (sessionInfo != null)
             {
-                GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
+                _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
                 var userSession = new ClientSession(_configManager, sessionInfo, clientThread);
                 userSession.UserEnter();
@@ -95,7 +96,7 @@ namespace SelGate.Services
             else
             {
                 e.Socket.Close();
-                GateShare.AddMainLogMsg("禁止连接: " + sRemoteAddress, 1);
+                _logQueue.Enqueue("禁止连接: " + sRemoteAddress, 1);
             }
         }
 
@@ -113,13 +114,13 @@ namespace SelGate.Services
                     userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
                     clientSession.UserLeave();
-                    GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
+                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }
             }
             else
             {
-                GateShare.AddMainLogMsg("断开链接: " + sRemoteAddr, 5);
-                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
             _sessionManager.Remove(e.ConnectionId);
@@ -131,20 +132,20 @@ namespace SelGate.Services
         }
 
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
-        {            
+        {
             var connectionId = token.ConnectionId;
             var userClient = _clientManager.GetClientThread(connectionId);
             var sRemoteAddress = token.RemoteIPaddr;
             if (userClient == null)
             {
-                GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
-                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
+                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
-                GateShare.AddMainLogMsg("未就绪: " + sRemoteAddress, 5);
-                Debug.WriteLine($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
+                _logQueue.EnqueueDebugging($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

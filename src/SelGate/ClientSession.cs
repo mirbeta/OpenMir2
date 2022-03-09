@@ -34,6 +34,7 @@ namespace SelGate
             _configManager = configManager;
             m_fOverClientCount = false;
             m_Stat = TCheckStep.CheckLogin;
+            m_dwClientTimeOutTick = HUtil32.GetTickCount();
         }
 
         public TSessionInfo Session => _session;
@@ -105,7 +106,7 @@ namespace SelGate
                         //case Grobal2.CM_QUERYDELCHR:
                         //case Grobal2.CM_GETBACKDELCHR:
                         m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        var sendStr = $"%A{(int) _session.Socket.Handle}/{HUtil32.GetString(userData.Body, 0, userData.MsgLen)}$";
+                        var sendStr = $"%A{(int)_session.Socket.Handle}/{HUtil32.GetString(userData.Body, 0, userData.MsgLen)}$";
                         lastGameSvr.SendData(sendStr);
                         break;
                     default:
@@ -126,7 +127,7 @@ namespace SelGate
         {
             if (!m_KickFlag)
             {
-                if(_handleLogin<3)
+                if (_handleLogin < 3)
                 {
                     if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
                     {
@@ -143,9 +144,9 @@ namespace SelGate
             {
                 if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
-                    m_dwClientTimeOutTick =HUtil32.GetTickCount();
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
                     _session.Socket.Close();
-                    success = false;
+                    success = true;
                 }
             }
         }
@@ -224,160 +225,5 @@ namespace SelGate
         SendSmu,
         SendFinsh,
         CheckTick
-    }
-
-    public class GameSpeed
-    {
-        /// <summary>
-        /// 是否速度限制
-        /// </summary>
-        public bool SpeedLimit = false;
-        /// <summary>
-        /// 最高的人物身上所有装备+速度，默认6。
-        /// </summary>
-        public int ItemSpeed = 0;
-        /// <summary>
-        /// 玩家加速度装备因数，数值越小，封加速越严厉，默认60。
-        /// </summary>
-        public int DefItemSpeed;
-        /// <summary>
-        /// 加速的累计值
-        /// </summary>
-        public int nErrorCount;
-        /// <summary>
-        /// 交易时间
-        /// </summary>
-        public int dwDealTick;
-        /// <summary>
-        /// 装备加速
-        /// </summary>
-        public int m_nHitSpeed;
-        /// <summary>
-        /// 发言时间
-        /// </summary>
-        public int dwSayMsgTick;
-        /// <summary>
-        /// 移动时间
-        /// </summary>
-        public int dwMoveTick;
-        /// <summary>
-        /// 攻击时间
-        /// </summary>
-        public int dwAttackTick;
-        /// <summary>
-        /// 魔法时间
-        /// </summary>
-        public int dwSpellTick;
-        /// <summary>
-        /// 走路时间
-        /// </summary>
-        public long dwWalkTick;
-        /// <summary>
-        /// 跑步时间
-        /// </summary>
-        public long dwRunTick;
-        /// <summary>
-        /// 转身时间
-        /// </summary>
-        public long dwTurnTick;
-        /// <summary>
-        /// 挖肉时间
-        /// </summary>
-        public int dwButchTick;
-        /// <summary>
-        /// 蹲下时间
-        /// </summary>
-        public int dwSitDownTick;
-        /// <summary>
-        /// 吃药时间
-        /// </summary>
-        public long dwEatTick;
-        /// <summary>
-        /// 捡起时间
-        /// </summary>
-        public long dwPickupTick;
-        /// <summary>
-        /// 移动时间
-        /// </summary>
-        public long dwRunWalkTick;
-        /// <summary>
-        /// 传送时间
-        /// </summary>
-        public long dwFeiDnItemsTick;
-        /// <summary>
-        /// 变速齿轮时间
-        /// </summary>
-        public long dwSupSpeederTick;
-        /// <summary>
-        /// 变速齿轮累计
-        /// </summary>
-        public int dwSupSpeederCount;
-        /// <summary>
-        /// 超级加速时间
-        /// </summary>
-        public long dwSuperNeverTick;
-        /// <summary>
-        /// 超级加速累计
-        /// </summary>
-        public int dwSuperNeverCount;
-        /// <summary>
-        /// 记录上一次操作
-        /// </summary>
-        public int dwUserDoTick;
-        /// <summary>
-        /// 保存停顿操作时间
-        /// </summary>
-        public long dwContinueTick;
-        /// <summary>
-        /// 带有攻击并发累计
-        /// </summary>
-        public int dwConHitMaxCount;
-        /// <summary>
-        /// 带有魔法并发累计
-        /// </summary>
-        public int dwConSpellMaxCount;
-        /// <summary>
-        /// 记录上一次移动方向
-        /// </summary>
-        public int dwCombinationTick;
-        /// <summary>
-        /// 智能攻击累计
-        /// </summary>
-        public int dwCombinationCount;
-        public long dwGameTick;
-        public int dwWaringTick;
-
-        public GameSpeed()
-        {
-            var dwCurrentTick = HUtil32.GetTickCount();
-            nErrorCount = dwCurrentTick;
-            dwDealTick = dwCurrentTick;
-            m_nHitSpeed = dwCurrentTick;
-            dwSayMsgTick = dwCurrentTick;
-            dwMoveTick = dwCurrentTick;
-            dwAttackTick = dwCurrentTick;
-            dwSpellTick = dwCurrentTick;
-            dwWalkTick = dwCurrentTick;
-            dwRunTick = dwCurrentTick;
-            dwTurnTick = dwCurrentTick;
-            dwButchTick = dwCurrentTick;
-            dwSitDownTick = dwCurrentTick;
-            dwEatTick = dwCurrentTick;
-            dwPickupTick = dwCurrentTick;
-            dwRunWalkTick = dwCurrentTick;
-            dwFeiDnItemsTick = dwCurrentTick;
-            dwSupSpeederTick = dwCurrentTick;
-            dwSupSpeederCount = dwCurrentTick;
-            dwSuperNeverTick = dwCurrentTick;
-            dwSuperNeverCount = dwCurrentTick;
-            dwUserDoTick = dwCurrentTick;
-            dwContinueTick = dwCurrentTick;
-            dwConHitMaxCount = dwCurrentTick;
-            dwConSpellMaxCount = dwCurrentTick;
-            dwCombinationTick = dwCurrentTick;
-            dwCombinationCount = dwCurrentTick;
-            dwGameTick = dwCurrentTick;
-            dwWaringTick = dwCurrentTick;
-        }
     }
 }
