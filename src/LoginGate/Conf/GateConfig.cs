@@ -33,7 +33,7 @@ namespace LoginGate.Conf
                 m_xGameGateList[i].nServerPort = 5500;
                 m_xGameGateList[i].nGatePort = 7000 + i;
             }
-
+            m_nShowLogLevel = 5;
             m_fCheckNewIDOfIP = true;
             m_fCheckNullSession = true;
             m_fOverSpeedSendBack = false;

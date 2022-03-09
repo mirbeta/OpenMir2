@@ -1,6 +1,5 @@
-using System;
-using System.Diagnostics;
 using LoginGate.Package;
+using System;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -51,9 +50,16 @@ namespace LoginGate.Services
         /// 是否链接成功
         /// </summary>
         private bool isConnected = false;
+        /// <summary>
+        /// 会话管理
+        /// </summary>
         private readonly SessionManager _sessionManager;
+        /// <summary>
+        /// 日志
+        /// </summary>
+        private readonly LogQueue _logQueue;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
         {
             ClientId = clientId;
             ClientSocket = new IClientScoket();
@@ -65,6 +71,7 @@ namespace LoginGate.Services
             ClientSocket.Port = serverPort;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
+            _logQueue = logQueue;
         }
 
         public bool IsConnected => isConnected;
@@ -89,6 +96,13 @@ namespace LoginGate.Services
 
         public void Stop()
         {
+            for (int i = 0; i < SessionArray.Length; i++)
+            {
+                if (SessionArray[i] != null && SessionArray[i].Socket != null)
+                {
+                    SessionArray[i].Socket.Close();
+                }
+            }
             ClientSocket.Disconnect();
         }
 
@@ -105,8 +119,8 @@ namespace LoginGate.Services
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.Add(this);
-            GateShare.AddMainLogMsg($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
-            Debug.WriteLine($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
+            _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
         }
 
@@ -119,14 +133,14 @@ namespace LoginGate.Services
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
-                    Console.WriteLine("账号服务器断开Socket");
+                    _logQueue.EnqueueDebugging("账号服务器断开Socket");
                 }
             }
             RestSessionArray();
             SocketBuffer = null;
             boGateReady = false;
             GateShare.ServerGateList.Remove(this);
-            GateShare.AddMainLogMsg($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
+            _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
         }
 
@@ -148,7 +162,7 @@ namespace LoginGate.Services
                 {
                     sSessionId = int.Parse(tempStr);
                     _sessionManager.CloseSession(sSessionId);
-                    Debug.WriteLine("收到账号服务器断开Socket消息.");
+                    _logQueue.EnqueueDebugging("收到账号服务器断开Socket消息.");
                     return;
                 }
                 return;
@@ -169,15 +183,15 @@ namespace LoginGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    GateShare.AddMainLogMsg("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    GateShare.AddMainLogMsg("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    GateShare.AddMainLogMsg("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }

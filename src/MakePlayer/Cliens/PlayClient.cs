@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Net.Sockets;
 using System.Text;
 using SystemModule;
-using SystemModule.Packages;
 using SystemModule.Packet;
 using SystemModule.Sockets;
 
@@ -195,6 +191,8 @@ namespace MakePlayer
             ua.sAnswer2 = sAccount;
             ua.sBirthDay = "1978/01/01";
             ua.sMobilePhone = "";
+            ua.sMemo = "";
+            ua.sMemo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue) + EDcode.EncodeBuffer(ua));
         }
@@ -757,9 +755,9 @@ namespace MakePlayer
                 case Grobal2.SM_LOGON:
                     ClientGetUserLogin(DefMsg, sBody);
                     break;
-                default:
+                /*default:
                     MainOutMessage($"未处理消息:[{DefMsg.Ident}]");
-                    break;
+                    break;*/
             }
         }
 

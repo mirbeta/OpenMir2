@@ -12,11 +12,11 @@ namespace GameGate
         /// 发送封包（网关-》客户端）
         /// </summary>
         private readonly Channel<TMessageData> _sendMsgList = null;
-        private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
+        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
+            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
             _sendMsgList = Channel.CreateUnbounded<TMessageData>();
         }
         
@@ -43,21 +43,21 @@ namespace GameGate
 
         public void AddSession(int sessionId, ClientSession clientSession)
         {
-            _connectionSessions.TryAdd(sessionId, clientSession);
+            _sessionMap.TryAdd(sessionId, clientSession);
         }
 
         public ClientSession GetSession(int sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
+            if (_sessionMap.ContainsKey(sessionId))
             {
-                return _connectionSessions[sessionId];
+                return _sessionMap[sessionId];
             }
             return null;
         }
         
         public void Remove(int sessionId)
         {
-            if (_connectionSessions.TryRemove(sessionId, out var clientSession))
+            if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
                
             }
@@ -65,7 +65,7 @@ namespace GameGate
 
         public bool CheckSession(int sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
+            if (_sessionMap.ContainsKey(sessionId))
             {
                 return true;
             }
@@ -74,7 +74,7 @@ namespace GameGate
 
         public IList<ClientSession> GetAllSession()
         {
-            return _connectionSessions.Values.ToList();
+            return _sessionMap.Values.ToList();
         }
     }
 }

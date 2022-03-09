@@ -1,10 +1,10 @@
+using LoginGate.Package;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using LoginGate.Package;
 
 namespace LoginGate.Services
 {
@@ -14,11 +14,11 @@ namespace LoginGate.Services
         /// 发送封包（网关-》客户端）
         /// </summary>
         private readonly Channel<TMessageData> _sendQueue = null;
-        private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
+        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
+            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
             _sendQueue = Channel.CreateUnbounded<TMessageData>();
         }
 
@@ -45,30 +45,30 @@ namespace LoginGate.Services
 
         public void AddSession(int sessionId, ClientSession clientSession)
         {
-            _connectionSessions.TryAdd(sessionId, clientSession);
+            _sessionMap.TryAdd(sessionId, clientSession);
         }
 
         public void CloseSession(int sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
+            if (_sessionMap.ContainsKey(sessionId))
             {
-                _connectionSessions[sessionId].Session.Socket.Close();
+                _sessionMap[sessionId].Session.Socket.Close();
             }
             Remove(sessionId);
         }
 
         public ClientSession GetSession(int sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
+            if (_sessionMap.ContainsKey(sessionId))
             {
-                return _connectionSessions[sessionId];
+                return _sessionMap[sessionId];
             }
             return null;
         }
         
         public void Remove(int sessionId)
         {
-            if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
+            if (!_sessionMap.TryRemove(sessionId, out var clientSession))
             {
                Console.WriteLine($"删除用户会话失败:[{sessionId}]");
             }
@@ -76,7 +76,7 @@ namespace LoginGate.Services
 
         public bool CheckSession(int sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
+            if (_sessionMap.ContainsKey(sessionId))
             {
                 return true;
             }
@@ -85,7 +85,7 @@ namespace LoginGate.Services
 
         public IList<ClientSession> GetAllSession()
         {
-            return _connectionSessions.Values.ToList();
+            return _sessionMap.Values.ToList();
         }
     }
 }

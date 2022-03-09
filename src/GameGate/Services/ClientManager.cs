@@ -17,7 +17,7 @@ namespace GameGate
         private readonly IList<ClientThread> _gateClient;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private Timer _checkSessionTimer = null;
 
         public ClientManager(ConfigManager configManager, SessionManager sessionManager)
