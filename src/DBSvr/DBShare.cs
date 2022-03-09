@@ -119,45 +119,53 @@ namespace DBSvr
 
         public static bool CheckChrName(string sChrName)
         {
-            char Chr;
-            bool result = true;
-            bool boIsTwoByte = false;
-            char FirstChr = '\0';
-            for (var i = 0; i <= sChrName.Length; i++)
+            try
             {
-                Chr = sChrName[i];
-                if (boIsTwoByte)
+                char Chr;
+                bool result = true;
+                bool boIsTwoByte = false;
+                char FirstChr = '\0';
+                for (var i = 0; i < sChrName.Length; i++)
                 {
-                    if (!((FirstChr <= '÷') && (Chr >= '@') && (Chr <= 't')))
+                    Chr = sChrName[i];
+                    if (boIsTwoByte)
                     {
-                        if (!((FirstChr > '÷') && (Chr >= '@') && (Chr <= '?')))
+                        if (!((FirstChr <= '÷') && (Chr >= '@') && (Chr <= 't')))
                         {
-                            result = false;
+                            if (!((FirstChr > '÷') && (Chr >= '@') && (Chr <= '?')))
+                            {
+                                result = false;
+                            }
                         }
-                    }
-                    boIsTwoByte = false;
-                }
-                else
-                {
-                    if ((Chr >= '?') && (Chr <= 't'))
-                    {
-                        boIsTwoByte = true;
-                        FirstChr = Chr;
+                        boIsTwoByte = false;
                     }
                     else
                     {
-                        if (!((Chr >= '0') && (Chr <= '9')) && !((Chr >= 'a') && (Chr <= 'z')) && !((Chr >= 'A') && (Chr <= 'Z')))
+                        if ((Chr >= '?') && (Chr <= 't'))
                         {
-                            result = false;
+                            boIsTwoByte = true;
+                            FirstChr = Chr;
+                        }
+                        else
+                        {
+                            if (!((Chr >= '0') && (Chr <= '9')) && !((Chr >= 'a') && (Chr <= 'z')) && !((Chr >= 'A') && (Chr <= 'Z')))
+                            {
+                                result = false;
+                            }
                         }
                     }
+                    if (!result)
+                    {
+                        break;
+                    }
                 }
-                if (!result)
-                {
-                    break;
-                }
+                return result;
             }
-            return result;
+            catch (Exception e)
+            {
+                Console.WriteLine($"CheckChrName {sChrName} 异常信息:" + e.Message);
+                return false;
+            }
         }
 
         public static bool InClearMakeIndexList(int nIndex)
