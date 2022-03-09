@@ -8,7 +8,7 @@ using SystemModule.Sockets;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 网关客户端(SelGate-DBSvr)
+    /// 网关客户端(LoginGate-Client)
     /// </summary>
     public class ClientThread
     {
@@ -130,8 +130,7 @@ namespace LoginGate.Services
         }
 
         /// <summary>
-        /// 收到数据库服务器 直接发送给客户端
-        /// todo 需要优化封包处理
+        /// 收到登录服务器消息 直接发送给客户端
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -152,8 +151,12 @@ namespace LoginGate.Services
                 }
                 return;
             }
-            var userData = new TMessageData();
             HUtil32.GetValidStr3(sText, ref sSessionId, new[] {"/"});
+            if (sSessionId <= 0)
+            {
+                return;
+            }
+            var userData = new TMessageData();
             userData.SessionId = sSessionId;
             userData.Body = e.Buff;
             _sessionManager.SendQueue.TryWrite(userData);

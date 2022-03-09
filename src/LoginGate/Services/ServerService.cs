@@ -72,7 +72,7 @@ namespace LoginGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            Debug.WriteLine($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
