@@ -25,14 +25,27 @@ jobs:
       uses: montudor/action-zip@v0.1.0
       with:
         args: zip -qq -r ./release.zip ./artifacts
+    - name: Get release version
+      id: version
+      uses: ashley-taylor/read-json-property-action@v1.0
+      with:
+          path: ./version.json
+          property: version
+    - name: Get release description
+      id: description
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./Changelog.md
+        
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v${{steps.version.outputs.value}}
+        release_name: v${{steps.version.outputs.value}}
+        body: ${{steps.description.outputs.content}}
         draft: false
         prerelease: false
     - name: Upload Release Asset
