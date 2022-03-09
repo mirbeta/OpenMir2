@@ -788,7 +788,6 @@ namespace SystemModule
             {
                 StringToBytePtr(str, pb, 1);
             }
-
             return ret;
         }
 

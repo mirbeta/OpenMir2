@@ -12,9 +12,20 @@ namespace SystemModule
         /// <returns></returns>
         public static byte[] ToByte(this string source, int size)
         {
-            var strLen = 0;
-            var strBuff = HUtil32.StringToByteAry(source, out strLen);
+            var strBuff = HUtil32.StringToByteAry(source, out int strLen);
             strBuff[0] = (byte)strLen;
+            Array.Resize(ref strBuff, size);
+            return strBuff;
+        }
+
+        public static byte[] ToByte(this string source, int size, int miniLen)
+        {
+            var strBuff = HUtil32.StringToByteAry(source, out int strLen);
+            strBuff[0] = (byte) strLen;
+            if (size < miniLen)
+            {
+                size = miniLen;
+            }
             Array.Resize(ref strBuff, size);
             return strBuff;
         }

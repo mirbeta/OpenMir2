@@ -534,20 +534,18 @@ namespace LoginSvr
 
         private void AccountCreate(TUserInfo UserInfo, string sData)
         {
-            int nLen = 198;
+            const int userLen = TUserEntry.PacketSize;
             bool bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
             try
             {
                 int nErrCode = -1;
-                var sUserEntryMsg = sData.Substring(0, nLen);
-                var sUserAddEntryMsg = sData.Substring(nLen, sData.Length - nLen);
-                TUserEntryAdd UserAddEntry = null;
-                TUserEntry UserEntry = null;
-                if (sUserEntryMsg != "" && sUserAddEntryMsg != "")
+                var sUserEntryMsg = sData.Substring(0, userLen);
+                var sUserAddEntryMsg = sData.Substring(userLen, sData.Length - userLen);
+                if (!string.IsNullOrEmpty(sUserEntryMsg) && !string.IsNullOrEmpty(sUserAddEntryMsg))
                 {
-                    UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg, sUserEntryMsg.Length));
-                    UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg, sUserAddEntryMsg.Length));
+                    TUserEntry UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg));
+                    TUserEntryAdd UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg));
                     if (LSShare.CheckAccountName(UserEntry.sAccount))
                     {
                         bo21 = true;
@@ -601,7 +599,8 @@ namespace LoginSvr
             }
             catch (Exception ex)
             {
-                LSShare.MainOutMessage("TFrmMain.AddNewUser");
+                LSShare.MainOutMessage("[Exception] LoginsService.AccountCreate");
+                LSShare.MainOutMessage(ex.StackTrace);
             }
         }
 
@@ -995,7 +994,7 @@ namespace LoginSvr
                         _masSock.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + UserInfo.nSessionID + "/" + (UserInfo.boPayCost ? 1 : 0) + "/" + nPayMode + "/" + UserInfo.sUserIPaddr);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, UserInfo.nSessionID, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + nSelGatePort + "/" + UserInfo.nSessionID));
-                        LSShare.MainOutMessage($"同步会话消息到[{sServerName}]成功.");
+                        //LSShare.MainOutMessage($"同步会话消息到[{sServerName}]成功.");
                     }
                     else
                     {
@@ -1003,7 +1002,7 @@ namespace LoginSvr
                         SessionDel(Config, UserInfo.nSessionID);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
-                        LSShare.MainOutMessage($"同步会话消息到[{sServerName}]失败.");
+                        //LSShare.MainOutMessage($"同步会话消息到[{sServerName}]失败.");
                     }
                 }
             }

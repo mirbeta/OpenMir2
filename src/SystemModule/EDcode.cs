@@ -137,9 +137,10 @@ namespace SystemModule
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
         }
-        
-        public static byte[] DecodeBuffer(string Src,int size)
+
+        public static byte[] DecodeBuffer(string Src, int size)
         {
+            var EncBuf = new byte[size];
             var bSrc = HUtil32.GetBytes(Src);
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
