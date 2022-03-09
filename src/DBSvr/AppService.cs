@@ -25,13 +25,13 @@ namespace DBSvr
             _threadTimer = new Timer(ThreadServerTimer, null, 1000, 5000);
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
             _userSoc.Start();
             _LoginSoc.Start();
             _dataService.Start();
-            return Task.CompletedTask;
+            await _userSoc.StartConsumer();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
