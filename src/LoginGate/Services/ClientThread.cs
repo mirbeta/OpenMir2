@@ -119,6 +119,7 @@ namespace LoginGate.Services
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
+                    Console.WriteLine("账号服务器断开Socket");
                 }
             }
             RestSessionArray();
@@ -147,6 +148,7 @@ namespace LoginGate.Services
                 {
                     sSessionId = int.Parse(tempStr);
                     _sessionManager.CloseSession(sSessionId);
+                    Debug.WriteLine("收到账号服务器断开Socket消息.");
                     return;
                 }
                 return;
