@@ -439,21 +439,16 @@ namespace SystemModule
         /// <returns></returns>
         public static string ArrestStringEx(string Source, string SearchAfter, string ArrestBefore, ref string ArrestStr)
         {
-            var result = string.Empty;
-            int srclen;
-            bool GoodData;
-            int n;
-            ArrestStr = string.Empty;
-            if (Source == "")
+            if (string.IsNullOrEmpty(Source))
             {
-                result = "";
-                return result;
+                return string.Empty;
             }
-
+            var result = string.Empty;
+            bool GoodData = false;
+            ArrestStr = string.Empty;
             try
             {
-                srclen = Source.Length;
-                GoodData = false;
+                int srclen = Source.Length;
                 if (srclen >= 2)
                 {
                     if (Source[0].ToString() == SearchAfter)
@@ -464,7 +459,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        n = Source.IndexOf(SearchAfter, StringComparison.Ordinal) + 1;
+                        var n = Source.IndexOf(SearchAfter, StringComparison.Ordinal) + 1;
                         if (n > 0)
                         {
                             Source = Source.Substring(n, srclen - n);
@@ -475,7 +470,7 @@ namespace SystemModule
                 }
                 if (GoodData)
                 {
-                    n = Source.IndexOf(ArrestBefore, StringComparison.Ordinal) + 1;
+                    var n = Source.IndexOf(ArrestBefore, StringComparison.Ordinal) + 1;
                     if (n > 0)
                     {
                         ArrestStr = Source.Substring(0, n - 1);
@@ -500,8 +495,8 @@ namespace SystemModule
             }
             catch
             {
-                ArrestStr = "";
-                result = "";
+                ArrestStr = string.Empty;
+                result = string.Empty;
             }
             return result;
         }
