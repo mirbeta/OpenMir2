@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using SelGate.Conf;
 using SelGate.Services;
@@ -121,7 +122,7 @@ namespace SelGate
         /// <summary>
         /// 处理消息
         /// </summary>
-        public void HandleDelayMsg()
+        public void HandleDelayMsg(ref bool success)
         {
             if (!m_KickFlag)
             {
@@ -133,6 +134,8 @@ namespace SelGate
                         SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0, "");
                         m_KickFlag = true;
                         //BlockUser(this);
+                        success = true;
+                        Debug.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
                     }
                 }
             }
@@ -142,6 +145,7 @@ namespace SelGate
                 {
                     m_dwClientTimeOutTick =HUtil32.GetTickCount();
                     _session.Socket.Close();
+                    success = false;
                 }
             }
         }
