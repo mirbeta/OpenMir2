@@ -766,7 +766,7 @@ namespace DBSvr
                 {
                     nCode = 0;
                 }
-                for (var i = 0; i <= sChrName.Length; i++)
+                for (var i = 0; i < sChrName.Length; i++)
                 {
                     if ((sChrName[i] == '?') || (sChrName[i] == ' ') || (sChrName[i] == '/') || (sChrName[i] == '@') || (sChrName[i] == '?') || (sChrName[i] == '\'') ||
                         (sChrName[i] == '\'') || (sChrName[i] == '\\') || (sChrName[i] == '.') || (sChrName[i] == ',') || (sChrName[i] == ':') || (sChrName[i] == ';') ||
