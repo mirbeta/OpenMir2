@@ -242,9 +242,10 @@ namespace GameGate
 
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
-            MessageHeader pMsg;
+            MessageHeader mesgHeader;
             var BuffIndex = 0;
             const int HeaderMessageSize = 20;
+            var tempssss = tBuffer;
             try
             {
                 if (nBuffLen > 0) //有未处理完成的buff
@@ -264,24 +265,28 @@ namespace GameGate
                 {
                     while (true)
                     {
-                        pMsg = new MessageHeader(Buff);
-                        if (pMsg.dwCode == Grobal2.RUNGATECODE)
+                        mesgHeader = new MessageHeader(Buff);
+                        if (mesgHeader.dwCode == 0)
                         {
-                            if ((Math.Abs(pMsg.nLength) + HeaderMessageSize) > nLen)
+                            break;
+                        }
+                        if (mesgHeader.dwCode == Grobal2.RUNGATECODE)
+                        {
+                            if ((Math.Abs(mesgHeader.nLength) + HeaderMessageSize) > nLen)
                             {
                                 break;
                             }
-                            switch (pMsg.wIdent)
+                            switch (mesgHeader.wIdent)
                             {
                                 case Grobal2.GM_CHECKSERVER:
                                     boCheckServerFail = false;
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
-                                    var userSession = _sessionManager.GetSession(pMsg.wGSocketIdx);
+                                    var userSession = _sessionManager.GetSession(mesgHeader.wGSocketIdx);
                                     if (userSession != null)
                                     {
-                                        userSession.m_nSvrListIdx = pMsg.wUserListIndex;
+                                        userSession.m_nSvrListIdx = mesgHeader.wUserListIndex;
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
@@ -294,23 +299,23 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    var msgBuff = pMsg.nLength > 0 ? new byte[pMsg.nLength] : new byte[Buff.Length - 20];
+                                    var msgBuff = mesgHeader.nLength > 0 ? new byte[mesgHeader.nLength] : new byte[Buff.Length - 20];
                                     Array.Copy(Buff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
                                     var message = new TMessageData();
-                                    message.UserCientId = pMsg.wGSocketIdx;
+                                    message.MessageId = mesgHeader.wGSocketIdx;
                                     message.Buffer = msgBuff;
-                                    message.DataLen = pMsg.nLength;
+                                    message.DataLen = mesgHeader.nLength;
                                     _sessionManager.SendQueue.TryWrite(message);
                                     break;
                                 case Grobal2.GM_TEST:
                                     break;
                             }
-                            var newLen = HeaderMessageSize + Math.Abs(pMsg.nLength);
+                            var newLen = HeaderMessageSize + Math.Abs(mesgHeader.nLength);
                             var tempBuff = new byte[Buff.Length - newLen];
                             Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
                             BuffIndex = 0;
-                            nLen -= Math.Abs(pMsg.nLength) + HeaderMessageSize;
+                            nLen -= Math.Abs(mesgHeader.nLength) + HeaderMessageSize;
                         }
                         else
                         {
@@ -341,6 +346,7 @@ namespace GameGate
             }
             catch (Exception E)
             {
+                Console.WriteLine($"异常信息:[Buffer{tempssss.Length}]");
                 GateShare.AddMainLogMsg($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
             }
         }

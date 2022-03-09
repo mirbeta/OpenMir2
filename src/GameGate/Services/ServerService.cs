@@ -55,7 +55,7 @@ namespace GameGate
             {
                 if (_reviceMsgList.Reader.TryRead(out var message))
                 {
-                    var clientSession = _sessionManager.GetSession(message.UserCientId);
+                    var clientSession = _sessionManager.GetSession(message.MessageId);
                     clientSession?.HandleUserPacket(message);
                 }
             }
@@ -168,7 +168,7 @@ namespace GameGate
                 Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
                 var message = new TMessageData();
                 message.Buffer = data;
-                message.UserCientId = connectionId;
+                message.MessageId = connectionId;
                 message.DataLen = data.Length;
                 _reviceMsgList.Writer.TryWrite(message);
             }
