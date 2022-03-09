@@ -19,13 +19,15 @@ namespace SelGate.Services
         private readonly ConfigManager _configManager;
         private static ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private Timer _checkSessionTimer = null;
+        private readonly LogQueue _logQueue;
 
-        public ClientManager(ConfigManager configManager, SessionManager sessionManager)
+        public ClientManager(ConfigManager configManager, SessionManager sessionManager, LogQueue logQueue)
         {
             _sessionManager = sessionManager;
             _configManager = configManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
             _gateClient = new List<ClientThread>();
+            _logQueue = logQueue;
         }
 
         public void LoadConfig()
@@ -41,7 +43,7 @@ namespace SelGate.Services
                     Console.WriteLine($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
+                _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
             }
         }
 
@@ -239,7 +241,6 @@ namespace SelGate.Services
             //{
             //    _serverService.dwProcessClientMsgTime -= 1;
             //}
-            GateShare.boDecodeMsgLock = false;
         }
     }
 }
