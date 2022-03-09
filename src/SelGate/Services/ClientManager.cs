@@ -152,10 +152,16 @@ namespace SelGate.Services
                         {
                             continue;
                         }
-                        userClient.HandleDelayMsg();
+                        var success = false;
+                        userClient.HandleDelayMsg(ref success);
+                        if (success)
+                        {
+                            _sessionManager.Remove(session.SocketId);
+                            _gateClient[i].SessionArray[j].Socket = null;
+                        }
                     }
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(50);
             }
         }
 
@@ -179,6 +185,8 @@ namespace SelGate.Services
                         {
                             UserSession.Socket.Close();
                             UserSession.Socket = null;
+                            _sessionManager.Remove(UserSession.SocketId);
+                            Debug.WriteLine("清理超时会话,关闭Socket.");
                         }
                     }
                 }
