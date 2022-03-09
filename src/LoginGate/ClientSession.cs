@@ -2,6 +2,7 @@ using LoginGate.Conf;
 using LoginGate.Package;
 using LoginGate.Services;
 using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 using SystemModule;
 
@@ -121,6 +122,7 @@ namespace LoginGate
                 switch (CltCmd.Cmd)
                 {
                     case Grobal2.CM_IDPASSWORD: //登录消息
+                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
                         //pszSendBuff = new byte[nDeCodeLen];
                         //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
                         //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
@@ -162,7 +164,7 @@ namespace LoginGate
         /// <summary>
         /// 处理消息
         /// </summary>
-        public void HandleDelayMsg()
+        public void HandleDelayMsg(ref bool success)
         {
             if (!m_KickFlag)
             {
@@ -171,10 +173,15 @@ namespace LoginGate
                     if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
                     {
                         m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                        if (_session.Socket == null || _session.Socket.Handle == IntPtr.Zero)
+                        {
+                            return;
+                        }
                         SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                         m_KickFlag = true;
                         //BlockUser(this);
-                        Console.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
+                        Debug.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
+                        success = true;
                     }
                 }
             }
@@ -184,6 +191,7 @@ namespace LoginGate
                 {
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
                     _session.Socket.Close();
+                    success = true;
                 }
             }
         }
@@ -249,6 +257,10 @@ namespace LoginGate
         public void UserLeave()
         {
             _handleLogin = 0;
+            if (Session == null || Session.Socket == null)
+            {
+                return;
+            }
             var accountPacket = new AccountPacket(AccountPacktType.Leave, (int) Session.Socket.Handle, "");
             lastGameSvr.SendBuffer(accountPacket.GetPacket());
             m_KickFlag = false;

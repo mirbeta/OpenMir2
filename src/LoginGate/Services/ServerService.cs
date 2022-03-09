@@ -77,6 +77,10 @@ namespace LoginGate.Services
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
                 sessionInfo = clientThread.SessionArray[nIdx];
+                if (sessionInfo == null)
+                {
+                    continue;
+                }
                 if (sessionInfo.Socket == null)
                 {
                     sessionInfo.Socket = e.Socket;
