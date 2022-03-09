@@ -22,6 +22,14 @@ namespace SystemModule
             return HUtil32.GetString(encBuf, 0, buffLen);
         }
 
+        /// <summary>
+        /// 加密Buffer
+        /// </summary>
+        /// <param name="Buf"></param>
+        /// <param name="Len"></param>
+        /// <param name="DstBuf"></param>
+        /// <param name="dstOffset"></param>
+        /// <returns></returns>
         public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf, int dstOffset = 0)
         {
             int result;
