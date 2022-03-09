@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -294,13 +293,13 @@ namespace GameSvr
                     {
                         boFlag = false;
                     }
-                    Console.WriteLine($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHWID}]");
                     if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionID >= 2 && !string.IsNullOrEmpty(sHWID))
                     {
                         nClientVersion = HUtil32.Str_ToInt(sClientVersion, 0);
                         tHWID = MD5.MD5UnPrInt(sHWID);
                         result = true;
                     }
+                    Debug.WriteLine($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHWID}]");
                 }
             }
             catch
@@ -697,11 +696,12 @@ namespace GameSvr
             backingStream.Write(nLen);
             backingStream.Write(msgHeader.GetPacket());
             backingStream.Write(defMsg.GetPacket());
-            var stream = backingStream.BaseStream as MemoryStream;
-            var buff = stream.ToArray();
-            if (!AddGateBuffer(nGateIdx, buff))
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            if (!AddGateBuffer(nGateIdx, data))
             {
-                buff = null;
+                data = null;
             }
         }
 
@@ -802,11 +802,12 @@ namespace GameSvr
             backingStream.Write(nLen);
             backingStream.Write(msgHdr.GetPacket());
             backingStream.Write(defMsg.GetPacket());
-            var stream = backingStream.BaseStream as MemoryStream;
-            var buff = stream.ToArray();
-            if (!AddGateBuffer(nIndex, buff))
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            if (!AddGateBuffer(nIndex, data))
             {
-                buff = null;
+                data = null;
             }
         }
 
@@ -1004,6 +1005,7 @@ namespace GameSvr
 
     /// <summary>
     /// 游戏网关消费者
+    /// GameSvr->GameGate
     /// </summary>
     public class GateConsumer
     {

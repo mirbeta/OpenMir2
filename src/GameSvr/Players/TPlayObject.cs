@@ -305,6 +305,7 @@ namespace GameSvr
                     backingStream.Write(bMsg);
                     backingStream.Write((byte)0);
                 }
+                memoryStream.Seek(0, SeekOrigin.Begin);
                 var Buff = new byte[memoryStream.Length];
                 memoryStream.Read(Buff, 0, Buff.Length);
                 M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
@@ -362,6 +363,7 @@ namespace GameSvr
                 backingStream.Write(bMsg);
                 backingStream.Write((byte)0);
             }
+            memoryStream.Seek(0, SeekOrigin.Begin);
             var buffer = new byte[memoryStream.Length];
             memoryStream.Read(buffer, 0, buffer.Length);
             M2Share.RunSocket.AddGateBuffer(m_nGateIdx, buffer);
