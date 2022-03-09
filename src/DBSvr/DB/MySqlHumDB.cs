@@ -14,7 +14,6 @@ namespace DBSvr
         private TQuickIDList m_MirQuickIDList = null;
         private Dictionary<int, string> m_QuickIndexNameList = null;
         private int m_nRecordCount = 0;
-        private IDbConnection _dbConnection;
 
         public MySqlHumDB()
         {
@@ -38,15 +37,16 @@ namespace DBSvr
             m_nRecordCount = -1;
             AccountList = new List<TQuickID>();
             ChrNameList = new List<string>();
+            IDbConnection dbConnection = null;
             try
             {
-                if (!Open())
+                if (!Open(ref dbConnection))
                 {
                     return;
                 }
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 using var dr = command.ExecuteReader();
                 var nIndex = 0;
                 while (dr.Read())
@@ -70,7 +70,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
@@ -83,37 +83,46 @@ namespace DBSvr
 
         public bool Open()
         {
+            return true;
+        }
+
+        public bool Close()
+        {
+            return true;
+        }
+
+        public bool Open(ref IDbConnection dbConnection)
+        {
             bool result = false;
-            if (_dbConnection == null)
-            {
-                _dbConnection = new MySqlConnection(DBShare.DBConnection);
-            }
-            switch (_dbConnection.State)
+            dbConnection = new MySqlConnection(DBShare.DBConnection);
+            switch (dbConnection.State)
             {
                 case ConnectionState.Open:
                     return true;
                 case ConnectionState.Closed:
                     try
                     {
-                        _dbConnection.Open();
+                        dbConnection.Open();
                         result = true;
                     }
                     catch (Exception e)
                     {
                         DBShare.MainOutMessage("打开数据库[MySql]失败.");
+                        DBShare.MainOutMessage(e.StackTrace);
                         result = false;
                     }
+
                     break;
             }
             return result;
         }
 
-        public void Close()
+        public void Close(IDbConnection dbConnection)
         {
-            if (_dbConnection != null)
+            if (dbConnection != null)
             {
-                _dbConnection.Close();
-                _dbConnection.Dispose();
+                dbConnection.Close();
+                dbConnection.Dispose();
             }
         }
 
@@ -173,9 +182,10 @@ namespace DBSvr
         private bool UpdateChrRecord(ref TQueryChr QueryChrRcd)
         {
             bool result = true;
+            IDbConnection dbConnection = null;
             try
             {
-                if (!Open())
+                if (!Open(ref dbConnection))
                 {
                     return false;
                 }
@@ -185,7 +195,7 @@ namespace DBSvr
                 command.Parameters.AddWithValue("@FLD_SEX", QueryChrRcd.btSex);
                 command.Parameters.AddWithValue("@FLD_JOB", QueryChrRcd.btJob);
                 command.Parameters.AddWithValue("@FLD_CHARNAME", QueryChrRcd.sName);
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 try
                 {
                     command.ExecuteNonQuery();
@@ -198,7 +208,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -295,7 +305,8 @@ namespace DBSvr
         private bool GetChrRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
@@ -304,7 +315,7 @@ namespace DBSvr
             try
             {
                 command.CommandText = string.Format(sSQL1, sChrName);
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -370,11 +381,12 @@ namespace DBSvr
             catch (Exception ex)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetChrRecord");
+                DBShare.MainOutMessage(ex.StackTrace);
                 return false;
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -382,7 +394,8 @@ namespace DBSvr
         private bool GetAbilGetRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool reslut = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return reslut;
             }
@@ -391,7 +404,7 @@ namespace DBSvr
             try
             {
                 command.CommandText = $"select * from TBL_CHARACTER_ABLITY where FLD_CharName='{sChrName}'";
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
@@ -421,11 +434,12 @@ namespace DBSvr
             catch (Exception ex)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetAbilGetRecord");
+                DBShare.MainOutMessage(ex.StackTrace);
                 return false;
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return reslut;
         }
@@ -433,13 +447,14 @@ namespace DBSvr
         private bool GetBonusAbilRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool reslut = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return reslut;
             }
             const string sSQL2 = "SELECT * FROM TBL_BONUSABILITY WHERE FLD_CHARNAME='{0}'";
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             try
             {
                 command.CommandText = string.Format(sSQL2, sChrName);
@@ -472,7 +487,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return reslut;
         }
@@ -480,7 +495,8 @@ namespace DBSvr
         private bool GetMagicRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool reslut = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return reslut;
             }
@@ -489,7 +505,7 @@ namespace DBSvr
             try
             {
                 var magicList = new List<TMagicRcd>();
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 command.CommandText = string.Format(sSQL4, sChrName);
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
@@ -514,7 +530,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return reslut;
         }
@@ -522,7 +538,8 @@ namespace DBSvr
         private bool GetItemRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool reslut = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return reslut;
             }
@@ -530,7 +547,7 @@ namespace DBSvr
             var command = new MySqlCommand();
             try
             {
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 command.CommandText = string.Format(sSQL5, sChrName);
                 using var dr = command.ExecuteReader();
                 var i = 0;
@@ -581,7 +598,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return reslut;
         }
@@ -589,7 +606,8 @@ namespace DBSvr
         private bool GetStorageRecord(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
@@ -598,7 +616,7 @@ namespace DBSvr
             try
             {
                 command.CommandText = string.Format(sSQL6, sChrName);
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 var dr = command.ExecuteReader();
                 var i = 0;
                 while (dr.Read())
@@ -625,7 +643,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -633,13 +651,14 @@ namespace DBSvr
         private bool GetPlayerStatus(string sChrName, ref THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             const string sSQL7 = "SELECT * FROM TBL_CHARACTER_STATUS WHERE FLD_CharName='{0}'";
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             try
             {
                 command.CommandText = string.Format(sSQL7, sChrName);
@@ -671,7 +690,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -693,9 +712,9 @@ namespace DBSvr
             strSql.AppendLine("@FLD_HomeX, @FLD_HomeY, @FLD_PkPoint, @FLD_ReLevel, @FLD_AttatckMode, @FLD_FightZoneDieCount, @FLD_BodyLuck, @FLD_IncHealth,@FLD_IncSpell, @FLD_IncHealing, @FLD_CreditPoint, @FLD_BonusPoint,");
             strSql.AppendLine("@FLD_HungerStatus, @FLD_PayMentPoint, @FLD_LockLogon, @FLD_MarryCount, @FLD_AllowGroupReCall, @FLD_GroupRcallTime, @FLD_AllowGuildReCall, @FLD_IsMaster, @FLD_MasterName, @FLD_DearName");
             strSql.AppendLine(",@FLD_StoragePwd, @FLD_Deleted, now(), now()) ");
-
+            IDbConnection dbConnection = null;
             var command = new MySqlCommand();
-            if (!Open())
+            if (!Open(ref dbConnection))
             {
                 return false;
             }
@@ -738,7 +757,7 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_StoragePwd", hd.sStoragePwd);
             command.Parameters.AddWithValue("@FLD_Deleted", 0);
             command.CommandText = string.Format(strSql.ToString());
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             try
             {
                 command.ExecuteNonQuery();
@@ -776,11 +795,12 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.InsertRecord (1)");
+                DBShare.MainOutMessage(ex.StackTrace);
                 return result;
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -805,7 +825,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+               // Close();
             }
             return result;
         }
@@ -816,8 +836,9 @@ namespace DBSvr
             var hd = HumanRCD.Data;
             var dwHP = HUtil32.MakeLong(hd.Abil.HP, hd.Abil.AC);
             var dwMP = HUtil32.MakeLong(hd.Abil.MP, hd.Abil.MAC);
+            IDbConnection dbConnection = null;
             var command = new MySqlCommand();
-            if (!Open())
+            if (!Open(ref dbConnection))
             {
                 return false;
             }
@@ -827,7 +848,7 @@ namespace DBSvr
             strSql.AppendLine("FLD_IncHealing = @FLD_IncHealing, FLD_CreditPoint = @FLD_CreditPoint, FLD_BonusPoint =@FLD_BonusPoint, FLD_HungerStatus =@FLD_HungerStatus, FLD_PayMentPoint = @FLD_PayMentPoint, FLD_LockLogon = @FLD_LockLogon, FLD_MarryCount = @FLD_MarryCount, FLD_AllowGroupReCall = @FLD_AllowGroupReCall, ");
             strSql.AppendLine("FLD_GroupRcallTime = @FLD_GroupRcallTime, FLD_AllowGuildReCall = @FLD_AllowGuildReCall, FLD_IsMaster = @FLD_IsMaster, FLD_MasterName = @FLD_MasterName, FLD_DearName = @FLD_DearName, FLD_StoragePwd = @FLD_StoragePwd, FLD_Deleted = @FLD_Deleted,FLD_LASTUPDATE = now() WHERE FLD_CharName = @FLD_CharName;");
             command.CommandText = strSql.ToString();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.Parameters.Clear();
             command.Parameters.AddWithValue("@FLD_ServerNum", 1);
             command.Parameters.AddWithValue("@FLD_LoginID", 1);
@@ -880,7 +901,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -888,7 +909,8 @@ namespace DBSvr
         private bool UpdateAblity(int Id, THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
@@ -899,7 +921,7 @@ namespace DBSvr
             strSql.AppendLine("FLD_MAxMP = @FLD_MAxMP, FLD_Exp = @FLD_Exp, FLD_MaxExp = @FLD_MaxExp, FLD_Weight = @FLD_Weight, FLD_MaxWeight = @FLD_MaxWeight, FLD_WearWeight = @FLD_WearWeight,");
             strSql.AppendLine("FLD_MaxWearWeight = @FLD_MaxWearWeight, FLD_HandWeight = @FLD_HandWeight, FLD_MaxHandWeight = @FLD_MaxHandWeight,FLD_ModifyTime=now() WHERE FLD_CharName = @FLD_CharName;");
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = strSql.ToString();
             command.Parameters.AddWithValue("@FLD_CharId", 1);
             command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
@@ -933,7 +955,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -941,12 +963,13 @@ namespace DBSvr
         private bool UpdateItem(int Id, THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = $"DELETE FROM TBL_ITEM WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
@@ -993,6 +1016,7 @@ namespace DBSvr
                         {
                             result = false;
                             DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
+                            DBShare.MainOutMessage(ex.StackTrace);
                         }
                     }
                 }
@@ -1047,7 +1071,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1055,12 +1079,13 @@ namespace DBSvr
         private bool SaveItemStorge(int Id, THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = $"DELETE FROM TBL_Storages WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
@@ -1116,7 +1141,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1124,19 +1149,20 @@ namespace DBSvr
         private bool SavePlayerMagic(int Id, THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = $"DELETE FROM TBL_CHARACTER_MAGIC WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
             try
             {
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
                 const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_CHARNAME, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
-                for (var i = 0; i <= HumanRCD.Data.Magic.GetUpperBound(0); i++)
+                for (var i = 0; i < HumanRCD.Data.Magic.GetUpperBound(0); i++)
                 {
                     if (HumanRCD.Data.Magic[i].wMagIdx > 0)
                     {
@@ -1151,14 +1177,15 @@ namespace DBSvr
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.SavePlayerMagic");
+                DBShare.MainOutMessage(ex.StackTrace);
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1166,14 +1193,15 @@ namespace DBSvr
         private bool UpdateBonusability(int Id, THumDataInfo HumanRCD)
         {
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var bonusAbil = HumanRCD.Data.BonusAbil;
             const string sSqlStr = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME=@FLD_CHARNAME";
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.Parameters.AddWithValue("@FLD_AC", bonusAbil.AC);
             command.Parameters.AddWithValue("@FLD_MAC", bonusAbil.MAC);
             command.Parameters.AddWithValue("@FLD_DC", bonusAbil.DC);
@@ -1195,10 +1223,11 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateBonusability");
+                DBShare.MainOutMessage(ex.StackTrace);
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1208,12 +1237,13 @@ namespace DBSvr
             const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_CHARNAME='{0}'";
             const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_CHARNAME, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(@FLD_CHARNAME, @FLD_QUESTOPENINDEX, @FLD_QUESTFININDEX, @FLD_QUEST)";
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = string.Format(sSqlStr4, HumanRCD.Header.sName);
             try
             {
@@ -1235,7 +1265,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1245,12 +1275,13 @@ namespace DBSvr
             const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE FLD_CHARNAME='{0}'";
             const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (FLD_CharId, FLD_CharName, FLD_Status) VALUES(@FLD_CharId, @FLD_CharName, @FLD_Status)";
             bool result = false;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return result;
             }
             var command = new MySqlCommand();
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = string.Format(sSqlStr4, HumanRCD.Header.sName);
             try
             {
@@ -1266,10 +1297,11 @@ namespace DBSvr
             {
                 result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateStatus (INSERT TBL_CHARACTER_STATUS)");
+                DBShare.MainOutMessage(ex.StackTrace);
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1291,7 +1323,6 @@ namespace DBSvr
         public bool Delete(int nIndex)
         {
             bool result = false;
-            string s14;
             for (var i = 0; i < m_MirQuickList.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
@@ -1312,13 +1343,14 @@ namespace DBSvr
         {
             bool result = true;
             string sChrName = m_QuickIndexNameList[nIndex];
+            IDbConnection dbConnection = null;
             var command = new MySqlCommand();
-            if (!Open())
+            if (!Open(ref dbConnection))
             {
                 return false;
             }
             command.CommandText = $"UPDATE TBL_CHARACTER SET FLD_DELETED=1, FLD_CREATEDATE=now() WHERE FLD_CHARNAME='{sChrName}'";
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             try
             {
                 command.ExecuteNonQuery();
@@ -1330,7 +1362,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             return result;
         }
@@ -1369,9 +1401,10 @@ namespace DBSvr
                 return result;
             }
             string sChrName = m_QuickIndexNameList[nIndex];
+            IDbConnection dbConnection = null;
             try
             {
-                if (!Open())
+                if (!Open(ref dbConnection))
                 {
                     return -1;
                 }
@@ -1379,7 +1412,7 @@ namespace DBSvr
                 try
                 {
                     command.CommandText = string.Format(sSQL, sChrName);
-                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.Connection = (MySqlConnection)dbConnection;
                     using var dr = command.ExecuteReader();
                     while (dr.Read())
                     {
@@ -1398,7 +1431,7 @@ namespace DBSvr
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             result = nIndex;
             return result;

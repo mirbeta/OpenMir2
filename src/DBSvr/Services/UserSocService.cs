@@ -6,7 +6,6 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
-using SystemModule.Packages;
 using SystemModule.Sockets;
 
 namespace DBSvr
@@ -124,7 +123,6 @@ namespace DBSvr
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             TGateInfo GateInfo;
-            TUserInfo UserInfo;
             const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
             for (var i = 0; i < GateList.Count; i++)
             {
@@ -501,16 +499,16 @@ namespace DBSvr
 
         private void DeCodeUserMsg(string sData, TGateInfo gateInfo, ref TUserInfo UserInfo)
         {
-            string sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
-            string s18 = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
-            TDefaultMessage Msg = EDcode.DecodeMessage(sDefMsg);
+            var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
+            var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
+            var Msg = EDcode.DecodeMessage(sDefMsg);
             switch (Msg.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
                     if (!UserInfo.boChrQueryed || ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 200))
                     {
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if (QueryChr(s18, ref UserInfo, ref gateInfo))
+                        if (QueryChr(sText, ref UserInfo, ref gateInfo))
                         {
                             UserInfo.boChrQueryed = true;
                         }
@@ -527,7 +525,7 @@ namespace DBSvr
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
                         if ((!string.IsNullOrEmpty(UserInfo.sAccount)) && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
-                            NewChr(s18, ref UserInfo);
+                            NewChr(sText, ref UserInfo);
                             UserInfo.boChrQueryed = false;
                         }
                         else
@@ -547,7 +545,7 @@ namespace DBSvr
                         UserInfo.dwChrTick = HUtil32.GetTickCount();
                         if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
-                            DelChr(s18, ref UserInfo);
+                            DelChr(sText, ref UserInfo);
                             UserInfo.boChrQueryed = false;
                         }
                         else
@@ -566,7 +564,7 @@ namespace DBSvr
                     {
                         if ((UserInfo.sAccount != "") && _LoginSoc.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
                         {
-                            if (SelectChr(s18, gateInfo, ref UserInfo))
+                            if (SelectChr(sText, gateInfo, ref UserInfo))
                             {
                                 UserInfo.boChrSelected = true;
                             }
@@ -651,10 +649,10 @@ namespace DBSvr
                     HumDB.Close();
                 }
                 ChrList = null;
-                if (!string.IsNullOrEmpty(s40))
+                /*if (!string.IsNullOrEmpty(s40))
                 {
                     DBShare.MainOutMessage("查询角色成功:" + s40);
-                }
+                }*/
                 SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
                 result = true;
             }

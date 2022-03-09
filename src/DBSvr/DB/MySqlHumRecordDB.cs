@@ -123,6 +123,7 @@ namespace DBSvr
                 catch (Exception e)
                 {
                     DBShare.MainOutMessage("打开数据库[MySql]失败.");
+                    DBShare.MainOutMessage(e.StackTrace);
                     result = false;
                 }
             }
