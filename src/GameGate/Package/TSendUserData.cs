@@ -4,6 +4,6 @@ namespace GameGate
     {
         public byte[] Buffer;
         public int DataLen;
-        public int UserCientId;
+        public int MessageId;
     }
 }

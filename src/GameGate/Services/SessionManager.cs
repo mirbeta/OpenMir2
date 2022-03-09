@@ -31,7 +31,7 @@ namespace GameGate
             {
                 if (_sendMsgList.Reader.TryRead(out var message))
                 {
-                    var userSession = GetSession(message.UserCientId);
+                    var userSession = GetSession(message.MessageId);
                     if (userSession == null)
                     {
                         return;
