@@ -21,7 +21,6 @@ namespace GameSvr
         /// 游戏网关
         /// </summary>
         private readonly ISocketServer _gateSocket = null;
-
         private object m_RunSocketSection = null;
         private StringList m_RunAddrList = null;
         private int n8 = 0;
@@ -689,7 +688,7 @@ namespace GameSvr
             msgHeader.nSocket = nSocket;
             msgHeader.wGSocketIdx = (ushort)nGsIdx;
             msgHeader.wIdent = Grobal2.GM_DATA;
-            msgHeader.nLength = Marshal.SizeOf(typeof(TDefaultMessage));
+            msgHeader.nLength = TDefaultMessage.PackSize;
             var nLen = msgHeader.nLength + 20;
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);

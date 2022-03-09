@@ -294,7 +294,7 @@ namespace GameSvr
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var bMsg = HUtil32.StringToByteAry(sMsg);
-                MsgHdr.nLength = -(bMsg.Length + 1);
+                MsgHdr.nLength = -(bMsg.Length);
                 var nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
                 using var memoryStream = new MemoryStream();
                 using var backingStream = new BinaryWriter(memoryStream);
@@ -358,7 +358,7 @@ namespace GameSvr
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetPacket());
             }
-            if (bMsg != null)
+            if (bMsg != null && bMsg.Length > 0)
             {
                 backingStream.Write(bMsg);
                 backingStream.Write((byte)0);
