@@ -26,6 +26,10 @@ namespace SystemModule
         public string ReadPascalString(int size)
         {
             var packegeLen = binaryReader.ReadByte();
+            if (size < packegeLen)
+            {
+                size = packegeLen;
+            }
             var strbuff = binaryReader.ReadBytes(size);
             return Encoding.GetEncoding("gb2312").GetString(strbuff, 0, packegeLen);
         }

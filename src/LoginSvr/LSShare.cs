@@ -19,6 +19,11 @@ namespace LoginSvr
         public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
         public static int UserLimit = ushort.MaxValue;
 
+        /// <summary>
+        /// 检查账号是否符合规则
+        /// </summary>
+        /// <param name="sName"></param>
+        /// <returns></returns>
         public static bool CheckAccountName(string sName)
         {
             bool result = false;

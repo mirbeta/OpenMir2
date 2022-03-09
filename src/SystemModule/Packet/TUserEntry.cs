@@ -13,6 +13,8 @@ namespace SystemModule.Packet
         public string sAnswer;
         public string sEMail;
 
+        public const int PacketSize = 198;
+
         public TUserEntry()
         {
 
@@ -38,14 +40,14 @@ namespace SystemModule.Packet
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(sAccount.ToByte(11));
-            writer.Write(sPassword.ToByte(11));
-            writer.Write(sUserName.ToByte(21));
-            writer.Write(sSSNo.ToByte(15));
-            writer.Write(sPhone.ToByte(15));
-            writer.Write(sQuiz.ToByte(21));
-            writer.Write(sAnswer.ToByte(13));
-            writer.Write(sEMail.ToByte(41));
+            writer.Write(sAccount.ToByte(sAccount.Length + 1, 11));
+            writer.Write(sPassword.ToByte(sPassword.Length + 1, 11));
+            writer.Write(sUserName.ToByte(sUserName.Length + 1,21));
+            writer.Write(sSSNo.ToByte(sSSNo.Length + 1, 15));
+            writer.Write(sPhone.ToByte(sPhone.Length + 1, 15));
+            writer.Write(sQuiz.ToByte(sQuiz.Length + 1, 21));
+            writer.Write(sAnswer.ToByte(sAnswer.Length + 1, 13));
+            writer.Write(sEMail.ToByte(sEMail.Length + 1, 41));
         }
     }
 }
