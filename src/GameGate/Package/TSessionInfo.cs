@@ -5,8 +5,8 @@ namespace GameGate
     public class TSessionInfo
     {
         public Socket Socket;
-        public int SocketId;
-        public int nSckHandle;
+        public int SessionId;
+        public int SckHandle;
         public ushort nUserListIndex;
         public int dwReceiveTick;
         public string sAccount;

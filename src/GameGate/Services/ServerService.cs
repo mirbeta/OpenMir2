@@ -13,7 +13,6 @@ namespace GameGate
     public class ServerService
     {
         public int NReviceMsgSize = 0;
-        private long _dwProcessClientMsgTime = 0;
         private readonly ISocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -76,7 +75,7 @@ namespace GameGate
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Console.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            Debug.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -85,18 +84,18 @@ namespace GameGate
                 {
                     userSession.Socket = e.Socket;
                     userSession.nUserListIndex = 0;
-                    userSession.SocketId = e.ConnectionId;
+                    userSession.SessionId = e.ConnectionId;
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
-                    userSession.nSckHandle = (int)e.Socket.Handle;
+                    userSession.SckHandle = (int)e.Socket.Handle;
                     break;
                 }
             }
             if (userSession != null)
             {
-                clientThread.UserEnter(userSession.SocketId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
+                clientThread.UserEnter(userSession.SessionId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
                 GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
                 _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                _sessionManager.AddSession(userSession.SocketId, new ClientSession(_configManager, userSession, clientThread));
+                _sessionManager.AddSession(userSession.SessionId, new ClientSession(_configManager, userSession, clientThread));
             }
             else
             {
@@ -117,7 +116,7 @@ namespace GameGate
                 {
                     userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
-                    userSession.nSckHandle = -1;
+                    userSession.SckHandle = -1;
                     clientThread.UserLeave((int)e.Socket.Handle); //发送消息给M2断开链接
                     GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
                 }
@@ -165,7 +164,6 @@ namespace GameGate
                 {
                     return;
                 }
-                var dwProcessMsgTick = HUtil32.GetTickCount();
                 var data = new byte[token.BytesReceived];
                 Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
                 var message = new TMessageData();
@@ -173,11 +171,6 @@ namespace GameGate
                 message.UserCientId = connectionId;
                 message.DataLen = data.Length;
                 _reviceMsgList.Writer.TryWrite(message);
-                var dwProcessMsgTime = HUtil32.GetTickCount() - dwProcessMsgTick;
-                if (dwProcessMsgTime > _dwProcessClientMsgTime)
-                {
-                    _dwProcessClientMsgTime = dwProcessMsgTime;
-                }
             }
             else
             {

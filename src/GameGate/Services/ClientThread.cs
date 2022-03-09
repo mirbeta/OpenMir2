@@ -12,8 +12,6 @@ namespace GameGate
     public class ClientThread
     {
         private IClientScoket ClientSocket;
-        private int nBufferOfM2Size = 0;
-        private int dwProcessServerMsgTime = 0;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -122,7 +120,7 @@ namespace GameGate
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
-                    userSession.nSckHandle = -1;
+                    userSession.SckHandle = -1;
                 }
             }
             RestSessionArray();
@@ -140,15 +138,7 @@ namespace GameGate
         /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var dwTick14 = HUtil32.GetTickCount();
-            var nMsgLen = e.Buff.Length;
-            ProcReceiveBuffer(e.Buff, nMsgLen);
-            nBufferOfM2Size += nMsgLen;
-            var dwTime10 = HUtil32.GetTickCount() - dwTick14;
-            if (dwProcessServerMsgTime < dwTime10)
-            {
-                dwProcessServerMsgTime = dwTime10;
-            }
+            ProcReceiveBuffer(e.Buff, e.BuffLen);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -183,8 +173,8 @@ namespace GameGate
                 tSession.Socket = null;
                 tSession.nUserListIndex = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
-                tSession.nSckHandle = 0;
-                tSession.SocketId = 0;
+                tSession.SckHandle = 0;
+                tSession.SessionId = 0;
             }
         }
 

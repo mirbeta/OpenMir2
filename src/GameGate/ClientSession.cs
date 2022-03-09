@@ -130,7 +130,7 @@ namespace GameGate
                             return;
                         }
           
-                        var tempBuff = message.Buffer[3..^2];//跳过#1....! 只保留消息内容
+                        var tempBuff = message.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
                         var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
                         
@@ -706,7 +706,7 @@ namespace GameGate
 
                         var cmdPack = new TSvrCmdPack();
                         cmdPack.Flag = Grobal2.RUNGATECODE;
-                        cmdPack.SockID = _session.nSckHandle;
+                        cmdPack.SockID = _session.SckHandle;
                         cmdPack.Cmd = Grobal2.GM_DATA;
                         cmdPack.GGSock = m_nSvrListIdx;
                         if (nDeCodeLen > TCmdPack.PackSize)
@@ -1030,7 +1030,7 @@ namespace GameGate
                 Array.Copy(message.Buffer, TCmdPack.PackSize, pzsSendBuf, nLen, message.DataLen - TCmdPack.PackSize);
                 nLen = message.DataLen - TCmdPack.PackSize + nLen;
             }
-            var sendBuff = new byte[nLen + 1];
+            var sendBuff = new byte[nLen + 2];
             sendBuff[0] = (byte) '#';
             Array.Copy(pzsSendBuf, 0, sendBuff, 1, sendBuff.Length - 1);
             sendBuff[^1] = (byte) '!';
@@ -1442,7 +1442,7 @@ namespace GameGate
             var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = (int)_session.Socket.Handle;
-            GateMsg.wGSocketIdx = (ushort)_session.SocketId;
+            GateMsg.wGSocketIdx = (ushort)_session.SessionId;
             GateMsg.wIdent = Grobal2.GM_DATA;
             GateMsg.wUserListIndex = _session.nUserListIndex;
             GateMsg.nLength = tempBuff.Length - 20;//修复客户端进入游戏困难问题，只需要发送数据封包大小即可
