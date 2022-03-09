@@ -209,7 +209,7 @@ namespace LoginSvr
         /// 处理网关消息
         /// </summary>
         /// <returns></returns>
-        public async Task ProcessReviceMessage()
+        private async Task ProcessReviceMessage()
         {
             while (await _receiveQueue.Reader.WaitToReadAsync())
             {
@@ -224,7 +224,7 @@ namespace LoginSvr
         /// 处理封包消息
         /// </summary>
         /// <returns></returns>
-        public async Task ProcessUserMessage()
+        private async Task ProcessUserMessage()
         {
             while (await _processUserQueue.Reader.WaitToReadAsync())
             {
@@ -333,26 +333,22 @@ namespace LoginSvr
                     {
                         UserInfo.sUserIPaddr = sUserIPaddr;
                         UserInfo.sGateIPaddr = sGateIPaddr;
-                        UserInfo.sAccount = "";
+                        UserInfo.sAccount = string.Empty;
                         UserInfo.nSessionID = 0;
-                        UserInfo.dwTime5C = HUtil32.GetTickCount();
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
                         return;
                     }
                 }
                 UserInfo = new TUserInfo();
-                UserInfo.sAccount = "";
+                UserInfo.sAccount = string.Empty;
                 UserInfo.sUserIPaddr = sUserIPaddr;
                 UserInfo.sGateIPaddr = sGateIPaddr;
                 UserInfo.sSockIndex = sSockIndex;
                 UserInfo.nVersionDate = 0;
                 UserInfo.boCertificationOK = false;
                 UserInfo.nSessionID = 0;
-                UserInfo.bo51 = false;
                 UserInfo.Socket = GateInfo.Socket;
-                UserInfo.dwTime5C = HUtil32.GetTickCount();
                 UserInfo.dwClientTick = HUtil32.GetTickCount();
-                UserInfo.bo60 = false;
                 UserInfo.Gate = GateInfo;
                 GateInfo.UserList.Add(UserInfo);
                 if (LSShare.g_Config.boShowDetailMsg)
@@ -470,7 +466,7 @@ namespace LoginSvr
                     AccountCheckProtocol(UserInfo, DefMsg.Recog);
                     break;
                 case Grobal2.CM_IDPASSWORD:
-                    if (UserInfo.sAccount == "")
+                    if (string.IsNullOrEmpty(UserInfo.sAccount))
                     {
                         AccountLogin(LSShare.g_Config, UserInfo, sData);
                     }
@@ -494,7 +490,7 @@ namespace LoginSvr
                     }
                     break;
                 case Grobal2.CM_CHANGEPASSWORD:
-                    if (UserInfo.sAccount == "")
+                    if (string.IsNullOrEmpty(UserInfo.sAccount))
                     {
                         if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
@@ -508,7 +504,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        UserInfo.sAccount = "";
+                        UserInfo.sAccount = string.Empty;
                     }
                     break;
                 case Grobal2.CM_UPDATEUSER:

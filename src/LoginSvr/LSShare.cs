@@ -261,9 +261,6 @@ namespace LoginSvr
         public int sSockIndex;
         public int nVersionDate;
         public bool boCertificationOK;
-        public bool bo29;
-        public bool bo2A;
-        public bool bo2B;
         public int nSessionID;
         public bool boPayCost;
         public int nIDDay;
@@ -272,13 +269,7 @@ namespace LoginSvr
         public int nIPHour;
         public DateTime dtDateTime;
         public bool boSelServer;
-        public bool bo51;
         public Socket Socket;
-        public long dwTime5C;
-        public bool bo60;
-        public bool bo61;
-        public bool bo62;
-        public bool bo63;
         public long dwClientTick;
         public TGateInfo Gate;
     }
