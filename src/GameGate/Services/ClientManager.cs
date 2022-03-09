@@ -152,7 +152,7 @@ namespace GameGate
                         {
                             continue;
                         }
-                        var userClient = _sessionManager.GetSession(session.SocketId);
+                        var userClient = _sessionManager.GetSession(session.SessionId);
                         if (userClient == null)
                         {
                             continue;
@@ -184,7 +184,7 @@ namespace GameGate
                         {
                             UserSession.Socket.Close();
                             UserSession.Socket = null;
-                            UserSession.nSckHandle = -1;
+                            UserSession.SckHandle = -1;
                         }
                     }
                 }
