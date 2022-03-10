@@ -7,17 +7,12 @@ namespace LoginSvr
 {
     public class LSShare
     {
-        public static TConfig g_Config;
         public static int nOnlineCountMin = 0;
         public static int nOnlineCountMax = 0;
-        public static IList<string> g_MainMsgList = null;
         public static int nSessionIdx = 0;
-        public static bool g_boDataDBReady = false;
-        public static bool bo470D20 = false;
         public static int nVersionDate = 20011006;
-        public static string[] ServerAddr = new string[16];
+        public static string[] ServerAddr = new string[200];
         public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
-        public static int UserLimit = ushort.MaxValue;
 
         /// <summary>
         /// 检查账号是否符合规则
@@ -74,13 +69,12 @@ namespace LoginSvr
             return nSessionIdx;
         }
 
-        public static void SaveGateConfig(TConfig Config)
+        public static void SaveGateConfig(LoginSvrConfig Config)
         {
-            StringList SaveList;
             int n8;
             string s10;
             string sC;
-            SaveList = new StringList();
+            StringList SaveList = new StringList();
             SaveList.Add(";No space allowed");
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
             for (var i = 0; i < Config.nRouteCount; i++)
@@ -115,7 +109,7 @@ namespace LoginSvr
             SaveList = null;
         }
 
-        public static string GetGatePublicAddr(TConfig Config, string sGateIP)
+        public static string GetGatePublicAddr(LoginSvrConfig Config, string sGateIP)
         {
             string result = sGateIP;
             for (var i = 0; i < Config.nRouteCount; i++)
@@ -140,20 +134,9 @@ namespace LoginSvr
             return result;
         }
 
-        public static void MainOutMessage(string sMsg)
-        {
-            g_MainMsgList.Add(sMsg);
-        }
-
         public static void Initialization()
         {
-            g_MainMsgList = new List<string>();
-            g_Config = new TConfig();
             nSessionIdx = 1;
-            g_Config.SessionList = new List<TConnInfo>();
-            g_Config.ServerNameList = new List<string>();
-            g_Config.AccountCostList = new Dictionary<string, int>();
-            g_Config.IPaddrCostList = new Dictionary<string, int>();
         }
     }
 
@@ -179,7 +162,7 @@ namespace LoginSvr
         }
     }
 
-    public class TConfig
+    public class LoginSvrConfig
     {
         public string sDBServer;
         public int nDBSPort;
@@ -211,7 +194,7 @@ namespace LoginSvr
         public int nRouteCount;
         public TGateRoute[] GateRoute;
 
-        public TConfig()
+        public LoginSvrConfig()
         {
             sDBServer = "127.0.0.1";
             nDBSPort = 16300;

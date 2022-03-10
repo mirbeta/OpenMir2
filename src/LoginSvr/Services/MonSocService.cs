@@ -12,18 +12,19 @@ namespace LoginSvr
         private readonly ISocketServer socketServer;
         private Timer monThreandTime;
         private MasSocService _masSock;
+        private ConfigManager _configManager;
 
-        public MonSocService(MasSocService masSock)
+        public MonSocService(MasSocService masSock, ConfigManager configManager)
         {
             _masSock = masSock;
             socketServer = new ISocketServer(ushort.MaxValue, 1024);
             socketServer.Init();
+            _configManager = configManager;
         }
 
         public void Start()
         {
-            TConfig Config = LSShare.g_Config;
-            socketServer.Start(Config.sMonAddr, Config.nMonPort);
+            socketServer.Start(_configManager.Config.sMonAddr, _configManager.Config.nMonPort);
             monThreandTime = new Timer(MonTimer, null, 5000, 20000);
         }
 

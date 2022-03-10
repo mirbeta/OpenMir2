@@ -1,15 +1,8 @@
 using System;
-using SystemModule;
 using SystemModule.Packet;
 
 namespace LoginSvr
 {
-    public class ReceiveData
-    {
-        public TGateInfo Config;
-        public string ReceiveMsg;
-    }
-
     public class ReceiveUserData
     {
         public TUserInfo UserInfo;

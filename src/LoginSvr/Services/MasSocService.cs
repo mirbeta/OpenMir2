@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using Microsoft.Extensions.Logging;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
@@ -10,33 +11,37 @@ namespace LoginSvr
 {
     public class MasSocService: IService
     {
+        private readonly ILogger<AppService> _logger;
         public readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
+        private readonly ConfigManager _configManager;
 
-        public MasSocService()
+        public MasSocService(ILogger<AppService> logger,ConfigManager configManager)
         {
             m_ServerList = new List<TMsgServerInfo>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
-            serverSocket.OnClientConnect += MSocketClientConnect;
-            serverSocket.OnClientDisconnect += MSocketClientDisconnect;
-            serverSocket.OnClientError += MSocketClientError;
-            serverSocket.OnClientRead += MSocketClientRead;
-            serverSocket.Init();
+            serverSocket.OnClientConnect += SocketClientConnect;
+            serverSocket.OnClientDisconnect += SocketClientDisconnect;
+            serverSocket.OnClientError += SocketClientError;
+            serverSocket.OnClientRead += SocketClientRead;
+            _configManager = configManager;
+            _logger = logger;
         }
 
         public void Start()
         {
-            serverSocket.Start(LSShare.g_Config.sServerAddr, LSShare.g_Config.nServerPort);
-            LSShare.MainOutMessage($"3) 账号数据服务[{LSShare.g_Config.sServerAddr}:{LSShare.g_Config.nServerPort}]已启动.");
+            var config = _configManager.Config;
+            serverSocket.Init();
+            serverSocket.Start(config.sServerAddr, config.nServerPort);
             LoadServerAddr();
             LoadUserLimit();
+            _logger.LogInformation($"账号数据服务[{config.sServerAddr}:{config.nServerPort}]已启动.");
         }
 
-        private void MSocketClientConnect(object sender, AsyncUserToken e)
+        private void SocketClientConnect(object sender, AsyncUserToken e)
         {
             string sRemoteAddr = e.RemoteIPaddr;
             bool boAllowed = false;
-            TMsgServerInfo MsgServer;
             for (var i = LSShare.ServerAddr.GetLowerBound(0); i <= LSShare.ServerAddr.GetUpperBound(0); i++)
             {
                 if (sRemoteAddr == LSShare.ServerAddr[i])
@@ -47,34 +52,32 @@ namespace LoginSvr
             }
             if (boAllowed)
             {
-                MsgServer = new TMsgServerInfo();
-                MsgServer.sReceiveMsg = "";
+                TMsgServerInfo MsgServer = new TMsgServerInfo();
+                MsgServer.sReceiveMsg = string.Empty;
                 MsgServer.Socket = e.Socket;
                 m_ServerList.Add(MsgServer);
-                LSShare.MainOutMessage($"6) 数据库服务[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
             }
             else
             {
-                LSShare.MainOutMessage("非法地址连接:" + sRemoteAddr);
+                _logger.LogInformation("非法地址连接:" + sRemoteAddr);
                 e.Socket.Close();
             }
         }
 
-        private void MSocketClientDisconnect(object sender, AsyncUserToken e)
+        private void SocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            TMsgServerInfo MsgServer;
             for (var i = 0; i < m_ServerList.Count; i++)
             {
-                MsgServer = m_ServerList[i];
+                TMsgServerInfo MsgServer = m_ServerList[i];
                 if (MsgServer.Socket == e.Socket)
                 {
                     if (MsgServer.nServerIndex == 99)
                     {
-                        LSShare.MainOutMessage($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogInformation($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        LSShare.MainOutMessage($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogInformation($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     MsgServer = null;
                     m_ServerList.RemoveAt(i);
@@ -83,12 +86,12 @@ namespace LoginSvr
             }
         }
 
-        private void MSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        private void SocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
 
         }
 
-        private void MSocketClientRead(object sender, AsyncUserToken e)
+        private void SocketClientRead(object sender, AsyncUserToken e)
         {
             TMsgServerInfo MsgServer;
             string sReviceMsg = string.Empty;
@@ -98,7 +101,6 @@ namespace LoginSvr
             string sServerName = string.Empty;
             string sIndex = string.Empty;
             string sOnlineCount = string.Empty;
-            TConfig Config = LSShare.g_Config;
             for (var i = 0; i < m_ServerList.Count; i++)
             {
                 MsgServer = m_ServerList[i];
@@ -108,25 +110,25 @@ namespace LoginSvr
                     var data = new byte[nReviceLen];
                     Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     sReviceMsg = MsgServer.sReceiveMsg + HUtil32.GetString(data, 0, data.Length);
-                    while (sReviceMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
+                    while (sReviceMsg.IndexOf(")", StringComparison.Ordinal) > 0)
                     {
                         sReviceMsg = HUtil32.ArrestStringEx(sReviceMsg, "(", ")", ref sMsg);
-                        if (sMsg == "")
+                        if (string.IsNullOrEmpty(sMsg))
                         {
                             break;
                         }
-                        sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, new string[] { "/" });
+                        sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, new[] { "/" });
                         int nCode = HUtil32.Str_ToInt(sCode, -1);
                         switch (nCode)
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new string[] { "/" });
-                                CloseUser(Config, sAccount, HUtil32.Str_ToInt(sMsg, 0));
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
+                                CloseUser(sAccount, HUtil32.Str_ToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new string[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new string[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new string[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
                                 MsgServer.sServerName = sServerName;
                                 MsgServer.nServerIndex = HUtil32.Str_ToInt(sIndex, 0);
                                 MsgServer.nOnlineCount = HUtil32.Str_ToInt(sOnlineCount, 0);
@@ -144,7 +146,7 @@ namespace LoginSvr
                                 SendServerMsgA(Grobal2.UNKNOWMSG, sMsg);
                                 break;
                             default:
-                                Console.WriteLine((nCode).ToString());
+                                Console.WriteLine(nCode);
                                 break;
                         }
                     }
@@ -153,15 +155,15 @@ namespace LoginSvr
             }
         }
 
-        private void CloseUser(TConfig Config, string sAccount, int nSessionID)
+        private void CloseUser(string sAccount, int nSessionID)
         {
-            TConnInfo ConnInfo;
+            var Config = _configManager.Config;
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)
             {
-                ConnInfo = Config.SessionList[i];
+                TConnInfo ConnInfo = Config.SessionList[i];
                 if ((ConnInfo.sAccount == sAccount) || (ConnInfo.nSessionID == nSessionID))
                 {
-                    SendServerMsg(Grobal2.SS_CLOSESESSION, ConnInfo.sServerName, ConnInfo.sAccount + "/" + (ConnInfo.nSessionID).ToString());
+                    SendServerMsg(Grobal2.SS_CLOSESESSION, ConnInfo.sServerName, ConnInfo.sAccount + "/" + ConnInfo.nSessionID);
                     ConnInfo = null;
                     Config.SessionList.RemoveAt(i);
                 }
@@ -213,20 +215,17 @@ namespace LoginSvr
         /// <param name="nIndex"></param>
         private void SortServerList(int nIndex)
         {
-            TMsgServerInfo MsgServerSort;
-            TMsgServerInfo MsgServer;
-            int nNewIndex;
             try
             {
                 if (m_ServerList.Count <= nIndex)
                 {
                     return;
                 }
-                MsgServerSort = m_ServerList[nIndex];
+                TMsgServerInfo MsgServerSort = m_ServerList[nIndex];
                 m_ServerList.RemoveAt(nIndex);
                 for (var nC = 0; nC < m_ServerList.Count; nC++)
                 {
-                    MsgServer = m_ServerList[nC];
+                    TMsgServerInfo MsgServer = m_ServerList[nC];
                     if (MsgServer.sServerName == MsgServerSort.sServerName)
                     {
                         if (MsgServer.nServerIndex < MsgServerSort.nServerIndex)
@@ -236,7 +235,7 @@ namespace LoginSvr
                         }
                         else
                         {
-                            nNewIndex = nC + 1;
+                            int nNewIndex = nC + 1;
                             if (nNewIndex < m_ServerList.Count)
                             {
                                 for (var n10 = nNewIndex; n10 < m_ServerList.Count; n10++)
@@ -272,37 +271,35 @@ namespace LoginSvr
                 }
                 m_ServerList.Add(MsgServerSort);
             }
-            catch
+            catch(Exception ex)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.SortServerList");
+                _logger.LogError(ex.StackTrace);
             }
         }
 
         public void SendServerMsg(short wIdent, string sServerName, string sMsg)
         {
-            TMsgServerInfo MsgServer;
-            string sSendMsg;
-            string s18;
             const string sFormatMsg = "({0}/{1})";
             try
             {
-                s18 = LimitName(sServerName);
-                sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
+                string tempName = LimitName(sServerName);
+                string sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
                 for (var i = 0; i < m_ServerList.Count; i++)
                 {
-                    MsgServer = m_ServerList[i];
+                    TMsgServerInfo MsgServer = m_ServerList[i];
                     if (MsgServer.Socket.Connected)
                     {
-                        if ((s18 == "") || (MsgServer.sServerName == "") || (string.Compare(MsgServer.sServerName, s18, StringComparison.OrdinalIgnoreCase) == 0) || (MsgServer.nServerIndex == 99))
+                        if ((string.IsNullOrEmpty(tempName)) || (string.IsNullOrEmpty(MsgServer.sServerName)) || (string.Compare(MsgServer.sServerName, tempName, StringComparison.OrdinalIgnoreCase) == 0)
+                            || (MsgServer.nServerIndex == 99))
                         {
                             MsgServer.Socket.SendText(sSendMsg);
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.SendServerMsg");
+                _logger.LogError(ex.StackTrace);
             }
         }
 
@@ -310,7 +307,6 @@ namespace LoginSvr
         {
             StringList LoadList;
             int nServerIdx = 0;
-            string sLineText;
             string sFileName = "!ServerAddr.txt";
             if (File.Exists(sFileName))
             {
@@ -318,7 +314,7 @@ namespace LoginSvr
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((sLineText != "") && (sLineText[i] != ';'))
                     {
                         if (HUtil32.TagCount(sLineText, '.') == 3)
@@ -353,21 +349,16 @@ namespace LoginSvr
                 }
                 result = nCount;
             }
-            catch
+            catch(Exception ex)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.GetOnlineHumCount");
+                _logger.LogError(ex.StackTrace);
             }
             return result;
         }
 
         public bool CheckReadyServers()
         {
-            bool result = false;
-            if (m_ServerList.Count >= LSShare.g_Config.nReadyServers)
-            {
-                result = true;
-            }
-            return result;
+            return m_ServerList.Count >= _configManager.Config.nReadyServers;
         }
 
         private void SendServerMsgA(short wIdent, string sMsg)
@@ -386,7 +377,7 @@ namespace LoginSvr
             }
             catch (Exception e)
             {
-                LSShare.MainOutMessage(e.Message);
+                _logger.LogError(e.StackTrace);
             }
         }
 
@@ -406,7 +397,6 @@ namespace LoginSvr
 
         private void LoadUserLimit()
         {
-            StringList LoadList;
             int nC = 0;
             string sLineText = string.Empty;
             string sServerName = string.Empty;
@@ -415,14 +405,14 @@ namespace LoginSvr
             string sFileName = "!UserLimit.txt";
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " ", "\09" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref s10, new string[] { " ", "\09" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref s14, new string[] { " ", "\09" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new[] { " ", "\09" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref s10, new[] { " ", "\09" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref s14, new[] { " ", "\09" });
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         MasSock.UserLimit[nC].sServerName = sServerName;
@@ -432,12 +422,11 @@ namespace LoginSvr
                         nC++;
                     }
                 }
-                LSShare.UserLimit = nC;
                 LoadList = null;
             }
             else
             {
-                LSShare.MainOutMessage("[Critical Failure] file not found. !UserLimit.txt");
+                _logger.LogInformation("[Critical Failure] file not found. !UserLimit.txt");
             }
         }
 
@@ -494,9 +483,9 @@ namespace LoginSvr
                 }
                 result = nStatus;
             }
-            catch
+            catch(Exception ex)
             {
-                LSShare.MainOutMessage("TFrmMasSoc.ServerStatus");
+                _logger.LogError(ex.StackTrace);
             }
             return result;
         }

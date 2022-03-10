@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using SystemModule;
 using SystemModule.Common;
 
@@ -9,22 +10,30 @@ namespace LoginSvr
 {
     public class ThreadParseList
     {
+        private readonly ILogger<AppServer> _logger;
         private StringList AccountLoadList = null;
         private StringList IPaddrLoadList = null;
         private IList<AccountConst> AccountCostList = null;
         private IList<AccountConst> IPaddrCostList = null;
         private readonly Thread _parseThread;
         private readonly LoginService _loginSvr;
+        private readonly ConfigManager _configManager;
 
-        public ThreadParseList(LoginService loginSvr)
+        public ThreadParseList(ILogger<AppServer> logger,LoginService loginSvr, ConfigManager configManager)
         {
             AccountLoadList = new StringList();
             IPaddrLoadList = new StringList();
             AccountCostList = new List<AccountConst>();
             IPaddrCostList = new List<AccountConst>();
             _loginSvr = loginSvr;
+            _configManager = configManager;
+            _logger = logger;
             _parseThread = new Thread(Execute);
             _parseThread.IsBackground = true;
+        }
+
+        public void Start()
+        {
             _parseThread.Start();
         }
 
@@ -37,7 +46,7 @@ namespace LoginSvr
             int nC;
             int n10;
             int n14;
-            TConfig Config = LSShare.g_Config;
+            LoginSvrConfig Config = _configManager.Config;
             int dwTick2C = 0;
             while (true)
             {
@@ -73,7 +82,7 @@ namespace LoginSvr
                     }
                     catch
                     {
-                        LSShare.MainOutMessage("Exception] loading on IDStrList.");
+                        _logger.LogError("Exception] loading on IDStrList.");
                     }
                     try
                     {
@@ -102,9 +111,10 @@ namespace LoginSvr
                             }
                         }
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        LSShare.MainOutMessage("Exception] loading on IPStrList.");
+                        _logger.LogError("Exception] loading on IPStrList.");
+                        _logger.LogError(ex.StackTrace);
                     }
                 }
                 Thread.Sleep(10);
