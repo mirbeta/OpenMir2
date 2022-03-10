@@ -18,7 +18,7 @@ namespace LoginSvr.Packet
             StartChar = ReadChar();
             PacketType = ReadChar();
             SocketId = ReadInt32();
-            var bodyLen = buffer.Length - 1 - 1 - 4 - 1 - 1;
+            var bodyLen = buffer.Length - 8;
             if (bodyLen > 0)
             {
                 ReadChar();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,60 +9,49 @@ namespace LoginSvr
     {
         private readonly ILogger<AppService> _logger;
         private readonly AppServer _serverApp;
-        private readonly MasSocService _masSoc;
-        private readonly MonSocService _monSoc;
+        private readonly MasSocService _masSocService;
+        private readonly MonSocService _monSocService;
         private readonly LoginService _loginService;
-        private readonly Thread _appThread;
         private Timer _monitorTimer;
 
-        public AppService(ILogger<AppService> logger, AppServer serverApp, MasSocService masSoc, MonSocService monSoc, LoginService loginService)
+        public AppService(ILogger<AppService> logger, AppServer serverApp, MasSocService masSocService, MonSocService monSocService,
+            LoginService loginService)
         {
             _logger = logger;
             _serverApp = serverApp;
-            _masSoc = masSoc;
-            _monSoc = monSoc;
+            _masSocService = masSocService;
+            _monSocService = monSocService;
             _loginService = loginService;
-            _appThread = new Thread(LoginProcessThread);
-            _appThread.IsBackground = true;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"LoginSvr is stopping."));
-            _serverApp.Start();
-            _masSoc.Start();
-            _monSoc.Start();
-            _appThread.Start();
-            _monitorTimer = new Timer(_serverApp.MonitorTimer, null, 0, 5000);
-            return Task.CompletedTask;
+            await _loginService.StartConsumer();
+            _monitorTimer = new Timer(ShowLogTimer, null, 1000, 2000);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug($"LoginSvr is starting.");
+            _serverApp.Start();
+            _monSocService.Start();
+            _loginService.LoadConfig();
+            _loginService.Start();
+            _masSocService.Start();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug($"LoginSvr is stopping.");
-            //_serverApp.StopService();
+            _serverApp.Stop();
             return base.StopAsync(cancellationToken);
         }
-        
-        private void LoginProcessThread(object obj)
+
+        private void ShowLogTimer(object obj)
         {
-            while (true)
-            {
-                for (var i = 0; i < LSShare.g_MainMsgList.Count; i++)
-                {
-                    Console.WriteLine(LSShare.g_MainMsgList[i]);
-                }
-                LSShare.g_MainMsgList.Clear();
-                _loginService.SessionClearKick(LSShare.g_Config);
-                _loginService.SessionClearNoPayMent(LSShare.g_Config);
-                Thread.Sleep(1);
-            }
+            _serverApp.CheckServerStatus();
         }
     }
 }

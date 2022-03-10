@@ -1,7 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using SystemModule;
 
@@ -12,20 +11,26 @@ namespace LoginSvr
         private ThreadParseList parseListTimer = null;
         private LoginService _loginService;
         private readonly MasSocService _massocService;
+        private readonly ConfigManager _configManager;
+        private readonly ILogger<AppServer> _logger;
+        private readonly Thread _appThread;
 
-        public AppServer(LoginService loginService, MasSocService masSocService)
+        public AppServer(ILogger<AppServer> logger, LoginService loginService, MasSocService masSocService, ConfigManager configManager)
         {
             LSShare.Initialization();
             _loginService = loginService;
             _massocService = masSocService;
+            _configManager = configManager;
+            _appThread = new Thread(LoginProcessThread);
+            _appThread.IsBackground = true;
+            _logger = logger;
+            parseListTimer = new ThreadParseList(_logger, _loginService, _configManager);
         }
 
-        public async void Start()
+        public void Start()
         {
-            TConfig Config = LSShare.g_Config;
-            _loginService.StartService(Config);
-            LSShare.MainOutMessage("1) 正在启动服务器...");
-            LSShare.MainOutMessage("2) 正在等待服务器连接...");
+            _logger.LogInformation("正在启动服务器...");
+            _logger.LogInformation("正在等待服务器连接...");
             while (true)
             {
                 if (_massocService.CheckReadyServers())
@@ -34,81 +39,65 @@ namespace LoginSvr
                 }
                 Thread.Sleep(1);
             }
-            _loginService.Start();
-            await _loginService.StartConsumer();
-            parseListTimer = new ThreadParseList(_loginService);
+            parseListTimer.Start();
+            _appThread.Start();
         }
 
-        public void CountLogTimerTimer(System.Object Sender, System.EventArgs _e1)
+        public void Stop()
         {
-            const string sFormatMsg = "{0}/{1}";
-            TConfig Config = LSShare.g_Config;
-            string sLogMsg = string.Format(sFormatMsg, LSShare.nOnlineCountMin, LSShare.nOnlineCountMax);
-            LSShare.nOnlineCountMax = 0;
+            
         }
 
-        public void MonitorTimer(object obj)
+        private void LoginProcessThread(object obj)
         {
-            string sServerName;
-            TMsgServerInfo MsgServer;
+            while (true)
+            {
+                _loginService.SessionClearKick(_configManager.Config);
+                _loginService.SessionClearNoPayMent(_configManager.Config);
+                Thread.Sleep(1);
+            }
+        }
+
+        public void CheckServerStatus()
+        {
             IList<TMsgServerInfo> ServerList = _massocService.m_ServerList;
             if (!ServerList.Any())
             {
                 return;
             }
-            StringBuilder msgStr = new StringBuilder();
             for (var i = 0; i < ServerList.Count; i++)
             {
-                MsgServer = ServerList[i];
-                sServerName = MsgServer.sServerName;
+                TMsgServerInfo MsgServer = ServerList[i];
+                string sServerName = MsgServer.sServerName;
                 if (!string.IsNullOrEmpty(sServerName))
                 {
-                    msgStr.Append($"{sServerName} ");
-                    if (MsgServer.nServerIndex == 99)
-                    {
-                        msgStr.Append("ServerIndex:[DB] ");
-                    }
-                    else
-                    {
-                        msgStr.Append($"ServerIndex:[{MsgServer.nServerIndex}] ");
-                    }
-                    msgStr.Append($"OnLineCount:[{MsgServer.nOnlineCount}] SelectId:[{MsgServer.nSelectID}] ");
                     var tickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
-                    if (tickTime < 30000)
-                    {
-                        msgStr.Append("Status:[Success] ");
-                    }
-                    else
-                    {
-                        msgStr.Append("Status:[TimeOut] ");
-                    }
                     if (tickTime <= 60000) continue;
                     MsgServer.Socket.Close();
                     if (MsgServer.nServerIndex == 99)
                     {
                         if (string.IsNullOrEmpty(sServerName))
                         {
-                            LSShare.MainOutMessage($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                            _logger.LogDebug($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
                         }
                         else
                         {
-                            LSShare.MainOutMessage($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                            _logger.LogDebug($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                         }
                     }
                     else
                     {                    
                         if (string.IsNullOrEmpty(sServerName))
                         {
-                            LSShare.MainOutMessage($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                            _logger.LogDebug($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
                         }
                         else
                         {
-                            LSShare.MainOutMessage($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                            _logger.LogDebug($"[{sServerName}]游戏服务器响应超时,关闭链接.");
                         }
                     }
                 }
             }
-            Debug.WriteLine(msgStr.ToString());
         }
     }
 }

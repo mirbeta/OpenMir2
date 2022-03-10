@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,33 +11,32 @@ namespace LoginSvr
 {
     public class AccountDB
     {
-        private IDbConnection ADOConnection = null;
+        private readonly ILogger<AccountDB> _logger;
+        private IDbConnection dbConnection = null;
         private IList<AccountQuick> m_QuickList = null;
-        private int nRecordCount = 0;
         private IDbConnection _dbConnection;
 
-        public AccountDB()
+        public AccountDB(ILogger<AccountDB> logger)
         {
             m_QuickList = new List<AccountQuick>();
-            nRecordCount = -1;
-            LSShare.g_boDataDBReady = false;
+            _logger = logger;
         }
 
         public void Initialization()
         {
-            LSShare.MainOutMessage("0) 正在连接SQL服务器...");
-            ADOConnection = new MySqlConnection(LSShare.DBConnection);
+            _logger.LogInformation("正在连接SQL服务器...");
+            dbConnection = new MySqlConnection(LSShare.DBConnection);
             try
             {
-                ADOConnection.Open();
-                LSShare.MainOutMessage("1) 连接SQL服务器成功...");
+                dbConnection.Open();
+                _logger.LogInformation("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception E)
             {
-                LSShare.MainOutMessage("[警告] SQL 连接失败!请检查SQL设置...");
-                LSShare.MainOutMessage(LSShare.DBConnection);
-                LSShare.MainOutMessage(E.Message);
+                _logger.LogError("[警告] SQL 连接失败!请检查SQL设置...");
+                _logger.LogError(LSShare.DBConnection);
+                _logger.LogError(E.StackTrace);
             }
         }
 
@@ -59,7 +59,7 @@ namespace LoginSvr
                     }
                     catch (Exception e)
                     {
-                        LSShare.MainOutMessage("打开数据库[MySql]失败.");
+                        _logger.LogError("打开数据库[MySql]失败.");
                         result = false;
                     }
                     break;
@@ -82,7 +82,6 @@ namespace LoginSvr
             bool boDeleted;
             string sAccount;
             const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
-            nRecordCount = -1;
             m_QuickList.Clear();
             try
             {
@@ -104,7 +103,6 @@ namespace LoginSvr
                         m_QuickList.Add(new AccountQuick(sAccount, nIndex));
                     }
                 }
-                nRecordCount = m_QuickList.Count;
                 dr.Close();
                 dr.Dispose();
             }
@@ -113,7 +111,6 @@ namespace LoginSvr
                 Close();
             }
             //m_QuickList.SortString(0, m_QuickList.Count - 1);
-            LSShare.g_boDataDBReady = true;
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -205,7 +202,7 @@ namespace LoginSvr
             catch
             {
                 result = false;
-                LSShare.MainOutMessage("[Exception] TFileIDDB.GetRecord (1)");
+                _logger.LogError("[Exception] TFileIDDB.GetRecord (1)");
                 return result;
             }
             finally
@@ -269,8 +266,8 @@ namespace LoginSvr
                         }
                         catch (Exception E)
                         {
-                            LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord");
-                            LSShare.MainOutMessage(E.Message);
+                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
+                            _logger.LogError(E.Message);
                             return 0;
                         }
                         break;
@@ -283,7 +280,7 @@ namespace LoginSvr
                         catch
                         {
                             result = 0;
-                            LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord (3)");
+                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord (3)");
                         }
                         break;
                     default:
@@ -295,8 +292,8 @@ namespace LoginSvr
                         catch (Exception E)
                         {
                             result = 0;
-                            LSShare.MainOutMessage("[Exception] TFileIDDB.UpdateRecord (0)");
-                            LSShare.MainOutMessage(E.Message);
+                           _logger.LogError("[Exception] TFileIDDB.UpdateRecord (0)");
+                           _logger.LogError(E.Message);
                             return result;
                         }
                         break;
@@ -338,7 +335,6 @@ namespace LoginSvr
             else
             {
                 var nIndex = UpdateRecord(DBRecord, 1);
-                nRecordCount++;
                 if (nIndex > 0)
                 {
                     m_QuickList.Add(new AccountQuick(sAccount, nIndex));
