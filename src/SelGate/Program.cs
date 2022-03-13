@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SelGate.Services;
 using System;
 using System.IO;
@@ -16,21 +15,16 @@ namespace SelGate
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             
             var builder = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.AddConsole();
-                    logging.AddDebug();
-                    logging.ClearProviders();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+                    services.AddSingleton<LogQueue>();
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
                     services.AddSingleton<SessionManager>();
                     services.AddSingleton<ClientManager>();
                     services.AddHostedService<AppService>();
-                    services.AddSingleton<LogQueue>();
+                    services.AddHostedService<TimedService>();
                 });
 
             await builder.RunConsoleAsync();
