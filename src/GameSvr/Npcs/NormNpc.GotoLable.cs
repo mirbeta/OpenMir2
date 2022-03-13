@@ -1708,8 +1708,6 @@ namespace GameSvr
         {
             bool result = true;
             TQuestActionInfo QuestActionInfo;
-            int n14;
-            int n1C;
             int n28;
             int n2C;
             int n20X;

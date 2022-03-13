@@ -523,7 +523,6 @@ namespace GameSvr
         private void ProcessHumans()
         {
             const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load...";
-            const string sExceptionMsg2 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete - Free";
             const string sExceptionMsg3 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete";
             var dwCheckTime = HUtil32.GetTickCount();
             TPlayObject PlayObject;

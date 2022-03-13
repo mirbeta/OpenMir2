@@ -1630,7 +1630,7 @@ namespace GameSvr
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
             boSpeedHackCheck = true;
-            sConnctionString = "server=127.0.0.1;uid=root;pwd=123456;database=Mir2;";
+            sConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
             sDBType = "MySQL";
         }
     }
