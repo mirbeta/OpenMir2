@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
@@ -11,12 +10,12 @@ namespace LoginSvr
 {
     public class MasSocService: IService
     {
-        private readonly ILogger<AppService> _logger;
-        public readonly IList<TMsgServerInfo> m_ServerList = null;
+        private readonly LogQueue _logQueue;
+        private readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
         private readonly ConfigManager _configManager;
 
-        public MasSocService(ILogger<AppService> logger,ConfigManager configManager)
+        public MasSocService(LogQueue logQueue,ConfigManager configManager)
         {
             m_ServerList = new List<TMsgServerInfo>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -25,8 +24,10 @@ namespace LoginSvr
             serverSocket.OnClientError += SocketClientError;
             serverSocket.OnClientRead += SocketClientRead;
             _configManager = configManager;
-            _logger = logger;
+            _logQueue = logQueue;
         }
+
+        public IList<TMsgServerInfo> ServerList => m_ServerList;
 
         public void Start()
         {
@@ -35,7 +36,7 @@ namespace LoginSvr
             serverSocket.Start(config.sServerAddr, config.nServerPort);
             LoadServerAddr();
             LoadUserLimit();
-            _logger.LogInformation($"账号数据服务[{config.sServerAddr}:{config.nServerPort}]已启动.");
+            _logQueue.Enqueue($"账号数据服务[{config.sServerAddr}:{config.nServerPort}]已启动.");
         }
 
         private void SocketClientConnect(object sender, AsyncUserToken e)
@@ -59,7 +60,7 @@ namespace LoginSvr
             }
             else
             {
-                _logger.LogInformation("非法地址连接:" + sRemoteAddr);
+                _logQueue.Enqueue("非法地址连接:" + sRemoteAddr);
                 e.Socket.Close();
             }
         }
@@ -73,11 +74,11 @@ namespace LoginSvr
                 {
                     if (MsgServer.nServerIndex == 99)
                     {
-                        _logger.LogInformation($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logQueue.Enqueue($"[{MsgServer.sServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        _logger.LogInformation($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logQueue.Enqueue($"[{MsgServer.sServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     MsgServer = null;
                     m_ServerList.RemoveAt(i);
@@ -273,7 +274,7 @@ namespace LoginSvr
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -299,7 +300,7 @@ namespace LoginSvr
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -351,7 +352,7 @@ namespace LoginSvr
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue(ex.StackTrace);
             }
             return result;
         }
@@ -377,7 +378,7 @@ namespace LoginSvr
             }
             catch (Exception e)
             {
-                _logger.LogError(e.StackTrace);
+                _logQueue.Enqueue(e.StackTrace);
             }
         }
 
@@ -426,7 +427,7 @@ namespace LoginSvr
             }
             else
             {
-                _logger.LogInformation("[Critical Failure] file not found. !UserLimit.txt");
+                _logQueue.Enqueue("[Critical Failure] file not found. !UserLimit.txt");
             }
         }
 
@@ -485,7 +486,7 @@ namespace LoginSvr
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue(ex.StackTrace);
             }
             return result;
         }

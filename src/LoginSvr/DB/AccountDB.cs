@@ -11,32 +11,32 @@ namespace LoginSvr
 {
     public class AccountDB
     {
-        private readonly ILogger<AccountDB> _logger;
+        private readonly LogQueue _logQueue;
         private IDbConnection dbConnection = null;
         private IList<AccountQuick> m_QuickList = null;
         private IDbConnection _dbConnection;
 
-        public AccountDB(ILogger<AccountDB> logger)
+        public AccountDB(LogQueue logQueue)
         {
             m_QuickList = new List<AccountQuick>();
-            _logger = logger;
+            _logQueue = logQueue;
         }
 
         public void Initialization()
         {
-            _logger.LogInformation("正在连接SQL服务器...");
+            _logQueue.Enqueue("正在连接SQL服务器...");
             dbConnection = new MySqlConnection(LSShare.DBConnection);
             try
             {
                 dbConnection.Open();
-                _logger.LogInformation("连接SQL服务器成功...");
+                _logQueue.Enqueue("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception E)
             {
-                _logger.LogError("[警告] SQL 连接失败!请检查SQL设置...");
-                _logger.LogError(LSShare.DBConnection);
-                _logger.LogError(E.StackTrace);
+                _logQueue.Enqueue("[警告] SQL 连接失败!请检查SQL设置...");
+                _logQueue.Enqueue(LSShare.DBConnection);
+                _logQueue.Enqueue(E.StackTrace);
             }
         }
 
@@ -59,7 +59,7 @@ namespace LoginSvr
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError("打开数据库[MySql]失败.");
+                        _logQueue.Enqueue("打开数据库[MySql]失败.");
                         result = false;
                     }
                     break;
@@ -202,7 +202,7 @@ namespace LoginSvr
             catch
             {
                 result = false;
-                _logger.LogError("[Exception] TFileIDDB.GetRecord (1)");
+                _logQueue.Enqueue("[Exception] TFileIDDB.GetRecord (1)");
                 return result;
             }
             finally
@@ -266,8 +266,8 @@ namespace LoginSvr
                         }
                         catch (Exception E)
                         {
-                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord");
-                            _logger.LogError(E.Message);
+                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord");
+                            _logQueue.Enqueue(E.Message);
                             return 0;
                         }
                         break;
@@ -280,7 +280,7 @@ namespace LoginSvr
                         catch
                         {
                             result = 0;
-                            _logger.LogError("[Exception] TFileIDDB.UpdateRecord (3)");
+                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (3)");
                         }
                         break;
                     default:
@@ -292,8 +292,8 @@ namespace LoginSvr
                         catch (Exception E)
                         {
                             result = 0;
-                           _logger.LogError("[Exception] TFileIDDB.UpdateRecord (0)");
-                           _logger.LogError(E.Message);
+                           _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (0)");
+                           _logQueue.Enqueue(E.Message);
                             return result;
                         }
                         break;

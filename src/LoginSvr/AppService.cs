@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,17 +6,16 @@ namespace LoginSvr
 {
     public class AppService : BackgroundService
     {
-        private readonly ILogger<AppService> _logger;
+        private readonly LogQueue _logQueue;
         private readonly AppServer _serverApp;
         private readonly MasSocService _masSocService;
         private readonly MonSocService _monSocService;
         private readonly LoginService _loginService;
-        private Timer _monitorTimer;
 
-        public AppService(ILogger<AppService> logger, AppServer serverApp, MasSocService masSocService, MonSocService monSocService,
+        public AppService(LogQueue logQueue, AppServer serverApp, MasSocService masSocService, MonSocService monSocService,
             LoginService loginService)
         {
-            _logger = logger;
+            _logQueue = logQueue;
             _serverApp = serverApp;
             _masSocService = masSocService;
             _monSocService = monSocService;
@@ -26,14 +24,13 @@ namespace LoginSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"LoginSvr is stopping."));
+            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"LoginSvr is stopping."));
             await _loginService.StartConsumer();
-            _monitorTimer = new Timer(ShowLogTimer, null, 1000, 2000);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"LoginSvr is starting.");
+            _logQueue.EnqueueDebugging($"LoginSvr is starting.");
             _serverApp.Start();
             _monSocService.Start();
             _loginService.LoadConfig();
@@ -44,14 +41,8 @@ namespace LoginSvr
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"LoginSvr is stopping.");
-            _serverApp.Stop();
+            _logQueue.EnqueueDebugging($"LoginSvr is stopping.");
             return base.StopAsync(cancellationToken);
-        }
-
-        private void ShowLogTimer(object obj)
-        {
-            _serverApp.CheckServerStatus();
         }
     }
 }
