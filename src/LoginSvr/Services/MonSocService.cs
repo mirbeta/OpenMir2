@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Sockets;
 
 namespace LoginSvr
@@ -10,31 +9,29 @@ namespace LoginSvr
     public class MonSocService : IService
     {
         private readonly ISocketServer socketServer;
-        private Timer monThreandTime;
-        private MasSocService _masSock;
-        private ConfigManager _configManager;
+        private readonly MasSocService _masSockService;
+        private readonly ConfigManager _configManager;
 
-        public MonSocService(MasSocService masSock, ConfigManager configManager)
+        public MonSocService(MasSocService masSockService, ConfigManager configManager)
         {
-            _masSock = masSock;
+            _masSockService = masSockService;
+            _configManager = configManager;
             socketServer = new ISocketServer(ushort.MaxValue, 1024);
             socketServer.Init();
-            _configManager = configManager;
         }
 
         public void Start()
         {
             socketServer.Start(_configManager.Config.sMonAddr, _configManager.Config.nMonPort);
-            monThreandTime = new Timer(MonTimer, null, 5000, 20000);
         }
 
-        private void MonTimer(object obj)
+        public void ProcessCleanSession()
         {
             string sMsg = string.Empty;
-            int nC = _masSock.m_ServerList.Count;
-            for (var i = 0; i < _masSock.m_ServerList.Count; i++)
+            int nC = _masSockService.ServerList.Count;
+            for (var i = 0; i < _masSockService.ServerList.Count; i++)
             {
-                var msgServer = _masSock.m_ServerList[i];
+                var msgServer = _masSockService.ServerList[i];
                 var sServerName = msgServer.sServerName;
                 if (sServerName != "")
                 {

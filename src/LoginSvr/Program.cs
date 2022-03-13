@@ -18,9 +18,8 @@ namespace LoginSvr
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.AddFilter("System", LogLevel.None).AddFilter("Microsoft", LogLevel.None);
-                    logging.SetMinimumLevel(LogLevel.Information);
                     logging.AddConsole();
+                    logging.AddDebug();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

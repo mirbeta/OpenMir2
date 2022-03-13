@@ -1,5 +1,4 @@
 using LoginSvr.Packet;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -17,7 +16,7 @@ namespace LoginSvr
     /// </summary>
     public class LoginService : IService
     {
-        private readonly ILogger<LoginService> _logger;
+        private readonly LogQueue _logQueue;
         private readonly ISocketServer _serverSocket;
         private readonly AccountDB _accountDB = null;
         private readonly MasSocService _masSock;
@@ -26,7 +25,7 @@ namespace LoginSvr
         private readonly Channel<ReceiveUserData> _processUserQueue = null;
         private readonly IList<TGateInfo> _gateList;
 
-        public LoginService(ILogger<LoginService> logger, AccountDB accountDB, MasSocService masSock, ConfigManager configManager)
+        public LoginService(LogQueue logQueue, AccountDB accountDB, MasSocService masSock, ConfigManager configManager)
         {
             _accountDB = accountDB;
             _masSock = masSock;
@@ -40,13 +39,13 @@ namespace LoginSvr
             _processUserQueue = Channel.CreateUnbounded<ReceiveUserData>();
             _configManager = configManager;
             _gateList = new List<TGateInfo>();
-            _logger = logger;
+            _logQueue = logQueue;
         }
 
         public void Start()
         {
             _serverSocket.Start(_configManager.Config.sGateAddr, _configManager.Config.nGatePort);
-            _logger.LogInformation($"账号登陆服务[{_configManager.Config.sGateAddr}:{_configManager.Config.nGatePort}]已启动.");
+            _logQueue.Enqueue($"账号登陆服务[{_configManager.Config.sGateAddr}:{_configManager.Config.nGatePort}]已启动.");
         }
 
         private void GSocketClientConnect(object sender, AsyncUserToken e)
@@ -57,7 +56,7 @@ namespace LoginSvr
             GateInfo.UserList = new List<TUserInfo>();
             GateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
             _gateList.Add(GateInfo);
-            _logger.LogInformation($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
+            _logQueue.Enqueue($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -75,7 +74,7 @@ namespace LoginSvr
                         UserInfo = GateInfo.UserList[j];
                         if (Config.boShowDetailMsg)
                         {
-                            _logger.LogDebug("Close: " + UserInfo.sUserIPaddr);
+                            _logQueue.EnqueueDebugging("Close: " + UserInfo.sUserIPaddr);
                         }
                         UserInfo = null;
                     }
@@ -84,7 +83,7 @@ namespace LoginSvr
                     break;
                 }
             }
-            _logger.LogInformation($"[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+            _logQueue.Enqueue($"[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
         }
 
         private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -227,7 +226,7 @@ namespace LoginSvr
                 {
                     if (_configManager.Config.boShowDetailMsg)
                     {
-                        _logger.LogDebug(string.Format(sCloseMsg, UserInfo.sUserIPaddr));
+                        _logQueue.EnqueueDebugging(string.Format(sCloseMsg, UserInfo.sUserIPaddr));
                     }
                     if (!UserInfo.boSelServer)
                     {
@@ -275,12 +274,12 @@ namespace LoginSvr
                 GateInfo.UserList.Add(UserInfo);
                 if (_configManager.Config.boShowDetailMsg)
                 {
-                    _logger.LogDebug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
+                    _logQueue.EnqueueDebugging(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
                 }
             }
             catch(Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.ReceiveOpenUser " + ex.Source);
+                _logQueue.Enqueue("[Exception] LoginService.ReceiveOpenUser " + ex.Source);
             }
         }
 
@@ -320,39 +319,37 @@ namespace LoginSvr
             var nCount = 0;
             try
             {
-                while (true)
+                if (HUtil32.TagCount(userData, '!') <= 0)
                 {
-                    if (HUtil32.TagCount(userData, '!') <= 0)
+                    return;
+                }
+                HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+                if (!string.IsNullOrEmpty(sMsg))
+                {
+                    if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
                     {
-                        break;
+                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
+                        ProcessUserMsg(UserInfo, sMsg);
+                        return;
                     }
-                    userData = HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
-                    if (!string.IsNullOrEmpty(sMsg))
+                }
+                else
+                {
+                    if (nCount >= 1)
                     {
-                        if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
-                        {
-                            sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                            ProcessUserMsg(UserInfo, sMsg);
-                        }
+                        userData = string.Empty;
                     }
-                    else
-                    {
-                        if (nCount >= 1)
-                        {
-                            userData = string.Empty;
-                        }
-                        nCount++;
-                    }
-                    if (string.IsNullOrEmpty(userData))
-                    {
-                        break;
-                    }
+                    nCount++;
+                }
+                if (string.IsNullOrEmpty(userData))
+                {
+                    return;
                 }
             }
             catch(Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.DecodeUserData");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue("[Exception] LoginService.DecodeUserData");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -407,7 +404,7 @@ namespace LoginSvr
                         }
                         else
                         {
-                            _logger.LogInformation("[超速操作] 创建帐号 /" + UserInfo.sUserIPaddr);
+                            _logQueue.Enqueue("[超速操作] 创建帐号 /" + UserInfo.sUserIPaddr);
                         }
                     }
                     break;
@@ -421,7 +418,7 @@ namespace LoginSvr
                         }
                         else
                         {
-                            _logger.LogInformation("[超速操作] 修改密码 /" + UserInfo.sUserIPaddr);
+                            _logQueue.Enqueue("[超速操作] 修改密码 /" + UserInfo.sUserIPaddr);
                         }
                     }
                     else
@@ -437,7 +434,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        _logger.LogInformation("[超速操作] 更新帐号 /" + UserInfo.sUserIPaddr);
+                        _logQueue.Enqueue("[超速操作] 更新帐号 /" + UserInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_GETBACKPASSWORD:
@@ -448,7 +445,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        _logger.LogInformation("[超速操作] 找回密码 /" + UserInfo.sUserIPaddr);
+                        _logQueue.Enqueue("[超速操作] 找回密码 /" + UserInfo.sUserIPaddr);
                     }
                     break;
             }
@@ -505,7 +502,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        _logger.LogInformation(string.Format(sAddNewuserFail, UserEntry.sAccount, UserAddEntry.sQuiz2));
+                        _logQueue.Enqueue(string.Format(sAddNewuserFail, UserEntry.sAccount, UserAddEntry.sQuiz2));
                     }
                 }
                 TDefaultMessage DefMsg;
@@ -521,8 +518,8 @@ namespace LoginSvr
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("[Exception] LoginsService.AccountCreate");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.EnqueueDebugging("[Exception] LoginsService.AccountCreate");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -590,8 +587,8 @@ namespace LoginSvr
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.ChangePassword");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue("[Exception] LoginService.ChangePassword");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -624,7 +621,7 @@ namespace LoginSvr
                     {
                         if (Config.boShowDetailMsg)
                         {
-                            _logger.LogDebug(string.Format(sKickMsg, UserInfo.sUserIPaddr));
+                            _logQueue.EnqueueDebugging(string.Format(sKickMsg, UserInfo.sUserIPaddr));
                         }
                         SendGateKickMsg(GateInfo.Socket, UserInfo.sSockIndex);
                         UserInfo = null;
@@ -758,8 +755,8 @@ namespace LoginSvr
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.LoginUser");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue("[Exception] LoginService.LoginUser");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -829,8 +826,8 @@ namespace LoginSvr
             }
             catch(Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.GetSelGateInfo");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue("[Exception] LoginService.GetSelGateInfo");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -857,7 +854,7 @@ namespace LoginSvr
             }
             catch
             {
-                _logger.LogError("[Exception] LoginService.GetServerListInfo");
+                _logQueue.Enqueue("[Exception] LoginService.GetServerListInfo");
             }
             return result;
         }
@@ -884,7 +881,7 @@ namespace LoginSvr
                     }
                     if (Config.boShowDetailMsg)
                     {
-                        _logger.LogDebug(string.Format(sSelServerMsg, sServerName, Config.sGateIPaddr, sSelGateIP, nSelGatePort));
+                        _logQueue.EnqueueDebugging(string.Format(sSelServerMsg, sServerName, Config.sGateIPaddr, sSelGateIP, nSelGatePort));
                     }
                     UserInfo.boSelServer = true;
                     boPayCost = false;
@@ -981,8 +978,8 @@ namespace LoginSvr
             }
             catch(Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.UpdateUserInfo");
-                _logger.LogError(ex.StackTrace);
+                _logQueue.Enqueue("[Exception] LoginService.UpdateUserInfo");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 

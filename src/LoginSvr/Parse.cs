@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using SystemModule;
 using SystemModule.Common;
 
@@ -15,11 +15,10 @@ namespace LoginSvr
         private StringList IPaddrLoadList = null;
         private IList<AccountConst> AccountCostList = null;
         private IList<AccountConst> IPaddrCostList = null;
-        private readonly Thread _parseThread;
         private readonly LoginService _loginSvr;
         private readonly ConfigManager _configManager;
 
-        public ThreadParseList(ILogger<AppServer> logger,LoginService loginSvr, ConfigManager configManager)
+        public ThreadParseList(ILogger<AppServer> logger, LoginService loginSvr, ConfigManager configManager)
         {
             AccountLoadList = new StringList();
             IPaddrLoadList = new StringList();
@@ -28,16 +27,9 @@ namespace LoginSvr
             _loginSvr = loginSvr;
             _configManager = configManager;
             _logger = logger;
-            _parseThread = new Thread(Execute);
-            _parseThread.IsBackground = true;
         }
 
-        public void Start()
-        {
-            _parseThread.Start();
-        }
-
-        private void Execute(object obj)
+        public void Execute()
         {
             string s18 = String.Empty;
             string s1C = String.Empty;
@@ -111,17 +103,13 @@ namespace LoginSvr
                             }
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _logger.LogError("Exception] loading on IPStrList.");
                         _logger.LogError(ex.StackTrace);
                     }
                 }
                 Thread.Sleep(10);
-                if (!_parseThread.IsAlive)
-                {
-                    break;
-                }
             }
         }
     }
