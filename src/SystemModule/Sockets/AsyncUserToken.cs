@@ -98,6 +98,14 @@ namespace SystemModule.Sockets
             }
         }
 
+        public int SocHandle
+        {
+            get
+            {
+                return (int)Socket.Handle;
+            }
+        }
+
         /// <summary>
         /// 获取或设置通讯中使用的连接ID号
         /// </summary>

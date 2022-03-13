@@ -33,14 +33,6 @@ namespace SelGate.Services
         /// </summary>
         public int CheckServerFailCount = 0;
         /// <summary>
-        /// 独立Buffer分区
-        /// </summary>
-        private byte[] SocketBuffer = null;
-        /// <summary>
-        /// 上次剩下多少字节未处理
-        /// </summary>
-        private int nBuffLen = 0;
-        /// <summary>
         /// 网关是否就绪
         /// </summary>
         public bool boGateReady = false;
@@ -131,7 +123,6 @@ namespace SelGate.Services
                 }
             }
             RestSessionArray();
-            SocketBuffer = null;
             boGateReady = false;
             GateShare.ServerGateList.Remove(this);
             _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
@@ -140,7 +131,7 @@ namespace SelGate.Services
 
         /// <summary>
         /// 收到数据库服务器 直接发送给客户端
-        /// todo 需要优化封包处理
+        /// todo 优化封包处理
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

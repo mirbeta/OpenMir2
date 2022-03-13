@@ -43,7 +43,7 @@ namespace SelGate
             _logQueue.Enqueue("正在启动服务...", 0);
             _configManager.LoadConfig();
             _serverService.Start();
-            _clientManager.LoadConfig();
+            _clientManager.Initialization();
             _clientManager.Start();
             _logQueue.Enqueue("服务已启动成功...", 2);
             _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);

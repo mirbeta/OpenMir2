@@ -7,31 +7,32 @@ namespace SelGate
 {
     public class AppService : BackgroundService
     {
-        private readonly ILogger<AppService> _logger;
+        private readonly LogQueue _logQueue;
         private readonly ServerApp _serverApp;
 
-        public AppService(ILogger<AppService> logger, ServerApp serverApp)
+        public AppService(LogQueue logQueue, ServerApp serverApp)
         {
-            _logger = logger;
+            _logQueue = logQueue;
             _serverApp = serverApp;
+            _logQueue = logQueue;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug($"GameGate is stopping."));
+            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"GameGate is stopping."));
             await _serverApp.Start();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is starting.");
+            _logQueue.EnqueueDebugging($"GameGate is starting.");
             _serverApp.StartService();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"GameGate is stopping.");
+            _logQueue.EnqueueDebugging($"GameGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }
