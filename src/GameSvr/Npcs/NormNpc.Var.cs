@@ -1858,10 +1858,6 @@ namespace GameSvr
             string sVarValue2 = string.Empty;
             int nSecond;
             TDynamicVar DynamicVar;
-            short wHour;
-            short wMinute;
-            short wSecond;
-            long IntDays;
             sValue = "";
             nValue = -1;
             nDataType = -1;
