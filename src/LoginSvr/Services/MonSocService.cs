@@ -33,7 +33,7 @@ namespace LoginSvr
             {
                 var msgServer = _masSockService.ServerList[i];
                 var sServerName = msgServer.sServerName;
-                if (sServerName != "")
+                if (!string.IsNullOrEmpty(sServerName))
                 {
                     sMsg = sMsg + sServerName + "/" + msgServer.nServerIndex + "/" + msgServer.nOnlineCount + "/";
                     if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)

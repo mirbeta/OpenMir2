@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text;
@@ -15,20 +14,17 @@ namespace LoginSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddDebug();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "Logsrv.conf")));
+                    services.AddSingleton<LogQueue>();
                     services.AddSingleton<AppServer>();
                     services.AddSingleton<LoginService>();
                     services.AddSingleton<AccountDB>();
                     services.AddSingleton<MasSocService>();
                     services.AddSingleton<MonSocService>();
+                    services.AddSingleton<ThreadParseList>();
+                    services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 });
 
