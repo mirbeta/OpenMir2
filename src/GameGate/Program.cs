@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,12 +22,6 @@ namespace GameGate
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             PrintUsage();
             var host = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.AddConsole();
-                    logging.AddDebug();
-                    logging.ClearProviders();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
@@ -75,7 +67,7 @@ namespace GameGate
 
                 if (firstTwoCharacters switch
                 {
-                    "/m" => ShowServerStatus(),
+                    "/s" => ShowServerStatus(),
                     _ => null
                 } is Task task)
                 {
@@ -104,7 +96,7 @@ namespace GameGate
                  .AutoClear(true)
                  .Overflow(VerticalOverflow.Crop)
                  .Cropping(VerticalOverflowCropping.Top)
-                 .Start(async ctx =>
+                 .StartAsync(async ctx =>
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
                      {
@@ -118,12 +110,12 @@ namespace GameGate
                          {
                              var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal) = clientList[i].GetStatus();
 
-                             table.UpdateCell(0, 0, $"[bold]{serverIp}[/]");
-                             table.UpdateCell(0, 1, ($"[bold]{serverPort}[/]"));
-                             table.UpdateCell(0, 2, ($"[bold]{Status}[/]"));
-                             table.UpdateCell(0, 3, ($"[bold]{playCount}[/]"));
-                             table.UpdateCell(0, 4, ($"[bold]{sendTotal}[/]"));
-                             table.UpdateCell(0, 5, ($"[bold]{reviceTotal}[/]"));
+                             table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
+                             table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
+                             table.UpdateCell(i, 2, ($"[bold]{Status}[/]"));
+                             table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
+                             table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
+                             table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
                          }
                          ctx.Refresh();
                      }

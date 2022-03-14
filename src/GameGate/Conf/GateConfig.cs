@@ -10,6 +10,7 @@ namespace GameGate
     {
         public bool m_fAddLog;
         public int m_nShowLogLevel;
+        public bool ShowDebugLog;
         public int m_nGateCount;
         public bool m_fCheckNullSession;
         /// <summary>
@@ -244,6 +245,7 @@ namespace GameGate
             m_nClientMoveSpeedRate = 0;
             m_nClientSpellSpeedRate = 0;
             m_nClientAttackSpeedRate = 0;
+            ShowDebugLog = false;
         }
     }
 }

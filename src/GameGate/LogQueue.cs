@@ -14,6 +14,8 @@ namespace GameGate
             _configManager = configManager;
         }
 
+        public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
+
         public void Enqueue(string msg, int msgLevel)
         {
             if (_configManager.GateConfig.m_nShowLogLevel >= msgLevel)
@@ -31,8 +33,11 @@ namespace GameGate
 
         public void EnqueueDebugging(string msg)
         {
-            if (DebugLog.Count < 100)
-                DebugLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+            if (ShowDebugLog)
+            {
+                if (DebugLog.Count < 100)
+                    DebugLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+            }
         }
     }
 }

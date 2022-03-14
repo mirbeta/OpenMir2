@@ -2,7 +2,7 @@ using SystemModule.Common;
 
 namespace GameGate
 {
-    public partial class ConfigManager : IniFile
+    public class ConfigManager : IniFile
     {
         public GateConfig GateConfig;
         public TGameGateList[] m_xGameGateList;
@@ -32,6 +32,7 @@ namespace GameGate
             GateConfig.m_szBlockHWIDFileName = ReadString("Strings", "BlockHWIDFileName", GateConfig.m_szBlockHWIDFileName);
             GateConfig.m_fAddLog = ReadBool("Switch", "AddLog", GateConfig.m_fAddLog);
             GateConfig.m_nShowLogLevel = ReadInteger("Integer", "ShowLogLevel", GateConfig.m_nShowLogLevel);
+            GateConfig.ShowDebugLog = ReadBool("Integer", "ShowDebugLog", GateConfig.ShowDebugLog);
             GateConfig.m_nPunishMoveInterval = ReadInteger("Integer", "PunishMoveInterval", GateConfig.m_nPunishMoveInterval);
             GateConfig.m_nPunishSpellInterval = ReadInteger("Integer", "PunishSpellInterval", GateConfig.m_nPunishSpellInterval);
             GateConfig.m_nPunishAttackInterval = ReadInteger("Integer", "PunishAttackInterval", GateConfig.m_nPunishAttackInterval);
