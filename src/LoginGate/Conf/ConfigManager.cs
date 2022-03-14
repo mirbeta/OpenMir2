@@ -43,6 +43,7 @@ namespace LoginGate.Conf
             GateConfig.m_tBlockIPMethod = Enum.Parse<TBlockIPMethod>(ReadString("Method", "BlockIPMethod", GateConfig.m_tBlockIPMethod.ToString()));
             GateConfig.m_nGateCount = ReadInteger("LoginGate", "Count", GateConfig.m_nGateCount);
             GateConfig.m_nShowLogLevel = ReadInteger("LoginGate", "ShowLogLevel", GateConfig.m_nShowLogLevel);
+            GateConfig.ShowDebugLog = ReadBool("LoginGate", "ShowDebugLog", GateConfig.ShowDebugLog);
             for (int i = 0; i < GateConfig.m_nGateCount; i++)
             {
                 m_xGameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);

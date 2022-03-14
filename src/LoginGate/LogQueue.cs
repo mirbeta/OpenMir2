@@ -16,9 +16,12 @@ namespace LoginGate
         public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
         public readonly ConcurrentQueue<string> DebugLog = new ConcurrentQueue<string>();
 
+        public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
+        public int ShowLogLevel => _configManager.GateConfig.m_nShowLogLevel;
+        
         public void Enqueue(string msg, int msgLevel)
         {
-            if (_configManager.GateConfig.m_nShowLogLevel >= msgLevel)
+            if (ShowLogLevel >= msgLevel)
             {
                 if (MessageLog.Count < 100)
                     MessageLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
@@ -33,8 +36,11 @@ namespace LoginGate
 
         public void EnqueueDebugging(string msg)
         {
-            if (DebugLog.Count < 100)
-                DebugLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+            if (ShowDebugLog)
+            {
+                if (DebugLog.Count < 100)
+                    DebugLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace LoginGate.Conf
     {
         public string m_szTitle;
         public int m_nShowLogLevel;
+        public bool ShowDebugLog;
         public int m_nGateCount;
         public TGameGateList[] m_xGameGateList;
         public bool m_fCheckNewIDOfIP;
@@ -46,6 +47,7 @@ namespace LoginGate.Conf
             m_nCheckNewIDOfIP = 5;
             m_nClientTimeOutTime = 60 * 1000;
             m_nMaxClientPacketCount = 2;
+            ShowDebugLog = false;
         }
     }
 
