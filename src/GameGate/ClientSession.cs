@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packages;
@@ -31,20 +30,22 @@ namespace GameGate
         private readonly ClientThread lastGameSvr;
         private readonly ConfigManager _configManager;
         private readonly HWIDFilter _hwidFilter;
+        private readonly LogQueue _logQueue;
 
-        public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(LogQueue logQueue, ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
             _msgList = new List<TDelayMsg>();
             _session = session;
             lastGameSvr = clientThread;
             _configManager = configManager;
-            _hwidFilter = GateShare._HwidFilter;
+            _hwidFilter = GateShare.HWFilter;
             m_xHWID = MD5.g_MD5EmptyDigest;
             m_fOverClientCount = false;
             m_KickFlag = false;
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
+            _logQueue = logQueue;
         }
 
         public GameSpeed GetGameSpeed()
@@ -944,7 +945,7 @@ namespace GameGate
             }
             if (nMid > 0)
             {
-                Debug.WriteLine($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{nMid}] DelayTime:[{dwDelay}]");
+                _logQueue.EnqueueDebugging($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{nMid}] DelayTime:[{dwDelay}]");
             }
         }
 
@@ -1008,10 +1009,10 @@ namespace GameGate
                         switch (cmd.Series)
                         {
                             case 1:
-                                Console.WriteLine("封机器码");
+                                _logQueue.EnqueueDebugging("封机器码");
                                 break;
                             case 2:
-                                Console.WriteLine("清理机器码");
+                                _logQueue.EnqueueDebugging("清理机器码");
                                 _hwidFilter.ClearDeny();
                                 _hwidFilter.SaveDenyList();
                                 break;
@@ -1266,7 +1267,7 @@ namespace GameGate
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
-                    GateShare.AddMainLogMsg($"[HandleLogin] Kicked 1: {loginData}", 1);
+                    _logQueue.Enqueue($"[HandleLogin] Kicked 1: {loginData}", 1);
                     success = false;
                     return;
                 }
@@ -1312,7 +1313,7 @@ namespace GameGate
                     {
                         if (string.IsNullOrEmpty(szHarewareID) || (szHarewareID.Length > 256) || ((szHarewareID.Length % 2) != 0))
                         {
-                            GateShare.AddMainLogMsg($"[HandleLogin] Kicked 3: {sHumName}", 1);
+                            _logQueue.Enqueue($"[HandleLogin] Kicked 3: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
@@ -1361,25 +1362,25 @@ namespace GameGate
                         }
                         if (fMatch)
                         {
-                            GateShare.AddMainLogMsg($"[HandleLogin] Kicked 5: {sHumName}", 1);
+                            _logQueue.Enqueue($"[HandleLogin] Kicked 5: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
-                        THardwareHeader pHardwareHeader = new THardwareHeader(dest);
+                        HardwareHeader pHardwareHeader = new HardwareHeader(dest);
                         //todo session会话里面需要存用户ip
-                        GateShare.AddMainLogMsg($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
+                        _logQueue.Enqueue($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)
                         {
                             if (MD5.MD5Match(MD5.g_MD5EmptyDigest, pHardwareHeader.xMd5Digest))
                             {
-                                GateShare.AddMainLogMsg($"[HandleLogin] Kicked 6: {sHumName}", 1);
+                                _logQueue.Enqueue($"[HandleLogin] Kicked 6: {sHumName}", 1);
                                 SendKickMsg(4);
                                 return;
                             }
                             m_xHWID = pHardwareHeader.xMd5Digest;
                             if (_hwidFilter.IsFilter(m_xHWID, ref m_fOverClientCount))
                             {
-                                GateShare.AddMainLogMsg($"[HandleLogin] Kicked 7: {sHumName}", 1);
+                                _logQueue.Enqueue($"[HandleLogin] Kicked 7: {sHumName}", 1);
                                 if (m_fOverClientCount)
                                 {
                                     SendKickMsg(5);
@@ -1393,7 +1394,7 @@ namespace GameGate
                         }
                         else
                         {
-                            GateShare.AddMainLogMsg($"[HandleLogin] Kicked 8: {sHumName}", 1);
+                            _logQueue.Enqueue($"[HandleLogin] Kicked 8: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
@@ -1407,20 +1408,19 @@ namespace GameGate
                     pszLoginPacket[1] = (byte)'0';
                     pszLoginPacket[encodelen + 2] = (byte)'!';
                     _handleLogin = 2;
-                    Console.WriteLine("发送延时消息:" + HUtil32.GetString(pszLoginPacket, 0, encodelen + 3));
                     SendFirstPack(pszLoginPacket, encodelen + 3);
                     _session.sAccount = sAccount;
                     _session.sChrName = sHumName;
                 }
                 else
                 {
-                    GateShare.AddMainLogMsg($"[HandleLogin] Kicked 2: {loginData}", 1);
+                    _logQueue.Enqueue($"[HandleLogin] Kicked 2: {loginData}", 1);
                     success = false;
                 }
             }
             else
             {
-                GateShare.AddMainLogMsg($"[HandleLogin] Kicked 0: {loginData}", 1);
+                _logQueue.Enqueue($"[HandleLogin] Kicked 0: {loginData}", 1);
                 success = false;
             }
         }
@@ -1493,29 +1493,18 @@ namespace GameGate
         /// <param name="sMsg"></param>
         private void FilterSayMsg(ref string sMsg)
         {
-            int nLen;
-            string sReplaceText;
-            string sFilterText;
-            try
+            for (var i = 0; i < GateShare.AbuseList.Count; i++)
             {
-                HUtil32.EnterCriticalSection(GateShare.CS_FilterMsg);
-                for (var i = 0; i < GateShare.AbuseList.Count; i++)
+                string sFilterText = GateShare.AbuseList[i];
+                string sReplaceText = string.Empty;
+                if (sMsg.IndexOf(sFilterText, StringComparison.OrdinalIgnoreCase) != -1)
                 {
-                    sFilterText = GateShare.AbuseList[i];
-                    sReplaceText = "";
-                    if (sMsg.IndexOf(sFilterText, StringComparison.OrdinalIgnoreCase) != -1)
+                    for (int nLen = 0; nLen <= sFilterText.Length; nLen++)
                     {
-                        for (nLen = 0; nLen <= sFilterText.Length; nLen++)
-                        {
-                            sReplaceText = sReplaceText + GateShare.sReplaceWord;
-                        }
-                        sMsg = sMsg.Replace(sFilterText, sReplaceText);
+                        sReplaceText = sReplaceText + GateShare.sReplaceWord;
                     }
+                    sMsg = sMsg.Replace(sFilterText, sReplaceText);
                 }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(GateShare.CS_FilterMsg);
             }
         }
     }

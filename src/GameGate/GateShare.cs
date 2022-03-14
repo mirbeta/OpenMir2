@@ -9,16 +9,9 @@ namespace GameGate
 {
     public class GateShare
     {
-        public static object CS_FilterMsg = null;
-        public static IList<string> MainLogMsgList = null;
-        public static int nShowLogLevel = 0;
-        public static string GateClass = "GameGate";
+        public static bool ShowLog = true;
         public static string GateAddr = "*";
         public static int GatePort = 7200;
-        /// <summary>
-        /// 显示B 或 KB
-        /// </summary>
-        public static bool boShowBite = true;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
@@ -30,7 +23,6 @@ namespace GameGate
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-        public static bool boDecodeMsgLock = false;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -47,48 +39,10 @@ namespace GameGate
         public static IList<ClientThread> ServerGateList;
         public static ConcurrentDictionary<string, byte> g_ChatCmdFilterList;
         public static Dictionary<string, ClientSession> PunishList;
-        public static HWIDFilter _HwidFilter;
-
-        public static void AddMainLogMsg(string Msg, int nLevel)
-        {
-            var tMsg = "[" + DateTime.Now + "] " + Msg;
-            MainLogMsgList.Add(tMsg);
-        }
-
-        public static void LoadAbuseFile()
-        {
-            AddMainLogMsg("正在加载文字过滤配置信息...", 4);
-            var sFileName = ".\\WordFilter.txt";
-            if (File.Exists(sFileName))
-            {
-                try
-                {
-                    HUtil32.EnterCriticalSection(CS_FilterMsg);
-                    //AbuseList.LoadFromFile(sFileName);
-                }
-                finally
-                {
-                    HUtil32.LeaveCriticalSection(CS_FilterMsg);
-                }
-            }
-            AddMainLogMsg("文字过滤信息加载完成...", 4);
-        }
-
-        public static void LoadBlockIPFile()
-        {
-            AddMainLogMsg("正在加载IP过滤配置信息...", 4);
-            var sFileName = ".\\BlockIPList.txt";
-            if (File.Exists(sFileName))
-            {
-                BlockIPList.LoadFromFile(sFileName);
-            }
-            AddMainLogMsg("IP过滤配置信息加载完成...", 4);
-        }
+        public static HWIDFilter HWFilter;
 
         public static void Initialization()
         {
-            CS_FilterMsg = new object();
-            MainLogMsgList = new List<string>();
             AbuseList = new List<string>();
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
@@ -98,12 +52,12 @@ namespace GameGate
         }
     }
 
-    public class THardwareHeader : Packets
+    public class HardwareHeader : Packets
     {
         public uint dwMagicCode;
         public byte[] xMd5Digest;
 
-        public THardwareHeader(byte[] buffer) : base(buffer)
+        public HardwareHeader(byte[] buffer) : base(buffer)
         {
 
         }

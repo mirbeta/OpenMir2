@@ -49,11 +49,20 @@ namespace GameGate
         /// </summary>
         private bool isConnected = false;
         /// <summary>
+        /// 发送总字节数
+        /// </summary>
+        public int SendBytes;
+        /// <summary>
+        /// 接受总字节数
+        /// </summary>
+        public int ReceiveBytes;
+        /// <summary>
         /// Session管理
         /// </summary>
         private readonly SessionManager _sessionManager;
+        private readonly LogQueue _logQueue;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
         {
             ClientId = clientId;
             ClientSocket = new IClientScoket();
@@ -65,6 +74,7 @@ namespace GameGate
             ClientSocket.Port = serverPort;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
+            _logQueue = logQueue;
         }
 
         public bool IsConnected => isConnected;
@@ -72,6 +82,16 @@ namespace GameGate
         public string GetSocketIp()
         {
             return $"{ClientSocket.Address}:{ClientSocket.Port}";
+        }
+
+        private string GetSocketPort()
+        {
+            return $"{ClientSocket.Port}";
+        }
+
+        private string GetSocketAddress()
+        {
+            return $"{ClientSocket.Address}";
         }
 
         public void Start()
@@ -85,6 +105,66 @@ namespace GameGate
             {
                 ClientSocket.Connect();
             }
+        }
+
+        public string GetSessionCount()
+        {
+            var count = 0;
+            for (int i = 0; i < SessionArray.Length; i++)
+            {
+                if (SessionArray[i].Socket != null)
+                {
+                    count++;
+                }
+            }
+            return count + "/" + count;
+        }
+
+        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal) GetStatus()
+        {
+            return (GetSocketAddress(), GetSocketPort(), GetConnected(), GetSessionCount(), GetSendInfo(), GetReceiveInfo());
+        }
+
+        internal string GetConnected() {
+            return IsConnected ? $"[green]已连接[/]" : $"[red]Not Connected[/]";
+        }
+
+        public string GetSendInfo()
+        {
+            var totalStr = string.Empty;
+            if (SendBytes > (1024 * 1000))
+            {
+                totalStr= $"↑{SendBytes / (1024 * 1000)}M";
+            }
+            else if (SendBytes > 1024)
+            {
+                totalStr = $"↑{SendBytes / 1024}K";
+            }
+            else
+            {
+                totalStr = $"↑{SendBytes}B";
+            }
+            SendBytes = 0;
+            return totalStr;
+        }
+
+        public string GetReceiveInfo()
+        {
+            var totalStr = string.Empty;
+            if (ReceiveBytes > (1024 * 1000))
+            {
+                totalStr = $"↓{ReceiveBytes / (1024 * 1000)}M";
+            }
+            else if (ReceiveBytes > 1024)
+            {
+                totalStr = $"↓{ReceiveBytes / 1024}K";
+            }
+            else
+            {
+                totalStr = $"↓{ReceiveBytes}B";
+            }
+            ReceiveBytes = 0;
+            return totalStr;
         }
 
         public void Stop()
@@ -106,9 +186,11 @@ namespace GameGate
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.Add(this);
-            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            _logQueue.Enqueue($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             Debug.WriteLine($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
+            ReceiveBytes = 0;
+            SendBytes = 0;
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -127,7 +209,7 @@ namespace GameGate
             SocketBuffer = null;
             boGateReady = false;
             GateShare.ServerGateList.Remove(this);
-            GateShare.AddMainLogMsg($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
+            _logQueue.Enqueue($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
         }
 
@@ -139,6 +221,7 @@ namespace GameGate
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             ProcReceiveBuffer(e.Buff, e.BuffLen);
+            ReceiveBytes += e.BuffLen;
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -146,15 +229,15 @@ namespace GameGate
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    GateShare.AddMainLogMsg("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }
@@ -197,7 +280,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 通知M2有新玩家进入游戏
+        /// 玩家进入游戏
         /// </summary>
         public void UserEnter(int wSocketIndex, int nSocket, string Data)
         {
@@ -205,7 +288,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 用户退出游戏
+        /// 玩家退出游戏
         /// </summary>
         public void UserLeave(int scoket)
         {
@@ -235,17 +318,11 @@ namespace GameGate
             }
         }
 
-        public void SendBuffer(byte[] buffer, int buffLen = 0)
-        {
-            SendSocket(buffer);
-        }
-
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             MessageHeader mesgHeader;
             var BuffIndex = 0;
             const int HeaderMessageSize = 20;
-            var tempssss = tBuffer;
             try
             {
                 if (nBuffLen > 0) //有未处理完成的buff
@@ -346,9 +423,13 @@ namespace GameGate
             }
             catch (Exception E)
             {
-                Console.WriteLine($"异常信息:[Buffer{tempssss.Length}]");
-                GateShare.AddMainLogMsg($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
+                _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
             }
+        }
+
+        public void SendBuffer(byte[] buffer, int buffLen = 0)
+        {
+            SendSocket(buffer);
         }
 
         private void SendSocket(byte[] sendBuffer)
@@ -356,6 +437,7 @@ namespace GameGate
             if (ClientSocket.IsConnected)
             {
                 ClientSocket.Send(sendBuffer);
+                SendBytes += sendBuffer.Length;
             }
         }
     }
