@@ -415,7 +415,7 @@ namespace LoginSvr
                         if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
                             UserInfo.dwClientTick = HUtil32.GetTickCount();
-                            AccountChangePassword(_configManager.Config, UserInfo, sData);
+                            AccountChangePassword(UserInfo, sData);
                         }
                         else
                         {
@@ -431,7 +431,7 @@ namespace LoginSvr
                     if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                     {
                         UserInfo.dwClientTick = HUtil32.GetTickCount();
-                        AccountUpdateUserInfo(_configManager.Config, UserInfo, sData);
+                        AccountUpdateUserInfo(UserInfo, sData);
                     }
                     else
                     {
@@ -454,31 +454,34 @@ namespace LoginSvr
 
         private void AccountCreate(TUserInfo UserInfo, string sData)
         {
-            const int userLen = TUserEntry.PacketSize;
             bool bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
+            UserFullEntry userFullEntry = null;
             try
             {
-                int nErrCode = -1;
-                var sUserEntryMsg = sData.Substring(0, userLen);
-                var sUserAddEntryMsg = sData.Substring(userLen, sData.Length - userLen);
-                if (!string.IsNullOrEmpty(sUserEntryMsg) && !string.IsNullOrEmpty(sUserAddEntryMsg))
+                if (string.IsNullOrEmpty(sData))
                 {
-                    TUserEntry UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg));
-                    TUserEntryAdd UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg));
-                    if (LSShare.CheckAccountName(UserEntry.sAccount))
+                    _logQueue.Enqueue("[新建账号失败,数据包为空].");
+                    return;
+                }
+                var deBuffer = EDcode.DecodeBuffer(sData);
+                userFullEntry = new UserFullEntry(deBuffer);
+                int nErrCode = -1;
+                if (userFullEntry != null)
+                {
+                    if (LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                     {
                         bo21 = true;
                     }
                     if (bo21)
                     {
-                        int n10 = _accountDB.Index(UserEntry.sAccount);
+                        int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
                         if (n10 <= 0)
                         {
                             TAccountDBRecord DBRecord = new TAccountDBRecord();
-                            DBRecord.UserEntry = UserEntry;
-                            DBRecord.UserEntryAdd = UserAddEntry;
-                            if (!string.IsNullOrEmpty(UserEntry.sAccount))
+                            DBRecord.UserEntry = userFullEntry.UserEntry;
+                            DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
+                            if (!string.IsNullOrEmpty(userFullEntry.UserEntry.sAccount))
                             {
                                 if (_accountDB.Add(ref DBRecord))
                                 {
@@ -493,7 +496,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        _logQueue.Enqueue(string.Format(sAddNewuserFail, UserEntry.sAccount, UserAddEntry.sQuiz2));
+                        _logQueue.Enqueue(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
                     }
                 }
                 TDefaultMessage DefMsg;
@@ -514,7 +517,7 @@ namespace LoginSvr
             }
         }
 
-        private void AccountChangePassword(Config Config, TUserInfo UserInfo, string sData)
+        private void AccountChangePassword(TUserInfo UserInfo, string sData)
         {
             string sLoginID = string.Empty;
             string sOldPassword = string.Empty;
@@ -900,45 +903,51 @@ namespace LoginSvr
         /// <summary>
         /// 更新账号信息
         /// </summary>
-        private void AccountUpdateUserInfo(Config Config, TUserInfo UserInfo, string sData)
+        private void AccountUpdateUserInfo(TUserInfo UserInfo, string sData)
         {
             TAccountDBRecord DBRecord = null;
-            const int userLen = TUserEntry.PacketSize;
+            UserFullEntry userFullEntry = null;
             TDefaultMessage DefMsg;
             try
             {
-                var sUserEntryMsg = sData.Substring(01, userLen);
-                var sUserAddEntryMsg = sData.Substring(userLen, sData.Length - userLen);
-                TUserEntry UserEntry = new TUserEntry(EDcode.DecodeBuffer(sUserEntryMsg));
-                TUserEntryAdd UserAddEntry = new TUserEntryAdd(EDcode.DecodeBuffer(sUserAddEntryMsg));
-                int nCode = -1;
-                if (UserInfo.sAccount == UserEntry.sAccount && LSShare.CheckAccountName(UserEntry.sAccount))
+                if (string.IsNullOrEmpty(sData))
                 {
-                    int n10 = _accountDB.Index(UserEntry.sAccount);
-                    if (n10 >= 0)
+                    _logQueue.Enqueue("[新建账号失败,数据包为空].");
+                    return;
+                }
+                var deBuffer = EDcode.DecodeBuffer(sData);
+                userFullEntry = new UserFullEntry(deBuffer);
+                if (userFullEntry != null)
+                {
+                    int nCode = -1;
+                    if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                     {
-                        if (_accountDB.Get(n10, ref DBRecord) >= 0)
+                        int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
+                        if (n10 >= 0)
                         {
-                            DBRecord.UserEntry = UserEntry;
-                            DBRecord.UserEntryAdd = UserAddEntry;
-                            _accountDB.Update(n10, ref DBRecord);
-                            nCode = 1;
+                            if (_accountDB.Get(n10, ref DBRecord) >= 0)
+                            {
+                                DBRecord.UserEntry = userFullEntry.UserEntry;
+                                DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
+                                _accountDB.Update(n10, ref DBRecord);
+                                nCode = 1;
+                            }
                         }
+                        else
+                        {
+                            nCode = 0;
+                        }
+                    }
+                    if (nCode == 1)
+                    {
+                        DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
                     }
                     else
                     {
-                        nCode = 0;
+                        DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
                     }
+                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
                 }
-                if (nCode == 1)
-                {
-                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
-                }
-                else
-                {
-                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
-                }
-                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
             }
             catch (Exception ex)
             {

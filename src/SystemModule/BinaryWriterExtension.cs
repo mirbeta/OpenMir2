@@ -14,10 +14,18 @@ namespace SystemModule
             var size = value.Length + 1;
             defaultSize = defaultSize + 1;
             var buffer = HUtil32.StringToByteAry(value, out int strLen);
-            buffer[0] = (byte)strLen;
-            if (size < defaultSize)
+            if (string.IsNullOrEmpty(value))
             {
+                buffer[0] = (byte)defaultSize;
                 size = defaultSize;
+            }
+            else
+            {
+                buffer[0] = (byte)strLen;
+                if (size < defaultSize)
+                {
+                    size = defaultSize;
+                }
             }
             Array.Resize(ref buffer, size);
             binaryWriter.Write(buffer, 0, buffer.Length);
