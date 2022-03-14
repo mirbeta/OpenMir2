@@ -53,8 +53,8 @@ namespace GameSvr
                     Gate.boUsed = true;
                     Gate.SocketId = e.ConnectionId;
                     Gate.Socket = e.Socket;
-                    Gate.sAddr = GetGateAddr(e.EndPoint.Address.ToString());
-                    Gate.nPort = e.EndPoint.Port;
+                    Gate.sAddr = GetGateAddr(e.RemoteIPaddr);
+                    Gate.nPort = e.RemotePort;
                     Gate.UserList = new List<TGateUserInfo>();
                     Gate.nUserCount = 0;
                     Gate.Buffer = null;
