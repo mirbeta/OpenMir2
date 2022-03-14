@@ -277,7 +277,7 @@ namespace LoginSvr
                     _logQueue.EnqueueDebugging(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue("[Exception] LoginService.ReceiveOpenUser " + ex.Source);
             }
@@ -347,7 +347,7 @@ namespace LoginSvr
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue("[Exception] LoginService.DecodeUserData");
                 _logQueue.Enqueue(ex.StackTrace);
@@ -472,33 +472,23 @@ namespace LoginSvr
                     }
                     if (bo21)
                     {
-                        try
+                        int n10 = _accountDB.Index(UserEntry.sAccount);
+                        if (n10 <= 0)
                         {
-                            if (_accountDB.Open())
+                            TAccountDBRecord DBRecord = new TAccountDBRecord();
+                            DBRecord.UserEntry = UserEntry;
+                            DBRecord.UserEntryAdd = UserAddEntry;
+                            if (!string.IsNullOrEmpty(UserEntry.sAccount))
                             {
-                                int n10 = _accountDB.Index(UserEntry.sAccount);
-                                if (n10 <= 0)
+                                if (_accountDB.Add(ref DBRecord))
                                 {
-                                    TAccountDBRecord DBRecord = new TAccountDBRecord();
-                                    DBRecord.UserEntry = UserEntry;
-                                    DBRecord.UserEntryAdd = UserAddEntry;
-                                    if (!string.IsNullOrEmpty(UserEntry.sAccount))
-                                    {
-                                        if (_accountDB.Add(ref DBRecord))
-                                        {
-                                            nErrCode = 1;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    nErrCode = 0;
+                                    nErrCode = 1;
                                 }
                             }
                         }
-                        finally
+                        else
                         {
-                            _accountDB.Close();
+                            nErrCode = 0;
                         }
                     }
                     else
@@ -533,48 +523,41 @@ namespace LoginSvr
             try
             {
                 string sMsg = EDcode.DeCodeString(sData);
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginID, new[] {"\09"});
-                string sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] {"\09"});
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginID, new[] { "\09" });
+                string sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09" });
                 int nCode = 0;
-                try
+                if (sNewPassword.Length >= 3)
                 {
-                    if (_accountDB.Open() && sNewPassword.Length >= 3)
+                    int n10 = _accountDB.Index(sLoginID);
+                    if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
                     {
-                        int n10 = _accountDB.Index(sLoginID);
-                        if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
+                        if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                         {
-                            if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
+                            if (DBRecord.UserEntry.sPassword == sOldPassword)
                             {
-                                if (DBRecord.UserEntry.sPassword == sOldPassword)
-                                {
-                                    DBRecord.nErrorCount = 0;
-                                    DBRecord.UserEntry.sPassword = sNewPassword;
-                                    nCode = 1;
-                                }
-                                else
-                                {
-                                    DBRecord.nErrorCount++;
-                                    DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                    nCode = -1;
-                                }
-
-                                _accountDB.Update(n10, ref DBRecord);
+                                DBRecord.nErrorCount = 0;
+                                DBRecord.UserEntry.sPassword = sNewPassword;
+                                nCode = 1;
                             }
                             else
                             {
-                                nCode = -2;
-                                if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
-                                {
-                                    DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                    _accountDB.Update(n10, ref DBRecord);
-                                }
+                                DBRecord.nErrorCount++;
+                                DBRecord.dwActionTick = HUtil32.GetTickCount();
+                                nCode = -1;
+                            }
+
+                            _accountDB.Update(n10, ref DBRecord);
+                        }
+                        else
+                        {
+                            nCode = -2;
+                            if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
+                            {
+                                DBRecord.dwActionTick = HUtil32.GetTickCount();
+                                _accountDB.Update(n10, ref DBRecord);
                             }
                         }
                     }
-                }
-                finally
-                {
-                    _accountDB.Close();
                 }
                 if (nCode == 1)
                 {
@@ -649,46 +632,36 @@ namespace LoginSvr
                 var sPassword = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sLoginID, new[] { "/" });
                 var nCode = 0;
                 var boNeedUpdate = false;
-                try
+                var n10 = _accountDB.Index(sLoginID);
+                if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
                 {
-                    if (_accountDB.Open())
+                    if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 60000)
                     {
-                        var n10 = _accountDB.Index(sLoginID);
-                        if (n10 >= 0 && _accountDB.Get(n10, ref DBRecord) >= 0)
+                        if (DBRecord.UserEntry.sPassword == sPassword)
                         {
-                            if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 60000)
+                            DBRecord.nErrorCount = 0;
+                            if (DBRecord.UserEntry.sUserName == "" || DBRecord.UserEntryAdd.sQuiz2 == "")
                             {
-                                if (DBRecord.UserEntry.sPassword == sPassword)
-                                {
-                                    DBRecord.nErrorCount = 0;
-                                    if (DBRecord.UserEntry.sUserName == "" || DBRecord.UserEntryAdd.sQuiz2 == "")
-                                    {
-                                        UserEntry = DBRecord.UserEntry;
-                                        boNeedUpdate = true;
-                                    }
-                                    DBRecord.Header.CreateDate = UserInfo.dtDateTime;
-                                    nCode = 1;
-                                }
-                                else
-                                {
-                                    DBRecord.nErrorCount++;
-                                    DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                    nCode = -1;
-                                }
-                                _accountDB.Update(n10, ref DBRecord);
+                                UserEntry = DBRecord.UserEntry;
+                                boNeedUpdate = true;
                             }
-                            else
-                            {
-                                nCode = -2;
-                                DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                _accountDB.Update(n10, ref DBRecord);
-                            }
+                            DBRecord.Header.CreateDate = UserInfo.dtDateTime;
+                            nCode = 1;
                         }
+                        else
+                        {
+                            DBRecord.nErrorCount++;
+                            DBRecord.dwActionTick = HUtil32.GetTickCount();
+                            nCode = -1;
+                        }
+                        _accountDB.Update(n10, ref DBRecord);
                     }
-                }
-                finally
-                {
-                    _accountDB.Close();
+                    else
+                    {
+                        nCode = -2;
+                        DBRecord.dwActionTick = HUtil32.GetTickCount();
+                        _accountDB.Update(n10, ref DBRecord);
+                    }
                 }
                 if (nCode == 1 && IsLogin(Config, sLoginID))
                 {
@@ -825,7 +798,7 @@ namespace LoginSvr
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue("[Exception] LoginService.GetSelGateInfo");
                 _logQueue.Enqueue(ex.StackTrace);
@@ -941,30 +914,20 @@ namespace LoginSvr
                 int nCode = -1;
                 if (UserInfo.sAccount == UserEntry.sAccount && LSShare.CheckAccountName(UserEntry.sAccount))
                 {
-                    try
+                    int n10 = _accountDB.Index(UserEntry.sAccount);
+                    if (n10 >= 0)
                     {
-                        if (_accountDB.Open())
+                        if (_accountDB.Get(n10, ref DBRecord) >= 0)
                         {
-                            int n10 = _accountDB.Index(UserEntry.sAccount);
-                            if (n10 >= 0)
-                            {
-                                if (_accountDB.Get(n10, ref DBRecord) >= 0)
-                                {
-                                    DBRecord.UserEntry = UserEntry;
-                                    DBRecord.UserEntryAdd = UserAddEntry;
-                                    _accountDB.Update(n10, ref DBRecord);
-                                    nCode = 1;
-                                }
-                            }
-                            else
-                            {
-                                nCode = 0;
-                            }
+                            DBRecord.UserEntry = UserEntry;
+                            DBRecord.UserEntryAdd = UserAddEntry;
+                            _accountDB.Update(n10, ref DBRecord);
+                            nCode = 1;
                         }
                     }
-                    finally
+                    else
                     {
-                        _accountDB.Close();
+                        nCode = 0;
                     }
                 }
                 if (nCode == 1)
@@ -977,7 +940,7 @@ namespace LoginSvr
                 }
                 SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue("[Exception] LoginService.UpdateUserInfo");
                 _logQueue.Enqueue(ex.StackTrace);
@@ -1006,20 +969,31 @@ namespace LoginSvr
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, new[] { "\09" });
             sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, new[] { "\09" });
             int nCode = 0;
-            try
+            if (!string.IsNullOrEmpty(sAccount))
             {
-                if (!string.IsNullOrEmpty(sAccount) && _accountDB.Open())
+                var nIndex = _accountDB.Index(sAccount);
+                if (nIndex >= 0 && _accountDB.Get(nIndex, ref DBRecord) >= 0)
                 {
-                    var nIndex = _accountDB.Index(sAccount);
-                    if (nIndex >= 0 && _accountDB.Get(nIndex, ref DBRecord) >= 0)
+                    if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
                     {
-                        if (DBRecord.nErrorCount < 5 || HUtil32.GetTickCount() - DBRecord.dwActionTick > 180000)
+                        nCode = -1;
+                        if (DBRecord.UserEntry.sQuiz == sQuest1)
                         {
-                            nCode = -1;
-                            if (DBRecord.UserEntry.sQuiz == sQuest1)
+                            nCode = -3;
+                            if (DBRecord.UserEntry.sAnswer == sAnswer1)
+                            {
+                                if (DBRecord.UserEntryAdd.sBirthDay == sBirthDay)
+                                {
+                                    nCode = 1;
+                                }
+                            }
+                        }
+                        if (nCode != 1)
+                        {
+                            if (DBRecord.UserEntryAdd.sQuiz2 == sQuest2)
                             {
                                 nCode = -3;
-                                if (DBRecord.UserEntry.sAnswer == sAnswer1)
+                                if (DBRecord.UserEntryAdd.sAnswer2 == sAnswer2)
                                 {
                                     if (DBRecord.UserEntryAdd.sBirthDay == sBirthDay)
                                     {
@@ -1027,46 +1001,28 @@ namespace LoginSvr
                                     }
                                 }
                             }
-                            if (nCode != 1)
-                            {
-                                if (DBRecord.UserEntryAdd.sQuiz2 == sQuest2)
-                                {
-                                    nCode = -3;
-                                    if (DBRecord.UserEntryAdd.sAnswer2 == sAnswer2)
-                                    {
-                                        if (DBRecord.UserEntryAdd.sBirthDay == sBirthDay)
-                                        {
-                                            nCode = 1;
-                                        }
-                                    }
-                                }
-                            }
-                            if (nCode == 1)
-                            {
-                                sPassword = DBRecord.UserEntry.sPassword;
-                            }
-                            else
-                            {
-                                DBRecord.nErrorCount++;
-                                DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                _accountDB.Update(nIndex, ref DBRecord);
-                            }
+                        }
+                        if (nCode == 1)
+                        {
+                            sPassword = DBRecord.UserEntry.sPassword;
                         }
                         else
                         {
-                            nCode = -2;
-                            if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
-                            {
-                                DBRecord.dwActionTick = HUtil32.GetTickCount();
-                                _accountDB.Update(nIndex, ref DBRecord);
-                            }
+                            DBRecord.nErrorCount++;
+                            DBRecord.dwActionTick = HUtil32.GetTickCount();
+                            _accountDB.Update(nIndex, ref DBRecord);
+                        }
+                    }
+                    else
+                    {
+                        nCode = -2;
+                        if (HUtil32.GetTickCount() < DBRecord.dwActionTick)
+                        {
+                            DBRecord.dwActionTick = HUtil32.GetTickCount();
+                            _accountDB.Update(nIndex, ref DBRecord);
                         }
                     }
                 }
-            }
-            finally
-            {
-                _accountDB.Close();
             }
             if (nCode == 1)
             {
@@ -1202,7 +1158,7 @@ namespace LoginSvr
             Config.AccountCostList.Clear();
             Config.AccountCostList.Add(accountConst.s1C, accountConst.nC);
         }
-      
+
         public void LoadConfig()
         {
             _configManager.LoadConfig();
