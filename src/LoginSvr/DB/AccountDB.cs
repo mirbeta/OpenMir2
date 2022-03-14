@@ -14,7 +14,6 @@ namespace LoginSvr
         private readonly LogQueue _logQueue;
         private readonly ConfigManager _configManager;
         private readonly IList<AccountQuick> _quickList = null;
-        private IDbConnection _dbConnection;
 
         public AccountDB(LogQueue logQueue, ConfigManager configManager)
         {
@@ -28,10 +27,10 @@ namespace LoginSvr
         public void Initialization()
         {
             _logQueue.Enqueue("正在连接SQL服务器...");
-            _dbConnection = new MySqlConnection(Config.ConnctionString);
+            var dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
-                _dbConnection.Open();
+                dbConnection.Open();
                 _logQueue.Enqueue("连接SQL服务器成功...");
                 LoadQuickList();
             }
@@ -43,21 +42,21 @@ namespace LoginSvr
             }
         }
 
-        public bool Open()
+        public bool Open(ref IDbConnection dbConnection)
         {
             bool result = false;
-            if (_dbConnection == null)
+            if (dbConnection == null)
             {
-                _dbConnection = new MySqlConnection(Config.ConnctionString);
+                dbConnection = new MySqlConnection(Config.ConnctionString);
             }
-            switch (_dbConnection.State)
+            switch (dbConnection.State)
             {
                 case ConnectionState.Open:
                     return true;
                 case ConnectionState.Closed:
                     try
                     {
-                        _dbConnection.Open();
+                        dbConnection.Open();
                         result = true;
                     }
                     catch (Exception e)
@@ -71,12 +70,12 @@ namespace LoginSvr
             return result;
         }
 
-        public void Close()
+        public void Close(ref IDbConnection dbConnection)
         {
-            if (_dbConnection != null)
+            if (dbConnection != null)
             {
-                _dbConnection.Close();
-                _dbConnection.Dispose();
+                dbConnection.Close();
+                dbConnection.Dispose();
             }
         }
 
@@ -87,16 +86,17 @@ namespace LoginSvr
             string sAccount;
             const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
             _quickList.Clear();
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return;
+            }
             try
             {
-                if (!Open())
-                {
-                    return;
-                }
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
-                command.Connection = (MySqlConnection)_dbConnection;
-                using  var dr = command.ExecuteReader();
+                command.Connection = (MySqlConnection)dbConnection;
+                using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
                     nIndex = dr.GetInt32("Id");
@@ -112,7 +112,7 @@ namespace LoginSvr
             }
             finally
             {
-                Close();
+                Close(ref dbConnection);
             }
             //m_QuickList.SortString(0, m_QuickList.Count - 1);
         }
@@ -149,13 +149,14 @@ namespace LoginSvr
         {
             const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE ID={0}";
             var result = true;
-            if (!Open())
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
             {
                 return false;
             }
             var command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, nIndex);
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = (MySqlConnection)dbConnection;
             IDataReader dr;
             try
             {
@@ -211,7 +212,7 @@ namespace LoginSvr
             }
             finally
             {
-                Close();
+                Close(ref dbConnection);
             }
             return result;
         }
@@ -251,14 +252,15 @@ namespace LoginSvr
             const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (FLD_LOGINID, FLD_PASSWORD, FLD_USERNAME, FLD_CREATEDATE, FLD_LASTUPDATE, FLD_DELETED, FLD_ERRORCOUNT, FLD_ACTIONTICK, FLD_SSNO, FLD_BIRTHDAY, FLD_PHONE, FLD_MOBILEPHONE, FLD_EMAIL, FLD_QUIZ1, FLD_ANSWER1, FLD_QUIZ2, FLD_ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
             const string sUpdateRecord2 = "UPDATE TBL_ACCOUNT SET FLD_DELETED=1, FLD_CREATEDATE='{0}' WHERE FLD_LOGINID='{1}'";
             const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET FLD_PASSWORD='{0}', FLD_USERNAME='{1}',FLD_LASTUPDATE={2}, FLD_ERRORCOUNT={3}, FLD_ACTIONTICK={4},FLD_SSNO='{5}', FLD_BIRTHDAY='{6}', FLD_PHONE='{7}',FLD_MOBILEPHONE='{8}', FLD_EMAIL='{9}', FLD_QUIZ1='{10}', FLD_ANSWER1='{11}', FLD_QUIZ2='{12}',FLD_ANSWER2='{13}' WHERE FLD_LOGINID='{14}'";
+            IDbConnection dbConnection = null;
+            if (!Open(ref dbConnection))
+            {
+                return 0;
+            }
             try
             {
-                if (!Open())
-                {
-                    return 0;
-                }
                 var command = new MySqlCommand();
-                command.Connection = (MySqlConnection)_dbConnection;
+                command.Connection = (MySqlConnection)dbConnection;
                 switch (btFlag)
                 {
                     case 1:
@@ -296,8 +298,8 @@ namespace LoginSvr
                         catch (Exception E)
                         {
                             result = 0;
-                           _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (0)");
-                           _logQueue.Enqueue(E.Message);
+                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (0)");
+                            _logQueue.Enqueue(E.Message);
                             return result;
                         }
                         break;
@@ -305,7 +307,7 @@ namespace LoginSvr
             }
             finally
             {
-                Close();
+                Close(ref dbConnection);
             }
             return result;
         }
@@ -354,14 +356,14 @@ namespace LoginSvr
 
         public bool Delete(int nIndex, ref TAccountDBRecord DBRecord)
         {
-            bool result = false;
+            var result = false;
             if (nIndex < 0)
             {
-                return result;
+                return false;
             }
             if (_quickList.Count <= nIndex)
             {
-                return result;
+                return false;
             }
             var up = UpdateRecord(DBRecord, 2);
             if (up > 0)
