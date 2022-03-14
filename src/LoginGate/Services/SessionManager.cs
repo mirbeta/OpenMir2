@@ -25,7 +25,7 @@ namespace LoginGate.Services
         public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
 
         /// <summary>
-        /// 处理DBSvr发送过来的消息
+        /// 处理LoginSvr发送过来的消息
         /// </summary>
         public async Task ProcessSendMessage()
         {

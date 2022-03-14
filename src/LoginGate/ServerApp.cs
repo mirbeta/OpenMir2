@@ -9,20 +9,17 @@ namespace LoginGate
 {
     public class ServerApp
     {
-        private Timer decodeTimer;
-        private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private readonly LogQueue _logQueue;
 
-        public ServerApp(ConfigManager configManager, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
+        public ServerApp(LogQueue logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager)
         {
+            _logQueue = logQueue;
             _serverService = serverService;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
-            _configManager = configManager;
-            _logQueue = logQueue;
         }
 
         public async Task Start()
@@ -39,17 +36,9 @@ namespace LoginGate
 
         public void StartService()
         {
-            GateShare.Initialization();
-            _logQueue.Enqueue("正在启动服务...", 2);
-            _configManager.LoadConfig();
             _serverService.Start();
-            _clientManager.LoadConfig();
+            _clientManager.Initialization();
             _clientManager.Start();
-            decodeTimer = new Timer(ShowMainLogMsg, null, 0, 1);
-            _logQueue.Enqueue("服务已启动成功...", 2);
-            _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            _logQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            _logQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
         }
 
         public void StopService()
@@ -58,29 +47,6 @@ namespace LoginGate
             _serverService.Stop();
             _clientManager.Stop();
             _logQueue.Enqueue("服务停止成功...", 2);
-        }
-
-        private void ShowMainLogMsg(object obj)
-        {
-            while (!_logQueue.MessageLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-
-                Console.WriteLine(message);
-            }
-
-            while (!_logQueue.DebugLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            }
         }
 
         private bool IsBlockIP(string sIPaddr)

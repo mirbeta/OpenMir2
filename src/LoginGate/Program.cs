@@ -17,21 +17,16 @@ namespace LoginGate
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             
             var builder = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.AddConsole();
-                    logging.AddDebug();
-                    logging.ClearProviders();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+                    services.AddSingleton<LogQueue>();
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
                     services.AddSingleton<SessionManager>();
                     services.AddSingleton<ClientManager>();
                     services.AddHostedService<AppService>();
-                    services.AddSingleton<LogQueue>();
+                    services.AddHostedService<TimedService>();
                 });
 
             await builder.RunConsoleAsync();
