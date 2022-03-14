@@ -12,7 +12,6 @@ namespace GameGate
     /// </summary>
     public class ServerService
     {
-        public int NReviceMsgSize = 0;
         private readonly ISocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -21,8 +20,9 @@ namespace GameGate
         private Channel<TMessageData> _reviceMsgList = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
-
-        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
+        private readonly LogQueue _logQueue;
+        
+        public ServerService(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
         {
             _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
@@ -34,6 +34,7 @@ namespace GameGate
             _sessionManager = sessionManager;
             _clientManager = clientManager;
             _configManager = configManager;
+            _logQueue = logQueue;
         }
 
         public void Start()
@@ -71,11 +72,11 @@ namespace GameGate
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                Console.WriteLine("获取服务器实例失败。");
+                _logQueue.EnqueueDebugging("获取服务器实例失败。");
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Debug.WriteLine($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            _logQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -86,21 +87,21 @@ namespace GameGate
                     userSession.nUserListIndex = 0;
                     userSession.SessionId = e.ConnectionId;
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
-                    userSession.SckHandle = (int)e.Socket.Handle;
+                    userSession.SckHandle = e.SocHandle;
                     break;
                 }
             }
             if (userSession != null)
             {
-                clientThread.UserEnter(userSession.SessionId, (int)e.Socket.Handle, sRemoteAddress); //通知M2有新玩家进入游戏
-                GateShare.AddMainLogMsg("开始连接: " + sRemoteAddress, 5);
-                _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                _sessionManager.AddSession(userSession.SessionId, new ClientSession(_configManager, userSession, clientThread));
+                _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
+                clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
+                _clientManager.AddClientThread(e.ConnectionId, clientThread);
+                _sessionManager.AddSession(userSession.SessionId, new ClientSession(_logQueue, _configManager, userSession, clientThread));
             }
             else
             {
                 e.Socket.Close();
-                GateShare.AddMainLogMsg("禁止连接: " + sRemoteAddress, 1);
+                _logQueue.Enqueue("禁止连接: " + sRemoteAddress, 1);
             }
         }
 
@@ -117,22 +118,22 @@ namespace GameGate
                     userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
                     userSession.SckHandle = -1;
-                    clientThread.UserLeave((int)e.Socket.Handle); //发送消息给M2断开链接
-                    GateShare.AddMainLogMsg("断开连接: " + sRemoteAddr, 5);
+                    clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
+                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }
             }
             else
             {
-                GateShare.AddMainLogMsg("断开链接: " + sRemoteAddr, 5);
-                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{nSockIndex}]");
             }
-            _clientManager.DeleteClientThread(e.ConnectionId);
-            _sessionManager.Remove(e.ConnectionId);
+            _clientManager.DeleteClientThread(nSockIndex);
+            _sessionManager.Remove(nSockIndex);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            Console.WriteLine($"客户端链接错误.[{e.Exception.ErrorCode}]");
+            _logQueue.EnqueueDebugging($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
         /// <summary>
@@ -147,14 +148,14 @@ namespace GameGate
             var sRemoteAddress = token.RemoteIPaddr;
             if (userClient == null)
             {
-                GateShare.AddMainLogMsg("非法攻击: " + sRemoteAddress, 5);
+                _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
                 Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
-                GateShare.AddMainLogMsg("未就绪: " + sRemoteAddress, 5);
-                Debug.WriteLine($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
+                _logQueue.EnqueueDebugging($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var clientSession = _sessionManager.GetSession(connectionId);
@@ -174,7 +175,7 @@ namespace GameGate
             }
             else
             {
-                GateShare.AddMainLogMsg("非法攻击: " + token.RemoteIPaddr, 5);
+                _logQueue.Enqueue("非法攻击: " + token.RemoteIPaddr, 5);
             }
         }
     }

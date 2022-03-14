@@ -1,4 +1,3 @@
-using System;
 using SystemModule.Common;
 
 namespace GameGate
@@ -24,8 +23,6 @@ namespace GameGate
 
         public void LoadConfig()
         {
-            GateShare.AddMainLogMsg("正在加载配置信息...", 3);
-            GateShare.nShowLogLevel = ReadInteger(GateShare.GateClass, "ShowLogLevel", GateShare.nShowLogLevel);
             GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
             GateConfig.m_szOverClientCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.m_szOverClientCntMsg);
             GateConfig.m_szHWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.m_szHWIDBlockedMsg);
@@ -118,9 +115,13 @@ namespace GameGate
                     TableDef.MAIGIC_DELAY_TIME_LIST[i] = ReadInteger("MagicInterval", TableDef.MAIGIC_NAME_LIST[i], TableDef.MAIGIC_DELAY_TIME_LIST[i]);
                 }
             }
-            GateShare.AddMainLogMsg("配置信息加载完成...", 3);
-            GateShare.LoadAbuseFile();
-            GateShare.LoadBlockIPFile();
         }
+    }
+
+    public class TGameGateList
+    {
+        public string sServerAdress;
+        public int nServerPort;
+        public int nGatePort;
     }
 }
