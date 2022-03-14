@@ -9,6 +9,7 @@ namespace LoginSvr
     {
         const string sSectionServer = "Server";
         const string sSectionDB = "DB";
+        private const string sDB = "DataBase";
         const string sIdentDBServer = "DBServer";
         const string sIdentFeeServer = "FeeServer";
         const string sIdentLogServer = "LogServer";
@@ -27,12 +28,12 @@ namespace LoginSvr
         const string sIdentFeedIDList = "FeedIDList";
         const string sIdentFeedIPList = "FeedIPList";
 
-        public LoginSvrConfig Config;
+        public Config Config;
 
         public ConfigManager(string fileName) : base(fileName)
         {
             Load();
-            Config = new LoginSvrConfig();
+            Config = new Config();
             Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();
             Config.AccountCostList = new Dictionary<string, int>();
@@ -58,6 +59,7 @@ namespace LoginSvr
             Config.boDynamicIPMode = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
             Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
+            Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
         }
 
         private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
@@ -181,7 +183,7 @@ namespace LoginSvr
             GenServerNameList(Config);
         }
 
-        private void GenServerNameList(LoginSvrConfig Config)
+        private void GenServerNameList(Config Config)
         {
             Config.ServerNameList.Clear();
             for (var i = 0; i < Config.nRouteCount; i++)

@@ -63,7 +63,7 @@ namespace LoginSvr
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
-            LoginSvrConfig Config = _configManager.Config;
+            Config Config = _configManager.Config;
             for (var i = 0; i < _gateList.Count; i++)
             {
                 GateInfo = _gateList[i];
@@ -112,7 +112,7 @@ namespace LoginSvr
         /// 是否付费账号
         /// </summary>
         /// <returns></returns>
-        private bool IsPayMent(LoginSvrConfig Config, string sIPaddr, string sAccount)
+        private bool IsPayMent(Config Config, string sIPaddr, string sAccount)
         {
             return Config.AccountCostList.ContainsKey(sAccount) || Config.IPaddrCostList.ContainsKey(sIPaddr);
         }
@@ -300,8 +300,9 @@ namespace LoginSvr
             }
         }
 
-        public void SessionClearKick(LoginSvrConfig Config)
+        public void SessionClearKick()
         {
+            var Config = _configManager.Config;
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)
             {
                 TConnInfo ConnInfo = Config.SessionList[i];
@@ -353,7 +354,7 @@ namespace LoginSvr
             }
         }
 
-        private void SessionDel(LoginSvrConfig Config, int nSessionID)
+        private void SessionDel(Config Config, int nSessionID)
         {
             TConnInfo ConnInfo;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -523,7 +524,7 @@ namespace LoginSvr
             }
         }
 
-        private void AccountChangePassword(LoginSvrConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountChangePassword(Config Config, TUserInfo UserInfo, string sData)
         {
             string sLoginID = string.Empty;
             string sOldPassword = string.Empty;
@@ -608,7 +609,7 @@ namespace LoginSvr
             SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
         }
 
-        private bool KickUser(LoginSvrConfig Config, TUserInfo UserInfo)
+        private bool KickUser(Config Config, TUserInfo UserInfo)
         {
             const string sKickMsg = "Kick: {0}";
             for (var i = 0; i < _gateList.Count; i++)
@@ -636,7 +637,7 @@ namespace LoginSvr
         /// <summary>
         /// 账号登陆
         /// </summary>
-        private void AccountLogin(LoginSvrConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountLogin(Config Config, TUserInfo UserInfo, string sData)
         {
             string sLoginID = string.Empty;
             TUserEntry UserEntry = null;
@@ -763,7 +764,7 @@ namespace LoginSvr
         /// <summary>
         /// 获取角色网关信息
         /// </summary>
-        private void GetSelGateInfo(LoginSvrConfig Config, string sServerName, string sIPaddr, ref string sSelGateIP, ref int nSelGatePort)
+        private void GetSelGateInfo(Config Config, string sServerName, string sIPaddr, ref string sSelGateIP, ref int nSelGatePort)
         {
             int nGateIdx;
             int nGateCount;
@@ -862,7 +863,7 @@ namespace LoginSvr
         /// <summary>
         /// 选择服务器
         /// </summary>
-        private void AccountSelectServer(LoginSvrConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountSelectServer(Config Config, TUserInfo UserInfo, string sData)
         {
             TDefaultMessage DefMsg;
             bool boPayCost;
@@ -926,7 +927,7 @@ namespace LoginSvr
         /// <summary>
         /// 更新账号信息
         /// </summary>
-        private void AccountUpdateUserInfo(LoginSvrConfig Config, TUserInfo UserInfo, string sData)
+        private void AccountUpdateUserInfo(Config Config, TUserInfo UserInfo, string sData)
         {
             TAccountDBRecord DBRecord = null;
             const int userLen = TUserEntry.PacketSize;
@@ -1088,7 +1089,7 @@ namespace LoginSvr
             }
         }
 
-        private bool IsLogin(LoginSvrConfig Config, int nSessionID)
+        private bool IsLogin(Config Config, int nSessionID)
         {
             bool result = false;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -1102,7 +1103,7 @@ namespace LoginSvr
             return result;
         }
 
-        private bool IsLogin(LoginSvrConfig Config, string sLoginID)
+        private bool IsLogin(Config Config, string sLoginID)
         {
             bool result = false;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -1119,7 +1120,7 @@ namespace LoginSvr
         /// <summary>
         /// 剔除会话
         /// </summary>
-        private void SessionKick(LoginSvrConfig Config, string sLoginID)
+        private void SessionKick(Config Config, string sLoginID)
         {
             TConnInfo ConnInfo;
             for (var i = 0; i < Config.SessionList.Count; i++)
@@ -1134,7 +1135,7 @@ namespace LoginSvr
             }
         }
 
-        private void SessionAdd(LoginSvrConfig Config, string sAccount, string sIPaddr, int nSessionID, bool boPayCost, bool bo11)
+        private void SessionAdd(Config Config, string sAccount, string sIPaddr, int nSessionID, bool boPayCost, bool bo11)
         {
             TConnInfo ConnInfo = new TConnInfo();
             ConnInfo.sAccount = sAccount;
@@ -1154,7 +1155,7 @@ namespace LoginSvr
             Socket.SendText(sSendMsg);
         }
 
-        private void SessionUpdate(LoginSvrConfig Config, int nSessionID, string sServerName, bool boPayCost)
+        private void SessionUpdate(Config Config, int nSessionID, string sServerName, bool boPayCost)
         {
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
@@ -1168,8 +1169,9 @@ namespace LoginSvr
             }
         }
 
-        public void SessionClearNoPayMent(LoginSvrConfig Config)
+        public void SessionClearNoPayMent()
         {
+            Config Config = _configManager.Config;
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)
             {
                 var ConnInfo = Config.SessionList[i];
@@ -1189,13 +1191,13 @@ namespace LoginSvr
             }
         }
 
-        public void LoadIPaddrCostList(LoginSvrConfig Config, AccountConst accountConst)
+        public void LoadIPaddrCostList(Config Config, AccountConst accountConst)
         {
             Config.IPaddrCostList.Clear();
             Config.IPaddrCostList.Add(accountConst.s1C, accountConst.nC);
         }
 
-        public void LoadAccountCostList(LoginSvrConfig Config, AccountConst accountConst)
+        public void LoadAccountCostList(Config Config, AccountConst accountConst)
         {
             Config.AccountCostList.Clear();
             Config.AccountCostList.Add(accountConst.s1C, accountConst.nC);
