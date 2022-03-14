@@ -18,7 +18,6 @@ namespace GameGate
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
         public static IList<string> AbuseList = null;
         public static string sReplaceWord = "*";
-        public static long dwSendHoldTick = 0;
         public static long dwCheckRecviceTick = 0;
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;

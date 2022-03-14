@@ -12,8 +12,8 @@ namespace GameGate
         private readonly LogQueue _logQueue;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
-        private int processDelayTick = 0;
-        private int processClearSessionTick = 0;
+        private int _processDelayTick = 0;
+        private int _processClearSessionTick = 0;
 
         public TimedService(LogQueue logQueue, ClientManager clientManager, SessionManager sessionManager)
         {
@@ -64,9 +64,9 @@ namespace GameGate
         /// </summary>
         private void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - processDelayTick > 500)
+            if (HUtil32.GetTickCount() - _processDelayTick > 500)
             {
-                processDelayTick = HUtil32.GetTickCount();
+                _processDelayTick = HUtil32.GetTickCount();
                 var _gateClient = _clientManager.GetAllClient();
                 for (var i = 0; i < _gateClient.Count; i++)
                 {
@@ -106,10 +106,10 @@ namespace GameGate
         /// <param name="obj"></param>
         private void ClearSession()
         {
-            if (HUtil32.GetTickCount() - processClearSessionTick > 20000)
+            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
             {
-                processClearSessionTick = HUtil32.GetTickCount();
-                Debug.WriteLine("清理超时会话开始工作...");
+                _processClearSessionTick = HUtil32.GetTickCount();
+                _logQueue.EnqueueDebugging("清理超时会话开始工作...");
                 TSessionInfo UserSession;
                 var clientList = _clientManager.GetAllClient();
                 for (var i = 0; i < clientList.Count; i++)
@@ -138,7 +138,7 @@ namespace GameGate
                     }
                     _clientManager.CheckSessionStatus(clientList[i]);
                 }
-                Debug.WriteLine("清理超时会话工作完成...");
+                _logQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 
