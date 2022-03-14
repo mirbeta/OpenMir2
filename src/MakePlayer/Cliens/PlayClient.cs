@@ -1,4 +1,3 @@
-using System.Text;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Sockets;
@@ -61,6 +60,7 @@ namespace MakePlayer
 
         public PlayClient()
         {
+            SessionId = string.Empty;
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += SocketConnect;
             ClientSocket.OnDisconnected += SocketDisconnect;
@@ -177,24 +177,23 @@ namespace MakePlayer
         {
             MainOutMessage($"[{m_sLoginAccount}] 创建帐号");
             m_ConnectionStep = TConnectionStep.cnsNewAccount;
-            TUserEntry ue = new TUserEntry();
-            TUserEntryAdd ua = new TUserEntryAdd();
-            ue.sAccount = sAccount;
-            ue.sPassword = sPassword;
-            ue.sUserName = sAccount;
-            ue.sSSNo = "650101-1455111";
-            ue.sQuiz = sAccount;
-            ue.sAnswer = sAccount;
-            ue.sPhone = "";
-            ue.sEMail = "";
-            ua.sQuiz2 = sAccount;
-            ua.sAnswer2 = sAccount;
-            ua.sBirthDay = "1978/01/01";
-            ua.sMobilePhone = "";
-            ua.sMemo = "";
-            ua.sMemo2 = "";
+            UserFullEntry ue = new UserFullEntry();
+            ue.UserEntry.sAccount = sAccount;
+            ue.UserEntry.sPassword = sPassword;
+            ue.UserEntry.sUserName = sAccount;
+            ue.UserEntry.sSSNo = "650101-1455111";
+            ue.UserEntry.sQuiz = sAccount;
+            ue.UserEntry.sAnswer = sAccount;
+            ue.UserEntry.sPhone = "";
+            ue.UserEntry.sEMail = "";
+            ue.UserEntryAdd.sQuiz2 = sAccount;
+            ue.UserEntryAdd.sAnswer2 = sAccount;
+            ue.UserEntryAdd.sBirthDay = "1978/01/01";
+            ue.UserEntryAdd.sMobilePhone = "";
+            ue.UserEntryAdd.sMemo = "";
+            ue.UserEntryAdd.sMemo2 = "";
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue) + EDcode.EncodeBuffer(ua));
+            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue));
         }
 
         private void SelectChrCreateNewChr(string sCharName)

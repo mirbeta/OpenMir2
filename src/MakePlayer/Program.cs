@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using SystemModule;
-using SystemModule.Packet;
 
 namespace MakePlayer
 {
@@ -25,11 +24,11 @@ namespace MakePlayer
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        private static int g_nChrCount = 20;
+        private static int g_nChrCount = 100;
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 2000;
+        private static int g_nTotalChrCount = 10000;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -44,10 +43,10 @@ namespace MakePlayer
         private static long g_dwLogonTick = 0;
         private static Thread _playTimer;
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-         
+
             g_sServerName = "热血传奇";
             g_sGameIPaddr = "10.10.0.112";
             g_nGamePort = 7000;
@@ -55,9 +54,10 @@ namespace MakePlayer
 
             g_nChrCount = HUtil32._MIN(g_nChrCount, g_nTotalChrCount);
             g_dwLogonTick = HUtil32.GetTickCount() - 1000 * g_nChrCount;
-            g_sAccount = "mplay";
+            g_sAccount = "woshizhende";
 
             _playTimer = new Thread(start: Start);
+            _playTimer.IsBackground = true;
             _playTimer.Start();
             
             ClientManager.Start();
@@ -93,17 +93,17 @@ namespace MakePlayer
                         }
                         for (var i = 0; i < g_nChrCount; i++)
                         {
-                            var ObjClient = new PlayClient();
-                            ObjClient.SessionId = Guid.NewGuid().ToString("N");
-                            ObjClient.m_boNewAccount = g_boNewAccount;
-                            ObjClient.m_sLoginAccount = string.Concat(g_sAccount, g_nLoginIndex);
-                            ObjClient.m_sLoginPasswd = ObjClient.m_sLoginAccount;
-                            ObjClient.m_sCharName = ObjClient.m_sLoginAccount;
-                            ObjClient.m_sServerName = g_sServerName;
-                            ObjClient.ClientSocket.Address = g_sGameIPaddr;
-                            ObjClient.ClientSocket.Port = g_nGamePort;
-                            ObjClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
-                            ClientManager.AddClient(ObjClient.SessionId, ObjClient);
+                            var playClient = new PlayClient();
+                            playClient.SessionId = Guid.NewGuid().ToString("N");
+                            playClient.m_boNewAccount = g_boNewAccount;
+                            playClient.m_sLoginAccount = string.Concat(g_sAccount, g_nLoginIndex);
+                            playClient.m_sLoginPasswd = playClient.m_sLoginAccount;
+                            playClient.m_sCharName = playClient.m_sLoginAccount;
+                            playClient.m_sServerName = g_sServerName;
+                            playClient.ClientSocket.Address = g_sGameIPaddr;
+                            playClient.ClientSocket.Port = g_nGamePort;
+                            playClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
+                            ClientManager.AddClient(playClient.SessionId, playClient);
                             g_nLoginIndex++;
                         }
                     }
