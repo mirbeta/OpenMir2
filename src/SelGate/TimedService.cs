@@ -50,7 +50,6 @@ namespace SelGate
                 Console.ResetColor();
             }
         }
-        
 
         public override void Dispose()
         {

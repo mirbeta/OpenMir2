@@ -13,7 +13,6 @@ namespace SelGate
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private readonly LogQueue _logQueue;
-        private readonly Timer _logTimer;
 
         public ServerApp(ConfigManager configManager, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
         {
@@ -22,7 +21,6 @@ namespace SelGate
             _sessionManager = sessionManager;
             _configManager = configManager;
             _logQueue = logQueue;
-            _logTimer = new Timer(ShowMainLogMsg, null, 0, 10);
         }
 
         public async Task Start()
@@ -57,29 +55,6 @@ namespace SelGate
             _serverService.Stop();
             _clientManager.Stop();
             _logQueue.Enqueue("服务停止成功...", 2);
-        }
-
-        private void ShowMainLogMsg(object obj)
-        {
-            while (!_logQueue.MessageLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-
-                Console.WriteLine(message);
-            }
-
-            while (!_logQueue.DebugLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            }
         }
 
         private bool IsBlockIP(string sIPaddr)

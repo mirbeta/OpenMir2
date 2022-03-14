@@ -8,7 +8,7 @@ using SystemModule;
 namespace SelGate
 {
     /// <summary>
-    /// 用户会话封包处理
+    /// 会话封包处理
     /// </summary>
     public class ClientSession
     {
