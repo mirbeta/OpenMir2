@@ -11,20 +11,18 @@ namespace LoginSvr
     public class TimedService : BackgroundService
     {
         private readonly LogQueue _logQueue;
-        private readonly ConfigManager _configManager;
         private readonly LoginService _loginService;
         private readonly MonSocService _monSocService;
         private readonly ThreadParseList _threadParseList;
         private readonly MasSocService _massocService;
-        private int processMonSocTick = 0;
-        private int processServerStatuTick = 0;
+        private int _processMonSocTick = 0;
+        private int _processServerStatuTick = 0;
 
-        public TimedService(LogQueue logQueue, LoginService loginService, ConfigManager configManager, ThreadParseList threadParseList, 
+        public TimedService(LogQueue logQueue, LoginService loginService, ThreadParseList threadParseList, 
             MonSocService monSocService, MasSocService massocService)
         {
             _logQueue = logQueue;
             _loginService = loginService;
-            _configManager = configManager;
             _threadParseList = threadParseList;
             _monSocService = monSocService;
             _massocService = massocService;
@@ -66,62 +64,61 @@ namespace LoginSvr
             }
         }
 
-
         private void LoginProcess()
         {
-            _loginService.SessionClearKick(_configManager.Config);
-            _loginService.SessionClearNoPayMent(_configManager.Config);
+            _loginService.SessionClearKick();
+            _loginService.SessionClearNoPayMent();
         }
 
         private void ProcessMonSoc()
         {
-            if (HUtil32.GetTickCount() - processMonSocTick > 20000)
+            if (HUtil32.GetTickCount() - _processMonSocTick > 20000)
             {
-                processMonSocTick = HUtil32.GetTickCount();
+                _processMonSocTick = HUtil32.GetTickCount();
                 _monSocService.ProcessCleanSession();
             }
         }
 
-        public void CheckServerStatus()
+        private void CheckServerStatus()
         {
-            if (HUtil32.GetTickCount() - processServerStatuTick > 20000)
-            { 
-            
-            }
+            if (HUtil32.GetTickCount() - _processServerStatuTick > 20000)
+            {
+                _processServerStatuTick = HUtil32.GetTickCount();
                 IList<TMsgServerInfo> ServerList = _massocService.ServerList;
-            if (!ServerList.Any())
-            {
-                return;
-            }
-            for (var i = 0; i < ServerList.Count; i++)
-            {
-                TMsgServerInfo MsgServer = ServerList[i];
-                string sServerName = MsgServer.sServerName;
-                if (!string.IsNullOrEmpty(sServerName))
+                if (!ServerList.Any())
                 {
-                    var tickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
-                    if (tickTime <= 60000) continue;
-                    MsgServer.Socket.Close();
-                    if (MsgServer.nServerIndex == 99)
+                    return;
+                }
+                for (var i = 0; i < ServerList.Count; i++)
+                {
+                    TMsgServerInfo MsgServer = ServerList[i];
+                    string sServerName = MsgServer.sServerName;
+                    if (!string.IsNullOrEmpty(sServerName))
                     {
-                        if (string.IsNullOrEmpty(sServerName))
+                        var tickTime = HUtil32.GetTickCount() - MsgServer.dwKeepAliveTick;
+                        if (tickTime <= 60000) continue;
+                        MsgServer.Socket.Close();
+                        if (MsgServer.nServerIndex == 99)
                         {
-                            _logQueue.Enqueue($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                            if (string.IsNullOrEmpty(sServerName))
+                            {
+                                _logQueue.Enqueue($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                            }
+                            else
+                            {
+                                _logQueue.Enqueue($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                            }
                         }
                         else
                         {
-                            _logQueue.Enqueue($"[{sServerName}]数据库服务器响应超时,关闭链接.");
-                        }
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(sServerName))
-                        {
-                            _logQueue.Enqueue($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
-                        }
-                        else
-                        {
-                            _logQueue.Enqueue($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                            if (string.IsNullOrEmpty(sServerName))
+                            {
+                                _logQueue.Enqueue($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                            }
+                            else
+                            {
+                                _logQueue.Enqueue($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                            }
                         }
                     }
                 }

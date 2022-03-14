@@ -12,30 +12,33 @@ namespace LoginSvr
     public class AccountDB
     {
         private readonly LogQueue _logQueue;
-        private IDbConnection dbConnection = null;
-        private IList<AccountQuick> m_QuickList = null;
+        private readonly ConfigManager _configManager;
+        private readonly IList<AccountQuick> _quickList = null;
         private IDbConnection _dbConnection;
 
-        public AccountDB(LogQueue logQueue)
+        public AccountDB(LogQueue logQueue, ConfigManager configManager)
         {
-            m_QuickList = new List<AccountQuick>();
             _logQueue = logQueue;
+            _configManager = configManager;
+            _quickList = new List<AccountQuick>();
         }
+
+        public Config Config => _configManager.Config;
 
         public void Initialization()
         {
             _logQueue.Enqueue("正在连接SQL服务器...");
-            dbConnection = new MySqlConnection(LSShare.DBConnection);
+            _dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
-                dbConnection.Open();
+                _dbConnection.Open();
                 _logQueue.Enqueue("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception E)
             {
                 _logQueue.Enqueue("[警告] SQL 连接失败!请检查SQL设置...");
-                _logQueue.Enqueue(LSShare.DBConnection);
+                _logQueue.Enqueue(Config.ConnctionString);
                 _logQueue.Enqueue(E.StackTrace);
             }
         }
@@ -45,7 +48,7 @@ namespace LoginSvr
             bool result = false;
             if (_dbConnection == null)
             {
-                _dbConnection = new MySqlConnection(LSShare.DBConnection);
+                _dbConnection = new MySqlConnection(Config.ConnctionString);
             }
             switch (_dbConnection.State)
             {
@@ -60,6 +63,7 @@ namespace LoginSvr
                     catch (Exception e)
                     {
                         _logQueue.Enqueue("打开数据库[MySql]失败.");
+                        _logQueue.Enqueue(e);
                         result = false;
                     }
                     break;
@@ -82,7 +86,7 @@ namespace LoginSvr
             bool boDeleted;
             string sAccount;
             const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
-            m_QuickList.Clear();
+            _quickList.Clear();
             try
             {
                 if (!Open())
@@ -100,7 +104,7 @@ namespace LoginSvr
                     sAccount = dr.GetString("FLD_LOGINID");
                     if (!boDeleted && (!string.IsNullOrEmpty(sAccount)))
                     {
-                        m_QuickList.Add(new AccountQuick(sAccount, nIndex));
+                        _quickList.Add(new AccountQuick(sAccount, nIndex));
                     }
                 }
                 dr.Close();
@@ -116,11 +120,11 @@ namespace LoginSvr
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
             int result;
-            for (var i = 0; i < m_QuickList.Count; i++)
+            for (var i = 0; i < _quickList.Count; i++)
             {
-                if (HUtil32.CompareLStr(m_QuickList[i].sAccount, sName, sName.Length))
+                if (HUtil32.CompareLStr(_quickList[i].sAccount, sName, sName.Length))
                 {
-                    List.Add(new AccountQuick(m_QuickList[i].sAccount, m_QuickList[i].nIndex));
+                    List.Add(new AccountQuick(_quickList[i].sAccount, _quickList[i].nIndex));
                 }
             }
             result = List.Count;
@@ -130,7 +134,7 @@ namespace LoginSvr
         public bool GetBy(int nIndex, ref TAccountDBRecord DBRecord)
         {
             bool result;
-            if ((nIndex >= 0) && (m_QuickList.Count > nIndex))
+            if ((nIndex >= 0) && (_quickList.Count > nIndex))
             {
                 result = GetRecord(nIndex, ref DBRecord);
             }
@@ -186,7 +190,7 @@ namespace LoginSvr
                     DBRecord.UserEntryAdd.sMemo = "";
                     DBRecord.UserEntryAdd.sMemo2 = "";
                 }
-                var quickAccount = m_QuickList.SingleOrDefault(x => x.nIndex == nIndex);
+                var quickAccount = _quickList.SingleOrDefault(x => x.nIndex == nIndex);
                 if (quickAccount != null)
                 {
                     if (DBRecord.Header.sAccount == quickAccount.sAccount)
@@ -214,7 +218,7 @@ namespace LoginSvr
 
         public int Index(string sName)
         {
-            var quick = m_QuickList.SingleOrDefault(o => o.sAccount == sName);
+            var quick = _quickList.SingleOrDefault(o => o.sAccount == sName);
             if (quick == null)
             {
                 return -1;
@@ -313,7 +317,7 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (m_QuickList.Count <= nIndex)
+            if (_quickList.Count <= nIndex)
             {
                 return result;
             }
@@ -337,7 +341,7 @@ namespace LoginSvr
                 var nIndex = UpdateRecord(DBRecord, 1);
                 if (nIndex > 0)
                 {
-                    m_QuickList.Add(new AccountQuick(sAccount, nIndex));
+                    _quickList.Add(new AccountQuick(sAccount, nIndex));
                     result = true;
                 }
                 else
@@ -355,14 +359,14 @@ namespace LoginSvr
             {
                 return result;
             }
-            if (m_QuickList.Count <= nIndex)
+            if (_quickList.Count <= nIndex)
             {
                 return result;
             }
             var up = UpdateRecord(DBRecord, 2);
             if (up > 0)
             {
-                m_QuickList.RemoveAt(nIndex);
+                _quickList.RemoveAt(nIndex);
                 result = true;
             }
             return result;

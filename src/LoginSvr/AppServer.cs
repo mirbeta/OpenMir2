@@ -9,7 +9,6 @@ namespace LoginSvr
 
         public AppServer(LogQueue logQueue, MasSocService masSocService)
         {
-            LSShare.Initialization();
             _massocService = masSocService;
             _logQueue = logQueue;
         }

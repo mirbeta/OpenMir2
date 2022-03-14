@@ -31,6 +31,7 @@ namespace LoginSvr
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logQueue.EnqueueDebugging($"LoginSvr is starting.");
+            LSShare.Initialization();
             _serverApp.Start();
             _monSocService.Start();
             _loginService.LoadConfig();

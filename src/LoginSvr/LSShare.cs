@@ -12,7 +12,6 @@ namespace LoginSvr
         public static int nSessionIdx = 0;
         public static int nVersionDate = 20011006;
         public static string[] ServerAddr = new string[200];
-        public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
 
         /// <summary>
         /// 检查账号是否符合规则
@@ -69,7 +68,7 @@ namespace LoginSvr
             return nSessionIdx;
         }
 
-        public static void SaveGateConfig(LoginSvrConfig Config)
+        public static void SaveGateConfig(Config Config)
         {
             int n8;
             string s10;
@@ -109,7 +108,7 @@ namespace LoginSvr
             SaveList = null;
         }
 
-        public static string GetGatePublicAddr(LoginSvrConfig Config, string sGateIP)
+        public static string GetGatePublicAddr(Config Config, string sGateIP)
         {
             string result = sGateIP;
             for (var i = 0; i < Config.nRouteCount; i++)
@@ -159,63 +158,6 @@ namespace LoginSvr
         public TGateRoute()
         {
             Gate = new TGateNet[10];
-        }
-    }
-
-    public class LoginSvrConfig
-    {
-        public string sDBServer;
-        public int nDBSPort;
-        public string sFeeServer;
-        public int nFeePort;
-        public string sLogServer;
-        public int nLogPort;
-        public string sGateAddr;
-        public int nGatePort;
-        public string sServerAddr;
-        public int nServerPort;
-        public string sMonAddr;
-        public int nMonPort;
-        public string sGateIPaddr;
-        public string sFeedIDList;
-        public string sFeedIPList;
-        public bool boTestServer;
-        /// <summary>
-        /// 是否允许创建账号
-        /// </summary>
-        public bool boEnableMakingID;
-        public bool boDynamicIPMode;
-        public int nReadyServers;
-        public IList<TConnInfo> SessionList;
-        public IList<string> ServerNameList;
-        public Dictionary<string, int> AccountCostList;
-        public Dictionary<string, int> IPaddrCostList;
-        public bool boShowDetailMsg;
-        public int nRouteCount;
-        public TGateRoute[] GateRoute;
-
-        public LoginSvrConfig()
-        {
-            sDBServer = "127.0.0.1";
-            nDBSPort = 16300;
-            sFeeServer = "127.0.0.1";
-            nFeePort = 16301;
-            sLogServer = "127.0.0.1";
-            nLogPort = 16301;
-            sGateAddr = "*";
-            nGatePort = 5500;
-            sServerAddr = "*";
-            nServerPort = 5600;
-            sMonAddr = "*";
-            nMonPort = 3000;
-            sFeedIDList = "FeedIDList.txt";
-            sFeedIPList = "FeedIPList.txt";
-            boTestServer = true;
-            boEnableMakingID = true;
-            boDynamicIPMode = false;
-            nReadyServers = 0;
-            boShowDetailMsg = false;
-            GateRoute = new TGateRoute[60];
         }
     }
 
