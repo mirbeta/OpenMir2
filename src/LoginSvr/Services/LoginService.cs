@@ -400,8 +400,7 @@ namespace LoginSvr
                     {
                         if (HUtil32.GetTickCount() - UserInfo.dwClientTick > 5000)
                         {
-                            UserInfo.dwClientTick = HUtil32.GetTickCount();
-                            AccountCreate(UserInfo, sData);
+                            AccountCreate(ref UserInfo, sData);
                         }
                         else
                         {
@@ -452,7 +451,7 @@ namespace LoginSvr
             }
         }
 
-        private void AccountCreate(TUserInfo UserInfo, string sData)
+        private void AccountCreate(ref TUserInfo UserInfo, string sData)
         {
             bool bo21 = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
@@ -514,6 +513,10 @@ namespace LoginSvr
             {
                 _logQueue.EnqueueDebugging("[Exception] LoginsService.AccountCreate");
                 _logQueue.Enqueue(ex.StackTrace);
+            }
+            finally
+            {
+                UserInfo.dwClientTick = HUtil32.GetTickCount();
             }
         }
 
