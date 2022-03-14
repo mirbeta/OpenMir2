@@ -10,11 +10,11 @@ using SystemModule.Sockets;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 客户端服务端(Mir2-SelGate)
+    /// 客户端服务端(Mir2-LoginGate)
     /// </summary>
     public class ServerService
     {
-        public int NReviceMsgSize = 0;
+        private readonly LogQueue _logQueue;
         private readonly ISocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -23,22 +23,23 @@ namespace LoginGate.Services
         private Channel<TMessageData> _snedQueue = null;
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
-        private readonly LogQueue _logQueue;
 
-        public ServerService(ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
+        public ServerService(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
         {
+            _snedQueue = Channel.CreateUnbounded<TMessageData>();
+            _sessionManager = sessionManager;
+            _clientManager = clientManager;
+            _configManager = configManager;
+            _logQueue = logQueue;
             _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _serverSocket.Init();
-            _snedQueue = Channel.CreateUnbounded<TMessageData>();
-            _sessionManager = sessionManager;
-            _clientManager = clientManager;
-            _configManager = configManager;
-            _logQueue = logQueue;
         }
+
+        private ChannelWriter<TMessageData> SendQueue => _snedQueue.Writer;
 
         public void Start()
         {
@@ -70,11 +71,11 @@ namespace LoginGate.Services
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                Console.WriteLine("获取服务器实例失败。");
+                _logQueue.EnqueueDebugging("获取服务器实例失败。");
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            Debug.WriteLine($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            _logQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -130,7 +131,7 @@ namespace LoginGate.Services
             else
             {
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                Debug.WriteLine($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
             _sessionManager.Remove(e.ConnectionId);
@@ -138,7 +139,7 @@ namespace LoginGate.Services
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            Console.WriteLine($"客户端链接错误.[{e.Exception.ErrorCode}]");
+            _logQueue.Enqueue($"客户端链接错误.[{e.Exception.ErrorCode}]", 5);
         }
 
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
@@ -163,7 +164,7 @@ namespace LoginGate.Services
             var userData = new TMessageData();
             userData.Body = data;
             userData.SessionId = connectionId;
-            _snedQueue.Writer.TryWrite(userData);
+            SendQueue.TryWrite(userData);
         }
     }
 }

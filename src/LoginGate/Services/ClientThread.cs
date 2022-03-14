@@ -12,8 +12,6 @@ namespace LoginGate.Services
     public class ClientThread
     {
         private IClientScoket ClientSocket;
-        private int nBufferOfM2Size = 0;
-        private int dwProcessServerMsgTime = 0;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -34,14 +32,6 @@ namespace LoginGate.Services
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
         public int CheckServerFailCount = 0;
-        /// <summary>
-        /// 独立Buffer分区
-        /// </summary>
-        private byte[] SocketBuffer = null;
-        /// <summary>
-        /// 上次剩下多少字节未处理
-        /// </summary>
-        private int nBuffLen = 0;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
@@ -137,7 +127,6 @@ namespace LoginGate.Services
                 }
             }
             RestSessionArray();
-            SocketBuffer = null;
             boGateReady = false;
             GateShare.ServerGateList.Remove(this);
             _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);

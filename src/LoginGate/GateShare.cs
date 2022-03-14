@@ -18,7 +18,6 @@ namespace LoginGate
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
         public static long dwCheckServerTimeMax = 0;
-        public static bool boDecodeMsgLock = false;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>

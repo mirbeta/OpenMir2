@@ -9,31 +9,22 @@ using SystemModule;
 namespace LoginGate
 {
     /// <summary>
-    /// 用户会话封包处理
+    /// 会话封包处理
     /// </summary>
-    public partial class ClientSession
+    public class ClientSession
     {
-        private int LastDirection = -1;
-        private byte _handleLogin = 0;
         private TSessionInfo _session;
-        private bool m_fOverClientCount;
         private bool m_KickFlag = false;
-        public int m_nSvrListIdx = 0;
         private int m_nSvrObject = 0;
-        private int m_SendCheckTick = 0;
-        private TCheckStep m_Stat;
-        private long m_FinishTick = 0;
         private int m_dwClientTimeOutTick = 0;
-        private readonly ClientThread lastGameSvr;
+        private readonly ClientThread _lastGameSvr;
         private readonly ConfigManager _configManager;
 
         public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
             _session = session;
-            lastGameSvr = clientThread;
+            _lastGameSvr = clientThread;
             _configManager = configManager;
-            m_fOverClientCount = false;
-            m_Stat = TCheckStep.CheckLogin;
             m_dwClientTimeOutTick = HUtil32.GetTickCount();
         }
 
@@ -48,18 +39,12 @@ namespace LoginGate
         /// <param name="userData"></param>
         public void HandleUserPacket(TMessageData userData)
         {
-            int dwCurrentTick = 0;
-            /*if (m_KickFlag)
-            {
-                m_KickFlag = false;
-                return;
-            }*/
             if ((userData.MsgLen >= 5) && Config.m_fDefenceCCPacket)
             {
                 var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    //if (LogManager.Units.LogManager.g_pLogMgr.CheckLevel(6))
+                    //if (g_pLogMgr.CheckLevel(6))
                     //{
                     //    Console.WriteLine("CC Attack, Kick: " + m_pUserOBJ.pszIPAddr);
                     //}
@@ -68,96 +53,70 @@ namespace LoginGate
                     //return;
                 }
             }
-            if ((m_Stat == TCheckStep.CheckLogin) || (m_Stat == TCheckStep.SendCheck))
-            {
-                dwCurrentTick = HUtil32.GetTickCount();
-                if (0 == m_SendCheckTick)
-                {
-                    m_SendCheckTick = dwCurrentTick;
-                }
-                if ((dwCurrentTick - m_SendCheckTick) > 1000 * 5)// 如果5 秒 没有回数据 就下发数据
-                {
-                    m_Stat = TCheckStep.SendSmu;
-                }
-            }
-            // 如果下发成功  得多少秒有数据如果没有的话，那就是有问题
-            if ((m_Stat == TCheckStep.SendFinsh))
-            {
-                dwCurrentTick = HUtil32.GetTickCount();
-                if ((dwCurrentTick - m_FinishTick) > 1000 * 10)
-                {
-                    //todo 
-                }
-            }
-            
             var success = false;
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             var CltCmd = new TCmdPack(packBuff);
-            //byte[] pszSendBuff = null;
-            if (_handleLogin == 0)
+            var sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
+            if (!string.IsNullOrEmpty(sReviceMsg))
             {
-                string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
-                if ((sReviceMsg != ""))
+                int nPos = sReviceMsg.IndexOf("*");
+                if (nPos > 0)
                 {
-                    int nPos = sReviceMsg.IndexOf("*");
-                    if (nPos > 0)
-                    {
-                        string s10 = sReviceMsg.Substring(0, nPos - 1);
-                        string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
-                        sReviceMsg = s10 + s1C;
-                    }
-                    if (!string.IsNullOrEmpty(sReviceMsg))
-                    {
-                        AccountPacket accountPacket = new AccountPacket(AccountPacktType.Data, (int)Session.Socket.Handle, userData.Body);
-                        lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                    }
+                    string s10 = sReviceMsg.Substring(0, nPos - 1);
+                    string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
+                    sReviceMsg = s10 + s1C;
                 }
+                if (!string.IsNullOrEmpty(sReviceMsg))
+                {
+                    AccountPacket accountPacket = new AccountPacket(AccountPacktType.Data, (int)Session.Socket.Handle, userData.Body);
+                    _lastGameSvr.SendBuffer(accountPacket.GetPacket());
+                }
+            }
 
-                /*if (CltCmd.Cmd == Grobal2.CM_QUERYDYNCODE)
-                { 
+            /*if (CltCmd.Cmd == Grobal2.CM_QUERYDYNCODE)
+            { 
+                m_dwClientTimeOutTick = HUtil32.GetTickCount();
+            }*/
+            switch (CltCmd.Cmd)
+            {
+                case Grobal2.CM_IDPASSWORD: //登录消息
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                }*/
-                switch (CltCmd.Cmd)
-                {
-                    case Grobal2.CM_IDPASSWORD: //登录消息
-                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        //pszSendBuff = new byte[nDeCodeLen];
-                        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                        //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                        //lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                        break;
-                    case Grobal2.CM_PROTOCOL:
-                    case Grobal2.CM_SELECTSERVER:
-                    case Grobal2.CM_CHANGEPASSWORD:
-                    case Grobal2.CM_UPDATEUSER:
-                    case Grobal2.CM_GETBACKPASSWORD:
-                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        //pszSendBuff = new byte[nDeCodeLen];
-                        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                        //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                        //lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                        break;
-                    case Grobal2.CM_ADDNEWUSER: //注册账号
-                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        //if (nDeCodeLen > TCmdPack.PackSize)
-                        //{
-                        //    pszSendBuff = new byte[nDeCodeLen];
-                        //    Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                        //    accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                        //    lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                        //}
-                        break;
-                    default:
-                        Console.WriteLine($"错误的数据包索引:[{CltCmd.Cmd}]");
-                        break;
-                }
+                    //pszSendBuff = new byte[nDeCodeLen];
+                    //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+                    //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+                    //lastGameSvr.SendBuffer(accountPacket.GetPacket());
+                    break;
+                case Grobal2.CM_PROTOCOL:
+                case Grobal2.CM_SELECTSERVER:
+                case Grobal2.CM_CHANGEPASSWORD:
+                case Grobal2.CM_UPDATEUSER:
+                case Grobal2.CM_GETBACKPASSWORD:
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                    //pszSendBuff = new byte[nDeCodeLen];
+                    //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+                    //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+                    //lastGameSvr.SendBuffer(accountPacket.GetPacket());
+                    break;
+                case Grobal2.CM_ADDNEWUSER: //注册账号
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                    //if (nDeCodeLen > TCmdPack.PackSize)
+                    //{
+                    //    pszSendBuff = new byte[nDeCodeLen];
+                    //    Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+                    //    accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+                    //    lastGameSvr.SendBuffer(accountPacket.GetPacket());
+                    //}
+                    break;
+                default:
+                    Console.WriteLine($"错误的数据包索引:[{CltCmd.Cmd}]");
+                    break;
+            }
 
-                if (!success)
-                {
-                    //KickUser("ip");
-                }
+            if (!success)
+            {
+                //KickUser("ip");
             }
         }
 
@@ -168,21 +127,18 @@ namespace LoginGate
         {
             if (!m_KickFlag)
             {
-                if (_handleLogin < 3)
+                if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
-                    if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                    if (_session.Socket == null || _session.Socket.Handle == IntPtr.Zero)
                     {
-                        m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                        if (_session.Socket == null || _session.Socket.Handle == IntPtr.Zero)
-                        {
-                            return;
-                        }
-                        SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
-                        m_KickFlag = true;
-                        //BlockUser(this);
-                        Debug.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
-                        success = true;
+                        return;
                     }
+                    SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
+                    m_KickFlag = true;
+                    //BlockUser(this);
+                    Debug.WriteLine($"Client Connect Time Out: {Session.ClientIP}");
+                    success = true;
                 }
             }
             else
@@ -212,7 +168,7 @@ namespace LoginGate
             int iLen = 0;
             TCmdPack Cmd;
             byte[] SendBuf = new byte[1024];
-            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
+            if ((_lastGameSvr == null) || !_lastGameSvr.IsConnected)
             {
                 return;
             }
@@ -233,7 +189,7 @@ namespace LoginGate
             }
             else
             {
-                TempBuf= Cmd.GetPacket();
+                TempBuf = Cmd.GetPacket();
                 iLen = Misc.EncodeBuf(TempBuf, TCmdPack.PackSize, SendBuf, 1);
             }
             SendBuf[iLen + 1] = (byte)'!';
@@ -245,10 +201,9 @@ namespace LoginGate
         /// </summary>
         public void UserEnter()
         {
-            _handleLogin = 0;
             var str = $"{_session.ClientIP}/{_session.ClientIP}";
-            var accountPacket = new AccountPacket(AccountPacktType.Open, (int) Session.Socket.Handle, str);
-            lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            var accountPacket = new AccountPacket(AccountPacktType.Open, (int)Session.Socket.Handle, str);
+            _lastGameSvr.SendBuffer(accountPacket.GetPacket());
         }
 
         /// <summary>
@@ -256,13 +211,12 @@ namespace LoginGate
         /// </summary>
         public void UserLeave()
         {
-            _handleLogin = 0;
             if (Session == null || Session.Socket == null)
             {
                 return;
             }
-            var accountPacket = new AccountPacket(AccountPacktType.Leave, (int) Session.Socket.Handle, "");
-            lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            var accountPacket = new AccountPacket(AccountPacktType.Leave, (int)Session.Socket.Handle, "");
+            _lastGameSvr.SendBuffer(accountPacket.GetPacket());
             m_KickFlag = false;
         }
     }
