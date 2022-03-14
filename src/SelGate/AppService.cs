@@ -14,7 +14,6 @@ namespace SelGate
         {
             _logQueue = logQueue;
             _serverApp = serverApp;
-            _logQueue = logQueue;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

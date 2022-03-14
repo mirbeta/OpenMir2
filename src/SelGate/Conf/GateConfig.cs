@@ -7,6 +7,7 @@ namespace SelGate.Conf
     public class GateConfig
     {
         public int m_nShowLogLevel = 0;
+        public bool ShowDebugLog = false;
         public int m_nGateCount = 0;
         public bool m_fCheckNewIDOfIP = false;
         public bool m_fCheckNullSession = false;
@@ -14,7 +15,7 @@ namespace SelGate.Conf
         public bool m_fDefenceCCPacket = false;
         public bool m_fKickOverSpeed = false;
         public bool m_fKickOverPacketSize = false;
-        // 新加角色过滤功能 2018-09-06
+        // 新加角色过滤功能 
         public bool m_fAllowGetBackChr = false;
         // 允许找回人物角色
         public bool m_fAllowDeleteChr = false;
@@ -82,6 +83,7 @@ namespace SelGate.Conf
             m_nCheckNewIDOfIP = 5;
             m_nClientTimeOutTime = 60 * 1000;
             m_nMaxClientPacketCount = 2;
+            ShowDebugLog = false;
         }
     }
 }
