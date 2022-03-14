@@ -36,12 +36,12 @@ namespace SystemModule.Packet
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(sQuiz2.ToByte(sQuiz2.Length + 1, 21));
-            writer.Write(sAnswer2.ToByte(sAnswer2.Length + 1, 13));
-            writer.Write(sBirthDay.ToByte(sBirthDay.Length + 1, 11));
-            writer.Write(sMobilePhone.ToByte(sMobilePhone.Length + 1, 14));
-            writer.Write(sMemo.ToByte(sMemo.Length + 1, 21));
-            writer.Write(sMemo2.ToByte(sMemo2.Length + 1, 21));
+            writer.Write(sQuiz2, 20);
+            writer.Write(sAnswer2, 12);
+            writer.Write(sBirthDay, 10);
+            writer.Write(sMobilePhone, 13);
+            writer.Write(sMemo, 20);
+            writer.Write(sMemo2, 20);
         }
     }
 }
