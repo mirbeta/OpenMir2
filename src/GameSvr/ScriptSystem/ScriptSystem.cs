@@ -22,7 +22,7 @@ namespace GameSvr
         private bool LoadScriptFile_LoadCallScript(string sFileName, string sLabel, StringList List)
         {
             bool result = false;
-            string s18;
+            string sLine;
             if (File.Exists(sFileName))
             {
                 var LoadStrList = new StringList();
@@ -31,22 +31,22 @@ namespace GameSvr
                 var bo1D = false;
                 for (var i = 0; i < LoadStrList.Count; i++)
                 {
-                    s18 = LoadStrList[i].Trim();
-                    if (!string.IsNullOrEmpty(s18))
+                    sLine = LoadStrList[i].Trim();
+                    if (!string.IsNullOrEmpty(sLine))
                     {
                         if (!bo1D)
                         {
-                            if (s18[0] == '[' && string.Compare(s18, sLabel, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (sLine[0] == '[' && string.Compare(sLine, sLabel, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 bo1D = true;
-                                List.Add(s18);
+                                List.Add(sLine);
                             }
                         }
                         else
                         {
-                            if (s18[0] != '{')
+                            if (sLine[0] != '{')
                             {
-                                if (s18[0] == '}')
+                                if (sLine[0] == '}')
                                 {
                                     bo1D = false;
                                     result = true;
@@ -54,7 +54,7 @@ namespace GameSvr
                                 }
                                 else
                                 {
-                                    List.Add(s18);
+                                    List.Add(sLine);
                                 }
                             }
                         }

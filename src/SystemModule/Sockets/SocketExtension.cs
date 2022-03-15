@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SystemModule.Sockets
 {
-    public static class SocketExtend
+    public static class SocketExtension
     {
         public static bool Send(this Socket socket, string str)
         {

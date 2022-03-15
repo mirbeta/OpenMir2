@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using SystemModule;
-using SystemModule.Packages;
 
 namespace GameSvr
 {
@@ -705,41 +702,7 @@ namespace GameSvr
                                             PlayObject.SearchViewRange();
                                             PlayObject.GameTimeChanged();
                                         }
-                                        // if (HUtil32.GetTickCount() - PlayObject.m_dwShowLineNoticeTick > M2Share.g_Config.dwShowLineNoticeTime)
-                                        // {
-                                        //     PlayObject.m_dwShowLineNoticeTick = HUtil32.GetTickCount();
-                                        //     if (M2Share.LineNoticeList.Count > PlayObject.m_nShowLineNoticeIdx)
-                                        //     {
-                                        //         var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, M2Share.LineNoticeList[PlayObject.m_nShowLineNoticeIdx]);
-                                        //         switch (lineNoticeMsg[0])
-                                        //         {
-                                        //             case 'R':
-                                        //                 PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Red, TMsgType.t_Notice);
-                                        //                 break;
-                                        //             case 'G':
-                                        //                 PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Green, TMsgType.t_Notice);
-                                        //                 break;
-                                        //             case 'B':
-                                        //                 PlayObject.SysMsg(lineNoticeMsg.Substring(1, lineNoticeMsg.Length - 1), TMsgColor.c_Blue, TMsgType.t_Notice);
-                                        //                 break;
-                                        //             default:
-                                        //                 PlayObject.SysMsg(lineNoticeMsg, (TMsgColor)M2Share.g_Config.nLineNoticeColor, TMsgType.t_Notice);
-                                        //                 break;
-                                        //         }
-                                        //     }
-                                        //     PlayObject.m_nShowLineNoticeIdx++;
-                                        //     if (M2Share.LineNoticeList.Count <= PlayObject.m_nShowLineNoticeIdx)
-                                        //     {
-                                        //         PlayObject.m_nShowLineNoticeIdx = 0;
-                                        //     }
-                                        // }
                                         PlayObject.Run();
-                                        // if (!M2Share.FrontEngine.IsFull() && HUtil32.GetTickCount() - PlayObject.m_dwSaveRcdTick > M2Share.g_Config.dwSaveHumanRcdTime)
-                                        // {
-                                        //     PlayObject.m_dwSaveRcdTick = HUtil32.GetTickCount();
-                                        //     PlayObject.DealCancelA();
-                                        //     SaveHumanRcd(PlayObject);
-                                        // }
                                     }
                                 }
                             }
@@ -1006,7 +969,7 @@ namespace GameSvr
                         var nTemp = HUtil32.GetTickCount() - MonGen.dwStartTick;
                         if (MonGen.dwStartTick == 0 || nTemp > ProcessMonsters_GetZenTime(MonGen.dwZenTime))
                         {
-                            var nGenCount = MonGen.nActiveCount;//GetGenMonCount(MonGen); //取已刷出来的怪数量
+                            var nGenCount = MonGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
                             var nGenModCount = (int)Math.Round((decimal)(MonGen.nCount / M2Share.g_Config.nMonGenRate * 10));// MonGen.nCount;
                             var map = M2Share.g_MapManager.FindMap(MonGen.sMapName);
@@ -1021,7 +984,6 @@ namespace GameSvr
                             if (boRegened)
                             {
                                 MonGen.dwStartTick = HUtil32.GetTickCount();
-                                //Debug.WriteLine(string.Format("{0}/{1}/{2} ({3}/{4})", MonGen.sMonName, m_nCurrMonGen, m_MonGenList.Count, nGenCount, nGenModCount));
                             }
                         }
                     }
@@ -1277,15 +1239,11 @@ namespace GameSvr
 
         public int GetStdItemWeight(int nItemIdx)
         {
-            int result;
+            int result = 0;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
                 result = StdItemList[nItemIdx].Weight;
-            }
-            else
-            {
-                result = 0;
             }
             return result;
         }
@@ -1297,10 +1255,6 @@ namespace GameSvr
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
                 result = StdItemList[nItemIdx].Name;
-            }
-            else
-            {
-                result = "";
             }
             return result;
         }
@@ -1935,12 +1889,11 @@ namespace GameSvr
         public TPlayObject GetPlayObject(string sName)
         {
             TPlayObject result = null;
-            TPlayObject PlayObject = null;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    PlayObject = m_PlayObjectList[i];
+                    TPlayObject PlayObject = m_PlayObjectList[i];
                     if (!PlayObject.m_boGhost)
                     {
                         if (!(PlayObject.m_boPasswordLocked && PlayObject.m_boObMode && PlayObject.m_boAdminMode))
@@ -2429,12 +2382,11 @@ namespace GameSvr
 
         private void ProcessMapDoor()
         {
-            Envirnoment Envir;
             TDoorInfo Door;
             var dorrList = M2Share.g_MapManager.GetDoorMapList();
             for (var i = 0; i < dorrList.Count; i++)
             {
-                Envir = dorrList[i];
+                var Envir = dorrList[i];
                 for (var j = 0; j < Envir.m_DoorList.Count; j++)
                 {
                     Door = Envir.m_DoorList[j];
@@ -2480,10 +2432,6 @@ namespace GameSvr
                     }
                 }
             }
-        }
-
-        private void Process4AECFC()
-        {
         }
 
         public TMagic FindMagic(string sMagicName)
@@ -2669,8 +2617,6 @@ namespace GameSvr
        /// <summary>
        /// 向每个人物发送消息
        /// </summary>
-       /// <param name="sMsg"></param>
-       /// <param name="MsgType"></param>
         public void SendBroadCastMsgExt(string sMsg, MsgType MsgType)
         {
             TPlayObject PlayObject;
@@ -2729,7 +2675,6 @@ namespace GameSvr
                 {
                     dwProcessMissionsTime = HUtil32.GetTickCount();
                     ProcessMissions();
-                    Process4AECFC();
                     ProcessEvents();
                 }
                 if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)

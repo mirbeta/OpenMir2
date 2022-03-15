@@ -274,7 +274,7 @@ namespace GameSvr
                     }
                     switch (m_nSelectMagic)
                     {
-                        case Grobal2.SKILL_HEALLING:// 治愈术 
+                        case SpellsDef.SKILL_HEALLING:// 治愈术 
                             if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -302,7 +302,7 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case Grobal2.SKILL_BIGHEALLING:// 群体治疗术
+                        case SpellsDef.SKILL_BIGHEALLING:// 群体治疗术
                             if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
@@ -330,15 +330,15 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case Grobal2.SKILL_FIRECHARM:// 灵符火符
+                        case SpellsDef.SKILL_FIRECHARM:// 灵符火符
                             if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret))
                             {
                                 GetGotoXY(m_TargetCret, 3);
                                 GotoTargetXY(m_nTargetX, m_nTargetY, 1);
                             }
                             break;
-                        case Grobal2.SKILL_AMYOUNSUL:
-                        case Grobal2.SKILL_GROUPAMYOUNSUL:
+                        case SpellsDef.SKILL_AMYOUNSUL:
+                        case SpellsDef.SKILL_GROUPAMYOUNSUL:
                             if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
@@ -348,8 +348,8 @@ namespace GameSvr
                                 n_AmuletIndx = 2;
                             }
                             break;
-                        case Grobal2.SKILL_CLOAK:
-                        case Grobal2.SKILL_BIGCLOAK: // 集体隐身术  隐身术
+                        case SpellsDef.SKILL_CLOAK:
+                        case SpellsDef.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
                             if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
                             {
@@ -374,8 +374,8 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case Grobal2.SKILL_SKELLETON:
-                        case Grobal2.SKILL_SINSU:
+                        case SpellsDef.SKILL_SKELLETON:
+                        case SpellsDef.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
                             if (UserMagic != null && UserMagic.btKey == 0)
                             {

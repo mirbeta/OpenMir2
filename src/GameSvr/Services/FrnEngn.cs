@@ -42,7 +42,8 @@ namespace GameSvr
             {
                 try
                 {
-                    Run();
+                    ProcessGameDate();
+                    GetGameTime();
                 }
                 catch(Exception ex)
                 {
@@ -128,11 +129,8 @@ namespace GameSvr
 
         private void ProcessGameDate()
         {
-            IList<TLoadDBInfo> TempList = null;
             IList<TGoldChangeInfo> ChangeGoldList = null;
-            TLoadDBInfo LoadDBInfo = null;
             TSaveRcd SaveRcd = null;
-            TGoldChangeInfo GoldChangeInfo = null;
             var boReTryLoadDB = false;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
@@ -144,7 +142,7 @@ namespace GameSvr
                         m_SaveRcdTempList.Add(m_SaveRcdList[i]);
                     }
                 }
-                TempList = m_LoadRcdTempList;
+                IList<TLoadDBInfo> TempList = m_LoadRcdTempList;
                 m_LoadRcdTempList = m_LoadRcdList;
                 m_LoadRcdList = TempList;
                 if (m_ChangeGoldList.Any())
@@ -224,7 +222,7 @@ namespace GameSvr
             m_SaveRcdTempList.Clear();
             for (var i = 0; i < m_LoadRcdTempList.Count; i++)
             {
-                LoadDBInfo = m_LoadRcdTempList[i];
+                TLoadDBInfo LoadDBInfo = m_LoadRcdTempList[i];
                 if (LoadDBInfo == null)
                 {
                     continue;
@@ -259,7 +257,7 @@ namespace GameSvr
             {
                 for (var i = 0; i < ChangeGoldList.Count; i++)
                 {
-                    GoldChangeInfo = ChangeGoldList[i];
+                    TGoldChangeInfo GoldChangeInfo = ChangeGoldList[i];
                     if (GoldChangeInfo == null)
                     {
                         continue;
@@ -438,12 +436,6 @@ namespace GameSvr
                 }
             }
             return result;
-        }
-
-        private void Run()
-        {
-            ProcessGameDate();
-            GetGameTime();
         }
 
         private void DisPose(object obj)

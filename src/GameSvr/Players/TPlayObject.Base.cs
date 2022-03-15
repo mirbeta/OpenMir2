@@ -938,7 +938,7 @@ namespace GameSvr
                 {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
-                if (m_MagicArr[Grobal2.SKILL_ERGUM] != null && !m_boUseThrusting)
+                if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null && !m_boUseThrusting)
                 {
                     m_boUseThrusting = true;
                     SendSocket("+LNG");

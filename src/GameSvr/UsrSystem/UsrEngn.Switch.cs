@@ -65,7 +65,6 @@ namespace GameSvr
             }
         }
 
-
         public void AddSwitchData(TSwitchDataInfo SwitchData)
         {
             SwitchData.dwWaitTime = HUtil32.GetTickCount();
