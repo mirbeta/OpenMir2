@@ -30,7 +30,7 @@ namespace GameGate
         {
             for (var i = 0; i < _configManager.GateConfig.GateCount; i++)
             {
-                var gameGate = _configManager.m_xGameGateList[i];
+                var gameGate = _configManager.GameGateList[i];
                 var serverAddr = gameGate.sServerAdress;
                 var serverPort = gameGate.nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
@@ -81,13 +81,13 @@ namespace GameGate
         /// <param name="clientThread"></param>
         public void CheckSessionStatus(ClientThread clientThread)
         {
-            if (clientThread.boGateReady)
+            if (clientThread.GateReady)
             {
                 clientThread.SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
                 clientThread.CheckServerFailCount = 0;
                 return;
             }
-            if (clientThread.boCheckServerFail && clientThread.CheckServerFailCount <= 20)
+            if (clientThread.CheckServerFail && clientThread.CheckServerFailCount <= 20)
             {
                 clientThread.ReConnected();
                 clientThread.CheckServerFailCount++;
@@ -96,7 +96,7 @@ namespace GameGate
             }
             if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
             {
-                clientThread.boCheckServerFail = true;
+                clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
                 _logQueue.EnqueueDebugging($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");

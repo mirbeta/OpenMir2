@@ -129,6 +129,7 @@ namespace GameGate
                 _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
                 _sessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread));
+                _clientManager.AddClientThread(userSession.SessionId, clientThread);
             }
             else
             {
@@ -142,15 +143,14 @@ namespace GameGate
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
-            if (clientThread != null && clientThread.boGateReady)
+            if (clientThread != null && clientThread.GateReady)
             {
                 if (nSockIndex >= 0 && nSockIndex < clientThread.SessionArray.Length)
                 {
-                    TSessionInfo userSession = clientThread.SessionArray[nSockIndex];
-                    userSession.Socket = null;
-                    userSession.SckHandle = -1;
+                    clientThread.SessionArray[nSockIndex] = null;
+                    clientThread.SessionArray[nSockIndex] = new TSessionInfo();
                     clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
-                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
+                    _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 }
             }
             else
@@ -158,6 +158,7 @@ namespace GameGate
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{nSockIndex}]");
             }
+
             _clientManager.DeleteClientThread(nSockIndex);
             _sessionManager.Remove(nSockIndex);
         }

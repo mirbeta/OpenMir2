@@ -72,7 +72,7 @@ namespace GameGate
                 m_KickFlag = false;
                 return;
             }
-            if ((message.DataLen >= 5) && Config.m_fDefenceCCPacket)
+            if ((message.DataLen >= 5) && Config.IsDefenceCCPacket)
             {
                 sMsg = HUtil32.GetString(message.Buffer, 2, message.DataLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
@@ -139,7 +139,7 @@ namespace GameGate
                         {
                             case Grobal2.CM_GUILDUPDATENOTICE:
                             case Grobal2.CM_GUILDUPDATERANKINFO:
-                                if (message.DataLen > Config.m_nMaxClientPacketSize)
+                                if (message.DataLen > Config.MaxClientPacketSize)
                                 {
                                     // LogManager.g_pLogMgr.Add("Kick off user,over max client packet size: " + (Len).ToString());
                                     // Misc.Units.Misc.KickUser(m_pUserOBJ.nIPAddr);
@@ -148,7 +148,7 @@ namespace GameGate
                                 }
                                 break;
                             default:
-                                if (message.DataLen > Config.m_nNomClientPacketSize)
+                                if (message.DataLen > Config.NomClientPacketSize)
                                 {
                                     //LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
                                     //Misc.KickUser(m_pUserOBJ.nIPAddr);
@@ -250,15 +250,15 @@ namespace GameGate
                                     {
                                         nAttackInterval = Config.AttackInterval;
                                     }
-                                    var nAttackFixInterval = HUtil32._MAX(0, (nAttackInterval - Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed));
+                                    var nAttackFixInterval = HUtil32._MAX(0, (nAttackInterval - Config.MaxItemSpeedRate * _gameSpeed.ItemSpeed));
                                     nInterval = dwCurrentTick - _gameSpeed.dwAttackTick;
                                     if ((nInterval >= nAttackFixInterval))
                                     {
                                         _gameSpeed.dwAttackTick = dwCurrentTick;
-                                        if (Config.m_fItemSpeedCompensate)
+                                        if (Config.IsItemSpeedCompensate)
                                         {
-                                            _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
-                                            _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
+                                            _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.MaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
+                                            _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.MaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
                                         }
                                         else
                                         {
@@ -780,10 +780,10 @@ namespace GameGate
                             {
                                 _gameSpeed.dwAttackTick = dwCurrentTick;
                             }
-                            if (Config.m_fItemSpeedCompensate)
+                            if (Config.IsItemSpeedCompensate)
                             {
-                                _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
-                                _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
+                                _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.MaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
+                                _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.MaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
                             }
                             else
                             {
@@ -1023,18 +1023,23 @@ namespace GameGate
             }
 
             pzsSendBuf = new byte[message.DataLen + TCmdPack.PackSize];
-            var nLen = Misc.EncodeBuf(cmd.GetPacket(), TCmdPack.PackSize, pzsSendBuf);
+            pzsSendBuf[0] = (byte)'#';
+            var nLen = Misc.EncodeBuf(cmd.GetPacket(), TCmdPack.PackSize, pzsSendBuf, 1);
             if (message.DataLen > TCmdPack.PackSize)
             {
-                Array.Copy(message.Buffer, TCmdPack.PackSize, pzsSendBuf, nLen, message.DataLen - TCmdPack.PackSize);
+                var tempBuffer = message.Buffer[TCmdPack.PackSize..];
+                Buffer.BlockCopy(tempBuffer, 0, pzsSendBuf, nLen + 1, tempBuffer.Length - 1);
+                //Array.Copy(message.Buffer, TCmdPack.PackSize, pzsSendBuf, nLen+1, message.DataLen - TCmdPack.PackSize);
                 nLen = message.DataLen - TCmdPack.PackSize + nLen;
+                pzsSendBuf[nLen] = (byte)'!';
+                pzsSendBuf = pzsSendBuf[..(nLen + 1)];
             }
-            var sendBuff = new byte[nLen + 2];
-            sendBuff[0] = (byte) '#';
-            Array.Copy(pzsSendBuf, 0, sendBuff, 1, sendBuff.Length - 1);
-            sendBuff[^1] = (byte) '!';
-            SendData(sendBuff);
-            
+            else
+            {
+                pzsSendBuf[nLen + 1] = (byte)'!';
+                pzsSendBuf = pzsSendBuf[..(nLen + 2)];
+            }
+            SendData(pzsSendBuf);
 
             #region 带数据校验封包（未完善）
 
@@ -1195,7 +1200,7 @@ namespace GameGate
             switch (killType)
             {
                 case 0:
-                    if (Config.m_fKickOverSpeed)
+                    if (Config.IsKickOverSpeed)
                     {
                         kick = true;
                     }

@@ -28,22 +28,22 @@ namespace GameGate
         /// <summary>
         /// 加速方式
         /// </summary>
-        public bool m_fOverSpeedSendBack;
+        public bool IsOverSpeedSendBack;
         /// <summary>
         /// 开启防御CC攻击
         /// </summary>
-        public bool m_fDefenceCCPacket;
-        public bool m_fKickOverSpeed;
-        public bool m_fDenyPresend;
-        public bool m_fItemSpeedCompensate;
-        public bool m_fDoMotaeboSpeedCheck;
-        public bool m_fKickOverPacketSize;
-        public int m_nMaxConnectOfIP;
-        public int m_nMaxClientCount;
-        public int m_nClientTimeOutTime;
-        public int m_nNomClientPacketSize;
-        public int m_nMaxClientPacketSize;
-        public int m_nMaxClientPacketCount;
+        public bool IsDefenceCCPacket;
+        public bool IsKickOverSpeed;
+        public bool IsDenyPresend;
+        public bool IsItemSpeedCompensate;
+        public bool IsDoMotaeboSpeedCheck;
+        public bool IsKickOverPacketSize;
+        public int MaxConnectOfIP;
+        public int MaxClientCount;
+        public int ClientTimeOutTime;
+        public int NomClientPacketSize;
+        public int MaxClientPacketSize;
+        public int MaxClientPacketCount;
         public string m_szCMDSpaceMove;
         public string m_szOverClientCntMsg;
         public string m_szHWIDBlockedMsg;
@@ -185,7 +185,7 @@ namespace GameGate
         public int PunishSpellInterval;
         public int PunishAttackInterval;
         public int MaxItemSpeed;
-        public int m_nMaxItemSpeedRate;
+        public int MaxItemSpeedRate;
         /// <summary>
         /// 客户端显示物品方式
         /// </summary>
@@ -203,20 +203,20 @@ namespace GameGate
         public GateConfig()
         {
             CheckNullSession = true;
-            m_fOverSpeedSendBack = false;
-            m_fDefenceCCPacket = false;
-            m_fKickOverSpeed = false;
-            m_fDenyPresend = false;
-            m_fItemSpeedCompensate = false;
-            m_fDoMotaeboSpeedCheck = true;
-            m_fKickOverPacketSize = true;
+            IsOverSpeedSendBack = false;
+            IsDefenceCCPacket = false;
+            IsKickOverSpeed = false;
+            IsDenyPresend = false;
+            IsItemSpeedCompensate = false;
+            IsDoMotaeboSpeedCheck = true;
+            IsKickOverPacketSize = true;
             BlockIPMethod = TBlockIPMethod.mDisconnect;
-            m_nNomClientPacketSize = 400;
-            m_nMaxClientPacketSize = 10240;
-            m_nMaxConnectOfIP = 50;
-            m_nMaxClientCount = 50;
-            m_nClientTimeOutTime = 15 * 1000;
-            m_nMaxClientPacketCount = 15;
+            NomClientPacketSize = 400;
+            MaxClientPacketSize = 10240;
+            MaxConnectOfIP = 50;
+            MaxClientCount = 50;
+            ClientTimeOutTime = 15 * 1000;
+            MaxClientPacketCount = 15;
             m_szOverSpeedSendBack = "[提示]：请爱护游戏环境，关闭加速外挂重新登陆！";
             m_szCMDSpaceMove = "Move";
             m_szPacketDecryptFailed = "[警告]：游戏连接被断开，请重新登陆！原因：使用非法外挂，客户端不配套，开启的客户端数量过多。";
@@ -262,7 +262,7 @@ namespace GameGate
             ChatFilterMethod = TChatFilterMethod.ctReplaceAll;
             SpeedHackWarnMethod = TOverSpeedMsgMethod.ptSysmsg;
             MaxItemSpeed = 6;
-            m_nMaxItemSpeedRate = 60;
+            MaxItemSpeedRate = 60;
             ClientShowHintNewType = true;
             OpenClientSpeedRate = false;
             SyncClientSpeed = false;

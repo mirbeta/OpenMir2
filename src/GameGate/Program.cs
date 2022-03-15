@@ -89,7 +89,7 @@ namespace GameGate
             await AnsiConsole.Live(table)
                  .AutoClear(true)
                  .Overflow(VerticalOverflow.Crop)
-                 .Cropping(VerticalOverflowCropping.Top)
+                 .Cropping(VerticalOverflowCropping.Bottom)
                  .StartAsync(async ctx =>
                  {
                      foreach (var _ in Enumerable.Range(0, 10))

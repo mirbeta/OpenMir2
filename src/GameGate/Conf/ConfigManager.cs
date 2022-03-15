@@ -16,19 +16,19 @@ namespace GameGate
         }
         
         public GateConfig GateConfig;
-        public GameGateInfo[] m_xGameGateList;
+        public GameGateInfo[] GameGateList;
 
         public ConfigManager(string fileName) : base(fileName)
         {
             Load();
             GateConfig = new GateConfig();
-            m_xGameGateList = new GameGateInfo[32];
-            for (int i = 0; i < m_xGameGateList.Length; i++)
+            GameGateList = new GameGateInfo[32];
+            for (int i = 0; i < GameGateList.Length; i++)
             {
-                m_xGameGateList[i] = new GameGateInfo();
-                m_xGameGateList[i].sServerAdress = "127.0.0.1";
-                m_xGameGateList[i].nGatePort = 7200 + i;
-                m_xGameGateList[i].nServerPort = 5000;
+                GameGateList[i] = new GameGateInfo();
+                GameGateList[i].sServerAdress = "127.0.0.1";
+                GameGateList[i].nGatePort = 7200 + i;
+                GameGateList[i].nServerPort = 5000;
             }
         }
 
@@ -48,19 +48,19 @@ namespace GameGate
             GateConfig.PunishSpellInterval = ReadInteger("Integer", "PunishSpellInterval", GateConfig.PunishSpellInterval);
             GateConfig.PunishAttackInterval = ReadInteger("Integer", "PunishAttackInterval", GateConfig.PunishAttackInterval);
             GateConfig.MaxItemSpeed = ReadInteger("Integer", "MaxItemSpeed", GateConfig.MaxItemSpeed);
-            GateConfig.m_nMaxItemSpeedRate = ReadInteger("Integer", "MaxItemSpeedRate", GateConfig.m_nMaxItemSpeedRate);
-            GateConfig.m_nMaxConnectOfIP = ReadInteger("Integer", "MaxConnectOfIP", GateConfig.m_nMaxConnectOfIP);
-            GateConfig.m_nMaxClientCount = ReadInteger("Integer", "MaxClientCount", GateConfig.m_nMaxClientCount);
-            GateConfig.m_nClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GateConfig.m_nClientTimeOutTime);
-            if (GateConfig.m_nClientTimeOutTime < 10 * 1000)
+            GateConfig.MaxItemSpeedRate = ReadInteger("Integer", "MaxItemSpeedRate", GateConfig.MaxItemSpeedRate);
+            GateConfig.MaxConnectOfIP = ReadInteger("Integer", "MaxConnectOfIP", GateConfig.MaxConnectOfIP);
+            GateConfig.MaxClientCount = ReadInteger("Integer", "MaxClientCount", GateConfig.MaxClientCount);
+            GateConfig.ClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GateConfig.ClientTimeOutTime);
+            if (GateConfig.ClientTimeOutTime < 10 * 1000)
             {
-                GateConfig.m_nClientTimeOutTime = 10 * 1000;
-                WriteInteger("Integer", "ClientTimeOutTime", GateConfig.m_nClientTimeOutTime);
+                GateConfig.ClientTimeOutTime = 10 * 1000;
+                WriteInteger("Integer", "ClientTimeOutTime", GateConfig.ClientTimeOutTime);
             }
-            GateConfig.m_nClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GateConfig.m_nClientTimeOutTime);
-            GateConfig.m_nNomClientPacketSize = ReadInteger("Integer", "NomClientPacketSize", GateConfig.m_nNomClientPacketSize);
-            GateConfig.m_nMaxClientPacketSize = ReadInteger("Integer", "MaxClientPacketSize", GateConfig.m_nMaxClientPacketSize);
-            GateConfig.m_nMaxClientPacketCount = ReadInteger("Integer", "MaxClientPacketCount", GateConfig.m_nMaxClientPacketCount);
+            GateConfig.ClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GateConfig.ClientTimeOutTime);
+            GateConfig.NomClientPacketSize = ReadInteger("Integer", "NomClientPacketSize", GateConfig.NomClientPacketSize);
+            GateConfig.MaxClientPacketSize = ReadInteger("Integer", "MaxClientPacketSize", GateConfig.MaxClientPacketSize);
+            GateConfig.MaxClientPacketCount = ReadInteger("Integer", "MaxClientPacketCount", GateConfig.MaxClientPacketCount);
             GateConfig.ChatInterval = ReadInteger("Integer", "ChatInterval", GateConfig.ChatInterval);
             GateConfig.TurnInterval = ReadInteger("Integer", "TurnInterval", GateConfig.TurnInterval);
             GateConfig.MoveInterval = ReadInteger("Integer", "MoveInterval", GateConfig.MoveInterval);
@@ -88,13 +88,13 @@ namespace GameGate
             GateConfig.SpeedHackWarnMethod = (TOverSpeedMsgMethod)ReadInteger("Method", "SpeedHackWarnMethod", (int)GateConfig.SpeedHackWarnMethod);
             // Boolean
             GateConfig.CheckNullSession = ReadBool("Switch", "CheckNullSession", GateConfig.CheckNullSession);
-            GateConfig.m_fOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GateConfig.m_fOverSpeedSendBack);
-            GateConfig.m_fDefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GateConfig.m_fDefenceCCPacket);
-            GateConfig.m_fKickOverSpeed = ReadBool("Switch", "KickOverSpeed", GateConfig.m_fKickOverSpeed);
-            GateConfig.m_fDoMotaeboSpeedCheck = ReadBool("Switch", "DoMotaeboSpeedCheck", GateConfig.m_fDoMotaeboSpeedCheck);
-            GateConfig.m_fDenyPresend = ReadBool("Switch", "DenyPresend", GateConfig.m_fDenyPresend);
-            GateConfig.m_fItemSpeedCompensate = ReadBool("Switch", "ItemSpeedCompensate", GateConfig.m_fItemSpeedCompensate);
-            GateConfig.m_fKickOverPacketSize = ReadBool("Switch", "KickOverPacketSize", GateConfig.m_fKickOverPacketSize);
+            GateConfig.IsOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GateConfig.IsOverSpeedSendBack);
+            GateConfig.IsDefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GateConfig.IsDefenceCCPacket);
+            GateConfig.IsKickOverSpeed = ReadBool("Switch", "KickOverSpeed", GateConfig.IsKickOverSpeed);
+            GateConfig.IsDoMotaeboSpeedCheck = ReadBool("Switch", "DoMotaeboSpeedCheck", GateConfig.IsDoMotaeboSpeedCheck);
+            GateConfig.IsDenyPresend = ReadBool("Switch", "DenyPresend", GateConfig.IsDenyPresend);
+            GateConfig.IsItemSpeedCompensate = ReadBool("Switch", "ItemSpeedCompensate", GateConfig.IsItemSpeedCompensate);
+            GateConfig.IsKickOverPacketSize = ReadBool("Switch", "KickOverPacketSize", GateConfig.IsKickOverPacketSize);
             GateConfig.IsChatFilter = ReadBool("Switch", "ChatFilter", GateConfig.IsChatFilter);
             GateConfig.IsChatInterval = ReadBool("Switch", "ChatInterval", GateConfig.IsChatInterval);
             GateConfig.IsChatCmdFilter = ReadBool("Switch", "ChatCmdFilter", GateConfig.IsChatCmdFilter);
@@ -116,9 +116,9 @@ namespace GameGate
             GateConfig.GateCount = ReadInteger("GameGate", "Count", GateConfig.GateCount);
             for (var i = 0; i <= GateConfig.GateCount; i++)
             {
-                m_xGameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);
-                m_xGameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
-                m_xGameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, m_xGameGateList[i].nGatePort);
+                GameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, GameGateList[i].sServerAdress);
+                GameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, GameGateList[i].nServerPort);
+                GameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, GameGateList[i].nGatePort);
             }
             //魔法间隔控制
             for (var i = 0; i <= TableDef.MAIGIC_DELAY_TIME_LIST.GetUpperBound(0); i++)
