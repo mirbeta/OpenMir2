@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -19,11 +18,11 @@ namespace GameGate
         /// <summary>
         /// 最大用户数
         /// </summary>
-        public int MaxSession = 2000;
+        public const int MaxSession = 5000;
         /// <summary>
         /// 用户会话
         /// </summary>
-        public TSessionInfo[] SessionArray;
+        public TSessionInfo[] SessionArray = new TSessionInfo[MaxSession];
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
@@ -59,22 +58,24 @@ namespace GameGate
         /// <summary>
         /// Session管理
         /// </summary>
-        private readonly SessionManager _sessionManager;
-        private readonly LogQueue _logQueue;
+        private SessionManager _sessionManager => SessionManager.Instance;
+        /// <summary>
+        /// 日志
+        /// </summary>
+        private LogQueue _logQueue => LogQueue.Instance;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
+        public ClientThread(int clientId, GameGateInfo gameGate)
         {
             ClientId = clientId;
             ClientSocket = new IClientScoket();
+            ClientSocket.Address = gameGate.sServerAdress;
+            ClientSocket.Port = gameGate.nServerPort;
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address = serverAddr;
-            ClientSocket.Port = serverPort;
-            SessionArray = new TSessionInfo[MaxSession];
-            _sessionManager = sessionManager;
-            _logQueue = logQueue;
+            ReceiveBytes = 0;
+            SendBytes = 0;
         }
 
         public bool IsConnected => isConnected;
@@ -82,16 +83,6 @@ namespace GameGate
         public string GetSocketIp()
         {
             return $"{ClientSocket.Address}:{ClientSocket.Port}";
-        }
-
-        private string GetSocketPort()
-        {
-            return $"{ClientSocket.Port}";
-        }
-
-        private string GetSocketAddress()
-        {
-            return $"{ClientSocket.Address}";
         }
 
         public void Start()
@@ -120,53 +111,6 @@ namespace GameGate
             return count + "/" + count;
         }
 
-        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal) GetStatus()
-        {
-            return (GetSocketAddress(), GetSocketPort(), GetConnected(), GetSessionCount(), GetSendInfo(), GetReceiveInfo());
-        }
-
-        internal string GetConnected() {
-            return IsConnected ? $"[green]已连接[/]" : $"[red]Not Connected[/]";
-        }
-
-        public string GetSendInfo()
-        {
-            var totalStr = string.Empty;
-            if (SendBytes > (1024 * 1000))
-            {
-                totalStr= $"↑{SendBytes / (1024 * 1000)}M";
-            }
-            else if (SendBytes > 1024)
-            {
-                totalStr = $"↑{SendBytes / 1024}K";
-            }
-            else
-            {
-                totalStr = $"↑{SendBytes}B";
-            }
-            SendBytes = 0;
-            return totalStr;
-        }
-
-        public string GetReceiveInfo()
-        {
-            var totalStr = string.Empty;
-            if (ReceiveBytes > (1024 * 1000))
-            {
-                totalStr = $"↓{ReceiveBytes / (1024 * 1000)}M";
-            }
-            else if (ReceiveBytes > 1024)
-            {
-                totalStr = $"↓{ReceiveBytes / 1024}K";
-            }
-            else
-            {
-                totalStr = $"↓{ReceiveBytes}B";
-            }
-            ReceiveBytes = 0;
-            return totalStr;
-        }
-
         public void Stop()
         {
             ClientSocket.Disconnect();
@@ -185,12 +129,12 @@ namespace GameGate
             RestSessionArray();
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
-            GateShare.ServerGateList.Add(this);
-            _logQueue.Enqueue($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
-            Debug.WriteLine($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
+            _logQueue.Enqueue($"[{ClientId}] 游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
+            ClientManager.Instance.AddClientThread(ClientId, this);
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -208,9 +152,9 @@ namespace GameGate
             RestSessionArray();
             SocketBuffer = null;
             boGateReady = false;
-            GateShare.ServerGateList.Remove(this);
-            _logQueue.Enqueue($"游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
+            _logQueue.Enqueue($"[{ClientId}] 游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
+            ClientManager.Instance.DeleteClientThread(ClientId);
         }
 
         /// <summary>
@@ -229,15 +173,15 @@ namespace GameGate
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    _logQueue.Enqueue($"[{ClientId}] 游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    _logQueue.Enqueue($"[{ClientId}] 游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue("游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    _logQueue.Enqueue($"[{ClientId}] 游戏引擎[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }
@@ -259,11 +203,6 @@ namespace GameGate
                 tSession.SckHandle = 0;
                 tSession.SessionId = 0;
             }
-        }
-
-        private void SendServerMsg(ForwardMessage message)
-        {
-            SendServerMsg(message.nIdent, message.wSocketIndex, message.nSocket, message.nUserListIndex, message.nLen, message.Data);
         }
 
         public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, string Data)
@@ -440,15 +379,5 @@ namespace GameGate
                 SendBytes += sendBuffer.Length;
             }
         }
-    }
-
-    public class ForwardMessage
-    {
-        public ushort nIdent;
-        public ushort wSocketIndex;
-        public int nSocket;
-        public ushort nUserListIndex;
-        public int nLen;
-        public byte[] Data;
     }
 }

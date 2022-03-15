@@ -7,26 +7,23 @@ namespace GameGate
 {
     public class ServerApp
     {
-        private readonly LogQueue _logQueue;
-        private readonly ServerService _serverService;
-        private readonly ClientManager _clientManager;
-        private readonly SessionManager _sessionManager;
+        private LogQueue logQueue => LogQueue.Instance;
+        private ClientManager clientManager => ClientManager.Instance;
+        private SessionManager sessionManager => SessionManager.Instance;
+        private ServerManager serverManager => ServerManager.Instance;
 
-        public ServerApp(LogQueue logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager)
+        public ServerApp()
         {
-            _logQueue = logQueue;
-            _serverService = serverService;
-            _clientManager = clientManager;
-            _sessionManager = sessionManager;
+
         }
 
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(_serverService.ProcessReviceMessage);
+            var consumerTask1 = Task.Factory.StartNew(serverManager.ProcessReviceMessage);
             gTasks[0] = consumerTask1;
 
-            var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
+            var consumerTask2 = Task.Factory.StartNew(sessionManager.ProcessSendMessage);
             gTasks[1] = consumerTask2;
 
             await Task.WhenAll(gTasks);
@@ -37,39 +34,37 @@ namespace GameGate
             GateShare.Initialization();
             LoadAbuseFile();
             LoadBlockIPFile();
-            _serverService.Start();
-            _clientManager.Initialization();
-            _clientManager.Start();
+            clientManager.Initialization();
+            serverManager.Start();
         }
 
         public void StopService()
         {
-            _logQueue.Enqueue("正在停止服务...", 2);
-            _serverService.Stop();
-            _clientManager.Stop();
-            _logQueue.Enqueue("服务停止成功...", 2);
+            logQueue.Enqueue("正在停止服务...", 2);
+            serverManager.Stop();
+            logQueue.Enqueue("服务停止成功...", 2);
         }
 
         public void LoadAbuseFile()
         {
-            _logQueue.Enqueue("正在加载文字过滤配置信息...", 4);
+            logQueue.Enqueue("正在加载文字过滤配置信息...", 4);
             var sFileName = ".\\WordFilter.txt";
             if (File.Exists(sFileName))
             {
                 //GateShare.AbuseList.LoadFromFile(sFileName);
             }
-            _logQueue.Enqueue("文字过滤信息加载完成...", 4);
+            logQueue.Enqueue("文字过滤信息加载完成...", 4);
         }
 
         private void LoadBlockIPFile()
         {
-            _logQueue.Enqueue("正在加载IP过滤配置信息...", 4);
+            logQueue.Enqueue("正在加载IP过滤配置信息...", 4);
             var sFileName = ".\\BlockIPList.txt";
             if (File.Exists(sFileName))
             {
                 GateShare.BlockIPList.LoadFromFile(sFileName);
             }
-            _logQueue.Enqueue("IP过滤配置信息加载完成...", 4);
+            logQueue.Enqueue("IP过滤配置信息加载完成...", 4);
         }
 
 

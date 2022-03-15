@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using SystemModule;
 
@@ -10,60 +9,37 @@ namespace GameGate
     /// </summary>
     public class ClientManager
     {
-        private readonly IList<ClientThread> _gateClient;
-        private readonly SessionManager _sessionManager;
-        private readonly ConfigManager _configManager;
-        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        private readonly LogQueue _logQueue;
+        private static readonly ClientManager instance = new ClientManager();
 
-        public ClientManager(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager)
+        public static ClientManager Instance
         {
-            _logQueue = logQueue;
-            _sessionManager = sessionManager;
-            _configManager = configManager;
-            _gateClient = new List<ClientThread>();
+            get { return instance; }
+        }
+
+        private ServerManager serverManager => ServerManager.Instance;
+        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        
+        public ClientManager()
+        {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
 
+        private LogQueue _logQueue => LogQueue.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
+
         public void Initialization()
         {
-            var serverAddr = string.Empty;
-            var serverPort = 0;
             for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
             {
-                serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
-                serverPort = _configManager.m_xGameGateList[i].nServerPort;
+                var gameGate = _configManager.m_xGameGateList[i];
+                var serverAddr = gameGate.sServerAdress;
+                var serverPort = gameGate.nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
                     _logQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
-                _gateClient.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
-            }
-        }
-
-        public void Start()
-        {
-            for (var i = 0; i < _gateClient.Count; i++)
-            {
-                if (_gateClient[i] == null)
-                {
-                    continue;
-                }
-                _gateClient[i].Start();
-                _gateClient[i].RestSessionArray();
-            }
-        }
-
-        public void Stop()
-        {
-            for (var i = 0; i < _gateClient.Count; i++)
-            {
-                if (_gateClient[i] == null)
-                {
-                    continue;
-                }
-                _gateClient[i].Stop();
+                serverManager.AddServer(new ServerService(i, gameGate));
             }
         }
 
@@ -86,7 +62,7 @@ namespace GameGate
         {
             if (connectionId > 0)
             {
-                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : GetClientThread();
+                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
             }
             return null;
         }
@@ -98,26 +74,6 @@ namespace GameGate
         public void DeleteClientThread(int connectionId)
         {
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
-        }
-
-        public ClientThread GetClientThread()
-        {
-            //TODO 根据配置文件有四种模式  默认随机
-            //1.轮询分配
-            //2.总是分配到最小资源 即网关在线人数最小的那个
-            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-            //4.按权重分配
-            if (GateShare.ServerGateList.Any())
-            {
-                var random = new System.Random().Next(GateShare.ServerGateList.Count);
-                return GateShare.ServerGateList[random];
-            }
-            return null;
-        }
-
-        public IList<ClientThread> GetAllClient()
-        {
-            return _gateClient;
         }
 
         /// <summary>

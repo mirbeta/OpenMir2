@@ -8,6 +8,13 @@ namespace GameGate
 {
     public class SessionManager
     {
+        private static readonly SessionManager instance = new SessionManager();
+
+        public static SessionManager Instance
+        {
+            get { return instance; }
+        }
+        
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>

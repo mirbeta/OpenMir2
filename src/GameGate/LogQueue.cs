@@ -5,13 +5,20 @@ namespace GameGate
 {
     public class LogQueue
     {
-        private readonly ConfigManager _configManager;
+        private static readonly LogQueue instance = new LogQueue();
+
+        public static LogQueue Instance
+        {
+            get { return instance; }
+        }
+
+        private ConfigManager _configManager => ConfigManager.Instance;
         public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
         public readonly ConcurrentQueue<string> DebugLog = new ConcurrentQueue<string>();
 
-        public LogQueue(ConfigManager configManager)
+        public LogQueue()
         {
-            _configManager = configManager;
+            
         }
 
         public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;

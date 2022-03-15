@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -9,17 +8,17 @@ namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly LogQueue _logQueue;
-        private readonly ClientManager _clientManager;
-        private readonly SessionManager _sessionManager;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private ClientManager _clientManager => ClientManager.Instance;
+        private SessionManager _sessionManager => SessionManager.Instance;
+        private ServerManager _serverManager => ServerManager.Instance;
+
         private int _processDelayTick = 0;
         private int _processClearSessionTick = 0;
 
-        public TimedService(LogQueue logQueue, ClientManager clientManager, SessionManager sessionManager)
+        public TimedService()
         {
-            _logQueue = logQueue;
-            _clientManager = clientManager;
-            _sessionManager = sessionManager;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -67,20 +66,24 @@ namespace GameGate
             if (HUtil32.GetTickCount() - _processDelayTick > 500)
             {
                 _processDelayTick = HUtil32.GetTickCount();
-                var _gateClient = _clientManager.GetAllClient();
-                for (var i = 0; i < _gateClient.Count; i++)
+                var _gateServer = _serverManager.GetServerList();
+                for (var i = 0; i < _gateServer.Count; i++)
                 {
-                    if (_gateClient[i] == null)
+                    if (_gateServer[i] == null)
                     {
                         continue;
                     }
-                    if (_gateClient[i].SessionArray == null)
+                    if (_gateServer[i].ClientThread == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < _gateClient[i].SessionArray.Length; j++)
+                    if (_gateServer[i].ClientThread.SessionArray == null)
                     {
-                        var session = _gateClient[i].SessionArray[j];
+                        continue;
+                    }
+                    for (var j = 0; j < _gateServer[i].ClientThread.SessionArray.Length; j++)
+                    {
+                        var session = _gateServer[i].ClientThread.SessionArray[j];
                         if (session == null)
                         {
                             continue;
@@ -111,16 +114,20 @@ namespace GameGate
                 _processClearSessionTick = HUtil32.GetTickCount();
                 _logQueue.EnqueueDebugging("清理超时会话开始工作...");
                 TSessionInfo UserSession;
-                var clientList = _clientManager.GetAllClient();
-                for (var i = 0; i < clientList.Count; i++)
+                var serverList = _serverManager.GetServerList();
+                for (var i = 0; i < serverList.Count; i++)
                 {
-                    if (clientList[i] == null)
+                    if (serverList[i] == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < clientList[i].MaxSession; j++)
+                    if (serverList[i].ClientThread != null)
                     {
-                        UserSession = clientList[i].SessionArray[j];
+                        continue;
+                    }
+                    for (var j = 0; j < serverList[i].ClientThread.SessionArray.Length; j++)
+                    {
+                        UserSession = serverList[i].ClientThread.SessionArray[j];
                         if (UserSession.Socket != null)
                         {
                             if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
@@ -136,7 +143,7 @@ namespace GameGate
                     {
                         GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
                     }
-                    _clientManager.CheckSessionStatus(clientList[i]);
+                    _clientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
                 _logQueue.EnqueueDebugging("清理超时会话工作完成...");
             }

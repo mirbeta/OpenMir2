@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Spectre.Console;
 using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,7 +12,6 @@ namespace GameGate
 {
     class Program
     {
-        static IServiceProvider ServiceProvider { get; set; }
         private static PeriodicTimer _timer;
         private static CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -21,29 +19,25 @@ namespace GameGate
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             PrintUsage();
-            var host = new HostBuilder()
+            var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
                     services.AddSingleton<ServerApp>();
-                    services.AddSingleton<ServerService>();
-                    services.AddSingleton<SessionManager>();
-                    services.AddSingleton<ClientManager>();
-                    services.AddSingleton<LogQueue>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
-                }).UseConsoleLifetime().Build();
+                });
             Console.CancelKeyPress += Console_CancelKeyPress;
-
-            await host.StartAsync();
-            
-            ServiceProvider = host.Services;
+            await builder.StartAsync();
             ProcessLoopAsync();
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             GateShare.ShowLog = true;
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
             //e.Cancel = true;
         }
 
@@ -60,7 +54,8 @@ namespace GameGate
 
                 if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
                 {
-                    break;
+                    System.Environment.Exit(Environment.ExitCode);
+                    return;
                 }
 
                 var firstTwoCharacters = input[..2];
@@ -82,8 +77,7 @@ namespace GameGate
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var clientManager = ServiceProvider.GetRequiredService<ClientManager>();
-            var clientList = clientManager.GetAllClient();
+            var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Address[/]");
             table.AddColumn("[yellow]Port[/]");
@@ -100,15 +94,14 @@ namespace GameGate
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
                      {
-                         //table.AddRow(new Text("-"), "-", "-", "-", "-", "-");
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
                      while (await _timer.WaitForNextTickAsync(cts.Token))
                      {
-                         for (int i = 0; i < clientList.Count; i++)
+                         for (int i = 0; i < serverList.Count; i++)
                          {
-                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal) = clientList[i].GetStatus();
+                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
@@ -119,7 +112,6 @@ namespace GameGate
                          }
                          ctx.Refresh();
                      }
-
                  });
         }
 

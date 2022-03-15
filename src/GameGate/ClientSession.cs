@@ -28,16 +28,13 @@ namespace GameGate
         private long m_FinishTick = 0;
         private readonly object _syncObj;
         private readonly ClientThread lastGameSvr;
-        private readonly ConfigManager _configManager;
         private readonly HWIDFilter _hwidFilter;
-        private readonly LogQueue _logQueue;
 
-        public ClientSession(LogQueue logQueue, ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(TSessionInfo session, ClientThread clientThread)
         {
             _msgList = new List<TDelayMsg>();
             _session = session;
             lastGameSvr = clientThread;
-            _configManager = configManager;
             _hwidFilter = GateShare.HWFilter;
             m_xHWID = MD5.g_MD5EmptyDigest;
             m_fOverClientCount = false;
@@ -45,7 +42,6 @@ namespace GameGate
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
-            _logQueue = logQueue;
         }
 
         public GameSpeed GetGameSpeed()
@@ -58,7 +54,9 @@ namespace GameGate
             get { return _session; }
         }
 
-        private GateConfig Config => _configManager.GateConfig;
+        private LogQueue _logQueue => LogQueue.Instance;
+
+        private GateConfig Config => ConfigManager.Instance.GateConfig;
 
         /// <summary>
         /// 处理客户端发送过来的封包
@@ -1433,11 +1431,11 @@ namespace GameGate
             byte[] tempBuff;
             if (len == 0)
             {
-                tempBuff = new byte[20 + packet.Length];
+                tempBuff = new byte[MessageHeader.PacketSize + packet.Length];
             }
             else
             {
-                tempBuff = new byte[20 + len];
+                tempBuff = new byte[MessageHeader.PacketSize + len];
             }
             var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
@@ -1445,7 +1443,7 @@ namespace GameGate
             GateMsg.wGSocketIdx = (ushort)_session.SessionId;
             GateMsg.wIdent = Grobal2.GM_DATA;
             GateMsg.wUserListIndex = _session.nUserListIndex;
-            GateMsg.nLength = tempBuff.Length - 20;//修复客户端进入游戏困难问题，只需要发送数据封包大小即可
+            GateMsg.nLength = tempBuff.Length - MessageHeader.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetPacket();
             Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
@@ -1461,29 +1459,25 @@ namespace GameGate
 
         private void SendSysMsg(string szMsg)
         {
-            TCmdPack Cmd;
-            byte[] TempBuf = new byte[1023 + 1];
-            byte[] SendBuf = new byte[1023 + 1];
             if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
             {
                 return;
             }
-            Cmd = new TCmdPack();
+            byte[] TempBuf = new byte[1024];
+            byte[] SendBuf = new byte[1024];
+            TCmdPack Cmd = new TCmdPack();
             Cmd.UID = m_nSvrObject;
             Cmd.Cmd = Grobal2.SM_SYSMESSAGE;
             Cmd.X = HUtil32.MakeWord(0xFF, 0xF9);
             Cmd.Y = 0;
             Cmd.Direct = 0;
             SendBuf[0] = (byte)'#';
-            //Move(Cmd, TempBuf[1], TCmdPack.PackSize);
             Array.Copy(Cmd.GetPacket(0), 0, TempBuf, 0, TCmdPack.PackSize);
             var sBuff = HUtil32.GetBytes(szMsg);
             Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-            //Move(szMsg[1], TempBuf[13], szMsg.Length);
             var iLen = TCmdPack.PackSize + szMsg.Length;
             iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
             SendBuf[iLen + 1] = (byte)'!';
-            //m_tIOCPSender.SendData(m_pOverlapSend, SendBuf[0], iLen + 2);
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
         }
 

@@ -1,20 +1,31 @@
+using System;
+using System.IO;
 using SystemModule.Common;
 
 namespace GameGate
 {
     public class ConfigManager : IniFile
     {
+        private static string fileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
+
+        private static readonly ConfigManager instance = new ConfigManager(fileName);
+
+        public static ConfigManager Instance
+        {
+            get { return instance; }
+        }
+        
         public GateConfig GateConfig;
-        public TGameGateList[] m_xGameGateList;
+        public GameGateInfo[] m_xGameGateList;
 
         public ConfigManager(string fileName) : base(fileName)
         {
             Load();
             GateConfig = new GateConfig();
-            m_xGameGateList = new TGameGateList[32];
+            m_xGameGateList = new GameGateInfo[32];
             for (int i = 0; i < m_xGameGateList.Length; i++)
             {
-                m_xGameGateList[i] = new TGameGateList();
+                m_xGameGateList[i] = new GameGateInfo();
                 m_xGameGateList[i].sServerAdress = "127.0.0.1";
                 m_xGameGateList[i].nGatePort = 7200 + i;
                 m_xGameGateList[i].nServerPort = 5000;
@@ -119,7 +130,7 @@ namespace GameGate
         }
     }
 
-    public class TGameGateList
+    public class GameGateInfo
     {
         public string sServerAdress;
         public int nServerPort;
