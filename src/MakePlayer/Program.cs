@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using SystemModule;
+using SystemModule.Packet;
+using SystemModule.Sockets;
 
 namespace MakePlayer
 {
@@ -24,11 +26,11 @@ namespace MakePlayer
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        private static int g_nChrCount = 100;
+        private static int g_nChrCount = 50;
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 10000;
+        private static int g_nTotalChrCount = 100000;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -47,6 +49,8 @@ namespace MakePlayer
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            //AccountCrateTest();
+                
             g_sServerName = "热血传奇";
             g_sGameIPaddr = "10.10.0.112";
             g_nGamePort = 7000;
@@ -54,7 +58,7 @@ namespace MakePlayer
 
             g_nChrCount = HUtil32._MIN(g_nChrCount, g_nTotalChrCount);
             g_dwLogonTick = HUtil32.GetTickCount() - 1000 * g_nChrCount;
-            g_sAccount = "woshizhende";
+            g_sAccount = "mplay";
 
             _playTimer = new Thread(start: Start);
             _playTimer.IsBackground = true;
@@ -71,6 +75,46 @@ namespace MakePlayer
 
                         break;
                 }
+            }
+        }
+
+        private static IClientScoket ClientSocket;
+        
+        static void AccountCrateTest()
+        {
+            ClientSocket = new IClientScoket();
+            ClientSocket.Address = "10.10.0.112";
+            ClientSocket.Port = 7000;
+            ClientSocket.Connect();
+            
+            UserFullEntry ue = new UserFullEntry();
+            var sAccount = "mplay0";
+            var sPassword = "mplay0";
+            ue.UserEntry.sAccount = sAccount;
+            ue.UserEntry.sPassword = sPassword;
+            ue.UserEntry.sUserName = sAccount;
+            ue.UserEntry.sSSNo = "650101-1455111";
+            ue.UserEntry.sQuiz = sAccount;
+            ue.UserEntry.sAnswer = sAccount;
+            ue.UserEntry.sPhone = "";
+            ue.UserEntry.sEMail = "";
+            ue.UserEntryAdd.sQuiz2 = sAccount;
+            ue.UserEntryAdd.sAnswer2 = sAccount;
+            ue.UserEntryAdd.sBirthDay = "1978/01/01";
+            ue.UserEntryAdd.sMobilePhone = "";
+            ue.UserEntryAdd.sMemo = "";
+            ue.UserEntryAdd.sMemo2 = "";
+            var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
+            ClientSocket.IsConnected = true;
+            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue));
+        }
+        
+        private static void SendSocket(string sText)
+        {
+            if (ClientSocket.IsConnected)
+            {
+                var sSendText = "#" + 0 + sText + "!";
+                ClientSocket.SendText(sSendText);
             }
         }
 
