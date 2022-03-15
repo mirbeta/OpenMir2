@@ -15,16 +15,15 @@ namespace GameGate
         private ServerManager _serverManager => ServerManager.Instance;
         private readonly ISocketServer _serverSocket;
         private readonly ClientThread _clientThread;
-        private string GateAddress = string.Empty;
-        private int GatePort = 0;
-
+        private readonly string GateAddress;
+        private readonly int GatePort = 0;
 
         public ServerService(int i, GameGateInfo gameGate)
         {
             _clientThread = new ClientThread(i, gameGate);
             GateAddress = gameGate.sServerAdress;
             GatePort = gameGate.nGatePort;
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 512);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -33,7 +32,6 @@ namespace GameGate
         }
 
         public ClientThread ClientThread => _clientThread;
-
 
         public void Start()
         {
@@ -54,12 +52,12 @@ namespace GameGate
             return (GateAddress, $"{GatePort}", GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo());
         }
 
-        internal string GetConnected()
+        private string GetConnected()
         {
             return _clientThread.IsConnected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
         }
 
-        internal string GetSendInfo()
+        private string GetSendInfo()
         {
             var totalStr = string.Empty;
             if (_clientThread.SendBytes > (1024 * 1000))
@@ -78,7 +76,7 @@ namespace GameGate
             return totalStr;
         }
 
-        internal string GetReceiveInfo()
+        private string GetReceiveInfo()
         {
             var totalStr = string.Empty;
             if (_clientThread.ReceiveBytes > (1024 * 1000))

@@ -28,7 +28,7 @@ namespace GameGate
         private long m_FinishTick = 0;
         private readonly object _syncObj;
         private readonly ClientThread lastGameSvr;
-        private readonly HWIDFilter _hwidFilter;
+        private readonly HardwareFilter _hwidFilter;
 
         public ClientSession(TSessionInfo session, ClientThread clientThread)
         {
@@ -181,39 +181,39 @@ namespace GameGate
                             //     break;
                             case Grobal2.CM_WALK:
                             case Grobal2.CM_RUN:
-                                if (Config.m_fMoveInterval)// 700
+                                if (Config.IsMoveInterval)// 700
                                 {
                                     fPacketOverSpeed = false;
                                     dwCurrentTick = HUtil32.GetTickCount();
                                     int nMoveInterval;
                                     if (_gameSpeed.SpeedLimit)
                                     {
-                                        nMoveInterval = Config.m_nMoveInterval + Config.m_nPunishMoveInterval;
+                                        nMoveInterval = Config.MoveInterval + Config.PunishMoveInterval;
                                     }
                                     else
                                     {
-                                        nMoveInterval = Config.m_nMoveInterval;
+                                        nMoveInterval = Config.MoveInterval;
                                     }
                                     nInterval = (dwCurrentTick - _gameSpeed.dwMoveTick);
                                     if ((nInterval >= nMoveInterval))
                                     {
                                         _gameSpeed.dwMoveTick = dwCurrentTick;
-                                        _gameSpeed.dwSpellTick = dwCurrentTick - Config.m_nMoveNextSpellCompensate;
-                                        if (_gameSpeed.dwAttackTick < dwCurrentTick - Config.m_nMoveNextAttackCompensate)
+                                        _gameSpeed.dwSpellTick = dwCurrentTick - Config.MoveNextSpellCompensate;
+                                        if (_gameSpeed.dwAttackTick < dwCurrentTick - Config.MoveNextAttackCompensate)
                                         {
-                                            _gameSpeed.dwAttackTick = dwCurrentTick - Config.m_nMoveNextAttackCompensate;
+                                            _gameSpeed.dwAttackTick = dwCurrentTick - Config.MoveNextAttackCompensate;
                                         }
                                         LastDirection = CltCmd.Dir;
                                     }
                                     else
                                     {
                                         fPacketOverSpeed = true;
-                                        if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                        if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
                                             nMsgCount = GetDelayMsgCount();
                                             if (nMsgCount == 0)
                                             {
-                                                dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((nMoveInterval - nInterval) * Config.m_nPunishIntervalRate);
+                                                dwDelay = Config.PunishBaseInterval + (int)Math.Round((nMoveInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.dwMoveTick = dwCurrentTick + dwDelay;
                                             }
                                             else
@@ -237,18 +237,18 @@ namespace GameGate
                             case Grobal2.CM_WIDEHIT:
                             case Grobal2.CM_CRSHIT:
                             case Grobal2.CM_FIREHIT:
-                                if (Config.m_fAttackInterval)
+                                if (Config.IsAttackInterval)
                                 {
                                     fPacketOverSpeed = false;
                                     dwCurrentTick = HUtil32.GetTickCount();
                                     int nAttackInterval;
                                     if (_gameSpeed.SpeedLimit)
                                     {
-                                        nAttackInterval = Config.m_nAttackInterval + Config.m_nPunishAttackInterval;
+                                        nAttackInterval = Config.AttackInterval + Config.PunishAttackInterval;
                                     }
                                     else
                                     {
-                                        nAttackInterval = Config.m_nAttackInterval;
+                                        nAttackInterval = Config.AttackInterval;
                                     }
                                     var nAttackFixInterval = HUtil32._MAX(0, (nAttackInterval - Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed));
                                     nInterval = dwCurrentTick - _gameSpeed.dwAttackTick;
@@ -257,25 +257,25 @@ namespace GameGate
                                         _gameSpeed.dwAttackTick = dwCurrentTick;
                                         if (Config.m_fItemSpeedCompensate)
                                         {
-                                            _gameSpeed.dwMoveTick = dwCurrentTick - (Config.m_nAttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
-                                            _gameSpeed.dwSpellTick = dwCurrentTick - (Config.m_nAttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
+                                            _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
+                                            _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
                                         }
                                         else
                                         {
-                                            _gameSpeed.dwMoveTick = dwCurrentTick - Config.m_nAttackNextMoveCompensate;// 550
-                                            _gameSpeed.dwSpellTick = dwCurrentTick - Config.m_nAttackNextSpellCompensate;// 1150
+                                            _gameSpeed.dwMoveTick = dwCurrentTick - Config.AttackNextMoveCompensate;// 550
+                                            _gameSpeed.dwSpellTick = dwCurrentTick - Config.AttackNextSpellCompensate;// 1150
                                         }
                                         LastDirection = CltCmd.Dir;
                                     }
                                     else
                                     {
                                         fPacketOverSpeed = true;
-                                        if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                        if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
                                             nMsgCount = GetDelayMsgCount();
                                             if (nMsgCount == 0)
                                             {
-                                                dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((nAttackFixInterval - nInterval) * Config.m_nPunishIntervalRate);
+                                                dwDelay = Config.PunishBaseInterval + (int)Math.Round((nAttackFixInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.dwAttackTick = dwCurrentTick + dwDelay;
                                             }
                                             else
@@ -292,7 +292,7 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_SPELL:
-                                if (Config.m_fSpellInterval)// 1380
+                                if (Config.IsSpellInterval)// 1380
                                 {
                                     fPacketOverSpeed = false;
                                     dwCurrentTick = HUtil32.GetTickCount();
@@ -305,7 +305,7 @@ namespace GameGate
                                         int nSpellInterval;
                                         if (_gameSpeed.SpeedLimit)
                                         {
-                                            nSpellInterval = TableDef.MAIGIC_DELAY_TIME_LIST[CltCmd.Magic] + Config.m_nPunishSpellInterval;
+                                            nSpellInterval = TableDef.MAIGIC_DELAY_TIME_LIST[CltCmd.Magic] + Config.PunishSpellInterval;
                                         }
                                         else
                                         {
@@ -318,13 +318,13 @@ namespace GameGate
                                             int dwNextAtt;
                                             if (TableDef.MAIGIC_ATTACK_ARRAY[CltCmd.Magic])
                                             {
-                                                dwNextMove = Config.m_nSpellNextMoveCompensate;
-                                                dwNextAtt = Config.m_nSpellNextAttackCompensate;
+                                                dwNextMove = Config.SpellNextMoveCompensate;
+                                                dwNextAtt = Config.SpellNextAttackCompensate;
                                             }
                                             else
                                             {
-                                                dwNextMove = Config.m_nSpellNextMoveCompensate + 80;
-                                                dwNextAtt = Config.m_nSpellNextAttackCompensate + 80;
+                                                dwNextMove = Config.SpellNextMoveCompensate + 80;
+                                                dwNextAtt = Config.SpellNextAttackCompensate + 80;
                                             }
                                             _gameSpeed.dwSpellTick = dwCurrentTick;
                                             _gameSpeed.dwMoveTick = dwCurrentTick - dwNextMove;
@@ -334,12 +334,12 @@ namespace GameGate
                                         else
                                         {
                                             fPacketOverSpeed = true;
-                                            if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                            if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                             {
                                                 nMsgCount = GetDelayMsgCount();
                                                 if (nMsgCount == 0)
                                                 {
-                                                    dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((nSpellInterval - nInterval) * Config.m_nPunishIntervalRate);
+                                                    dwDelay = Config.PunishBaseInterval + (int)Math.Round((nSpellInterval - nInterval) * Config.PunishIntervalRate);
                                                 }
                                                 else
                                                 {
@@ -355,29 +355,29 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_SITDOWN:
-                                if (Config.m_fSitDownInterval)
+                                if (Config.IsSitDownInterval)
                                 {
                                     fPacketOverSpeed = false;
                                     dwCurrentTick = HUtil32.GetTickCount();
                                     nInterval = (dwCurrentTick - _gameSpeed.dwSitDownTick);
-                                    if (nInterval >= Config.m_nSitDownInterval)
+                                    if (nInterval >= Config.SitDownInterval)
                                     {
                                         _gameSpeed.dwSitDownTick = dwCurrentTick;
                                     }
                                     else
                                     {
                                         fPacketOverSpeed = true;
-                                        if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                        if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
                                             nMsgCount = GetDelayMsgCount();
                                             if (nMsgCount == 0)
                                             {
-                                                dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((Config.m_nSitDownInterval - nInterval) * Config.m_nPunishIntervalRate);
+                                                dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.SitDownInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.dwSitDownTick = dwCurrentTick + dwDelay;
                                             }
                                             else
                                             {
-                                                _gameSpeed.dwSitDownTick = dwCurrentTick + (Config.m_nSitDownInterval - nInterval);
+                                                _gameSpeed.dwSitDownTick = dwCurrentTick + (Config.SitDownInterval - nInterval);
                                                 if (nMsgCount >= 2)
                                                 {
                                                     SendKickMsg(0);
@@ -389,28 +389,28 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_BUTCH:
-                                if (Config.m_fButchInterval)
+                                if (Config.IsButchInterval)
                                 {
                                     fPacketOverSpeed = false;
                                     dwCurrentTick = HUtil32.GetTickCount();
                                     nInterval = dwCurrentTick - _gameSpeed.dwButchTick;
-                                    if (nInterval >= Config.m_nButchInterval)
+                                    if (nInterval >= Config.ButchInterval)
                                     {
                                         _gameSpeed.dwButchTick = dwCurrentTick;
                                     }
                                     else
                                     {
                                         fPacketOverSpeed = true;
-                                        if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                        if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                         {
                                             if (!PeekDelayMsg(CltCmd.Cmd))
                                             {
-                                                dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((Config.m_nButchInterval - nInterval) * Config.m_nPunishIntervalRate);
+                                                dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.ButchInterval - nInterval) * Config.PunishIntervalRate);
                                                 _gameSpeed.dwButchTick = dwCurrentTick + dwDelay;
                                             }
                                             else
                                             {
-                                                _gameSpeed.dwSitDownTick = dwCurrentTick + (Config.m_nButchInterval - nInterval);
+                                                _gameSpeed.dwSitDownTick = dwCurrentTick + (Config.ButchInterval - nInterval);
                                                 return;
                                             }
                                         }
@@ -418,25 +418,25 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_TURN:
-                                if (Config.m_fTurnInterval && (Config.m_tOverSpeedPunishMethod != TPunishMethod.TurnPack))
+                                if (Config.IsTurnInterval && (Config.OverSpeedPunishMethod != TPunishMethod.TurnPack))
                                 {
                                     if (LastDirection != CltCmd.Dir)
                                     {
                                         fPacketOverSpeed = false;
                                         dwCurrentTick = HUtil32.GetTickCount();
-                                        if (dwCurrentTick - _gameSpeed.dwTurnTick >= Config.m_nTurnInterval)
+                                        if (dwCurrentTick - _gameSpeed.dwTurnTick >= Config.TurnInterval)
                                         {
                                             LastDirection = CltCmd.Dir;
                                             _gameSpeed.dwTurnTick = dwCurrentTick;
                                         }
                                         else
                                         {
-                                            if (Config.m_tOverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                            if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                             {
                                                 fPacketOverSpeed = true;
                                                 if (!PeekDelayMsg(CltCmd.Cmd))
                                                 {
-                                                    dwDelay = Config.m_nPunishBaseInterval + (int)Math.Round((Config.m_nTurnInterval - (dwCurrentTick - _gameSpeed.dwTurnTick)) * Config.m_nPunishIntervalRate);
+                                                    dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.TurnInterval - (dwCurrentTick - _gameSpeed.dwTurnTick)) * Config.PunishIntervalRate);
                                                 }
                                                 else
                                                 {
@@ -465,12 +465,12 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_SAY:
-                                if (Config.m_fChatInterval)
+                                if (Config.IsChatInterval)
                                 {
                                     if (!sMsg.StartsWith("@"))
                                     {
                                         dwCurrentTick = HUtil32.GetTickCount();
-                                        if (dwCurrentTick - _gameSpeed.dwSayMsgTick < Config.m_nChatInterval)
+                                        if (dwCurrentTick - _gameSpeed.dwSayMsgTick < Config.ChatInterval)
                                         {
                                             return;
                                         }
@@ -497,7 +497,7 @@ namespace GameGate
                                         // {
                                         //     Move(pszChatBuffer[0], pszChatCmd[0], pszChatBuffer.Length);
                                         // }
-                                        if (GateShare.g_ChatCmdFilterList.ContainsKey(pszChatCmd))
+                                        if (GateShare.ChatCommandFilter.ContainsKey(pszChatCmd))
                                         {
                                            var Cmd = new TCmdPack();
                                            Cmd.UID = m_nSvrObject;
@@ -515,16 +515,16 @@ namespace GameGate
                                            //m_tIOCPSender.SendData(m_pOverlapSend, pszSendBuf[0], nEnCodeLen + 2);
                                            return;
                                         }
-                                        if (Config.m_fSpaceMoveNextPickupInterval)
+                                        if (Config.IsSpaceMoveNextPickupInterval)
                                         {
                                             var buffString = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
                                             if (String.Compare(buffString, Config.m_szCMDSpaceMove, StringComparison.OrdinalIgnoreCase) == 0)
                                             {
-                                                _gameSpeed.dwPickupTick = HUtil32.GetTickCount() + Config.m_nSpaceMoveNextPickupInterval;
+                                                _gameSpeed.dwPickupTick = HUtil32.GetTickCount() + Config.SpaceMoveNextPickupInterval;
                                             }
                                         }
                                     }
-                                    else if (Config.m_fChatFilter)
+                                    else if (Config.IsChatFilter)
                                     {
                                         if (sMsg.StartsWith("/"))
                                         {
@@ -569,10 +569,10 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_PICKUP:
-                                if (Config.m_fPickupInterval)
+                                if (Config.IsPickupInterval)
                                 {
                                     dwCurrentTick = HUtil32.GetTickCount();
-                                    if (dwCurrentTick - _gameSpeed.dwPickupTick > Config.m_nPickupInterval)
+                                    if (dwCurrentTick - _gameSpeed.dwPickupTick > Config.PickupInterval)
                                     {
                                         _gameSpeed.dwPickupTick = dwCurrentTick;
                                     }
@@ -583,12 +583,12 @@ namespace GameGate
                                 }
                                 break;
                             case Grobal2.CM_EAT:
-                                if (Config.m_fEatInterval)
+                                if (Config.IsEatInterval)
                                 {
                                     if (CltCmd.Direct == 0 || CltCmd.Direct == 1 || CltCmd.Direct == 3)
                                     {
                                         dwCurrentTick = HUtil32.GetTickCount();
-                                        if (dwCurrentTick - _gameSpeed.dwEatTick > Config.m_nEatInterval)
+                                        if (dwCurrentTick - _gameSpeed.dwEatTick > Config.EatInterval)
                                         {
                                             _gameSpeed.dwEatTick = dwCurrentTick;
                                         }
@@ -761,10 +761,10 @@ namespace GameGate
                         case Grobal2.CM_WALK:
                         case Grobal2.CM_RUN:
                             _gameSpeed.dwMoveTick = dwCurrentTick;
-                            _gameSpeed.dwSpellTick = dwCurrentTick - Config.m_nMoveNextSpellCompensate; //1200
-                            if (_gameSpeed.dwAttackTick < dwCurrentTick - Config.m_nMoveNextAttackCompensate)
+                            _gameSpeed.dwSpellTick = dwCurrentTick - Config.MoveNextSpellCompensate; //1200
+                            if (_gameSpeed.dwAttackTick < dwCurrentTick - Config.MoveNextAttackCompensate)
                             {
-                                _gameSpeed.dwAttackTick = dwCurrentTick - Config.m_nMoveNextAttackCompensate; //900
+                                _gameSpeed.dwAttackTick = dwCurrentTick - Config.MoveNextAttackCompensate; //900
                             }
                             LastDirection = delayMsg.nDir;
                             break;
@@ -782,13 +782,13 @@ namespace GameGate
                             }
                             if (Config.m_fItemSpeedCompensate)
                             {
-                                _gameSpeed.dwMoveTick = dwCurrentTick - (Config.m_nAttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
-                                _gameSpeed.dwSpellTick = dwCurrentTick - (Config.m_nAttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
+                                _gameSpeed.dwMoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 550
+                                _gameSpeed.dwSpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.m_nMaxItemSpeedRate * _gameSpeed.ItemSpeed);// 1150
                             }
                             else
                             {
-                                _gameSpeed.dwMoveTick = dwCurrentTick - Config.m_nAttackNextMoveCompensate; // 550
-                                _gameSpeed.dwSpellTick = dwCurrentTick - Config.m_nAttackNextSpellCompensate;// 1150
+                                _gameSpeed.dwMoveTick = dwCurrentTick - Config.AttackNextMoveCompensate; // 550
+                                _gameSpeed.dwSpellTick = dwCurrentTick - Config.AttackNextSpellCompensate;// 1150
                             }
                             LastDirection = delayMsg.nDir;
                             break;
@@ -798,13 +798,13 @@ namespace GameGate
                             int nNextAtt = 0;
                             if (TableDef.MAIGIC_ATTACK_ARRAY[delayMsg.nMag])
                             {
-                                nNextMov = Config.m_nSpellNextMoveCompensate;
-                                nNextAtt = Config.m_nSpellNextAttackCompensate;
+                                nNextMov = Config.SpellNextMoveCompensate;
+                                nNextAtt = Config.SpellNextAttackCompensate;
                             }
                             else
                             {
-                                nNextMov = Config.m_nSpellNextMoveCompensate + 80;
-                                nNextAtt = Config.m_nSpellNextAttackCompensate + 80;
+                                nNextMov = Config.SpellNextMoveCompensate + 80;
+                                nNextAtt = Config.SpellNextAttackCompensate + 80;
                             }
                             _gameSpeed.dwMoveTick = dwCurrentTick - nNextMov;// 550
                             if (_gameSpeed.dwAttackTick < dwCurrentTick - nNextAtt)// 900
@@ -996,13 +996,13 @@ namespace GameGate
                     if (m_nSvrObject == cmd.UID)
                     {
                         _gameSpeed.DefItemSpeed = cmd.Direct;
-                        _gameSpeed.ItemSpeed = HUtil32._MIN(Config.m_nMaxItemSpeed, cmd.Direct);
+                        _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, cmd.Direct);
                         m_nChrStutas = HUtil32.MakeLong(cmd.X, cmd.Y);
                         message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
                     }
                     break;
                 case Grobal2.SM_HWID:
-                    if (Config.m_fProcClientHWID)
+                    if (Config.IsProcClientHardwareID)
                     {
                         switch (cmd.Series)
                         {
@@ -1307,7 +1307,7 @@ namespace GameGate
                         _gameSpeed.SpeedLimit = true;
                         GateShare.PunishList[sHumName] = this;
                     }
-                    if (Config.m_fProcClientHWID)
+                    if (Config.IsProcClientHardwareID)
                     {
                         if (string.IsNullOrEmpty(szHarewareID) || (szHarewareID.Length > 256) || ((szHarewareID.Length % 2) != 0))
                         {
@@ -1316,7 +1316,7 @@ namespace GameGate
                             return;
                         }
                         var Src = szHarewareID;
-                        var Key = "openmir2";
+                        var Key = Config.ProClientHardwareKey;
                         var KeyLen = Key.Length;
                         var KeyPos = 0;
                         var OffSet = Convert.ToInt32("$" + Src.Substring(0, 2));
@@ -1479,27 +1479,6 @@ namespace GameGate
             iLen = Misc.EncodeBuf(TempBuf, iLen, SendBuf);
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
-        }
-
-        /// <summary>
-        /// 文字消息处理(过滤，已经发言间隔)
-        /// </summary>
-        /// <param name="sMsg"></param>
-        private void FilterSayMsg(ref string sMsg)
-        {
-            for (var i = 0; i < GateShare.AbuseList.Count; i++)
-            {
-                string sFilterText = GateShare.AbuseList[i];
-                string sReplaceText = string.Empty;
-                if (sMsg.IndexOf(sFilterText, StringComparison.OrdinalIgnoreCase) != -1)
-                {
-                    for (int nLen = 0; nLen <= sFilterText.Length; nLen++)
-                    {
-                        sReplaceText = sReplaceText + GateShare.sReplaceWord;
-                    }
-                    sMsg = sMsg.Replace(sFilterText, sReplaceText);
-                }
-            }
         }
     }
 
