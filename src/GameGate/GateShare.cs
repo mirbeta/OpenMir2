@@ -14,8 +14,6 @@ namespace GameGate
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static IList<string> AbuseList = null;
-        public static string sReplaceWord = "*";
         public static long dwCheckRecviceTick = 0;
         public static long dwCheckServerTick = 0;
         public static long dwCheckServerTimeMin = 0;
@@ -33,17 +31,19 @@ namespace GameGate
         /// 会话超时时间
         /// </summary>
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
-        public static ConcurrentDictionary<string, byte> g_ChatCmdFilterList;
+        /// <summary>
+        /// 聊天过滤命令列表
+        /// </summary>
+        public static ConcurrentDictionary<string, byte> ChatCommandFilter;
         public static Dictionary<string, ClientSession> PunishList;
-        public static HWIDFilter HWFilter;
+        public static HardwareFilter HWFilter;
 
         public static void Initialization()
         {
-            AbuseList = new List<string>();
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
             PunishList = new Dictionary<string, ClientSession>();
-            g_ChatCmdFilterList = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
+            ChatCommandFilter = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
         }
     }
 

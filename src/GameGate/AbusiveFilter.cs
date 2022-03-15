@@ -7,11 +7,16 @@ namespace GameGate
     public class AbusiveFilter
     {
         private readonly StringList AbuseList;
-        private readonly ConfigManager _configManager;
+        private static readonly AbusiveFilter instance = new AbusiveFilter();
+        private ConfigManager _configManager=>ConfigManager.Instance;
 
-        public AbusiveFilter(ConfigManager configManager)
+        public static AbusiveFilter Instance
         {
-            _configManager = configManager;
+            get { return instance; }
+        }
+
+        public AbusiveFilter()
+        {
             AbuseList = new StringList();
         }
 
@@ -27,7 +32,7 @@ namespace GameGate
             {
                 if (AbuseList[i].Contains(chatMsg))
                 {
-                    switch (_configManager.GateConfig.m_tChatFilterMethod)
+                    switch (_configManager.GateConfig.ChatFilterMethod)
                     {
                         case  TChatFilterMethod.ctDropconnect:
                             kick = false;

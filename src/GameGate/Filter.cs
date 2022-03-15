@@ -8,14 +8,14 @@ namespace GameGate
 {
     public class Filter
     {
-        public readonly HWIDFilter g_HWIDFilter = null;
+        public readonly HardwareFilter g_HWIDFilter = null;
         public static object g_ConnectOfIPLock = null;
         public static ArrayList g_ConnectOfIPList = null;
         private static ArrayList g_BlockIPList = null;
         private static ArrayList g_TempBlockIPList = null;
         public static ArrayList g_BlockIPAreaList = null;
 
-        public Filter(HWIDFilter hwidFilter)
+        public Filter(HardwareFilter hwidFilter)
         {
             g_HWIDFilter = hwidFilter;
         }
@@ -339,27 +339,27 @@ namespace GameGate
         }
     }
         
-    public class THWIDCnt
+    public class HardwareCnt
     {
         public byte[] HWID;
         public int Count;
     }
 
-    public class HWIDFilter
+    public class HardwareFilter
     {
-        private IList<THWIDCnt> m_xCurList = null;
-        private IList<THWIDCnt> m_xDenyList = null;
+        private IList<HardwareCnt> m_xCurList = null;
+        private IList<HardwareCnt> m_xDenyList = null;
         private ConfigManager _configManager => ConfigManager.Instance;
 
-        public HWIDFilter()
+        public HardwareFilter()
         {
-            m_xCurList = new List<THWIDCnt>();
-            m_xDenyList = new List<THWIDCnt>();
+            m_xCurList = new List<HardwareCnt>();
+            m_xDenyList = new List<HardwareCnt>();
         }
 
         public int AddDeny(byte[] HWID)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             int result = -1;
             for (var i = 0; i < m_xDenyList.Count; i++)
             {
@@ -370,7 +370,7 @@ namespace GameGate
                     return result;
                 }
             }
-            pHWIDCnt = new THWIDCnt();
+            pHWIDCnt = new HardwareCnt();
             pHWIDCnt.HWID = HWID;
             pHWIDCnt.Count = 0;
             m_xDenyList.Add(pHWIDCnt);
@@ -379,7 +379,7 @@ namespace GameGate
 
         public int DelDeny(byte[] HWID)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             int result = -1;
             for (var i = 0; i < m_xDenyList.Count; i++)
             {
@@ -434,7 +434,7 @@ namespace GameGate
 
         public bool IsFilter(byte[] HWID)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             bool result = false;
             for (var i = 0; i < m_xDenyList.Count; i++)
             {
@@ -450,7 +450,7 @@ namespace GameGate
 
         public bool IsFilter(byte[] HWID, ref bool fOverClientCount)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             bool result = false;
             var fMatch = false;
             for (var i = 0; i < m_xCurList.Count; i++)
@@ -473,7 +473,7 @@ namespace GameGate
             }
             if (!fMatch)
             {
-                pHWIDCnt = new THWIDCnt();
+                pHWIDCnt = new HardwareCnt();
                 pHWIDCnt.HWID = HWID;
                 pHWIDCnt.Count = 1;
                 m_xCurList.Add(pHWIDCnt);
@@ -495,7 +495,7 @@ namespace GameGate
 
         public int GetItemCount(byte[] HWID)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             int result = 0;
             for (var i = 0; i < m_xCurList.Count; i++)
             {
@@ -511,7 +511,7 @@ namespace GameGate
 
         public void DecHWIDCount(byte[] HWID)
         {
-            THWIDCnt pHWIDCnt;
+            HardwareCnt pHWIDCnt;
             for (var i = 0; i < m_xCurList.Count; i++)
             {
                 pHWIDCnt = m_xCurList[i];

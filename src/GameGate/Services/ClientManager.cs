@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Linq;
 using SystemModule;
 
 namespace GameGate
@@ -29,7 +28,7 @@ namespace GameGate
 
         public void Initialization()
         {
-            for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
+            for (var i = 0; i < _configManager.GateConfig.GateCount; i++)
             {
                 var gameGate = _configManager.m_xGameGateList[i];
                 var serverAddr = gameGate.sServerAdress;
