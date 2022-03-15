@@ -10,8 +10,6 @@ namespace GameGate
     public class GateShare
     {
         public static bool ShowLog = true;
-        public static string GateAddr = "*";
-        public static int GatePort = 7200;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
@@ -35,7 +33,6 @@ namespace GameGate
         /// 会话超时时间
         /// </summary>
         public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
-        public static IList<ClientThread> ServerGateList;
         public static ConcurrentDictionary<string, byte> g_ChatCmdFilterList;
         public static Dictionary<string, ClientSession> PunishList;
         public static HWIDFilter HWFilter;
@@ -45,7 +42,6 @@ namespace GameGate
             AbuseList = new List<string>();
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
-            ServerGateList = new List<ClientThread>();
             PunishList = new Dictionary<string, ClientSession>();
             g_ChatCmdFilterList = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
         }

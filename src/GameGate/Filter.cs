@@ -349,11 +349,10 @@ namespace GameGate
     {
         private IList<THWIDCnt> m_xCurList = null;
         private IList<THWIDCnt> m_xDenyList = null;
-        private readonly ConfigManager _configManager;
+        private ConfigManager _configManager => ConfigManager.Instance;
 
-        public HWIDFilter(ConfigManager configManager)
+        public HWIDFilter()
         {
-            _configManager = configManager;
             m_xCurList = new List<THWIDCnt>();
             m_xDenyList = new List<THWIDCnt>();
         }
