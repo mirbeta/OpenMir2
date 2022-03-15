@@ -458,7 +458,7 @@ namespace GameGate
                 pHWIDCnt = m_xCurList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
                 {
-                    if (pHWIDCnt.Count + 1 > _configManager.GateConfig.m_nMaxClientCount)
+                    if (pHWIDCnt.Count + 1 > _configManager.GateConfig.MaxClientCount)
                     {
                         result = true;
                         fOverClientCount = true;

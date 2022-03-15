@@ -26,7 +26,7 @@ namespace GameGate
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
-        public bool boCheckServerFail = false;
+        public bool CheckServerFail = false;
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
@@ -38,11 +38,11 @@ namespace GameGate
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
-        private int nBuffLen = 0;
+        private int BuffLen = 0;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
-        public bool boGateReady = false;
+        public bool GateReady = false;
         /// <summary>
         /// 是否链接成功
         /// </summary>
@@ -52,7 +52,7 @@ namespace GameGate
         /// </summary>
         public int SendBytes;
         /// <summary>
-        /// 接受总字节数
+        /// 接收总字节数
         /// </summary>
         public int ReceiveBytes;
         /// <summary>
@@ -123,7 +123,7 @@ namespace GameGate
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            boGateReady = true;
+            GateReady = true;
             GateShare.dwCheckServerTick = HUtil32.GetTickCount();
             GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
@@ -151,7 +151,7 @@ namespace GameGate
             }
             RestSessionArray();
             SocketBuffer = null;
-            boGateReady = false;
+            GateReady = false;
             _logQueue.Enqueue($"[{ClientId}] 游戏引擎[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
             ClientManager.Instance.DeleteClientThread(ClientId);
@@ -160,8 +160,6 @@ namespace GameGate
         /// <summary>
         /// 收到GameSvr发来的消息
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             ProcReceiveBuffer(e.Buff, e.BuffLen);
@@ -189,14 +187,13 @@ namespace GameGate
 
         public void RestSessionArray()
         {
-            TSessionInfo tSession;
             for (var i = 0; i < MaxSession; i++)
             {
                 if (SessionArray[i] == null)
                 {
                     SessionArray[i] = new TSessionInfo();
                 }
-                tSession = SessionArray[i];
+                var tSession = SessionArray[i];
                 tSession.Socket = null;
                 tSession.nUserListIndex = 0;
                 tSession.dwReceiveTick = HUtil32.GetTickCount();
@@ -264,18 +261,18 @@ namespace GameGate
             const int HeaderMessageSize = 20;
             try
             {
-                if (nBuffLen > 0) //有未处理完成的buff
+                if (BuffLen > 0) //有未处理完成的buff
                 {
-                    var tempBuff = new byte[nBuffLen + nMsgLen];
-                    Array.Copy(SocketBuffer, 0, tempBuff, 0, nBuffLen);
-                    Array.Copy(tBuffer, 0, tempBuff, nBuffLen, tBuffer.Length);
+                    var tempBuff = new byte[BuffLen + nMsgLen];
+                    Array.Copy(SocketBuffer, 0, tempBuff, 0, BuffLen);
+                    Array.Copy(tBuffer, 0, tempBuff, BuffLen, tBuffer.Length);
                     SocketBuffer = tempBuff;
                 }
                 else
                 {
                     SocketBuffer = tBuffer;
                 }
-                var nLen = nBuffLen + nMsgLen;
+                var nLen = BuffLen + nMsgLen;
                 var Buff = SocketBuffer;
                 if (nLen >= HeaderMessageSize)
                 {
@@ -295,7 +292,7 @@ namespace GameGate
                             switch (mesgHeader.wIdent)
                             {
                                 case Grobal2.GM_CHECKSERVER:
-                                    boCheckServerFail = false;
+                                    CheckServerFail = false;
                                     GateShare.dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
@@ -352,12 +349,12 @@ namespace GameGate
                     var tempBuff = new byte[nLen];
                     Array.Copy(Buff, 0, tempBuff, 0, nLen);
                     SocketBuffer = tempBuff;
-                    nBuffLen = nLen;
+                    BuffLen = nLen;
                 }
                 else
                 {
                     SocketBuffer = null;
-                    nBuffLen = 0;
+                    BuffLen = 0;
                 }
             }
             catch (Exception E)
