@@ -77,7 +77,7 @@ namespace GameSvr
         /// <summary>
         /// 清理
         /// </summary>
-        public void ClearGhost()
+        public void ClearObject()
         {
             var actorIds = _actors.Keys;
             TBaseObject actor = null;

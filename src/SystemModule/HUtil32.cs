@@ -308,7 +308,10 @@ namespace SystemModule
         public static int Str_ToInt(string Str, int def)
         {
             var result = def;
-            int.TryParse(Str, out result);
+            if (int.TryParse(Str, out result))
+            {
+                return result;
+            }
             return result;
         }
 
@@ -350,7 +353,6 @@ namespace SystemModule
             var Div = new char[DividerAry.Length];
             int i;
             for (i = 0; i < DividerAry.Length; i++) Div[i] = DividerAry[i];
-
             var Ary = Str.Split(Div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
             if (Ary.Length > 0)
                 Dest = Ary[0]; //目标置为第一个
@@ -604,27 +606,6 @@ namespace SystemModule
                 result = IsEnglish(sEngStr[i]);
                 if (result) break;
             }
-            return result;
-        }
-
-        public static bool IsFloatNumeric(string str)
-        {
-            bool result;
-            if (str.Trim() == "")
-            {
-                result = false;
-                return result;
-            }
-            try
-            {
-                Convert.ToSingle(str);
-                result = true;
-            }
-            catch
-            {
-                result = false;
-            }
-
             return result;
         }
 

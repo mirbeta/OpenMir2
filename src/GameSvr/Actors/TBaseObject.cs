@@ -2410,19 +2410,19 @@ namespace GameSvr
                 m_MagicArr[UserMagic.wMagIdx] = UserMagic;
                 switch (UserMagic.wMagIdx)
                 {
-                    case Grobal2.SKILL_ONESWORD:// 基本剑法
+                    case SpellsDef.SKILL_ONESWORD:// 基本剑法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(9 / 3 * UserMagic.btLevel));
                         }
                         break;
-                    case Grobal2.SKILL_ILKWANG:// 精神力战法
+                    case SpellsDef.SKILL_ILKWANG:// 精神力战法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(8 / 3 * UserMagic.btLevel));
                         }
                         break;
-                    case Grobal2.SKILL_YEDO:// 攻杀剑法
+                    case SpellsDef.SKILL_YEDO:// 攻杀剑法
                         if (UserMagic.btLevel > 0)
                         {
                             m_btHitPoint = (byte)(m_btHitPoint + HUtil32.Round(3 / 3 * UserMagic.btLevel));
@@ -2431,7 +2431,7 @@ namespace GameSvr
                         m_btAttackSkillCount = (byte)(7 - UserMagic.btLevel);
                         m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
                         break;
-                    case Grobal2.SKILL_FIRESWORD:// 烈火剑法
+                    case SpellsDef.SKILL_FIRESWORD:// 烈火剑法
                         m_nHitDouble = (byte)(4 + UserMagic.btLevel * 4);
                         break;
                 }

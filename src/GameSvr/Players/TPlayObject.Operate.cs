@@ -744,17 +744,17 @@ namespace GameSvr
                                             Dispose(UserItem);
                                             m_ItemList.RemoveAt(i);
                                             boEatOK = true;
-                                            if (m_MagicArr[Grobal2.SKILL_ERGUM] != null && !m_boUseThrusting)
+                                            if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null && !m_boUseThrusting)
                                             {
                                                 ThrustingOnOff(true);
                                                 SendSocket("+LNG");
                                             }
-                                            if (m_MagicArr[Grobal2.SKILL_BANWOL] != null && !m_boUseHalfMoon)
+                                            if (m_MagicArr[SpellsDef.SKILL_BANWOL] != null && !m_boUseHalfMoon)
                                             {
                                                 HalfMoonOnOff(true);
                                                 SendSocket("+WID");
                                             }
-                                            if (m_MagicArr[Grobal2.SKILL_REDBANWOL] != null && !m_boRedUseHalfMoon)
+                                            if (m_MagicArr[SpellsDef.SKILL_REDBANWOL] != null && !m_boRedUseHalfMoon)
                                             {
                                                 RedHalfMoonOnOff(true);
                                                 SendSocket("+WID");

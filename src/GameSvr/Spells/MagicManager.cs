@@ -70,15 +70,15 @@ namespace GameSvr
             var result = false;
             switch (wMagIdx)
             {
-                case Grobal2.SKILL_ONESWORD:
-                case Grobal2.SKILL_ILKWANG:
-                case Grobal2.SKILL_YEDO:
-                case Grobal2.SKILL_ERGUM:
-                case Grobal2.SKILL_BANWOL:
-                case Grobal2.SKILL_FIRESWORD:
-                case Grobal2.SKILL_MOOTEBO:
-                case Grobal2.SKILL_CROSSMOON:
-                case Grobal2.SKILL_TWINBLADE:
+                case SpellsDef.SKILL_ONESWORD:
+                case SpellsDef.SKILL_ILKWANG:
+                case SpellsDef.SKILL_YEDO:
+                case SpellsDef.SKILL_ERGUM:
+                case SpellsDef.SKILL_BANWOL:
+                case SpellsDef.SKILL_FIRESWORD:
+                case SpellsDef.SKILL_MOOTEBO:
+                case SpellsDef.SKILL_CROSSMOON:
+                case SpellsDef.SKILL_TWINBLADE:
                     result = true;
                     break;
             }
@@ -158,8 +158,8 @@ namespace GameSvr
             }
             switch (UserMagic.MagicInfo.wMagicID)
             {
-                case Grobal2.SKILL_FIREBALL:
-                case Grobal2.SKILL_FIREBALL2:
+                case SpellsDef.SKILL_FIREBALL:
+                case SpellsDef.SKILL_FIREBALL2:
                     if (PlayObject.MagCanHitTarget(PlayObject.m_nCurrX, PlayObject.m_nCurrY, TargeTBaseObject))
                     {
                         if (PlayObject.IsProperTarget(TargeTBaseObject))
@@ -188,7 +188,7 @@ namespace GameSvr
                         TargeTBaseObject = null;
                     }
                     break;
-                case Grobal2.SKILL_HEALLING:
+                case SpellsDef.SKILL_HEALLING:
                     if (TargeTBaseObject == null)
                     {
                         TargeTBaseObject = PlayObject;
@@ -209,7 +209,7 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_AMYOUNSUL:
+                case SpellsDef.SKILL_AMYOUNSUL:
                     boSpellFail = true;
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
@@ -243,13 +243,13 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_FIREWIND:
+                case SpellsDef.SKILL_FIREWIND:
                     if (MagPushArround(PlayObject, UserMagic.btLevel) > 0)
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_FIRE:
+                case SpellsDef.SKILL_FIRE:
                     n1C = M2Share.GetNextDirection(PlayObject.m_nCurrX, PlayObject.m_nCurrY, nTargetX, nTargetY);
                     if (PlayObject.m_PEnvir.GetNextPosition(PlayObject.m_nCurrX, PlayObject.m_nCurrY, n1C, 1, ref n14, ref n18))
                     {
@@ -261,7 +261,7 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_SHOOTLIGHTEN:
+                case SpellsDef.SKILL_SHOOTLIGHTEN:
                     n1C = M2Share.GetNextDirection(PlayObject.m_nCurrX, PlayObject.m_nCurrY, nTargetX, nTargetY);
                     if (PlayObject.m_PEnvir.GetNextPosition(PlayObject.m_nCurrX, PlayObject.m_nCurrY, n1C, 1, ref n14, ref n18))
                     {
@@ -273,7 +273,7 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_LIGHTENING:
+                case SpellsDef.SKILL_LIGHTENING:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
@@ -299,20 +299,20 @@ namespace GameSvr
                         TargeTBaseObject = null;
                     }
                     break;
-                case Grobal2.SKILL_FIRECHARM:
-                case Grobal2.SKILL_HANGMAJINBUB:
-                case Grobal2.SKILL_DEJIWONHO:
-                case Grobal2.SKILL_HOLYSHIELD:
-                case Grobal2.SKILL_SKELLETON:
-                case Grobal2.SKILL_CLOAK:
-                case Grobal2.SKILL_BIGCLOAK:
+                case SpellsDef.SKILL_FIRECHARM:
+                case SpellsDef.SKILL_HANGMAJINBUB:
+                case SpellsDef.SKILL_DEJIWONHO:
+                case SpellsDef.SKILL_HOLYSHIELD:
+                case SpellsDef.SKILL_SKELLETON:
+                case SpellsDef.SKILL_CLOAK:
+                case SpellsDef.SKILL_BIGCLOAK:
                     boSpellFail = true;
                     if (Magic.CheckAmulet(PlayObject, 1, 1, ref nAmuletIdx))
                     {
                         Magic.UseAmulet(PlayObject, 1, 1, ref nAmuletIdx);
                         switch (UserMagic.MagicInfo.wMagicID)
                         {
-                            case Grobal2.SKILL_FIRECHARM:
+                            case SpellsDef.SKILL_FIRECHARM:
                                 if (PlayObject.MagCanHitTarget(PlayObject.m_nCurrX, PlayObject.m_nCurrY, TargeTBaseObject))
                                 {
                                     if (PlayObject.IsProperTarget(TargeTBaseObject))
@@ -336,39 +336,39 @@ namespace GameSvr
                                     TargeTBaseObject = null;
                                 }
                                 break;
-                            case Grobal2.SKILL_HANGMAJINBUB:
+                            case SpellsDef.SKILL_HANGMAJINBUB:
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.m_WAbil.SC) * 10, HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC) + 1);
                                 if (PlayObject.MagMakeDefenceArea(nTargetX, nTargetY, 3, nPower, 1) > 0)
                                 {
                                     boTrain = true;
                                 }
                                 break;
-                            case Grobal2.SKILL_DEJIWONHO:
+                            case SpellsDef.SKILL_DEJIWONHO:
                                 nPower = PlayObject.GetAttackPower(DoSpell_GetPower13(UserMagic, 60) + HUtil32.LoWord(PlayObject.m_WAbil.SC) * 10, HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC) + 1);
                                 if (PlayObject.MagMakeDefenceArea(nTargetX, nTargetY, 3, nPower, 0) > 0)
                                 {
                                     boTrain = true;
                                 }
                                 break;
-                            case Grobal2.SKILL_HOLYSHIELD:
+                            case SpellsDef.SKILL_HOLYSHIELD:
                                 if (MagMakeHolyCurtain(PlayObject, DoSpell_GetPower13(UserMagic, 40) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 3, nTargetX, nTargetY) > 0)
                                 {
                                     boTrain = true;
                                 }
                                 break;
-                            case Grobal2.SKILL_SKELLETON:
+                            case SpellsDef.SKILL_SKELLETON:
                                 if (MagMakeSlave(PlayObject, UserMagic))
                                 {
                                     boTrain = true;
                                 }
                                 break;
-                            case Grobal2.SKILL_CLOAK:
+                            case SpellsDef.SKILL_CLOAK:
                                 if (MagMakePrivateTransparent(PlayObject, DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 3))
                                 {
                                     boTrain = true;
                                 }
                                 break;
-                            case Grobal2.SKILL_BIGCLOAK:
+                            case SpellsDef.SKILL_BIGCLOAK:
                                 if (MagMakeGroupTransparent(PlayObject, nTargetX, nTargetY, DoSpell_GetPower13(UserMagic, 30) + DoSpell_GetRPow(PlayObject.m_WAbil.SC) * 3))
                                 {
                                     boTrain = true;
@@ -378,7 +378,7 @@ namespace GameSvr
                         boSpellFail = false;
                     }
                     break;
-                case Grobal2.SKILL_TAMMING:
+                case SpellsDef.SKILL_TAMMING:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
                         if (MagTamming(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.btLevel))
@@ -387,7 +387,7 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_SPACEMOVE:
+                case SpellsDef.SKILL_SPACEMOVE:
                     var targerActors = TargeTBaseObject == null ? 0 : TargeTBaseObject.ObjectId;
                     PlayObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(UserMagic.MagicInfo.btEffectType, UserMagic.MagicInfo.btEffect), HUtil32.MakeLong(nTargetX, nTargetY), targerActors, "");
                     boSpellFire = false;
@@ -396,26 +396,26 @@ namespace GameSvr
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_EARTHFIRE:
+                case SpellsDef.SKILL_EARTHFIRE:
                     if (MagMakeFireCross(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), DoSpell_GetPower(UserMagic, 10) + (DoSpell_GetRPow(PlayObject.m_WAbil.MC) >> 1), nTargetX, nTargetY) > 0)
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_FIREBOOM:
+                case SpellsDef.SKILL_FIREBOOM:
                     if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), nTargetX, nTargetY, M2Share.g_Config.nFireBoomRage))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_LIGHTFLOWER:
+                case SpellsDef.SKILL_LIGHTFLOWER:
                     if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), 
                         HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1)))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_SHOWHP:
+                case SpellsDef.SKILL_SHOWHP:
                     if (TargeTBaseObject != null && !TargeTBaseObject.m_boShowHP)
                     {
                         if (M2Share.RandomNumber.Random(6) <= UserMagic.btLevel + 3)
@@ -427,14 +427,14 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_BIGHEALLING:
+                case SpellsDef.SKILL_BIGHEALLING:
                     nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.SC) * 2, (HUtil32.HiWord(PlayObject.m_WAbil.SC) - HUtil32.LoWord(PlayObject.m_WAbil.SC)) * 2 + 1);
                     if (MagBigHealing(PlayObject, nPower, nTargetX, nTargetY))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_SINSU:
+                case SpellsDef.SKILL_SINSU:
                     boSpellFail = true;
                     if (Magic.CheckAmulet(PlayObject, 5, 1, ref nAmuletIdx))
                     {
@@ -446,7 +446,7 @@ namespace GameSvr
                         boSpellFail = false;
                     }
                     break;
-                case Grobal2.SKILL_ANGEL:
+                case SpellsDef.SKILL_ANGEL:
                     boSpellFail = true;
                     if (Magic.CheckAmulet(PlayObject, 2, 1, ref nAmuletIdx))
                     {
@@ -458,13 +458,13 @@ namespace GameSvr
                         boSpellFail = false;
                     }
                     break;
-                case Grobal2.SKILL_SHIELD:
+                case SpellsDef.SKILL_SHIELD:
                     if (PlayObject.MagBubbleDefenceUp(UserMagic.btLevel, DoSpell_GetPower(UserMagic, (ushort)(DoSpell_GetRPow(PlayObject.m_WAbil.MC) + 15))))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_KILLUNDEAD:
+                case SpellsDef.SKILL_KILLUNDEAD:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
                         if (MagTurnUndead(PlayObject, TargeTBaseObject, nTargetX, nTargetY, UserMagic.btLevel))
@@ -473,13 +473,13 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_SNOWWIND:
+                case SpellsDef.SKILL_SNOWWIND:
                     if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), nTargetX, nTargetY, M2Share.g_Config.nSnowWindRange))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_UNAMYOUNSUL:
+                case SpellsDef.SKILL_UNAMYOUNSUL:
                     if (TargeTBaseObject == null)
                     {
                         TargeTBaseObject = PlayObject;
@@ -508,46 +508,46 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_WINDTEBO:
+                case SpellsDef.SKILL_WINDTEBO:
                     if (MagWindTebo(PlayObject, UserMagic))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_MABE:
+                case SpellsDef.SKILL_MABE:
                     nPower = PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1);
                     if (MabMabe(PlayObject, TargeTBaseObject, nPower, UserMagic.btLevel, nTargetX, nTargetY))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_GROUPLIGHTENING:
+                case SpellsDef.SKILL_GROUPLIGHTENING:
                     if (MagGroupLightening(PlayObject, UserMagic, nTargetX, nTargetY, TargeTBaseObject, ref boSpellFire))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_GROUPAMYOUNSUL:
+                case SpellsDef.SKILL_GROUPAMYOUNSUL:
                     if (MagGroupAmyounsul(PlayObject, UserMagic, nTargetX, nTargetY, TargeTBaseObject))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_GROUPDEDING:
+                case SpellsDef.SKILL_GROUPDEDING:
                     if (MagGroupDeDing(PlayObject, UserMagic, nTargetX, nTargetY, TargeTBaseObject))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_43:
+                case SpellsDef.SKILL_43:
                     break;
-                case Grobal2.SKILL_44:
+                case SpellsDef.SKILL_44:
                     if (MagHbFireBall(PlayObject, UserMagic, nTargetX, nTargetY, ref TargeTBaseObject))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_45:
+                case SpellsDef.SKILL_45:
                     if (PlayObject.IsProperTarget(TargeTBaseObject))
                     {
                         if (M2Share.RandomNumber.Random(10) >= TargeTBaseObject.m_nAntiMagic)
@@ -573,28 +573,28 @@ namespace GameSvr
                         TargeTBaseObject = null;
                     }
                     break;
-                case Grobal2.SKILL_46:
+                case SpellsDef.SKILL_46:
                     if (MagMakeClone(PlayObject, UserMagic))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_47:
+                case SpellsDef.SKILL_47:
                     if (MagBigExplosion(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1), nTargetX, nTargetY, M2Share.g_Config.nFireBoomRage))
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_ENERGYREPULSOR:
+                case SpellsDef.SKILL_ENERGYREPULSOR:
                     if (MagPushArround(PlayObject, UserMagic.btLevel) > 0)
                     {
                         boTrain = true;
                     }
                     break;
-                case Grobal2.SKILL_49:
+                case SpellsDef.SKILL_49:
                     boTrain = true;
                     break;
-                case Grobal2.SKILL_UENHANCER:
+                case SpellsDef.SKILL_UENHANCER:
                     boSpellFail = true;
                     if (TargeTBaseObject == null)
                     {
@@ -617,16 +617,16 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_51:// 灵魂召唤术
+                case SpellsDef.SKILL_51:// 灵魂召唤术
                     boTrain = true;
                     break;
-                case Grobal2.SKILL_52:// 诅咒术
+                case SpellsDef.SKILL_52:// 诅咒术
                     boTrain = true;
                     break;
-                case Grobal2.SKILL_53:// 灵魂召唤术
+                case SpellsDef.SKILL_53:// 灵魂召唤术
                     boTrain = true;
                     break;
-                case Grobal2.SKILL_54:// 诅咒术
+                case SpellsDef.SKILL_54:// 诅咒术
                     boTrain = true;
                     break;
             }

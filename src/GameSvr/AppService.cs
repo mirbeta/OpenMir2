@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 using SystemModule;
 
 namespace GameSvr
@@ -116,7 +116,7 @@ namespace GameSvr
             }
             if ((HUtil32.GetTickCount() - _clearIntervalTime) > 60000)
             {
-                M2Share.ObjectManager.ClearGhost();
+                M2Share.ObjectManager.ClearObject();
                 _clearIntervalTime = HUtil32.GetTickCount();
             }
         }

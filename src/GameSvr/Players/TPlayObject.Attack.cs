@@ -126,7 +126,7 @@ namespace GameSvr
                             AttackDir(null, 11, nDir);
                             break;
                     }
-                    if (m_MagicArr[Grobal2.SKILL_YEDO] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
+                    if (m_MagicArr[SpellsDef.SKILL_YEDO] != null && m_UseItems[Grobal2.U_WEAPON].Dura > 0)
                     {
                         m_btAttackSkillCount -= 1;
                         if (m_btAttackSkillPointCount == m_btAttackSkillCount)
@@ -136,7 +136,7 @@ namespace GameSvr
                         }
                         if (m_btAttackSkillCount <= 0)
                         {
-                            m_btAttackSkillCount = (byte)(7 - m_MagicArr[Grobal2.SKILL_YEDO].btLevel);
+                            m_btAttackSkillCount = (byte)(7 - m_MagicArr[SpellsDef.SKILL_YEDO].btLevel);
                             m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
                         }
                     }
@@ -312,8 +312,8 @@ namespace GameSvr
             ushort nSpellPoint;
             switch (UserMagic.wMagIdx)
             {
-                case Grobal2.SKILL_ERGUM:
-                    if (m_MagicArr[Grobal2.SKILL_ERGUM] != null)
+                case SpellsDef.SKILL_ERGUM:
+                    if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null)
                     {
                         if (!m_boUseThrusting)
                         {
@@ -328,8 +328,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_BANWOL:
-                    if (m_MagicArr[Grobal2.SKILL_BANWOL] != null)
+                case SpellsDef.SKILL_BANWOL:
+                    if (m_MagicArr[SpellsDef.SKILL_BANWOL] != null)
                     {
                         if (!m_boUseHalfMoon)
                         {
@@ -344,8 +344,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_REDBANWOL:
-                    if (m_MagicArr[Grobal2.SKILL_REDBANWOL] != null)
+                case SpellsDef.SKILL_REDBANWOL:
+                    if (m_MagicArr[SpellsDef.SKILL_REDBANWOL] != null)
                     {
                         if (!m_boRedUseHalfMoon)
                         {
@@ -360,8 +360,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_FIRESWORD:
-                    if (m_MagicArr[Grobal2.SKILL_FIRESWORD] != null)
+                case SpellsDef.SKILL_FIRESWORD:
+                    if (m_MagicArr[SpellsDef.SKILL_FIRESWORD] != null)
                     {
                         if (AllowFireHitSkill())
                         {
@@ -379,7 +379,7 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_MOOTEBO:
+                case SpellsDef.SKILL_MOOTEBO:
                     result = true;
                     if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3 * 1000)
                     {
@@ -410,8 +410,8 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_CROSSMOON:
-                    if (m_MagicArr[Grobal2.SKILL_CROSSMOON] != null)
+                case SpellsDef.SKILL_CROSSMOON:
+                    if (m_MagicArr[SpellsDef.SKILL_CROSSMOON] != null)
                     {
                         if (!m_boCrsHitkill)
                         {
@@ -426,8 +426,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_TWINBLADE:// 狂风斩
-                    if (m_MagicArr[Grobal2.SKILL_TWINBLADE] != null)
+                case SpellsDef.SKILL_TWINBLADE:// 狂风斩
+                    if (m_MagicArr[SpellsDef.SKILL_TWINBLADE] != null)
                     {
                         if (AllowTwinHitSkill())
                         {
@@ -445,8 +445,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_43:// 破空剑
-                    if (m_MagicArr[Grobal2.SKILL_43] != null)
+                case SpellsDef.SKILL_43:// 破空剑
+                    if (m_MagicArr[SpellsDef.SKILL_43] != null)
                     {
                         if (!m_bo43kill)
                         {

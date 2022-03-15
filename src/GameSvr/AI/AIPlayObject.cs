@@ -1864,18 +1864,18 @@ namespace GameSvr
                         UserMagic = m_MagicList[i];
                         switch (UserMagic.wMagIdx)
                         {
-                            case Grobal2.SKILL_FIREBALL:
-                            case Grobal2.SKILL_FIREBALL2:
-                            case Grobal2.SKILL_FIRE:
-                            case Grobal2.SKILL_SHOOTLIGHTEN:
-                            case Grobal2.SKILL_LIGHTENING:
-                            case Grobal2.SKILL_EARTHFIRE:
-                            case Grobal2.SKILL_FIREBOOM:
-                            case Grobal2.SKILL_LIGHTFLOWER:
-                            case Grobal2.SKILL_SNOWWIND:
-                            case Grobal2.SKILL_GROUPLIGHTENING:
-                            case Grobal2.SKILL_47:
-                            case Grobal2.SKILL_58:
+                            case SpellsDef.SKILL_FIREBALL:
+                            case SpellsDef.SKILL_FIREBALL2:
+                            case SpellsDef.SKILL_FIRE:
+                            case SpellsDef.SKILL_SHOOTLIGHTEN:
+                            case SpellsDef.SKILL_LIGHTENING:
+                            case SpellsDef.SKILL_EARTHFIRE:
+                            case SpellsDef.SKILL_FIREBOOM:
+                            case SpellsDef.SKILL_LIGHTFLOWER:
+                            case SpellsDef.SKILL_SNOWWIND:
+                            case SpellsDef.SKILL_GROUPLIGHTENING:
+                            case SpellsDef.SKILL_47:
+                            case SpellsDef.SKILL_58:
                                 if (GetSpellPoint(UserMagic) <= m_WAbil.MP)
                                 {
                                     result = true;
@@ -1893,34 +1893,34 @@ namespace GameSvr
                         {
                             switch (UserMagic.wMagIdx)
                             {
-                                case Grobal2.SKILL_AMYOUNSUL:
-                                case Grobal2.SKILL_GROUPAMYOUNSUL:// 需要毒药
+                                case SpellsDef.SKILL_AMYOUNSUL:
+                                case SpellsDef.SKILL_GROUPAMYOUNSUL:// 需要毒药
                                     result = CheckUserItem(1, 2) || CheckUserItem(2, 2);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(Grobal2.SKILL_AMYOUNSUL) || AllowUseMagic(Grobal2.SKILL_GROUPAMYOUNSUL);
+                                        result = AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL) || AllowUseMagic(SpellsDef.SKILL_GROUPAMYOUNSUL);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case Grobal2.SKILL_FIRECHARM:// 需要符
+                                case SpellsDef.SKILL_FIRECHARM:// 需要符
                                     result = CheckUserItem(5, 1);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(Grobal2.SKILL_FIRECHARM);
+                                        result = AllowUseMagic(SpellsDef.SKILL_FIRECHARM);
                                     }
                                     if (result)
                                     {
                                         break;
                                     }
                                     break;
-                                case Grobal2.SKILL_59:// 需要符
+                                case SpellsDef.SKILL_59:// 需要符
                                     result = CheckUserItem(5, 5);
                                     if (result)
                                     {
-                                        result = AllowUseMagic(Grobal2.SKILL_59);
+                                        result = AllowUseMagic(SpellsDef.SKILL_59);
                                     }
                                     if (result)
                                     {
@@ -1965,8 +1965,8 @@ namespace GameSvr
             m_nSpellTick = HUtil32._MAX(0, m_nSpellTick);
             switch (UserMagic.wMagIdx)
             {
-                case Grobal2.SKILL_ERGUM:
-                    if (m_MagicArr[Grobal2.SKILL_ERGUM] != null)
+                case SpellsDef.SKILL_ERGUM:
+                    if (m_MagicArr[SpellsDef.SKILL_ERGUM] != null)
                     {
                         if (!m_boUseThrusting)
                         {
@@ -1979,8 +1979,8 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_BANWOL:
-                    if (m_MagicArr[Grobal2.SKILL_BANWOL] != null)
+                case SpellsDef.SKILL_BANWOL:
+                    if (m_MagicArr[SpellsDef.SKILL_BANWOL] != null)
                     {
                         if (!m_boUseHalfMoon)
                         {
@@ -1993,13 +1993,13 @@ namespace GameSvr
                     }
                     result = true;
                     break;
-                case Grobal2.SKILL_FIRESWORD:
-                    if (m_MagicArr[Grobal2.SKILL_FIRESWORD] != null)
+                case SpellsDef.SKILL_FIRESWORD:
+                    if (m_MagicArr[SpellsDef.SKILL_FIRESWORD] != null)
                     {
                         result = true;
                     }
                     break;
-                case Grobal2.SKILL_MOOTEBO:
+                case SpellsDef.SKILL_MOOTEBO:
                     result = true;
                     if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3000)
                     {
@@ -2010,7 +2010,7 @@ namespace GameSvr
                         }
                     }
                     break;
-                case Grobal2.SKILL_43:
+                case SpellsDef.SKILL_43:
                     result = true;
                     break;
                 default:
@@ -2030,13 +2030,13 @@ namespace GameSvr
                     {
                         switch (UserMagic.wMagIdx)
                         {
-                            case Grobal2.SKILL_HEALLING:
-                            case Grobal2.SKILL_HANGMAJINBUB:
-                            case Grobal2.SKILL_DEJIWONHO:
-                            case Grobal2.SKILL_BIGHEALLING:
-                            case Grobal2.SKILL_SINSU:
-                            case Grobal2.SKILL_UNAMYOUNSUL:
-                            case Grobal2.SKILL_46:
+                            case SpellsDef.SKILL_HEALLING:
+                            case SpellsDef.SKILL_HANGMAJINBUB:
+                            case SpellsDef.SKILL_DEJIWONHO:
+                            case SpellsDef.SKILL_BIGHEALLING:
+                            case SpellsDef.SKILL_SINSU:
+                            case SpellsDef.SKILL_UNAMYOUNSUL:
+                            case SpellsDef.SKILL_46:
                                 if (m_boSelSelf)
                                 {
                                     BaseObject = this;
@@ -2223,7 +2223,7 @@ namespace GameSvr
                 {
                     switch (m_nSelectMagic)
                     {
-                        case Grobal2.SKILL_ERGUM:
+                        case SpellsDef.SKILL_ERGUM:
                             if (AllowUseMagic(12) && m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref m_nTargetX, ref m_nTargetY))
                             {
                                 if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 0 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 0 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2 || Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) == 2 && Math.Abs(m_nCurrY - m_TargetCret.m_nCurrY) == 2)
@@ -2908,15 +2908,15 @@ namespace GameSvr
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = Grobal2.SKILL_BANWOL;
+                                        result = SpellsDef.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -2968,15 +2968,15 @@ namespace GameSvr
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = Grobal2.SKILL_BANWOL;
+                                        result = SpellsDef.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -3019,15 +3019,15 @@ namespace GameSvr
                                     result = 40;
                                     return result;
                                 }
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
+                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
                                     {
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = Grobal2.SKILL_BANWOL;
+                                        result = SpellsDef.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -3060,17 +3060,17 @@ namespace GameSvr
                             }
                             if ((HUtil32.GetTickCount() - m_SkillUseTick[25]) > 1500)
                             {
-                                if (AllowUseMagic(Grobal2.SKILL_BANWOL))
+                                if (AllowUseMagic(SpellsDef.SKILL_BANWOL))
                                 {
                                     // 半月弯刀
-                                    if (CheckTargetXYCount2(Grobal2.SKILL_BANWOL) > 0)
+                                    if (CheckTargetXYCount2(SpellsDef.SKILL_BANWOL) > 0)
                                     {
                                         m_SkillUseTick[25] = HUtil32.GetTickCount();
                                         if (!m_boUseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = Grobal2.SKILL_BANWOL;
+                                        result = SpellsDef.SKILL_BANWOL;
                                         return result;
                                     }
                                 }
@@ -3123,14 +3123,14 @@ namespace GameSvr
                     }
                     if ((HUtil32.GetTickCount() - m_SkillUseTick[25]) > 3000)
                     {
-                        if (AllowUseMagic(Grobal2.SKILL_BANWOL))// 半月弯刀
+                        if (AllowUseMagic(SpellsDef.SKILL_BANWOL))// 半月弯刀
                         {
                             if (!m_boUseHalfMoon)
                             {
                                 HalfMoonOnOff(true);
                             }
                             m_SkillUseTick[25] = HUtil32.GetTickCount();
-                            result = Grobal2.SKILL_BANWOL;
+                            result = SpellsDef.SKILL_BANWOL;
                             return result;
                         }
                     }
@@ -3871,13 +3871,13 @@ namespace GameSvr
                         {
                             result = 72;
                         }
-                        else if (AllowUseMagic(Grobal2.SKILL_SINSU))// 召唤神兽
+                        else if (AllowUseMagic(SpellsDef.SKILL_SINSU))// 召唤神兽
                         {
-                            result = Grobal2.SKILL_SINSU;
+                            result = SpellsDef.SKILL_SINSU;
                         }
-                        else if (AllowUseMagic(Grobal2.SKILL_SKELLETON)) // 召唤骷髅
+                        else if (AllowUseMagic(SpellsDef.SKILL_SKELLETON)) // 召唤骷髅
                         {
-                            result = Grobal2.SKILL_SKELLETON;
+                            result = SpellsDef.SKILL_SKELLETON;
                         }
                         return result;
                     }
@@ -3923,24 +3923,24 @@ namespace GameSvr
                                 {
                                     if (m_PEnvir != null)// 判断地图是否禁用
                                     {
-                                        if (m_PEnvir.AllowMagics(Grobal2.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (m_PEnvir.AllowMagics(SpellsDef.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = Grobal2.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
+                                            result = SpellsDef.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
-                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (m_PEnvir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = Grobal2.SKILL_AMYOUNSUL;// 英雄施毒术
+                                                result = SpellsDef.SKILL_AMYOUNSUL;// 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -3950,14 +3950,14 @@ namespace GameSvr
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
-                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (m_PEnvir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -3980,25 +3980,25 @@ namespace GameSvr
                                     if (m_PEnvir != null)
                                     {
                                         // 判断地图是否禁用
-                                        if (m_PEnvir.AllowMagics(Grobal2.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (m_PEnvir.AllowMagics(SpellsDef.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = Grobal2.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
+                                            result = SpellsDef.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
                                 else if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -4008,15 +4008,15 @@ namespace GameSvr
                             case 1:
                                 if ((HUtil32.GetTickCount() - m_SkillUseTick[6]) > 1000)
                                 {
-                                    if (AllowUseMagic(Grobal2.SKILL_AMYOUNSUL))
+                                    if (AllowUseMagic(SpellsDef.SKILL_AMYOUNSUL))
                                     {
                                         if (m_PEnvir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (m_PEnvir.AllowMagics(Grobal2.SKILL_AMYOUNSUL, 1))
+                                            if (m_PEnvir.AllowMagics(SpellsDef.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = Grobal2.SKILL_AMYOUNSUL; // 英雄施毒术
+                                                result = SpellsDef.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
                                         }
@@ -4191,7 +4191,7 @@ namespace GameSvr
                 {
                     switch (nMode)
                     {
-                        case Grobal2.SKILL_BANWOL:
+                        case SpellsDef.SKILL_BANWOL:
                             n10 = (m_btDirection + M2Share.g_Config.WideAttack[nC]) % 8;
                             break;
                     }
@@ -4212,7 +4212,7 @@ namespace GameSvr
                     nC++;
                     switch (nMode)
                     {
-                        case Grobal2.SKILL_BANWOL:
+                        case SpellsDef.SKILL_BANWOL:
                             if (nC >= 3)
                             {
                                 break;

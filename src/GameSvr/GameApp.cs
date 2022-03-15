@@ -405,25 +405,5 @@ namespace GameSvr
                 $"Hum:{M2Share.g_nHumCountMin}/{M2Share.g_nHumCountMax} UsrRot:{M2Share.dwUsrRotCountMin}/{M2Share.dwUsrRotCountMax} Merch:{M2Share.UserEngine.dwProcessMerchantTimeMin}/{M2Share.UserEngine.dwProcessMerchantTimeMax} Npc:{M2Share.UserEngine.dwProcessNpcTimeMin}/{M2Share.UserEngine.dwProcessNpcTimeMax} ({M2Share.g_nProcessHumanLoopTime})");
             //sc.AppendLine("MonG:{0}/{1}/{2} MonP:{3}/{4}/{5} ObjRun:{6}/{7}", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin, M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin, M2Share.g_nBaseObjTimeMax);
         }
-
-        /// <summary>
-        /// 保存变量
-        /// </summary>
-        private void SaveItemsData()
-        {
-            //if (HUtil32.GetTickCount() - M2Share.dwSaveDataTick > 480000)
-            //{
-            //    M2Share.dwSaveDataTick = HUtil32.GetTickCount();
-            //    if (M2Share.sSellOffItemList != null)
-            //    {
-            //        M2Share.LocalDB.SaveSellOffItemList();
-            //    }
-            //    if (M2Share.g_Storage != null)
-            //    {
-            //        M2Share.g_Storage.SaveToFile(M2Share.g_StorageFileName);
-            //    }
-            //    SaveItemNumber(false);
-            //}
-        }
     }
 }

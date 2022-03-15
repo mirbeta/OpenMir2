@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using SystemModule;
-using SystemModule.Packages;
 
 namespace GameSvr
 {
@@ -33,14 +32,13 @@ namespace GameSvr
             {
                 if ((HUtil32.GetTickCount() - dwTimeOutTick) > dwTimeOut)
                 {
-                    //M2Share.n4EBB6C = M2Share.n4EBB68;
                     break;
                 }
                 s24 = "";
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    if (M2Share.g_Config.sDBSocketRecvText.IndexOf("!", StringComparison.OrdinalIgnoreCase) > 0)
+                    if (M2Share.g_Config.sDBSocketRecvText.IndexOf("!", StringComparison.Ordinal) > 0)
                     {
                         s24 = M2Share.g_Config.sDBSocketRecvText;
                         M2Share.g_Config.sDBSocketRecvText = string.Empty;
