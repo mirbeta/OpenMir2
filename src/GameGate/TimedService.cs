@@ -59,41 +59,33 @@ namespace GameGate
         /// </summary>
         private void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 500)
+            if (HUtil32.GetTickCount() - _processDelayTick > 100)
             {
                 _processDelayTick = HUtil32.GetTickCount();
-                var _gateServer = _serverManager.GetServerList();
-                for (var i = 0; i < _gateServer.Count; i++)
+                var _serverList = _serverManager.GetServerList();
+                for (var i = 0; i < _serverList.Count; i++)
                 {
-                    if (_gateServer[i] == null)
+                    if (_serverList[i] == null)
                     {
                         continue;
                     }
-                    if (_gateServer[i].ClientThread == null)
+                    if (_serverList[i].ClientThread == null)
                     {
                         continue;
                     }
-                    if (_gateServer[i].ClientThread.SessionArray == null)
+                    if (_serverList[i].ClientThread.SessionArray == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < _gateServer[i].ClientThread.SessionArray.Length; j++)
+                    for (var j = 0; j < _serverList[i].ClientThread.SessionArray.Length; j++)
                     {
-                        var session = _gateServer[i].ClientThread.SessionArray[j];
-                        if (session == null)
-                        {
-                            continue;
-                        }
-                        if (session.Socket == null)
+                        var session = _serverList[i].ClientThread.SessionArray[j];
+                        if (session?.Socket == null)
                         {
                             continue;
                         }
                         var userClient = _sessionManager.GetSession(session.SessionId);
-                        if (userClient == null)
-                        {
-                            continue;
-                        }
-                        userClient.HandleDelayMsg();
+                        userClient?.HandleDelayMsg();
                     }
                 }
             }
@@ -124,24 +116,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    for (var j = 0; j < clientThread.SessionArray.Length; j++)
-                    {
-                        var UserSession = clientThread.SessionArray[j];
-                        if (UserSession.Socket != null)
-                        {
-                            if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
-                            {
-                                UserSession.Socket.Close();
-                                UserSession.Socket = null;
-                                UserSession.SckHandle = -1;
-                            }
-                        }
-                        clientThread.dwCheckServerTimeMin = HUtil32.GetTickCount() - clientThread.dwCheckServerTick;
-                        if (clientThread.dwCheckServerTimeMax < clientThread.dwCheckServerTimeMin)
-                        {
-                            clientThread.dwCheckServerTimeMax = clientThread.dwCheckServerTimeMin;
-                        }
-                    }
+                    clientThread.CheckTimeOutSession();
                     _clientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
                 _logQueue.EnqueueDebugging("清理超时会话工作完成...");
