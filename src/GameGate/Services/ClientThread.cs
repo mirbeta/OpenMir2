@@ -55,6 +55,10 @@ namespace GameGate
         /// 接收总字节数
         /// </summary>
         public int ReceiveBytes;
+        public int dwCheckRecviceTick = 0;
+        public int dwCheckServerTick = 0;
+        public int dwCheckServerTimeMin = 0;
+        public int dwCheckServerTimeMax = 0;
         /// <summary>
         /// Session管理
         /// </summary>
@@ -124,11 +128,11 @@ namespace GameGate
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateReady = true;
-            GateShare.dwCheckServerTick = HUtil32.GetTickCount();
-            GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
+            dwCheckServerTick = HUtil32.GetTickCount();
+            dwCheckRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            GateShare.dwCheckServerTimeMax = 0;
-            GateShare.dwCheckServerTimeMax = 0;
+            dwCheckServerTimeMax = 0;
+            dwCheckServerTimeMax = 0;
             _logQueue.Enqueue($"[{ClientId}] 游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
@@ -246,11 +250,11 @@ namespace GameGate
                 var tempBuff = new byte[20 + Data.Length];
                 Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 Array.Copy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
-                SendSocket(tempBuff);
+                SendBuffer(tempBuff);
             }
             else
             {
-                SendSocket(sendBuffer);
+                SendBuffer(sendBuffer);
             }
         }
 
@@ -293,7 +297,7 @@ namespace GameGate
                             {
                                 case Grobal2.GM_CHECKSERVER:
                                     CheckServerFail = false;
-                                    GateShare.dwCheckServerTick = HUtil32.GetTickCount();
+                                    dwCheckServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
                                     var userSession = _sessionManager.GetSession(mesgHeader.wGSocketIdx);
@@ -303,12 +307,12 @@ namespace GameGate
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
-                                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckRecviceTick;
-                                    if (GateShare.dwCheckServerTimeMin > GateShare.dwCheckServerTimeMax)
+                                    dwCheckServerTimeMin = HUtil32.GetTickCount() - dwCheckRecviceTick;
+                                    if (dwCheckServerTimeMin > dwCheckServerTimeMax)
                                     {
-                                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                                        dwCheckServerTimeMax = dwCheckServerTimeMin;
                                     }
-                                    GateShare.dwCheckRecviceTick = HUtil32.GetTickCount();
+                                    dwCheckRecviceTick = HUtil32.GetTickCount();
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
@@ -363,18 +367,11 @@ namespace GameGate
             }
         }
 
-        public void SendBuffer(byte[] buffer, int buffLen = 0)
+        public void SendBuffer(byte[] sendBuffer)
         {
-            SendSocket(buffer);
-        }
-
-        private void SendSocket(byte[] sendBuffer)
-        {
-            if (ClientSocket.IsConnected)
-            {
-                ClientSocket.Send(sendBuffer);
-                SendBytes += sendBuffer.Length;
-            }
+            if (!ClientSocket.IsConnected) return;
+            ClientSocket.Send(sendBuffer);
+            SendBytes += sendBuffer.Length;
         }
     }
 }
