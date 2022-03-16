@@ -16,7 +16,7 @@ namespace LoginSvr
         {
             _masSockService = masSockService;
             _configManager = configManager;
-            socketServer = new ISocketServer(ushort.MaxValue, 1024);
+            socketServer = new ISocketServer(ushort.MaxValue, 128);
             socketServer.Init();
         }
 

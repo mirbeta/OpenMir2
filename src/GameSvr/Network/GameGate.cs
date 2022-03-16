@@ -653,7 +653,7 @@ namespace GameSvr
                 g_GateArr[i] = Gate;
             }
             LoadRunAddr();
-            _gateSocket = new ISocketServer(ushort.MaxValue, 2048);
+            _gateSocket = new ISocketServer(ushort.MaxValue, 128);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
