@@ -55,10 +55,10 @@ namespace GameGate
         /// 接收总字节数
         /// </summary>
         public int ReceiveBytes;
-        public int dwCheckRecviceTick = 0;
-        public int dwCheckServerTick = 0;
-        public int dwCheckServerTimeMin = 0;
-        public int dwCheckServerTimeMax = 0;
+        private int _checkRecviceTick = 0;
+        private int _checkServerTick = 0;
+        private int _checkServerTimeMin = 0;
+        private int _checkServerTimeMax = 0;
         /// <summary>
         /// Session管理
         /// </summary>
@@ -128,11 +128,11 @@ namespace GameGate
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             GateReady = true;
-            dwCheckServerTick = HUtil32.GetTickCount();
-            dwCheckRecviceTick = HUtil32.GetTickCount();
+            _checkServerTick = HUtil32.GetTickCount();
+            _checkRecviceTick = HUtil32.GetTickCount();
             RestSessionArray();
-            dwCheckServerTimeMax = 0;
-            dwCheckServerTimeMax = 0;
+            _checkServerTimeMax = 0;
+            _checkServerTimeMax = 0;
             _logQueue.Enqueue($"[{ClientId}] 游戏引擎[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
@@ -261,8 +261,8 @@ namespace GameGate
         private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
         {
             MessageHeader mesgHeader;
-            var BuffIndex = 0;
-            const int HeaderMessageSize = 20;
+            var buffIndex = 0;
+            const int headerMessageSize = 20;
             try
             {
                 if (BuffLen > 0) //有未处理完成的buff
@@ -278,7 +278,7 @@ namespace GameGate
                 }
                 var nLen = BuffLen + nMsgLen;
                 var Buff = SocketBuffer;
-                if (nLen >= HeaderMessageSize)
+                if (nLen >= headerMessageSize)
                 {
                     while (true)
                     {
@@ -289,7 +289,7 @@ namespace GameGate
                         }
                         if (mesgHeader.dwCode == Grobal2.RUNGATECODE)
                         {
-                            if ((Math.Abs(mesgHeader.nLength) + HeaderMessageSize) > nLen)
+                            if ((Math.Abs(mesgHeader.nLength) + headerMessageSize) > nLen)
                             {
                                 break;
                             }
@@ -297,7 +297,7 @@ namespace GameGate
                             {
                                 case Grobal2.GM_CHECKSERVER:
                                     CheckServerFail = false;
-                                    dwCheckServerTick = HUtil32.GetTickCount();
+                                    _checkServerTick = HUtil32.GetTickCount();
                                     break;
                                 case Grobal2.GM_SERVERUSERINDEX:
                                     var userSession = _sessionManager.GetSession(mesgHeader.wGSocketIdx);
@@ -307,17 +307,17 @@ namespace GameGate
                                     }
                                     break;
                                 case Grobal2.GM_RECEIVE_OK:
-                                    dwCheckServerTimeMin = HUtil32.GetTickCount() - dwCheckRecviceTick;
-                                    if (dwCheckServerTimeMin > dwCheckServerTimeMax)
+                                    _checkServerTimeMin = HUtil32.GetTickCount() - _checkRecviceTick;
+                                    if (_checkServerTimeMin > _checkServerTimeMax)
                                     {
-                                        dwCheckServerTimeMax = dwCheckServerTimeMin;
+                                        _checkServerTimeMax = _checkServerTimeMin;
                                     }
-                                    dwCheckRecviceTick = HUtil32.GetTickCount();
+                                    _checkRecviceTick = HUtil32.GetTickCount();
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
                                     var msgBuff = mesgHeader.nLength > 0 ? new byte[mesgHeader.nLength] : new byte[Buff.Length - 20];
-                                    Array.Copy(Buff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
+                                    Array.Copy(Buff, headerMessageSize, msgBuff, 0, msgBuff.Length);
                                     var message = new TMessageData();
                                     message.MessageId = mesgHeader.wGSocketIdx;
                                     message.Buffer = msgBuff;
@@ -327,22 +327,22 @@ namespace GameGate
                                 case Grobal2.GM_TEST:
                                     break;
                             }
-                            var newLen = HeaderMessageSize + Math.Abs(mesgHeader.nLength);
+                            var newLen = headerMessageSize + Math.Abs(mesgHeader.nLength);
                             var tempBuff = new byte[Buff.Length - newLen];
                             Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
-                            BuffIndex = 0;
-                            nLen -= Math.Abs(mesgHeader.nLength) + HeaderMessageSize;
+                            buffIndex = 0;
+                            nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
                         }
                         else
                         {
-                            BuffIndex++;
+                            buffIndex++;
                             var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, BuffIndex, messageBuff, 0, HeaderMessageSize);
+                            Array.Copy(Buff, buffIndex, messageBuff, 0, headerMessageSize);
                             Buff = messageBuff;
                             nLen -= 1;
                         }
-                        if (nLen < HeaderMessageSize)
+                        if (nLen < headerMessageSize)
                         {
                             break;
                         }
@@ -363,7 +363,7 @@ namespace GameGate
             }
             catch (Exception E)
             {
-                _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{BuffIndex}", 1);
+                _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{buffIndex}", 1);
             }
         }
 
@@ -372,6 +372,39 @@ namespace GameGate
             if (!ClientSocket.IsConnected) return;
             ClientSocket.Send(sendBuffer);
             SendBytes += sendBuffer.Length;
+        }
+
+        public void CheckServerIsTimeOut()
+        {
+            if ((HUtil32.GetTickCount() - _checkServerTick) > GateShare.dwCheckServerTimeOutTime && CheckServerFailCount <= 20)
+            {
+                CheckServerFail = true;
+                Stop();
+                CheckServerFailCount++;
+                _logQueue.EnqueueDebugging($"服务器[{GetSocketIp()}]链接超时.失败次数:[{CheckServerFailCount}]");
+            }
+        }
+
+        public void CheckTimeOutSession()
+        {
+            for (var j = 0; j < SessionArray.Length; j++)
+            {
+                var UserSession = SessionArray[j];
+                if (UserSession.Socket != null)
+                {
+                    if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
+                    {
+                        UserSession.Socket.Close();
+                        UserSession.Socket = null;
+                        UserSession.SckHandle = -1;
+                    }
+                }
+                _checkServerTimeMin = HUtil32.GetTickCount() - _checkServerTick;
+                if (_checkServerTimeMax < _checkServerTimeMin)
+                {
+                    _checkServerTimeMax = _checkServerTimeMin;
+                }
+            }
         }
     }
 }

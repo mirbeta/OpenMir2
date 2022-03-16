@@ -11,9 +11,13 @@ namespace GameGate
     {
         public static bool ShowLog = true;
         /// <summary>
-        ///  网关游戏服务器之间检测超时时间长度
+        ///  网关游戏服务器之间检测超时时间
         /// </summary>
-        public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public const long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        /// <summary>
+        /// 会话超时时间
+        /// </summary>
+        public const long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -22,11 +26,6 @@ namespace GameGate
         /// 临时禁止连接IP列表
         /// </summary>
         public static IList<string> TempBlockIPList = null;
-        public static int nMaxConnOfIPaddr = 50;
-        /// <summary>
-        /// 会话超时时间
-        /// </summary>
-        public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         /// <summary>
         /// 聊天过滤命令列表
         /// </summary>

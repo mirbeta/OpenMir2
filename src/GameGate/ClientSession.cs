@@ -141,19 +141,17 @@ namespace GameGate
                             case Grobal2.CM_GUILDUPDATERANKINFO:
                                 if (message.DataLen > Config.MaxClientPacketSize)
                                 {
-                                    // LogManager.g_pLogMgr.Add("Kick off user,over max client packet size: " + (Len).ToString());
+                                    _logQueue.Enqueue("Kick off user,over max client packet size: " + message.DataLen, 5);
                                     // Misc.Units.Misc.KickUser(m_pUserOBJ.nIPAddr);
-                                    //Succeed = false;
                                     return;
                                 }
                                 break;
                             default:
                                 if (message.DataLen > Config.NomClientPacketSize)
                                 {
-                                    //LogManager.g_pLogMgr.Add("Kick off user,over nom client packet size: " + (Len).ToString());
+                                    _logQueue.Enqueue("Kick off user,over nom client packet size: " + message.DataLen, 5);
                                     //Misc.KickUser(m_pUserOBJ.nIPAddr);
-                                    //Succeed = false;
-                                    //return;
+                                    return;
                                 }
                                 break;
                         }
@@ -163,22 +161,6 @@ namespace GameGate
                         var dwDelay = 0;
                         switch (CltCmd.Cmd)
                         {
-                            //case Grobal2.CM_LOGINNOTICEOK:
-                            //    if (m_Stat == TCheckStep.CheckLogin)
-                            //    {
-                            //        // m_checkstr = GenRandString(10);
-                            //        // SendDefMessage(SM_CHECKCLIENT, 0, 0, 0, 0, m_checkstr);
-                            //        // m_SendCheckTick = GetTickCount;
-                            //        m_Stat = TCheckStep.SendCheck;
-                            //    }
-                            //    break;
-                            // case Grobal2.CM_CHECKCLIENT_RES:
-                            //     if (m_Stat == TCheckStep.csSendCheck)
-                            //     {
-                            //         res2 = HUtil32.MakeLong(CltCmd.Y, CltCmd.X);
-                            //         m_Stat = TCheckStep.csSendSmu;                            
-                            //     }
-                            //     break;
                             case Grobal2.CM_WALK:
                             case Grobal2.CM_RUN:
                                 if (Config.IsMoveInterval)// 700
@@ -194,7 +176,7 @@ namespace GameGate
                                     {
                                         nMoveInterval = Config.MoveInterval;
                                     }
-                                    nInterval = (dwCurrentTick - _gameSpeed.dwMoveTick);
+                                    nInterval = dwCurrentTick - _gameSpeed.dwMoveTick;
                                     if ((nInterval >= nMoveInterval))
                                     {
                                         _gameSpeed.dwMoveTick = dwCurrentTick;
@@ -711,6 +693,11 @@ namespace GameGate
                         cmdPack.GGSock = m_nSvrListIdx;
                         if (nDeCodeLen > TCmdPack.PackSize)
                         {
+                            //clen := EncodeBuf(nABuf + SizeOf(TCmdPack), nDeCodeLen - SizeOf(TCmdPack), nBuffer + SizeOf(TCmdPack)) + 1;
+
+                            var sendBuffer = new byte[message.Buffer.Length - TCmdPack.PackSize];
+                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - TCmdPack.PackSize, sendBuffer) + 1;
+                            
                             var len = message.DataLen - 19;
                             cmdPack.DataLen = TCmdPack.PackSize + len + 1;
                             var bufferLen = TSvrCmdPack.PackSize + cmdPack.DataLen;
@@ -741,13 +728,12 @@ namespace GameGate
                 return;
             }
             TDelayMsg delayMsg = null;
-            var dwCurrentTick = 0;
             while (GetDelayMsg(ref delayMsg))
             {
                 if (delayMsg.nBufLen > 0)
                 {
                     lastGameSvr.SendBuffer(delayMsg.pBuffer);//发送消息到M2
-                    dwCurrentTick = HUtil32.GetTickCount();
+                    var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
                         case Grobal2.CM_BUTCH:
@@ -958,9 +944,15 @@ namespace GameGate
             {
                 pzsSendBuf = new byte[0 - message.DataLen + 2];
                 pzsSendBuf[0] = (byte)'#';
-                Array.Copy(message.Buffer, 0, pzsSendBuf, 1, pzsSendBuf.Length - 2);
+                //Array.Copy(message.Buffer, 0, pzsSendBuf, 1, pzsSendBuf.Length - 2);
+                Array.Copy(message.Buffer, 0, pzsSendBuf, 1, -message.DataLen);
+
                 pzsSendBuf[^1] = (byte) '!';
+                var ss = HUtil32.GetString(pzsSendBuf, 0, pzsSendBuf.Length);
                 SendData(pzsSendBuf);
+                Console.WriteLine("str:"+ss);
+                Console.WriteLine("source:"+message.Buffer.Length);
+                Console.WriteLine("sendBuff:"+pzsSendBuf.Length);
                 return;
             }
             var cmd = new TCmdPack(message.Buffer);

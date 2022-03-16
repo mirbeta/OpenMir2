@@ -94,14 +94,7 @@ namespace GameGate
                 _logQueue.EnqueueDebugging($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                 return;
             }
-            if ((HUtil32.GetTickCount() - clientThread.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
-            {
-                clientThread.CheckServerFail = true;
-                clientThread.Stop();
-                clientThread.CheckServerFailCount++;
-                _logQueue.EnqueueDebugging($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
-                return;
-            }
+            clientThread.CheckServerIsTimeOut();
         }
     }
 }
