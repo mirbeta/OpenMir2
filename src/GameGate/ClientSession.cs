@@ -601,7 +601,7 @@ namespace GameGate
                                             pszSendBuf[0] = (byte)'#';
                                             var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetPacket(0), TCmdPack.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                            lastGameSvr.SendBuffer(pszSendBuf, nEnCodeLen + 2);
+                                            lastGameSvr.SendBuffer(pszSendBuf);
                                             return;
                                         }
                                     }
@@ -611,97 +611,98 @@ namespace GameGate
 
                         byte[] BodyBuffer;
                         
-                        // if (fPacketOverSpeed)
-                        // {
-                        //     if (fConvertPacket)
-                        //     {
-                        //         CltCmd.Cmd = Grobal2.CM_TURN;
-                        //     }
-                        //     else
-                        //     {
-                        //         if (Config.m_fOverSpeedSendBack)
-                        //         {
-                        //             if (Config.m_tSpeedHackWarnMethod == TOverSpeedMsgMethod.ptSysmsg)
-                        //             {
-                        //                 CltCmd.Cmd = Grobal2.RM_WHISPER;
-                        //                 CltCmd.UID = 0xFF; // FrontColor
-                        //                 CltCmd.X = 0xF9; // BackColor
-                        //             }
-                        //             else
-                        //             {
-                        //                 CltCmd.Cmd = Grobal2.CM_SPEEDHACKMSG;
-                        //             }
-                        //             //nBuffer = UserData.Buffer[TSvrCmdPack.PackSize];
-                        //             TSvrCmdPack _wvar1 = new TSvrCmdPack();// ((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
-                        //             _wvar1.Flag = Protocol.RUNGATECODE;
-                        //             _wvar1.SockID = _session.nSckHandle;
-                        //             _wvar1.Cmd = Grobal2.GM_DATA;
-                        //             _wvar1.GGSock = m_nSvrListIdx;
-                        //             _wvar1.DataLen = TCmdPack.PackSize;
-                        //             //Move(nABuf, nBuffer, TCmdPack.PackSize);
-                        //             var speedBuff = HUtil32.GetBytes(Config.m_szOverSpeedSendBack);
-                        //             _wvar1.DataLen += speedBuff.Length + 1;
-                        //             var bufferLen = TSvrCmdPack.PackSize + _wvar1.DataLen;
-                        //             nBuffer = new byte[bufferLen];
-                        //             Array.Copy(packBuff, 0, nBuffer, 0, TCmdPack.PackSize);
-                        //             //Move(Config.m_szOverSpeedSendBack, nBuffer.Length + TCmdPack.PackSize, Config.m_szOverSpeedSendBack.Length);
-                        //             Array.Copy(speedBuff, 0, nBuffer, TCmdPack.PackSize, speedBuff.Length);
-                        //             //((byte)nBuffer + _wvar1.DataLen - 1) = 0;
-                        //
-                        //             cmdBuffer = _wvar1.GetPacket();
-                        //             Array.Copy(cmdBuffer, 0, nBuffer, 0, 20);
-                        //             lastGameSvr.SendBuffer(nBuffer, _wvar1.DataLen + TSvrCmdPack.PackSize);
-                        //             //lastGameSvr.SendBuffer(nBuffer, bufferLen);
-                        //             return;
-                        //         }
-                        //         switch (Config.m_tOverSpeedPunishMethod)
-                        //         {
-                        //             case TPunishMethod.TurnPack:
-                        //                 CltCmd.Cmd = Grobal2.CM_TURN;
-                        //                 break;
-                        //             case TPunishMethod.DropPack:
-                        //                 return;
-                        //             case TPunishMethod.NullPack:
-                        //                 CltCmd.Cmd = 0xFFFF;
-                        //                 break;
-                        //             case TPunishMethod.DelaySend:
-                        //                 if (dwDelay > 0)
-                        //                 {
-                        //                     //UserData.Buffer[TSvrCmdPack.PackSize];
-                        //                     TSvrCmdPack _wvar2 = new TSvrCmdPack();//((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
-                        //                     _wvar2.Flag = Protocol.RUNGATECODE;
-                        //                     _wvar2.SockID = _session.nSckHandle;
-                        //                     _wvar2.Cmd = Grobal2.GM_DATA;
-                        //                     _wvar2.GGSock = m_nSvrListIdx;
-                        //                     _wvar2.DataLen = TCmdPack.PackSize;
-                        //                     //Move(nABuf, nBuffer, TCmdPack.PackSize);
-                        //                     //Array.Copy(UserData.Buffer, 0, nBuffer, 0, TCmdPack.PackSize);
-                        //                     if (nDeCodeLen > TCmdPack.PackSize)
-                        //                     {
-                        //                         //_wvar2.DataLen += Misc.EncodeBuf(nABuf + TCmdPack.PackSize, nDeCodeLen - TCmdPack.PackSize, nBuffer + TCmdPack.PackSize) + 1;
-                        //                         //((byte)nBuffer + _wvar2.DataLen - 1) = 0;
-                        //                         var len = UserData.BufferLen - 19;
-                        //                         _wvar2.DataLen = TCmdPack.PackSize + len + 1;
-                        //                         var bufferLen = TSvrCmdPack.PackSize + _wvar2.DataLen;
-                        //                         nBuffer = new byte[bufferLen];
-                        //                         Array.Copy(packBuff, 0, nBuffer, 20, TCmdPack.PackSize);
-                        //                         Array.Copy(tempBuff, 16, nBuffer, 32, len); //消息体
-                        //                     }
-                        //                     else
-                        //                     {
-                        //                         nBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
-                        //                         _wvar2.DataLen = TCmdPack.PackSize;
-                        //                         Array.Copy(packBuff, 0, nBuffer, 20, packBuff.Length);
-                        //                     }
-                        //                     cmdBuffer = _wvar2.GetPacket();
-                        //                     Array.Copy(cmdBuffer, 0, nBuffer, 0, 20);
-                        //                     SendDelayMsg(CltCmd.Magic, CltCmd.Dir, CltCmd.Cmd, _wvar2.DataLen + TSvrCmdPack.PackSize, nBuffer, dwDelay);
-                        //                     return;
-                        //                 }
-                        //                 break;
-                        //         }
-                        //     }
-                        // }
+                        if (fPacketOverSpeed)
+                        {
+                            if (fConvertPacket)
+                            {
+                                CltCmd.Cmd = Grobal2.CM_TURN;
+                            }
+                            else
+                            {
+                                if (Config.IsOverSpeedSendBack)
+                                {
+                                    if (Config.SpeedHackWarnMethod == TOverSpeedMsgMethod.ptSysmsg)
+                                    {
+                                        CltCmd.Cmd = Grobal2.RM_WHISPER;
+                                        CltCmd.UID = 0xFF; // FrontColor
+                                        CltCmd.X = 0xF9; // BackColor
+                                    }
+                                    else
+                                    {
+                                        CltCmd.Cmd = Grobal2.CM_SPEEDHACKMSG;
+                                    }
+                                    //nBuffer = UserData.Buffer[TSvrCmdPack.PackSize];
+                                    TSvrCmdPack _wvar1 = new TSvrCmdPack();// ((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
+                                    _wvar1.Flag = Grobal2.RUNGATECODE;
+                                    _wvar1.SockID = _session.SckHandle;
+                                    _wvar1.Cmd = Grobal2.GM_DATA;
+                                    _wvar1.GGSock = m_nSvrListIdx;
+                                    _wvar1.DataLen = TCmdPack.PackSize;
+                                    //Move(nABuf, nBuffer, TCmdPack.PackSize);
+                                    var speedBuff = HUtil32.GetBytes(Config.m_szOverSpeedSendBack);
+                                    _wvar1.DataLen += speedBuff.Length + 1;
+                                    var bufferLen = TSvrCmdPack.PackSize + _wvar1.DataLen;
+                                    var nBuffer = new byte[bufferLen];
+                                    Array.Copy(packBuff, 0, nBuffer, 0, TCmdPack.PackSize);
+                                    //Move(Config.m_szOverSpeedSendBack, nBuffer.Length + TCmdPack.PackSize, Config.m_szOverSpeedSendBack.Length);
+                                    Array.Copy(speedBuff, 0, nBuffer, TCmdPack.PackSize, speedBuff.Length);
+                                    //((byte)nBuffer + _wvar1.DataLen - 1) = 0;
+                        
+                                    var cmdBuffer = _wvar1.GetPacket();
+                                    Array.Copy(cmdBuffer, 0, nBuffer, 0, 20);
+                                    lastGameSvr.SendBuffer(nBuffer);
+                                    //lastGameSvr.SendBuffer(nBuffer, bufferLen);
+                                    return;
+                                }
+                                switch (Config.OverSpeedPunishMethod)
+                                {
+                                    case TPunishMethod.TurnPack:
+                                        CltCmd.Cmd = Grobal2.CM_TURN;
+                                        break;
+                                    case TPunishMethod.DropPack:
+                                        return;
+                                    case TPunishMethod.NullPack:
+                                        CltCmd.Cmd = 0xFFFF;
+                                        break;
+                                    case TPunishMethod.DelaySend:
+                                        if (dwDelay > 0)
+                                        {
+                                            //UserData.Buffer[TSvrCmdPack.PackSize];
+                                            TSvrCmdPack _wvar2 = new TSvrCmdPack();//((TSvrCmdPack)(m_pOverlapRecv.BBuffer));
+                                            _wvar2.Flag = Grobal2.RUNGATECODE;
+                                            _wvar2.SockID = _session.SckHandle;
+                                            _wvar2.Cmd = Grobal2.GM_DATA;
+                                            _wvar2.GGSock = m_nSvrListIdx;
+                                            _wvar2.DataLen = TCmdPack.PackSize;
+                                            //Move(nABuf, nBuffer, TCmdPack.PackSize);
+                                            //Array.Copy(UserData.Buffer, 0, nBuffer, 0, TCmdPack.PackSize);
+                                            byte[] nBuffer = null;
+                                            if (nDeCodeLen > TCmdPack.PackSize)
+                                            {
+                                                //_wvar2.DataLen += Misc.EncodeBuf(nABuf + TCmdPack.PackSize, nDeCodeLen - TCmdPack.PackSize, nBuffer + TCmdPack.PackSize) + 1;
+                                                //((byte)nBuffer + _wvar2.DataLen - 1) = 0;
+                                                var len = message.DataLen - 19;
+                                                _wvar2.DataLen = TCmdPack.PackSize + len + 1;
+                                                var bufferLen = TSvrCmdPack.PackSize + _wvar2.DataLen;
+                                               nBuffer = new byte[bufferLen];
+                                                Array.Copy(packBuff, 0, nBuffer, 20, TCmdPack.PackSize);
+                                                Array.Copy(tempBuff, 16, nBuffer, 32, len); //消息体
+                                            }
+                                            else
+                                            {
+                                                nBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
+                                                _wvar2.DataLen = TCmdPack.PackSize;
+                                                Array.Copy(packBuff, 0, nBuffer, 20, packBuff.Length);
+                                            }
+                                            var cmdBuffer = _wvar2.GetPacket();
+                                            Array.Copy(cmdBuffer, 0, nBuffer, 0, 20);
+                                            SendDelayMsg(CltCmd.Magic, CltCmd.Dir, CltCmd.Cmd, _wvar2.DataLen + TSvrCmdPack.PackSize, nBuffer, dwDelay);
+                                            return;
+                                        }
+                                        break;
+                                }
+                            }
+                        }
 
                         var cmdPack = new TSvrCmdPack();
                         cmdPack.Flag = Grobal2.RUNGATECODE;
@@ -724,7 +725,7 @@ namespace GameGate
                             Array.Copy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
                         }
                         Array.Copy(cmdPack.GetPacket(), 0, BodyBuffer, 0, TSvrCmdPack.PackSize);//复制消息头
-                        lastGameSvr.SendBuffer(BodyBuffer, cmdPack.DataLen + TSvrCmdPack.PackSize);
+                        lastGameSvr.SendBuffer(BodyBuffer);
                         break;
                     }
             }
@@ -745,7 +746,7 @@ namespace GameGate
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    lastGameSvr.SendBuffer(delayMsg.pBuffer, delayMsg.nBufLen);//发送消息到M2
+                    lastGameSvr.SendBuffer(delayMsg.pBuffer);//发送消息到M2
                     dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {

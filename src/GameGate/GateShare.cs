@@ -14,10 +14,6 @@ namespace GameGate
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
         public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static long dwCheckRecviceTick = 0;
-        public static long dwCheckServerTick = 0;
-        public static long dwCheckServerTimeMin = 0;
-        public static long dwCheckServerTimeMax = 0;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>

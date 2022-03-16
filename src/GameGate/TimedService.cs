@@ -39,18 +39,14 @@ namespace GameGate
                 while (!_logQueue.MessageLog.IsEmpty)
                 {
                     string message;
-
                     if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-
                     Console.WriteLine(message);
                 }
 
                 while (!_logQueue.DebugLog.IsEmpty)
                 {
                     string message;
-
                     if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine(message);
                     Console.ResetColor();
@@ -106,14 +102,12 @@ namespace GameGate
         /// <summary>
         /// 清理过期会话
         /// </summary>
-        /// <param name="obj"></param>
         private void ClearSession()
         {
             if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
                 _logQueue.EnqueueDebugging("清理超时会话开始工作...");
-                TSessionInfo UserSession;
                 var serverList = _serverManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
@@ -125,9 +119,14 @@ namespace GameGate
                     {
                         continue;
                     }
-                    for (var j = 0; j < serverList[i].ClientThread.SessionArray.Length; j++)
+                    ClientThread clientThread = serverList[i].ClientThread;
+                    if (clientThread == null)
                     {
-                        UserSession = serverList[i].ClientThread.SessionArray[j];
+                        continue;
+                    }
+                    for (var j = 0; j < clientThread.SessionArray.Length; j++)
+                    {
+                        var UserSession = clientThread.SessionArray[j];
                         if (UserSession.Socket != null)
                         {
                             if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
@@ -137,11 +136,11 @@ namespace GameGate
                                 UserSession.SckHandle = -1;
                             }
                         }
-                    }
-                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
-                    {
-                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                        clientThread.dwCheckServerTimeMin = HUtil32.GetTickCount() - clientThread.dwCheckServerTick;
+                        if (clientThread.dwCheckServerTimeMax < clientThread.dwCheckServerTimeMin)
+                        {
+                            clientThread.dwCheckServerTimeMax = clientThread.dwCheckServerTimeMin;
+                        }
                     }
                     _clientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
