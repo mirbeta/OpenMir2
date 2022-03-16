@@ -29,7 +29,7 @@ namespace SelGate.Services
             _clientManager = clientManager;
             _configManager = configManager;
             _snedQueue = Channel.CreateUnbounded<TMessageData>();
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 128);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;

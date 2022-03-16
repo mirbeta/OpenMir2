@@ -50,8 +50,8 @@ namespace GameSvr
 
     public class MapCellinfo
     {
-        public static MapCellinfo LowWall => new MapCellinfo { Attribute = CellAttribute.LowWall };
-        public static MapCellinfo HighWall => new MapCellinfo { Attribute = CellAttribute.HighWall };
+        public static MapCellinfo LowWall => new() { Attribute = CellAttribute.LowWall };
+        public static MapCellinfo HighWall => new() { Attribute = CellAttribute.HighWall };
 
         public bool Valid => Attribute == CellAttribute.Walk;
 

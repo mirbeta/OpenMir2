@@ -35,7 +35,7 @@ namespace DBSvr
             _configManager = configManager;
             GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            UserSocket = new ISocketServer(ushort.MaxValue, 1024);
+            UserSocket = new ISocketServer(ushort.MaxValue, 512);
             UserSocket.OnClientConnect += UserSocketClientConnect;
             UserSocket.OnClientDisconnect += UserSocketClientDisconnect;
             UserSocket.OnClientRead += UserSocketClientRead;
