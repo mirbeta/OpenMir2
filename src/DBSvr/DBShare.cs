@@ -128,14 +128,38 @@ namespace DBSvr
                 bool result = true;
                 bool boIsTwoByte = false;
                 char FirstChr = '\0';
+                var bytesCount = 0;
+                for (int i = 0; i < sChrName.Length; i++)
+                {
+                    var bytes = HUtil32.GetByteCount(sChrName[i]);
+                    switch (bytes)
+                    {
+                        case 1:
+                            bytesCount++;
+                            break;
+                        case 2:
+                            bytesCount += 2;
+                            if (i == sChrName.Length)
+                            {
+                                result = false;
+                            }
+                            break;
+                    }
+                }
+
+                if (bytesCount != sChrName.Length)
+                {
+                    return false;
+                }
+
                 for (var i = 0; i < sChrName.Length; i++)
                 {
                     Chr = sChrName[i];
                     if (boIsTwoByte)
                     {
-                        if (!((FirstChr <= '÷') && (Chr >= '@') && (Chr <= 't')))
+                        if (!((FirstChr <= 0xF7) && (Chr >= 0x40) && (Chr <= 0xFE)))
                         {
-                            if (!((FirstChr > '÷') && (Chr >= '@') && (Chr <= '?')))
+                            if (!((FirstChr > 0xF7) && (Chr >= 0x40) && (Chr <= 0xA0)))
                             {
                                 result = false;
                             }
@@ -144,7 +168,7 @@ namespace DBSvr
                     }
                     else
                     {
-                        if ((Chr >= '?') && (Chr <= 't'))
+                        if ((Chr >= 0x81) && (Chr <= 0xFE))
                         {
                             boIsTwoByte = true;
                             FirstChr = Chr;
