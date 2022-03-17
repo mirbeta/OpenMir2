@@ -14,25 +14,27 @@ namespace GameSvr
     /// </summary>
     public class GateConsumer
     {
-        private readonly ChannelReader<byte[]> _reader;
+        private readonly ChannelReader<byte[]> _queue;
         private readonly int _identifier;
         private readonly TGateInfo _gate;
 
         public GateConsumer(TGateInfo gate,int identifier)
         {
-            _reader = gate.Queue.Reader;
+            _queue = gate.Queue.Reader;
             _identifier = identifier;
             _gate = gate;
         }
+
+        public TGateInfo Gate => _gate;
         
         public async Task ProcessGateData(CancellationToken cancellation)
         {
             Console.WriteLine($"GameGate Consumer ({_identifier}): Starting");
-            while (await _reader.WaitToReadAsync(cancellation))
+            while (await _queue.WaitToReadAsync(cancellation))
             {
-                if (_reader.TryRead(out var buff))
+                if (_queue.TryRead(out var buffer))
                 {
-                    SendGateBuffers(buff);
+                    SendGateBuffers(buffer);
                 }
             }
         }
@@ -41,19 +43,26 @@ namespace GameSvr
         {
             const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
             var dwRunTick = HUtil32.GetTickCount();
-            if (_gate.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
+            if (Gate.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
-                if ((HUtil32.GetTickCount() - _gate.dwSendCheckTick) > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
+                if ((HUtil32.GetTickCount() - Gate.dwSendCheckTick) > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
                 {
-                    _gate.nSendChecked = 0;
-                    _gate.nSendBlockCount = 0;
+                    Gate.nSendChecked = 0;
+                    Gate.nSendBlockCount = 0;
                 }
                 return;
             }
             try
             {
                 var nSendBuffLen = buffer.Length; 
-                if (_gate.nSendChecked == 0 && _gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
+
+                /*var dBuffer = buffer[24..];
+                var DefMsg = new TDefaultMessage(dBuffer);
+                M2Share.MainOutMessage(string.Format("消息 Ident:{0}",DefMsg.Ident, DefMsg.Ident));
+                M2Share.MainOutMessage(string.Format("数据大小 Block:{0} sMsg:{1} {2}",M2Share.g_Config.nCheckBlock, Gate.nSendBlockCount + nSendBuffLen, nSendBuffLen));
+                */
+                
+                if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
                 {
                     if (_gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
                     {

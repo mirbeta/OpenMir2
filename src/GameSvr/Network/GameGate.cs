@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Console;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -653,7 +654,7 @@ namespace GameSvr
                 g_GateArr[i] = Gate;
             }
             LoadRunAddr();
-            _gateSocket = new ISocketServer(ushort.MaxValue, 128);
+            _gateSocket = new ISocketServer(ushort.MaxValue, 512);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
@@ -688,18 +689,10 @@ namespace GameSvr
             msgHeader.wGSocketIdx = (ushort)nGsIdx;
             msgHeader.wIdent = Grobal2.GM_DATA;
             msgHeader.nLength = TDefaultMessage.PackSize;
-            var nLen = msgHeader.nLength + 20;
-            using var memoryStream = new MemoryStream();
-            var backingStream = new BinaryWriter(memoryStream);
-            backingStream.Write(nLen);
-            backingStream.Write(msgHeader.GetPacket());
-            backingStream.Write(defMsg.GetPacket());
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
-            if (!AddGateBuffer(nGateIdx, data))
+            ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
+            if (!AddGateBuffer(nGateIdx, outMessage.GetPacket()))
             {
-                data = null;
+                Console.WriteLine("发送玩家退出消息失败.");
             }
         }
 
@@ -707,7 +700,7 @@ namespace GameSvr
         {
             byte[] Buff = null;
             int nSendBytes;
-            MessageHeader  MsgHdr = new MessageHeader
+            MessageHeader MsgHdr = new MessageHeader
             {
                 dwCode = Grobal2.RUNGATECODE,
                 nSocket = nSocket,
@@ -811,15 +804,13 @@ namespace GameSvr
 
         public void KickUser(string sAccount, int nSessionID,int payMode)
         {
-            TGateUserInfo GateUserInfo;
-            TGateInfo Gate;
             const string sExceptionMsg = "[Exception] TRunSocket::KickUser";
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
             try
             {
                 for (var i = g_GateArr.GetLowerBound(0); i <= g_GateArr.GetUpperBound(0); i++)
                 {
-                    Gate = g_GateArr[i];
+                    var Gate = g_GateArr[i];
                     if (Gate.boUsed && Gate.Socket != null && Gate.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -827,7 +818,7 @@ namespace GameSvr
                         {
                             for (var j = 0; j < Gate.UserList.Count; j++)
                             {
-                                GateUserInfo = Gate.UserList[j];
+                                var GateUserInfo = Gate.UserList[j];
                                 if (GateUserInfo == null)
                                 {
                                     continue;
@@ -980,8 +971,8 @@ namespace GameSvr
             {
                 return;
             }
-            var data = new byte[e.BytesReceived];
-            Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
+            var data = new byte[nMsgLen];
+            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
             if (GataSocket.TryGetValue(e.ConnectionId, out var gate))
             {
                 ExecGateBuffers(gate.GateIndex, gate, data, nMsgLen);
