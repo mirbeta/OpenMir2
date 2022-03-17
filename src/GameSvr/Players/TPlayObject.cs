@@ -3289,8 +3289,7 @@ namespace GameSvr
             dwDelayTime = 0;
             if (M2Share.g_Config.boSpeedHackCheck)
             {
-                result = true;
-                return result;
+                return true;
             }
             int dwCheckTime;
             if (!M2Share.g_Config.boDisableStruck) // 检查人物弯腰停留时间

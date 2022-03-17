@@ -258,23 +258,27 @@ namespace GameGate
             }
         }
 
-        private void ProcReceiveBuffer(byte[] tBuffer, int nMsgLen)
+        const int headerMessageSize = 20;
+
+        //todo 有封包堆积处理问题，导致游戏数据
+        private void ProcReceiveBuffer(byte[] Buffer, int nMsgLen)
         {
             MessageHeader mesgHeader;
             var buffIndex = 0;
-            const int headerMessageSize = 20;
+            var testBuff = Buffer;
+            byte[] myBuff = null;
             try
             {
                 if (BuffLen > 0) //有未处理完成的buff
                 {
                     var tempBuff = new byte[BuffLen + nMsgLen];
                     Array.Copy(SocketBuffer, 0, tempBuff, 0, BuffLen);
-                    Array.Copy(tBuffer, 0, tempBuff, BuffLen, tBuffer.Length);
+                    Array.Copy(Buffer, 0, tempBuff, BuffLen, Buffer.Length);
                     SocketBuffer = tempBuff;
                 }
                 else
                 {
-                    SocketBuffer = tBuffer;
+                    SocketBuffer = Buffer;
                 }
                 var nLen = BuffLen + nMsgLen;
                 var Buff = SocketBuffer;
@@ -285,6 +289,9 @@ namespace GameGate
                         mesgHeader = new MessageHeader(Buff);
                         if (mesgHeader.dwCode == 0)
                         {
+                            Buff = Buff[20..];
+                            buffIndex = 0;
+                            nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
                             break;
                         }
                         if (mesgHeader.dwCode == Grobal2.RUNGATECODE)
@@ -323,14 +330,16 @@ namespace GameGate
                                     message.Buffer = msgBuff;
                                     message.DataLen = mesgHeader.nLength;
                                     _sessionManager.SendQueue.TryWrite(message);
+                                    myBuff = msgBuff;
                                     break;
                                 case Grobal2.GM_TEST:
                                     break;
                             }
+                            
                             var newLen = headerMessageSize + Math.Abs(mesgHeader.nLength);
-                            var tempBuff = new byte[Buff.Length - newLen];
-                            Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
-                            Buff = tempBuff;
+                            /*var tempBuff = new byte[Buff.Length - newLen];
+                            Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);*/
+                            Buff = Buff[newLen..];
                             buffIndex = 0;
                             nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
                         }
@@ -348,7 +357,7 @@ namespace GameGate
                         }
                     }
                 }
-                if (nLen > 0)
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
                     var tempBuff = new byte[nLen];
                     Array.Copy(Buff, 0, tempBuff, 0, nLen);
@@ -363,7 +372,7 @@ namespace GameGate
             }
             catch (Exception E)
             {
-                _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{buffIndex}", 1);
+                _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{buffIndex}", 5);
             }
         }
 

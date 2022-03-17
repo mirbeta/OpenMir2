@@ -29,6 +29,7 @@ namespace GameGate
         private readonly object _syncObj;
         private readonly ClientThread lastGameSvr;
         private readonly HardwareFilter _hwidFilter;
+        private readonly SendQueue _sendQueue;
 
         public ClientSession(TSessionInfo session, ClientThread clientThread)
         {
@@ -42,6 +43,7 @@ namespace GameGate
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
+            _sendQueue = SendQueue.Instance;
         }
 
         public GameSpeed GetGameSpeed()
@@ -593,6 +595,7 @@ namespace GameGate
 
                         byte[] BodyBuffer;
                         
+                        /*
                         if (fPacketOverSpeed)
                         {
                             if (fConvertPacket)
@@ -685,6 +688,7 @@ namespace GameGate
                                 }
                             }
                         }
+                        */
 
                         var cmdPack = new TSvrCmdPack();
                         cmdPack.Flag = Grobal2.RUNGATECODE;
@@ -942,17 +946,34 @@ namespace GameGate
             byte[] pzsSendBuf = null;
             if (message.DataLen <= 0)
             {
+                var len = -message.DataLen;
                 pzsSendBuf = new byte[0 - message.DataLen + 2];
                 pzsSendBuf[0] = (byte)'#';
-                //Array.Copy(message.Buffer, 0, pzsSendBuf, 1, pzsSendBuf.Length - 2);
                 Array.Copy(message.Buffer, 0, pzsSendBuf, 1, -message.DataLen);
-
                 pzsSendBuf[^1] = (byte) '!';
-                var ss = HUtil32.GetString(pzsSendBuf, 0, pzsSendBuf.Length);
-                SendData(pzsSendBuf);
-                Console.WriteLine("str:"+ss);
-                Console.WriteLine("source:"+message.Buffer.Length);
-                Console.WriteLine("sendBuff:"+pzsSendBuf.Length);
+                Console.WriteLine("Len:" + message.DataLen);
+                var tempStr = HUtil32.GetString(message.Buffer, 0, -message.DataLen).Trim();
+                if (tempStr.StartsWith("+") && tempStr[1] == 'G' && tempStr[2] == 'D' && tempStr[3] == '/')
+                {
+                    _sendQueue.AddToQueue(new QueueData()
+                    {
+                        Socket = _session.Socket,
+                        Buffer = pzsSendBuf
+                    });
+                }
+                else
+                {
+                    pzsSendBuf = new byte[0 - message.DataLen + 2];
+                    pzsSendBuf[0] = (byte)'#';
+                    var pb = HUtil32.GetBytes(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
+                    Array.Copy(pb, 0, pzsSendBuf, 1, -message.DataLen);
+                    pzsSendBuf[^1] = (byte) '!';
+                    _sendQueue.AddToQueue(new QueueData()
+                    {
+                        Socket = _session.Socket,
+                        Buffer = pzsSendBuf
+                    });
+                }
                 return;
             }
             var cmd = new TCmdPack(message.Buffer);
