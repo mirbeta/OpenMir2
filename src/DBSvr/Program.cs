@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DBSvr
 {
@@ -15,19 +14,16 @@ namespace DBSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = new HostBuilder()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory,"dbsvr.conf")));
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<LoginSocService>();
                     services.AddSingleton<HumDataService>();
                     services.AddSingleton<MySqlHumRecordDB>();
                     services.AddSingleton<MySqlHumDB>();
+                    services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory,"dbsvr.conf")));
                 });
 
             await builder.RunConsoleAsync();

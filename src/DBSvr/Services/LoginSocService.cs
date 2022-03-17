@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Sockets;
 
 namespace DBSvr
@@ -101,11 +100,11 @@ namespace DBSvr
             while ((sScoketText.IndexOf(")", StringComparison.Ordinal) > 0))
             {
                 sScoketText = HUtil32.ArrestStringEx(sScoketText, "(", ")", ref sData);
-                if (sData == "")
+                if (string.IsNullOrEmpty(sData))
                 {
                     break;
                 }
-                string sBody = HUtil32.GetValidStr3(sData, ref sCode, new string[] { "/" });
+                string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
                 int nIdent = HUtil32.Str_ToInt(sCode, 0);
                 switch (nIdent)
                 {
@@ -277,11 +276,11 @@ namespace DBSvr
             string s14 = string.Empty;
             string s18 = string.Empty;
             string sIPaddr = string.Empty;
-            sData = HUtil32.GetValidStr3(sData, ref sAccount, new string[] { "/" });
-            sData = HUtil32.GetValidStr3(sData, ref s10, new string[] { "/" });
-            sData = HUtil32.GetValidStr3(sData, ref s14, new string[] { "/" });
-            sData = HUtil32.GetValidStr3(sData, ref s18, new string[] { "/" });
-            sData = HUtil32.GetValidStr3(sData, ref sIPaddr, new string[] { "/" });
+            sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s10, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
+            sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
             TGlobaSessionInfo GlobaSessionInfo = new TGlobaSessionInfo();
             GlobaSessionInfo.sAccount = sAccount;
             GlobaSessionInfo.sIPaddr = sIPaddr;
@@ -298,7 +297,7 @@ namespace DBSvr
         {
             string sAccount = string.Empty;
             TGlobaSessionInfo GlobaSessionInfo;
-            sData = HUtil32.GetValidStr3(sData, ref sAccount, new string[] { "/" });
+            sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
             int nSessionID = HUtil32.Str_ToInt(sData, 0);
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {

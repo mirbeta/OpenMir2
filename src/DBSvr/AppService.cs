@@ -13,7 +13,6 @@ namespace DBSvr
         private readonly LoginSocService _LoginSoc;
         private readonly HumDataService _dataService;
         private readonly ConfigManager _configManager;
-        private Timer _threadTimer;
 
         public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSocService idSoc, HumDataService dataService, ConfigManager configManager)
         {
@@ -22,7 +21,6 @@ namespace DBSvr
             _LoginSoc = idSoc;
             _dataService = dataService;
             _configManager = configManager;
-            _threadTimer = new Timer(ThreadServerTimer, null, 1000, 5000);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -55,15 +53,6 @@ namespace DBSvr
         {
             _logger.LogDebug($"DBSvr is stopping.");
             return base.StopAsync(cancellationToken);
-        }
-
-        private void ThreadServerTimer(object obj)
-        {
-            var userCount = _userSoc.GetUserCount();
-            _LoginSoc.SendKeepAlivePacket(userCount);
-            _LoginSoc.CheckConnection();
-            _dataService.ClearTimeoutSession();
-            //ServerState(userCount);
         }
         
         private void ServerState(int userCount)

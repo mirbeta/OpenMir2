@@ -50,7 +50,7 @@ namespace DBSvr
             ServerInfo = new TServerInfo();
             ServerInfo.bo08 = true;
             ServerInfo.nSckHandle = (int)e.Socket.Handle;
-            ServerInfo.sStr = "";
+            ServerInfo.sData = "";
             ServerInfo.Socket = e.Socket;
             ServerList.Add(ServerInfo);
         }
@@ -78,28 +78,25 @@ namespace DBSvr
 
         private void ServerSocketClientRead(object sender, AsyncUserToken e)
         {
-            TServerInfo ServerInfo;
-            string s10;
             for (var i = 0; i < ServerList.Count; i++)
             {
-                ServerInfo = ServerList[i];
-                if (ServerInfo.nSckHandle == (int)e.Socket.Handle)
+                var serverInfo = ServerList[i];
+                if (serverInfo.nSckHandle == (int)e.Socket.Handle)
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
                     Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    s10 = HUtil32.GetString(data, 0, data.Length);
-                    if (!string.IsNullOrEmpty(s10))
+                    var sText = HUtil32.GetString(data, 0, data.Length);
+                    if (!string.IsNullOrEmpty(sText))
                     {
-                        ServerInfo.sStr += s10;
-                        if (s10.IndexOf("!", StringComparison.Ordinal) > 0)
+                        serverInfo.sData += sText;
+                        if (sText.IndexOf("!", StringComparison.Ordinal) > 0)
                         {
-                            ProcessServerPacket(ServerInfo);
-                            break;
+                            ProcessServerPacket(serverInfo);
                         }
-                        else if (ServerInfo.sStr.Length > 81920)
+                        else if (serverInfo.sData.Length > 81920)
                         {
-                            ServerInfo.sStr = "";
+                            serverInfo.sData = string.Empty;
                         }
                     }
                     break;
@@ -109,51 +106,42 @@ namespace DBSvr
 
         private void ProcessServerPacket(TServerInfo ServerInfo)
         {
-            bool bo25;
-            string sC = string.Empty;
-            string s1C = string.Empty;
-            string s20 = string.Empty;
+            string sText = string.Empty;
             string s24 = string.Empty;
-            try
+            var bo25 = false;
+            var sData = ServerInfo.sData;
+            ServerInfo.sData = string.Empty;
+            sData = HUtil32.ArrestStringEx(sData, "#", "!", ref sText);
+            if (!string.IsNullOrEmpty(sText))
             {
-                bo25 = false;
-                s1C = ServerInfo.sStr;
-                ServerInfo.sStr = "";
-                s1C = HUtil32.ArrestStringEx(s1C, "#", "!", ref s20);
-                if (!string.IsNullOrEmpty(s20))
+                sText = HUtil32.GetValidStr3(sText, ref s24, new[] { "/" });
+                int n14 = sText.Length;
+                if ((n14 >= Grobal2.DEFBLOCKSIZE) && (!string.IsNullOrEmpty(s24)))
                 {
-                    s20 = HUtil32.GetValidStr3(s20, ref s24, new string[] { "/" });
-                    int n14 = s20.Length;
-                    if ((n14 >= Grobal2.DEFBLOCKSIZE) && (s24 != ""))
+                    int wE = HUtil32.Str_ToInt(s24, 0) ^ 170;
+                    int w10 = n14;
+                    int n18 = HUtil32.MakeLong(wE, w10);
+                    var by = new byte[sizeof(int)];
+                    unsafe
                     {
-                        int wE = HUtil32.Str_ToInt(s24, 0) ^ 170;
-                        int w10 = n14;
-                        int n18 = HUtil32.MakeLong(wE, w10);
-                        var by = new byte[sizeof(int)];
-                        unsafe
+                        fixed (byte* pb = by)
                         {
-                            fixed (byte* pb = by)
-                            {
-                                *(int*)pb = n18;
-                            }
-                        }
-                        sC = EDcode.EncodeBuffer(@by, @by.Length);
-                        s34C = s24;
-                        if (HUtil32.CompareBackLStr(s20, sC, sC.Length))
-                        {
-                            ProcessServerMsg(s20, n14, ServerInfo.Socket);
-                            bo25 = true;
+                            *(int*)pb = n18;
                         }
                     }
-                }
-                if (!bo25)
-                {
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-                    SendSocket(ServerInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
+                    var sC = EDcode.EncodeBuffer(by, by.Length);
+                    s34C = s24;
+                    if (HUtil32.CompareBackLStr(sText, sC, sC.Length))
+                    {
+                        ProcessServerMsg(sText, n14, ServerInfo.Socket);
+                        bo25 = true;
+                    }
                 }
             }
-            finally
+            if (!bo25)
             {
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
+                SendSocket(ServerInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
             }
         }
 
@@ -295,12 +283,12 @@ namespace DBSvr
             string sIPaddr = LoadHuman.sUserAddr;
             int nSessionID = LoadHuman.nSessionID;
             int nCheckCode = -1;
-            if ((sAccount != "") && (sHumName != ""))
+            if ((!string.IsNullOrEmpty(sAccount)) && (!string.IsNullOrEmpty(sHumName)))
             {
                 nCheckCode = _LoginSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + (nSessionID).ToString());
+                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + nSessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
@@ -349,8 +337,8 @@ namespace DBSvr
             string sChrName = string.Empty;
             string sUserID = string.Empty;
             THumDataInfo HumanRCD = null;
-            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new string[] { "/" });
-            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new string[] { "/" });
+            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new[] { "/" });
+            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new[] { "/" });
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
             bool bo21 = false;
@@ -415,8 +403,8 @@ namespace DBSvr
         {
             string sChrName = string.Empty;
             string sUserID = string.Empty;
-            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new string[] { "/" });
-            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new string[] { "/" });
+            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new[] { "/" });
+            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new[] { "/" });
             sUserID = EDcode.DeCodeString(sUserID);
             sChrName = EDcode.DeCodeString(sChrName);
             for (var i = 0; i < HumSessionList.Count; i++)
