@@ -116,7 +116,7 @@ namespace SystemModule
         public static unsafe string DeCodeString(string str, bool chinese = true)
         {
             var nLen = 0;
-            var bSrc = HUtil32.StringToByteAry(str);
+            var bSrc = HUtil32.GetBytes(str);
             var encBuf = Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
             if (chinese)
             {
@@ -131,9 +131,9 @@ namespace SystemModule
             }
         }
 
-        public static byte[] DecodeBuffer(string Src)
+        public static byte[] DecodeBuffer(string strSrc)
         {
-            var bSrc = HUtil32.GetBytes(Src);
+            var bSrc = HUtil32.GetBytes(strSrc);
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
         }

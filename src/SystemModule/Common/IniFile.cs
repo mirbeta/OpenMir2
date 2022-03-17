@@ -201,7 +201,7 @@ namespace SystemModule.Common
                 File.Create(this.FileName).Close();
                 return;
             }
-            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
+            StreamReader rd = new StreamReader(File.Open(this.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.Default);
             bool isCurSecComment = false;
             Dictionary<string, string> curSec = null;
             string str = "";
@@ -314,7 +314,7 @@ namespace SystemModule.Common
                 {
                     fi.IsReadOnly = false;
                 }
-                StreamWriter sw = new StreamWriter(File.Open(this.FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("gb2312"));
+                StreamWriter sw = new StreamWriter(File.Open(this.FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.Default);
                 foreach (KeyValuePair<string, Dictionary<string, string>> pair in this.iniCahce)
                 {
                     sw.WriteLine("[" + pair.Key + "]");
