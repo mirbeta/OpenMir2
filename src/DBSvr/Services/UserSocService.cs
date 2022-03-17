@@ -35,7 +35,7 @@ namespace DBSvr
             _configManager = configManager;
             GateList = new List<TGateInfo>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            UserSocket = new ISocketServer(ushort.MaxValue, 512);
+            UserSocket = new ISocketServer(ushort.MaxValue, 1024);
             UserSocket.OnClientConnect += UserSocketClientConnect;
             UserSocket.OnClientDisconnect += UserSocketClientDisconnect;
             UserSocket.OnClientRead += UserSocketClientRead;
@@ -784,7 +784,7 @@ namespace DBSvr
             {
                 nCode = 2;
             }
-            if (!DBShare.boDenyChrName)
+            /*if (!DBShare.boDenyChrName)
             {
                 if (!DBShare.CheckChrName(sChrName))
                 {
@@ -802,7 +802,7 @@ namespace DBSvr
                         nCode = 0;
                     }
                 }
-            }
+            }*/
             if (nCode == -1)
             {
                 if (HumDB.Index(sChrName) >= 0)
@@ -822,7 +822,7 @@ namespace DBSvr
                             HumRecord.btCount = 0;
                             HumRecord.Header.sName = sChrName;
                             HumRecord.Header.nSelectID = UserInfo.nSelGateID;
-                            if (HumRecord.Header.sName != "")
+                            if (!string.IsNullOrEmpty(HumRecord.Header.sName))
                             {
                                 if (!HumChrDB.Add(HumRecord))
                                 {

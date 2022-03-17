@@ -31,7 +31,7 @@ namespace LoginGate.Services
             _clientManager = clientManager;
             _configManager = configManager;
             _logQueue = logQueue;
-            _serverSocket = new ISocketServer(ushort.MaxValue, 128);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;

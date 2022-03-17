@@ -249,7 +249,7 @@ namespace DBSvr
             bool result = false;
             if (m_QuickList.ContainsKey(HumRecord.Header.sName))
             {
-                if (m_QuickList[HumRecord.Header.sName] >= 0)
+                if (m_QuickList[HumRecord.Header.sName] > 0)
                 {
                     return false;
                 }
