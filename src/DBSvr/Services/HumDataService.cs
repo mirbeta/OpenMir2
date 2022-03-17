@@ -23,7 +23,7 @@ namespace DBSvr
             HumDB = humDb;
             ServerList = new List<TServerInfo>();
             HumSessionList = new List<THumSession>();
-            serverSocket = new ISocketServer(ushort.MaxValue, 512);
+            serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             serverSocket.OnClientConnect += ServerSocketClientConnect;
             serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             serverSocket.OnClientRead += ServerSocketClientRead;
