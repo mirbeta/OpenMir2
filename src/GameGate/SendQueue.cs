@@ -13,21 +13,20 @@ namespace GameGate
             get { return instance; }
         }
 
-        private readonly Channel<QueueData> _sendMsgList = null;
+        private readonly Channel<SendQueueData> _sendQueue = null;
         private readonly LogQueue _logQueue = LogQueue.Instance;
 
         public SendQueue()
         {
-            _sendMsgList = Channel.CreateUnbounded<QueueData>();
+            _sendQueue = Channel.CreateUnbounded<SendQueueData>();
         }
 
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        /// <param name="queueData"></param>
         public void AddToQueue(TSessionInfo session, byte[] buffer)
         {
-            _sendMsgList.Writer.TryWrite(new QueueData()
+            _sendQueue.Writer.TryWrite(new SendQueueData()
             {
                 Session = session,
                 Buffer = buffer
@@ -39,9 +38,9 @@ namespace GameGate
         /// </summary>
         public async Task ProcessSendQueue()
         {
-            while (await _sendMsgList.Reader.WaitToReadAsync())
+            while (await _sendQueue.Reader.WaitToReadAsync())
             {
-                if (_sendMsgList.Reader.TryRead(out var queueData))
+                if (_sendQueue.Reader.TryRead(out var queueData))
                 {
                     var resp = await queueData.SendBuffer();
                     if (resp != queueData.Buffer.Length)
@@ -53,7 +52,7 @@ namespace GameGate
         }
     }
 
-    public struct QueueData
+    public struct SendQueueData
     {
         public TSessionInfo Session;
         public byte[] Buffer;

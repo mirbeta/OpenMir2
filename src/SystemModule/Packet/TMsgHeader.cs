@@ -43,4 +43,29 @@ namespace SystemModule.Packages
             writer.Write(nLength);
         }
     }
+
+    public class ClientOutMessage : Packets
+    {
+        private MessageHeader MessageHeader;
+        private TDefaultMessage DefaultMessage;
+        
+        public ClientOutMessage(MessageHeader messageHeader,TDefaultMessage defaultMessage)
+        {
+            MessageHeader = messageHeader;
+            DefaultMessage = defaultMessage;
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            var nLen = MessageHeader.nLength + 20;
+            writer.Write(nLen);
+            writer.Write(MessageHeader.GetPacket());
+            writer.Write(DefaultMessage.GetPacket());
+        }
+    }
 }

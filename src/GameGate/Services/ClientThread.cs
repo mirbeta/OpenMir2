@@ -321,12 +321,14 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
+                                    
                                     var msgBuff = mesgHeader.nLength > 0 ? new byte[mesgHeader.nLength] : new byte[Buff.Length - 20];
                                     Array.Copy(Buff, headerMessageSize, msgBuff, 0, msgBuff.Length);
+                                    
                                     var message = new TMessageData();
                                     message.MessageId = mesgHeader.wGSocketIdx;
                                     message.Buffer = msgBuff;
-                                    message.DataLen = mesgHeader.nLength;
+                                    message.BufferLen = mesgHeader.nLength;
                                     _sessionManager.SendQueue.TryWrite(message);
                                     break;
                                 case Grobal2.GM_TEST:

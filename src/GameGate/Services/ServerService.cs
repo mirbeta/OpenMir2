@@ -188,7 +188,7 @@ namespace GameGate
                 var message = new TMessageData();
                 message.Buffer = data;
                 message.MessageId = connectionId;
-                message.DataLen = data.Length;
+                message.BufferLen = data.Length;
                 _serverManager.SendQueue(message);
             }
             else
