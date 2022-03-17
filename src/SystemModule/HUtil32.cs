@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading;
 
 namespace SystemModule
 {
@@ -138,10 +139,12 @@ namespace SystemModule
 
         public static void EnterCriticalSection(object obj)
         {
+           // Monitor.Enter(obj);
         }
 
         public static void LeaveCriticalSection(object obj)
         {
+          //  Monitor.Exit(obj);
         }
 
         public static string GetString(byte[] bytes, int index, int count)
@@ -172,41 +175,6 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        public static string StrPasTest(byte[] buff)
-        {
-            var nLen = 0;
-            if (buff[buff.Length - 1] == 0)
-            {
-                nLen = buff.Length - 1;
-            }
-            else
-            {
-                nLen = buff.Length;
-            }
-            var sb = new char[nLen];
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = (char)buff[i];
-            }
-            return new string(sb);
-        }
-
-        /// <summary>
-        /// 字符串转Byte数组
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static unsafe byte[] StringToByteAry(string str)
-        {
-            var nLen = StringToBytePtr(str, null, 0);
-            var ret = new byte[nLen];
-            fixed (byte* pb = ret)
-            {
-                StringToBytePtr(str, pb, 0);
-            }
-            return ret;
-        }
-
         /// <summary>
         /// 字符串转丹字节
         /// 思路：对于含有高字节不为0的，说明字符串包含汉字，用Encoding.Default.GetBytes
@@ -218,7 +186,7 @@ namespace SystemModule
         /// <param name="retby"></param>
         /// <param name="StartIndex"></param>
         /// <returns></returns>
-        public static unsafe int StringToBytePtr(string str, byte* retby, int StartIndex)
+        private static unsafe int StringToBytePtr(string str, byte* retby, int StartIndex)
         {
             var bDecode = false;
             if (string.IsNullOrEmpty(str)) return 0;
@@ -568,7 +536,6 @@ namespace SystemModule
                 ArrestStr = "";
                 result = "";
             }
-
             return result;
         }
 
@@ -691,10 +658,14 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetBytes(str.ToString());
         }
 
+        public static int GetByteCount(char strSrc)
+        {
+            return Encoding.GetEncoding("gb2312").GetByteCount(strSrc.ToString());
+        }
+
         public static int GetDayCount(DateTime MaxDate, DateTime MinDate)
         {
-            int result = 0;
-            if (MaxDate < MinDate) return result;
+            if (MaxDate < MinDate) return 0;
             int YearMax = MaxDate.Year;
             int MonthMax = MaxDate.Month;
             int DayMax = MaxDate.Day;
@@ -703,26 +674,7 @@ namespace SystemModule
             int DayMin = MinDate.Day;
             YearMax -= YearMin;
             YearMin = 0;
-            result = YearMax * 12 * 30 + MonthMax * 30 + DayMax - (YearMin * 12 * 30 + MonthMin * 30 + DayMin);
-            return result;
-        }
-
-        public static unsafe void IntPtrToIntPtr(IntPtr Src, int SrcIndex, IntPtr Dest, int DestIndex, int nLen)
-        {
-            var pSrc = (byte*) Src + SrcIndex;
-            var pDest = (byte*) Dest + DestIndex;
-            if (pDest > pSrc)
-            {
-                pDest = pDest + (nLen - 1);
-                pSrc = pSrc + (nLen - 1);
-                for (var i = 0; i < nLen; i++)
-                    *pDest-- = *pSrc--;
-            }
-            else
-            {
-                for (var i = 0; i < nLen; i++)
-                    *pDest++ = *pSrc++;
-            }
+            return YearMax * 12 * 30 + MonthMax * 30 + DayMax - (YearMin * 12 * 30 + MonthMin * 30 + DayMin);
         }
 
         /// <summary>
@@ -743,8 +695,8 @@ namespace SystemModule
                 throw new Exception(ex.Message);
             }
         }
-        
-        public static unsafe string BytePtrToString(byte* by, int StartIndex, int Len)
+
+        private static unsafe string BytePtrToString(byte* by, int StartIndex, int Len)
         {
             var ret = new string('\0', Len);
             var sb = new StringBuilder(ret);
@@ -775,8 +727,6 @@ namespace SystemModule
         public static bool CompareBackLStr(string Src, string targ, int compn)
         {
             var result = false;
-            int slen;
-            int tLen;
             if (compn <= 0)
             {
                 return result;
@@ -789,8 +739,8 @@ namespace SystemModule
             {
                 return result;
             }
-            slen = Src.Length;
-            tLen = targ.Length;
+            var slen = Src.Length;
+            var tLen = targ.Length;
             result = true;
             for (var i = 0; i < compn; i++)
             {
@@ -809,7 +759,7 @@ namespace SystemModule
             {
                 return -1;
             }
-            char[] separator = new char[] { '.' };
+            char[] separator = new[] { '.' };
             string[] items = ip.Split(separator);
             return long.Parse(items[0]) << 24
                    | long.Parse(items[1]) << 16
