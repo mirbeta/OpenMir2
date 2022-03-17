@@ -62,6 +62,7 @@ namespace GameGate
 
         /// <summary>
         /// 处理客户端发送过来的封包
+        /// 这里所有的包都大于12个字节
         /// </summary>
         /// <param name="message"></param>
         public void HandleUserPacket(TMessageData message)
@@ -946,34 +947,17 @@ namespace GameGate
             byte[] pzsSendBuf = null;
             if (message.DataLen <= 0)
             {
-                var len = -message.DataLen;
                 pzsSendBuf = new byte[0 - message.DataLen + 2];
                 pzsSendBuf[0] = (byte)'#';
                 Array.Copy(message.Buffer, 0, pzsSendBuf, 1, -message.DataLen);
                 pzsSendBuf[^1] = (byte) '!';
-                Console.WriteLine("Len:" + message.DataLen);
-                var tempStr = HUtil32.GetString(message.Buffer, 0, -message.DataLen).Trim();
-                if (tempStr.StartsWith("+") && tempStr[1] == 'G' && tempStr[2] == 'D' && tempStr[3] == '/')
+                var tempStr = HUtil32.GetString(message.Buffer, 0, -message.DataLen);
+                if (tempStr[0] != '+' && tempStr[1] != 'G' && tempStr[2] != 'D' && tempStr[3] != '/') //封包问题导致需要重新二次生成封包,后期需要详细跟踪一下封包问题
                 {
-                    _sendQueue.AddToQueue(new QueueData()
-                    {
-                        Socket = _session.Socket,
-                        Buffer = pzsSendBuf
-                    });
-                }
-                else
-                {
-                    pzsSendBuf = new byte[0 - message.DataLen + 2];
-                    pzsSendBuf[0] = (byte)'#';
                     var pb = HUtil32.GetBytes(Grobal2.sSTATUS_GOOD + HUtil32.GetTickCount());
-                    Array.Copy(pb, 0, pzsSendBuf, 1, -message.DataLen);
-                    pzsSendBuf[^1] = (byte) '!';
-                    _sendQueue.AddToQueue(new QueueData()
-                    {
-                        Socket = _session.Socket,
-                        Buffer = pzsSendBuf
-                    });
+                    Buffer.BlockCopy(pb, 0, pzsSendBuf, 1, -message.DataLen);
                 }
+                _sendQueue.AddToQueue(_session, pzsSendBuf);
                 return;
             }
             var cmd = new TCmdPack(message.Buffer);
@@ -1053,7 +1037,8 @@ namespace GameGate
                 pzsSendBuf[nLen + 1] = (byte)'!';
                 pzsSendBuf = pzsSendBuf[..(nLen + 2)];
             }
-            SendData(pzsSendBuf);
+
+            _sendQueue.AddToQueue(_session, pzsSendBuf);
 
             #region 带数据校验封包（未完善）
 

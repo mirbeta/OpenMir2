@@ -25,11 +25,15 @@ namespace GameGate
         /// 添加到发送队列
         /// </summary>
         /// <param name="queueData"></param>
-        public void AddToQueue(QueueData queueData)
+        public void AddToQueue(TSessionInfo session, byte[] buffer)
         {
-            _sendMsgList.Writer.TryWrite(queueData);
+            _sendMsgList.Writer.TryWrite(new QueueData()
+            {
+                Session = session,
+                Buffer = buffer
+            });
         }
-        
+
         /// <summary>
         /// 处理M2发过来的消息
         /// </summary>
@@ -37,11 +41,10 @@ namespace GameGate
         {
             while (await _sendMsgList.Reader.WaitToReadAsync())
             {
-                if (_sendMsgList.Reader.TryRead(out var sendData))
+                if (_sendMsgList.Reader.TryRead(out var queueData))
                 {
-                    if (sendData.Socket == null || !sendData.Socket.Connected) continue;
-                    var resp = await sendData.Socket.SendAsync(sendData.Buffer, SocketFlags.None);
-                    if (resp != sendData.Buffer.Length)
+                    var resp = await queueData.SendBuffer();
+                    if (resp != queueData.Buffer.Length)
                     {
                         _logQueue.Enqueue("向客户端发送数据包失败", 5);
                     }
@@ -50,9 +53,18 @@ namespace GameGate
         }
     }
 
-    public class QueueData
+    public struct QueueData
     {
-        public Socket Socket;
+        public TSessionInfo Session;
         public byte[] Buffer;
+
+        public async Task<int> SendBuffer()
+        {
+            if (Session.Socket == null || !Session.Socket.Connected)
+            {
+                return 0;
+            }
+            return await Session.Socket.SendAsync(Buffer, SocketFlags.None);
+        }
     }
 }
