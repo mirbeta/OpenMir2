@@ -265,8 +265,6 @@ namespace GameGate
         {
             MessageHeader mesgHeader;
             var buffIndex = 0;
-            var testBuff = Buffer;
-            byte[] myBuff = null;
             try
             {
                 if (BuffLen > 0) //有未处理完成的buff
@@ -330,7 +328,6 @@ namespace GameGate
                                     message.Buffer = msgBuff;
                                     message.DataLen = mesgHeader.nLength;
                                     _sessionManager.SendQueue.TryWrite(message);
-                                    myBuff = msgBuff;
                                     break;
                                 case Grobal2.GM_TEST:
                                     break;
