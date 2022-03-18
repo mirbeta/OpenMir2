@@ -1,7 +1,4 @@
-using LoginGate.Conf;
-using LoginGate.Services;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 
@@ -9,23 +6,20 @@ namespace LoginGate
 {
     public class ServerApp
     {
-        private readonly ServerService _serverService;
-        private readonly ClientManager _clientManager;
-        private readonly SessionManager _sessionManager;
-        private readonly LogQueue _logQueue;
+        private ServerManager _ServerManager => ServerManager.Instance;
+        private ClientManager _clientManager=>ClientManager.Instance;
+        private SessionManager _sessionManager=>SessionManager.Instance;
+        private LogQueue _logQueue => LogQueue.Instance;
 
-        public ServerApp(LogQueue logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager)
+        public ServerApp()
         {
-            _logQueue = logQueue;
-            _serverService = serverService;
-            _clientManager = clientManager;
-            _sessionManager = sessionManager;
+
         }
 
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(_serverService.ProcessReviceMessage);
+            var consumerTask1 = Task.Factory.StartNew(_ServerManager.ProcessReviceMessage);
             gTasks[0] = consumerTask1;
 
             var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
@@ -36,15 +30,15 @@ namespace LoginGate
 
         public void StartService()
         {
-            _serverService.Start();
             _clientManager.Initialization();
+            _ServerManager.Start();
             _clientManager.Start();
         }
 
         public void StopService()
         {
             _logQueue.Enqueue("正在停止服务...", 2);
-            _serverService.Stop();
+            _ServerManager.Stop();
             _clientManager.Stop();
             _logQueue.Enqueue("服务停止成功...", 2);
         }

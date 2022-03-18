@@ -1,36 +1,30 @@
 using LoginGate.Conf;
-using LoginGate.Package;
 using System;
-using System.Diagnostics;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
 
-namespace LoginGate.Services
+namespace LoginGate
 {
     /// <summary>
     /// 客户端服务端(Mir2-LoginGate)
     /// </summary>
     public class ServerService
     {
-        private readonly LogQueue _logQueue;
+        private LogQueue _logQueue=>LogQueue.Instance;
         private readonly ISocketServer _serverSocket;
-        private readonly SessionManager _sessionManager;
-        /// <summary>
-        /// 接收封包（客户端-》网关）
-        /// </summary>
-        private Channel<TMessageData> _snedQueue = null;
-        private readonly ClientManager _clientManager;
-        private readonly ConfigManager _configManager;
+        private readonly string GateAddress;
+        private readonly int GatePort = 0;
+        private readonly ClientThread _clientThread;
+        private SessionManager _sessionManager=>SessionManager.Instance;
+        private ClientManager _clientManager => ClientManager.Instance;
+        private ServerManager _serverManager => ServerManager.Instance;
+        private readonly ConfigManager _configManager = ConfigManager.Instance;
 
-        public ServerService(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
+        public ServerService(int i, GameGateInfo gameGate)
         {
-            _snedQueue = Channel.CreateUnbounded<TMessageData>();
-            _sessionManager = sessionManager;
-            _clientManager = clientManager;
-            _configManager = configManager;
-            _logQueue = logQueue;
+            _clientThread = new ClientThread(i, gameGate);
+            GateAddress = gameGate.sServerAdress;
+            GatePort = gameGate.nGatePort;
             _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -39,31 +33,16 @@ namespace LoginGate.Services
             _serverSocket.Init();
         }
 
-        private ChannelWriter<TMessageData> SendQueue => _snedQueue.Writer;
+        public ClientThread ClientThread => _clientThread;
 
         public void Start()
         {
-            _serverSocket.Start(GateShare.GateAddr, GateShare.GatePort);
+            _serverSocket.Start(GateAddress, GatePort);
         }
 
         public void Stop()
         {
             _serverSocket.Shutdown();
-        }
-
-        /// <summary>
-        /// 处理客户端发过来的消息
-        /// </summary>
-        public async Task ProcessReviceMessage()
-        {
-            while (await _snedQueue.Reader.WaitToReadAsync())
-            {
-                if (_snedQueue.Reader.TryRead(out var message))
-                {
-                    var clientSession = _sessionManager.GetSession(message.SessionId);
-                    clientSession?.HandleUserPacket(message);
-                }
-            }
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -110,7 +89,6 @@ namespace LoginGate.Services
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo userSession;
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
@@ -118,13 +96,10 @@ namespace LoginGate.Services
             {
                 if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
-                    userSession = clientThread.SessionArray[nSockIndex];
+                    var userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
                     var clientSession = _sessionManager.GetSession(e.ConnectionId);
-                    if (clientSession != null)
-                    {
-                        clientSession.UserLeave();
-                    }
+                    clientSession?.UserLeave();
                     _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }
             }
@@ -134,7 +109,7 @@ namespace LoginGate.Services
                 _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
-            _sessionManager.Remove(e.ConnectionId);
+            _sessionManager.CloseSession(e.ConnectionId);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -160,11 +135,11 @@ namespace LoginGate.Services
                 return;
             }
             var data = new byte[token.BytesReceived];
-            Array.Copy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-            var userData = new TMessageData();
-            userData.Body = data;
-            userData.SessionId = connectionId;
-            SendQueue.TryWrite(userData);
+            Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
+            var message = new TMessageData();
+            message.Body = data;
+            message.MessageId = connectionId;
+            _serverManager.SendQueue(message);
         }
     }
 }

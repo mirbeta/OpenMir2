@@ -1,10 +1,11 @@
-namespace LoginGate.Package
+namespace LoginGate
 {
     public struct TMessageData
     {
-        public int SessionId;
+        public int MessageId;
 
         public byte[] Body;
+        
         public int MsgLen => Body.Length;
     }
 }

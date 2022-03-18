@@ -98,8 +98,6 @@ namespace GameGate
         /// <summary>
         /// 新玩家链接
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             var clientThread = _serverManager.GetClientThread();
@@ -171,8 +169,6 @@ namespace GameGate
         /// <summary>
         /// 收到客户端消息
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
             var connectionId = token.ConnectionId;

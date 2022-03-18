@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using LoginGate.Services;
 using Microsoft.Extensions.Hosting;
 
 namespace LoginGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly LogQueue _logQueue;
-        private readonly ClientManager _clientManager;
+        private LogQueue _logQueue=>LogQueue.Instance;
+        private ClientManager _clientManager=>ClientManager.Instance;
 
-        public TimedService(LogQueue logQueue, ClientManager clientManager)
+        public TimedService()
         {
-            _logQueue = logQueue;
-            _clientManager = clientManager;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,7 +20,6 @@ namespace LoginGate
             while (!stoppingToken.IsCancellationRequested)
             {
                 OutMianMessage();
-                _clientManager.CheckSession();
                 _clientManager.ProcessDelayMsg();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }

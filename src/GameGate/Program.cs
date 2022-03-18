@@ -18,6 +18,14 @@ namespace GameGate
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            
+            ThreadPool.SetMaxThreads(200, 200);
+            ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
+            Console.WriteLine(new StringBuilder()
+                .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
+                .Append($"Minimum work threads: {workThreads}, ")
+                .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
+            
             PrintUsage();
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
@@ -27,7 +35,7 @@ namespace GameGate
                     services.AddHostedService<AppService>();
                 });
             Console.CancelKeyPress += Console_CancelKeyPress;
-            await builder.StartAsync();
+            await builder.StartAsync(cts.Token);
             ProcessLoopAsync();
         }
 
@@ -54,7 +62,6 @@ namespace GameGate
 
                 if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
                 {
-                    System.Environment.Exit(Environment.ExitCode);
                     return;
                 }
 
@@ -62,7 +69,7 @@ namespace GameGate
 
                 if (firstTwoCharacters switch
                 {
-                    "/s" => ShowServerStatus(),
+                    "/m" => ShowServerStatus(),
                     _ => null
                 } is Task task)
                 {
@@ -73,7 +80,7 @@ namespace GameGate
             } while (input is not "/exit");
         }
 
-        static async Task ShowServerStatus()
+        private static async Task ShowServerStatus()
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));

@@ -6,11 +6,18 @@ namespace LoginGate
 {
     public class LogQueue
     {
-        private readonly ConfigManager _configManager;
+        private ConfigManager _configManager => ConfigManager.Instance;
 
-        public LogQueue(ConfigManager configManager)
+        private static readonly LogQueue instance = new LogQueue();
+
+        public static LogQueue Instance
         {
-            _configManager = configManager;
+            get { return instance; }
+        }
+        
+        public LogQueue()
+        {
+           
         }
 
         public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();

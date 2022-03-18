@@ -102,7 +102,6 @@ namespace SelGate.Services
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            TSessionInfo userSession;
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
@@ -110,9 +109,9 @@ namespace SelGate.Services
             {
                 if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
-                    userSession = clientThread.SessionArray[nSockIndex];
+                    var userSession = clientThread.SessionArray[nSockIndex];
                     userSession.Socket = null;
-                    var clientSession = _sessionManager.GetSession(e.ConnectionId);
+                    var clientSession = _sessionManager.GetSession(nSockIndex);
                     clientSession?.UserLeave();
                     _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }

@@ -29,7 +29,7 @@ namespace LoginSvr
         {
             _accountDB = accountDB;
             _masSock = masSock;
-            _serverSocket = new ISocketServer(short.MaxValue, 1024);
+            _serverSocket = new ISocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
             _serverSocket.OnClientRead += GSocketClientRead;
@@ -160,6 +160,32 @@ namespace LoginSvr
                 {
                     DecodeUserData(message.UserInfo, message.Msg);
                 }
+            }
+        }
+        
+        private void DecodeUserData(TUserInfo UserInfo, string userData)
+        {
+            string sMsg = string.Empty;
+            try
+            {
+                if (HUtil32.TagCount(userData, '!') <= 0)
+                {
+                    return;
+                }
+                HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+                if (!string.IsNullOrEmpty(sMsg))
+                {
+                    if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
+                    {
+                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
+                        ProcessUserMsg(UserInfo, sMsg);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logQueue.Enqueue("[Exception] LoginService.DecodeUserData");
+                _logQueue.Enqueue(ex.StackTrace);
             }
         }
 
@@ -313,47 +339,7 @@ namespace LoginSvr
                 }
             }
         }
-
-        private void DecodeUserData(TUserInfo UserInfo, string userData)
-        {
-            string sMsg = string.Empty;
-            var nCount = 0;
-            try
-            {
-                if (HUtil32.TagCount(userData, '!') <= 0)
-                {
-                    return;
-                }
-                HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
-                if (!string.IsNullOrEmpty(sMsg))
-                {
-                    if (sMsg.Length >= Grobal2.DEFBLOCKSIZE + 1)
-                    {
-                        sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                        ProcessUserMsg(UserInfo, sMsg);
-                        return;
-                    }
-                }
-                else
-                {
-                    if (nCount >= 1)
-                    {
-                        userData = string.Empty;
-                    }
-                    nCount++;
-                }
-                if (string.IsNullOrEmpty(userData))
-                {
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logQueue.Enqueue("[Exception] LoginService.DecodeUserData");
-                _logQueue.Enqueue(ex.StackTrace);
-            }
-        }
-
+        
         private void SessionDel(Config Config, int nSessionID)
         {
             TConnInfo ConnInfo;

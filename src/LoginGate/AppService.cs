@@ -8,15 +8,13 @@ namespace LoginGate
 {
     public class AppService : BackgroundService
     {
-        private readonly LogQueue _logQueue;
         private readonly ServerApp _serverApp;
-        private readonly ConfigManager _configManager;
+        private readonly LogQueue _logQueue = LogQueue.Instance;
+        private ConfigManager ConfigManager => ConfigManager.Instance;
 
-        public AppService(LogQueue logQueue, ServerApp serverApp, ConfigManager configManager)
+        public AppService(ServerApp serverApp)
         {
-            _logQueue = logQueue;
             _serverApp = serverApp;
-            _configManager = configManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,7 +28,7 @@ namespace LoginGate
             _logQueue.EnqueueDebugging($"GameGate is starting.");
             _logQueue.Enqueue("正在启动服务...", 2);
             GateShare.Initialization();
-            _configManager.LoadConfig();
+            ConfigManager.LoadConfig();
             _serverApp.StartService();
             _logQueue.Enqueue("服务已启动成功...", 2);
             _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using SystemModule.Common;
 
 namespace LoginGate.Conf
@@ -6,18 +7,26 @@ namespace LoginGate.Conf
     public class ConfigManager : IniFile
     {
         public GateConfig GateConfig;
-        public TGameGateList[] m_xGameGateList;
+        public GameGateInfo[] GameGateList;
+        private static string sConfitFile = Path.Combine(AppContext.BaseDirectory, "config.conf");
 
+        private static readonly ConfigManager instance = new ConfigManager(sConfitFile);
+
+        public static ConfigManager Instance
+        {
+            get { return instance; }
+        }
+        
         public ConfigManager(string szFileName) : base(szFileName)
         {
             Load();
             GateConfig = new GateConfig();
-            m_xGameGateList = new TGameGateList[32];
-            for (var i = m_xGameGateList.GetLowerBound(0); i <= m_xGameGateList.GetUpperBound(0); i++)
+            GameGateList = new GameGateInfo[32];
+            for (var i = GameGateList.GetLowerBound(0); i <= GameGateList.GetUpperBound(0); i++)
             {
-                m_xGameGateList[i].sServerAdress = "127.0.0.1";
-                m_xGameGateList[i].nServerPort = 5500;
-                m_xGameGateList[i].nGatePort = 7000 + i;
+                GameGateList[i].sServerAdress = "127.0.0.1";
+                GameGateList[i].nServerPort = 5500;
+                GameGateList[i].nGatePort = 7000 + i;
             }
         }
 
@@ -46,14 +55,14 @@ namespace LoginGate.Conf
             GateConfig.ShowDebugLog = ReadBool("LoginGate", "ShowDebugLog", GateConfig.ShowDebugLog);
             for (int i = 0; i < GateConfig.m_nGateCount; i++)
             {
-                m_xGameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, m_xGameGateList[i].sServerAdress);
-                m_xGameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, m_xGameGateList[i].nServerPort);
-                m_xGameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, m_xGameGateList[i].nGatePort);
+                GameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, GameGateList[i].sServerAdress);
+                GameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, GameGateList[i].nServerPort);
+                GameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, GameGateList[i].nGatePort);
             }
         }
     }
     
-    public struct TGameGateList
+    public struct GameGateInfo
     {
         public string sServerAdress;
         public int nServerPort;

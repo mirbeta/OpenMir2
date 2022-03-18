@@ -6,12 +6,11 @@ namespace GameSvr.Configs
     {
         public StringConfig(string fileName) : base(fileName)
         {
-
+            Load();
         }
 
         public void LoadString()
         {
-            Load();
             string LoadString;
             if (ReadString("Server", "ServerIP", "") == "")
             {
