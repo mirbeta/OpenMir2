@@ -38,11 +38,16 @@ namespace LoginGate
         public void Start()
         {
             _serverSocket.Start(GateAddress, GatePort);
+            _clientThread.Start();
+            _clientThread.RestSessionArray();
+            _logQueue.Enqueue($"登录网关[{GateAddress}:{GatePort}]已启动...", 1);
         }
 
         public void Stop()
         {
+            _clientThread.Stop();
             _serverSocket.Shutdown();
+            _logQueue.Enqueue($"登录网关[{GateAddress}:{GatePort}]停止服务...", 1);
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)

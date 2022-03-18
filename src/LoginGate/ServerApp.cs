@@ -32,14 +32,12 @@ namespace LoginGate
         {
             _clientManager.Initialization();
             _ServerManager.Start();
-            _clientManager.Start();
         }
 
         public void StopService()
         {
             _logQueue.Enqueue("正在停止服务...", 2);
             _ServerManager.Stop();
-            _clientManager.Stop();
             _logQueue.Enqueue("服务停止成功...", 2);
         }
 
