@@ -69,7 +69,7 @@ namespace GameGate
 
                 if (firstTwoCharacters switch
                 {
-                    "/m" => ShowServerStatus(),
+                    "/s" => ShowServerStatus(),
                     _ => null
                 } is Task task)
                 {
