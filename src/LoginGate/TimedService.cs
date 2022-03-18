@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+using SystemModule;
 
 namespace LoginGate
 {
     public class TimedService : BackgroundService
     {
         private LogQueue _logQueue=>LogQueue.Instance;
-        private ClientManager _clientManager=>ClientManager.Instance;
+        private ServerManager ServerManager => ServerManager.Instance;
+        private SessionManager SessionManager => SessionManager.Instance;
+        private int _processDelayTick = 0;
 
         public TimedService()
         {
@@ -20,7 +23,7 @@ namespace LoginGate
             while (!stoppingToken.IsCancellationRequested)
             {
                 OutMianMessage();
-                _clientManager.ProcessDelayMsg();
+                ProcessDelayMsg();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
@@ -47,7 +50,55 @@ namespace LoginGate
                 Console.ResetColor();
             }
         }
-        
+
+        public void ProcessDelayMsg()
+        {
+            if (HUtil32.GetTickCount() - _processDelayTick > 200)
+            {
+                _processDelayTick = HUtil32.GetTickCount();
+                var _clientList = ServerManager.GetServerList();
+                for (var i = 0; i < _clientList.Count; i++)
+                {
+                    if (_clientList[i] == null)
+                    {
+                        continue;
+                    }
+                    if (_clientList[i].ClientThread == null)
+                    {
+                        continue;
+                    }
+                    if (_clientList[i].ClientThread.SessionArray == null)
+                    {
+                        continue;
+                    }
+                    for (var j = 0; j < _clientList[i].ClientThread.SessionArray.Length; j++)
+                    {
+                        var session = _clientList[i].ClientThread.SessionArray[j];
+                        if (session == null)
+                        {
+                            continue;
+                        }
+                        if (session.Socket == null)
+                        {
+                            continue;
+                        }
+                        var userSession = SessionManager.GetSession(session.SocketId);
+                        if (userSession == null)
+                        {
+                            continue;
+                        }
+                        var success = false;
+                        userSession.HandleDelayMsg(ref success);
+                        if (success)
+                        {
+                            SessionManager.CloseSession(session.SocketId);
+                            _clientList[i].ClientThread.SessionArray[j].Socket = null;
+                        }
+                    }
+                }
+            }
+        }
+
 
         public override void Dispose()
         {

@@ -11,7 +11,6 @@ namespace LoginGate
     /// </summary>
     public class ClientManager
     {
-        private readonly IList<ClientThread> _clientList;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private int _processClearSessionTick = 0;
         private int _processDelayTick = 0;
@@ -30,7 +29,6 @@ namespace LoginGate
         public ClientManager()
         {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
-            _clientList = new List<ClientThread>();
         }
 
         public void Initialization()
@@ -46,31 +44,6 @@ namespace LoginGate
                     return;
                 }
                 serverManager.AddServer(new ServerService(i, gameGate));
-            }
-        }
-
-        public void Start()
-        {
-            for (var i = 0; i < _clientList.Count; i++)
-            {
-                if (_clientList[i] == null)
-                {
-                    continue;
-                }
-                _clientList[i].Start();
-                _clientList[i].RestSessionArray();
-            }
-        }
-
-        public void Stop()
-        {
-            for (var i = 0; i < _clientList.Count; i++)
-            {
-                if (_clientList[i] == null)
-                {
-                    continue;
-                }
-                _clientList[i].Stop();
             }
         }
 
@@ -115,54 +88,6 @@ namespace LoginGate
                 return GateShare.ServerGateList[random];
             }
             return null;
-        }
-
-        private IList<ClientThread> GetAllClient()
-        {
-            return _clientList;
-        }
-
-        public void ProcessDelayMsg()
-        {
-            if (HUtil32.GetTickCount() - _processDelayTick > 200)
-            {
-                _processDelayTick = HUtil32.GetTickCount();
-                for (var i = 0; i < _clientList.Count; i++)
-                {
-                    if (_clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    if (_clientList[i].SessionArray == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < _clientList[i].SessionArray.Length; j++)
-                    {
-                        var session = _clientList[i].SessionArray[j];
-                        if (session == null)
-                        {
-                            continue;
-                        }
-                        if (session.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userSession = _sessionManager.GetSession(session.SocketId);
-                        if (userSession == null)
-                        {
-                            continue;
-                        }
-                        var success = false;
-                        userSession.HandleDelayMsg(ref success);
-                        if (success)
-                        {
-                            _sessionManager.CloseSession(session.SocketId);
-                            _clientList[i].SessionArray[j].Socket = null;
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
