@@ -1,10 +1,10 @@
-using LoginGate.Package;
 using System;
+using LoginGate.Conf;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
 
-namespace LoginGate.Services
+namespace LoginGate
 {
     /// <summary>
     /// 网关客户端(LoginGate-Client)
@@ -19,7 +19,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 最大用户数
         /// </summary>
-        public int MaxSession = 2000;
+        public int MaxSession = 10000;
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -43,13 +43,13 @@ namespace LoginGate.Services
         /// <summary>
         /// 会话管理
         /// </summary>
-        private readonly SessionManager _sessionManager;
+        private SessionManager _sessionManager => SessionManager.Instance;
         /// <summary>
         /// 日志
         /// </summary>
-        private readonly LogQueue _logQueue;
+        private LogQueue _logQueue = LogQueue.Instance;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
+        public ClientThread(int clientId, GameGateInfo gateInfo)
         {
             ClientId = clientId;
             ClientSocket = new IClientScoket();
@@ -57,11 +57,9 @@ namespace LoginGate.Services
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address = serverAddr;
-            ClientSocket.Port = serverPort;
+            ClientSocket.Address = gateInfo.sServerAdress;
+            ClientSocket.Port = gateInfo.nServerPort;
             SessionArray = new TSessionInfo[MaxSession];
-            _sessionManager = sessionManager;
-            _logQueue = logQueue;
         }
 
         public bool IsConnected => isConnected;
@@ -162,7 +160,7 @@ namespace LoginGate.Services
                 return;
             }
             var userData = new TMessageData();
-            userData.SessionId = sSessionId;
+            userData.MessageId = sSessionId;
             userData.Body = e.Buff;
             _sessionManager.SendQueue.TryWrite(userData);
         }

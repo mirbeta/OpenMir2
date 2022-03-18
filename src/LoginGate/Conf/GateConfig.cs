@@ -10,7 +10,7 @@ namespace LoginGate.Conf
         public int m_nShowLogLevel;
         public bool ShowDebugLog;
         public int m_nGateCount;
-        public TGameGateList[] m_xGameGateList;
+        public GameGateInfo[] m_xGameGateList;
         public bool m_fCheckNewIDOfIP;
         public bool m_fCheckNullSession;
         public bool m_fOverSpeedSendBack;
@@ -27,7 +27,7 @@ namespace LoginGate.Conf
         public GateConfig()
         {
             m_nGateCount = 1;
-            m_xGameGateList = new TGameGateList[32];
+            m_xGameGateList = new GameGateInfo[32];
             for (int i = 0; i < m_xGameGateList.Length; i++)
             {
                 m_xGameGateList[i].sServerAdress = "127.0.0.1";

@@ -1,4 +1,3 @@
-using LoginGate.Package;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -6,7 +5,7 @@ using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace LoginGate.Services
+namespace LoginGate
 {
     public class SessionManager
     {
@@ -16,6 +15,13 @@ namespace LoginGate.Services
         private readonly Channel<TMessageData> _sendQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
+        private static readonly SessionManager instance = new SessionManager();
+
+        public static SessionManager Instance
+        {
+            get { return instance; }
+        }
+        
         public SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
@@ -33,7 +39,7 @@ namespace LoginGate.Services
             {
                 if (_sendQueue.Reader.TryRead(out var message))
                 {
-                    var userSession = GetSession(message.SessionId);
+                    var userSession = GetSession(message.MessageId);
                     if (userSession == null)
                     {
                         return;
@@ -48,15 +54,6 @@ namespace LoginGate.Services
             _sessionMap.TryAdd(sessionId, clientSession);
         }
 
-        public void CloseSession(int sessionId)
-        {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                _sessionMap[sessionId].Session.Socket.Close();
-            }
-            Remove(sessionId);
-        }
-
         public ClientSession GetSession(int sessionId)
         {
             if (_sessionMap.ContainsKey(sessionId))
@@ -66,11 +63,15 @@ namespace LoginGate.Services
             return null;
         }
         
-        public void Remove(int sessionId)
+        public void CloseSession(int sessionId)
         {
-            if (!_sessionMap.TryRemove(sessionId, out var clientSession))
+            if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
-               Console.WriteLine($"删除用户会话失败:[{sessionId}]");
+                clientSession.Session.Socket.Close();
+            }
+            else
+            {
+                Console.WriteLine($"删除用户会话失败:[{sessionId}]");
             }
         }
 

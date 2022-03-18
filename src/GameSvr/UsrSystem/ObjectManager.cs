@@ -21,7 +21,7 @@ namespace GameSvr
 
         public ObjectManager()
         {
-            Debug.WriteLine("Start Clear Object Thread...");
+            //Debug.WriteLine("Start Clear Object Thread...");
         }
 
         public void Add(int actorId, TBaseObject actor)
@@ -60,7 +60,7 @@ namespace GameSvr
             _actors.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-                M2Share.MainOutMessage($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
+               // M2Share.MainOutMessage($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
             }
         }
 
@@ -70,7 +70,7 @@ namespace GameSvr
             _ohter.TryRemove(actorId, out actor);
             if (actor != null)
             {
-                M2Share.MainOutMessage($"清理死亡对象 [{actorId}]");
+                //M2Share.MainOutMessage($"清理死亡对象 [{actorId}]");
             }
         }
 
@@ -104,7 +104,7 @@ namespace GameSvr
                     }
                 }
             }
-            Debug.WriteLine($"在线人物:[{playCount}] 怪物总数:[{monsterCount}]");
+            //Debug.WriteLine($"在线人物:[{playCount}] 怪物总数:[{monsterCount}]");
         }
     }
 }

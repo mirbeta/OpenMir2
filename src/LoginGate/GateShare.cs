@@ -1,4 +1,3 @@
-using LoginGate.Services;
 using System.Collections.Generic;
 using SystemModule.Common;
 
@@ -6,11 +5,6 @@ namespace LoginGate
 {
     public class GateShare
     {
-        public static string GateAddr = "*";
-        /// <summary>
-        /// 登录网关端口
-        /// </summary>
-        public static int GatePort = 7000;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
@@ -30,7 +24,7 @@ namespace LoginGate
         /// <summary>
         /// 会话超时时间
         /// </summary>
-        public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        public static long dwSessionTimeOutTime = 60 * 1000;
         public static IList<ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()

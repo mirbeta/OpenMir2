@@ -16,13 +16,13 @@ namespace SelGate
         private bool _KickFlag = false;
         private int _nSvrObject = 0;
         private int _dwClientTimeOutTick = 0;
-        private readonly ClientThread _lastGameSvr;
+        private readonly ClientThread _lastDBSvr;
         private readonly ConfigManager _configManager;
 
         public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
             _session = session;
-            _lastGameSvr = clientThread;
+            _lastDBSvr = clientThread;
             _configManager = configManager;
             _dwClientTimeOutTick = HUtil32.GetTickCount();
         }
@@ -65,7 +65,7 @@ namespace SelGate
                 case Grobal2.CM_SELCHR:
                     _dwClientTimeOutTick = HUtil32.GetTickCount();
                     var sendStr = $"%A{(int)_session.Socket.Handle}/{HUtil32.GetString(userData.Body, 0, userData.MsgLen)}$";//todo 待优化
-                    _lastGameSvr.SendData(sendStr);
+                    _lastDBSvr.SendData(sendStr);
                     break;
                 default:
                     Console.WriteLine($"错误的数据包索引:[{CltCmd.Cmd}]");
@@ -122,7 +122,7 @@ namespace SelGate
             TCmdPack Cmd;
             byte[] TempBuf = new byte[1048 - 1 + 1];
             byte[] SendBuf = new byte[1048 - 1 + 1];
-            if ((_lastGameSvr == null) || !_lastGameSvr.IsConnected)
+            if ((_lastDBSvr == null) || !_lastDBSvr.IsConnected)
             {
                 return;
             }
@@ -156,7 +156,7 @@ namespace SelGate
         public void UserEnter()
         {
             var sendStr = $"%K{(int)_session.Socket.Handle}/{_session.ClientIP}/{_session.ClientIP}$";
-            _lastGameSvr.SendData(sendStr);
+            _lastDBSvr.SendData(sendStr);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace SelGate
         public void UserLeave()
         {
             var szSenfBuf = $"%L{(int)_session.Socket.Handle}$";
-            _lastGameSvr.SendData(szSenfBuf);
+            _lastDBSvr.SendData(szSenfBuf);
             _KickFlag = false;
         }
     }

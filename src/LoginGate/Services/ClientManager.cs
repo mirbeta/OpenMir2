@@ -1,11 +1,10 @@
 using LoginGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using SystemModule;
 
-namespace LoginGate.Services
+namespace LoginGate
 {
     /// <summary>
     /// GameGate->GameSvr
@@ -13,36 +12,40 @@ namespace LoginGate.Services
     public class ClientManager
     {
         private readonly IList<ClientThread> _clientList;
-        private readonly SessionManager _sessionManager;
-        private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        private readonly LogQueue _logQueue;
         private int _processClearSessionTick = 0;
         private int _processDelayTick = 0;
+        private SessionManager _sessionManager => SessionManager.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private ServerManager serverManager => ServerManager.Instance;
 
-        public ClientManager(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager)
+        private static readonly ClientManager instance = new ClientManager();
+
+        public static ClientManager Instance
         {
-            _logQueue = logQueue;
-            _sessionManager = sessionManager;
-            _configManager = configManager;
+            get { return instance; }
+        }
+        
+        public ClientManager()
+        {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
             _clientList = new List<ClientThread>();
         }
 
         public void Initialization()
         {
-            var serverAddr = string.Empty;
-            var serverPort = 0;
             for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
             {
-                serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
-                serverPort = _configManager.m_xGameGateList[i].nServerPort;
+                var gameGate = _configManager.GameGateList[i];
+                var serverAddr = gameGate.sServerAdress;
+                var serverPort = gameGate.nGatePort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logQueue.EnqueueDebugging($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    _logQueue.Enqueue($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
-                _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
+                serverManager.AddServer(new ServerService(i, gameGate));
             }
         }
 
@@ -145,59 +148,20 @@ namespace LoginGate.Services
                         {
                             continue;
                         }
-                        var userClient = _sessionManager.GetSession(session.SocketId);
-                        if (userClient == null)
+                        var userSession = _sessionManager.GetSession(session.SocketId);
+                        if (userSession == null)
                         {
                             continue;
                         }
                         var success = false;
-                        userClient.HandleDelayMsg(ref success);
+                        userSession.HandleDelayMsg(ref success);
                         if (success)
                         {
-                            _sessionManager.Remove(session.SocketId);
+                            _sessionManager.CloseSession(session.SocketId);
                             _clientList[i].SessionArray[j].Socket = null;
                         }
                     }
                 }
-            }
-        }
-
-        public void CheckSession()
-        {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
-            {
-                _processClearSessionTick = HUtil32.GetTickCount();
-                _logQueue.EnqueueDebugging("清理超时会话开始工作...");
-                TSessionInfo UserSession;
-                var clientList = GetAllClient();
-                for (var i = 0; i < clientList.Count; i++)
-                {
-                    if (clientList[i] == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < clientList[i].MaxSession; j++)
-                    {
-                        UserSession = clientList[i].SessionArray[j];
-                        if (UserSession.Socket != null)
-                        {
-                            if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime)//清理超时用户会话 
-                            {
-                                UserSession.Socket.Close();
-                                UserSession.Socket = null;
-                                _sessionManager.Remove(UserSession.SocketId);
-                                _logQueue.EnqueueDebugging("清理超时会话,关闭Socket.");
-                            }
-                        }
-                    }
-                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
-                    {
-                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
-                    }
-                    CheckSessionStatus(clientList[i]);
-                }
-                _logQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 
@@ -226,7 +190,6 @@ namespace LoginGate.Services
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
                 _logQueue.Enqueue($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]", 5);
-                return;
             }
         }
     }

@@ -37,12 +37,9 @@ namespace MakePlayer
         public string m_sMapTitle = string.Empty;
         public string m_sMapName = string.Empty;
         public int m_nMapMusic = 0;
-        //public ArrayList m_MagicList;
         public bool m_boActionLock = false;
         public long m_dwNotifyEventTick = 0;
         public int m_nReceiveCount = 0;
-        //public TUserEntry m_NewIdRetryUE;
-        //public TUserEntryAdd m_NewIdRetryAdd;
         public string m_sMakeNewId = string.Empty;
         public bool m_boTimerMainBusy = false;
         public bool m_boMapMovingWait = false;
