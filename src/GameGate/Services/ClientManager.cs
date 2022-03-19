@@ -9,7 +9,6 @@ namespace GameGate
     public class ClientManager
     {
         private static readonly ClientManager instance = new ClientManager();
-
         public static ClientManager Instance => instance;
 
         private ServerManager ServerManager => ServerManager.Instance;

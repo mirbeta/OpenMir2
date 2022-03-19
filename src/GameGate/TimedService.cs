@@ -15,10 +15,11 @@ namespace GameGate
 
         private int _processDelayTick = 0;
         private int _processClearSessionTick = 0;
+        private int _kepAliveTick = 0;
 
         public TimedService()
         {
-
+            _kepAliveTick = HUtil32.GetTickCount();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,6 +29,7 @@ namespace GameGate
                 OutMianMessage();
                 ProcessDelayMsg();
                 ClearSession();
+                KeepAlive();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
@@ -50,6 +52,39 @@ namespace GameGate
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine(message);
                     Console.ResetColor();
+                }
+            }
+        }
+
+        /// <summary>
+        /// GameGate->GameSvr 心跳
+        /// </summary>
+        private void KeepAlive()
+        {
+            if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 2000)
+            {
+                _kepAliveTick = HUtil32.GetTickCount();
+                var cmdPacket = new TSvrCmdPack();
+                cmdPacket.Flag = Grobal2.RUNGATECODE;
+                cmdPacket.SockID = 0;
+                cmdPacket.Cmd = Grobal2.GM_CHECKCLIENT;
+                cmdPacket.DataLen = 0;
+                var _serverList = _serverManager.GetServerList();
+                for (int i = 0; i < _serverList.Count; i++)
+                {
+                    if (_serverList[i] == null)
+                    {
+                        continue;
+                    }
+                    if (_serverList[i].ClientThread == null)
+                    {
+                        continue;
+                    }
+                    if (!_serverList[i].ClientThread.IsConnected)
+                    {
+                        continue;
+                    }
+                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
                 }
             }
         }

@@ -29,18 +29,18 @@ namespace GameGate
         private TCheckStep m_Stat;
         private long m_FinishTick = 0;
 
-        public ClientSession(TSessionInfo session, ClientThread clientThread)
+        public ClientSession(TSessionInfo session, ClientThread clientThread,SendQueue sendQueue)
         {
-            _msgList = new List<TDelayMsg>();
             _session = session;
             lastGameSvr = clientThread;
+            _sendQueue = sendQueue;
+            _msgList = new List<TDelayMsg>();
             _hwidFilter = GateShare.HWFilter;
             _fOverClientCount = false;
             m_KickFlag = false;
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
-            _sendQueue = SendQueue.Instance;
         }
 
         public GameSpeed GetGameSpeed()
@@ -697,15 +697,17 @@ namespace GameGate
                         {
                             //clen := EncodeBuf(nABuf + SizeOf(TCmdPack), nDeCodeLen - SizeOf(TCmdPack), nBuffer + SizeOf(TCmdPack)) + 1;
 
-                            var sendBuffer = new byte[message.Buffer.Length - TCmdPack.PackSize];
-                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - TCmdPack.PackSize, sendBuffer) + 1;
+                            //todo 有封包问题,正在排查
 
-                            var len = message.BufferLen - 19;
-                            cmdPack.DataLen = TCmdPack.PackSize + len + 1;
-                            var bufferLen = TSvrCmdPack.PackSize + cmdPack.DataLen;
-                            BodyBuffer = new byte[bufferLen];
+                            var sendBuffer = new byte[message.Buffer.Length - TCmdPack.PackSize + 1];
+                            var sss = message.Buffer[nDeCodeLen..^1];
+                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - TCmdPack.PackSize, sendBuffer);
+
+                            cmdPack.DataLen = TCmdPack.PackSize + tLen + 1;
+
+                            BodyBuffer = new byte[TSvrCmdPack.PackSize + cmdPack.DataLen];
                             Array.Copy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, TCmdPack.PackSize);
-                            Array.Copy(tempBuff, 16, BodyBuffer, 32, len); //消息体
+                            Array.Copy(tempBuff, 16, BodyBuffer, 32, tLen); //消息体
                         }
                         else
                         {
@@ -941,7 +943,7 @@ namespace GameGate
         /// </summary>
         public void ProcessSvrData(TMessageData message)
         {
-            byte[] pzsSendBuf = null;
+            byte[] pzsSendBuf;
             if (message.BufferLen <= 0)
             {
                 pzsSendBuf = new byte[(0 - message.BufferLen) + 2];

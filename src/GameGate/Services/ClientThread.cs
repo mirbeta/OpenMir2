@@ -260,7 +260,6 @@ namespace GameGate
 
         const int headerMessageSize = 20;
 
-        //todo 有封包堆积处理问题，导致游戏数据
         private void ProcReceiveBuffer(byte[] Buffer, int nMsgLen)
         {
             MessageHeader mesgHeader;
@@ -375,6 +374,10 @@ namespace GameGate
             }
         }
 
+        /// <summary>
+        /// 发送消息到GameSvr
+        /// </summary>
+        /// <param name="sendBuffer"></param>
         public void SendBuffer(byte[] sendBuffer)
         {
             if (!ClientSocket.IsConnected) return;

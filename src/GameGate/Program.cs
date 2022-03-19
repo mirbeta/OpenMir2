@@ -99,6 +99,7 @@ namespace GameGate
             table.AddColumn("[yellow]Count[/]");
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
+            table.AddColumn("[yellow]Queue[/]");
 
             await AnsiConsole.Live(table)
                  .AutoClear(true)
@@ -108,14 +109,14 @@ namespace GameGate
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
                      {
-                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
+                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
                      while (await _timer.WaitForNextTickAsync(cts.Token))
                      {
                          for (int i = 0; i < serverList.Count; i++)
                          {
-                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal) = serverList[i].GetStatus();
+                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal,queueCount) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
@@ -123,6 +124,7 @@ namespace GameGate
                              table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
                              table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
                              table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
+                             table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
                          }
                          ctx.Refresh();
                      }
