@@ -307,7 +307,7 @@ namespace GameSvr
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 var data = new byte[memoryStream.Length];
                 memoryStream.Read(data, 0, data.Length);
-                M2Share.RunSocket.AddGateBuffer(m_nGateIdx, data);
+                M2Share.GateManager.AddGateBuffer(m_nGateIdx, data);
             }
         }
 
@@ -363,9 +363,9 @@ namespace GameSvr
                 //backingStream.Write((byte)0);
             }
             memoryStream.Seek(0, SeekOrigin.Begin);
-            var buffer = new byte[memoryStream.Length];
-            memoryStream.Read(buffer, 0, buffer.Length);
-            M2Share.RunSocket.AddGateBuffer(m_nGateIdx, buffer);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            M2Share.GateManager.AddGateBuffer(m_nGateIdx, data);
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
