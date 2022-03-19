@@ -10,25 +10,29 @@ namespace GameGate
     {
         private static readonly SessionManager instance = new SessionManager();
 
-        public static SessionManager Instance
-        {
-            get { return instance; }
-        }
-        
+        public static SessionManager Instance => instance;
+
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
         private readonly Channel<TMessageData> _sendMsgList = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
-        public SessionManager()
+        private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
             _sendMsgList = Channel.CreateUnbounded<TMessageData>();
         }
-        
-        public ChannelWriter<TMessageData> SendQueue => _sendMsgList.Writer;
-        
+
+        /// <summary>
+        /// 添加到消息处理队列
+        /// </summary>
+        /// <param name="messageData"></param>
+        public void AddToQueue(TMessageData messageData)
+        {
+            _sendMsgList.Writer.TryWrite(messageData);
+        }
+
         /// <summary>
         /// 处理M2发过来的消息
         /// </summary>
@@ -61,12 +65,12 @@ namespace GameGate
             }
             return null;
         }
-        
-        public void Remove(int sessionId)
+
+        public void CloseSession(int sessionId)
         {
-            if (_sessionMap.TryRemove(sessionId, out var clientSession))
+            if (!_sessionMap.TryRemove(sessionId, out var clientSession))
             {
-               
+
             }
         }
 

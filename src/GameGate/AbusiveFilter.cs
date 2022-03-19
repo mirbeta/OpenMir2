@@ -8,7 +8,7 @@ namespace GameGate
     {
         private readonly StringList AbuseList;
         private static readonly AbusiveFilter instance = new AbusiveFilter();
-        private ConfigManager _configManager=>ConfigManager.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
 
         public static AbusiveFilter Instance
         {
@@ -34,25 +34,25 @@ namespace GameGate
                 {
                     switch (_configManager.GateConfig.ChatFilterMethod)
                     {
-                        case  TChatFilterMethod.ctDropconnect:
+                        case TChatFilterMethod.ctDropconnect:
                             kick = false;
                             break;
                         case TChatFilterMethod.ctReplaceAll:
                             chatMsg = _configManager.GateConfig.m_szChatFilterReplace;
                             break;
-                            case TChatFilterMethod.ctReplaceOne:
-                                var szRplace = string.Empty;
-                                for (int j = 0; j < AbuseList[i].Length; j++)
+                        case TChatFilterMethod.ctReplaceOne:
+                            var szRplace = string.Empty;
+                            for (int j = 0; j < AbuseList[i].Length; j++)
+                            {
+                                szRplace = szRplace + "*";
+                                chatMsg = chatMsg.Replace(chatMsg, szRplace);
+                                rplaceCount++;
+                                if (rplaceCount > 4)
                                 {
-                                    szRplace = szRplace + "*";
-                                    chatMsg = chatMsg.Replace(chatMsg, szRplace);
-                                    rplaceCount++;
-                                    if (rplaceCount > 4)
-                                    {
-                                        break;
-                                    }
+                                    break;
                                 }
-                                break;
+                            }
+                            break;
                     }
                 }
             }

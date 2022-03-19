@@ -10,43 +10,38 @@ namespace GameGate
     {
         private static readonly ClientManager instance = new ClientManager();
 
-        public static ClientManager Instance
-        {
-            get { return instance; }
-        }
+        public static ClientManager Instance => instance;
 
-        private ServerManager serverManager => ServerManager.Instance;
+        private ServerManager ServerManager => ServerManager.Instance;
+        private LogQueue LogQueue => LogQueue.Instance;
+        private ConfigManager ConfigManager => ConfigManager.Instance;
+
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        
-        public ClientManager()
+
+        private ClientManager()
         {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
 
-        private LogQueue _logQueue => LogQueue.Instance;
-        private ConfigManager _configManager => ConfigManager.Instance;
-
         public void Initialization()
         {
-            for (var i = 0; i < _configManager.GateConfig.GateCount; i++)
+            for (var i = 0; i < ConfigManager.GateConfig.GateCount; i++)
             {
-                var gameGate = _configManager.GameGateList[i];
+                var gameGate = ConfigManager.GameGateList[i];
                 var serverAddr = gameGate.sServerAdress;
                 var serverPort = gameGate.nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
+                    LogQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
-                serverManager.AddServer(new ServerService(i, gameGate));
+                ServerManager.AddServer(new ServerService(i, gameGate));
             }
         }
 
         /// <summary>
         /// 添加用户对饮网关
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="clientThread"></param>
         public void AddClientThread(int connectionId, ClientThread clientThread)
         {
             _clientThreadMap.TryAdd(connectionId, clientThread); //链接成功后建立对应关系
@@ -55,7 +50,6 @@ namespace GameGate
         /// <summary>
         /// 获取用户链接对应网关
         /// </summary>
-        /// <param name="connectionId"></param>
         /// <returns></returns>
         public ClientThread GetClientThread(int connectionId)
         {
@@ -69,7 +63,6 @@ namespace GameGate
         /// <summary>
         /// 从字典删除用户和网关对应关系
         /// </summary>
-        /// <param name="connectionId"></param>
         public void DeleteClientThread(int connectionId)
         {
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
@@ -78,7 +71,6 @@ namespace GameGate
         /// <summary>
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
-        /// <param name="clientThread"></param>
         public void CheckSessionStatus(ClientThread clientThread)
         {
             if (clientThread.GateReady)
@@ -91,7 +83,7 @@ namespace GameGate
             {
                 clientThread.ReConnected();
                 clientThread.CheckServerFailCount++;
-                _logQueue.EnqueueDebugging($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                LogQueue.EnqueueDebugging($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                 return;
             }
             clientThread.CheckServerIsTimeOut();

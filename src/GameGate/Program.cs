@@ -18,15 +18,24 @@ namespace GameGate
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            
+
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
             Console.WriteLine(new StringBuilder()
                 .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
                 .Append($"Minimum work threads: {workThreads}, ")
                 .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
-            
+
             PrintUsage();
+            Console.CancelKeyPress += delegate
+            {
+                GateShare.ShowLog = true;
+                if (_timer != null)
+                {
+                    _timer.Dispose();
+                }
+                AnsiConsole.Reset();
+            };
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -34,22 +43,20 @@ namespace GameGate
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 });
-            Console.CancelKeyPress += Console_CancelKeyPress;
             await builder.StartAsync(cts.Token);
-            ProcessLoopAsync();
+            await ProcessLoopAsync();
+            await StopAsync();
         }
 
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        static async Task StopAsync()
         {
-            GateShare.ShowLog = true;
-            if (_timer != null)
+            await AnsiConsole.Status().StartAsync("Disconnecting...", async ctx =>
             {
-                _timer.Dispose();
-            }
-            //e.Cancel = true;
+                ctx.Spinner(Spinner.Known.Dots);
+            });
         }
 
-        static async void ProcessLoopAsync()
+        static async Task ProcessLoopAsync()
         {
             string? input = null;
             do

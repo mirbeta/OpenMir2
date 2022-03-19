@@ -338,7 +338,7 @@ namespace GameGate
             //g_BlockIPAreaList = new object();
         }
     }
-        
+
     public class HardwareCnt
     {
         public byte[] HWID;
@@ -402,7 +402,7 @@ namespace GameGate
 
         public void LoadDenyList()
         {
-            var ls = new  StringList();
+            var ls = new StringList();
             if (!File.Exists(_configManager.GateConfig.m_szBlockHWIDFileName))
             {
                 ls.SaveToFile(_configManager.GateConfig.m_szBlockHWIDFileName);

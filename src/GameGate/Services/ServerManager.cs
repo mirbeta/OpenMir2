@@ -62,6 +62,10 @@ namespace GameGate
             }
         }
 
+        /// <summary>
+        /// 把客户端的消息添加到队列给服务端处理
+        /// </summary>
+        /// <param name="messageData"></param>
         public void SendQueue(TMessageData messageData)
         {
             _reviceMsgList.Writer.TryWrite(messageData);
