@@ -903,8 +903,6 @@ namespace SystemModule
         public const int CM_SMUGGLE_SUCESS = 41903;
         public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
-        public const string sSTATUS_FAIL = "+FL/";
-        public const string sSTATUS_GOOD = "+GD/";
 
         public static TDefaultMessage MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {

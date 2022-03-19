@@ -274,7 +274,7 @@ namespace GameSvr
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.RunSocket.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.nPayMode);
+                    M2Share.GateManager.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.nPayMode);
                 }
             }
             catch (Exception e)

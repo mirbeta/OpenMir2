@@ -28,7 +28,9 @@ namespace GameSvr
             if (M2Share.boStartReady)
             {
                 _connectTimer = new Timer(ServiceTimer, null, 1000, 3000);
-                await M2Share.RunSocket.StartConsumer(stoppingToken);
+                M2Share.GateManager.Initialization();
+                M2Share.GateManager.Start();
+                await M2Share.GateManager.StartMessageQueue(stoppingToken);
             }
         }
 

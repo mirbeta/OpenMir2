@@ -230,7 +230,7 @@ namespace GameSvr
                 }
                 if (!LoadHumFromDB(LoadDBInfo, ref boReTryLoadDB))
                 {
-                    M2Share.RunSocket.CloseUser(LoadDBInfo.nGateIdx, LoadDBInfo.nSocket);
+                    M2Share.GateManager.CloseUser(LoadDBInfo.nGateIdx, LoadDBInfo.nSocket);
                 }
                 else
                 {
@@ -335,7 +335,7 @@ namespace GameSvr
             }
             if (!RunDB.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sCharName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
             {
-                M2Share.RunSocket.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
+                M2Share.GateManager.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
             else
             {
