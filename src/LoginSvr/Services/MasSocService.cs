@@ -8,14 +8,14 @@ using SystemModule.Sockets;
 
 namespace LoginSvr
 {
-    public class MasSocService: IService
+    public class MasSocService : IService
     {
         private readonly LogQueue _logQueue;
         private readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
         private readonly ConfigManager _configManager;
 
-        public MasSocService(LogQueue logQueue,ConfigManager configManager)
+        public MasSocService(LogQueue logQueue, ConfigManager configManager)
         {
             m_ServerList = new List<TMsgServerInfo>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -170,7 +170,7 @@ namespace LoginSvr
                 }
             }
         }
-        
+
         private void RefServerLimit(string sServerName)
         {
             int nCount = 0;
@@ -272,7 +272,7 @@ namespace LoginSvr
                 }
                 m_ServerList.Add(MsgServerSort);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue(ex.StackTrace);
             }
@@ -350,7 +350,7 @@ namespace LoginSvr
                 }
                 result = nCount;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue(ex.StackTrace);
             }
@@ -484,7 +484,7 @@ namespace LoginSvr
                 }
                 result = nStatus;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logQueue.Enqueue(ex.StackTrace);
             }

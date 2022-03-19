@@ -162,7 +162,7 @@ namespace LoginSvr
                 }
             }
         }
-        
+
         private void DecodeUserData(TUserInfo UserInfo, string userData)
         {
             string sMsg = string.Empty;
@@ -339,7 +339,7 @@ namespace LoginSvr
                 }
             }
         }
-        
+
         private void SessionDel(Config Config, int nSessionID)
         {
             TConnInfo ConnInfo;
