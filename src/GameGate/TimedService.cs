@@ -59,7 +59,7 @@ namespace GameGate
         /// <summary>
         /// GameGate->GameSvr 心跳
         /// </summary>
-        private void KeepAlive()
+        private async void KeepAlive()
         {
             if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 2000)
             {
@@ -84,7 +84,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
+                    await _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
                 }
             }
         }

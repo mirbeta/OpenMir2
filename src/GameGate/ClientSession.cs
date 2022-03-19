@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 
@@ -62,7 +63,7 @@ namespace GameGate
         /// 这里所有的包都大于12个字节
         /// </summary>
         /// <param name="message"></param>
-        public void HandleUserPacket(TMessageData message)
+        public async void HandleUserPacket(TMessageData message)
         {
             var sMsg = string.Empty;
             int dwCurrentTick = 0;
@@ -583,7 +584,7 @@ namespace GameGate
                                             pszSendBuf[0] = (byte)'#';
                                             var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetPacket(0), TCmdPack.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                            lastGameSvr.SendBuffer(pszSendBuf);
+                                            await lastGameSvr.SendBuffer(pszSendBuf);
                                             return;
                                         }
                                     }
@@ -716,7 +717,7 @@ namespace GameGate
                             Array.Copy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
                         }
                         Array.Copy(cmdPack.GetPacket(), 0, BodyBuffer, 0, TSvrCmdPack.PackSize);//复制消息头
-                        lastGameSvr.SendBuffer(BodyBuffer);
+                        await lastGameSvr.SendBuffer(BodyBuffer);
                         break;
                     }
             }
@@ -725,7 +726,7 @@ namespace GameGate
         /// <summary>
         /// 处理延时消息
         /// </summary>
-        public void HandleDelayMsg()
+        public async Task HandleDelayMsg()
         {
             if (GetDelayMsgCount() <= 0)
             {
@@ -736,7 +737,7 @@ namespace GameGate
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    lastGameSvr.SendBuffer(delayMsg.pBuffer);//发送消息到M2
+                    await lastGameSvr.SendBuffer(delayMsg.Buffer);//发送消息到M2
                     var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
@@ -884,7 +885,7 @@ namespace GameGate
                 delayMsg.nDir = _delayMsg.nDir;
                 delayMsg.nCmd = _delayMsg.nCmd;
                 delayMsg.nBufLen = _delayMsg.nBufLen;
-                delayMsg.pBuffer = _delayMsg.pBuffer;
+                delayMsg.Buffer = _delayMsg.Buffer;
                 _delayMsg = null;
                 result = true;
             }
@@ -909,7 +910,7 @@ namespace GameGate
                 if (!string.IsNullOrEmpty(sMsg))
                 {
                     var bMsg = HUtil32.GetBytes(sMsg);
-                    pDelayMsg.pBuffer = bMsg;
+                    pDelayMsg.Buffer = bMsg;
                 }
                 _msgList.Add(pDelayMsg);
             }
@@ -929,7 +930,7 @@ namespace GameGate
                 pDelayMsg.nCmd = nIdx;
                 pDelayMsg.dwDelayTime = HUtil32.GetTickCount() + dwDelay;
                 pDelayMsg.nBufLen = nLen;
-                pDelayMsg.pBuffer = pMsg;
+                pDelayMsg.Buffer = pMsg;
                 _msgList.Add(pDelayMsg);
             }
             if (nMid > 0)

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -235,7 +236,7 @@ namespace GameGate
             SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, "");
         }
 
-        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
+        private async Task SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
@@ -250,11 +251,11 @@ namespace GameGate
                 var tempBuff = new byte[20 + Data.Length];
                 Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 Array.Copy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
-                SendBuffer(tempBuff);
+                await SendBuffer(tempBuff);
             }
             else
             {
-                SendBuffer(sendBuffer);
+                await SendBuffer(sendBuffer);
             }
         }
 
@@ -378,11 +379,11 @@ namespace GameGate
         /// 发送消息到GameSvr
         /// </summary>
         /// <param name="sendBuffer"></param>
-        public void SendBuffer(byte[] sendBuffer)
+        public Task SendBuffer(byte[] sendBuffer)
         {
-            if (!ClientSocket.IsConnected) return;
-            ClientSocket.Send(sendBuffer);
+            if (!ClientSocket.IsConnected) return Task.CompletedTask;
             SendBytes += sendBuffer.Length;
+            return ClientSocket.SendBuffer(sendBuffer);
         }
 
         public void CheckServerIsTimeOut()

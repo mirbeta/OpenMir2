@@ -52,7 +52,7 @@ namespace GameGate
         public int nCmd;
         public int nDir;
         public int nBufLen;
-        public byte[] pBuffer;
+        public byte[] Buffer;
     }
 
     public enum TBlockIPMethod
