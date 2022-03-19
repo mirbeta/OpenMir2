@@ -866,7 +866,7 @@ namespace GameSvr
                     {
                         if (GetGuildRelation(this, m_LastHiter) == 2)
                         {
-                            guildwarkill = true;    
+                            guildwarkill = true;
                         }
                     }
                     var Castle = M2Share.CastleManager.InCastleWarArea(this);
@@ -1060,7 +1060,7 @@ namespace GameSvr
                 {
                     if (m_Abil.Level > M2Share.g_Config.nPKProtectLevel)// 如果大于指定等级
                     {
-                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel && 
+                        if (!BaseObject.m_boPKFlag && BaseObject.m_Abil.Level <= M2Share.g_Config.nPKProtectLevel &&
                             BaseObject.PKLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                         {
                             result = false;
@@ -1527,9 +1527,9 @@ namespace GameSvr
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                    /*default:
-                        Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
-                        break;*/
+                        /*default:
+                            Debug.WriteLine(format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", m_sCharName, ProcessMsg.wIdent, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.sMsg));
+                            break;*/
                 }
             }
             catch (Exception e)

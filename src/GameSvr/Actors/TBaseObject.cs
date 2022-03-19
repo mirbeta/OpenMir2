@@ -287,7 +287,7 @@ namespace GameSvr
         public int m_dwGhostTick = 0;
         public bool m_boDeath = false;
         public int m_dwDeathTick = 0;
-        public bool m_boInvisible=false;
+        public bool m_boInvisible = false;
         public bool m_boCanReAlive = false;
         public int m_dwReAliveTick = 0;
         public MonGenInfo m_pMonGen = null;
@@ -3349,7 +3349,7 @@ namespace GameSvr
                     }
                 }
                 nWeapon += (byte)m_btGender;
-                byte nHair = (byte) (m_btHair * 2 + (byte) m_btGender);
+                byte nHair = (byte)(m_btHair * 2 + (byte)m_btGender);
                 result = Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
                 return result;
             }
@@ -3557,21 +3557,21 @@ namespace GameSvr
                                 }
                                 break;
                             case CellType.OS_EVENTOBJECT:
-                            {
-                                Event __Event = null;
-                                if (((Event)OSObject.CellObj).m_OwnBaseObject != null)
                                 {
-                                    __Event = (Event)OSObject.CellObj;
-                                }
-                                if (__Event != null)
-                                {
-                                    if (__Event.m_OwnBaseObject.IsProperTarget(this))
+                                    Event __Event = null;
+                                    if (((Event)OSObject.CellObj).m_OwnBaseObject != null)
                                     {
-                                        SendMsg(__Event.m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.m_nDamage, 0, 0, "");
+                                        __Event = (Event)OSObject.CellObj;
                                     }
+                                    if (__Event != null)
+                                    {
+                                        if (__Event.m_OwnBaseObject.IsProperTarget(this))
+                                        {
+                                            SendMsg(__Event.m_OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, __Event.m_nDamage, 0, 0, "");
+                                        }
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case CellType.OS_MAPEVENT:
                                 break;
                             case CellType.OS_DOOR:
@@ -5516,7 +5516,8 @@ namespace GameSvr
             {
                 //((TFrostTiger)(this)).m_boApproach = false;
             }
-            if (this is CowKingMonster) {
+            if (this is CowKingMonster)
+            {
                 /*((TCowKingMonster)(this)).m_boCowKingMon = true;
                 ((TCowKingMonster)(this)).m_nDangerLevel = 0;
                 ((TCowKingMonster)(this)).m_boDanger = false;
@@ -5528,8 +5529,8 @@ namespace GameSvr
             }
             if (this is WhiteSkeleton)
             {
-               ((WhiteSkeleton)(this)).m_boIsFirst = true;
-               ((WhiteSkeleton)(this)).m_boFixedHideMode = true;
+                ((WhiteSkeleton)(this)).m_boIsFirst = true;
+                ((WhiteSkeleton)(this)).m_boFixedHideMode = true;
             }
             if (this is ScultureMonster)
             {
@@ -5537,8 +5538,8 @@ namespace GameSvr
             }
             if (this is ScultureKingMonster)
             {
-               ((ScultureKingMonster)(this)).m_boStoneMode = true;
-               ((ScultureKingMonster)(this)).m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
+                ((ScultureKingMonster)(this)).m_boStoneMode = true;
+                ((ScultureKingMonster)(this)).m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
             }
             if (this is ElfMonster)
             {
@@ -5548,14 +5549,14 @@ namespace GameSvr
             }
             if (this is ElfWarriorMonster)
             {
-                 ((ElfWarriorMonster)(this)).m_boFixedHideMode = true;
-                 ((ElfWarriorMonster)(this)).boIsFirst = true;
-                 ((ElfWarriorMonster)(this)).m_boUsePoison = false;
+                ((ElfWarriorMonster)(this)).m_boFixedHideMode = true;
+                ((ElfWarriorMonster)(this)).boIsFirst = true;
+                ((ElfWarriorMonster)(this)).m_boUsePoison = false;
             }
             if (this is ElectronicScolpionMon)
             {
-               ((ElectronicScolpionMon)(this)).m_boUseMagic = false;
-               //((TElectronicScolpionMon)(this)).m_boApproach = false;
+                ((ElectronicScolpionMon)(this)).m_boUseMagic = false;
+                //((TElectronicScolpionMon)(this)).m_boApproach = false;
             }
             if (this is DoubleCriticalMonster)
             {
@@ -5563,9 +5564,9 @@ namespace GameSvr
             }
             if (this is StickMonster)
             {
-                 ((StickMonster)(this)).m_dwSearchTick = HUtil32.GetTickCount();
-                 ((StickMonster)(this)).m_boFixedHideMode = true;
-                 ((StickMonster)(this)).m_boStickMode = true;
+                ((StickMonster)(this)).m_dwSearchTick = HUtil32.GetTickCount();
+                ((StickMonster)(this)).m_boFixedHideMode = true;
+                ((StickMonster)(this)).m_boStickMode = true;
             }
 
             m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
@@ -5581,11 +5582,13 @@ namespace GameSvr
                     m_nBodyLeathery = 50;
                     break;
                 case 52:
-                    if (M2Share.RandomNumber.Random(30) == 0) {
+                    if (M2Share.RandomNumber.Random(30) == 0)
+                    {
                         m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
                         m_nBodyLeathery = 150;
                     }
-                    else {
+                    else
+                    {
                         m_nMeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                         m_nBodyLeathery = 150;
                     }
@@ -5600,19 +5603,19 @@ namespace GameSvr
                 case 95:
                     if (M2Share.RandomNumber.Random(2) == 0)
                     {
-                       // m_boSafeWalk = true;
+                        // m_boSafeWalk = true;
                     }
                     break;
                 case 96:
                     if (M2Share.RandomNumber.Random(4) == 0)
                     {
-                       // m_boSafeWalk = true;
+                        // m_boSafeWalk = true;
                     }
                     break;
                 case 97:
                     if (M2Share.RandomNumber.Random(2) == 0)
                     {
-                       // m_boSafeWalk = true;
+                        // m_boSafeWalk = true;
                     }
                     break;
                 case 169:
@@ -5658,7 +5661,8 @@ namespace GameSvr
                 {
                     nRange = 2;
                 }
-                else {
+                else
+                {
                     nRange = 3;
                 }
                 if ((m_PEnvir.wHeight < 250))
@@ -5672,7 +5676,8 @@ namespace GameSvr
                         nRange2 = 20;
                     }
                 }
-                else {
+                else
+                {
                     nRange2 = 50;
                 }
             }
@@ -5702,7 +5707,8 @@ namespace GameSvr
                         nY = M2Share.RandomNumber.Random(m_PEnvir.wHeight / 2) + nRange2;
                     }
                 }
-                else {
+                else
+                {
                     m_nCurrX = (short)nX;
                     m_nCurrY = (short)nY;
                     addObj = m_PEnvir.AddToMap(nX, nY, CellType.OS_MOVINGOBJECT, this);

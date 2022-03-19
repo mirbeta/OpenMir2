@@ -21,7 +21,7 @@ namespace GameSvr
         }
 
         public void Start()
-        { 
+        {
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
             //_saveQueue.Start();
         }
@@ -75,7 +75,7 @@ namespace GameSvr
             var data = HUtil32.GetBytes(sSendMsg);
             _clientScoket.Send(data);
         }
-        
+
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = false;

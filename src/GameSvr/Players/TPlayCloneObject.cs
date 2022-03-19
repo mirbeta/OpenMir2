@@ -2,7 +2,7 @@
 
 namespace GameSvr
 {
-    public class TPlayCloneObject: TPlayObject
+    public class TPlayCloneObject : TPlayObject
     {
         private int m_dwRunTime = 0;
 

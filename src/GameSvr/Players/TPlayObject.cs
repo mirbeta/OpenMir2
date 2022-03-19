@@ -294,7 +294,7 @@ namespace GameSvr
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var bMsg = HUtil32.GetBytes(sMsg);
-                MsgHdr.nLength = -(bMsg.Length + 1);
+                MsgHdr.nLength = -(bMsg.Length);
                 var nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
                 using var memoryStream = new MemoryStream();
                 using var backingStream = new BinaryWriter(memoryStream);
@@ -303,12 +303,11 @@ namespace GameSvr
                 if (bMsg.Length > 0)
                 {
                     backingStream.Write(bMsg);
-                    backingStream.Write((byte) 0);
                 }
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                var Buff = new byte[memoryStream.Length];
-                memoryStream.Read(Buff, 0, Buff.Length);
-                M2Share.RunSocket.AddGateBuffer(m_nGateIdx, Buff);
+                var data = new byte[memoryStream.Length];
+                memoryStream.Read(data, 0, data.Length);
+                M2Share.RunSocket.AddGateBuffer(m_nGateIdx, data);
             }
         }
 
@@ -339,7 +338,7 @@ namespace GameSvr
                 bMsg = HUtil32.GetBytes(sMsg);
                 if (!string.IsNullOrEmpty(sMsg))
                 {
-                    messageHead.nLength = bMsg.Length + 13;
+                    messageHead.nLength = bMsg.Length + 12;
                 }
                 else
                 {
@@ -353,7 +352,7 @@ namespace GameSvr
             else if (!string.IsNullOrEmpty(sMsg))
             {
                 bMsg = HUtil32.GetBytes(sMsg);
-                messageHead.nLength = -(bMsg.Length + 1);
+                messageHead.nLength = -(bMsg.Length);
                 nSendBytes = Math.Abs(messageHead.nLength) + MessageHeader.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetPacket());
@@ -361,7 +360,7 @@ namespace GameSvr
             if (bMsg != null && bMsg.Length > 0)
             {
                 backingStream.Write(bMsg);
-                backingStream.Write((byte)0);
+                //backingStream.Write((byte)0);
             }
             memoryStream.Seek(0, SeekOrigin.Begin);
             var buffer = new byte[memoryStream.Length];

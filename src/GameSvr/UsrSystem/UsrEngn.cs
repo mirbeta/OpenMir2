@@ -44,7 +44,7 @@ namespace GameSvr
         private int m_nMonGenListPosition;
         private int m_nProcHumIDx;
         private IList<TPlayObject> m_PlayObjectFreeList;
-        private Dictionary<string,ServerGruopInfo> m_OtherUserNameList;
+        private Dictionary<string, ServerGruopInfo> m_OtherUserNameList;
         private IList<TPlayObject> m_PlayObjectList;
         private IList<TPlayObject> m_AiPlayObjectList;
         public IList<TMonInfo> MonsterList;
@@ -154,7 +154,7 @@ namespace GameSvr
             M2Share.MainOutMessage("初始化NPC脚本完成...");
             for (var i = 0; i < m_MonGenList.Count; i++)
             {
-                if (m_MonGenList[i] != null) 
+                if (m_MonGenList[i] != null)
                     m_MonGenList[i].nRace = GetMonRace(m_MonGenList[i].sMonName);
             }
         }
@@ -273,11 +273,7 @@ namespace GameSvr
         {
             TPlayObject result = null;
             TPlayObject PlayObject = null;
-            TAbility Abil = null;
-            Envirnoment Envir = null;
-            int nC;
             TSwitchDataInfo SwitchDataInfo = null;
-            TUserCastle Castle = null;
             const string sExceptionMsg = "[Exception] TUserEngine::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail2 = "chg-server-fail-2 [{0}] -> [{1}] [{2}]";
@@ -298,7 +294,7 @@ namespace GameSvr
                 {
                     SwitchDataInfo = null;
                 }
-                //SwitchDataInfo = null;
+                Envirnoment Envir = null;
                 if (SwitchDataInfo == null)
                 {
                     GetHumData(PlayObject, ref UserOpenInfo.HumanRcd);
@@ -311,7 +307,7 @@ namespace GameSvr
                         PlayObject.m_nCurrY = GetRandHomeY(PlayObject);
                         if (PlayObject.m_Abil.Level == 0)
                         {
-                            Abil = PlayObject.m_Abil;
+                            var Abil = PlayObject.m_Abil;
                             Abil.Level = 1;
                             Abil.AC = 0;
                             Abil.MAC = 0;
@@ -348,11 +344,11 @@ namespace GameSvr
                         }
                     }
                     PlayObject.m_MyGuild = M2Share.GuildManager.MemberOfGuild(PlayObject.m_sCharName);
-                    Castle = M2Share.CastleManager.InCastleWarArea(Envir, PlayObject.m_nCurrX, PlayObject.m_nCurrY);
-                    if (Envir != null && Castle != null && (Castle.m_MapPalace == Envir || Castle.m_boUnderWar))
+                    var userCastle = M2Share.CastleManager.InCastleWarArea(Envir, PlayObject.m_nCurrX, PlayObject.m_nCurrY);
+                    if (Envir != null && userCastle != null && (userCastle.m_MapPalace == Envir || userCastle.m_boUnderWar))
                     {
-                        Castle = M2Share.CastleManager.IsCastleMember(PlayObject);
-                        if (Castle == null)
+                        userCastle = M2Share.CastleManager.IsCastleMember(PlayObject);
+                        if (userCastle == null)
                         {
                             PlayObject.m_sMapName = PlayObject.m_sHomeMap;
                             PlayObject.m_nCurrX = (short)(PlayObject.m_nHomeX - 2 + M2Share.RandomNumber.Random(5));
@@ -360,11 +356,11 @@ namespace GameSvr
                         }
                         else
                         {
-                            if (Castle.m_MapPalace == Envir)
+                            if (userCastle.m_MapPalace == Envir)
                             {
-                                PlayObject.m_sMapName = Castle.GetMapName();
-                                PlayObject.m_nCurrX = Castle.GetHomeX();
-                                PlayObject.m_nCurrY = Castle.GetHomeY();
+                                PlayObject.m_sMapName = userCastle.GetMapName();
+                                PlayObject.m_nCurrX = userCastle.GetHomeX();
+                                PlayObject.m_nCurrY = userCastle.GetHomeY();
                             }
                         }
                     }
@@ -375,12 +371,12 @@ namespace GameSvr
                         PlayObject.ClearStatusTime();
                         if (PlayObject.PKLevel() < 2)
                         {
-                            Castle = M2Share.CastleManager.IsCastleMember(PlayObject);
-                            if (Castle != null && Castle.m_boUnderWar)
+                            userCastle = M2Share.CastleManager.IsCastleMember(PlayObject);
+                            if (userCastle != null && userCastle.m_boUnderWar)
                             {
-                                PlayObject.m_sMapName = Castle.m_sHomeMap;
-                                PlayObject.m_nCurrX = Castle.GetHomeX();
-                                PlayObject.m_nCurrY = Castle.GetHomeY();
+                                PlayObject.m_sMapName = userCastle.m_sHomeMap;
+                                PlayObject.m_nCurrX = userCastle.GetHomeX();
+                                PlayObject.m_nCurrY = userCastle.GetHomeY();
                             }
                             else
                             {
@@ -417,7 +413,7 @@ namespace GameSvr
                         return result;
                     }
                     PlayObject.m_sMapFileName = Envir.m_sMapFileName;
-                    nC = 0;
+                    var nC = 0;
                     while (true)
                     {
                         if (Envir.CanWalk(PlayObject.m_nCurrX, PlayObject.m_nCurrY, true)) break;
@@ -477,7 +473,6 @@ namespace GameSvr
                             PlayObject.m_nCurrX = M2Share.g_Config.nHomeX;
                             PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                         }
-
                         PlayObject.AbilCopyToWAbil();
                         PlayObject.m_PEnvir = Envir;
                         PlayObject.OnEnvirnomentChanged();
@@ -504,8 +499,7 @@ namespace GameSvr
                 PlayObject.m_nPayMent = UserOpenInfo.LoadUser.nPayMent;
                 PlayObject.m_nPayMode = UserOpenInfo.LoadUser.nPayMode;
                 PlayObject.m_dwLoadTick = UserOpenInfo.LoadUser.dwNewUserTick;
-                PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate,
-                    ref PlayObject.m_nSoftVersionDate);
+                PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = PlayObject;
             }
             catch (Exception ex)
@@ -513,7 +507,6 @@ namespace GameSvr
                 M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(ex.StackTrace);
             }
-
             return result;
         }
 
@@ -647,7 +640,7 @@ namespace GameSvr
             {
                 M2Share.MainOutMessage(sExceptionMsg3);
             }
-            
+
             nProcessHumanLoopTime++;
             M2Share.g_nProcessHumanLoopTime = nProcessHumanLoopTime;
             if (m_nProcHumIDx == 0)
@@ -731,7 +724,7 @@ namespace GameSvr
                     Thread.Sleep(30);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.MainOutMessage(sExceptionMsg8);
                 M2Share.MainOutMessage(ex.StackTrace);
@@ -844,7 +837,7 @@ namespace GameSvr
                     Thread.Sleep(1);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.MainOutMessage(sExceptionMsg8);
                 M2Share.MainOutMessage(ex.StackTrace);
@@ -916,7 +909,7 @@ namespace GameSvr
 
         private void ProcessMissions()
         {
-            
+
         }
 
         public int ProcessMonsters_GetZenTime(int dwTime)
@@ -1009,7 +1002,7 @@ namespace GameSvr
                     m_nMonGenCertListPosition = 0;
                     while (true)
                     {
-                        if (nProcessPosition >= MonGen.CertCount) 
+                        if (nProcessPosition >= MonGen.CertCount)
                         {
                             break;
                         }
@@ -1940,7 +1933,7 @@ namespace GameSvr
             try
             {
                 for (var i = 0; i < m_PlayObjectList.Count; i++)
-                {                    
+                {
                     if (string.Compare(m_PlayObjectList[i].m_sCharName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = m_PlayObjectList[i];
@@ -1966,7 +1959,7 @@ namespace GameSvr
             }
             if (npcType == typeof(TGuildOfficial))
             {
-                npcObject = (TGuildOfficial) Convert.ChangeType(normNpc, typeof(TGuildOfficial));
+                npcObject = (TGuildOfficial)Convert.ChangeType(normNpc, typeof(TGuildOfficial));
             }
             if (npcType == typeof(NormNpc))
             {
@@ -1981,7 +1974,7 @@ namespace GameSvr
 
         public object FindNPC(int npcId)
         {
-            return M2Share.ObjectManager.Get(npcId);;
+            return M2Share.ObjectManager.Get(npcId); ;
         }
 
         /// <summary>
@@ -2291,7 +2284,7 @@ namespace GameSvr
             for (var i = 0; i < MonsterList.Count; i++)
             {
                 Monster = MonsterList[i];
-                if(string.Compare(Monster.sName,sMonName,StringComparison.OrdinalIgnoreCase)==0)
+                if (string.Compare(Monster.sName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     BaseObject.m_btRaceServer = Monster.btRace;
                     BaseObject.m_btRaceImg = Monster.btRaceImg;
@@ -2372,7 +2365,7 @@ namespace GameSvr
                             OSObject = MapCellInfo.ObjList[i];
                             if (OSObject != null && OSObject.CellType == CellType.OS_MOVINGOBJECT)
                             {
-                                BaseObject = (TBaseObject) OSObject.CellObj;
+                                BaseObject = (TBaseObject)OSObject.CellObj;
                                 if (BaseObject != null && !BaseObject.m_boGhost && BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
                                 {
                                     BaseObject.SendMsg(BaseObject, wIdent, wX, nDoorX, nDoorY, nA, sStr);
@@ -2546,7 +2539,7 @@ namespace GameSvr
                     BaseObject = MonGen.CertList[j];
                     if (!BaseObject.m_boDeath && !BaseObject.m_boGhost && BaseObject.m_PEnvir == Envir)
                     {
-                        if (List != null) 
+                        if (List != null)
                             List.Add(BaseObject);
                         result++;
                     }
@@ -2618,16 +2611,16 @@ namespace GameSvr
             return result;
         }
 
-       /// <summary>
-       /// 向每个人物发送消息
-       /// </summary>
+        /// <summary>
+        /// 向每个人物发送消息
+        /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType MsgType)
         {
             TPlayObject PlayObject;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
                 PlayObject = m_PlayObjectList[i];
-                if (!PlayObject.m_boGhost) 
+                if (!PlayObject.m_boGhost)
                     PlayObject.SysMsg(sMsg, MsgColor.Red, MsgType);
             }
         }
@@ -2690,7 +2683,7 @@ namespace GameSvr
             }
         }
 
-        public string GetHomeInfo(ref short nX,ref short nY)
+        public string GetHomeInfo(ref short nX, ref short nY)
         {
             string result;
             if (M2Share.StartPointList.Count > 0)

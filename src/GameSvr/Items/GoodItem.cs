@@ -759,7 +759,7 @@ namespace GameSvr
             addAbility.wSC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wSC) + Sc, HUtil32.HiWord(addAbility.wSC) + Sc2);
         }
     }
-    
+
     public enum GoodType : byte
     {
         /// <summary>

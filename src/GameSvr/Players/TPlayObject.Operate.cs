@@ -577,7 +577,7 @@ namespace GameSvr
                     n18 = -1;
                 }
             }
-            FailExit:
+        FailExit:
             if (n18 <= 0)
             {
                 SendDefMessage(Grobal2.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
@@ -664,7 +664,7 @@ namespace GameSvr
             {
                 n10 = -1;
             }
-            FailExit:
+        FailExit:
             if (n10 <= 0)
             {
                 SendDefMessage(Grobal2.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");

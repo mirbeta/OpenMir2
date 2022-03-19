@@ -3,7 +3,7 @@
 namespace GameSvr
 {
     public class StoneMineEvent : Event
-    {        
+    {
         private readonly int _addStoneCount = 0;
         public int MineCount = 0;
         public int AddStoneMineTick = 0;

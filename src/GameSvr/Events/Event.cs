@@ -1,5 +1,5 @@
-﻿using SystemModule;
-using System;
+﻿using System;
+using SystemModule;
 
 namespace GameSvr
 {

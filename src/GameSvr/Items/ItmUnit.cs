@@ -16,7 +16,7 @@ namespace GameSvr
 
         ~ItemUnit()
         {
-            for (var i = 0; i < _mItemNameList.Count; i ++ )
+            for (var i = 0; i < _mItemNameList.Count; i++)
             {
                 _mItemNameList[i] = null;
             }
@@ -125,7 +125,7 @@ namespace GameSvr
             saveList.SaveToFile(sFileName);
             saveList = null;
         }
-        
+
         /// <summary>
         /// 获取物品名称颜色
         /// </summary>
@@ -134,7 +134,7 @@ namespace GameSvr
         public int GetItemAddValuePointColor(TUserItem UserItem)
         {
             int result = 0;
-            int ItemVlue= 0;
+            int ItemVlue = 0;
             GoodItem StdItem;
             // if (M2Share.g_Config.boRandomnameColor)
             // {
@@ -230,7 +230,7 @@ namespace GameSvr
         }
 
     }
-    
+
     public class ItmUnit
     {
         /// <summary>

@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using SystemModule;
 
 namespace GameSvr
 {
     public partial class TAIPlayObject
     {
-         
+
         /// <summary>
         /// 是否需要躲避
         /// </summary>

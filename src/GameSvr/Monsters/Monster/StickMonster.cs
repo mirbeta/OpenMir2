@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class StickMonster: AnimalObject
+    public class StickMonster : AnimalObject
     {
         public int n54C = 0;
         protected int nComeOutValue = 0;
@@ -14,7 +14,7 @@ namespace GameSvr
             this.m_nViewRange = 7;
             this.m_nRunTime = 250;
             this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            this.m_dwSearchTick =HUtil32.GetTickCount();
+            this.m_dwSearchTick = HUtil32.GetTickCount();
             nComeOutValue = 4;
             nAttackRange = 4;
             this.m_boFixedHideMode = true;
@@ -24,7 +24,7 @@ namespace GameSvr
 
         protected virtual bool AttackTarget()
         {
-            byte btDir=0;
+            byte btDir = 0;
             if (this.m_TargetCret == null)
             {
                 return false;
@@ -33,8 +33,8 @@ namespace GameSvr
             {
                 if ((HUtil32.GetTickCount() - this.m_dwHitTick) > this.m_nNextHitTime)
                 {
-                    this.m_dwHitTick =HUtil32.GetTickCount();
-                    this.m_dwTargetFocusTick =HUtil32.GetTickCount();
+                    this.m_dwHitTick = HUtil32.GetTickCount();
+                    this.m_dwTargetFocusTick = HUtil32.GetTickCount();
                     this.Attack(this.m_TargetCret, btDir);
                 }
                 return true;
@@ -59,7 +59,7 @@ namespace GameSvr
         protected virtual void ComeDown()
         {
             this.SendRefMsg(Grobal2.RM_DIGDOWN, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
-            for (var i = 0; i < this.m_VisibleActors.Count; i ++ )
+            for (var i = 0; i < this.m_VisibleActors.Count; i++)
             {
                 Dispose(m_VisibleActors[i]);
             }
@@ -71,7 +71,7 @@ namespace GameSvr
         {
             TBaseObject BaseObject;
             var result = false;
-            for (var i = 0; i < this.m_VisibleActors.Count; i ++ )
+            for (var i = 0; i < this.m_VisibleActors.Count; i++)
             {
                 BaseObject = this.m_VisibleActors[i].BaseObject;
                 if (BaseObject.m_boDeath)
@@ -105,7 +105,7 @@ namespace GameSvr
             {
                 if ((HUtil32.GetTickCount() - this.m_dwWalkTick) > this.m_nWalkSpeed)
                 {
-                    this.m_dwWalkTick =HUtil32.GetTickCount();
+                    this.m_dwWalkTick = HUtil32.GetTickCount();
                     if (this.m_boFixedHideMode)
                     {
                         if (CheckComeOut())

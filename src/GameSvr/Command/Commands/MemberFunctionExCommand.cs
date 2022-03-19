@@ -1,9 +1,8 @@
-﻿using SystemModule;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("MemberFunctionEx", "",help:"打开会员功能窗口", 0)]
+    [GameCommand("MemberFunctionEx", "", help: "打开会员功能窗口", 0)]
     public class MemberFunctionExCommand : BaseCommond
     {
         [DefaultCommand]

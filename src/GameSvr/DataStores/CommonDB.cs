@@ -194,7 +194,7 @@ namespace GameSvr
             }
             return result;
         }
-        
+
         public int LoadMonsterDB()
         {
             var result = 0;

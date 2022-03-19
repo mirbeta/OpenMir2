@@ -35,7 +35,7 @@ namespace GameSvr
             M2Share.MainOutMessage($"节点数据服务[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]已启动.");
         }
 
-        private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps,string msgstr)
+        private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
         {
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
             {
@@ -92,7 +92,7 @@ namespace GameSvr
                 }
                 ps.SocData = BufStr + ps.SocData;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.ErrorMessage(ex.StackTrace);
             }
@@ -153,7 +153,8 @@ namespace GameSvr
             for (var i = m_SrvArray.GetLowerBound(0); i <= m_SrvArray.GetUpperBound(0); i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
-                if (ServerMsgInfo == null) {
+                if (ServerMsgInfo == null)
+                {
                     continue;
                 }
                 if (ServerMsgInfo.SocketId == e.ConnectionId)
@@ -211,7 +212,7 @@ namespace GameSvr
                 M2Share.ErrorMessage(sExceptionMsg);
             }
         }
-    } 
+    }
 
     public class TServerMsgInfo
     {

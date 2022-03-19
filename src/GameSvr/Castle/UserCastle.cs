@@ -405,7 +405,7 @@ namespace GameSvr
                         if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) > (M2Share.g_Config.dwCastleWarTime - M2Share.g_Config.dwShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             m_boShowOverMsg = true;
-                            s20 = string.Format(sWarStopTimeMsg,  m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
+                            s20 = string.Format(sWarStopTimeMsg, m_sName, M2Share.g_Config.dwShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.UserEngine.SendBroadCastMsgExt(s20, MsgType.System);
                             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s20);
                             M2Share.MainOutMessage(s20);
@@ -522,7 +522,7 @@ namespace GameSvr
             SaveConfigFile();
             if (oldGuild != null) oldGuild.RefMemberName();
             if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
-            var s10 = string.Format(sGetCastleMsg,  m_sName, m_sOwnGuild);
+            var s10 = string.Format(sGetCastleMsg, m_sName, m_sOwnGuild);
             M2Share.UserEngine.SendBroadCastMsgExt(s10, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
             M2Share.MainOutMessage(s10);

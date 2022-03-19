@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class AnimalObject: TBaseObject
+    public class AnimalObject : TBaseObject
     {
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
@@ -24,7 +24,7 @@ namespace GameSvr
         public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;
-            m_nTargetX =  -1;
+            m_nTargetX = -1;
             this.m_btRaceServer = Grobal2.RC_ANIMAL;
             this.m_dwHitTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             this.m_dwWalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
@@ -89,13 +89,13 @@ namespace GameSvr
                 nOldY = this.m_nCurrY;
                 this.WalkTo(nDir, false);
                 n20 = M2Share.RandomNumber.Random(3);
-                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i ++ )
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if (nOldX == this.m_nCurrX && nOldY == this.m_nCurrY)
                     {
                         if (n20 != 0)
                         {
-                            nDir ++;
+                            nDir++;
                         }
                         else if (nDir > 0)
                         {
@@ -176,7 +176,7 @@ namespace GameSvr
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
             this.m_btDirection = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
             this.m_PEnvir.GetBaseObjects(TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY, false, BaseObjectList);
-            for (var i = 0; i < BaseObjectList.Count; i ++ )
+            for (var i = 0; i < BaseObjectList.Count; i++)
             {
                 BaseObject = BaseObjectList[i];
                 if (this.IsProperTarget(BaseObject))
@@ -199,8 +199,8 @@ namespace GameSvr
         protected override void DelTargetCreat()
         {
             base.DelTargetCreat();
-            m_nTargetX =  -1;
-            m_nTargetY =  -1;
+            m_nTargetX = -1;
+            m_nTargetY = -1;
         }
 
         protected virtual void SearchTarget()
@@ -209,7 +209,7 @@ namespace GameSvr
             TBaseObject BaseObject18 = null;
             int nC;
             var n10 = 999;
-            for (var i = 0; i < this.m_VisibleActors.Count; i ++ )
+            for (var i = 0; i < this.m_VisibleActors.Count; i++)
             {
                 BaseObject = this.m_VisibleActors[i].BaseObject;
                 if (!BaseObject.m_boDeath)
@@ -236,7 +236,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             TBaseObject Creat = null;
             var n10 = 999;
-            for (var i = 0; i < this.m_VisibleActors.Count; i ++ )
+            for (var i = 0; i < this.m_VisibleActors.Count; i++)
             {
                 BaseObject = this.m_VisibleActors[i].BaseObject;
                 if (BaseObject.m_boDeath)

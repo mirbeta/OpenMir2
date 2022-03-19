@@ -6,7 +6,7 @@ namespace GameSvr
 {
     public partial class TAIPlayObject
     {
-                public int DoThink_CheckTargetXYCount(int nX, int nY, int nRange)
+        public int DoThink_CheckTargetXYCount(int nX, int nY, int nRange)
         {
             TBaseObject BaseObject;
             int nC;
@@ -63,7 +63,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool DoThink_MagPushArround(int MagicID,short wMagicID)
+        public bool DoThink_MagPushArround(int MagicID, short wMagicID)
         {
             bool result = false;
             TBaseObject ActorObject;
@@ -138,7 +138,7 @@ namespace GameSvr
                             nRange = 6;
                         }
                         result = 2;
-                        if(wMagicID==61 || wMagicID==62 || CanAttack(m_TargetCret, nRange, ref btDir))
+                        if (wMagicID == 61 || wMagicID == 62 || CanAttack(m_TargetCret, nRange, ref btDir))
                         {
                             result = 0;
                         }

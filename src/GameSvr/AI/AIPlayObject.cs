@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using SystemModule;
 using SystemModule.Common;
 
@@ -170,7 +169,7 @@ namespace GameSvr
             }
             _conf = new AIObjectConf(sFileName);
         }
-        
+
         /// <summary>
         /// 取随机配置
         /// </summary>
@@ -293,7 +292,7 @@ namespace GameSvr
                 }
             }
         }
-        
+
         private void WinExp(int dwExp)
         {
             if (m_Abil.Level > M2Share.g_Config.nLimitExpLevel)
@@ -1124,7 +1123,7 @@ namespace GameSvr
                             {
                                 m_nMoveFailCount = 0;
                                 m_nPostion++;
-                 
+
                                 return;
                             }
                         }
@@ -1367,7 +1366,7 @@ namespace GameSvr
                     result = base.Operate(ProcessMsg);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.MainOutMessage(ex.Message);
             }
@@ -1889,7 +1888,7 @@ namespace GameSvr
                     for (var i = 0; i < m_MagicList.Count; i++)
                     {
                         UserMagic = m_MagicList[i];
-                        if(UserMagic.MagicInfo.btJob==2 ||UserMagic.MagicInfo.btJob==99)
+                        if (UserMagic.MagicInfo.btJob == 2 || UserMagic.MagicInfo.btJob == 99)
                         {
                             switch (UserMagic.wMagIdx)
                             {
@@ -2164,7 +2163,7 @@ namespace GameSvr
             }
             return result;
         }
-      
+
         private int CheckTargetXYCount(int nX, int nY, int nRange)
         {
             TBaseObject BaseObject;
@@ -2376,12 +2375,12 @@ namespace GameSvr
             return result;
         }
 
-      /// <summary>
-      /// 走向目标
-      /// </summary>
-      /// <param name="BaseObject"></param>
-      /// <param name="nCode"></param>
-      /// <returns></returns>
+        /// <summary>
+        /// 走向目标
+        /// </summary>
+        /// <param name="BaseObject"></param>
+        /// <param name="nCode"></param>
+        /// <returns></returns>
         private bool GetGotoXY(TBaseObject BaseObject, byte nCode)
         {
             bool result = false;
@@ -2550,7 +2549,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool RunTo1(byte btDir, bool boFlag,short nDestX, short nDestY)
+        public bool RunTo1(byte btDir, bool boFlag, short nDestX, short nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             var result = false;
@@ -3910,8 +3909,8 @@ namespace GameSvr
                         }
                     }
                     // 绿毒
-                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 
-                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) 
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700
+                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)
                         && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
                         // 对于血量超过800的怪用 不毒城墙
@@ -3966,8 +3965,8 @@ namespace GameSvr
                                 break;
                         }
                     }
-                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700 
-                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7) 
+                    if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.g_Config.btHeroSkillMode || !M2Share.g_Config.btHeroSkillMode && m_TargetCret.m_Abil.HP >= 700
+                        || m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT) && (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) < 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) < 7)
                         && !new ArrayList(new byte[] { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 }).Contains(m_TargetCret.m_btRaceServer))
                     {
                         // 对于血量超过100的怪用 不毒城墙

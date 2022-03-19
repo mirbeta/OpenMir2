@@ -148,7 +148,7 @@ namespace GameSvr
         /// <returns></returns>
         public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
         {
-            M2Share.g_Config.nSaveDBCount ++;
+            M2Share.g_Config.nSaveDBCount++;
             return SaveRcd(sAccount, sCharName, nSessionID, ref HumanRcd);
         }
 
@@ -215,7 +215,8 @@ namespace GameSvr
                             result = true;
                         }
                     }
-                    else {
+                    else
+                    {
                         result = false;
                     }
                 }
@@ -225,13 +226,13 @@ namespace GameSvr
 
         private static int GetQueryID(GameSvrConfig Config)
         {
-            Config.nDBQueryID ++;
+            Config.nDBQueryID++;
             if (Config.nDBQueryID > int.MaxValue - 1)
             {
                 Config.nDBQueryID = 1;
             }
             return Config.nDBQueryID;
         }
-    } 
+    }
 }
 

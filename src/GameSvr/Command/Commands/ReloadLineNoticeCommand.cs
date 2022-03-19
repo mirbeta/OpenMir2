@@ -1,7 +1,6 @@
-﻿using SystemModule;
-using System;
+﻿using GameSvr.CommandSystem;
 using System.IO;
-using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -14,7 +13,7 @@ namespace GameSvr
         [DefaultCommand]
         public void ReloadLineNotice(TPlayObject PlayObject)
         {
-            if (M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath,M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
+            if (M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
             {
                 PlayObject.SysMsg(M2Share.g_sGameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }

@@ -35,7 +35,7 @@ namespace GameSvr
             {
                 return result;
             }
-            if ((HUtil32.GetTickCount() - m_dwHitTick )> m_nNextHitTime)
+            if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
                 if (Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7 && Math.Abs(m_nCurrX - m_TargetCret.m_nCurrX) <= 7)

@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 调整指定玩家等级
     /// </summary>
-    [GameCommand("AdjuestLevel", "调整指定玩家等级","人物名称 等级", 10)]
+    [GameCommand("AdjuestLevel", "调整指定玩家等级", "人物名称 等级", 10)]
     public class AdjuestLevelCommand : BaseCommond
     {
         [DefaultCommand]

@@ -7,14 +7,14 @@ namespace GameSvr
         public const int MAXCASTLEARCHER = 12;
         public const int MAXCALSTEGUARD = 4;
     }
-    
+
     public class TAttackerInfo
     {
         public DateTime AttackDate;
         public string sGuildName;
         public Association Guild;
     }
-    
+
     public struct TDefenseUnit
     {
         public int nMainDoorX;
@@ -28,7 +28,7 @@ namespace GameSvr
         public TBaseObject RightWall;
         public TBaseObject Archer;
     }
-    
+
     public class TObjUnit
     {
         public short nX;

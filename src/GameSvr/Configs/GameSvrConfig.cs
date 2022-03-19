@@ -1397,7 +1397,7 @@ namespace GameSvr
             nWinLotteryLevel6 = 0;
             GlobalVal = new int[500];
             GlobaDyMval = new int[500];
-            GlobalAVal = new string[500]; 
+            GlobalAVal = new string[500];
             nItemNumber = 0;
             nItemNumberEx = int.MaxValue / 2;
             nGuildRecallTime = 180;

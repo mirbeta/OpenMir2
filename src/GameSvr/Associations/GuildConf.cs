@@ -22,7 +22,7 @@ namespace GameSvr
             guild.m_nFlourishing = ReadInteger("Guild", "Flourishing", guild.m_nFlourishing);
             guild.m_nChiefItemCount = ReadInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
         }
-        
+
         public void SaveGuildConfig(Association guild)
         {
             WriteString("Guild", "GuildName", guild.sGuildName);

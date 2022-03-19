@@ -2,9 +2,9 @@ using SystemModule.Common;
 
 namespace GameSvr.Configs
 {
-    public class GlobalConfig:IniFile
+    public class GlobalConfig : IniFile
     {
-        public GlobalConfig(string fileName):base(fileName)
+        public GlobalConfig(string fileName) : base(fileName)
         {
             Load();
         }
@@ -25,7 +25,7 @@ namespace GameSvr.Configs
                     M2Share.g_Config.GlobalVal[i] = nLoadInteger;
                 }
             }
-            
+
             for (var i = M2Share.g_Config.GlobalAVal.GetLowerBound(0); i <= M2Share.g_Config.GlobalAVal.GetUpperBound(0); i++)
             {
                 sLoadString = ReadString("String", "GlobalStrVal" + i, "");

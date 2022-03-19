@@ -1,6 +1,6 @@
-﻿using SystemModule;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SystemModule;
 
 namespace GameSvr
 {

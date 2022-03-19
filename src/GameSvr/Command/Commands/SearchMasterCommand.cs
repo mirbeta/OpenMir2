@@ -1,5 +1,5 @@
-﻿using SystemModule;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -45,7 +45,7 @@ namespace GameSvr
                 PlayObject.SysMsg(PlayObject.m_MasterHuman.m_sCharName + " " + PlayObject.m_MasterHuman.m_PEnvir.sMapDesc + "(" + PlayObject.m_MasterHuman.m_nCurrX + ":"
                     + PlayObject.m_MasterHuman.m_nCurrY + ")", MsgColor.Green, MsgType.Hint);
                 PlayObject.m_MasterHuman.SysMsg(M2Share.g_sYourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.m_MasterHuman.SysMsg(PlayObject.m_sCharName + " " + PlayObject.m_PEnvir.sMapDesc + "(" + PlayObject.m_nCurrX + ":" + PlayObject.m_nCurrY + ")", 
+                PlayObject.m_MasterHuman.SysMsg(PlayObject.m_sCharName + " " + PlayObject.m_PEnvir.sMapDesc + "(" + PlayObject.m_nCurrX + ":" + PlayObject.m_nCurrY + ")",
                     MsgColor.Green, MsgType.Hint);
             }
         }

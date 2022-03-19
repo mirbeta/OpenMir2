@@ -92,7 +92,7 @@ namespace GameSvr
                     }
                     for (var i = 0; i < denyList.Count; i++)
                     {
-                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i],out var denyName))
+                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i], out var denyName))
                         {
                             M2Share.MainOutMessage($"解除玩家[{denyList[i]}]禁言");
                         }

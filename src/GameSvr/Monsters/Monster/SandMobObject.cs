@@ -40,7 +40,7 @@ namespace GameSvr
                                 return;
                             }
                         }
-                        if ((HUtil32.GetTickCount() - m_dwHitTick )> m_nNextHitTime)
+                        if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
                         {
                             SearchTarget();
                         }

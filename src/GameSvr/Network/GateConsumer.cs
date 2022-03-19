@@ -18,7 +18,7 @@ namespace GameSvr
         private readonly int _identifier;
         private readonly TGateInfo _gate;
 
-        public GateConsumer(TGateInfo gate,int identifier)
+        public GateConsumer(TGateInfo gate, int identifier)
         {
             _queue = gate.Queue.Reader;
             _identifier = identifier;
@@ -26,7 +26,7 @@ namespace GameSvr
         }
 
         public TGateInfo Gate => _gate;
-        
+
         public async Task ProcessGateData(CancellationToken cancellation)
         {
             Console.WriteLine($"GameGate Consumer ({_identifier}): Starting");
@@ -38,7 +38,7 @@ namespace GameSvr
                 }
             }
         }
-        
+
         private void SendGateBuffers(byte[] buffer)
         {
             const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
@@ -54,14 +54,14 @@ namespace GameSvr
             }
             try
             {
-                var nSendBuffLen = buffer.Length; 
+                var nSendBuffLen = buffer.Length;
 
                 /*var dBuffer = buffer[24..];
                 var DefMsg = new TDefaultMessage(dBuffer);
                 M2Share.MainOutMessage(string.Format("消息 Ident:{0}",DefMsg.Ident, DefMsg.Ident));
                 M2Share.MainOutMessage(string.Format("数据大小 Block:{0} sMsg:{1} {2}",M2Share.g_Config.nCheckBlock, Gate.nSendBlockCount + nSendBuffLen, nSendBuffLen));
                 */
-                
+
                 if (Gate.nSendChecked == 0 && Gate.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
                 {
                     if (_gate.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
@@ -124,7 +124,7 @@ namespace GameSvr
                 M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
             }
         }
-        
+
         private void SendCheck(Socket Socket, int nIdent)
         {
             if (!Socket.Connected)
