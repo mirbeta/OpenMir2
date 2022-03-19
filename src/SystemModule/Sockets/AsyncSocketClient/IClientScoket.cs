@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace SystemModule.Sockets
 {
@@ -172,6 +173,11 @@ namespace SystemModule.Sockets
                 }
                 this.RaiseErrorEvent(exception);//引发错误事件
             }
+        }
+
+        public Task SendBuffer(byte[] buffer)
+        {
+            return this.cli.SendAsync(buffer, SocketFlags.None);
         }
 
         public void Send(byte[] buffer)
