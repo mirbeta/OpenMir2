@@ -78,7 +78,7 @@ namespace GameSvr.CommandSystem
         /// </summary>
         public byte MinUserLevel { get; private set; }
 
-        public CommandAttribute(string command, string desc,string help, byte minUserLevel = 0)
+        public CommandAttribute(string command, string desc, string help, byte minUserLevel = 0)
         {
             this.Name = command;
             this.Desc = desc;

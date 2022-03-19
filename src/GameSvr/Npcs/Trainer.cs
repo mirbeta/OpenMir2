@@ -5,7 +5,7 @@ namespace GameSvr
     /// <summary>
     /// 练功师
     /// </summary>
-    public class Trainer: NormNpc
+    public class Trainer : NormNpc
     {
         public int n564 = 0;
         private int m_dw568 = 0;
@@ -28,7 +28,7 @@ namespace GameSvr
                 {
                     n56C += ProcessMsg.wParam;
                     m_dw568 = HUtil32.GetTickCount();
-                    n570 ++;
+                    n570++;
                     this.ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + n56C / n570);
                 }
             }
@@ -52,6 +52,6 @@ namespace GameSvr
             }
             base.Run();
         }
-    } 
+    }
 }
 

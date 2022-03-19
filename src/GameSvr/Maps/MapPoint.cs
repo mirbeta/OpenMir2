@@ -157,7 +157,8 @@ namespace GameSvr
             {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
-                if (FBaseObject.m_btDirection > 8) {
+                if (FBaseObject.m_btDirection > 8)
+                {
                     FBaseObject.m_btDirection = 4;
                 }
                 m_btDirection = FBaseObject.m_btDirection;

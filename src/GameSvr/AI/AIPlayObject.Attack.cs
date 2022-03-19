@@ -5,7 +5,7 @@ namespace GameSvr
 {
     public partial class TAIPlayObject
     {
-          /// <summary>
+        /// <summary>
         /// 物理攻击
         /// </summary>
         /// <param name="wHitMode"></param>

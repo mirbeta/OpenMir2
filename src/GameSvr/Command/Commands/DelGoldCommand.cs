@@ -1,12 +1,12 @@
-﻿using SystemModule;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("DelGold", "调整指定玩家游戏币", help:"人物名称 数量", 10)]
+    [GameCommand("DelGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
     public class DelGoldCommand : BaseCommond
     {
         [DefaultCommand]
@@ -44,7 +44,7 @@ namespace GameSvr
                 PlayObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() + "\09" 
+                    M2Share.AddGameDataLog("13" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() + "\09"
                         + PlayObject.m_sCharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }

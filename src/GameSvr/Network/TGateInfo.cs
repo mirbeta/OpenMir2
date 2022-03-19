@@ -68,7 +68,7 @@ namespace GameSvr
         /// </summary>
         public int dwSendCheckTick;
 
-        public void Send(byte[] buffer)
+        public void AddToQueue(byte[] buffer)
         {
             Queue.Writer.TryWrite(buffer);
         }

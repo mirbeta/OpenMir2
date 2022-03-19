@@ -409,7 +409,7 @@ namespace GameSvr
                     }
                     break;
                 case SpellsDef.SKILL_LIGHTFLOWER:
-                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC), 
+                    if (MagElecBlizzard(PlayObject, PlayObject.GetAttackPower(DoSpell_GetPower(UserMagic, DoSpell_MPow(UserMagic)) + HUtil32.LoWord(PlayObject.m_WAbil.MC),
                         HUtil32.HiWord(PlayObject.m_WAbil.MC) - HUtil32.LoWord(PlayObject.m_WAbil.MC) + 1)))
                     {
                         boTrain = true;
@@ -1067,27 +1067,27 @@ namespace GameSvr
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY - 1) == null)
             {
-                FireBurnEvent   FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY - 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX - 1, nY) == null)
             {
-                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX - 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY) == null)
             {
-                FireBurnEvent   FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX + 1, nY) == null)
             {
-                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX + 1, nY, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             if (PlayObject.m_PEnvir.GetEvent(nX, nY + 1) == null)
             {
-                FireBurnEvent  FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
+                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, nX, nY + 1, Grobal2.ET_FIRE, nHTime * 1000, nDamage);
                 M2Share.EventManager.AddEvent(FireBurnEvent);
             }
             return 1;

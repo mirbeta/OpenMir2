@@ -27,7 +27,7 @@ namespace GameSvr
                 {
                     continue;
                 }
-                var fileName = Path.Combine(M2Share.sConfigPath,M2Share.g_Config.sNoticeDir, $"{NoticeList[i].sMsg}.txt");
+                var fileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, $"{NoticeList[i].sMsg}.txt");
                 if (!File.Exists(fileName)) continue;
                 try
                 {

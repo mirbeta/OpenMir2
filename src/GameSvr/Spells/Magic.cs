@@ -17,7 +17,7 @@ namespace GameSvr
         public static int GetPower13(int nInt, TUserMagic UserMagic)
         {
             double d10 = nInt / 3.0;
-            double  d18 = nInt - d10;
+            double d18 = nInt - d10;
             return HUtil32.Round(d18 / (UserMagic.MagicInfo.btTrainLv + 1) * (UserMagic.btLevel + 1) + d10 + (UserMagic.MagicInfo.btDefPower + M2Share.RandomNumber.Random(UserMagic.MagicInfo.btDefMaxPower - UserMagic.MagicInfo.btDefPower)));
         }
 
@@ -48,7 +48,7 @@ namespace GameSvr
             GoodItem amuletStdItem = null;
             var result = false;
             Idx = 0;
-            if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL]!=null && PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
+            if (PlayObject.m_UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex > 0)
             {
                 amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[Grobal2.U_ARMRINGL].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
@@ -74,7 +74,7 @@ namespace GameSvr
                     }
                 }
             }
-            if (PlayObject.m_UseItems[Grobal2.U_BUJUK] !=null && PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
+            if (PlayObject.m_UseItems[Grobal2.U_BUJUK] != null && PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex > 0)
             {
                 amuletStdItem = M2Share.UserEngine.GetStdItem(PlayObject.m_UseItems[Grobal2.U_BUJUK].wIndex);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)

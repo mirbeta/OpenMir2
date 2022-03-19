@@ -302,7 +302,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
             }
@@ -318,7 +318,7 @@ namespace GameSvr
         {
             return base.IsAttackTarget(BaseObject);
         }
-        
+
         public override bool IsProperTarget(TBaseObject BaseObject)
         {
             bool result = false;
@@ -479,7 +479,7 @@ namespace GameSvr
             VisibleMapItem VisibleMapItem;
             int nVisibleFlag;
             const string sExceptionMsg1 = "TAIPlayObject::SearchViewRange Code:{0}";
-            const string  sExceptionMsg2 = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
+            const string sExceptionMsg2 = "TAIPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             try
             {
                 if (m_boGhost)
@@ -646,7 +646,7 @@ namespace GameSvr
             }
             catch (Exception)
             {
-                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] {  m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
+                M2Share.MainOutMessage(format(sExceptionMsg2, new object[] { m_sCharName, m_sMapName, m_nCurrX, m_nCurrY }));
                 KickException();
             }
             try
@@ -842,8 +842,8 @@ namespace GameSvr
                 KickException();
             }
         }
-        
-                public override void Struck(TBaseObject hiter)
+
+        public override void Struck(TBaseObject hiter)
         {
             bool boDisableSayMsg;
             m_dwStruckTick = HUtil32.GetTickCount();

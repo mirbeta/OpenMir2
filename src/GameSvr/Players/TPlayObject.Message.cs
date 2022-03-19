@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SystemModule;
 
 namespace GameSvr
@@ -774,7 +773,7 @@ namespace GameSvr
                         m_boSoftClose = true;
                     }
                     break;
-                case Grobal2.CM_CLICKNPC:   
+                case Grobal2.CM_CLICKNPC:
                     ClientClickNPC(ProcessMsg.nParam1);
                     break;
                 case Grobal2.CM_MERCHANTDLGSELECT:

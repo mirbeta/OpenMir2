@@ -1,10 +1,10 @@
-﻿using System;
+﻿using GameSvr.CommandSystem;
+using System;
 using SystemModule;
-using GameSvr.CommandSystem;
 
 namespace GameSvr
 {
-    [GameCommand("BindUseItem", "",M2Share.g_sGameCommandBindUseItemHelpMsg, 10)]
+    [GameCommand("BindUseItem", "", M2Share.g_sGameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : BaseCommond
     {
         [DefaultCommand]
@@ -188,36 +188,36 @@ namespace GameSvr
                     // PlayObject.SendUpdateItem(UserItem);
                     m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
-                //case 3:// 人物装备死亡不爆绑定
-                //    sBindName = PlayObject.m_sCharName;
-                //    M2Share.g_ItemBindDieNoDropName.__Lock();
-                //    try
-                //    {
-                //        for (var i = 0; i < M2Share.g_ItemBindDieNoDropName.Count; i++)
-                //        {
-                //            //ItemBind = M2Share.g_ItemBindDieNoDropName[i];
-                //            //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
-                //            //{
-                //            //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
-                //            //    return;
-                //            //}
-                //        }
-                //        ItemBind = new TItemBind
-                //        {
-                //            nItemIdx = nItemIdx,
-                //            nMakeIdex = 0,
-                //            sBindName = sBindName
-                //        };
-                //        //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
-                //    }
-                //    finally
-                //    {
-                //        M2Share.g_ItemBindDieNoDropName.UnLock();
-                //    }
-                //    M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                //    m_PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，死亡不爆绑定到%s成功。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-                //    PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
-                //    break;
+                    //case 3:// 人物装备死亡不爆绑定
+                    //    sBindName = PlayObject.m_sCharName;
+                    //    M2Share.g_ItemBindDieNoDropName.__Lock();
+                    //    try
+                    //    {
+                    //        for (var i = 0; i < M2Share.g_ItemBindDieNoDropName.Count; i++)
+                    //        {
+                    //            //ItemBind = M2Share.g_ItemBindDieNoDropName[i];
+                    //            //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
+                    //            //{
+                    //            //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+                    //            //    return;
+                    //            //}
+                    //        }
+                    //        ItemBind = new TItemBind
+                    //        {
+                    //            nItemIdx = nItemIdx,
+                    //            nMakeIdex = 0,
+                    //            sBindName = sBindName
+                    //        };
+                    //        //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
+                    //    }
+                    //    finally
+                    //    {
+                    //        M2Share.g_ItemBindDieNoDropName.UnLock();
+                    //    }
+                    //    M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
+                    //    m_PlayObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]，死亡不爆绑定到%s成功。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), UserItem.wIndex, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
+                    //    PlayObject.SysMsg(string.Format("您的%s[%s]已经绑定到%s[%s]上了。", M2Share.GetUseItemName(nItem), M2Share.UserEngine.GetStdItemName(UserItem.wIndex), sType, sBindName), TMsgColor.c_Blue, TMsgType.t_Hint);
+                    //    break;
             }
         }
     }

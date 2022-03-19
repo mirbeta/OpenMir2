@@ -17,7 +17,8 @@ namespace GameSvr
 
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             var builder = new HostBuilder()
-                .ConfigureLogging(logging => {
+                .ConfigureLogging(logging =>
+                {
                     logging.AddConsole();
                     logging.AddDebug();
                     logging.ClearProviders();

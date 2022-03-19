@@ -1,13 +1,12 @@
-﻿using SystemModule;
-using System;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
     /// <summary>
     /// 调整指定玩家属性点
     /// </summary>
-    [GameCommand("BonuPoint", "调整指定玩家属性点","人物名称 属性点数(不输入为查看点数)", 10)]
+    [GameCommand("BonuPoint", "调整指定玩家属性点", "人物名称 属性点数(不输入为查看点数)", 10)]
     public class BonuPointCommand : BaseCommond
     {
         [DefaultCommand]

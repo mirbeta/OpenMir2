@@ -124,7 +124,7 @@ namespace GameSvr
             if (userCastle.m_sHomeMap != "") WriteString("Defense", "CastleHomeMap", userCastle.m_sHomeMap);
             if (userCastle.m_nHomeX != 0) WriteInteger("Defense", "CastleHomeX", userCastle.m_nHomeX);
             if (userCastle.m_nHomeY != 0) WriteInteger("Defense", "CastleHomeY", userCastle.m_nHomeY);
-            if (userCastle.m_nWarRangeX != 0) WriteInteger("Defense", "CastleWarRangeX",userCastle.m_nWarRangeX);
+            if (userCastle.m_nWarRangeX != 0) WriteInteger("Defense", "CastleWarRangeX", userCastle.m_nWarRangeX);
             if (userCastle.m_nWarRangeY != 0) WriteInteger("Defense", "CastleWarRangeY", userCastle.m_nWarRangeY);
             if (userCastle.m_sPalaceMap != "") WriteString("Defense", "CastlePlaceMap", userCastle.m_sPalaceMap);
             if (userCastle.m_sSecretMap != "") WriteString("Defense", "CastleSecretMap", userCastle.m_sSecretMap);

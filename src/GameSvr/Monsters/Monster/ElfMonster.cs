@@ -7,7 +7,7 @@ namespace GameSvr
     /// </summary>
     public class ElfMonster : Monster
     {
-        public bool boIsFirst= false;
+        public bool boIsFirst = false;
 
         public ElfMonster() : base()
         {
@@ -23,7 +23,7 @@ namespace GameSvr
             RecalcAbilitys();
             m_dwWalkTick = m_dwWalkTick + 800;
         }
-        
+
         public override void RecalcAbilitys()
         {
             base.RecalcAbilitys();

@@ -9,11 +9,11 @@ namespace GameSvr
         public TMapWalkXY ActThink_FindGoodPathA(TMapWalkXY[] WalkStep, int nRange, int nType)
         {
             TMapWalkXY result = null;
-            int n10= int.MaxValue;
+            int n10 = int.MaxValue;
             int nMastrRange;
             int nMonCount;
-            TMapWalkXY MapWalkXY= null;
-            TMapWalkXY MapWalkXYA= null;
+            TMapWalkXY MapWalkXY = null;
+            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
@@ -111,8 +111,8 @@ namespace GameSvr
             int n10 = int.MaxValue;
             int n1C;
             int nMonCount;
-            TMapWalkXY MapWalkXY= null;
-            TMapWalkXY MapWalkXYA= null;
+            TMapWalkXY MapWalkXY = null;
+            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {

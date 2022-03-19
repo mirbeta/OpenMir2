@@ -1,6 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Threading;
 using SystemModule;
 
 namespace GameSvr
@@ -60,7 +58,7 @@ namespace GameSvr
             _actors.TryRemove(actorId, out ghostactor);
             if (ghostactor != null)
             {
-               // M2Share.MainOutMessage($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
+                // M2Share.MainOutMessage($"清理死亡对象 名称:[{ghostactor.m_sCharName}] 地图:{ghostactor.m_sMapName} 坐标:{ghostactor.m_nCurrX}:{ghostactor.m_nCurrY}");
             }
         }
 

@@ -807,7 +807,7 @@ namespace GameSvr
 
         public int LoadQuestDiary()
         {
-            int result= 1;
+            int result = 1;
             IList<TQDDinfo> QDDinfoList;
             TQDDinfo QDDinfo;
             var s14 = string.Empty;
@@ -1089,108 +1089,108 @@ namespace GameSvr
             {
                 return;
             }
-                for (var i = 0; i < M2Share.UserEngine.m_MerchantList.Count; i++)
+            for (var i = 0; i < M2Share.UserEngine.m_MerchantList.Count; i++)
+            {
+                Merchant = M2Share.UserEngine.m_MerchantList[i];
+                if (Merchant != M2Share.g_FunctionNPC)
                 {
-                    Merchant = M2Share.UserEngine.m_MerchantList[i];
-                    if (Merchant != M2Share.g_FunctionNPC)
-                    {
-                        Merchant.m_nFlag = -1;
-                    }
+                    Merchant.m_nFlag = -1;
                 }
-                LoadList = new StringList();
-                LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+            }
+            LoadList = new StringList();
+            LoadList.LoadFromFile(sFileName);
+            for (var i = 0; i < LoadList.Count; i++)
+            {
+                var sLineText = LoadList[i].Trim();
+                if (sLineText != "" && sLineText[0] != ';')
                 {
-                    var sLineText = LoadList[i].Trim();
-                    if (sLineText != "" && sLineText[0] != ';')
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCharName, new[] { " ", "\t" });
+                    if (sCharName != "" && sCharName[0] == '\"')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sCharName, new[] { " ", "\t" });
-                        if (sCharName != "" && sCharName[0] == '\"')
+                        HUtil32.ArrestStringEx(sCharName, '\"', '\"', ref sCharName);
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, new[] { " ", "\t" });
+                    nX = HUtil32.Str_ToInt(sX, 0);
+                    nY = HUtil32.Str_ToInt(sY, 0);
+                    boNewNpc = true;
+                    for (var j = 0; j < M2Share.UserEngine.m_MerchantList.Count; j++)
+                    {
+                        Merchant = M2Share.UserEngine.m_MerchantList[j];
+                        if (Merchant.m_sMapName == sMapName && Merchant.m_nCurrX == nX && Merchant.m_nCurrY == nY)
                         {
-                            HUtil32.ArrestStringEx(sCharName, '\"', '\"', ref sCharName);
-                        }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, new[] { " ", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, new[] { " ", "\t" });
-                        nX = HUtil32.Str_ToInt(sX, 0);
-                        nY = HUtil32.Str_ToInt(sY, 0);
-                        boNewNpc = true;
-                        for (var j = 0; j < M2Share.UserEngine.m_MerchantList.Count; j++)
-                        {
-                            Merchant = M2Share.UserEngine.m_MerchantList[j];
-                            if (Merchant.m_sMapName == sMapName && Merchant.m_nCurrX == nX && Merchant.m_nCurrY == nY)
+                            boNewNpc = false;
+                            Merchant.m_sScript = sScript;
+                            Merchant.m_sCharName = sCharName;
+                            Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
+                            Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
+                            Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
+                            if (HUtil32.Str_ToInt(sCastle, 0) != 1)
                             {
-                                boNewNpc = false;
-                                Merchant.m_sScript = sScript;
-                                Merchant.m_sCharName = sCharName;
-                                Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                                Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
-                                Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
-                                if (HUtil32.Str_ToInt(sCastle, 0) != 1)
-                                {
-                                    Merchant.m_boCastle = true;
-                                }
-                                else
-                                {
-                                    Merchant.m_boCastle = false;
-                                }
-                                if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
-                                {
-                                    Merchant.m_boCanMove = true;
-                                }
-                                break;
+                                Merchant.m_boCastle = true;
                             }
-                        }
-                        if (boNewNpc)
-                        {
-                            Merchant = new Merchant
+                            else
                             {
-                                m_sMapName = sMapName
-                            };
-                            Merchant.m_PEnvir = M2Share.g_MapManager.FindMap(Merchant.m_sMapName);
-                            if (Merchant.m_PEnvir != null)
-                            {
-                                Merchant.m_sScript = sScript;
-                                Merchant.m_nCurrX = (short)nX;
-                                Merchant.m_nCurrY = (short)nY;
-                                Merchant.m_sCharName = sCharName;
-                                Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
-                                Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
-                                Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
-                                if (HUtil32.Str_ToInt(sCastle, 0) != 1)
-                                {
-                                    Merchant.m_boCastle = true;
-                                }
-                                else
-                                {
-                                    Merchant.m_boCastle = false;
-                                }
-                                if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
-                                {
-                                    Merchant.m_boCanMove = true;
-                                }
-                                M2Share.UserEngine.m_MerchantList.Add(Merchant);
-                                Merchant.Initialize();
+                                Merchant.m_boCastle = false;
                             }
+                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
+                            {
+                                Merchant.m_boCanMove = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (boNewNpc)
+                    {
+                        Merchant = new Merchant
+                        {
+                            m_sMapName = sMapName
+                        };
+                        Merchant.m_PEnvir = M2Share.g_MapManager.FindMap(Merchant.m_sMapName);
+                        if (Merchant.m_PEnvir != null)
+                        {
+                            Merchant.m_sScript = sScript;
+                            Merchant.m_nCurrX = (short)nX;
+                            Merchant.m_nCurrY = (short)nY;
+                            Merchant.m_sCharName = sCharName;
+                            Merchant.m_nFlag = (short)HUtil32.Str_ToInt(sFlag, 0);
+                            Merchant.m_wAppr = (ushort)HUtil32.Str_ToInt(sAppr, 0);
+                            Merchant.m_dwMoveTime = HUtil32.Str_ToInt(sMoveTime, 0);
+                            if (HUtil32.Str_ToInt(sCastle, 0) != 1)
+                            {
+                                Merchant.m_boCastle = true;
+                            }
+                            else
+                            {
+                                Merchant.m_boCastle = false;
+                            }
+                            if (HUtil32.Str_ToInt(sCanMove, 0) != 0 && Merchant.m_dwMoveTime > 0)
+                            {
+                                Merchant.m_boCanMove = true;
+                            }
+                            M2Share.UserEngine.m_MerchantList.Add(Merchant);
+                            Merchant.Initialize();
                         }
                     }
                 }
-                for (var i = M2Share.UserEngine.m_MerchantList.Count - 1; i >= 0; i--)
+            }
+            for (var i = M2Share.UserEngine.m_MerchantList.Count - 1; i >= 0; i--)
+            {
+                Merchant = M2Share.UserEngine.m_MerchantList[i];
+                if (Merchant.m_nFlag == -1)
                 {
-                    Merchant = M2Share.UserEngine.m_MerchantList[i];
-                    if (Merchant.m_nFlag == -1)
-                    {
-                        Merchant.m_boGhost = true;
-                        Merchant.m_dwGhostTick = HUtil32.GetTickCount();
-                        M2Share.UserEngine.m_MerchantList.RemoveAt(i);
-                    }
+                    Merchant.m_boGhost = true;
+                    Merchant.m_dwGhostTick = HUtil32.GetTickCount();
+                    M2Share.UserEngine.m_MerchantList.RemoveAt(i);
                 }
+            }
         }
 
         public int LoadUpgradeWeaponRecord(string sNPCName, IList<TUpgradeInfo> DataList)

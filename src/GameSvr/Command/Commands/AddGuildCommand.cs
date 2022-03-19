@@ -1,13 +1,12 @@
-﻿using SystemModule;
-using System;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
     /// <summary>
     /// 创建行会
     /// </summary>
-    [GameCommand("AddGuild", "新建一个行会","行会名称 掌门人名称", 10)]
+    [GameCommand("AddGuild", "新建一个行会", "行会名称 掌门人名称", 10)]
     public class AddGuildCommand : BaseCommond
     {
         [DefaultCommand]

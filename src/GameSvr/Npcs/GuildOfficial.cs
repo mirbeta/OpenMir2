@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using SystemModule;
 
@@ -9,14 +8,14 @@ namespace GameSvr
     /// 行会NPC类
     /// 行会管理NPC 如：比奇国王
     /// </summary>
-    public class TGuildOfficial: NormNpc
+    public class TGuildOfficial : NormNpc
     {
         public TGuildOfficial() : base()
         {
             this.m_btRaceImg = Grobal2.RCC_MERCHANT;
             this.m_wAppr = 8;
         }
-        
+
         public override void Click(TPlayObject PlayObject)
         {
             base.Click(PlayObject);
@@ -121,7 +120,7 @@ namespace GameSvr
             TUserItem UserItem = null;
             if (sGuildName == "")
             {
-                result =  -4;
+                result = -4;
             }
             if (PlayObject.m_MyGuild == null)
             {
@@ -130,17 +129,17 @@ namespace GameSvr
                     UserItem = PlayObject.CheckItems(M2Share.g_Config.sWomaHorn);
                     if (UserItem == null)
                     {
-                        result =  -3;// '你没有准备好需要的全部物品。'
+                        result = -3;// '你没有准备好需要的全部物品。'
                     }
                 }
                 else
                 {
-                    result =  -2;// '缺少创建费用。'
+                    result = -2;// '缺少创建费用。'
                 }
             }
             else
             {
-                result =  -1;// '您已经加入其它行会。'
+                result = -1;// '您已经加入其它行会。'
             }
             if (result == 0)
             {
@@ -160,7 +159,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    result =  -4;
+                    result = -4;
                 }
             }
             if (result >= 0)

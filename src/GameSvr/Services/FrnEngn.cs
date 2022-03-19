@@ -45,7 +45,7 @@ namespace GameSvr
                     ProcessGameDate();
                     GetGameTime();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     M2Share.ErrorMessage(sExceptionMsg);
                     M2Share.ErrorMessage(ex.StackTrace);
@@ -89,7 +89,8 @@ namespace GameSvr
                 case 13:
                 case 14:
                 case 22:
-                    M2Share.g_nGameTime = 3;//夜晚
+                    //M2Share.g_nGameTime = 3;//夜晚
+                    M2Share.g_nGameTime = 1;//白天
                     break;
             }
         }

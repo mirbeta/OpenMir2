@@ -9,8 +9,8 @@ namespace GameSvr
         private readonly TPlayObject PlayObject = null;
 
         public MirrorMessage()
-        { 
-            
+        {
+
         }
 
         public void ProcessData(int Ident, int serverNum, string Body)
@@ -123,13 +123,13 @@ namespace GameSvr
                 case Grobal2.ISM_REQUEST_LOVERRECALL:
                     MsgGetRequestLoverRecall(serverNum, Body);
                     break;
-                 case Grobal2.ISM_GRUOPMESSAGE:
-                     Console.WriteLine("跨服消息");
-                     break;
+                case Grobal2.ISM_GRUOPMESSAGE:
+                    Console.WriteLine("跨服消息");
+                    break;
             }
         }
 
-        private void ServerHeartMessage(int sNu,string Body)
+        private void ServerHeartMessage(int sNu, string Body)
         {
 
         }

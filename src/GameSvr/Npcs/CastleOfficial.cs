@@ -11,9 +11,9 @@ namespace GameSvr
     {
         public CastleOfficial() : base()
         {
-            
+
         }
-        
+
         public override void Click(TPlayObject PlayObject)
         {
             if (this.m_Castle == null)
@@ -47,23 +47,23 @@ namespace GameSvr
                     sMsg = this.ReplaceVariableText(sMsg, "<$TODAYINCOME>", sText);
                     break;
                 case "$CASTLEDOORSTATE":
-                {
-                    var castleDoor = (CastleDoor)this.m_Castle.m_MainDoor.BaseObject;
-                    if (castleDoor.m_boDeath)
                     {
-                        sText = "destroyed";
+                        var castleDoor = (CastleDoor)this.m_Castle.m_MainDoor.BaseObject;
+                        if (castleDoor.m_boDeath)
+                        {
+                            sText = "destroyed";
+                        }
+                        else if (castleDoor.m_boOpened)
+                        {
+                            sText = "opened";
+                        }
+                        else
+                        {
+                            sText = "closed";
+                        }
+                        sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEDOORSTATE>", sText);
+                        break;
                     }
-                    else if (castleDoor.m_boOpened)
-                    {
-                        sText = "opened";
-                    }
-                    else
-                    {
-                        sText = "closed";
-                    }
-                    sMsg = this.ReplaceVariableText(sMsg, "<$CASTLEDOORSTATE>", sText);
-                    break;
-                }
                 case "$REPAIRDOORGOLD":
                     sText = M2Share.g_Config.nRepairDoorPrice.ToString();
                     sMsg = this.ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
@@ -406,7 +406,7 @@ namespace GameSvr
                 PlayObject.SysMsg("城内资金不足!!!", MsgColor.Red, MsgType.Hint);
             }
         }
-        
+
         protected override void SendCustemMsg(TPlayObject PlayObject, string sMsg)
         {
             if (!M2Share.g_Config.boSubkMasterSendMsg)

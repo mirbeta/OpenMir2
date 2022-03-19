@@ -14,7 +14,7 @@ namespace GameSvr
     public class Association
     {
         public int Count => GetMemberCount();
-        
+
         public bool IsFull => GetMemgerIsFull();
 
         public int BuildPoint
@@ -22,31 +22,31 @@ namespace GameSvr
             get => m_nBuildPoint;
             set => SetBuildPoint(value);
         }
-        
+
         public int Aurae
         {
             get => m_nAurae;
             set => SetAuraePoint(value);
         }
-        
+
         public int Stability
         {
             get => m_nStability;
             set => SetStabilityPoint(value);
         }
-        
+
         public int Flourishing
         {
             get => m_nFlourishing;
             set => SetFlourishPoint(value);
         }
-        
+
         public int ChiefItemCount
         {
             get => m_nChiefItemCount;
             set => SetChiefItemCount(value);
         }
-        
+
         /// <summary>
         /// 行会名称
         /// </summary>
@@ -545,10 +545,10 @@ namespace GameSvr
         public void DelHumanObj(TPlayObject PlayObject)
         {
             CheckSaveGuildFile();
-            for (var i = 0; i < m_RankList.Count; i ++ )
+            for (var i = 0; i < m_RankList.Count; i++)
             {
                 var guildRank = m_RankList[i];
-                for (var j = 0; j < guildRank.MemberList.Count; j ++ )
+                for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
                     if (string.Compare(guildRank.MemberList[j].sMemberName, PlayObject.m_sCharName, StringComparison.OrdinalIgnoreCase) == 1)
                     {
@@ -726,7 +726,7 @@ namespace GameSvr
 
         public int UpdateRank(string sRankData)
         {
-            int result= -1;
+            int result = -1;
             TGuildRank NewGuildRank;
             var sRankInfo = string.Empty;
             var sRankNo = string.Empty;

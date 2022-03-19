@@ -1,5 +1,5 @@
-﻿using SystemModule;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -13,7 +13,7 @@ namespace GameSvr
         public void AllowGroupReCall(TPlayObject PlayObject)
         {
             PlayObject.m_boAllowGroupReCall = !PlayObject.m_boAllowGroupReCall;
-            if (PlayObject.m_boAllowGroupReCall) 
+            if (PlayObject.m_boAllowGroupReCall)
             {
                 PlayObject.SysMsg(M2Share.g_sEnableGroupRecall, MsgColor.Green, MsgType.Hint);
             }

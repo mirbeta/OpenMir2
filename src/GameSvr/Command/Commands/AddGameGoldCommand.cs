@@ -1,13 +1,13 @@
-﻿using SystemModule;
+﻿using GameSvr.CommandSystem;
 using System;
-using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr.Command
 {
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
-    [GameCommand("AddGameGold", "调整指定玩家游戏币","人物名称  金币数量", 10)]
+    [GameCommand("AddGameGold", "调整指定玩家游戏币", "人物名称  金币数量", 10)]
     public class AddGameGoldCommand : BaseCommond
     {
         [DefaultCommand]

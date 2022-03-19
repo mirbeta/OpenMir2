@@ -34,7 +34,7 @@ namespace GameSvr
 
         public override void Run()
         {
-            int nRage= 9999;
+            int nRage = 9999;
             TBaseObject BaseObject = null;
             TBaseObject TargetBaseObject = null;
             if (!m_boDeath && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)

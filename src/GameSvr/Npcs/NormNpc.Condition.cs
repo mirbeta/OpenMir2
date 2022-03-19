@@ -2095,7 +2095,7 @@ namespace GameSvr
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
-                case '=': 
+                case '=':
                     if (PlayObject.m_wContribution == nContribution)
                     {
                         result = true;
@@ -2565,11 +2565,11 @@ namespace GameSvr
             {
                 if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref n14))
                 {
-                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1),  -1);
+                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1), -1);
                 }
                 if (!GetValValue(PlayObject, QuestConditionInfo.sParam2, ref n18))
                 {
-                    n18 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
+                    n18 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2), -1);
                 }
                 result = n14 > n18;
             }
@@ -2581,7 +2581,7 @@ namespace GameSvr
             var result = false;
             int n14 = 0;
             int n18 = 0;
-            if (CheckVarNameNo(PlayObject,QuestConditionInfo, ref n14, ref n18))
+            if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))
             {
                 result = n14 < n18;
             }
@@ -2589,11 +2589,11 @@ namespace GameSvr
             {
                 if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref n14))
                 {
-                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1),  -1);
+                    n14 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam1), -1);
                 }
                 if (!GetValValue(PlayObject, QuestConditionInfo.sParam2, ref n18))
                 {
-                    n18 =HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2),  -1);
+                    n18 = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestConditionInfo.sParam2), -1);
                 }
                 result = n14 < n18;
             }
@@ -2764,14 +2764,14 @@ namespace GameSvr
             bool result = false;
             TDynamicVar DynamicVar;
             string sName = string.Empty;
-            Dictionary<string,TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return result;
             }
             else
             {
-                if(DynamicVarList.TryGetValue(sValName,out DynamicVar))
+                if (DynamicVarList.TryGetValue(sValName, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {

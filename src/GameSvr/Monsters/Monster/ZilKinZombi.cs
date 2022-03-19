@@ -2,7 +2,7 @@
 
 namespace GameSvr
 {
-    public class ZilKinZombi: AtMonster
+    public class ZilKinZombi : AtMonster
     {
         private int dw558 = 0;
         private int nZilKillCount = 0;
@@ -12,7 +12,7 @@ namespace GameSvr
         {
             this.m_nViewRange = 6;
             this.m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 2500;
-            this.m_dwSearchTick =HUtil32.GetTickCount();
+            this.m_dwSearchTick = HUtil32.GetTickCount();
             nZilKillCount = 0;
             if (M2Share.RandomNumber.Random(3) == 0)
             {
@@ -25,7 +25,7 @@ namespace GameSvr
             base.Die();
             if (nZilKillCount > 0)
             {
-                dw558 =HUtil32.GetTickCount();
+                dw558 = HUtil32.GetTickCount();
                 dw560 = (M2Share.RandomNumber.Random(20) + 4) * 1000;
             }
             nZilKillCount -= 1;

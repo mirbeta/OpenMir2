@@ -26,7 +26,7 @@ namespace GameSvr
                 return instance;
             }
         }
-        
+
         public SnapsmClient()
         {
             _msgClient = new IClientScoket();

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr
@@ -84,7 +83,7 @@ namespace GameSvr
                 for (var i = 0; i < Castle.m_EnvirList.Count; i++)
                 {
                     Castle.m_EnvirList[i] = M2Share.g_MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
-                }    
+                }
                 Save();
                 return;
             }
@@ -161,7 +160,7 @@ namespace GameSvr
             for (var i = 0; i < _castleList.Count; i++)
             {
                 Castle = _castleList[i];
-                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg,Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome ));
+                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome));
             }
         }
 

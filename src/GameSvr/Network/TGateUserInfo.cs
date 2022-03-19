@@ -38,5 +38,5 @@ namespace GameSvr
         public TFrontEngine FrontEngine;
         public UserEngine UserEngine;
         public int dwNewUserTick;
-    } 
+    }
 }

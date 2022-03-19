@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Console;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -26,7 +25,7 @@ namespace GameSvr
         private StringList m_RunAddrList = null;
         private int n8 = 0;
         private TIPaddr[] m_IPaddrArr;
-        private int dwSendTestMsgTick = 0;
+        private int SendTestMsgTick = 0;
         /// <summary>
         /// 最大6个游戏网关
         /// </summary>
@@ -148,7 +147,7 @@ namespace GameSvr
                 HUtil32.LeaveCriticalSection(m_RunSocketSection);
             }
         }
-   
+
         private void ExecGateBuffers(int nGateIndex, TGateInfo GameGate, byte[] data, int nMsgLen)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";
@@ -156,7 +155,7 @@ namespace GameSvr
             const string sExceptionMsg3 = "[Exception] TRunSocket::ExecGateBuffers -> FreeMem";
             var nLen = 0;
             var buffIndex = 0;
-            if (data is not {Length: > 0} || nMsgLen <= 0)
+            if (data is not { Length: > 0 } || nMsgLen <= 0)
             {
                 return;
             }
@@ -211,16 +210,19 @@ namespace GameSvr
                             }
                             else
                             {
-                                byte[] msgBuff = new byte[msgHeader.nLength];
-                                Array.Copy(Buff, MessageHeader.PacketSize, msgBuff, 0, msgBuff.Length);//跳过消息头20字节
+                                byte[] msgBuff = Buff[MessageHeader.PacketSize..];//跳过消息头20字节
                                 ExecGateMsg(nGateIndex, GameGate, msgHeader, msgBuff, msgHeader.nLength);
+                            }
+                            nLen -= (msgHeader.nLength + MessageHeader.PacketSize);
+                            if (nLen < 20)
+                            {
+                                break;
                             }
                             var newLen = MessageHeader.PacketSize + msgHeader.nLength;
                             var tempBuff = new byte[Buff.Length - newLen];
                             Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);
                             Buff = tempBuff;
                             buffIndex = 0;
-                            nLen -= (msgHeader.nLength + MessageHeader.PacketSize);
                         }
                         else
                         {
@@ -229,8 +231,7 @@ namespace GameSvr
                             Array.Copy(Buff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
                             Buff = messageBuff;
                             nLen -= 1;
-                            
-                            Console.WriteLine("todo 注意看这里，一般情况下不应该看到这句话.");
+                            Console.WriteLine("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
                         }
                         if (nLen < 20)
                         {
@@ -264,7 +265,7 @@ namespace GameSvr
             }
         }
 
-        private bool DoClientCertification_GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionID, ref int nClientVersion, ref bool boFlag,ref byte[] tHWID)
+        private bool DoClientCertification_GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionID, ref int nClientVersion, ref bool boFlag, ref byte[] tHWID)
         {
             var result = false;
             var sCodeStr = string.Empty;
@@ -331,7 +332,7 @@ namespace GameSvr
                     {
                         sData = HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         sMsg = sMsg.Substring(1, sMsg.Length - 1);
-                        if (DoClientCertification_GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag,ref HWID))
+                        if (DoClientCertification_GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
                         {
                             SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent);
                             if (SessInfo != null && nPayMent > 0)
@@ -576,7 +577,7 @@ namespace GameSvr
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
                                     var defMsg = new TDefaultMessage(MsgBuff);
-                                    if (nMsgLen == 12) 
+                                    if (nMsgLen == 12)
                                     {
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);
                                     }
@@ -672,7 +673,7 @@ namespace GameSvr
                 {
                     if (gameGate.boUsed && gameGate.Socket != null)
                     {
-                        gameGate.Send(buffer);
+                        gameGate.AddToQueue(buffer);
                         result = true;
                     }
                 }
@@ -802,7 +803,7 @@ namespace GameSvr
             }
         }
 
-        public void KickUser(string sAccount, int nSessionID,int payMode)
+        public void KickUser(string sAccount, int nSessionID, int payMode)
         {
             const string sExceptionMsg = "[Exception] TRunSocket::KickUser";
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
@@ -876,7 +877,7 @@ namespace GameSvr
             }
             return result;
         }
-        
+
         public void Run()
         {
             TGateInfo Gate;
@@ -888,9 +889,9 @@ namespace GameSvr
                 {
                     if (M2Share.g_Config.nGateLoad > 0)
                     {
-                        if ((HUtil32.GetTickCount() - dwSendTestMsgTick) >= 100)
+                        if ((HUtil32.GetTickCount() - SendTestMsgTick) >= 100)
                         {
-                            dwSendTestMsgTick = HUtil32.GetTickCount();
+                            SendTestMsgTick = HUtil32.GetTickCount();
                             for (var i = g_GateArr.GetLowerBound(0); i <= g_GateArr.GetUpperBound(0); i++)
                             {
                                 Gate = g_GateArr[i];
@@ -937,7 +938,7 @@ namespace GameSvr
                 M2Share.g_nSockCountMax = M2Share.g_nSockCountMin;
             }
         }
-        
+
         public void Start()
         {
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
@@ -961,7 +962,7 @@ namespace GameSvr
 
         private void GateSocketClientConnect(object sender, AsyncUserToken e)
         {
-           AddGate(e);
+            AddGate(e);
         }
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
@@ -978,7 +979,7 @@ namespace GameSvr
                 ExecGateBuffers(gate.GateIndex, gate, data, nMsgLen);
             }
         }
-        
+
         public async Task StartConsumer(CancellationToken cancellation)
         {
             var gTasks = new Task[g_GateArr.Length];

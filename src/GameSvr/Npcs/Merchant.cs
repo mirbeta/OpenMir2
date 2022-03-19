@@ -464,7 +464,7 @@ namespace GameSvr
                     return;
                 }
             }
-            if (User.m_UseItems[Grobal2.U_WEAPON] != null && User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice 
+            if (User.m_UseItems[Grobal2.U_WEAPON] != null && User.m_UseItems[Grobal2.U_WEAPON].wIndex != 0 && User.m_nGold >= M2Share.g_Config.nUpgradeWeaponPrice
                 && User.CheckItems(M2Share.g_Config.sBlackStone) != null)
             {
                 User.DecGold(M2Share.g_Config.nUpgradeWeaponPrice);
@@ -603,7 +603,7 @@ namespace GameSvr
                 if (UpgradeInfo.btDc >= UpgradeInfo.btMc && (UpgradeInfo.btDc >= UpgradeInfo.btSc) || (n1C == 0))
                 {
                     n90 = HUtil32._MIN(11, UpgradeInfo.btDc);
-                    n10 = HUtil32._MIN(85, (n90 << 3 - n90 ) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
+                    n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + UpgradeInfo.UserItem.btValue[3] - UpgradeInfo.UserItem.btValue[4] + User.m_nBodyLuckLevel);
                     if (M2Share.RandomNumber.Random(M2Share.g_Config.nUpgradeWeaponDCRate) < n10)
                     {
                         UpgradeInfo.UserItem.btValue[10] = 10;
@@ -977,7 +977,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.MainOutMessage(format(sExceptionMsg, sData));
                 M2Share.MainOutMessage(ex.StackTrace);
@@ -1133,18 +1133,18 @@ namespace GameSvr
                     sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
                     break;
                 case "$USERWEAPON":
-                {
-                    if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
                     {
-                        sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                        if (PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex != 0)
+                        {
+                            sText = M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[Grobal2.U_WEAPON].wIndex);
+                        }
+                        else
+                        {
+                            sText = "无";
+                        }
+                        sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
+                        break;
                     }
-                    else
-                    {
-                        sText = "无";
-                    }
-                    sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
-                    break;
-                }
             }
         }
 
@@ -1389,7 +1389,7 @@ namespace GameSvr
                         {
                             nInt = HUtil32._MAX(0, List20.Count - 10);
                         }
-                        for (var j  = List20.Count - 1; j >= 0; j--)
+                        for (var j = List20.Count - 1; j >= 0; j--)
                         {
                             UserItem = List20[j];
                             ClientItem = new TClientItem();
@@ -1536,7 +1536,7 @@ namespace GameSvr
             if (result)
             {
                 List28 = null;
-                for (var i  = 0; i < List10.Count; i++)
+                for (var i = 0; i < List10.Count; i++)
                 {
                     s20 = List10[i].ItemName;
                     n1C = List10[i].ItemCount;

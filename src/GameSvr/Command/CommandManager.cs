@@ -41,7 +41,7 @@ namespace GameSvr.CommandSystem
                     M2Share.ErrorMessage($"重复游戏命令: {groupAttribute.Name}");
                 }
 
-                if (Commands.TryGetValue(groupAttribute.Name,out cmdName))
+                if (Commands.TryGetValue(groupAttribute.Name, out cmdName))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = cmdName;
@@ -99,7 +99,7 @@ namespace GameSvr.CommandSystem
                 return found;
 
             BaseCommond commond = null;
-            if(CommandGroups.TryGetValue(command, out commond))
+            if (CommandGroups.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters, playObject);
                 found = true;

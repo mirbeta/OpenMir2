@@ -12,8 +12,8 @@ namespace GameSvr
         public ushort nMP;
 
         public TSlaveInfo()
-        { 
-            
+        {
+
         }
     }
 }

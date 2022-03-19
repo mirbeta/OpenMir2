@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace GameSvr
 {
@@ -14,8 +13,8 @@ namespace GameSvr
         public string sName;
         public ushort wLooks;
         public int nVisibleFlag;
-    } 
-    
+    }
+
     /// <summary>
     /// 地图上的对象
     /// </summary>
@@ -61,7 +60,7 @@ namespace GameSvr
         /// 对象数量
         /// </summary>
         public int Count => ObjList.Count;
-        
+
         public IList<CellObject> ObjList;
 
         public void Add(CellObject @object)
@@ -92,7 +91,7 @@ namespace GameSvr
         public short nX;
         public short nY;
 
-        public PointInfo(short x,short y)
+        public PointInfo(short x, short y)
         {
             nX = x;
             nY = y;
@@ -106,7 +105,7 @@ namespace GameSvr
         public int Right;
         public int Bottom;
 
-        public TRect(int left,int top,int right,int bottom)
+        public TRect(int left, int top, int right, int bottom)
         {
             Left = left;
             Top = top;

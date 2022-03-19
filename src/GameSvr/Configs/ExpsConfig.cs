@@ -3,7 +3,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Configs
 {
-    public class ExpsConfig: IniFile
+    public class ExpsConfig : IniFile
     {
         public ExpsConfig(string fileName) : base(fileName)
         {

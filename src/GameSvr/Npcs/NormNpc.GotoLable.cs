@@ -1856,7 +1856,7 @@ namespace GameSvr
                     case M2Share.nSC_MUL:
                         MulData(PlayObject, QuestActionInfo);
                         break;
-                    case M2Share.nSC_PERCENT: 
+                    case M2Share.nSC_PERCENT:
                         PercentData(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nBREAKTIMERECALL:
@@ -2345,7 +2345,8 @@ namespace GameSvr
                     case M2Share.nDELAYGOTO:
                         PlayObject.m_boTimeGoto = true;
                         var m_DelayGoto = HUtil32.Str_ToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
-                        if (m_DelayGoto == 0) {
+                        if (m_DelayGoto == 0)
+                        {
                             var delayCount = 0;
                             GetValValue(PlayObject, QuestActionInfo.sParam1, ref delayCount);
                             m_DelayGoto = delayCount;
@@ -2354,7 +2355,8 @@ namespace GameSvr
                         {
                             PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
                         }
-                        else {
+                        else
+                        {
                             PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
                         }
                         PlayObject.m_sTimeGotoLable = QuestActionInfo.sParam2;

@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TeleMonster: Monster
+    public class TeleMonster : Monster
     {
         public TeleMonster() : base()
         {

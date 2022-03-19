@@ -104,7 +104,7 @@ namespace GameSvr
             {
                 envirnoment.nMinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath,M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
             {
                 if (!m_MapList.ContainsKey(sMapName))
                 {
@@ -141,7 +141,7 @@ namespace GameSvr
             }
             return result;
         }
-        
+
         public Envirnoment FindMap(string sMapName)
         {
             Envirnoment Map = null;

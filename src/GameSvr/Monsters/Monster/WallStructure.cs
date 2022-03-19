@@ -1,9 +1,8 @@
-﻿using System;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
-    public class WallStructure: GuardUnit
+    public class WallStructure : GuardUnit
     {
         public int n55C = 0;
         private int dw560 = 0;

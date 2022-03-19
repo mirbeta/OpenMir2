@@ -1,13 +1,9 @@
-﻿using SystemModule;
+﻿using GameSvr.CommandSystem;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GameSvr.CommandSystem;
 
 namespace GameSvr.Command
 {
-    [GameCommand("ClearItemMap", "清除指定地图范围物品","地图编号", 10)]
+    [GameCommand("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
     public class ClearItemMapCommand : BaseCommond
     {
         [DefaultCommand]

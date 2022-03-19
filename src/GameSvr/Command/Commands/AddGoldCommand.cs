@@ -1,13 +1,13 @@
-﻿using SystemModule;
+﻿using GameSvr.CommandSystem;
 using System;
-using GameSvr.CommandSystem;
+using SystemModule;
 
 namespace GameSvr
 {
     /// <summary>
     /// 调整指定玩家金币
     /// </summary>
-    [GameCommand("AddGold", "调整指定玩家金币","人物名称  金币数量", 10)]
+    [GameCommand("AddGold", "调整指定玩家金币", "人物名称  金币数量", 10)]
     public class AddGoldCommand : BaseCommond
     {
         [DefaultCommand]
@@ -46,7 +46,7 @@ namespace GameSvr
                 PlayObject.SysMsg(sHumName + "的金币已增加" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.g_boGameLogGold)
                 {
-                    M2Share.AddGameDataLog("14" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString() 
+                    M2Share.AddGameDataLog("14" + "\09" + PlayObject.m_sMapName + "\09" + (PlayObject.m_nCurrX).ToString() + "\09" + (PlayObject.m_nCurrY).ToString()
                         + "\09" + PlayObject.m_sCharName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + (nCount).ToString() + "\09" + "1" + "\09" + sHumName);
                 }
             }
