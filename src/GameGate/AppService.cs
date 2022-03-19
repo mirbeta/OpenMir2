@@ -43,7 +43,9 @@ namespace GameGate
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Debug.WriteLine("GameGate is stopping.");
+            LogQueue.Enqueue("正在停止服务...", 2);
             _serverApp.StopService();
+            LogQueue.Enqueue("服务停止成功...", 2);
             return base.StopAsync(cancellationToken);
         }
     }

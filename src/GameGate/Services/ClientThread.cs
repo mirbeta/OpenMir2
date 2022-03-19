@@ -224,7 +224,7 @@ namespace GameGate
         /// </summary>
         public void UserEnter(int wSocketIndex, int nSocket, string Data)
         {
-            SendServerMsg(Grobal2.GM_OPEN,  wSocketIndex, nSocket, 0, Data.Length, Data);
+            SendServerMsg(Grobal2.GM_OPEN, wSocketIndex, nSocket, 0, Data.Length, Data);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace GameGate
         /// </summary>
         public void UserLeave(int scoket)
         {
-            SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, ""); 
+            SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, "");
         }
 
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
@@ -290,6 +290,7 @@ namespace GameGate
                             Buff = Buff[20..];
                             buffIndex = 0;
                             nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
+                            _logQueue.Enqueue("不应该出现这个文字", 5);
                             break;
                         }
                         if (mesgHeader.dwCode == Grobal2.RUNGATECODE)
@@ -321,26 +322,25 @@ namespace GameGate
                                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
-                                    
                                     var msgBuff = mesgHeader.nLength > 0 ? new byte[mesgHeader.nLength] : new byte[Buff.Length - 20];
                                     Array.Copy(Buff, headerMessageSize, msgBuff, 0, msgBuff.Length);
-                                    
                                     var message = new TMessageData();
                                     message.MessageId = mesgHeader.wGSocketIdx;
                                     message.Buffer = msgBuff;
                                     message.BufferLen = mesgHeader.nLength;
-                                    _sessionManager.SendQueue.TryWrite(message);
+                                    _sessionManager.AddToQueue(message);
                                     break;
                                 case Grobal2.GM_TEST:
                                     break;
                             }
-                            
+                            nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
+                            if (nLen <= 0)
+                            {
+                                break;
+                            }
                             var newLen = headerMessageSize + Math.Abs(mesgHeader.nLength);
-                            /*var tempBuff = new byte[Buff.Length - newLen];
-                            Array.Copy(Buff, newLen, tempBuff, 0, tempBuff.Length);*/
                             Buff = Buff[newLen..];
                             buffIndex = 0;
-                            nLen -= Math.Abs(mesgHeader.nLength) + headerMessageSize;
                         }
                         else
                         {

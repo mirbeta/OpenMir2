@@ -14,7 +14,7 @@ namespace GameGate
         {
             get { return instance; }
         }
-        
+
         public GateConfig GateConfig;
         public GameGateInfo[] GameGateList;
 

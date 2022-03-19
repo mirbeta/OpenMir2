@@ -156,9 +156,8 @@ namespace GameGate
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{nSockIndex}]");
             }
-
             _clientManager.DeleteClientThread(nSockIndex);
-            _sessionManager.Remove(nSockIndex);
+            _sessionManager.CloseSession(nSockIndex);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -175,6 +174,11 @@ namespace GameGate
             var clientSession = _sessionManager.GetSession(connectionId);
             if (clientSession != null)
             {
+                if (clientSession.Session == null)
+                {
+                    _logQueue.Enqueue($"[{connectionId}] Session会话已经失效", 5);
+                    return;
+                }
                 if (!clientSession.Session.Socket.Connected)
                 {
                     return;

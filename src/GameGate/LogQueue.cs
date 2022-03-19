@@ -18,7 +18,7 @@ namespace GameGate
 
         public LogQueue()
         {
-            
+
         }
 
         public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
