@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -49,6 +48,9 @@ namespace SelGate.Services
         public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
         {
             ClientId = clientId;
+            SessionArray = new TSessionInfo[MaxSession];
+            _sessionManager = sessionManager;
+            _logQueue = logQueue;
             ClientSocket = new IClientScoket();
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
@@ -56,9 +58,6 @@ namespace SelGate.Services
             ClientSocket.OnError += ClientSocketError;
             ClientSocket.Address = serverAddr;
             ClientSocket.Port = serverPort;
-            SessionArray = new TSessionInfo[MaxSession];
-            _sessionManager = sessionManager;
-            _logQueue = logQueue;
         }
 
         public bool IsConnected => isConnected;
@@ -219,16 +218,11 @@ namespace SelGate.Services
             }
         }
 
-        public void SendBuffer(byte[] buffer, int buffLen = 0)
-        {
-            SendSocket(buffer);
-        }
-
         public void SendData(string sendText)
         {
             SendSocket(HUtil32.GetBytes(sendText));
         }
-        
+
         private void SendSocket(byte[] sendBuffer)
         {
             if (ClientSocket.IsConnected)

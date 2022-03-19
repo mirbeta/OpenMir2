@@ -71,7 +71,7 @@ namespace SelGate
             }
         }
     }
-    
+
     public struct TGameGateList
     {
         public string sServerAdress;

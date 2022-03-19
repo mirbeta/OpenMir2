@@ -55,12 +55,12 @@ namespace SelGate.Services
             }
             return null;
         }
-        
-        public void Remove(int sessionId)
+
+        public void CloseSession(int sessionId)
         {
             if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
-               Console.WriteLine($"移除用户会话失败:[{sessionId}]");
+                Console.WriteLine($"移除用户会话失败:[{sessionId}]");
             }
         }
 

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using SelGate.Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using SelGate.Services;
 
 namespace SelGate
 {
@@ -23,7 +23,7 @@ namespace SelGate
             {
                 OutMianMessage();
                 _clientManager.CheckSession();
-                _clientManager.ProcessDelayMsg();
+                //_clientManager.ProcessDelayMsg();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }

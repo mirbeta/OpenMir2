@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
@@ -22,7 +21,7 @@ namespace SelGate.Services
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
 
-        public ServerService(LogQueue logQueue,ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
+        public ServerService(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager, ClientManager clientManager)
         {
             _logQueue = logQueue;
             _sessionManager = sessionManager;
@@ -122,7 +121,6 @@ namespace SelGate.Services
                 _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
-            _sessionManager.Remove(e.ConnectionId);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
