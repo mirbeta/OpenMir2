@@ -21,7 +21,7 @@ namespace LoginGate
         {
             get { return instance; }
         }
-        
+
         public SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
@@ -39,12 +39,19 @@ namespace LoginGate
             {
                 if (_sendQueue.Reader.TryRead(out var message))
                 {
-                    var userSession = GetSession(message.MessageId);
-                    if (userSession == null)
+                    try
                     {
-                        return;
+                        var userSession = GetSession(message.MessageId);
+                        if (userSession == null)
+                        {
+                            return;
+                        }
+                        userSession.ProcessSvrData(message);
                     }
-                    userSession.ProcessSvrData(message);
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.StackTrace);
+                    }
                 }
             }
         }
@@ -62,16 +69,12 @@ namespace LoginGate
             }
             return null;
         }
-        
+
         public void CloseSession(int sessionId)
         {
             if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
                 clientSession.Session.Socket.Close();
-            }
-            else
-            {
-                Console.WriteLine($"删除用户会话失败:[{sessionId}]");
             }
         }
 

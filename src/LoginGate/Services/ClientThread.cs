@@ -1,5 +1,5 @@
-using System;
 using LoginGate.Conf;
+using System;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -106,7 +106,7 @@ namespace LoginGate
             RestSessionArray();
             GateShare.dwCheckServerTimeMax = 0;
             GateShare.dwCheckServerTimeMax = 0;
-            GateShare.ServerGateList.Add(this);
+            GateShare.ServerGateList.TryAdd(ClientId, this);
             _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
@@ -126,7 +126,7 @@ namespace LoginGate
             }
             RestSessionArray();
             boGateReady = false;
-            GateShare.ServerGateList.Remove(this);
+            GateShare.ServerGateList.TryRemove(ClientId, out var client);
             _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
             isConnected = false;
         }
@@ -144,17 +144,16 @@ namespace LoginGate
             HUtil32.ArrestStringEx(sSocketMsg, "%", "$", ref sText);
             if (sText[0] == '+' && sText[1] == '-')
             {
-                var tempStr = sSocketMsg.Substring(3, sSocketMsg.Length - 4);
+                var tempStr = sSocketMsg[3..7];
                 if (!string.IsNullOrEmpty(tempStr))
                 {
                     sSessionId = int.Parse(tempStr);
                     _sessionManager.CloseSession(sSessionId);
                     _logQueue.EnqueueDebugging("收到账号服务器断开Socket消息.");
-                    return;
                 }
                 return;
             }
-            HUtil32.GetValidStr3(sText, ref sSessionId, new[] {"/"});
+            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
             if (sSessionId <= 0)
             {
                 return;
@@ -241,7 +240,7 @@ namespace LoginGate
         {
             SendSocket(buffer);
         }
-        
+
         private void SendSocket(byte[] sendBuffer)
         {
             if (ClientSocket.IsConnected)

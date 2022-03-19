@@ -7,8 +7,8 @@ namespace LoginGate
     public class ServerApp
     {
         private ServerManager _ServerManager => ServerManager.Instance;
-        private ClientManager _clientManager=>ClientManager.Instance;
-        private SessionManager _sessionManager=>SessionManager.Instance;
+        private ClientManager _clientManager => ClientManager.Instance;
+        private SessionManager _sessionManager => SessionManager.Instance;
         private LogQueue _logQueue => LogQueue.Instance;
 
         public ServerApp()

@@ -10,12 +10,12 @@ namespace LoginGate
     /// </summary>
     public class ServerService
     {
-        private LogQueue _logQueue=>LogQueue.Instance;
+        private LogQueue _logQueue => LogQueue.Instance;
         private readonly ISocketServer _serverSocket;
         private readonly string GateAddress;
         private readonly int GatePort = 0;
         private readonly ClientThread _clientThread;
-        private SessionManager _sessionManager=>SessionManager.Instance;
+        private SessionManager _sessionManager => SessionManager.Instance;
         private ClientManager _clientManager => ClientManager.Instance;
         private ServerManager _serverManager => ServerManager.Instance;
         private readonly ConfigManager _configManager = ConfigManager.Instance;
@@ -25,7 +25,7 @@ namespace LoginGate
             _clientThread = new ClientThread(i, gameGate);
             GateAddress = gameGate.sServerAdress;
             GatePort = gameGate.nGatePort;
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new ISocketServer(ushort.MaxValue, 2048);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -114,7 +114,6 @@ namespace LoginGate
                 _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
-            _sessionManager.CloseSession(e.ConnectionId);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)

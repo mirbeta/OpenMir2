@@ -5,7 +5,7 @@ namespace LoginGate
         public int MessageId;
 
         public byte[] Body;
-        
+
         public int MsgLen => Body.Length;
     }
 }

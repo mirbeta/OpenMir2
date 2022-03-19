@@ -1,8 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
 using LoginGate.Conf;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LoginGate
 {
