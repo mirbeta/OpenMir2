@@ -18,7 +18,7 @@ namespace LoginSvr
         private int _processMonSocTick = 0;
         private int _processServerStatuTick = 0;
 
-        public TimedService(LogQueue logQueue, LoginService loginService, ThreadParseList threadParseList, 
+        public TimedService(LogQueue logQueue, LoginService loginService, ThreadParseList threadParseList,
             MonSocService monSocService, MasSocService massocService)
         {
             _logQueue = logQueue;

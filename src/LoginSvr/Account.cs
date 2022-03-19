@@ -20,7 +20,7 @@ namespace LoginSvr
             nIndex = index;
         }
     }
-    
+
     public class TRecordHeader
     {
         public string sAccount;
@@ -31,7 +31,7 @@ namespace LoginSvr
         public DateTime UpdateDate;
         public DateTime CreateDate;
     }
-    
+
     public class TAccountDBRecord
     {
         public TRecordHeader Header;
@@ -39,5 +39,5 @@ namespace LoginSvr
         public double dwActionTick;
         public TUserEntry UserEntry;
         public TUserEntryAdd UserEntryAdd;
-    } 
+    }
 }
