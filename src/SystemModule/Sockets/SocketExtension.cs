@@ -22,7 +22,7 @@ namespace SystemModule.Sockets
             return false;
         }
 
-        public static bool SendText(this Socket socket,string str)
+        public static bool SendText(this Socket socket, string str)
         {
             if (string.IsNullOrEmpty(str))
             {

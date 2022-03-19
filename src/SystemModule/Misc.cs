@@ -70,7 +70,7 @@ namespace SystemModule
             DstBuf[dstPos + 1] = (byte)'\0';
             return result;
         }
-     
+
         public static byte[] DecodeBuf(byte[] Buf, int Len, ref int decodeLen)
         {
             byte temp;

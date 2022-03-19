@@ -48,8 +48,8 @@ namespace SystemModule.Packages
     {
         private MessageHeader MessageHeader;
         private TDefaultMessage DefaultMessage;
-        
-        public ClientOutMessage(MessageHeader messageHeader,TDefaultMessage defaultMessage)
+
+        public ClientOutMessage(MessageHeader messageHeader, TDefaultMessage defaultMessage)
         {
             MessageHeader = messageHeader;
             DefaultMessage = defaultMessage;

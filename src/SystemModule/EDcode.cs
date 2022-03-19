@@ -1,13 +1,11 @@
 using System;
-using System.Text;
-using SystemModule.Packages;
 
 namespace SystemModule
 {
     public class EDcode
     {
         private const int BUFFERSIZE = 10000;
-        
+
         private static int Encode6BitBuf(byte[] pSrc, byte[] pDest, int nSrcLen, int nDestLen)
         {
             var nRestCount = 0;
@@ -17,8 +15,8 @@ namespace SystemModule
             {
                 if (nDestPos >= nDestLen) break;
                 var btCh = pSrc[i];
-                var btMade = Convert.ToByte((byte) (btRest | (btCh >> Convert.ToByte(2 + nRestCount))) & 0x3F);
-                btRest = Convert.ToByte((byte) ((btCh << (8 - (2 + nRestCount))) >> 2) & 0x3F);
+                var btMade = Convert.ToByte((byte)(btRest | (btCh >> Convert.ToByte(2 + nRestCount))) & 0x3F);
+                btRest = Convert.ToByte((byte)((btCh << (8 - (2 + nRestCount))) >> 2) & 0x3F);
                 nRestCount += 2;
                 if (nRestCount < 6)
                 {
@@ -56,7 +54,7 @@ namespace SystemModule
 
         internal static int Decode6BitBuf(byte[] source, byte[] pbuf, int nSrcLen, int nBufLen)
         {
-            byte[] masks = {0xFC, 0xF8, 0xF0, 0xE0, 0xC0};
+            byte[] masks = { 0xFC, 0xF8, 0xF0, 0xE0, 0xC0 };
             var nBitPos = 2;
             var nMadeBit = 0;
             var nBufPos = 0;
@@ -92,7 +90,7 @@ namespace SystemModule
                         continue;
                     }
                 }
-                btTmp = Convert.ToByte((byte) (btCh << nBitPos) & masks[nBitPos - 2]);
+                btTmp = Convert.ToByte((byte)(btCh << nBitPos) & masks[nBitPos - 2]);
                 nMadeBit += 8 - nBitPos;
             }
             pbuf[nBufPos] = 0;
@@ -159,7 +157,7 @@ namespace SystemModule
             var DestLen = Misc.EncodeBuf(bSrc, bSrc.Length, EncBuf);
             fixed (byte* pb = EncBuf)
             {
-                result = HUtil32.SBytePtrToString((sbyte*) pb, 0, DestLen);
+                result = HUtil32.SBytePtrToString((sbyte*)pb, 0, DestLen);
             }
             return result;
         }
@@ -173,11 +171,11 @@ namespace SystemModule
             byte[] methordResult;
             if (targetsMethord.GetParameters().Length > 0)
             {
-                methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { (byte)6 });
+                methordResult = (byte[])targetsMethord.Invoke(obj, new object[] { (byte)6 });
             }
             else
             {
-                methordResult = (byte[]) targetsMethord.Invoke(obj, new object[] { });
+                methordResult = (byte[])targetsMethord.Invoke(obj, new object[] { });
             }
             var buffSize = methordResult.Length;
             if (buffSize > 0)
@@ -190,7 +188,7 @@ namespace SystemModule
                     var destLen = Misc.EncodeBuf(tempBuf, buffSize, encBuf);
                     fixed (byte* pb = encBuf)
                     {
-                        result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
+                        result = HUtil32.SBytePtrToString((sbyte*)pb, 0, destLen);
                     }
                 }
                 else
@@ -219,7 +217,7 @@ namespace SystemModule
                 var destLen = Misc.EncodeBuf(TempBuf, bufsize, EncBuf);
                 fixed (byte* pb = EncBuf)
                 {
-                    result = HUtil32.SBytePtrToString((sbyte*) pb, 0, destLen);
+                    result = HUtil32.SBytePtrToString((sbyte*)pb, 0, destLen);
                 }
             }
             else
@@ -228,16 +226,16 @@ namespace SystemModule
             }
             return result;
         }
-        
+
         /// <summary>
         /// 加密消息
         /// </summary>
         /// <returns></returns>
-        public static int EncodeMessage(byte[] msgBuf,ref byte[] encBuff)
+        public static int EncodeMessage(byte[] msgBuf, ref byte[] encBuff)
         {
             return Misc.EncodeBuf(msgBuf, 12, encBuff);
         }
-        
+
         /// <summary>
         /// 加密消息
         /// </summary>

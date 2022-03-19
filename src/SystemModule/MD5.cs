@@ -13,12 +13,12 @@ namespace SystemModule
 
         private static uint F(uint x, uint y, uint z)
         {
-            return  (x & y) | (~x & z);
+            return (x & y) | (~x & z);
         }
 
         private static uint g(uint x, uint y, uint z)
         {
-            return  (x & z) | (y & ~z);
+            return (x & z) | (y & ~z);
         }
 
         private static uint H(uint x, uint y, uint z)

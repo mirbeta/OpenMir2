@@ -99,7 +99,7 @@ namespace SystemModule
         /// </summary>
         public const int USERITEMMAX = 46;
         public const int MaxSkillLevel = 3;
-        
+
         /// <summary>
         /// 物品类型(物品属性读取)
         /// </summary>
@@ -896,12 +896,12 @@ namespace SystemModule
         public const int SM_SELLOFFBUY_OK = 23027;
         // 购买成功
         public const int RM_SELLOFFBUY_OK = 23028;
-        
-        public const  int CM_CHECKCLIENT_RES = 41905;
-        public const  int SM_SMUGGLE_SUCESS = 41901;
-        public const  int CM_SMUGGLE = 41902;
-        public const  int CM_SMUGGLE_SUCESS = 41903;
-        public const  int SM_SMUGGLE = 41900; // 夹带数据
+
+        public const int CM_CHECKCLIENT_RES = 41905;
+        public const int SM_SMUGGLE_SUCESS = 41901;
+        public const int CM_SMUGGLE = 41902;
+        public const int CM_SMUGGLE_SUCESS = 41903;
+        public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
         public const string sSTATUS_FAIL = "+FL/";
         public const string sSTATUS_GOOD = "+GD/";

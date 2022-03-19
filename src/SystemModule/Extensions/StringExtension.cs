@@ -21,7 +21,7 @@ namespace SystemModule
         public static byte[] ToByte(this string source, int size, int miniLen)
         {
             var strBuff = HUtil32.StringToByteAry(source, out int strLen);
-            strBuff[0] = (byte) strLen;
+            strBuff[0] = (byte)strLen;
             if (size < miniLen)
             {
                 size = miniLen;
