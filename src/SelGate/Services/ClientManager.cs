@@ -119,7 +119,7 @@ namespace SelGate.Services
 
         public void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 200)
+            if (HUtil32.GetTickCount() - _processDelayTick > 20000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
                 for (var i = 0; i < _clientList.Count; i++)
@@ -152,7 +152,7 @@ namespace SelGate.Services
                         userClient.HandleDelayMsg(ref success);
                         if (success)
                         {
-                            _sessionManager.Remove(session.SocketId);
+                            _sessionManager.CloseSession(session.SocketId);
                             _clientList[i].SessionArray[j].Socket = null;
                         }
                     }
@@ -183,7 +183,7 @@ namespace SelGate.Services
                             {
                                 UserSession.Socket.Close();
                                 UserSession.Socket = null;
-                                _sessionManager.Remove(UserSession.SocketId);
+                                _sessionManager.CloseSession(UserSession.SocketId);
                                 _logQueue.EnqueueDebugging("清理超时会话,关闭Socket.");
                             }
                         }

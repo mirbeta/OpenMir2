@@ -11,7 +11,7 @@ namespace SelGate
         {
             _configManager = configManager;
         }
-        
+
         public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
         public int ShowLogLevel => _configManager.GateConfig.m_nShowLogLevel;
 
