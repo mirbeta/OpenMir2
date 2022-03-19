@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -17,9 +18,11 @@ namespace GameGate
         private readonly ClientThread _clientThread;
         private readonly string GateAddress;
         private readonly int GatePort = 0;
+        private readonly SendQueue _sendQueue;
 
         public ServerService(int i, GameGateInfo gameGate)
         {
+            _sendQueue = new SendQueue();
             _clientThread = new ClientThread(i, gameGate);
             GateAddress = gameGate.sServerAdress;
             GatePort = gameGate.nGatePort;
@@ -33,12 +36,13 @@ namespace GameGate
 
         public ClientThread ClientThread => _clientThread;
 
-        public void Start()
+        public Task Start()
         {
             _serverSocket.Start(GateAddress, GatePort);
             _clientThread.Start();
             _clientThread.RestSessionArray();
             _logQueue.Enqueue($"网关[{GateAddress}:{GatePort}]已启动...", 1);
+            return _sendQueue.ProcessSendQueue();
         }
 
         public void Stop()
@@ -47,9 +51,18 @@ namespace GameGate
             _serverSocket.Shutdown();
         }
 
-        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal) GetStatus()
+        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal,string queueCount) GetStatus()
         {
-            return (GateAddress, $"{GatePort}", GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo());
+            return (GateAddress, $"{GatePort}", GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo(), GetSendQueueCount());
+        }
+
+        /// <summary>
+        /// 获取待发送队列数量
+        /// </summary>
+        /// <returns></returns>
+        private string GetSendQueueCount()
+        {
+            return $"{_sendQueue.GetQueueCount}";
         }
 
         private string GetConnected()
@@ -126,7 +139,7 @@ namespace GameGate
             {
                 _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
-                _sessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread));
+                _sessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread,_sendQueue));
                 _clientManager.AddClientThread(userSession.SessionId, clientThread);
             }
             else
@@ -177,6 +190,11 @@ namespace GameGate
                 if (clientSession.Session == null)
                 {
                     _logQueue.Enqueue($"[{connectionId}] Session会话已经失效", 5);
+                    return;
+                }
+                if (clientSession.Session.Socket == null)
+                {
+                    _logQueue.Enqueue($"[{connectionId}] Socket已释放", 5);
                     return;
                 }
                 if (!clientSession.Session.Socket.Connected)

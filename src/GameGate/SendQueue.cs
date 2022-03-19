@@ -6,13 +6,6 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private static readonly SendQueue instance = new SendQueue();
-
-        public static SendQueue Instance
-        {
-            get { return instance; }
-        }
-
         private readonly Channel<SendQueueData> _sendQueue = null;
         private readonly LogQueue _logQueue = LogQueue.Instance;
 
@@ -20,6 +13,8 @@ namespace GameGate
         {
             _sendQueue = Channel.CreateUnbounded<SendQueueData>();
         }
+
+        public int GetQueueCount => _sendQueue.Reader.Count;
 
         /// <summary>
         /// 添加到发送队列

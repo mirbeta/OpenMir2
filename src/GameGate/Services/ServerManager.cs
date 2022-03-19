@@ -40,14 +40,16 @@ namespace GameGate
 
         public void Start()
         {
+            var serverQueueTask = new Task[_serverServices.Count];
             for (var i = 0; i < _serverServices.Count; i++)
             {
                 if (_serverServices[i] == null)
                 {
                     continue;
                 }
-                _serverServices[i].Start();
+                serverQueueTask[i] = _serverServices[i].Start();
             }
+            Task.WhenAll(serverQueueTask);
         }
 
         public void Stop()
@@ -63,7 +65,8 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 把客户端的消息添加到队列给服务端处理
+        /// 客户端消息添加到队列给服务端处理
+        /// GameGate -> GameSvr
         /// </summary>
         /// <param name="messageData"></param>
         public void SendQueue(TMessageData messageData)
