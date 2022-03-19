@@ -55,14 +55,14 @@ namespace SystemModule
             Param = binaryReader.ReadUInt16();
             Tag = binaryReader.ReadUInt16();
             Series = binaryReader.ReadUInt16();
-                    
+
             Cmd = Ident;
             Cmd1 = Ident;
             Cmd2 = Ident;
             Cmd3 = Ident;
             Cmd4 = Ident;
             Command = Ident;
-                    
+
             UID = Recog;
             Head = Recog;
             NID = Recog;
@@ -72,7 +72,7 @@ namespace SystemModule
 
             X = Param;
             IDLo = Param;
-            b1 =(byte) Param;
+            b1 = (byte)Param;
             Pos = Param;
             Zero1 = Param;
 

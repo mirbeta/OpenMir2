@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,23 +34,23 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 设计同时处理的连接最大数
         /// </summary>
-        int m_numConnections;           
+        int m_numConnections;
         /// <summary>
         /// 用于每一个Socket I/O操作使用的缓冲区大小
         /// </summary>
-        int m_BufferSize;               
+        int m_BufferSize;
         /// <summary>
         /// 为所有Socket操作准备的一个大的可重用的缓冲区集合
         /// </summary>
-        BufferManager m_bufferManager;  
+        BufferManager m_bufferManager;
         /// <summary>
         /// 需要分配空间的操作数目:为 读、写、接收等 操作预分配空间(接受操作可以不分配)
         /// </summary>
-        const int opsToPreAlloc = 2; 
+        const int opsToPreAlloc = 2;
         /// <summary>
         /// 用来侦听到达的连接请求的Socket
         /// </summary>
-        Socket listenSocket;  
+        Socket listenSocket;
         /// <summary>
         /// 读Socket操作的SocketAsyncEventArgs可重用对象池
         /// </summary>
@@ -65,11 +64,11 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 服务器接收到的总字节数计数器
         /// </summary>
-        long m_totalBytesRead; 
+        long m_totalBytesRead;
         /// <summary>
         /// 服务器发送的字节总数
         /// </summary>
-        long m_totalBytesWrite; 
+        long m_totalBytesWrite;
         /// <summary>
         /// 连接到服务器的Socket总数
         /// </summary>
@@ -78,7 +77,7 @@ namespace SystemModule.Sockets
         /// 最大接受请求数信号量
         /// </summary>
         Semaphore m_maxNumberAcceptedClients;
-        
+
         /// <summary>
         /// 获取已经连接的Socket总数
         /// </summary>
@@ -103,15 +102,15 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 客户端已经连接事件
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientConnect;               
+        public event EventHandler<AsyncUserToken> OnClientConnect;
         /// <summary>
         /// 客户端错误事件
         /// </summary>
-        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;           
+        public event EventHandler<AsyncSocketErrorEventArgs> OnClientError;
         /// <summary>
         /// 接收到数据事件
         /// </summary>
-        public event EventHandler<AsyncUserToken> OnClientRead;          
+        public event EventHandler<AsyncUserToken> OnClientRead;
         /// <summary>
         /// 数据发送完成
         /// </summary>
@@ -120,7 +119,7 @@ namespace SystemModule.Sockets
         /// 客户端断开连接事件
         /// </summary>
         public event EventHandler<AsyncUserToken> OnClientDisconnect;
-        
+
         /// <summary>
         /// 客户端是否在线
         /// </summary>
@@ -337,7 +336,7 @@ namespace SystemModule.Sockets
             }
             try
             {
-                m_maxNumberAcceptedClients.WaitOne();// 对信号量进行一次P操作
+                //m_maxNumberAcceptedClients.WaitOne(TimeSpan.FromMilliseconds(200));// 对信号量进行一次P操作
 
                 bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArg);
                 if (!willRaiseEvent)
@@ -372,8 +371,8 @@ namespace SystemModule.Sockets
         private void ProcessAccept(SocketAsyncEventArgs e)
         {
             AsyncUserToken token;
-            Interlocked.Increment(ref m_numConnectedSockets);
-            Debug.WriteLine($"客户端连接请求被接受. 有 {m_numConnectedSockets} 个客户端连接到服务器");
+            //Interlocked.Increment(ref m_numConnectedSockets);
+            //Debug.WriteLine($"客户端连接请求被接受. 有 {m_numConnectedSockets} 个客户端连接到服务器");
             SocketAsyncEventArgs readEventArg;
             // 获得已经接受的客户端连接Socket并把它放到ReadEventArg对象的user token中
             lock (m_readPool)
@@ -658,7 +657,7 @@ namespace SystemModule.Sockets
                 throw exception_debug;
             }
         }
-        
+
         /// <summary>
         /// 这个方法当一个异步发送操作完成时被调用.         
         /// </summary>
@@ -748,7 +747,7 @@ namespace SystemModule.Sockets
                 RaiseDisconnectedEvent(token);//引发断开连接事件
             }
         }
-        
+
         public void Disconnect(int connectionId)//断开连接(形参 连接ID)
         {
             AsyncUserToken token;
@@ -759,7 +758,7 @@ namespace SystemModule.Sockets
             }
             RaiseDisconnectedEvent(token);//抛出断开连接事件            
         }
-        
+
         private void RaiseDisconnectedEvent(AsyncUserToken token)//引发断开连接事件
         {
             if (null != token)
@@ -805,9 +804,9 @@ namespace SystemModule.Sockets
             finally
             {
                 // 减少连接到服务器客户端总数的计数器的值
-                Interlocked.Decrement(ref m_numConnectedSockets);
-                m_maxNumberAcceptedClients.Release();
-                Debug.WriteLine($"一个客户端被从服务器断开. 有 {m_numConnectedSockets.ToString()} 个客户端连接到服务器");
+                //Interlocked.Decrement(ref m_numConnectedSockets);
+                //m_maxNumberAcceptedClients.Release();
+                //Debug.WriteLine($"一个客户端被从服务器断开. 有 {m_numConnectedSockets} 个客户端连接到服务器");
                 lock (m_readPool)
                 {
                     // 释放以使它们可以被其他客户端重新利用
@@ -815,7 +814,7 @@ namespace SystemModule.Sockets
                 }
             }
         }
-        
+
         private void RaiseErrorEvent(AsyncUserToken token, AsyncSocketException exception)
         {
             EventHandler<AsyncSocketErrorEventArgs> handler = OnClientError;
@@ -862,7 +861,7 @@ namespace SystemModule.Sockets
             this.m_tokens.Clear();
             isActive = false;
         }
-        
+
         /// <summary>
         /// 获取文件大小的显示字符串
         /// </summary>

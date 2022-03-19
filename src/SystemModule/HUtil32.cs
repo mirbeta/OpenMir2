@@ -1,13 +1,12 @@
 using System;
 using System.Text;
-using System.Threading;
 
 namespace SystemModule
 {
     public class HUtil32
     {
         public const string Backslash = "/";
-        
+
         /// <summary>
         /// 根据GUID获取唯一数字序列
         /// </summary>
@@ -32,32 +31,32 @@ namespace SystemModule
 
         public static int MakeLong(int lowPart, int highPart)
         {
-            return lowPart | (short) highPart << 16;
+            return lowPart | (short)highPart << 16;
         }
 
         public static int MakeLong(double lowPart, double highPart)
         {
-            return (int) lowPart | ((int) highPart << 16);
+            return (int)lowPart | ((int)highPart << 16);
         }
 
         public static int MakeLong(ushort lowPart, int highPart)
         {
-            return lowPart | (short) highPart << 16;
+            return lowPart | (short)highPart << 16;
         }
 
         public static int MakeLong(short lowPart, int highPart)
         {
-            return (ushort) lowPart | ((short) highPart << 16);
+            return (ushort)lowPart | ((short)highPart << 16);
         }
 
         public static int MakeLong(short lowPart, short highPart)
         {
-            return (ushort) lowPart | (highPart << 16);
+            return (ushort)lowPart | (highPart << 16);
         }
 
         public static int MakeLong(short lowPart, ushort highPart)
         {
-            return (ushort) lowPart | ((short) highPart << 16);
+            return (ushort)lowPart | ((short)highPart << 16);
         }
 
         //public static ushort MakeWord(byte bLow, byte bHigh)
@@ -67,37 +66,37 @@ namespace SystemModule
 
         public static ushort MakeWord(int bLow, int bHigh)
         {
-            return (ushort) (bLow | (bHigh << 8));
+            return (ushort)(bLow | (bHigh << 8));
         }
 
         public static ushort HiWord(int dword)
         {
-            return (ushort) (dword >> 16);
+            return (ushort)(dword >> 16);
         }
 
         public static ushort LoWord(int dword)
         {
-            return (ushort) dword;
+            return (ushort)dword;
         }
 
         public static byte HiByte(short W)
         {
-            return (byte) (W >> 8);
+            return (byte)(W >> 8);
         }
 
         public static byte HiByte(int W)
         {
-            return (byte) (W >> 8);
+            return (byte)(W >> 8);
         }
 
         public static byte LoByte(short W)
         {
-            return (byte) W;
+            return (byte)W;
         }
 
         public static byte LoByte(int W)
         {
-            return (byte) W;
+            return (byte)W;
         }
 
         public static bool IsVarNumber(string Str)
@@ -107,7 +106,7 @@ namespace SystemModule
 
         public static int Round(object r)
         {
-            return (int) Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
+            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
         }
 
         public static int Round(double r)
@@ -139,12 +138,12 @@ namespace SystemModule
 
         public static void EnterCriticalSection(object obj)
         {
-           // Monitor.Enter(obj);
+            // Monitor.Enter(obj);
         }
 
         public static void LeaveCriticalSection(object obj)
         {
-          //  Monitor.Exit(obj);
+            //  Monitor.Exit(obj);
         }
 
         public static string GetString(byte[] bytes, int index, int count)
@@ -215,7 +214,7 @@ namespace SystemModule
             else
             {
                 var pb = retby + StartIndex;
-                for (var i = 0; i < str.Length; i++) *pb++ = (byte) str[i];
+                for (var i = 0; i < str.Length; i++) *pb++ = (byte)str[i];
             }
 
             return nLen;
@@ -340,7 +339,7 @@ namespace SystemModule
             Dest = Ary.Length > 0 ? Ary[0] : "";
             return Ary.Length > 1 ? Ary[1] : "";
         }
-        
+
         public static string GetValidStr3(string Str, ref int Dest, string[] DividerAry)
         {
             var Div = new char[DividerAry.Length];
@@ -355,7 +354,7 @@ namespace SystemModule
             }
             return Ary.Length > 1 ? Ary[1] : "";
         }
-        
+
         public static string GetValidStr3(string Str, ref string Dest, string DividerAry)
         {
             var div = new char[DividerAry.Length];
@@ -562,7 +561,7 @@ namespace SystemModule
 
         public static bool IsEngNumeric(char Ch)
         {
-            return IsEnglish(Ch) || Ch >= '0' && Ch <= '9';;
+            return IsEnglish(Ch) || Ch >= '0' && Ch <= '9'; ;
         }
 
         public static bool IsEnglishStr(string sEngStr)
@@ -688,7 +687,7 @@ namespace SystemModule
         {
             try
             {
-                return BytePtrToString((byte*) by, StartIndex, Len);
+                return BytePtrToString((byte*)by, StartIndex, Len);
             }
             catch (Exception ex)
             {
@@ -702,7 +701,7 @@ namespace SystemModule
             var sb = new StringBuilder(ret);
 
             by += StartIndex;
-            for (var i = 0; i < Len; i++) sb[i] = (char) *@by++;
+            for (var i = 0; i < Len; i++) sb[i] = (char)*@by++;
 
             return sb.ToString();
         }
@@ -752,7 +751,7 @@ namespace SystemModule
             }
             return result;
         }
-        
+
         public static long IpToInt(string ip)
         {
             if (string.IsNullOrEmpty(ip))

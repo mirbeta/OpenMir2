@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -93,7 +92,7 @@ namespace SystemModule
             }
             return shortarr;
         }
-        
+
         public byte[] GetPacket()
         {
             byte[] data;
@@ -111,8 +110,8 @@ namespace SystemModule
         }
 
         protected abstract void ReadPacket(BinaryReader reader);
-        
+
         protected abstract void WritePacket(BinaryWriter writer);
-    } 
+    }
 }
 

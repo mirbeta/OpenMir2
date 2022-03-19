@@ -5,7 +5,7 @@ namespace SystemModule
 {
     public static class DataReaderExtension
     {
-        private static int GetOrdinal(IDataReader dr,string name)
+        private static int GetOrdinal(IDataReader dr, string name)
         {
             return dr.GetOrdinal(name);
         }
@@ -97,7 +97,7 @@ namespace SystemModule
             return -1;
         }
 
-        public static double GetDouble(this IDataReader dr,string name)
+        public static double GetDouble(this IDataReader dr, string name)
         {
             var idx = GetOrdinal(dr, name);
             if (idx > -1 && !(dr.IsDBNull(idx)))
@@ -107,7 +107,7 @@ namespace SystemModule
             return -1;
         }
 
-        public static UInt32 GetUInt32(this IDataReader dr,string name)
+        public static UInt32 GetUInt32(this IDataReader dr, string name)
         {
             var idx = GetOrdinal(dr, name);
             if (idx > -1)
