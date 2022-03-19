@@ -144,7 +144,6 @@ namespace LoginGate
                 if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    _session.Socket.Close();
                     success = true;
                 }
             }
@@ -217,15 +216,6 @@ namespace LoginGate
             _lastGameSvr.SendBuffer(accountPacket.GetPacket());
             m_KickFlag = false;
         }
-    }
-
-    public enum TCheckStep
-    {
-        CheckLogin,
-        SendCheck,
-        SendSmu,
-        SendFinsh,
-        CheckTick
     }
 
     public class TSessionInfo

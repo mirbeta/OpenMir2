@@ -1,6 +1,5 @@
 using LoginGate.Conf;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using SystemModule;
 
@@ -25,7 +24,7 @@ namespace LoginGate
         {
             get { return instance; }
         }
-        
+
         public ClientManager()
         {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
@@ -94,7 +93,7 @@ namespace LoginGate
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
         /// <param name="clientThread"></param>
-        private void CheckSessionStatus(ClientThread clientThread)
+        public void CheckSessionStatus(ClientThread clientThread)
         {
             if (clientThread.boGateReady)
             {

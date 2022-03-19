@@ -14,10 +14,10 @@ namespace LoginGate
         {
             get { return instance; }
         }
-        
+
         public LogQueue()
         {
-           
+
         }
 
         public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
@@ -25,7 +25,7 @@ namespace LoginGate
 
         public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
         public int ShowLogLevel => _configManager.GateConfig.m_nShowLogLevel;
-        
+
         public void Enqueue(string msg, int msgLevel)
         {
             if (ShowLogLevel >= msgLevel)

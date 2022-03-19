@@ -16,7 +16,7 @@ namespace LoginGate.Conf
         {
             get { return instance; }
         }
-        
+
         public ConfigManager(string szFileName) : base(szFileName)
         {
             Load();
@@ -45,7 +45,7 @@ namespace LoginGate.Conf
             GateConfig.m_nMaxClientPacketCount = ReadInteger("Integer", "MaxClientPacketCount", GateConfig.m_nMaxClientPacketCount);
             GateConfig.m_fCheckNewIDOfIP = ReadBool("Switch", "CheckNewIDOfIP", GateConfig.m_fCheckNewIDOfIP);
             GateConfig.m_fCheckNullSession = ReadBool("Switch", "CheckNullSession", GateConfig.m_fCheckNullSession);
-            GateConfig.m_fOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack",GateConfig. m_fOverSpeedSendBack);
+            GateConfig.m_fOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GateConfig.m_fOverSpeedSendBack);
             GateConfig.m_fDefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GateConfig.m_fDefenceCCPacket);
             GateConfig.m_fKickOverSpeed = ReadBool("Switch", "KickOverSpeed", GateConfig.m_fKickOverSpeed);
             GateConfig.m_fKickOverPacketSize = ReadBool("Switch", "KickOverPacketSize", GateConfig.m_fKickOverPacketSize);
@@ -61,7 +61,7 @@ namespace LoginGate.Conf
             }
         }
     }
-    
+
     public struct GameGateInfo
     {
         public string sServerAdress;

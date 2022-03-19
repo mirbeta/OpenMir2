@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using SystemModule.Common;
 
@@ -25,7 +26,7 @@ namespace LoginGate
         /// 会话超时时间
         /// </summary>
         public static long dwSessionTimeOutTime = 60 * 1000;
-        public static IList<ClientThread> ServerGateList;
+        public static ConcurrentDictionary<int, ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()
         {
@@ -42,7 +43,7 @@ namespace LoginGate
         {
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
-            ServerGateList = new List<ClientThread>();
+            ServerGateList = new ConcurrentDictionary<int, ClientThread>();
         }
     }
 }
