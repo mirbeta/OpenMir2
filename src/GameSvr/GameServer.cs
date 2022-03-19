@@ -20,7 +20,6 @@ namespace GameSvr
         public void Start()
         {
             _runServer.Start();
-            M2Share.RunSocket.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
@@ -29,7 +28,7 @@ namespace GameSvr
         public void Stop()
         {
             M2Share.DataServer.Stop();
-            M2Share.RunSocket.Stop();
+            M2Share.GateManager.Stop();
             M2Share.UserEngine.Stop();
             _runServer.Interrupt();
         }
@@ -38,7 +37,7 @@ namespace GameSvr
         {
             while (M2Share.boStartReady)
             {
-                M2Share.RunSocket.Run();
+                M2Share.GateManager.Run();
                 IdSrvClient.Instance.Run();
                 M2Share.UserEngine.Run();
                 ProcessGameRun();

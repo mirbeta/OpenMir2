@@ -572,12 +572,12 @@ namespace GameSvr
                     for (var i = 0; i < m_NewHumanList.Count; i++)
                     {
                         PlayObject = m_NewHumanList[i];
-                        M2Share.RunSocket.SetGateUserList(PlayObject.m_nGateIdx, PlayObject.m_nSocket, PlayObject);
+                        M2Share.GateManager.SetGateUserList(PlayObject.m_nGateIdx, PlayObject.m_nSocket, PlayObject);
                     }
                     m_NewHumanList.Clear();
                     for (var i = 0; i < m_ListOfGateIdx.Count; i++)
                     {
-                        M2Share.RunSocket.CloseUser((int)m_ListOfGateIdx[i], (int)m_ListOfSocket[i]);
+                        M2Share.GateManager.CloseUser((int)m_ListOfGateIdx[i], (int)m_ListOfSocket[i]);
                     }
                     m_ListOfGateIdx.Clear();
                     m_ListOfSocket.Clear();
@@ -706,7 +706,7 @@ namespace GameSvr
                                 AddToHumanFreeList(PlayObject);
                                 PlayObject.DealCancelA();
                                 SaveHumanRcd(PlayObject);
-                                M2Share.RunSocket.CloseUser(PlayObject.m_nGateIdx, PlayObject.m_nSocket);
+                                M2Share.GateManager.CloseUser(PlayObject.m_nGateIdx, PlayObject.m_nSocket);
                                 SendServerGroupMsg(Grobal2.SS_202, M2Share.nServerIndex, PlayObject.m_sCharName);
                                 continue;
                             }
@@ -819,7 +819,7 @@ namespace GameSvr
                                 AddToHumanFreeList(PlayObject);
                                 PlayObject.DealCancelA();
                                 SaveHumanRcd(PlayObject);
-                                M2Share.RunSocket.CloseUser(PlayObject.m_nGateIdx, PlayObject.m_nSocket);
+                                M2Share.GateManager.CloseUser(PlayObject.m_nGateIdx, PlayObject.m_nSocket);
                                 SendServerGroupMsg(Grobal2.SS_202, M2Share.nServerIndex, PlayObject.m_sCharName);
                                 continue;
                             }

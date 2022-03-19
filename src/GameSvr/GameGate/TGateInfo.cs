@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Threading.Channels;
 
 namespace GameSvr
 {
@@ -31,7 +30,6 @@ namespace GameSvr
         public int nUserCount;
         public byte[] Buffer;
         public int nBuffLen;
-        public Channel<byte[]> Queue;
         public bool boSendKeepAlive;
         public int nSendChecked;
         public int nSendBlockCount;
@@ -67,10 +65,5 @@ namespace GameSvr
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
-
-        public void AddToQueue(byte[] buffer)
-        {
-            Queue.Writer.TryWrite(buffer);
-        }
     }
 }

@@ -50,7 +50,7 @@ namespace GameSvr
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GameGate RunSocket = null;
+        public static GateManager GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
         public static MapManager g_MapManager = null;
@@ -454,6 +454,9 @@ namespace GameSvr
 
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
+
+        private const string sSTATUS_FAIL = "+FL/{0}";
+        private const string sSTATUS_GOOD = "+GD/{0}";
 
         public const int MAXUPLEVEL = 500;
         public const int MAXHUMPOWER = 1000;
@@ -1591,6 +1594,9 @@ namespace GameSvr
         public const string U_BOOTSNAME = "鞋子";
         public const string U_CHARMNAME = "宝石";
 
+        public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static string GetFailTick => string.Format(sSTATUS_FAIL, HUtil32.GetTickCount());
+
         public static void CopyStdItemToOStdItem(TStdItem StdItem, TOStdItem OStdItem)
         {
             OStdItem.Name = StdItem.Name;
@@ -1658,6 +1664,10 @@ namespace GameSvr
             for (var i = 0; i < ServerTableList.Length; i++)
             {
                 RouteInfo = ServerTableList[i];
+                if(RouteInfo == null)
+                {
+                    continue;
+                }
                 if (RouteInfo.nGateCount <= 0)
                 {
                     continue;
