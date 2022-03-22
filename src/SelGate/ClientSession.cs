@@ -15,7 +15,7 @@ namespace SelGate
         private TSessionInfo _session;
         private bool _KickFlag = false;
         private int _nSvrObject = 0;
-        private int _dwClientTimeOutTick = 0;
+        private int _clientTimeOutTick = 0;
         private readonly ClientThread _lastDBSvr;
         private readonly ConfigManager _configManager;
 
@@ -24,12 +24,14 @@ namespace SelGate
             _session = session;
             _lastDBSvr = clientThread;
             _configManager = configManager;
-            _dwClientTimeOutTick = HUtil32.GetTickCount();
+            _clientTimeOutTick = HUtil32.GetTickCount();
         }
 
         public TSessionInfo Session => _session;
 
         private GateConfig Config => _configManager.GateConfig;
+
+        public ClientThread ClientThread => _lastDBSvr;
 
         /// <summary>
         /// 处理客户端发送过来的封包
@@ -63,7 +65,7 @@ namespace SelGate
                 case Grobal2.CM_NEWCHR:
                 case Grobal2.CM_DELCHR:
                 case Grobal2.CM_SELCHR:
-                    _dwClientTimeOutTick = HUtil32.GetTickCount();
+                    _clientTimeOutTick = HUtil32.GetTickCount();
                     var sendStr = $"%A{(int)_session.Socket.Handle}/{HUtil32.GetString(userData.Body, 0, userData.MsgLen)}$";//todo 待优化
                     _lastDBSvr.SendData(sendStr);
                     break;
@@ -84,9 +86,9 @@ namespace SelGate
         {
             if (!_KickFlag)
             {
-                if (HUtil32.GetTickCount() - _dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                if (HUtil32.GetTickCount() - _clientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
-                    _dwClientTimeOutTick = HUtil32.GetTickCount();
+                    _clientTimeOutTick = HUtil32.GetTickCount();
                     SendDefMessage(Grobal2.SM_OUTOFCONNECTION, _nSvrObject, 0, 0, 0, "");
                     _KickFlag = true;
                     //BlockUser(this);
@@ -96,9 +98,9 @@ namespace SelGate
             }
             else
             {
-                if (HUtil32.GetTickCount() - _dwClientTimeOutTick > Config.m_nClientTimeOutTime)
+                if (HUtil32.GetTickCount() - _clientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
-                    _dwClientTimeOutTick = HUtil32.GetTickCount();
+                    _clientTimeOutTick = HUtil32.GetTickCount();
                     _session.Socket.Close();
                     success = true;
                 }
@@ -110,6 +112,12 @@ namespace SelGate
         /// </summary>
         public void ProcessSvrData(TMessageData sendData)
         {
+            if (_KickFlag)
+            {
+                _KickFlag = false;
+                _session.Socket.Close();
+                return;
+            }
             if (_session.Socket != null && _session.Socket.Connected)
             {
                 _session.Socket.Send(sendData.Body);
@@ -171,6 +179,11 @@ namespace SelGate
             var szSenfBuf = $"%L{(int)_session.Socket.Handle}$";
             _lastDBSvr.SendData(szSenfBuf);
             _KickFlag = false;
+        }
+
+        public void CloseSession()
+        {
+            _session.Socket.Close();
         }
     }
 

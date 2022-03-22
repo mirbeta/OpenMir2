@@ -3,6 +3,7 @@ using SelGate.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace SelGate
 {
@@ -23,8 +24,30 @@ namespace SelGate
             {
                 OutMianMessage();
                 _clientManager.CheckSession();
-                //_clientManager.ProcessDelayMsg();
+                _clientManager.ProcessDelayMsg();
+                //KeepAlive();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+            }
+        }
+
+        private void KeepAlive()
+        {
+            var clientList = _clientManager.GetALlClient();
+            foreach (var client in clientList)
+            {
+                if (client.IsConnected)
+                {
+                    client.SendData("%--$");
+                }
+                if (client.IsConnected && client.KeepAlive)
+                {
+                    if (HUtil32.GetTickCount() - client.KeepAliveTick > 25 * 1000)
+                    {
+                       client.KeepAliveTick = HUtil32.GetTickCount();
+                       client.Stop();
+                       client.SockThreadStutas = SockThreadStutas.TimeOut;
+                    }
+                }
             }
         }
 
@@ -44,7 +67,6 @@ namespace SelGate
                 string message;
 
                 if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine(message);
                 Console.ResetColor();

@@ -75,8 +75,9 @@ namespace SelGate.Services
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
                 sessionInfo = clientThread.SessionArray[nIdx];
-                if (sessionInfo.Socket == null)
+                if (sessionInfo == null)
                 {
+                    sessionInfo = new TSessionInfo();
                     sessionInfo.Socket = e.Socket;
                     sessionInfo.SocketId = e.ConnectionId;
                     sessionInfo.dwReceiveTick = HUtil32.GetTickCount();
@@ -109,10 +110,13 @@ namespace SelGate.Services
                 if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
                 {
                     var userSession = clientThread.SessionArray[nSockIndex];
-                    userSession.Socket = null;
-                    var clientSession = _sessionManager.GetSession(nSockIndex);
-                    clientSession?.UserLeave();
-                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
+                    if (userSession != null)
+                    {
+                        userSession.Socket = null;
+                        var clientSession = _sessionManager.GetSession(nSockIndex);
+                        clientSession?.UserLeave();
+                        _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
+                    }
                 }
             }
             else
