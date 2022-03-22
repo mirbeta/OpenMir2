@@ -1,7 +1,6 @@
 using System;
 using SystemModule;
 using SystemModule.Packages;
-using SystemModule.ProtobuffPacket;
 using SystemModule.Sockets;
 
 namespace GameGate
@@ -406,16 +405,6 @@ namespace GameGate
             }
             SendBytes += sendBuffer.Length;
             ClientSocket.SendBuff(sendBuffer);
-        }
-
-        public void SendBuffer(IProtoBuff protoBuff)
-        {
-            if (!ClientSocket.IsConnected) {
-                return;
-            }
-            var bodyBuffer = ProtobuffHelp.Serialize(protoBuff);
-            SendBytes += bodyBuffer.Length;
-            ClientSocket.SendBuff(bodyBuffer);
         }
 
         public void CheckServerIsTimeOut()
