@@ -56,7 +56,7 @@ namespace SelGate.Services
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address = serverAddr;
+            ClientSocket.Host = serverAddr;
             ClientSocket.Port = serverPort;
         }
 
@@ -64,7 +64,7 @@ namespace SelGate.Services
 
         public string GetSocketIp()
         {
-            return $"{ClientSocket.Address}:{ClientSocket.Port}";
+            return $"{ClientSocket.Host}:{ClientSocket.Port}";
         }
 
         public void Start()
@@ -151,15 +151,15 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }
