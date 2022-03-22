@@ -57,7 +57,7 @@ namespace LoginGate
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Address = gateInfo.sServerAdress;
+            ClientSocket.Host = gateInfo.sServerAdress;
             ClientSocket.Port = gateInfo.nServerPort;
             SessionArray = new TSessionInfo[MaxSession];
         }
@@ -66,7 +66,7 @@ namespace LoginGate
 
         public string GetSocketIp()
         {
-            return $"{ClientSocket.Address}:{ClientSocket.Port}";
+            return $"{ClientSocket.Host}:{ClientSocket.Port}";
         }
 
         public void Start()
@@ -169,15 +169,15 @@ namespace LoginGate
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...", 1);
                     isConnected = false;
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...", 1);
+                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...", 1);
                     isConnected = false;
                     break;
             }
