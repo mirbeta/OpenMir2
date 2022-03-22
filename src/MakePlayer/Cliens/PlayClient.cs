@@ -123,7 +123,11 @@ namespace MakePlayer
 
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            string sData = e.ReceiveText;
+            if (e.BuffLen <= 0)
+            {
+                return;
+            }
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
