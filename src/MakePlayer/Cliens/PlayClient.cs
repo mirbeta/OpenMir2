@@ -118,7 +118,7 @@ namespace MakePlayer
 
         private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            MainOutMessage($"{m_sLoginAccount}[{ClientSocket.Address}:{ClientSocket.Port}] 断开链接");
+            MainOutMessage($"{m_sLoginAccount}[{ClientSocket.Host}:{ClientSocket.Port}] 断开链接");
         }
 
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
@@ -139,13 +139,13 @@ namespace MakePlayer
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]拒绝链接...");
+                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]关闭连接...");
+                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine("游戏[" + ClientSocket.Address + ":" + ClientSocket.Port + "]链接超时...");
+                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...");
                     break;
             }
         }
@@ -295,7 +295,7 @@ namespace MakePlayer
             m_ConnectionStep = TConnectionStep.cnsPlay;
             MainOutMessage($"[{m_sLoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
-            ClientSocket.Address = m_sRunServerAddr;
+            ClientSocket.Host = m_sRunServerAddr;
             ClientSocket.Port = m_nRunServerPort;
             ClientSocket.Connect();
             //ClientSocket.Active = true;
@@ -418,7 +418,7 @@ namespace MakePlayer
             m_nSelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
-            ClientSocket.Address = m_sSelChrAddr;
+            ClientSocket.Host = m_sSelChrAddr;
             ClientSocket.Port = m_nSelChrPort;
             ClientSocket.Connect();
             //ClientSocket.Active = true;
