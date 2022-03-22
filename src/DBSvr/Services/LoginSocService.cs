@@ -15,7 +15,6 @@ namespace DBSvr
         private string sIDAddr;
         private int nIDPort = 0;
         private readonly IClientScoket _socket;
-        private readonly ConfigManager _configManager;
 
         public LoginSocService(ConfigManager configManager)
         {
@@ -24,9 +23,8 @@ namespace DBSvr
             _socket.OnConnected += IDSocketConnected;
             _socket.OnDisconnected += IDSocketDisconnected;
             _socket.OnError += IDSocketError;
-            _configManager = configManager;
-            sIDAddr = _configManager.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
-            nIDPort = _configManager.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
+            sIDAddr = configManager.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
+            nIDPort = configManager.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
             GlobaSessionList = new List<TGlobaSessionInfo>();
         }
 
@@ -85,7 +83,7 @@ namespace DBSvr
 
         private void IDSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            m_sSockMsg += e.ReceiveText;
+            m_sSockMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (m_sSockMsg.IndexOf(")", StringComparison.Ordinal) > 0)
             {
                 ProcessSocketMsg();
