@@ -46,7 +46,7 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
             try
             {
-                M2Share.g_Config.sIDSocketRecvText += e.ReceiveText;
+                M2Share.g_Config.sIDSocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
             }
             finally
             {

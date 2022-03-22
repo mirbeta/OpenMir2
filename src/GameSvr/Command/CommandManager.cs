@@ -165,6 +165,11 @@ namespace GameSvr.CommandSystem
             parameters = string.Empty;
             if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // 取命令参数
 
+            if (string.IsNullOrEmpty(parameters))
+            {
+                return false;
+            }
+
             return true;
         }
 

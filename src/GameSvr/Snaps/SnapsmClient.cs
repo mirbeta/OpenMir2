@@ -155,7 +155,7 @@ namespace GameSvr
         /// <param name="e"></param>
         private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
         {
-            sRecvMsg += e.ReceiveText;
+            sRecvMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
         }
     }
 }

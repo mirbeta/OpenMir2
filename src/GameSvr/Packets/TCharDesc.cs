@@ -7,6 +7,7 @@ namespace GameSvr
     {
         public int Feature;
         public int Status;
+        public int StatusEx;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -17,6 +18,7 @@ namespace GameSvr
         {
             writer.Write(Feature);
             writer.Write(Status);
+            writer.Write(StatusEx);
         }
     }
 }
