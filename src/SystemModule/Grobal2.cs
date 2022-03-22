@@ -602,7 +602,6 @@ namespace SystemModule
         public const int SM_NEEDPASSWORD = 8003;
         public const int SM_GETREGINFO = 8004;
         public const int DATA_BUFSIZE = 1024;
-        public const int RUNGATEMAX = 8;
         public const int MAXMAGIC = 54;
         public const string sSTRING_GOLDNAME = "金币";
         public const short MAXLEVEL = short.MaxValue;

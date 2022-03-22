@@ -22,8 +22,8 @@ namespace SystemModule.Sockets
         public AsyncUserToken()
             : this(null)
         {
+            
         }
-
 
         /// <summary>
         /// 预留的操作标志 用于发送某些操作数据后的成功反馈(建议用法 使用自定义枚举来表示操作)
@@ -37,26 +37,17 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 获取缓冲区
         /// </summary>
-        public byte[] ReceiveBuffer
-        {
-            get { return m_receiveBuffer; }
-        }
+        public byte[] ReceiveBuffer => m_receiveBuffer;
 
         /// <summary>
         /// 获取相对缓冲区偏移量
         /// </summary>
-        public int Offset
-        {
-            get { return m_offset; }
-        }
+        public int Offset => m_offset;
 
         /// <summary>
         /// 获取接收数据字节数
         /// </summary>
-        public int BytesReceived
-        {
-            get { return m_bytesReceived; }
-        }
+        public int BytesReceived => m_bytesReceived;
 
         /// <summary>
         /// 获取或设置SocketAsyncEventArgs读对象
@@ -98,13 +89,7 @@ namespace SystemModule.Sockets
             }
         }
 
-        public int SocHandle
-        {
-            get
-            {
-                return (int)Socket.Handle;
-            }
-        }
+        public int SocHandle => (int)Socket.Handle;
 
         /// <summary>
         /// 获取或设置通讯中使用的连接ID号
@@ -118,21 +103,12 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 获取正在连接的对端客户端终结点
         /// </summary>
-        public IPEndPoint EndPoint//对端终结点
-        {
-            get { return this.m_endPoint; }
-        }
+        public IPEndPoint EndPoint => this.m_endPoint; //对端终结点
 
         /// <summary>
         /// 远程IP
         /// </summary>
-        public string RemoteIPaddr
-        {
-            get
-            {
-                return EndPoint?.Address.ToString();
-            }
-        }
+        public string RemoteIPaddr => EndPoint?.Address.ToString();
 
         /// <summary>
         /// 远程端口

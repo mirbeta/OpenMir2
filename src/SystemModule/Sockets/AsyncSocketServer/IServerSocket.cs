@@ -160,8 +160,8 @@ namespace SystemModule.Sockets
 
             // 为最大数目Socket 同时能拥有高性能的读、写通讯表现而分配缓冲区空间
 
-            m_bufferManager = new BufferManager(BufferSize * numConnections * opsToPreAlloc,
-                BufferSize);
+            m_bufferManager = new BufferManager(BufferSize * numConnections * opsToPreAlloc, BufferSize);
+            
             // 读写池
             m_readPool = new SocketAsyncEventArgsPool(numConnections);
             m_writePool = new SocketAsyncEventArgsPool(numConnections);
@@ -283,6 +283,10 @@ namespace SystemModule.Sockets
                 }
                 // 用一个侦听1000个连接的队列启动服务器
                 listenSocket.NoDelay = false;
+                listenSocket.ReceiveBufferSize = 4096;
+                listenSocket.SendBufferSize = 4096;
+                listenSocket.ReceiveTimeout = 20000;
+                listenSocket.SendTimeout = 10000;
                 listenSocket.Listen(1000);
             }
             catch (ObjectDisposedException)
@@ -293,7 +297,7 @@ namespace SystemModule.Sockets
             {
                 //RaiseErrorEvent(null, exception);
                 // 启动失败抛出启动失败异常
-                if (ex.ErrorCode == (int)SocketError.AddressNotAvailable)
+                if (ex.ErrorCode == (int) SocketError.AddressNotAvailable)
                 {
                     throw new AsyncSocketException(ex.Message, ex);
                 }
@@ -385,9 +389,9 @@ namespace SystemModule.Sockets
             token.Socket = e.AcceptSocket;
             // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
             token.ConnectionId = (int)_idWorker.nextId();//Guid.NewGuid().ToString("N");
-            if (token.ConnectionId <= 0 || token.ConnectionId > ushort.MaxValue)
+            if ((token.ConnectionId <= 0 || token.ConnectionId > ushort.MaxValue) && token.Socket != null)
             {
-                token.ConnectionId = (int)token.Socket.Handle;
+                token.ConnectionId = (int) token.Socket.Handle;
             }
             if (token.ConnectionId > ushort.MaxValue)
             {
@@ -402,10 +406,7 @@ namespace SystemModule.Sockets
 
             EventHandler<AsyncUserToken> handler = OnClientConnect;
             // 如果订户事件将为空(null)
-            if (handler != null)
-            {
-                handler(this, token);// 抛出客户端连接事件
-            }
+            handler?.Invoke(this, token);// 抛出客户端连接事件
 
             try
             {
@@ -481,10 +482,7 @@ namespace SystemModule.Sockets
 
                 EventHandler<AsyncUserToken> handler = OnClientRead;
                 // 如果订户事件将为空(null)
-                if (handler != null)
-                {
-                    handler(this, token);// 抛出接收到数据事件                                                   
-                }
+                handler?.Invoke(this, token);// 抛出接收到数据事件                                                   
 
                 try
                 {
@@ -522,7 +520,7 @@ namespace SystemModule.Sockets
             }
         }
 
-        public void Send(int connectionId, byte[] buffer)
+        public void SendAsync(int connectionId, byte[] buffer)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -593,7 +591,7 @@ namespace SystemModule.Sockets
         /// <param name="connectionId">连接的ID号</param>
         /// <param name="buffer">缓冲区大小</param>
         /// <param name="operation">操作自定义枚举</param>
-        public void Send(int connectionId, byte[] buffer, object operation)
+        public void SendAsync(int connectionId, byte[] buffer, object operation)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -780,6 +778,10 @@ namespace SystemModule.Sockets
         private void CloseClientSocket(AsyncUserToken token)
         {
             //AsyncUserToken token = e.UserToken as AsyncUserToken;
+            if (token == null)
+            {
+                return;
+            }
 
             // 关闭相关联的客户端
             try
