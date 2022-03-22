@@ -39,7 +39,7 @@ namespace GameSvr
 
         public void ConnectMsgServer()
         {
-            _msgClient.Address = M2Share.g_Config.sMsgSrvAddr;
+            _msgClient.Host = M2Share.g_Config.sMsgSrvAddr;
             _msgClient.Port = M2Share.g_Config.nMsgSrvPort;
             _msgClient.Connect();
         }
@@ -132,13 +132,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]拒绝链接...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]关闭连接...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Address + ":" + _msgClient.Port + "]链接超时...");
+                    M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]链接超时...");
                     break;
             }
         }

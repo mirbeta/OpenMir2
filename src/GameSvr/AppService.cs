@@ -28,8 +28,8 @@ namespace GameSvr
             if (M2Share.boStartReady)
             {
                 _connectTimer = new Timer(ServiceTimer, null, 1000, 3000);
-                M2Share.GateManager.Initialization();
                 M2Share.GateManager.Start();
+                M2Share.GateManager.StartQueue();
                 await M2Share.GateManager.StartMessageQueue(stoppingToken);
             }
         }
