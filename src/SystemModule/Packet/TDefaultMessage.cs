@@ -88,7 +88,7 @@ namespace SystemModule
 
         public byte[] GetPacket(byte msgType = 6)
         {
-            using var memoryStream = new MemoryStream();
+            using var memoryStream = new MemoryStream(PackSize);
             var backingStream = new BinaryWriter(memoryStream);
             switch (msgType)
             {

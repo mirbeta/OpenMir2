@@ -12,7 +12,7 @@ namespace SystemModule.Sockets
         private Socket cli = null;//客户端Socket
         private readonly byte[] databuffer;//缓冲区
         public bool IsConnected;//连接是否成功
-        public string Address = string.Empty;
+        public string Host = string.Empty;
         public int Port = 0;
         public bool IsBusy = false;
 
@@ -31,9 +31,9 @@ namespace SystemModule.Sockets
 
         public void Connect()
         {
-            if (!string.IsNullOrEmpty(Address) && Port > 0)
+            if (!string.IsNullOrEmpty(Host) && Port > 0)
             {
-                Connect(Address, Port);
+                Connect(Host, Port);
             }
             else
             {
@@ -179,6 +179,11 @@ namespace SystemModule.Sockets
         {
             return this.cli.SendAsync(buffer, SocketFlags.None);
         }
+        
+        public Task SendBuffer(ArraySegment<byte> buffer)
+        {
+            return this.cli.SendAsync(buffer, SocketFlags.None);
+        }
 
         public void Send(byte[] buffer)
         {
@@ -203,7 +208,10 @@ namespace SystemModule.Sockets
 
         public void SendBuff(byte[] buffer)
         {
-            this.cli.Send(buffer);
+            if (this.cli.Connected)
+            {
+                this.cli.Send(buffer);
+            }
         }
 
         private void HandleSendFinished(IAsyncResult parameter)
@@ -243,7 +251,7 @@ namespace SystemModule.Sockets
         {
             if (null != this.OnError)
             {
-                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Address, Port, error.ErrorCode, error));
+                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Host, Port, error.ErrorCode, error));
             }
         }
 
