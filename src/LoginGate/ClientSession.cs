@@ -15,13 +15,13 @@ namespace LoginGate
         private bool m_KickFlag = false;
         private int m_nSvrObject = 0;
         private int m_dwClientTimeOutTick = 0;
-        private readonly ClientThread _lastGameSvr;
+        private readonly ClientThread _lastLoginSvr;
         private readonly ConfigManager _configManager;
 
         public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
             _session = session;
-            _lastGameSvr = clientThread;
+            _lastLoginSvr = clientThread;
             _configManager = configManager;
             m_dwClientTimeOutTick = HUtil32.GetTickCount();
         }
@@ -29,6 +29,8 @@ namespace LoginGate
         public TSessionInfo Session => _session;
 
         private GateConfig Config => _configManager.GateConfig;
+
+        public ClientThread ClientThread => _lastLoginSvr;
 
         /// <summary>
         /// 处理客户端发送过来的封包
@@ -69,7 +71,7 @@ namespace LoginGate
                 if (!string.IsNullOrEmpty(sReviceMsg))
                 {
                     AccountPacket accountPacket = new AccountPacket(AccountPacktType.Data, (int)Session.Socket.Handle, userData.Body);
-                    _lastGameSvr.SendBuffer(accountPacket.GetPacket());
+                    _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
                 }
             }
 
@@ -165,7 +167,7 @@ namespace LoginGate
             int iLen = 0;
             TCmdPack Cmd;
             byte[] SendBuf = new byte[1024];
-            if ((_lastGameSvr == null) || !_lastGameSvr.IsConnected)
+            if ((_lastLoginSvr == null) || !_lastLoginSvr.IsConnected)
             {
                 return;
             }
@@ -200,7 +202,7 @@ namespace LoginGate
         {
             var str = $"{_session.ClientIP}/{_session.ClientIP}";
             var accountPacket = new AccountPacket(AccountPacktType.Open, (int)Session.Socket.Handle, str);
-            _lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
         }
 
         /// <summary>
@@ -213,8 +215,13 @@ namespace LoginGate
                 return;
             }
             var accountPacket = new AccountPacket(AccountPacktType.Leave, (int)Session.Socket.Handle, "");
-            _lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
             m_KickFlag = false;
+        }
+
+        public void CloseSession()
+        {
+            _session.Socket.Close();
         }
     }
 

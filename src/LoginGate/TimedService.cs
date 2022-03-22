@@ -24,7 +24,7 @@ namespace LoginGate
             while (!stoppingToken.IsCancellationRequested)
             {
                 OutMianMessage();
-                //ProcessDelayMsg();
+                ProcessDelayMsg();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
@@ -52,7 +52,7 @@ namespace LoginGate
             }
         }
 
-        public void ProcessDelayMsg()
+        private void ProcessDelayMsg()
         {
             if (HUtil32.GetTickCount() - _processDelayTick > 2000)
             {
@@ -95,12 +95,12 @@ namespace LoginGate
                         {
                             SessionManager.CloseSession(session.SocketId);
                             _clientList[i].ClientThread.SessionArray[j].Socket = null;
+                            _clientList[i].ClientThread.SessionArray[j] = null;
                         }
                     }
                 }
             }
         }
-
 
         public override void Dispose()
         {
