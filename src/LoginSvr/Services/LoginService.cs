@@ -446,7 +446,7 @@ namespace LoginSvr
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logQueue.Enqueue("[新建账号失败,数据包为空].");
+                    _logQueue.Enqueue("[新建账号失败] 数据包为空.");
                     return;
                 }
                 var deBuffer = EDcode.DecodeBuffer(sData);
@@ -537,7 +537,6 @@ namespace LoginSvr
                                 DBRecord.dwActionTick = HUtil32.GetTickCount();
                                 nCode = -1;
                             }
-
                             _accountDB.Update(n10, ref DBRecord);
                         }
                         else
@@ -1105,7 +1104,7 @@ namespace LoginSvr
 
         private void SendGateKickMsg(Socket Socket, int sSockIndex)
         {
-            var sSendMsg = "%+-" + sSockIndex + "$";
+            var sSendMsg = $"%+-{sSockIndex}$";
             Socket.SendText(sSendMsg);
         }
 
