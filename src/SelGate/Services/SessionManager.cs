@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace SelGate.Services
 {
@@ -35,6 +36,19 @@ namespace SelGate.Services
                     var userSession = GetSession(message.SessionId);
                     if (userSession == null)
                     {
+                        return;
+                    }
+                    if (message.Body[0] == (byte) '+') //收到DB服务器发过来的关闭会话请求
+                    {
+                        if (message.Body[1] == (byte) '-')
+                        {
+                            userSession.CloseSession();
+                            Console.WriteLine("收到DBSvr关闭会话请求");
+                        }
+                        else
+                        {
+                            userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
+                        }
                         return;
                     }
                     userSession.ProcessSvrData(message);

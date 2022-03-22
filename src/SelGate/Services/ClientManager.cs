@@ -69,6 +69,11 @@ namespace SelGate.Services
             }
         }
 
+        public IList<ClientThread> GetALlClient()
+        {
+            return _clientList;
+        }
+
         /// <summary>
         /// 添加用户对饮网关
         /// </summary>
@@ -154,6 +159,7 @@ namespace SelGate.Services
                         {
                             _sessionManager.CloseSession(session.SocketId);
                             _clientList[i].SessionArray[j].Socket = null;
+                            _clientList[i].SessionArray[j] = null;
                         }
                     }
                 }
@@ -177,6 +183,10 @@ namespace SelGate.Services
                     for (var j = 0; j < clientList[i].MaxSession; j++)
                     {
                         UserSession = clientList[i].SessionArray[j];
+                        if (UserSession == null)
+                        {
+                            continue;
+                        }
                         if (UserSession.Socket != null)
                         {
                             if ((HUtil32.GetTickCount() - UserSession.dwReceiveTick) > GateShare.dwSessionTimeOutTime) //清理超时用户会话 
@@ -184,6 +194,7 @@ namespace SelGate.Services
                                 UserSession.Socket.Close();
                                 UserSession.Socket = null;
                                 _sessionManager.CloseSession(UserSession.SocketId);
+                                UserSession = null;
                                 _logQueue.EnqueueDebugging("清理超时会话,关闭Socket.");
                             }
                         }

@@ -31,6 +31,9 @@ namespace SelGate.Services
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
         public int CheckServerFailCount = 0;
+        public bool KeepAlive;
+        public int KeepAliveTick;
+        public SockThreadStutas SockThreadStutas;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
@@ -43,9 +46,11 @@ namespace SelGate.Services
         /// 会话管理
         /// </summary>
         private readonly SessionManager _sessionManager;
+
         private readonly LogQueue _logQueue;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, LogQueue logQueue)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,
+            LogQueue logQueue)
         {
             ClientId = clientId;
             SessionArray = new TSessionInfo[MaxSession];
@@ -58,6 +63,9 @@ namespace SelGate.Services
             ClientSocket.OnError += ClientSocketError;
             ClientSocket.Host = serverAddr;
             ClientSocket.Port = serverPort;
+            SockThreadStutas = SockThreadStutas.Connecting;
+            KeepAliveTick = HUtil32.GetTickCount();
+            KeepAlive = true;
         }
 
         public bool IsConnected => isConnected;
@@ -108,6 +116,8 @@ namespace SelGate.Services
             _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
+            SockThreadStutas = SockThreadStutas.Connected;
+            KeepAliveTick = HUtil32.GetTickCount();
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -115,6 +125,10 @@ namespace SelGate.Services
             for (var i = 0; i < MaxSession; i++)
             {
                 var userSession = SessionArray[i];
+                if (userSession == null)
+                {
+                    continue;
+                }
                 if (userSession.Socket != null && userSession.Socket == e.socket)
                 {
                     userSession.Socket.Close();
@@ -136,12 +150,17 @@ namespace SelGate.Services
         /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
+            if (e.BuffLen <= 0)
+            {
+                return;
+            }
+            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             var sText = string.Empty;
-            string sSessionId = string.Empty;
-            HUtil32.ArrestStringEx(e.ReceiveText, "%", "$", ref sText);
-            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
+            int sSessionId = -1;
+            HUtil32.ArrestStringEx(sData, "%", "$", ref sText);
+            HUtil32.GetValidStr3(sText, ref sSessionId, new[] {"/"});
             var userData = new TMessageData();
-            userData.SessionId = int.Parse(sSessionId);
+            userData.SessionId = sSessionId;
             userData.Body = e.Buff;
             _sessionManager.SendQueue.TryWrite(userData);
         }
@@ -167,22 +186,20 @@ namespace SelGate.Services
 
         public void RestSessionArray()
         {
-            TSessionInfo tSession;
             for (var i = 0; i < MaxSession; i++)
             {
-                if (SessionArray[i] == null)
+                if (SessionArray[i] != null)
                 {
-                    SessionArray[i] = new TSessionInfo();
+                    SessionArray[i].Socket = null;
+                    SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+                    SessionArray[i].SocketId = 0;
+                    SessionArray[i].ClientIP = string.Empty;
                 }
-                tSession = SessionArray[i];
-                tSession.Socket = null;
-                tSession.dwReceiveTick = HUtil32.GetTickCount();
-                tSession.SocketId = 0;
-                tSession.ClientIP = string.Empty;
             }
         }
 
-        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, string Data)
+        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
+            string Data)
         {
             if (!string.IsNullOrEmpty(Data))
             {
@@ -195,17 +212,18 @@ namespace SelGate.Services
             }
         }
 
-        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
+        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
+            byte[] Data)
         {
             var GateMsg = new MessageHeader();
             GateMsg.dwCode = Grobal2.RUNGATECODE;
             GateMsg.nSocket = nSocket;
-            GateMsg.wGSocketIdx = (ushort)wSocketIndex;
+            GateMsg.wGSocketIdx = (ushort) wSocketIndex;
             GateMsg.wIdent = nIdent;
             GateMsg.wUserListIndex = nUserListIndex;
             GateMsg.nLength = nLen;
             var sendBuffer = GateMsg.GetPacket();
-            if (Data is { Length: > 0 })
+            if (Data is {Length: > 0})
             {
                 var tempBuff = new byte[20 + Data.Length];
                 Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
@@ -230,5 +248,12 @@ namespace SelGate.Services
                 ClientSocket.Send(sendBuffer);
             }
         }
+    }
+
+    public enum SockThreadStutas : byte
+    {
+        Connecting = 0,
+        Connected = 1,
+        TimeOut = 2
     }
 }
