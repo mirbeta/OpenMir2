@@ -5,220 +5,263 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
-using SystemModule.Sockets;
 
 namespace GameSvr
 {
     public class GateService
     {
-        /// <summary>
-        /// 游戏网关
-        /// </summary>
-        private readonly ISocketServer _gateSocket = null;
+        private readonly int _gateIdx;
         private readonly TGateInfo _gateInfo;
-        private readonly string GateAddress;
-        private readonly int GatePort;
-        private readonly SendQueue sendQueue;
-        private readonly object m_RunSocketSection;
-        private readonly int GateIdx;
+        private readonly SendQueue _sendQueue;
+        private readonly object runSocketSection;
+        private byte[] GameBuffer;
+        private int nBuffLen;
 
-        public GateService(int gateIdx, string gateAddres, int gatePort, TGateInfo gateInfo)
+        public GateService(int gateIdx, TGateInfo gateInfo)
         {
-            GateIdx = gateIdx;
-            GateAddress = gateAddres;
-            GatePort = gatePort;
+            _gateIdx = gateIdx;
             _gateInfo = gateInfo;
-            sendQueue = new SendQueue(1);
-            m_RunSocketSection = new object();
-            _gateSocket = new ISocketServer(ushort.MaxValue, 2048);
-            _gateSocket.OnClientConnect += GateSocketClientConnect;
-            _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
-            _gateSocket.OnClientRead += GateSocketClientRead;
-            _gateSocket.OnClientError += GateSocketClientError;
-            _gateSocket.Init();
+            runSocketSection = new object();
+            _sendQueue = new SendQueue();
+            _sendQueue.Initialization(gateIdx, gateInfo.Socket);
         }
 
         public TGateInfo GateInfo => _gateInfo;
 
-        public Task Start()
+        public void StartQueueService()
         {
-            _gateSocket.Start(GateAddress, GatePort);
-            M2Share.MainOutMessage($"游戏网关[{GateAddress}:{GatePort}]已启动...");
-            var gTasks = new Task[sendQueue.QueueConsumerCount];
-            for (int i = 0; i < sendQueue.QueueConsumerCount; i++)
+            Task.Run(async () =>
             {
-                gTasks[i] = sendQueue.ProcessSendQueue();
-            }
-            return Task.WhenAll(gTasks);
+                await _sendQueue.ProcessSendQueue();
+            });
         }
 
         public void Stop()
         {
-            _gateSocket.Shutdown();
-        }
-
-        private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)
-        {
-            //M2Share.RunSocket.CloseErrGate();
-        }
-
-        private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
-        {
-            M2Share.GateManager.CloseGate(e);
-        }
-
-        private void GateSocketClientConnect(object sender, AsyncUserToken e)
-        {
-            M2Share.GateManager.OpenGate(e);
-        }
-
-        private void GateSocketClientRead(object sender, AsyncUserToken e)
-        {
-            var nMsgLen = e.BytesReceived;
-            if (nMsgLen <= 0)
-            {
-                return;
-            }
-            if (nMsgLen > 200)
-            {
-                Console.WriteLine("asdasd");
-            }
-            var data = new byte[nMsgLen];
-            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-            M2Share.GateManager.AddToQueue(new ReceiveData()
-            {
-                GateId = GateIdx,
-                Buffer = data,
-                BuffLen = nMsgLen
-            });
+            _sendQueue.Stop();
         }
 
         /// <summary>
-        /// 添加到网关发送队列
-        /// GameSvr->GameGate
+        /// 处理接收到的数据
+        /// GameGate -> GameSvr
         /// </summary>
-        /// <param name="gateIdx"></param>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        public bool AddGateBuffer(byte[] buffer) //添加到发送队列
-        {
-            var result = false;
-            if (GateInfo.boUsed && GateInfo.Socket != null)
-            {
-                sendQueue.AddToQueue(GateInfo, buffer);
-                result = true;
-            }
-            return result;
-        }
-
-        public void ExecGateBuffers(int nGateIndex, byte[] data, int nMsgLen)
+        /// <param name="nMsgLen"></param>
+        /// <param name="data"></param>
+        public void HandleReceiveBuffer(int nMsgLen,byte[] data)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
-            var nLen = 0;
-            var buffIndex = 0;
-            if (data is not { Length: > 0 } || nMsgLen <= 0)
+            if (nMsgLen <= 0)
             {
                 return;
             }
             try
             {
-                if (data.Length > 0)
+                if (nBuffLen > 0)
                 {
-                    var buffSize = GateInfo.nBuffLen + nMsgLen;
-                    if (GateInfo.Buffer != null && buffSize > GateInfo.nBuffLen)
+                    var buffSize = nBuffLen + nMsgLen;
+                    if (GameBuffer != null && buffSize > nBuffLen)
                     {
                         var tempBuff = new byte[buffSize];
-                        Array.Copy(GateInfo.Buffer, 0, tempBuff, 0, GateInfo.nBuffLen);
-                        Array.Copy(data, 0, tempBuff, GateInfo.nBuffLen, nMsgLen);
-                        GateInfo.Buffer = tempBuff;
+                        Buffer.BlockCopy(GameBuffer, 0, tempBuff, 0, nBuffLen);
+                        Buffer.BlockCopy(data, 0, tempBuff, nBuffLen, nMsgLen);
+                        GameBuffer = tempBuff;
                     }
-                    else
-                    {
-                        GateInfo.Buffer = new byte[buffSize];
-                        Array.Copy(data, 0, GateInfo.Buffer, 0, nMsgLen);
-                    }
+                }
+                else
+                {
+                    GameBuffer = data;
                 }
             }
             catch
             {
                 M2Share.ErrorMessage(sExceptionMsg1);
             }
-            byte[] Buff = null;
-            //todo 下面代码容易引起封包处理异常下，需要重构
+            var nLen = 0;
+            var buffIndex = 0;
+            byte[] protoBuff = GameBuffer;
             try
             {
-                nLen = GateInfo.nBuffLen + nMsgLen;
-                Buff = GateInfo.Buffer;
-                if (nLen >= MessageHeader.PacketSize)
+                nLen = nBuffLen + nMsgLen;
+                while (nLen >= MessageHeader.PacketSize)
                 {
-                    while (true)
+                    var msgHeader = new MessageHeader(protoBuff);
+                    if (msgHeader.dwCode == 0)
                     {
-                        var msgHeader = new MessageHeader(Buff);
-                        if (msgHeader.dwCode == 0)
-                        {
-                            Buff = Buff[20..];
-                            buffIndex = 0;
-                            nLen -= (msgHeader.nLength + MessageHeader.PacketSize);
-                            Console.WriteLine("不应该出现这个文字");
-                            return;
-                        }
-                        var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
-                        if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
-                        {
-                            if (nLen < nCheckMsgLen)
-                            {
-                                break;
-                            }
-                            if (msgHeader.nLength == 0)
-                            {
-                                ExecGateMsg(nGateIndex, GateInfo, msgHeader, null, msgHeader.nLength);
-                            }
-                            else
-                            {
-                                byte[] msgBuff = Buff[MessageHeader.PacketSize..];//跳过消息头20字节
-                                ExecGateMsg(nGateIndex, GateInfo, msgHeader, msgBuff, msgHeader.nLength);
-                            }
-                            nLen -= (msgHeader.nLength + MessageHeader.PacketSize);
-                            if (nLen > 20)
-                            {
-                                var tempBuff = new byte[Buff.Length - nCheckMsgLen];
-                                Array.Copy(Buff, nCheckMsgLen, tempBuff, 0, tempBuff.Length);
-                                Buff = tempBuff;
-                                buffIndex = 0;
-                            }
-                        }
-                        else
-                        {
-                            buffIndex++;
-                            var messageBuff = new byte[Buff.Length - 1];
-                            Array.Copy(Buff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
-                            Buff = messageBuff;
-                            nLen -= 1;
-                            Console.WriteLine("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
-                        }
-                        if (nLen < 20)
+                        return;
+                    }
+                    var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
+                    if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
+                    {
+                        if (nLen < nCheckMsgLen)
                         {
                             break;
                         }
+                        byte[] body = null;
+                        if (msgHeader.nLength > 0 && protoBuff != null)
+                        {
+                            body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
+                            body = body[MessageHeader.PacketSize..];
+                        }
+                        //M2Share.GateManager.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
+                        ExecGateBuffers(msgHeader, body);
+                        nLen -= nCheckMsgLen;
+                        if (nLen > 0 && GameBuffer != null)
+                        {
+                            var tempBuff = new byte[nLen];
+                            Buffer.BlockCopy(GameBuffer, nCheckMsgLen, tempBuff, 0, nLen);
+                            GameBuffer = tempBuff;
+                            protoBuff = tempBuff;
+                            nBuffLen = nLen;
+                        }
+                    }
+                    else
+                    {
+                        buffIndex++;
+                        var messageBuff = new byte[protoBuff.Length - 1];
+                        Buffer.BlockCopy(protoBuff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
+                        protoBuff = messageBuff;
+                        nLen -= 1;
+                        Console.WriteLine("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
+                    }
+                    if (nLen < MessageHeader.PacketSize)
+                    {
+                        break;
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 M2Share.ErrorMessage(sExceptionMsg2);
             }
             if (nLen > 0)
             {
                 var tempBuff = new byte[nLen];
-                Array.Copy(Buff, 0, tempBuff, 0, nLen);
-                GateInfo.Buffer = tempBuff;
-                GateInfo.nBuffLen = nLen;
+                Buffer.BlockCopy(protoBuff, 0, tempBuff, 0, nLen);
+                GameBuffer = tempBuff;
+                nBuffLen = nLen;
             }
             else
             {
-                GateInfo.Buffer = null;
-                GateInfo.nBuffLen = 0;
+                GameBuffer = null;
+                nBuffLen = 0;
+            }
+        }
+
+        /// <summary>
+        /// 添加到网关发送队列
+        /// GameSvr -> GameGate
+        /// </summary>
+        /// <returns></returns>
+        public void HandleSendBuffer(byte[] buffer) 
+        {
+            if (!GateInfo.boUsed && GateInfo.Socket == null)
+            {
+                return;
+            }
+            const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
+            var dwRunTick = HUtil32.GetTickCount();
+            if (GateInfo.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
+            {
+                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
+                {
+                    GateInfo.nSendChecked = 0;
+                    GateInfo.nSendBlockCount = 0;
+                }
+                return;
+            }
+            try
+            {
+                var nSendBuffLen = buffer.Length;
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + nSendBuffLen >= M2Share.g_Config.nCheckBlock * 10)
+                {
+                    if (GateInfo.nSendBlockCount == 0 && M2Share.g_Config.nCheckBlock * 10 <= nSendBuffLen)
+                    {
+                        return;
+                    }
+                    SendCheck(GateInfo.Socket, Grobal2.GM_RECEIVE_OK);
+                    GateInfo.nSendChecked = 1;
+                    GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
+                }
+                var sendBuffer = new byte[buffer.Length - 4];
+                Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
+                nSendBuffLen = sendBuffer.Length;
+                if (nSendBuffLen > 0)
+                {
+                    while (true)
+                    {
+                        if (M2Share.g_Config.nSendBlock <= nSendBuffLen)
+                        {
+                            if (GateInfo.Socket != null)
+                            {
+                                var sendBuff = new byte[M2Share.g_Config.nSendBlock];
+                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, M2Share.g_Config.nSendBlock);
+                                _sendQueue.AddToQueue(sendBuff);
+                                GateInfo.nSendCount++;
+                                GateInfo.nSendBytesCount += M2Share.g_Config.nSendBlock;
+                            }
+                            GateInfo.nSendBlockCount += M2Share.g_Config.nSendBlock;
+                            nSendBuffLen -= M2Share.g_Config.nSendBlock;
+                            var tempBuff = new byte[nSendBuffLen];
+                            Buffer.BlockCopy(sendBuffer, M2Share.g_Config.nSendBlock, tempBuff, 0, nSendBuffLen);
+                            sendBuffer = tempBuff;
+                            continue;
+                        }
+                        if (GateInfo.Socket != null)
+                        {
+                            _sendQueue.AddToQueue(sendBuffer);
+                            GateInfo.nSendCount++;
+                            GateInfo.nSendBytesCount += nSendBuffLen;
+                            GateInfo.nSendBlockCount += nSendBuffLen;
+                        }
+                        nSendBuffLen = 0;
+                        break;
+                    }
+                }
+                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.g_dwSocLimit)
+                {
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(e.StackTrace, MessageType.Error);
+            }
+        }
+
+        private void SendCheck(Socket Socket, ushort nIdent)
+        {
+            if (!Socket.Connected)
+            {
+                return;
+            }
+            var msgHeader = new MessageHeader
+            {
+                dwCode = Grobal2.RUNGATECODE,
+                nSocket = 0,
+                wIdent = nIdent,
+                nLength = 0
+            };
+            if (Socket.Connected)
+            {
+                var data = msgHeader.GetPacket();
+                Socket.Send(data, 0, data.Length, SocketFlags.None);
+            }
+        }
+
+        /// <summary>
+        /// 执行网关封包消息
+        /// </summary>
+        private void ExecGateBuffers(MessageHeader packet, byte[] data)
+        {
+            if (packet.nLength == 0)
+            {
+                ExecGateMsg(_gateIdx, GateInfo, packet, null, packet.nLength);
+            }
+            else
+            {
+                ExecGateMsg(_gateIdx, GateInfo, packet, data, packet.nLength);
             }
         }
 
@@ -313,14 +356,14 @@ namespace GameSvr
                             {
                                 GateUser.sAccount = sDisable;
                                 GateUser.boCertification = false;
-                                CloseUser(GateIdx, nSocket);
+                                CloseUser(nSocket);
                             }
                         }
                         else
                         {
                             GateUser.sAccount = sDisable;
                             GateUser.boCertification = false;
-                            CloseUser(GateIdx, nSocket);
+                            CloseUser(nSocket);
                         }
                     }
                 }
@@ -331,10 +374,9 @@ namespace GameSvr
             }
         }
 
-        public void CloseUser(int GateIdx, int nSocket)
+        public void CloseUser(int nSocket)
         {
             TGateUserInfo GateUser;
-            TGateInfo Gate;
             const string sExceptionMsg0 = "[Exception] TRunSocket::CloseUser 0";
             const string sExceptionMsg1 = "[Exception] TRunSocket::CloseUser 1";
             const string sExceptionMsg2 = "[Exception] TRunSocket::CloseUser 2";
@@ -342,7 +384,7 @@ namespace GameSvr
             const string sExceptionMsg4 = "[Exception] TRunSocket::CloseUser 4";
             if (GateInfo.UserList != null)
             {
-                HUtil32.EnterCriticalSection(m_RunSocketSection);
+                HUtil32.EnterCriticalSection(runSocketSection);
                 try
                 {
                     try
@@ -412,7 +454,7 @@ namespace GameSvr
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSection(m_RunSocketSection);
+                    HUtil32.LeaveCriticalSection(runSocketSection);
                 }
             }
         }
@@ -422,8 +464,8 @@ namespace GameSvr
             int result;
             var GateUser = new TGateUserInfo
             {
-                sAccount = "",
-                sCharName = "",
+                sAccount = string.Empty,
+                sCharName = String.Empty,
                 sIPaddr = sIPaddr,
                 nSocket = nSocket,
                 nGSocketIdx = nGSocketIdx,
@@ -471,21 +513,19 @@ namespace GameSvr
         private void ExecGateMsg(int GateIdx, TGateInfo Gate, MessageHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
         {
             int nUserIdx;
-            string sIPaddr;
-            TGateUserInfo GateUser;
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";
             try
             {
                 switch (MsgHeader.wIdent)
                 {
                     case Grobal2.GM_OPEN:
-                        sIPaddr = HUtil32.GetString(MsgBuff, 0, nMsgLen);
+                        var sIPaddr = HUtil32.GetString(MsgBuff, 0, nMsgLen);
                         nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
                         SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
-                        CloseUser(GateIdx, MsgHeader.nSocket);
+                        CloseUser(MsgHeader.nSocket);
                         break;
                     case Grobal2.GM_CHECKCLIENT:
                         Gate.boSendKeepAlive = true;
@@ -495,7 +535,7 @@ namespace GameSvr
                         Gate.nSendBlockCount = 0;
                         break;
                     case Grobal2.GM_DATA:
-                        GateUser = null;
+                        TGateUserInfo GateUser = null;
                         if (MsgHeader.wUserListIndex >= 1)
                         {
                             nUserIdx = MsgHeader.wUserListIndex - 1;
@@ -612,7 +652,7 @@ namespace GameSvr
             {
                 if (GateInfo.boUsed && GateInfo.Socket != null && GateInfo.UserList != null)
                 {
-                    HUtil32.EnterCriticalSection(m_RunSocketSection);
+                    HUtil32.EnterCriticalSection(runSocketSection);
                     try
                     {
                         for (var j = 0; j < GateInfo.UserList.Count; j++)
@@ -650,7 +690,7 @@ namespace GameSvr
                     }
                     finally
                     {
-                        HUtil32.LeaveCriticalSection(m_RunSocketSection);
+                        HUtil32.LeaveCriticalSection(runSocketSection);
                     }
                 }
             }
@@ -658,6 +698,32 @@ namespace GameSvr
             {
                 M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(e.Message, MessageType.Error);
+            }
+        }
+        
+        /// <summary>
+        /// 设置用户对应网关编号
+        /// </summary>
+        public void SetGateUserList(int nSocket, TPlayObject PlayObject)
+        {
+            HUtil32.EnterCriticalSection(runSocketSection);
+            try
+            {
+                for (var i = 0; i < GateInfo.UserList.Count; i++)
+                {
+                    var gateUserInfo = GateInfo.UserList[i];
+                    if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
+                    {
+                        gateUserInfo.FrontEngine = null;
+                        gateUserInfo.UserEngine = M2Share.UserEngine;
+                        gateUserInfo.PlayObject = PlayObject;
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(runSocketSection);
             }
         }
     }

@@ -11,15 +11,6 @@ namespace GameSvr
         public bool boUsed;
         public Socket Socket;
         public int SocketId;
-        public int GateIndex;
-        /// <summary>
-        /// 网关IP
-        /// </summary>
-        public string sAddr;
-        /// <summary>
-        /// 端口
-        /// </summary>
-        public int nPort;
         /// <summary>
         /// 玩家列表
         /// </summary>
@@ -28,8 +19,6 @@ namespace GameSvr
         /// 在线人数
         /// </summary>
         public int nUserCount;
-        public byte[] Buffer;
-        public int nBuffLen;
         public bool boSendKeepAlive;
         public int nSendChecked;
         public int nSendBlockCount;
@@ -38,7 +27,7 @@ namespace GameSvr
         /// </summary>
         public int nSendMsgCount;
         /// <summary>
-        /// 剩余数据
+        /// 未处理数据
         /// </summary>
         public int nSendRemainCount;
         /// <summary>

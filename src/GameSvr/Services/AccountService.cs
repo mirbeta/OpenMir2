@@ -23,7 +23,7 @@ namespace GameSvr
             _clientScoket.ReceivedDatagram += IdSocketRead;
             if (M2Share.g_Config != null)
             {
-                _clientScoket.Address = M2Share.g_Config.sIDSAddr;
+                _clientScoket.Host = M2Share.g_Config.sIDSAddr;
                 _clientScoket.Port = M2Share.g_Config.nIDSPort;
             }
         }
@@ -38,7 +38,7 @@ namespace GameSvr
             {
                 return;
             }
-            _clientScoket.Connect(_clientScoket.Address, _clientScoket.Port);
+            _clientScoket.Connect(_clientScoket.Host, _clientScoket.Port);
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -59,13 +59,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]拒绝链接...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]关闭连接...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]链接超时...");
+                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]链接超时...");
                     break;
             }
         }
@@ -377,7 +377,7 @@ namespace GameSvr
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             M2Share.g_Config.boIDSocketConnected = true;
-            M2Share.MainOutMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
+            M2Share.MainOutMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
             SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
         }
 
@@ -390,7 +390,7 @@ namespace GameSvr
             ClearSession();
             M2Share.g_Config.boIDSocketConnected = false;
             _clientScoket.IsConnected = false;
-            M2Share.ErrorMessage("登录服务器[" + _clientScoket.Address + ":" + _clientScoket.Port + "]断开连接...");
+            M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]断开连接...");
         }
 
         public void Close()
