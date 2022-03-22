@@ -37,7 +37,7 @@ namespace GameGate
             {
                 if (_sendQueue.Reader.TryRead(out var queueData))
                 {
-                    var resp = await queueData.SendBuffer();
+                    var resp = queueData.SendBuffer();
                     if (resp != queueData.Buffer.Length)
                     {
                         _logQueue.Enqueue("向客户端发送数据包失败", 5);
@@ -52,13 +52,13 @@ namespace GameGate
         public TSessionInfo Session;
         public byte[] Buffer;
 
-        public async Task<int> SendBuffer()
+        public int SendBuffer()
         {
             if (Session.Socket == null || !Session.Socket.Connected)
             {
                 return 0;
             }
-            return await Session.Socket.SendAsync(Buffer, SocketFlags.None);
+            return Session.Socket.Send(Buffer, 0, Buffer.Length, SocketFlags.None);
         }
     }
 }
