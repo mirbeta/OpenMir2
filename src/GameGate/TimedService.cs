@@ -3,6 +3,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Packages;
+using SystemModule.ProtobuffPacket;
 
 namespace GameGate
 {
@@ -59,16 +61,11 @@ namespace GameGate
         /// <summary>
         /// GameGate->GameSvr 心跳
         /// </summary>
-        private async void KeepAlive()
+        private void KeepAlive()
         {
-            if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 2000)
+            if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 10000)
             {
                 _kepAliveTick = HUtil32.GetTickCount();
-                var cmdPacket = new TSvrCmdPack();
-                cmdPacket.Flag = Grobal2.RUNGATECODE;
-                cmdPacket.SockID = 0;
-                cmdPacket.Cmd = Grobal2.GM_CHECKCLIENT;
-                cmdPacket.DataLen = 0;
                 var _serverList = _serverManager.GetServerList();
                 for (int i = 0; i < _serverList.Count; i++)
                 {
@@ -84,7 +81,17 @@ namespace GameGate
                     {
                         continue;
                     }
-                    await _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
+                    /*var gateMessage = new GateMessage();
+                    gateMessage.dwCode = Grobal2.RUNGATECODE;
+                    gateMessage.nSocket = 0;
+                    gateMessage.wIdent = Grobal2.GM_CHECKCLIENT;
+                    gateMessage.nLength = 0;*/
+                    var cmdPacket = new TSvrCmdPack();
+                    cmdPacket.Flag = Grobal2.RUNGATECODE;
+                    cmdPacket.SockID = 0;
+                    cmdPacket.Cmd = Grobal2.GM_CHECKCLIENT;
+                    cmdPacket.DataLen = 0;
+                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
                 }
             }
         }
@@ -142,7 +149,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    if (serverList[i].ClientThread != null)
+                    if (serverList[i].ClientThread == null)
                     {
                         continue;
                     }

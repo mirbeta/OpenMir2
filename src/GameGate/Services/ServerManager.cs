@@ -84,7 +84,7 @@ namespace GameGate
                 if (_reviceMsgList.Reader.TryRead(out var message))
                 {
                     var clientSession = SessionManager.Instance.GetSession(message.MessageId);
-                    clientSession?.HandleUserPacket(message);
+                    clientSession?.HandleSessionPacket(message);
                 }
             }
         }

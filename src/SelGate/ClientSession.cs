@@ -164,6 +164,10 @@ namespace SelGate
         /// </summary>
         public void UserLeave()
         {
+            if (_session == null || _session.Socket==null)
+            {
+                return;
+            }
             var szSenfBuf = $"%L{(int)_session.Socket.Handle}$";
             _lastDBSvr.SendData(szSenfBuf);
             _KickFlag = false;
