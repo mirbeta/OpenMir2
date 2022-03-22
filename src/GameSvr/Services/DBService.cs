@@ -110,7 +110,7 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                M2Share.g_Config.sDBSocketRecvText += e.ReceiveText;
+                M2Share.g_Config.sDBSocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
                 if (!M2Share.g_Config.boDBSocketWorking)
                 {
                     M2Share.g_Config.sDBSocketRecvText = "";

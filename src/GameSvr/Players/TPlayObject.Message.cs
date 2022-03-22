@@ -660,7 +660,7 @@ namespace GameSvr
         {
             TCharDesc CharDesc;
             int nObjCount;
-            string s1C;
+            string sendMsg;
             TMessageBodyWL MessageBodyWL = null;
             TOAbility OAbility = null;
             var dwDelayTime = 0;
@@ -1437,13 +1437,13 @@ namespace GameSvr
                         CharDesc = new TCharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.m_nCharStatus;
-                        s1C = EDcode.EncodeBuffer(CharDesc);
+                        sendMsg = EDcode.EncodeBuffer(CharDesc);
                         nObjCount = GetCharColor(BaseObject);
-                        if (ProcessMsg.sMsg != "")
+                        if (!string.IsNullOrEmpty(ProcessMsg.sMsg))
                         {
-                            s1C = s1C + EDcode.EncodeString(ProcessMsg.sMsg + '/' + nObjCount);
+                            sendMsg = sendMsg + EDcode.EncodeString($"{ProcessMsg.sMsg}/{nObjCount}");
                         }
-                        SendSocket(m_DefMsg, s1C);
+                        SendSocket(m_DefMsg, sendMsg);
                         if (ProcessMsg.wIdent == Grobal2.RM_TURN)
                         {
                             nObjCount = BaseObject.GetFeatureToLong();
@@ -1797,8 +1797,8 @@ namespace GameSvr
                     MessageBodyWL.lParam2 = (int)BaseObject.m_nCharStatus;
                     MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                     MessageBodyWL.lTag1 = 0;
-                    s1C = EDcode.EncodeBuffer(MessageBodyWL);
-                    SendSocket(m_DefMsg, s1C);
+                    sendMsg = EDcode.EncodeBuffer(MessageBodyWL);
+                    SendSocket(m_DefMsg, sendMsg);
                     break;
                 case Grobal2.RM_DIGDOWN:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGDOWN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, 0);
@@ -1880,13 +1880,13 @@ namespace GameSvr
                     CharDesc = new TCharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);
                     CharDesc.Status = BaseObject.m_nCharStatus;
-                    s1C = EDcode.EncodeBuffer(CharDesc);
+                    sendMsg = EDcode.EncodeBuffer(CharDesc);
                     nObjCount = GetCharColor(BaseObject);
                     if (ProcessMsg.sMsg != "")
                     {
-                        s1C = s1C + EDcode.EncodeString(ProcessMsg.sMsg + '/' + nObjCount);
+                        sendMsg = sendMsg + EDcode.EncodeString(ProcessMsg.sMsg + '/' + nObjCount);
                     }
-                    SendSocket(m_DefMsg, s1C);
+                    SendSocket(m_DefMsg, sendMsg);
                     break;
                 case Grobal2.RM_RECONNECTION:
                     m_boReconnection = true;
