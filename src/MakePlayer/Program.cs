@@ -52,7 +52,7 @@ namespace MakePlayer
             //AccountCrateTest();
                 
             g_sServerName = "热血传奇";
-            g_sGameIPaddr = "10.10.0.112";
+            g_sGameIPaddr = "10.10.0.106";
             g_nGamePort = 7000;
             g_boNewAccount = false;
 
@@ -83,7 +83,7 @@ namespace MakePlayer
         static void AccountCrateTest()
         {
             ClientSocket = new IClientScoket();
-            ClientSocket.Address = "10.10.0.112";
+            ClientSocket.Host = "10.10.0.112";
             ClientSocket.Port = 7000;
             ClientSocket.Connect();
             
@@ -144,7 +144,7 @@ namespace MakePlayer
                             playClient.m_sLoginPasswd = playClient.m_sLoginAccount;
                             playClient.m_sCharName = playClient.m_sLoginAccount;
                             playClient.m_sServerName = g_sServerName;
-                            playClient.ClientSocket.Address = g_sGameIPaddr;
+                            playClient.ClientSocket.Host = g_sGameIPaddr;
                             playClient.ClientSocket.Port = g_nGamePort;
                             playClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             ClientManager.AddClient(playClient.SessionId, playClient);
