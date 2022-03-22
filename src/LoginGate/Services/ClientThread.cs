@@ -1,5 +1,6 @@
 using LoginGate.Conf;
 using System;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -44,6 +45,10 @@ namespace LoginGate
         /// 会话管理
         /// </summary>
         private SessionManager _sessionManager => SessionManager.Instance;
+        public bool KeepAlive;
+        public int KeepAliveTick;
+        public SockThreadStutas SockThreadStutas;
+        public int dwCheckServerTick = 0;
         /// <summary>
         /// 日志
         /// </summary>
@@ -102,14 +107,14 @@ namespace LoginGate
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             boGateReady = true;
-            GateShare.dwCheckServerTick = HUtil32.GetTickCount();
+            dwCheckServerTick = HUtil32.GetTickCount();
             RestSessionArray();
-            GateShare.dwCheckServerTimeMax = 0;
-            GateShare.dwCheckServerTimeMax = 0;
             GateShare.ServerGateList.TryAdd(ClientId, this);
             _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
             _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
+            SockThreadStutas = SockThreadStutas.Connected;
+            KeepAliveTick = HUtil32.GetTickCount();
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -117,6 +122,10 @@ namespace LoginGate
             for (var i = 0; i < MaxSession; i++)
             {
                 var userSession = SessionArray[i];
+                if (userSession == null)
+                {
+                    continue;
+                }
                 if (userSession.Socket != null && userSession.Socket == e.socket)
                 {
                     userSession.Socket.Close();
@@ -134,13 +143,15 @@ namespace LoginGate
         /// <summary>
         /// 收到登录服务器消息 直接发送给客户端
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
+            if (e.BuffLen <= 0)
+            {
+                return;
+            }
             var sText = string.Empty;
             int sSessionId = -1;
-            var sSocketMsg = e.ReceiveText;
+            var sSocketMsg = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             HUtil32.ArrestStringEx(sSocketMsg, "%", "$", ref sText);
             if (sText[0] == '+' && sText[1] == '-')
             {
@@ -185,18 +196,15 @@ namespace LoginGate
 
         public void RestSessionArray()
         {
-            TSessionInfo tSession;
             for (var i = 0; i < MaxSession; i++)
             {
-                if (SessionArray[i] == null)
+                if (SessionArray[i] != null)
                 {
-                    SessionArray[i] = new TSessionInfo();
+                    SessionArray[i].Socket = null;
+                    SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+                    SessionArray[i].SocketId = 0;
+                    SessionArray[i].ClientIP = string.Empty;
                 }
-                tSession = SessionArray[i];
-                tSession.Socket = null;
-                tSession.dwReceiveTick = HUtil32.GetTickCount();
-                tSession.SocketId = 0;
-                tSession.ClientIP = string.Empty;
             }
         }
 
@@ -248,5 +256,12 @@ namespace LoginGate
                 ClientSocket.Send(sendBuffer);
             }
         }
+    }
+    
+    public enum SockThreadStutas : byte
+    {
+        Connecting = 0,
+        Connected = 1,
+        TimeOut = 2
     }
 }

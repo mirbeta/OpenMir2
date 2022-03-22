@@ -11,24 +11,17 @@ namespace LoginGate
     public class ClientManager
     {
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
-        private int _processClearSessionTick = 0;
-        private int _processDelayTick = 0;
-        private SessionManager _sessionManager => SessionManager.Instance;
         private ConfigManager _configManager => ConfigManager.Instance;
         private LogQueue _logQueue => LogQueue.Instance;
         private ServerManager serverManager => ServerManager.Instance;
-
         private static readonly ClientManager instance = new ClientManager();
-
-        public static ClientManager Instance
-        {
-            get { return instance; }
-        }
 
         public ClientManager()
         {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
+        
+        public static ClientManager Instance => instance;
 
         public void Initialization()
         {
@@ -108,7 +101,7 @@ namespace LoginGate
                 _logQueue.Enqueue($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]", 5);
                 return;
             }
-            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
+            if ((HUtil32.GetTickCount() - clientThread.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
             {
                 clientThread.boCheckServerFail = true;
                 clientThread.Stop();

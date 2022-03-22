@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace LoginGate
 {
@@ -15,18 +17,13 @@ namespace LoginGate
         private readonly Channel<TMessageData> _sendQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
-        private static readonly SessionManager instance = new SessionManager();
-
-        public static SessionManager Instance
-        {
-            get { return instance; }
-        }
-
         public SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
             _sendQueue = Channel.CreateUnbounded<TMessageData>();
         }
+        
+        public static SessionManager Instance { get; } = new SessionManager();
 
         public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
 
@@ -39,19 +36,25 @@ namespace LoginGate
             {
                 if (_sendQueue.Reader.TryRead(out var message))
                 {
-                    try
+                    var userSession = GetSession(message.MessageId);
+                    if (userSession == null)
                     {
-                        var userSession = GetSession(message.MessageId);
-                        if (userSession == null)
+                        return;
+                    }
+                    if (message.Body[0] == (byte) '+') //收到DB服务器发过来的关闭会话请求
+                    {
+                        if (message.Body[1] == (byte) '-')
                         {
-                            return;
+                            userSession.CloseSession();
+                            Console.WriteLine("收到LoginSvr关闭会话请求");
                         }
-                        userSession.ProcessSvrData(message);
+                        else
+                        {
+                            userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
+                        }
+                        return;
                     }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.StackTrace);
-                    }
+                    userSession.ProcessSvrData(message);
                 }
             }
         }
