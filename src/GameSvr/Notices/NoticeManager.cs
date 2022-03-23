@@ -65,28 +65,30 @@ namespace GameSvr
             }
             for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
             {
-                if (!string.IsNullOrEmpty(NoticeList[i].sMsg)) continue;
-                var fileName = M2Share.sConfigPath + M2Share.g_Config.sNoticeDir + sStr + ".txt";
-                if (File.Exists(fileName))
+                if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {
-                    try
+                    var fileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, sStr + ".txt");
+                    if (File.Exists(fileName))
                     {
-                        if (NoticeList[i].sList == null)
+                        try
                         {
-                            NoticeList[i].sList = new StringList();
+                            if (NoticeList[i].sList == null)
+                            {
+                                NoticeList[i].sList = new StringList();
+                            }
+                            NoticeList[i].sList.LoadFromFile(fileName, true);
+                            for (var j = 0; j < NoticeList[i].sList.Count; j++)
+                            {
+                                LoadList.Add(NoticeList[i].sList[j]);
+                            }
                         }
-                        NoticeList[i].sList.LoadFromFile(fileName, true);
-                        for (var j = 0; j < NoticeList[i].sList.Count; j++)
+                        catch (Exception)
                         {
-                            LoadList.Add(NoticeList[i].sList[j]);
+                            M2Share.ErrorMessage("Error in loading notice text. file name is " + fileName);
                         }
+                        NoticeList[i].sMsg = sStr;
+                        break;
                     }
-                    catch (Exception)
-                    {
-                        M2Share.ErrorMessage("Error in loading notice text. file name is " + fileName);
-                    }
-                    NoticeList[i].sMsg = sStr;
-                    break;
                 }
             }
         }
