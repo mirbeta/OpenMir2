@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 增加AI玩家
     /// </summary>
-    [GameCommand("AddAIUser", "增加机器人玩家", "数量", 0)]
+    [GameCommand("AddRebotsPlay", "增加机器人玩家", "数量", 0)]
     public class CreateAIUserCommand : BaseCommond
     {
         [DefaultCommand]
@@ -39,6 +39,10 @@ namespace GameSvr
                     nX = nX,
                     nY = nY
                 });
+            }
+            if (userCount > 0)
+            {
+                M2Share.UserEngine.StartAI();
             }
         }
     }

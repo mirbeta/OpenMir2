@@ -85,7 +85,7 @@ namespace GameSvr
         public void SendHumanLogOutMsg(string sUserId, int nId)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            for (var i = m_SessionList.Count - 1; i >= 0; i--)
+            for (int i = 0; i < m_SessionList.Count; i++)
             {
                 var sessInfo = m_SessionList[i];
                 if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId)

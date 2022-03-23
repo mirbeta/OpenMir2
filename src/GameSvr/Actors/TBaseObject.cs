@@ -3494,7 +3494,7 @@ namespace GameSvr
             }
         }
 
-        public bool Walk(int nIdent)
+        protected bool Walk(int nIdent)
         {
             CellObject OSObject;
             TGateObj GateObj = null;
@@ -3597,10 +3597,6 @@ namespace GameSvr
         /// <summary>
         /// 切换地图
         /// </summary>
-        /// <param name="Envir"></param>
-        /// <param name="nDMapX"></param>
-        /// <param name="nDMapY"></param>
-        /// <returns></returns>
         private bool EnterAnotherMap(Envirnoment Envir, int nDMapX, int nDMapY)
         {
             bool result = false;
@@ -3613,7 +3609,7 @@ namespace GameSvr
             {
                 if (m_Abil.Level < Envir.nRequestLevel)
                 {
-                    SysMsg(string.Format("需要 {0} 级以上才能进入 {1}", Envir.Flag.nL - 1, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);
+                    SysMsg($"需要 {Envir.Flag.nL - 1} 级以上才能进入 {Envir.sMapDesc}", MsgColor.Red, MsgType.Hint);
                     return false;
                 }
                 if (Envir.QuestNPC != null)
@@ -3628,7 +3624,7 @@ namespace GameSvr
                     }
                 }
                 var mapCell = false;
-                MapCellinfo MapCellInfo = Envir.GetMapCellInfo(nDMapX, nDMapY, ref mapCell);
+                Envir.GetMapCellInfo(nDMapX, nDMapY, ref mapCell);
                 if (!mapCell)
                 {
                     return false;
@@ -3673,27 +3669,6 @@ namespace GameSvr
                     m_dwMapMoveTick = HUtil32.GetTickCount();
                     m_bo316 = true;
                     result = true;
-
-                    //if (m_Escort != null && !m_Escort.m_boGhost && !m_Escort.m_boDeath)
-                    //{
-                    //    if ((OldEnvir = m_Escort.m_PEnvir) && ((abs(nOldX - m_Escort.m_nCurrX) <= 8) && (abs(nOldY - m_Escort.m_nCurrY) <= 8)))
-                    //    {
-                    //        if (GetRecallXY(m_nCurrX, m_nCurrY, 3, nrX, nrY))
-                    //        {
-                    //            m_Escort.m_PEnvir.DeleteFromMap(m_Escort.m_nCurrX, m_Escort.m_nCurrY, OS_MOVINGOBJECT, m_Escort);
-                    //            m_Escort.SendRefMsg(RM_DISAPPEAR, 0, 0, 0, 0, '');
-                    //            m_Escort.m_nCurrX = nrX;
-                    //            m_Escort.m_nCurrY = nrY;
-                    //            m_Escort.m_PEnvir = Envir;
-                    //            m_Escort.m_PEnvir.AddToMap(m_Escort.m_nCurrX, m_Escort.m_nCurrY, OS_MOVINGOBJECT, m_Escort);
-                    //            m_Escort.m_Master = Self;
-                    //            m_Escort.OnEnvirnomentChanged();
-                    //            m_Escort.SendRefMsg(RM_DIGUP, m_Escort.m_btDirection, m_Escort.m_nCurrX, m_Escort.m_nCurrY, 0, '');
-                    //            m_Escort.SendRefMsg(RM_TURN, m_Escort.m_btDirection, m_Escort.m_nCurrX, m_Escort.m_nCurrY, m_Escort.GetFeatureToLong, m_Escort.GetShowName);
-                    //        }
-                    //    }
-                    //}
-
                 }
                 else
                 {
@@ -3721,7 +3696,7 @@ namespace GameSvr
             return result;
         }
 
-        public void TurnTo(byte nDir)
+        protected void TurnTo(byte nDir)
         {
             m_btDirection = nDir;
             SendRefMsg(Grobal2.RM_TURN, nDir, m_nCurrX, m_nCurrY, 0, "");
@@ -3849,7 +3824,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="AttackBaseObject"></param>
         /// <param name="MonStatus"></param>
-        public void MonsterSayMsg(TBaseObject AttackBaseObject, MonStatus MonStatus)
+        protected void MonsterSayMsg(TBaseObject AttackBaseObject, MonStatus MonStatus)
         {
             if (m_SayMsgList == null)
             {
@@ -3921,12 +3896,10 @@ namespace GameSvr
         /// </summary>
         protected void ApplyMeatQuality()
         {
-            GoodItem StdItem;
-            TUserItem UserItem;
             for (int i = 0; i < m_ItemList.Count; i++)
             {
-                UserItem = m_ItemList[i];
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                var UserItem = m_ItemList[i];
+                var StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
                 if (StdItem != null)
                 {
                     if (StdItem.StdMode == 40)
@@ -3968,7 +3941,7 @@ namespace GameSvr
         /// 散落金币
         /// </summary>
         /// <param name="GoldOfCreat"></param>
-        public void ScatterGolds(TBaseObject GoldOfCreat)
+        private void ScatterGolds(TBaseObject GoldOfCreat)
         {
             int I;
             int nGold;
@@ -4325,18 +4298,16 @@ namespace GameSvr
 
         public bool InSafeZone()
         {
-            bool result;
             int nSafeX;
             int nSafeY;
-            if (m_PEnvir == null)// 修正机器人刷火墙的错误
+            if (m_PEnvir == null)
             {
-                result = true;
-                return result;
+                return true;
             }
-            result = m_PEnvir.Flag.boSAFE;
+            var result = m_PEnvir.Flag.boSAFE;
             if (result)
             {
-                return result;
+                return true;
             }
             if ((m_PEnvir.sMapName != M2Share.g_Config.sRedHomeMap) || (Math.Abs(m_nCurrX - M2Share.g_Config.nRedHomeX) > M2Share.g_Config.nSafeZoneSize) || (Math.Abs(m_nCurrY - M2Share.g_Config.nRedHomeY) > M2Share.g_Config.nSafeZoneSize))
             {
@@ -4372,7 +4343,7 @@ namespace GameSvr
         {
             int nSafeX;
             int nSafeY;
-            if (m_PEnvir == null)  // 修正机器人刷火墙的错误
+            if (m_PEnvir == null)
             {
                 return true;
             }
@@ -4474,27 +4445,27 @@ namespace GameSvr
         public bool CheckMagicLevelup(TUserMagic UserMagic)
         {
             bool result = false;
-            int n10;
+            int nLevel;
             if ((UserMagic.btLevel < 4) && (UserMagic.MagicInfo.btTrainLv >= UserMagic.btLevel))
             {
-                n10 = UserMagic.btLevel;
+                nLevel = UserMagic.btLevel;
             }
             else
             {
-                n10 = 0;
+                nLevel = 0;
             }
-            if ((UserMagic.MagicInfo.btTrainLv > UserMagic.btLevel) && (UserMagic.MagicInfo.MaxTrain[n10] <= UserMagic.nTranPoint))
+            if ((UserMagic.MagicInfo.btTrainLv > UserMagic.btLevel) && (UserMagic.MagicInfo.MaxTrain[nLevel] <= UserMagic.nTranPoint))
             {
                 if (UserMagic.MagicInfo.btTrainLv > UserMagic.btLevel)
                 {
-                    UserMagic.nTranPoint -= UserMagic.MagicInfo.MaxTrain[n10];
+                    UserMagic.nTranPoint -= UserMagic.MagicInfo.MaxTrain[nLevel];
                     UserMagic.btLevel++;
                     SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.MagicInfo.wMagicID, UserMagic.btLevel, UserMagic.nTranPoint, "", 800);
                     CheckSeeHealGauge(UserMagic);
                 }
                 else
                 {
-                    UserMagic.nTranPoint = UserMagic.MagicInfo.MaxTrain[n10];
+                    UserMagic.nTranPoint = UserMagic.MagicInfo.MaxTrain[nLevel];
                 }
                 result = true;
             }
@@ -4905,12 +4876,7 @@ namespace GameSvr
 
         public bool IsGuildMaster()
         {
-            bool result = false;
-            if ((m_MyGuild != null) && (m_nGuildRankNo == 1))
-            {
-                result = true;
-            }
-            return result;
+            return (m_MyGuild != null) && (m_nGuildRankNo == 1);
         }
 
         public bool MagCanHitTarget(short nX, short nY, TBaseObject TargeTBaseObject)
@@ -5166,12 +5132,11 @@ namespace GameSvr
         /// <returns></returns>
         public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
         {
-            long nOldStatus;
             if (m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] != 0)
             {
                 return false;
             }
-            nOldStatus = m_nCharStatus;
+            var nOldStatus = m_nCharStatus;
             m_wStatusTimeArr[Grobal2.STATE_BUBBLEDEFENCEUP] = nSec;
             m_dwStatusArrTick[Grobal2.STATE_BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
             m_nCharStatus = GetCharStatus();
@@ -5187,7 +5152,6 @@ namespace GameSvr
         public TUserItem CheckItemCount(string sItemName, ref int nCount)
         {
             TUserItem result = null;
-            string sName;
             nCount = 0;
             for (int i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
             {
@@ -5195,7 +5159,7 @@ namespace GameSvr
                 {
                     continue;
                 }
-                sName = M2Share.UserEngine.GetStdItemName(m_UseItems[i].wIndex);
+                var sName = M2Share.UserEngine.GetStdItemName(m_UseItems[i].wIndex);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = m_UseItems[i];
@@ -5737,7 +5701,6 @@ namespace GameSvr
             m_boDeath = false;
             m_boInvisible = false;
 
-            //if not m_boFixedHideMode then
             SendRefMsg(Grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, GetFeatureToLong(), "");
 
             if (M2Share.g_Config.boMonSayMsg)

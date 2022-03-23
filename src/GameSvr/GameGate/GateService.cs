@@ -86,12 +86,12 @@ namespace GameSvr
                 while (nLen >= MessageHeader.PacketSize)
                 {
                     var msgHeader = new MessageHeader(protoBuff);
-                    if (msgHeader.dwCode == 0)
+                    if (msgHeader.PacketCode == 0)
                     {
                         return;
                     }
                     var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
-                    if (msgHeader.dwCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
+                    if (msgHeader.PacketCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                     {
                         if (nLen < nCheckMsgLen)
                         {
@@ -113,6 +113,7 @@ namespace GameSvr
                             GameBuffer = tempBuff;
                             protoBuff = tempBuff;
                             nBuffLen = nLen;
+                            buffIndex = 0;
                         }
                     }
                     else
@@ -238,8 +239,8 @@ namespace GameSvr
             }
             var msgHeader = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = 0,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = 0,
                 wIdent = nIdent,
                 nLength = 0
             };
@@ -377,84 +378,47 @@ namespace GameSvr
         public void CloseUser(int nSocket)
         {
             TGateUserInfo GateUser;
-            const string sExceptionMsg0 = "[Exception] TRunSocket::CloseUser 0";
-            const string sExceptionMsg1 = "[Exception] TRunSocket::CloseUser 1";
-            const string sExceptionMsg2 = "[Exception] TRunSocket::CloseUser 2";
-            const string sExceptionMsg3 = "[Exception] TRunSocket::CloseUser 3";
-            const string sExceptionMsg4 = "[Exception] TRunSocket::CloseUser 4";
             if (GateInfo.UserList != null)
             {
-                HUtil32.EnterCriticalSection(runSocketSection);
+                HUtil32.EnterCriticalSections(runSocketSection);
                 try
                 {
-                    try
+                    for (var i = 0; i < GateInfo.UserList.Count; i++)
                     {
-                        for (var i = 0; i < GateInfo.UserList.Count; i++)
+                        if (GateInfo.UserList[i] != null)
                         {
-                            if (GateInfo.UserList[i] != null)
+                            GateUser = GateInfo.UserList[i];
+                            if (GateUser == null)
                             {
-                                GateUser = GateInfo.UserList[i];
-                                if (GateUser.nSocket == nSocket)
+                                continue;
+                            }
+                            if (GateUser.nSocket == nSocket)
+                            {
+                                if (GateUser.FrontEngine != null)
                                 {
-                                    try
-                                    {
-                                        if (GateUser.FrontEngine != null)
-                                        {
-                                            GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        M2Share.ErrorMessage(sExceptionMsg1);
-                                    }
-                                    try
-                                    {
-                                        if (GateUser.PlayObject != null)
-                                        {
-                                            if (!GateUser.PlayObject.m_boOffLineFlag)
-                                            {
-                                                GateUser.PlayObject.m_boSoftClose = true;
-                                            }
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        M2Share.ErrorMessage(sExceptionMsg2);
-                                    }
-                                    try
-                                    {
-                                        if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
-                                        {
-                                            IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        M2Share.ErrorMessage(sExceptionMsg3);
-                                    }
-                                    try
-                                    {
-                                        GateUser = null;
-                                        GateInfo.UserList[i] = null;
-                                        GateInfo.nUserCount -= 1;
-                                    }
-                                    catch
-                                    {
-                                        M2Share.ErrorMessage(sExceptionMsg4);
-                                    }
-                                    break;
+                                    GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
                                 }
+                                if (GateUser.PlayObject != null)
+                                {
+                                    if (!GateUser.PlayObject.m_boOffLineFlag)
+                                    {
+                                        GateUser.PlayObject.m_boSoftClose = true;
+                                    }
+                                }
+                                if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
+                                {
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
+                                }
+                                GateInfo.UserList[i] = null;
+                                GateInfo.nUserCount -= 1;
+                                break;
                             }
                         }
-                    }
-                    catch
-                    {
-                        M2Share.ErrorMessage(sExceptionMsg0);
                     }
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSection(runSocketSection);
+                    HUtil32.LeaveCriticalSections(runSocketSection);
                 }
             }
         }
@@ -497,9 +461,9 @@ namespace GameSvr
                 return;
             }
             var MsgHeader = new MessageHeader();
-            MsgHeader.dwCode = Grobal2.RUNGATECODE;
-            MsgHeader.nSocket = nSocket;
-            MsgHeader.wGSocketIdx = (ushort)nSocketIndex;
+            MsgHeader.PacketCode = Grobal2.RUNGATECODE;
+            MsgHeader.Socket = nSocket;
+            MsgHeader.SocketIdx = (ushort)nSocketIndex;
             MsgHeader.wIdent = Grobal2.GM_SERVERUSERINDEX;
             MsgHeader.wUserListIndex = (ushort)nUserIdex;
             MsgHeader.nLength = 0;
@@ -520,12 +484,12 @@ namespace GameSvr
                 {
                     case Grobal2.GM_OPEN:
                         var sIPaddr = HUtil32.GetString(MsgBuff, 0, nMsgLen);
-                        nUserIdx = OpenNewUser(MsgHeader.nSocket, MsgHeader.wGSocketIdx, sIPaddr, Gate.UserList);
-                        SendNewUserMsg(Gate.Socket, MsgHeader.nSocket, MsgHeader.wGSocketIdx, nUserIdx + 1);
+                        nUserIdx = OpenNewUser(MsgHeader.Socket, MsgHeader.SocketIdx, sIPaddr, Gate.UserList);
+                        SendNewUserMsg(Gate.Socket, MsgHeader.Socket, MsgHeader.SocketIdx, nUserIdx + 1);
                         Gate.nUserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
-                        CloseUser(MsgHeader.nSocket);
+                        CloseUser(MsgHeader.Socket);
                         break;
                     case Grobal2.GM_CHECKCLIENT:
                         Gate.boSendKeepAlive = true;
@@ -542,7 +506,7 @@ namespace GameSvr
                             if (Gate.UserList.Count > nUserIdx)
                             {
                                 GateUser = Gate.UserList[nUserIdx];
-                                if (GateUser != null && GateUser.nSocket != MsgHeader.nSocket)
+                                if (GateUser != null && GateUser.nSocket != MsgHeader.Socket)
                                 {
                                     GateUser = null;
                                 }
@@ -556,7 +520,7 @@ namespace GameSvr
                                 {
                                     continue;
                                 }
-                                if (Gate.UserList[i].nSocket == MsgHeader.nSocket)
+                                if (Gate.UserList[i].nSocket == MsgHeader.Socket)
                                 {
                                     GateUser = Gate.UserList[i];
                                     break;
@@ -584,7 +548,7 @@ namespace GameSvr
                             else
                             {
                                 var sMsg = HUtil32.StrPas(MsgBuff);
-                                DoClientCertification(GateIdx, GateUser, MsgHeader.nSocket, sMsg);
+                                DoClientCertification(GateIdx, GateUser, MsgHeader.Socket, sMsg);
                             }
                         }
                         break;
@@ -602,9 +566,9 @@ namespace GameSvr
             int nSendBytes;
             MessageHeader MsgHdr = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = nSocket,
-                wGSocketIdx = (ushort)nGsIdx,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = nSocket,
+                SocketIdx = (ushort)nGsIdx,
                 wIdent = Grobal2.GM_DATA,
                 nLength = 12
             };
@@ -681,7 +645,6 @@ namespace GameSvr
                                     GateUserInfo.PlayObject.m_boEmergencyClose = true;
                                     GateUserInfo.PlayObject.m_boSoftClose = true;
                                 }
-                                GateUserInfo = null;
                                 GateInfo.UserList[j] = null;
                                 GateInfo.nUserCount -= 1;
                                 break;
