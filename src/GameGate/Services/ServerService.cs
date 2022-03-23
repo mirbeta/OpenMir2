@@ -144,12 +144,10 @@ namespace GameGate
             var clientThread = _clientManager.GetClientThread(nSockIndex);
             if (clientThread != null && clientThread.GateReady)
             {
-                if (nSockIndex >= 0 && nSockIndex < clientThread.SessionArray.Length)
-                {
-                    clientThread.SessionArray[nSockIndex] = null;
-                    clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
-                    _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                }
+                clientThread.SessionArray[nSockIndex] = null;
+                clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
+                _sessionManager.CloseSession(nSockIndex);
+                _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
             }
             else
             {

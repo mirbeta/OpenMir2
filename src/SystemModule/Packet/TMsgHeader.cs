@@ -7,9 +7,9 @@ namespace SystemModule.Packages
     /// </summary>
     public class MessageHeader : Packets
     {
-        public uint dwCode;
-        public int nSocket;
-        public ushort wGSocketIdx;
+        public uint PacketCode;
+        public int Socket;
+        public ushort SocketIdx;
         public ushort wIdent;
         public int wUserListIndex;
         public int nLength;
@@ -20,9 +20,9 @@ namespace SystemModule.Packages
 
         public MessageHeader(byte[] buffer) : base(buffer)
         {
-            dwCode = ReadUInt32();
-            nSocket = ReadInt32();
-            wGSocketIdx = ReadUInt16();
+            PacketCode = ReadUInt32();
+            Socket = ReadInt32();
+            SocketIdx = ReadUInt16();
             wIdent = ReadUInt16();
             wUserListIndex = ReadInt32();
             nLength = ReadInt32();
@@ -35,9 +35,9 @@ namespace SystemModule.Packages
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(dwCode);
-            writer.Write(nSocket);
-            writer.Write(wGSocketIdx);
+            writer.Write(PacketCode);
+            writer.Write(Socket);
+            writer.Write(SocketIdx);
             writer.Write(wIdent);
             writer.Write(wUserListIndex);
             writer.Write(nLength);

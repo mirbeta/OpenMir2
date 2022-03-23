@@ -122,6 +122,10 @@ namespace SelGate
             {
                 _session.Socket.Send(sendData.Body);
             }
+            else
+            {
+                Console.WriteLine("Scoket会话失效，无法处理登陆封包");
+            }
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
