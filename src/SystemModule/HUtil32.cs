@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading;
 
 namespace SystemModule
 {
@@ -136,6 +137,16 @@ namespace SystemModule
             return Math.Max(min, values) == Math.Min(values, max);
         }
 
+        public static void EnterCriticalSections(object obj)
+        {
+            Monitor.Enter(obj);
+        }
+
+        public static void LeaveCriticalSections(object obj)
+        {
+            Monitor.Exit(obj);
+        }
+        
         public static void EnterCriticalSection(object obj)
         {
             // Monitor.Enter(obj);
