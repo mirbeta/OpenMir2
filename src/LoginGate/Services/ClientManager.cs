@@ -90,7 +90,6 @@ namespace LoginGate
         {
             if (clientThread.boGateReady)
             {
-                //clientThread.SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
                 clientThread.CheckServerFailCount = 0;
                 return;
             }
@@ -107,6 +106,14 @@ namespace LoginGate
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
                 _logQueue.Enqueue($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]", 5);
+                return;
+            }
+            if (clientThread.boCheckServerFail && clientThread.CheckServerFailCount > 20 && HUtil32.GetTickCount() - clientThread.CheckServerTick > 60 * 1000)
+            {
+                clientThread.CheckServerTick = HUtil32.GetTickCount();
+                clientThread.ReConnected();
+                clientThread.CheckServerFailCount++;
+                _logQueue.Enqueue($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]", 5);
             }
         }
     }
