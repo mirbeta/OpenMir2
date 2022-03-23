@@ -1295,21 +1295,21 @@ namespace GameGate
                 tempBuff = new byte[MessageHeader.PacketSize + len];
             }
             var GateMsg = new MessageHeader();
-            GateMsg.dwCode = Grobal2.RUNGATECODE;
-            GateMsg.nSocket = (int)_session.Socket.Handle;
-            GateMsg.wGSocketIdx = (ushort)_session.SessionId;
+            GateMsg.PacketCode = Grobal2.RUNGATECODE;
+            GateMsg.Socket = (int)_session.Socket.Handle;
+            GateMsg.SocketIdx = (ushort)_session.SessionId;
             GateMsg.wIdent = Grobal2.GM_DATA;
             GateMsg.wUserListIndex = _session.nUserListIndex;
             GateMsg.nLength = tempBuff.Length - MessageHeader.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetPacket();
-            Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+            Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
-                Array.Copy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
+                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
             }
             else
             {
-                Array.Copy(packet, 0, tempBuff, sendBuffer.Length, len);
+                Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, len);
             }
             SendDelayMsg(0, 0, 0, tempBuff.Length, tempBuff, 1);
             /*var gateMessage = new GateMessage();
