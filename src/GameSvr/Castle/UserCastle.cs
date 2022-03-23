@@ -108,6 +108,14 @@ namespace GameSvr
         public string m_sSecretMap = string.Empty;
         public DateTime m_WarDate;
         private readonly CastleConfManager castleConf;
+        /// <summary>
+        /// 沙巴克战役列表
+        /// </summary>
+        const string AttackSabukWallList = "AttackSabukWall.txt";
+        /// <summary>
+        /// 沙巴克配置文件
+        /// </summary>
+        private const string SabukWFileName = "SabukW.txt";
 
         public TUserCastle(string sCastleDir)
         {
@@ -130,13 +138,12 @@ namespace GameSvr
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
             m_EnvirList = new List<string>();
-            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
             }
-            var sConfigFile = "SabukW.txt";
-            castleConf = new CastleConfManager(Path.Combine(filePath, sConfigFile));
+            castleConf = new CastleConfManager(Path.Combine(filePath, SabukWFileName));
         }
 
         public int nTechLevel
@@ -266,14 +273,16 @@ namespace GameSvr
             castleConf.SaveConfig(this);
         }
 
+        /// <summary>
+        /// 读取沙巴克战役列表
+        /// </summary>
         private void LoadAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
             var guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
-            var sConfigFile = "AttackSabukWall.txt";
-            var sFileName = Path.Combine(sabukwallPath, sConfigFile);
+            var sFileName = Path.Combine(sabukwallPath, AttackSabukWallList);
             if (!File.Exists(sFileName)) return;
             var loadList = new StringList();
             loadList.LoadFromFile(sFileName);
@@ -305,21 +314,22 @@ namespace GameSvr
             }
         }
 
+        /// <summary>
+        /// 保存沙巴克战役列表
+        /// </summary>
         private void SaveAttackSabukWall()
         {
-            var sabukwallPath = Path.Combine(M2Share.g_Config.sCastleDir, m_sConfigDir);
+            var sabukwallPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, m_sConfigDir);
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
-            var sConfigFile = "AttackSabukWall.txt";
-            var sFileName = Path.Combine(sabukwallPath, sConfigFile);
-            var loadLis = new StringList();
+            var sFileName = Path.Combine(sabukwallPath, AttackSabukWallList);
+            using var loadLis = new StringList();
             for (var i = 0; i < m_AttackWarList.Count; i++)
             {
                 var attackerInfo = m_AttackWarList[i];
                 loadLis.Add(attackerInfo.sGuildName + "       \"" + attackerInfo.AttackDate + '\"');
             }
             loadLis.SaveToFile(sFileName);
-            loadLis = null;
         }
 
         public void Run()
@@ -491,37 +501,37 @@ namespace GameSvr
 
         public bool CanGetCastle(Association guild)
         {
-            var result = false;
             if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.g_Config.dwGetCastleTime)
             {
-                return result;
+                return false;
             }
-            var List14 = new List<TBaseObject>();
-            M2Share.UserEngine.GetMapRageHuman(m_MapPalace, 0, 0, 1000, List14);
-            result = true;
-            for (var i = 0; i < List14.Count; i++)
+            var playPbjectList = new List<TBaseObject>();
+            M2Share.UserEngine.GetMapRageHuman(m_MapPalace, 0, 0, 1000, playPbjectList);
+            var result = true;
+            for (var i = 0; i < playPbjectList.Count; i++)
             {
-                var playObject = (TPlayObject)List14[i];
+                var playObject = (TPlayObject)playPbjectList[i];
                 if (!playObject.m_boDeath && playObject.m_MyGuild != guild)
                 {
                     result = false;
                     break;
                 }
             }
-            List14 = null;
+            playPbjectList = null;
             return result;
         }
 
         public void GetCastle(Association Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
-            var oldGuild = m_MasterGuild;
-            m_MasterGuild = Guild;
             m_sOwnGuild = Guild.sGuildName;
             m_ChangeDate = DateTime.Now;
             SaveConfigFile();
-            if (oldGuild != null) oldGuild.RefMemberName();
-            if (m_MasterGuild != null) m_MasterGuild.RefMemberName();
+            if (m_MasterGuild != null)
+            {
+                m_MasterGuild.RefMemberName();//刷新旧的行会信息
+            }
+            Guild.RefMemberName();//刷新新的行会信息
             var s10 = string.Format(sGetCastleMsg, m_sName, m_sOwnGuild);
             M2Share.UserEngine.SendBroadCastMsgExt(s10, MsgType.System);
             M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_204, M2Share.nServerIndex, s10);
@@ -573,21 +583,15 @@ namespace GameSvr
 
         public bool IsDefenseAllyGuild(Association guild)
         {
-            var result = false;
-            if (!m_boUnderWar) return result;
-            if (m_MasterGuild != null) // 如果未开始攻城，则无效
-                result = m_MasterGuild.IsAllyGuild(guild);
-            return result;
+            if (!m_boUnderWar) return false; // 如果未开始攻城，则无效
+            return m_MasterGuild != null && m_MasterGuild.IsAllyGuild(guild);
         }
 
         // 检查是否为守城方行会
         public bool IsDefenseGuild(Association guild)
         {
-            var result = false;
-            if (!m_boUnderWar) return result;
-            if (guild == m_MasterGuild) // 如果未开始攻城，则无效
-                result = true;
-            return result;
+            if (!m_boUnderWar) return false;// 如果未开始攻城，则无效
+            return guild == m_MasterGuild;
         }
 
         public bool IsMasterGuild(Association guild)
