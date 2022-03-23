@@ -130,6 +130,7 @@ namespace LoginGate
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
+                    SessionArray[i] = null;
                     _logQueue.EnqueueDebugging("账号服务器断开Socket");
                 }
             }
@@ -224,9 +225,9 @@ namespace LoginGate
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen, byte[] Data)
         {
             var GateMsg = new MessageHeader();
-            GateMsg.dwCode = Grobal2.RUNGATECODE;
-            GateMsg.nSocket = nSocket;
-            GateMsg.wGSocketIdx = (ushort)wSocketIndex;
+            GateMsg.PacketCode = Grobal2.RUNGATECODE;
+            GateMsg.Socket = nSocket;
+            GateMsg.SocketIdx = (ushort)wSocketIndex;
             GateMsg.wIdent = nIdent;
             GateMsg.wUserListIndex = nUserListIndex;
             GateMsg.nLength = nLen;
