@@ -16,20 +16,12 @@ namespace LoginSvr
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "Logsrv.conf")));
-                    services.AddSingleton<LogQueue>();
                     services.AddSingleton<AppServer>();
-                    services.AddSingleton<LoginService>();
-                    services.AddSingleton<AccountDB>();
-                    services.AddSingleton<MasSocService>();
-                    services.AddSingleton<MonSocService>();
-                    services.AddSingleton<ThreadParseList>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 });
 
             await builder.RunConsoleAsync();
-
         }
     }
 }

@@ -19,7 +19,7 @@ namespace LoginSvr
         public string sGateIPaddr;
         public string sFeedIDList;
         public string sFeedIPList;
-        public bool boTestServer;
+        public bool TestServer;
         /// <summary>
         /// 是否允许创建账号
         /// </summary>
@@ -30,7 +30,7 @@ namespace LoginSvr
         public IList<string> ServerNameList;
         public Dictionary<string, int> AccountCostList;
         public Dictionary<string, int> IPaddrCostList;
-        public bool boShowDetailMsg;
+        public bool ShowDetailMsg;
         public int nRouteCount;
         public TGateRoute[] GateRoute;
         public string ConnctionString;
@@ -51,11 +51,11 @@ namespace LoginSvr
             nMonPort = 3000;
             sFeedIDList = "FeedIDList.txt";
             sFeedIPList = "FeedIPList.txt";
-            boTestServer = true;
+            TestServer = true;
             boEnableMakingID = true;
             boDynamicIPMode = false;
             nReadyServers = 0;
-            boShowDetailMsg = false;
+            ShowDetailMsg = false;
             GateRoute = new TGateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
         }

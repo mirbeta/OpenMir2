@@ -6,20 +6,16 @@ namespace LoginSvr
 {
     public class AppService : BackgroundService
     {
-        private readonly LogQueue _logQueue;
         private readonly AppServer _serverApp;
-        private readonly MasSocService _masSocService;
-        private readonly MonSocService _monSocService;
-        private readonly LoginService _loginService;
 
-        public AppService(LogQueue logQueue, AppServer serverApp, MasSocService masSocService, MonSocService monSocService,
-            LoginService loginService)
+        private LogQueue _logQueue => LogQueue.Instance;
+        private MasSocService _masSocService => MasSocService.Instance;
+        private MonSocService _monSocService => MonSocService.Instance;
+        private LoginService _loginService => LoginService.Instance;
+
+        public AppService(AppServer appServer)
         {
-            _logQueue = logQueue;
-            _serverApp = serverApp;
-            _masSocService = masSocService;
-            _monSocService = monSocService;
-            _loginService = loginService;
+            _serverApp = appServer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

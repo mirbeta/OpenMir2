@@ -8,14 +8,21 @@ using SystemModule.Sockets;
 
 namespace LoginSvr
 {
-    public class MasSocService : IService
+    public class MasSocService
     {
-        private readonly LogQueue _logQueue;
+        private static readonly MasSocService instance = new MasSocService();
+
+        public static MasSocService Instance
+        {
+            get { return instance; }
+        }
+
+        private LogQueue _logQueue => LogQueue.Instance;
         private readonly IList<TMsgServerInfo> m_ServerList = null;
         private readonly ISocketServer serverSocket;
-        private readonly ConfigManager _configManager;
+        private ConfigManager _configManager => ConfigManager.Instance;
 
-        public MasSocService(LogQueue logQueue, ConfigManager configManager)
+        public MasSocService()
         {
             m_ServerList = new List<TMsgServerInfo>();
             serverSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -23,8 +30,6 @@ namespace LoginSvr
             serverSocket.OnClientDisconnect += SocketClientDisconnect;
             serverSocket.OnClientError += SocketClientError;
             serverSocket.OnClientRead += SocketClientRead;
-            _configManager = configManager;
-            _logQueue = logQueue;
         }
 
         public IList<TMsgServerInfo> ServerList => m_ServerList;
@@ -109,7 +114,7 @@ namespace LoginSvr
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
                     sReviceMsg = MsgServer.sReceiveMsg + HUtil32.GetString(data, 0, data.Length);
                     while (sReviceMsg.IndexOf(")", StringComparison.Ordinal) > 0)
                     {

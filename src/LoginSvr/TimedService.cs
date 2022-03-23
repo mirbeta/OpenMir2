@@ -10,22 +10,17 @@ namespace LoginSvr
 {
     public class TimedService : BackgroundService
     {
-        private readonly LogQueue _logQueue;
-        private readonly LoginService _loginService;
-        private readonly MonSocService _monSocService;
-        private readonly ThreadParseList _threadParseList;
-        private readonly MasSocService _massocService;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private LoginService _loginService => LoginService.Instance;
+        private MonSocService _monSocService => MonSocService.Instance;
+        private ThreadParseList _threadParseList => ThreadParseList.Instance;
+        private MasSocService _massocService => MasSocService.Instance;
         private int _processMonSocTick = 0;
         private int _processServerStatuTick = 0;
 
-        public TimedService(LogQueue logQueue, LoginService loginService, ThreadParseList threadParseList,
-            MonSocService monSocService, MasSocService massocService)
+        public TimedService()
         {
-            _logQueue = logQueue;
-            _loginService = loginService;
-            _threadParseList = threadParseList;
-            _monSocService = monSocService;
-            _massocService = massocService;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

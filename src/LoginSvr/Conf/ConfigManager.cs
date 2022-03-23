@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
@@ -7,6 +8,14 @@ namespace LoginSvr
 {
     public class ConfigManager : IniFile
     {
+        private static string fileName = Path.Combine(AppContext.BaseDirectory, "Logsrv.conf");
+        private static readonly ConfigManager instance = new ConfigManager(fileName);
+
+        public static ConfigManager Instance
+        {
+            get { return instance; }
+        }
+        
         const string sSectionServer = "Server";
         const string sSectionDB = "DB";
         private const string sDB = "DataBase";
@@ -60,6 +69,7 @@ namespace LoginSvr
             Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
             Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
+            Config.ShowDetailMsg = LoadConfig_LoadConfigBoolean(sSectionServer, "ShowDetailMsg", Config.ShowDetailMsg);
         }
 
         private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)

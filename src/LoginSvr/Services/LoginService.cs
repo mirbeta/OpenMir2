@@ -14,32 +14,34 @@ namespace LoginSvr
     /// 账号服务
     /// 处理账号注册 登录 找回密码等
     /// </summary>
-    public class LoginService : IService
+    public class LoginService
     {
-        private readonly LogQueue _logQueue;
+        private static readonly LoginService instance = new LoginService();
+
+        public static LoginService Instance
+        {
+            get { return instance; }
+        }
         private readonly ISocketServer _serverSocket;
-        private readonly AccountDB _accountDB = null;
-        private readonly MasSocService _masSock;
-        private readonly ConfigManager _configManager;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private AccountDB _accountDB = AccountDB.Instance;
+        private MasSocService _masSock => MasSocService.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
         private readonly Channel<LoginPacket> _receiveQueue = null;
         private readonly Channel<ReceiveUserData> _processUserQueue = null;
         private readonly IList<TGateInfo> _gateList;
 
-        public LoginService(LogQueue logQueue, AccountDB accountDB, MasSocService masSock, ConfigManager configManager)
+        public LoginService()
         {
-            _accountDB = accountDB;
-            _masSock = masSock;
+            _receiveQueue = Channel.CreateUnbounded<LoginPacket>();
+            _processUserQueue = Channel.CreateUnbounded<ReceiveUserData>();
+            _gateList = new List<TGateInfo>();
             _serverSocket = new ISocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
             _serverSocket.OnClientRead += GSocketClientRead;
             _serverSocket.OnClientError += GSocketClientError;
             _serverSocket.Init();
-            _receiveQueue = Channel.CreateUnbounded<LoginPacket>();
-            _processUserQueue = Channel.CreateUnbounded<ReceiveUserData>();
-            _configManager = configManager;
-            _gateList = new List<TGateInfo>();
-            _logQueue = logQueue;
         }
 
         public void Start()
@@ -63,7 +65,6 @@ namespace LoginSvr
         {
             TGateInfo GateInfo;
             TUserInfo UserInfo;
-            Config Config = _configManager.Config;
             for (var i = 0; i < _gateList.Count; i++)
             {
                 GateInfo = _gateList[i];
@@ -72,11 +73,11 @@ namespace LoginSvr
                     for (var j = 0; j < GateInfo.UserList.Count; j++)
                     {
                         UserInfo = GateInfo.UserList[j];
-                        if (Config.boShowDetailMsg)
+                        if (_configManager.Config.ShowDetailMsg)
                         {
                             _logQueue.EnqueueDebugging("Close: " + UserInfo.sUserIPaddr);
                         }
-                        UserInfo = null;
+                        GateInfo.UserList[j] = null;
                     }
                     GateInfo.UserList = null;
                     _gateList.Remove(GateInfo);
@@ -95,14 +96,12 @@ namespace LoginSvr
         {
             for (var i = 0; i < _gateList.Count; i++)
             {
-                var GateInfo = _gateList[i];
-                if (GateInfo.Socket == e.Socket)
+                if (_gateList[i].Socket == e.Socket)
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    var logionPacket = new LoginPacket(data);
-                    _receiveQueue.Writer.TryWrite(logionPacket);
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    _receiveQueue.Writer.TryWrite(new LoginPacket(data));
                     break;
                 }
             }
@@ -123,14 +122,11 @@ namespace LoginSvr
         /// <returns></returns>
         public async Task StartConsumer()
         {
-            var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
-
-            var consumerTask2 = Task.Factory.StartNew(ProcessUserMessage);
-            gTasks[1] = consumerTask2;
-
-            await Task.WhenAll(gTasks);
+            await Task.Run(() =>
+            {
+                Task.Factory.StartNew(async () => { await ProcessReviceMessage(); });
+                Task.Factory.StartNew(async () => { await ProcessUserMessage(); });
+            });
         }
 
         /// <summary>
@@ -250,7 +246,7 @@ namespace LoginSvr
                 var UserInfo = GateInfo.UserList[i];
                 if (UserInfo.sSockIndex == sSockIndex)
                 {
-                    if (_configManager.Config.boShowDetailMsg)
+                    if (_configManager.Config.ShowDetailMsg)
                     {
                         _logQueue.EnqueueDebugging(string.Format(sCloseMsg, UserInfo.sUserIPaddr));
                     }
@@ -258,7 +254,7 @@ namespace LoginSvr
                     {
                         SessionDel(_configManager.Config, UserInfo.nSessionID);
                     }
-                    UserInfo = null;
+                    GateInfo.UserList[i] = null;
                     GateInfo.UserList.RemoveAt(i);
                     break;
                 }
@@ -298,7 +294,7 @@ namespace LoginSvr
                 UserInfo.dwClientTick = HUtil32.GetTickCount();
                 UserInfo.Gate = GateInfo;
                 GateInfo.UserList.Add(UserInfo);
-                if (_configManager.Config.boShowDetailMsg)
+                if (_configManager.Config.ShowDetailMsg)
                 {
                     _logQueue.EnqueueDebugging(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
                 }
@@ -326,6 +322,9 @@ namespace LoginSvr
             }
         }
 
+        /// <summary>
+        /// 清理超时会话
+        /// </summary>
         public void SessionClearKick()
         {
             var Config = _configManager.Config;
@@ -334,7 +333,7 @@ namespace LoginSvr
                 TConnInfo ConnInfo = Config.SessionList[i];
                 if (ConnInfo.boKicked && HUtil32.GetTickCount() - ConnInfo.dwKickTick > 5 * 1000)
                 {
-                    ConnInfo = null;
+                    Config.SessionList[i] = null;
                     Config.SessionList.RemoveAt(i);
                 }
             }
@@ -342,13 +341,11 @@ namespace LoginSvr
 
         private void SessionDel(Config Config, int nSessionID)
         {
-            TConnInfo ConnInfo;
             for (var i = 0; i < Config.SessionList.Count; i++)
             {
-                ConnInfo = Config.SessionList[i];
-                if (ConnInfo.nSessionID == nSessionID)
+                if (Config.SessionList[i].nSessionID == nSessionID)
                 {
-                    ConnInfo = null;
+                    Config.SessionList[i] = null;
                     Config.SessionList.RemoveAt(i);
                     break;
                 }
@@ -378,7 +375,7 @@ namespace LoginSvr
                     }
                     else
                     {
-                        KickUser(_configManager.Config, UserInfo);
+                        KickUser(_configManager.Config, ref UserInfo);
                     }
                     break;
                 case Grobal2.CM_ADDNEWUSER:
@@ -452,37 +449,34 @@ namespace LoginSvr
                 var deBuffer = EDcode.DecodeBuffer(sData);
                 userFullEntry = new UserFullEntry(deBuffer);
                 int nErrCode = -1;
-                if (userFullEntry != null)
+                if (LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
-                    if (LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
+                    bo21 = true;
+                }
+                if (bo21)
+                {
+                    int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
+                    if (n10 <= 0)
                     {
-                        bo21 = true;
-                    }
-                    if (bo21)
-                    {
-                        int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
-                        if (n10 <= 0)
+                        TAccountDBRecord DBRecord = new TAccountDBRecord();
+                        DBRecord.UserEntry = userFullEntry.UserEntry;
+                        DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
+                        if (!string.IsNullOrEmpty(userFullEntry.UserEntry.sAccount))
                         {
-                            TAccountDBRecord DBRecord = new TAccountDBRecord();
-                            DBRecord.UserEntry = userFullEntry.UserEntry;
-                            DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                            if (!string.IsNullOrEmpty(userFullEntry.UserEntry.sAccount))
+                            if (_accountDB.Add(ref DBRecord))
                             {
-                                if (_accountDB.Add(ref DBRecord))
-                                {
-                                    nErrCode = 1;
-                                }
+                                nErrCode = 1;
                             }
-                        }
-                        else
-                        {
-                            nErrCode = 0;
                         }
                     }
                     else
                     {
-                        _logQueue.Enqueue(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
+                        nErrCode = 0;
                     }
+                }
+                else
+                {
+                    _logQueue.Enqueue(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
                 }
                 TDefaultMessage DefMsg;
                 if (nErrCode == 1)
@@ -583,7 +577,7 @@ namespace LoginSvr
             SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
         }
 
-        private bool KickUser(Config Config, TUserInfo UserInfo)
+        private void KickUser(Config Config, ref TUserInfo UserInfo)
         {
             const string sKickMsg = "Kick: {0}";
             for (var i = 0; i < _gateList.Count; i++)
@@ -594,18 +588,17 @@ namespace LoginSvr
                     var User = GateInfo.UserList[j];
                     if (User == UserInfo)
                     {
-                        if (Config.boShowDetailMsg)
+                        if (Config.ShowDetailMsg)
                         {
                             _logQueue.EnqueueDebugging(string.Format(sKickMsg, UserInfo.sUserIPaddr));
                         }
                         SendGateKickMsg(GateInfo.Socket, UserInfo.sSockIndex);
                         UserInfo = null;
                         GateInfo.UserList.RemoveAt(j);
-                        return true;
+                        return;
                     }
                 }
             }
-            return false;
         }
 
         /// <summary>
@@ -844,7 +837,7 @@ namespace LoginSvr
                     {
                         sSelGateIP = UserInfo.sGateIPaddr;
                     }
-                    if (Config.boShowDetailMsg)
+                    if (Config.ShowDetailMsg)
                     {
                         _logQueue.EnqueueDebugging(string.Format(sSelServerMsg, sServerName, Config.sGateIPaddr, sSelGateIP, nSelGatePort));
                     }
@@ -874,7 +867,6 @@ namespace LoginSvr
                         _masSock.SendServerMsg(Grobal2.SS_OPENSESSION, sServerName, UserInfo.sAccount + "/" + UserInfo.nSessionID + "/" + (UserInfo.boPayCost ? 1 : 0) + "/" + nPayMode + "/" + UserInfo.sUserIPaddr);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELECTSERVER_OK, UserInfo.nSessionID, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg) + EDcode.EncodeString(sSelGateIP + "/" + nSelGatePort + "/" + UserInfo.nSessionID));
-                        //_logQueue.Enqueue($"同步会话消息到[{sServerName}]成功.");
                     }
                     else
                     {
@@ -882,7 +874,6 @@ namespace LoginSvr
                         SessionDel(Config, UserInfo.nSessionID);
                         DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
-                        //_logQueue.Enqueue($"同步会话消息到[{sServerName}]失败.");
                     }
                 }
             }
@@ -905,37 +896,34 @@ namespace LoginSvr
                 }
                 var deBuffer = EDcode.DecodeBuffer(sData);
                 userFullEntry = new UserFullEntry(deBuffer);
-                if (userFullEntry != null)
+                int nCode = -1;
+                if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
-                    int nCode = -1;
-                    if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
+                    int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
+                    if (n10 >= 0)
                     {
-                        int n10 = _accountDB.Index(userFullEntry.UserEntry.sAccount);
-                        if (n10 >= 0)
+                        if (_accountDB.Get(n10, ref DBRecord) >= 0)
                         {
-                            if (_accountDB.Get(n10, ref DBRecord) >= 0)
-                            {
-                                DBRecord.UserEntry = userFullEntry.UserEntry;
-                                DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                                _accountDB.Update(n10, ref DBRecord);
-                                nCode = 1;
-                            }
+                            DBRecord.UserEntry = userFullEntry.UserEntry;
+                            DBRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
+                            _accountDB.Update(n10, ref DBRecord);
+                            nCode = 1;
                         }
-                        else
-                        {
-                            nCode = 0;
-                        }
-                    }
-                    if (nCode == 1)
-                    {
-                        DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
                     }
                     else
                     {
-                        DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
+                        nCode = 0;
                     }
-                    SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
                 }
+                if (nCode == 1)
+                {
+                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
+                }
+                else
+                {
+                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
+                }
+                SendGateMsg(UserInfo.Socket, UserInfo.sSockIndex, EDcode.EncodeMessage(DefMsg));
             }
             catch (Exception ex)
             {
@@ -1122,13 +1110,16 @@ namespace LoginSvr
             }
         }
 
+        /// <summary>
+        /// 清理没有付费的账号
+        /// </summary>
         public void SessionClearNoPayMent()
         {
             Config Config = _configManager.Config;
             for (var i = Config.SessionList.Count - 1; i >= 0; i--)
             {
                 var ConnInfo = Config.SessionList[i];
-                if (!ConnInfo.boKicked && !Config.boTestServer && !ConnInfo.bo11)
+                if (!ConnInfo.boKicked && !Config.TestServer && !ConnInfo.bo11)
                 {
                     if (HUtil32.GetTickCount() - ConnInfo.dwStartTick > 60 * 60 * 1000)
                     {
@@ -1136,7 +1127,7 @@ namespace LoginSvr
                         if (!IsPayMent(Config, ConnInfo.sIPaddr, ConnInfo.sAccount))
                         {
                             _masSock.SendServerMsg(Grobal2.SS_KICKUSER, ConnInfo.sServerName, ConnInfo.sAccount + "/" + ConnInfo.nSessionID);
-                            ConnInfo = null;
+                            Config.SessionList[i] = null;
                             Config.SessionList.RemoveAt(i);
                         }
                     }
