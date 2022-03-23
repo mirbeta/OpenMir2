@@ -4,13 +4,12 @@ namespace LoginSvr
 {
     public class AppServer
     {
-        private readonly LogQueue _logQueue;
-        private readonly MasSocService _massocService;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private MasSocService _massocService => MasSocService.Instance;
 
-        public AppServer(LogQueue logQueue, MasSocService masSocService)
+        public AppServer()
         {
-            _massocService = masSocService;
-            _logQueue = logQueue;
+
         }
 
         public void Start()

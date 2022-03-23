@@ -6,16 +6,21 @@ namespace LoginSvr
     /// <summary>
     /// 远程监控服务(无用)
     /// </summary>
-    public class MonSocService : IService
+    public class MonSocService
     {
-        private readonly ISocketServer socketServer;
-        private readonly MasSocService _masSockService;
-        private readonly ConfigManager _configManager;
+        private static readonly MonSocService instance = new MonSocService();
 
-        public MonSocService(MasSocService masSockService, ConfigManager configManager)
+        public static MonSocService Instance
         {
-            _masSockService = masSockService;
-            _configManager = configManager;
+            get { return instance; }
+        }
+
+        private readonly ISocketServer socketServer;
+        private MasSocService _masSockService => MasSocService.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
+
+        public MonSocService()
+        {
             socketServer = new ISocketServer(ushort.MaxValue, 128);
             socketServer.Init();
         }

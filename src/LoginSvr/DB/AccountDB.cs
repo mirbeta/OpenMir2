@@ -10,14 +10,18 @@ namespace LoginSvr
 {
     public class AccountDB
     {
-        private readonly LogQueue _logQueue;
-        private readonly ConfigManager _configManager;
+        private static readonly AccountDB instance = new AccountDB();
+
+        public static AccountDB Instance
+        {
+            get { return instance; }
+        }
+        private LogQueue _logQueue => LogQueue.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
         private readonly IList<AccountQuick> _quickList = null;
 
-        public AccountDB(LogQueue logQueue, ConfigManager configManager)
+        public AccountDB()
         {
-            _logQueue = logQueue;
-            _configManager = configManager;
             _quickList = new List<AccountQuick>();
         }
 

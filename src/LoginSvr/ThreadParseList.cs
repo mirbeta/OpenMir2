@@ -9,20 +9,24 @@ namespace LoginSvr
 {
     public class ThreadParseList
     {
-        private readonly LogQueue _logQueue;
-        private StringList AccountLoadList = null;
-        private StringList IPaddrLoadList = null;
-        private IList<AccountConst> AccountCostList = null;
-        private IList<AccountConst> IPaddrCostList = null;
-        private readonly LoginService _loginService;
-        private readonly ConfigManager _configManager;
-        private int _threadExecuteTick = 0;
+        private static readonly ThreadParseList instance = new ThreadParseList();
 
-        public ThreadParseList(LogQueue logQueue, LoginService loginService, ConfigManager configManager)
+        public static ThreadParseList Instance
         {
-            _logQueue = logQueue;
-            _loginService = loginService;
-            _configManager = configManager;
+            get { return instance; }
+        }
+
+        private readonly StringList AccountLoadList = null;
+        private readonly StringList IPaddrLoadList = null;
+        private readonly IList<AccountConst> AccountCostList = null;
+        private readonly IList<AccountConst> IPaddrCostList = null;
+        private int _threadExecuteTick = 0;
+        private LogQueue _logQueue => LogQueue.Instance;
+        private LoginService _loginService => LoginService.Instance;
+        private ConfigManager _configManager => ConfigManager.Instance;
+
+        public ThreadParseList()
+        {
             AccountLoadList = new StringList();
             IPaddrLoadList = new StringList();
             AccountCostList = new List<AccountConst>();

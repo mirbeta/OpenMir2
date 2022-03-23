@@ -5,13 +5,13 @@ namespace LoginSvr
 {
     public class LogQueue
     {
-        private readonly ConfigManager _configManager;
         public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
         public readonly ConcurrentQueue<string> DebugLog = new ConcurrentQueue<string>();
+        private static readonly LogQueue instance = new LogQueue();
 
-        public LogQueue(ConfigManager configManager)
+        public static LogQueue Instance
         {
-            _configManager = configManager;
+            get { return instance; }
         }
 
         public void Enqueue(string msg)

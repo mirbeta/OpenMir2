@@ -17,6 +17,7 @@ namespace LoginGate
         private int m_dwClientTimeOutTick = 0;
         private readonly ClientThread _lastLoginSvr;
         private readonly ConfigManager _configManager;
+        private LogQueue _logQueue=>LogQueue.Instance;
 
         public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
@@ -156,9 +157,19 @@ namespace LoginGate
         /// </summary>
         public void ProcessSvrData(TMessageData sendData)
         {
+            if (m_KickFlag)
+            {
+                m_KickFlag = false;
+                _session.Socket.Close();
+                return;
+            }
             if (_session.Socket != null && _session.Socket.Connected)
             {
                 _session.Socket.Send(sendData.Body);
+            }
+            else
+            {
+                _logQueue.Enqueue("Scoket会话失效，无法处理登陆封包", 5);
             }
         }
 
