@@ -34,6 +34,10 @@ namespace LoginGate
         /// </summary>
         public int CheckServerFailCount = 0;
         /// <summary>
+        /// 服务器之间的检查间隔
+        /// </summary>
+        public int CheckServerTick = 0;
+        /// <summary>
         /// 网关是否就绪
         /// </summary>
         public bool boGateReady = false;
