@@ -216,9 +216,9 @@ namespace SelGate.Services
             byte[] Data)
         {
             var GateMsg = new MessageHeader();
-            GateMsg.dwCode = Grobal2.RUNGATECODE;
-            GateMsg.nSocket = nSocket;
-            GateMsg.wGSocketIdx = (ushort) wSocketIndex;
+            GateMsg.PacketCode = Grobal2.RUNGATECODE;
+            GateMsg.Socket = nSocket;
+            GateMsg.SocketIdx = (ushort) wSocketIndex;
             GateMsg.wIdent = nIdent;
             GateMsg.wUserListIndex = nUserListIndex;
             GateMsg.nLength = nLen;

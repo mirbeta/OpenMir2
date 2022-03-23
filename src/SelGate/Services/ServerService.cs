@@ -107,17 +107,15 @@ namespace SelGate.Services
             var clientThread = _clientManager.GetClientThread(nSockIndex);
             if (clientThread != null && clientThread.boGateReady)
             {
-                if (nSockIndex >= 0 && nSockIndex < clientThread.MaxSession)
+                var userSession = _sessionManager.GetSession(nSockIndex);
+                if (userSession != null)
                 {
-                    var userSession = clientThread.SessionArray[nSockIndex];
-                    if (userSession != null)
-                    {
-                        userSession.Socket = null;
-                        var clientSession = _sessionManager.GetSession(nSockIndex);
-                        clientSession?.UserLeave();
-                        _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
-                    }
+                    var clientSession = _sessionManager.GetSession(e.ConnectionId);
+                    clientSession?.UserLeave();
+                    clientSession?.CloseSession();
+                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
                 }
+                _sessionManager.CloseSession(nSockIndex);
             }
             else
             {
