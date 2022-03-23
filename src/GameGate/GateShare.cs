@@ -11,6 +11,10 @@ namespace GameGate
     {
         public static bool ShowLog = true;
         /// <summary>
+        /// 最大用户数
+        /// </summary>
+        public const int MaxSession = 5000;
+        /// <summary>
         ///  网关游戏服务器之间检测超时时间
         /// </summary>
         public const long dwCheckServerTimeOutTime = 3 * 60 * 1000;

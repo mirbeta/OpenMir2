@@ -21,8 +21,8 @@ namespace GameGate
 
         }
 
-        public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
-        public int ShowLogLevel => _configManager.GateConfig.ShowLogLevel;
+        private bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
+        private int ShowLogLevel => _configManager.GateConfig.ShowLogLevel;
 
         public void Enqueue(string msg, int msgLevel)
         {

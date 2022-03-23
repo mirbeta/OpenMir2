@@ -16,16 +16,16 @@ namespace GameGate
         private ServerManager _serverManager => ServerManager.Instance;
         private readonly ISocketServer _serverSocket;
         private readonly ClientThread _clientThread;
-        private readonly string GateAddress;
-        private readonly int GatePort = 0;
+        private readonly string _gateAddress;
+        private readonly int _gatePort = 0;
         private readonly SendQueue _sendQueue;
 
         public ServerService(int i, GameGateInfo gameGate)
         {
             _sendQueue = new SendQueue();
             _clientThread = new ClientThread(i, gameGate);
-            GateAddress = gameGate.sServerAdress;
-            GatePort = gameGate.nGatePort;
+            _gateAddress = gameGate.sServerAdress;
+            _gatePort = gameGate.nGatePort;
             _serverSocket = new ISocketServer(ushort.MaxValue, 512);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -38,10 +38,10 @@ namespace GameGate
 
         public Task Start()
         {
-            _serverSocket.Start(GateAddress, GatePort);
+            _serverSocket.Start(_gateAddress, _gatePort);
             _clientThread.Start();
             _clientThread.RestSessionArray();
-            _logQueue.Enqueue($"网关[{GateAddress}:{GatePort}]已启动...", 1);
+            _logQueue.Enqueue($"网关[{_gateAddress}:{_gatePort}]已启动...", 1);
             return _sendQueue.ProcessSendQueue();
         }
 
@@ -51,9 +51,9 @@ namespace GameGate
             _serverSocket.Shutdown();
         }
 
-        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal,string queueCount) GetStatus()
+        public (string serverIp, string serverPort, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()
         {
-            return (GateAddress, $"{GatePort}", GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo(), GetSendQueueCount());
+            return (_gateAddress, $"{_gatePort}", GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo(), GetSendQueueCount());
         }
 
         /// <summary>
@@ -72,40 +72,26 @@ namespace GameGate
 
         private string GetSendInfo()
         {
-            var totalStr = string.Empty;
-            if (_clientThread.SendBytes > (1024 * 1000))
+            var sendStr = _clientThread.SendBytes switch
             {
-                totalStr = $"↑{_clientThread.SendBytes / (1024 * 1000)}M";
-            }
-            else if (_clientThread.SendBytes > 1024)
-            {
-                totalStr = $"↑{_clientThread.SendBytes / 1024}K";
-            }
-            else
-            {
-                totalStr = $"↑{_clientThread.SendBytes}B";
-            }
+                > 1024 * 1000 => $"↑{_clientThread.SendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{_clientThread.SendBytes / 1024}K",
+                _ => $"↑{_clientThread.SendBytes}B"
+            };
             _clientThread.SendBytes = 0;
-            return totalStr;
+            return sendStr;
         }
 
         private string GetReceiveInfo()
         {
-            var totalStr = string.Empty;
-            if (_clientThread.ReceiveBytes > (1024 * 1000))
+            var receiveStr = _clientThread.ReceiveBytes switch
             {
-                totalStr = $"↓{_clientThread.ReceiveBytes / (1024 * 1000)}M";
-            }
-            else if (_clientThread.ReceiveBytes > 1024)
-            {
-                totalStr = $"↓{_clientThread.ReceiveBytes / 1024}K";
-            }
-            else
-            {
-                totalStr = $"↓{_clientThread.ReceiveBytes}B";
-            }
+                > 1024 * 1000 => $"↓{_clientThread.ReceiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{_clientThread.ReceiveBytes / 1024}K",
+                _ => $"↓{_clientThread.ReceiveBytes}B"
+            };
             _clientThread.ReceiveBytes = 0;
-            return totalStr;
+            return receiveStr;
         }
 
         /// <summary>
@@ -125,13 +111,15 @@ namespace GameGate
             for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
                 userSession = clientThread.SessionArray[nIdx];
-                if (userSession.Socket == null)
+                if (userSession == null)
                 {
+                    userSession = new TSessionInfo();
                     userSession.Socket = e.Socket;
                     userSession.nUserListIndex = 0;
                     userSession.SessionId = e.ConnectionId;
                     userSession.dwReceiveTick = HUtil32.GetTickCount();
                     userSession.SckHandle = e.SocHandle;
+                    clientThread.SessionArray[nIdx] = userSession;
                     break;
                 }
             }
@@ -139,7 +127,7 @@ namespace GameGate
             {
                 _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 clientThread.UserEnter((ushort)userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
-                _sessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread,_sendQueue));
+                _sessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
                 _clientManager.AddClientThread(userSession.SessionId, clientThread);
             }
             else
@@ -159,7 +147,6 @@ namespace GameGate
                 if (nSockIndex >= 0 && nSockIndex < clientThread.SessionArray.Length)
                 {
                     clientThread.SessionArray[nSockIndex] = null;
-                    clientThread.SessionArray[nSockIndex] = new TSessionInfo();
                     clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
                     _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
                 }
