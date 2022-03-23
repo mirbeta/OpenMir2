@@ -156,7 +156,6 @@ namespace GameSvr
                                         gateUserInfo.PlayObject.m_boEmergencyClose = true;
                                         gateUserInfo.PlayObject.m_boSoftClose = true;
                                     }
-                                    gateUserInfo = null;
                                     gateInfo.UserList[j] = null;
                                     gateInfo.nUserCount -= 1;
                                     break;
@@ -230,7 +229,6 @@ namespace GameSvr
                                     IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                 }
                             }
-                            GateUser = null;
                             UserList[i] = null;
                         }
                     }
@@ -258,9 +256,9 @@ namespace GameSvr
         {
             var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var msgHeader = new MessageHeader();
-            msgHeader.dwCode = Grobal2.RUNGATECODE;
-            msgHeader.nSocket = nSocket;
-            msgHeader.wGSocketIdx = (ushort)nGsIdx;
+            msgHeader.PacketCode = Grobal2.RUNGATECODE;
+            msgHeader.Socket = nSocket;
+            msgHeader.SocketIdx = (ushort)nGsIdx;
             msgHeader.wIdent = Grobal2.GM_DATA;
             msgHeader.nLength = TDefaultMessage.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
@@ -325,8 +323,8 @@ namespace GameSvr
             var defMsg = new TDefaultMessage();
             var msgHdr = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = 0,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = 0,
                 wIdent = Grobal2.GM_TEST,
                 nLength = 100
             };
@@ -353,8 +351,8 @@ namespace GameSvr
             }
             var MsgHeader = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = 0,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = 0,
                 wIdent = (ushort)nIdent,
                 nLength = 0
             };
@@ -430,9 +428,9 @@ namespace GameSvr
         {
             if (_gateDataService.ContainsKey(e.ConnectionId))
             {
-                var data = new byte[e.BytesReceived];
-                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, e.BytesReceived);
                 var nMsgLen = e.BytesReceived;
+                var data = new byte[e.BytesReceived];
+                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
                 _gateDataService[e.ConnectionId].HandleReceiveBuffer(nMsgLen, data);
             }
             else

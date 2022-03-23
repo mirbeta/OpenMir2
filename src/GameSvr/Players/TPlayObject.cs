@@ -286,9 +286,9 @@ namespace GameSvr
             }
             var MsgHdr = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = m_nSocket,
-                wGSocketIdx = m_nGSocketIdx,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = m_nSocket,
+                SocketIdx = m_nGSocketIdx,
                 wIdent = Grobal2.GM_DATA
             };
             if (!string.IsNullOrEmpty(sMsg))
@@ -324,9 +324,9 @@ namespace GameSvr
             }
             var messageHead = new MessageHeader
             {
-                dwCode = Grobal2.RUNGATECODE,
-                nSocket = m_nSocket,
-                wGSocketIdx = m_nGSocketIdx,
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = m_nSocket,
+                SocketIdx = m_nGSocketIdx,
                 wIdent = Grobal2.GM_DATA
             };
             int nSendBytes = 0;
