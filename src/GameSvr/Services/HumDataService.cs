@@ -1,11 +1,10 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 using SystemModule;
 
 namespace GameSvr
 {
-    public class RunDB
+    public class HumDataService
     {
         public static bool DBSocketConnected()
         {
@@ -24,7 +23,7 @@ namespace GameSvr
             string s38 = string.Empty;
             int nLen;
             int nCheckCode;
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
             int dwTimeOutTick = HUtil32.GetTickCount();
@@ -58,7 +57,7 @@ namespace GameSvr
                         nLen = s28.Length;
                         unsafe
                         {
-                            if (nLen >= 12 && HUtil32.Str_ToInt(s2C, 0) == nQueryID) //sizeof(TDefaultMessage)
+                            if (nLen >= 12 && HUtil32.Str_ToInt(s2C, 0) == nQueryID) //sizeof(ClientMessage)
                             {
                                 nCheckCode = HUtil32.MakeLong(HUtil32.Str_ToInt(s2C, 0) ^ 170, nLen);
                                 byte[] data = new byte[sizeof(int)];
@@ -79,7 +78,7 @@ namespace GameSvr
                                         sDefMsg = s28.Substring(0, Grobal2.DEFBLOCKSIZE);
                                         s38 = s28.Substring(Grobal2.DEFBLOCKSIZE, s28.Length - Grobal2.DEFBLOCKSIZE - 6);
                                     }
-                                    DefMsg = EDcode.DecodeMessage(sDefMsg);
+                                    DefMsg = EDcode.DecodePacket(sDefMsg);
                                     nIdent = DefMsg.Ident;
                                     nRecog = DefMsg.Recog;
                                     sStr = s38;
@@ -129,7 +128,14 @@ namespace GameSvr
         {
             bool result = false;
             HumanRcd = new THumDataInfo();
-            if (LoadRcd(sAccount, sCharName, sStr, nCertCode, ref HumanRcd))
+            var loadHum = new LoadHumDataPacket()
+            {
+                sAccount = sAccount,
+                sChrName = sCharName,
+                sUserAddr = sStr,
+                nSessionID = nCertCode
+            };
+            if (LoadRcd(loadHum, ref HumanRcd))
             {
                 HumanRcd.Data.sCharName = sCharName;
                 HumanRcd.Data.sAccount = sAccount;
@@ -146,35 +152,29 @@ namespace GameSvr
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
+        public static bool SaveHumRcdToDB(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
         {
             M2Share.g_Config.nSaveDBCount++;
-            return SaveRcd(sAccount, sCharName, nSessionID, ref HumanRcd);
+            return SaveRcd(sAccount, sCharName, nSessionID, HumanRcd);
         }
 
-        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, ref THumDataInfo HumanRcd)
+        private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
         {
             int nIdent = 0;
             int nRecog = 0;
             string sStr = string.Empty;
             int nQueryID = GetQueryID(M2Share.g_Config);
             bool result = false;
-            // M2Share.DataServer.AddToSaveQueue(new SaveHumData()
-            // {
-            //      sAccount = sAccount,
-            //      sCharName = sCharName,
-            //      SessionID = nSessionID,
-            //      QueryId = nQueryID,
-            //      sHunData = EDcode.EncodeBuffer(HumanRcd),
-            //      MsgType = 1
-            // });
-            M2Share.DataServer.SendMessage(nQueryID, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0)) +
-                EDcode.EncodeString(sAccount) + "/" + EDcode.EncodeString(sCharName) + "/" + EDcode.EncodeBuffer(HumanRcd));
+            var packet = new ServerMessagePacket(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0);
+            var saveHumData = new SaveHumDataPacket();
+            saveHumData.sAccount = sAccount;
+            saveHumData.sCharName = sCharName;
+            saveHumData.HumDataInfo = HumanRcd;
+            M2Share.DataServer.SendRequest(nQueryID, packet, saveHumData);
             if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sStr, 5000, false))
             {
                 if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                 {
-                    Debug.WriteLine($"[RunDB] 保存人物({sCharName})数据成功");
                     result = true;
                 }
                 else
@@ -185,35 +185,29 @@ namespace GameSvr
             return result;
         }
 
-        private static bool LoadRcd(string sAccount, string sCharName, string sStr, int nCertCode, ref THumDataInfo HumanRcd)
+        private static bool LoadRcd(LoadHumDataPacket loadHuman, ref THumDataInfo HumanRcd)
         {
             bool result = true;
             int nIdent = 0;
             int nRecog = 0;
             string sHumanRcdStr = string.Empty;
             int nQueryID = GetQueryID(M2Share.g_Config);
-            TLoadHuman loadHuman = new TLoadHuman();
-            loadHuman.sAccount = sAccount;
-            loadHuman.sChrName = sCharName;
-            loadHuman.sUserAddr = sStr;
-            loadHuman.nSessionID = nCertCode;
-            TDefaultMessage defmsg = Grobal2.MakeDefaultMsg(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            string sDBMsg = EDcode.EncodeBuffer(defmsg) + EDcode.EncodeBuffer(loadHuman);
-            M2Share.DataServer.SendMessage(nQueryID, sDBMsg);
+            var packet = new ServerMessagePacket(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman);
             if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sHumanRcdStr, 5000, true))
             {
                 if (nIdent == Grobal2.DBR_LOADHUMANRCD)
                 {
                     if (nRecog == 1)
                     {
-                        sHumanRcdStr = HUtil32.GetValidStr3(sHumanRcdStr, ref sDBMsg, '/');
+                        /*sHumanRcdStr = HUtil32.GetValidStr3(sHumanRcdStr, ref sDBMsg, '/');
                         var sDBCharName = EDcode.DeCodeString(sDBMsg);
-                        if (sDBCharName == sCharName)
+                        if (sDBCharName == loadHuman.sChrName)
                         {
                             var dataBuff = EDcode.DecodeBuffer(sHumanRcdStr);
                             HumanRcd = new THumDataInfo(dataBuff);
                             result = true;
-                        }
+                        }*/
                     }
                     else
                     {

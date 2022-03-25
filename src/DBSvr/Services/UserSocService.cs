@@ -497,7 +497,7 @@ namespace DBSvr
         {
             var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
-            var Msg = EDcode.DecodeMessage(sDefMsg);
+            var Msg = EDcode.DecodePacket(sDefMsg);
             switch (Msg.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
@@ -589,7 +589,7 @@ namespace DBSvr
         private bool QueryChr(string sData, ref TUserInfo UserInfo,ref TGateInfo CurGate)
         {
             string sAccount = string.Empty;
-            string s40 = string.Empty;
+            string sSendMsg = string.Empty;
             bool result = false;
             string sSessionID = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
             int nSessionID = HUtil32.Str_ToInt(sSessionID, -2);
@@ -629,9 +629,9 @@ namespace DBSvr
                                     var sLevel = ChrRecord.Data.Abil.Level.ToString();
                                     if (HumRecord.boSelected == 1)
                                     {
-                                        s40 = s40 + "*";
+                                        sSendMsg = sSendMsg + "*";
                                     }
-                                    s40 = s40 + sChrName + "/" + sJob + "/" + sHair + "/" + sLevel + "/" + btSex + "/";
+                                    sSendMsg = sSendMsg + sChrName + "/" + sJob + "/" + sHair + "/" + sLevel + "/" + btSex + "/";
                                     nChrCount++;
                                 }
                             }
@@ -643,7 +643,7 @@ namespace DBSvr
                     HumDB.Close();
                 }
                 ChrList = null;
-                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(s40));
+                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(sSendMsg));
                 result = true;
             }
             else
@@ -659,7 +659,7 @@ namespace DBSvr
         /// </summary>
         private void OutOfConnect(TUserInfo UserInfo)
         {
-            TDefaultMessage Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            ClientPacket Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             string sMsg = EDcode.EncodeMessage(Msg);
             SendUserSocket(UserInfo.Socket, sMsg, UserInfo.sConnID);
         }
@@ -692,7 +692,7 @@ namespace DBSvr
         /// </summary>
         private void DelChr(string sData, ref TUserInfo UserInfo)
         {
-            TDefaultMessage Msg;
+            ClientPacket Msg;
             THumInfo HumRecord = null;
             var sChrName = EDcode.DeCodeString(sData);
             var boCheck = false;
@@ -745,7 +745,7 @@ namespace DBSvr
             string sHair = string.Empty;
             string sJob = string.Empty;
             string sSex = string.Empty;
-            TDefaultMessage Msg;
+            ClientPacket Msg;
             var nCode = -1;
             string Data = EDcode.DeCodeString(sData);
             Data = HUtil32.GetValidStr3(Data, ref sAccount, HUtil32.Backslash);

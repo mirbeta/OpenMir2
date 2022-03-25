@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 
 namespace SystemModule
 {
@@ -97,12 +98,31 @@ namespace SystemModule
             return nBufPos;
         }
 
-        public static TDefaultMessage DecodeMessage(string str)
+        /// <summary>
+        /// 解码客户端封包
+        /// </summary>
+        public static ClientPacket DecodePacket(string str)
         {
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var EncBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
-            return new TDefaultMessage(EncBuf, (byte)buffLen);
+            return new ClientPacket(EncBuf, (byte)buffLen);
+        }
+        
+        /// <summary>
+        /// 解码客户端封包
+        /// </summary>
+        public static ClientPacket DecodePacket(byte[] data)
+        {
+            var buffLen = 0;
+            var EncBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
+            return new ClientPacket(EncBuf, (byte)buffLen);
+        }
+        
+        public static byte[] DecodeBuff(byte[] data)
+        {
+            var buffLen = 0;
+            return Misc.DecodeBuf(data, data.Length, ref buffLen);
         }
 
         /// <summary>
@@ -120,12 +140,9 @@ namespace SystemModule
             {
                 return HUtil32.GetString(encBuf, 0, nLen);
             }
-            else
+            fixed (byte* pb = encBuf)
             {
-                fixed (byte* pb = encBuf)
-                {
-                    return HUtil32.SBytePtrToString((sbyte*)pb, 0, nLen);
-                }
+                return HUtil32.SBytePtrToString((sbyte*)pb, 0, nLen);
             }
         }
 
@@ -147,7 +164,6 @@ namespace SystemModule
         /// <summary>
         /// 加密字符串
         /// </summary>
-        /// <param name="str"></param>
         /// <returns></returns>
         public static unsafe string EncodeString(string str)
         {
@@ -199,13 +215,23 @@ namespace SystemModule
             }
             return result;
         }
+        
+        /// <summary>
+        /// 加密Byte数组
+        /// </summary>
+        /// <returns></returns>
+        public static byte[] EncodeBuffer(byte[] data)
+        {
+            var buffSize = data.Length;
+            if (buffSize >= BUFFERSIZE) return Array.Empty<byte>();
+            var encBuf = new byte[BUFFERSIZE];
+            var destLen = Misc.EncodeBuf(data, buffSize, encBuf);
+            return encBuf[..destLen];
+        }
 
         /// <summary>
         /// 加密Byte数组
         /// </summary>
-        /// <param name="Buf"></param>
-        /// <param name="bufsize"></param>
-        /// <returns></returns>
         public static unsafe string EncodeBuffer(byte[] Buf, int bufsize)
         {
             string result;
@@ -241,7 +267,7 @@ namespace SystemModule
         /// </summary>
         /// <param name="smsg"></param>
         /// <returns></returns>
-        public static unsafe string EncodeMessage(TDefaultMessage smsg)
+        public static unsafe string EncodeMessage(ClientPacket smsg)
         {
             string result = string.Empty;
             byte[] EncBuf = new byte[1024];

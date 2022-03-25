@@ -311,12 +311,12 @@ namespace GameSvr
             }
         }
 
-        private void SendSocket(TDefaultMessage DefMsg)
+        private void SendSocket(ClientPacket DefMsg)
         {
             SendSocket(DefMsg, "");
         }
 
-        internal virtual void SendSocket(TDefaultMessage defMsg, string sMsg)
+        internal virtual void SendSocket(ClientPacket defMsg, string sMsg)
         {
             if (m_boOffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {

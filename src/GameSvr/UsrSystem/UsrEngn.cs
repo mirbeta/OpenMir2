@@ -1342,7 +1342,7 @@ namespace GameSvr
             return false;
         }
 
-        public void ProcessUserMessage(TPlayObject PlayObject, TDefaultMessage DefMsg, string Buff)
+        public void ProcessUserMessage(TPlayObject PlayObject, ClientPacket DefMsg, string Buff)
         {
             var sMsg = string.Empty;
             if (PlayObject.m_boOffLineFlag) return;

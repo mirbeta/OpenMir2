@@ -903,9 +903,9 @@ namespace SystemModule
         public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
 
-        public static TDefaultMessage MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
+        public static ClientPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {
-            var result = new TDefaultMessage();
+            var result = new ClientPacket();
             result.Ident = (ushort)msg;
             result.Param = (ushort)param;
             result.Tag = (ushort)tag;

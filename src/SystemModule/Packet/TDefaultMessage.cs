@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using ProtoBuf;
 
 namespace SystemModule
 {
@@ -67,18 +68,18 @@ namespace SystemModule
             Head = Recog;
             NID = Recog;
             UID1 = Recog;
-            PosX = (ushort)Recog;
+            PosX = (ushort) Recog;
             ID1 = Recog;
 
             X = Param;
             IDLo = Param;
-            b1 = (byte)Param;
+            b1 = (byte) Param;
             Pos = Param;
             Zero1 = Param;
 
             Y = Tag;
             Dir = Tag;
-            b3 = (byte)Tag;
+            b3 = (byte) Tag;
             Magic = Tag;
 
             Direct = Series;
@@ -141,6 +142,7 @@ namespace SystemModule
                     backingStream.Write(Series);
                     break;
             }
+
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
@@ -148,15 +150,17 @@ namespace SystemModule
         }
     }
 
-
-    public class TDefaultMessage : TCmdPack
+    /// <summary>
+    /// 客户端消息
+    /// </summary>
+    public class ClientPacket : TCmdPack
     {
-        public TDefaultMessage()
+        public ClientPacket()
         {
 
         }
 
-        public TDefaultMessage(byte[] buff)
+        public ClientPacket(byte[] buff)
         {
             var binaryReader = new BinaryReader(new MemoryStream(buff));
             Recog = binaryReader.ReadInt32();
@@ -166,11 +170,11 @@ namespace SystemModule
             Series = binaryReader.ReadUInt16();
         }
 
-        public TDefaultMessage(byte[] buff, byte buffSize)
+        public ClientPacket(byte[] buff, byte buffSize)
         {
             switch (buffSize)
             {
-                case 12://TDefaultMessage
+                case 12: //ClientMessage
                     var binaryReader = new BinaryReader(new MemoryStream(buff, 0, buffSize));
                     Recog = binaryReader.ReadInt32();
                     Ident = binaryReader.ReadUInt16();
@@ -183,5 +187,36 @@ namespace SystemModule
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// 服务端消息
+    /// </summary>
+    [ProtoContract]
+    public class ServerMessagePacket
+    {
+        [ProtoMember(1)] public int Recog { get; set; }
+        [ProtoMember(2)] public ushort Ident { get; set; }
+        [ProtoMember(3)] public ushort Param { get; set; }
+        [ProtoMember(4)] public ushort Tag { get; set; }
+        [ProtoMember(5)] public ushort Series { get; set; }
+
+        public ServerMessagePacket()
+        {
+        }
+
+        public ServerMessagePacket(int ident, int recog, int param, int tag, int series)
+        {
+            Recog = recog;
+            Ident = (ushort)ident;
+            Param = (ushort)param;
+            Tag = (ushort)tag;
+            Series = (ushort)series;
+        }
+    }
+
+    public class CmdPacket
+    {
+
     }
 }
