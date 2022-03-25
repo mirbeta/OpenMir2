@@ -1,5 +1,5 @@
-using System.IO;
 using ProtoBuf;
+using System.IO;
 
 namespace SystemModule
 {
@@ -50,25 +50,6 @@ namespace SystemModule
             writer.Write((byte) '!');
         }
     }
-
-    [ProtoContract]
-    public class ResponseServerPacket<T> : Packets
-    {
-        [ProtoMember(1)] public string QueryId;
-        [ProtoMember(2)] public ServerMessagePacket PacketHead;
-        [ProtoMember(3)] public T PacketBody;
-        
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
 
     public class LoadHumanRcdResponsePacket
     {

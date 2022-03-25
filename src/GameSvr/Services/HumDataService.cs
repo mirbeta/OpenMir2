@@ -15,7 +15,7 @@ namespace GameSvr
         {
             bool result = false;
             bool boLoadDBOK = false;
-            string s24 = string.Empty;
+            byte[] sData;
             string s28 = string.Empty;
             string s2C = string.Empty;
             string sCheckFlag = string.Empty;
@@ -33,24 +33,21 @@ namespace GameSvr
                 {
                     break;
                 }
-                s24 = "";
+                sData = null;
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    if (M2Share.g_Config.sDBSocketRecvText.IndexOf("!", StringComparison.Ordinal) > 0)
-                    {
-                        s24 = M2Share.g_Config.sDBSocketRecvText;
-                        M2Share.g_Config.sDBSocketRecvText = string.Empty;
-                    }
+                    sData = M2Share.g_Config.sDBSocketRecvBuff;
+                    M2Share.g_Config.sDBSocketRecvBuff = null;
                 }
                 finally
                 {
                     HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
                 }
-                if (!string.IsNullOrEmpty(s24))
+                if (sData!=null && sData.Length>0)
                 {
                     s28 = "";
-                    s24 = HUtil32.ArrestStringEx(s24, '#', '!', ref s28);
+                    sData = HUtil32.ArrestStringEx(sData, '#', '!', ref s28);
                     if (s28 != "")
                     {
                         s28 = HUtil32.GetValidStr3(s28, ref s2C, new[] { "/" });

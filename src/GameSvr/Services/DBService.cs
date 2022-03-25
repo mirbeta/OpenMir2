@@ -47,8 +47,6 @@ namespace GameSvr
             }
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
-
-      
         
         public void SendRequest<T>(int nQueryID, ServerMessagePacket packet,T requet) where T : CmdPacket
         {
@@ -56,7 +54,7 @@ namespace GameSvr
             {
                 return;
             }
-            M2Share.g_Config.sDBSocketRecvText = string.Empty;
+            M2Share.g_Config.sDBSocketRecvBuff = null;
 
             var packBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(packet));
             var bodyBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(requet));
@@ -83,7 +81,7 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                M2Share.g_Config.sDBSocketRecvText = string.Empty;
+                M2Share.g_Config.sDBSocketRecvBuff = null;
             }
             finally
             {
@@ -139,10 +137,17 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                M2Share.g_Config.sDBSocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                if (M2Share.g_Config.sDBSocketRecvBuff != null && M2Share.g_Config.sDBSocketRecvBuff.Length > 0)
+                {
+                    Buffer.BlockCopy(e.Buff, 0, M2Share.g_Config.sDBSocketRecvBuff, M2Share.g_Config.sDBSocketRecvBuff.Length + 1, e.BuffLen);
+                }
+                else
+                {
+                    M2Share.g_Config.sDBSocketRecvBuff = e.Buff;
+                }
                 if (!M2Share.g_Config.boDBSocketWorking)
                 {
-                    M2Share.g_Config.sDBSocketRecvText = "";
+                    M2Share.g_Config.sDBSocketRecvBuff = null;
                 }
             }
             finally
