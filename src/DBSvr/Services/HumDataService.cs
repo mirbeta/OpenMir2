@@ -108,9 +108,13 @@ namespace DBSvr
         {
             var bo25 = false;
             var sData = serverInfo.sData;
-            if (sData[0] == (byte) '#' && sData[^1] == (byte) '!')
+            if (sData[0] == (byte)'#' && sData[^1] == (byte)'!')
             {
                 sData = sData[1..^1];
+            }
+            else
+            {
+                return;
             }
             if (sData.Length > 0)
             {
@@ -138,9 +142,25 @@ namespace DBSvr
             }
         }
 
-        private void SendSocket(Socket socket, Packets packet) 
+        private void SendSocket<T>(Socket socket, RequestServerPacket packet, T requet)
         {
-            
+            var packBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(packet));
+            var bodyBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(requet));
+
+            var s = HUtil32.MakeLong(s34C ^ 170, packBuff.Length + bodyBuff.Length);
+            var nCheckCode = BitConverter.GetBytes(s);
+            var codeBuff = EDcode.EncodeBuffer(nCheckCode);
+
+            var requestPacket = new RequestServerPacket();
+            requestPacket.QueryId = codeBuff;
+            requestPacket.PacketHead = packBuff;
+            requestPacket.PacketBody = bodyBuff;
+
+            socket.Send(requestPacket.GetPacket());
+
+            //var by = BitConverter.GetBytes(nQueryId);
+            //var s18 = EDcode.EncodeBuffer(by, by.Length);
+            //socket.SendText("#" + s34C + "/" + sMsg + s18 + "!");
         }
 
         private void SendSocket(Socket Socket, string sMsg)
@@ -278,50 +298,35 @@ namespace DBSvr
             }
             if ((nCheckCode == 1) || boFoundSession)
             {
-                try
+                int nIndex = HumDB.Index(LoadHuman.sChrName);
+                if (nIndex >= 0)
                 {
-                    if (HumDB.Open())
+                    if (HumDB.Get(nIndex, ref HumanRCD) < 0)
                     {
-                        int nIndex = HumDB.Index(LoadHuman.sChrName);
-                        if (nIndex >= 0)
-                        {
-                            if (HumDB.Get(nIndex, ref HumanRCD) < 0)
-                            {
-                                nCheckCode = -2;
-                            }
-                        }
-                        else
-                        {
-                            nCheckCode = -3;
-                        }
-                    }
-                    else
-                    {
-                        nCheckCode = -4;
+                        nCheckCode = -2;
                     }
                 }
-                finally
+                else
                 {
-                    HumDB.Close();
+                    nCheckCode = -3;
                 }
             }
-   
-            var responsePack = new ResponseServerPacket<LoadHumanRcdResponsePacket>();
+            var responsePack = new RequestServerPacket();
             if ((nCheckCode == 1) || boFoundSession)
             {
                 var loadHumData = new LoadHumanRcdResponsePacket();
                 loadHumData.sChrName = loadHumData.sChrName;
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                responsePack.PacketHead = messagePacket;
-                responsePack.PacketBody = loadHumData;
-                SendSocket(Socket, responsePack);
+                responsePack.PacketHead = ServerPacketDecoder.Serialize(messagePacket);
+                responsePack.PacketBody = ServerPacketDecoder.Serialize(loadHumData);
+                SendSocket(Socket, responsePack, loadHumData);
             }
             else
             {
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
-                responsePack.PacketHead = messagePacket;
-                SendSocket(Socket, responsePack);
+                responsePack.PacketHead = ServerPacketDecoder.Serialize(messagePacket);
+                SendSocket(Socket, responsePack, messagePacket);
             }
         }
 

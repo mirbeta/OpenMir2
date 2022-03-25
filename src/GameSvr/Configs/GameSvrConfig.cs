@@ -848,7 +848,7 @@ namespace GameSvr
         public bool boDBSocketConnected;
         public int nDBSocketRecvIncLen;
         public int nDBSocketRecvMaxLen;
-        public string sDBSocketRecvText;
+        public byte[] sDBSocketRecvBuff;
         public bool boDBSocketWorking;
         public int nDBSocketRecvCount;
         public int nDBReceiveMaxTime;
