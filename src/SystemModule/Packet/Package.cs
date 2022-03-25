@@ -108,6 +108,19 @@ namespace SystemModule
             }
             return data;
         }
+        
+        public Packets ToPacket()
+        {
+            try
+            {
+                this.ReadPacket(binaryReader);
+            }
+            catch
+            {
+                return null;
+            }
+            return this;
+        }
 
         protected abstract void ReadPacket(BinaryReader reader);
 

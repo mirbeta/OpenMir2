@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using SystemModule;
-using SystemModule.Packages;
 using SystemModule.Sockets;
 
 namespace DBSvr
 {
+    /// <summary>
+    /// 玩家数据服务
+    /// </summary>
     public class HumDataService
     {
         private IList<TServerInfo> ServerList = null;
         private IList<THumSession> HumSessionList = null;
-        private TDefaultMessage m_DefMsg;
-        private string s34C;
+        private ClientPacket m_DefMsg;
+        private int s34C;
         private readonly MySqlHumDB HumDB;
         private readonly ISocketServer serverSocket;
         private readonly LoginSocService _LoginSoc;
@@ -50,7 +54,7 @@ namespace DBSvr
             ServerInfo = new TServerInfo();
             ServerInfo.bo08 = true;
             ServerInfo.nSckHandle = (int)e.Socket.Handle;
-            ServerInfo.sData = "";
+            ServerInfo.sData = null;
             ServerInfo.Socket = e.Socket;
             ServerList.Add(ServerInfo);
         }
@@ -85,78 +89,65 @@ namespace DBSvr
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
-                    Array.Copy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    var sText = HUtil32.GetString(data, 0, data.Length);
-                    if (!string.IsNullOrEmpty(sText))
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                    if (serverInfo.sData != null && serverInfo.sData.Length > 0)
                     {
-                        serverInfo.sData += sText;
-                        if (sText.IndexOf("!", StringComparison.Ordinal) > 0)
-                        {
-                            ProcessServerPacket(serverInfo);
-                        }
-                        else if (serverInfo.sData.Length > 81920)
-                        {
-                            serverInfo.sData = string.Empty;
-                        }
+                        Buffer.BlockCopy(data, 0, serverInfo.sData, serverInfo.sData.Length, data.Length);
                     }
+                    else
+                    {
+                        serverInfo.sData = data;
+                    }
+                    ProcessServerPacket(serverInfo);
                     break;
                 }
             }
         }
-
-        private void ProcessServerPacket(TServerInfo ServerInfo)
+        
+        private void ProcessServerPacket(TServerInfo serverInfo)
         {
-            string sText = string.Empty;
-            string s24 = string.Empty;
             var bo25 = false;
-            var sData = ServerInfo.sData;
-            ServerInfo.sData = string.Empty;
-            sData = HUtil32.ArrestStringEx(sData, "#", "!", ref sText);
-            if (!string.IsNullOrEmpty(sText))
+            var sData = serverInfo.sData;
+            if (sData[0] == (byte) '#' && sData[^1] == (byte) '!')
             {
-                sText = HUtil32.GetValidStr3(sText, ref s24, new[] { "/" });
-                int n14 = sText.Length;
-                if ((n14 >= Grobal2.DEFBLOCKSIZE) && (!string.IsNullOrEmpty(s24)))
+                sData = sData[1..^1];
+            }
+            if (sData.Length > 0)
+            {
+                RequestServerPacket requestPacket = new RequestServerPacket(sData);
+                requestPacket.ToPacket();
+                
+                var nQueryId=  BitConverter.ToInt32(EDcode.DecodeBuff(requestPacket.QueryId));
+                var packet = ServerPacketDecoder.DeSerialize<ServerMessagePacket>(requestPacket.PacketHead);
+                var packetLen = requestPacket.PacketBody.Length + requestPacket.PacketHead.Length;
+                if ((packetLen >= Grobal2.DEFBLOCKSIZE) && nQueryId > 0)
                 {
-                    int wE = HUtil32.Str_ToInt(s24, 0) ^ 170;
-                    int w10 = n14;
+                    var wE = nQueryId ^ 170;
+                    int w10 = packetLen;
                     int n18 = HUtil32.MakeLong(wE, w10);
-                    var by = new byte[sizeof(int)];
-                    unsafe
-                    {
-                        fixed (byte* pb = by)
-                        {
-                            *(int*)pb = n18;
-                        }
-                    }
-                    var sC = EDcode.EncodeBuffer(by, by.Length);
-                    s34C = s24;
-                    if (HUtil32.CompareBackLStr(sText, sC, sC.Length))
-                    {
-                        ProcessServerMsg(sText, n14, ServerInfo.Socket);
-                        bo25 = true;
-                    }
+                    s34C = nQueryId;
+                    ProcessServerMsg(packet, requestPacket.PacketBody, serverInfo.Socket); 
+                    bo25 = true;
                 }
             }
+            serverInfo.sData = null;
             if (!bo25)
             {
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-                SendSocket(ServerInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
+                SendSocket(serverInfo.Socket, EDcode.EncodeMessage(m_DefMsg));
             }
+        }
+
+        private void SendSocket(Socket socket, Packets packet) 
+        {
+            
         }
 
         private void SendSocket(Socket Socket, string sMsg)
         {
-            int n10 = HUtil32.MakeLong(HUtil32.Str_ToInt(s34C, 0) ^ 170, sMsg.Length + 6);
-            var by = new byte[sizeof(int)];
-            unsafe
-            {
-                fixed (byte* pb = by)
-                {
-                    *(int*)pb = n10;
-                }
-            }
-            string s18 = EDcode.EncodeBuffer(@by, @by.Length);
+            int nQueryId = HUtil32.MakeLong(s34C ^ 170, sMsg.Length + 6);
+            var by = BitConverter.GetBytes(nQueryId);
+            var s18 = EDcode.EncodeBuffer(by, by.Length);
             Socket.SendText("#" + s34C + "/" + sMsg + s18 + "!");
         }
 
@@ -240,11 +231,10 @@ namespace DBSvr
             return result;
         }
 
-        private void ProcessServerMsg(string sMsg, int nLen, Socket Socket)
+        private void ProcessServerMsg(ServerMessagePacket packet, byte[] sData, Socket Socket)
         {
-            string sDefMsg;
-            string sData;
-            if (nLen == Grobal2.DEFBLOCKSIZE)
+            //string sDefMsg;
+            /*if (nLen == Grobal2.DEFBLOCKSIZE)
             {
                 sDefMsg = sMsg;
                 sData = "";
@@ -253,18 +243,17 @@ namespace DBSvr
             {
                 sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
                 sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE - 6);
-            }
-            var DefMsg = EDcode.DecodeMessage(sDefMsg);
-            switch (DefMsg.Ident)
+            }*/
+            switch (packet.Ident)
             {
                 case Grobal2.DB_LOADHUMANRCD:
                     LoadHumanRcd(sData, Socket);
                     break;
                 case Grobal2.DB_SAVEHUMANRCD:
-                    SaveHumanRcd(DefMsg.Recog, sData, Socket);
+                    SaveHumanRcd(packet.Recog, sData, Socket);
                     break;
                 case Grobal2.DB_SAVEHUMANRCDEX:
-                    SaveHumanRcdEx(sData, DefMsg.Recog, Socket);
+                    SaveHumanRcdEx(sData, packet.Recog, Socket);
                     break;
                 default:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
@@ -273,22 +262,18 @@ namespace DBSvr
             }
         }
 
-        private void LoadHumanRcd(string sMsg, Socket Socket)
+        private void LoadHumanRcd(byte[] data, Socket Socket)
         {
             THumDataInfo HumanRCD = null;
             bool boFoundSession = false;
-            TLoadHuman LoadHuman = new TLoadHuman(EDcode.DecodeBuffer(sMsg));
-            string sAccount = LoadHuman.sAccount;
-            string sHumName = LoadHuman.sChrName;
-            string sIPaddr = LoadHuman.sUserAddr;
-            int nSessionID = LoadHuman.nSessionID;
+            LoadHumDataPacket LoadHuman = ServerPacketDecoder.DeSerialize<LoadHumDataPacket>(data);
             int nCheckCode = -1;
-            if ((!string.IsNullOrEmpty(sAccount)) && (!string.IsNullOrEmpty(sHumName)))
+            if ((!string.IsNullOrEmpty(LoadHuman.sAccount)) && (!string.IsNullOrEmpty(LoadHuman.sChrName)))
             {
-                nCheckCode = _LoginSoc.CheckSessionLoadRcd(sAccount, sIPaddr, nSessionID, ref boFoundSession);
+                nCheckCode = _LoginSoc.CheckSessionLoadRcd(LoadHuman.sAccount, LoadHuman.sUserAddr, LoadHuman.nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + sAccount + " IP: " + sIPaddr + " 标识: " + nSessionID);
+                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + LoadHuman.sAccount + " IP: " + LoadHuman.sUserAddr + " 标识: " + LoadHuman.nSessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
@@ -297,7 +282,7 @@ namespace DBSvr
                 {
                     if (HumDB.Open())
                     {
-                        int nIndex = HumDB.Index(sHumName);
+                        int nIndex = HumDB.Index(LoadHuman.sChrName);
                         if (nIndex >= 0)
                         {
                             if (HumDB.Get(nIndex, ref HumanRCD) < 0)
@@ -320,61 +305,60 @@ namespace DBSvr
                     HumDB.Close();
                 }
             }
+   
+            var responsePack = new ResponseServerPacket<LoadHumanRcdResponsePacket>();
             if ((nCheckCode == 1) || boFoundSession)
             {
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                SendSocket(Socket, EDcode.EncodeMessage(m_DefMsg) + EDcode.EncodeString(sHumName) + "/" + EDcode.EncodeBuffer(HumanRCD));
+                var loadHumData = new LoadHumanRcdResponsePacket();
+                loadHumData.sChrName = loadHumData.sChrName;
+                loadHumData.HumDataInfo = HumanRCD;
+                var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
+                responsePack.PacketHead = messagePacket;
+                responsePack.PacketBody = loadHumData;
+                SendSocket(Socket, responsePack);
             }
             else
             {
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
-                SendSocket(Socket, EDcode.EncodeMessage(m_DefMsg));
+                var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
+                responsePack.PacketHead = messagePacket;
+                SendSocket(Socket, responsePack);
             }
         }
 
-        private void SaveHumanRcd(int nRecog, string sMsg, Socket Socket)
+        private void SaveHumanRcd(int nRecog, byte[] sMsg, Socket Socket)
         {
-            string sChrName = string.Empty;
-            string sUserID = string.Empty;
-            THumDataInfo HumanRCD = null;
-            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new[] { "/" });
-            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new[] { "/" });
-            sUserID = EDcode.DeCodeString(sUserID);
-            sChrName = EDcode.DeCodeString(sChrName);
-            bool bo21 = false;
-            if (sHumanRCD.Length >= 4000)
+            var saveHumDataPacket = ServerPacketDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            if (saveHumDataPacket == null)
             {
-                HumanRCD = new THumDataInfo(EDcode.DecodeBuffer(sHumanRCD));
+                Console.WriteLine("保存玩家数据出错.");
+                return;
             }
-            else
-            {
-                bo21 = true;
-            }
+            var sUserID = saveHumDataPacket.sAccount;
+            var sChrName = saveHumDataPacket.sCharName;
+            var humanRcd = saveHumDataPacket.HumDataInfo;
+            bool bo21 = humanRcd == null;
             if (!bo21)
             {
                 bo21 = true;
                 try
                 {
-                    if (HumDB.Open())
+                    int nIndex = HumDB.Index(sChrName);
+                    if (nIndex < 0)
                     {
-                        int nIndex = HumDB.Index(sChrName);
-                        if (nIndex < 0)
-                        {
-                            HumanRCD.Header.sName = sChrName;
-                            HumDB.Add(ref HumanRCD);
-                            nIndex = HumDB.Index(sChrName);
-                        }
-                        if (nIndex >= 0)
-                        {
-                            HumanRCD.Header.sName = sChrName;
-                            HumDB.Update(nIndex, ref HumanRCD);
-                            bo21 = false;
-                        }
+                        humanRcd.Header.sName = sChrName;
+                        HumDB.Add(ref humanRcd);
+                        nIndex = HumDB.Index(sChrName);
+                    }
+                    if (nIndex >= 0)
+                    {
+                        humanRcd.Header.sName = sChrName;
+                        HumDB.Update(nIndex, ref humanRcd);
+                        bo21 = false;
                     }
                 }
                 finally
                 {
-                    HumDB.Close();
+                   
                 }
                 _LoginSoc.SetSessionSaveRcd(sUserID);
             }
@@ -399,14 +383,15 @@ namespace DBSvr
             }
         }
 
-        private void SaveHumanRcdEx(string sMsg, int nRecog, Socket Socket)
+        private void SaveHumanRcdEx(byte[] sMsg, int nRecog, Socket Socket)
         {
-            string sChrName = string.Empty;
-            string sUserID = string.Empty;
-            string sHumanRCD = HUtil32.GetValidStr3(sMsg, ref sUserID, new[] { "/" });
-            sHumanRCD = HUtil32.GetValidStr3(sHumanRCD, ref sChrName, new[] { "/" });
-            sUserID = EDcode.DeCodeString(sUserID);
-            sChrName = EDcode.DeCodeString(sChrName);
+            var saveHumDataPacket = ServerPacketDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            if (saveHumDataPacket == null)
+            {
+                Console.WriteLine("保存玩家数据出错.");
+                return;
+            }
+            var sChrName = saveHumDataPacket.sCharName;
             for (var i = 0; i < HumSessionList.Count; i++)
             {
                 THumSession HumSession = HumSessionList[i];

@@ -7,7 +7,7 @@ namespace GameSvr
 {
     public partial class TPlayObject
     {
-        public TDefaultMessage m_DefMsg;
+        public ClientPacket m_DefMsg;
         public string m_sOldSayMsg = string.Empty;
         public int m_nSayMsgCount = 0;
         public int m_dwSayMsgTick = 0;

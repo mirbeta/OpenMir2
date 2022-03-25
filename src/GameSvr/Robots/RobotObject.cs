@@ -289,7 +289,7 @@ namespace GameSvr
             ProcessAutoRun();
         }
 
-        internal override void SendSocket(TDefaultMessage DefMsg, string sMsg)
+        internal override void SendSocket(ClientPacket DefMsg, string sMsg)
         {
 
         }

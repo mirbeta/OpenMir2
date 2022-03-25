@@ -533,7 +533,7 @@ namespace GameSvr
                             {
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
-                                    var defMsg = new TDefaultMessage(MsgBuff);
+                                    var defMsg = new ClientPacket(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);
@@ -560,7 +560,7 @@ namespace GameSvr
             }
         }
 
-        private unsafe void SendScanMsg(TDefaultMessage DefMsg, string sMsg, int nGateIdx, int nSocket, int nGsIdx)
+        private unsafe void SendScanMsg(ClientPacket DefMsg, string sMsg, int nGateIdx, int nSocket, int nGsIdx)
         {
             byte[] Buff = null;
             int nSendBytes;

@@ -1,4 +1,7 @@
-﻿using SystemModule;
+﻿using System;
+using System.IO;
+using ProtoBuf;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Sockets;
 
@@ -45,6 +48,32 @@ namespace GameSvr
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
 
+      
+        
+        public void SendRequest<T>(int nQueryID, ServerMessagePacket packet,T requet) where T : CmdPacket
+        {
+            if (!_clientScoket.IsConnected)
+            {
+                return;
+            }
+            M2Share.g_Config.sDBSocketRecvText = string.Empty;
+
+            var packBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(packet));
+            var bodyBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(requet));
+
+            var s = HUtil32.MakeLong(nQueryID ^ 170,  packBuff.Length + bodyBuff.Length);
+            var nCheckCode = BitConverter.GetBytes(s);
+            var codeBuff = EDcode.EncodeBuffer(nCheckCode);
+
+            var requestPacket = new RequestServerPacket();
+            requestPacket.QueryId = codeBuff;
+            requestPacket.PacketHead = packBuff;
+            requestPacket.PacketBody = bodyBuff;
+            
+            _clientScoket.Send(requestPacket.GetPacket());
+            M2Share.g_Config.boDBSocketWorking = true;
+        }
+
         public void SendMessage(int nQueryID, string sMsg)
         {
             if (!_clientScoket.IsConnected)
@@ -70,7 +99,7 @@ namespace GameSvr
                 }
             }
             var sCheckStr = EDcode.EncodeBuffer(@by, @by.Length);
-            var sSendMsg = "#" + nQueryID + "/" + sMsg + sCheckStr + "!";
+            var sSendMsg = $"#{nQueryID}{sMsg}{sCheckStr}!";
             M2Share.g_Config.boDBSocketWorking = true;
             var data = HUtil32.GetBytes(sSendMsg);
             _clientScoket.Send(data);
@@ -140,6 +169,8 @@ namespace GameSvr
                                                  EDcode.EncodeString(saveHumData.sAccount) + "/" + EDcode.EncodeString(saveHumData.sCharName) + "/" + saveHumData.sHunData);
             }
         }
+        
+ 
     }
 
     public struct SaveHumData

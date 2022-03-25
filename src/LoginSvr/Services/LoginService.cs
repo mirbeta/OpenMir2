@@ -356,7 +356,7 @@ namespace LoginSvr
         {
             string sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
             string sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
-            TDefaultMessage DefMsg = EDcode.DecodeMessage(sDefMsg);
+            ClientPacket DefMsg = EDcode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {
                 case Grobal2.CM_SELECTSERVER:
@@ -478,7 +478,7 @@ namespace LoginSvr
                 {
                     _logQueue.Enqueue(string.Format(sAddNewuserFail, userFullEntry.UserEntry.sAccount, userFullEntry.UserEntryAdd.sQuiz2));
                 }
-                TDefaultMessage DefMsg;
+                ClientPacket DefMsg;
                 if (nErrCode == 1)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_SUCCESS, 0, 0, 0, 0);
@@ -504,7 +504,7 @@ namespace LoginSvr
         {
             string sLoginID = string.Empty;
             string sOldPassword = string.Empty;
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             TAccountDBRecord DBRecord = null;
             try
             {
@@ -563,7 +563,7 @@ namespace LoginSvr
 
         private void AccountCheckProtocol(TUserInfo UserInfo, int nDate)
         {
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             if (nDate < LSShare.nVersionDate)
             {
                 DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
@@ -652,7 +652,7 @@ namespace LoginSvr
                     SessionKick(Config, sLoginID);
                     nCode = -3;
                 }
-                TDefaultMessage DefMsg;
+                ClientPacket DefMsg;
                 if (boNeedUpdate)
                 {
                     DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
@@ -822,7 +822,7 @@ namespace LoginSvr
         /// </summary>
         private void AccountSelectServer(Config Config, TUserInfo UserInfo, string sData)
         {
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             bool boPayCost;
             string sSelGateIP = string.Empty;
             int nSelGatePort = 0;
@@ -886,7 +886,7 @@ namespace LoginSvr
         {
             TAccountDBRecord DBRecord = null;
             UserFullEntry userFullEntry = null;
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             try
             {
                 if (string.IsNullOrEmpty(sData))
@@ -944,7 +944,7 @@ namespace LoginSvr
             string sAnswer2 = string.Empty;
             string sPassword = string.Empty;
             string sBirthDay = string.Empty;
-            TDefaultMessage DefMsg;
+            ClientPacket DefMsg;
             TAccountDBRecord DBRecord = null;
             string sMsg = EDcode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "\09" });

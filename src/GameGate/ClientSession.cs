@@ -1047,7 +1047,7 @@ namespace GameGate
         {
             var kick = false;
             var SendMsg = string.Empty;
-            var defMsg = new TDefaultMessage();
+            var defMsg = new ClientPacket();
             switch (killType)
             {
                 case 0:

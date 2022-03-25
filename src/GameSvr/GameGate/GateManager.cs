@@ -260,7 +260,7 @@ namespace GameSvr
             msgHeader.Socket = nSocket;
             msgHeader.SocketIdx = (ushort)nGsIdx;
             msgHeader.wIdent = Grobal2.GM_DATA;
-            msgHeader.nLength = TDefaultMessage.PackSize;
+            msgHeader.nLength = ClientPacket.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
             if (!AddGateBuffer(nGateIdx, outMessage.GetPacket()))
             {
@@ -320,7 +320,7 @@ namespace GameSvr
 
         private void SendGateTestMsg(int nIndex)
         {
-            var defMsg = new TDefaultMessage();
+            var defMsg = new ClientPacket();
             var msgHdr = new MessageHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,

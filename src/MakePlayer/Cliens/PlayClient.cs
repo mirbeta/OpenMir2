@@ -694,7 +694,7 @@ namespace MakePlayer
             }
             string sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
             string sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
-            var DefMsg = EDcode.DecodeMessage(sDefMsg);
+            var DefMsg = EDcode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {
                 case Grobal2.SM_NEWID_SUCCESS:

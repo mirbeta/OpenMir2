@@ -1,37 +1,41 @@
-﻿using System.IO;
+﻿using ProtoBuf;
 
 namespace SystemModule
 {
-    public class THumDataInfo : Packets
+    [ProtoContract]
+    public class THumDataInfo
     {
-        public TRecordHeader Header;
-        public THumInfoData Data;
+        [ProtoMember(1)] public TRecordHeader Header { get; set; }
+        [ProtoMember(2)] public THumInfoData Data { get; set; }
 
         public THumDataInfo()
         {
             Header = new TRecordHeader();
             Data = new THumInfoData();
         }
+    }
 
-        public THumDataInfo(byte[] buff)
-            : base(buff)
-        {
-            var hederBuff = ReadBytes(67);
-            Header = new TRecordHeader(hederBuff);
-
-            var bodyBuff = ReadBytes(3433);
-            Data = new THumInfoData(bodyBuff);
-        }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Header.GetPacket());
-            writer.Write(Data.GetPacket());
-        }
+    [ProtoContract]
+    public class SaveHumDataPacket : CmdPacket
+    {
+        [ProtoMember(1)]
+        public string sAccount { get; set; }
+        [ProtoMember(2)]
+        public string sCharName { get; set; }
+        [ProtoMember(3)]
+        public THumDataInfo HumDataInfo { get; set; }
+    }
+    
+    [ProtoContract]
+    public class LoadHumDataPacket : CmdPacket
+    {
+        [ProtoMember(1)] 
+        public string sAccount { get; set; }
+        [ProtoMember(2)] 
+        public string sChrName { get; set; }
+        [ProtoMember(3)] 
+        public string sUserAddr { get; set; }
+        [ProtoMember(4)] 
+        public int nSessionID { get; set; }
     }
 }
