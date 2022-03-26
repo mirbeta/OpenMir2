@@ -27,8 +27,7 @@ namespace SystemModule
         {
             try
             {
-                using var ms = new MemoryStream();
-                ms.Write(msg, 0, msg.Length);
+                using var ms = new MemoryStream(msg);
                 ms.Position = 0;
                 return Serializer.Deserialize<T>(ms);
             }

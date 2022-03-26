@@ -229,8 +229,6 @@ namespace GameSvr
             M2Share.g_dwNpcLimit = 5;
             M2Share.g_dwSocLimit = 10;
             M2Share.nDecLimit = 20;
-            M2Share.g_Config.sDBSocketRecvBuff = null;
-            M2Share.g_Config.boDBSocketWorking = false;
             M2Share.g_Config.nLoadDBErrorCount = 0;
             M2Share.g_Config.nLoadDBCount = 0;
             M2Share.g_Config.nSaveDBCount = 0;

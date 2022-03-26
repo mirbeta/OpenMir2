@@ -7,7 +7,6 @@ namespace GameSvr
 {
     public class CastleConfManager : IniFile
     {
-
         public CastleConfManager(string fileName) : base(fileName)
         {
 
@@ -98,13 +97,11 @@ namespace GameSvr
 
         public void SaveConfig(TUserCastle userCastle)
         {
-            var filePath = Path.Combine(M2Share.g_Config.sCastleDir, userCastle.m_sConfigDir);
+            var filePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir, userCastle.m_sConfigDir);
             var sMapList = string.Empty;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             if (M2Share.g_MapManager.GetMapOfServerIndex(userCastle.m_sMapName) != M2Share.nServerIndex) return;
-            var sConfigFile = "SabukW.txt";
-            var sFileName = Path.Combine(filePath, sConfigFile);
             if (!string.IsNullOrEmpty(userCastle.m_sName))
             {
                 WriteString("Setup", "CastleName", userCastle.m_sName);
