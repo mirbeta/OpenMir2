@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 namespace SystemModule.Sockets
 {
@@ -156,33 +155,7 @@ namespace SystemModule.Sockets
                 return;
             }
             var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes(str);
-            try
-            {
-                //开始异步发送数据
-                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, this.HandleSendFinished, this.cli);
-            }
-            catch (ObjectDisposedException)
-            {
-                this.RaiseDisconnectedEvent();//引发断开连接事件
-            }
-            catch (SocketException exception)
-            {
-                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
-                {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
-                }
-                this.RaiseErrorEvent(exception);//引发错误事件
-            }
-        }
-
-        public Task SendBuffer(byte[] buffer)
-        {
-            return this.cli.SendAsync(buffer, SocketFlags.None);
-        }
-        
-        public Task SendBuffer(ArraySegment<byte> buffer)
-        {
-            return this.cli.SendAsync(buffer, SocketFlags.None);
+            Send(buffer);
         }
 
         public void Send(byte[] buffer)
@@ -203,14 +176,6 @@ namespace SystemModule.Sockets
                     this.RaiseDisconnectedEvent();//引发断开连接事件
                 }
                 this.RaiseErrorEvent(exception);//引发错误事件
-            }
-        }
-
-        public void SendBuff(byte[] buffer)
-        {
-            if (this.cli.Connected)
-            {
-                this.cli.Send(buffer);
             }
         }
 

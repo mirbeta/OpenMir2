@@ -386,7 +386,7 @@ namespace GameGate
                 return;
             }
             SendBytes += sendBuffer.Length;
-            ClientSocket.SendBuff(sendBuffer);
+            ClientSocket.Send(sendBuffer);
         }
 
         public void CheckServerIsTimeOut()

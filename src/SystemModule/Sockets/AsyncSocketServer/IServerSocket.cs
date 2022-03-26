@@ -487,7 +487,7 @@ namespace SystemModule.Sockets
                 try
                 {
                     // 继续接收数据
-                    bool willRaiseEvent = token.Socket.ReceiveAsync(e);
+                    var willRaiseEvent = token.Socket.ReceiveAsync(e);
                     if (!willRaiseEvent)
                     {
                         ProcessReceive(e);

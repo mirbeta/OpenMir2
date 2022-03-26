@@ -8,6 +8,9 @@ namespace SystemModule
     {
         public const string Backslash = "/";
 
+        public static TUserItem DelfautItem = new TUserItem();
+        public static TMagicRcd DetailtMagicRcd = new TMagicRcd();
+
         /// <summary>
         /// 根据GUID获取唯一数字序列
         /// </summary>

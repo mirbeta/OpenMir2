@@ -20,12 +20,6 @@ namespace GameSvr
         public ArrayList sList;
     }
 
-    public struct TGoodFileHeader
-    {
-        public int nItemCount;
-        public int[] Resv;
-    }
-
     public class LocalDB
     {
         public bool LoadAdminList()

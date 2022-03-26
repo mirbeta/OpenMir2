@@ -129,17 +129,23 @@ namespace GameSvr
             saveHumData.sAccount = sAccount;
             saveHumData.sCharName = sCharName;
             saveHumData.HumDataInfo = HumanRcd;
-            M2Share.DataServer.SendRequest(nQueryID, packet, saveHumData);
-            if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref data, 5000, false))
+            if (M2Share.DataServer.SendRequest(nQueryID, packet, saveHumData))
             {
-                if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref data, 5000, false))
                 {
-                    result = true;
+                    if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        M2Share.ErrorMessage($"[RunDB] 保存人物({sCharName})数据失败");
+                    }
                 }
-                else
-                {
-                    M2Share.ErrorMessage($"[RunDB] 保存人物({sCharName})数据失败");
-                }
+            }
+            else
+            {
+                Console.WriteLine("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }
@@ -152,27 +158,33 @@ namespace GameSvr
             byte[] humRespData = null;
             int nQueryID = GetQueryID(M2Share.g_Config);
             var packet = new ServerMessagePacket(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman);
-            if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref humRespData, 5000, true))
+            if (M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman))
             {
-                if (nIdent == Grobal2.DBR_LOADHUMANRCD)
+                if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref humRespData, 5000, true))
                 {
-                    if (nRecog == 1)
+                    if (nIdent == Grobal2.DBR_LOADHUMANRCD)
                     {
-                        humRespData = EDcode.DecodeBuff(humRespData);
-                        var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
-                        var sDBCharName = EDcode.DeCodeString(responsePacket.sChrName);
-                        if (sDBCharName == loadHuman.sChrName)
+                        if (nRecog == 1)
                         {
-                            HumanRcd = responsePacket.HumDataInfo;
-                            result = true;
+                            humRespData = EDcode.DecodeBuff(humRespData);
+                            var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
+                            var sDBCharName = EDcode.DeCodeString(responsePacket.sChrName);
+                            if (sDBCharName == loadHuman.sChrName)
+                            {
+                                HumanRcd = responsePacket.HumDataInfo;
+                                result = true;
+                            }
+                        }
+                        else
+                        {
+                            result = false;
                         }
                     }
-                    else
-                    {
-                        result = false;
-                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }

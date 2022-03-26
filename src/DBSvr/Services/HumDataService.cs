@@ -49,22 +49,19 @@ namespace DBSvr
                 return;
             }
             ServerInfo = new TServerInfo();
-            ServerInfo.bo08 = true;
             ServerInfo.nSckHandle = (int)e.Socket.Handle;
-            ServerInfo.sData = null;
+            ServerInfo.Data = null;
             ServerInfo.Socket = e.Socket;
             ServerList.Add(ServerInfo);
         }
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            TServerInfo ServerInfo;
             for (var i = 0; i < ServerList.Count; i++)
             {
-                ServerInfo = ServerList[i];
-                if (ServerInfo.nSckHandle == (int)e.Socket.Handle)
+                if (ServerList[i].nSckHandle == (int)e.Socket.Handle)
                 {
-                    ServerInfo = null;
+                    ServerList[i] = null;
                     ServerList.RemoveAt(i);
                     ClearSocket(e.Socket);
                     break;
@@ -87,36 +84,49 @@ namespace DBSvr
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    if (serverInfo.sData != null && serverInfo.sData.Length > 0)
+                    if (serverInfo.DataLen == 0 && data[0] == (byte)'#')
                     {
-                        Buffer.BlockCopy(data, 0, serverInfo.sData, serverInfo.sData.Length, data.Length);
+                        serverInfo.DataLen = BitConverter.ToInt32(data[1..5]);
+                    }
+                    if (serverInfo.Data != null && serverInfo.Data.Length > 0)
+                    {
+                        var tempBuff = new byte[serverInfo.Data.Length + nReviceLen];
+                        Buffer.BlockCopy(serverInfo.Data, 0, tempBuff, 0, serverInfo.Data.Length);
+                        Buffer.BlockCopy(data, 0, tempBuff, serverInfo.Data.Length, data.Length);
+                        serverInfo.Data = tempBuff;
                     }
                     else
                     {
-                        serverInfo.sData = data;
+                        serverInfo.Data = data;
                     }
-                    ProcessServerPacket(serverInfo);
+                    var len = serverInfo.Data.Length - serverInfo.DataLen;
+                    if (len > 0)
+                    {
+                        var tempBuff = new byte[len];
+                        Buffer.BlockCopy(serverInfo.Data, serverInfo.DataLen, tempBuff, 0, len);
+                        data = serverInfo.Data[..serverInfo.DataLen];
+                        serverInfo.Data = tempBuff;
+                        ProcessServerPacket(serverInfo, data);
+                        serverInfo.DataLen = tempBuff.Length;
+                    }
+                    else if (len == 0)
+                    {
+                        ProcessServerPacket(serverInfo, serverInfo.Data);
+                        serverInfo.Data = null;
+                        serverInfo.DataLen = 0;
+                    }
                     break;
                 }
             }
         }
         
-        private void ProcessServerPacket(TServerInfo serverInfo)
+        private void ProcessServerPacket(TServerInfo serverInfo,byte[] data)
         {
             var bo25 = false;
-            var sData = serverInfo.sData;
-            if (sData[0] == (byte)'#' && sData[^1] == (byte)'!')
-            {
-                sData = sData[1..^1];
-            }
-            else
-            {
-                return;
-            }
             var nQueryId = 0;
-            if (sData.Length > 0)
+            if (data.Length > 0)
             {
-                var requestPacket = Packets.ToPacket<RequestServerPacket>(sData);
+                var requestPacket = Packets.ToPacket<RequestServerPacket>(data);
                 if (requestPacket == null)
                 {
                     return;
@@ -141,7 +151,7 @@ namespace DBSvr
                     }
                 }
             }
-            serverInfo.sData = null;
+            serverInfo.Data = null;
             if (!bo25)
             {
                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.DBR_FAIL, 0, 0, 0, 0);
@@ -159,11 +169,11 @@ namespace DBSvr
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
         
-        private void SendRequest<T>(Socket socket, RequestServerPacket requestPacket, T requet) where T : class, new()
+        private void SendRequest<T>(Socket socket, RequestServerPacket requestPacket, T packet) where T : class, new()
         {
-            if (requet != null)
+            if (packet != null)
             {
-                requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
+                requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             }
             var s = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
             var nCheckCode = BitConverter.GetBytes(s);
