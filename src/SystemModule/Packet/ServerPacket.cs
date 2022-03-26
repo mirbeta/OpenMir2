@@ -6,54 +6,87 @@ namespace SystemModule
     [ProtoContract]
     public class RequestServerPacket : Packets
     {
-        [ProtoMember(1)] public byte[] QueryId;
-        [ProtoMember(2)] public byte[] PacketHead;
-        [ProtoMember(3)] public byte[] PacketBody;
+        private int _packLen = 0;
+        
+        [ProtoMember(1)]
+        public int PacketLen
+        {
+            get
+            {
+                var len = QueryId + Message?.Length + Packet?.Length + CheckBody?.Length;
+                return len > 0 ? len.Value + 2 : 0;
+            }
+            private set => value = _packLen;
+        }
+
+        [ProtoMember(2)] 
+        public int QueryId { get; set; }
+        /// <summary>
+        /// 消息头,需要自行解密
+        /// </summary>
+        [ProtoMember(3)] 
+        public byte[] Message { get; set; }
+        /// <summary>
+        /// 消息封包，需要自行调用解密
+        /// </summary>
+        [ProtoMember(4)]
+        public byte[] Packet { get; set; }
+        /// <summary>
+        /// 已经解密，无需在解密
+        /// </summary>
+        [ProtoMember(5)]
+        public byte[] CheckBody { get; set; }
 
         public RequestServerPacket()
-        {
-
-        }
-        
-        public RequestServerPacket(byte[] data) : base(data)
         {
 
         }
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            var queryLen = reader.ReadUInt16();
-            QueryId = reader.ReadBytes(queryLen);
-            var packetLen = reader.ReadUInt16();
-            if (packetLen > 0)
+            _packLen = reader.ReadInt32();
+            QueryId = reader.ReadInt32();
+            var msgLen = reader.ReadUInt16();
+            if (msgLen > 0)
             {
-                PacketHead = reader.ReadBytes(packetLen);
-                PacketHead = EDcode.DecodeBuff(PacketHead);
+                Message = reader.ReadBytes(msgLen);
+                Message = Message;
             }
-            var bodyLen = reader.ReadUInt16();
-            if (bodyLen > 0)
+            var packLen = reader.ReadUInt16();
+            if (packLen > 0)
             {
-                PacketBody = reader.ReadBytes(bodyLen);
-                PacketBody = EDcode.DecodeBuff(PacketBody);
+                Packet = reader.ReadBytes(packLen);
+                Packet = Packet;
+            }
+            var checkLen = reader.ReadUInt16();
+            if (checkLen > 0)
+            {
+                CheckBody = reader.ReadBytes(checkLen);
+                CheckBody = EDcode.DecodeBuff(CheckBody);
             }
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte) '#');
-            writer.Write((ushort) QueryId.Length);
-            writer.Write(QueryId, 0, QueryId.Length);
-            writer.Write((ushort) PacketHead.Length);
-            writer.Write(PacketHead, 0, PacketHead.Length);
-            writer.Write((ushort) PacketBody.Length);
-            writer.Write(PacketBody, 0, PacketBody.Length);
+            writer.Write(PacketLen);
+            writer.Write(QueryId);
+            writer.Write((ushort) Message.Length);
+            writer.Write(Message, 0, Message.Length);
+            writer.Write((ushort) Packet.Length);
+            writer.Write(Packet, 0, Packet.Length);
+            writer.Write((ushort) CheckBody.Length);
+            writer.Write(CheckBody, 0, CheckBody.Length);
             writer.Write((byte) '!');
         }
     }
 
+    [ProtoContract]
     public class LoadHumanRcdResponsePacket
     {
+        [ProtoMember(1)]
         public string sChrName { get; set; }
+        [ProtoMember(2)]
         public THumDataInfo HumDataInfo { get; set; }
     }
 }

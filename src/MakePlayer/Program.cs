@@ -52,7 +52,7 @@ namespace MakePlayer
             //AccountCrateTest();
                 
             g_sServerName = "热血传奇";
-            g_sGameIPaddr = "10.10.0.106";
+            g_sGameIPaddr = "10.10.0.101";
             g_nGamePort = 7000;
             g_boNewAccount = false;
 

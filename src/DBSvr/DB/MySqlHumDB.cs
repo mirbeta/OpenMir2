@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.IO;
 using System.Text;
 using SystemModule;
 
@@ -504,23 +505,24 @@ namespace DBSvr
             var command = new MySqlCommand();
             try
             {
-                var magicList = new List<TMagicRcd>();
+                for (int i = 0; i < HumanRCD.Data.Magic.Length; i++)
+                {
+                    HumanRCD.Data.Magic[i] = new TMagicRcd();
+                }
                 command.Connection = (MySqlConnection)dbConnection;
                 command.CommandText = string.Format(sSQL4, sChrName);
                 using var dr = command.ExecuteReader();
+                var position = 0;
                 while (dr.Read())
                 {
-                    magicList.Add(new TMagicRcd()
-                    {
-                        wMagIdx = dr.GetUInt16("FLD_MAGICID"),
-                        btKey = (byte)dr.GetInt32("FLD_USEKEY"),
-                        btLevel = (byte)dr.GetInt32("FLD_LEVEL"),
-                        nTranPoint = dr.GetInt32("FLD_CURRTRAIN")
-                    });
+                    HumanRCD.Data.Magic[position].wMagIdx = dr.GetUInt16("FLD_MAGICID");
+                    HumanRCD.Data.Magic[position].btKey = (byte) dr.GetInt32("FLD_USEKEY");
+                    HumanRCD.Data.Magic[position].btLevel = (byte) dr.GetInt32("FLD_LEVEL");
+                    HumanRCD.Data.Magic[position].nTranPoint = dr.GetInt32("FLD_CURRTRAIN");
+                    position++;
                 }
                 dr.Close();
                 dr.Dispose();
-                HumanRCD.Data.Magic = magicList.ToArray();
                 reslut = true;
             }
             catch (Exception)
@@ -610,6 +612,10 @@ namespace DBSvr
             if (!Open(ref dbConnection))
             {
                 return result;
+            }
+            for (int i = 0; i < HumanRCD.Data.StorageItems.Length; i++)
+            {
+                HumanRCD.Data.StorageItems[i] = new TUserItem();
             }
             const string sSQL6 = "SELECT * FROM TBL_Storages WHERE FLD_CHARNAME='{0}'";
             var command = new MySqlCommand();
