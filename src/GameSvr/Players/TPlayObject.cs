@@ -2957,13 +2957,7 @@ namespace GameSvr
 
         public void MakeSaveRcd(ref THumDataInfo HumanRcd)
         {
-            THumInfoData HumData;
-            TUserItem[] HumItems;
-            TUserItem[] BagItems;
-            TUserItem[] StorageItems;
-            TMagicRcd[] HumMagic;
-            TUserMagic UserMagic;
-            HumData = HumanRcd.Data;
+            var HumData = HumanRcd.Data;
             HumData.sCharName = m_sCharName;
             HumData.sCurMap = m_sMapName;
             HumData.wCurX = m_nCurrX;
@@ -2986,7 +2980,6 @@ namespace GameSvr
             HumData.Abil.MaxWearWeight = m_Abil.MaxWearWeight;
             HumData.Abil.HandWeight = m_Abil.HandWeight;
             HumData.Abil.MaxHandWeight = m_Abil.MaxHandWeight;
-            // HumData.Abil:=m_Abil;
             HumData.Abil.HP = m_WAbil.HP;
             HumData.Abil.MP = m_WAbil.MP;
             HumData.wStatusTimeArr = m_wStatusTimeArr;
@@ -2994,8 +2987,8 @@ namespace GameSvr
             HumData.wHomeX = m_nHomeX;
             HumData.wHomeY = m_nHomeY;
             HumData.nPKPoint = m_nPkPoint;
-            HumData.BonusAbil = m_BonusAbil;// 08/09
-            HumData.nBonusPoint = m_nBonusPoint;// 08/09
+            HumData.BonusAbil = m_BonusAbil;
+            HumData.nBonusPoint = m_nBonusPoint;
             HumData.sStoragePwd = m_sStoragePwd;
             HumData.btCreditPoint = m_btCreditPoint;
             HumData.btReLevel = m_btReLevel;
@@ -3031,25 +3024,25 @@ namespace GameSvr
             HumData.QuestUnitOpen = m_QuestUnitOpen;
             HumData.QuestUnit = m_QuestUnit;
             HumData.QuestFlag = m_QuestFlag;
-            HumItems = HumanRcd.Data.HumItems;
+            var HumItems = HumanRcd.Data.HumItems;
             if (HumItems == null)
             {
                 HumItems = new TUserItem[13];
             }
-            HumItems[Grobal2.U_DRESS] = m_UseItems[Grobal2.U_DRESS];
-            HumItems[Grobal2.U_WEAPON] = m_UseItems[Grobal2.U_WEAPON];
-            HumItems[Grobal2.U_RIGHTHAND] = m_UseItems[Grobal2.U_RIGHTHAND];
-            HumItems[Grobal2.U_HELMET] = m_UseItems[Grobal2.U_NECKLACE];
-            HumItems[Grobal2.U_NECKLACE] = m_UseItems[Grobal2.U_HELMET];
-            HumItems[Grobal2.U_ARMRINGL] = m_UseItems[Grobal2.U_ARMRINGL];
-            HumItems[Grobal2.U_ARMRINGR] = m_UseItems[Grobal2.U_ARMRINGR];
-            HumItems[Grobal2.U_RINGL] = m_UseItems[Grobal2.U_RINGL];
-            HumItems[Grobal2.U_RINGR] = m_UseItems[Grobal2.U_RINGR];
-            HumItems[Grobal2.U_BUJUK] = m_UseItems[Grobal2.U_BUJUK];
-            HumItems[Grobal2.U_BELT] = m_UseItems[Grobal2.U_BELT];
-            HumItems[Grobal2.U_BOOTS] = m_UseItems[Grobal2.U_BOOTS];
-            HumItems[Grobal2.U_CHARM] = m_UseItems[Grobal2.U_CHARM];
-            BagItems = HumanRcd.Data.BagItems;
+            HumItems[Grobal2.U_DRESS] = m_UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_DRESS];
+            HumItems[Grobal2.U_WEAPON] = m_UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_WEAPON];
+            HumItems[Grobal2.U_RIGHTHAND] = m_UseItems[Grobal2.U_RIGHTHAND] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_RIGHTHAND];
+            HumItems[Grobal2.U_HELMET] = m_UseItems[Grobal2.U_NECKLACE] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_NECKLACE];
+            HumItems[Grobal2.U_NECKLACE] = m_UseItems[Grobal2.U_HELMET] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_HELMET];
+            HumItems[Grobal2.U_ARMRINGL] = m_UseItems[Grobal2.U_ARMRINGL] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_ARMRINGL];
+            HumItems[Grobal2.U_ARMRINGR] = m_UseItems[Grobal2.U_ARMRINGR] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_ARMRINGR];
+            HumItems[Grobal2.U_RINGL] = m_UseItems[Grobal2.U_RINGL] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_RINGL];
+            HumItems[Grobal2.U_RINGR] = m_UseItems[Grobal2.U_RINGR] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_RINGR];
+            HumItems[Grobal2.U_BUJUK] = m_UseItems[Grobal2.U_BUJUK] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_BUJUK];
+            HumItems[Grobal2.U_BELT] = m_UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_BELT];
+            HumItems[Grobal2.U_BOOTS] = m_UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_BOOTS];
+            HumItems[Grobal2.U_CHARM] = m_UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem : m_UseItems[Grobal2.U_CHARM];
+            var BagItems = HumanRcd.Data.BagItems;
             if (BagItems == null)
             {
                 BagItems = new TUserItem[46];
@@ -3061,7 +3054,14 @@ namespace GameSvr
                     BagItems[i] = m_ItemList[i];
                 }
             }
-            HumMagic = HumanRcd.Data.Magic;
+            for (int i = 0; i < BagItems.Length; i++)
+            {
+                if (BagItems[i] == null)
+                {
+                    BagItems[i] = HUtil32.DelfautItem;
+                }
+            }
+            var HumMagic = HumanRcd.Data.Magic;
             if (HumMagic == null)
             {
                 HumMagic = new TMagicRcd[Grobal2.MAXMAGIC];
@@ -3072,7 +3072,7 @@ namespace GameSvr
                 {
                     break;
                 }
-                UserMagic = m_MagicList[i];
+                var UserMagic = m_MagicList[i];
                 if (HumMagic[i] == null)
                 {
                     HumMagic[i] = new TMagicRcd();
@@ -3082,7 +3082,14 @@ namespace GameSvr
                 HumMagic[i].btKey = UserMagic.btKey;
                 HumMagic[i].nTranPoint = UserMagic.nTranPoint;
             }
-            StorageItems = HumanRcd.Data.StorageItems;
+            for (int i = 0; i < HumMagic.Length; i++)
+            {
+                if (HumMagic[i] == null)
+                {
+                    HumMagic[i] = HUtil32.DetailtMagicRcd;
+                }
+            }
+            var StorageItems = HumanRcd.Data.StorageItems;
             if (StorageItems == null)
             {
                 StorageItems = new TUserItem[50];
@@ -3094,6 +3101,13 @@ namespace GameSvr
                     break;
                 }
                 StorageItems[i] = this.m_StorageItemList[i];
+            }
+            for (int i = 0; i < StorageItems.Length; i++)
+            {
+                if (StorageItems[i] == null)
+                {
+                    StorageItems[i] = HUtil32.DelfautItem;
+                }
             }
         }
 

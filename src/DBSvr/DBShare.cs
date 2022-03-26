@@ -235,8 +235,8 @@ namespace DBSvr
     public class TServerInfo
     {
         public int nSckHandle;
-        public byte[] sData;
-        public bool bo08;
+        public byte[] Data;
+        public int DataLen;
         public Socket Socket;
     }
 

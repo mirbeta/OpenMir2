@@ -44,11 +44,11 @@ namespace GameSvr
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
         }
 
-        public void SendRequest<T>(int nQueryID, ServerMessagePacket packet, T requet) where T : CmdPacket
+        public bool SendRequest<T>(int nQueryID, ServerMessagePacket packet, T requet) where T : CmdPacket
         {
             if (!_clientScoket.IsConnected)
             {
-                return;
+                return false;
             }
             DBSocketRecvBuff = null;
 
@@ -61,8 +61,11 @@ namespace GameSvr
             var nCheckCode = BitConverter.GetBytes(s);
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
             requestPacket.CheckKey = codeBuff;
-            
-            _clientScoket.Send(requestPacket.GetPacket());
+
+            var pk = requestPacket.GetPacket();
+            _clientScoket.Send(pk);
+            Console.WriteLine(pk.Length);
+            return true;
         }
 
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
