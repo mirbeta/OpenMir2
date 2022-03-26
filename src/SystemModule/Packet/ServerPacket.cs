@@ -13,8 +13,8 @@ namespace SystemModule
         {
             get
             {
-                var len = QueryId + Message?.Length + Packet?.Length + CheckBody?.Length;
-                return len > 0 ? len.Value + 2 : 0;
+                var len = QueryId + Message?.Length + Packet?.Length + CheckKey?.Length;
+                return len > 0 ? len.Value + 15 : 0;
             }
             private set => value = _packLen;
         }
@@ -35,8 +35,8 @@ namespace SystemModule
         /// 已经解密，无需在解密
         /// </summary>
         [ProtoMember(5)]
-        public byte[] CheckBody { get; set; }
-
+        public byte[] CheckKey { get; set; }
+        
         public RequestServerPacket()
         {
 
@@ -61,8 +61,8 @@ namespace SystemModule
             var checkLen = reader.ReadUInt16();
             if (checkLen > 0)
             {
-                CheckBody = reader.ReadBytes(checkLen);
-                CheckBody = EDcode.DecodeBuff(CheckBody);
+                CheckKey = reader.ReadBytes(checkLen);
+                CheckKey = EDcode.DecodeBuff(CheckKey);
             }
         }
 
@@ -75,8 +75,8 @@ namespace SystemModule
             writer.Write(Message, 0, Message.Length);
             writer.Write((ushort) Packet.Length);
             writer.Write(Packet, 0, Packet.Length);
-            writer.Write((ushort) CheckBody.Length);
-            writer.Write(CheckBody, 0, CheckBody.Length);
+            writer.Write((ushort) CheckKey.Length);
+            writer.Write(CheckKey, 0, CheckKey.Length);
             writer.Write((byte) '!');
         }
     }

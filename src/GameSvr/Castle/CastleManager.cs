@@ -130,36 +130,29 @@ namespace GameSvr
 
         public TUserCastle IsCastleMember(TBaseObject BaseObject)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (Castle.IsMember(BaseObject))
+                if (_castleList[i].IsMember(BaseObject))
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-            return result;
+            return null;
         }
 
         public void Run()
         {
-            TUserCastle UserCastle;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                UserCastle = _castleList[i];
-                UserCastle.Run();
+                _castleList[i].Run();
             }
         }
 
         public void GetCastleGoldInfo(ArrayList List)
         {
-            TUserCastle Castle;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
+                TUserCastle Castle = _castleList[i];
                 List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome));
             }
         }
@@ -177,20 +170,20 @@ namespace GameSvr
 
         public void LoadCastleList()
         {
-            StringList LoadList;
-            TUserCastle Castle;
-            string sCastleDir;
-            if (File.Exists(M2Share.g_Config.sCastleFile))
+            var castleFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            if (File.Exists(castleFile))
             {
-                LoadList = new StringList();
-                LoadList.LoadFromFile(M2Share.g_Config.sCastleFile);
-                for (var i = 0; i < LoadList.Count; i++)
+                using (var loadList = new StringList())
                 {
-                    sCastleDir = LoadList[i].Trim();
-                    if (!string.IsNullOrEmpty(sCastleDir))
+                    loadList.LoadFromFile(castleFile);
+                    for (var i = 0; i < loadList.Count; i++)
                     {
-                        Castle = new TUserCastle(sCastleDir);
-                        _castleList.Add(Castle);
+                        var sCastleDir = loadList[i].Trim();
+                        if (!string.IsNullOrEmpty(sCastleDir))
+                        {
+                            var castle = new TUserCastle(sCastleDir);
+                            _castleList.Add(castle);
+                        }
                     }
                 }
                 M2Share.MainOutMessage($"已读取 [{_castleList.Count}] 个城堡信息...", messageColor: ConsoleColor.Green);
@@ -203,18 +196,18 @@ namespace GameSvr
 
         private void SaveCastleList()
         {
-            StringList LoadList;
-            if (!Directory.Exists(M2Share.g_Config.sCastleDir))
+            var castleDirPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir);
+            if (!Directory.Exists(castleDirPath))
             {
-                Directory.CreateDirectory(M2Share.g_Config.sCastleDir);
+                Directory.CreateDirectory(castleDirPath);
             }
-            LoadList = new StringList();
+            var loadList = new StringList();
             for (var i = 0; i < _castleList.Count; i++)
             {
-                LoadList.Add(i.ToString());
+                loadList.Add(i.ToString());
             }
-            LoadList.SaveToFile(M2Share.g_Config.sCastleFile);
-            //LoadList.Free;
+            var savePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            loadList.SaveToFile(savePath);
         }
 
         public TUserCastle GetCastle(int nIndex)

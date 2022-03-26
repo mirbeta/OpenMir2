@@ -1,6 +1,5 @@
 ﻿using System;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Sockets;
 
 namespace GameSvr
@@ -8,8 +7,9 @@ namespace GameSvr
     public class DBService
     {
         private readonly IClientScoket _clientScoket;
-        private AsynQueue<SaveHumData> _saveQueue;
         private static int packetLen = 0;
+        private byte[] DBSocketRecvBuff;
+        private bool DBSocketWorking = false;
 
         public DBService()
         {
@@ -18,20 +18,17 @@ namespace GameSvr
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.ReceivedDatagram += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
-            //_saveQueue = new AsynQueue<SaveHumData>();
-            //_saveQueue.ProcessItemFunction += ProcessSaveHumData;
+            DBSocketWorking = false;
         }
 
         public void Start()
         {
             _clientScoket.Connect(M2Share.g_Config.sDBAddr, M2Share.g_Config.nDBPort);
-            //_saveQueue.Start();
         }
 
         public void Stop()
         {
             _clientScoket.Disconnect();
-            //_saveQueue.Stop();
         }
 
         public void CheckConnected()
@@ -53,7 +50,7 @@ namespace GameSvr
             {
                 return;
             }
-            M2Share.g_Config.sDBSocketRecvBuff = null;
+            DBSocketRecvBuff = null;
 
             var requestPacket = new RequestServerPacket();
             requestPacket.QueryId = nQueryID;
@@ -63,40 +60,9 @@ namespace GameSvr
             var s = HUtil32.MakeLong(nQueryID ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
             var nCheckCode = BitConverter.GetBytes(s);
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
-            requestPacket.CheckBody = codeBuff;
+            requestPacket.CheckKey = codeBuff;
             
             _clientScoket.Send(requestPacket.GetPacket());
-        }
-
-        public void SendMessage(int nQueryID, string sMsg)
-        {
-            if (!_clientScoket.IsConnected)
-            {
-                return;
-            }
-            HUtil32.EnterCriticalSection(M2Share.UserDBSection);
-            try
-            {
-                M2Share.g_Config.sDBSocketRecvBuff = null;
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
-            }
-            var nCheckCode = HUtil32.MakeLong(nQueryID ^ 170, sMsg.Length + 6);
-            var by = new byte[sizeof(int)];
-            unsafe
-            {
-                fixed (byte* pb = by)
-                {
-                    *(int*)pb = nCheckCode;
-                }
-            }
-            var sCheckStr = EDcode.EncodeBuffer(@by, @by.Length);
-            var sSendMsg = $"#{nQueryID}{sMsg}{sCheckStr}!";
-            M2Share.g_Config.boDBSocketWorking = true;
-            var data = HUtil32.GetBytes(sSendMsg);
-            _clientScoket.Send(data);
         }
 
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
@@ -138,32 +104,32 @@ namespace GameSvr
                 {
                     packetLen = BitConverter.ToInt32(data[1..5]);
                 }
-                if (M2Share.g_Config.sDBSocketRecvBuff != null && M2Share.g_Config.sDBSocketRecvBuff.Length > 0)
+                if (DBSocketRecvBuff != null && DBSocketRecvBuff.Length > 0)
                 {
-                    var tempBuff = new byte[M2Share.g_Config.sDBSocketRecvBuff.Length + e.BuffLen];
-                    Buffer.BlockCopy(M2Share.g_Config.sDBSocketRecvBuff, 0, tempBuff, 0, M2Share.g_Config.sDBSocketRecvBuff.Length);
-                    Buffer.BlockCopy(e.Buff, 0, tempBuff, M2Share.g_Config.sDBSocketRecvBuff.Length, e.BuffLen);
-                    M2Share.g_Config.sDBSocketRecvBuff = tempBuff;
+                    var tempBuff = new byte[DBSocketRecvBuff.Length + e.BuffLen];
+                    Buffer.BlockCopy(DBSocketRecvBuff, 0, tempBuff, 0, DBSocketRecvBuff.Length);
+                    Buffer.BlockCopy(e.Buff, 0, tempBuff, DBSocketRecvBuff.Length, e.BuffLen);
+                    DBSocketRecvBuff = tempBuff;
                 }
                 else
                 {
-                    M2Share.g_Config.sDBSocketRecvBuff = e.Buff;
+                    DBSocketRecvBuff = e.Buff;
                 }
-                var len = M2Share.g_Config.sDBSocketRecvBuff.Length - packetLen;
+                var len = DBSocketRecvBuff.Length - packetLen;
                 if (len > 0)
                 {
                     var tempBuff = new byte[len];
-                    Buffer.BlockCopy(M2Share.g_Config.sDBSocketRecvBuff, packetLen, tempBuff, 0, len);
-                    data = M2Share.g_Config.sDBSocketRecvBuff[..packetLen];
-                    M2Share.g_Config.sDBSocketRecvBuff = tempBuff;
-                    M2Share.g_Config.boDBSocketWorking = true;
+                    Buffer.BlockCopy(DBSocketRecvBuff, packetLen, tempBuff, 0, len);
+                    data = DBSocketRecvBuff[..packetLen];
+                    DBSocketRecvBuff = tempBuff;
+                    DBSocketWorking = true;
                     ProcessData(data);
                 }
                 else if (len == 0)
                 {
-                    M2Share.g_Config.sDBSocketRecvBuff = data;
-                    M2Share.g_Config.boDBSocketWorking = true;
-                    ProcessData(data);
+                    DBSocketWorking = true;
+                    ProcessData(DBSocketRecvBuff);
+                    DBSocketRecvBuff = null;
                 }
             }
             finally
@@ -174,58 +140,33 @@ namespace GameSvr
 
         private void ProcessData(byte[] data)
         {
-            if (M2Share.g_Config.boDBSocketWorking)
+            try
             {
+                if (!DBSocketWorking) return;
                 data = data[1..^1];
                 var responsePacket = Packets.ToPacket<RequestServerPacket>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;
-                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + responsePacket.CheckBody.Length;
+                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
                     if (nLen >= 12)
                     {
                         var nCheckCode = HUtil32.MakeLong(respCheckCode ^ 170, nLen);
-                        var checkdata = BitConverter.GetBytes(nCheckCode);
-                        var sCheckFlag = EDcode.EncodeBuffer(checkdata, checkdata.Length);
-                        if (nLen == sCheckFlag.Length)
+                        if (nCheckCode == BitConverter.ToInt32(responsePacket.CheckKey))
                         {
                             HumDataService.AddToProcess(respCheckCode, responsePacket);
                         }
+                        else
+                        {
+                            M2Share.g_Config.nLoadDBErrorCount++;
+                        }
                     }
                 }
-                M2Share.g_Config.boDBSocketWorking = false;
             }
-        }
-
-        public void AddToSaveQueue(SaveHumData saveHumData)
-        {
-            _saveQueue.Enqueue(saveHumData);
-        }
-
-        private void ProcessSaveHumData(SaveHumData saveHumData)
-        {
-            if (saveHumData.MsgType == 1)
+            finally
             {
-                SendMessage(saveHumData.QueryId, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_SAVEHUMANRCD, saveHumData.SessionID, 0, 0, 0)) +
-                                                 EDcode.EncodeString(saveHumData.sAccount) + "/" + EDcode.EncodeString(saveHumData.sCharName) + "/" + saveHumData.sHunData);
-            }
-            else if (saveHumData.MsgType == 0)
-            {
-                SendMessage(saveHumData.QueryId, EDcode.EncodeBuffer(Grobal2.MakeDefaultMsg(Grobal2.DB_LOADHUMANRCD, saveHumData.SessionID, 0, 0, 0)) +
-                                                 EDcode.EncodeString(saveHumData.sAccount) + "/" + EDcode.EncodeString(saveHumData.sCharName) + "/" + saveHumData.sHunData);
+                DBSocketWorking = false;
             }
         }
-
-
-    }
-
-    public struct SaveHumData
-    {
-        public string sAccount;
-        public string sCharName;
-        public int QueryId;
-        public int SessionID;
-        public string sHunData;
-        public int MsgType;
     }
 }
