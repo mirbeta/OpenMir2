@@ -118,20 +118,30 @@ namespace DBSvr
             }
             if (sData.Length > 0)
             {
-                RequestServerPacket requestPacket = new RequestServerPacket(sData);
-                requestPacket.ToPacket();
-                
-                var nQueryId=  BitConverter.ToInt32(EDcode.DecodeBuff(requestPacket.QueryId));
-                var packet = ServerPacketDecoder.DeSerialize<ServerMessagePacket>(requestPacket.PacketHead);
-                var packetLen = requestPacket.PacketBody.Length + requestPacket.PacketHead.Length;
+                var requestPacket = Packets.ToPacket<RequestServerPacket>(sData);
+                if (requestPacket == null)
+                {
+                    return;
+                }
+                var nQueryId = requestPacket.QueryId;
+                var packet = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDcode.DecodeBuff(requestPacket.Message));
+                var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
                 if ((packetLen >= Grobal2.DEFBLOCKSIZE) && nQueryId > 0)
                 {
                     var wE = nQueryId ^ 170;
-                    int w10 = packetLen;
-                    int n18 = HUtil32.MakeLong(wE, w10);
-                    s34C = nQueryId;
-                    ProcessServerMsg(packet, requestPacket.PacketBody, serverInfo.Socket); 
-                    bo25 = true;
+                    var n18 = HUtil32.MakeLong(wE, packetLen);
+                    var checkCode = BitConverter.ToInt32(requestPacket.CheckBody);
+                    if (checkCode == n18)
+                    {
+                        s34C = nQueryId;
+                        ProcessServerMsg(packet, requestPacket.Packet, serverInfo.Socket);
+                        bo25 = true;
+                    }
+                    else
+                    {
+                        serverInfo.Socket.Close();
+                        Console.WriteLine("关闭错误的查询请求.");
+                    }
                 }
             }
             serverInfo.sData = null;
@@ -144,23 +154,20 @@ namespace DBSvr
 
         private void SendSocket<T>(Socket socket, RequestServerPacket packet, T requet)
         {
-            var packBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(packet));
-            var bodyBuff = EDcode.EncodeBuffer(ServerPacketDecoder.Serialize(requet));
+            var requestPacket = new RequestServerPacket();
+            requestPacket.QueryId = s34C;
+            requestPacket.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
+            requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
 
-            var s = HUtil32.MakeLong(s34C ^ 170, packBuff.Length + bodyBuff.Length);
+            var s = HUtil32.MakeLong(s34C ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
             var nCheckCode = BitConverter.GetBytes(s);
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
 
-            var requestPacket = new RequestServerPacket();
-            requestPacket.QueryId = codeBuff;
-            requestPacket.PacketHead = packBuff;
-            requestPacket.PacketBody = bodyBuff;
-
-            socket.Send(requestPacket.GetPacket());
-
-            //var by = BitConverter.GetBytes(nQueryId);
-            //var s18 = EDcode.EncodeBuffer(by, by.Length);
-            //socket.SendText("#" + s34C + "/" + sMsg + s18 + "!");
+            requestPacket.CheckBody = codeBuff;
+            
+            var sb = requestPacket.GetPacket();
+            socket.Send(sb, sb.Length, SocketFlags.None);
+            Console.WriteLine(sb.Length);
         }
 
         private void SendSocket(Socket Socket, string sMsg)
@@ -264,6 +271,7 @@ namespace DBSvr
                 sDefMsg = sMsg.Substring(0, Grobal2.DEFBLOCKSIZE);
                 sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE - 6);
             }*/
+            sData = EDcode.DecodeBuff(sData);
             switch (packet.Ident)
             {
                 case Grobal2.DB_LOADHUMANRCD:
@@ -286,7 +294,7 @@ namespace DBSvr
         {
             THumDataInfo HumanRCD = null;
             bool boFoundSession = false;
-            LoadHumDataPacket LoadHuman = ServerPacketDecoder.DeSerialize<LoadHumDataPacket>(data);
+            LoadHumDataPacket LoadHuman = ProtoBufDecoder.DeSerialize<LoadHumDataPacket>(data);
             int nCheckCode = -1;
             if ((!string.IsNullOrEmpty(LoadHuman.sAccount)) && (!string.IsNullOrEmpty(LoadHuman.sChrName)))
             {
@@ -315,24 +323,23 @@ namespace DBSvr
             if ((nCheckCode == 1) || boFoundSession)
             {
                 var loadHumData = new LoadHumanRcdResponsePacket();
-                loadHumData.sChrName = loadHumData.sChrName;
+                loadHumData.sChrName = LoadHuman.sChrName;
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                responsePack.PacketHead = ServerPacketDecoder.Serialize(messagePacket);
-                responsePack.PacketBody = ServerPacketDecoder.Serialize(loadHumData);
+                responsePack.Packet = ProtoBufDecoder.Serialize(messagePacket);
                 SendSocket(Socket, responsePack, loadHumData);
             }
             else
             {
                 var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
-                responsePack.PacketHead = ServerPacketDecoder.Serialize(messagePacket);
+                responsePack.Packet = ProtoBufDecoder.Serialize(messagePacket);
                 SendSocket(Socket, responsePack, messagePacket);
             }
         }
 
         private void SaveHumanRcd(int nRecog, byte[] sMsg, Socket Socket)
         {
-            var saveHumDataPacket = ServerPacketDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
             if (saveHumDataPacket == null)
             {
                 Console.WriteLine("保存玩家数据出错.");
@@ -390,7 +397,7 @@ namespace DBSvr
 
         private void SaveHumanRcdEx(byte[] sMsg, int nRecog, Socket Socket)
         {
-            var saveHumDataPacket = ServerPacketDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
             if (saveHumDataPacket == null)
             {
                 Console.WriteLine("保存玩家数据出错.");

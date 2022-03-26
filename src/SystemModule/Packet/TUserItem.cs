@@ -1,25 +1,32 @@
 ﻿using System.IO;
+using ProtoBuf;
 
 namespace SystemModule
 {
+    [ProtoContract]
     public class TUserItem : Packets
     {
         /// <summary>
         /// 唯一ID
         /// </summary>
+        [ProtoMember(1)]
         public int MakeIndex;
         /// <summary>
         /// 物品ID
         /// </summary>
+        [ProtoMember(2)]
         public ushort wIndex;
         /// <summary>
         /// 当前持久值
         /// </summary>
+        [ProtoMember(3)]
         public ushort Dura;
         /// <summary>
         /// 最大持久值
         /// </summary>
+        [ProtoMember(4)]
         public ushort DuraMax;
+        [ProtoMember(5)]
         public byte[] btValue;
 
         public TUserItem()

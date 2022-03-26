@@ -1,25 +1,31 @@
 ﻿using System;
 using System.IO;
+using ProtoBuf;
 
 namespace SystemModule
 {
+    [ProtoContract]
     public class TMagicRcd : Packets
     {
         /// <summary>
         /// 技能ID
         /// </summary>
+        [ProtoMember(1)]
         public ushort wMagIdx;
         /// <summary>
         /// 等级
         /// </summary>
+        [ProtoMember(2)]
         public byte btLevel;
         /// <summary>
         /// 技能快捷键
         /// </summary>
+        [ProtoMember(3)]
         public byte btKey;
         /// <summary>
         /// 当前修练值
         /// </summary>
+        [ProtoMember(4)]
         public int nTranPoint;
 
         public TMagicRcd() { }

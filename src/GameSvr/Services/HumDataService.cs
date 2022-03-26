@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using SystemModule;
 
@@ -6,9 +7,16 @@ namespace GameSvr
 {
     public class HumDataService
     {
+        private static readonly ConcurrentDictionary<int, RequestServerPacket> _receivedMap = new ConcurrentDictionary<int, RequestServerPacket>();
+
         public static bool DBSocketConnected()
         {
             return true;
+        }
+
+        public static void AddToProcess(int queryId,RequestServerPacket data)
+        {
+            _receivedMap.TryAdd(queryId, data);
         }
 
         private static bool GetDBSockMsg(int nQueryID, ref int nIdent, ref int nRecog, ref string sStr, int dwTimeOut, bool boLoadRcd)
@@ -16,14 +24,10 @@ namespace GameSvr
             bool result = false;
             bool boLoadDBOK = false;
             byte[] sData;
-            string s28 = string.Empty;
-            string s2C = string.Empty;
             string sCheckFlag = string.Empty;
-            string sDefMsg = string.Empty;
-            string s38 = string.Empty;
+            byte[] sDefMsg = null;
             int nLen;
             int nCheckCode;
-            ClientPacket DefMsg;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
             int dwTimeOutTick = HUtil32.GetTickCount();
@@ -33,12 +37,11 @@ namespace GameSvr
                 {
                     break;
                 }
-                sData = null;
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    sData = M2Share.g_Config.sDBSocketRecvBuff;
-                    M2Share.g_Config.sDBSocketRecvBuff = null;
+                    sData = null;
+                    //sData = _receivedMap[nQueryID];
                 }
                 finally
                 {
@@ -46,55 +49,46 @@ namespace GameSvr
                 }
                 if (sData!=null && sData.Length>0)
                 {
-                    s28 = "";
-                    sData = HUtil32.ArrestStringEx(sData, '#', '!', ref s28);
-                    if (s28 != "")
+                    if (sData[0] != (byte) '#' && sData[^1] != (byte) '!')
                     {
-                        s28 = HUtil32.GetValidStr3(s28, ref s2C, new[] { "/" });
-                        nLen = s28.Length;
-                        unsafe
+                        return false;
+                    }
+                    sData = sData[1..^1];
+                    var responsePacket = Packets.ToPacket<RequestServerPacket>(sData);
+                    if (responsePacket != null)
+                    {
+                        var respCheckCode = responsePacket.QueryId;
+                        nLen = responsePacket.Message.Length + responsePacket.Packet.Length + responsePacket.CheckBody.Length;
+                        if (nLen >= 12 && respCheckCode == nQueryID)
                         {
-                            if (nLen >= 12 && HUtil32.Str_ToInt(s2C, 0) == nQueryID) //sizeof(ClientMessage)
+                            /*if (HUtil32.CompareBackLStr(s28, sCheckFlag, sCheckFlag.Length))
                             {
-                                nCheckCode = HUtil32.MakeLong(HUtil32.Str_ToInt(s2C, 0) ^ 170, nLen);
-                                byte[] data = new byte[sizeof(int)];
-                                fixed (byte* by = data)
+                                sDefMsg = responsePacket.PacketHead;
+                                if (nLen == Grobal2.DEFBLOCKSIZE)
                                 {
-                                    *(int*)by = nCheckCode;
-                                }
-                                sCheckFlag = EDcode.EncodeBuffer(data, data.Length);
-                                if (HUtil32.CompareBackLStr(s28, sCheckFlag, sCheckFlag.Length))
-                                {
-                                    if (nLen == Grobal2.DEFBLOCKSIZE)
-                                    {
-                                        sDefMsg = s28;
-                                        s38 = "";
-                                    }
-                                    else
-                                    {
-                                        sDefMsg = s28.Substring(0, Grobal2.DEFBLOCKSIZE);
-                                        s38 = s28.Substring(Grobal2.DEFBLOCKSIZE, s28.Length - Grobal2.DEFBLOCKSIZE - 6);
-                                    }
-                                    DefMsg = EDcode.DecodePacket(sDefMsg);
-                                    nIdent = DefMsg.Ident;
-                                    nRecog = DefMsg.Recog;
-                                    sStr = s38;
-                                    boLoadDBOK = true;
-                                    result = true;
-                                    break;
+                                    s38 = "";
                                 }
                                 else
                                 {
-                                    M2Share.g_Config.nLoadDBErrorCount++;
-                                    break;
+                                    //sDefMsg = s28.Substring(0, Grobal2.DEFBLOCKSIZE);
+                                    //s38 = s28.Substring(Grobal2.DEFBLOCKSIZE, s28.Length - Grobal2.DEFBLOCKSIZE - 6);
                                 }
-                            }
-                            else
-                            {
-                                M2Share.g_Config.nLoadDBErrorCount++;
+                                DefMsg = EDcode.DecodePacket(sDefMsg);
+                                nIdent = DefMsg.Ident;
+                                nRecog = DefMsg.Recog;
+                                sStr = s38;
+                                boLoadDBOK = true;
+                                result = true;
                                 break;
-                            }
+                            }*/
+                            M2Share.g_Config.nLoadDBErrorCount++;
                         }
+                        else
+                        {
+                            M2Share.g_Config.nLoadDBErrorCount++;
+                        }
+                        _receivedMap.TryRemove(nQueryID, out var qdata);
+                        break;
                     }
                 }
                 else
@@ -118,6 +112,7 @@ namespace GameSvr
                 M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - dwTimeOutTick;
             }
             M2Share.g_Config.boDBSocketWorking = false;
+            M2Share.g_Config.sDBSocketRecvBuff = null;
             return result;
         }
 
@@ -191,7 +186,7 @@ namespace GameSvr
             int nQueryID = GetQueryID(M2Share.g_Config);
             var packet = new ServerMessagePacket(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
             M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman);
-            if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sHumanRcdStr, 5000, true))
+            /*if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref sHumanRcdStr, 5000, true))
             {
                 if (nIdent == Grobal2.DBR_LOADHUMANRCD)
                 {
@@ -204,14 +199,14 @@ namespace GameSvr
                             var dataBuff = EDcode.DecodeBuffer(sHumanRcdStr);
                             HumanRcd = new THumDataInfo(dataBuff);
                             result = true;
-                        }*/
+                        }#1#
                     }
                     else
                     {
                         result = false;
                     }
                 }
-            }
+            }*/
             return result;
         }
 

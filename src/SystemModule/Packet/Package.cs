@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 
@@ -21,6 +22,8 @@ namespace SystemModule
             }
             binaryReader = new BinaryReader(new MemoryStream(segment));
         }
+
+        public BinaryReader BinaryReader => binaryReader;
 
         public string ReadPascalString(int size)
         {
@@ -108,18 +111,22 @@ namespace SystemModule
             }
             return data;
         }
-        
-        public Packets ToPacket()
+
+        public static T ToPacket<T>(byte[] rawBytes) where T : Packets, new()
         {
+            Packets p = Activator.CreateInstance<T>();
+            using var stream = new MemoryStream(rawBytes, 0, rawBytes.Length);
+            using var reader = new BinaryReader(stream);
             try
             {
-                this.ReadPacket(binaryReader);
+                if (p == null) return null;
+                p.ReadPacket(reader);
             }
             catch
             {
                 return null;
             }
-            return this;
+            return (T)p;
         }
 
         protected abstract void ReadPacket(BinaryReader reader);

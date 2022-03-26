@@ -4,7 +4,7 @@ using ProtoBuf;
 
 namespace SystemModule
 {
-    public class ServerPacketDecoder
+    public class ProtoBufDecoder
     {
         public static byte[] Serialize<T>(T model)
         {
