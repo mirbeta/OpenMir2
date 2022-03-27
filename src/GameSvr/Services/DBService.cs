@@ -64,7 +64,7 @@ namespace GameSvr
 
             var pk = requestPacket.GetPacket();
             _clientScoket.Send(pk);
-            Console.WriteLine(pk.Length);
+
             return true;
         }
 
@@ -146,7 +146,6 @@ namespace GameSvr
             try
             {
                 if (!DBSocketWorking) return;
-                data = data[1..^1];
                 var responsePacket = Packets.ToPacket<RequestServerPacket>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {

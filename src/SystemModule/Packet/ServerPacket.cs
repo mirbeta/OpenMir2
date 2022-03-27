@@ -6,19 +6,8 @@ namespace SystemModule
     [ProtoContract]
     public class RequestServerPacket : Packets
     {
-        private int _packLen = 0;
-        
         [ProtoMember(1)]
-        public int PacketLen
-        {
-            get
-            {
-                var len = QueryId + Message?.Length + Packet?.Length + CheckKey?.Length;
-                return len > 0 ? len.Value + 15 : 0;
-            }
-            private set => value = _packLen;
-        }
-
+        public int PacketLen { get; private set; }
         [ProtoMember(2)] 
         public int QueryId { get; set; }
         /// <summary>
@@ -36,7 +25,10 @@ namespace SystemModule
         /// </summary>
         [ProtoMember(5)]
         public byte[] CheckKey { get; set; }
-        
+
+        public const int ByteSize = 1 + 4 + 4 + 2 + 2 + 2 + 1;
+
+
         public RequestServerPacket()
         {
 
@@ -44,7 +36,8 @@ namespace SystemModule
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            _packLen = reader.ReadInt32();
+            reader.ReadByte();//#
+            PacketLen = reader.ReadInt32();
             QueryId = reader.ReadInt32();
             var msgLen = reader.ReadUInt16();
             if (msgLen > 0)
@@ -64,10 +57,13 @@ namespace SystemModule
                 CheckKey = reader.ReadBytes(checkLen);
                 CheckKey = EDcode.DecodeBuff(CheckKey);
             }
+            reader.ReadByte();//!
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
+            PacketLen = Message.Length + Packet.Length + CheckKey.Length + ByteSize;
+
             writer.Write((byte) '#');
             writer.Write(PacketLen);
             writer.Write(QueryId);
