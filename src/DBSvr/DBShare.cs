@@ -17,29 +17,15 @@ namespace DBSvr
         public static int nIDServerPort = 5600;
         public static string sIDServerAddr = "127.0.0.1";
         public static bool g_boEnglishNames = false;
-        public static int g_nQueryChrCount = 0;
-        public static int nHackerNewChrCount = 0;
-        public static int nHackerDelChrCount = 0;
-        public static int nHackerSelChrCount = 0;
-        public static int n4ADC1C = 0;
-        public static int n4ADC20 = 0;
-        public static int n4ADC24 = 0;
-        public static int n4ADC28 = 0;
-        public static int n4ADBB8 = 0;
         public static string sServerName = "热血传奇";
-        public static string sConfFileName = "Dbsrc.ini";
         public static string sGateConfFileName = "!ServerInfo.txt";
-        public static string sServerIPConfFileNmae = "!AddrTable.txt";
-        public static string sGateIDConfFileName = "SelectID.txt";
+        private static string sServerIPConfFileNmae = "!AddrTable.txt";
+        private static string sGateIDConfFileName = "SelectID.txt";
         public static string sMapFile = string.Empty;
         public static StringList DenyChrNameList = null;
-        public static Hashtable ServerIPList = null;
-        public static Dictionary<string, short> GateIDList = null;
+        private static Hashtable ServerIPList = null;
+        private static Dictionary<string, short> GateIDList = null;
         public static int dwInterval = 3000;
-        public static int g_nClearRecordCount = 0;
-        public static int g_nClearIndex = 0;
-        public static int g_nClearCount = 0;
-        public static int g_nClearItemIndexCount = 0;
         public static bool g_boDynamicIPMode = false;
         public static StringList g_ClearMakeIndex = null;
         public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
@@ -48,7 +34,7 @@ namespace DBSvr
         /// </summary>
         public static bool boDenyChrName = true;
         public static int nDELMaxLevel = 30;
-        public static string DBConnection = "server=10.10.0.199;uid=root;pwd=123456;database=Mir2;";
+        public static string DBConnection = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
 
         private static void LoadGateID()
         {
@@ -250,7 +236,7 @@ namespace DBSvr
         public long lastSessionTick;
     }
 
-    public class THumInfo
+    public struct HumRecordData
     {
         public int Id;
         public TRecordHeader Header;
@@ -258,14 +244,6 @@ namespace DBSvr
         public string sAccount;
         public bool boDeleted;
         public byte boSelected;
-        public DateTime dModDate;
-        public byte btCount;
-        public byte[] unknown2;
-
-        public THumInfo()
-        {
-            Header = new TRecordHeader();
-        }
     }
 
     public class TGlobaSessionInfo

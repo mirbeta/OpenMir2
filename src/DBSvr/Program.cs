@@ -16,12 +16,12 @@ namespace DBSvr
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory,"dbsvr.conf")));
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "dbsvr.conf")));
                     services.AddSingleton<UserSocService>();
-                    services.AddSingleton<LoginSocService>();
+                    services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<HumDataService>();
-                    services.AddSingleton<MySqlHumRecordDB>();
-                    services.AddSingleton<MySqlHumDB>();
+                    services.AddSingleton<IPlayRecordService, MySqlPlayRecordService>();
+                    services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 });

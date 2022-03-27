@@ -7,16 +7,17 @@ namespace DBSvr
 {
     /// <summary>
     /// 账号中心
+    /// 登陆会话服务
     /// </summary>
-    public class LoginSocService
+    public class LoginSvrService
     {
-        private IList<TGlobaSessionInfo> GlobaSessionList = null;
+        private readonly IClientScoket _socket;
+        private readonly IList<TGlobaSessionInfo> GlobaSessionList = null;
         private string m_sSockMsg = string.Empty;
         private string sIDAddr;
         private int nIDPort = 0;
-        private readonly IClientScoket _socket;
 
-        public LoginSocService(ConfigManager configManager)
+        public LoginSvrService(ConfigManager configManager)
         {
             _socket = new IClientScoket();
             _socket.ReceivedDatagram += IDSocketRead;
@@ -65,7 +66,6 @@ namespace DBSvr
             {
                 GlobaSessionList[i] = null;
             }
-            GlobaSessionList = null;
         }
 
         public void CheckConnection()
@@ -132,11 +132,10 @@ namespace DBSvr
 
         public bool CheckSession(string sAccount, string sIPaddr, int nSessionID)
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             bool result = false;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.sAccount == sAccount) && (GlobaSessionInfo.nSessionID == nSessionID))
@@ -151,12 +150,11 @@ namespace DBSvr
 
         public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionID, ref bool boFoundSession)
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             int result = -1;
             boFoundSession = false;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.sAccount == sAccount) && (GlobaSessionInfo.nSessionID == nSessionID))
@@ -177,10 +175,9 @@ namespace DBSvr
         public bool SetSessionSaveRcd(string sAccount)
         {
             bool result = false;
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.sAccount == sAccount))
@@ -195,10 +192,9 @@ namespace DBSvr
 
         public void SetGlobaSessionNoPlay(int nSessionID)
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.nSessionID == nSessionID))
@@ -212,10 +208,9 @@ namespace DBSvr
 
         public void SetGlobaSessionPlay(int nSessionID)
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.nSessionID == nSessionID))
@@ -230,10 +225,9 @@ namespace DBSvr
         public bool GetGlobaSessionStatus(int nSessionID)
         {
             bool result = false;
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.nSessionID == nSessionID))
@@ -248,10 +242,9 @@ namespace DBSvr
 
         public void CloseSession(string sAccount, int nSessionID)
         {
-            TGlobaSessionInfo GlobaSessionInfo;
             for (var i = 0; i < GlobaSessionList.Count; i++)
             {
-                GlobaSessionInfo = GlobaSessionList[i];
+                var GlobaSessionInfo = GlobaSessionList[i];
                 if (GlobaSessionInfo != null)
                 {
                     if ((GlobaSessionInfo.nSessionID == nSessionID))

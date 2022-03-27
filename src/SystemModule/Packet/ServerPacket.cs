@@ -1,3 +1,4 @@
+using System;
 using ProtoBuf;
 using System.IO;
 
@@ -6,14 +7,21 @@ namespace SystemModule
     [ProtoContract]
     public class RequestServerPacket : Packets
     {
+        private int packlen;
+
         [ProtoMember(1)]
-        public int PacketLen { get; private set; }
-        [ProtoMember(2)] 
+        public int? PacketLen
+        {
+            get => (Message?.Length ?? 0) + (Packet?.Length ?? 0) + (CheckKey?.Length ?? 0) + ByteSize;
+            private set => value = packlen;
+        }
+
+        [ProtoMember(2)]
         public int QueryId { get; set; }
         /// <summary>
         /// 消息头,需要自行解密
         /// </summary>
-        [ProtoMember(3)] 
+        [ProtoMember(3)]
         public byte[] Message { get; set; }
         /// <summary>
         /// 消息封包，需要自行调用解密
@@ -26,8 +34,7 @@ namespace SystemModule
         [ProtoMember(5)]
         public byte[] CheckKey { get; set; }
 
-        public const int ByteSize = 1 + 4 + 4 + 2 + 2 + 2 + 1;
-
+        private const int ByteSize = 1 + 4 + 4 + 2 + 2 + 2 + 1;
 
         public RequestServerPacket()
         {
@@ -51,6 +58,10 @@ namespace SystemModule
                 Packet = reader.ReadBytes(packLen);
                 Packet = Packet;
             }
+            else
+            {
+                Packet= Array.Empty<byte>();
+            }
             var checkLen = reader.ReadUInt16();
             if (checkLen > 0)
             {
@@ -62,10 +73,8 @@ namespace SystemModule
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            PacketLen = Message.Length + Packet.Length + CheckKey.Length + ByteSize;
-
             writer.Write((byte) '#');
-            writer.Write(PacketLen);
+            writer.Write(PacketLen.Value);
             writer.Write(QueryId);
             writer.Write((ushort) Message.Length);
             writer.Write(Message, 0, Message.Length);

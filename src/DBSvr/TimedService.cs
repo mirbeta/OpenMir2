@@ -8,10 +8,10 @@ namespace DBSvr
     public class TimedService : BackgroundService
     {
         private readonly UserSocService _userSoc;
-        private readonly LoginSocService _LoginSoc;
+        private readonly LoginSvrService _LoginSoc;
         private readonly HumDataService _dataService;
 
-        public TimedService(UserSocService userSoc, LoginSocService loginSoc, HumDataService dataService)
+        public TimedService(UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService)
         {
             _userSoc = userSoc;
             _LoginSoc = loginSoc;

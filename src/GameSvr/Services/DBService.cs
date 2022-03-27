@@ -127,12 +127,14 @@ namespace GameSvr
                     DBSocketRecvBuff = tempBuff;
                     DBSocketWorking = true;
                     ProcessData(data);
+                    packetLen = tempBuff.Length;
                 }
                 else if (len == 0)
                 {
                     DBSocketWorking = true;
                     ProcessData(DBSocketRecvBuff);
                     DBSocketRecvBuff = null;
+                    packetLen = 0;
                 }
             }
             finally

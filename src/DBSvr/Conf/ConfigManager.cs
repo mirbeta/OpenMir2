@@ -11,6 +11,7 @@ namespace DBSvr
 
         public void LoadConfig()
         {
+            DBShare.DBConnection = ReadString("DataBase", "ConnctionString", DBShare.DBConnection);
             DBShare.nServerPort = ReadInteger("Setup", "ServerPort", DBShare.nServerPort);
             DBShare.sServerAddr = ReadString("Setup", "ServerAddr", DBShare.sServerAddr);
             DBShare.g_nGatePort = ReadInteger("Setup", "GatePort", DBShare.g_nGatePort);
