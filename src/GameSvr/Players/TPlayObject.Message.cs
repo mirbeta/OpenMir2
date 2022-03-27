@@ -771,6 +771,10 @@ namespace GameSvr
                     {
                         m_boReconnection = true;
                         m_boSoftClose = true;
+                        if (ProcessMsg.wParam == 1)
+                        {
+                            m_boEmergencyClose = true; 
+                        }
                     }
                     break;
                 case Grobal2.CM_CLICKNPC:

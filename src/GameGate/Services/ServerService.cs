@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
@@ -19,6 +20,7 @@ namespace GameGate
         private readonly string _gateAddress;
         private readonly int _gatePort = 0;
         private readonly SendQueue _sendQueue;
+        private readonly ConcurrentQueue<int> _waitCloseList;
 
         public ServerService(int i, GameGateInfo gameGate)
         {
@@ -26,6 +28,7 @@ namespace GameGate
             _clientThread = new ClientThread(i, gameGate);
             _gateAddress = gameGate.sServerAdress;
             _gatePort = gameGate.nGatePort;
+            _waitCloseList = new ConcurrentQueue<int>();
             _serverSocket = new ISocketServer(ushort.MaxValue, 512);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -95,6 +98,18 @@ namespace GameGate
         }
 
         /// <summary>
+        /// 处理等待关闭链接列表
+        /// </summary>
+        public void ProcessCloseList()
+        {
+            while (!_waitCloseList.IsEmpty)
+            {
+                _waitCloseList.TryDequeue(out int socket);
+                _clientThread.UserLeave(socket); //发送消息给M2断开链接
+            }
+        }
+
+        /// <summary>
         /// 新玩家链接
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -142,10 +157,10 @@ namespace GameGate
             var sRemoteAddr = e.RemoteIPaddr;
             var nSockIndex = e.ConnectionId;
             var clientThread = _clientManager.GetClientThread(nSockIndex);
-            if (clientThread != null && clientThread.GateReady)
+            if (clientThread != null && clientThread.GateReady) //todo 这里需要等待100ms才能发送给M2
             {
                 clientThread.SessionArray[nSockIndex] = null;
-                clientThread.UserLeave(e.SocHandle); //发送消息给M2断开链接
+                _waitCloseList.Enqueue(e.SocHandle);
                 _sessionManager.CloseSession(nSockIndex);
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
             }

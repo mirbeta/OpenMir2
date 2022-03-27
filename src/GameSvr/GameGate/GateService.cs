@@ -378,7 +378,7 @@ namespace GameSvr
         public void CloseUser(int nSocket)
         {
             TGateUserInfo GateUser;
-            if (GateInfo.UserList != null)
+            if (GateInfo.UserList.Count>0)
             {
                 HUtil32.EnterCriticalSections(runSocketSection);
                 try
@@ -406,6 +406,10 @@ namespace GameSvr
                                     }
                                 }
                                 if (GateUser.PlayObject != null && GateUser.PlayObject.m_boGhost && !GateUser.PlayObject.m_boReconnection)
+                                {
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
+                                }
+                                if (GateUser.PlayObject != null && GateUser.PlayObject.m_boSoftClose && GateUser.PlayObject.m_boReconnection && GateUser.PlayObject.m_boEmergencyClose)
                                 {
                                     IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
                                 }

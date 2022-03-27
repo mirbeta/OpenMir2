@@ -1312,16 +1312,6 @@ namespace GameGate
                 Buffer.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, len);
             }
             SendDelayMsg(0, 0, 0, tempBuff.Length, tempBuff, 1);
-            /*var gateMessage = new GateMessage();
-            gateMessage.dwCode = Grobal2.RUNGATECODE;
-            gateMessage.nSocket = (int)_session.Socket.Handle;
-            gateMessage.wGSocketIdx = (ushort)_session.SessionId;
-            gateMessage.wIdent = Grobal2.GM_DATA;
-            gateMessage.wUserListIndex = _session.nUserListIndex;
-            gateMessage.nLength = packet.Length;
-            gateMessage.Data = packet;
-            var sendBuff = ProtobuffHelp.Serialize(gateMessage);
-            SendDelayMsg(0, 0, 0, sendBuff.Length, sendBuff, 1);*/
         }
 
         private void SendSysMsg(string szMsg)
