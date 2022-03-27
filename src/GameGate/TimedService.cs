@@ -14,6 +14,7 @@ namespace GameGate
         private ServerManager _serverManager => ServerManager.Instance;
 
         private int _processDelayTick = 0;
+        private int _processDelayCloseTick = 0;
         private int _processClearSessionTick = 0;
         private int _kepAliveTick = 0;
 
@@ -79,11 +80,6 @@ namespace GameGate
                     {
                         continue;
                     }
-                    /*var gateMessage = new GateMessage();
-                    gateMessage.dwCode = Grobal2.RUNGATECODE;
-                    gateMessage.nSocket = 0;
-                    gateMessage.wIdent = Grobal2.GM_CHECKCLIENT;
-                    gateMessage.nLength = 0;*/
                     var cmdPacket = new TSvrCmdPack();
                     cmdPacket.Flag = Grobal2.RUNGATECODE;
                     cmdPacket.SockID = 0;
@@ -108,6 +104,11 @@ namespace GameGate
                     if (_serverList[i] == null)
                     {
                         continue;
+                    }
+                    if (HUtil32.GetTickCount() - _processDelayCloseTick > 2000) //加入网关延时发送关闭消息
+                    {
+                        _processDelayCloseTick = HUtil32.GetTickCount();
+                        _serverList[i].ProcessCloseList();
                     }
                     if (_serverList[i].ClientThread == null)
                     {
