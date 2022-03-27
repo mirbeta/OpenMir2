@@ -321,6 +321,7 @@ namespace DBSvr
                 while (dr.Read())
                 {
                     HumanRCD = new THumDataInfo();
+                    HumanRCD.Data.Initialization();
                     HumanRCD.Data.sAccount = dr.GetString("FLD_LOGINID");
                     HumanRCD.Header.sName = dr.GetString("FLD_CHARNAME");
                     HumanRCD.Header.boDeleted = dr.GetBoolean("FLD_DELETED");

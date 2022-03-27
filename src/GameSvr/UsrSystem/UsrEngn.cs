@@ -2060,6 +2060,7 @@ namespace GameSvr
                 PlayObject = PlayObject,
                 HumanRcd = new THumDataInfo()
             };
+            SaveRcd.HumanRcd.Data.Initialization();
             PlayObject.MakeSaveRcd(ref SaveRcd.HumanRcd);
             M2Share.FrontEngine.AddToSaveRcdList(SaveRcd);
         }

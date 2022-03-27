@@ -258,6 +258,7 @@ namespace DBSvr
                     ChrRecord = new THumDataInfo();
                     ChrRecord.Header = new TRecordHeader();
                     ChrRecord.Data = new THumInfoData();
+                    ChrRecord.Data.Initialization();
                     ChrRecord.Header.sName = sChrName;
                     ChrRecord.Header.sAccount = sAccount;
                     ChrRecord.Data.sCharName = sChrName;

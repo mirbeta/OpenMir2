@@ -136,10 +136,9 @@ namespace DBSvr
                 var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
                 if ((packetLen >= Grobal2.DEFBLOCKSIZE) && nQueryId > 0)
                 {
-                    var wE = nQueryId ^ 170;
-                    var n18 = HUtil32.MakeLong(wE, packetLen);
-                    var checkCode = BitConverter.ToInt32(requestPacket.CheckKey);
-                    if (checkCode == n18)
+                    var queryID = HUtil32.MakeLong(nQueryId ^ 170, packetLen);
+                    var checkKey = BitConverter.ToInt32(requestPacket.CheckKey);
+                    if (checkKey == queryID)
                     {
                         ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
                         bo25 = true;
@@ -340,7 +339,7 @@ namespace DBSvr
             }
         }
 
-        private void SaveHumanRcd(int nQueryId,int nRecog, byte[] sMsg, Socket Socket)
+        private void SaveHumanRcd(int nQueryId, int nRecog, byte[] sMsg, Socket Socket)
         {
             var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
             if (saveHumDataPacket == null)
@@ -373,7 +372,7 @@ namespace DBSvr
                 }
                 finally
                 {
-                   
+
                 }
                 _LoginSoc.SetSessionSaveRcd(sUserID);
             }
