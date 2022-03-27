@@ -3,29 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
-using System.IO;
 using System.Text;
 using SystemModule;
 
 namespace DBSvr
 {
-    public class MySqlHumDB
+    public class MySqlPlayDataService : IPlayDataService
     {
         private Dictionary<string, int> m_MirQuickList = null;
         private TQuickIDList m_MirQuickIDList = null;
-        private Dictionary<int, string> m_QuickIndexNameList = null;
+        private Dictionary<int, int> m_QuickIndexIdList = null;
         private int m_nRecordCount = 0;
 
-        public MySqlHumDB()
+        public MySqlPlayDataService()
         {
             m_MirQuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             m_MirQuickIDList = new TQuickIDList();
             m_nRecordCount = -1;
-            m_QuickIndexNameList = new Dictionary<int, string>();
-            LoadQuickList();
+            m_QuickIndexIdList = new Dictionary<int, int>();
         }
 
-        private void LoadQuickList()
+        public void LoadQuickList()
         {
             bool boDeleted;
             IList<TQuickID> AccountList;
@@ -56,7 +54,7 @@ namespace DBSvr
                     boDeleted = dr.GetBoolean("FLD_DELETED");
                     sAccount = dr.GetString("FLD_LOGINID");
                     sChrName = dr.GetString("FLD_CHARNAME");
-                    if (!boDeleted && (sChrName != ""))
+                    if (!boDeleted && (!string.IsNullOrEmpty(sChrName)))
                     {
                         m_MirQuickList.Add(sChrName, nIndex);
                         AccountList.Add(new TQuickID()
@@ -65,7 +63,7 @@ namespace DBSvr
                             nSelectID = 0
                         });
                         ChrNameList.Add(sChrName);
-                        m_QuickIndexNameList.Add(nIndex, sChrName);
+                        m_QuickIndexIdList.Add(nIndex, nIndex);
                     }
                 }
             }
@@ -92,7 +90,7 @@ namespace DBSvr
             return true;
         }
 
-        public bool Open(ref IDbConnection dbConnection)
+        private bool Open(ref IDbConnection dbConnection)
         {
             bool result = false;
             dbConnection = new MySqlConnection(DBShare.DBConnection);
@@ -118,7 +116,7 @@ namespace DBSvr
             return result;
         }
 
-        public void Close(IDbConnection dbConnection)
+        private void Close(IDbConnection dbConnection)
         {
             if (dbConnection != null)
             {
@@ -172,7 +170,7 @@ namespace DBSvr
             bool result = false;
             if ((nIndex >= 0) && (m_MirQuickList.Count > nIndex))
             {
-                if (UpdateChrRecord(ref QueryChrRcd))
+                if (UpdateChrRecord(nIndex, QueryChrRcd))
                 {
                     result = true;
                 }
@@ -180,7 +178,7 @@ namespace DBSvr
             return result;
         }
 
-        private bool UpdateChrRecord(ref TQueryChr QueryChrRcd)
+        private bool UpdateChrRecord(int playerId, TQueryChr QueryChrRcd)
         {
             bool result = true;
             IDbConnection dbConnection = null;
@@ -190,12 +188,12 @@ namespace DBSvr
                 {
                     return false;
                 }
-                const string sStrSql = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE FLD_CHARNAME=@FLD_CHARNAME";
+                const string sStrSql = "UPDATE TBL_CHARACTER SET FLD_SEX=@FLD_SEX, FLD_JOB=@FLD_JOB WHERE ID=@ID";
                 var command = new MySqlCommand();
                 command.CommandText = sStrSql;
                 command.Parameters.AddWithValue("@FLD_SEX", QueryChrRcd.btSex);
                 command.Parameters.AddWithValue("@FLD_JOB", QueryChrRcd.btJob);
-                command.Parameters.AddWithValue("@FLD_CHARNAME", QueryChrRcd.sName);
+                command.Parameters.AddWithValue("@ID", playerId);
                 command.Connection = (MySqlConnection)dbConnection;
                 try
                 {
@@ -223,7 +221,7 @@ namespace DBSvr
             {
                 if (nIndex >= 0)
                 {
-                    result = false;
+                    return false;
                 }
             }
             else
@@ -233,12 +231,8 @@ namespace DBSvr
                 if (AddRecord(ref nIndex, ref HumanRCD))
                 {
                     m_MirQuickList.Add(sChrName, nIndex);
-                    m_QuickIndexNameList.Add(nIndex, sChrName);
+                    m_QuickIndexIdList.Add(nIndex, nIndex);
                     result = true;
-                }
-                else
-                {
-                    result = false;
                 }
             }
             return result;
@@ -246,76 +240,37 @@ namespace DBSvr
 
         private bool GetRecord(int nIndex, ref THumDataInfo HumanRCD)
         {
-            const string sSQL3 = "SELECT * FROM TBL_QUEST WHERE FLD_CHARNAME='{0}'";
-            bool result = true;
-            string sChrName = string.Empty;
+            int playerId = 0;
             if (HumanRCD == null)
             {
-                sChrName = m_QuickIndexNameList[nIndex];
+                playerId = m_QuickIndexIdList[nIndex];
             }
-            else
+            if (playerId == 0)
             {
-                sChrName = HumanRCD.Header.sName;
+                return false;
             }
-
-            try
-            {
-                GetChrRecord(sChrName, ref HumanRCD);
-                GetAbilGetRecord(sChrName, ref HumanRCD);
-                GetBonusAbilRecord(sChrName, ref HumanRCD);
-                GetMagicRecord(sChrName, ref HumanRCD);
-                GetItemRecord(sChrName, ref HumanRCD);
-                GetStorageRecord(sChrName, ref HumanRCD);
-                GetPlayerStatus(sChrName, ref HumanRCD);
-                //try
-                //{
-                //    command.CommandText = string.Format(sSQL3, sChrName);
-                //}
-                //catch (Exception)
-                //{
-                //    DBShare.MainOutMessage("[Exception] MySqlHumDB.GetRecord (3)");
-                //    return false;
-                //}
-                //dr = command.ExecuteReader();
-                //while (dr.Read())
-                //{
-                //    sTmp = dr.GetString("FLD_QUESTOPENINDEX").AsString.Trim();
-                //    if (sTmp != "")
-                //    {
-                //        EDcode.Decode6BitBuf((sTmp as string), HumanRCD.Data.QuestUnitOpen, sTmp.Length, sizeof(HumanRCD.Data.QuestUnitOpen));
-                //    }
-                //    sTmp = dr.GetString("FLD_QUESTFININDEX").AsString;
-                //    if (sTmp != "")
-                //    {
-                //        EDcode.Decode6BitBuf((sTmp as string), HumanRCD.Data.QuestUnit, sTmp.Length, sizeof(HumanRCD.Data.QuestUnit));
-                //    }
-                //    sTmp = dr.GetString("FLD_QUEST").AsString;
-                //    if (sTmp != "")
-                //    {
-                //        EDcode.Decode6BitBuf((sTmp as string), HumanRCD.Data.QuestFlag, sTmp.Length, sizeof(HumanRCD.Data.QuestFlag));
-                //    }
-                //}
-            }
-            catch (Exception ex)
-            {
-                DBShare.MainOutMessage("GetRecord:" + ex.Message);
-            }
-            return result;
+            GetChrRecord(playerId, ref HumanRCD);
+            GetAbilGetRecord(playerId, ref HumanRCD);
+            GetBonusAbilRecord(playerId, ref HumanRCD);
+            GetMagicRecord(playerId, ref HumanRCD);
+            GetItemRecord(playerId, ref HumanRCD);
+            GetStorageRecord(playerId, ref HumanRCD);
+            GetPlayerStatus(playerId, ref HumanRCD);
+            return true;
         }
 
-        private bool GetChrRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetChrRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
-            const string sSQL1 = "SELECT * FROM TBL_CHARACTER WHERE FLD_CHARNAME='{0}'";
+            const string sSQL1 = "SELECT * FROM TBL_CHARACTER WHERE ID={0}";
             var command = new MySqlCommand();
             try
             {
-                command.CommandText = string.Format(sSQL1, sChrName);
+                command.CommandText = string.Format(sSQL1, playerId);
                 command.Connection = (MySqlConnection)dbConnection;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
@@ -375,7 +330,6 @@ namespace DBSvr
                     HumanRCD.Data.boAllowGroupReCall = dr.GetBoolean("FLD_AllowGroupReCall");
                     HumanRCD.Data.wGroupRcallTime = dr.GetInt16("FLD_GroupRcallTime");
                     HumanRCD.Data.dBodyLuck = dr.GetDouble("FLD_BodyLuck");
-                    result = true;
                 }
                 dr.Close();
                 dr.Dispose();
@@ -384,28 +338,25 @@ namespace DBSvr
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetChrRecord");
                 DBShare.MainOutMessage(ex.StackTrace);
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool GetAbilGetRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetAbilGetRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool reslut = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return reslut;
+                return;
             }
             int dw;
             var command = new MySqlCommand();
             try
             {
-                command.CommandText = $"select * from TBL_CHARACTER_ABLITY where FLD_CharName='{sChrName}'";
+                command.CommandText = $"select * from TBL_CHARACTER_ABLITY where FLD_PLAYERID={playerId}";
                 command.Connection = (MySqlConnection)dbConnection;
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
@@ -428,7 +379,6 @@ namespace DBSvr
                     HumanRCD.Data.Abil.MaxWearWeight = dr.GetUInt16("FLD_MaxWearWeight");
                     HumanRCD.Data.Abil.HandWeight = dr.GetUInt16("FLD_HandWeight");
                     HumanRCD.Data.Abil.MaxHandWeight = dr.GetUInt16("FLD_MaxHandWeight");
-                    reslut = true;
                 }
                 dr.Close();
                 dr.Dispose();
@@ -437,29 +387,26 @@ namespace DBSvr
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetAbilGetRecord");
                 DBShare.MainOutMessage(ex.StackTrace);
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return reslut;
         }
 
-        private bool GetBonusAbilRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetBonusAbilRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool reslut = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return reslut;
+                return;
             }
-            const string sSQL2 = "SELECT * FROM TBL_BONUSABILITY WHERE FLD_CHARNAME='{0}'";
+            const string sSQL = "SELECT * FROM TBL_BONUSABILITY WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
             try
             {
-                command.CommandText = string.Format(sSQL2, sChrName);
+                command.CommandText = string.Format(sSQL, playerId);
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
@@ -477,7 +424,6 @@ namespace DBSvr
                     HumanRCD.Data.BonusAbil.Hit = dr.GetByte("FLD_HIT");
                     HumanRCD.Data.BonusAbil.Speed = dr.GetInt32("FLD_SPEED");
                     HumanRCD.Data.BonusAbil.X2 = dr.GetByte("FLD_RESERVED");
-                    reslut = true;
                 }
                 dr.Close();
                 dr.Dispose();
@@ -485,24 +431,21 @@ namespace DBSvr
             catch (Exception)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetBonusAbilRecord");
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return reslut;
         }
 
-        private bool GetMagicRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetMagicRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool reslut = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return reslut;
+                return;
             }
-            const string sSQL4 = "SELECT * FROM TBL_CHARACTER_MAGIC WHERE FLD_CHARNAME='{0}'";
+            const string sSQL4 = "SELECT * FROM TBL_CHARACTER_MAGIC WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();
             try
             {
@@ -511,52 +454,52 @@ namespace DBSvr
                     HumanRCD.Data.Magic[i] = new TMagicRcd();
                 }
                 command.Connection = (MySqlConnection)dbConnection;
-                command.CommandText = string.Format(sSQL4, sChrName);
+                command.CommandText = string.Format(sSQL4, playerId);
                 using var dr = command.ExecuteReader();
                 var position = 0;
                 while (dr.Read())
                 {
                     HumanRCD.Data.Magic[position].wMagIdx = dr.GetUInt16("FLD_MAGICID");
-                    HumanRCD.Data.Magic[position].btKey = (byte) dr.GetInt32("FLD_USEKEY");
-                    HumanRCD.Data.Magic[position].btLevel = (byte) dr.GetInt32("FLD_LEVEL");
+                    HumanRCD.Data.Magic[position].btKey = (byte)dr.GetInt32("FLD_USEKEY");
+                    HumanRCD.Data.Magic[position].btLevel = (byte)dr.GetInt32("FLD_LEVEL");
                     HumanRCD.Data.Magic[position].nTranPoint = dr.GetInt32("FLD_CURRTRAIN");
                     position++;
                 }
                 dr.Close();
                 dr.Dispose();
-                reslut = true;
             }
             catch (Exception)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetMagicRecord");
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return reslut;
         }
 
-        private bool GetItemRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetItemRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool reslut = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return reslut;
+                return;
             }
-            const string sSQL5 = "SELECT * FROM TBL_ITEM WHERE FLD_CHARNAME='{0}'";
+            const string sSQL5 = "SELECT * FROM TBL_ITEM WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();
             try
             {
                 command.Connection = (MySqlConnection)dbConnection;
-                command.CommandText = string.Format(sSQL5, sChrName);
+                command.CommandText = string.Format(sSQL5, playerId);
                 using var dr = command.ExecuteReader();
                 var i = 0;
                 for (var j = 0; j < HumanRCD.Data.HumItems.Length; j++)
                 {
                     HumanRCD.Data.HumItems[j] = new TUserItem();
+                }
+                for (int j = 0; j < HumanRCD.Data.BagItems.Length; j++)
+                {
+                    HumanRCD.Data.BagItems[j] = new TUserItem();
                 }
                 while (dr.Read())
                 {
@@ -578,7 +521,6 @@ namespace DBSvr
                         {
                             break;
                         }
-                        HumanRCD.Data.BagItems[i] = new TUserItem();
                         HumanRCD.Data.BagItems[i].MakeIndex = dr.GetInt32("FLD_MAKEINDEX");
                         HumanRCD.Data.BagItems[i].wIndex = dr.GetUInt16("FLD_STDINDEX");
                         HumanRCD.Data.BagItems[i].Dura = dr.GetUInt16("FLD_DURA");
@@ -592,37 +534,33 @@ namespace DBSvr
                 }
                 dr.Close();
                 dr.Dispose();
-                reslut = true;
             }
             catch (Exception ex)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetItemRecord:" + ex.StackTrace);
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return reslut;
         }
 
-        private bool GetStorageRecord(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetStorageRecord(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             for (int i = 0; i < HumanRCD.Data.StorageItems.Length; i++)
             {
                 HumanRCD.Data.StorageItems[i] = new TUserItem();
             }
-            const string sSQL6 = "SELECT * FROM TBL_Storages WHERE FLD_CHARNAME='{0}'";
+            const string sSQL6 = "SELECT * FROM TBL_Storages WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();
             try
             {
-                command.CommandText = string.Format(sSQL6, sChrName);
+                command.CommandText = string.Format(sSQL6, playerId);
                 command.Connection = (MySqlConnection)dbConnection;
                 var dr = command.ExecuteReader();
                 var i = 0;
@@ -640,42 +578,38 @@ namespace DBSvr
                 }
                 dr.Close();
                 dr.Dispose();
-                result = true;
             }
             catch (Exception ex)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetStorageRecord");
                 Console.WriteLine(ex.StackTrace);
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool GetPlayerStatus(string sChrName, ref THumDataInfo HumanRCD)
+        private void GetPlayerStatus(int playerId, ref THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
-            const string sSQL7 = "SELECT * FROM TBL_CHARACTER_STATUS WHERE FLD_CharName='{0}'";
+            const string sSQL7 = "SELECT * FROM TBL_CHARACTER_STATUS WHERE FLD_PLAYERID={0}";
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
             try
             {
-                command.CommandText = string.Format(sSQL7, sChrName);
+                command.CommandText = string.Format(sSQL7, playerId);
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     var sTmp = dr.GetString("FLD_STATUS");
                     var i = 0;
                     var str = string.Empty;
-                    while (sTmp != "")
+                    while (!string.IsNullOrEmpty(sTmp))
                     {
                         sTmp = HUtil32.GetValidStr3(sTmp, ref str, new[] { "/" });
                         HumanRCD.Data.wStatusTimeArr[i] = Convert.ToUInt16(str);
@@ -686,20 +620,17 @@ namespace DBSvr
                         }
                     }
                 }
-                result = true;
                 dr.Close();
                 dr.Dispose();
             }
             catch (Exception)
             {
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.GetPlayerStatus");
-                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
         private bool AddRecord(ref int nIndex, ref THumDataInfo HumanRCD)
@@ -709,7 +640,6 @@ namespace DBSvr
 
         private bool InsertRecord(THumInfoData hd, ref int nIndex)
         {
-            bool result = true;
             var strSql = new StringBuilder();
             strSql.AppendLine("INSERT INTO TBL_CHARACTER (FLD_ServerNum, FLD_LoginID, FLD_CharName, FLD_MapName, FLD_CX, FLD_CY, FLD_Level, FLD_Dir, FLD_Hair, FLD_Sex, FLD_Job, FLD_Gold, FLD_GamePoint, FLD_HomeMap,");
             strSql.AppendLine("FLD_HomeX, FLD_HomeY, FLD_PkPoint, FLD_ReLevel, FLD_AttatckMode, FLD_FightZoneDieCount, FLD_BodyLuck, FLD_IncHealth,FLD_IncSpell, FLD_IncHealing, FLD_CreditPoint, FLD_BonusPoint,");
@@ -754,7 +684,7 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_HungerStatus", hd.nHungerStatus);
             command.Parameters.AddWithValue("@FLD_PayMentPoint", hd.nPayMentPoint);
             command.Parameters.AddWithValue("@FLD_LockLogon", hd.boLockLogon);
-            command.Parameters.AddWithValue("@FLD_MarryCount", hd.btMarryCount);
+            command.Parameters.AddWithValue("@FLD_MarryCount", hd.MarryCount);
             command.Parameters.AddWithValue("@FLD_AllowGroupReCall", hd.btAllowGroup);
             command.Parameters.AddWithValue("@FLD_GroupRcallTime", hd.wGroupRcallTime);
             command.Parameters.AddWithValue("@FLD_AllowGuildReCall", hd.boAllowGuildReCall);
@@ -771,13 +701,13 @@ namespace DBSvr
                 nIndex = (int)command.LastInsertedId;
 
                 strSql.Clear();
-                strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_CharId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
+                strSql.AppendLine("INSERT INTO TBL_CHARACTER_ABLITY (FLD_PlayerId, FLD_Level, FLD_Ac, FLD_Mac, FLD_Dc, FLD_Mc, FLD_Sc, FLD_Hp, FLD_Mp, FLD_MaxHP, FLD_MAxMP, FLD_Exp, FLD_MaxExp,");
                 strSql.AppendLine(" FLD_Weight, FLD_MaxWeight, FLD_WearWeight,FLD_MaxWearWeight, FLD_HandWeight, FLD_MaxHandWeight) VALUES ");
-                strSql.AppendLine(" (@FLD_CharId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
+                strSql.AppendLine(" (@FLD_PlayerId, @FLD_Level, @FLD_Ac, @FLD_Mac, @FLD_Dc, @FLD_Mc, @FLD_Sc, @FLD_Hp, @FLD_Mp, @FLD_MaxHP, @FLD_MAxMP, @FLD_Exp, @FLD_MaxExp, @FLD_Weight, @FLD_MaxWeight, @FLD_WearWeight, @FLD_MaxWearWeight, @FLD_HandWeight, @FLD_MaxHandWeight) ");
 
                 command.CommandText = strSql.ToString();
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@FLD_CharId", 1);
+                command.Parameters.AddWithValue("@FLD_PlayerId", nIndex);
                 command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
                 command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
                 command.Parameters.AddWithValue("@FLD_Mac", hd.Abil.MAC);
@@ -800,16 +730,15 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                result = false;
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.InsertRecord (1)");
+                DBShare.MainOutMessage("[Exception] MySqlHumDB.InsertRecord");
                 DBShare.MainOutMessage(ex.StackTrace);
-                return result;
+                return false;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
+            return true;
         }
 
         private bool UpdateRecord(int nIndex, ref THumDataInfo HumanRCD)
@@ -830,16 +759,11 @@ namespace DBSvr
                 result = false;
                 DBShare.MainOutMessage($"保存玩家[{HumanRCD.Header.sName}]数据失败. " + ex.Message);
             }
-            finally
-            {
-               // Close();
-            }
             return result;
         }
 
-        private bool UpdateRecord(int Id, THumDataInfo HumanRCD)
+        private void UpdateRecord(int Id, THumDataInfo HumanRCD)
         {
-            bool result = true;
             var hd = HumanRCD.Data;
             var dwHP = HUtil32.MakeLong(hd.Abil.HP, hd.Abil.AC);
             var dwMP = HUtil32.MakeLong(hd.Abil.MP, hd.Abil.MAC);
@@ -847,13 +771,13 @@ namespace DBSvr
             var command = new MySqlCommand();
             if (!Open(ref dbConnection))
             {
-                return false;
+                return;
             }
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE TBL_CHARACTER SET FLD_ServerNum = @FLD_ServerNum, FLD_LoginID = @FLD_LoginID,FLD_MapName = @FLD_MapName, FLD_CX = @FLD_CX, FLD_CY = @FLD_CY, FLD_Level = @FLD_Level, FLD_Dir = @FLD_Dir, FLD_Hair = @FLD_Hair, FLD_Sex = @FLD_Sex, FLD_Job = FLD_Job, FLD_Gold = @FLD_Gold, ");
             strSql.AppendLine("FLD_GamePoint = @FLD_GamePoint, FLD_HomeMap = @FLD_HomeMap, FLD_HomeX = @FLD_HomeX, FLD_HomeY = @FLD_HomeY, FLD_PkPoint = @FLD_PkPoint, FLD_ReLevel = @FLD_ReLevel, FLD_AttatckMode = @FLD_AttatckMode, FLD_FightZoneDieCount = @FLD_FightZoneDieCount, FLD_BodyLuck = @FLD_BodyLuck, FLD_IncHealth = @FLD_IncHealth, FLD_IncSpell = @FLD_IncSpell,");
             strSql.AppendLine("FLD_IncHealing = @FLD_IncHealing, FLD_CreditPoint = @FLD_CreditPoint, FLD_BonusPoint =@FLD_BonusPoint, FLD_HungerStatus =@FLD_HungerStatus, FLD_PayMentPoint = @FLD_PayMentPoint, FLD_LockLogon = @FLD_LockLogon, FLD_MarryCount = @FLD_MarryCount, FLD_AllowGroupReCall = @FLD_AllowGroupReCall, ");
-            strSql.AppendLine("FLD_GroupRcallTime = @FLD_GroupRcallTime, FLD_AllowGuildReCall = @FLD_AllowGuildReCall, FLD_IsMaster = @FLD_IsMaster, FLD_MasterName = @FLD_MasterName, FLD_DearName = @FLD_DearName, FLD_StoragePwd = @FLD_StoragePwd, FLD_Deleted = @FLD_Deleted,FLD_LASTUPDATE = now() WHERE FLD_CharName = @FLD_CharName;");
+            strSql.AppendLine("FLD_GroupRcallTime = @FLD_GroupRcallTime, FLD_AllowGuildReCall = @FLD_AllowGuildReCall, FLD_IsMaster = @FLD_IsMaster, FLD_MasterName = @FLD_MasterName, FLD_DearName = @FLD_DearName, FLD_StoragePwd = @FLD_StoragePwd, FLD_Deleted = @FLD_Deleted,FLD_LASTUPDATE = now() WHERE ID = @ID;");
             command.CommandText = strSql.ToString();
             command.Connection = (MySqlConnection)dbConnection;
             command.Parameters.Clear();
@@ -885,7 +809,7 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_HungerStatus", hd.nHungerStatus);
             command.Parameters.AddWithValue("@FLD_PayMentPoint", hd.nPayMentPoint);
             command.Parameters.AddWithValue("@FLD_LockLogon", hd.boLockLogon);
-            command.Parameters.AddWithValue("@FLD_MarryCount", hd.btMarryCount);
+            command.Parameters.AddWithValue("@FLD_MarryCount", hd.MarryCount);
             command.Parameters.AddWithValue("@FLD_AllowGroupReCall", hd.btAllowGroup);
             command.Parameters.AddWithValue("@FLD_GroupRcallTime", hd.wGroupRcallTime);
             command.Parameters.AddWithValue("@FLD_AllowGuildReCall", hd.boAllowGuildReCall);
@@ -895,43 +819,37 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_StoragePwd", hd.sStoragePwd);
             command.Parameters.AddWithValue("@FLD_Deleted", 0);
             command.Parameters.AddWithValue("@Id", Id);
-            command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
             try
             {
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord:" + ex.Message);
-                return result;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool UpdateAblity(int Id, THumDataInfo HumanRCD)
+        private void UpdateAblity(int playerId, THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var hd = HumanRCD.Data;
             var strSql = new StringBuilder();
             strSql.AppendLine(" UPDATE TBL_CHARACTER_ABLITY SET FLD_Level = @FLD_Level,");
             strSql.AppendLine("FLD_Ac = @FLD_Ac, FLD_Mac = @FLD_Mac, FLD_Dc = @FLD_Dc, FLD_Mc = @FLD_Mc, FLD_Sc = @FLD_Sc, FLD_Hp = @FLD_Hp, FLD_Mp = @FLD_Mp, FLD_MaxHP = @FLD_MaxHP,");
             strSql.AppendLine("FLD_MAxMP = @FLD_MAxMP, FLD_Exp = @FLD_Exp, FLD_MaxExp = @FLD_MaxExp, FLD_Weight = @FLD_Weight, FLD_MaxWeight = @FLD_MaxWeight, FLD_WearWeight = @FLD_WearWeight,");
-            strSql.AppendLine("FLD_MaxWearWeight = @FLD_MaxWearWeight, FLD_HandWeight = @FLD_HandWeight, FLD_MaxHandWeight = @FLD_MaxHandWeight,FLD_ModifyTime=now() WHERE FLD_CharName = @FLD_CharName;");
+            strSql.AppendLine("FLD_MaxWearWeight = @FLD_MaxWearWeight, FLD_HandWeight = @FLD_HandWeight, FLD_MaxHandWeight = @FLD_MaxHandWeight,FLD_ModifyTime=now() WHERE FLD_PLAYERID = @FLD_PLAYERID;");
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
             command.CommandText = strSql.ToString();
-            command.Parameters.AddWithValue("@FLD_CharId", 1);
-            command.Parameters.AddWithValue("@FLD_CharName", hd.sCharName);
+            command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
             command.Parameters.AddWithValue("@FLD_Level", hd.Abil.Level);
             command.Parameters.AddWithValue("@FLD_Ac", hd.Abil.Level);
             command.Parameters.AddWithValue("@FLD_Mac", hd.Abil.MAC);
@@ -953,39 +871,35 @@ namespace DBSvr
             try
             {
                 command.ExecuteNonQuery();
-                result = true;
             }
             catch
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool UpdateItem(int Id, THumDataInfo HumanRCD)
+        private void UpdateItem(int playerId, THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
-            command.CommandText = $"DELETE FROM TBL_ITEM WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
+            command.CommandText = $"DELETE FROM TBL_ITEM WHERE FLD_PLAYERID={playerId}";
             try
             {
                 THumInfoData hd = HumanRCD.Data;
                 var strSql = new StringBuilder();
-                strSql.AppendLine("INSERT INTO TBL_ITEM(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
+                strSql.AppendLine("INSERT INTO TBL_ITEM(FLD_PLAYERID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
                 strSql.AppendLine("FLD_VALUE0, FLD_VALUE1, FLD_VALUE2, FLD_VALUE3, FLD_VALUE4, FLD_VALUE5, FLD_VALUE6, FLD_VALUE7, FLD_VALUE8, FLD_VALUE9, FLD_VALUE10, FLD_VALUE11, FLD_VALUE12, FLD_VALUE13) ");
                 strSql.AppendLine(" VALUES ");
-                strSql.AppendLine("(@FLD_CHARID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
+                strSql.AppendLine("(@FLD_PLAYERID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
                 strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
 
                 for (var i = 0; i <= hd.BagItems.GetUpperBound(0); i++)
@@ -994,7 +908,7 @@ namespace DBSvr
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
-                        command.Parameters.AddWithValue("@FLD_CHARID", 1);
+                        command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                         command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                         command.Parameters.AddWithValue("@FLD_POSITION", -1);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
@@ -1021,7 +935,6 @@ namespace DBSvr
                         }
                         catch (Exception ex)
                         {
-                            result = false;
                             DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
                             DBShare.MainOutMessage(ex.StackTrace);
                         }
@@ -1034,7 +947,7 @@ namespace DBSvr
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
-                        command.Parameters.AddWithValue("@FLD_CHARID", 1);
+                        command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                         command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
                         command.Parameters.AddWithValue("@FLD_POSITION", i);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.HumItems[i].MakeIndex);
@@ -1061,7 +974,6 @@ namespace DBSvr
                         }
                         catch
                         {
-                            result = false;
                             DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (13)");
                         }
                     }
@@ -1072,38 +984,34 @@ namespace DBSvr
             }
             catch
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
-                return result;
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool SaveItemStorge(int Id, THumDataInfo HumanRCD)
+        private void SaveItemStorge(int playerId, THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
-            command.CommandText = $"DELETE FROM TBL_Storages WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
+            command.CommandText = $"DELETE FROM TBL_Storages WHERE FLD_PLAYERID={playerId}";
             try
             {
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
 
                 var strSql = new StringBuilder();
-                strSql.AppendLine("INSERT INTO TBL_Storages(FLD_CHARID,FLD_CHARNAME, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
+                strSql.AppendLine("INSERT INTO TBL_Storages(FLD_PLAYERID, FLD_POSITION, FLD_MAKEINDEX, FLD_STDINDEX, FLD_DURA, FLD_DURAMAX,");
                 strSql.AppendLine("FLD_VALUE0, FLD_VALUE1, FLD_VALUE2, FLD_VALUE3, FLD_VALUE4, FLD_VALUE5, FLD_VALUE6, FLD_VALUE7, FLD_VALUE8, FLD_VALUE9, FLD_VALUE10, FLD_VALUE11, FLD_VALUE12, FLD_VALUE13) ");
                 strSql.AppendLine(" VALUES ");
-                strSql.AppendLine("(@FLD_CHARID,@FLD_CHARNAME, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
+                strSql.AppendLine("(@FLD_PLAYERID, @FLD_POSITION, @FLD_MAKEINDEX, @FLD_STDINDEX, @FLD_DURA, @FLD_DURAMAX,@FLD_VALUE0, @FLD_VALUE1, @FLD_VALUE2, @FLD_VALUE3, @FLD_VALUE4, @FLD_VALUE5,");
                 strSql.AppendLine("@FLD_VALUE6, @FLD_VALUE7, @FLD_VALUE8, @FLD_VALUE9, @FLD_VALUE10, @FLD_VALUE11, @FLD_VALUE12, @FLD_VALUE13)");
 
                 for (var i = 0; i <= hd.StorageItems.GetUpperBound(0); i++)
@@ -1116,8 +1024,7 @@ namespace DBSvr
                     {
                         command.CommandText = strSql.ToString();
                         command.Parameters.Clear();
-                        command.Parameters.AddWithValue("@FLD_CHARID", 1);
-                        command.Parameters.AddWithValue("@FLD_CHARNAME", hd.sCharName);
+                        command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                         command.Parameters.AddWithValue("@FLD_POSITION", -1);
                         command.Parameters.AddWithValue("@FLD_MAKEINDEX", hd.BagItems[i].MakeIndex);
                         command.Parameters.AddWithValue("@FLD_STDINDEX", hd.BagItems[i].wIndex);
@@ -1143,38 +1050,35 @@ namespace DBSvr
             }
             catch
             {
-                result = false;
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (10)");
+                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord");
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool SavePlayerMagic(int Id, THumDataInfo HumanRCD)
+        private void SavePlayerMagic(int playerId, THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
-            command.CommandText = $"DELETE FROM TBL_CHARACTER_MAGIC WHERE FLD_CHARNAME='{HumanRCD.Header.sName}'";
+            command.CommandText = $"DELETE FROM TBL_CHARACTER_MAGIC WHERE FLD_PLAYERID={playerId}";
             try
             {
                 command.ExecuteNonQuery();
                 var hd = HumanRCD.Data;
-                const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_CHARNAME, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_CHARNAME, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
+                const string sStrSql = "INSERT INTO TBL_CHARACTER_MAGIC(FLD_PLAYERID, FLD_MAGICID, FLD_LEVEL, FLD_USEKEY, FLD_CURRTRAIN) VALUES (@FLD_PLAYERID, @FLD_MAGICID, @FLD_LEVEL, @FLD_USEKEY, @FLD_CURRTRAIN)";
                 for (var i = 0; i < HumanRCD.Data.Magic.GetUpperBound(0); i++)
                 {
                     if (HumanRCD.Data.Magic[i].wMagIdx > 0)
                     {
                         command.Parameters.Clear();
-                        command.Parameters.AddWithValue("@FLD_CHARNAME", HumanRCD.Header.sName);
+                        command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                         command.Parameters.AddWithValue("@FLD_MAGICID", hd.Magic[i].wMagIdx);
                         command.Parameters.AddWithValue("@FLD_LEVEL", hd.Magic[i].btLevel);
                         command.Parameters.AddWithValue("@FLD_USEKEY", hd.Magic[i].btKey);
@@ -1184,9 +1088,8 @@ namespace DBSvr
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.SavePlayerMagic");
                 DBShare.MainOutMessage(ex.StackTrace);
             }
@@ -1194,21 +1097,20 @@ namespace DBSvr
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool UpdateBonusability(int Id, THumDataInfo HumanRCD)
+        private void UpdateBonusability(int playerId, THumDataInfo HumanRCD)
         {
-            bool result = false;
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var bonusAbil = HumanRCD.Data.BonusAbil;
-            const string sSqlStr = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_CHARNAME=@FLD_CHARNAME";
+            const string sSqlStr = "UPDATE TBL_BONUSABILITY SET FLD_AC=@FLD_AC, FLD_MAC=@FLD_MAC, FLD_DC=@FLD_DC, FLD_MC=@FLD_MC, FLD_SC=@FLD_SC, FLD_HP=@FLD_HP, FLD_MP=@FLD_MP, FLD_HIT=@FLD_HIT, FLD_SPEED=@FLD_SPEED, FLD_RESERVED=@FLD_RESERVED WHERE FLD_PLAYERID=@FLD_PLAYERID";
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
+            command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
             command.Parameters.AddWithValue("@FLD_AC", bonusAbil.AC);
             command.Parameters.AddWithValue("@FLD_MAC", bonusAbil.MAC);
             command.Parameters.AddWithValue("@FLD_DC", bonusAbil.DC);
@@ -1219,16 +1121,13 @@ namespace DBSvr
             command.Parameters.AddWithValue("@FLD_HIT", bonusAbil.Hit);
             command.Parameters.AddWithValue("@FLD_SPEED", bonusAbil.Speed);
             command.Parameters.AddWithValue("@FLD_RESERVED", bonusAbil.X2);
-            command.Parameters.AddWithValue("@FLD_CHARNAME", HumanRCD.Header.sName);
             command.CommandText = sSqlStr;
             try
             {
                 command.ExecuteNonQuery();
-                result = true;
             }
             catch (Exception ex)
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateBonusability");
                 DBShare.MainOutMessage(ex.StackTrace);
             }
@@ -1236,18 +1135,16 @@ namespace DBSvr
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool UpdateQuest(int Id, THumDataInfo HumanRCD)
+        private void UpdateQuest(int Id, THumDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_CHARNAME='{0}'";
-            const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_CHARNAME, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(@FLD_CHARNAME, @FLD_QUESTOPENINDEX, @FLD_QUESTFININDEX, @FLD_QUEST)";
-            bool result = false;
+            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE FLD_PLAYERID='{0}'";
+            const string sSqlStr5 = "INSERT INTO TBL_QUEST (FLD_PLAYERID, FLD_QUESTOPENINDEX, FLD_QUESTFININDEX, FLD_QUEST) VALUES(@FLD_PLAYERID, @FLD_QUESTOPENINDEX, @FLD_QUESTFININDEX, @FLD_QUEST)";
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
@@ -1267,42 +1164,37 @@ namespace DBSvr
             }
             catch
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateQuest");
             }
             finally
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
-        private bool UpdateStatus(int id, THumDataInfo HumanRCD)
+        private void UpdateStatus(int playerId, THumDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE FLD_CHARNAME='{0}'";
-            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (FLD_CharId, FLD_CharName, FLD_Status) VALUES(@FLD_CharId, @FLD_CharName, @FLD_Status)";
-            bool result = false;
+            const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE FLD_PlayerId={0}";
+            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (FLD_PlayerId, FLD_CharName, FLD_Status) VALUES(@FLD_PlayerId, @FLD_CharName, @FLD_Status)";
             IDbConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
-                return result;
+                return;
             }
             var command = new MySqlCommand();
             command.Connection = (MySqlConnection)dbConnection;
-            command.CommandText = string.Format(sSqlStr4, HumanRCD.Header.sName);
+            command.CommandText = string.Format(sSqlStr4, playerId);
             try
             {
                 command.ExecuteNonQuery();
                 command.CommandText = sSqlStr5;
-                command.Parameters.AddWithValue("@FLD_CharId", id);
+                command.Parameters.AddWithValue("@FLD_PLAYERID", playerId);
                 command.Parameters.AddWithValue("@FLD_CharName", HumanRCD.Data.sCharName);
                 command.Parameters.AddWithValue("@FLD_Status", string.Join("/", HumanRCD.Data.wStatusTimeArr));
                 command.ExecuteNonQuery();
-                result = true;
             }
             catch (Exception ex)
             {
-                result = false;
                 DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateStatus (INSERT TBL_CHARACTER_STATUS)");
                 DBShare.MainOutMessage(ex.StackTrace);
             }
@@ -1310,7 +1202,6 @@ namespace DBSvr
             {
                 Close(dbConnection);
             }
-            return result;
         }
 
         public int Find(string sChrName, StringDictionary List)
@@ -1329,7 +1220,6 @@ namespace DBSvr
 
         public bool Delete(int nIndex)
         {
-            bool result = false;
             for (var i = 0; i < m_MirQuickList.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
@@ -1343,20 +1233,20 @@ namespace DBSvr
                 //    }
                 //}
             }
-            return result;
+            return false;
         }
 
         private bool DeleteRecord(int nIndex)
         {
             bool result = true;
-            string sChrName = m_QuickIndexNameList[nIndex];
+            int PlayerId = m_QuickIndexIdList[nIndex];
             IDbConnection dbConnection = null;
             var command = new MySqlCommand();
             if (!Open(ref dbConnection))
             {
                 return false;
             }
-            command.CommandText = $"UPDATE TBL_CHARACTER SET FLD_DELETED=1, FLD_CREATEDATE=now() WHERE FLD_CHARNAME='{sChrName}'";
+            command.CommandText = $"UPDATE TBL_CHARACTER SET FLD_DELETED=1, FLD_CREATEDATE=now() WHERE ID={PlayerId}";
             command.Connection = (MySqlConnection)dbConnection;
             try
             {
@@ -1381,7 +1271,6 @@ namespace DBSvr
 
         public bool Delete(string sChrName)
         {
-            bool result = false;
             //int nIndex = m_MirQuickList.GetIndex(sChrName);
             //if (nIndex < 0)
             //{
@@ -1392,22 +1281,22 @@ namespace DBSvr
             //    m_MirQuickList.Remove(nIndex);
             //    result = true;
             //}
-            return result;
+            return false;
         }
 
         public int GetQryChar(int nIndex, ref TQueryChr QueryChrRcd)
         {
             int result = -1;
-            const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE FLD_CHARNAME='{0}'";
+            const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE ID={0}";
             if (nIndex < 0)
             {
                 return result;
             }
-            if (m_QuickIndexNameList.Count <= nIndex)
+            if (m_QuickIndexIdList.Count <= nIndex)
             {
                 return result;
             }
-            string sChrName = m_QuickIndexNameList[nIndex];
+            int PlayerId = m_QuickIndexIdList[nIndex];
             IDbConnection dbConnection = null;
             try
             {
@@ -1418,7 +1307,7 @@ namespace DBSvr
                 var command = new MySqlCommand();
                 try
                 {
-                    command.CommandText = string.Format(sSQL, sChrName);
+                    command.CommandText = string.Format(sSQL, PlayerId);
                     command.Connection = (MySqlConnection)dbConnection;
                     using var dr = command.ExecuteReader();
                     while (dr.Read())
