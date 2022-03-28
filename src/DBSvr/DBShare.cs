@@ -307,9 +307,4 @@ namespace DBSvr
         public ushort wLevel;
         public string sName;
     }
-
-    public class TDBHeader
-    {
-        public int nHumCount;
-    }
 }

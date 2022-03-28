@@ -15,7 +15,7 @@ namespace DBSvr
 
         bool Update(int nIndex, ref THumDataInfo HumanRCD);
 
-        bool UpdateQryChar(int nIndex, ref TQueryChr QueryChrRcd);
+        bool UpdateQryChar(int nIndex, TQueryChr QueryChrRcd);
 
         bool Add(ref THumDataInfo HumanRCD);
 

@@ -8,7 +8,7 @@ namespace DBSvr
     public class AppService : BackgroundService
     {
         private readonly ILogger<AppService> _logger;
-        private readonly UserSocService _userSoc;
+        private readonly UserSocService _userSocService;
         private readonly LoginSvrService _loginSvrService;
         private readonly HumDataService _dataService;
         private readonly ConfigManager _configManager;
@@ -16,7 +16,7 @@ namespace DBSvr
         public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService, ConfigManager configManager)
         {
             _logger = logger;
-            _userSoc = userSoc;
+            _userSocService = userSoc;
             _loginSvrService = idSoc;
             _dataService = dataService;
             _configManager = configManager;
@@ -25,10 +25,10 @@ namespace DBSvr
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
-            _userSoc.Start();
+            _userSocService.Start();
             _loginSvrService.Start();
             _dataService.Start();
-            await _userSoc.StartConsumer();
+            await _userSocService.StartConsumer();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

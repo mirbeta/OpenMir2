@@ -56,12 +56,10 @@ namespace DBSvr
 
         public async Task StartConsumer()
         {
-            var gTasks = new Task[1];
-            var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
-            /*var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
-            gTasks[1] = consumerTask2;*/
-            await Task.WhenAll(gTasks);
+            await Task.Run(async () =>
+            {
+                await ProcessReviceMessage();
+            });
         }
 
         /// <summary>

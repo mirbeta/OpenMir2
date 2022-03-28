@@ -45,7 +45,7 @@ namespace LoginSvr
             }
         }
 
-        public bool Open(ref IDbConnection dbConnection)
+        public bool Open(ref MySqlConnection dbConnection)
         {
             bool result = false;
             if (dbConnection == null)
@@ -73,7 +73,7 @@ namespace LoginSvr
             return result;
         }
 
-        public void Close(ref IDbConnection dbConnection)
+        public void Close(ref MySqlConnection dbConnection)
         {
             if (dbConnection != null)
             {
@@ -89,7 +89,7 @@ namespace LoginSvr
             string sAccount;
             const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
             _quickList.Clear();
-            IDbConnection dbConnection = null;
+            MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return;
@@ -152,7 +152,7 @@ namespace LoginSvr
         {
             const string sSQL = "SELECT * FROM TBL_ACCOUNT WHERE ID={0}";
             var result = true;
-            IDbConnection dbConnection = null;
+            MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return false;
@@ -255,7 +255,7 @@ namespace LoginSvr
             const string sUpdateRecord1 = "INSERT INTO TBL_ACCOUNT (FLD_LOGINID, FLD_PASSWORD, FLD_USERNAME, FLD_CREATEDATE, FLD_LASTUPDATE, FLD_DELETED, FLD_ERRORCOUNT, FLD_ACTIONTICK, FLD_SSNO, FLD_BIRTHDAY, FLD_PHONE, FLD_MOBILEPHONE, FLD_EMAIL, FLD_QUIZ1, FLD_ANSWER1, FLD_QUIZ2, FLD_ANSWER2) VALUES('{0}', '{1}', '{2}', {3}, {4}, 0, 0, 0,'{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');";
             const string sUpdateRecord2 = "UPDATE TBL_ACCOUNT SET FLD_DELETED=1, FLD_CREATEDATE='{0}' WHERE FLD_LOGINID='{1}'";
             const string sUpdateRecord0 = "UPDATE TBL_ACCOUNT SET FLD_PASSWORD='{0}', FLD_USERNAME='{1}',FLD_LASTUPDATE={2}, FLD_ERRORCOUNT={3}, FLD_ACTIONTICK={4},FLD_SSNO='{5}', FLD_BIRTHDAY='{6}', FLD_PHONE='{7}',FLD_MOBILEPHONE='{8}', FLD_EMAIL='{9}', FLD_QUIZ1='{10}', FLD_ANSWER1='{11}', FLD_QUIZ2='{12}',FLD_ANSWER2='{13}' WHERE FLD_LOGINID='{14}'";
-            IDbConnection dbConnection = null;
+            MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return 0;
