@@ -2,7 +2,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using SystemModule;
 
@@ -10,123 +9,116 @@ namespace DBSvr
 {
     public class MySqlPlayRecordService : IPlayRecordService
     {
-        private TDBHeader m_Header = null;
-        private readonly Dictionary<string, int> m_QuickList = null;
-        private readonly Dictionary<int, string> m_IndexQuickList = null;
-        private readonly TQuickIDList m_QuickIDList = null;
+        private int RecordCount = 0;
+        private readonly Dictionary<string, int> QuickList = null;
+        private readonly Dictionary<int, string> IndexQuickList = null;
+        private readonly TQuickIDList QuickIDList = null;
         /// <summary>
         /// 已被删除的记录号
         /// </summary>
-        private readonly IList<int> m_DeletedList = null;
-        private IDbConnection _dbConnection = null;
+        private readonly IList<int> DeletedList = null;
 
         public MySqlPlayRecordService()
         {
-            m_QuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            m_IndexQuickList = new Dictionary<int, string>();
-            m_QuickIDList = new TQuickIDList();
-            m_DeletedList = new List<int>();
-            m_Header = new TDBHeader();
+            QuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            IndexQuickList = new Dictionary<int, string>();
+            QuickIDList = new TQuickIDList();
+            DeletedList = new List<int>();
+            RecordCount = 0;
         }
 
         public void LoadQuickList()
         {
-            m_QuickList.Clear();
-            m_QuickIDList.Clear();
-            m_DeletedList.Clear();
+            QuickList.Clear();
+            QuickIDList.Clear();
+            DeletedList.Clear();
             var nRecordIndex = 1;
             IList<TQuickID> AccountList = new List<TQuickID>();
             IList<string> ChrNameList = new List<string>();
+            bool result = false;
+            MySqlConnection dbConnection = Open(ref result);
+            if (!result)
+            {
+                return;
+            }
             try
             {
-                if (Open())
+                var command = new MySqlCommand();
+                command.Connection = dbConnection;
+                command.CommandText = "select * from TBL_HUMRECORD";
+                using var dr = command.ExecuteReader();
+                while (dr.Read())
                 {
-                    var command = new MySqlCommand();
-                    command.Connection = (MySqlConnection)_dbConnection;
-                    command.CommandText = "select * from TBL_HUMRECORD";
-                    using var dr = command.ExecuteReader();
-                    while (dr.Read())
+                    var DBRecord = new HumRecordData();
+                    DBRecord.Id = dr.GetInt32("Id");
+                    DBRecord.sAccount = dr.GetString("FLD_Account");
+                    DBRecord.sChrName = dr.GetString("FLD_CharName");
+                    DBRecord.boSelected = (byte)dr.GetInt32("FLD_SelectID");
+                    DBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                    DBRecord.Header = new TRecordHeader();
+                    DBRecord.Header.sAccount = DBRecord.sAccount;
+                    DBRecord.Header.sName = DBRecord.sChrName;
+                    DBRecord.Header.boDeleted = DBRecord.boDeleted;
+                    if (!DBRecord.Header.boDeleted)
                     {
-                        var DBRecord = new HumRecordData();
-                        DBRecord.Id = dr.GetInt32("Id");
-                        DBRecord.sAccount = dr.GetString("FLD_Account");
-                        DBRecord.sChrName = dr.GetString("FLD_CharName");
-                        DBRecord.boSelected = (byte)dr.GetInt32("FLD_SelectID");
-                        DBRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
-                        DBRecord.Header = new TRecordHeader();
-                        DBRecord.Header.sAccount = DBRecord.sAccount;
-                        DBRecord.Header.sName = DBRecord.sChrName;
-                        DBRecord.Header.boDeleted = DBRecord.boDeleted;
-                        if (!DBRecord.Header.boDeleted)
+                        QuickList.Add(DBRecord.Header.sName, nRecordIndex);
+                        IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
+                        AccountList.Add(new TQuickID()
                         {
-                            m_QuickList.Add(DBRecord.Header.sName, nRecordIndex);
-                            m_IndexQuickList.Add(nRecordIndex, DBRecord.Header.sName);
-                            AccountList.Add(new TQuickID()
-                            {
-                                nIndex = DBRecord.Id,
-                                sAccount = DBRecord.sAccount,
-                                nSelectID = 0
-                            });
-                            ChrNameList.Add(DBRecord.sChrName);
-                        }
-                        else
-                        {
-                            m_DeletedList.Add(DBRecord.Id);
-                        }
-                        nRecordIndex++;
+                            nIndex = DBRecord.Id,
+                            sAccount = DBRecord.sAccount,
+                            nSelectID = 0
+                        });
+                        ChrNameList.Add(DBRecord.sChrName);
                     }
-                    dr.Close();
-                    dr.Dispose();
+                    else
+                    {
+                        DeletedList.Add(DBRecord.Id);
+                    }
+                    nRecordIndex++;
                 }
+                dr.Close();
+                dr.Dispose();
             }
             finally
             {
-                Close();
+                Close(dbConnection);
             }
             for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
-                m_QuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], AccountList[nIndex].nIndex, AccountList[nIndex].nSelectID);
+                QuickIDList.AddRecord(AccountList[nIndex].sAccount, ChrNameList[nIndex], AccountList[nIndex].nIndex, AccountList[nIndex].nSelectID);
             }
             AccountList = null;
             ChrNameList = null;
-            //m_QuickList.SortString(0, m_QuickList.Count - 1);
         }
 
-        private void Close()
+        private void Close(MySqlConnection dbConnection)
         {
-            if (_dbConnection == null) return;
-            _dbConnection.Close();
-            _dbConnection.Dispose();
+            if (dbConnection == null) return;
+            dbConnection.Close();
+            dbConnection.Dispose();
         }
 
-        private bool Open()
+        private MySqlConnection Open(ref bool succes)
         {
-            bool result = false;
-            _dbConnection ??= new MySqlConnection(DBShare.DBConnection);
-            switch (_dbConnection.State)
+            var dbConnection = new MySqlConnection(DBShare.DBConnection);
+            try
             {
-                case ConnectionState.Open:
-                    return true;
-                case ConnectionState.Closed:
-                    try
-                    {
-                        _dbConnection.Open();
-                        result = true;
-                    }
-                    catch (Exception e)
-                    {
-                        DBShare.MainOutMessage("打开数据库[MySql]失败.");
-                        DBShare.MainOutMessage(e.StackTrace);
-                        result = false;
-                    }
-                    break;
+                dbConnection.Open();
+                succes = true;
             }
-            return result;
+            catch (Exception e)
+            {
+                DBShare.MainOutMessage("打开数据库[MySql]失败.");
+                DBShare.MainOutMessage(e.StackTrace);
+                succes = false;
+            }
+            return dbConnection;
         }
 
         public int Index(string sName)
         {
-            if (m_QuickList.TryGetValue(sName, out int nIndex))
+            if (QuickList.TryGetValue(sName, out int nIndex))
             {
                 return nIndex;
             }
@@ -140,14 +132,15 @@ namespace DBSvr
 
         private HumRecordData GetRecord(int nIndex, ref bool success)
         {
-            if (!Open())
+            MySqlConnection dbConnection = Open(ref success);
+            if (!success)
             {
                 success = false;
                 return default;
             }
             var command = new MySqlCommand();
             command.CommandText = "select * from TBL_HUMRECORD where Id=@Id";
-            command.Connection = (MySqlConnection)_dbConnection;
+            command.Connection = dbConnection;
             command.Parameters.AddWithValue("@Id", nIndex);
             using var dr = command.ExecuteReader();
             if (dr.Read())
@@ -171,7 +164,7 @@ namespace DBSvr
         public int FindByName(string sChrName, ArrayList ChrList)
         {
             int result;
-            for (var i = 0; i < m_QuickList.Count; i++)
+            for (var i = 0; i < QuickList.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_QuickList[i], sChrName, sChrName.Length))
                 //{
@@ -192,13 +185,12 @@ namespace DBSvr
         public int FindByAccount(string sAccount, ref IList<TQuickID> ChrList)
         {
             IList<TQuickID> ChrNameList = null;
-            m_QuickIDList.GetChrList(sAccount, ref ChrNameList);
+            QuickIDList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
                 for (var i = 0; i < ChrNameList.Count; i++)
                 {
-                    var quickId = ChrNameList[i];
-                    ChrList.Add(quickId);
+                    ChrList.Add(ChrNameList[i]);
                 }
             }
             return ChrList.Count;
@@ -206,16 +198,15 @@ namespace DBSvr
 
         public int ChrCountOfAccount(string sAccount)
         {
-            HumRecordData HumDBRecord;
             var result = 0;
             IList<TQuickID> ChrList = null;
-            m_QuickIDList.GetChrList(sAccount, ref ChrList);
+            QuickIDList.GetChrList(sAccount, ref ChrList);
             var success = false;
             if (ChrList != null)
             {
                 for (var i = 0; i < ChrList.Count; i++)
                 {
-                    HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
+                    HumRecordData HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
                     if (success && (!HumDBRecord.boDeleted))
                     {
                         result++;
@@ -228,36 +219,34 @@ namespace DBSvr
         public bool Add(HumRecordData HumRecord)
         {
             bool result = false;
-            if (m_QuickList.ContainsKey(HumRecord.Header.sName))
+            if (QuickList.ContainsKey(HumRecord.Header.sName))
             {
-                if (m_QuickList[HumRecord.Header.sName] > 0)
+                if (QuickList[HumRecord.Header.sName] > 0)
                 {
                     return false;
                 }
             }
             else
             {
-                var oldHeader = m_Header;
                 int nIndex = 0;
-                if (m_DeletedList.Count > 0)
+                if (DeletedList.Count > 0)
                 {
-                    nIndex = m_DeletedList[0];
-                    m_DeletedList.RemoveAt(0);
+                    nIndex = DeletedList[0];
+                    DeletedList.RemoveAt(0);
                 }
                 else
                 {
-                    nIndex = m_Header.nHumCount;
-                    m_Header.nHumCount++;
+                    nIndex = RecordCount;
+                    RecordCount++;
                 }
                 if (UpdateRecord(HumRecord, true, ref nIndex))
                 {
-                    m_QuickList.Add(HumRecord.Header.sName, nIndex);
-                    m_QuickIDList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.nSelectID);
+                    QuickList.Add(HumRecord.Header.sName, nIndex);
+                    QuickIDList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.nSelectID);
                     result = true;
                 }
                 else
                 {
-                    m_Header = oldHeader;
                     result = false;
                 }
             }
@@ -267,19 +256,20 @@ namespace DBSvr
         private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
         {
             bool result = false;
+            MySqlConnection dbConnection = Open(ref result);
+            if (!result)
+            {
+                return false;
+            }
             try
             {
                 if (boNew && (!HumRecord.Header.boDeleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
                 {
-                    if (!Open())
-                    {
-                        return false;
-                    }
                     var strSql = new StringBuilder();
                     strSql.AppendLine("INSERT INTO TBL_HUMRECORD (FLD_Account, FLD_CharName, FLD_SelectID, FLD_IsDeleted, FLD_CreateDate, FLD_ModifyDate) VALUES ");
                     strSql.AppendLine("(@FLD_Account, @FLD_CharName, @FLD_SelectID, @FLD_IsDeleted, now(), now());");
                     var command = new MySqlCommand();
-                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.Connection = dbConnection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
@@ -287,21 +277,17 @@ namespace DBSvr
                     command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
                     command.ExecuteNonQuery();
                     var id = command.LastInsertedId;
-                    nIndex = (int)id;
+                    nIndex = (int) id;
                     result = true;
                 }
                 else
                 {
-                    if (!Open())
-                    {
-                        return false;
-                    }
                     HumRecord.Header.boDeleted = false;
                     var strSql = new StringBuilder();
                     strSql.AppendLine("UPDATE TBL_HUMRECORD SET FLD_Account = @FLD_Account, FLD_CharName = @FLD_CharName, FLD_SelectID = @FLD_SelectID, FLD_IsDeleted = @FLD_IsDeleted, ");
                     strSql.AppendLine(" FLD_ModifyDate = now() WHERE Id = @Id;");
                     var command = new MySqlCommand();
-                    command.Connection = (MySqlConnection)_dbConnection;
+                    command.Connection = dbConnection;
                     command.CommandText = strSql.ToString();
                     command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
@@ -314,8 +300,11 @@ namespace DBSvr
             }
             catch (Exception e)
             {
-                Close();
                 DBShare.MainOutMessage(e.Message);
+            }
+            finally
+            {
+                Close(dbConnection);
             }
             return result;
         }
@@ -324,7 +313,7 @@ namespace DBSvr
         {
             IList<TQuickID> ChrNameList = null;
             var result = false;
-            int n10 = m_QuickList[sName];
+            int n10 = QuickList[sName];
             if (n10 < 0)
             {
                 return result;
@@ -337,10 +326,10 @@ namespace DBSvr
             //}
             if (result)
             {
-                var n14 = m_QuickIDList.GetChrList(HumRecord.sAccount, ref ChrNameList);
+                var n14 = QuickIDList.GetChrList(HumRecord.sAccount, ref ChrNameList);
                 if (n14 >= 0)
                 {
-                    m_QuickIDList.DelRecord(n14, HumRecord.sChrName);
+                    QuickIDList.DelRecord(n14, HumRecord.sChrName);
                 }
             }
             return result;
@@ -348,13 +337,7 @@ namespace DBSvr
 
         private bool DeleteRecord(int nIndex)
         {
-            TRecordHeader HumRcdHeader = null;
-            var result = false;
-            HumRcdHeader.boDeleted = true;
-            HumRcdHeader.dCreateDate = HUtil32.DateTimeToDouble(DateTime.Now);
-            m_DeletedList.Add(nIndex);
-            result = true;
-            return result;
+            throw new NotImplementedException();
         }
 
         public bool Update(int nIndex, ref HumRecordData HumDBRecord)
@@ -362,11 +345,11 @@ namespace DBSvr
             var result = false;
             if (nIndex < 0)
             {
-                return result;
+                return false;
             }
-            if (m_QuickList.Count < nIndex)
+            if (QuickList.Count < nIndex)
             {
-                return result;
+                return false;
             }
             if (UpdateRecord(HumDBRecord, false, ref nIndex))
             {
