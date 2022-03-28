@@ -34,7 +34,7 @@ namespace DBSvr
             m_QuickList.Clear();
             m_QuickIDList.Clear();
             m_DeletedList.Clear();
-            var nRecordIndex = 0;
+            var nRecordIndex = 1;
             IList<TQuickID> AccountList = new List<TQuickID>();
             IList<string> ChrNameList = new List<string>();
             try
@@ -157,6 +157,7 @@ namespace DBSvr
                 HumRecord.sChrName = dr.GetString("FLD_CharName");
                 HumRecord.boSelected = (byte)dr.GetUInt32("FLD_SelectID");
                 HumRecord.boDeleted = dr.GetBoolean("FLD_IsDeleted");
+                HumRecord.Header = new TRecordHeader();
                 HumRecord.Header.sAccount = HumRecord.sAccount;
                 HumRecord.Header.sName = HumRecord.sChrName;
                 HumRecord.Header.nSelectID = HumRecord.boSelected;
@@ -305,7 +306,7 @@ namespace DBSvr
                     command.Parameters.AddWithValue("@FLD_Account", HumRecord.sAccount);
                     command.Parameters.AddWithValue("@FLD_CharName", HumRecord.sChrName);
                     command.Parameters.AddWithValue("@FLD_SelectID", HumRecord.boSelected);
-                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.Header.boDeleted);
+                    command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
                     command.Parameters.AddWithValue("@Id", nIndex);
                     command.ExecuteNonQuery();
                     result = true;
@@ -363,7 +364,7 @@ namespace DBSvr
             {
                 return result;
             }
-            if (m_QuickList.Count <= nIndex)
+            if (m_QuickList.Count < nIndex)
             {
                 return result;
             }

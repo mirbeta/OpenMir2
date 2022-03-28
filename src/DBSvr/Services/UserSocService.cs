@@ -673,13 +673,12 @@ namespace DBSvr
         private void DelChr(string sData, ref TUserInfo UserInfo)
         {
             ClientPacket Msg;
-            HumRecordData HumRecord;
             var sChrName = EDcode.DeCodeString(sData);
             var boCheck = false;
-            int n10 = _playRecordService.Index(sChrName);
-            if (n10 >= 0)
+            var nIndex = _playRecordService.Index(sChrName);
+            if (nIndex >= 0)
             {
-                HumRecord = _playRecordService.Get(n10, ref boCheck);
+                var HumRecord = _playRecordService.Get(nIndex, ref boCheck);
                 if (boCheck)
                 {
                     if (HumRecord.sAccount == UserInfo.sAccount)
@@ -688,7 +687,7 @@ namespace DBSvr
                         if (nLevel < DBShare.nDELMaxLevel)
                         {
                             HumRecord.boDeleted = true;
-                            boCheck = _playRecordService.Update(n10, ref HumRecord);
+                            boCheck = _playRecordService.Update(nIndex, ref HumRecord);
                         }
                     }
                 }
@@ -708,8 +707,6 @@ namespace DBSvr
         /// <summary>
         /// 新建角色
         /// </summary>
-        /// <param name="sData"></param>
-        /// <param name="UserInfo"></param>
         private void NewChr(string sData, ref TUserInfo UserInfo)
         {
             string sAccount = string.Empty;
@@ -773,6 +770,7 @@ namespace DBSvr
                     HumRecord.sChrName = sChrName;
                     HumRecord.sAccount = sAccount;
                     HumRecord.boDeleted = false;
+                    HumRecord.Header = new TRecordHeader();
                     HumRecord.Header.sName = sChrName;
                     HumRecord.Header.nSelectID = UserInfo.nSelGateID;
                     if (!string.IsNullOrEmpty(HumRecord.Header.sName))
