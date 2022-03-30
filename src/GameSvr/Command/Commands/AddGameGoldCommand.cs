@@ -26,7 +26,7 @@ namespace GameSvr.Command
             }
             if (string.IsNullOrEmpty(sHumName) || nPoint <= 0)
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

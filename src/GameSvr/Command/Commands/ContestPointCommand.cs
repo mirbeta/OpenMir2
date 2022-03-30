@@ -20,7 +20,7 @@ namespace GameSvr
             if (sGuildName == "" || sGuildName != "" && sGuildName[0] == '?')
             {
                 PlayObject.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = M2Share.GuildManager.FindGuild(sGuildName);

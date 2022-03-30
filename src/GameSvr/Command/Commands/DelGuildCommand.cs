@@ -24,7 +24,7 @@ namespace GameSvr
             }
             if (sGuildName == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.GuildManager.DelGuild(sGuildName))

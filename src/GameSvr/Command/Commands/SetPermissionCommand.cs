@@ -22,7 +22,7 @@ namespace GameSvr
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

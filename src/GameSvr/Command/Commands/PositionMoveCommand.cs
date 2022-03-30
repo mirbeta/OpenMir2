@@ -25,10 +25,10 @@ namespace GameSvr
                 Envirnoment Envir = null;
                 if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
                 {
-                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (PlayObject.m_btPermission >= this.Command.nPermissionMin || M2Share.CanMoveMap(sMapName))
+                if (PlayObject.m_btPermission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
                 {
                     Envir = M2Share.g_MapManager.FindMap(sMapName);
                     if (Envir != null)

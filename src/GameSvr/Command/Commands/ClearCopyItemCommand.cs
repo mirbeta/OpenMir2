@@ -23,7 +23,7 @@ namespace GameSvr
             string s14;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             TargerObject = M2Share.UserEngine.GetPlayObject(sHumanName);

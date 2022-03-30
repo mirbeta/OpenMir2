@@ -20,7 +20,7 @@ namespace GameSvr
             var sCASTLENAME = @Params.Length > 0 ? @Params[0] : "";
             if (sCASTLENAME == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Castle = M2Share.CastleManager.Find(sCASTLENAME);

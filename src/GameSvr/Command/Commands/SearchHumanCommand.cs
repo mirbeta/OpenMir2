@@ -22,7 +22,7 @@ namespace GameSvr
             {
                 if (string.IsNullOrEmpty(sHumanName))
                 {
-                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (HUtil32.GetTickCount() - PlayObject.m_dwProbeTick > 10000 || PlayObject.m_btPermission >= 3)

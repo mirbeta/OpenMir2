@@ -24,7 +24,7 @@ namespace GameSvr
             TBaseObject BaseObject;
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boKillAll = false;

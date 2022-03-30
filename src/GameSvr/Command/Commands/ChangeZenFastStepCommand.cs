@@ -21,7 +21,7 @@ namespace GameSvr
             if (sFastStep == "" || nFastStep < 1 || sFastStep != "")
             {
                 PlayObject.SysMsg("设置怪物行动速度。", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.g_Config.nZenFastStep = nFastStep;

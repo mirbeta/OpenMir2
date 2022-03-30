@@ -21,7 +21,7 @@ namespace GameSvr
             var boFlag = @Params.Length > 2 ? bool.Parse(@Params[2]) : false;
             if (sCASTLENAME == "" || sGuildName == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Castle = M2Share.CastleManager.Find(sCASTLENAME);

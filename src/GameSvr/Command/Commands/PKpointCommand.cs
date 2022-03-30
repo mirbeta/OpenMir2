@@ -19,7 +19,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (!string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

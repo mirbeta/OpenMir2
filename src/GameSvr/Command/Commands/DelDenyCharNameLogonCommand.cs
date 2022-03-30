@@ -16,7 +16,7 @@ namespace GameSvr
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
             if (sCharName == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;

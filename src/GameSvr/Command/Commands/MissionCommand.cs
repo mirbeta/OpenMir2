@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 设置怪物集中目标
     /// </summary>
-    [GameCommand("Mission", "设置怪物集中目标", 10)]
+    [GameCommand("Mission", "设置怪物集中目标"," X Y", 10)]
     public class MissionCommand : BaseCommond
     {
         [DefaultCommand]
@@ -22,7 +22,7 @@ namespace GameSvr
             short nY;
             if (sX == "" || sY == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " X  Y", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nX = (short)HUtil32.Str_ToInt(sX, 0);

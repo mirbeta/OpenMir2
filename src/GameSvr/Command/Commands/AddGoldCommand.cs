@@ -1,5 +1,4 @@
 ﻿using GameSvr.CommandSystem;
-using System;
 using SystemModule;
 
 namespace GameSvr
@@ -27,7 +26,7 @@ namespace GameSvr
             }
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

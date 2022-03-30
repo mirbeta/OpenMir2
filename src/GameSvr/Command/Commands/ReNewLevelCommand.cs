@@ -20,7 +20,7 @@ namespace GameSvr
             var sLevel = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nLevel = HUtil32.Str_ToInt(sLevel, -1);

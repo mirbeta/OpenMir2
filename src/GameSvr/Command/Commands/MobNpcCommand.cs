@@ -22,14 +22,14 @@ namespace GameSvr
             var sParam4 = @Params.Length > 3 ? @Params[3] : "";
             if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nAppr = HUtil32.Str_ToInt(sParam3, 0);
             var boIsCastle = HUtil32.Str_ToInt(sParam4, 0) == 1;
             if (sParam1 == "")
             {
-                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " NPC名称 脚本文件名 外形(数字) 属沙城(0,1)", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             short nX = 0;

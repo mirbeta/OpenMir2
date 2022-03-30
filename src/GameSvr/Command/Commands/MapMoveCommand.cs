@@ -19,7 +19,7 @@ namespace GameSvr
             var sMapName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Envir = M2Share.g_MapManager.FindMap(sMapName);
@@ -28,7 +28,7 @@ namespace GameSvr
                 PlayObject.SysMsg(string.Format(M2Share.g_sTheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_btPermission >= this.Command.nPermissionMin || M2Share.CanMoveMap(sMapName))
+            if (PlayObject.m_btPermission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
             {
                 PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 PlayObject.MapRandomMove(sMapName, 0);
