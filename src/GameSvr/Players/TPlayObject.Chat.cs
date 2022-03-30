@@ -189,14 +189,11 @@ namespace GameSvr
                                         M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_sCharName + "/:" + sC);
                                         return;
                                     }
-                                    if (sData[1] == '~') //发送行会消息
+                                    if (sData[1] == '~' && m_MyGuild != null) //发送行会消息
                                     {
-                                        if (m_MyGuild != null)
-                                        {
-                                            sC = sData.Substring(2, sData.Length - 2);
-                                            m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
-                                            M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
-                                        }
+                                        sC = sData.Substring(2, sData.Length - 2);
+                                        m_MyGuild.SendGuildMsg(m_sCharName + ": " + sC);
+                                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.nServerIndex, m_MyGuild.sGuildName + '/' + m_sCharName + '/' + sC);
                                         return;
                                     }
                                 }
@@ -451,7 +448,7 @@ namespace GameSvr
                         m_boPasswordLocked = true;
                         return;
                     }
-                    if (m_sStoragePwd != "")
+                    if (!string.IsNullOrEmpty(m_sStoragePwd))
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         m_boCheckOldPwd = true;

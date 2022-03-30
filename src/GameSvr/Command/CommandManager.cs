@@ -5,7 +5,7 @@ namespace GameSvr.CommandSystem
 {
     public class CommandManager
     {
-        private static readonly Dictionary<string, BaseCommond> CommandGroups = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, BaseCommond> CommandMaps = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 自定义游戏命令列表
         /// </summary>
@@ -36,7 +36,7 @@ namespace GameSvr.CommandSystem
                 if (attributes.Length == 0) continue;
 
                 var groupAttribute = attributes[0];
-                if (CommandGroups.ContainsKey(groupAttribute.Name))
+                if (CommandMaps.ContainsKey(groupAttribute.Name))
                 {
                     M2Share.ErrorMessage($"重复游戏命令: {groupAttribute.Name}");
                 }
@@ -67,7 +67,7 @@ namespace GameSvr.CommandSystem
                     return;
                 }
                 commandGroup.Register(groupAttribute, methodInfo);
-                CommandGroups.Add(groupAttribute.Name, commandGroup);
+                CommandMaps.Add(groupAttribute.Name, commandGroup);
             }
         }
 
@@ -83,7 +83,7 @@ namespace GameSvr.CommandSystem
         /// <param name="sCmd"></param>
         public void UpdataRegisterCommandGroups(GameCommandAttribute OldCmd, string sCmd)
         {
-            if (CommandGroups.ContainsKey(OldCmd.Command))
+            if (CommandMaps.ContainsKey(OldCmd.Command))
             {
                 //foreach (var pair in CommandGroups)
                 //{
@@ -116,8 +116,8 @@ namespace GameSvr.CommandSystem
             if (!ExtractCommandAndParameters(line, out command, out parameters))
                 return found;
 
-            BaseCommond commond = null;
-            if (CommandGroups.TryGetValue(command, out commond))
+            BaseCommond commond;
+            if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters, playObject);
                 found = true;
@@ -147,7 +147,7 @@ namespace GameSvr.CommandSystem
                 return;
 
             BaseCommond commond = null;
-            if (CommandGroups.TryGetValue(command, out commond))
+            if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters);
                 found = true;
@@ -191,12 +191,12 @@ namespace GameSvr.CommandSystem
             public override string Fallback(string[] parameters = null, TPlayObject PlayObject = null)
             {
                 var output = "Available commands: ";
-                //foreach (var pair in CommandGroups)
-                //{
-                //    if (PlayObject != null && pair.Key.nPermissionMin > PlayObject.m_btPermission) continue;
-                //    output += pair.Key.Name + ", ";
-                //}
-
+                var commandList = CommandMaps.Values.ToList();
+                foreach (var pair in commandList)
+                {
+                    if (PlayObject != null && pair.GameCommand.nPermissionMin > PlayObject.m_btPermission) continue;
+                    output += pair.GameCommand.Name + ", ";
+                }
                 output = output.Substring(0, output.Length - 2) + ".";
                 return output + "\nType 'help <command>' to get help.";
             }
