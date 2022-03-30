@@ -28,6 +28,7 @@ namespace GameSvr
                     services.AddSingleton<GameApp>();
                     services.AddSingleton<MirLog>();
                     services.AddHostedService<AppService>();
+                    services.AddHostedService<TimedService>();
                 });
 
             System.Console.CancelKeyPress += (sender, e) =>
