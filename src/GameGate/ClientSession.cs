@@ -28,7 +28,7 @@ namespace GameGate
         private TCheckStep m_Stat;
         private long m_FinishTick = 0;
 
-        public ClientSession(TSessionInfo session, ClientThread clientThread,SendQueue sendQueue)
+        public ClientSession(TSessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
             _session = session;
             lastGameSvr = clientThread;
@@ -47,10 +47,7 @@ namespace GameGate
             return _gameSpeed;
         }
 
-        public TSessionInfo Session
-        {
-            get { return _session; }
-        }
+        public TSessionInfo Session => _session;
 
         private LogQueue _logQueue => LogQueue.Instance;
 
@@ -71,7 +68,7 @@ namespace GameGate
                 m_KickFlag = false;
                 return;
             }
-            if ((message.BufferLen >= 5) && Config.IsDefenceCCPacket)
+            if (Config.IsDefenceCCPacket && (message.BufferLen >= 5))
             {
                 sMsg = HUtil32.GetString(message.Buffer, 2, message.BufferLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
@@ -708,30 +705,6 @@ namespace GameGate
                             Buffer.BlockCopy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
                         }
                         Buffer.BlockCopy(cmdPack.GetPacket(), 0, BodyBuffer, 0, TSvrCmdPack.PackSize);//复制消息头
-        
-                        /*var dataLen = 0;
-                        if (nDeCodeLen > TCmdPack.PackSize) //下面的方法只需要发送游戏包即可，不需要消息头，消息头已经被定义
-                        {
-                            var sendBuffer = new byte[message.Buffer.Length - TCmdPack.PackSize + 1];
-                            var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - TCmdPack.PackSize, sendBuffer);
-                            dataLen = TCmdPack.PackSize + tLen + 1;
-                            BodyBuffer = new byte[TSvrCmdPack.PackSize + dataLen];
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, TCmdPack.PackSize);
-                            Buffer.BlockCopy(tempBuff, 16, BodyBuffer, 32, tLen); //消息体
-                        }
-                        else
-                        {
-                            BodyBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
-                            dataLen = TCmdPack.PackSize;
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
-                        }
-                        var protoBuff = new GateMessage();
-                        protoBuff.dwCode = Grobal2.RUNGATECODE;
-                        protoBuff.nSocket = _session.SckHandle;
-                        protoBuff.wIdent = Grobal2.GM_DATA;
-                        protoBuff.wUserListIndex = m_nSvrListIdx;
-                        protoBuff.nLength = dataLen;
-                        protoBuff.Data = BodyBuffer;*/
                         lastGameSvr.SendBuffer(BodyBuffer);
                         break;
                     }
@@ -987,10 +960,6 @@ namespace GameGate
                 case Grobal2.SM_NEWMAP:
                 case Grobal2.SM_CHANGEMAP:
                 case Grobal2.SM_LOGON:
-                    if (_handleLogin != 3)
-                    {
-                        _handleLogin = 3;
-                    }
                     if (m_nSvrObject == 0)
                     {
                         m_nSvrObject = cmd.UID;
@@ -1005,7 +974,7 @@ namespace GameGate
                         _gameSpeed.DefItemSpeed = cmd.Direct;
                         _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, cmd.Direct);
                         m_nChrStutas = HUtil32.MakeLong(cmd.X, cmd.Y);
-                        message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
+                        //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
                     }
                     break;
                 case Grobal2.SM_HWID:
@@ -1288,19 +1257,19 @@ namespace GameGate
             byte[] tempBuff;
             if (len == 0)
             {
-                tempBuff = new byte[MessageHeader.PacketSize + packet.Length];
+                tempBuff = new byte[PacketHeader.PacketSize + packet.Length];
             }
             else
             {
-                tempBuff = new byte[MessageHeader.PacketSize + len];
+                tempBuff = new byte[PacketHeader.PacketSize + len];
             }
-            var GateMsg = new MessageHeader();
+            var GateMsg = new PacketHeader();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = (int)_session.Socket.Handle;
             GateMsg.SocketIdx = (ushort)_session.SessionId;
-            GateMsg.wIdent = Grobal2.GM_DATA;
-            GateMsg.wUserListIndex = _session.nUserListIndex;
-            GateMsg.nLength = tempBuff.Length - MessageHeader.PacketSize;//只需要发送数据封包大小即可
+            GateMsg.Ident = Grobal2.GM_DATA;
+            GateMsg.UserIndex = _session.nUserListIndex;
+            GateMsg.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetPacket();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)

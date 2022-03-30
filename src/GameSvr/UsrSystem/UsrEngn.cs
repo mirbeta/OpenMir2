@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using SystemModule;
+using ThreadState = System.Threading.ThreadState;
 
 namespace GameSvr
 {
@@ -942,6 +944,10 @@ namespace GameSvr
                     {
                         MonGen = m_MonGenList[m_nCurrMonGen];
                     }
+                    else if(m_MonGenList.Count>0)
+                    {
+                        MonGen = m_MonGenList[0];
+                    }
                     if (m_nCurrMonGen < m_MonGenList.Count - 1)
                     {
                         m_nCurrMonGen++;
@@ -957,7 +963,7 @@ namespace GameSvr
                         {
                             var nGenCount = MonGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var nGenModCount = (int)Math.Round((decimal)(MonGen.nCount / M2Share.g_Config.nMonGenRate * 10));// MonGen.nCount;
+                            var nGenModCount = (MonGen.nCount / M2Share.g_Config.nMonGenRate) * 10;
                             var map = M2Share.g_MapManager.FindMap(MonGen.sMapName);
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 boCanCreate = false;
@@ -978,20 +984,19 @@ namespace GameSvr
                 var dwMonProcTick = HUtil32.GetTickCount();
 
                 nMonsterProcessCount = 0;
-                var currentMongen = 0;
-                var monGenTotal = m_MonGenList.Count;
-                for (currentMongen = m_nMonGenListPosition; currentMongen < monGenTotal; currentMongen++)
+                var i = 0;
+                for (i = m_nMonGenListPosition; i < m_MonGenList.Count; i++)
                 {
-                    MonGen = m_MonGenList[currentMongen];
+                    MonGen = m_MonGenList[i];
                     int nProcessPosition;
-                    if (m_nMonGenCertListPosition < MonGen.CertCount)
+                    if (m_nMonGenCertListPosition < MonGen.CertList.Count)
                         nProcessPosition = m_nMonGenCertListPosition;
                     else
                         nProcessPosition = 0;
                     m_nMonGenCertListPosition = 0;
                     while (true)
                     {
-                        if (nProcessPosition >= MonGen.CertCount)
+                        if (nProcessPosition >= MonGen.CertList.Count)
                         {
                             break;
                         }
@@ -1015,7 +1020,7 @@ namespace GameSvr
                                     }
                                     if (!Monster.m_boIsVisibleActive && (Monster.m_nProcessRunCount < M2Share.g_Config.nProcessMonsterInterval))
                                     {
-                                        nMonsterProcessCount++;
+                                        Monster.m_nProcessRunCount++;
                                     }
                                     else
                                     {
@@ -1058,7 +1063,7 @@ namespace GameSvr
                     }
                     if (boProcessLimit) break;
                 }
-                if (monGenTotal <= currentMongen)
+                if (m_MonGenList.Count <= i)
                 {
                     m_nMonGenListPosition = 0;
                     nMonsterCount = nMonsterProcessPostion;
@@ -1067,7 +1072,7 @@ namespace GameSvr
                 if (!boProcessLimit)
                     m_nMonGenListPosition = 0;
                 else
-                    m_nMonGenListPosition = currentMongen;
+                    m_nMonGenListPosition = i;
             }
             catch (Exception e)
             {
@@ -2652,24 +2657,32 @@ namespace GameSvr
 
         private void PrcocessData()
         {
-            while (M2Share.boStartReady)
+            try
             {
-                ProcessHumans();
-                ProcessMonsters();
-                ProcessMerchants();
-                ProcessNpcs();
-                if ((HUtil32.GetTickCount() - dwProcessMissionsTime) > 1000)
+                while (M2Share.boStartReady)
                 {
-                    dwProcessMissionsTime = HUtil32.GetTickCount();
-                    ProcessMissions();
-                    ProcessEvents();
+                    ProcessHumans();
+                    ProcessMonsters();
+                    ProcessMerchants();
+                    ProcessNpcs();
+                    if ((HUtil32.GetTickCount() - dwProcessMissionsTime) > 1000)
+                    {
+                        dwProcessMissionsTime = HUtil32.GetTickCount();
+                        ProcessMissions();
+                        ProcessEvents();
+                    }
+                    if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)
+                    {
+                        dwProcessMapDoorTick = HUtil32.GetTickCount();
+                        ProcessMapDoor();
+                    }
+                    Thread.Sleep(20);
                 }
-                if ((HUtil32.GetTickCount() - dwProcessMapDoorTick) > 500)
-                {
-                    dwProcessMapDoorTick = HUtil32.GetTickCount();
-                    ProcessMapDoor();
-                }
-                Thread.Sleep(20);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -55,7 +56,9 @@ namespace GameSvr
                 {
                     if (_sendSocket.Connected)
                     {
-                        _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                        var sendLen = _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                        
+                        Debug.WriteLine(sendLen);
                     }
                 }
             }

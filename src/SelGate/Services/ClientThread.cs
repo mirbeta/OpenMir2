@@ -215,13 +215,13 @@ namespace SelGate.Services
         private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
             byte[] Data)
         {
-            var GateMsg = new MessageHeader();
+            var GateMsg = new PacketHeader();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = nSocket;
             GateMsg.SocketIdx = (ushort) wSocketIndex;
-            GateMsg.wIdent = nIdent;
-            GateMsg.wUserListIndex = nUserListIndex;
-            GateMsg.nLength = nLen;
+            GateMsg.Ident = nIdent;
+            GateMsg.UserIndex = nUserListIndex;
+            GateMsg.PackLength = nLen;
             var sendBuffer = GateMsg.GetPacket();
             if (Data is {Length: > 0})
             {

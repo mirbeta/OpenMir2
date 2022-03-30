@@ -109,7 +109,8 @@ namespace GameSvr
         /// 可视范围大小
         /// </summary>
         public int m_nViewRange = 0;
-        public ushort[] m_wStatusTimeArr;
+
+        public ushort[] m_wStatusTimeArr = new ushort[12];
         public int[] m_dwStatusArrTick = new int[12];
         public ushort[] m_wStatusArrValue = null;
         public int[] m_dwStatusArrTimeOutTick = null;
@@ -289,6 +290,9 @@ namespace GameSvr
         public int m_dwDeathTick = 0;
         public bool m_boInvisible = false;
         public bool m_boCanReAlive = false;
+        /// <summary>
+        /// 复活时间
+        /// </summary>
         public int m_dwReAliveTick = 0;
         public MonGenInfo m_pMonGen = null;
 
@@ -5589,8 +5593,6 @@ namespace GameSvr
                     m_boStickMode = true;
                     break;
             }
-
-            m_wStatusTimeArr = new ushort[8];
             m_UseItems = new TUserItem[8];
             for (int i = 0; i < m_ItemList.Count; i++)
             {

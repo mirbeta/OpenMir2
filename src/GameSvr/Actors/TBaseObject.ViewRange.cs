@@ -295,18 +295,20 @@ namespace GameSvr
             }
 
             var n17 = 0;
-            while (true)
+            if (m_VisibleActors.Count > 0)
             {
-                if (m_VisibleActors.Count < n17)
+                while (true)
                 {
-                    var VisibleBaseObject = m_VisibleActors[n17];
-                    if (VisibleBaseObject.nVisibleFlag == 0)
+                    if (m_VisibleActors.Count < n17)
                     {
-                        m_VisibleActors.RemoveAt(n17);
-                        VisibleBaseObject = null;
-                        continue;
+                        if (m_VisibleActors[n17].nVisibleFlag == 0)
+                        {
+                            m_VisibleActors.RemoveAt(n17);
+                            m_VisibleActors[n17] = null;
+                            continue;
+                        }
+                        n17++;
                     }
-                    n17++;
                 }
             }
         }

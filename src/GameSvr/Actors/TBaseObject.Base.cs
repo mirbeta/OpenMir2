@@ -228,7 +228,7 @@ namespace GameSvr
             // 血气石处理开始
             try
             {
-                if (m_UseItems[Grobal2.U_CHARM] != null)
+                if ( m_UseItems.Length>=Grobal2.U_CHARM && m_UseItems[Grobal2.U_CHARM]!=null)
                 {
                     if (!m_boDeath && new ArrayList(new byte[] { Grobal2.RC_PLAYOBJECT, Grobal2.RC_PLAYCLONE }).Contains(m_btRaceServer))
                     {
@@ -326,7 +326,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 M2Share.ErrorMessage(sExceptionMsg7);
             }

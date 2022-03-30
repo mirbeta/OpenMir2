@@ -10,10 +10,7 @@ namespace GameGate
     {
         private static readonly ServerManager instance = new ServerManager();
 
-        public static ServerManager Instance
-        {
-            get { return instance; }
-        }
+        public static ServerManager Instance => instance;
 
         private readonly IList<ServerService> _serverServices;
 

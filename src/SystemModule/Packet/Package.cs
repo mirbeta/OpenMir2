@@ -97,35 +97,30 @@ namespace SystemModule
 
         public byte[] GetPacket()
         {
-            byte[] data;
-            using (MemoryStream stream = new MemoryStream())
-            {
-                using (BinaryWriter writer = new BinaryWriter(stream))
-                {
-                    WritePacket(writer);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    data = new byte[stream.Length];
-                    stream.Read(data, 0, data.Length);
-                }
-            }
+            using MemoryStream stream = new MemoryStream();
+            using BinaryWriter writer = new BinaryWriter(stream);
+            WritePacket(writer);
+            stream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[stream.Length];
+            stream.Read(data, 0, data.Length);
             return data;
         }
 
         public static T ToPacket<T>(byte[] rawBytes) where T : Packets, new()
         {
-            Packets p = Activator.CreateInstance<T>();
+            Packets packet = Activator.CreateInstance<T>();
             using var stream = new MemoryStream(rawBytes, 0, rawBytes.Length);
             using var reader = new BinaryReader(stream);
             try
             {
-                if (p == null) return null;
-                p.ReadPacket(reader);
+                if (packet == null) return null;
+                packet.ReadPacket(reader);
             }
             catch
             {
                 return null;
             }
-            return (T)p;
+            return (T)packet;
         }
 
         protected abstract void ReadPacket(BinaryReader reader);
