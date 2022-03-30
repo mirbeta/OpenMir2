@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Packages;
 using SystemModule.Sockets;
 
@@ -204,7 +201,7 @@ namespace GameGate
                         }
                         if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
                         {
-                            var nCheckMsgLen =(Math.Abs(packetHeader.PackLength) + HeaderMessageSize);
+                            var nCheckMsgLen = (Math.Abs(packetHeader.PackLength) + HeaderMessageSize);
                             if (nCheckMsgLen > nLen)
                             {
                                 break;

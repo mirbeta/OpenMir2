@@ -22,7 +22,7 @@ namespace SystemModule.Sockets
         public AsyncUserToken()
             : this(null)
         {
-            
+
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 using LoginGate.Conf;
 using System;
-using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packages;
 using SystemModule.Sockets;
@@ -262,7 +261,7 @@ namespace LoginGate
             }
         }
     }
-    
+
     public enum SockThreadStutas : byte
     {
         Connecting = 0,

@@ -236,7 +236,7 @@ namespace GameSvr
                     Gate.boUsed = false;
                     Gate.Socket = null;
                     M2Share.ErrorMessage(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
-                    if(_gateDataService.Remove(e.ConnectionId, out var gateService))
+                    if (_gateDataService.Remove(e.ConnectionId, out var gateService))
                     {
                         gateService.Stop();
                     }

@@ -38,9 +38,9 @@ namespace SelGate.Services
                     {
                         return;
                     }
-                    if (message.Body[0] == (byte) '+') //收到DB服务器发过来的关闭会话请求
+                    if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
                     {
-                        if (message.Body[1] == (byte) '-')
+                        if (message.Body[1] == (byte)'-')
                         {
                             userSession.CloseSession();
                             Console.WriteLine("收到DBSvr关闭会话请求");

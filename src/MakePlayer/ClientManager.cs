@@ -32,7 +32,7 @@ namespace MakePlayer
             gTasks[0] = consumerTask1;
             await Task.WhenAll(gTasks);
         }
-        
+
         private static async Task ProcessReviceMessage()
         {
             while (await _reviceMsgList.Reader.WaitToReadAsync())
@@ -47,7 +47,7 @@ namespace MakePlayer
             }
         }
 
-        public static void AddPacket(string socHandle,byte[] reviceBuff)
+        public static void AddPacket(string socHandle, byte[] reviceBuff)
         {
             var clientPacket = new ClientPacket();
             clientPacket.SessionId = socHandle;
@@ -55,7 +55,7 @@ namespace MakePlayer
             _reviceMsgList.Writer.TryWrite(clientPacket);
         }
 
-        public static void AddClient(string sessionId,PlayClient objClient)
+        public static void AddClient(string sessionId, PlayClient objClient)
         {
             _Clients.TryAdd(sessionId, objClient);
         }

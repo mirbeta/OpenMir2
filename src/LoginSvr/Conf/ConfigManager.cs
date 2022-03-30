@@ -15,7 +15,7 @@ namespace LoginSvr
         {
             get { return instance; }
         }
-        
+
         const string sSectionServer = "Server";
         const string sSectionDB = "DB";
         private const string sDB = "DataBase";

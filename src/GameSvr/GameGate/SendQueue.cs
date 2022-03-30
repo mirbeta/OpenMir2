@@ -3,7 +3,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule.Sockets;
 
 namespace GameSvr
 {
@@ -20,7 +19,7 @@ namespace GameSvr
             _cancellation = new CancellationTokenSource();
         }
 
-        public void Initialization(int socketId,Socket socket)
+        public void Initialization(int socketId, Socket socket)
         {
             SocketId = socketId;
             _sendSocket = socket;
@@ -57,7 +56,7 @@ namespace GameSvr
                     if (_sendSocket.Connected)
                     {
                         var sendLen = _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                        
+
                         Debug.WriteLine(sendLen);
                     }
                 }

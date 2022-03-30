@@ -149,7 +149,7 @@ namespace SystemModule
         {
             Monitor.Exit(obj);
         }
-        
+
         public static void EnterCriticalSection(object obj)
         {
             // Monitor.Enter(obj);

@@ -1,5 +1,5 @@
-using System;
 using ProtoBuf;
+using System;
 using System.IO;
 
 namespace SystemModule
@@ -60,7 +60,7 @@ namespace SystemModule
             }
             else
             {
-                Packet= Array.Empty<byte>();
+                Packet = Array.Empty<byte>();
             }
             var checkLen = reader.ReadUInt16();
             if (checkLen > 0)
@@ -73,16 +73,16 @@ namespace SystemModule
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte) '#');
+            writer.Write((byte)'#');
             writer.Write(PacketLen.Value);
             writer.Write(QueryId);
-            writer.Write((ushort) Message.Length);
+            writer.Write((ushort)Message.Length);
             writer.Write(Message, 0, Message.Length);
-            writer.Write((ushort) Packet.Length);
+            writer.Write((ushort)Packet.Length);
             writer.Write(Packet, 0, Packet.Length);
-            writer.Write((ushort) CheckKey.Length);
+            writer.Write((ushort)CheckKey.Length);
             writer.Write(CheckKey, 0, CheckKey.Length);
-            writer.Write((byte) '!');
+            writer.Write((byte)'!');
         }
     }
 

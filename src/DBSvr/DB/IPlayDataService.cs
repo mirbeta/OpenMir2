@@ -6,9 +6,9 @@ namespace DBSvr
     public interface IPlayDataService
     {
         void LoadQuickList();
-        
+
         int Index(string sName);
-        
+
         int Get(int nIndex, ref THumDataInfo HumanRCD);
 
         int GetQryChar(int nIndex, ref TQueryChr QueryChrRcd);

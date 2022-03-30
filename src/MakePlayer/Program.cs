@@ -50,7 +50,7 @@ namespace MakePlayer
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             //AccountCrateTest();
-                
+
             g_sServerName = "热血传奇";
             g_sGameIPaddr = "10.10.0.101";
             g_nGamePort = 7000;
@@ -63,7 +63,7 @@ namespace MakePlayer
             _playTimer = new Thread(start: Start);
             _playTimer.IsBackground = true;
             _playTimer.Start();
-            
+
             ClientManager.Start();
 
             while (true)
@@ -79,14 +79,14 @@ namespace MakePlayer
         }
 
         private static IClientScoket ClientSocket;
-        
+
         static void AccountCrateTest()
         {
             ClientSocket = new IClientScoket();
             ClientSocket.Host = "10.10.0.112";
             ClientSocket.Port = 7000;
             ClientSocket.Connect();
-            
+
             UserFullEntry ue = new UserFullEntry();
             var sAccount = "mplay0";
             var sPassword = "mplay0";
@@ -108,7 +108,7 @@ namespace MakePlayer
             ClientSocket.IsConnected = true;
             SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeBuffer(ue));
         }
-        
+
         private static void SendSocket(string sText)
         {
             if (ClientSocket.IsConnected)

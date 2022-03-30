@@ -1664,7 +1664,7 @@ namespace GameSvr
             for (var i = 0; i < ServerTableList.Length; i++)
             {
                 RouteInfo = ServerTableList[i];
-                if(RouteInfo == null)
+                if (RouteInfo == null)
                 {
                     continue;
                 }

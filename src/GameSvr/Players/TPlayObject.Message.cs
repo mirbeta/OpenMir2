@@ -773,7 +773,7 @@ namespace GameSvr
                         m_boSoftClose = true;
                         if (ProcessMsg.wParam == 1)
                         {
-                            m_boEmergencyClose = true; 
+                            m_boEmergencyClose = true;
                         }
                     }
                     break;

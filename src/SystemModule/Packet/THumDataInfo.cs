@@ -25,20 +25,20 @@ namespace SystemModule
         [ProtoMember(3)]
         public THumDataInfo HumDataInfo { get; set; }
     }
-    
+
     [ProtoContract]
     public class LoadHumDataPacket : CmdPacket
     {
-        [ProtoMember(1)] 
+        [ProtoMember(1)]
         public string sAccount { get; set; }
-        [ProtoMember(2)] 
+        [ProtoMember(2)]
         public string sChrName { get; set; }
-        [ProtoMember(3)] 
+        [ProtoMember(3)]
         public string sUserAddr { get; set; }
-        [ProtoMember(4)] 
+        [ProtoMember(4)]
         public int nSessionID { get; set; }
     }
-    
+
     [ProtoContract]
     public class THumInfoData
     {

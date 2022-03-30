@@ -161,7 +161,7 @@ namespace SystemModule.Sockets
             // 为最大数目Socket 同时能拥有高性能的读、写通讯表现而分配缓冲区空间
 
             m_bufferManager = new BufferManager(BufferSize * numConnections * opsToPreAlloc, BufferSize);
-            
+
             // 读写池
             m_readPool = new SocketAsyncEventArgsPool(numConnections);
             m_writePool = new SocketAsyncEventArgsPool(numConnections);
@@ -297,7 +297,7 @@ namespace SystemModule.Sockets
             {
                 //RaiseErrorEvent(null, exception);
                 // 启动失败抛出启动失败异常
-                if (ex.ErrorCode == (int) SocketError.AddressNotAvailable)
+                if (ex.ErrorCode == (int)SocketError.AddressNotAvailable)
                 {
                     throw new AsyncSocketException(ex.Message, ex);
                 }
@@ -391,7 +391,7 @@ namespace SystemModule.Sockets
             token.ConnectionId = (int)_idWorker.nextId();//Guid.NewGuid().ToString("N");
             if ((token.ConnectionId <= 0 || token.ConnectionId > ushort.MaxValue) && token.Socket != null)
             {
-                token.ConnectionId = (int) token.Socket.Handle;
+                token.ConnectionId = (int)token.Socket.Handle;
             }
             if (token.ConnectionId > ushort.MaxValue)
             {

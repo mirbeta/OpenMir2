@@ -17,7 +17,7 @@ namespace LoginGate
         private int m_dwClientTimeOutTick = 0;
         private readonly ClientThread _lastLoginSvr;
         private readonly ConfigManager _configManager;
-        private LogQueue _logQueue=>LogQueue.Instance;
+        private LogQueue _logQueue => LogQueue.Instance;
 
         public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {

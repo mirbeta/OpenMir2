@@ -176,7 +176,7 @@ namespace SelGate
         /// </summary>
         public void UserLeave()
         {
-            if (_session == null || _session.Socket==null)
+            if (_session == null || _session.Socket == null)
             {
                 return;
             }

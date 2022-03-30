@@ -75,7 +75,7 @@ namespace DBSvr
                 return;
             }
             if (_socket.IsBusy)
-            { 
+            {
                 return;
             }
             _socket.Connect(sIDAddr, nIDPort);
@@ -326,7 +326,7 @@ namespace DBSvr
 
         private void ProcessGetOnlineCount(string sData)
         {
-             
+
         }
 
         public void SendKeepAlivePacket(int userCount)

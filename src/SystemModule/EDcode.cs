@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http.Headers;
 
 namespace SystemModule
 {
@@ -108,7 +107,7 @@ namespace SystemModule
             var EncBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
             return new ClientPacket(EncBuf, (byte)buffLen);
         }
-        
+
         /// <summary>
         /// 解码客户端封包
         /// </summary>
@@ -118,7 +117,7 @@ namespace SystemModule
             var EncBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
             return new ClientPacket(EncBuf, (byte)buffLen);
         }
-        
+
         public static byte[] DecodeBuff(byte[] data)
         {
             var buffLen = 0;
@@ -215,7 +214,7 @@ namespace SystemModule
             }
             return result;
         }
-        
+
         /// <summary>
         /// 加密Byte数组
         /// </summary>

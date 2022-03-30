@@ -75,7 +75,7 @@ namespace DBSvr
                 }
             }
         }
-        
+
         private void ProcessGateMsg(TGateInfo GateInfo, string sText)
         {
             var s0C = string.Empty;
@@ -271,7 +271,7 @@ namespace DBSvr
             }
             finally
             {
-                
+
             }
             return result;
         }
@@ -400,7 +400,7 @@ namespace DBSvr
             }
             return result;
         }
-        
+
         private void SendKeepAlivePacket(Socket Socket)
         {
             if (Socket.Connected)
@@ -574,7 +574,7 @@ namespace DBSvr
         /// 查询角色
         /// </summary>
         /// <returns></returns>
-        private bool QueryChr(string sData, ref TUserInfo UserInfo,ref TGateInfo CurGate)
+        private bool QueryChr(string sData, ref TUserInfo UserInfo, ref TGateInfo CurGate)
         {
             string sAccount = string.Empty;
             string sSendMsg = string.Empty;
@@ -660,7 +660,7 @@ namespace DBSvr
             }
             finally
             {
-                 
+
             }
             return result;
         }

@@ -2,7 +2,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data;
 using System.Text;
 using SystemModule;
 
@@ -44,7 +43,7 @@ namespace DBSvr
             }
             try
             {
- 
+
                 var command = new MySqlCommand();
                 command.CommandText = sSQLString;
                 command.Connection = dbConnection;

@@ -7,7 +7,7 @@ namespace DBSvr
     public interface IPlayRecordService
     {
         void LoadQuickList();
-        
+
         int Index(string sName);
 
         HumRecordData Get(int nIndex, ref bool success);
@@ -25,7 +25,7 @@ namespace DBSvr
         bool Update(int nIndex, ref HumRecordData HumDBRecord);
 
         void UpdateBy(int nIndex, ref HumRecordData HumDBRecord);
-        
+
         int FindByName(string sChrName, ArrayList ChrList);
     }
 }

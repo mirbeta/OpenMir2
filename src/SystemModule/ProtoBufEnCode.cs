@@ -1,6 +1,6 @@
+using ProtoBuf;
 using System;
 using System.IO;
-using ProtoBuf;
 
 namespace SystemModule
 {

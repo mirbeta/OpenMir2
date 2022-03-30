@@ -8,7 +8,7 @@ namespace SystemModule
         {
             return new string(binaryReader.ReadChars(size));
         }
-        
+
         public static byte[] ReadDeCodeBytes(this BinaryReader binaryReader, int size)
         {
             var buffLen = 0;

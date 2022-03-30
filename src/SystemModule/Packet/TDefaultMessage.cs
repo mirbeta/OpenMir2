@@ -1,6 +1,6 @@
+using ProtoBuf;
 using System;
 using System.IO;
-using ProtoBuf;
 
 namespace SystemModule
 {
@@ -68,18 +68,18 @@ namespace SystemModule
             Head = Recog;
             NID = Recog;
             UID1 = Recog;
-            PosX = (ushort) Recog;
+            PosX = (ushort)Recog;
             ID1 = Recog;
 
             X = Param;
             IDLo = Param;
-            b1 = (byte) Param;
+            b1 = (byte)Param;
             Pos = Param;
             Zero1 = Param;
 
             Y = Tag;
             Dir = Tag;
-            b3 = (byte) Tag;
+            b3 = (byte)Tag;
             Magic = Tag;
 
             Direct = Series;
