@@ -299,16 +299,16 @@ namespace GameSvr
             {
                 while (true)
                 {
-                    if (m_VisibleActors.Count < n17)
+                    if (m_VisibleActors.Count <= n17)
                     {
-                        if (m_VisibleActors[n17].nVisibleFlag == 0)
-                        {
-                            m_VisibleActors.RemoveAt(n17);
-                            m_VisibleActors[n17] = null;
-                            continue;
-                        }
-                        n17++;
+                        break;
                     }
+                    if (m_VisibleActors[n17].nVisibleFlag == 0)
+                    {
+                        m_VisibleActors.RemoveAt(n17);
+                        continue;
+                    }
+                    n17++;
                 }
             }
         }
