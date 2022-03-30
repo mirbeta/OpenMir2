@@ -1,8 +1,3 @@
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 
 namespace GameSvr
@@ -10,10 +5,6 @@ namespace GameSvr
     public class AppService : BackgroundService
     {
         private readonly GameApp _mirApp;
-        private Timer _connectTimer;
-        private int _checkIntervalTime;
-        private int _saveIntervalTime;
-        private int _clearIntervalTime;
 
         public AppService(GameApp serverApp)
         {
@@ -22,12 +13,8 @@ namespace GameSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _checkIntervalTime = HUtil32.GetTickCount();
-            _saveIntervalTime = HUtil32.GetTickCount();
-            _clearIntervalTime = HUtil32.GetTickCount();
             if (M2Share.boStartReady)
             {
-                _connectTimer = new Timer(ServiceTimer, null, 1000, 3000);
                 M2Share.GateManager.Start();
                 M2Share.GateManager.StartQueue();
                 await M2Share.GateManager.StartMessageQueue(stoppingToken);
@@ -100,27 +87,6 @@ namespace GameSvr
             _mirApp.Stop();
 
             return base.StopAsync(cancellationToken);
-        }
-
-        private void ServiceTimer(object obj)
-        {
-            if ((HUtil32.GetTickCount() - _checkIntervalTime) > 3000) //3s一次检查链接
-            {
-                M2Share.DataServer.CheckConnected();
-                IdSrvClient.Instance.CheckConnected();
-                SnapsmClient.Instance.CheckConnected();
-                _checkIntervalTime = HUtil32.GetTickCount();
-            }
-            if ((HUtil32.GetTickCount() - _saveIntervalTime) > 50000) //保存游戏变量等
-            {
-                _mirApp.SaveItemNumber();
-                _saveIntervalTime = HUtil32.GetTickCount();
-            }
-            if ((HUtil32.GetTickCount() - _clearIntervalTime) > 60000)
-            {
-                M2Share.ObjectManager.ClearObject();
-                _clearIntervalTime = HUtil32.GetTickCount();
-            }
         }
     }
 }

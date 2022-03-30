@@ -1,10 +1,6 @@
 ﻿using GameSvr.CommandSystem;
-using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 using SystemModule;
 using SystemModule.Common;
 
@@ -17,135 +13,128 @@ namespace GameSvr
             int nCode;
             M2Share.LocalDB = new LocalDB();
             M2Share.CommonDB = new CommonDB();
-            try
+            M2Share.LoadGameLogItemNameList();
+            M2Share.LoadDenyIPAddrList();
+            M2Share.LoadDenyAccountList();
+            M2Share.LoadDenyChrNameList();
+            M2Share.LoadNoClearMonList();
+            M2Share.MainOutMessage("正在加载物品数据库...");
+            nCode = M2Share.CommonDB.LoadItemsDB();
+            if (nCode < 0)
             {
-                M2Share.LoadGameLogItemNameList();
-                M2Share.LoadDenyIPAddrList();
-                M2Share.LoadDenyAccountList();
-                M2Share.LoadDenyChrNameList();
-                M2Share.LoadNoClearMonList();
-                M2Share.MainOutMessage("正在加载物品数据库...");
-                nCode = M2Share.CommonDB.LoadItemsDB();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("物品数据库加载失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
-                M2Share.MainOutMessage("正在加载数据图文件...");
-                nCode = Maps.LoadMinMap();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("小地图数据加载失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage("小地图数据加载成功...");
-                M2Share.MainOutMessage("正在加载地图数据...");
-                nCode = Maps.LoadMapInfo();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
-                M2Share.MainOutMessage("正在加载怪物数据库...");
-                nCode = M2Share.CommonDB.LoadMonsterDB();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载怪物数据库失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
-                M2Share.MainOutMessage("正在加载技能数据库...");
-                nCode = M2Share.CommonDB.LoadMagicDB();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载技能数据库失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
-                M2Share.MainOutMessage("正在加载怪物刷新配置信息...");
-                nCode = M2Share.LocalDB.LoadMonGen();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
-                M2Share.MainOutMessage("正加载怪物说话配置信息...");
-                M2Share.LoadMonSayMsg();
-                M2Share.MainOutMessage($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
-                M2Share.LoadDisableTakeOffList();
-                M2Share.LoadMonDropLimitList();
-                M2Share.LoadDisableMakeItem();
-                M2Share.LoadEnableMakeItem();
-                M2Share.LoadAllowSellOffItem();
-                M2Share.LoadDisableMoveMap();
-                M2Share.ItemUnit.LoadCustomItemName();
-                M2Share.LoadDisableSendMsgList();
-                M2Share.LoadItemBindIPaddr();
-                M2Share.LoadItemBindAccount();
-                M2Share.LoadItemBindCharName();
-                M2Share.LoadUnMasterList();
-                M2Share.LoadUnForceMasterList();
-                M2Share.MainOutMessage("正在加载捆装物品信息...");
-                nCode = M2Share.LocalDB.LoadUnbindList();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载捆装物品信息失败!!!" + "Code: " + nCode);
-                    return;
-                }
-                M2Share.MainOutMessage("加载捆装物品信息成功...");
-                M2Share.MainOutMessage("加载物品寄售系统...");
-                M2Share.CommonDB.LoadSellOffItemList();
-                M2Share.MainOutMessage("正在加载任务地图信息...");
-                nCode = M2Share.LocalDB.LoadMapQuest();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载任务地图信息失败!!!");
-                    return;
-                }
-                M2Share.MainOutMessage("加载任务地图信息成功...");
-                M2Share.MainOutMessage("正在加载任务说明信息...");
-                nCode = M2Share.LocalDB.LoadQuestDiary();
-                if (nCode < 0)
-                {
-                    M2Share.MainOutMessage("加载任务说明信息失败!!!");
-                    return;
-                }
-                M2Share.MainOutMessage("加载任务说明信息成功...");
-                if (LoadAbuseInformation(".\\!abuse.txt"))
-                {
-                    M2Share.MainOutMessage("加载文字过滤信息成功...");
-                }
-                M2Share.MainOutMessage("正在加载公告提示信息...");
-                if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
-                {
-                    M2Share.MainOutMessage("加载公告提示信息失败!!!");
-                }
-                M2Share.MainOutMessage("加载公告提示信息成功...");
-                M2Share.LocalDB.LoadAdminList();
-                M2Share.MainOutMessage("管理员列表加载成功...");
-                M2Share.GuildManager.LoadGuildInfo();
-                M2Share.MainOutMessage("行会列表加载成功...");
-                M2Share.CastleManager.LoadCastleList();
-                M2Share.MainOutMessage("城堡列表加载成功...");
-                M2Share.CastleManager.Initialize();
-                M2Share.MainOutMessage("城堡城初始完成...");
-                if (M2Share.nServerIndex == 0)
-                {
-                    SnapsmService.Instance.StartSnapsServer();
-                    M2Share.MainOutMessage("当前服务器运行主节点模式...");
-                }
-                else
-                {
-                    SnapsmClient.Instance.ConnectMsgServer();
-                    M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
-                }
+                M2Share.MainOutMessage("物品数据库加载失败!!!" + "Code: " + nCode);
+                return;
             }
-            catch (Exception e)
+            M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
+            M2Share.MainOutMessage("正在加载数据图文件...");
+            nCode = Maps.LoadMinMap();
+            if (nCode < 0)
             {
-                Console.WriteLine(e.Message);
+                M2Share.MainOutMessage("小地图数据加载失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage("小地图数据加载成功...");
+            M2Share.MainOutMessage("正在加载地图数据...");
+            nCode = Maps.LoadMapInfo();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
+            M2Share.MainOutMessage("正在加载怪物数据库...");
+            nCode = M2Share.CommonDB.LoadMonsterDB();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载怪物数据库失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage($"加载怪物数据库成功({M2Share.UserEngine.MonsterList.Count})...");
+            M2Share.MainOutMessage("正在加载技能数据库...");
+            nCode = M2Share.CommonDB.LoadMagicDB();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载技能数据库失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage($"加载技能数据库成功({M2Share.UserEngine.m_MagicList.Count})...");
+            M2Share.MainOutMessage("正在加载怪物刷新配置信息...");
+            nCode = M2Share.LocalDB.LoadMonGen();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage($"加载怪物刷新配置信息成功({M2Share.UserEngine.m_MonGenList.Count})...");
+            M2Share.MainOutMessage("正加载怪物说话配置信息...");
+            M2Share.LoadMonSayMsg();
+            M2Share.MainOutMessage($"加载怪物说话配置信息成功({M2Share.g_MonSayMsgList.Count})...");
+            M2Share.LoadDisableTakeOffList();
+            M2Share.LoadMonDropLimitList();
+            M2Share.LoadDisableMakeItem();
+            M2Share.LoadEnableMakeItem();
+            M2Share.LoadAllowSellOffItem();
+            M2Share.LoadDisableMoveMap();
+            M2Share.ItemUnit.LoadCustomItemName();
+            M2Share.LoadDisableSendMsgList();
+            M2Share.LoadItemBindIPaddr();
+            M2Share.LoadItemBindAccount();
+            M2Share.LoadItemBindCharName();
+            M2Share.LoadUnMasterList();
+            M2Share.LoadUnForceMasterList();
+            M2Share.MainOutMessage("正在加载捆装物品信息...");
+            nCode = M2Share.LocalDB.LoadUnbindList();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载捆装物品信息失败!!!" + "Code: " + nCode);
+                return;
+            }
+            M2Share.MainOutMessage("加载捆装物品信息成功...");
+            M2Share.MainOutMessage("加载物品寄售系统...");
+            M2Share.CommonDB.LoadSellOffItemList();
+            M2Share.MainOutMessage("正在加载任务地图信息...");
+            nCode = M2Share.LocalDB.LoadMapQuest();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载任务地图信息失败!!!");
+                return;
+            }
+            M2Share.MainOutMessage("加载任务地图信息成功...");
+            M2Share.MainOutMessage("正在加载任务说明信息...");
+            nCode = M2Share.LocalDB.LoadQuestDiary();
+            if (nCode < 0)
+            {
+                M2Share.MainOutMessage("加载任务说明信息失败!!!");
+                return;
+            }
+            M2Share.MainOutMessage("加载任务说明信息成功...");
+            if (LoadAbuseInformation(".\\!abuse.txt"))
+            {
+                M2Share.MainOutMessage("加载文字过滤信息成功...");
+            }
+            M2Share.MainOutMessage("正在加载公告提示信息...");
+            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sNoticeDir, "LineNotice.txt")))
+            {
+                M2Share.MainOutMessage("加载公告提示信息失败!!!");
+            }
+            M2Share.MainOutMessage("加载公告提示信息成功...");
+            M2Share.LocalDB.LoadAdminList();
+            M2Share.MainOutMessage("管理员列表加载成功...");
+            M2Share.GuildManager.LoadGuildInfo();
+            M2Share.MainOutMessage("行会列表加载成功...");
+            M2Share.CastleManager.LoadCastleList();
+            M2Share.MainOutMessage("城堡列表加载成功...");
+            M2Share.CastleManager.Initialize();
+            M2Share.MainOutMessage("城堡城初始完成...");
+            if (M2Share.nServerIndex == 0)
+            {
+                SnapsmService.Instance.StartSnapsServer();
+                M2Share.MainOutMessage("当前服务器运行主节点模式...");
+            }
+            else
+            {
+                SnapsmClient.Instance.ConnectMsgServer();
+                M2Share.MainOutMessage($"当前运行从节点模式...[{M2Share.g_Config.sMsgSrvAddr}:{M2Share.g_Config.nMsgSrvPort}]");
             }
         }
 

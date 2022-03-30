@@ -4,7 +4,7 @@
         <RootNamespace>GameSvr</RootNamespace>
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
         <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
         <BaseOutputPath>bin\</BaseOutputPath>
         <PackageId>GameSvr</PackageId>
         <OutputType>Exe</OutputType>
