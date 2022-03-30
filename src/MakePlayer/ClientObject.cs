@@ -1,12 +1,10 @@
-using System;
-
 namespace MakePlayer
 {
     public class ClientObject
     {
         public const int MAXBAGITEMCL = 40;
     }
-    
+
     public struct TUserCharacterInfo
     {
         public string sName;
@@ -14,7 +12,7 @@ namespace MakePlayer
         public byte btHair;
         public ushort wLevel;
         public byte btSex;
-    } 
+    }
 
     public struct TSelChar
     {
@@ -50,6 +48,6 @@ namespace MakePlayer
     {
         cns_Success,
         cns_Failure
-    } 
+    }
 }
 

@@ -1,5 +1,5 @@
-﻿using System;
-using GameSvr.CommandSystem;
+﻿using GameSvr.CommandSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -64,9 +64,9 @@ namespace GameSvr
         /// <param name="parameters"></param>
         /// <param name="playObject"></param>
         /// <returns></returns>
-        public virtual string Handle(string parameters, TPlayObject playObject = null)
+        public virtual string Handle(string command, string parameters, TPlayObject playObject = null)
         {
-            if (playObject != null) 
+            if (playObject != null)
             {
 #if DEBUG
                 playObject.m_btPermission = 10;
@@ -86,7 +86,7 @@ namespace GameSvr
             else
             {
                 @params = parameters.Split(' ');
-                target = this.GetSubcommand(@params[0]) ?? this.GetDefaultSubcommand();
+                target = this.GetSubcommand(command) ?? this.GetDefaultSubcommand();
                 if (target != this.GetDefaultSubcommand())
                 {
                     @params = @params.Skip(1).ToArray();

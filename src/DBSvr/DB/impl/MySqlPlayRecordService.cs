@@ -277,7 +277,7 @@ namespace DBSvr
                     command.Parameters.AddWithValue("@FLD_IsDeleted", HumRecord.boDeleted);
                     command.ExecuteNonQuery();
                     var id = command.LastInsertedId;
-                    nIndex = (int) id;
+                    nIndex = (int)id;
                     result = true;
                 }
                 else

@@ -116,7 +116,7 @@ namespace GameGate
                      {
                          for (int i = 0; i < serverList.Count; i++)
                          {
-                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal,queueCount) = serverList[i].GetStatus();
+                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));

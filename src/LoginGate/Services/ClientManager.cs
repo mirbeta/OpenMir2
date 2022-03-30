@@ -20,7 +20,7 @@ namespace LoginGate
         {
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
-        
+
         public static ClientManager Instance => instance;
 
         public void Initialization()

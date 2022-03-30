@@ -4,10 +4,13 @@
         <RootNamespace>GameSvr</RootNamespace>
         <UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
         <LangVersion>10</LangVersion>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
         <BaseOutputPath>bin\</BaseOutputPath>
         <PackageId>GameSvr</PackageId>
         <OutputType>Exe</OutputType>
+        <IsPublishable>True</IsPublishable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,7 +22,7 @@
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <Optimize>False</Optimize>
+      <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' " />
    <ItemGroup>

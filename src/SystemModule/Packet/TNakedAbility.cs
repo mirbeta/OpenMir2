@@ -1,5 +1,5 @@
-﻿using System.IO;
-using ProtoBuf;
+﻿using ProtoBuf;
+using System.IO;
 
 namespace SystemModule
 {
@@ -32,7 +32,7 @@ namespace SystemModule
         public TNakedAbility(byte[] buff)
             : base(buff)
         {
-            DC = ReadUInt16(); 
+            DC = ReadUInt16();
             MC = ReadUInt16();
             SC = ReadUInt16();
             AC = ReadUInt16();
@@ -40,7 +40,7 @@ namespace SystemModule
             HP = ReadUInt16();
             MP = ReadUInt16();
             Hit = ReadByte();
-            Speed = ReadInt32(); 
+            Speed = ReadInt32();
             X2 = ReadByte();
         }
 

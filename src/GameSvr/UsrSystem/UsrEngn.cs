@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using SystemModule;
@@ -944,7 +943,7 @@ namespace GameSvr
                     {
                         MonGen = m_MonGenList[m_nCurrMonGen];
                     }
-                    else if(m_MonGenList.Count>0)
+                    else if (m_MonGenList.Count > 0)
                     {
                         MonGen = m_MonGenList[0];
                     }

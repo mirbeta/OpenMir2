@@ -43,9 +43,9 @@ namespace SelGate
                 {
                     if (HUtil32.GetTickCount() - client.KeepAliveTick > 25 * 1000)
                     {
-                       client.KeepAliveTick = HUtil32.GetTickCount();
-                       client.Stop();
-                       client.SockThreadStutas = SockThreadStutas.TimeOut;
+                        client.KeepAliveTick = HUtil32.GetTickCount();
+                        client.Stop();
+                        client.SockThreadStutas = SockThreadStutas.TimeOut;
                     }
                 }
             }

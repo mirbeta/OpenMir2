@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace LoginGate
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
             _sendQueue = Channel.CreateUnbounded<TMessageData>();
         }
-        
+
         public static SessionManager Instance { get; } = new SessionManager();
 
         public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
@@ -41,9 +40,9 @@ namespace LoginGate
                     {
                         return;
                     }
-                    if (message.Body[0] == (byte) '+') //收到DB服务器发过来的关闭会话请求
+                    if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
                     {
-                        if (message.Body[1] == (byte) '-')
+                        if (message.Body[1] == (byte)'-')
                         {
                             userSession.CloseSession();
                             Console.WriteLine("收到LoginSvr关闭会话请求");

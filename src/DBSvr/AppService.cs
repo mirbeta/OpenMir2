@@ -1,7 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DBSvr
 {
@@ -13,7 +13,7 @@ namespace DBSvr
         private readonly HumDataService _dataService;
         private readonly ConfigManager _configManager;
 
-        public AppService(ILogger<AppService> logger,  UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService, ConfigManager configManager)
+        public AppService(ILogger<AppService> logger, UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService, ConfigManager configManager)
         {
             _logger = logger;
             _userSocService = userSoc;

@@ -158,7 +158,7 @@ namespace SelGate.Services
             var sText = string.Empty;
             int sSessionId = -1;
             HUtil32.ArrestStringEx(sData, "%", "$", ref sText);
-            HUtil32.GetValidStr3(sText, ref sSessionId, new[] {"/"});
+            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
             var userData = new TMessageData();
             userData.SessionId = sSessionId;
             userData.Body = e.Buff;
@@ -218,12 +218,12 @@ namespace SelGate.Services
             var GateMsg = new PacketHeader();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = nSocket;
-            GateMsg.SocketIdx = (ushort) wSocketIndex;
+            GateMsg.SocketIdx = (ushort)wSocketIndex;
             GateMsg.Ident = nIdent;
             GateMsg.UserIndex = nUserListIndex;
             GateMsg.PackLength = nLen;
             var sendBuffer = GateMsg.GetPacket();
-            if (Data is {Length: > 0})
+            if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];
                 Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);

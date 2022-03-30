@@ -101,7 +101,7 @@ namespace GameSvr.CommandSystem
             BaseCommond commond = null;
             if (CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(parameters, playObject);
+                output = commond.Handle(command, parameters, playObject);
                 found = true;
             }
 
@@ -131,7 +131,7 @@ namespace GameSvr.CommandSystem
             BaseCommond commond = null;
             if (CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(parameters);
+                output = commond.Handle(command, parameters);
                 found = true;
             }
 
@@ -164,7 +164,7 @@ namespace GameSvr.CommandSystem
             command = line.Split(' ')[0]; // 取命令
             parameters = string.Empty;
             if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // 取命令参数
-            return !string.IsNullOrEmpty(parameters);
+            return true;
         }
 
         [GameCommand("commands", "列出可用的命令")]
@@ -192,7 +192,7 @@ namespace GameSvr.CommandSystem
                 return "usage: help <command>";
             }
 
-            public override string Handle(string parameters, TPlayObject PlayObject = null)
+            public override string Handle(string commandName, string parameters, TPlayObject PlayObject = null)
             {
                 if (parameters == string.Empty)
                     return this.Fallback();

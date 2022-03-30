@@ -639,7 +639,7 @@ namespace GameSvr
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     M2Share.ErrorMessage(sExceptionMsg);
                 }

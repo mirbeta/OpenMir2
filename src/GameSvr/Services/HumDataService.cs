@@ -14,7 +14,7 @@ namespace GameSvr
             return true;
         }
 
-        public static void AddToProcess(int queryId,RequestServerPacket data)
+        public static void AddToProcess(int queryId, RequestServerPacket data)
         {
             _receivedMap.TryAdd(queryId, data);
         }

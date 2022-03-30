@@ -47,7 +47,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="nMsgLen"></param>
         /// <param name="data"></param>
-        public void HandleReceiveBuffer(int nMsgLen,byte[] data)
+        public void HandleReceiveBuffer(int nMsgLen, byte[] data)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";
             const string sExceptionMsg2 = "[Exception] TRunSocket::ExecGateBuffers -> @pwork,ExecGateMsg ";
@@ -154,7 +154,7 @@ namespace GameSvr
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void HandleSendBuffer(byte[] buffer) 
+        public void HandleSendBuffer(byte[] buffer)
         {
             if (!GateInfo.boUsed && GateInfo.Socket == null)
             {
@@ -378,7 +378,7 @@ namespace GameSvr
         public void CloseUser(int nSocket)
         {
             TGateUserInfo GateUser;
-            if (GateInfo.UserList.Count>0)
+            if (GateInfo.UserList.Count > 0)
             {
                 HUtil32.EnterCriticalSections(runSocketSection);
                 try
@@ -563,7 +563,7 @@ namespace GameSvr
                 M2Share.ErrorMessage(sExceptionMsg);
             }
         }
-        
+
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
