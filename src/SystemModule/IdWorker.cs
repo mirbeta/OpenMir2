@@ -31,7 +31,7 @@ namespace SystemModule
         {
             lock (this)
             {
-                long timestamp = timeGen();
+                long timestamp = TimeGen();
                 if (this.lastTimestamp == timestamp)
                 {
                     //同一微妙中生成ID
@@ -39,7 +39,7 @@ namespace SystemModule
                     if (IdWorker.sequence == 0)
                     {
                         //一微妙内产生的ID计数已达上限，等待下一微妙
-                        timestamp = tillNextMillis(this.lastTimestamp);
+                        timestamp = TillNextMillis(this.lastTimestamp);
                     }
                 }
                 else
@@ -68,12 +68,12 @@ namespace SystemModule
         /// </summary>
         /// <param name="lastTimestamp"></param>
         /// <returns></returns>
-        private long tillNextMillis(long lastTimestamp)
+        private long TillNextMillis(long lastTimestamp)
         {
-            long timestamp = timeGen();
+            long timestamp = TimeGen();
             while (timestamp <= lastTimestamp)
             {
-                timestamp = timeGen();
+                timestamp = TimeGen();
             }
             return timestamp;
         }
@@ -82,7 +82,7 @@ namespace SystemModule
         /// 生成当前时间戳
         /// </summary>
         /// <returns></returns>
-        private long timeGen()
+        private long TimeGen()
         {
             return DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }

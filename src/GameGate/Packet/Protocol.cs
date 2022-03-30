@@ -14,24 +14,14 @@ namespace GameGate
 
         public const int PackSize = 20;
 
-        public TSvrCmdPack()
-        {
-
-        }
-
-        public TSvrCmdPack(byte[] buff) : base(buff)
-        {
-            Flag = ReadUInt32();
-            SockID = ReadInt32();
-            Seq = ReadUInt16();
-            Cmd = ReadUInt16();
-            GGSock = ReadInt32();
-            DataLen = ReadInt32();
-        }
-
         protected override void ReadPacket(BinaryReader reader)
         {
-            throw new System.NotImplementedException();
+            Flag = reader.ReadUInt32();
+            SockID = reader.ReadInt32();
+            Seq = reader.ReadUInt16();
+            Cmd = reader.ReadUInt16();
+            GGSock = reader.ReadInt32();
+            DataLen = reader.ReadInt32();
         }
 
         protected override void WritePacket(BinaryWriter writer)
