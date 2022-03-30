@@ -15,5 +15,16 @@ namespace SystemModule
             var data = binaryReader.ReadBytes(size);
             return Misc.DecodeBuf(data, data.Length, ref buffLen);
         }
+        
+        public static string ReadPascalString(this BinaryReader binaryReader, int size)
+        {
+            var packegeLen = binaryReader.ReadByte();
+            if (size < packegeLen)
+            {
+                size = packegeLen;
+            }
+            var strbuff = binaryReader.ReadBytes(size);
+            return HUtil32.GetString(strbuff, 0, packegeLen);
+        }
     }
 }

@@ -27,26 +27,18 @@ namespace SystemModule
         [ProtoMember(10)]
         public byte X2;
 
-        public TNakedAbility() { }
-
-        public TNakedAbility(byte[] buff)
-            : base(buff)
-        {
-            DC = ReadUInt16();
-            MC = ReadUInt16();
-            SC = ReadUInt16();
-            AC = ReadUInt16();
-            MAC = ReadUInt16();
-            HP = ReadUInt16();
-            MP = ReadUInt16();
-            Hit = ReadByte();
-            Speed = ReadInt32();
-            X2 = ReadByte();
-        }
-
         protected override void ReadPacket(BinaryReader reader)
         {
-            throw new System.NotImplementedException();
+            DC = reader.ReadUInt16();
+            MC = reader.ReadUInt16();
+            SC = reader.ReadUInt16();
+            AC = reader.ReadUInt16();
+            MAC = reader.ReadUInt16();
+            HP = reader.ReadUInt16();
+            MP = reader.ReadUInt16();
+            Hit = reader.ReadByte();
+            Speed = reader.ReadInt32();
+            X2 = reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)

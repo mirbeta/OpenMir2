@@ -447,7 +447,7 @@ namespace LoginSvr
                     return;
                 }
                 var deBuffer = EDcode.DecodeBuffer(sData);
-                userFullEntry = new UserFullEntry(deBuffer);
+                userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
                 int nErrCode = -1;
                 if (LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {
@@ -895,7 +895,7 @@ namespace LoginSvr
                     return;
                 }
                 var deBuffer = EDcode.DecodeBuffer(sData);
-                userFullEntry = new UserFullEntry(deBuffer);
+                userFullEntry = Packets.ToPacket<UserFullEntry>(deBuffer);
                 int nCode = -1;
                 if (UserInfo.sAccount == userFullEntry.UserEntry.sAccount && LSShare.CheckAccountName(userFullEntry.UserEntry.sAccount))
                 {

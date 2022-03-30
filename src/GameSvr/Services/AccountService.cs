@@ -357,7 +357,7 @@ namespace GameSvr
 
         private void GetServerLoad(string sData)
         {
-            var sC = string.Empty;
+            /*var sC = string.Empty;
             var s10 = string.Empty;
             var s14 = string.Empty;
             var s18 = string.Empty;
@@ -371,7 +371,7 @@ namespace GameSvr
             M2Share.nLastMonthlyTotalUsage = HUtil32.Str_ToInt(s10, 0);
             M2Share.nTotalTimeUsage = HUtil32.Str_ToInt(s14, 0);
             M2Share.nGrossTotalCnt = HUtil32.Str_ToInt(s18, 0);
-            M2Share.nGrossResetCnt = HUtil32.Str_ToInt(s1C, 0);
+            M2Share.nGrossResetCnt = HUtil32.Str_ToInt(s1C, 0);*/
         }
 
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)

@@ -9,7 +9,7 @@ using SystemModule.Common;
 namespace GameSvr
 {
     /// <summary>
-    /// 工会系统
+    /// 公会系统
     /// </summary>
     public class Association
     {
