@@ -83,14 +83,14 @@ namespace GameSvr
             try
             {
                 nLen = nBuffLen + nMsgLen;
-                while (nLen >= MessageHeader.PacketSize)
+                while (nLen >= PacketHeader.PacketSize)
                 {
-                    var msgHeader = new MessageHeader(protoBuff);
+                    var msgHeader = Packets.ToPacket<PacketHeader>(protoBuff);
                     if (msgHeader.PacketCode == 0)
                     {
                         return;
                     }
-                    var nCheckMsgLen = Math.Abs(msgHeader.nLength) + MessageHeader.PacketSize;
+                    var nCheckMsgLen = Math.Abs(msgHeader.PackLength) + PacketHeader.PacketSize;
                     if (msgHeader.PacketCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
                     {
                         if (nLen < nCheckMsgLen)
@@ -98,10 +98,10 @@ namespace GameSvr
                             break;
                         }
                         byte[] body = null;
-                        if (msgHeader.nLength > 0 && protoBuff != null)
+                        if (msgHeader.PackLength > 0 && protoBuff != null)
                         {
                             body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
-                            body = body[MessageHeader.PacketSize..];
+                            body = body[PacketHeader.PacketSize..];
                         }
                         //M2Share.GateManager.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
                         ExecGateBuffers(msgHeader, body);
@@ -120,12 +120,12 @@ namespace GameSvr
                     {
                         buffIndex++;
                         var messageBuff = new byte[protoBuff.Length - 1];
-                        Buffer.BlockCopy(protoBuff, buffIndex, messageBuff, 0, MessageHeader.PacketSize);
+                        Buffer.BlockCopy(protoBuff, buffIndex, messageBuff, 0, PacketHeader.PacketSize);
                         protoBuff = messageBuff;
                         nLen -= 1;
                         Console.WriteLine("注意看这里，看到这句话就是GameSvr封包处理出了问题.");
                     }
-                    if (nLen < MessageHeader.PacketSize)
+                    if (nLen < PacketHeader.PacketSize)
                     {
                         break;
                     }
@@ -237,12 +237,12 @@ namespace GameSvr
             {
                 return;
             }
-            var msgHeader = new MessageHeader
+            var msgHeader = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
-                wIdent = nIdent,
-                nLength = 0
+                Ident = nIdent,
+                PackLength = 0
             };
             if (Socket.Connected)
             {
@@ -254,15 +254,15 @@ namespace GameSvr
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        private void ExecGateBuffers(MessageHeader packet, byte[] data)
+        private void ExecGateBuffers(PacketHeader packet, byte[] data)
         {
-            if (packet.nLength == 0)
+            if (packet.PackLength == 0)
             {
-                ExecGateMsg(_gateIdx, GateInfo, packet, null, packet.nLength);
+                ExecGateMsg(_gateIdx, GateInfo, packet, null, packet.PackLength);
             }
             else
             {
-                ExecGateMsg(_gateIdx, GateInfo, packet, data, packet.nLength);
+                ExecGateMsg(_gateIdx, GateInfo, packet, data, packet.PackLength);
             }
         }
 
@@ -464,13 +464,13 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new MessageHeader();
+            var MsgHeader = new PacketHeader();
             MsgHeader.PacketCode = Grobal2.RUNGATECODE;
             MsgHeader.Socket = nSocket;
             MsgHeader.SocketIdx = (ushort)nSocketIndex;
-            MsgHeader.wIdent = Grobal2.GM_SERVERUSERINDEX;
-            MsgHeader.wUserListIndex = (ushort)nUserIdex;
-            MsgHeader.nLength = 0;
+            MsgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
+            MsgHeader.UserIndex = (ushort)nUserIdex;
+            MsgHeader.PackLength = 0;
             if (Socket.Connected)
             {
                 var data = MsgHeader.GetPacket();
@@ -478,13 +478,13 @@ namespace GameSvr
             }
         }
 
-        private void ExecGateMsg(int GateIdx, TGateInfo Gate, MessageHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
+        private void ExecGateMsg(int GateIdx, TGateInfo Gate, PacketHeader MsgHeader, byte[] MsgBuff, int nMsgLen)
         {
             int nUserIdx;
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";
             try
             {
-                switch (MsgHeader.wIdent)
+                switch (MsgHeader.Ident)
                 {
                     case Grobal2.GM_OPEN:
                         var sIPaddr = HUtil32.GetString(MsgBuff, 0, nMsgLen);
@@ -504,9 +504,9 @@ namespace GameSvr
                         break;
                     case Grobal2.GM_DATA:
                         TGateUserInfo GateUser = null;
-                        if (MsgHeader.wUserListIndex >= 1)
+                        if (MsgHeader.UserIndex >= 1)
                         {
-                            nUserIdx = MsgHeader.wUserListIndex - 1;
+                            nUserIdx = MsgHeader.UserIndex - 1;
                             if (Gate.UserList.Count > nUserIdx)
                             {
                                 GateUser = Gate.UserList[nUserIdx];

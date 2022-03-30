@@ -5,32 +5,27 @@ namespace SystemModule.Packages
     /// <summary>
     /// 封包消息头
     /// </summary>
-    public class MessageHeader : Packets
+    public class PacketHeader : Packets
     {
         public uint PacketCode;
         public int Socket;
         public ushort SocketIdx;
-        public ushort wIdent;
-        public int wUserListIndex;
-        public int nLength;
+        public ushort Ident;
+        public int UserIndex;
+        public int PackLength;
 
         public const int PacketSize = 20;
 
-        public MessageHeader() { }
+        public PacketHeader() { }
 
-        public MessageHeader(byte[] buffer) : base(buffer)
+        protected override void ReadPacket(BinaryReader reader)
         {
             PacketCode = ReadUInt32();
             Socket = ReadInt32();
             SocketIdx = ReadUInt16();
-            wIdent = ReadUInt16();
-            wUserListIndex = ReadInt32();
-            nLength = ReadInt32();
-        }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            throw new System.NotImplementedException();
+            Ident = ReadUInt16();
+            UserIndex = ReadInt32();
+            PackLength = ReadInt32();
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -38,18 +33,18 @@ namespace SystemModule.Packages
             writer.Write(PacketCode);
             writer.Write(Socket);
             writer.Write(SocketIdx);
-            writer.Write(wIdent);
-            writer.Write(wUserListIndex);
-            writer.Write(nLength);
+            writer.Write(Ident);
+            writer.Write(UserIndex);
+            writer.Write(PackLength);
         }
     }
 
     public class ClientOutMessage : Packets
     {
-        private MessageHeader MessageHeader;
+        private PacketHeader MessageHeader;
         private ClientPacket DefaultMessage;
 
-        public ClientOutMessage(MessageHeader messageHeader, ClientPacket defaultMessage)
+        public ClientOutMessage(PacketHeader messageHeader, ClientPacket defaultMessage)
         {
             MessageHeader = messageHeader;
             DefaultMessage = defaultMessage;
@@ -62,7 +57,7 @@ namespace SystemModule.Packages
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            var nLen = MessageHeader.nLength + 20;
+            var nLen = MessageHeader.PackLength + 20;
             writer.Write(nLen);
             writer.Write(MessageHeader.GetPacket());
             writer.Write(DefaultMessage.GetPacket());

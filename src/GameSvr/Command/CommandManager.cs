@@ -164,13 +164,7 @@ namespace GameSvr.CommandSystem
             command = line.Split(' ')[0]; // 取命令
             parameters = string.Empty;
             if (line.Contains(' ')) parameters = line.Substring(line.IndexOf(' ') + 1).Trim(); // 取命令参数
-
-            if (string.IsNullOrEmpty(parameters))
-            {
-                return false;
-            }
-
-            return true;
+            return !string.IsNullOrEmpty(parameters);
         }
 
         [GameCommand("commands", "列出可用的命令")]
@@ -202,28 +196,10 @@ namespace GameSvr.CommandSystem
             {
                 if (parameters == string.Empty)
                     return this.Fallback();
-
-                var output = string.Empty;
-                var found = false;
                 var @params = parameters.Split(' ');
                 var group = @params[0];
                 var command = @params.Count() > 1 ? @params[1] : string.Empty;
-
-                //foreach (var pair in CommandGroups)
-                //{
-                //    if (group != pair.Key.Name)
-                //        continue;
-
-                //    if (command == string.Empty)
-                //        return pair.Key.Help;
-
-                //    output = pair.Value.GetHelp(command);
-                //    found = true;
-                //}
-
-                if (!found)
-                    output = string.Format("Unknown command: {0} {1}", group, command);
-
+                var output = $"Unknown command: {group} {command}";
                 return output;
             }
         }
