@@ -207,7 +207,7 @@ namespace DBSvr
                 for (var i = 0; i < ChrList.Count; i++)
                 {
                     HumRecordData HumDBRecord = GetBy(ChrList[i].nIndex, ref success);
-                    if (success && (!HumDBRecord.boDeleted))
+                    if (success && !HumDBRecord.boDeleted)
                     {
                         result++;
                     }

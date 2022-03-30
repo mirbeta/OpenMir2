@@ -6,7 +6,7 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<SendQueueData> _sendQueue = null;
+        private readonly Channel<SendQueueData> _sendQueue;
         private readonly LogQueue _logQueue = LogQueue.Instance;
 
         public SendQueue()
@@ -29,7 +29,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 处理M2发过来的消息
+        /// 将队列消息发送到客户端
         /// </summary>
         public async Task ProcessSendQueue()
         {

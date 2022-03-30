@@ -20,12 +20,12 @@ namespace SystemModule.Packages
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            PacketCode = ReadUInt32();
-            Socket = ReadInt32();
-            SocketIdx = ReadUInt16();
-            Ident = ReadUInt16();
-            UserIndex = ReadInt32();
-            PackLength = ReadInt32();
+            PacketCode = reader.ReadUInt32();
+            Socket = reader.ReadInt32();
+            SocketIdx = reader.ReadUInt16();
+            Ident = reader.ReadUInt16();
+            UserIndex = reader.ReadInt32();
+            PackLength = reader.ReadInt32();
         }
 
         protected override void WritePacket(BinaryWriter writer)
