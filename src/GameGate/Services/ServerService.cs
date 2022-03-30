@@ -161,7 +161,6 @@ namespace GameGate
             {
                 clientThread.SessionArray[nSockIndex] = null;
                 _waitCloseList.Enqueue(e.SocHandle);
-                _sessionManager.CloseSession(nSockIndex);
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
             }
             else

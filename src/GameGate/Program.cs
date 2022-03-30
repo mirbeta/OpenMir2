@@ -45,12 +45,12 @@ namespace GameGate
                 });
             await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
-            await StopAsync();
+            Stop();
         }
 
-        static async Task StopAsync()
+        static void Stop()
         {
-            await AnsiConsole.Status().StartAsync("Disconnecting...", async ctx =>
+            AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
             });
