@@ -30,7 +30,7 @@ namespace GameSvr.Command
             }
             if (string.IsNullOrEmpty(sHumanName) || nSex == -1)
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var playSex = PlayGender.Man;

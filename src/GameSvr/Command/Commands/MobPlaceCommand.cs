@@ -25,53 +25,39 @@ namespace GameSvr
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
             Envirnoment MEnvir;
             TBaseObject mon = null;
-            byte nCode = 0;
-            try
+            nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
+            nX = (short)HUtil32.Str_ToInt(sX, 0);
+            nY = (short)HUtil32.Str_ToInt(sY, 0);
+            if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
             {
-                nCount = HUtil32._MIN(500, HUtil32.Str_ToInt(sCount, 0));
-                nX = (short)HUtil32.Str_ToInt(sX, 0);
-                nY = (short)HUtil32.Str_ToInt(sY, 0);
-                if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                return;
+            }
+            MEnvir = M2Share.g_MapManager.FindMap(M2Share.g_sMissionMap);
+            if (!M2Share.g_boMission || MEnvir == null)
+            {
+                PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("请先用命令" + this.GameCommand.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
+                return;
+            }
+            for (var i = 0; i < nCount; i++)
+            {
+                mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
+                if (mon != null)
                 {
-                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
-                    return;
+                    mon.m_boMission = true;
+                    mon.m_nMissionX = M2Share.g_nMissionX;
+                    mon.m_nMissionY = M2Share.g_nMissionY;
                 }
-                nCode = 1;
-                MEnvir = M2Share.g_MapManager.FindMap(M2Share.g_sMissionMap);
-                if (!M2Share.g_boMission || MEnvir == null)
+                else
                 {
-                    PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
-                    PlayObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
-                    return;
-                }
-                nCode = 2;
-                for (var i = 0; i < nCount; i++)
-                {
-                    nCode = 3;
-                    mon = M2Share.UserEngine.RegenMonsterByName(M2Share.g_sMissionMap, nX, nY, sMonName);
-                    nCode = 4;
-                    if (mon != null)
-                    {
-                        nCode = 5;
-                        mon.m_boMission = true;
-                        mon.m_nMissionX = M2Share.g_nMissionX;
-                        mon.m_nMissionY = M2Share.g_nMissionY;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                nCode = 6;
-                if (mon.m_btRaceServer != 136)
-                {
-                    PlayObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + M2Share.g_sMissionMap + " " +
-                        M2Share.g_nMissionX + ":" + M2Share.g_nMissionY + " 集中。", MsgColor.Green, MsgType.Hint);
+                    break;
                 }
             }
-            catch
+            if (mon?.m_btRaceServer != 136)
             {
-                M2Share.MainOutMessage("[异常] TPlayObject.CmdMobPlace Code:" + nCode);
+                PlayObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + M2Share.g_sMissionMap + " " +
+                    M2Share.g_nMissionX + ":" + M2Share.g_nMissionY + " 集中。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

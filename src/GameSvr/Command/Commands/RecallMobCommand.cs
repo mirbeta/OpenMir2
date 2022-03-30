@@ -1,5 +1,4 @@
 ﻿using GameSvr.CommandSystem;
-using System;
 using SystemModule;
 
 namespace GameSvr
@@ -14,22 +13,19 @@ namespace GameSvr
         [DefaultCommand]
         public void RecallMob(string[] @Params, TPlayObject PlayObject)
         {
-            if (@Params == null)
-            {
-                return;
-            }
             var sMonName = @Params.Length > 0 ? @Params[0] : "";
             var nCount = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;
             var nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            var nAutoChangeColor = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
-            var nFixColor = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
+            var nTick = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 86400000;
+            var nAutoChangeColor = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
+            var nFixColor = @Params.Length > 5 ? Convert.ToInt32(@Params[5]) : 0;
 
             short n10 = 0;
             short n14 = 0;
             TBaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nLevel >= 10)
@@ -51,7 +47,7 @@ namespace GameSvr
                 if (mon != null)
                 {
                     mon.m_Master = PlayObject;
-                    mon.m_dwMasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
+                    mon.m_dwMasterRoyaltyTick = nTick;
                     mon.m_btSlaveMakeLevel = 3;
                     mon.m_btSlaveExpLevel = (byte)nLevel;
                     if (nAutoChangeColor == 1)

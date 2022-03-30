@@ -20,12 +20,12 @@ namespace GameSvr
             var sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
-            if (PlayObject.m_btPermission < Command.nPermissionMax)
+            if (PlayObject.m_btPermission < GameCommand.nPermissionMax)
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
@@ -62,7 +62,7 @@ namespace GameSvr
                             StdItem.RandomUpgradeItem(UserItem);
                         }
                     }
-                    if (PlayObject.m_btPermission >= Command.nPermissionMax)
+                    if (PlayObject.m_btPermission >= GameCommand.nPermissionMax)
                     {
                         UserItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }

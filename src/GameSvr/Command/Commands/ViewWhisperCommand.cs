@@ -19,7 +19,7 @@ namespace GameSvr
             var sCharName = @Params.Length > 0 ? @Params[0] : "";
             if (sCharName == "" || sCharName != "" && sCharName[1] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sCharName);

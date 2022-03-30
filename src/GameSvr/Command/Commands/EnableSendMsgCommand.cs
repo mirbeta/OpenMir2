@@ -19,7 +19,7 @@ namespace GameSvr
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = M2Share.g_DisableSendMsgList.Count - 1; i >= 0; i--)

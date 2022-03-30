@@ -26,7 +26,7 @@ namespace GameSvr
             ArrayList List;
             if (sCASTLENAME != "" && sCASTLENAME[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Command.Name, ""), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.GameCommand.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCASTLENAME == "")
@@ -50,7 +50,7 @@ namespace GameSvr
             nGold = HUtil32.Str_ToInt(sGold, -1);
             if (!new ArrayList(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Command.Name, M2Share.g_sGameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.GameCommand.Name, M2Share.g_sGameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (Ctr)

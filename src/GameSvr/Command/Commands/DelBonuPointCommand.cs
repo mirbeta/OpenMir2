@@ -19,7 +19,7 @@ namespace GameSvr
             var sHumName = @Params.Length > 0 ? @Params[0] : "";
             if (sHumName == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var targerPlayObject = M2Share.UserEngine.GetPlayObject(sHumName);

@@ -21,7 +21,7 @@ namespace GameSvr
             string sMsg;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg("命令格式: @" + this.Command.Name + " 人物名称 属性点数(不输入为查看点数)", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumName);
@@ -36,10 +36,10 @@ namespace GameSvr
                 m_PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 return;
             }
-            sMsg = string.Format("未分配点数:%d 已分配点数:(DC:%d MC:%d SC:%d AC:%d MAC:%d HP:%d MP:%d HIT:%d SPEED:%d)", m_PlayObject.m_nBonusPoint,
+            sMsg = string.Format("未分配点数:{0} 已分配点数:(DC:{1} MC:{2} SC:{3} AC:{4} MAC:{5} HP:{6} MP:{7} HIT:{8} SPEED:{9})", m_PlayObject.m_nBonusPoint,
                 m_PlayObject.m_BonusAbil.DC, m_PlayObject.m_BonusAbil.MC, m_PlayObject.m_BonusAbil.SC, m_PlayObject.m_BonusAbil.AC,
                 m_PlayObject.m_BonusAbil.MAC, m_PlayObject.m_BonusAbil.HP, m_PlayObject.m_BonusAbil.MP, m_PlayObject.m_BonusAbil.Hit, m_PlayObject.m_BonusAbil.Speed);
-            PlayObject.SysMsg(string.Format("%s的属性点数为:%s", sHumName, sMsg), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format("{0}的属性点数为:{1}", sHumName, sMsg), MsgColor.Red, MsgType.Hint);
         }
     }
 }

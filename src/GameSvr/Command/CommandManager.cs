@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using SystemModule;
 
 namespace GameSvr.CommandSystem
@@ -9,7 +6,10 @@ namespace GameSvr.CommandSystem
     public class CommandManager
     {
         private static readonly Dictionary<string, BaseCommond> CommandGroups = new Dictionary<string, BaseCommond>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, string> Commands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        /// 自定义游戏命令列表
+        /// </summary>
+        private static readonly Dictionary<string, string> CustomCommands = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public CommandManager()
         {
@@ -41,21 +41,39 @@ namespace GameSvr.CommandSystem
                     M2Share.ErrorMessage($"重复游戏命令: {groupAttribute.Name}");
                 }
 
-                if (Commands.TryGetValue(groupAttribute.Name, out cmdName))
+                if (CustomCommands.TryGetValue(groupAttribute.Name, out cmdName))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = cmdName;
                 }
 
                 var commandGroup = (BaseCommond)Activator.CreateInstance(type);
-                commandGroup.Register(groupAttribute);
+                if (commandGroup == null)
+                {
+                    return;
+                }
+                MethodInfo methodInfo = null;
+                foreach (var method in commandGroup.GetType().GetMethods())
+                {
+                    var methodAttributes = method.GetCustomAttribute(typeof(DefaultCommand), true);
+                    if (methodAttributes != null)
+                    {
+                        methodInfo = method;
+                        break;
+                    }
+                }
+                if (methodInfo == null)
+                {
+                    return;
+                }
+                commandGroup.Register(groupAttribute, methodInfo);
                 CommandGroups.Add(groupAttribute.Name, commandGroup);
             }
         }
 
         public void RegisterCommand(string command, string commandName)
         {
-            Commands.Add(command, commandName);
+            CustomCommands.Add(command, commandName);
         }
 
         /// <summary>
@@ -101,7 +119,7 @@ namespace GameSvr.CommandSystem
             BaseCommond commond = null;
             if (CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(command, parameters, playObject);
+                output = commond.Handle(parameters, playObject);
                 found = true;
             }
 
@@ -131,7 +149,7 @@ namespace GameSvr.CommandSystem
             BaseCommond commond = null;
             if (CommandGroups.TryGetValue(command, out commond))
             {
-                output = commond.Handle(command, parameters);
+                output = commond.Handle(parameters);
                 found = true;
             }
 
@@ -192,7 +210,7 @@ namespace GameSvr.CommandSystem
                 return "usage: help <command>";
             }
 
-            public override string Handle(string commandName, string parameters, TPlayObject PlayObject = null)
+            public override string Handle(string parameters, TPlayObject PlayObject = null)
             {
                 if (parameters == string.Empty)
                     return this.Fallback();

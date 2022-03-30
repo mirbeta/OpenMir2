@@ -21,7 +21,7 @@ namespace GameSvr
             var sPoint = @Params.Length > 2 ? @Params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);

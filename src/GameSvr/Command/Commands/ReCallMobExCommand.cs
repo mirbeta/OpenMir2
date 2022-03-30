@@ -24,7 +24,7 @@ namespace GameSvr
             TBaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nX < 0)

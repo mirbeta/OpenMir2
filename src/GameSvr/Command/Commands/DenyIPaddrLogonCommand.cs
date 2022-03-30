@@ -20,7 +20,7 @@ namespace GameSvr
             var sFixDeny = @Params.Length > 1 ? @Params[3] : "";
             if (sIPaddr == "")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             try

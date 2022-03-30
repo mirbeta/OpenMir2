@@ -19,7 +19,7 @@ namespace GameSvr
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = PlayObject.m_BlockWhisperList.Count - 1; i >= 0; i--)

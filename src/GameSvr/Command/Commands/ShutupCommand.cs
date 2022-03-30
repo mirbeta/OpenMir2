@@ -21,7 +21,7 @@ namespace GameSvr
             if (sTime == "" || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Command.Name, M2Share.g_sGameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.GameCommand.Name, M2Share.g_sGameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var dwTime = (uint)HUtil32.Str_ToInt(sTime, 5);

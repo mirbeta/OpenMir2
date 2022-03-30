@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameSvr.CommandSystem
+﻿namespace GameSvr.CommandSystem
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class GameCommandAttribute : Attribute
@@ -20,9 +18,6 @@ namespace GameSvr.CommandSystem
         /// </summary>
         public string Desc { get; set; }
 
-        /// <summary>
-        /// 命令帮助
-        /// </summary>
         public string Help { get; set; }
 
         /// <summary>
@@ -52,7 +47,7 @@ namespace GameSvr.CommandSystem
             this.nPermissionMax = maxUserLevel;
         }
 
-        public string CommandHelp => $"命令格式: @{Name} {Help}";
+        public string ShowHelp => $"命令格式: @{Name} {Help}";
     }
 
     [AttributeUsage(AttributeTargets.Method)]
@@ -98,6 +93,7 @@ namespace GameSvr.CommandSystem
     {
         public DefaultCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel)
         {
+
         }
     }
 }

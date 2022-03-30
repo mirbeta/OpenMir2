@@ -23,7 +23,7 @@ namespace GameSvr
             TPlayObject MoveHuman;
             if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var SrcEnvir = M2Share.g_MapManager.FindMap(sSrcMap);
