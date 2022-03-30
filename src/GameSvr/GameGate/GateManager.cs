@@ -255,12 +255,12 @@ namespace GameSvr
         public void SendOutConnectMsg(int nGateIdx, int nSocket, int nGsIdx)
         {
             var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var msgHeader = new MessageHeader();
+            var msgHeader = new PacketHeader();
             msgHeader.PacketCode = Grobal2.RUNGATECODE;
             msgHeader.Socket = nSocket;
             msgHeader.SocketIdx = (ushort)nGsIdx;
-            msgHeader.wIdent = Grobal2.GM_DATA;
-            msgHeader.nLength = ClientPacket.PackSize;
+            msgHeader.Ident = Grobal2.GM_DATA;
+            msgHeader.PackLength = ClientPacket.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
             if (!AddGateBuffer(nGateIdx, outMessage.GetPacket()))
             {
@@ -321,14 +321,14 @@ namespace GameSvr
         private void SendGateTestMsg(int nIndex)
         {
             var defMsg = new ClientPacket();
-            var msgHdr = new MessageHeader
+            var msgHdr = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
-                wIdent = Grobal2.GM_TEST,
-                nLength = 100
+                Ident = Grobal2.GM_TEST,
+                PackLength = 100
             };
-            var nLen = msgHdr.nLength + MessageHeader.PacketSize;
+            var nLen = msgHdr.PackLength + PacketHeader.PacketSize;
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
@@ -349,12 +349,12 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new MessageHeader
+            var MsgHeader = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
-                wIdent = (ushort)nIdent,
-                nLength = 0
+                Ident = (ushort)nIdent,
+                PackLength = 0
             };
             if (Socket.Connected)
             {
@@ -382,7 +382,7 @@ namespace GameSvr
         /// <summary>
         /// 收到GameGate发来的消息并添加到GameSvr消息队列
         /// </summary>
-        public void AddGameGateQueue(int gateIdx, MessageHeader packet, byte[] data)
+        public void AddGameGateQueue(int gateIdx, PacketHeader packet, byte[] data)
         {
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
@@ -444,7 +444,7 @@ namespace GameSvr
 
     public struct ReceiveData
     {
-        public MessageHeader Packet;
+        public PacketHeader Packet;
         public byte[] Data;
         public int GateId;
     }

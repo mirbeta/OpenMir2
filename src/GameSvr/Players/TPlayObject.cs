@@ -284,18 +284,18 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHdr = new MessageHeader
+            var MsgHdr = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = m_nSocket,
                 SocketIdx = m_nGSocketIdx,
-                wIdent = Grobal2.GM_DATA
+                Ident = Grobal2.GM_DATA
             };
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var bMsg = HUtil32.GetBytes(sMsg);
-                MsgHdr.nLength = -(bMsg.Length);
-                var nSendBytes = Math.Abs(MsgHdr.nLength) + 20;
+                MsgHdr.PackLength = -(bMsg.Length);
+                var nSendBytes = Math.Abs(MsgHdr.PackLength) + 20;
                 using var memoryStream = new MemoryStream();
                 using var backingStream = new BinaryWriter(memoryStream);
                 backingStream.Write(nSendBytes);
@@ -322,12 +322,12 @@ namespace GameSvr
             {
                 return;
             }
-            var messageHead = new MessageHeader
+            var messageHead = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = m_nSocket,
                 SocketIdx = m_nGSocketIdx,
-                wIdent = Grobal2.GM_DATA
+                Ident = Grobal2.GM_DATA
             };
             int nSendBytes = 0;
             using var memoryStream = new MemoryStream();
@@ -338,13 +338,13 @@ namespace GameSvr
                 bMsg = HUtil32.GetBytes(sMsg);
                 if (!string.IsNullOrEmpty(sMsg))
                 {
-                    messageHead.nLength = bMsg.Length + 12;
+                    messageHead.PackLength = bMsg.Length + 12;
                 }
                 else
                 {
-                    messageHead.nLength = 12;
+                    messageHead.PackLength = 12;
                 }
-                nSendBytes = messageHead.nLength + MessageHeader.PacketSize;
+                nSendBytes = messageHead.PackLength + PacketHeader.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetPacket());
                 backingStream.Write(defMsg.GetPacket());
@@ -352,8 +352,8 @@ namespace GameSvr
             else if (!string.IsNullOrEmpty(sMsg))
             {
                 bMsg = HUtil32.GetBytes(sMsg);
-                messageHead.nLength = -(bMsg.Length);
-                nSendBytes = Math.Abs(messageHead.nLength) + MessageHeader.PacketSize;
+                messageHead.PackLength = -(bMsg.Length);
+                nSendBytes = Math.Abs(messageHead.PackLength) + PacketHeader.PacketSize;
                 backingStream.Write(nSendBytes);
                 backingStream.Write(messageHead.GetPacket());
             }

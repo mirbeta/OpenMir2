@@ -1,4 +1,5 @@
-﻿using GameSvr.CommandSystem;
+﻿using System;
+using GameSvr.CommandSystem;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,8 +11,7 @@ namespace GameSvr
     {
         protected GameCommandAttribute Command { get; private set; }
 
-        private readonly Dictionary<CommandAttribute, MethodInfo> _commands =
-            new Dictionary<CommandAttribute, MethodInfo>();
+        private readonly Dictionary<string, (CommandAttribute, MethodInfo)> _commands = new Dictionary<string, (CommandAttribute, MethodInfo)>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// 注册命令
@@ -34,13 +34,13 @@ namespace GameSvr
                 var attribute = (CommandAttribute)attributes[0];
                 if (attribute is DefaultCommand) continue;
 
-                if (!this._commands.ContainsKey(attribute))
+                if (_commands.ContainsKey(attribute.Name))
                 {
-                    this._commands.Add(attribute, method);
+                    M2Share.ErrorMessage($"命令名称重复: {attribute.Name}");
                 }
                 else
                 {
-                    M2Share.ErrorMessage($"命令名称重复: {attribute.Name}");
+                    _commands.Add(attribute.Name, (attribute, method));
                 }
             }
         }
@@ -52,10 +52,10 @@ namespace GameSvr
                 var attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) continue;
                 if (method.Name == "fallback") continue;
-                this._commands.Add(new DefaultCommand(this.Command.nPermissionMin), method);
+                this._commands.Add(method.Name, (new DefaultCommand(this.Command.nPermissionMin), method));
                 return;
             }
-            this._commands.Add(new DefaultCommand(this.Command.nPermissionMin), this.GetType().GetMethod("Fallback"));
+            this._commands.Add("Fallback", (new DefaultCommand(this.Command.nPermissionMin), this.GetType().GetMethod("Fallback")));
         }
 
         /// <summary>
@@ -66,17 +66,16 @@ namespace GameSvr
         /// <returns></returns>
         public virtual string Handle(string parameters, TPlayObject playObject = null)
         {
-            // 检查用户是否有足够的权限来调用命令。
-            if (playObject != null)
+            if (playObject != null) 
             {
 #if DEBUG
                 playObject.m_btPermission = 10;
                 playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
 #endif
-            }
-            if (playObject != null && playObject.m_btPermission < this.Command.nPermissionMin)
-            {
-                return M2Share.g_sGameCommandPermissionTooLow; //权限不足
+                if (playObject.m_btPermission < this.Command.nPermissionMin)// 检查用户是否有权限来调用命令。
+                {
+                    return M2Share.g_sGameCommandPermissionTooLow; //权限不足
+                }
             }
             string[] @params = null;
             CommandAttribute target = null;
@@ -94,7 +93,16 @@ namespace GameSvr
                 }
             }
             string result;
-            var methodsParamsCount = this._commands[target].GetParameters().Length;//查看命令目标所需要的参数个数
+            if (!_commands.ContainsKey(target.Name))
+            {
+                return string.Empty;
+            }
+            var targetCommand = _commands[target.Name].Item2;
+            if (targetCommand == null)
+            {
+                return string.Empty;
+            }
+            var methodsParamsCount = targetCommand.GetParameters().Length;//查看命令目标所需要的参数个数
             if (methodsParamsCount == 2) //默认参数为当前对象，即：PlayObject
             {
                 if (@params == null)
@@ -105,15 +113,15 @@ namespace GameSvr
                 {
                     return Command.CommandHelp;
                 }
-                result = (string)this._commands[target].Invoke(this, new object[] { @params, playObject });
+                result = (string)targetCommand.Invoke(this, new object[] { @params, playObject });
             }
             else if (methodsParamsCount == 1)
             {
-                result = (string)this._commands[target].Invoke(this, new object[] { playObject });
+                result = (string)targetCommand.Invoke(this, new object[] { playObject });
             }
             else
             {
-                result = (string)this._commands[target].Invoke(this, new object[] { null, playObject });
+                result = (string)targetCommand.Invoke(this, new object[] { null, playObject });
             }
             return result;
         }
@@ -122,8 +130,8 @@ namespace GameSvr
         {
             foreach (var pair in this._commands)
             {
-                if (command != pair.Key.Name) continue;
-                return pair.Key.Help;
+                if (command != pair.Key) continue;
+                return pair.Value.Item1.Help;
             }
             return string.Empty;
         }
@@ -140,22 +148,21 @@ namespace GameSvr
             var output = "可用的命令: ";
             foreach (var pair in this._commands)
             {
-                if (pair.Key.Name.Trim() == string.Empty) continue;
-                if (PlayObject != null && pair.Key.MinUserLevel > PlayObject.m_btPermission) continue;
-                output += pair.Key.Name + ", ";
+                if (pair.Key.Trim() == string.Empty) continue;
+                if (PlayObject != null && pair.Value.Item1.MinUserLevel > PlayObject.m_btPermission) continue;
+                output += pair.Key + ", ";
             }
-
             return output.Substring(0, output.Length - 2) + ".";
         }
 
-        protected CommandAttribute GetDefaultSubcommand()
+        private CommandAttribute GetDefaultSubcommand()
         {
-            return this._commands.Keys.First();
+            return this._commands["fallback"].Item1;
         }
 
-        protected CommandAttribute GetSubcommand(string name)
+        private CommandAttribute GetSubcommand(string name)
         {
-            return this._commands.Keys.FirstOrDefault(command => command.Name == name);
+            return this._commands.ContainsKey(name) ? _commands[name].Item1 : null;
         }
     }
 }
