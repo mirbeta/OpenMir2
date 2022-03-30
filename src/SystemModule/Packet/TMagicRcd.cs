@@ -28,19 +28,12 @@ namespace SystemModule
         [ProtoMember(4)]
         public int nTranPoint;
 
-        public TMagicRcd() { }
-
-        public TMagicRcd(byte[] buff)
-        {
-            this.wMagIdx = BitConverter.ToUInt16(buff, 0);
-            this.btLevel = buff[2];
-            this.btKey = buff[3];
-            this.nTranPoint = BitConverter.ToInt16(buff, 4);
-        }
-
         protected override void ReadPacket(BinaryReader reader)
         {
-            throw new NotImplementedException();
+            this.wMagIdx = reader.ReadUInt16();
+            this.btLevel = reader.ReadByte();
+            this.btKey = reader.ReadByte();
+            this.nTranPoint = reader.ReadInt32();
         }
 
         protected override void WritePacket(BinaryWriter writer)

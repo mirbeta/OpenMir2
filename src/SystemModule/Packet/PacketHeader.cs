@@ -16,8 +16,6 @@ namespace SystemModule.Packages
 
         public const int PacketSize = 20;
 
-        public PacketHeader() { }
-
         protected override void ReadPacket(BinaryReader reader)
         {
             PacketCode = reader.ReadUInt32();

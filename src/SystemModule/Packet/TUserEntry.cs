@@ -25,30 +25,25 @@ namespace SystemModule.Packet
             UserEntryAdd = new TUserEntryAdd();
         }
 
-        public UserFullEntry(byte[] buff) : base(buff)
-        {
-            UserEntry = new TUserEntry();
-            UserEntry.sAccount = ReadPascalString(10);
-            UserEntry.sPassword = ReadPascalString(10);
-            UserEntry.sUserName = ReadPascalString(20);
-            UserEntry.sSSNo = ReadPascalString(14);
-            UserEntry.sPhone = ReadPascalString(14);
-            UserEntry.sQuiz = ReadPascalString(20);
-            UserEntry.sAnswer = ReadPascalString(12);
-            UserEntry.sEMail = ReadPascalString(40);
-
-            UserEntryAdd = new TUserEntryAdd();
-            UserEntryAdd.sQuiz2 = ReadPascalString(20);
-            UserEntryAdd.sAnswer2 = ReadPascalString(12);
-            UserEntryAdd.sBirthDay = ReadPascalString(10);
-            UserEntryAdd.sMobilePhone = ReadPascalString(13);
-            UserEntryAdd.sMemo = ReadPascalString(20);
-            UserEntryAdd.sMemo2 = ReadPascalString(20);
-        }
-
         protected override void ReadPacket(BinaryReader reader)
         {
-            throw new System.NotImplementedException();
+            UserEntry = new TUserEntry();
+            UserEntry.sAccount = reader.ReadPascalString(10);
+            UserEntry.sPassword = reader.ReadPascalString(10);
+            UserEntry.sUserName = reader.ReadPascalString(20);
+            UserEntry.sSSNo = reader.ReadPascalString(14);
+            UserEntry.sPhone = reader.ReadPascalString(14);
+            UserEntry.sQuiz = reader.ReadPascalString(20);
+            UserEntry.sAnswer = reader.ReadPascalString(12);
+            UserEntry.sEMail = reader.ReadPascalString(40);
+
+            UserEntryAdd = new TUserEntryAdd();
+            UserEntryAdd.sQuiz2 = reader.ReadPascalString(20);
+            UserEntryAdd.sAnswer2 = reader.ReadPascalString(12);
+            UserEntryAdd.sBirthDay = reader.ReadPascalString(10);
+            UserEntryAdd.sMobilePhone = reader.ReadPascalString(13);
+            UserEntryAdd.sMemo = reader.ReadPascalString(20);
+            UserEntryAdd.sMemo2 =reader. ReadPascalString(20);
         }
 
         protected override void WritePacket(BinaryWriter writer)
