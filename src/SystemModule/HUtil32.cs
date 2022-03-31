@@ -723,8 +723,6 @@ namespace SystemModule
         /// <summary>
         /// 字符串转Byte字节数组
         /// </summary>
-        /// <param name="str"></param>
-        /// <param name="strLength"></param>
         /// <returns></returns>
         public static unsafe byte[] StringToByteAry(string str, out int strLength)
         {

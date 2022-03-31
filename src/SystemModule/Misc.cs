@@ -3,8 +3,8 @@ namespace SystemModule
 {
     public class Misc
     {
-        const byte bySeed = 0xAC;
-        const byte byBase = 0x3C;
+        private const byte bySeed = 0xAC;
+        private const byte byBase = 0x3C;
 
         public static string EncodeString(string Str)
         {
@@ -25,23 +25,16 @@ namespace SystemModule
         /// <summary>
         /// 加密Buffer
         /// </summary>
-        /// <param name="Buf"></param>
-        /// <param name="Len"></param>
-        /// <param name="DstBuf"></param>
-        /// <param name="dstOffset"></param>
         /// <returns></returns>
         public static int EncodeBuf(byte[] Buf, int Len, byte[] DstBuf, int dstOffset = 0)
         {
-            int result;
-            byte temp;
-            byte c;
             var no = 2;
             byte remainder = 0;
             var pos = 0;
             var dstPos = dstOffset;
             for (var i = 0; i < Len; i++)
             {
-                c = (byte)(Buf[pos] ^ bySeed);
+                var c = (byte)(Buf[pos] ^ bySeed);
                 pos++;
                 if (no == 6)
                 {
@@ -54,7 +47,7 @@ namespace SystemModule
                 }
                 else
                 {
-                    temp = (byte)(c >> 2);
+                    var temp = (byte)(c >> 2);
                     DstBuf[dstPos] = (byte)(((temp & 0x3C) | (c & 0x3)) + byBase);
                     dstPos++;
                     remainder = (byte)((remainder << 2) | (temp & 0x3));
@@ -66,7 +59,7 @@ namespace SystemModule
                 DstBuf[dstPos] = (byte)(remainder + byBase);
                 dstPos++;
             }
-            result = dstPos - dstOffset;
+            var result = dstPos - dstOffset;
             DstBuf[dstPos + 1] = (byte)'\0';
             return result;
         }
