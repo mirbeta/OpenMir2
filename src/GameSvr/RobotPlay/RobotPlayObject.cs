@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
@@ -10,7 +7,7 @@ namespace GameSvr
     /// <summary>
     /// 假人
     /// </summary>
-    public partial class TAIPlayObject : TPlayObject
+    public partial class RobotPlayObject : TPlayObject
     {
         public long m_dwSearchTargetTick = 0;
         /// <summary>
@@ -111,7 +108,7 @@ namespace GameSvr
         public int m_nDropUseItemRate;
         private readonly AIObjectConf _conf = null;
 
-        public TAIPlayObject() : base()
+        public RobotPlayObject() : base()
         {
             m_nSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
             m_nSoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref m_nSoftVersionDate);

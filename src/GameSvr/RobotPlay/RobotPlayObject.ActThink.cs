@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public partial class TAIPlayObject
+    public partial class RobotPlayObject
     {
         public TMapWalkXY ActThink_FindGoodPathA(TMapWalkXY[] WalkStep, int nRange, int nType)
         {

@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using SystemModule;
 
 namespace GameSvr
 {
-    public partial class TAIPlayObject
+    public partial class RobotPlayObject
     {
         public int DoThink_CheckTargetXYCount(int nX, int nY, int nRange)
         {

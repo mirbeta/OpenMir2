@@ -18,7 +18,7 @@ namespace GameSvr
             Load();
         }
 
-        public void LoadConfig(TAIPlayObject playObject)
+        public void LoadConfig(RobotPlayObject playObject)
         {
             byte nAttatckMode;
             string sLineText;

@@ -1,5 +1,4 @@
-﻿using System;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
@@ -656,11 +655,11 @@ namespace GameSvr
                         {
                             if (this.m_boAI)
                             {
-                                if ((this as TAIPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                if ((this as RobotPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
                                     {
-                                        (this as TAIPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                        (this as RobotPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
                                     }
                                 }
                             }
@@ -681,11 +680,11 @@ namespace GameSvr
                             {
                                 if (m_Master.m_boAI)
                                 {
-                                    if ((m_Master as TAIPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
+                                    if ((m_Master as RobotPlayObject).m_WAbil.Level <= M2Share.g_Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.m_sCharName))
                                         {
-                                            (m_Master as TAIPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
+                                            (m_Master as RobotPlayObject).GainExp(nPower * M2Share.g_Config.MonHptoExpmax);
                                         }
                                     }
                                 }
