@@ -22,8 +22,7 @@ namespace GameSvr
             _gateIdx = gateIdx;
             _gateInfo = gateInfo;
             runSocketSection = new object();
-            _sendQueue = new SendQueue();
-            _sendQueue.Initialization(gateIdx, gateInfo.Socket);
+            _sendQueue = new SendQueue(gateInfo.Socket);
         }
 
         public TGateInfo GateInfo => _gateInfo;
@@ -45,8 +44,6 @@ namespace GameSvr
         /// 处理接收到的数据
         /// GameGate -> GameSvr
         /// </summary>
-        /// <param name="nMsgLen"></param>
-        /// <param name="data"></param>
         public void HandleReceiveBuffer(int nMsgLen, byte[] data)
         {
             const string sExceptionMsg1 = "[Exception] TRunSocket::ExecGateBuffers -> pBuffer";

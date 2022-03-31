@@ -16,7 +16,6 @@ namespace GameSvr
             if (M2Share.boStartReady)
             {
                 M2Share.GateManager.Start();
-                M2Share.GateManager.StartQueue();
                 await M2Share.GateManager.StartMessageQueue(stoppingToken);
             }
         }
@@ -29,7 +28,7 @@ namespace GameSvr
             M2Share.MainOutMessage("读取配置信息完成...");
             _mirApp.StartServer(cancellationToken);
             _mirApp.StartEngine();
-            _mirApp.Start();
+            _mirApp.Start(cancellationToken);
             return base.StartAsync(cancellationToken);
         }
 

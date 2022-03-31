@@ -277,6 +277,9 @@ namespace GameSvr
         /// 包裹刷新间隔
         /// </summary>
         public int dwQueryBagItemsTick;
+        /// <summary>
+        /// 发送在线人数间隔时间
+        /// </summary>
         public int dwSendOnlineTime;
         public int dwSaveHumanRcdTime;
         public int dwHumanFreeDelayTime;

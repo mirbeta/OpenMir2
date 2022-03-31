@@ -3540,13 +3540,11 @@ namespace GameSvr
             {
                 if (m_btGender == PlayGender.Man)
                 {
-                    sSayMsg = M2Share.g_sfUnMarryManLoginMsg.Replace("%d", m_sDearName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sDearName);
+                    sSayMsg = string.Format(M2Share.g_sfUnMarryManLoginMsg, m_sDearName, m_sDearName);
                 }
                 else
                 {
-                    sSayMsg = M2Share.g_sfUnMarryWoManLoginMsg.Replace("%d", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
+                    sSayMsg = string.Format(M2Share.g_sfUnMarryWoManLoginMsg, m_sCharName, m_sCharName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 m_sDearName = "";
@@ -3558,32 +3556,16 @@ namespace GameSvr
                 m_DearHuman.m_DearHuman = this;
                 if (m_btGender == PlayGender.Man)
                 {
-                    sSayMsg = M2Share.g_sManLoginDearOnlineSelfMsg.Replace("%d", m_sDearName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_DearHuman.m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_DearHuman.m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_DearHuman.m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineSelfMsg, m_sDearName, m_sCharName, m_DearHuman.m_PEnvir.sMapDesc, m_DearHuman.m_nCurrX, m_DearHuman.m_nCurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = M2Share.g_sManLoginDearOnlineDearMsg.Replace("%d", m_sDearName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineDearMsg, m_sDearName, m_sCharName, m_PEnvir.sMapDesc, m_nCurrX, m_nCurrY);
                     m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    sSayMsg = M2Share.g_sWoManLoginDearOnlineSelfMsg.Replace("%d", m_sDearName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_DearHuman.m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_DearHuman.m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_DearHuman.m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineSelfMsg, m_sDearName, m_sCharName, m_DearHuman.m_PEnvir.sMapDesc, m_DearHuman.m_nCurrX, m_DearHuman.m_nCurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = M2Share.g_sWoManLoginDearOnlineDearMsg.Replace("%d", m_sDearName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineDearMsg, m_sDearName, m_sCharName, m_PEnvir.sMapDesc, m_nCurrX, m_nCurrY);
                     m_DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
@@ -3605,8 +3587,7 @@ namespace GameSvr
             bool boIsfound = false;
             string sSayMsg;
             TPlayObject Human;
-            // 处理强行脱离师徒关系
-            for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++)
+            for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
                 if (String.Compare(M2Share.g_UnForceMasterList[i], this.m_sCharName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -3620,13 +3601,11 @@ namespace GameSvr
             {
                 if (m_boMaster)
                 {
-                    sSayMsg = M2Share.g_sfUnMasterLoginMsg.Replace("%d", m_sMasterName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sMasterName);
+                    sSayMsg = string.Format(M2Share.g_sfUnMasterLoginMsg, m_sMasterName);
                 }
                 else
                 {
-                    sSayMsg = M2Share.g_sfUnMasterListLoginMsg.Replace("%d", m_sMasterName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sMasterName);
+                    sSayMsg = string.Format(M2Share.g_sfUnMasterListLoginMsg, m_sMasterName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 m_sMasterName = "";
@@ -3639,11 +3618,10 @@ namespace GameSvr
                     Human = M2Share.UserEngine.GetPlayObject(m_sMasterName);
                     if (Human != null && !Human.m_boDeath && !Human.m_boGhost)
                     {
-                        sSayMsg = M2Share.g_sYourMasterListUnMasterOKMsg.Replace("%d", m_sCharName);
+                        sSayMsg = string.Format(M2Share.g_sYourMasterListUnMasterOKMsg, m_sCharName);
                         Human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
-                        // 如果大徒弟则将师父上的名字去掉
-                        if (m_sCharName == Human.m_sMasterName)
+                        if (m_sCharName == Human.m_sMasterName)// 如果大徒弟则将师父上的名字去掉
                         {
                             Human.m_sMasterName = "";
                             Human.RefShowName();
@@ -3726,17 +3704,9 @@ namespace GameSvr
                 {
                     m_MasterHuman.m_MasterHuman = this;
                     m_MasterList.Add(m_MasterHuman);
-                    sSayMsg = M2Share.g_sMasterOnlineSelfMsg.Replace("%d", m_sMasterName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_MasterHuman.m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_MasterHuman.m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_MasterHuman.m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sMasterOnlineSelfMsg, m_sMasterName, m_sCharName, m_MasterHuman.m_PEnvir.sMapDesc, m_MasterHuman.m_nCurrX, m_MasterHuman.m_nCurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = M2Share.g_sMasterOnlineMasterListMsg.Replace("%d", m_sMasterName);
-                    sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                    sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
-                    sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                    sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                    sSayMsg = string.Format(M2Share.g_sMasterOnlineMasterListMsg, m_sMasterName, m_sCharName, m_PEnvir.sMapDesc, m_nCurrX, m_nCurrY);
                     m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
@@ -3757,17 +3727,9 @@ namespace GameSvr
                             m_MasterHuman.m_MasterHuman = this;
                         }
                         m_MasterHuman.m_MasterList.Add(this);
-                        sSayMsg = M2Share.g_sMasterListOnlineSelfMsg.Replace("%d", m_sMasterName);
-                        sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                        sSayMsg = sSayMsg.Replace("%m", m_MasterHuman.m_PEnvir.sMapDesc);
-                        sSayMsg = sSayMsg.Replace("%x", m_MasterHuman.m_nCurrX.ToString());
-                        sSayMsg = sSayMsg.Replace("%y", m_MasterHuman.m_nCurrY.ToString());
+                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, m_sMasterName,m_sCharName,m_MasterHuman.m_PEnvir.sMapDesc,m_MasterHuman.m_nCurrX,m_MasterHuman.m_nCurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                        sSayMsg = M2Share.g_sMasterListOnlineMasterMsg.Replace("%d", m_sMasterName);
-                        sSayMsg = sSayMsg.Replace("%s", m_sCharName);
-                        sSayMsg = sSayMsg.Replace("%m", m_PEnvir.sMapDesc);
-                        sSayMsg = sSayMsg.Replace("%x", m_nCurrX.ToString());
-                        sSayMsg = sSayMsg.Replace("%y", m_nCurrY.ToString());
+                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineMasterMsg, m_sMasterName, m_sCharName, m_PEnvir.sMapDesc, m_nCurrX, m_nCurrY);
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
