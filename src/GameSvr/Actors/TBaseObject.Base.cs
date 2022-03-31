@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using SystemModule;
 
 namespace GameSvr
@@ -746,7 +744,7 @@ namespace GameSvr
                             {
                                 if (m_ExpHitter.m_boAI)
                                 {
-                                    (m_ExpHitter as TAIPlayObject).GainExp(tExp);
+                                    (m_ExpHitter as RobotPlayObject).GainExp(tExp);
                                 }
                                 else
                                 {
@@ -794,7 +792,7 @@ namespace GameSvr
                                 {
                                     if (m_ExpHitter.m_Master.m_boAI)
                                     {
-                                        (m_ExpHitter.m_Master as TAIPlayObject).GainExp(tExp);
+                                        (m_ExpHitter.m_Master as RobotPlayObject).GainExp(tExp);
                                     }
                                     else
                                     {
@@ -817,7 +815,7 @@ namespace GameSvr
                             {
                                 if (m_LastHiter.m_boAI)
                                 {
-                                    (m_LastHiter as TAIPlayObject).GainExp(tExp);
+                                    (m_LastHiter as RobotPlayObject).GainExp(tExp);
                                 }
                                 else
                                 {
@@ -1392,7 +1390,7 @@ namespace GameSvr
                                         {
                                             if (TargetBaseObject.m_boAI)
                                             {
-                                                (TargetBaseObject as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                (TargetBaseObject as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
                                             }
                                             else
                                             {
@@ -1411,7 +1409,7 @@ namespace GameSvr
                                             {
                                                 if (TargetBaseObject.m_Master.m_boAI)
                                                 {
-                                                    (TargetBaseObject.m_Master as TAIPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
+                                                    (TargetBaseObject.m_Master as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.g_Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {

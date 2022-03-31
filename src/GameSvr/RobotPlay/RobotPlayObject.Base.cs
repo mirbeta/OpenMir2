@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using SystemModule;
 
 namespace GameSvr
 {
-    public partial class TAIPlayObject
+    public partial class RobotPlayObject
     {
         public override void Run()
         {

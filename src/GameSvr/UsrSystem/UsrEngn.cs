@@ -2733,19 +2733,19 @@ namespace GameSvr
             return false;
         }
 
-        private TAIPlayObject AddAIPlayObject(TAILogon AI)
+        private RobotPlayObject AddAIPlayObject(TAILogon AI)
         {
             int n1C;
             int n20;
             int n24;
             object p28;
-            TAIPlayObject result = null;
+            RobotPlayObject result = null;
             var Map = M2Share.g_MapManager.FindMap(AI.sMapName);
             if (Map == null)
             {
                 return result;
             }
-            TAIPlayObject Cert = new TAIPlayObject();
+            RobotPlayObject Cert = new RobotPlayObject();
             if (Cert != null)
             {
                 Cert.m_PEnvir = Map;

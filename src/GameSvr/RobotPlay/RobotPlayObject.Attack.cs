@@ -1,9 +1,8 @@
-using System;
 using SystemModule;
 
 namespace GameSvr
 {
-    public partial class TAIPlayObject
+    public partial class RobotPlayObject
     {
         /// <summary>
         /// 物理攻击
