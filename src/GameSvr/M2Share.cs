@@ -327,7 +327,7 @@ namespace GameSvr
         public static string g_sYourHusbandSearchLocateMsg = "你的老公正在找你，他现在位于:";
         public static string g_sYourHusbandNowLocateMsg = "你的老公现在位于:";
         public static string g_sYourWifeSearchLocateMsg = "你的老婆正在找你，他现在位于:";
-        public static string g_sfUnMasterLoginMsg = "你的一个徒弟已经背判师门了!!!";
+        public static string g_sfUnMasterLoginMsg = "你的徒弟{0}已经背判师门了!!!";
         public static string g_sfUnMasterListLoginMsg = "你的师父{0}已经将你逐出师门了!!!";
         public static string g_sMasterListOnlineSelfMsg = "你的师父{0}当前位于{1}({2}:{3})。";
         public static string g_sMasterListOnlineMasterMsg = "你的徒弟%s在:{0}({1}:{2})上线了!!!。";
@@ -421,7 +421,7 @@ namespace GameSvr
         public static string g_sChangePermissionMsg = "当前权限等级为:{0}";
         public static string g_sChangeKillMonExpRateMsg = "经验倍数:{0} 时长{1}秒";
         public static string g_sChangePowerRateMsg = "攻击力倍数:{0} 时长{1}秒";
-        public static string g_sChangeMemberLevelMsg = "当前会员等级为:%d";
+        public static string g_sChangeMemberLevelMsg = "当前会员等级为:{0}";
         public static string g_sChangeMemberTypeMsg = "当前会员类型为:{0}";
         public static string g_sScriptChangeHumanHPMsg = "当前HP值为:{0}";
         public static string g_sScriptChangeHumanMPMsg = "当前MP值为:{0}";

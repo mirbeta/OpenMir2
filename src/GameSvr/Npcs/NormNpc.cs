@@ -329,7 +329,7 @@ namespace GameSvr
                     var wHour = nSecond / 3600;
                     var wMinute = (nSecond / 60) % 60;
                     var wSecond = nSecond % 60;
-                    sText = format("%d:%d:%d", wHour, wMinute, wSecond);
+                    sText = format("{0}:{1}:{2}", wHour, wMinute, wSecond);
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
                     return;
                 case "$DATETIME":

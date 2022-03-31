@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
@@ -17,7 +15,7 @@ namespace GameSvr
             _runServer = new Thread(Run) { IsBackground = true };
         }
 
-        public void Start()
+        public void Start(CancellationToken cancellationToken)
         {
             _runServer.Start();
             M2Share.UserEngine.Start();
@@ -58,7 +56,7 @@ namespace GameSvr
             if (M2Share.g_Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.g_Config.dwSendOnlineTime)
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = M2Share.g_sSendOnlineCountMsg.Replace("%c", HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.g_Config.nSendOnlineCountRate / 10)).ToString());
+                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.g_Config.nSendOnlineCountRate / 10)));
                 M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }

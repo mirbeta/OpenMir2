@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Packages;
@@ -19,21 +13,18 @@ namespace GameSvr
         private static readonly GateManager instance = new GateManager();
         public static GateManager Instance => instance;
         private readonly ISocketServer _gateSocket = null;
-        private object m_RunSocketSection = null;
-        private Channel<ReceiveData> _receiveQueue;
+        private readonly object m_RunSocketSection = null;
+        private readonly Channel<ReceiveData> _receiveQueue;
         private readonly object runSocketSection;
-        private ConcurrentDictionary<int, GateService> _gateDataService;
-        private readonly IList<Task> _runTask;
-        private int _runCount = 0;
+        private readonly ConcurrentDictionary<int, GateService> _gateDataService;
 
         private GateManager()
         {
-            _runTask = new List<Task>();
             m_RunSocketSection = new object();
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
             _gateDataService = new ConcurrentDictionary<int, GateService>();
-            _gateSocket = new ISocketServer(10, 4096);
+            _gateSocket = new ISocketServer(10, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
@@ -45,11 +36,6 @@ namespace GameSvr
         {
             _gateSocket.Start(M2Share.g_Config.sGateAddr, M2Share.g_Config.nGatePort);
             M2Share.MainOutMessage($"游戏网关[{ M2Share.g_Config.sGateAddr}:{M2Share.g_Config.nGatePort}]已启动...");
-        }
-
-        public void StartQueue()
-        {
-            Task.WhenAll(_runTask);
         }
 
         public void Stop()

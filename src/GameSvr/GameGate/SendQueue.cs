@@ -1,27 +1,19 @@
 ﻿using System.Diagnostics;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace GameSvr
 {
     public class SendQueue
     {
         private readonly Channel<byte[]> _sendQueue = null;
-        private Socket _sendSocket;
-        private int SocketId;
+        private readonly Socket _sendSocket;
         private readonly CancellationTokenSource _cancellation;
 
-        public SendQueue()
+        public SendQueue(Socket socket)
         {
             _sendQueue = Channel.CreateUnbounded<byte[]>();
             _cancellation = new CancellationTokenSource();
-        }
-
-        public void Initialization(int socketId, Socket socket)
-        {
-            SocketId = socketId;
             _sendSocket = socket;
         }
 
