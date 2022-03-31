@@ -2,7 +2,7 @@ using System.IO;
 
 namespace SystemModule.Packet
 {
-    public class TUserEntry
+    public class TUserEntry: Packets
     {
         public string sAccount;
         public string sPassword;
@@ -12,6 +12,16 @@ namespace SystemModule.Packet
         public string sQuiz;
         public string sAnswer;
         public string sEMail;
+        
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class UserFullEntry : Packets

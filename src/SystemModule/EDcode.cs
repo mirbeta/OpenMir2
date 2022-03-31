@@ -6,97 +6,6 @@ namespace SystemModule
     {
         private const int BUFFERSIZE = 10000;
 
-        private static int Encode6BitBuf(byte[] pSrc, byte[] pDest, int nSrcLen, int nDestLen)
-        {
-            var nRestCount = 0;
-            byte btRest = 0;
-            var nDestPos = 0;
-            for (var i = 0; i < nSrcLen; i++)
-            {
-                if (nDestPos >= nDestLen) break;
-                var btCh = pSrc[i];
-                var btMade = Convert.ToByte((byte)(btRest | (btCh >> Convert.ToByte(2 + nRestCount))) & 0x3F);
-                btRest = Convert.ToByte((byte)((btCh << (8 - (2 + nRestCount))) >> 2) & 0x3F);
-                nRestCount += 2;
-                if (nRestCount < 6)
-                {
-                    pDest[nDestPos] = Convert.ToByte(btMade + 0x3C);
-                    nDestPos++;
-                }
-                else
-                {
-                    if (nDestPos < nDestLen - 1)
-                    {
-                        pDest[nDestPos] = Convert.ToByte(btMade + 0x3C);
-                        pDest[nDestPos + 1] = Convert.ToByte(btRest + 0x3C);
-                        nDestPos += 2;
-                    }
-                    else
-                    {
-                        pDest[nDestPos] = Convert.ToByte(btMade + 0x3C);
-                        nDestPos++;
-                    }
-
-                    nRestCount = 0;
-                    btRest = 0;
-                }
-            }
-
-            if (nRestCount > 0)
-            {
-                pDest[nDestPos] = Convert.ToByte(btRest + 0x3C);
-                nDestPos++;
-            }
-
-            pDest[nDestPos] = 0;
-            return nDestPos;
-        }
-
-        internal static int Decode6BitBuf(byte[] source, byte[] pbuf, int nSrcLen, int nBufLen)
-        {
-            byte[] masks = { 0xFC, 0xF8, 0xF0, 0xE0, 0xC0 };
-            var nBitPos = 2;
-            var nMadeBit = 0;
-            var nBufPos = 0;
-            byte btCh = 0;
-            byte btTmp = 0;
-            byte btByte = 0;
-            for (var i = 0; i < nSrcLen; i++)
-            {
-                if (source[i] - 0x3C >= 0)
-                {
-                    btCh = Convert.ToByte(source[i] - 0x3C);
-                }
-                else
-                {
-                    nBufPos = 0;
-                    break;
-                }
-
-                if (nBufPos >= nBufLen) break;
-                if (nMadeBit + 6 >= 8)
-                {
-                    btByte = Convert.ToByte(btTmp | ((btCh & 0x3F) >> (6 - nBitPos)));
-                    pbuf[nBufPos] = btByte;
-                    nBufPos++;
-                    nMadeBit = 0;
-                    if (nBitPos < 6)
-                    {
-                        nBitPos += 2;
-                    }
-                    else
-                    {
-                        nBitPos = 2;
-                        continue;
-                    }
-                }
-                btTmp = Convert.ToByte((byte)(btCh << nBitPos) & masks[nBitPos - 2]);
-                nMadeBit += 8 - nBitPos;
-            }
-            pbuf[nBufPos] = 0;
-            return nBufPos;
-        }
-
         /// <summary>
         /// 解码客户端封包
         /// </summary>
@@ -104,8 +13,8 @@ namespace SystemModule
         {
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
-            var EncBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
-            return new ClientPacket(EncBuf, (byte)buffLen);
+            var encBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
+            return new ClientPacket(encBuf, (byte)buffLen);
         }
 
         /// <summary>
@@ -114,8 +23,8 @@ namespace SystemModule
         public static ClientPacket DecodePacket(byte[] data)
         {
             var buffLen = 0;
-            var EncBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
-            return new ClientPacket(EncBuf, (byte)buffLen);
+            var encBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
+            return new ClientPacket(encBuf, (byte)buffLen);
         }
 
         public static byte[] DecodeBuff(byte[] data)
@@ -127,22 +36,12 @@ namespace SystemModule
         /// <summary>
         /// 解密字符串
         /// </summary>
-        /// <param name="str">密文</param>
-        /// <param name="chinese">是否返回中文</param>
-        /// <returns></returns>
-        public static unsafe string DeCodeString(string str, bool chinese = true)
+        public static string DeCodeString(string str)
         {
             var nLen = 0;
             var bSrc = HUtil32.GetBytes(str);
             var encBuf = Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
-            if (chinese)
-            {
-                return HUtil32.GetString(encBuf, 0, nLen);
-            }
-            fixed (byte* pb = encBuf)
-            {
-                return HUtil32.SBytePtrToString((sbyte*)pb, 0, nLen);
-            }
+            return HUtil32.GetString(encBuf, 0, nLen);
         }
 
         public static byte[] DecodeBuffer(string strSrc)
@@ -154,7 +53,6 @@ namespace SystemModule
 
         public static byte[] DecodeBuffer(string Src, int size)
         {
-            var EncBuf = new byte[size];
             var bSrc = HUtil32.GetBytes(Src);
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
@@ -164,53 +62,27 @@ namespace SystemModule
         /// 加密字符串
         /// </summary>
         /// <returns></returns>
-        public static unsafe string EncodeString(string str)
+        public static string EncodeString(string str)
         {
-            string result;
-            var EncBuf = new byte[BUFFERSIZE];
             var bSrc = HUtil32.GetBytes(str);
-            var DestLen = Misc.EncodeBuf(bSrc, bSrc.Length, EncBuf);
-            fixed (byte* pb = EncBuf)
-            {
-                result = HUtil32.SBytePtrToString((sbyte*)pb, 0, DestLen);
-            }
-            return result;
+            var encBuf = new byte[bSrc.Length * 2];
+            var destLen = Misc.EncodeBuf(bSrc, bSrc.Length, encBuf);
+            return HUtil32.GetString(encBuf, 0, destLen);
         }
 
-        public static unsafe string EncodeBuffer<T>(T obj)
+        public static string EncodeBuffer<T>(T obj) where T : Packets, new()
         {
             var result = string.Empty;
-            var type = typeof(T);
-            var targetsMethord = type.GetMethod("GetPacket");
-            if (targetsMethord == null) throw new Exception($"序列化{type.Name}失败");
-            byte[] methordResult;
-            if (targetsMethord.GetParameters().Length > 0)
+            var data = obj.GetPacket();
+            var buffSize = data.Length;
+            if (buffSize <= 0) return result;
+            if (buffSize < BUFFERSIZE)
             {
-                methordResult = (byte[])targetsMethord.Invoke(obj, new object[] { (byte)6 });
-            }
-            else
-            {
-                methordResult = (byte[])targetsMethord.Invoke(obj, new object[] { });
-            }
-            var buffSize = methordResult.Length;
-            if (buffSize > 0)
-            {
-                if (buffSize < BUFFERSIZE)
-                {
-                    var encBuf = new byte[BUFFERSIZE];
-                    var tempBuf = new byte[BUFFERSIZE];
-                    Array.Copy(methordResult, 0, tempBuf, 0, buffSize);
-                    var destLen = Misc.EncodeBuf(tempBuf, buffSize, encBuf);
-                    fixed (byte* pb = encBuf)
-                    {
-                        result = HUtil32.SBytePtrToString((sbyte*)pb, 0, destLen);
-                    }
-                }
-                else
-                {
-                    result = string.Empty;
-                }
-                return result;
+                var encBuf = new byte[buffSize * 2];
+                var tempBuf = new byte[buffSize];
+                Buffer.BlockCopy(data, 0, tempBuf, 0, buffSize);
+                var destLen = Misc.EncodeBuf(tempBuf, buffSize, encBuf);
+                return HUtil32.GetString(encBuf, 0, destLen);
             }
             return result;
         }
@@ -231,25 +103,17 @@ namespace SystemModule
         /// <summary>
         /// 加密Byte数组
         /// </summary>
-        public static unsafe string EncodeBuffer(byte[] Buf, int bufsize)
+        public static string EncodeBuffer(byte[] data, int bufsize)
         {
-            string result;
-            var EncBuf = new byte[BUFFERSIZE];
-            var TempBuf = new byte[BUFFERSIZE];
+            var tempBuf = new byte[data.Length];
+            var encBuf = new byte[tempBuf.Length * 2];
             if (bufsize < BUFFERSIZE)
             {
-                Array.Copy(Buf, 0, TempBuf, 0, bufsize);
-                var destLen = Misc.EncodeBuf(TempBuf, bufsize, EncBuf);
-                fixed (byte* pb = EncBuf)
-                {
-                    result = HUtil32.SBytePtrToString((sbyte*)pb, 0, destLen);
-                }
+                Buffer.BlockCopy(data, 0, tempBuf, 0, bufsize);
+                var destLen = Misc.EncodeBuf(tempBuf, bufsize, encBuf);
+                return HUtil32.GetString(encBuf, 0, destLen);
             }
-            else
-            {
-                result = "";
-            }
-            return result;
+            return string.Empty;
         }
 
         /// <summary>
@@ -264,19 +128,13 @@ namespace SystemModule
         /// <summary>
         /// 加密消息
         /// </summary>
-        /// <param name="smsg"></param>
         /// <returns></returns>
-        public static unsafe string EncodeMessage(ClientPacket smsg)
+        public static string EncodeMessage(ClientPacket packet)
         {
-            string result = string.Empty;
-            byte[] EncBuf = new byte[1024];
-            byte[] msgBuf = smsg.GetPacket();
-            int DestLen = Misc.EncodeBuf(msgBuf, 12, EncBuf);
-            fixed (byte* pb = EncBuf)
-            {
-                result = HUtil32.SBytePtrToString((sbyte*)pb, 0, DestLen);
-            }
-            return result;
+            var packetData = packet.GetPacket();
+            var encBuf = new byte[packetData.Length * 2];
+            var destLen = Misc.EncodeBuf(packetData, 12, encBuf);
+            return HUtil32.GetString(encBuf, 0, destLen);
         }
     }
 }
