@@ -1,10 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Runtime;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GameSvr
 {
@@ -35,7 +30,7 @@ namespace GameSvr
             {
                 cancellationToken.CancelAfter(2000);
             };
-
+            
             await builder.RunConsoleAsync(cancellationToken.Token);
         }
     }

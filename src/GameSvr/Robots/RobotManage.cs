@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr
@@ -24,12 +21,11 @@ namespace GameSvr
 
         private void LoadRobot()
         {
-            StringList LoadList;
             var sRobotName = string.Empty;
             var sScriptFileName = string.Empty;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Robot.txt");
             if (!File.Exists(sFileName)) return;
-            LoadList = new StringList();
+            using var LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);
             for (var i = 0; i < LoadList.Count; i++)
             {
@@ -44,7 +40,6 @@ namespace GameSvr
                 RobotHuman.LoadScript();
                 _robotHumanList.Add(RobotHuman);
             }
-            LoadList = null;
         }
 
         public void ReLoadRobot()

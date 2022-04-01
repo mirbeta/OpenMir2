@@ -248,20 +248,20 @@ namespace SystemModule
         {
             var buff = HUtil32.GetBytes(m);
             byte[] result = new byte[16];
-            var Context = new MD5Context();
-            MD5Init(ref Context);
-            MD5Update(ref Context, ref buff, m.Length);
-            MD5Final(ref Context, ref result);
+            var context = new MD5Context();
+            MD5Init(ref context);
+            MD5Update(ref context, ref buff, m.Length);
+            MD5Final(ref context, ref result);
             return result;
         }
 
         public static string MD5Print(byte[] d)
         {
-            char[] Digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
             var result = "";
             for (var i = 0; i <= 15; i++)
             {
-                result = result + Digits[(d[i] >> 4) & 0x0F] + Digits[d[i] & 0x0F];
+                result = result + digits[(d[i] >> 4) & 0x0F] + digits[d[i] & 0x0F];
             }
             return result;
         }
@@ -269,20 +269,18 @@ namespace SystemModule
         public static byte[] MD5UnPrInt(string s)
         {
             byte[] result = null;
-            byte[] Digest = new byte[16];
-            if (s.Length == 32)
+            byte[] digest = new byte[16];
+            if (s.Length != 32) return null;
+            try
             {
-                try
+                for (var i = 0; i < 15; i++)
                 {
-                    for (var i = 0; i < 15; i++)
-                    {
-                        Digest[i] = Convert.ToByte("$" + s.Substring(1 + i * 2 - 1, 2));
-                    }
+                    digest[i] = Convert.ToByte("$" + s.Substring(1 + i * 2 - 1, 2));
                 }
-                catch
-                {
-                    result = Digest;
-                }
+            }
+            catch
+            {
+                result = digest;
             }
             return result;
         }
@@ -290,9 +288,6 @@ namespace SystemModule
         /// <summary>
         /// Compare two Digests
         /// </summary>
-        /// <param name="D1"></param>
-        /// <param name="D2"></param>
-        /// <returns></returns>
         public static bool MD5Match(byte[] D1, byte[] D2)
         {
             byte i = 0;

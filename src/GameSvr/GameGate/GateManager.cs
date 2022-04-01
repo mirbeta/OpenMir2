@@ -63,6 +63,7 @@ namespace GameSvr
                 if (_gateDataService.Count > 20)
                 {
                     e.Socket.Close();
+                    return;
                 }
                 var gateInfo = new TGateInfo();
                 gateInfo.nSendMsgCount = 0;
@@ -84,7 +85,7 @@ namespace GameSvr
             }
             else
             {
-                M2Share.ErrorMessage(string.Format(sKickGate, new object?[] { e.EndPoint.Address.ToString() }), MessageType.Error);
+                M2Share.ErrorMessage(string.Format(sKickGate, e.EndPoint));
                 e.Socket.Close();
             }
         }

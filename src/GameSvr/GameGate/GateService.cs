@@ -149,6 +149,7 @@ namespace GameSvr
         /// <summary>
         /// 添加到网关发送队列
         /// GameSvr -> GameGate
+        /// todo 合并小封包然后再次发送
         /// </summary>
         /// <returns></returns>
         public void HandleSendBuffer(byte[] buffer)
