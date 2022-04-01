@@ -1292,9 +1292,10 @@ namespace GameSvr
                     SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
+                M2Share.ErrorMessage(ex.StackTrace);
             }
         }
 

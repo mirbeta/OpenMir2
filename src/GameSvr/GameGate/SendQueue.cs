@@ -48,8 +48,10 @@ namespace GameSvr
                     if (_sendSocket.Connected)
                     {
                         var sendLen = _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-
-                        Debug.WriteLine(sendLen);
+                        if (sendLen < buffer.Length)
+                        {
+                            Debug.WriteLine("发送封包出现异常。");
+                        }
                     }
                 }
             }

@@ -60,7 +60,6 @@ namespace SystemModule
                 dstPos++;
             }
             var result = dstPos - dstOffset;
-            DstBuf[dstPos + 1] = (byte)'\0';
             return result;
         }
 
