@@ -742,7 +742,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sBunOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -910,7 +910,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -930,7 +930,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sBunOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -952,7 +952,7 @@ namespace GameSvr
                     }
                     break;
                 case Grobal2.CM_WALK:
-                    if (ClientWalkXY((short)ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.boLateDelivery, ref dwDelayTime))
+                    if (ClientWalkXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.boLateDelivery, ref dwDelayTime))
                     {
                         m_dwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -961,7 +961,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -981,8 +981,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sWalkOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                // 如果超速则发送攻击失败信息
-                                SendSocket(M2Share.GetFailTick);
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                                 if (m_boTestSpeedMode)
                                 {
                                     SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -992,7 +991,7 @@ namespace GameSvr
                             {
                                 if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
-                                    SendSocket(M2Share.GetFailTick);
+                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
                                     {
                                         SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1021,7 +1020,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1041,7 +1040,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sRunOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                                 if (m_boTestSpeedMode)
                                 {
                                     SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1069,7 +1068,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1089,13 +1088,13 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sRunOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                             }
                             else
                             {
                                 if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
-                                    SendSocket(M2Share.GetFailTick);
+                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
                                     {
                                         SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1132,7 +1131,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1152,7 +1151,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sHitOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -1187,7 +1186,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1207,7 +1206,7 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sBunOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -1242,7 +1241,7 @@ namespace GameSvr
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendSocket(M2Share.GetFailTick);
+                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1262,13 +1261,13 @@ namespace GameSvr
                                         M2Share.MainOutMessage(format(M2Share.g_sSpellOverSpeed, m_sCharName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendSocket(M2Share.GetFailTick);// 如果超速则发送攻击失败信息
+                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
                                 if (dwDelayTime > M2Share.g_Config.dwDropOverSpeed && M2Share.g_Config.btSpeedControlMode == 1 && m_boFilterAction)
                                 {
-                                    SendSocket(M2Share.GetFailTick);
+                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (m_boTestSpeedMode)
                                     {
                                         SysMsg(format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);

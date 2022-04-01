@@ -561,7 +561,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool ClientWalkXY(short wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientWalkXY(int wIdent, int nX, int nY, bool boLateDelivery, ref int dwDelayTime)
         {
             bool result = false;
             int n14;
