@@ -15,7 +15,7 @@ namespace SystemModule
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var encBuf = Misc.DecodeBuf(tempBuf, str.Length, ref buffLen);
-            return new ClientPacket(encBuf, (byte)buffLen);
+            return Packets.ToPacket<ClientPacket>(encBuf);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace SystemModule
             if (data == null) throw new ArgumentNullException(nameof(data));
             var buffLen = 0;
             var encBuf = Misc.DecodeBuf(data, data.Length, ref buffLen);
-            return new ClientPacket(encBuf, (byte)buffLen);
+            return Packets.ToPacket<ClientPacket>(encBuf);
         }
 
         public static byte[] DecodeBuff(byte[] data)
@@ -81,7 +81,7 @@ namespace SystemModule
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             var result = string.Empty;
-            var data = obj.GetPacket();
+            var data = obj.GetBuffer();
             var buffSize = data.Length;
             if (buffSize <= 0) return result;
             if (buffSize < BUFFERSIZE)
@@ -143,7 +143,7 @@ namespace SystemModule
         public static string EncodeMessage(ClientPacket packet)
         {
             if (packet == null) throw new ArgumentNullException(nameof(packet));
-            var packetData = packet.GetPacket();
+            var packetData = packet.GetBuffer();
             var encBuf = new byte[packetData.Length * 2];
             var destLen = Misc.EncodeBuf(packetData, 12, encBuf);
             return HUtil32.GetString(encBuf, 0, destLen);

@@ -23,7 +23,7 @@ namespace GameSvr
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(MagicInfo.GetPacket());
+            writer.Write(MagicInfo.GetBuffer());
             writer.Write(btLevel);
             writer.Write(wMagIdx);
             writer.Write(nTranPoint);

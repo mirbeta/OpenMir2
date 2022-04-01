@@ -47,7 +47,7 @@ namespace GameSvr
 
             for (var i = 0; i < UseItems.Length; i++)
             {
-                writer.Write(UseItems[i].GetPacket());
+                writer.Write(UseItems[i].GetBuffer());
             }
         }
     }

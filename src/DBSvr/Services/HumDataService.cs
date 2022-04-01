@@ -176,7 +176,7 @@ namespace DBSvr
             var nCheckCode = BitConverter.GetBytes(queryPart);
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
             requestPacket.CheckKey = codeBuff;
-            var pk = requestPacket.GetPacket();
+            var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
 
@@ -190,7 +190,7 @@ namespace DBSvr
             var nCheckCode = BitConverter.GetBytes(s);
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
             requestPacket.CheckKey = codeBuff;
-            var pk = requestPacket.GetPacket();
+            var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
 

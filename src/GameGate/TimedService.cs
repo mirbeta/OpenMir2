@@ -85,7 +85,7 @@ namespace GameGate
                     cmdPacket.SockID = 0;
                     cmdPacket.Cmd = Grobal2.GM_CHECKCLIENT;
                     cmdPacket.DataLen = 0;
-                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetPacket());
+                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
                 }
             }
         }

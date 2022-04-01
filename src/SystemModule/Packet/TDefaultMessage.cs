@@ -1,10 +1,12 @@
 using ProtoBuf;
-using System;
 using System.IO;
 
 namespace SystemModule
 {
-    public class TCmdPack
+    /// <summary>
+    /// 客户端消息
+    /// </summary>
+    public class ClientPacket : Packets
     {
         public int UID;
         public ushort Cmd;
@@ -43,19 +45,13 @@ namespace SystemModule
 
         public const int PackSize = 12;
 
-        public TCmdPack()
+        protected override void ReadPacket(BinaryReader reader)
         {
-
-        }
-
-        public TCmdPack(byte[] buffer)
-        {
-            var binaryReader = new BinaryReader(new MemoryStream(buffer, 0, PackSize));
-            Recog = binaryReader.ReadInt32();
-            Ident = binaryReader.ReadUInt16();
-            Param = binaryReader.ReadUInt16();
-            Tag = binaryReader.ReadUInt16();
-            Series = binaryReader.ReadUInt16();
+            Recog = reader.ReadInt32();
+            Ident = reader.ReadUInt16();
+            Param = reader.ReadUInt16();
+            Tag = reader.ReadUInt16();
+            Series = reader.ReadUInt16();
 
             Cmd = Ident;
             Cmd1 = Ident;
@@ -87,105 +83,13 @@ namespace SystemModule
             IDHi = Series;
         }
 
-        public byte[] GetPacket(byte msgType = 6)
+        protected override void WritePacket(BinaryWriter writer)
         {
-            using var memoryStream = new MemoryStream(PackSize);
-            var backingStream = new BinaryWriter(memoryStream);
-            switch (msgType)
-            {
-                case 0:
-                    backingStream.Write(UID);
-                    backingStream.Write(Cmd);
-                    backingStream.Write(X);
-                    backingStream.Write(Y);
-                    backingStream.Write(Direct);
-                    break;
-                case 1:
-                    backingStream.Write(ID1);
-                    backingStream.Write(Cmd1);
-                    backingStream.Write(ID2);
-                    break;
-                case 2:
-                    backingStream.Write(PosX);
-                    backingStream.Write(PosY);
-                    backingStream.Write(Cmd2);
-                    backingStream.Write(IDLo);
-                    backingStream.Write(Magic);
-                    backingStream.Write(IDHi);
-                    break;
-                case 3:
-                    backingStream.Write(UID1);
-                    backingStream.Write(Cmd3);
-                    backingStream.Write(b1);
-                    backingStream.Write(b2);
-                    backingStream.Write(b3);
-                    backingStream.Write(b4);
-                    break;
-                case 4:
-                    backingStream.Write(NID);
-                    backingStream.Write(Command);
-                    backingStream.Write(Pos);
-                    backingStream.Write(Dir);
-                    backingStream.Write(WID);
-                    break;
-                case 5:
-                    backingStream.Write(Head);
-                    backingStream.Write(Cmd4);
-                    backingStream.Write(Zero1);
-                    backingStream.Write(Tail);
-                    break;
-                case 6:
-                    backingStream.Write(Recog);
-                    backingStream.Write(Ident);
-                    backingStream.Write(Param);
-                    backingStream.Write(Tag);
-                    backingStream.Write(Series);
-                    break;
-            }
-
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
-            return data;
-        }
-    }
-
-    /// <summary>
-    /// 客户端消息
-    /// </summary>
-    public class ClientPacket : TCmdPack
-    {
-        public ClientPacket()
-        {
-
-        }
-
-        public ClientPacket(byte[] buff)
-        {
-            var binaryReader = new BinaryReader(new MemoryStream(buff));
-            Recog = binaryReader.ReadInt32();
-            Ident = binaryReader.ReadUInt16();
-            Param = binaryReader.ReadUInt16();
-            Tag = binaryReader.ReadUInt16();
-            Series = binaryReader.ReadUInt16();
-        }
-
-        public ClientPacket(byte[] buff, byte buffSize)
-        {
-            switch (buffSize)
-            {
-                case 12: //ClientMessage
-                    var binaryReader = new BinaryReader(new MemoryStream(buff, 0, buffSize));
-                    Recog = binaryReader.ReadInt32();
-                    Ident = binaryReader.ReadUInt16();
-                    Param = binaryReader.ReadUInt16();
-                    Tag = binaryReader.ReadUInt16();
-                    Series = binaryReader.ReadUInt16();
-                    break;
-                default:
-                    Console.WriteLine(buffSize);
-                    break;
-            }
+           writer.Write(Recog);
+           writer.Write(Ident);
+           writer.Write(Param);
+           writer.Write(Tag);
+           writer.Write(Series);
         }
     }
 

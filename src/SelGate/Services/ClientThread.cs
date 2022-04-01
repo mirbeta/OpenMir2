@@ -222,7 +222,7 @@ namespace SelGate.Services
             GateMsg.Ident = nIdent;
             GateMsg.UserIndex = nUserListIndex;
             GateMsg.PackLength = nLen;
-            var sendBuffer = GateMsg.GetPacket();
+            var sendBuffer = GateMsg.GetBuffer();
             if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];

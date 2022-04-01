@@ -27,7 +27,7 @@ namespace GameSvr
             writer.Write((byte)0);
             writer.Write((byte)0);
             writer.Write(CurTrain);
-            writer.Write(Def.GetPacket());
+            writer.Write(Def.GetBuffer());
         }
     }
 }

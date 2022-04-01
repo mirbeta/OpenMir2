@@ -244,7 +244,7 @@ namespace GameSvr
             };
             if (Socket.Connected)
             {
-                var data = msgHeader.GetPacket();
+                var data = msgHeader.GetBuffer();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -471,7 +471,7 @@ namespace GameSvr
             MsgHeader.PackLength = 0;
             if (Socket.Connected)
             {
-                var data = MsgHeader.GetPacket();
+                var data = MsgHeader.GetBuffer();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -535,7 +535,7 @@ namespace GameSvr
                             {
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
-                                    var defMsg = new ClientPacket(MsgBuff);
+                                    var defMsg = Packets.ToPacket<ClientPacket>(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);

@@ -249,7 +249,7 @@ namespace GameSvr
             msgHeader.Ident = Grobal2.GM_DATA;
             msgHeader.PackLength = ClientPacket.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
-            if (!AddGateBuffer(nGateIdx, outMessage.GetPacket()))
+            if (!AddGateBuffer(nGateIdx, outMessage.GetBuffer()))
             {
                 Console.WriteLine("发送玩家退出消息失败.");
             }
@@ -319,8 +319,8 @@ namespace GameSvr
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
-            backingStream.Write(msgHdr.GetPacket());
-            backingStream.Write(defMsg.GetPacket());
+            backingStream.Write(msgHdr.GetBuffer());
+            backingStream.Write(defMsg.GetBuffer());
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
@@ -345,7 +345,7 @@ namespace GameSvr
             };
             if (Socket.Connected)
             {
-                var data = MsgHeader.GetPacket();
+                var data = MsgHeader.GetBuffer();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }

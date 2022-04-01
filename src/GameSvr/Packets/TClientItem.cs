@@ -22,7 +22,7 @@ namespace GameSvr
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Item.GetPacket());
+            writer.Write(Item.GetBuffer());
             writer.Write(MakeIndex);
             writer.Write(Dura);
             writer.Write(DuraMax);

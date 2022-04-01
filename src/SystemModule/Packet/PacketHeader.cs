@@ -57,8 +57,8 @@ namespace SystemModule.Packages
         {
             var nLen = MessageHeader.PackLength + 20;
             writer.Write(nLen);
-            writer.Write(MessageHeader.GetPacket());
-            writer.Write(DefaultMessage.GetPacket());
+            writer.Write(MessageHeader.GetBuffer());
+            writer.Write(DefaultMessage.GetBuffer());
         }
     }
 }

@@ -62,7 +62,7 @@ namespace GameSvr
             var codeBuff = EDcode.EncodeBuffer(nCheckCode);
             requestPacket.CheckKey = codeBuff;
 
-            var pk = requestPacket.GetPacket();
+            var pk = requestPacket.GetBuffer();
             _clientScoket.Send(pk);
 
             return true;

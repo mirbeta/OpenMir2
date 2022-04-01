@@ -58,7 +58,7 @@ namespace LoginGate
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = Misc.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var CltCmd = new TCmdPack(packBuff);
+            var CltCmd = Packets.ToPacket<ClientPacket>(packBuff);
             var sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
@@ -72,7 +72,7 @@ namespace LoginGate
                 if (!string.IsNullOrEmpty(sReviceMsg))
                 {
                     AccountPacket accountPacket = new AccountPacket(AccountPacktType.Data, (int)Session.Socket.Handle, userData.Body);
-                    _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
+                    _lastLoginSvr.SendBuffer(accountPacket.GetBuffer());
                 }
             }
 
@@ -176,13 +176,13 @@ namespace LoginGate
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg = "")
         {
             int iLen = 0;
-            TCmdPack Cmd;
+            ClientPacket Cmd;
             byte[] SendBuf = new byte[1024];
             if ((_lastLoginSvr == null) || !_lastLoginSvr.IsConnected)
             {
                 return;
             }
-            Cmd = new TCmdPack();
+            Cmd = new ClientPacket();
             Cmd.Recog = nRecog;
             Cmd.Ident = wIdent;
             Cmd.Param = nParam;
@@ -193,14 +193,14 @@ namespace LoginGate
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var sBuff = HUtil32.GetBytes(sMsg);
-                TempBuf = new byte[TCmdPack.PackSize + sBuff.Length];
+                TempBuf = new byte[ClientPacket.PackSize + sBuff.Length];
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-                iLen = Misc.EncodeBuf(TempBuf, TCmdPack.PackSize + sMsg.Length, SendBuf);
+                iLen = Misc.EncodeBuf(TempBuf, ClientPacket.PackSize + sMsg.Length, SendBuf);
             }
             else
             {
-                TempBuf = Cmd.GetPacket();
-                iLen = Misc.EncodeBuf(TempBuf, TCmdPack.PackSize, SendBuf, 1);
+                TempBuf = Cmd.GetBuffer();
+                iLen = Misc.EncodeBuf(TempBuf, ClientPacket.PackSize, SendBuf, 1);
             }
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen, SocketFlags.None);
@@ -213,7 +213,7 @@ namespace LoginGate
         {
             var str = $"{_session.ClientIP}/{_session.ClientIP}";
             var accountPacket = new AccountPacket(AccountPacktType.Open, (int)Session.Socket.Handle, str);
-            _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
+            _lastLoginSvr.SendBuffer(accountPacket.GetBuffer());
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace LoginGate
                 return;
             }
             var accountPacket = new AccountPacket(AccountPacktType.Leave, (int)Session.Socket.Handle, "");
-            _lastLoginSvr.SendBuffer(accountPacket.GetPacket());
+            _lastLoginSvr.SendBuffer(accountPacket.GetBuffer());
             m_KickFlag = false;
         }
 
