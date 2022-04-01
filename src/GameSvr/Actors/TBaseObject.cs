@@ -2656,7 +2656,6 @@ namespace GameSvr
 
         protected byte GetCharColor(TBaseObject BaseObject)
         {
-            int n10;
             TUserCastle Castle;
             byte result = BaseObject.GetNamecolor();
             if (BaseObject.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
@@ -2667,7 +2666,7 @@ namespace GameSvr
                     {
                         result = M2Share.g_Config.btPKFlagNameColor;
                     }
-                    n10 = GetGuildRelation(this, BaseObject);
+                    var n10 = GetGuildRelation(this, BaseObject);
                     switch (n10)
                     {
                         case 1:
@@ -2732,11 +2731,27 @@ namespace GameSvr
                     }
                 }
             }
+            else if (BaseObject.m_btRaceServer == Grobal2.RC_NPC) //增加NPC名字颜色单独控制
+            {
+                result = M2Share.g_Config.NpcNameColor;
+                if (BaseObject.m_boCrazyMode) //疯狂模式(红名)
+                {
+                    result = 0xF9;
+                }
+                if (BaseObject.m_boHolySeize) //不能走动模式(困魔咒)
+                {
+                    result = 0x7D;
+                }
+            }
             else
             {
-                if (BaseObject.m_btSlaveExpLevel < Grobal2.SLAVEMAXLEVEL)
+                if (BaseObject.m_btSlaveExpLevel <= Grobal2.SLAVEMAXLEVEL)
                 {
                     result = M2Share.g_Config.SlaveColor[BaseObject.m_btSlaveExpLevel];
+                }
+                else
+                {
+                    result = 255;
                 }
                 if (BaseObject.m_boCrazyMode)
                 {
