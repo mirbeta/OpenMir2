@@ -193,7 +193,7 @@ namespace GameGate
                 {
                     while (true)
                     {
-                        var packetHeader = Packets.ToPacket<PacketHeader>(data);
+                        var packetHeader = Packets.ToPacket<PacketHeader>(dataBuff);
                         if (packetHeader.PacketCode == 0)
                         {
                             _logQueue.Enqueue("不应该出现这个文字", 5);
@@ -231,6 +231,10 @@ namespace GameGate
                                 case Grobal2.GM_DATA:
                                     var msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
                                     Buffer.BlockCopy(dataBuff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
+                                    
+                                    var cmd = Packets.ToPacket<ClientPacket>(dataBuff);
+                                    Console.WriteLine($"Ident:[{cmd.Ident}] DataLen:[{packetHeader.PackLength}] DataLen:[{dataBuff.Length}]");
+                                    
                                     var message = new TMessageData();
                                     message.MessageId = packetHeader.SocketIdx;
                                     message.Buffer = msgBuff;
@@ -361,7 +365,7 @@ namespace GameGate
             GateMsg.Ident = nIdent;
             GateMsg.UserIndex = nUserListIndex;
             GateMsg.PackLength = nLen;
-            var sendBuffer = GateMsg.GetPacket();
+            var sendBuffer = GateMsg.GetBuffer();
             if (Data is { Length: > 0 })
             {
                 var tempBuff = new byte[20 + Data.Length];

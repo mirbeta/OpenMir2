@@ -4,7 +4,7 @@ using SystemModule;
 
 namespace MakePlayer
 {
-    public class ClientPacket
+    public class RecvicePacket
     {
         public string SessionId;
         public byte[] ReviceBuffer;
@@ -17,12 +17,12 @@ namespace MakePlayer
         private static int g_dwProcessTimeMax = 0;
         private static int g_nPosition = 0;
         private static int dwRunTick = 0;
-        private static Channel<ClientPacket> _reviceMsgList;
+        private static Channel<RecvicePacket> _reviceMsgList;
 
         static ClientManager()
         {
             _Clients = new ConcurrentDictionary<string, PlayClient>();
-            _reviceMsgList = Channel.CreateUnbounded<ClientPacket>();
+            _reviceMsgList = Channel.CreateUnbounded<RecvicePacket>();
         }
 
         public static async void Start()
@@ -49,7 +49,7 @@ namespace MakePlayer
 
         public static void AddPacket(string socHandle, byte[] reviceBuff)
         {
-            var clientPacket = new ClientPacket();
+            var clientPacket = new RecvicePacket();
             clientPacket.SessionId = socHandle;
             clientPacket.ReviceBuffer = reviceBuff;
             _reviceMsgList.Writer.TryWrite(clientPacket);

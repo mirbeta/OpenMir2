@@ -299,7 +299,7 @@ namespace GameSvr
                 using var memoryStream = new MemoryStream();
                 using var backingStream = new BinaryWriter(memoryStream);
                 backingStream.Write(nSendBytes);
-                backingStream.Write(MsgHdr.GetPacket());
+                backingStream.Write(MsgHdr.GetBuffer());
                 if (bMsg.Length > 0)
                 {
                     backingStream.Write(bMsg);
@@ -329,7 +329,7 @@ namespace GameSvr
                 SocketIdx = m_nGSocketIdx,
                 Ident = Grobal2.GM_DATA
             };
-            int nSendBytes = 0;
+            var nSendBytes = 0;
             using var memoryStream = new MemoryStream();
             using var backingStream = new BinaryWriter(memoryStream);
             byte[] bMsg = null;
@@ -346,8 +346,8 @@ namespace GameSvr
                 }
                 nSendBytes = messageHead.PackLength + PacketHeader.PacketSize;
                 backingStream.Write(nSendBytes);
-                backingStream.Write(messageHead.GetPacket());
-                backingStream.Write(defMsg.GetPacket());
+                backingStream.Write(messageHead.GetBuffer());
+                backingStream.Write(defMsg.GetBuffer());
             }
             else if (!string.IsNullOrEmpty(sMsg))
             {
@@ -355,17 +355,18 @@ namespace GameSvr
                 messageHead.PackLength = -(bMsg.Length);
                 nSendBytes = Math.Abs(messageHead.PackLength) + PacketHeader.PacketSize;
                 backingStream.Write(nSendBytes);
-                backingStream.Write(messageHead.GetPacket());
+                backingStream.Write(messageHead.GetBuffer());
             }
             if (bMsg != null && bMsg.Length > 0)
             {
                 backingStream.Write(bMsg);
-                //backingStream.Write((byte)0);
             }
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
             M2Share.GateManager.AddGateBuffer(m_nGateIdx, data);
+            
+            Console.WriteLine($"Ident:[{defMsg.Ident}] DataLen:[{messageHead.PackLength}] DataLen:[{data.Length}]");
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

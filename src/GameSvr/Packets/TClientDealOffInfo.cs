@@ -45,7 +45,7 @@ namespace GameSvr
             writer.Write(dSellDateTime);
             writer.Write(nSellGold);
             var nullItem = new TClientItem();
-            var nullBuff = nullItem.GetPacket();
+            var nullBuff = nullItem.GetBuffer();
             for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
@@ -54,7 +54,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    writer.Write(UseItems[i].GetPacket());
+                    writer.Write(UseItems[i].GetBuffer());
                 }
             }
             writer.Write(N);

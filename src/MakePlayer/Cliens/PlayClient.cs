@@ -321,7 +321,7 @@ namespace MakePlayer
             SendClientMessage(Grobal2.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
-        private void ClientGetUserLogin(TCmdPack DefMsg, string sData)
+        private void ClientGetUserLogin(ClientPacket DefMsg, string sData)
         {
             m_boLogin = true;
             m_ConnectionStep = TConnectionStep.cnsPlay;
@@ -337,7 +337,7 @@ namespace MakePlayer
             SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeString("压力测试工具."));
         }
 
-        private void ClientGetAbility(TCmdPack DefMsg, string sData)
+        private void ClientGetAbility(ClientPacket DefMsg, string sData)
         {
             m_nGold = DefMsg.Recog;
             m_btJob = (byte)DefMsg.Param;
@@ -346,12 +346,12 @@ namespace MakePlayer
             m_Abil = new TAbility(buff);
         }
 
-        private void ClientGetWinExp(TCmdPack DefMsg)
+        private void ClientGetWinExp(ClientPacket DefMsg)
         {
             m_Abil.Exp = DefMsg.Recog;
         }
 
-        private void ClientGetLevelUp(TCmdPack DefMsg)
+        private void ClientGetLevelUp(ClientPacket DefMsg)
         {
             m_Abil.Level = (ushort)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
         }
@@ -586,7 +586,7 @@ namespace MakePlayer
             }
         }
 
-        private void ClientGetServerName(TCmdPack DefMsg, string sBody)
+        private void ClientGetServerName(ClientPacket DefMsg, string sBody)
         {
             string sServerName = string.Empty;
             string sServerStatus = string.Empty;

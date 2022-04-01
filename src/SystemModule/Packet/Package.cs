@@ -95,7 +95,7 @@ namespace SystemModule
             return shortarr;
         }
 
-        public byte[] GetPacket()
+        public byte[] GetBuffer()
         {
             using MemoryStream stream = new MemoryStream();
             using BinaryWriter writer = new BinaryWriter(stream);
