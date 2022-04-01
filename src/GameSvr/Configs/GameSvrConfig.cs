@@ -937,6 +937,10 @@ namespace GameSvr
         /// 关闭游戏引擎的加速控制
         /// </summary>
         public bool boSpeedHackCheck;
+        /// <summary>
+        /// NPC名字颜色控制(0-255)
+        /// </summary>
+        public byte NpcNameColor;
 
         public GameSvrConfig()
         {
@@ -1027,8 +1031,8 @@ namespace GameSvr
             nSpellFillTime = 800;
             nMonUpLvNeedKillBase = 100;
             nMonUpLvRate = 16;
-            MonUpLvNeedKillCount = new int[] { 0, 0, 50, 100, 200, 300, 600, 1200 };
-            SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249 };
+            MonUpLvNeedKillCount = new int[] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
+            SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249, 250, 250, 250, 250, 250, 250 };
             dwNeedExps = new int[Grobal2.MAXCHANGELEVEL];
             WideAttack = new int[] { 7, 1, 2 };
             CrsAttack = new int[] { 7, 1, 2, 3, 4, 5, 6 };
@@ -1633,6 +1637,7 @@ namespace GameSvr
             boSpeedHackCheck = true;
             sConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
             sDBType = "MySQL";
+            NpcNameColor = 255;
         }
     }
 }
