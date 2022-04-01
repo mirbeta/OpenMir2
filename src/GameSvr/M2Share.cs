@@ -1589,7 +1589,6 @@ namespace GameSvr
         public const string U_CHARMNAME = "宝石";
 
         public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
-        public static string GetFailTick => string.Format(sSTATUS_FAIL, HUtil32.GetTickCount());
 
         public static void CopyStdItemToOStdItem(TStdItem StdItem, TOStdItem OStdItem)
         {

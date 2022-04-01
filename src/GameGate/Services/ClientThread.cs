@@ -231,10 +231,6 @@ namespace GameGate
                                 case Grobal2.GM_DATA:
                                     var msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
                                     Buffer.BlockCopy(dataBuff, HeaderMessageSize, msgBuff, 0, msgBuff.Length);
-                                    
-                                    var cmd = Packets.ToPacket<ClientPacket>(dataBuff);
-                                    Console.WriteLine($"Ident:[{cmd.Ident}] DataLen:[{packetHeader.PackLength}] DataLen:[{dataBuff.Length}]");
-                                    
                                     var message = new TMessageData();
                                     message.MessageId = packetHeader.SocketIdx;
                                     message.Buffer = msgBuff;

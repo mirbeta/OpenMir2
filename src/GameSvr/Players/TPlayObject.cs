@@ -365,8 +365,6 @@ namespace GameSvr
             var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
             M2Share.GateManager.AddGateBuffer(m_nGateIdx, data);
-            
-            Console.WriteLine($"Ident:[{defMsg.Ident}] DataLen:[{messageHead.PackLength}] DataLen:[{data.Length}]");
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

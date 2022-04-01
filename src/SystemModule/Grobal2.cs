@@ -239,9 +239,21 @@ namespace SystemModule
         public const int CM_UPDATEUSER = 2004;
         public const int CM_THROW = 3005;
         public const int CM_TURN = 3010;
+        /// <summary>
+        /// 走路
+        /// </summary>
         public const int CM_WALK = 3011;
+        /// <summary>
+        /// 蹲下
+        /// </summary>
         public const int CM_SITDOWN = 3012;
+        /// <summary>
+        /// 跑步
+        /// </summary>
         public const int CM_RUN = 3013;
+        /// <summary>
+        /// 攻击
+        /// </summary>
         public const int CM_HIT = 3014;
         public const int CM_HEAVYHIT = 3015;
         public const int CM_BIGHIT = 3016;
