@@ -1,6 +1,4 @@
 ﻿using GameSvr.CommandSystem;
-using System;
-using System.Collections.Generic;
 using SystemModule;
 
 namespace GameSvr
@@ -59,7 +57,7 @@ namespace GameSvr
                             {
                                 for (var j = 0; j < MonList.Count; j++)
                                 {
-                                    BaseObject = MonList[j] as TBaseObject;
+                                    BaseObject = MonList[j];
                                     if (BaseObject != null)
                                     {
                                         if (BaseObject.m_Master != null && BaseObject.m_btRaceServer != 135)// 除135怪外，其它宝宝不清除

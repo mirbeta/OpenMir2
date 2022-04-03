@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr
@@ -12,11 +9,11 @@ namespace GameSvr
         /// <summary>
         /// 攻城行会列表
         /// </summary>
-        private IList<Association> m_AttackGuildList;
+        private readonly IList<Association> m_AttackGuildList;
         /// <summary>
         /// 攻城列表
         /// </summary>
-        private IList<TAttackerInfo> m_AttackWarList;
+        private readonly IList<TAttackerInfo> m_AttackWarList;
         /// <summary>
         /// 是否显示攻城战役结束消息
         /// </summary>

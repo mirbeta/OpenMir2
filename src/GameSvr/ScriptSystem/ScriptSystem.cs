@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -100,7 +97,7 @@ namespace GameSvr
             return sCallScriptFile;
         }
 
-        private Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
@@ -1909,7 +1906,6 @@ namespace GameSvr
             //    }
             //}
             int nIdx;
-            var boChange = false;
             // for (var i = 0; i < PlayDiceList.Count; i++)
             // {
             //     QuestActionInfo = PlayDiceList[i];

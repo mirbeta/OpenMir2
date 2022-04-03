@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GameSvr
+﻿namespace GameSvr
 {
     public class MagicEvent
     {

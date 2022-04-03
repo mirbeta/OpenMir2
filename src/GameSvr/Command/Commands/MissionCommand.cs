@@ -6,7 +6,7 @@ namespace GameSvr
     /// <summary>
     /// 设置怪物集中目标
     /// </summary>
-    [GameCommand("Mission", "设置怪物集中目标"," X Y", 10)]
+    [GameCommand("Mission", "设置怪物集中目标", " X Y", 10)]
     public class MissionCommand : BaseCommond
     {
         [DefaultCommand]

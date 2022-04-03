@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Globalization;
-using System.Threading;
 using SystemModule;
 
 namespace GameSvr
@@ -11,7 +9,7 @@ namespace GameSvr
         private readonly ConcurrentQueue<LogInfo> _logqueue = null;
         private readonly ConcurrentQueue<LogInfo> _debugLog = null;
         private readonly ConcurrentQueue<LogInfo> _chatLog = null;
-        private Timer _logTime;
+        private readonly Timer _logTime;
 
         public MirLog()
         {

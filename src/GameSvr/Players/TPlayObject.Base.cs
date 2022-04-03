@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using SystemModule;
 
 namespace GameSvr
@@ -236,7 +234,7 @@ namespace GameSvr
         /// <summary>
         /// 可点击脚本标签字典
         /// </summary>
-        private Hashtable m_CanJmpScriptLableList = null;
+        private readonly Hashtable m_CanJmpScriptLableList = null;
         public int m_nScriptGotoCount = 0;
         public string m_sScriptCurrLable = string.Empty;
         // 用于处理 @back 脚本命令
@@ -639,7 +637,7 @@ namespace GameSvr
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     M2Share.ErrorMessage(sExceptionMsg);
                 }
@@ -651,7 +649,7 @@ namespace GameSvr
             var MessageBodyWL = new TMessageBodyWL();
             m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, m_nCurrX, m_nCurrY, HUtil32.MakeWord(m_btDirection, m_nLight));
             MessageBodyWL.lParam1 = GetFeatureToLong();
-            MessageBodyWL.lParam2 = (int)m_nCharStatus;
+            MessageBodyWL.lParam2 = m_nCharStatus;
             if (m_boAllowGroup)
             {
                 MessageBodyWL.lTag1 = HUtil32.MakeLong(HUtil32.MakeWord(1, 0), GetFeatureEx());

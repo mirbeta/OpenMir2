@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr
 {
     public class AssociationManager
     {
-        private IList<Association> GuildList = null;
+        private readonly IList<Association> GuildList = null;
 
         public bool AddGuild(string sGuildName, string sChief)
         {

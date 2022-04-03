@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using SystemModule;
 using SystemModule.Common;
 
@@ -9,9 +6,9 @@ namespace GameSvr
 {
     public class AIObjectConf : IniFile
     {
-        private string m_sFilePath = string.Empty;
-        private string m_sConfigListFileName = string.Empty;
-        private string m_sHeroConfigListFileName = string.Empty;
+        private readonly string m_sFilePath = string.Empty;
+        private readonly string m_sConfigListFileName = string.Empty;
+        private readonly string m_sHeroConfigListFileName = string.Empty;
 
         public AIObjectConf(string fileName) : base(fileName)
         {

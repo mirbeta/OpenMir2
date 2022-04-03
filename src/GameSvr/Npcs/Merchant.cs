@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
@@ -27,15 +24,15 @@ namespace GameSvr
         /// <summary>
         /// 商品列表
         /// </summary>
-        private IList<IList<TUserItem>> m_GoodsList = null;
+        private readonly IList<IList<TUserItem>> m_GoodsList = null;
         /// <summary>
         /// 物品价格列表
         /// </summary>
-        private IList<TItemPrice> m_ItemPriceList = null;
+        private readonly IList<TItemPrice> m_ItemPriceList = null;
         /// <summary>
         /// 物品升级列表
         /// </summary>
-        private IList<TUpgradeInfo> m_UpgradeWeaponList = null;
+        private readonly IList<TUpgradeInfo> m_UpgradeWeaponList = null;
         public bool m_boCanMove = false;
         public int m_dwMoveTime = 0;
         public int m_dwMoveTick = 0;

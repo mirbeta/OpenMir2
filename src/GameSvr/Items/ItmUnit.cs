@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
@@ -134,8 +132,6 @@ namespace GameSvr
         public int GetItemAddValuePointColor(TUserItem UserItem)
         {
             int result = 0;
-            int ItemVlue = 0;
-            GoodItem StdItem;
             // if (M2Share.g_Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )

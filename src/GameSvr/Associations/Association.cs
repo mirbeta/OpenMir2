@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections;
 using SystemModule;
 using SystemModule.Common;
 
@@ -85,7 +81,7 @@ namespace GameSvr
         /// </summary>        
         public int m_nFlourishing = 0;
         public int m_nChiefItemCount = 0;
-        private GuildConf _guildConf;
+        private readonly GuildConf _guildConf;
 
         private void ClearRank()
         {

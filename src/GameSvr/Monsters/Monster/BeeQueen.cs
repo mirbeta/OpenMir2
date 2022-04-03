@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
     public class BeeQueen : AnimalObject
     {
-        private IList<TBaseObject> BBList;
+        private readonly IList<TBaseObject> BBList;
 
         public BeeQueen() : base()
         {

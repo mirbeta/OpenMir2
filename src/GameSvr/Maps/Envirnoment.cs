@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr
@@ -873,7 +870,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 M2Share.MainOutMessage("[Exception] TEnvirnoment.LoadMapData");
             }

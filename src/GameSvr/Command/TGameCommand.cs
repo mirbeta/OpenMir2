@@ -6,7 +6,7 @@ namespace GameSvr
         public int nPerMissionMin;
         public int nPerMissionMax;
     }
-    
+
     public class TGameCommand
     {
         public TGameCmd DATA;

@@ -38,20 +38,20 @@ namespace GameSvr
 #endif
                 if (playObject.m_btPermission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
                 {
-                    return M2Share.g_sGameCommandPermissionTooLow; 
+                    return M2Share.g_sGameCommandPermissionTooLow;
                 }
             }
             switch (MethodParameterCount)
             {
                 case 2:
-                {
-                    var @params = parameters.Split(' ');
-                    return (string) CommandMethod.Invoke(this, new object[] {@params, playObject});
-                }
+                    {
+                        var @params = parameters.Split(' ');
+                        return (string)CommandMethod.Invoke(this, new object[] { @params, playObject });
+                    }
                 case 1:
-                    return (string) CommandMethod.Invoke(this, new object[] {playObject});
+                    return (string)CommandMethod.Invoke(this, new object[] { playObject });
                 default:
-                    return (string) CommandMethod.Invoke(this, new object[] {null, playObject});
+                    return (string)CommandMethod.Invoke(this, new object[] { null, playObject });
             }
         }
 

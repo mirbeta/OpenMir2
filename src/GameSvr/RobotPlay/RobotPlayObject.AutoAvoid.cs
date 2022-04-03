@@ -433,7 +433,7 @@ namespace GameSvr
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
-            m_btLastDirection = (byte)nDir;
+            m_btLastDirection = nDir;
             return result;
         }
 
