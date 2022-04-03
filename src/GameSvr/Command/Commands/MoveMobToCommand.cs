@@ -55,8 +55,8 @@ namespace GameSvr
             {
                 OnY = 0;
             }
-            SrcEnvir = M2Share.g_MapManager.FindMap(OleMap);// 原地图
-            DenEnvir = M2Share.g_MapManager.FindMap(NewMap);// 新地图
+            SrcEnvir = M2Share.MapManager.FindMap(OleMap);// 原地图
+            DenEnvir = M2Share.MapManager.FindMap(NewMap);// 新地图
             if (SrcEnvir == null || DenEnvir == null)
             {
                 return;

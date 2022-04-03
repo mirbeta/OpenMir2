@@ -8,7 +8,7 @@ namespace GameSvr
 {
     public class GameApp : ServerBase
     {
-        public void StartServer(CancellationToken token)
+        public void Initialize()
         {
             int nCode;
             M2Share.LocalDB = new LocalDB();
@@ -41,7 +41,7 @@ namespace GameSvr
                 M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
-            M2Share.MainOutMessage($"地图数据加载成功({M2Share.g_MapManager.Maps.Count})...");
+            M2Share.MainOutMessage($"地图数据加载成功({M2Share.MapManager.Maps.Count})...");
             M2Share.MainOutMessage("正在加载怪物数据库...");
             nCode = M2Share.CommonDB.LoadMonsterDB();
             if (nCode < 0)
@@ -144,7 +144,7 @@ namespace GameSvr
             {
                 IdSrvClient.Instance.Initialize();
                 M2Share.MainOutMessage("登录服务器连接初始化完成...");
-                M2Share.g_MapManager.LoadMapDoor();
+                M2Share.MapManager.LoadMapDoor();
                 M2Share.MainOutMessage("地图环境加载成功...");
                 MakeStoneMines();
                 M2Share.MainOutMessage("矿物数据初始成功...");
@@ -162,7 +162,7 @@ namespace GameSvr
                 M2Share.LocalDB.LoadStartPoint();
                 M2Share.MainOutMessage("回城点配置加载成功...");
                 M2Share.MainOutMessage("正在初始安全区光圈...");
-                M2Share.g_MapManager.MakeSafePkZone();
+                M2Share.MapManager.MakeSafePkZone();
                 M2Share.MainOutMessage("安全区光圈初始化成功...");
                 M2Share.FrontEngine.Start();
                 M2Share.MainOutMessage("人物数据引擎启动成功...");
@@ -183,7 +183,7 @@ namespace GameSvr
         {
             Envirnoment Envir;
             var stoneList = new List<StoneMineEvent>();
-            var mineMapList = M2Share.g_MapManager.GetMineMaps();
+            var mineMapList = M2Share.MapManager.GetMineMaps();
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 Envir = mineMapList[i];
@@ -243,7 +243,7 @@ namespace GameSvr
             M2Share.CommandSystem = new CommandManager();
             M2Share.LogStringList = new ArrayList();
             M2Share.LogonCostLogList = new ArrayList();
-            M2Share.g_MapManager = new MapManager();
+            M2Share.MapManager = new MapManager();
             M2Share.ItemUnit = new ItemUnit();
             M2Share.MagicManager = new MagicManager();
             M2Share.NoticeManager = new NoticeManager();

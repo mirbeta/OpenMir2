@@ -4,7 +4,6 @@ namespace GameSvr
 {
     public class ServerBase
     {
-        private readonly Thread _runServer;
         /// <summary>
         /// 运行时间
         /// </summary>
@@ -12,12 +11,11 @@ namespace GameSvr
 
         protected ServerBase()
         {
-            _runServer = new Thread(Run) { IsBackground = true };
+            _runTimeTick = HUtil32.GetTickCount();
         }
 
-        public void Start(CancellationToken cancellationToken)
+        public void StartService()
         {
-            _runServer.Start();
             M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
@@ -28,26 +26,21 @@ namespace GameSvr
             M2Share.DataServer.Stop();
             M2Share.GateManager.Stop();
             M2Share.UserEngine.Stop();
-            _runServer.Interrupt();
         }
 
-        private void Run()
+        public void Run()
         {
-            while (M2Share.boStartReady)
+            M2Share.GateManager.Run();
+            IdSrvClient.Instance.Run();
+            M2Share.UserEngine.Run();
+            ProcessGameRun();
+            if (M2Share.nServerIndex == 0)
             {
-                M2Share.GateManager.Run();
-                IdSrvClient.Instance.Run();
-                M2Share.UserEngine.Run();
-                ProcessGameRun();
-                if (M2Share.nServerIndex == 0)
-                {
-                    SnapsmService.Instance.Run();
-                }
-                else
-                {
-                    SnapsmClient.Instance.Run();
-                }
-                Thread.Sleep(10);
+                SnapsmService.Instance.Run();
+            }
+            else
+            {
+                SnapsmClient.Instance.Run();
             }
         }
 
@@ -69,7 +62,7 @@ namespace GameSvr
 
         private void ProcessGameRun()
         {
-            HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
+            HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
                 M2Share.EventManager.Run();
@@ -98,7 +91,7 @@ namespace GameSvr
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
+                HUtil32.LeaveCriticalSections(M2Share.ProcessHumanCriticalSection);
             }
         }
     }

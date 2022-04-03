@@ -418,7 +418,7 @@ namespace GameSvr
             var sMap = QuestActionInfo.sParam4;
             if (sMap != "")
             {
-                Envir = M2Share.g_MapManager.FindMap(sMap);
+                Envir = M2Share.MapManager.FindMap(sMap);
             }
             if ((nTime <= 0) || (nPoint <= 0) || ((sMap != "") && (Envir == null)))
             {
@@ -705,7 +705,7 @@ namespace GameSvr
         {
             TBaseObject Mon;
             IList<TBaseObject> MonList = new List<TBaseObject>();
-            M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), MonList);
+            M2Share.UserEngine.GetMapMonster(M2Share.MapManager.FindMap(QuestActionInfo.sParam1), MonList);
             for (var i = 0; i < MonList.Count; i++)
             {
                 Mon = MonList[i];
@@ -1182,7 +1182,7 @@ namespace GameSvr
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_MOBFIREBURN);
                 return;
             }
-            var Envir = M2Share.g_MapManager.FindMap(sMap);
+            var Envir = M2Share.MapManager.FindMap(sMap);
             if (Envir != null)
             {
                 var OldEnvir = PlayObject.m_PEnvir;
@@ -1696,7 +1696,7 @@ namespace GameSvr
             bool boFlag = false;
             if (PlayObject.m_GroupOwner != null)
             {
-                var Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
+                var Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
                 {
                     if (Envir.CanWalk(QuestActionInfo.nParam2, QuestActionInfo.nParam3, true))
@@ -2180,7 +2180,7 @@ namespace GameSvr
             string sMapMode = QuestActionInfo.sParam2;
             string sParam1 = QuestActionInfo.sParam3;
             string sParam2 = QuestActionInfo.sParam4;
-            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
             if ((Envir == null) || (sMapMode == ""))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sSC_SETMAPMODE);
@@ -3418,7 +3418,7 @@ namespace GameSvr
                     ScriptActionError(PlayObject, "", QuestActionInfo, M2Share.sTHROWITEM);
                     return;
                 }
-                Envir = M2Share.g_MapManager.FindMap(sMap); // 查找地图,地图不存在则退出
+                Envir = M2Share.MapManager.FindMap(sMap); // 查找地图,地图不存在则退出
                 if (Envir == null)
                 {
                     return;

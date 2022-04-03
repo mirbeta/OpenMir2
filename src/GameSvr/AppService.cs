@@ -18,26 +18,26 @@ namespace GameSvr
                 M2Share.GateManager.Start();
                 await M2Share.GateManager.StartMessageQueue(stoppingToken);
             }
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _mirApp.Run();
+                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+            }
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            M2Share.MainOutMessage("GameSvr is starting.");
             M2Share.MainOutMessage("正在读取配置信息...");
             _mirApp.InitializeServer();
             M2Share.MainOutMessage("读取配置信息完成...");
-            _mirApp.StartServer(cancellationToken);
+            _mirApp.Initialize();
             _mirApp.StartEngine();
-            _mirApp.Start(cancellationToken);
+            _mirApp.StartService();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("GameSvr is stopping.");
-
-            //todo 需要立即保存所有玩家数据，防止数据不对
-
             if (M2Share.UserEngine.PlayObjectCount > 0)
             {
                 Console.WriteLine("开始玩家数据保存");
@@ -49,42 +49,56 @@ namespace GameSvr
             }
 
             //如果有多机负载转移在线玩家到新服务器
-            if (M2Share.UserEngine.PlayObjects.Any())
+            var sIPaddr = string.Empty;
+            var nPort = 0;
+
+            var isMultiServer = M2Share.GetMultiServerAddrPort(0, ref sIPaddr, ref nPort); //如果有可用服务器，那就切换过去
+            if (isMultiServer)
             {
-                Task.Run(() =>
+                var playerCount = M2Share.UserEngine.PlayObjects.Count();
+                if (playerCount > 0)
                 {
-                    var shutdownSeconds = 30;
-                    while (true)
+                    Task.Run(() =>
                     {
-                        foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                        var shutdownSeconds = 120;
+                        while (playerCount > 0)
                         {
-                            playObject.SysMsg($"服务器关闭倒计时 [{shutdownSeconds}].", MsgColor.Red, MsgType.Notice);
-                            shutdownSeconds--;
-                        }
-                        if (shutdownSeconds > 0)
-                        {
-                            Thread.Sleep(TimeSpan.FromSeconds(1));
-                        }
-                        else
-                        {
-                            var sIPaddr = string.Empty;
-                            var nPort = 0;
-                            if (M2Share.GetMultiServerAddrPort(0, ref sIPaddr, ref nPort)) //如果有可用服务器，那就切换过去
+                            foreach (var playObject in M2Share.UserEngine.PlayObjects)
+                            {
+                                var closeStr = $"服务器关闭倒计时 [{shutdownSeconds}].";
+                                playObject.SysMsg(closeStr, MsgColor.Red, MsgType.Notice);
+                                Console.WriteLine(closeStr);
+                                shutdownSeconds--;
+                            }
+                            if (shutdownSeconds > 0)
+                            {
+                                Thread.Sleep(TimeSpan.FromSeconds(1));
+                            }
+                            else
                             {
                                 foreach (var playObject in M2Share.UserEngine.PlayObjects)
                                 {
+                                    if (playObject.m_boGhost || playObject.m_boDeath) //死亡或者下线的玩家不进行转移
+                                    {
+                                        playerCount--;
+                                        continue;
+                                    }
                                     playObject.ChangeSnapsServer(sIPaddr, nPort);
+                                    playerCount--;
                                 }
+                                break;
                             }
-                            break;
                         }
-                    }
-                }, cancellationToken);
+                        M2Share.boStartReady = false;
+                        _mirApp.Stop();
+                    }, cancellationToken);
+                }
             }
-
-            M2Share.boStartReady = false;
-            _mirApp.Stop();
-
+            else
+            {
+                M2Share.boStartReady = false;
+                _mirApp.Stop();
+            }
             return base.StopAsync(cancellationToken);
         }
     }

@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
@@ -28,7 +25,6 @@ namespace GameSvr
             var sIPaddr = string.Empty;
             var sCharName = string.Empty;
             var sData = string.Empty;
-            StringList LoadList;
             TAdminInfo AdminInfo;
             string sfilename = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "AdminList.txt");
             if (!File.Exists(sfilename))
@@ -36,7 +32,7 @@ namespace GameSvr
                 return false;
             }
             M2Share.UserEngine.m_AdminList.Clear();
-            LoadList = new StringList();
+            using var LoadList = new StringList();
             LoadList.LoadFromFile(sfilename);
             for (var i = 0; i < LoadList.Count; i++)
             {
@@ -107,73 +103,6 @@ namespace GameSvr
             return true;
         }
 
-        public bool SaveAdminList()
-        {
-            var sPermission = string.Empty;
-            int nPermission;
-            TAdminInfo AdminInfo;
-            string sfilename = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "AdminList.txt");
-            StringList Savelist = new StringList();
-            for (var i = 0; i < M2Share.UserEngine.m_AdminList.Count; i++)
-            {
-                AdminInfo = M2Share.UserEngine.m_AdminList[i];
-                nPermission = AdminInfo.nLv;
-                if (nPermission == 10)
-                {
-                    sPermission = "*";
-                }
-
-                if (nPermission == 9)
-                {
-                    sPermission = "1";
-                }
-
-                if (nPermission == 8)
-                {
-                    sPermission = "2";
-                }
-
-                if (nPermission == 7)
-                {
-                    sPermission = "3";
-                }
-
-                if (nPermission == 6)
-                {
-                    sPermission = "4";
-                }
-
-                if (nPermission == 5)
-                {
-                    sPermission = "5";
-                }
-
-                if (nPermission == 4)
-                {
-                    sPermission = "6";
-                }
-
-                if (nPermission == 3)
-                {
-                    sPermission = "7";
-                }
-
-                if (nPermission == 2)
-                {
-                    sPermission = "8";
-                }
-
-                if (nPermission == 1)
-                {
-                    sPermission = "9";
-                }
-
-                Savelist.Add(sPermission + "\t" + AdminInfo.sChrName + "\t" + AdminInfo.sIPaddr);
-            }
-            Savelist.SaveToFile(sfilename);
-            return true;
-        }
-
         public void LoadGuardList()
         {
             try
@@ -194,10 +123,10 @@ namespace GameSvr
                     for (var i = 0; i < tGuardList.Count; i++)
                     {
                         s14 = tGuardList[i];
-                        if (s14 != "" && s14[0] != ';')
+                        if (!string.IsNullOrEmpty(s14) && s14[0] != ';')
                         {
                             s14 = HUtil32.GetValidStrCap(s14, ref s1C, new[] { " " });
-                            if (s1C != "" && s1C[0] == '\"')
+                            if (!string.IsNullOrEmpty(s1C) && s1C[0] == '\"')
                             {
                                 HUtil32.ArrestStringEx(s1C, '\"', '\"', ref s1C);
                             }
@@ -205,7 +134,7 @@ namespace GameSvr
                             s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { ' ', ',' });
                             s14 = HUtil32.GetValidStr3(s14, ref s28, new[] { ' ', ',', ':' });
                             s14 = HUtil32.GetValidStr3(s14, ref s2C, new[] { ' ', ':' });
-                            if (s1C != "" && s20 != "" && s2C != "")
+                            if (!string.IsNullOrEmpty(s1C) && s20 != "" && s2C != "")
                             {
                                 tGuard = M2Share.UserEngine.RegenMonsterByName(s20, (short)HUtil32.Str_ToInt(s24, 0), (short)HUtil32.Str_ToInt(s28, 0), s1C);
                                 if (tGuard != null)
@@ -232,12 +161,11 @@ namespace GameSvr
             var sLine = string.Empty;
             var sSubName = string.Empty;
             var sItemName = string.Empty;
-            StringList LoadList;
             IList<TMakeItem> List28 = null;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MakeItem.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -443,7 +371,7 @@ namespace GameSvr
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s20, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref sMonName, new[] { " ", "\t" });
-                        if (sMonName != "" && sMonName[0] == '\"')
+                        if (!string.IsNullOrEmpty(sMonName) && sMonName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMonName, "\"", "\"", ref sMonName);
                         }
@@ -456,7 +384,7 @@ namespace GameSvr
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, new[] { " ", "\t" });
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
-                            var Map = M2Share.g_MapManager.FindMap(sMap);
+                            var Map = M2Share.MapManager.FindMap(sMap);
                             if (Map != null)
                             {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
@@ -514,7 +442,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sX, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sY, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sName, new[] { " ", "\t" });
-                        if (sName != "" && sName[0] == '\"')
+                        if (!string.IsNullOrEmpty(sName) && sName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sName, '\"', '\"', ref sName);
                         }
@@ -560,7 +488,7 @@ namespace GameSvr
             }
             var sFilePatchName = sFileDir + sFileName;
             if (!File.Exists(sFilePatchName)) return;
-            var LoadList = new StringList();
+            using var LoadList = new StringList();
             LoadList.LoadFromFile(sFilePatchName);
             for (var i = 0; i < LoadList.Count; i++)
             {
@@ -577,7 +505,7 @@ namespace GameSvr
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MonGen.txt");
             if (File.Exists(sFileName))
             {
-                var LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 i = 0;
                 while (true)
@@ -601,7 +529,7 @@ namespace GameSvr
                 for (i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
                         MonGenInfo = new MonGenInfo();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
@@ -611,7 +539,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.nY = HUtil32.Str_ToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { " ", "\t" });
-                        if (sData != "" && sData[0] == '\"')
+                        if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                         }
@@ -624,11 +552,10 @@ namespace GameSvr
                         MonGenInfo.dwZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (MonGenInfo.sMapName != "" && MonGenInfo.sMonName != "" && MonGenInfo.dwZenTime != 0 &&
-                            M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
+                        if (!string.IsNullOrEmpty(MonGenInfo.sMapName) && !string.IsNullOrEmpty(MonGenInfo.sMonName) && MonGenInfo.dwZenTime != 0 &&M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
                             MonGenInfo.CertList = new List<TBaseObject>();
-                            MonGenInfo.Envir = M2Share.g_MapManager.FindMap(MonGenInfo.sMapName);
+                            MonGenInfo.Envir = M2Share.MapManager.FindMap(MonGenInfo.sMapName);
                             if (MonGenInfo.Envir != null)
                             {
                                 M2Share.UserEngine.m_MonGenList.Add(MonGenInfo);
@@ -642,13 +569,10 @@ namespace GameSvr
                 }
                 MonGenInfo = new MonGenInfo
                 {
-                    sMapName = "",
-                    sMonName = "",
                     CertList = new List<TBaseObject>(),
                     Envir = null
                 };
                 M2Share.UserEngine.m_MonGenList.Add(MonGenInfo);
-                LoadList = null;
                 result = 1;
             }
             return result;
@@ -656,7 +580,6 @@ namespace GameSvr
 
         public int LoadMonitems(string MonName, ref IList<TMonItem> ItemList)
         {
-            StringList LoadList;
             var s30 = string.Empty;
             var result = 0;
             var s24 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MonItems", $"{MonName}.txt");
@@ -670,12 +593,12 @@ namespace GameSvr
                     }
                     ItemList.Clear();
                 }
-                LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(s24);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var s28 = LoadList[i];
-                    if (s28 != "" && s28[0] != ';')
+                    if (!string.IsNullOrEmpty(s28) && s28[0] != ';')
                     {
                         s28 = HUtil32.GetValidStr3(s28, ref s30, new[] { " ", "/", "\t" });
                         var n18 = HUtil32.Str_ToInt(s30, -1);
@@ -726,20 +649,19 @@ namespace GameSvr
             var s30 = string.Empty;
             var s34 = string.Empty;
             var s38 = string.Empty;
-            StringList LoadList;
             NormNpc NPC;
             string sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Npcs.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
-                    if (s18 != "" && s18[0] != ';')
+                    if (!string.IsNullOrEmpty(s18) && s18[0] != ';')
                     {
                         s18 = HUtil32.GetValidStrCap(s18, ref s20, new[] { " ", "\t" });
-                        if (s20 != "" && s20[0] == '\"')
+                        if (!string.IsNullOrEmpty(s20) && s20[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                         }
@@ -749,7 +671,7 @@ namespace GameSvr
                         s18 = HUtil32.GetValidStr3(s18, ref s30, new[] { " ", "\t" });
                         s18 = HUtil32.GetValidStr3(s18, ref s34, new[] { " ", "\t" });
                         s18 = HUtil32.GetValidStr3(s18, ref s38, new[] { " ", "\t" });
-                        if (s20 != "" && s28 != "" && s38 != "")
+                        if (!string.IsNullOrEmpty(s20) && !string.IsNullOrEmpty(s28) && !string.IsNullOrEmpty(s38))
                         {
                             NPC = null;
                             switch (HUtil32.Str_ToInt(s24, 0))
@@ -778,7 +700,6 @@ namespace GameSvr
                         }
                     }
                 }
-                LoadList = null;
             }
         }
 
@@ -808,7 +729,6 @@ namespace GameSvr
             var s18 = string.Empty;
             var s1C = string.Empty;
             var s20 = string.Empty;
-            StringList LoadList;
             var bo2D = false;
             var nC = 1;
             M2Share.QuestDiaryList.Clear();
@@ -818,18 +738,18 @@ namespace GameSvr
                 s14 = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
                 if (File.Exists(s14))
                 {
-                    s18 = "";
+                    s18 = string.Empty;
                     QDDinfo = null;
-                    LoadList = new StringList();
+                    using var LoadList = new StringList();
                     LoadList.LoadFromFile(s14);
                     for (var i = 0; i < LoadList.Count; i++)
                     {
                         s1C = LoadList[i];
-                        if (s1C != "" && s1C[0] != ';')
+                        if (!string.IsNullOrEmpty(s1C) && s1C[0] != ';')
                         {
                             if (s1C[0] == '[' && s1C.Length > 2)
                             {
-                                if (s18 == "")
+                                if (string.IsNullOrEmpty(s18))
                                 {
                                     HUtil32.ArrestStringEx(s1C, '[', ']', ref s18);
                                     QDDinfoList = new List<TQDDinfo>();
@@ -872,7 +792,6 @@ namespace GameSvr
                             }
                         }
                     }
-                    LoadList = null;
                 }
                 if (QDDinfoList != null)
                 {
@@ -902,18 +821,17 @@ namespace GameSvr
             var s26 = string.Empty;
             var s28 = string.Empty;
             var s30 = string.Empty;
-            StringList LoadList;
             TStartPoint StartPoint;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "StartPoint.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.StartPointList.Clear();
-                LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     tStr = LoadList[i].Trim();
-                    if (tStr != "" && tStr[0] != ';')
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref s18, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, new[] { " ", "\t" });
@@ -923,7 +841,7 @@ namespace GameSvr
                         tStr = HUtil32.GetValidStr3(tStr, ref s26, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s28, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, new[] { " ", "\t" });
-                        if (s18 != "" && s1C != "" && s20 != "")
+                        if (s18 != "" && !string.IsNullOrEmpty(s1C) && s20 != "")
                         {
                             StartPoint = new TStartPoint
                             {
@@ -949,17 +867,16 @@ namespace GameSvr
             var tStr = string.Empty;
             var sData = string.Empty;
             var sItemName = string.Empty;
-            StringList LoadList;
             int n10;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "UnbindList.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     tStr = LoadList[i];
-                    if (tStr != "" && tStr[0] != ';')
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sData, new[] { " ", "\t" });
                         tStr = HUtil32.GetValidStrCap(tStr, ref sItemName, new[] { " ", "\t" });
@@ -1076,7 +993,6 @@ namespace GameSvr
             var sCanMove = string.Empty;
             var sMoveTime = string.Empty;
             Merchant Merchant;
-            StringList LoadList;
             bool boNewNpc;
             var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Merchant.txt");
             if (!File.Exists(sFileName))
@@ -1091,7 +1007,7 @@ namespace GameSvr
                     Merchant.m_nFlag = -1;
                 }
             }
-            LoadList = new StringList();
+            using var LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);
             for (var i = 0; i < LoadList.Count; i++)
             {
@@ -1147,7 +1063,7 @@ namespace GameSvr
                         {
                             m_sMapName = sMapName
                         };
-                        Merchant.m_PEnvir = M2Share.g_MapManager.FindMap(Merchant.m_sMapName);
+                        Merchant.m_PEnvir = M2Share.MapManager.FindMap(Merchant.m_sMapName);
                         if (Merchant.m_PEnvir != null)
                         {
                             Merchant.m_sScript = sScript;

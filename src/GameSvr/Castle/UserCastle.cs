@@ -164,13 +164,13 @@ namespace GameSvr
             TDoorInfo Door;
             LoadConfig();
             LoadAttackSabukWall();
-            if (M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
+            if (M2Share.MapManager.GetMapOfServerIndex(m_sMapName) == M2Share.nServerIndex)
             {
-                m_MapPalace = M2Share.g_MapManager.FindMap(m_sPalaceMap);
+                m_MapPalace = M2Share.MapManager.FindMap(m_sPalaceMap);
                 if (m_MapPalace == null) M2Share.MainOutMessage($"皇宫地图{m_sPalaceMap}没找到!!!");
-                m_MapSecret = M2Share.g_MapManager.FindMap(m_sSecretMap);
+                m_MapSecret = M2Share.MapManager.FindMap(m_sSecretMap);
                 if (m_MapSecret == null) M2Share.MainOutMessage($"密道地图{m_sSecretMap}没找到!!!");
-                m_MapCastle = M2Share.g_MapManager.FindMap(m_sMapName);
+                m_MapCastle = M2Share.MapManager.FindMap(m_sMapName);
                 if (m_MapCastle != null)
                 {
                     m_MainDoor.BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, m_MainDoor.nX, m_MainDoor.nY, m_MainDoor.sName);
@@ -340,7 +340,7 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
-                if (M2Share.nServerIndex != M2Share.g_MapManager.GetMapOfServerIndex(m_sMapName)) return;
+                if (M2Share.nServerIndex != M2Share.MapManager.GetMapOfServerIndex(m_sMapName)) return;
                 var Year = DateTime.Now.Year;
                 var Month = DateTime.Now.Month;
                 var Day = DateTime.Now.Day;

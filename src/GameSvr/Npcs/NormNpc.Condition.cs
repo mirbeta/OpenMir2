@@ -1799,7 +1799,7 @@ namespace GameSvr
             int nRange = HUtil32.Str_ToInt(QuestConditionInfo.sParam4, -1);
             char cMethod = QuestConditionInfo.sParam5[0];
             int nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam6, -1);
-            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
             if ((Envir == null) || (nX < 0) || (nY < 0) || (nRange < 0) || (nCount < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKRANGEMONCOUNT);
@@ -2505,7 +2505,7 @@ namespace GameSvr
         {
             var result = false;
             var nCount = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
-            var Envir = M2Share.g_MapManager.FindMap(QuestConditionInfo.sParam1);
+            var Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
             if ((nCount < 0) || (Envir == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, M2Share.sSC_CHECKMAPMONCOUNT);

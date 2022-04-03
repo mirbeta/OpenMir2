@@ -1115,7 +1115,7 @@ namespace GameSvr
                 else
                 {
                     // 如果不是全部地图
-                    var Envir = M2Share.g_MapManager.FindMap(MapName);
+                    var Envir = M2Share.MapManager.FindMap(MapName);
                     if (Envir != null)
                     {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
