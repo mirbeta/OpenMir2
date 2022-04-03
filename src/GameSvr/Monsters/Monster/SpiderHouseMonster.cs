@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
     public class SpiderHouseMonster : AnimalObject
     {
         public int n54C = 0;
-        private IList<TBaseObject> BBList = null;
+        private readonly IList<TBaseObject> BBList = null;
 
         public SpiderHouseMonster() : base()
         {

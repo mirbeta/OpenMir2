@@ -3484,7 +3484,7 @@ namespace GameSvr
 
         public void StatusChanged()
         {
-            SendRefMsg(Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, (int)m_nCharStatus, 0, 0, "");
+            SendRefMsg(Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, m_nCharStatus, 0, 0, "");
         }
 
         protected void DisappearA()

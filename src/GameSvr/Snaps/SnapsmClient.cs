@@ -1,4 +1,3 @@
-using System;
 using SystemModule;
 using SystemModule.Sockets;
 
@@ -11,7 +10,7 @@ namespace GameSvr
     {
         private string sRecvMsg = string.Empty;
         private readonly IClientScoket _msgClient;
-        private MirrorMessage _groupMessageHandle;
+        private readonly MirrorMessage _groupMessageHandle;
 
         private static SnapsmClient instance = null;
 

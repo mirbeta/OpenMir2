@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace GameSvr
 {
     public class MonGenInfo

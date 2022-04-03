@@ -552,7 +552,7 @@ namespace GameSvr
                         MonGenInfo.dwZenTime = HUtil32.Str_ToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, new[] { " ", "\t" });
                         MonGenInfo.nMissionGenRate = HUtil32.Str_ToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(MonGenInfo.sMapName) && !string.IsNullOrEmpty(MonGenInfo.sMonName) && MonGenInfo.dwZenTime != 0 &&M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
+                        if (!string.IsNullOrEmpty(MonGenInfo.sMapName) && !string.IsNullOrEmpty(MonGenInfo.sMonName) && MonGenInfo.dwZenTime != 0 && M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, MonGenInfo.sMapName) != null)
                         {
                             MonGenInfo.CertList = new List<TBaseObject>();
                             MonGenInfo.Envir = M2Share.MapManager.FindMap(MonGenInfo.sMapName);

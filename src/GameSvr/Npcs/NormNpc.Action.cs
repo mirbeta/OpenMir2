@@ -942,7 +942,7 @@ namespace GameSvr
 
         private void ActionOfMapTing(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
         {
-            
+
         }
 
         private void ActionOfMarry(TPlayObject PlayObject, TQuestActionInfo QuestActionInfo)
@@ -1031,9 +1031,9 @@ namespace GameSvr
                     {
                         if (PlayObject.m_boStartMarry && PoseHuman.m_boStartMarry)
                         {
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManAnswerQuestionMsg, this.m_sCharName,PlayObject.m_sCharName,PoseHuman.m_sCharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManAnswerQuestionMsg, this.m_sCharName, PlayObject.m_sCharName, PoseHuman.m_sCharName);
                             M2Share.UserEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManGetMarryMsg, this.m_sCharName,PlayObject.m_sCharName,PoseHuman.m_sCharName);
+                            sSayMsg = string.Format(M2Share.g_sMarryWoManGetMarryMsg, this.m_sCharName, PlayObject.m_sCharName, PoseHuman.m_sCharName);
                             M2Share.UserEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             GotoLable(PlayObject, "@EndMarry", false);
                             GotoLable(PoseHuman, "@EndMarry", false);

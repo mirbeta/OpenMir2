@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packages;
 
@@ -128,7 +125,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 M2Share.ErrorMessage(sExceptionMsg2);
             }

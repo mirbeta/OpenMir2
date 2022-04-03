@@ -10,7 +10,7 @@ namespace GameSvr
         public string GuildRankName;
         public short NameColor;
         public TOClientItem[] UseItems;
-        
+
         protected override void ReadPacket(BinaryReader reader)
         {
             throw new NotImplementedException();

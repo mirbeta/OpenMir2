@@ -1,6 +1,4 @@
 ﻿using GameSvr.CommandSystem;
-using System;
-using System.Collections.Generic;
 using SystemModule;
 
 namespace GameSvr
@@ -69,7 +67,7 @@ namespace GameSvr
                 {
                     for (var i = 0; i < MonList.Count; i++)
                     {
-                        MoveMon = MonList[i] as TBaseObject;
+                        MoveMon = MonList[i];
                         if (MoveMon != PlayObject)
                         {
                             if (string.Compare(MoveMon.m_sCharName, sMonName, StringComparison.Ordinal) == 0) // 是否是指定名称的怪
@@ -86,7 +84,7 @@ namespace GameSvr
                 M2Share.UserEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 1000, MonList);// 查指定XY范围内的怪
                 for (var i = 0; i < MonList.Count; i++)
                 {
-                    MoveMon = MonList[i] as TBaseObject;
+                    MoveMon = MonList[i];
                     if (MoveMon != PlayObject)
                     {
                         MoveMon.SpaceMove(NewMap, nX, nY, 0);

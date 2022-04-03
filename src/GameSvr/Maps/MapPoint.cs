@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using SystemModule;
 
@@ -77,8 +76,8 @@ namespace GameSvr
         public byte m_btDirection = 0;
         public int m_nTurnCount = 0;
         public Envirnoment m_PEnvir = null;
-        private ArrayList FPointList = null;
-        private TBaseObject FBaseObject = null;
+        private readonly ArrayList FPointList = null;
+        private readonly TBaseObject FBaseObject = null;
         private TPathType FPathType;
 
         public TPointManager(TBaseObject ABaseObject)

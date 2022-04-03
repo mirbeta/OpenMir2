@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
@@ -3726,7 +3723,7 @@ namespace GameSvr
                             m_MasterHuman.m_MasterHuman = this;
                         }
                         m_MasterHuman.m_MasterList.Add(this);
-                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, m_sMasterName,m_sCharName,m_MasterHuman.m_PEnvir.sMapDesc,m_MasterHuman.m_nCurrX,m_MasterHuman.m_nCurrY);
+                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, m_sMasterName, m_sCharName, m_MasterHuman.m_PEnvir.sMapDesc, m_MasterHuman.m_nCurrX, m_MasterHuman.m_nCurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                         sSayMsg = string.Format(M2Share.g_sMasterListOnlineMasterMsg, m_sMasterName, m_sCharName, m_PEnvir.sMapDesc, m_nCurrX, m_nCurrY);
                         m_MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);

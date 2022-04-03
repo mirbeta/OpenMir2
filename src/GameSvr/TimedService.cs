@@ -2,7 +2,7 @@ using SystemModule;
 
 namespace GameSvr
 {
-    public class TimedService: BackgroundService
+    public class TimedService : BackgroundService
     {
         private readonly GameApp _mirApp;
         private int _checkIntervalTime;
@@ -25,7 +25,7 @@ namespace GameSvr
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
-        
+
         private void ServiceTimer()
         {
             if ((HUtil32.GetTickCount() - _checkIntervalTime) > 3000) //3s一次检查链接

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameSvr
+﻿namespace GameSvr
 {
     public class Castle
     {

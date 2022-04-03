@@ -30,7 +30,7 @@ namespace GameSvr
             {
                 cancellationToken.CancelAfter(2000);
             };
-            
+
             await builder.RunConsoleAsync(cancellationToken.Token);
         }
     }

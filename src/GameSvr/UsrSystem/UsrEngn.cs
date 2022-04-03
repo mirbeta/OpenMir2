@@ -1,8 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using SystemModule;
 using ThreadState = System.Threading.ThreadState;
 
@@ -20,33 +16,33 @@ namespace GameSvr
         private int dwSendOnlineHumTime;
         private int dwShowOnlineTick;
         public IList<TAdminInfo> m_AdminList;
-        private IList<TGoldChangeInfo> m_ChangeHumanDBGoldList;
-        private IList<TSwitchDataInfo> m_ChangeServerList;
+        private readonly IList<TGoldChangeInfo> m_ChangeHumanDBGoldList;
+        private readonly IList<TSwitchDataInfo> m_ChangeServerList;
         private int m_dwProcessLoadPlayTick;
-        private ArrayList m_ListOfGateIdx;
-        private ArrayList m_ListOfSocket;
+        private readonly ArrayList m_ListOfGateIdx;
+        private readonly ArrayList m_ListOfSocket;
         /// <summary>
         /// 从DB读取人物数据
         /// </summary>
-        private IList<TUserOpenInfo> m_LoadPlayList;
-        private object m_LoadPlaySection;
+        private readonly IList<TUserOpenInfo> m_LoadPlayList;
+        private readonly object m_LoadPlaySection;
         public IList<MagicEvent> m_MagicEventList;
         public IList<TMagic> m_MagicList;
         public IList<Merchant> m_MerchantList;
-        private ArrayList m_MonFreeList;
+        private readonly ArrayList m_MonFreeList;
         public IList<MonGenInfo> m_MonGenList;
         private int m_nCurrMonGen;
-        private IList<TPlayObject> m_NewHumanList;
+        private readonly IList<TPlayObject> m_NewHumanList;
         /// <summary>
         /// 当前怪物列表刷新位置索引
         /// </summary>
         private int m_nMonGenCertListPosition;
         private int m_nMonGenListPosition;
         private int m_nProcHumIDx;
-        private IList<TPlayObject> m_PlayObjectFreeList;
-        private Dictionary<string, ServerGruopInfo> m_OtherUserNameList;
-        private IList<TPlayObject> m_PlayObjectList;
-        private IList<TPlayObject> m_AiPlayObjectList;
+        private readonly IList<TPlayObject> m_PlayObjectFreeList;
+        private readonly Dictionary<string, ServerGruopInfo> m_OtherUserNameList;
+        private readonly IList<TPlayObject> m_PlayObjectList;
+        private readonly IList<TPlayObject> m_AiPlayObjectList;
         public IList<TMonInfo> MonsterList;
         private int nMerchantPosition;
         /// <summary>
@@ -69,7 +65,7 @@ namespace GameSvr
         /// 处理人物开始索引（每次处理人物数限制）
         /// </summary>
         private int nProcessHumanLoopTime;
-        private ArrayList OldMagicList;
+        private readonly ArrayList OldMagicList;
         public IList<NormNpc> QuestNPCList;
         public IList<GoodItem> StdItemList;
         public long m_dwAILogonTick;//处理假人间隔

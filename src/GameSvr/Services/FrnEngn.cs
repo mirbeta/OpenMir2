@@ -4,10 +4,10 @@ namespace GameSvr
 {
     public class TFrontEngine
     {
-        private object m_UserCriticalSection = null;
+        private readonly object m_UserCriticalSection = null;
         private IList<TLoadDBInfo> m_LoadRcdList = null;
-        private IList<TSaveRcd> m_SaveRcdList = null;
-        private IList<TGoldChangeInfo> m_ChangeGoldList = null;
+        private readonly IList<TSaveRcd> m_SaveRcdList = null;
+        private readonly IList<TGoldChangeInfo> m_ChangeGoldList = null;
         private IList<TLoadDBInfo> m_LoadRcdTempList = null;
         private readonly IList<TSaveRcd> m_SaveRcdTempList = null;
         private readonly Thread _frontEngine;

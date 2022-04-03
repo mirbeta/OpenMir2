@@ -324,7 +324,7 @@ namespace GameSvr
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 M2Share.ErrorMessage(sExceptionMsg7);
             }
@@ -1292,7 +1292,7 @@ namespace GameSvr
                     SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.ErrorMessage(sExceptionMsg);
                 M2Share.ErrorMessage(ex.StackTrace);
@@ -2465,7 +2465,7 @@ namespace GameSvr
             }
             if (m_btRaceServer == Grobal2.RC_PLAYOBJECT)
             {
-                SendUpdateMsg(this, Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, (int)m_nCharStatus, 0, 0, "");
+                SendUpdateMsg(this, Grobal2.RM_CHARSTATUSCHANGED, m_nHitSpeed, m_nCharStatus, 0, 0, "");
             }
             if (m_btRaceServer >= Grobal2.RC_ANIMAL)
             {

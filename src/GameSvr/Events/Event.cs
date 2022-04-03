@@ -1,5 +1,4 @@
-﻿using System;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
@@ -19,7 +18,7 @@ namespace GameSvr
         /// <summary>
         /// 持续时间
         /// </summary>
-        private int m_dwContinueTime = 0;
+        private readonly int m_dwContinueTime = 0;
         /// <summary>
         /// 关闭时间
         /// </summary>

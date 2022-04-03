@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using SystemModule;
+﻿using SystemModule;
 
 namespace GameSvr
 {
@@ -1490,7 +1488,7 @@ namespace GameSvr
                                 m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ProcessMsg.wParam);
                                 MessageBodyWL = new TMessageBodyWL();
                                 MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                                MessageBodyWL.lParam2 = (int)BaseObject.m_nCharStatus;
+                                MessageBodyWL.lParam2 = BaseObject.m_nCharStatus;
                                 MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                                 if (ProcessMsg.wIdent == Grobal2.RM_STRUCK_MAG)
                                 {
@@ -1797,7 +1795,7 @@ namespace GameSvr
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord(ProcessMsg.wParam, BaseObject.m_nLight));
                     MessageBodyWL = new TMessageBodyWL();
                     MessageBodyWL.lParam1 = BaseObject.GetFeature(this);
-                    MessageBodyWL.lParam2 = (int)BaseObject.m_nCharStatus;
+                    MessageBodyWL.lParam2 = BaseObject.m_nCharStatus;
                     MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                     MessageBodyWL.lTag1 = 0;
                     sendMsg = EDcode.EncodeBuffer(MessageBodyWL);
