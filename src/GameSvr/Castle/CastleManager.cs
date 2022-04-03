@@ -82,7 +82,7 @@ namespace GameSvr
                 Castle.m_EnvirList.Add("0156");
                 for (var i = 0; i < Castle.m_EnvirList.Count; i++)
                 {
-                    Castle.m_EnvirList[i] = M2Share.g_MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
+                    Castle.m_EnvirList[i] = M2Share.MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
                 }
                 Save();
                 return;

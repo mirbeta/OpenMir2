@@ -172,7 +172,7 @@ namespace GameSvr
             for (var i = m_MerchantList.Count - 1; i >= 0; i--)
             {
                 Merchant = m_MerchantList[i];
-                Merchant.m_PEnvir = M2Share.g_MapManager.FindMap(Merchant.m_sMapName);
+                Merchant.m_PEnvir = M2Share.MapManager.FindMap(Merchant.m_sMapName);
                 if (Merchant.m_PEnvir != null)
                 {
                     Merchant.OnEnvirnomentChanged();
@@ -204,7 +204,7 @@ namespace GameSvr
             for (var i = QuestNPCList.Count - 1; i >= 0; i--)
             {
                 NormNpc = QuestNPCList[i];
-                NormNpc.m_PEnvir = M2Share.g_MapManager.FindMap(NormNpc.m_sMapName);
+                NormNpc.m_PEnvir = M2Share.MapManager.FindMap(NormNpc.m_sMapName);
                 if (NormNpc.m_PEnvir != null)
                 {
                     NormNpc.OnEnvirnomentChanged();
@@ -319,7 +319,7 @@ namespace GameSvr
                             PlayObject.m_boNewHuman = true;
                         }
                     }
-                    Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
+                    Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
                         PlayObject.m_sMapFileName = Envir.m_sMapFileName;
@@ -359,7 +359,7 @@ namespace GameSvr
                         }
                     }
                     if (PlayObject.nC4 <= 1 && PlayObject.m_Abil.Level >= 1) PlayObject.nC4 = 2;
-                    if (M2Share.g_MapManager.FindMap(PlayObject.m_sMapName) == null) PlayObject.m_Abil.HP = 0;
+                    if (M2Share.MapManager.FindMap(PlayObject.m_sMapName) == null) PlayObject.m_Abil.HP = 0;
                     if (PlayObject.m_Abil.HP <= 0)
                     {
                         PlayObject.ClearStatusTime();
@@ -388,7 +388,7 @@ namespace GameSvr
                         PlayObject.m_Abil.HP = 14;
                     }
                     PlayObject.AbilCopyToWAbil();
-                    Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);//切换其他服务器
+                    Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);//切换其他服务器
                     if (Envir == null)
                     {
                         PlayObject.m_nSessionID = UserOpenInfo.LoadUser.nSessionID;
@@ -396,7 +396,7 @@ namespace GameSvr
                         PlayObject.m_nGateIdx = UserOpenInfo.LoadUser.nGateIdx;
                         PlayObject.m_nGSocketIdx = UserOpenInfo.LoadUser.nGSocketIdx;
                         PlayObject.m_WAbil = PlayObject.m_Abil;
-                        PlayObject.m_nServerIndex = M2Share.g_MapManager.GetMapOfServerIndex(PlayObject.m_sMapName);
+                        PlayObject.m_nServerIndex = M2Share.MapManager.GetMapOfServerIndex(PlayObject.m_sMapName);
                         if (PlayObject.m_Abil.HP != 14)
                         {
                             M2Share.MainOutMessage(string.Format(sChangeServerFail1, new object[] { M2Share.nServerIndex, PlayObject.m_nServerIndex, PlayObject.m_sMapName }));
@@ -421,7 +421,7 @@ namespace GameSvr
                         M2Share.MainOutMessage(string.Format(sChangeServerFail2,
                             new object[] { M2Share.nServerIndex, PlayObject.m_nServerIndex, PlayObject.m_sMapName }));
                         PlayObject.m_sMapName = M2Share.g_Config.sHomeMap;
-                        Envir = M2Share.g_MapManager.FindMap(M2Share.g_Config.sHomeMap);
+                        Envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
                         PlayObject.m_nCurrX = M2Share.g_Config.nHomeX;
                         PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                     }
@@ -446,13 +446,13 @@ namespace GameSvr
                     PlayObject.m_WAbil = SwitchDataInfo.Abil;
                     LoadSwitchData(SwitchDataInfo, ref PlayObject);
                     DelSwitchData(SwitchDataInfo);
-                    Envir = M2Share.g_MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
+                    Envir = M2Share.MapManager.GetMapInfo(M2Share.nServerIndex, PlayObject.m_sMapName);
                     if (Envir != null)
                     {
                         M2Share.MainOutMessage(string.Format(sChangeServerFail3,
                             new object[] { M2Share.nServerIndex, PlayObject.m_nServerIndex, PlayObject.m_sMapName }));
                         PlayObject.m_sMapName = M2Share.g_Config.sHomeMap;
-                        Envir = M2Share.g_MapManager.FindMap(M2Share.g_Config.sHomeMap);
+                        Envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
                         PlayObject.m_nCurrX = M2Share.g_Config.nHomeX;
                         PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                     }
@@ -463,7 +463,7 @@ namespace GameSvr
                             M2Share.MainOutMessage(string.Format(sChangeServerFail4,
                                 new object[] { M2Share.nServerIndex, PlayObject.m_nServerIndex, PlayObject.m_sMapName }));
                             PlayObject.m_sMapName = M2Share.g_Config.sHomeMap;
-                            Envir = M2Share.g_MapManager.FindMap(M2Share.g_Config.sHomeMap);
+                            Envir = M2Share.MapManager.FindMap(M2Share.g_Config.sHomeMap);
                             PlayObject.m_nCurrX = M2Share.g_Config.nHomeX;
                             PlayObject.m_nCurrY = M2Share.g_Config.nHomeY;
                         }
@@ -963,7 +963,7 @@ namespace GameSvr
                             var nGenCount = MonGen.nActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
                             var nGenModCount = (MonGen.nCount / M2Share.g_Config.nMonGenRate) * 10;
-                            var map = M2Share.g_MapManager.FindMap(MonGen.sMapName);
+                            var map = M2Share.MapManager.FindMap(MonGen.sMapName);
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 boCanCreate = false;
                             else
@@ -1524,7 +1524,7 @@ namespace GameSvr
             int n20;
             int n24;
             object p28;
-            var map = M2Share.g_MapManager.FindMap(sMapName);
+            var map = M2Share.MapManager.FindMap(sMapName);
             if (map == null) return result;
             switch (nMonRace)
             {
@@ -2374,7 +2374,7 @@ namespace GameSvr
         private void ProcessMapDoor()
         {
             TDoorInfo Door;
-            var dorrList = M2Share.g_MapManager.GetDoorMapList();
+            var dorrList = M2Share.MapManager.GetDoorMapList();
             for (var i = 0; i < dorrList.Count; i++)
             {
                 var Envir = dorrList[i];
@@ -2561,7 +2561,7 @@ namespace GameSvr
         {
             TPlayObject PlayObject;
             var result = 0;
-            var Envir = M2Share.g_MapManager.FindMap(sMapName);
+            var Envir = M2Share.MapManager.FindMap(sMapName);
             if (Envir == null) return result;
             for (var i = 0; i < m_PlayObjectList.Count; i++)
             {
@@ -2740,7 +2740,7 @@ namespace GameSvr
             int n24;
             object p28;
             RobotPlayObject result = null;
-            var Map = M2Share.g_MapManager.FindMap(AI.sMapName);
+            var Map = M2Share.MapManager.FindMap(AI.sMapName);
             if (Map == null)
             {
                 return result;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using SystemModule;
 
 namespace GameSvr
@@ -1833,7 +1831,7 @@ namespace GameSvr
             int nOldY;
             bool bo21;
             TPlayObject PlayObject;
-            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMap);
+            Envirnoment Envir = M2Share.MapManager.FindMap(sMap);
             if (Envir != null)
             {
                 if (M2Share.nServerIndex == Envir.nServerIndex)
@@ -1953,7 +1951,7 @@ namespace GameSvr
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            Envirnoment Envir = M2Share.g_MapManager.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapManager.FindMap(sMapName);
             if (Envir != null)
             {
                 if (Envir.wHeight < 150)

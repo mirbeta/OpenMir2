@@ -53,7 +53,7 @@ namespace GameSvr
         public static GateManager GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
-        public static MapManager g_MapManager = null;
+        public static MapManager MapManager = null;
         public static ItemUnit ItemUnit = null;
         public static MagicManager MagicManager = null;
         public static NoticeManager NoticeManager = null;

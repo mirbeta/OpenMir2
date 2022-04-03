@@ -1399,7 +1399,7 @@ namespace GameSvr
             var nY = (short)HUtil32.Str_ToInt(sY, 0);
             if (sMap != "" && nX >= 0 && nY >= 0)
             {
-                Map = M2Share.g_MapManager.FindMap(sMap);
+                Map = M2Share.MapManager.FindMap(sMap);
                 if (Map != null)
                 {
                     var mapCell = false;

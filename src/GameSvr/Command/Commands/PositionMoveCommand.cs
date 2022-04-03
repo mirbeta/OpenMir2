@@ -30,7 +30,7 @@ namespace GameSvr
                 }
                 if (PlayObject.m_btPermission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
                 {
-                    Envir = M2Share.g_MapManager.FindMap(sMapName);
+                    Envir = M2Share.MapManager.FindMap(sMapName);
                     if (Envir != null)
                     {
                         var nX = (short)HUtil32.Str_ToInt(sX, 0);

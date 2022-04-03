@@ -43,7 +43,7 @@ namespace GameSvr
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Envir = M2Share.g_MapManager.FindMap(sMAP);
+            var Envir = M2Share.MapManager.FindMap(sMAP);
             if (Envir != null)
             {
                 var OldEnvir = PlayObject.m_PEnvir;

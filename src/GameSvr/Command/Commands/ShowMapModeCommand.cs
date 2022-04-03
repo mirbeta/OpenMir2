@@ -23,7 +23,7 @@ namespace GameSvr
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Envir = M2Share.g_MapManager.FindMap(sMapName);
+            var Envir = M2Share.MapManager.FindMap(sMapName);
             if (Envir == null)
             {
                 PlayObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);

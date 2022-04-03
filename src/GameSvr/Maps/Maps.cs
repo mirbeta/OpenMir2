@@ -343,7 +343,7 @@ namespace GameSvr
                                 MapFlag.nL = HUtil32.Str_ToInt(s34.Substring(1, s34.Length - 1), 1);
                             }
                         }
-                        if (M2Share.g_MapManager.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
+                        if (M2Share.MapManager.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
                         {
                             result = -10;
                         }
@@ -368,7 +368,7 @@ namespace GameSvr
                         n1C = HUtil32.Str_ToInt(s34, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", ";", "\t" });
                         n20 = HUtil32.Str_ToInt(s34, 0);
-                        M2Share.g_MapManager.AddMapRoute(sMapName, n14, n18, s44, n1C, n20);
+                        M2Share.MapManager.AddMapRoute(sMapName, n14, n18, s44, n1C, n20);
                     }
                 }
                 LoadList = null;

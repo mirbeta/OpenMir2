@@ -696,7 +696,7 @@ namespace GameSvr
                         }
                         break;
                     case M2Share.nCHECKMONMAP:
-                        Envir = M2Share.g_MapManager.FindMap(QuestConditionInfo.sParam1);
+                        Envir = M2Share.MapManager.FindMap(QuestConditionInfo.sParam1);
                         if (Envir != null)
                         {
                             if (M2Share.UserEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2)
@@ -1830,7 +1830,7 @@ namespace GameSvr
                         break;
                     case M2Share.nMONCLEAR:
                         List58 = new List<TBaseObject>();
-                        M2Share.UserEngine.GetMapMonster(M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1), List58);
+                        M2Share.UserEngine.GetMapMonster(M2Share.MapManager.FindMap(QuestActionInfo.sParam1), List58);
                         for (var k = 0; k < List58.Count; k++)
                         {
                             List58[k].m_boNoItem = true;
@@ -1927,7 +1927,7 @@ namespace GameSvr
                         MovrData(PlayObject, QuestActionInfo);
                         break;
                     case M2Share.nEXCHANGEMAP:
-                        Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
+                        Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
                             List58 = new List<TBaseObject>();
@@ -1945,7 +1945,7 @@ namespace GameSvr
                         }
                         break;
                     case M2Share.nRECALLMAP:
-                        Envir = M2Share.g_MapManager.FindMap(QuestActionInfo.sParam1);
+                        Envir = M2Share.MapManager.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null)
                         {
                             List58 = new List<TBaseObject>();
