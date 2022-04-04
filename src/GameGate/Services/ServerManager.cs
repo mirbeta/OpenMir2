@@ -17,7 +17,7 @@ namespace GameGate
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private Channel<TMessageData> _reviceMsgList = null;
+        private readonly Channel<TMessageData> _reviceMsgList = null;
 
         public ServerManager()
         {

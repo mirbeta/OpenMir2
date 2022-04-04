@@ -10,7 +10,7 @@ namespace GameGate
     /// </summary>
     public class ClientThread
     {
-        private IClientScoket ClientSocket;
+        private readonly IClientScoket ClientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -280,7 +280,7 @@ namespace GameGate
                     BuffLen = 0;
                 }
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 _logQueue.Enqueue($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}", 5);
             }

@@ -11,8 +11,8 @@ namespace GameGate
         public readonly HardwareFilter g_HWIDFilter = null;
         public static object g_ConnectOfIPLock = null;
         public static ArrayList g_ConnectOfIPList = null;
-        private static ArrayList g_BlockIPList = null;
-        private static ArrayList g_TempBlockIPList = null;
+        private static readonly ArrayList g_BlockIPList = null;
+        private static readonly ArrayList g_TempBlockIPList = null;
         public static ArrayList g_BlockIPAreaList = null;
 
         public Filter(HardwareFilter hwidFilter)
@@ -347,8 +347,8 @@ namespace GameGate
 
     public class HardwareFilter
     {
-        private IList<HardwareCnt> m_xCurList = null;
-        private IList<HardwareCnt> m_xDenyList = null;
+        private readonly IList<HardwareCnt> m_xCurList = null;
+        private readonly IList<HardwareCnt> m_xDenyList = null;
         private ConfigManager _configManager => ConfigManager.Instance;
 
         public HardwareFilter()
