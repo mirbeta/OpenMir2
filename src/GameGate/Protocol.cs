@@ -1,38 +1,23 @@
-﻿using System.IO;
-using SystemModule;
+﻿using System.Net.Sockets;
 
 namespace GameGate
 {
-    public class TSvrCmdPack : Packets
+    public struct TMessageData
     {
-        public uint Flag;
-        public int SockID;
-        public ushort Seq;
-        public ushort Cmd;
-        public int GGSock;
-        public int DataLen;
+        public byte[] Buffer;
+        public int BufferLen;
+        public int MessageId;
+    }
 
-        public const int PackSize = 20;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Flag = reader.ReadUInt32();
-            SockID = reader.ReadInt32();
-            Seq = reader.ReadUInt16();
-            Cmd = reader.ReadUInt16();
-            GGSock = reader.ReadInt32();
-            DataLen = reader.ReadInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Flag);
-            writer.Write(SockID);
-            writer.Write(Seq);
-            writer.Write(Cmd);
-            writer.Write(GGSock);
-            writer.Write(DataLen);
-        }
+    public class TSessionInfo
+    {
+        public Socket Socket;
+        public int SessionId;
+        public int SckHandle;
+        public ushort nUserListIndex;
+        public int dwReceiveTick;
+        public string sAccount;
+        public string sChrName;
     }
 
     public class TDelayMsg
