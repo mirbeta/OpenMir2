@@ -6,7 +6,7 @@ namespace GameGate
 {
     public class ConfigManager : IniFile
     {
-        private static string fileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
+        private static readonly string fileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
 
         private static readonly ConfigManager instance = new ConfigManager(fileName);
 

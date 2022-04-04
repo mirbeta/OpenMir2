@@ -13,7 +13,7 @@ namespace GameGate
     class Program
     {
         private static PeriodicTimer _timer;
-        private static CancellationTokenSource cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         static async Task Main(string[] args)
         {
