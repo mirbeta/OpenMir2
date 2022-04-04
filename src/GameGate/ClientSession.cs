@@ -571,27 +571,27 @@ namespace GameGate
                         }
 
                         byte[] BodyBuffer;
-                        var cmdPack = new TSvrCmdPack();
-                        cmdPack.Flag = Grobal2.RUNGATECODE;
-                        cmdPack.SockID = _session.SckHandle;
-                        cmdPack.Cmd = Grobal2.GM_DATA;
-                        cmdPack.GGSock = m_nSvrListIdx;
+                        var cmdPack = new PacketHeader();
+                        cmdPack.PacketCode = Grobal2.RUNGATECODE;
+                        cmdPack.Socket = _session.SckHandle;
+                        cmdPack.Ident = Grobal2.GM_DATA;
+                        cmdPack.UserIndex = m_nSvrListIdx;
                         if (nDeCodeLen > ClientPacket.PackSize)
                         {
                             var sendBuffer = new byte[message.Buffer.Length - ClientPacket.PackSize + 1];
                             var tLen = Misc.EncodeBuf(packBuff, nDeCodeLen - ClientPacket.PackSize, sendBuffer);
-                            cmdPack.DataLen = ClientPacket.PackSize + tLen + 1;
-                            BodyBuffer = new byte[TSvrCmdPack.PackSize + cmdPack.DataLen];
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, ClientPacket.PackSize);
+                            cmdPack.PackLength = ClientPacket.PackSize + tLen + 1;
+                            BodyBuffer = new byte[PacketHeader.PacketSize + cmdPack.PackLength];
+                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, ClientPacket.PackSize);
                             Buffer.BlockCopy(tempBuff, 16, BodyBuffer, 32, tLen); //消息体
                         }
                         else
                         {
-                            BodyBuffer = new byte[TSvrCmdPack.PackSize + packBuff.Length];
-                            cmdPack.DataLen = ClientPacket.PackSize;
-                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, TSvrCmdPack.PackSize, packBuff.Length);
+                            BodyBuffer = new byte[PacketHeader.PacketSize + packBuff.Length];
+                            cmdPack.PackLength = ClientPacket.PackSize;
+                            Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, packBuff.Length);
                         }
-                        Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, TSvrCmdPack.PackSize);//复制消息头
+                        Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, PacketHeader.PacketSize);//复制消息头
                         lastGameSvr.SendBuffer(BodyBuffer);
                         break;
                     }

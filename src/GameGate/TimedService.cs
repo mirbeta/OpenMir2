@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Packages;
 
 namespace GameGate
 {
@@ -80,11 +81,11 @@ namespace GameGate
                     {
                         continue;
                     }
-                    var cmdPacket = new TSvrCmdPack();
-                    cmdPacket.Flag = Grobal2.RUNGATECODE;
-                    cmdPacket.SockID = 0;
-                    cmdPacket.Cmd = Grobal2.GM_CHECKCLIENT;
-                    cmdPacket.DataLen = 0;
+                    var cmdPacket = new PacketHeader();
+                    cmdPacket.PacketCode = Grobal2.RUNGATECODE;
+                    cmdPacket.Socket = 0;
+                    cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;
+                    cmdPacket.PackLength = 0;
                     _serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
                 }
             }
