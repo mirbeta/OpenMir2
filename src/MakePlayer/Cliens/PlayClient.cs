@@ -1,3 +1,4 @@
+using System.Drawing;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Sockets;
@@ -30,10 +31,6 @@ namespace MakePlayer
         public string m_sRunServerAddr = string.Empty;
         public int m_nRunServerPort = 0;
         public TSelChar[] m_ChrArr;
-        /*public ArrayList m_ChangeFaceReadyList;
-        public ArrayList m_FreeActorList;
-        public int m_nTargetX = 0;
-        public int m_nTargetY = 0;*/
         public string m_sMapTitle = string.Empty;
         public string m_sMapName = string.Empty;
         public int m_nMapMusic = 0;
