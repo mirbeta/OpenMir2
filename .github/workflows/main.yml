@@ -21,18 +21,80 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Publish with dotnet
-      run: dotnet publish -c Release -o ./artifacts
-    - name: Zip artifacts
+        
+    - name: Build & DBSvr
+      run: |
+        cd /src/DBSvr/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./DBSvr
+        
+    - name: Build & LoginSvr
+      run: |
+        cd /src/LoginSvr/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./LoginSvr
+
+    - name: Build & SelGate
+      run: |
+        cd /src/SelGate/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./SelGate
+        
+    - name: Build & LoginGate
+      run: |
+        cd /src/LoginGate/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./LoginGate
+        
+    - name: Build & GameSvr
+      run: |
+        cd /src/GameSvr/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./GameSvr
+        
+    - name: Build & GameGate
+      run: |
+        cd /src/GameGate/
+        dotnet build --configuration Release --no-restore
+        dotnet publish -c Release -o ./GameGate
+      
+    - name: DBSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./release.zip ./artifacts
+        args: zip -qq -r ./DBSvr.zip ./DBSvr
+        
+    - name: LoginSvr & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./LoginSvr.zip ./LoginSvr
+        
+    - name: SelGate & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./SelGate.zip ./SelGate
+        
+    - name: LoginGate & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./LoginGate.zip ./LoginGate
+        
+    - name: GameSvr & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./GameSvr.zip ./GameSvr
+        
+    - name: GameGate & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./GameGate.zip ./GameGate
+        
     - name: Get release version
       id: version
       uses: ashley-taylor/read-json-property-action@v1.0
       with:
           path: ./version.json
           property: version
+          
     - name: Get release description
       id: description
       uses: juliangruber/read-file-action@v1
@@ -50,6 +112,7 @@ jobs:
         body: ${{steps.description.outputs.content}}
         draft: false
         prerelease: false
+        
     - name: Upload Release Asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1.0.1
@@ -57,6 +120,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release.zip
+        asset_path: ./*.zip
         asset_name: dev.${{steps.version.outputs.value}}.zip
         asset_content_type: application/zip
