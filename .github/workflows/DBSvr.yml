@@ -32,7 +32,13 @@ jobs:
       uses: montudor/action-zip@v0.1.0
       with:
         args: zip -qq -r ./DBSvr.zip src/Build/DBSvr
-        
+
+    - name: Generate build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v2
+        with:
+          token: ${{secrets.REPO_TOKEN}}
+          
     - name: Read VERSION file
         id: getversion
         run: echo "::set-output name=version::$(cat VERSION)"
