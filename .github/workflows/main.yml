@@ -61,32 +61,32 @@ jobs:
     - name: DBSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./DBSvr.zip ../Build/DBSvr
+        args: zip -qq -r ./DBSvr.zip src/Build/DBSvr
         
     - name: LoginSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./LoginSvr.zip ../Build/LoginSvr
+        args: zip -qq -r ./LoginSvr.zip src/Build/LoginSvr
         
     - name: SelGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./SelGate.zip ../Build/SelGate
+        args: zip -qq -r ./SelGate.zip src/Build/SelGate
         
     - name: LoginGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./LoginGate.zip ../Build/LoginGate
+        args: zip -qq -r ./LoginGate.zip src/Build/LoginGate
         
     - name: GameSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./GameSvr.zip ../Build/GameSvr
+        args: zip -qq -r ./GameSvr.zip src/Build/GameSvr
         
     - name: GameGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./GameGate.zip ../Build/GameGate
+        args: zip -qq -r ./GameGate.zip src/Build/GameGate
         
     - name: Get release version
       id: version
