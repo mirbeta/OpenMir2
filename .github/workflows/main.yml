@@ -25,37 +25,37 @@ jobs:
     - name: Build & DBSvr
       run: |
         cd src/DBSvr/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./DBSvr
         
     - name: Build & LoginSvr
       run: |
         cd src/LoginSvr/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./LoginSvr
 
     - name: Build & SelGate
       run: |
         cd src/SelGate/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./SelGate
         
     - name: Build & LoginGate
       run: |
         cd src/LoginGate/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./LoginGate
         
     - name: Build & GameSvr
       run: |
         cd src/GameSvr/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./GameSvr
         
     - name: Build & GameGate
       run: |
         cd src/GameGate/
-        dotnet build --configuration Release --no-restore
+        dotnet build --configuration Release
         dotnet publish -c Release -o ./GameGate
       
     - name: DBSvr & Zip artifacts
