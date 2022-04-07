@@ -26,67 +26,67 @@ jobs:
       run: |
         cd src/DBSvr/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./DBSvr
+        dotnet publish -c Release -o ../Build/DBSvr
         
     - name: Build & LoginSvr
       run: |
         cd src/LoginSvr/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./LoginSvr
+        dotnet publish -c Release -o ../Build/LoginSvr
 
     - name: Build & SelGate
       run: |
         cd src/SelGate/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./SelGate
+        dotnet publish -c Release -o ../Build/SelGate
         
     - name: Build & LoginGate
       run: |
         cd src/LoginGate/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./LoginGate
+        dotnet publish -c Release -o ../Build/LoginGate
         
     - name: Build & GameSvr
       run: |
         cd src/GameSvr/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./GameSvr
+        dotnet publish -c Release -o ../Build/GameSvr
         
     - name: Build & GameGate
       run: |
         cd src/GameGate/
         dotnet build --configuration Release
-        dotnet publish -c Release -o ./GameGate
+        dotnet publish -c Release -o ../Build/GameGate
       
     - name: DBSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./DBSvr.zip ./DBSvr
+        args: zip -qq -r ./DBSvr.zip ../Build/DBSvr
         
     - name: LoginSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./LoginSvr.zip ./LoginSvr
+        args: zip -qq -r ./LoginSvr.zip ../Build/LoginSvr
         
     - name: SelGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./SelGate.zip ./SelGate
+        args: zip -qq -r ./SelGate.zip ../Build/SelGate
         
     - name: LoginGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./LoginGate.zip ./LoginGate
+        args: zip -qq -r ./LoginGate.zip ../Build/LoginGate
         
     - name: GameSvr & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./GameSvr.zip ./GameSvr
+        args: zip -qq -r ./GameSvr.zip ../Build/GameSvr
         
     - name: GameGate & Zip artifacts
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r ./GameGate.zip ./GameGate
+        args: zip -qq -r ./GameGate.zip ../Build/GameGate
         
     - name: Get release version
       id: version
