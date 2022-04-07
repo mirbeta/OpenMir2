@@ -2,8 +2,10 @@ name: .NET Build & Publish
 
 on:
   push:
-   branches: -master
-   tags: -'v*'
+    branches:
+      - master
+    tags:
+      - 'v*'
   
 jobs:
   build_and_test:
