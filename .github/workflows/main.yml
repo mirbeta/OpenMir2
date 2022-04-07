@@ -24,31 +24,31 @@ jobs:
           cd src/DBSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/DBSvr
-          zip -qq -r /src/Build/DBSvr.zip src/Build/DBSvr
+          zip -qq -r src/Build/DBSvr.zip src/Build/DBSvr
           cd src/LoginSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginSvr
-          zip -qq -r /src/Build/LoginSvr.zip src/Build/LoginSvr
+          zip -qq -r src/Build/LoginSvr.zip src/Build/LoginSvr
           cd src/SelGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/SelGate
-          zip -qq -r /src/Build/SelGate.zip src/Build/SelGate
+          zip -qq -r src/Build/SelGate.zip src/Build/SelGate
           cd src/LoginGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginGate
-          zip -qq -r /src/Build/LoginGate.zip src/Build/LoginGate
+          zip -qq -r src/Build/LoginGate.zip src/Build/LoginGate
           cd src/GameSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameSvr
-          zip -qq -r /src/Build/GameSvr.zip src/Build/GameSvr
+          zip -qq -r src/Build/GameSvr.zip src/Build/GameSvr
           cd src/GameGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameGate
-          zip -qq -r /src/Build/GameGate.zip src/Build/GameGate
+          zip -qq -r src/Build/GameGate.zip src/Build/GameGate
           cd src/MakePlay/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/MakePlay
-          zip -qq -r /src/Build/MakePlay.zip src/Build/MakePlay
+          zip -qq -r src/Build/MakePlay.zip src/Build/MakePlay
 
 
     - name: Create release
@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/DBSvr.zip
+          asset_path: src/Build/DBSvr.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-DBSvr.zip
           asset_content_type: application/zip
 
@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/LoginSvr.zip
+          asset_path: src/Build/LoginSvr.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginSvr.zip
           asset_content_type: application/zip
 
@@ -89,7 +89,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/SelGate.zip
+          asset_path: src/Build/SelGate.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-SelGate.zip
           asset_content_type: application/zip
 
@@ -99,7 +99,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/LoginGate.zip
+          asset_path: src/Build/LoginGate.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginGate.zip
           asset_content_type: application/zip
 
@@ -109,7 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/GameSvr.zip
+          asset_path: src/Build/GameSvr.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-GameSvr.zip
           asset_content_type: application/zip
 
@@ -119,7 +119,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/GameGate.zip
+          asset_path: src/Build/GameGate.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-GameGate.zip
           asset_content_type: application/zip
 
@@ -129,6 +129,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /src/Build/MakePlay.zip
+          asset_path: src/Build/MakePlay.zip
           asset_name: dev.${{ steps.create_release.outputs.tag }}-MakePlay.zip
           asset_content_type: application/zip
