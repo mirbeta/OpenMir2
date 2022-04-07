@@ -1,106 +1,54 @@
 name: .NET Build & Publish
 
 on:
-  push:
-    branches:
-      - master
-    tags:
-      - 'v*'
-  schedule:
-    - cron: '0 7 * * *'
-     
+push:
+branches: - master
+tags: - 'v*'
+schedule: - cron: '0 7 * \* \*'
+  
 jobs:
-  build_and_test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Build & DBSvr
-      run: |
-        cd src/DBSvr/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/DBSvr
-        
-    - name: Build & LoginSvr
-      run: |
-        cd src/LoginSvr/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/LoginSvr
+build_and_test:
+runs-on: \${{ matrix.os }}
+strategy:
+matrix:
+os: [ubuntu-latest]
+steps: - uses: actions/checkout@v1 - name: Setup .NET Core
+uses: actions/setup-dotnet@v1
+with:
+dotnet-version: 6.0.x
 
-    - name: Build & SelGate
-      run: |
-        cd src/SelGate/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/SelGate
-        
-    - name: Build & LoginGate
-      run: |
-        cd src/LoginGate/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/LoginGate
-        
-    - name: Build & GameSvr
-      run: |
-        cd src/GameSvr/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/GameSvr
-        
-    - name: Build & GameGate
-      run: |
-        cd src/GameGate/
-        dotnet build --configuration Release
-        dotnet publish -c Release -o ../Build/GameGate
-      
-    - name: DBSvr & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./DBSvr.zip src/Build/DBSvr
-        
-    - name: LoginSvr & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./LoginSvr.zip src/Build/LoginSvr
-        
-    - name: SelGate & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./SelGate.zip src/Build/SelGate
-        
-    - name: LoginGate & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./LoginGate.zip src/Build/LoginGate
-        
-    - name: GameSvr & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./GameSvr.zip src/Build/GameSvr
-        
-    - name: GameGate & Zip artifacts
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./GameGate.zip src/Build/GameGate
-        
-    - name: Get release version
-      id: version
-      uses: ashley-taylor/read-json-property-action@v1.0
-      with:
-          path: ./version.json
-          property: version
-          
-    - name: Get release description
-      id: description
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./Changelog.md
-        
+- name: Build & Publish
+  run: |
+  cd src/DBSvr/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/DBSvr
+  zip -qq -r /src/Build/DBSvr.zip src/Build/DBSvr
+  cd src/LoginSvr/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/LoginSvr
+  zip -qq -r /src/Build/LoginSvr.zip src/Build/LoginSvr
+  cd src/SelGate/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/SelGate
+  zip -qq -r /src/Build/SelGate.zip src/Build/SelGate
+  cd src/LoginGate/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/LoginGate
+  zip -qq -r /src/Build/LoginGate.zip src/Build/LoginGate
+  cd src/GameSvr/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/GameSvr
+  zip -qq -r /src/Build/GameSvr.zip src/Build/GameSvr
+  cd src/GameGate/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/GameGate
+  zip -qq -r /src/Build/GameGate.zip src/Build/GameGate
+  cd src/MakePlay/
+  dotnet build --configuration Release
+  dotnet publish -c Release -o ../Build/MakePlay
+  zip -qq -r /src/Build/MakePlay.zip src/Build/MakePlay
+
+
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.0.0
@@ -112,14 +60,75 @@ jobs:
         body: ${{steps.description.outputs.content}}
         draft: false
         prerelease: false
-        
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./*.zip
-        asset_name: dev.${{steps.version.outputs.value}}.zip
-        asset_content_type: application/zip
+
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/DBSvr.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-DBSvr.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/LoginSvr.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginSvr.zip
+          asset_content_type: application/zip
+
+                - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/SelGate.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-SelGate.zip
+          asset_content_type: application/zip
+
+     - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/LoginGate.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginGate.zip
+          asset_content_type: application/zip
+
+     - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/GameSvr.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-GameSvr.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/GameGate.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-GameGate.zip
+          asset_content_type: application/zip
+
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /src/Build/MakePlay.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-MakePlay.zip
+          asset_content_type: application/zip
