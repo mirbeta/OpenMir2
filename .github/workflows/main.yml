@@ -24,37 +24,37 @@ jobs:
         
     - name: Build & DBSvr
       run: |
-        cd /src/DBSvr/
+        cd ./src/DBSvr/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./DBSvr
         
     - name: Build & LoginSvr
       run: |
-        cd /src/LoginSvr/
+        cd ./src/LoginSvr/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./LoginSvr
 
     - name: Build & SelGate
       run: |
-        cd /src/SelGate/
+        cd ./src/SelGate/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./SelGate
         
     - name: Build & LoginGate
       run: |
-        cd /src/LoginGate/
+        cd ./src/LoginGate/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./LoginGate
         
     - name: Build & GameSvr
       run: |
-        cd /src/GameSvr/
+        cd ./src/GameSvr/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./GameSvr
         
     - name: Build & GameGate
       run: |
-        cd /src/GameGate/
+        cd ./src/GameGate/
         dotnet build --configuration Release --no-restore
         dotnet publish -c Release -o ./GameGate
       
