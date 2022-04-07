@@ -8,11 +8,13 @@ This project refers to the network Delphi code, which can be used with the origi
 * How to download the Delphi game client  
     * Please use the search engine to search for blood legend source code yourself.  
 * Use our game client  
-    * download here (later, we are ready)  
+    * download 
+    * (Chinese users 天翼云盘 https://cloud.189.cn/web/share?code=nEVz2qQFfmee（访问码：7lqz）)  
 
 ## Server
 > You can download various game versions on the search engine or download our basic version to experience.   
-* download here (later, we are ready)
+* download 
+* (Chinese users 天翼云盘 :https://cloud.189.cn/web/share?code=MfE3IvjmIJJf（访问码：dba4）)
 
 ## Startup sequence and project description. 
 1. DBSvr (database service, responsible for data storage). 
