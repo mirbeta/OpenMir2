@@ -1,0 +1,62 @@
+name: .NET Build & Publish
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  schedule:
+    - cron: '0 7 * * *'
+     
+jobs:
+  build_and_test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Build & DBSvr
+      run: |
+        cd src/DBSvr/
+        dotnet build --configuration Release
+        dotnet publish -c Release -o ../Build/DBSvr
+        
+    - name: DBSvr & Zip artifacts
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./DBSvr.zip src/Build/DBSvr
+        
+    - name: Read VERSION file
+        id: getversion
+        run: echo "::set-output name=version::$(cat VERSION)"
+      - uses: "marvinpinto/action-automatic-releases@latest"
+                  
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        tag_name: v${{steps.version.outputs.value}}
+        release_name: v${{steps.version.outputs.value}}
+        body: ${{steps.description.outputs.content}}
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./DBSvr.zip
+        asset_name: dev.${{ steps.buildnumber.outputs.build_number }}.zip
+        asset_content_type: application/zip
