@@ -2,7 +2,7 @@ name: debugger-action
 on:
   push:
     branches:
-      - test
+      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
