@@ -25,27 +25,27 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/DBSvr
           zip -qq -r ../Build/DBSvr.zip ../Build/DBSvr
-          cd src/LoginSvr/
+          cd ../src/LoginSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginSvr
           zip -qq -r ../Build/LoginSvr.zip ../Build/LoginSvr
-          cd src/SelGate/
+          cd ../src/SelGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/SelGate
           zip -qq -r ../Build/SelGate.zip ../Build/SelGate
-          cd src/LoginGate/
+          cd ../src/LoginGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginGate
           zip -qq -r ../Build/LoginGate.zip ../Build/LoginGate
-          cd src/GameSvr/
+          cd ../src/GameSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameSvr
           zip -qq -r ../Build/GameSvr.zip ../Build/GameSvr
-          cd src/GameGate/
+          cd ../src/GameGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameGate
           zip -qq -r ../Build/GameGate.zip ../Build/GameGate
-          cd src/MakePlay/
+          cd ../src/MakePlay/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/MakePlay
           zip -qq -r ../Build/MakePlay.zip ../Build/MakePlay
