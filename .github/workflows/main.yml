@@ -63,12 +63,12 @@ jobs:
           dotnet publish -c Release -o ../Build/GameGate
           zip -qq -r ../Build/GameGate.zip ../Build/GameGate
           
-    - name: Publish & MakePlay
+    - name: Publish & MakePlayer
       run: |                              
-          cd src/MakePlay/
+          cd src/MakePlayer/
           dotnet build --configuration Release
-          dotnet publish -c Release -o ../Build/MakePlay
-          zip -qq -r ../Build/MakePlay.zip ../Build/MakePlay
+          dotnet publish -c Release -o ../Build/MakePlayer
+          zip -qq -r ../Build/MakePlayer.zip ../Build/MakePlayer
 
 
     - name: Create release
@@ -83,7 +83,7 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Asset
+    - name: Upload DBSvr Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -93,7 +93,7 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-DBSvr.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload LoginSvr Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -103,7 +103,7 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginSvr.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload SelGate Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -113,7 +113,7 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-SelGate.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload LoginGate Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -123,7 +123,7 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginGate.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload GameSvr Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -133,7 +133,7 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-GameSvr.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload GameGate Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -143,12 +143,12 @@ jobs:
           asset_name: dev.${{ steps.create_release.outputs.tag }}-GameGate.zip
           asset_content_type: application/zip
 
-    - name: Upload Release Asset
+    - name: Upload MakePlayer Release Asset
       uses: actions/upload-release-asset@v1.0.1
       env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src/Build/MakePlay.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-MakePlay.zip
+          asset_path: src/Build/MakePlayer.zip
+          asset_name: dev.${{ steps.create_release.outputs.tag }}-MakePlayer.zip
           asset_content_type: application/zip
