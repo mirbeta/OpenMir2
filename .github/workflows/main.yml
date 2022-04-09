@@ -20,40 +20,52 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-                
-    - name: Publish with dotnet
+
+    - name: Publish & DBSvr
       run: |
           cd src/DBSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/DBSvr
           zip -qq -r ../Build/DBSvr.zip ../Build/DBSvr
-          
-          cd ./src/LoginSvr/
+
+    - name: Publish & LoginSvr
+      run: |
+          cd src/LoginSvr/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginSvr
           zip -qq -r ../Build/LoginSvr.zip ../Build/LoginSvr
           
-          cd ./src/SelGate/
+    - name: Publish & SelGate
+      run: |
+          cd src/SelGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/SelGate
           zip -qq -r ../Build/SelGate.zip ../Build/SelGate
-          
-          cd ./src/LoginGate/
+
+    - name: Publish & LoginGate
+      run: |
+          cd src/LoginGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/LoginGate
           zip -qq -r ../Build/LoginGate.zip ../Build/LoginGate
           
-          cd ./src/GameSvr/
+    - name: Publish & GameSvr
+      run: |
+          cd src/LoginGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameSvr
           zip -qq -r ../Build/GameSvr.zip ../Build/GameSvr
           
-          cd ./src/GameGate/
+    - name: Publish & GameGate
+      run: |
+          cd src/GameGate/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/GameGate
           zip -qq -r ../Build/GameGate.zip ../Build/GameGate
           
-          cd ./src/MakePlay/
+    - name: Publish & MakePlay
+      run: |                              
+          cd src/MakePlay/
           dotnet build --configuration Release
           dotnet publish -c Release -o ../Build/MakePlay
           zip -qq -r ../Build/MakePlay.zip ../Build/MakePlay
