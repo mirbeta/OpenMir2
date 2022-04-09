@@ -90,7 +90,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/DBSvr.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-DBSvr.zip
+          asset_name: DBSvr.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload LoginSvr Release Asset
@@ -100,7 +100,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/LoginSvr.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginSvr.zip
+          asset_name: LoginSvr.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload SelGate Release Asset
@@ -110,7 +110,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/SelGate.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-SelGate.zip
+          asset_name: SelGate.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload LoginGate Release Asset
@@ -120,7 +120,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/LoginGate.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-LoginGate.zip
+          asset_name: LoginGate.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload GameSvr Release Asset
@@ -130,7 +130,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/GameSvr.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-GameSvr.zip
+          asset_name: GameSvr.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload GameGate Release Asset
@@ -140,7 +140,7 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/GameGate.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-GameGate.zip
+          asset_name: GameGate.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
 
     - name: Upload MakePlayer Release Asset
@@ -150,5 +150,5 @@ jobs:
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/Build/MakePlayer.zip
-          asset_name: dev.${{ steps.create_release.outputs.tag }}-MakePlayer.zip
+          asset_name: MakePlayer.${{ steps.create_release.outputs.tag }}.zip
           asset_content_type: application/zip
