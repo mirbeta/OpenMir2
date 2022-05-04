@@ -2,6 +2,10 @@ Legend of Mir 2 complete game server, support 1.10-1.76 classic game functions, 
 
 This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
 
+## Developing 
+1.MirClient  
+2.ResourceSvr  
+
 ### How to use    
 ## Client
 >  You can build the game client yourself from the Delphi source code or use the game client files we provide.    
