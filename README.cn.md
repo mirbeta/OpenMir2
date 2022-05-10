@@ -1,3 +1,6 @@
+[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)  
+
+
 
 热血传奇完整服务端，支持经典热血传奇客户端（1.10-1.76），支持联机和多人游戏.  
 
