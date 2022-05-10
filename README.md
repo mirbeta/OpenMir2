@@ -1,4 +1,4 @@
-[EN](https://github.com/dwbeta/OpenMir2/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/master/README.cn.md)  
+[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)  
 
 
 Legend of Mir 2 complete game server, support 1.10-1.76 classic game functions, support online and multiplayer interaction.
