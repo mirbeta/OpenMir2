@@ -108,16 +108,14 @@ namespace SelGate.Services
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             boGateReady = true;
-            GateShare.dwCheckServerTick = HUtil32.GetTickCount();
             RestSessionArray();
-            GateShare.dwCheckServerTimeMax = 0;
-            GateShare.dwCheckServerTimeMax = 0;
-            GateShare.ServerGateList.Add(this);
-            _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
-            _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
             isConnected = true;
             SockThreadStutas = SockThreadStutas.Connected;
             KeepAliveTick = HUtil32.GetTickCount();
+            GateShare.dwCheckServerTick = HUtil32.GetTickCount();
+            GateShare.ServerGateList.Add(this);
+            _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            _logQueue.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -170,16 +168,13 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue("数据库服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }

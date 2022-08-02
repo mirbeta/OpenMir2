@@ -449,7 +449,7 @@ namespace GameSvr
         private const string sSTATUS_FAIL = "+FL/{0}";
         private const string sSTATUS_GOOD = "+GD/{0}";
 
-        public const int MAXUPLEVEL = 500;
+        public const int MAXUPLEVEL = 255;
         public const int MAXHUMPOWER = 1000;
         public const int BODYLUCKUNIT = 5000;
         public const int HAM_ALL = 0;
@@ -1587,15 +1587,19 @@ namespace GameSvr
 
         public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
 
-        public static void CopyStdItemToOStdItem(TStdItem StdItem, TOStdItem OStdItem)
+        public static void CopyStdItemToOStdItem(TStdItem StdItem, ref TOStdItem OStdItem)
         {
+            if (OStdItem == null)
+            {
+                OStdItem = new TOStdItem();
+            }
             OStdItem.Name = StdItem.Name;
             OStdItem.StdMode = StdItem.StdMode;
             OStdItem.Shape = StdItem.Shape;
             OStdItem.Weight = StdItem.Weight;
             OStdItem.AniCount = StdItem.AniCount;
-            OStdItem.Source = (byte)StdItem.Source;
-            OStdItem.Reserved = StdItem.reserved;
+            /*OStdItem.Source = (byte)StdItem.Source;
+            OStdItem.Reserved = StdItem.reserved;*/
             OStdItem.NeedIdentify = StdItem.NeedIdentify;
             OStdItem.Looks = StdItem.Looks;
             OStdItem.DuraMax = (ushort)StdItem.DuraMax;
@@ -1726,11 +1730,11 @@ namespace GameSvr
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
             var result = 0;
-            if (nVersionDate > 100000000)
+            if (nVersionDate > 10000000)
             {
-                while (nVersionDate > 100000000)
+                while (nVersionDate > 10000000)
                 {
-                    nVersionDate -= 100000000;
+                    nVersionDate -= 10000;
                     result += 100000000;
                 }
             }

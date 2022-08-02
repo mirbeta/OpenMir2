@@ -347,6 +347,11 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 检查是否在保存队列中
+        /// </summary>
+        /// <param name="sChrName"></param>
+        /// <returns></returns>
         public bool InSaveRcdList(string sChrName)
         {
             var result = false;
@@ -369,6 +374,9 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 添加到加载队列中
+        /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
             TGoldChangeInfo GoldInfo = new TGoldChangeInfo
@@ -380,6 +388,9 @@ namespace GameSvr
             m_ChangeGoldList.Add(GoldInfo);
         }
 
+        /// <summary>
+        /// 添加到保存队列中
+        /// </summary>
         public void AddToSaveRcdList(TSaveRcd SaveRcd)
         {
             HUtil32.EnterCriticalSection(m_UserCriticalSection);

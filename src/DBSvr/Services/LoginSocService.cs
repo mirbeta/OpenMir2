@@ -13,19 +13,16 @@ namespace DBSvr
     {
         private readonly IClientScoket _socket;
         private readonly IList<TGlobaSessionInfo> GlobaSessionList = null;
+        private DBConfig Config = ConfigManager.GetConfig();
         private string m_sSockMsg = string.Empty;
-        private string sIDAddr;
-        private int nIDPort = 0;
 
-        public LoginSvrService(ConfigManager configManager)
+        public LoginSvrService()
         {
             _socket = new IClientScoket();
             _socket.ReceivedDatagram += IDSocketRead;
             _socket.OnConnected += IDSocketConnected;
             _socket.OnDisconnected += IDSocketDisconnected;
             _socket.OnError += IDSocketError;
-            sIDAddr = configManager.ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
-            nIDPort = configManager.ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
             GlobaSessionList = new List<TGlobaSessionInfo>();
         }
 
@@ -34,13 +31,13 @@ namespace DBSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]拒绝链接...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + Config.sIDServerAddr + ":" + Config.nIDServerPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]关闭连接...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + Config.sIDServerAddr + ":" + Config.nIDServerPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    DBShare.MainOutMessage("账号登陆服务器[" + sIDAddr + ":" + nIDPort + "]链接超时...");
+                    DBShare.MainOutMessage("账号登陆服务器[" + Config.sIDServerAddr + ":" + Config.nIDServerPort + "]链接超时...");
                     break;
             }
         }
@@ -57,7 +54,7 @@ namespace DBSvr
 
         public void Start()
         {
-            _socket.Connect(sIDAddr, nIDPort);
+            _socket.Connect(Config.sIDServerAddr, Config.nIDServerPort);
         }
 
         public void Stop()
@@ -78,7 +75,7 @@ namespace DBSvr
             {
                 return;
             }
-            _socket.Connect(sIDAddr, nIDPort);
+            _socket.Connect(Config.sIDServerAddr, Config.nIDServerPort);
         }
 
         private void IDSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -333,7 +330,7 @@ namespace DBSvr
         {
             if (_socket.IsConnected)
             {
-                _socket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + DBShare.sServerName + "/" + "99" + "/" + userCount + ")");
+                _socket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + Config.sServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
     }

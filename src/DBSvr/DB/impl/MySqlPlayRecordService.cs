@@ -13,6 +13,7 @@ namespace DBSvr
         private readonly Dictionary<string, int> QuickList = null;
         private readonly Dictionary<int, string> IndexQuickList = null;
         private readonly TQuickIDList QuickIDList = null;
+        private DBConfig Config = ConfigManager.GetConfig();
         /// <summary>
         /// 已被删除的记录号
         /// </summary>
@@ -101,7 +102,7 @@ namespace DBSvr
 
         private MySqlConnection Open(ref bool succes)
         {
-            var dbConnection = new MySqlConnection(DBShare.DBConnection);
+            var dbConnection = new MySqlConnection(Config.DBConnection);
             try
             {
                 dbConnection.Open();

@@ -436,7 +436,7 @@ namespace GameSvr
                             m_Master = null;
                             m_btSlaveExpLevel = (byte)M2Share.g_Config.SlaveColor.GetUpperBound(0);
                             RecalcAbilitys();
-                            m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower, HUtil32.HiWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower);
+                            m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower, HUtil32.HiWord(m_WAbil.DC) * M2Share.g_Config.nMasterDieMutinyPower);
                             m_nWalkSpeed = m_nWalkSpeed / M2Share.g_Config.nMasterDieMutinySpeed;
                             RefNameColor();
                             RefShowName();
@@ -917,7 +917,7 @@ namespace GameSvr
                             {
                                 if (m_Abil.Level >= m_LastHiter.m_nPKDieLostLevel)
                                 {
-                                    m_Abil.Level -= (ushort)m_LastHiter.m_nPKDieLostLevel;
+                                    m_Abil.Level -= (byte)m_LastHiter.m_nPKDieLostLevel;
                                 }
                                 else
                                 {
@@ -2343,34 +2343,34 @@ namespace GameSvr
             m_nLuck -= m_AddAbil.btUnLuck;
             m_nHitSpeed = m_AddAbil.nHitSpeed;
             m_WAbil.MaxWeight += m_AddAbil.Weight;
-            m_WAbil.MaxWearWeight += m_AddAbil.WearWeight;
-            m_WAbil.MaxHandWeight += m_AddAbil.HandWeight;
+            m_WAbil.MaxWearWeight += (byte)m_AddAbil.WearWeight;
+            m_WAbil.MaxHandWeight += (byte)m_AddAbil.HandWeight;
             m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_Abil.MaxHP + m_AddAbil.wHP);
             m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_Abil.MaxMP + m_AddAbil.wMP);
-            m_WAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wAC) + HUtil32.LoWord(m_Abil.AC), HUtil32.HiWord(m_AddAbil.wAC) + HUtil32.HiWord(m_Abil.AC));
-            m_WAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wMAC) + HUtil32.LoWord(m_Abil.MAC), HUtil32.HiWord(m_AddAbil.wMAC) + HUtil32.HiWord(m_Abil.MAC));
-            m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wDC) + HUtil32.LoWord(m_Abil.DC), HUtil32.HiWord(m_AddAbil.wDC) + HUtil32.HiWord(m_Abil.DC));
-            m_WAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wMC) + HUtil32.LoWord(m_Abil.MC), HUtil32.HiWord(m_AddAbil.wMC) + HUtil32.HiWord(m_Abil.MC));
-            m_WAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wSC) + HUtil32.LoWord(m_Abil.SC), HUtil32.HiWord(m_AddAbil.wSC) + HUtil32.HiWord(m_Abil.SC));
+            m_WAbil.AC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wAC) + HUtil32.LoWord(m_Abil.AC), HUtil32.HiWord(m_AddAbil.wAC) + HUtil32.HiWord(m_Abil.AC));
+            m_WAbil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wMAC) + HUtil32.LoWord(m_Abil.MAC), HUtil32.HiWord(m_AddAbil.wMAC) + HUtil32.HiWord(m_Abil.MAC));
+            m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wDC) + HUtil32.LoWord(m_Abil.DC), HUtil32.HiWord(m_AddAbil.wDC) + HUtil32.HiWord(m_Abil.DC));
+            m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wMC) + HUtil32.LoWord(m_Abil.MC), HUtil32.HiWord(m_AddAbil.wMC) + HUtil32.HiWord(m_Abil.MC));
+            m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_AddAbil.wSC) + HUtil32.LoWord(m_Abil.SC), HUtil32.HiWord(m_AddAbil.wSC) + HUtil32.HiWord(m_Abil.SC));
             if (m_wStatusTimeArr[Grobal2.STATE_DEFENCEUP] > 0)
             {
-                m_WAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.AC), HUtil32.HiWord(m_WAbil.AC) + 2 + (m_Abil.Level / 7));
+                m_WAbil.AC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.AC), HUtil32.HiWord(m_WAbil.AC) + 2 + (m_Abil.Level / 7));
             }
             if (m_wStatusTimeArr[Grobal2.STATE_MAGDEFENCEUP] > 0)
             {
-                m_WAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MAC), HUtil32.HiWord(m_WAbil.MAC) + 2 + (m_Abil.Level / 7));
+                m_WAbil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MAC), HUtil32.HiWord(m_WAbil.MAC) + 2 + (m_Abil.Level / 7));
             }
             if (m_wStatusArrValue[0] > 0)
             {
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) + 2 + m_wStatusArrValue[0]);
+                m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) + 2 + m_wStatusArrValue[0]);
             }
             if (m_wStatusArrValue[1] > 0)
             {
-                m_WAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC), HUtil32.HiWord(m_WAbil.MC) + 2 + m_wStatusArrValue[1]);
+                m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC), HUtil32.HiWord(m_WAbil.MC) + 2 + m_wStatusArrValue[1]);
             }
             if (m_wStatusArrValue[2] > 0)
             {
-                m_WAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC), HUtil32.HiWord(m_WAbil.SC) + 2 + m_wStatusArrValue[2]);
+                m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC), HUtil32.HiWord(m_WAbil.SC) + 2 + m_wStatusArrValue[2]);
             }
             if (m_wStatusArrValue[3] > 0)
             {
@@ -2419,13 +2419,13 @@ namespace GameSvr
             if (m_bopirit)
             {
                 // Bonus DC Min +2,DC Max +5,A.Speed + 2
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + 2, HUtil32.HiWord(m_WAbil.DC) + 2 + 5);
+                m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + 2, HUtil32.HiWord(m_WAbil.DC) + 2 + 5);
                 m_nHitSpeed += 2;
             }
             if (m_boSmashSet)
             {
                 // Attack Speed +1, DC1-3
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + 1, HUtil32.HiWord(m_WAbil.DC) + 2 + 3);
+                m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + 1, HUtil32.HiWord(m_WAbil.DC) + 2 + 3);
                 m_nHitSpeed++;
             }
             if (m_boHwanDevilSet)
@@ -2433,13 +2433,13 @@ namespace GameSvr
                 // Hand Carrying Weight Increase +5, Bag Weight Limit Increase +20, +MC 1-2
                 m_WAbil.MaxHandWeight += 5;
                 m_WAbil.MaxWeight += 20;
-                m_WAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC) + 1, HUtil32.HiWord(m_WAbil.MC) + 2 + 2);
+                m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC) + 1, HUtil32.HiWord(m_WAbil.MC) + 2 + 2);
             }
             if (m_boPuritySet)
             {
                 // Holy +3, Sc 1-2
                 m_AddAbil.btUndead = (byte)(m_AddAbil.btUndead + -3);
-                m_WAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC) + 1, HUtil32.HiWord(m_WAbil.SC) + 2 + 2);
+                m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC) + 1, HUtil32.HiWord(m_WAbil.SC) + 2 + 2);
             }
             if (m_boMundaneSet)
             {
@@ -2472,36 +2472,36 @@ namespace GameSvr
                 MonsterRecalcAbilitys();
             }
             // 限制最高属性
-            m_WAbil.AC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.AC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.AC)));
-            m_WAbil.MAC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.MAC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.MAC)));
-            m_WAbil.DC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.DC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.DC)));
-            m_WAbil.MC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.MC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.MC)));
-            m_WAbil.SC = HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.SC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.SC)));
+            m_WAbil.AC = (ushort)HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.AC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.AC)));
+            m_WAbil.MAC = (ushort)HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.MAC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.MAC)));
+            m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.DC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.DC)));
+            m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.MC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.MC)));
+            m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.LoWord(m_WAbil.SC)), HUtil32._MIN(M2Share.MAXHUMPOWER, HUtil32.HiWord(m_WAbil.SC)));
             if (M2Share.g_Config.boHungerSystem && M2Share.g_Config.boHungerDecPower)
             {
                 if (HUtil32.RangeInDefined(m_nHungerStatus, 0, 999))
                 {
-                    m_WAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.2));
-                    m_WAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.2));
-                    m_WAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.2));
+                    m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.2));
+                    m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.2));
+                    m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.2), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.2));
                 }
                 else if (HUtil32.RangeInDefined(m_nHungerStatus, 1000, 1999))
                 {
-                    m_WAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.4));
-                    m_WAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.4));
-                    m_WAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.4));
+                    m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.4));
+                    m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.4));
+                    m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.4), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.4));
                 }
                 else if (HUtil32.RangeInDefined(m_nHungerStatus, 2000, 2999))
                 {
-                    m_WAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.6));
-                    m_WAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.6));
-                    m_WAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.6));
+                    m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.6));
+                    m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.6));
+                    m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.6), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.6));
                 }
                 else if (HUtil32.RangeInDefined(m_nHungerStatus, 3000, 3000))
                 {
-                    m_WAbil.DC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.9));
-                    m_WAbil.MC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.9));
-                    m_WAbil.SC = HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.9));
+                    m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.DC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.DC) * 0.9));
+                    m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.MC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.MC) * 0.9));
+                    m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.Round(HUtil32.LoWord(m_WAbil.SC) * 0.9), HUtil32.Round(HUtil32.HiWord(m_WAbil.SC) * 0.9));
                 }
             }
         }

@@ -191,74 +191,36 @@ namespace GameSvr
 
         public void SendAddItem(TUserItem UserItem)
         {
-            GoodItem Item;
-            TStdItem StdItem = null;
-            if (m_nSoftVersionDateEx == 0)
+            GoodItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            if (Item == null)
             {
-                Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (Item == null)
-                {
-                    return;
-                }
-                TOClientItem OClientItem = new TOClientItem();
-                Item.GetStandardItem(ref StdItem);
-                Item.GetItemAddValue(UserItem, ref StdItem);
-                StdItem.Name = ItmUnit.GetItemName(UserItem);
-                M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
-                OClientItem.MakeIndex = UserItem.MakeIndex;
-                OClientItem.Dura = UserItem.Dura;
-                OClientItem.DuraMax = UserItem.DuraMax;
-                if (StdItem.StdMode == 50)
-                {
-                    OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
-                }
-                if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
-                {
-                    if (UserItem.btValue[8] == 0)
-                    {
-                        OClientItem.Item.Shape = 0;
-                    }
-                    else
-                    {
-                        OClientItem.Item.Shape = 130;
-                    }
-                }
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
-                SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
+                return;
             }
-            else
+            TClientItem ClientItem = new TClientItem();
+            Item.GetStandardItem(ref ClientItem.Item);
+            Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+            ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+            ClientItem.MakeIndex = UserItem.MakeIndex;
+            ClientItem.Dura = UserItem.Dura;
+            ClientItem.DuraMax = UserItem.DuraMax;
+            var StdItem = ClientItem.Item;
+            if (StdItem.StdMode == 50)
             {
-                Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (Item == null)
-                {
-                    return;
-                }
-                TClientItem ClientItem = new TClientItem();
-                Item.GetStandardItem(ref ClientItem.Item);
-                Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                ClientItem.MakeIndex = UserItem.MakeIndex;
-                ClientItem.Dura = UserItem.Dura;
-                ClientItem.DuraMax = UserItem.DuraMax;
-                StdItem = ClientItem.Item;
-                if (StdItem.StdMode == 50)
-                {
-                    ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
-                }
-                if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
-                {
-                    if (UserItem.btValue[8] == 0)
-                    {
-                        ClientItem.Item.Shape = 0;
-                    }
-                    else
-                    {
-                        ClientItem.Item.Shape = 130;
-                    }
-                }
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
-                SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
             }
+            if (new ArrayList(new byte[] { 15, 19, 20, 21, 22, 23, 24, 26 }).Contains(StdItem.StdMode))
+            {
+                if (UserItem.btValue[8] == 0)
+                {
+                    ClientItem.Item.Shape = 0;
+                }
+                else
+                {
+                    ClientItem.Item.Shape = 130;
+                }
+            }
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ObjectId, 0, 0, 1);
+            SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
         }
 
         internal bool IsBlockWhisper(string sName)
@@ -1159,63 +1121,29 @@ namespace GameSvr
 
         internal void SendUseitems()
         {
-            GoodItem Item;
-            string sSendMsg;
-            TStdItem StdItem = null;
-            if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
+            string sSendMsg = string.Empty;
+            for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
             {
-                sSendMsg = "";
-                for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
+                if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
-                    if (m_UseItems[i].wIndex > 0)
+                    GoodItem Item = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
+                    if (Item != null)
                     {
-                        Item = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
-                        if (Item != null)
-                        {
-                            TOClientItem OClientItem = new TOClientItem();
-                            Item.GetStandardItem(ref StdItem);
-                            Item.GetItemAddValue(m_UseItems[i], ref StdItem);
-                            StdItem.Name = ItmUnit.GetItemName(m_UseItems[i]);
-                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
-                            OClientItem.Dura = m_UseItems[i].Dura;
-                            OClientItem.DuraMax = m_UseItems[i].DuraMax;
-                            OClientItem.MakeIndex = m_UseItems[i].MakeIndex;
-                            sSendMsg = sSendMsg + i + '/' + EDcode.EncodeBuffer(OClientItem) + '/';
-                        }
+                        TClientItem ClientItem = new TClientItem();
+                        Item.GetStandardItem(ref ClientItem.Item);
+                        Item.GetItemAddValue(m_UseItems[i], ref ClientItem.Item);
+                        ClientItem.Item.Name = ItmUnit.GetItemName(m_UseItems[i]);
+                        ClientItem.Dura = m_UseItems[i].Dura;
+                        ClientItem.DuraMax = m_UseItems[i].DuraMax;
+                        ClientItem.MakeIndex = m_UseItems[i].MakeIndex;
+                        sSendMsg = sSendMsg + i + '/' + EDcode.EncodeBuffer(ClientItem) + '/';
                     }
-                }
-                if (sSendMsg != "")
-                {
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
-                    SendSocket(m_DefMsg, sSendMsg);
                 }
             }
-            else
+            if (sSendMsg != "")
             {
-                sSendMsg = "";
-                for (var i = m_UseItems.GetLowerBound(0); i <= m_UseItems.GetUpperBound(0); i++)
-                {
-                    if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
-                    {
-                        Item = M2Share.UserEngine.GetStdItem(m_UseItems[i].wIndex);
-                        if (Item != null)
-                        {
-                            TClientItem ClientItem = new TClientItem();
-                            Item.GetStandardItem(ref ClientItem.Item);
-                            Item.GetItemAddValue(m_UseItems[i], ref ClientItem.Item);
-                            ClientItem.Item.Name = ItmUnit.GetItemName(m_UseItems[i]);
-                            ClientItem.Dura = m_UseItems[i].Dura;
-                            ClientItem.DuraMax = m_UseItems[i].DuraMax;
-                            ClientItem.MakeIndex = m_UseItems[i].MakeIndex;
-                            sSendMsg = sSendMsg + i + '/' + EDcode.EncodeBuffer(ClientItem) + '/';
-                        }
-                    }
-                }
-                if (sSendMsg != "")
-                {
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
-                    SendSocket(m_DefMsg, sSendMsg);
-                }
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
+                SendSocket(m_DefMsg, sSendMsg);
             }
         }
 
@@ -1319,11 +1247,11 @@ namespace GameSvr
             RecalcAdjusBonus_AdjustAb((byte)NakedAbil.SC, asc, ref lsc, ref hsc);
             RecalcAdjusBonus_AdjustAb((byte)NakedAbil.AC, aac, ref lac, ref hac);
             RecalcAdjusBonus_AdjustAb((byte)NakedAbil.MAC, amac, ref lmac, ref hmac);
-            m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + ldc, HUtil32.HiWord(m_WAbil.DC) + hdc);
-            m_WAbil.MC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC) + lmc, HUtil32.HiWord(m_WAbil.MC) + hmc);
-            m_WAbil.SC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC) + lsc, HUtil32.HiWord(m_WAbil.SC) + hsc);
-            m_WAbil.AC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.AC) + lac, HUtil32.HiWord(m_WAbil.AC) + hac);
-            m_WAbil.MAC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MAC) + lmac, HUtil32.HiWord(m_WAbil.MAC) + hmac);
+            m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC) + ldc, HUtil32.HiWord(m_WAbil.DC) + hdc);
+            m_WAbil.MC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MC) + lmc, HUtil32.HiWord(m_WAbil.MC) + hmc);
+            m_WAbil.SC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.SC) + lsc, HUtil32.HiWord(m_WAbil.SC) + hsc);
+            m_WAbil.AC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.AC) + lac, HUtil32.HiWord(m_WAbil.AC) + hac);
+            m_WAbil.MAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.MAC) + lmac, HUtil32.HiWord(m_WAbil.MAC) + hmac);
             m_WAbil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxHP + m_BonusAbil.HP / BonusTick.HP);
             m_WAbil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, m_WAbil.MaxMP + m_BonusAbil.MP / BonusTick.MP);
             // m_btSpeedPoint:=m_btSpeedPoint + m_BonusAbil.Speed div BonusTick.Speed;
@@ -1482,7 +1410,7 @@ namespace GameSvr
             {
                 if (PlayObject.m_Abil.Level + nWinLevel <= M2Share.MAXUPLEVEL)
                 {
-                    PlayObject.m_Abil.Level += (ushort)nWinLevel;
+                    PlayObject.m_Abil.Level += (byte)nWinLevel;
                 }
                 else
                 {
@@ -1495,14 +1423,14 @@ namespace GameSvr
                     {
                         if (m_Abil.Level >= nLostLevel * 2)
                         {
-                            m_Abil.Level -= (ushort)(nLostLevel * 2);
+                            m_Abil.Level -= (byte)(nLostLevel * 2);
                         }
                     }
                     else
                     {
                         if (m_Abil.Level >= nLostLevel)
                         {
-                            m_Abil.Level -= (ushort)nLostLevel;
+                            m_Abil.Level -= (byte)nLostLevel;
                         }
                     }
                 }
@@ -1806,54 +1734,26 @@ namespace GameSvr
         private void SendSaveItemList(int nBaseObject)
         {
             GoodItem Item;
-            string sSendMsg;
             TClientItem ClientItem = null;
-            TOClientItem OClientItem = null;
-            TStdItem StdItem = null;
             TUserItem UserItem;
-            if (m_nSoftVersionDateEx == 0)
+            string sSendMsg = String.Empty;
+            for (var i = 0; i < m_StorageItemList.Count; i++)
             {
-                sSendMsg = "";
-                for (var i = 0; i < m_StorageItemList.Count; i++)
+                UserItem = m_StorageItemList[i];
+                Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                if (Item != null)
                 {
-                    UserItem = m_StorageItemList[i];
-                    Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (Item != null)
-                    {
-                        Item.GetStandardItem(ref StdItem);
-                        Item.GetItemAddValue(UserItem, ref StdItem);
-                        StdItem.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
-                        OClientItem.Dura = UserItem.Dura;
-                        OClientItem.DuraMax = UserItem.DuraMax;
-                        OClientItem.MakeIndex = UserItem.MakeIndex;
-                        sSendMsg = sSendMsg + EDcode.EncodeBuffer(OClientItem) + '/';
-                    }
+                    Item.GetStandardItem(ref ClientItem.Item);
+                    Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.Dura = UserItem.Dura;
+                    ClientItem.DuraMax = UserItem.DuraMax;
+                    ClientItem.MakeIndex = UserItem.MakeIndex;
+                    sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
                 }
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
-                SendSocket(m_DefMsg, sSendMsg);
             }
-            else
-            {
-                sSendMsg = "";
-                for (var i = 0; i < m_StorageItemList.Count; i++)
-                {
-                    UserItem = m_StorageItemList[i];
-                    Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (Item != null)
-                    {
-                        Item.GetStandardItem(ref ClientItem.Item);
-                        Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                        ClientItem.Dura = UserItem.Dura;
-                        ClientItem.DuraMax = UserItem.DuraMax;
-                        ClientItem.MakeIndex = UserItem.MakeIndex;
-                        sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + '/';
-                    }
-                }
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
-                SendSocket(m_DefMsg, sSendMsg);
-            }
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, nBaseObject, 0, 0, (short)m_StorageItemList.Count);
+            SendSocket(m_DefMsg, sSendMsg);
         }
 
         private void SendChangeGuildName()
@@ -1881,95 +1781,43 @@ namespace GameSvr
 
         public void SendDelItems(TUserItem UserItem)
         {
-            GoodItem StdItem = null;
-            TStdItem StdItem80 = null;
-            if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
+            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            if (StdItem != null)
             {
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null)
+                TClientItem ClientItem = new TClientItem();
+                StdItem.GetStandardItem(ref ClientItem.Item);
+                StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                ClientItem.MakeIndex = UserItem.MakeIndex;
+                ClientItem.Dura = UserItem.Dura;
+                ClientItem.DuraMax = UserItem.DuraMax;
+                if (StdItem.StdMode == 50)
                 {
-                    TOClientItem OClientItem = new TOClientItem();
-                    StdItem.GetStandardItem(ref StdItem80);
-                    StdItem.GetItemAddValue(UserItem, ref StdItem80);
-                    StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
-                    OClientItem.MakeIndex = UserItem.MakeIndex;
-                    OClientItem.Dura = UserItem.Dura;
-                    OClientItem.DuraMax = UserItem.DuraMax;
-                    if (StdItem.StdMode == 50)
-                    {
-                        OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
-                    }
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
+                    ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                 }
-            }
-            else
-            {
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null)
-                {
-                    TClientItem ClientItem = new TClientItem();
-                    StdItem.GetStandardItem(ref ClientItem.Item);
-                    StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                    ClientItem.MakeIndex = UserItem.MakeIndex;
-                    ClientItem.Dura = UserItem.Dura;
-                    ClientItem.DuraMax = UserItem.DuraMax;
-                    if (StdItem.StdMode == 50)
-                    {
-                        ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
-                    }
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
-                }
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ObjectId, 0, 0, 1);
+                SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
             }
         }
 
         public void SendUpdateItem(TUserItem UserItem)
         {
-            GoodItem StdItem;
-            TStdItem StdItem80 = null;
-            if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
+            GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+            if (StdItem != null)
             {
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null)
+                TClientItem ClientItem = new TClientItem();
+                StdItem.GetStandardItem(ref ClientItem.Item);
+                StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                ClientItem.MakeIndex = UserItem.MakeIndex;
+                ClientItem.Dura = UserItem.Dura;
+                ClientItem.DuraMax = UserItem.DuraMax;
+                if (StdItem.StdMode == 50)
                 {
-                    TOClientItem OClientItem = new TOClientItem();
-                    StdItem.GetStandardItem(ref StdItem80);
-                    StdItem.GetItemAddValue(UserItem, ref StdItem80);
-                    StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                    M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
-                    OClientItem.MakeIndex = UserItem.MakeIndex;
-                    OClientItem.Dura = UserItem.Dura;
-                    OClientItem.DuraMax = UserItem.DuraMax;
-                    if (StdItem.StdMode == 50)
-                    {
-                        OClientItem.Item.Name = OClientItem.Item.Name + " #" + UserItem.Dura;
-                    }
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
+                    ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
                 }
-            }
-            else
-            {
-                StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                if (StdItem != null)
-                {
-                    TClientItem ClientItem = new TClientItem();
-                    StdItem.GetStandardItem(ref ClientItem.Item);
-                    StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                    ClientItem.MakeIndex = UserItem.MakeIndex;
-                    ClientItem.Dura = UserItem.Dura;
-                    ClientItem.DuraMax = UserItem.DuraMax;
-                    if (StdItem.StdMode == 50)
-                    {
-                        ClientItem.Item.Name = ClientItem.Item.Name + " #" + UserItem.Dura;
-                    }
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
-                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
-                }
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ObjectId, 0, 0, 1);
+                SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
             }
         }
 
@@ -2614,93 +2462,49 @@ namespace GameSvr
 
         private void SendDelDealItem(TUserItem UserItem)
         {
-            GoodItem pStdItem;
-            SendDefMessage(Grobal2.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
-                if (((TPlayObject)m_DealCreat).m_nSoftVersionDateEx == 0)
+                GoodItem pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                if (pStdItem != null)
                 {
-                    TOClientItem OClientItem = null;
-                    pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (pStdItem != null)
-                    {
-                        TStdItem StdItem = null;
-                        OClientItem = new TOClientItem();
-                        pStdItem.GetStandardItem(ref StdItem);
-                        pStdItem.GetItemAddValue(UserItem, ref StdItem);
-                        StdItem.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
-                        OClientItem.MakeIndex = UserItem.MakeIndex;
-                        OClientItem.Dura = UserItem.Dura;
-                        OClientItem.DuraMax = UserItem.DuraMax;
-                    }
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
-                    (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
-                }
-                else
-                {
-                    TClientItem ClientItem = null;
-                    pStdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (pStdItem != null)
-                    {
-                        ClientItem = new TClientItem();
-                        pStdItem.GetStandardItem(ref ClientItem.Item);
-                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                        ClientItem.MakeIndex = UserItem.MakeIndex;
-                        ClientItem.Dura = UserItem.Dura;
-                        ClientItem.DuraMax = UserItem.DuraMax;
-                    }
+                    TClientItem ClientItem = new TClientItem();
+                    pStdItem.GetStandardItem(ref ClientItem.Item);
+                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.MakeIndex = UserItem.MakeIndex;
+                    ClientItem.Dura = UserItem.Dura;
+                    ClientItem.DuraMax = UserItem.DuraMax;
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ObjectId, 0, 0, 1);
                     (m_DealCreat as TPlayObject)?.SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
+                    m_DealLastTick = HUtil32.GetTickCount();
                 }
-                m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
-                m_DealLastTick = HUtil32.GetTickCount();
+                SendDefMessage(Grobal2.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
+            }
+            else
+            {
+                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
         private void SendAddDealItem(TUserItem UserItem)
         {
-            GoodItem StdItem;
             SendDefMessage(Grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (m_DealCreat != null)
             {
-                if ((m_DealCreat as TPlayObject).m_nSoftVersionDateEx == 0)
+                GoodItem StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                if (StdItem != null)
                 {
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (StdItem != null)
-                    {
-                        TStdItem StdItem80 = null;
-                        TOClientItem OClientItem = new TOClientItem();
-                        StdItem.GetStandardItem(ref StdItem80);
-                        StdItem.GetItemAddValue(UserItem, ref StdItem80);
-                        StdItem80.Name = ItmUnit.GetItemName(UserItem);
-                        M2Share.CopyStdItemToOStdItem(StdItem80, OClientItem.Item);
-                        OClientItem.MakeIndex = UserItem.MakeIndex;
-                        OClientItem.Dura = UserItem.Dura;
-                        OClientItem.DuraMax = UserItem.DuraMax;
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
-                        (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(OClientItem));
-                        m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
-                        m_DealLastTick = HUtil32.GetTickCount();
-                    }
-                }
-                else
-                {
-                    StdItem = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (StdItem != null)
-                    {
-                        var ClientItem = new TClientItem();
-                        StdItem.GetStandardItem(ref ClientItem.Item);
-                        StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
-                        ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
-                        ClientItem.MakeIndex = UserItem.MakeIndex;
-                        ClientItem.Dura = UserItem.Dura;
-                        ClientItem.DuraMax = UserItem.DuraMax;
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
-                        (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
-                        m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
-                        m_DealLastTick = HUtil32.GetTickCount();
-                    }
+                    var ClientItem = new TClientItem();
+                    StdItem.GetStandardItem(ref ClientItem.Item);
+                    StdItem.GetItemAddValue(UserItem, ref ClientItem.Item);
+                    ClientItem.Item.Name = ItmUnit.GetItemName(UserItem);
+                    ClientItem.MakeIndex = UserItem.MakeIndex;
+                    ClientItem.Dura = UserItem.Dura;
+                    ClientItem.DuraMax = UserItem.DuraMax;
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ObjectId, 0, 0, 1);
+                    (m_DealCreat as TPlayObject).SendSocket(m_DefMsg, EDcode.EncodeBuffer(ClientItem));
+                    m_DealCreat.m_DealLastTick = HUtil32.GetTickCount();
+                    m_DealLastTick = HUtil32.GetTickCount();
                 }
             }
         }

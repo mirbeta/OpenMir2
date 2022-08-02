@@ -73,13 +73,6 @@ namespace GameGate
     public class Protocol
     {
         public static bool g_fServiceStarted = false;
-        public const string _STR_GRID_INDEX = "网关";
-        public const string _STR_GRID_IP = "网关地址";
-        public const string _STR_GRID_PORT = "端口";
-        public const string _STR_GRID_CONNECT_STATUS = "连接状态";
-        public const string _STR_GRID_IO_SEND_BYTES = "发送";
-        public const string _STR_GRID_IO_RECV_BYTES = "接收";
-        public const string _STR_KEEP_ALIVE = "**";
         public const string _STR_CMD_FILTER = "{0} 此命令禁止使用！";
         public const string _STR_CONFIG_FILE = ".\\Config.ini";
         public const string _STR_BLOCK_FILE = ".\\BlockIPList.txt";

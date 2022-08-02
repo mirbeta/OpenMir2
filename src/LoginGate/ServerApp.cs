@@ -6,7 +6,7 @@ namespace LoginGate
 {
     public class ServerApp
     {
-        private ServerManager _ServerManager => ServerManager.Instance;
+        private ServerManager _serverManager => ServerManager.Instance;
         private ClientManager _clientManager => ClientManager.Instance;
         private SessionManager _sessionManager => SessionManager.Instance;
         private LogQueue _logQueue => LogQueue.Instance;
@@ -19,25 +19,21 @@ namespace LoginGate
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(_ServerManager.ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
-
-            var consumerTask2 = Task.Factory.StartNew(_sessionManager.ProcessSendMessage);
-            gTasks[1] = consumerTask2;
-
+            gTasks[0] = _serverManager.ProcessReviceMessage();
+            gTasks[1] = _sessionManager.ProcessSendMessage();
             await Task.WhenAll(gTasks);
         }
 
         public void StartService()
         {
             _clientManager.Initialization();
-            _ServerManager.Start();
+            _serverManager.Start();
         }
 
         public void StopService()
         {
             _logQueue.Enqueue("正在停止服务...", 2);
-            _ServerManager.Stop();
+            _serverManager.Stop();
             _logQueue.Enqueue("服务停止成功...", 2);
         }
 

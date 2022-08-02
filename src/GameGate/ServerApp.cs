@@ -16,12 +16,8 @@ namespace GameGate
         public async Task Start()
         {
             var gTasks = new Task[2];
-            var consumerTask1 = Task.Factory.StartNew(ServerManager.ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
-
-            var consumerTask2 = Task.Factory.StartNew(SessionManager.ProcessSendMessage);
-            gTasks[1] = consumerTask2;
-
+            gTasks[0] = ServerManager.ProcessReviceMessage();
+            gTasks[1] = SessionManager.ProcessSendMessage();
             await Task.WhenAll(gTasks);
         }
 

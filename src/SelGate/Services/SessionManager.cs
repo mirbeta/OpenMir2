@@ -31,12 +31,12 @@ namespace SelGate.Services
         {
             while (await _sendQueue.Reader.WaitToReadAsync())
             {
-                if (_sendQueue.Reader.TryRead(out var message))
+                while (_sendQueue.Reader.TryRead(out var message))
                 {
                     var userSession = GetSession(message.SessionId);
                     if (userSession == null)
                     {
-                        return;
+                        continue;
                     }
                     if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
                     {
@@ -49,7 +49,7 @@ namespace SelGate.Services
                         {
                             userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
                         }
-                        return;
+                        continue;
                     }
                     userSession.ProcessSvrData(message);
                 }

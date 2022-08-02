@@ -77,6 +77,8 @@ namespace GameGate
                 if (firstTwoCharacters switch
                 {
                     "/s" => ShowServerStatus(),
+                    "/c" => ClearConsole(),
+                    "/q" => Exit(),
                     _ => null
                 } is Task task)
                 {
@@ -85,6 +87,19 @@ namespace GameGate
                 }
 
             } while (input is not "/exit");
+        }
+
+        private static Task Exit()
+        {
+            Environment.Exit(Environment.ExitCode);
+            return Task.CompletedTask;
+        }
+
+        private static Task ClearConsole()
+        {
+            Console.Clear();
+            AnsiConsole.Clear();
+            return Task.CompletedTask;
         }
 
         private static async Task ShowServerStatus()
@@ -96,7 +111,7 @@ namespace GameGate
             table.AddColumn("[yellow]Address[/]");
             table.AddColumn("[yellow]Port[/]");
             table.AddColumn("[yellow]Status[/]");
-            table.AddColumn("[yellow]Count[/]");
+            table.AddColumn("[yellow]Online[/]");
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
             table.AddColumn("[yellow]Queue[/]");
@@ -156,8 +171,13 @@ namespace GameGate
                 Color = Color.Aqua
             };
 
-            var markup = new Markup(
-                "[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
+            var sb = new StringBuilder();
+            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
+            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
+            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
+            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
+            var markup = new Markup(sb.ToString());
+
             table.AddColumn(new TableColumn("Two"));
 
             var rightTable = new Table()

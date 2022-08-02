@@ -28,23 +28,25 @@ namespace MakePlayer
         public static async void Start()
         {
             var gTasks = new Task[1];
-            var consumerTask1 = Task.Factory.StartNew(ProcessReviceMessage);
-            gTasks[0] = consumerTask1;
+            gTasks[0] = ProcessReviceMessage();
             await Task.WhenAll(gTasks);
         }
 
-        private static async Task ProcessReviceMessage()
+        private static Task ProcessReviceMessage()
         {
-            while (await _reviceMsgList.Reader.WaitToReadAsync())
+            return Task.Factory.StartNew(async () =>
             {
-                if (_reviceMsgList.Reader.TryRead(out var message))
+                while (await _reviceMsgList.Reader.WaitToReadAsync())
                 {
-                    if (_Clients.ContainsKey(message.SessionId))
+                    while (_reviceMsgList.Reader.TryRead(out var message))
                     {
-                        _Clients[message.SessionId].ProcessPacket(message.ReviceBuffer);
+                        if (_Clients.ContainsKey(message.SessionId))
+                        {
+                            _Clients[message.SessionId].ProcessPacket(message.ReviceBuffer);
+                        }
                     }
                 }
-            }
+            });
         }
 
         public static void AddPacket(string socHandle, byte[] reviceBuff)

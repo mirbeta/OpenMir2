@@ -33,19 +33,19 @@ namespace SystemModule
             return Environment.TickCount;
         }
 
-        public static int MakeLong(int lowPart, int highPart)
+        public static ushort MakeLong(int lowPart, int highPart)
         {
-            return lowPart | (short)highPart << 16;
+            return (ushort)(lowPart | highPart << 16);
         }
 
         public static int MakeLong(double lowPart, double highPart)
         {
             return (int)lowPart | ((int)highPart << 16);
         }
-
-        public static int MakeLong(ushort lowPart, int highPart)
+        
+        public static ushort MakeLong(ushort lowPart, int highPart)
         {
-            return lowPart | (short)highPart << 16;
+            return (ushort)(lowPart | highPart << 16);
         }
 
         public static int MakeLong(short lowPart, int highPart)

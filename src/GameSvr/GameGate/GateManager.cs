@@ -382,15 +382,18 @@ namespace GameSvr
         /// <summary>
         /// 处理GameGate发过来的消息
         /// </summary>
-        public async Task StartMessageQueue(CancellationToken cancellation)
+        public Task StartMessageQueue(CancellationToken cancellation)
         {
-            while (await _receiveQueue.Reader.WaitToReadAsync(cancellation))
-            {
-                if (_receiveQueue.Reader.TryRead(out var message))
-                {
-                    //ExecGateBuffers(message.Packet, message.Data);
-                }
-            }
+            return Task.Factory.StartNew(async () =>
+              {
+                  while (await _receiveQueue.Reader.WaitToReadAsync(cancellation))
+                  {
+                      while (_receiveQueue.Reader.TryRead(out var message))
+                      {
+                         // ExecGateBuffers(message.Packet, message.Data);
+                      }
+                  }
+              });
         }
 
         #region Socket Events

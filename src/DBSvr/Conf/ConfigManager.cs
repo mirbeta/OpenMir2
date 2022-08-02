@@ -1,37 +1,53 @@
+using System.IO;
+using System;
 using SystemModule.Common;
 
 namespace DBSvr
 {
     public class ConfigManager : IniFile
     {
+        public DBConfig Config;
+        private static string sConfitFile = Path.Combine(AppContext.BaseDirectory, "config.conf");
+
+        private static readonly ConfigManager instance = new ConfigManager(sConfitFile);
+
+        public static DBConfig GetConfig()
+        {
+            return Instance.Config;
+        }
+
+        public static ConfigManager Instance => instance;
+
         public ConfigManager(string fileName) : base(fileName)
         {
+            Config = new DBConfig();
             Load();
         }
 
         public void LoadConfig()
         {
-            DBShare.DBConnection = ReadString("DataBase", "ConnctionString", DBShare.DBConnection);
-            DBShare.nServerPort = ReadInteger("Setup", "ServerPort", DBShare.nServerPort);
-            DBShare.sServerAddr = ReadString("Setup", "ServerAddr", DBShare.sServerAddr);
-            DBShare.g_nGatePort = ReadInteger("Setup", "GatePort", DBShare.g_nGatePort);
-            DBShare.g_sGateAddr = ReadString("Setup", "GateAddr", DBShare.g_sGateAddr);
-            DBShare.sIDServerAddr = ReadString("Server", "IDSAddr", DBShare.sIDServerAddr);
-            DBShare.nIDServerPort = ReadInteger("Server", "IDSPort", DBShare.nIDServerPort);
-            DBShare.sServerName = ReadString("Setup", "ServerName", DBShare.sServerName);
-            DBShare.boDenyChrName = ReadBool("Setup", "DenyChrName", DBShare.boDenyChrName);
-            DBShare.nDELMaxLevel = ReadInteger("Setup", "DELMaxLevel", DBShare.nDELMaxLevel);
-            DBShare.dwInterval = Read<int>("DBClear", "Interval", DBShare.dwInterval);
+            Config.DBConnection = ReadString("DataBase", "ConnctionString", Config.DBConnection);
+            Config.nServerPort = ReadInteger("Setup", "ServerPort", Config.nServerPort);
+            Config.sServerAddr = ReadString("Setup", "ServerAddr", Config.sServerAddr);
+            Config.g_nGatePort = ReadInteger("Setup", "GatePort", Config.g_nGatePort);
+            Config.g_sGateAddr = ReadString("Setup", "GateAddr", Config.g_sGateAddr);
+            Config.sIDServerAddr = ReadString("Server", "IDSAddr", Config.sIDServerAddr);
+            Config.nIDServerPort = ReadInteger("Server", "IDSPort", Config.nIDServerPort);
+            Config.sServerName = ReadString("Setup", "ServerName", Config.sServerName);
+            Config.boDenyChrName = ReadBool("Setup", "DenyChrName", Config.boDenyChrName);
+            Config.nDELMaxLevel = ReadInteger("Setup", "DELMaxLevel", Config.nDELMaxLevel);
+            Config.dwInterval = Read<int>("DBClear", "Interval", Config.dwInterval);
             var LoadInteger = ReadInteger("Setup", "DynamicIPMode", -1);
             if (LoadInteger < 0)
             {
-                WriteBool("Setup", "DynamicIPMode", DBShare.g_boDynamicIPMode);
+                WriteBool("Setup", "DynamicIPMode", Config.g_boDynamicIPMode);
             }
             else
             {
-                DBShare.g_boDynamicIPMode = LoadInteger == 1;
+                Config.g_boDynamicIPMode = LoadInteger == 1;
             }
-            DBShare.g_boEnglishNames = ReadBool("Setup", "EnglishNameOnly", DBShare.g_boEnglishNames);
+            Config.g_boEnglishNames = ReadBool("Setup", "EnglishNameOnly", Config.g_boEnglishNames);
+            Config.sMapFile = ReadString("Setup", "MapFile", Config.sMapFile);
         }
     }
 }

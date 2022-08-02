@@ -70,6 +70,8 @@ namespace LoginSvr
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
             Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowDetailMsg = LoadConfig_LoadConfigBoolean(sSectionServer, "ShowDetailMsg", Config.ShowDetailMsg);
+            Config.ShowLogLevel = ReadInteger("Integer", "ShowLogLevel", Config.ShowLogLevel);
+            Config.ShowDebugLog = ReadBool("Integer", "ShowDebugLog", Config.ShowDebugLog);
         }
 
         private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)

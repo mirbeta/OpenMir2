@@ -29,6 +29,12 @@ namespace SystemModule
             return Packets.ToPacket<ClientPacket>(encBuf);
         }
 
+        /// <summary>
+        /// 解密Buffer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static byte[] DecodeBuff(byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -54,6 +60,13 @@ namespace SystemModule
             var bSrc = HUtil32.GetBytes(strSrc);
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
+        }
+
+        public static byte[] DecodeBuffer(byte[] buffer)
+        {
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            var nLen = 0;
+            return Misc.DecodeBuf(buffer, buffer.Length, ref nLen);
         }
 
         public static byte[] DecodeBuffer(string src, int size)

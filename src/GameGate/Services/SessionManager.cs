@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace GameGate
         }
 
         /// <summary>
+        /// 获取待处理的队列数量
+        /// </summary>
+        public int GetQueueCount => _sendMsgList.Reader.Count;
+
+
+        /// <summary>
         /// 添加到消息处理队列
         /// </summary>
         /// <param name="messageData"></param>
@@ -36,20 +43,30 @@ namespace GameGate
         /// <summary>
         /// 处理M2发过来的消息
         /// </summary>
-        public async Task ProcessSendMessage()
+        public Task ProcessSendMessage()
         {
-            while (await _sendMsgList.Reader.WaitToReadAsync())
-            {
-                if (_sendMsgList.Reader.TryRead(out var message))
-                {
-                    var userSession = GetSession(message.MessageId);
-                    if (userSession == null)
-                    {
-                        return;
-                    }
-                    userSession.ProcessSvrData(message);
-                }
-            }
+            return Task.Factory.StartNew(async () =>
+             {
+                 while (await _sendMsgList.Reader.WaitToReadAsync())
+                 {
+                     while (_sendMsgList.Reader.TryRead(out var message))
+                     {
+                         try
+                         {
+                             var userSession = GetSession(message.MessageId);
+                             if (userSession == null)
+                             {
+                                 continue;
+                             }
+                             userSession.ProcessSvrData(message);
+                         }
+                         catch (Exception ex)
+                         {
+                             Console.WriteLine(ex.Message);
+                         }
+                     }
+                 }
+             });
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)

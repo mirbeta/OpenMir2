@@ -30,7 +30,7 @@ namespace MakePlayer
         /// <summary>
         /// 登录总人数
         /// </summary>
-        private static int g_nTotalChrCount = 1;
+        private static int g_nTotalChrCount = 3000;
         /// <summary>
         /// 是否创建帐号
         /// </summary>
@@ -52,13 +52,13 @@ namespace MakePlayer
             //AccountCrateTest();
 
             g_sServerName = "热血传奇";
-            g_sGameIPaddr = "10.10.0.101";
+            g_sGameIPaddr = "10.10.0.102";
             g_nGamePort = 7000;
             g_boNewAccount = false;
 
             g_nChrCount = HUtil32._MIN(g_nChrCount, g_nTotalChrCount);
             g_dwLogonTick = HUtil32.GetTickCount() - 1000 * g_nChrCount;
-            g_sAccount = "mptalay";
+            g_sAccount = "winpalay";
 
             _playTimer = new Thread(start: Start);
             _playTimer.IsBackground = true;
@@ -144,6 +144,7 @@ namespace MakePlayer
                             playClient.m_sLoginPasswd = playClient.m_sLoginAccount;
                             playClient.m_sCharName = playClient.m_sLoginAccount;
                             playClient.m_sServerName = g_sServerName;
+                            playClient.ClientSocket.Close();
                             playClient.ClientSocket.Host = g_sGameIPaddr;
                             playClient.ClientSocket.Port = g_nGamePort;
                             playClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;

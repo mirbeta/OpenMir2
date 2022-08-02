@@ -10,31 +10,14 @@ namespace DBSvr
 {
     public class DBShare
     {
-        public static int nServerPort = 6000;
-        public static string sServerAddr = "*";
-        public static int g_nGatePort = 5100;
-        public static string g_sGateAddr = "*";
-        public static int nIDServerPort = 5600;
-        public static string sIDServerAddr = "127.0.0.1";
-        public static bool g_boEnglishNames = false;
-        public static string sServerName = "热血传奇";
         public static string sGateConfFileName = "!ServerInfo.txt";
         private static string sServerIPConfFileNmae = "!AddrTable.txt";
         private static string sGateIDConfFileName = "SelectID.txt";
-        public static string sMapFile = string.Empty;
         public static StringList DenyChrNameList = null;
         private static Hashtable ServerIPList = null;
         private static Dictionary<string, short> GateIDList = null;
-        public static int dwInterval = 3000;
-        public static bool g_boDynamicIPMode = false;
         public static StringList g_ClearMakeIndex = null;
         public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
-        /// <summary>
-        /// 是否禁止检测玩家名字
-        /// </summary>
-        public static bool boDenyChrName = true;
-        public static int nDELMaxLevel = 30;
-        public static string DBConnection = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
 
         private static void LoadGateID()
         {
@@ -207,7 +190,7 @@ namespace DBSvr
 
         public static void MainOutMessage(string sMsg)
         {
-            Console.WriteLine(sMsg);
+            LogQueue.Instance.Enqueue(sMsg, 1);
         }
 
         public static void Initialization()

@@ -17,20 +17,20 @@ namespace SelGate
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"GameGate is stopping."));
+            stoppingToken.Register(() => _logQueue.DebugLog($"GameGate is stopping."));
             await _serverApp.Start();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is starting.");
+            _logQueue.DebugLog($"GameGate is starting.");
             _serverApp.StartService();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is stopping.");
+            _logQueue.DebugLog($"GameGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

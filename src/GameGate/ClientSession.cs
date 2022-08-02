@@ -420,7 +420,7 @@ namespace GameGate
                                     if ((dwCurrentTick - -_gameSpeed.dwWaringTick > 2000))
                                     {
                                         _gameSpeed.dwWaringTick = dwCurrentTick;
-                                        SendSysMsg($"攻击状态不能交易！请稍等{(10000 - dwCurrentTick + _gameSpeed.dwDealTick) / 1000 + 1 }秒……");
+                                        SendSysMsg($"攻击状态不能交易！请稍等{(10000 - dwCurrentTick + _gameSpeed.dwDealTick) / 1000 + 1}秒……");
                                     }
                                     return;
                                 }
@@ -830,11 +830,11 @@ namespace GameGate
                 Debug.WriteLine(HUtil32.GetString(pzsSendBuf, 0, pzsSendBuf.Length));
                 return;
             }
-            var cmd = Packets.ToPacket<ClientPacket>(message.Buffer);
-            switch (cmd.Cmd)
+            var packet = Packets.ToPacket<ClientPacket>(message.Buffer);
+            switch (packet.Cmd)
             {
                 case Grobal2.SM_RUSH:
-                    if (m_nSvrObject == cmd.UID)
+                    if (m_nSvrObject == packet.UID)
                     {
                         var dwCurrentTick = HUtil32.GetTickCount();
                         _gameSpeed.dwMoveTick = dwCurrentTick;
@@ -850,25 +850,25 @@ namespace GameGate
                 case Grobal2.SM_LOGON:
                     if (m_nSvrObject == 0)
                     {
-                        m_nSvrObject = cmd.UID;
+                        m_nSvrObject = packet.UID;
                     }
                     break;
                 case Grobal2.SM_PLAYERCONFIG:
 
                     break;
                 case Grobal2.SM_CHARSTATUSCHANGED:
-                    if (m_nSvrObject == cmd.UID)
+                    if (m_nSvrObject == packet.UID)
                     {
-                        _gameSpeed.DefItemSpeed = cmd.Direct;
-                        _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, cmd.Direct);
-                        m_nChrStutas = HUtil32.MakeLong(cmd.X, cmd.Y);
+                        _gameSpeed.DefItemSpeed = packet.Direct;
+                        _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, packet.Direct);
+                        m_nChrStutas = HUtil32.MakeLong(packet.X, packet.Y);
                         //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
                     }
                     break;
                 case Grobal2.SM_HWID:
                     if (Config.IsProcClientHardwareID)
                     {
-                        switch (cmd.Series)
+                        switch (packet.Series)
                         {
                             case 1:
                                 _logQueue.EnqueueDebugging("封机器码");
@@ -888,7 +888,7 @@ namespace GameGate
 
             pzsSendBuf = new byte[message.BufferLen + ClientPacket.PackSize];
             pzsSendBuf[0] = (byte)'#';
-            var nLen = Misc.EncodeBuf(cmd.GetBuffer(), ClientPacket.PackSize, pzsSendBuf, 1);
+            var nLen = Misc.EncodeBuf(packet.GetBuffer(), ClientPacket.PackSize, pzsSendBuf, 1);
             if (message.BufferLen > ClientPacket.PackSize)
             {
                 var tempBuffer = message.Buffer[ClientPacket.PackSize..];
@@ -996,12 +996,13 @@ namespace GameGate
                         success = false;
                         return;
                     }
-                    if (szClientVerNO.Length != 9)
+                    if (szClientVerNO.Length < 8)
                     {
+                        _logQueue.Enqueue($"[HandleLogin] Kicked 2: {sHumName} clientVer validation failed.", 1);
                         success = false;
                         return;
                     }
-                    if (szCode.Length != 1)
+                    if (szCode.Length != 10)
                     {
                         success = false;
                         return;

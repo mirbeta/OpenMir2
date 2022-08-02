@@ -1,12 +1,11 @@
-﻿using LoginGate.Conf;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 
-namespace LoginGate
+namespace DBSvr
 {
     public class LogQueue
     {
-        private ConfigManager _configManager => ConfigManager.Instance;
+        private DBConfig Config = ConfigManager.GetConfig();
 
         private static readonly LogQueue instance = new LogQueue();
 
@@ -23,8 +22,8 @@ namespace LoginGate
         public readonly ConcurrentQueue<string> MessageLogQueue = new ConcurrentQueue<string>();
         public readonly ConcurrentQueue<string> DebugLogQueue = new ConcurrentQueue<string>();
 
-        public bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
-        public int ShowLogLevel => _configManager.GateConfig.m_nShowLogLevel;
+        public bool ShowDebugLog => Config.ShowDebugLog;
+        public int ShowLogLevel => Config.ShowLogLevel;
 
         public void Enqueue(string msg, int msgLevel)
         {

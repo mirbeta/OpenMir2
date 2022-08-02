@@ -4,6 +4,8 @@ namespace LoginSvr
 {
     public class Config
     {
+        public bool ShowDebugLog;
+        public int ShowLogLevel;
         public string sDBServer;
         public int nDBSPort;
         public string sFeeServer;
@@ -58,8 +60,9 @@ namespace LoginSvr
             ShowDetailMsg = false;
             GateRoute = new TGateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
+            ShowDebugLog = false;
+            ShowLogLevel = 1;
         }
     }
-
 }
 

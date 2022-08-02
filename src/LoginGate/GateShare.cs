@@ -9,7 +9,7 @@ namespace LoginGate
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
-        public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public static int dwCheckServerTimeOutTime = 3 * 60 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>

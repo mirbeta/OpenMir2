@@ -680,7 +680,7 @@ namespace GameSvr
                 {
                     if (m_Abil.Level < M2Share.g_Config.nTestLevel)
                     {
-                        m_Abil.Level = (ushort)M2Share.g_Config.nTestLevel;
+                        m_Abil.Level = (byte)M2Share.g_Config.nTestLevel;
                     }
                     if (m_nGold < M2Share.g_Config.nTestGold)
                     {
@@ -834,7 +834,7 @@ namespace GameSvr
                 }
                 if (!bo6AB)
                 {
-                    if (m_nSoftVersionDate < M2Share.g_Config.nSoftVersionDate)
+                    if (m_nSoftVersionDate < M2Share.g_Config.nSoftVersionDate) //登录版本号验证
                     {
                         SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);

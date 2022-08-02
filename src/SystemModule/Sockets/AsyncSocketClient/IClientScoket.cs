@@ -220,6 +220,16 @@ namespace SystemModule.Sockets
             }
         }
 
+        public void Close()
+        {
+            if (cli != null)
+            {
+                this.cli.Shutdown(SocketShutdown.Both);
+                this.cli.Disconnect(true);//scoket 复用
+                this.cli.Close();
+            }
+        }
+
         public void Disconnect()
         {
             try

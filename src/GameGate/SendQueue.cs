@@ -14,6 +14,9 @@ namespace GameGate
             _sendQueue = Channel.CreateUnbounded<SendQueueData>();
         }
 
+        /// <summary>
+        /// 获取待发送队列数量
+        /// </summary>
         public int GetQueueCount => _sendQueue.Reader.Count;
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace GameGate
         {
             while (await _sendQueue.Reader.WaitToReadAsync())
             {
-                if (_sendQueue.Reader.TryRead(out var queueData))
+                while (_sendQueue.Reader.TryRead(out var queueData))
                 {
                     var resp = queueData.SendBuffer();
                     if (resp != queueData.Buffer.Length)

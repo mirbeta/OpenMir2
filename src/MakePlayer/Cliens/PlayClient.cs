@@ -296,6 +296,7 @@ namespace MakePlayer
             m_ConnectionStep = TConnectionStep.cnsPlay;
             MainOutMessage($"[{m_sLoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
+            ClientSocket.Close();
             ClientSocket.Host = m_sRunServerAddr;
             ClientSocket.Port = m_nRunServerPort;
             ClientSocket.Connect();
@@ -340,7 +341,7 @@ namespace MakePlayer
             m_btJob = (byte)DefMsg.Param;
             m_nGameGold = HUtil32.MakeLong(DefMsg.Tag, DefMsg.Series);
             var buff = EDcode.DecodeBuffer(sData);
-            m_Abil = new TAbility(buff);
+            m_Abil = Packets.ToPacket<TAbility>(buff);
         }
 
         private void ClientGetWinExp(ClientPacket DefMsg)
@@ -350,7 +351,7 @@ namespace MakePlayer
 
         private void ClientGetLevelUp(ClientPacket DefMsg)
         {
-            m_Abil.Level = (ushort)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
+            m_Abil.Level = (byte)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
         }
 
         private void ClientQueryChrFail(int nFailCode)
@@ -419,6 +420,7 @@ namespace MakePlayer
             m_nSelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
+            ClientSocket.Close();
             ClientSocket.Host = m_sSelChrAddr;
             ClientSocket.Port = m_nSelChrPort;
             ClientSocket.Connect();

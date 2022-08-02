@@ -55,11 +55,11 @@ namespace LoginGate
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                _logQueue.EnqueueDebugging("获取服务器实例失败。");
+                _logQueue.DebugLog("获取服务器实例失败。");
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            _logQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            _logQueue.DebugLog($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -110,7 +110,7 @@ namespace LoginGate
             else
             {
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logQueue.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
         }
@@ -128,13 +128,13 @@ namespace LoginGate
             if (userClient == null)
             {
                 _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logQueue.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
                 _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"账号服务器链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                _logQueue.DebugLog($"账号服务器链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

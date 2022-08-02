@@ -55,8 +55,8 @@ namespace GameSvr
                         Item.Mc2 = (ushort)HUtil32.Round(dr.GetInt32("MC2") * (M2Share.g_Config.nItemsPowerRate / 10));
                         Item.Sc = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.g_Config.nItemsPowerRate / 10));
                         Item.Sc2 = (ushort)HUtil32.Round(dr.GetInt32("SC2") * (M2Share.g_Config.nItemsPowerRate / 10));
-                        Item.Need = dr.GetInt32("Need");// 附加条件
-                        Item.NeedLevel = dr.GetInt32("NeedLevel");// 需要等级
+                        Item.Need = dr.GetByte("Need");// 附加条件
+                        Item.NeedLevel = dr.GetByte("NeedLevel");// 需要等级
                         Item.Price = dr.GetInt32("Price");// 价格
                         Item.NeedIdentify = M2Share.GetGameLogItemNameList(Item.Name);
                         switch (Item.StdMode)

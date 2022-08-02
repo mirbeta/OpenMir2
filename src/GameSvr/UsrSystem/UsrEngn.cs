@@ -238,7 +238,7 @@ namespace GameSvr
             return m_PlayObjectList.Count + m_AiPlayObjectList.Count;
         }
 
-        private bool ProcessHumans_IsLogined(string sChrName)
+        private bool ProcessHumansIsLogined(string sChrName)
         {
             var result = false;
             if (M2Share.FrontEngine.InSaveRcdList(sChrName))
@@ -301,9 +301,9 @@ namespace GameSvr
                             Abil.Level = 1;
                             Abil.AC = 0;
                             Abil.MAC = 0;
-                            Abil.DC = HUtil32.MakeLong(1, 2);
-                            Abil.MC = HUtil32.MakeLong(1, 2);
-                            Abil.SC = HUtil32.MakeLong(1, 2);
+                            Abil.DC = (ushort)HUtil32.MakeLong(1, 2);
+                            Abil.MC = (ushort)HUtil32.MakeLong(1, 2);
+                            Abil.SC = (ushort)HUtil32.MakeLong(1, 2);
                             Abil.MP = 15;
                             Abil.HP = 15;
                             Abil.MaxHP = 15;
@@ -489,7 +489,9 @@ namespace GameSvr
                 PlayObject.m_nPayMent = UserOpenInfo.LoadUser.nPayMent;
                 PlayObject.m_nPayMode = UserOpenInfo.LoadUser.nPayMode;
                 PlayObject.m_dwLoadTick = UserOpenInfo.LoadUser.dwNewUserTick;
-                PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                PlayObject.m_nSoftVersionDate = UserOpenInfo.LoadUser.nSoftVersionDate;
+                PlayObject.m_nSoftVersionDateEx = UserOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = PlayObject;
             }
             catch (Exception ex)
@@ -517,7 +519,7 @@ namespace GameSvr
                         for (var i = 0; i < m_LoadPlayList.Count; i++)
                         {
                             TUserOpenInfo UserOpenInfo;
-                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumans_IsLogined(m_LoadPlayList[i].sChrName))
+                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(m_LoadPlayList[i].sChrName))
                             {
                                 UserOpenInfo = m_LoadPlayList[i];
                                 PlayObject = ProcessHumans_MakeNewHuman(UserOpenInfo);
@@ -2279,7 +2281,7 @@ namespace GameSvr
                     BaseObject.m_btRaceServer = Monster.btRace;
                     BaseObject.m_btRaceImg = Monster.btRaceImg;
                     BaseObject.m_wAppr = Monster.wAppr;
-                    BaseObject.m_Abil.Level = Monster.wLevel;
+                    BaseObject.m_Abil.Level = (byte)Monster.wLevel;
                     BaseObject.m_btLifeAttrib = Monster.btLifeAttrib;
                     BaseObject.m_btCoolEye = (byte)Monster.wCoolEye;
                     BaseObject.m_dwFightExp = Monster.dwExp;
@@ -2288,11 +2290,11 @@ namespace GameSvr
                     BaseObject.m_btMonsterWeapon = HUtil32.LoByte(Monster.wMP);
                     BaseObject.m_Abil.MP = 0;
                     BaseObject.m_Abil.MaxMP = Monster.wMP;
-                    BaseObject.m_Abil.AC = HUtil32.MakeLong(Monster.wAC, Monster.wAC);
-                    BaseObject.m_Abil.MAC = HUtil32.MakeLong(Monster.wMAC, Monster.wMAC);
-                    BaseObject.m_Abil.DC = HUtil32.MakeLong(Monster.wDC, Monster.wMaxDC);
-                    BaseObject.m_Abil.MC = HUtil32.MakeLong(Monster.wMC, Monster.wMC);
-                    BaseObject.m_Abil.SC = HUtil32.MakeLong(Monster.wSC, Monster.wSC);
+                    BaseObject.m_Abil.AC = (ushort)HUtil32.MakeLong(Monster.wAC, Monster.wAC);
+                    BaseObject.m_Abil.MAC = (ushort)HUtil32.MakeLong(Monster.wMAC, Monster.wMAC);
+                    BaseObject.m_Abil.DC = (ushort)HUtil32.MakeLong(Monster.wDC, Monster.wMaxDC);
+                    BaseObject.m_Abil.MC = (ushort)HUtil32.MakeLong(Monster.wMC, Monster.wMC);
+                    BaseObject.m_Abil.SC = (ushort)HUtil32.MakeLong(Monster.wSC, Monster.wSC);
                     BaseObject.m_btSpeedPoint = (byte)Monster.wSpeed;
                     BaseObject.m_btHitPoint = (byte)Monster.wHitPoint;
                     BaseObject.m_nWalkSpeed = Monster.wWalkSpeed;

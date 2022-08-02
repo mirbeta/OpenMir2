@@ -24,15 +24,14 @@ namespace DBSvr
         private readonly IPlayRecordService _playRecordService;
         private readonly ISocketServer _userSocket;
         private readonly LoginSvrService _loginService;
-        private readonly ConfigManager _configManager;
+        private DBConfig Config = ConfigManager.GetConfig();
         private readonly Channel<UsrSocMessage> _reviceMsgList;
 
-        public UserSocService(LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService, ConfigManager configManager)
+        public UserSocService(LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
         {
             _loginService = loginService;
             _playRecordService = playRecordService;
             _playDataService = playDataService;
-            _configManager = configManager;
             _gateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             _userSocket = new ISocketServer(ushort.MaxValue, 1024);
@@ -49,9 +48,9 @@ namespace DBSvr
 
         public void Start()
         {
-            _userSocket.Start(DBShare.g_sGateAddr, DBShare.g_nGatePort);
+            _userSocket.Start(Config.g_sGateAddr, Config.g_nGatePort);
             _playRecordService.LoadQuickList();
-            DBShare.MainOutMessage($"数据库服务[{DBShare.g_sGateAddr}:{DBShare.g_nGatePort}]已启动.等待链接...");
+            DBShare.MainOutMessage($"数据库服务[{Config.g_sGateAddr}:{Config.g_nGatePort}]已启动.等待链接...");
         }
 
         public async Task StartConsumer()
@@ -69,7 +68,7 @@ namespace DBSvr
         {
             while (await _reviceMsgList.Reader.WaitToReadAsync())
             {
-                if (_reviceMsgList.Reader.TryRead(out var message))
+                while (_reviceMsgList.Reader.TryRead(out var message))
                 {
                     ProcessGateMsg(message.GateInfo, message.Text);
                 }
@@ -325,12 +324,11 @@ namespace DBSvr
                     nRouteIdx++;
                 }
             }
-            DBShare.sMapFile = _configManager.ReadString("Setup", "MapFile", DBShare.sMapFile);
             _mapList.Clear();
-            if (File.Exists(DBShare.sMapFile))
+            if (File.Exists(Config.sMapFile))
             {
                 LoadList.Clear();
-                LoadList.LoadFromFile(DBShare.sMapFile);
+                LoadList.LoadFromFile(Config.sMapFile);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
@@ -682,7 +680,7 @@ namespace DBSvr
                     if (HumRecord.sAccount == UserInfo.sAccount)
                     {
                         int nLevel = DelChrSnameToLevel(sChrName);
-                        if (nLevel < DBShare.nDELMaxLevel)
+                        if (nLevel < Config.nDELMaxLevel)
                         {
                             HumRecord.boDeleted = true;
                             boCheck = _playRecordService.Update(nIndex, ref HumRecord);
@@ -729,7 +727,7 @@ namespace DBSvr
             {
                 nCode = 0;
             }
-            if (DBShare.g_boEnglishNames && !HUtil32.IsEnglishStr(sChrName))
+            if (Config.g_boEnglishNames && !HUtil32.IsEnglishStr(sChrName))
             {
                 nCode = 0;
             }
@@ -863,7 +861,7 @@ namespace DBSvr
                 int nMapIndex = GetMapIndex(sCurMap);
                 string sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
                 string sRouteIP = GateRouteIP(CurGate.sGateaddr, ref nRoutePort);
-                if (DBShare.g_boDynamicIPMode)// 使用动态IP
+                if (Config.g_boDynamicIPMode)// 使用动态IP
                 {
                     sRouteIP = UserInfo.sGateIPaddr;
                 }

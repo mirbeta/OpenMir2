@@ -1325,88 +1325,44 @@ namespace GameSvr
 
         public void ClientGetDetailGoodsList(TPlayObject PlayObject, string sItemName, int nInt)
         {
-            int nItemCount;
             IList<TUserItem> List20;
-            TStdItem StdItem = null;
-            TClientItem ClientItem = null;
-            TOClientItem OClientItem = null;
             var sSendMsg = string.Empty;
-            GoodItem Item;
-            TUserItem UserItem;
-            if (PlayObject.m_nSoftVersionDateEx == 0)
+            int nItemCount = 0;
+            for (var i = 0; i < m_GoodsList.Count; i++)
             {
-                nItemCount = 0;
-                for (var i = 0; i < m_GoodsList.Count; i++)
+                List20 = m_GoodsList[i];
+                if (List20.Count <= 0)
                 {
-                    List20 = m_GoodsList[i];
-                    UserItem = List20[0];
-                    Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (Item != null && Item.Name == sItemName)
-                    {
-                        if (List20.Count - 1 < nInt)
-                        {
-                            nInt = HUtil32._MAX(0, List20.Count - 10);
-                        }
-                        for (var j = List20.Count - 1; j >= 0; j--)
-                        {
-                            UserItem = List20[j];
-                            Item.GetStandardItem(ref StdItem);
-                            Item.GetItemAddValue(UserItem, ref StdItem);
-                            M2Share.CopyStdItemToOStdItem(StdItem, OClientItem.Item);
-                            OClientItem.Dura = UserItem.Dura;
-                            OClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
-                            OClientItem.MakeIndex = UserItem.MakeIndex;
-                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(OClientItem) + '/';
-                            nItemCount++;
-                            if (nItemCount >= 10)
-                            {
-                                break;
-                            }
-                        }
-                        break;
-                    }
+                    continue;
                 }
-                PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
-            }
-            else
-            {
-                nItemCount = 0;
-                for (var i = 0; i < m_GoodsList.Count; i++)
+                TUserItem UserItem = List20[0];
+                GoodItem Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
+                if (Item != null && Item.Name == sItemName)
                 {
-                    List20 = m_GoodsList[i];
-                    if (List20.Count <= 0)
+                    if (List20.Count - 1 < nInt)
                     {
-                        continue;
+                        nInt = HUtil32._MAX(0, List20.Count - 10);
                     }
-                    UserItem = List20[0];
-                    Item = M2Share.UserEngine.GetStdItem(UserItem.wIndex);
-                    if (Item != null && Item.Name == sItemName)
+                    for (var j = List20.Count - 1; j >= 0; j--)
                     {
-                        if (List20.Count - 1 < nInt)
+                        UserItem = List20[j];
+                        TClientItem ClientItem = new TClientItem();
+                        Item.GetStandardItem(ref ClientItem.Item);
+                        Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        ClientItem.Dura = UserItem.Dura;
+                        ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
+                        ClientItem.MakeIndex = UserItem.MakeIndex;
+                        sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + "/";
+                        nItemCount++;
+                        if (nItemCount >= 10)
                         {
-                            nInt = HUtil32._MAX(0, List20.Count - 10);
+                            break;
                         }
-                        for (var j = List20.Count - 1; j >= 0; j--)
-                        {
-                            UserItem = List20[j];
-                            ClientItem = new TClientItem();
-                            Item.GetStandardItem(ref ClientItem.Item);
-                            Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                            ClientItem.Dura = UserItem.Dura;
-                            ClientItem.DuraMax = (ushort)GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
-                            ClientItem.MakeIndex = UserItem.MakeIndex;
-                            sSendMsg = sSendMsg + EDcode.EncodeBuffer(ClientItem) + "/";
-                            nItemCount++;
-                            if (nItemCount >= 10)
-                            {
-                                break;
-                            }
-                        }
-                        break;
                     }
+                    break;
                 }
-                PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
             }
+            PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ObjectId, nItemCount, nInt, sSendMsg);
         }
 
         public void ClientQuerySellPrice(TPlayObject PlayObject, TUserItem UserItem)

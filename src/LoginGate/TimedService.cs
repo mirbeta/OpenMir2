@@ -31,20 +31,20 @@ namespace LoginGate
 
         private void OutMianMessage()
         {
-            while (!_logQueue.MessageLog.IsEmpty)
+            while (!_logQueue.MessageLogQueue.IsEmpty)
             {
                 string message;
 
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
+                if (!_logQueue.MessageLogQueue.TryDequeue(out message)) continue;
 
                 Console.WriteLine(message);
             }
 
-            while (!_logQueue.DebugLog.IsEmpty)
+            while (!_logQueue.DebugLogQueue.IsEmpty)
             {
                 string message;
 
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
+                if (!_logQueue.DebugLogQueue.TryDequeue(out message)) continue;
 
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine(message);
@@ -54,7 +54,7 @@ namespace LoginGate
 
         private void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 2000)
+            if (HUtil32.GetTickCount() - _processDelayTick > 5000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
                 var _clientList = ServerManager.GetServerList();
@@ -100,11 +100,6 @@ namespace LoginGate
                     }
                 }
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

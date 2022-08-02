@@ -53,7 +53,7 @@ namespace SelGate.Services
         {
             while (await _snedQueue.Reader.WaitToReadAsync())
             {
-                if (_snedQueue.Reader.TryRead(out var message))
+                while (_snedQueue.Reader.TryRead(out var message))
                 {
                     var clientSession = _sessionManager.GetSession(message.SessionId);
                     clientSession?.HandleUserPacket(message);
@@ -70,7 +70,7 @@ namespace SelGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            _logQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            _logQueue.DebugLog($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
             {
@@ -120,7 +120,7 @@ namespace SelGate.Services
             else
             {
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
+                _logQueue.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
             }
             _clientManager.DeleteClientThread(e.ConnectionId);
         }
@@ -138,13 +138,13 @@ namespace SelGate.Services
             if (userClient == null)
             {
                 _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                _logQueue.DebugLog($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return;
             }
             if (!userClient.boGateReady)
             {
                 _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
+                _logQueue.DebugLog($"游戏引擎链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
                 return;
             }
             var data = new byte[token.BytesReceived];

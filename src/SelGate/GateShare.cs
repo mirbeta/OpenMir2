@@ -14,10 +14,8 @@ namespace SelGate
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
-        public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static long dwCheckServerTick = 0;
-        public static long dwCheckServerTimeMin = 0;
-        public static long dwCheckServerTimeMax = 0;
+        public static int dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public static int dwCheckServerTick = 0;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -30,7 +28,7 @@ namespace SelGate
         /// <summary>
         /// 会话超时时间
         /// </summary>
-        public static long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        public static int dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         public static IList<ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()

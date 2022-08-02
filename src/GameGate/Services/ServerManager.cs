@@ -74,16 +74,19 @@ namespace GameGate
         /// <summary>
         /// 处理客户端发过来的消息
         /// </summary>
-        public async Task ProcessReviceMessage()
+        public Task ProcessReviceMessage()
         {
-            while (await _reviceMsgList.Reader.WaitToReadAsync())
+            return Task.Factory.StartNew(async () =>
             {
-                if (_reviceMsgList.Reader.TryRead(out var message))
+                while (await _reviceMsgList.Reader.WaitToReadAsync())
                 {
-                    var clientSession = SessionManager.Instance.GetSession(message.MessageId);
-                    clientSession?.HandleSessionPacket(message);
+                    while (_reviceMsgList.Reader.TryRead(out var message))
+                    {
+                        var clientSession = SessionManager.Instance.GetSession(message.MessageId);
+                        clientSession?.HandleSessionPacket(message);
+                    }
                 }
-            }
+            });
         }
 
         public IList<ServerService> GetServerList()

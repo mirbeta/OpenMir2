@@ -16,6 +16,7 @@ namespace DBSvr
         private readonly IPlayDataService _playDataService;
         private readonly ISocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
+        private DBConfig Config = ConfigManager.GetConfig();
 
         public HumDataService(LoginSvrService loginSvrService, IPlayDataService playDataService)
         {
@@ -33,9 +34,9 @@ namespace DBSvr
 
         public void Start()
         {
-            _serverSocket.Start(DBShare.sServerAddr, DBShare.nServerPort);
+            _serverSocket.Start(Config.sServerAddr, Config.nServerPort);
             _playDataService.LoadQuickList();
-            DBShare.MainOutMessage($"数据库角色服务[{DBShare.sServerAddr}:{DBShare.nServerPort}]已启动.等待链接...");
+            DBShare.MainOutMessage($"数据库角色服务[{Config.sServerAddr}:{Config.nServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -122,7 +123,6 @@ namespace DBSvr
 
         private void ProcessServerPacket(TServerInfo serverInfo, byte[] data)
         {
-            var bo25 = false;
             var nQueryId = 0;
             if (data.Length > 0)
             {
@@ -134,31 +134,27 @@ namespace DBSvr
                 nQueryId = requestPacket.QueryId;
                 var packet = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDcode.DecodeBuff(requestPacket.Message));
                 var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
-                if ((packetLen >= Grobal2.DEFBLOCKSIZE) && nQueryId > 0)
+                if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
                 {
                     var queryId = HUtil32.MakeLong(nQueryId ^ 170, packetLen);
-                    var checkKey = BitConverter.ToInt32(requestPacket.CheckKey);
-                    if (checkKey == queryId)
+                    var sginBuff = EDcode.DecodeBuff(requestPacket.Sgin);
+                    var sgin = BitConverter.ToInt16(sginBuff);
+                    if (sgin == queryId)
                     {
                         ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
-                        bo25 = true;
+                        return;
                     }
-                    else
-                    {
-                        serverInfo.Socket.Close();
-                        Console.WriteLine("关闭错误的查询请求.");
-                    }
+                    serverInfo.Socket.Close();
+                    Console.WriteLine("关闭错误的查询请求.");
+                    return;
                 }
             }
+            var responsePack = new RequestServerPacket();
+            responsePack.QueryId = nQueryId;
+            var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
+            responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+            SendRequest(serverInfo.Socket, responsePack);
             serverInfo.Data = null;
-            if (!bo25)
-            {
-                var responsePack = new RequestServerPacket();
-                responsePack.QueryId = nQueryId;
-                var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-                responsePack.Message = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(serverInfo.Socket, responsePack);
-            }
         }
 
         private void SendRequest(Socket socket, RequestServerPacket requestPacket)
@@ -174,8 +170,7 @@ namespace DBSvr
                 queryPart = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + 6);
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
-            var codeBuff = EDcode.EncodeBuffer(nCheckCode);
-            requestPacket.CheckKey = codeBuff;
+            requestPacket.Sgin = EDcode.EncodeBuffer(nCheckCode);
             var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
@@ -187,9 +182,7 @@ namespace DBSvr
                 requestPacket.Packet = EDcode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             }
             var s = HUtil32.MakeLong(requestPacket.QueryId ^ 170, requestPacket.Message.Length + requestPacket.Packet.Length + 6);
-            var nCheckCode = BitConverter.GetBytes(s);
-            var codeBuff = EDcode.EncodeBuffer(nCheckCode);
-            requestPacket.CheckKey = codeBuff;
+            requestPacket.Sgin = EDcode.EncodeBuffer(BitConverter.GetBytes(s));
             var pk = requestPacket.GetBuffer();
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
