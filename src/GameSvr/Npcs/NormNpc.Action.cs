@@ -85,7 +85,7 @@ namespace GameSvr
                                                 //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 _wvar1.Dura = ushort.MaxValue;// 客户端金刚石特征
-                                                _wvar1.Item.DuraMax = short.MaxValue;// 客户端金刚石特征
+                                                _wvar1.Item.DuraMax = ushort.MaxValue;// 客户端金刚石特征
                                                 _wvar1.Item.Looks = ushort.MaxValue;// 不显示图片
                                                 bo12 = true;
                                             }
@@ -644,20 +644,20 @@ namespace GameSvr
                 case '=':
                     if ((nLevel > 0) && (nLevel <= Grobal2.MAXLEVEL))
                     {
-                        PlayObject.m_Abil.Level = (ushort)nLevel;
+                        PlayObject.m_Abil.Level = (byte)nLevel;
                         boChgOK = true;
                     }
                     break;
                 case '-':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level - nLevel);
                     nLv = HUtil32._MIN(Grobal2.MAXLEVEL, nLv);
-                    PlayObject.m_Abil.Level = (ushort)nLv;
+                    PlayObject.m_Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
                 case '+':
                     nLv = HUtil32._MAX(0, PlayObject.m_Abil.Level + nLevel);
                     nLv = HUtil32._MIN(Grobal2.MAXLEVEL, nLv);
-                    PlayObject.m_Abil.Level = (ushort)nLv;
+                    PlayObject.m_Abil.Level = (byte)nLv;
                     boChgOK = true;
                     break;
             }
@@ -3162,7 +3162,7 @@ namespace GameSvr
                 PlayObject.m_btReLevel += (byte)nReLevel;
                 if (nLevel > 0)
                 {
-                    PlayObject.m_Abil.Level = (ushort)nLevel;
+                    PlayObject.m_Abil.Level = (byte)nLevel;
                 }
                 if (M2Share.g_Config.boReNewLevelClearExp)
                 {

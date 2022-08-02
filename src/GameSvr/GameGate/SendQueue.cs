@@ -43,15 +43,12 @@ namespace GameSvr
         {
             while (await _sendQueue.Reader.WaitToReadAsync(_cancellation.Token))
             {
-                if (_sendQueue.Reader.TryRead(out var buffer))
+                while (_sendQueue.Reader.TryRead(out var buffer))
                 {
                     if (_sendSocket.Connected)
                     {
-                        var sendLen = _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                        if (sendLen < buffer.Length)
-                        {
-                            Debug.WriteLine("发送封包出现异常。");
-                        }
+                        //todo 此处异步发送效率比同步效率要低很多,不知道为什么,暂时先用同步发送
+                        _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                     }
                 }
             }

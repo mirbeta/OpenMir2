@@ -11,11 +11,6 @@ namespace LoginGate
     /// </summary>
     public class ClientThread
     {
-        private IClientScoket ClientSocket;
-        /// <summary>
-        /// 网关编号（初始化的时候进行分配）
-        /// </summary>
-        public int ClientId = 0;
         /// <summary>
         /// 最大用户数
         /// </summary>
@@ -25,37 +20,17 @@ namespace LoginGate
         /// </summary>
         public TSessionInfo[] SessionArray;
         /// <summary>
-        ///  网关游戏服务器之间检测是否失败（超时）
+        /// Socket
         /// </summary>
-        public bool boCheckServerFail = false;
-        /// <summary>
-        /// 网关游戏服务器之间检测是否失败次数
-        /// </summary>
-        public int CheckServerFailCount = 0;
-        /// <summary>
-        /// 服务器之间的检查间隔
-        /// </summary>
-        public int CheckServerTick = 0;
-        /// <summary>
-        /// 网关是否就绪
-        /// </summary>
-        public bool boGateReady = false;
-        /// <summary>
-        /// 是否链接成功
-        /// </summary>
-        private bool isConnected = false;
-        /// <summary>
-        /// 会话管理
-        /// </summary>
-        private SessionManager _sessionManager => SessionManager.Instance;
-        public bool KeepAlive;
-        public int KeepAliveTick;
-        public SockThreadStutas SockThreadStutas;
-        public int dwCheckServerTick = 0;
+        private IClientScoket ClientSocket;
         /// <summary>
         /// 日志
         /// </summary>
         private LogQueue _logQueue = LogQueue.Instance;
+        /// <summary>
+        /// 会话管理
+        /// </summary>
+        private SessionManager _sessionManager => SessionManager.Instance;
 
         public ClientThread(int clientId, GameGateInfo gateInfo)
         {
@@ -70,7 +45,7 @@ namespace LoginGate
             SessionArray = new TSessionInfo[MaxSession];
         }
 
-        public bool IsConnected => isConnected;
+        public bool IsConnected => ClientSocket.IsConnected;
 
         public string GetSocketIp()
         {
@@ -84,7 +59,7 @@ namespace LoginGate
 
         public void ReConnected()
         {
-            if (isConnected == false)
+            if (ClientSocket.IsConnected == false)
             {
                 ClientSocket.Connect();
             }
@@ -110,14 +85,14 @@ namespace LoginGate
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             boGateReady = true;
-            dwCheckServerTick = HUtil32.GetTickCount();
             RestSessionArray();
-            GateShare.ServerGateList.TryAdd(ClientId, this);
-            _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
-            _logQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
-            isConnected = true;
             SockThreadStutas = SockThreadStutas.Connected;
             KeepAliveTick = HUtil32.GetTickCount();
+            GateShare.ServerGateList.TryAdd(ClientId, this);
+            dwCheckServerTick = HUtil32.GetTickCount();
+            CheckServerFailCount = 1;
+            _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
+            _logQueue.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -134,14 +109,13 @@ namespace LoginGate
                     userSession.Socket.Close();
                     userSession.Socket = null;
                     SessionArray[i] = null;
-                    _logQueue.EnqueueDebugging("账号服务器断开Socket");
+                    _logQueue.DebugLog("账号服务器断开Socket");
                 }
             }
             RestSessionArray();
             boGateReady = false;
             GateShare.ServerGateList.TryRemove(ClientId, out var client);
-            _logQueue.Enqueue($"账号服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
-            isConnected = false;
+            _logQueue.Enqueue($"账号服务器[{ClientSocket.Host}:{ClientSocket.Port}]断开链接.", 1);
         }
 
         /// <summary>
@@ -164,7 +138,7 @@ namespace LoginGate
                 {
                     sSessionId = int.Parse(tempStr);
                     _sessionManager.CloseSession(sSessionId);
-                    _logQueue.EnqueueDebugging("收到账号服务器断开Socket消息.");
+                    _logQueue.DebugLog($"账号服务器[{ClientSocket.Host}:{ClientSocket.Port}]主动断开链接..");
                 }
                 return;
             }
@@ -184,16 +158,13 @@ namespace LoginGate
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"账号服务器[{ClientSocket.Host}:{ClientSocket.Port}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"账号服务器[{ClientSocket.Host}:{ClientSocket.Port}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue("账号服务器[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...", 1);
-                    isConnected = false;
+                    _logQueue.Enqueue($"账号服务器[{ClientSocket.Host}:{ClientSocket.Port}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }
@@ -260,6 +231,39 @@ namespace LoginGate
                 ClientSocket.Send(sendBuffer);
             }
         }
+
+        /// <summary>
+        /// 网关编号（初始化的时候进行分配）
+        /// </summary>
+        public int ClientId = 0;
+        /// <summary>
+        ///  网关游戏服务器之间检测是否失败（超时）
+        /// </summary>
+        public bool boCheckServerFail = false;
+        /// <summary>
+        /// 网关游戏服务器之间检测是否失败次数
+        /// </summary>
+        public int CheckServerFailCount = 0;
+        /// <summary>
+        /// 服务器之间的检查间隔
+        /// </summary>
+        public int CheckServerTick = 0;
+        /// <summary>
+        /// 网关是否就绪
+        /// </summary>
+        public bool boGateReady = false;
+        /// <summary>
+        /// 上次心跳链接时间
+        /// </summary>
+        public int KeepAliveTick;
+        /// <summary>
+        /// 服务器链接状态
+        /// </summary>
+        public SockThreadStutas SockThreadStutas;
+        /// <summary>
+        /// 服务器链接时间
+        /// </summary>
+        public int dwCheckServerTick = 0;
     }
 
     public enum SockThreadStutas : byte

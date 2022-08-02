@@ -18,13 +18,13 @@ namespace LoginGate
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"GameGate is stopping."));
+            stoppingToken.Register(() => _logQueue.DebugLog($"GameGate is stopping."));
             await _serverApp.Start();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is starting.");
+            _logQueue.DebugLog($"GameGate is starting.");
             _logQueue.Enqueue("正在启动服务...", 2);
             GateShare.Initialization();
             ConfigManager.LoadConfig();
@@ -38,7 +38,7 @@ namespace LoginGate
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is stopping.");
+            _logQueue.DebugLog($"GameGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

@@ -11,15 +11,14 @@ namespace DBSvr
         private readonly UserSocService _userSocService;
         private readonly LoginSvrService _loginSvrService;
         private readonly HumDataService _dataService;
-        private readonly ConfigManager _configManager;
+        private ConfigManager ConfigManager => ConfigManager.Instance;
 
-        public AppService(ILogger<AppService> logger, UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService, ConfigManager configManager)
+        public AppService(ILogger<AppService> logger, UserSocService userSoc, LoginSvrService idSoc, HumDataService dataService)
         {
             _logger = logger;
             _userSocService = userSoc;
             _loginSvrService = idSoc;
             _dataService = dataService;
-            _configManager = configManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,9 +34,9 @@ namespace DBSvr
         {
             _logger.LogDebug($"DBSvr is starting.");
             DBShare.Initialization();
-            _configManager.LoadConfig();
+            ConfigManager.LoadConfig();
             DBShare.LoadConfig();
-            DBShare.MainOutMessage("服务器已启动...");
+            DBShare.MainOutMessage("数据库配置文件读取完成...");
             return base.StartAsync(cancellationToken);
         }
 

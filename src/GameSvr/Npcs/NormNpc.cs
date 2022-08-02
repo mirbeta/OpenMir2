@@ -135,7 +135,7 @@ namespace GameSvr
                     case 0:
                         if (nParam3 >= 0)
                         {
-                            PlayObject.m_Abil.Level = (ushort)nParam3;
+                            PlayObject.m_Abil.Level = (byte)nParam3;
                             PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         }
                         break;
@@ -162,13 +162,13 @@ namespace GameSvr
                                 dwInt = nParam3;
                             }
                         }
-                        PlayObject.m_Abil.Level += (ushort)dwInt;
+                        PlayObject.m_Abil.Level += (byte)dwInt;
                         PlayObject.HasLevelUp(PlayObject.m_Abil.Level - 1);
                         break;
                     case 2:
                         if (PlayObject.m_Abil.Level > nParam3)
                         {
-                            PlayObject.m_Abil.Level -= (ushort)nParam3;
+                            PlayObject.m_Abil.Level -= (byte)nParam3;
                         }
                         else
                         {

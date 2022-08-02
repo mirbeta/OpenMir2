@@ -87,18 +87,19 @@ namespace LoginSvr
             int nIndex = 0;
             bool boDeleted;
             string sAccount;
-            const string sSQL = "SELECT Id,FLD_DELETED，FLD_LOGINID FROM TBL_ACCOUNT";
+            const string sSQL = "SELECT Id,FLD_DELETED,FLD_LOGINID FROM TBL_ACCOUNT";
             _quickList.Clear();
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return;
             }
+
             try
             {
                 var command = new MySqlCommand();
                 command.CommandText = sSQL;
-                command.Connection = (MySqlConnection)dbConnection;
+                command.Connection = (MySqlConnection) dbConnection;
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
@@ -110,8 +111,13 @@ namespace LoginSvr
                         _quickList.Add(new AccountQuick(sAccount, nIndex));
                     }
                 }
+
                 dr.Close();
                 dr.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
             finally
             {

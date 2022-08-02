@@ -725,9 +725,9 @@ namespace GameSvr
                 Level = 1,
                 AC = 0,
                 MAC = 0,
-                DC = HUtil32.MakeLong(1, 4),
-                MC = HUtil32.MakeLong(1, 2),
-                SC = HUtil32.MakeLong(1, 2),
+                DC = (ushort)HUtil32.MakeLong(1, 4),
+                MC = (ushort)HUtil32.MakeLong(1, 2),
+                SC = (ushort)HUtil32.MakeLong(1, 2),
                 HP = 15,
                 MP = 15,
                 MaxHP = 15,
@@ -963,25 +963,25 @@ namespace GameSvr
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfTaosHP + M2Share.g_Config.nLevelValueOfTaosHPRate) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round(nLevel / M2Share.g_Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
-                    m_Abil.MaxWearWeight = (ushort)(15 + HUtil32.Round(nLevel / 50 * nLevel));
-                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 42 * nLevel));
+                    m_Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 50 * nLevel));
+                    m_Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42 * nLevel));
                     n = (int)(nLevel / 7);
-                    m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    m_Abil.DC = (ushort)HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     m_Abil.MC = 0;
-                    m_Abil.SC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    m_Abil.SC = (ushort)HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     m_Abil.AC = 0;
                     n = HUtil32.Round(nLevel / 6);
-                    m_Abil.MAC = HUtil32.MakeLong(n / 2, n + 1);
+                    m_Abil.MAC = (ushort)HUtil32.MakeLong(n / 2, n + 1);
                     break;
                 case M2Share.jWizard:
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWizardHP + M2Share.g_Config.nLevelValueOfWizardHPRate) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 13 + HUtil32.Round((nLevel / 5 + 2) * 2.2 * nLevel));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
-                    m_Abil.MaxWearWeight = (ushort)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
-                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 90 * nLevel));
+                    m_Abil.MaxWearWeight = (byte)HUtil32._MIN(short.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
+                    m_Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90 * nLevel));
                     n = (int)(nLevel / 7);
-                    m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
-                    m_Abil.MC = HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    m_Abil.DC = (ushort)HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
+                    m_Abil.MC = (ushort)HUtil32.MakeLong(HUtil32._MAX(n - 1, 0), HUtil32._MAX(1, n));
                     m_Abil.SC = 0;
                     m_Abil.AC = 0;
                     m_Abil.MAC = 0;
@@ -990,12 +990,12 @@ namespace GameSvr
                     m_Abil.MaxHP = (ushort)HUtil32._MIN(short.MaxValue, 14 + HUtil32.Round((nLevel / M2Share.g_Config.nLevelValueOfWarrHP + M2Share.g_Config.nLevelValueOfWarrHPRate + nLevel / 20) * nLevel));
                     m_Abil.MaxMP = (ushort)HUtil32._MIN(short.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     m_Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
-                    m_Abil.MaxWearWeight = (ushort)(15 + HUtil32.Round(nLevel / 20 * nLevel));
-                    m_Abil.MaxHandWeight = (ushort)(12 + HUtil32.Round(nLevel / 13 * nLevel));
-                    m_Abil.DC = HUtil32.MakeLong(HUtil32._MAX((int)(nLevel / 5) - 1, 1), HUtil32._MAX(1, (int)(nLevel / 5)));
+                    m_Abil.MaxWearWeight = (byte)(15 + HUtil32.Round(nLevel / 20 * nLevel));
+                    m_Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13 * nLevel));
+                    m_Abil.DC = (ushort)HUtil32.MakeLong(HUtil32._MAX((int)(nLevel / 5) - 1, 1), HUtil32._MAX(1, (int)(nLevel / 5)));
                     m_Abil.SC = 0;
                     m_Abil.MC = 0;
-                    m_Abil.AC = HUtil32.MakeLong(0, nLevel / 7);
+                    m_Abil.AC = (ushort)HUtil32.MakeLong(0, nLevel / 7);
                     m_Abil.MAC = 0;
                     break;
             }
@@ -2833,11 +2833,11 @@ namespace GameSvr
 
         public void MonsterRecalcAbilitys()
         {
-            m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_Abil.DC));
+            m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_Abil.DC));
             int n8 = 0;
             if ((m_btRaceServer == M2Share.MONSTER_WHITESKELETON) || (m_btRaceServer == M2Share.MONSTER_ELFMONSTER) || (m_btRaceServer == M2Share.MONSTER_ELFWARRIOR))
             {
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round((m_btSlaveExpLevel * 0.1 + 0.3) * 3.0 * m_btSlaveExpLevel + HUtil32.HiWord(m_WAbil.DC)));
+                m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round((m_btSlaveExpLevel * 0.1 + 0.3) * 3.0 * m_btSlaveExpLevel + HUtil32.HiWord(m_WAbil.DC)));
                 n8 = n8 + HUtil32.Round((m_btSlaveExpLevel * 0.1 + 0.3) * m_Abil.MaxHP) * m_btSlaveExpLevel;
                 n8 = n8 + m_Abil.MaxHP;
                 if (m_btSlaveExpLevel > 0)
@@ -2852,7 +2852,7 @@ namespace GameSvr
             else
             {
                 n8 = m_Abil.MaxHP;
-                m_WAbil.DC = HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round(m_btSlaveExpLevel * 2 + HUtil32.HiWord(m_WAbil.DC)));
+                m_WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(m_WAbil.DC), HUtil32.Round(m_btSlaveExpLevel * 2 + HUtil32.HiWord(m_WAbil.DC)));
                 n8 = n8 + HUtil32.Round(m_Abil.MaxHP * 0.15) * m_btSlaveExpLevel;
                 m_WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(m_Abil.MaxHP + m_btSlaveExpLevel * 60), n8);
             }

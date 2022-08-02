@@ -23,10 +23,9 @@ namespace SelGate
             while (!stoppingToken.IsCancellationRequested)
             {
                 OutMianMessage();
-                _clientManager.CheckSession();
-                _clientManager.ProcessDelayMsg();
+                _clientManager.Process();
                 //KeepAlive();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(1), stoppingToken);
             }
         }
 
@@ -53,29 +52,24 @@ namespace SelGate
 
         private void OutMianMessage()
         {
-            while (!_logQueue.MessageLog.IsEmpty)
+            while (!_logQueue.MessageLogQueue.IsEmpty)
             {
                 string message;
 
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
+                if (!_logQueue.MessageLogQueue.TryDequeue(out message)) continue;
 
                 Console.WriteLine(message);
             }
 
-            while (!_logQueue.DebugLog.IsEmpty)
+            while (!_logQueue.DebugLogQueue.IsEmpty)
             {
                 string message;
 
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
+                if (!_logQueue.DebugLogQueue.TryDequeue(out message)) continue;
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine(message);
                 Console.ResetColor();
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

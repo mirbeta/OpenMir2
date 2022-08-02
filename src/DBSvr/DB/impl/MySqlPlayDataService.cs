@@ -12,6 +12,7 @@ namespace DBSvr
         private readonly Dictionary<string, int> MirQuickList = null;
         private readonly TQuickIDList MirQuickIDList = null;
         private readonly Dictionary<int, int> QuickIndexIdList = null;
+        private DBConfig Config = ConfigManager.GetConfig();
         private int _recordCount = 0;
 
         public MySqlPlayDataService()
@@ -83,7 +84,7 @@ namespace DBSvr
 
         private MySqlConnection Open(ref bool success)
         {
-            var dbConnection = new MySqlConnection(DBShare.DBConnection);
+            var dbConnection = new MySqlConnection(Config.DBConnection);
             try
             {
                 dbConnection.Open();
@@ -346,24 +347,24 @@ namespace DBSvr
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
-                    HumanRCD.Data.Abil.Level = dr.GetUInt16("FLD_LEVEL");
+                    HumanRCD.Data.Abil.Level = dr.GetByte("FLD_LEVEL");
                     dw = dr.GetInt32("FLD_HP");
                     HumanRCD.Data.Abil.HP = HUtil32.LoWord(dw);
                     HumanRCD.Data.Abil.AC = HUtil32.HiWord(dw);
                     dw = dr.GetInt32("FLD_MP");
                     HumanRCD.Data.Abil.MP = HUtil32.LoWord(dw);
                     HumanRCD.Data.Abil.MAC = HUtil32.HiWord(dw);
-                    HumanRCD.Data.Abil.DC = dr.GetInt32("FLD_DC");
-                    HumanRCD.Data.Abil.MC = dr.GetInt32("FLD_MC");
-                    HumanRCD.Data.Abil.SC = dr.GetInt32("FLD_SC");
+                    HumanRCD.Data.Abil.DC = dr.GetUInt16("FLD_DC");
+                    HumanRCD.Data.Abil.MC = dr.GetUInt16("FLD_MC");
+                    HumanRCD.Data.Abil.SC = dr.GetUInt16("FLD_SC");
                     HumanRCD.Data.Abil.Exp = dr.GetInt32("FLD_EXP");
                     HumanRCD.Data.Abil.MaxExp = dr.GetInt32("FLD_MaxExp");
                     HumanRCD.Data.Abil.Weight = dr.GetUInt16("FLD_Weight");
                     HumanRCD.Data.Abil.MaxWeight = dr.GetUInt16("FLD_MaxWeight");
-                    HumanRCD.Data.Abil.WearWeight = dr.GetUInt16("FLD_WearWeight");
-                    HumanRCD.Data.Abil.MaxWearWeight = dr.GetUInt16("FLD_MaxWearWeight");
-                    HumanRCD.Data.Abil.HandWeight = dr.GetUInt16("FLD_HandWeight");
-                    HumanRCD.Data.Abil.MaxHandWeight = dr.GetUInt16("FLD_MaxHandWeight");
+                    HumanRCD.Data.Abil.WearWeight = dr.GetByte("FLD_WearWeight");
+                    HumanRCD.Data.Abil.MaxWearWeight = dr.GetByte("FLD_MaxWearWeight");
+                    HumanRCD.Data.Abil.HandWeight = dr.GetByte("FLD_HandWeight");
+                    HumanRCD.Data.Abil.MaxHandWeight = dr.GetByte("FLD_MaxHandWeight");
                 }
                 dr.Close();
                 dr.Dispose();

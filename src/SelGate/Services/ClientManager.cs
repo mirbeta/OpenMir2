@@ -16,6 +16,7 @@ namespace SelGate.Services
         private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private int _processClearSessionTick = 0;
+        private int _lastChekSocketTick = 0;
         private int _processDelayTick = 0;
 
         public ClientManager(LogQueue logQueue, ConfigManager configManager, SessionManager sessionManager)
@@ -37,7 +38,7 @@ namespace SelGate.Services
                 serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logQueue.EnqueueDebugging($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    _logQueue.DebugLog($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
                 _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
@@ -117,14 +118,21 @@ namespace SelGate.Services
             return null;
         }
 
-        private IList<ClientThread> GetAllClient()
+        private IList<ClientThread> GetClientThreads()
         {
             return _clientList;
         }
 
-        public void ProcessDelayMsg()
+        public void Process()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 20000)
+            CleanOutSession();
+            ProcessDelayMsg();
+            CheckSocketState();
+        }
+
+        private void ProcessDelayMsg()
+        {
+            if (HUtil32.GetTickCount() - _processDelayTick > 20 * 1000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
                 for (var i = 0; i < _clientList.Count; i++)
@@ -166,14 +174,14 @@ namespace SelGate.Services
             }
         }
 
-        public void CheckSession()
+        private void CleanOutSession()
         {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
+            if (HUtil32.GetTickCount() - _processClearSessionTick > 20 * 1000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                _logQueue.EnqueueDebugging("清理超时会话开始工作...");
+                _logQueue.DebugLog("清理超时会话开始工作...");
                 TSessionInfo UserSession;
-                var clientList = GetAllClient();
+                var clientList = GetClientThreads();
                 for (var i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
@@ -195,18 +203,29 @@ namespace SelGate.Services
                                 UserSession.Socket = null;
                                 _sessionManager.CloseSession(UserSession.SocketId);
                                 UserSession = null;
-                                _logQueue.EnqueueDebugging("清理超时会话,关闭Socket.");
+                                _logQueue.DebugLog("清理超时会话,关闭超时Socket.");
                             }
                         }
                     }
-                    GateShare.dwCheckServerTimeMin = HUtil32.GetTickCount() - GateShare.dwCheckServerTick;
-                    if (GateShare.dwCheckServerTimeMax < GateShare.dwCheckServerTimeMin)
+                }
+                _logQueue.DebugLog("清理超时会话工作完成...");
+            }
+        }
+
+        private void CheckSocketState()
+        {
+            if (HUtil32.GetTickCount() - _lastChekSocketTick > 5000)
+            {
+                _lastChekSocketTick = HUtil32.GetTickCount();
+                var clientList = GetClientThreads();
+                for (var i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i] == null)
                     {
-                        GateShare.dwCheckServerTimeMax = GateShare.dwCheckServerTimeMin;
+                        continue;
                     }
                     CheckSessionStatus(clientList[i]);
                 }
-                _logQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 
@@ -222,19 +241,19 @@ namespace SelGate.Services
                 clientThread.CheckServerFailCount = 0;
                 return;
             }
-            if (clientThread.boCheckServerFail && clientThread.CheckServerFailCount <= 20)
+            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime)
             {
-                clientThread.ReConnected();
-                clientThread.CheckServerFailCount++;
-                _logQueue.Enqueue($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]", 5);
-                return;
-            }
-            if ((HUtil32.GetTickCount() - GateShare.dwCheckServerTick) > GateShare.dwCheckServerTimeOutTime && clientThread.CheckServerFailCount <= 20)
-            {
+                if (clientThread.boCheckServerFail)
+                {
+                    clientThread.ReConnected();
+                    clientThread.CheckServerFailCount++;
+                    _logQueue.DebugLog($"重新与服务器[{clientThread.GetSocketIp()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    return;
+                }
                 clientThread.boCheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                _logQueue.Enqueue($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]", 5);
+                _logQueue.DebugLog($"服务器[{clientThread.GetSocketIp()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
                 return;
             }
         }

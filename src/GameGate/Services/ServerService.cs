@@ -65,7 +65,9 @@ namespace GameGate
         /// <returns></returns>
         private string GetSendQueueCount()
         {
-            return $"{_sendQueue.GetQueueCount}";
+            //需要合并发送队列和接受解列
+
+            return $"{_sendQueue.GetQueueCount}/" + $"{_sessionManager.GetQueueCount}";
         }
 
         private string GetConnected()
@@ -159,7 +161,24 @@ namespace GameGate
             var clientThread = _clientManager.GetClientThread(nSockIndex);
             if (clientThread != null && clientThread.GateReady) //todo 这里需要等待100ms才能发送给M2
             {
-                clientThread.SessionArray[nSockIndex] = null;
+                for (int i = 0; i < clientThread.SessionArray.Length; i++)
+                {
+                    if (clientThread.SessionArray[i] == null)
+                    {
+                        continue;
+                    }
+                    if (clientThread.SessionArray[i].SckHandle == e.SocHandle)
+                    {
+                        clientThread.SessionArray[i].Socket.Close();
+                        clientThread.SessionArray[i].Socket = null;
+                        clientThread.SessionArray[i].nUserListIndex = 0;
+                        clientThread.SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+                        clientThread.SessionArray[i].SckHandle = 0;
+                        clientThread.SessionArray[i].SessionId = 0;
+                        clientThread.SessionArray[i] = null;
+                        break;
+                    }
+                }
                 _waitCloseList.Enqueue(e.SocHandle);
                 _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
             }

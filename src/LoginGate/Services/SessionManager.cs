@@ -29,33 +29,36 @@ namespace LoginGate
         /// <summary>
         /// 处理LoginSvr发送过来的消息
         /// </summary>
-        public async Task ProcessSendMessage()
+        public Task ProcessSendMessage()
         {
-            while (await _sendQueue.Reader.WaitToReadAsync())
-            {
-                if (_sendQueue.Reader.TryRead(out var message))
-                {
-                    var userSession = GetSession(message.MessageId);
-                    if (userSession == null)
-                    {
-                        return;
-                    }
-                    if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
-                    {
-                        if (message.Body[1] == (byte)'-')
-                        {
-                            userSession.CloseSession();
-                            Console.WriteLine("收到LoginSvr关闭会话请求");
-                        }
-                        else
-                        {
-                            userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
-                        }
-                        return;
-                    }
-                    userSession.ProcessSvrData(message);
-                }
-            }
+            return Task.Factory.StartNew(async () =>
+             {
+                 while (await _sendQueue.Reader.WaitToReadAsync())
+                 {
+                     while (_sendQueue.Reader.TryRead(out var message))
+                     {
+                         var userSession = GetSession(message.MessageId);
+                         if (userSession == null)
+                         {
+                             continue;
+                         }
+                         if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
+                         {
+                             if (message.Body[1] == (byte)'-')
+                             {
+                                 userSession.CloseSession();
+                                 Console.WriteLine("收到LoginSvr关闭会话请求");
+                             }
+                             else
+                             {
+                                 userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
+                             }
+                             return;
+                         }
+                         userSession.ProcessSvrData(message);
+                     }
+                 }
+             });
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)

@@ -1547,15 +1547,7 @@ namespace GameSvr
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, m_Abil.Exp, m_Abil.Level, 0, 0);
                     SendSocket(m_DefMsg);
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
-                    {
-                        GetOldAbil(ref OAbility);
-                        SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
-                    }
-                    else
-                    {
-                        SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
-                    }
+                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(m_nAntiMagic, 0), 0), HUtil32.MakeWord(m_btHitPoint, m_btSpeedPoint), HUtil32.MakeWord(m_btAntiPoison, m_nPoisonRecover), HUtil32.MakeWord(m_nHealthRecover, m_nSpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
@@ -1615,27 +1607,7 @@ namespace GameSvr
                     break;
                 case Grobal2.RM_ABILITY:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, m_nGold, HUtil32.MakeWord(m_btJob, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    if (m_nSoftVersionDateEx == 0 && m_dwClientTick == 0)
-                    {
-                        GetOldAbil(ref OAbility);
-                        SendSocket(m_DefMsg, EDcode.EncodeBuffer(OAbility));
-                        if (M2Share.g_Config.boOldClientShowHiLevel && m_Abil.Level > 255)
-                        {
-                            SysMsg(M2Share.g_sClientVersionTooOld, MsgColor.Red, MsgType.Hint);
-                            SysMsg("Level: " + m_Abil.Level, MsgColor.Green, MsgType.Hint);
-                            SysMsg("HP: " + m_WAbil.HP + '-' + m_WAbil.MaxHP, MsgColor.Blue, MsgType.Hint);
-                            SysMsg("MP: " + m_WAbil.MP + '-' + m_WAbil.MaxMP, MsgColor.Red, MsgType.Hint);
-                            SysMsg("AC: " + HUtil32.LoWord(m_WAbil.AC) + '-' + HUtil32.HiWord(m_WAbil.AC), MsgColor.Green, MsgType.Hint);
-                            SysMsg("MAC: " + HUtil32.LoWord(m_WAbil.MAC) + '-' + HUtil32.HiWord(m_WAbil.MAC), MsgColor.Blue, MsgType.Hint);
-                            SysMsg("DC: " + HUtil32.LoWord(m_WAbil.DC) + '-' + HUtil32.HiWord(m_WAbil.DC), MsgColor.Red, MsgType.Hint);
-                            SysMsg("MC: " + HUtil32.LoWord(m_WAbil.MC) + '-' + HUtil32.HiWord(m_WAbil.MC), MsgColor.Green, MsgType.Hint);
-                            SysMsg("SC: " + HUtil32.LoWord(m_WAbil.SC) + '-' + HUtil32.HiWord(m_WAbil.SC), MsgColor.Blue, MsgType.Hint);
-                        }
-                    }
-                    else
-                    {
-                        SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
-                    }
+                    SendSocket(m_DefMsg, EDcode.EncodeBuffer(m_WAbil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:
                     m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MP, BaseObject.m_WAbil.MaxHP);

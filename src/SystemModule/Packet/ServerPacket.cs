@@ -12,27 +12,27 @@ namespace SystemModule
         [ProtoMember(1)]
         public int? PacketLen
         {
-            get => (Message?.Length ?? 0) + (Packet?.Length ?? 0) + (CheckKey?.Length ?? 0) + ByteSize;
+            get => (Message?.Length ?? 0) + (Packet?.Length ?? 0) + (Sgin?.Length ?? 0) + ByteSize;
             private set => value = packlen;
         }
 
         [ProtoMember(2)]
         public int QueryId { get; set; }
         /// <summary>
-        /// 消息头,需要自行解密
+        /// 消息头
         /// </summary>
         [ProtoMember(3)]
         public byte[] Message { get; set; }
         /// <summary>
-        /// 消息封包，需要自行调用解密
+        /// 消息封包
         /// </summary>
         [ProtoMember(4)]
         public byte[] Packet { get; set; }
         /// <summary>
-        /// 已经解密，无需在解密
+        /// 验签
         /// </summary>
         [ProtoMember(5)]
-        public byte[] CheckKey { get; set; }
+        public byte[] Sgin { get; set; }
 
         private const int ByteSize = 1 + 4 + 4 + 2 + 2 + 2 + 1;
 
@@ -65,8 +65,7 @@ namespace SystemModule
             var checkLen = reader.ReadUInt16();
             if (checkLen > 0)
             {
-                CheckKey = reader.ReadBytes(checkLen);
-                CheckKey = EDcode.DecodeBuff(CheckKey);
+                Sgin = reader.ReadBytes(checkLen);
             }
             reader.ReadByte();//!
         }
@@ -80,8 +79,8 @@ namespace SystemModule
             writer.Write(Message, 0, Message.Length);
             writer.Write((ushort)Packet.Length);
             writer.Write(Packet, 0, Packet.Length);
-            writer.Write((ushort)CheckKey.Length);
-            writer.Write(CheckKey, 0, CheckKey.Length);
+            writer.Write((ushort)Sgin.Length);
+            writer.Write(Sgin, 0, Sgin.Length);
             writer.Write((byte)'!');
         }
     }

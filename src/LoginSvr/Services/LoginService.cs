@@ -137,7 +137,7 @@ namespace LoginSvr
         {
             while (await _receiveQueue.Reader.WaitToReadAsync())
             {
-                if (_receiveQueue.Reader.TryRead(out var message))
+                while (_receiveQueue.Reader.TryRead(out var message))
                 {
                     ProcessGateData(message);
                 }
@@ -152,7 +152,7 @@ namespace LoginSvr
         {
             while (await _processUserQueue.Reader.WaitToReadAsync())
             {
-                if (_processUserQueue.Reader.TryRead(out var message))
+                while (_processUserQueue.Reader.TryRead(out var message))
                 {
                     DecodeUserData(message.UserInfo, message.Msg);
                 }
