@@ -8,6 +8,9 @@
         <DebugType>embedded</DebugType>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
     </PropertyGroup>
     <Choose>
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">

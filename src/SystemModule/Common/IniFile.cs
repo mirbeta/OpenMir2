@@ -284,10 +284,11 @@ namespace SystemModule.Common
             }
         Label_02AE:
             rd.Close();
-            if (ConfigCount <= 0)
+            rd.Dispose();
+            /*if (ConfigCount <= 0)
             {
                 throw new Exception($"配置文件[{FileName}]不存在或配置文件内容为空。");
-            }
+            }*/
         }
 
         public void ReLoad()
@@ -377,12 +378,32 @@ namespace SystemModule.Common
 
         protected void WriteBool(string section, string key, bool val)
         {
-            //Console.WriteLine("todo ini WriteBool");
+            if (!this.iniCahce.ContainsKey(section))
+            {
+                this.iniCahce.Add(section, new Dictionary<string, string>());
+            }
+            if (!string.IsNullOrEmpty(key))
+            {
+                Dictionary<string, string> secTbl = this.iniCahce[section];
+                secTbl[key] = (val ? 1 : 0).ToString();
+            }
         }
 
         protected void WriteInteger(string section, string key, object val)
         {
-            //Console.WriteLine("todo ini WriteInteger");
+            if (val == null)
+            {
+                return;
+            }
+            if (!this.iniCahce.ContainsKey(section))
+            {
+                this.iniCahce.Add(section, new Dictionary<string, string>());
+            }
+            if (!string.IsNullOrEmpty(key))
+            {
+                Dictionary<string, string> secTbl = this.iniCahce[section];
+                secTbl[key] = val.ToString();
+            }
         }
 
         protected void WriteDateTime(string section, string key, DateTime val)
@@ -407,7 +428,7 @@ namespace SystemModule.Common
             }
         }
 
-        protected string FileName
+        private string FileName
         {
             get
             {
