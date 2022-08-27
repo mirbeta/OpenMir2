@@ -1,17 +1,28 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LoginSvr.Conf;
+using LoginSvr.DB;
+using LoginSvr.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule;
 
 namespace LoginSvr
 {
     class Program
     {
         private static PeriodicTimer _timer;
+        private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         static async Task Main(string[] args)
@@ -21,7 +32,7 @@ namespace LoginSvr
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                //GateShare.ShowLog = true;
+                LsShare.ShowLog = true;
                 if (_timer != null)
                 {
                     _timer.Dispose();
@@ -29,18 +40,35 @@ namespace LoginSvr
                 AnsiConsole.Reset();
             };
 
+            var config = new ConfigurationBuilder().Build();
+
+            LogManager.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                .GetCurrentClassLogger();
+            
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+                    services.AddSingleton<MirLog>();
+                    services.AddSingleton<MasSocService>();
+                    services.AddSingleton<LoginService>();
+                    services.AddSingleton<AccountDB>();
+                    services.AddSingleton<ThreadParseList>();
                     services.AddSingleton<AppServer>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+
+            _host = await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
             Stop();
         }
-
 
         static void Stop()
         {
@@ -96,49 +124,57 @@ namespace LoginSvr
             return Task.CompletedTask;
         }
 
-        private static Task ShowServerStatus()
+        private static async Task ShowServerStatus()
         {
-            //GateShare.ShowLog = false;
-            //_timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            //var serverList = ServerManager.Instance.GetServerList();
-            //var table = new Table().Expand().BorderColor(Color.Grey);
-            //table.AddColumn("[yellow]Address[/]");
-            //table.AddColumn("[yellow]Port[/]");
-            //table.AddColumn("[yellow]Status[/]");
-            //table.AddColumn("[yellow]Online[/]");
-            //table.AddColumn("[yellow]Send[/]");
-            //table.AddColumn("[yellow]Revice[/]");
-            //table.AddColumn("[yellow]Queue[/]");
+            LsShare.ShowLog = false;
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+            var masSocService = (MasSocService)_host.Services.GetService(typeof(MasSocService));
+            var serverList = masSocService?.ServerList;
+            var table = new Table().Expand().BorderColor(Color.Grey);
+            table.AddColumn("[yellow]Server[/]");
+            table.AddColumn("[yellow]EndPoint[/]");
+            table.AddColumn("[yellow]Status[/]");
+            table.AddColumn("[yellow]Online[/]");
 
-            //await AnsiConsole.Live(table)
-            //     .AutoClear(true)
-            //     .Overflow(VerticalOverflow.Crop)
-            //     .Cropping(VerticalOverflowCropping.Bottom)
-            //     .StartAsync(async ctx =>
-            //     {
-            //         foreach (var _ in Enumerable.Range(0, 10))
-            //         {
-            //             table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
-            //         }
+            await AnsiConsole.Live(table)
+                 .AutoClear(true)
+                 .Overflow(VerticalOverflow.Crop)
+                 .Cropping(VerticalOverflowCropping.Bottom)
+                 .StartAsync(async ctx =>
+                 {
+                     foreach (var _ in Enumerable.Range(0, 10))
+                     {
+                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
+                     }
 
-            //         while (await _timer.WaitForNextTickAsync(cts.Token))
-            //         {
-            //             for (int i = 0; i < serverList.Count; i++)
-            //             {
-            //                 var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
-
-            //                 table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
-            //                 table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
-            //                 table.UpdateCell(i, 2, ($"[bold]{Status}[/]"));
-            //                 table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
-            //                 table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
-            //                 table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
-            //                 table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
-            //             }
-            //             ctx.Refresh();
-            //         }
-            //     });
-            return Task.CompletedTask;
+                     while (await _timer.WaitForNextTickAsync(cts.Token))
+                     {
+                         for (int i = 0; i < serverList.Count; i++)
+                         {
+                             var msgServer = serverList[i];
+                             if (!string.IsNullOrEmpty(msgServer.sServerName))
+                             {
+                                 var serverType = msgServer.nServerIndex == 99 ? " (DB)" : " (GameSvr)";
+                                 table.UpdateCell(i, 0, $"[bold]{msgServer.sServerName}{serverType}[/]");
+                                 table.UpdateCell(i, 1, ($"[bold]{msgServer.EndPoint}[/]"));
+                                 if (!msgServer.Socket.Connected)
+                                 {
+                                     table.UpdateCell(i, 2, ($"[red]Not Connected[/]"));
+                                 }
+                                 else if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)
+                                 {
+                                     table.UpdateCell(i, 2, ($"[green]Connected[/]"));
+                                 }
+                                 else
+                                 {
+                                     table.UpdateCell(i, 2, ($"[red]Timeout[/]"));
+                                 }
+                             }
+                             table.UpdateCell(i, 3, ($"[bold]{msgServer.nOnlineCount}[/]"));
+                         }
+                         ctx.Refresh();
+                     }
+                 });
         }
 
         static void PrintUsage()

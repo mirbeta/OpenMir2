@@ -1,7 +1,12 @@
+using GameSvr.Actor;
+using GameSvr.Event;
+using GameSvr.Items;
+using GameSvr.Maps;
 using System.Collections;
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {
@@ -63,7 +68,7 @@ namespace GameSvr
                                 {
                                     if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 13 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 13)
                                     {
-                                        SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
+                                        SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
                                         m_btDirection = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
@@ -134,7 +139,7 @@ namespace GameSvr
                                     DelTargetCreat();
                                     if (m_boProtectStatus) // 守护状态
                                     {
-                                        SpaceMove(m_ManagedEnvir.sMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
+                                        SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
                                         m_btDirection = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
@@ -473,7 +478,7 @@ namespace GameSvr
             CellObject OSObject;
             TBaseObject BaseObject;
             MapItem MapItem;
-            Event MapEvent;
+            MirEvent MapEvent;
             TVisibleBaseObject VisibleBaseObject;
             VisibleMapItem VisibleMapItem;
             int nVisibleFlag;
@@ -629,7 +634,7 @@ namespace GameSvr
                                                 {
                                                     if (OSObject.CellObj != null)
                                                     {
-                                                        MapEvent = (Event)OSObject.CellObj;
+                                                        MapEvent = (MirEvent)OSObject.CellObj;
                                                         UpdateVisibleEvent(n18, n1C, MapEvent);
                                                     }
                                                 }
@@ -795,7 +800,7 @@ namespace GameSvr
                         try
                         {
                             MapEvent = m_VisibleEvents[position];
-                            nVisibleFlag = MapEvent.nVisibleFlag;
+                            nVisibleFlag = MapEvent.VisibleFlag;
                         }
                         catch
                         {
@@ -808,7 +813,7 @@ namespace GameSvr
                         }
                         if (MapEvent != null)
                         {
-                            switch (MapEvent.nVisibleFlag)
+                            switch (MapEvent.VisibleFlag)
                             {
                                 case 0:
                                     SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.m_nX, MapEvent.m_nY, "");
@@ -819,11 +824,11 @@ namespace GameSvr
                                     }
                                     break;
                                 case 1:
-                                    MapEvent.nVisibleFlag = 0;
+                                    MapEvent.VisibleFlag = 0;
                                     break;
                                 case 2:
-                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.m_nEventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
-                                    MapEvent.nVisibleFlag = 0;
+                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.m_nX, MapEvent.m_nEventParam), MapEvent.m_nY, "");
+                                    MapEvent.VisibleFlag = 0;
                                     break;
                             }
                         }

@@ -4,18 +4,10 @@ using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
-namespace LoginSvr
+namespace LoginSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        private static string fileName = Path.Combine(AppContext.BaseDirectory, "Logsrv.conf");
-        private static readonly ConfigManager instance = new ConfigManager(fileName);
-
-        public static ConfigManager Instance
-        {
-            get { return instance; }
-        }
-
         const string sSectionServer = "Server";
         const string sSectionDB = "DB";
         private const string sDB = "DataBase";
@@ -69,9 +61,8 @@ namespace LoginSvr
             Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
             Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
             Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
-            Config.ShowDetailMsg = LoadConfig_LoadConfigBoolean(sSectionServer, "ShowDetailMsg", Config.ShowDetailMsg);
-            Config.ShowLogLevel = ReadInteger("Integer", "ShowLogLevel", Config.ShowLogLevel);
-            Config.ShowDebugLog = ReadBool("Integer", "ShowDebugLog", Config.ShowDebugLog);
+            Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
+            Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
         }
 
         private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
@@ -135,7 +126,7 @@ namespace LoginSvr
             string sRemote = string.Empty;
             string sPublic = string.Empty;
             string sGatePort = string.Empty;
-            string sFileName = "!AddrTable.txt";
+            string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
             StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {

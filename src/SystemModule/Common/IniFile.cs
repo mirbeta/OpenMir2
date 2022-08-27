@@ -17,9 +17,19 @@ namespace SystemModule.Common
 
         public int ConfigCount => iniCahce.Count;
 
+        protected IniFile()
+        {
+
+        }
+        
         protected IniFile(string fileName)
         {
             this.FileName = fileName;
+        }
+
+        protected void Clear()
+        {
+            iniCahce.Clear();
         }
 
         protected bool ContainSectionName(string secName)
@@ -194,7 +204,7 @@ namespace SystemModule.Common
             return "";
         }
 
-        protected void Load()
+        public void Load()
         {
             if (!File.Exists(this.FileName))
             {
@@ -278,6 +288,12 @@ namespace SystemModule.Common
             {
                 throw new Exception($"配置文件[{FileName}]不存在或配置文件内容为空。");
             }
+        }
+
+        public void ReLoad()
+        {
+            iniCahce.Clear();
+            Load();
         }
 
         private string ReadLine(StreamReader rd)

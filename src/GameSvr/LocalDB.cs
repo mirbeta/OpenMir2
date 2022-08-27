@@ -1,6 +1,11 @@
+using GameSvr.Actor;
+using GameSvr.Monster;
+using GameSvr.Npc;
 using System.Collections;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -128,7 +133,7 @@ namespace GameSvr
                             s14 = HUtil32.GetValidStrCap(s14, ref s1C, new[] { " " });
                             if (!string.IsNullOrEmpty(s1C) && s1C[0] == '\"')
                             {
-                                HUtil32.ArrestStringEx(s1C, '\"', '\"', ref s1C);
+                                HUtil32.ArrestStringEx(s1C, "\"", "\"", ref s1C);
                             }
                             s14 = HUtil32.GetValidStr3(s14, ref s20, new[] { ' ' });
                             s14 = HUtil32.GetValidStr3(s14, ref s24, new[] { ' ', ',' });
@@ -181,7 +186,7 @@ namespace GameSvr
                             M2Share.g_MakeItemList.Add(sItemName, List28);
                         }
                         List28 = new List<TMakeItem>();
-                        HUtil32.ArrestStringEx(sLine, '[', ']', ref sItemName);
+                        HUtil32.ArrestStringEx(sLine, "[", "]", ref sItemName);
                     }
                     else
                     {
@@ -250,7 +255,6 @@ namespace GameSvr
             try
             {
                 var sScriptFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapQuest_def", "QManage.txt");
-                var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
                 var sScritpDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapQuest_def");
                 if (!Directory.Exists(sScritpDir))
                 {
@@ -258,6 +262,7 @@ namespace GameSvr
                 }
                 if (!File.Exists(sScriptFile))
                 {
+                    var sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
                     var SaveList = new StringList();
                     SaveList.Add(";此脚为登录脚本，人物每次登录时都会执行此脚本，所有人物初始设置都可以放在此脚本中。");
                     SaveList.Add(";修改脚本内容，可用@ReloadManage命令重新加载该脚本，不须重启程序。");
@@ -444,7 +449,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sName, new[] { " ", "\t" });
                         if (!string.IsNullOrEmpty(sName) && sName[0] == '\"')
                         {
-                            HUtil32.ArrestStringEx(sName, '\"', '\"', ref sName);
+                            HUtil32.ArrestStringEx(sName, "\"", "\"", ref sName);
                         }
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, new[] { " ", "\t" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, new[] { " ", "\t" });
@@ -751,7 +756,7 @@ namespace GameSvr
                             {
                                 if (string.IsNullOrEmpty(s18))
                                 {
-                                    HUtil32.ArrestStringEx(s1C, '[', ']', ref s18);
+                                    HUtil32.ArrestStringEx(s1C, "[", "]", ref s18);
                                     QDDinfoList = new List<TQDDinfo>();
                                     QDDinfo = new TQDDinfo
                                     {
@@ -1021,7 +1026,7 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sCharName, new[] { " ", "\t" });
                     if (sCharName != "" && sCharName[0] == '\"')
                     {
-                        HUtil32.ArrestStringEx(sCharName, '\"', '\"', ref sCharName);
+                        HUtil32.ArrestStringEx(sCharName, "\"", "\"", ref sCharName);
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, new[] { " ", "\t" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, new[] { " ", "\t" });

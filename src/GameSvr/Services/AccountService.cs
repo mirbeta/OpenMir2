@@ -1,20 +1,23 @@
 using System.Collections;
 using SystemModule;
+using SystemModule.Data;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class AccountService
     {
         private int _dwClearEmptySessionTick = 0;
         private readonly IList<TSessInfo> m_SessionList = null;
-        private readonly IClientScoket _clientScoket;
+        private readonly ClientScoket _clientScoket;
 
         public AccountService()
         {
             m_SessionList = new List<TSessInfo>();
             M2Share.g_Config.boIDSocketConnected = false;
-            _clientScoket = new IClientScoket();
+            _clientScoket = new ClientScoket();
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
@@ -44,7 +47,8 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
             try
             {
-                M2Share.g_Config.sIDSocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                var recvText=HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                M2Share.g_Config.sIDSocketRecvText += recvText;
             }
             finally
             {
@@ -83,7 +87,7 @@ namespace GameSvr
         public void SendHumanLogOutMsg(string sUserId, int nId)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            for (int i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < m_SessionList.Count; i++)
             {
                 var sessInfo = m_SessionList[i];
                 if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId)
@@ -243,11 +247,11 @@ namespace GameSvr
             sessInfo.sAccount = sAccount;
             sessInfo.sIPaddr = sIPaddr;
             sessInfo.nSessionID = nSessionID;
-            sessInfo.nPayMent = nPayMent;
-            sessInfo.nPayMode = nPayMode;
-            sessInfo.nSessionStatus = 0;
+            sessInfo.PayMent = nPayMent;
+            sessInfo.PayMode = nPayMode;
+            sessInfo.SessionStatus = 0;
             sessInfo.dwStartTick = HUtil32.GetTickCount();
-            sessInfo.dwActiveTick = HUtil32.GetTickCount();
+            sessInfo.ActiveTick = HUtil32.GetTickCount();
             sessInfo.nRefCount = 1;
             m_SessionList.Add(sessInfo);
         }
@@ -272,7 +276,7 @@ namespace GameSvr
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.GateManager.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.nPayMode);
+                    M2Share.GateManager.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.PayMode);
                 }
             }
             catch (Exception e)
@@ -300,10 +304,10 @@ namespace GameSvr
             nPayMode = 0;
             for (var i = 0; i < m_SessionList.Count; i++)
             {
-                var SessInfo = m_SessionList[i];
-                if (SessInfo.nSessionID == nSessionID && SessInfo.sAccount == sAccount)
+                var sessInfo = m_SessionList[i];
+                if (sessInfo.nSessionID == nSessionID && sessInfo.sAccount == sAccount)
                 {
-                    switch (SessInfo.nPayMent)
+                    switch (sessInfo.PayMent)
                     {
                         case 2:
                             nPayMent = 3;
@@ -315,8 +319,8 @@ namespace GameSvr
                             nPayMent = 1;
                             break;
                     }
-                    result = SessInfo;
-                    nPayMode = SessInfo.nPayMode;
+                    result = sessInfo;
+                    nPayMode = sessInfo.PayMode;
                     boFound = true;
                     break;
                 }
@@ -409,10 +413,7 @@ namespace GameSvr
             }
         }
     }
-}
 
-namespace GameSvr
-{
     public class IdSrvClient
     {
         private static AccountService instance = null;

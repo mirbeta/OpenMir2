@@ -1,20 +1,23 @@
+using SystemModule.Common;
 
 namespace LoginGate.Conf
 {
     /// <summary>
     /// 网关配置类
     /// </summary>
-    public class GateConfig
+    public class GateConfig : IniFile
     {
-        public string m_szTitle;
-        public int m_nShowLogLevel;
+        public int ShowLogLevel;
         public bool ShowDebugLog;
-        public int m_nGateCount;
-        public GameGateInfo[] m_xGameGateList;
+        public int GateCount;
+        private GameGateInfo[] GameGateList;
         public bool m_fCheckNewIDOfIP;
         public bool m_fCheckNullSession;
         public bool m_fOverSpeedSendBack;
-        public bool m_fDefenceCCPacket;
+        /// <summary>
+        /// 是否启用CC封包检测
+        /// </summary>
+        public bool DefenceCCPacket;
         public bool m_fKickOverSpeed;
         public bool m_fKickOverPacketSize;
         public int m_nCheckNewIDOfIP;
@@ -26,22 +29,21 @@ namespace LoginGate.Conf
 
         public GateConfig()
         {
-            m_nGateCount = 1;
-            m_xGameGateList = new GameGateInfo[32];
-            for (int i = 0; i < m_xGameGateList.Length; i++)
+            GateCount = 1;
+            GameGateList = new GameGateInfo[32];
+            for (var i = 0; i < GameGateList.Length; i++)
             {
-                m_xGameGateList[i].sServerAdress = "127.0.0.1";
-                m_xGameGateList[i].nServerPort = 5500;
-                m_xGameGateList[i].nGatePort = 7000 + i;
+                GameGateList[i].LoginAdress = "127.0.0.1";
+                GameGateList[i].LoginPort = 5500;
+                GameGateList[i].GatePort = 7000 + i;
             }
-            m_nShowLogLevel = 5;
+            ShowLogLevel = 5;
             m_fCheckNewIDOfIP = true;
             m_fCheckNullSession = true;
             m_fOverSpeedSendBack = false;
-            m_fDefenceCCPacket = false;
+            DefenceCCPacket = false;
             m_fKickOverSpeed = false;
             m_fKickOverPacketSize = true;
-
             m_nNomClientPacketSize = 400;
             m_nMaxConnectOfIP = 20;
             m_nCheckNewIDOfIP = 5;

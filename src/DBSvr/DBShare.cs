@@ -2,22 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Packet.ClientPackets;
 
 namespace DBSvr
 {
     public class DBShare
     {
-        public static string sGateConfFileName = "!ServerInfo.txt";
-        private static string sServerIPConfFileNmae = "!AddrTable.txt";
-        private static string sGateIDConfFileName = "SelectID.txt";
+        public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");
+        private static readonly string ServerIpConfFileNmae = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
+        private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
         public static StringList DenyChrNameList = null;
-        private static Hashtable ServerIPList = null;
-        private static Dictionary<string, short> GateIDList = null;
-        public static StringList g_ClearMakeIndex = null;
-        public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
+        private static Hashtable _serverIpList = null;
+        private static Dictionary<string, short> _gateIdList = null;
+        public static readonly StringList ClearMakeIndex = null;
+        public static readonly TRouteInfo[] RouteInfo = new TRouteInfo[20];
+        public static bool ShowLog = true;
 
         private static void LoadGateID()
         {
@@ -25,11 +28,11 @@ namespace DBSvr
             string sLineText;
             string sID = string.Empty;
             string sIPaddr = string.Empty;
-            GateIDList.Clear();
-            if (File.Exists(sGateIDConfFileName))
+            _gateIdList.Clear();
+            if (File.Exists(GateIdConfFileName))
             {
                 LoadList = new StringList();
-                LoadList.LoadFromFile(sGateIDConfFileName);
+                LoadList.LoadFromFile(GateIdConfFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
@@ -44,7 +47,7 @@ namespace DBSvr
                     {
                         continue;
                     }
-                    GateIDList.Add(sIPaddr, (short)nID);
+                    _gateIdList.Add(sIPaddr, (short)nID);
                 }
                 LoadList = null;
             }
@@ -53,33 +56,33 @@ namespace DBSvr
         public static short GetGateID(string sIPaddr)
         {
             short result = 0;
-            if (GateIDList.ContainsKey(sIPaddr))
+            if (_gateIdList.ContainsKey(sIPaddr))
             {
-                return GateIDList[sIPaddr];
+                return _gateIdList[sIPaddr];
             }
             return result;
         }
 
         private static void LoadIPTable()
         {
-            ServerIPList.Clear();
+            _serverIpList.Clear();
             try
             {
                 var stringList = new StringList();
-                stringList.LoadFromFile(sServerIPConfFileNmae);
+                stringList.LoadFromFile(ServerIpConfFileNmae);
                 for (var i = 0; i < stringList.Count; i++)
                 {
-                    if (ServerIPList.ContainsKey(stringList[i]))
+                    if (_serverIpList.ContainsKey(stringList[i]))
                     {
                         continue;
                     }
-                    ServerIPList.Add(stringList[i], stringList[i]);
+                    _serverIpList.Add(stringList[i], stringList[i]);
                 }
                 stringList = null;
             }
             catch
             {
-                MainOutMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错!!!");
+                //MainOutMessage("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
             }
         }
 
@@ -167,7 +170,7 @@ namespace DBSvr
         public static bool InClearMakeIndexList(int nIndex)
         {
             bool result = false;
-            for (var i = 0; i < g_ClearMakeIndex.Count; i++)
+            for (var i = 0; i < ClearMakeIndex.Count; i++)
             {
                 //if (nIndex == ((int)g_ClearMakeIndex.Values[i]))
                 //{
@@ -181,23 +184,18 @@ namespace DBSvr
         public static bool CheckServerIP(string sIP)
         {
             bool result = false;
-            if (ServerIPList.ContainsKey(sIP))
+            if (_serverIpList.ContainsKey(sIP))
             {
                 return true;
             }
             return result;
         }
 
-        public static void MainOutMessage(string sMsg)
-        {
-            LogQueue.Instance.Enqueue(sMsg, 1);
-        }
-
         public static void Initialization()
         {
             DenyChrNameList = new StringList();
-            ServerIPList = new Hashtable();
-            GateIDList = new Dictionary<string, short>();
+            _serverIpList = new Hashtable();
+            _gateIdList = new Dictionary<string, short>();
         }
     }
 
@@ -243,13 +241,24 @@ namespace DBSvr
     public class TGateInfo
     {
         public Socket Socket;
-        public string sGateaddr;
+        public EndPoint RemoteEndPoint;
+        public EndPoint LoclEndPoint;
         public IList<TUserInfo> UserList;
-        public long dwTick10;
         /// <summary>
         /// 网关ID
         /// </summary>
         public short nGateID;
+        public int ConnectTick;
+
+        public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()
+        {
+            return (RemoteEndPoint.ToString(), GetConnected(), UserList.Count.ToString(), "", "", "");
+        }
+
+        private string GetConnected()
+        {
+            return Socket.Connected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+        }
     }
 
     public class TUserInfo

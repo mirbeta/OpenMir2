@@ -1,23 +1,25 @@
 ﻿using SystemModule;
-using SystemModule.Sockets;
+using SystemModule.Packet.ClientPackets;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class DBService
     {
-        private readonly IClientScoket _clientScoket;
-        private static int packetLen = 0;
-        private byte[] DBSocketRecvBuff;
-        private bool DBSocketWorking = false;
+        private readonly ClientScoket _clientScoket;
+        private static int _packetLen = 0;
+        private byte[] _recvBuff;
+        private bool _socketWorking = false;
 
         public DBService()
         {
-            _clientScoket = new IClientScoket();
+            _clientScoket = new ClientScoket();
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.ReceivedDatagram += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
-            DBSocketWorking = false;
+            _socketWorking = false;
         }
 
         public void Start()
@@ -49,7 +51,7 @@ namespace GameSvr
             {
                 return false;
             }
-            DBSocketRecvBuff = null;
+            _recvBuff = null;
 
             var requestPacket = new RequestServerPacket();
             requestPacket.QueryId = nQueryID;
@@ -67,13 +69,13 @@ namespace GameSvr
         private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = false;
-            M2Share.ErrorMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]断开连接...");
+            M2Share.ErrorMessage("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
         }
 
         private void DbScoketConnected(object sender, DSCClientConnectedEventArgs e)
         {
             _clientScoket.IsConnected = true;
-            M2Share.MainOutMessage("数据库服务器[" + e.RemoteAddress + ':' + e.RemotePort + "]连接成功...", messageColor: System.ConsoleColor.Green);
+            M2Share.MainOutMessage("数据库服务器[" + e.RemoteEndPoint + "]连接成功...", messageColor: System.ConsoleColor.Green);
         }
 
         private void DBSocketError(object sender, DSCClientErrorEventArgs e)
@@ -99,38 +101,38 @@ namespace GameSvr
             try
             {
                 var data = e.Buff;
-                if (packetLen == 0 && data[0] == (byte)'#')
+                if (_packetLen == 0 && data[0] == (byte)'#')
                 {
-                    packetLen = BitConverter.ToInt32(data[1..5]);
+                    _packetLen = BitConverter.ToInt32(data[1..5]);
                 }
-                if (DBSocketRecvBuff != null && DBSocketRecvBuff.Length > 0)
+                if (_recvBuff != null && _recvBuff.Length > 0)
                 {
-                    var tempBuff = new byte[DBSocketRecvBuff.Length + e.BuffLen];
-                    Buffer.BlockCopy(DBSocketRecvBuff, 0, tempBuff, 0, DBSocketRecvBuff.Length);
-                    Buffer.BlockCopy(e.Buff, 0, tempBuff, DBSocketRecvBuff.Length, e.BuffLen);
-                    DBSocketRecvBuff = tempBuff;
+                    var tempBuff = new byte[_recvBuff.Length + e.BuffLen];
+                    Buffer.BlockCopy(_recvBuff, 0, tempBuff, 0, _recvBuff.Length);
+                    Buffer.BlockCopy(e.Buff, 0, tempBuff, _recvBuff.Length, e.BuffLen);
+                    _recvBuff = tempBuff;
                 }
                 else
                 {
-                    DBSocketRecvBuff = e.Buff;
+                    _recvBuff = e.Buff;
                 }
-                var len = DBSocketRecvBuff.Length - packetLen;
+                var len = _recvBuff.Length - _packetLen;
                 if (len > 0)
                 {
                     var tempBuff = new byte[len];
-                    Buffer.BlockCopy(DBSocketRecvBuff, packetLen, tempBuff, 0, len);
-                    data = DBSocketRecvBuff[..packetLen];
-                    DBSocketRecvBuff = tempBuff;
-                    DBSocketWorking = true;
+                    Buffer.BlockCopy(_recvBuff, _packetLen, tempBuff, 0, len);
+                    data = _recvBuff[.._packetLen];
+                    _recvBuff = tempBuff;
+                    _socketWorking = true;
                     ProcessData(data);
-                    packetLen = tempBuff.Length;
+                    _packetLen = tempBuff.Length;
                 }
                 else if (len == 0)
                 {
-                    DBSocketWorking = true;
-                    ProcessData(DBSocketRecvBuff);
-                    DBSocketRecvBuff = null;
-                    packetLen = 0;
+                    _socketWorking = true;
+                    ProcessData(_recvBuff);
+                    _recvBuff = null;
+                    _packetLen = 0;
                 }
             }
             finally
@@ -143,8 +145,8 @@ namespace GameSvr
         {
             try
             {
-                if (!DBSocketWorking) return;
-                var responsePacket = Packets.ToPacket<RequestServerPacket>(data);
+                if (!_socketWorking) return;
+                var responsePacket = SystemModule.Packet.Packets.ToPacket<RequestServerPacket>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;
@@ -166,7 +168,7 @@ namespace GameSvr
             }
             finally
             {
-                DBSocketWorking = false;
+                _socketWorking = false;
             }
         }
     }

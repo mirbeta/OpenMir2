@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("ShutupRelease", "恢复禁言", M2Share.g_sGameCommandShutupReleaseHelpMsg, 10)]
     public class ShutupReleaseCommand : BaseCommond

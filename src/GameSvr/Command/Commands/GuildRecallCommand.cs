@@ -1,7 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Castle;
+using GameSvr.Guild;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 行会传送，行会掌门人可以将整个行会成员全部集中。

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     /// <summary>
     /// 多选器

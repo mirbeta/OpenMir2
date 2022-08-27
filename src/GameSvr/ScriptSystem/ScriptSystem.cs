@@ -1,9 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using GameSvr.Npc;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.ScriptSystem
 {
     public class ScriptSystem
     {
@@ -101,7 +102,7 @@ namespace GameSvr
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
-            var s1C = string.Empty;
+            var sLable = string.Empty;
             var callList = new StringList();
             for (var i = 0; i < LoadList.Count; i++)
             {
@@ -109,8 +110,8 @@ namespace GameSvr
                 callList.AppendText(sLine);
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL", "#CALL".Length))
                 {
-                    sLine = HUtil32.ArrestStringEx(sLine, '[', ']', ref s1C);
-                    var sCallScriptFile = GetCallScriptPath(s1C.Trim());
+                    sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
+                    var sCallScriptFile = GetCallScriptPath(sLable.Trim());
                     var s18 = sLine.Trim();
                     var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "QuestDiary", sCallScriptFile);
                     if (sCallScriptDict.ContainsKey(sFileName))
@@ -753,27 +754,27 @@ namespace GameSvr
                 QuestConditionInfo.nCmdCode = nCMDCode;
                 if (sParam1 != "" && sParam1[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam1, '\"', '\"', ref sParam1);
+                    HUtil32.ArrestStringEx(sParam1, "\"", "\"", ref sParam1);
                 }
                 if (sParam2 != "" && sParam2[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam2, '\"', '\"', ref sParam2);
+                    HUtil32.ArrestStringEx(sParam2, "\"", "\"", ref sParam2);
                 }
                 if (sParam3 != "" && sParam3[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam3, '\"', '\"', ref sParam3);
+                    HUtil32.ArrestStringEx(sParam3, "\"", "\"", ref sParam3);
                 }
                 if (sParam4 != "" && sParam4[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam4, '\"', '\"', ref sParam4);
+                    HUtil32.ArrestStringEx(sParam4, "\"", "\"", ref sParam4);
                 }
                 if (sParam5 != "" && sParam5[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam5, '\"', '\"', ref sParam5);
+                    HUtil32.ArrestStringEx(sParam5, "\"", "\"", ref sParam5);
                 }
                 if (sParam6 != "" && sParam6[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam6, '\"', '\"', ref sParam6);
+                    HUtil32.ArrestStringEx(sParam6, "\"", "\"", ref sParam6);
                 }
                 QuestConditionInfo.sParam1 = sParam1;
                 QuestConditionInfo.sParam2 = sParam2;
@@ -835,7 +836,7 @@ namespace GameSvr
                 case M2Share.sSET:
                     {
                         nCMDCode = M2Share.nSET;
-                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
                             nCMDCode = 0;
@@ -849,7 +850,7 @@ namespace GameSvr
                 case M2Share.sRESET:
                     {
                         nCMDCode = M2Share.nRESET;
-                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
                             nCMDCode = 0;
@@ -863,7 +864,7 @@ namespace GameSvr
                 case M2Share.sSETOPEN:
                     {
                         nCMDCode = M2Share.nSETOPEN;
-                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
                             nCMDCode = 0;
@@ -877,7 +878,7 @@ namespace GameSvr
                 case M2Share.sSETUNIT:
                     {
                         nCMDCode = M2Share.nSETUNIT;
-                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
                             nCMDCode = 0;
@@ -891,7 +892,7 @@ namespace GameSvr
                 case M2Share.sRESETUNIT:
                     {
                         nCMDCode = M2Share.nRESETUNIT;
-                        HUtil32.ArrestStringEx(sParam1, '[', ']', ref sParam1);
+                        HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
                         if (!HUtil32.IsStringNumber(sParam1))
                         {
                             nCMDCode = 0;
@@ -1368,27 +1369,27 @@ namespace GameSvr
                 QuestActionInfo.nCmdCode = nCMDCode;
                 if (sParam1 != "" && sParam1[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam1, '\"', '\"', ref sParam1);
+                    HUtil32.ArrestStringEx(sParam1, "\"", "\"", ref sParam1);
                 }
                 if (sParam2 != "" && sParam2[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam2, '\"', '\"', ref sParam2);
+                    HUtil32.ArrestStringEx(sParam2, "\"", "\"", ref sParam2);
                 }
                 if (sParam3 != "" && sParam3[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam3, '\"', '\"', ref sParam3);
+                    HUtil32.ArrestStringEx(sParam3, "\"", "\"", ref sParam3);
                 }
                 if (sParam4 != "" && sParam4[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam4, '\"', '\"', ref sParam4);
+                    HUtil32.ArrestStringEx(sParam4, "\"", "\"", ref sParam4);
                 }
                 if (sParam5 != "" && sParam5[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam5, '\"', '\"', ref sParam5);
+                    HUtil32.ArrestStringEx(sParam5, "\"", "\"", ref sParam5);
                 }
                 if (sParam6 != "" && sParam6[0] == '\"')
                 {
-                    HUtil32.ArrestStringEx(sParam6, '\"', '\"', ref sParam6);
+                    HUtil32.ArrestStringEx(sParam6, "\"", "\"", ref sParam6);
                 }
                 QuestActionInfo.sParam1 = sParam1;
                 QuestActionInfo.sParam2 = sParam2;

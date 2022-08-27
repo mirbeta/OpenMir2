@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SystemModule;
+namespace SystemModule.Data;
 
 public struct TMonInfo
 {

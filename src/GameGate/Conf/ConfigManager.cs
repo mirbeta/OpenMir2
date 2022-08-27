@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using SystemModule.Common;
 
-namespace GameGate
+namespace GameGate.Conf
 {
     public class ConfigManager : IniFile
     {
@@ -10,10 +10,7 @@ namespace GameGate
 
         private static readonly ConfigManager instance = new ConfigManager(fileName);
 
-        public static ConfigManager Instance
-        {
-            get { return instance; }
-        }
+        public static ConfigManager Instance => instance;
 
         public GateConfig GateConfig;
         public GameGateInfo[] GameGateList;
@@ -26,14 +23,20 @@ namespace GameGate
             for (int i = 0; i < GameGateList.Length; i++)
             {
                 GameGateList[i] = new GameGateInfo();
-                GameGateList[i].sServerAdress = "127.0.0.1";
-                GameGateList[i].nGatePort = 7200 + i;
-                GameGateList[i].nServerPort = 5000;
+                GameGateList[i].ServerAdress = "127.0.0.1";
+                GameGateList[i].ServerPort = 5000;
+                GameGateList[i].GateAddress = "127.0.0.1";
+                GameGateList[i].GatePort = 7200 + i;
             }
         }
 
         public void LoadConfig()
         {
+            GateConfig.MessageThread = ReadInteger("Integer", "MessageThread", GateConfig.MessageThread);
+            if (GateConfig.MessageThread > 4)
+            {
+                GateConfig.MessageThread = 4;
+            }
             GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
             GateConfig.m_szOverClientCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.m_szOverClientCntMsg);
             GateConfig.m_szHWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.m_szHWIDBlockedMsg);
@@ -116,25 +119,34 @@ namespace GameGate
             GateConfig.GateCount = ReadInteger("GameGate", "Count", GateConfig.GateCount);
             for (var i = 0; i <= GateConfig.GateCount; i++)
             {
-                GameGateList[i].sServerAdress = ReadString("GameGate", "ServerAddr" + i, GameGateList[i].sServerAdress);
-                GameGateList[i].nServerPort = ReadInteger("GameGate", "ServerPort" + i, GameGateList[i].nServerPort);
-                GameGateList[i].nGatePort = ReadInteger("GameGate", "GatePort" + i, GameGateList[i].nGatePort);
+                GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
+                GameGateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
+                GameGateList[i].GateAddress = ReadString("GameGate", "GateAddress" + (i + 1), GameGateList[i].GateAddress);
+                GameGateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
             }
             //魔法间隔控制
-            for (var i = 0; i <= TableDef.MAIGIC_DELAY_TIME_LIST.GetUpperBound(0); i++)
+            for (var i = 0; i <= TableDef.MaigicDelayTimeList.GetUpperBound(0); i++)
             {
-                if (!string.IsNullOrEmpty(TableDef.MAIGIC_NAME_LIST[i]))
+                if (!string.IsNullOrEmpty(TableDef.MaigicNameList[i]))
                 {
-                    TableDef.MAIGIC_DELAY_TIME_LIST[i] = ReadInteger("MagicInterval", TableDef.MAIGIC_NAME_LIST[i], TableDef.MAIGIC_DELAY_TIME_LIST[i]);
+                    TableDef.MaigicDelayTimeList[i] = ReadInteger("MagicInterval", TableDef.MaigicNameList[i], TableDef.MaigicDelayTimeList[i]);
                 }
             }
+        }
+
+        public void ReLoadConfig()
+        {
+            Clear();
+            Load();
+            LoadConfig();
         }
     }
 
     public class GameGateInfo
     {
-        public string sServerAdress;
-        public int nServerPort;
-        public int nGatePort;
+        public string ServerAdress;
+        public int ServerPort;
+        public string GateAddress;
+        public int GatePort;
     }
 }

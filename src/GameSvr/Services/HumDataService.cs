@@ -1,11 +1,12 @@
 using System.Collections.Concurrent;
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class HumDataService
     {
-        private static readonly ConcurrentDictionary<int, RequestServerPacket> _receivedMap = new ConcurrentDictionary<int, RequestServerPacket>();
+        private static readonly ConcurrentDictionary<int, RequestServerPacket> ReceivedMap = new ConcurrentDictionary<int, RequestServerPacket>();
 
         public static bool DBSocketConnected()
         {
@@ -14,13 +15,13 @@ namespace GameSvr
 
         public static void AddToProcess(int queryId, RequestServerPacket data)
         {
-            _receivedMap.TryAdd(queryId, data);
+            ReceivedMap.TryAdd(queryId, data);
         }
 
-        private static bool GetDBSockMsg(int nQueryID, ref int nIdent, ref int nRecog, ref byte[] data, int dwTimeOut, bool boLoadRcd)
+        private static bool GetDBSockMsg(int queryId, ref int nIdent, ref int nRecog, ref byte[] data, int dwTimeOut, bool boLoadRcd)
         {
-            bool result = false;
-            bool boLoadDBOK = false;
+            var result = false;
+            var boLoadDBOK = false;
             RequestServerPacket respPack = null;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
@@ -35,9 +36,8 @@ namespace GameSvr
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    if (_receivedMap.ContainsKey(nQueryID))
+                    if (ReceivedMap.TryGetValue(queryId,out respPack))
                     {
-                        respPack = _receivedMap[nQueryID];
                         if (respPack == null)
                         {
                             Thread.Sleep(1);
@@ -83,8 +83,7 @@ namespace GameSvr
 
         public static bool LoadHumRcdFromDB(string sAccount, string sCharName, string sStr, ref THumDataInfo HumanRcd, int nCertCode)
         {
-            bool result = false;
-            HumanRcd = new THumDataInfo();
+            var result = false;
             var loadHum = new LoadHumDataPacket()
             {
                 sAccount = sAccount,
@@ -96,7 +95,7 @@ namespace GameSvr
             {
                 HumanRcd.Data.sCharName = sCharName;
                 HumanRcd.Data.sAccount = sAccount;
-                if (HumanRcd.Data.sCharName == sCharName && (HumanRcd.Data.sAccount == "" || HumanRcd.Data.sAccount == sAccount))
+                if (HumanRcd.Data.sCharName == sCharName && (string.IsNullOrEmpty(HumanRcd.Data.sAccount) || HumanRcd.Data.sAccount == sAccount))
                 {
                     result = true;
                 }
@@ -117,19 +116,19 @@ namespace GameSvr
 
         private static bool SaveRcd(string sAccount, string sCharName, int nSessionID, THumDataInfo HumanRcd)
         {
-            int nIdent = 0;
-            int nRecog = 0;
+            var nIdent = 0;
+            var nRecog = 0;
             byte[] data = null;
-            int nQueryID = GetQueryID(M2Share.g_Config);
-            bool result = false;
+            var nQueryId = GetQueryId();
+            var result = false;
             var packet = new ServerMessagePacket(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0);
             var saveHumData = new SaveHumDataPacket();
             saveHumData.sAccount = sAccount;
             saveHumData.sCharName = sCharName;
             saveHumData.HumDataInfo = HumanRcd;
-            if (M2Share.DataServer.SendRequest(nQueryID, packet, saveHumData))
+            if (M2Share.DataServer.SendRequest(nQueryId, packet, saveHumData))
             {
-                if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref data, 5000, false))
+                if (GetDBSockMsg(nQueryId, ref nIdent, ref nRecog, ref data, 5000, false))
                 {
                     if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
@@ -150,11 +149,11 @@ namespace GameSvr
 
         private static bool LoadRcd(LoadHumDataPacket loadHuman, ref THumDataInfo HumanRcd)
         {
-            bool result = true;
-            int nIdent = 0;
-            int nRecog = 0;
+            var result = false;
+            var nIdent = 0;
+            var nRecog = 0;
             byte[] humRespData = null;
-            int nQueryID = GetQueryID(M2Share.g_Config);
+            var nQueryID = GetQueryId();
             var packet = new ServerMessagePacket(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman))
             {
@@ -169,13 +168,10 @@ namespace GameSvr
                             var sDBCharName = EDcode.DeCodeString(responsePacket.sChrName);
                             if (sDBCharName == loadHuman.sChrName)
                             {
+                                HumanRcd = new THumDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;
                                 result = true;
                             }
-                        }
-                        else
-                        {
-                            result = false;
                         }
                     }
                 }
@@ -187,14 +183,14 @@ namespace GameSvr
             return result;
         }
 
-        private static int GetQueryID(GameSvrConfig Config)
+        private static int GetQueryId()
         {
-            Config.nDBQueryID++;
-            if (Config.nDBQueryID > int.MaxValue - 1)
+            M2Share.g_Config.nDBQueryID++;
+            if (M2Share.g_Config.nDBQueryID > int.MaxValue - 1)
             {
-                Config.nDBQueryID = 1;
+                M2Share.g_Config.nDBQueryID = 1;
             }
-            return Config.nDBQueryID;
+            return M2Share.g_Config.nDBQueryID;
         }
     }
 }

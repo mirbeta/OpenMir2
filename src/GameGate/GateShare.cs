@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
-using SystemModule;
 using SystemModule.Common;
 
 namespace GameGate
@@ -11,17 +9,17 @@ namespace GameGate
     {
         public static bool ShowLog = true;
         /// <summary>
-        /// 最大用户数
+        /// 单线程最大用户数
         /// </summary>
-        public const int MaxSession = 5000;
+        public const int MaxSession = 10000;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间
         /// </summary>
-        public const long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public const long CheckServerTimeOutTime = 3 * 60 * 1000;
         /// <summary>
         /// 会话超时时间
         /// </summary>
-        public const long dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        public const long SessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -46,25 +44,4 @@ namespace GameGate
         }
     }
 
-    public class HardwareHeader : Packets
-    {
-        public uint dwMagicCode;
-        public byte[] xMd5Digest;
-
-        public HardwareHeader(byte[] buffer) : base(buffer)
-        {
-
-        }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            dwMagicCode = reader.ReadUInt32();
-            xMd5Digest = reader.ReadBytes(16);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

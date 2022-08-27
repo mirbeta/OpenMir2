@@ -1,6 +1,8 @@
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Items
 {
     public class GoodItem
     {
@@ -665,8 +667,8 @@ namespace GameSvr
                     addAbility.btUnLuck += (byte)Mac;
                     break;
                 case GoodType.ITEM_ARMOR:
-                    addAbility.wAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
-                    addAbility.wMAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
+                    addAbility.wAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
+                    addAbility.wMAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
                     addAbility.btLuck += HUtil32.LoByte(Source);
                     addAbility.btUnLuck += HUtil32.HiByte(Source);
                     break;
@@ -687,8 +689,8 @@ namespace GameSvr
                             }
                             else
                             {
-                                addAbility.wAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
-                                addAbility.wMAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
+                                addAbility.wAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
+                                addAbility.wMAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
                             }
                             break;
                         case 63:
@@ -710,8 +712,8 @@ namespace GameSvr
                             }
                             else
                             {
-                                addAbility.wAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
-                                addAbility.wMAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
+                                addAbility.wAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
+                                addAbility.wMAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
                             }
                             break;
                         case 62:
@@ -735,8 +737,8 @@ namespace GameSvr
                             }
                             else
                             {
-                                addAbility.wAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
-                                addAbility.wMAC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
+                                addAbility.wAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wAC) + Ac, HUtil32.HiWord(addAbility.wAC) + Ac2);
+                                addAbility.wMAC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMAC) + Mac, HUtil32.HiWord(addAbility.wMAC) + Mac2);
                             }
                             break;
                         case 64:
@@ -754,9 +756,9 @@ namespace GameSvr
                     }
                     break;
             }
-            addAbility.wDC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wDC) + Dc, HUtil32.HiWord(addAbility.wDC) + Dc2);
-            addAbility.wMC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMC) + Mc, HUtil32.HiWord(addAbility.wMC) + Mc2);
-            addAbility.wSC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(addAbility.wSC) + Sc, HUtil32.HiWord(addAbility.wSC) + Sc2);
+            addAbility.wDC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wDC) + Dc, HUtil32.HiWord(addAbility.wDC) + Dc2);
+            addAbility.wMC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wMC) + Mc, HUtil32.HiWord(addAbility.wMC) + Mc2);
+            addAbility.wSC = HUtil32.MakeLong(HUtil32.LoWord(addAbility.wSC) + Sc, HUtil32.HiWord(addAbility.wSC) + Sc2);
         }
     }
 

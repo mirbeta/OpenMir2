@@ -2,15 +2,15 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace GameGate
+namespace GameGate.Services
 {
     public class SessionManager
     {
         private static readonly SessionManager instance = new SessionManager();
-
         public static SessionManager Instance => instance;
 
         /// <summary>
@@ -18,6 +18,7 @@ namespace GameGate
         /// </summary>
         private readonly Channel<TMessageData> _sendMsgList = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
+        private Task _processSendMessageTask;
 
         private SessionManager()
         {
@@ -29,7 +30,6 @@ namespace GameGate
         /// 获取待处理的队列数量
         /// </summary>
         public int GetQueueCount => _sendMsgList.Reader.Count;
-
 
         /// <summary>
         /// 添加到消息处理队列
@@ -43,30 +43,30 @@ namespace GameGate
         /// <summary>
         /// 处理M2发过来的消息
         /// </summary>
-        public Task ProcessSendMessage()
+        public void ProcessSendMessage(CancellationToken stoppingToken)
         {
-            return Task.Factory.StartNew(async () =>
-             {
-                 while (await _sendMsgList.Reader.WaitToReadAsync())
-                 {
-                     while (_sendMsgList.Reader.TryRead(out var message))
-                     {
-                         try
-                         {
-                             var userSession = GetSession(message.MessageId);
-                             if (userSession == null)
-                             {
-                                 continue;
-                             }
-                             userSession.ProcessSvrData(message);
-                         }
-                         catch (Exception ex)
-                         {
-                             Console.WriteLine(ex.Message);
-                         }
-                     }
-                 }
-             });
+            _processSendMessageTask = Task.Factory.StartNew(async () =>
+            {
+                while (await _sendMsgList.Reader.WaitToReadAsync(stoppingToken))
+                {
+                    while (_sendMsgList.Reader.TryRead(out var message))
+                    {
+                        try
+                        {
+                            var userSession = GetSession(message.MessageId);
+                            if (userSession == null)
+                            {
+                                continue;
+                            }
+                            userSession.ProcessSvrData(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+            }, stoppingToken);
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)

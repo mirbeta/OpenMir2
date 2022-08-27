@@ -1,14 +1,17 @@
+using DBSvr.Conf;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace DBSvr
+namespace DBSvr.DB.impl
 {
     public class MySqlPlayRecordService : IPlayRecordService
     {
+        private readonly MirLog _logger;
         private int RecordCount = 0;
         private readonly Dictionary<string, int> QuickList = null;
         private readonly Dictionary<int, string> IndexQuickList = null;
@@ -19,8 +22,9 @@ namespace DBSvr
         /// </summary>
         private readonly IList<int> DeletedList = null;
 
-        public MySqlPlayRecordService()
+        public MySqlPlayRecordService(MirLog logger)
         {
+            _logger = logger;
             QuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             IndexQuickList = new Dictionary<int, string>();
             QuickIDList = new TQuickIDList();
@@ -110,8 +114,8 @@ namespace DBSvr
             }
             catch (Exception e)
             {
-                DBShare.MainOutMessage("打开数据库[MySql]失败.");
-                DBShare.MainOutMessage(e.StackTrace);
+                _logger.LogError("打开数据库[MySql]失败.");
+                _logger.LogError(e.StackTrace);
                 succes = false;
             }
             return dbConnection;
@@ -301,7 +305,7 @@ namespace DBSvr
             }
             catch (Exception e)
             {
-                DBShare.MainOutMessage(e.Message);
+                _logger.LogError(e.Message);
             }
             finally
             {

@@ -1,5 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GameGate.Conf;
+using GameGate.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Linq;
@@ -12,8 +18,9 @@ namespace GameGate
 {
     class Program
     {
+        private static Logger _logger;
         private static PeriodicTimer _timer;
-        private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
         static async Task Main(string[] args)
         {
@@ -36,14 +43,26 @@ namespace GameGate
                 }
                 AnsiConsole.Reset();
             };
+            
+            var config = new ConfigurationBuilder().Build();
+
+            _logger = LogManager.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                .GetCurrentClassLogger();
+            
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<ServerApp>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+            await builder.StartAsync(CancellationToken.Token);
             await ProcessLoopAsync();
             Stop();
         }
@@ -58,7 +77,7 @@ namespace GameGate
 
         static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
@@ -78,6 +97,7 @@ namespace GameGate
                 {
                     "/s" => ShowServerStatus(),
                     "/c" => ClearConsole(),
+                    "/r" => ReLoadConfig(),
                     "/q" => Exit(),
                     _ => null
                 } is Task task)
@@ -91,6 +111,7 @@ namespace GameGate
 
         private static Task Exit()
         {
+            CancellationToken.CancelAfter(3000);
             Environment.Exit(Environment.ExitCode);
             return Task.CompletedTask;
         }
@@ -102,19 +123,27 @@ namespace GameGate
             return Task.CompletedTask;
         }
 
+        private static Task ReLoadConfig()
+        {
+            ConfigManager.Instance.ReLoadConfig();
+            ServerManager.Instance.StartProcessMessage(CancellationToken.Token);
+            Console.WriteLine("重新读取配置文件完成...");
+            return Task.CompletedTask;
+        }
+
         private static async Task ShowServerStatus()
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
-            table.AddColumn("[yellow]Address[/]");
-            table.AddColumn("[yellow]Port[/]");
+            table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
             table.AddColumn("[yellow]Online[/]");
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
             table.AddColumn("[yellow]Queue[/]");
+            table.AddColumn("[yellow]Thread[/]");
 
             await AnsiConsole.Live(table)
                  .AutoClear(true)
@@ -124,22 +153,22 @@ namespace GameGate
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
                      {
-                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
+                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
-                     while (await _timer.WaitForNextTickAsync(cts.Token))
+                     while (await _timer.WaitForNextTickAsync(CancellationToken.Token))
                      {
-                         for (int i = 0; i < serverList.Count; i++)
+                         for (var i = 0; i < serverList.Count; i++)
                          {
-                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
+                             var (endPoint, status, playCount, reviceTotal, sendTotal, queueCount, threadCount) = serverList[i].GetStatus();
 
-                             table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
-                             table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
-                             table.UpdateCell(i, 2, ($"[bold]{Status}[/]"));
-                             table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
-                             table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
-                             table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
-                             table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
+                             table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
+                             table.UpdateCell(i, 1, ($"[bold]{status}[/]"));
+                             table.UpdateCell(i, 2, ($"[bold]{playCount}[/]"));
+                             table.UpdateCell(i, 3, ($"[bold]{sendTotal}[/]"));
+                             table.UpdateCell(i, 4, ($"[bold]{reviceTotal}[/]"));
+                             table.UpdateCell(i, 5, ($"[bold]{queueCount}[/]"));
+                             table.UpdateCell(i, 6, ($"[bold]{threadCount}[/]"));
                          }
                          ctx.Refresh();
                      }

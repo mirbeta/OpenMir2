@@ -1,6 +1,8 @@
+using GameSvr.Magic;
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {

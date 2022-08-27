@@ -1,4 +1,6 @@
-namespace GameSvr
+using GameSvr.Npc;
+
+namespace GameSvr.ScriptSystem
 {
     public class TScript
     {

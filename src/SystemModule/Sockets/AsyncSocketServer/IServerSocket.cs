@@ -7,97 +7,95 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace SystemModule.Sockets
+namespace SystemModule.Sockets.AsyncSocketServer
 {
     /// <summary>
     /// 异步Socket通讯服务器类
     /// </summary>
-    public class ISocketServer
+    public class SocketServer
     {
-        private IdWorker _idWorker;
         /// <summary>
         /// 缓冲区同步对象
         /// </summary>
-        private Object m_bufferLock = new Object();
+        private readonly object _bufferLock = new object();
         /// <summary>
         /// 读对象池同步对象
         /// </summary>
-        private Object m_readPoolLock = new Object();
+        private object _readPoolLock = new object();
         /// <summary>
         /// 写对象池同步对象
         /// </summary>
-        private Object m_writePoolLock = new Object();
+        private object _writePoolLock = new object();
         /// <summary>
         /// 接收数据事件对象集合
         /// </summary>
-        ConcurrentDictionary<long, AsyncUserToken> m_tokens;
+        ConcurrentDictionary<string, AsyncUserToken> _mTokens;
         /// <summary>
         /// 设计同时处理的连接最大数
         /// </summary>
-        int m_numConnections;
+        private readonly int _numConnections;
         /// <summary>
         /// 用于每一个Socket I/O操作使用的缓冲区大小
         /// </summary>
-        int m_BufferSize;
+        private readonly int _bufferSize;
         /// <summary>
         /// 为所有Socket操作准备的一个大的可重用的缓冲区集合
         /// </summary>
-        BufferManager m_bufferManager;
+        private readonly BufferManager _bufferManager;
         /// <summary>
         /// 需要分配空间的操作数目:为 读、写、接收等 操作预分配空间(接受操作可以不分配)
         /// </summary>
-        const int opsToPreAlloc = 2;
+        private const int OpsToPreAlloc = 2;
         /// <summary>
         /// 用来侦听到达的连接请求的Socket
         /// </summary>
-        Socket listenSocket;
+        private Socket _listenSocket;
         /// <summary>
         /// 读Socket操作的SocketAsyncEventArgs可重用对象池
         /// </summary>
-        SocketAsyncEventArgsPool m_readPool;
+        private readonly SocketAsyncEventArgsPool _readPool;
         /// <summary>
         /// 写Socket操作的SocketAsyncEventArgs可重用对象池
         /// </summary>
-        SocketAsyncEventArgsPool m_writePool;
-        bool isActive = false;
-        // 测试用
+        private readonly SocketAsyncEventArgsPool _writePool;
+        private bool _isActive = false;
         /// <summary>
         /// 服务器接收到的总字节数计数器
         /// </summary>
-        long m_totalBytesRead;
+        private long _totalBytesRead;
         /// <summary>
         /// 服务器发送的字节总数
         /// </summary>
-        long m_totalBytesWrite;
+        private long _totalBytesWrite;
         /// <summary>
         /// 连接到服务器的Socket总数
         /// </summary>
-        long m_numConnectedSockets;
+        private long _numConnectedSockets;
         /// <summary>
         /// 最大接受请求数信号量
         /// </summary>
-        Semaphore m_maxNumberAcceptedClients;
+        private Semaphore _maxNumberAcceptedClients;
 
         /// <summary>
         /// 获取已经连接的Socket总数
         /// </summary>
         public long NumConnectedSockets
         {
-            get { return m_numConnectedSockets; }
+            get { return _numConnectedSockets; }
         }
         /// <summary>
         /// 获取接收到的字节总数
         /// </summary>
         public long TotalBytesRead
         {
-            get { return m_totalBytesRead; }
+            get { return _totalBytesRead; }
         }
         /// <summary>
         /// 获取发送的字节总数
         /// </summary>
         public long TotalBytesWrite
         {
-            get { return m_totalBytesWrite; }
+            get { return _totalBytesWrite; }
         }
         /// <summary>
         /// 客户端已经连接事件
@@ -125,9 +123,9 @@ namespace SystemModule.Sockets
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns>在线返回true，否则返回false</returns>
-        public bool IsOnline(int connectionId)
+        public bool IsOnline(string connectionId)
         {
-            if (!this.m_tokens.ContainsKey(connectionId))
+            if (!this._mTokens.ContainsKey(connectionId))
             {
                 return false;
             }
@@ -139,40 +137,38 @@ namespace SystemModule.Sockets
 
         public IList<AsyncUserToken> GetSockets()
         {
-            return this.m_tokens.Values.ToList();
+            return this._mTokens.Values.ToList();
         }
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="numConnections">服务器允许连接的客户端总数</param>
-        /// <param name="receiveBufferSize">接收缓冲区大小</param>
-        public ISocketServer(int numConnections, int BufferSize)//构造函数
+        /// <param name="bufferSize">接收缓冲区大小</param>
+        public SocketServer(int numConnections, int bufferSize)//构造函数
         {
             // 重置接收和发送字节总数
-            m_totalBytesRead = 0;
-            m_totalBytesWrite = 0;
-            m_numConnectedSockets = 0;
+            _totalBytesRead = 0;
+            _totalBytesWrite = 0;
+            _numConnectedSockets = 0;
             // 数据库设计连接容量
-            m_numConnections = numConnections;
+            this._numConnections = numConnections;
             // 接收缓冲区大小
-            m_BufferSize = BufferSize;
+            this._bufferSize = bufferSize;
 
             // 为最大数目Socket 同时能拥有高性能的读、写通讯表现而分配缓冲区空间
 
-            m_bufferManager = new BufferManager(BufferSize * numConnections * opsToPreAlloc, BufferSize);
+            _bufferManager = new BufferManager(bufferSize * numConnections * OpsToPreAlloc, bufferSize);
 
             // 读写池
-            m_readPool = new SocketAsyncEventArgsPool(numConnections);
-            m_writePool = new SocketAsyncEventArgsPool(numConnections);
+            _readPool = new SocketAsyncEventArgsPool(numConnections);
+            _writePool = new SocketAsyncEventArgsPool(numConnections);
 
             // 接收数据事件参数对象集合
-            m_tokens = new ConcurrentDictionary<long, AsyncUserToken>();
+            _mTokens = new ConcurrentDictionary<string, AsyncUserToken>();
 
             // 初始信号量
-            m_maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
-
-            _idWorker = new IdWorker(new Random().Next(10));
+            _maxNumberAcceptedClients = new Semaphore(numConnections, numConnections);
         }
 
         /// <summary>
@@ -181,7 +177,7 @@ namespace SystemModule.Sockets
         public void Init()
         {
             // 为所有的I/O操作分配一个大的字节缓冲区.目的是防止内存碎片的产生             
-            m_bufferManager.InitBuffer();
+            _bufferManager.InitBuffer();
 
             // 可重用的SocketAsyncEventArgs,用于重复接受客户端使用
             SocketAsyncEventArgs readWriteEventArg;
@@ -189,7 +185,7 @@ namespace SystemModule.Sockets
             // 预分配一个 SocketAsyncEventArgs 对象池
 
             // 预分配SocketAsyncEventArgs读对象池
-            for (int i = 0; i < m_numConnections; i++)
+            for (int i = 0; i < _numConnections; i++)
             {
                 // 预分配一个 可重用的SocketAsyncEventArgs 对象
                 //readWriteEventArg = new SocketAsyncEventArgs();
@@ -199,41 +195,50 @@ namespace SystemModule.Sockets
                 //token.ReadEventArgs = readWriteEventArg;
                 //readWriteEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
                 // 注册一个SocketAsyncEventArgs完成事件
-                token.ReadEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+                token.ReadEventArgs.Completed += IO_Completed;
                 //readWriteEventArg.UserToken = new AsyncUserToken();
 
                 // 从缓冲区池中分配一个字节缓冲区给 SocketAsyncEventArg 对象
                 //m_bufferManager.SetBuffer(readWriteEventArg);
-                m_bufferManager.SetBuffer(token.ReadEventArgs);
+                _bufferManager.SetBuffer(token.ReadEventArgs);
                 //((AsyncUserToken)readWriteEventArg.UserToken).SetReceivedBytes(readWriteEventArg.Buffer, readWriteEventArg.Offset, 0);
                 //设定接收缓冲区及偏移量
                 token.SetBuffer(token.ReadEventArgs.Buffer, token.ReadEventArgs.Offset, token.ReadEventArgs.Count);
                 // 添加一个 SocketAsyncEventArg 到池中
                 //m_readPool.Push(readWriteEventArg);
-                m_readPool.Push(token.ReadEventArgs);
+                _readPool.Push(token.ReadEventArgs);
             }
             // 预分配SocketAsyncEventArgs写对象池
-            for (int i = 0; i < m_numConnections; i++)
+            for (int i = 0; i < _numConnections; i++)
             {
                 // 预分配一个 可重用的SocketAsyncEventArgs 对象
                 readWriteEventArg = new SocketAsyncEventArgs();
-                readWriteEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+                readWriteEventArg.Completed += IO_Completed;
                 readWriteEventArg.UserToken = null;
 
                 // 从缓冲区池中分配一个字节缓冲区给 SocketAsyncEventArg 对象
-                m_bufferManager.SetBuffer(readWriteEventArg);
+                _bufferManager.SetBuffer(readWriteEventArg);
                 //readWriteEventArg.SetBuffer(null, 0, 0);
 
                 // 添加一个 SocketAsyncEventArg 到池中
-                m_writePool.Push(readWriteEventArg);
+                _writePool.Push(readWriteEventArg);
             }
+        }
+
+        /// <summary>
+        /// 启动异步Socket服务
+        /// </summary>
+        /// <param name="endPoint"></param>
+        public void Start(IPEndPoint endPoint)
+        {
+            StartSocket(endPoint);
+            _isActive = true;
         }
 
         /// <summary>
         /// 启动异步Socket服务
         /// 支持指定IP和端口
         /// </summary>
-        /// <param name="Port"></param>
         public void Start(string ip, int port)
         {
             if (ip == "*" || ip == "all")
@@ -242,8 +247,8 @@ namespace SystemModule.Sockets
             }
             else
             {
-                Start(new IPEndPoint(IPAddress.Parse(ip), port));
-                isActive = true;
+                StartSocket(new IPEndPoint(IPAddress.Parse(ip), port));
+                _isActive = true;
             }
         }
 
@@ -254,40 +259,40 @@ namespace SystemModule.Sockets
         /// <param name="port"></param>
         public void Start(int port)
         {
-            Start(new IPEndPoint(IPAddress.Any, port));
-            isActive = true;
+            StartSocket(new IPEndPoint(IPAddress.Any, port));
+            _isActive = true;
         }
 
         public bool Active
         {
-            get { return isActive; }
+            get { return _isActive; }
         }
 
         /// <summary>
         /// 启动异步Socket服务器
         /// </summary>
         /// <param name="localEndPoint">要绑定的本地终结点</param>
-        private void Start(IPEndPoint localEndPoint)// 启动
+        private void StartSocket(IPEndPoint localEndPoint)// 启动
         {
             try
             {
                 // 创建一个侦听到达连接的Socket
-                if (null != listenSocket)
+                if (null != _listenSocket)
                 {
-                    listenSocket.Close();
+                    _listenSocket.Close();
                 }
                 else
                 {
-                    listenSocket = new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    listenSocket.Bind(localEndPoint);
+                    _listenSocket = new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    _listenSocket.Bind(localEndPoint);
                 }
                 // 用一个侦听1000个连接的队列启动服务器
-                listenSocket.NoDelay = false;
-                listenSocket.ReceiveBufferSize = 4096;
-                listenSocket.SendBufferSize = 4096;
-                listenSocket.ReceiveTimeout = 20000;
-                listenSocket.SendTimeout = 10000;
-                listenSocket.Listen(1000);
+                _listenSocket.NoDelay = false;
+                _listenSocket.ReceiveBufferSize = 4096;
+                _listenSocket.SendBufferSize = 4096;
+                _listenSocket.ReceiveTimeout = 20000;
+                _listenSocket.SendTimeout = 10000;
+                _listenSocket.Listen(1000);
             }
             catch (ObjectDisposedException)
             {
@@ -297,11 +302,11 @@ namespace SystemModule.Sockets
             {
                 //RaiseErrorEvent(null, exception);
                 // 启动失败抛出启动失败异常
-                if (ex.ErrorCode == (int)SocketError.AddressNotAvailable)
+                if (ex.SocketErrorCode == SocketError.AddressNotAvailable)
                 {
-                    throw new AsyncSocketException(ex.Message, ex);
+                    throw new AsyncSocketException("IP地址不可用", ex);
                 }
-                else if (ex.ErrorCode == 48)
+                if (ex.ErrorCode == 48)
                 {
                     throw new AsyncSocketException("Socket端口被占用", AsyncSocketErrorCode.ServerStartFailure);
                 }
@@ -310,10 +315,10 @@ namespace SystemModule.Sockets
                     throw new AsyncSocketException("服务器启动失败", AsyncSocketErrorCode.ServerStartFailure);
                 }
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
-                Debug.WriteLine("调试：" + exception_debug.Message);
-                throw exception_debug;
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
             }
             // 在侦听Socket上抛出接受委托.      
 
@@ -331,7 +336,7 @@ namespace SystemModule.Sockets
             if (acceptEventArg == null)
             {
                 acceptEventArg = new SocketAsyncEventArgs();
-                acceptEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(AcceptEventArg_Completed);
+                acceptEventArg.Completed += AcceptEventArg_Completed;
             }
             else
             {
@@ -342,7 +347,7 @@ namespace SystemModule.Sockets
             {
                 //m_maxNumberAcceptedClients.WaitOne(TimeSpan.FromMilliseconds(200));// 对信号量进行一次P操作
 
-                bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArg);
+                bool willRaiseEvent = _listenSocket.AcceptAsync(acceptEventArg);
                 if (!willRaiseEvent)
                 {
                     ProcessAccept(acceptEventArg);
@@ -357,10 +362,10 @@ namespace SystemModule.Sockets
                 // 接受客户端发生异常
                 //throw new AsyncSocketException("服务器接受客户端请求发生一次异常", AsyncSocketErrorCode.ServerAcceptFailure);
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
-                Debug.WriteLine("调试：" + exception_debug.Message);
-                throw exception_debug;
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
             }
         }
 
@@ -379,26 +384,17 @@ namespace SystemModule.Sockets
             //Debug.WriteLine($"客户端连接请求被接受. 有 {m_numConnectedSockets} 个客户端连接到服务器");
             SocketAsyncEventArgs readEventArg;
             // 获得已经接受的客户端连接Socket并把它放到ReadEventArg对象的user token中
-            lock (m_readPool)
+            lock (_readPool)
             {
-                readEventArg = m_readPool.Pop();
+                readEventArg = _readPool.Pop();
             }
 
             token = (AsyncUserToken)readEventArg.UserToken;
             // 把它放到ReadEventArg对象的user token中
             token.Socket = e.AcceptSocket;
             // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-            token.ConnectionId = (int)_idWorker.nextId();//Guid.NewGuid().ToString("N");
-            if ((token.ConnectionId <= 0 || token.ConnectionId > ushort.MaxValue) && token.Socket != null)
-            {
-                token.ConnectionId = (int)token.Socket.Handle;
-            }
-            if (token.ConnectionId > ushort.MaxValue)
-            {
-                Console.WriteLine("生成SocketId异常.");
-                return;
-            }
-            if (!this.m_tokens.TryAdd(token.ConnectionId, token)) // 添加到集合中
+            token.ConnectionId = Guid.NewGuid().ToString("N");
+            if (!this._mTokens.TryAdd(token.ConnectionId, token)) // 添加到集合中
             {
                 Console.WriteLine("Socket链接异常");
                 return;
@@ -432,9 +428,9 @@ namespace SystemModule.Sockets
                     RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步接收数据操作时发生SocketException异常", socketException));
                 }
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
-                Debug.WriteLine("调试：" + exception_debug.Message);
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
             }
             finally
             {
@@ -445,7 +441,8 @@ namespace SystemModule.Sockets
 
         /// <summary>
         /// 这个方法在一个Socket读或者发送操作完成时被调用
-        /// </summary> 
+        /// </summary>
+        /// <param name="sender"></param>
         /// <param name="e">和完成的接受操作关联的SocketAsyncEventArg对象</param>
         void IO_Completed(object sender, SocketAsyncEventArgs e)
         {
@@ -474,8 +471,8 @@ namespace SystemModule.Sockets
             if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
             {
                 // 增加接收到的字节总数
-                Interlocked.Add(ref m_totalBytesRead, e.BytesTransferred);
-                Debug.WriteLine($"服务器读取字节总数:{BytesToReadableValue(m_totalBytesRead)}");
+                Interlocked.Add(ref _totalBytesRead, e.BytesTransferred);
+                Debug.WriteLine($"服务器读取字节总数:{BytesToReadableValue(_totalBytesRead)}");
                 //byte[] destinationArray = new byte[e.BytesTransferred];// 目的字节数组
                 //Array.Copy(e.Buffer, 0, destinationArray, 0, e.BytesTransferred);
                 token.SetBytesReceived(e.BytesTransferred);
@@ -508,10 +505,10 @@ namespace SystemModule.Sockets
                         RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步接收数据操作时发生SocketException异常", socketException));
                     }
                 }
-                catch (Exception exception_debug)
+                catch (Exception exceptionDebug)
                 {
-                    Debug.WriteLine("调试：" + exception_debug.Message);
-                    throw exception_debug;
+                    Debug.WriteLine("调试：" + exceptionDebug.Message);
+                    throw;
                 }
             }
             else
@@ -520,7 +517,7 @@ namespace SystemModule.Sockets
             }
         }
 
-        public void SendAsync(int connectionId, byte[] buffer)
+        public void SendAsync(string connectionId, byte[] buffer)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -528,27 +525,27 @@ namespace SystemModule.Sockets
             //{
             //    throw new ArgumentException("数据包长度超过缓冲区大小", "buffer");
             //}
-            if (!this.m_tokens.TryGetValue(connectionId, out token))
+            if (!this._mTokens.TryGetValue(connectionId, out token))
             {
                 throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                 //return;
             }
             SocketAsyncEventArgs writeEventArgs;
-            lock (m_writePool)
+            lock (_writePool)
             {
-                writeEventArgs = m_writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
+                writeEventArgs = _writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
             }
             writeEventArgs.UserToken = token;
-            if (buffer.Length <= m_BufferSize)
+            if (buffer.Length <= _bufferSize)
             {
                 Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
                 writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
             }
             else
             {
-                lock (m_bufferLock)
+                lock (_bufferLock)
                 {
-                    m_bufferManager.FreeBuffer(writeEventArgs);
+                    _bufferManager.FreeBuffer(writeEventArgs);
                 }
                 writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
             }
@@ -569,19 +566,19 @@ namespace SystemModule.Sockets
             }
             catch (SocketException socketException)
             {
-                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)//10054一个建立的?颖辉冻讨骰?啃泄乇蕴
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)
                 {
                     RaiseDisconnectedEvent(token);//引发断开连接事件
                 }
                 else
                 {
-                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException)); ;
+                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException));
                 }
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
-                Debug.WriteLine("调试：" + exception_debug.Message);
-                throw exception_debug;
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
             }
         }
 
@@ -591,7 +588,7 @@ namespace SystemModule.Sockets
         /// <param name="connectionId">连接的ID号</param>
         /// <param name="buffer">缓冲区大小</param>
         /// <param name="operation">操作自定义枚举</param>
-        public void SendAsync(int connectionId, byte[] buffer, object operation)
+        public void SendAsync(string connectionId, byte[] buffer, object operation)
         {
             AsyncUserToken token;
             //SocketAsyncEventArgs token;
@@ -599,27 +596,27 @@ namespace SystemModule.Sockets
             //{
             //    throw new ArgumentException("数据包长度超过缓冲区大小", "buffer");
             //}
-            if (!this.m_tokens.TryGetValue(connectionId, out token))
+            if (!this._mTokens.TryGetValue(connectionId, out token))
             {
                 throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                 //return;
             }
             SocketAsyncEventArgs writeEventArgs;
-            lock (m_writePool)
+            lock (_writePool)
             {
-                writeEventArgs = m_writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
+                writeEventArgs = _writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
             }
             writeEventArgs.UserToken = token;
             token.Operation = operation;// 设置操作标志
-            if (buffer.Length <= m_BufferSize)
+            if (buffer.Length <= _bufferSize)
             {
                 Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
             }
             else
             {
-                lock (m_bufferLock)
+                lock (_bufferLock)
                 {
-                    m_bufferManager.FreeBuffer(writeEventArgs);
+                    _bufferManager.FreeBuffer(writeEventArgs);
                 }
                 writeEventArgs.SetBuffer(buffer, 0, buffer.Length);
             }
@@ -646,13 +643,13 @@ namespace SystemModule.Sockets
                 }
                 else
                 {
-                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException)); ;
+                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException));
                 }
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
-                Debug.WriteLine("调试：" + exception_debug.Message);
-                throw exception_debug;
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
             }
         }
 
@@ -665,19 +662,19 @@ namespace SystemModule.Sockets
             //SocketAsyncEventArgs token;
             AsyncUserToken token = (AsyncUserToken)e.UserToken;
             // 增加发送计数器
-            Interlocked.Add(ref m_totalBytesWrite, e.BytesTransferred);
-            if (e.Count > m_BufferSize)
+            Interlocked.Add(ref _totalBytesWrite, e.BytesTransferred);
+            if (e.Count > _bufferSize)
             {
-                lock (m_bufferLock)
+                lock (_bufferLock)
                 {
-                    m_bufferManager.SetBuffer(e);// 恢复默认大小缓冲区
+                    _bufferManager.SetBuffer(e);// 恢复默认大小缓冲区
                 }
                 //e.SetBuffer(null, 0, 0);// 清除发送缓冲区
             }
-            lock (m_writePool)
+            lock (_writePool)
             {
                 // 回收SocketAsyncEventArgs以备再次被利用
-                m_writePool.Push(e);
+                _writePool.Push(e);
             }
             // 清除UserToken对象引用  
             e.UserToken = null;
@@ -746,10 +743,10 @@ namespace SystemModule.Sockets
             }
         }
 
-        public void Disconnect(int connectionId)//断开连接(形参 连接ID)
+        public void Disconnect(string connectionId)//断开连接(形参 连接ID)
         {
             AsyncUserToken token;
-            if (!this.m_tokens.TryGetValue(connectionId, out token))
+            if (!this._mTokens.TryGetValue(connectionId, out token))
             {
                 throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
                 //return;//不存在该ID客户端
@@ -761,9 +758,9 @@ namespace SystemModule.Sockets
         {
             if (null != token)
             {
-                if (this.m_tokens.ContainsKey(token.ConnectionId))
+                if (this._mTokens.ContainsKey(token.ConnectionId))
                 {
-                    this.m_tokens.TryRemove(token.ConnectionId, out token);
+                    this._mTokens.TryRemove(token.ConnectionId, out token);
                     CloseClientSocket(token);
                     EventHandler<AsyncUserToken> handler = OnClientDisconnect;
                     // 如果订户事件将为空(null)
@@ -797,11 +794,11 @@ namespace SystemModule.Sockets
             {
                 token.Socket.Close();
             }
-            catch (Exception exception_debug)
+            catch (Exception exceptionDebug)
             {
                 token.Socket.Close();
-                Debug.WriteLine("调试:" + exception_debug.Message);
-                throw exception_debug;
+                Debug.WriteLine("调试:" + exceptionDebug.Message);
+                throw;
             }
             finally
             {
@@ -809,10 +806,10 @@ namespace SystemModule.Sockets
                 //Interlocked.Decrement(ref m_numConnectedSockets);
                 //m_maxNumberAcceptedClients.Release();
                 //Debug.WriteLine($"一个客户端被从服务器断开. 有 {m_numConnectedSockets} 个客户端连接到服务器");
-                lock (m_readPool)
+                lock (_readPool)
                 {
                     // 释放以使它们可以被其他客户端重新利用
-                    m_readPool.Push(token.ReadEventArgs);
+                    _readPool.Push(token.ReadEventArgs);
                 }
             }
         }
@@ -836,11 +833,11 @@ namespace SystemModule.Sockets
 
         public void Shutdown()
         {
-            if (null != this.listenSocket)
+            if (null != this._listenSocket)
             {
-                this.listenSocket.Close();//停止侦听
+                this._listenSocket.Close();//停止侦听
             }
-            foreach (AsyncUserToken token in this.m_tokens.Values)
+            foreach (AsyncUserToken token in this._mTokens.Values)
             {
                 try
                 {
@@ -855,13 +852,13 @@ namespace SystemModule.Sockets
                 // 编译时打开注释调试时关闭
                 //catch(Exception){ }
                 // 编译时关闭调试时打开
-                catch (Exception exception_debug)
+                catch (Exception exceptionDebug)
                 {
-                    Debug.WriteLine("调试:" + exception_debug.Message);
+                    Debug.WriteLine("调试:" + exceptionDebug.Message);
                 }
             }
-            this.m_tokens.Clear();
-            isActive = false;
+            this._mTokens.Clear();
+            _isActive = false;
         }
 
         /// <summary>

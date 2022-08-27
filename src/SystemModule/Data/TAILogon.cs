@@ -1,4 +1,4 @@
-﻿namespace SystemModule;
+﻿namespace SystemModule.Data;
 
 /// <summary>
 /// 假人登陆结构

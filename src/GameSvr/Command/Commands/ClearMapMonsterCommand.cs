@@ -1,7 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Actor;
+using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 清楚指定地图怪物
@@ -50,7 +53,7 @@ namespace GameSvr
                     Envir = M2Share.MapManager.Maps[i];
                     if (Envir != null)
                     {
-                        if (boKillAllMap || string.Compare(Envir.sMapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (boKillAllMap || string.Compare(Envir.SMapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             M2Share.UserEngine.GetMapMonster(Envir, MonList);
                             if (MonList.Count > 0)

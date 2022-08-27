@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SystemModule;
 
-namespace DBSvr
+namespace DBSvr.DB
 {
     public interface IPlayRecordService
     {

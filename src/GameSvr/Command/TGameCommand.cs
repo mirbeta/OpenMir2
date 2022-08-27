@@ -1,4 +1,4 @@
-namespace GameSvr
+namespace GameSvr.Command
 {
     public struct TGameCmd
     {

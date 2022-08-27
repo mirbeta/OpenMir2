@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule
+namespace SystemModule.Extensions
 {
     public static class StringExtension
     {

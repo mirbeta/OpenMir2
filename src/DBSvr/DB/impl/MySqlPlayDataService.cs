@@ -1,22 +1,26 @@
+using DBSvr.Conf;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace DBSvr
+namespace DBSvr.DB.impl
 {
     public class MySqlPlayDataService : IPlayDataService
     {
+        private readonly MirLog _logger;
         private readonly Dictionary<string, int> MirQuickList = null;
         private readonly TQuickIDList MirQuickIDList = null;
         private readonly Dictionary<int, int> QuickIndexIdList = null;
         private DBConfig Config = ConfigManager.GetConfig();
         private int _recordCount = 0;
 
-        public MySqlPlayDataService()
+        public MySqlPlayDataService(MirLog logger)
         {
+            _logger = logger;
             MirQuickList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MirQuickIDList = new TQuickIDList();
             _recordCount = -1;
@@ -92,8 +96,8 @@ namespace DBSvr
             }
             catch (Exception e)
             {
-                DBShare.MainOutMessage("打开数据库[MySql]失败.");
-                DBShare.MainOutMessage(e.StackTrace);
+                _logger.LogError("打开数据库[MySql]失败.");
+                _logger.LogError(e.StackTrace);
                 success = false;
             }
             return dbConnection;
@@ -185,7 +189,7 @@ namespace DBSvr
                 }
                 catch
                 {
-                    DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateChrRecord");
+                    _logger.LogError("[Exception] MySqlHumDB.UpdateChrRecord");
                     result = false;
                 }
             }
@@ -321,8 +325,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetChrRecord");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.GetChrRecord");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -371,8 +375,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetAbilGetRecord");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.GetAbilGetRecord");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -417,7 +421,7 @@ namespace DBSvr
             }
             catch (Exception)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetBonusAbilRecord");
+                _logger.LogError("[Exception] MySqlHumDB.GetBonusAbilRecord");
             }
             finally
             {
@@ -458,7 +462,7 @@ namespace DBSvr
             }
             catch (Exception)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetMagicRecord");
+                _logger.LogError("[Exception] MySqlHumDB.GetMagicRecord");
             }
             finally
             {
@@ -526,7 +530,7 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetItemRecord:" + ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.GetItemRecord:" + ex.StackTrace);
             }
             finally
             {
@@ -571,8 +575,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetStorageRecord");
-                Console.WriteLine(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.GetStorageRecord");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -616,7 +620,7 @@ namespace DBSvr
             }
             catch (Exception)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.GetPlayerStatus");
+                _logger.LogError("[Exception] MySqlHumDB.GetPlayerStatus");
             }
             finally
             {
@@ -722,8 +726,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.InsertRecord");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.InsertRecord");
+                _logger.LogError(ex.StackTrace);
                 return false;
             }
             finally
@@ -749,7 +753,7 @@ namespace DBSvr
             catch (Exception ex)
             {
                 result = false;
-                DBShare.MainOutMessage($"保存玩家[{HumanRCD.Header.sName}]数据失败. " + ex.Message);
+                _logger.LogError($"保存玩家[{HumanRCD.Header.sName}]数据失败. " + ex.Message);
             }
             return result;
         }
@@ -818,7 +822,7 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord:" + ex.Message);
+                _logger.LogError("[Exception] MySqlHumDB.UpdateRecord:" + ex.Message);
             }
             finally
             {
@@ -868,7 +872,7 @@ namespace DBSvr
             }
             catch
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
+                _logger.LogError("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
             }
             finally
             {
@@ -930,8 +934,8 @@ namespace DBSvr
                         }
                         catch (Exception ex)
                         {
-                            DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
-                            DBShare.MainOutMessage(ex.StackTrace);
+                            _logger.LogError("[Exception] MySqlHumDB.UpdateRecord (INSERT TBL_ITEM)");
+                            _logger.LogError(ex.StackTrace);
                         }
                     }
                 }
@@ -969,7 +973,7 @@ namespace DBSvr
                         }
                         catch
                         {
-                            DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (13)");
+                            _logger.LogError("[Exception] MySqlHumDB.UpdateRecord (13)");
                         }
                     }
                 }
@@ -979,7 +983,7 @@ namespace DBSvr
             }
             catch
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
+                _logger.LogError("[Exception] MySqlHumDB.UpdateRecord (DELETE TBL_ITEM)");
             }
             finally
             {
@@ -1046,7 +1050,7 @@ namespace DBSvr
             }
             catch
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateRecord");
+                _logger.LogError("[Exception] MySqlHumDB.UpdateRecord");
             }
             finally
             {
@@ -1087,8 +1091,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.SavePlayerMagic");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.SavePlayerMagic");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -1126,8 +1130,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateBonusability");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.UpdateBonusability");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -1163,7 +1167,7 @@ namespace DBSvr
             }
             catch
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateQuest");
+                _logger.LogError("[Exception] MySqlHumDB.UpdateQuest");
             }
             finally
             {
@@ -1195,8 +1199,8 @@ namespace DBSvr
             }
             catch (Exception ex)
             {
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.UpdateStatus (INSERT TBL_CHARACTER_STATUS)");
-                DBShare.MainOutMessage(ex.StackTrace);
+                _logger.LogError("[Exception] MySqlHumDB.UpdateStatus (INSERT TBL_CHARACTER_STATUS)");
+                _logger.LogError(ex.StackTrace);
             }
             finally
             {
@@ -1256,7 +1260,7 @@ namespace DBSvr
             catch
             {
                 result = false;
-                DBShare.MainOutMessage("[Exception] MySqlHumDB.DeleteRecord");
+                _logger.LogError("[Exception] MySqlHumDB.DeleteRecord");
             }
             finally
             {
@@ -1323,7 +1327,7 @@ namespace DBSvr
                 }
                 catch (Exception)
                 {
-                    DBShare.MainOutMessage("[Exception] MySqlHumDB.GetQryChar (1)");
+                    _logger.LogError("[Exception] MySqlHumDB.GetQryChar (1)");
                     return result;
                 }
             }

@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     /// <summary>
     /// 单选器

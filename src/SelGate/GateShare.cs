@@ -10,12 +10,12 @@ namespace SelGate
         /// <summary>
         /// 角色网关端口
         /// </summary>
-        public static int GatePort = 7100;
+        public const int GatePort = 7100;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
-        public static int dwCheckServerTimeOutTime = 3 * 60 * 1000;
-        public static int dwCheckServerTick = 0;
+        public const int CheckServerTimeOutTime = 10 * 1000;
+        public static int CheckServerTick = 0;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -28,7 +28,7 @@ namespace SelGate
         /// <summary>
         /// 会话超时时间
         /// </summary>
-        public static int dwSessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        public const int SessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
         public static IList<ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()

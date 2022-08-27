@@ -1,6 +1,9 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
+using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.UsrSystem
 {
     public partial class UserEngine
     {
@@ -46,7 +49,7 @@ namespace GameSvr
             nCount = 0;
             while (true)
             {
-                if (SwitchData.SlaveArr[nCount].sSlaveName == "") break;
+                if (SwitchData.SlaveArr[nCount].SlaveName == "") break;
                 SlaveInfo = SwitchData.SlaveArr[nCount];
                 var slaveId = HUtil32.Sequence();
                 M2Share.ObjectManager.AddOhter(slaveId, SlaveInfo);
@@ -121,11 +124,11 @@ namespace GameSvr
                 BaseObject = PlayObject.m_SlaveList[i];
                 if (i <= 4)
                 {
-                    SwitchData.SlaveArr[i].sSlaveName = BaseObject.m_sCharName;
-                    SwitchData.SlaveArr[i].nKillCount = BaseObject.m_nKillMonCount;
-                    SwitchData.SlaveArr[i].btSalveLevel = BaseObject.m_btSlaveMakeLevel;
-                    SwitchData.SlaveArr[i].btSlaveExpLevel = BaseObject.m_btSlaveExpLevel;
-                    SwitchData.SlaveArr[i].dwRoyaltySec = (BaseObject.m_dwMasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
+                    SwitchData.SlaveArr[i].SlaveName = BaseObject.m_sCharName;
+                    SwitchData.SlaveArr[i].KillCount = BaseObject.m_nKillMonCount;
+                    SwitchData.SlaveArr[i].SalveLevel = BaseObject.m_btSlaveMakeLevel;
+                    SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.m_btSlaveExpLevel;
+                    SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.m_dwMasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
                     SwitchData.SlaveArr[i].nHP = BaseObject.m_WAbil.HP;
                     SwitchData.SlaveArr[i].nMP = BaseObject.m_WAbil.MP;
                 }

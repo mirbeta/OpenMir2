@@ -1,7 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Items;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 取指定玩家物品

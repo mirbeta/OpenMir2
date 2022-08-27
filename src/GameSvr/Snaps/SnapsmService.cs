@@ -1,8 +1,9 @@
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSvr
+namespace GameSvr.Snaps
 {
     /// <summary>
     /// 镜像服务器
@@ -10,8 +11,8 @@ namespace GameSvr
     public class SnapsmService
     {
         private readonly TServerMsgInfo[] m_SrvArray;
-        private readonly ISocketServer _msgServer;
-        private readonly MirrorMessage _groupMessageHandle;
+        private readonly SocketServer _msgServer;
+        private readonly SpapsMessage _groupMessageHandle;
 
         private static SnapsmService instance = null;
 
@@ -20,12 +21,12 @@ namespace GameSvr
         private SnapsmService()
         {
             m_SrvArray = new TServerMsgInfo[10];
-            _msgServer = new ISocketServer(ushort.MaxValue, 512);
+            _msgServer = new SocketServer(10, 512);
             _msgServer.OnClientConnect += MsgServerClientConnect;
             _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
             _msgServer.OnClientRead += MsgServerClientRead;
             _msgServer.Init();
-            _groupMessageHandle = new MirrorMessage();
+            _groupMessageHandle = new SpapsMessage();
         }
 
         public void StartSnapsServer()
@@ -217,7 +218,7 @@ namespace GameSvr
     {
         public Socket Socket;
         public string SocData;
-        public int SocketId;
+        public string SocketId;
     }
 
     public class ServerGruopInfo

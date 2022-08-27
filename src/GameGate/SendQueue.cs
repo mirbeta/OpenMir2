@@ -7,7 +7,7 @@ namespace GameGate
     public class SendQueue
     {
         private readonly Channel<SendQueueData> _sendQueue;
-        private readonly LogQueue _logQueue = LogQueue.Instance;
+        private readonly MirLog _logQueue = MirLog.Instance;
 
         public SendQueue()
         {

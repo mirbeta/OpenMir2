@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 飞到指定玩家身边
@@ -28,7 +28,7 @@ namespace GameSvr
                 PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SpaceMove(m_PlayObject.m_PEnvir.sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, 0);
+            PlayObject.SpaceMove(m_PlayObject.m_PEnvir.SMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, 0);
         }
     }
 }

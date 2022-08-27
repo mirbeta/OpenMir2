@@ -1,3 +1,4 @@
+using GameGate.Conf;
 using System;
 using System.IO;
 using SystemModule.Common;
@@ -34,13 +35,13 @@ namespace GameGate
                 {
                     switch (_configManager.GateConfig.ChatFilterMethod)
                     {
-                        case TChatFilterMethod.ctDropconnect:
+                        case TChatFilterMethod.Dropconnect:
                             kick = false;
                             break;
-                        case TChatFilterMethod.ctReplaceAll:
+                        case TChatFilterMethod.ReplaceAll:
                             chatMsg = _configManager.GateConfig.m_szChatFilterReplace;
                             break;
-                        case TChatFilterMethod.ctReplaceOne:
+                        case TChatFilterMethod.ReplaceOne:
                             var szRplace = string.Empty;
                             for (int j = 0; j < AbuseList[i].Length; j++)
                             {

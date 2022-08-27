@@ -1,6 +1,9 @@
-using SystemModule;
+using GameSvr.Player;
+using GameSvr.Services;
+using GameSvr.UsrSystem;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.GameGate
 {
     public class TGateUserInfo
     {
@@ -13,7 +16,7 @@ namespace GameSvr
         /// 账号
         /// </summary>
         public string sAccount;
-        public ushort nGSocketIdx;
+        public ushort SocketId;
         /// <summary>
         /// 玩家IP
         /// </summary>

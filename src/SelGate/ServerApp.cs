@@ -1,3 +1,4 @@
+using SelGate.Conf;
 using SelGate.Services;
 using System;
 using System.Threading.Tasks;
@@ -11,15 +12,15 @@ namespace SelGate
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
-        private readonly LogQueue _logQueue;
+        private readonly MirLog _logQueue;
 
-        public ServerApp(ConfigManager configManager, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, LogQueue logQueue)
+        public ServerApp(MirLog logQueue, ServerService serverService, SessionManager sessionManager, ClientManager clientManager, ConfigManager configManager)
         {
+            _logQueue = logQueue;
             _serverService = serverService;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
             _configManager = configManager;
-            _logQueue = logQueue;
         }
 
         public async Task Start()
@@ -37,23 +38,23 @@ namespace SelGate
         public void StartService()
         {
             GateShare.Initialization();
-            _logQueue.Enqueue("正在启动服务...", 0);
+            _logQueue.LogInformation("正在启动服务...", 0);
             _configManager.LoadConfig();
             _serverService.Start();
             _clientManager.Initialization();
             _clientManager.Start();
-            _logQueue.Enqueue("服务已启动成功...", 2);
-            _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            _logQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            _logQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
+            _logQueue.LogInformation("服务已启动成功...", 2);
+            _logQueue.LogInformation("欢迎使用翎风系列游戏软件...", 0);
+            _logQueue.LogInformation("网站:http://www.gameofmir.com", 0);
+            _logQueue.LogInformation("论坛:http://bbs.gameofmir.com", 0);
         }
 
         public void StopService()
         {
-            _logQueue.Enqueue("正在停止服务...", 2);
+            _logQueue.LogInformation("正在停止服务...", 2);
             _serverService.Stop();
             _clientManager.Stop();
-            _logQueue.Enqueue("服务停止成功...", 2);
+            _logQueue.LogInformation("服务停止成功...", 2);
         }
 
         private bool IsBlockIP(string sIPaddr)

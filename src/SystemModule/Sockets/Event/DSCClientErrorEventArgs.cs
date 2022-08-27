@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets
+namespace SystemModule.Sockets.Event
 {
     public class DSCClientErrorEventArgs : EventArgs
     {

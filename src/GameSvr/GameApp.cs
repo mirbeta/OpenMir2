@@ -1,8 +1,24 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Castle;
+using GameSvr.Command;
+using GameSvr.DataStores;
+using GameSvr.Event;
+using GameSvr.Event.Events;
+using GameSvr.GameGate;
+using GameSvr.Guild;
+using GameSvr.Items;
+using GameSvr.Magic;
+using GameSvr.Maps;
+using GameSvr.Notices;
+using GameSvr.Robots;
+using GameSvr.Services;
+using GameSvr.Snaps;
+using GameSvr.UsrSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -27,7 +43,7 @@ namespace GameSvr
             }
             M2Share.MainOutMessage($"物品数据库加载成功({M2Share.UserEngine.StdItemList.Count})...");
             M2Share.MainOutMessage("正在加载数据图文件...");
-            nCode = Maps.LoadMinMap();
+            nCode = Maps.Maps.LoadMinMap();
             if (nCode < 0)
             {
                 M2Share.MainOutMessage("小地图数据加载失败!!!" + "Code: " + nCode);
@@ -35,7 +51,7 @@ namespace GameSvr
             }
             M2Share.MainOutMessage("小地图数据加载成功...");
             M2Share.MainOutMessage("正在加载地图数据...");
-            nCode = Maps.LoadMapInfo();
+            nCode = Maps.Maps.LoadMapInfo();
             if (nCode < 0)
             {
                 M2Share.MainOutMessage("地图数据加载失败!!!" + "Code: " + nCode);
@@ -187,9 +203,9 @@ namespace GameSvr
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 Envir = mineMapList[i];
-                for (var nW = 0; nW < Envir.wWidth; nW++)
+                for (var nW = 0; nW < Envir.WWidth; nW++)
                 {
-                    for (var nH = 0; nH < Envir.wHeight; nH++)
+                    for (var nH = 0; nH < Envir.WHeight; nH++)
                     {
                         var mine = new StoneMineEvent(Envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
@@ -237,7 +253,7 @@ namespace GameSvr
             M2Share.LoadConfig();
             M2Share.DataServer = new DBService();
             M2Share.ObjectManager = new ObjectManager();
-            M2Share.ScriptSystem = new ScriptSystem();
+            M2Share.ScriptSystem = new ScriptSystem.ScriptSystem();
             M2Share.GateManager = GateManager.Instance;
             M2Share.g_FindPath = new TFindPath();
             M2Share.CommandSystem = new CommandManager();
@@ -247,7 +263,7 @@ namespace GameSvr
             M2Share.ItemUnit = new ItemUnit();
             M2Share.MagicManager = new MagicManager();
             M2Share.NoticeManager = new NoticeManager();
-            M2Share.GuildManager = new AssociationManager();
+            M2Share.GuildManager = new GuildManager();
             M2Share.EventManager = new EventManager();
             M2Share.CastleManager = new CastleManager();
             M2Share.FrontEngine = new TFrontEngine();

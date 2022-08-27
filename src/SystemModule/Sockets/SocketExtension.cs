@@ -36,6 +36,16 @@ namespace SystemModule.Sockets
             }
             return false;
         }
+        
+        public static bool SendBuffer(this Socket socket, byte[] buffer)
+        {
+            if (socket.Connected)
+            {
+                socket.Send(buffer);
+                return true;
+            }
+            return false;
+        }
 
         public static string GetIPAddress(this EndPoint endPoint)
         {
@@ -44,7 +54,7 @@ namespace SystemModule.Sockets
                 throw new Exception("endPoint is null");
             }
             var ipEndPoint = ((IPEndPoint)endPoint);
-            return ipEndPoint.ToString();
+            return ipEndPoint.Address.ToString();
         }
 
         public static int GetPort(this EndPoint endPoint)

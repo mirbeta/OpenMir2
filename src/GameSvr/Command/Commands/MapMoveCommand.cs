@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 在指定地图随机移动
@@ -35,7 +36,7 @@ namespace GameSvr
             }
             else
             {
-                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
+                PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.SMapDesc), MsgColor.Red, MsgType.Hint);//不允许传送
             }
         }
     }

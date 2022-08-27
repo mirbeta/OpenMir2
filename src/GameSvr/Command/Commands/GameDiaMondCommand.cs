@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("GameDiaMond", "调整玩家金刚石", 10)]
     public class GameDiaMondCommand : BaseCommond

@@ -1,26 +1,31 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using GameGate.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packages;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private LogQueue _logQueue => LogQueue.Instance;
-        private ClientManager _clientManager => ClientManager.Instance;
-        private SessionManager _sessionManager => SessionManager.Instance;
-        private ServerManager _serverManager => ServerManager.Instance;
+        private readonly ILogger<TimedService> _logger;
+        private static MirLog LogQueue => MirLog.Instance;
+        private static ClientManager ClientManager => ClientManager.Instance;
+        private static SessionManager SessionManager => SessionManager.Instance;
+        private static ServerManager ServerManager => ServerManager.Instance;
 
         private int _processDelayTick = 0;
         private int _processDelayCloseTick = 0;
         private int _processClearSessionTick = 0;
         private int _kepAliveTick = 0;
 
-        public TimedService()
+        public TimedService(ILogger<TimedService> logger)
         {
+            _logger = logger;
             _kepAliveTick = HUtil32.GetTickCount();
         }
 
@@ -38,23 +43,21 @@ namespace GameGate
 
         private void OutMianMessage()
         {
-            if (GateShare.ShowLog)
+            if (!GateShare.ShowLog)
+                return;
+            
+            while (!LogQueue.MessageLog.IsEmpty)
             {
-                while (!_logQueue.MessageLog.IsEmpty)
-                {
-                    string message;
-                    if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-                    Console.WriteLine(message);
-                }
+                string message;
+                if (!LogQueue.MessageLog.TryDequeue(out message)) continue;
+                _logger.LogInformation(message);
+            }
 
-                while (!_logQueue.DebugLog.IsEmpty)
-                {
-                    string message;
-                    if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine(message);
-                    Console.ResetColor();
-                }
+            while (!LogQueue.DebugLog.IsEmpty)
+            {
+                string message;
+                if (!LogQueue.DebugLog.TryDequeue(out message)) continue;
+                _logger.LogDebug(message);
             }
         }
 
@@ -66,18 +69,18 @@ namespace GameGate
             if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 10000)
             {
                 _kepAliveTick = HUtil32.GetTickCount();
-                var _serverList = _serverManager.GetServerList();
-                for (int i = 0; i < _serverList.Count; i++)
+                IList<ServerService> serverList = ServerManager.GetServerList();
+                for (int i = 0; i < serverList.Count; i++)
                 {
-                    if (_serverList[i] == null)
+                    if (serverList[i] == null)
                     {
                         continue;
                     }
-                    if (_serverList[i].ClientThread == null)
+                    if (serverList[i].ClientThread == null)
                     {
                         continue;
                     }
-                    if (!_serverList[i].ClientThread.IsConnected)
+                    if (!serverList[i].ClientThread.IsConnected)
                     {
                         continue;
                     }
@@ -86,7 +89,7 @@ namespace GameGate
                     cmdPacket.Socket = 0;
                     cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;
                     cmdPacket.PackLength = 0;
-                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
+                    serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
                 }
             }
         }
@@ -99,34 +102,34 @@ namespace GameGate
             if (HUtil32.GetTickCount() - _processDelayTick > 100)
             {
                 _processDelayTick = HUtil32.GetTickCount();
-                var _serverList = _serverManager.GetServerList();
-                for (var i = 0; i < _serverList.Count; i++)
+                IList<ServerService> serverList = ServerManager.GetServerList();
+                for (var i = 0; i < serverList.Count; i++)
                 {
-                    if (_serverList[i] == null)
+                    if (serverList[i] == null)
                     {
                         continue;
                     }
                     if (HUtil32.GetTickCount() - _processDelayCloseTick > 2000) //加入网关延时发送关闭消息
                     {
                         _processDelayCloseTick = HUtil32.GetTickCount();
-                        _serverList[i].ProcessCloseList();
+                        serverList[i].ProcessCloseList();
                     }
-                    if (_serverList[i].ClientThread == null)
+                    if (serverList[i].ClientThread == null)
                     {
                         continue;
                     }
-                    if (_serverList[i].ClientThread.SessionArray == null)
+                    if (serverList[i].ClientThread.SessionArray == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < _serverList[i].ClientThread.SessionArray.Length; j++)
+                    for (var j = 0; j < serverList[i].ClientThread.SessionArray.Length; j++)
                     {
-                        var session = _serverList[i].ClientThread.SessionArray[j];
+                        var session = serverList[i].ClientThread.SessionArray[j];
                         if (session?.Socket == null)
                         {
                             continue;
                         }
-                        var userClient = _sessionManager.GetSession(session.SessionId);
+                        var userClient = SessionManager.GetSession(session.SessionId);
                         userClient?.HandleDelayMsg();
                     }
                 }
@@ -141,8 +144,8 @@ namespace GameGate
             if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                _logQueue.EnqueueDebugging("清理超时会话开始工作...");
-                var serverList = _serverManager.GetServerList();
+                LogQueue.EnqueueDebugging("清理超时会话开始工作...");
+                var serverList = ServerManager.GetServerList();
                 for (var i = 0; i < serverList.Count; i++)
                 {
                     if (serverList[i] == null)
@@ -159,9 +162,9 @@ namespace GameGate
                         continue;
                     }
                     clientThread.CheckTimeOutSession();
-                    _clientManager.CheckSessionStatus(serverList[i].ClientThread);
+                    ClientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
-                _logQueue.EnqueueDebugging("清理超时会话工作完成...");
+                LogQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
         }
 

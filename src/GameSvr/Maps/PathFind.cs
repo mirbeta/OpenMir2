@@ -33,7 +33,7 @@
 // 将地图数据的读取和估价函数封装成一个类使用。
 // *******************************************************************************)
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     // 路径数组
     public class TPathMapCell
@@ -614,8 +614,8 @@ namespace GameSvr
         public PointInfo[] FindPath(Envirnoment Envir, short StartX, short StartY, short StopX, short StopY, bool Run)
         {
             PointInfo[] result;
-            this.Width = Envir.wWidth;
-            this.Height = Envir.wHeight;
+            this.Width = Envir.WWidth;
+            this.Height = Envir.WHeight;
             BeginX = StartX;
             BeginY = StartY;
             EndX = StopX;

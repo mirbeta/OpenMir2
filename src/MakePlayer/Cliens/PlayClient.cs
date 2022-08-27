@@ -1,9 +1,10 @@
-using System.Drawing;
 using SystemModule;
 using SystemModule.Packet;
-using SystemModule.Sockets;
+using SystemModule.Packet.ClientPackets;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
-namespace MakePlayer
+namespace MakePlayer.Cliens
 {
     public class PlayClient
     {
@@ -50,12 +51,13 @@ namespace MakePlayer
         public bool m_boLogin = false;
         public long m_dwSayTick = 0;
         private Action? FNotifyEvent = null;
-        public IClientScoket ClientSocket;
+        public readonly ClientScoket ClientSocket;
+        private readonly ClientManager _clientManager;
 
-        public PlayClient()
+        public PlayClient(ClientManager clientManager)
         {
             SessionId = string.Empty;
-            ClientSocket = new IClientScoket();
+            ClientSocket = new ClientScoket();
             ClientSocket.OnConnected += SocketConnect;
             ClientSocket.OnDisconnected += SocketDisconnect;
             ClientSocket.ReceivedDatagram += SocketRead;
@@ -74,6 +76,7 @@ namespace MakePlayer
             FNotifyEvent = null;
             m_dwNotifyEventTick = HUtil32.GetTickCount();
             m_ChrArr = new TSelChar[2];
+            _clientManager = clientManager;
         }
 
         private void NewAccount()
@@ -124,7 +127,7 @@ namespace MakePlayer
             {
                 return;
             }
-            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             var nIdx = sData.IndexOf("*", StringComparison.Ordinal);
             if (nIdx > 0)
             {
@@ -132,7 +135,7 @@ namespace MakePlayer
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
                 ClientSocket.SendText("*");
             }
-            ClientManager.AddPacket(SessionId, e.Buff);
+            _clientManager.AddPacket(SessionId, e.Buff);
         }
 
         private void SocketError(object sender, DSCClientErrorEventArgs e)
@@ -175,7 +178,7 @@ namespace MakePlayer
         {
             MainOutMessage($"[{m_sLoginAccount}] 创建帐号");
             m_ConnectionStep = TConnectionStep.cnsNewAccount;
-            UserFullEntry ue = new UserFullEntry();
+            var ue = new UserFullEntry();
             ue.UserEntry.sAccount = sAccount;
             ue.UserEntry.sPassword = sPassword;
             ue.UserEntry.sUserName = sAccount;
@@ -214,8 +217,8 @@ namespace MakePlayer
                     }
                     break;
             }
-            byte sJob = (byte)RandomNumber.GetInstance().Random(2);
-            byte sSex = (byte)RandomNumber.GetInstance().Random(1);
+            var sJob = (byte)RandomNumber.GetInstance().Random(2);
+            var sSex = (byte)RandomNumber.GetInstance().Random(1);
             SendNewChr(m_sLoginAccount, sCharName, sHair, sJob, sSex);
         }
 
@@ -265,7 +268,7 @@ namespace MakePlayer
         {
             MainOutMessage($"[{m_sLoginAccount}] 进入游戏");
             m_ConnectionStep = TConnectionStep.cnsPlay;
-            var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sCharName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 0 });
+            var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { m_sLoginAccount, m_sCharName, m_nCertification, Grobal2.CLIENT_VERSION_NUMBER, 2022080300 });
             SendSocket(EDcode.EncodeString(sSendMsg));
         }
 
@@ -289,14 +292,14 @@ namespace MakePlayer
 
         private void ClientGetStartPlay(string sData)
         {
-            string sText = EDcode.DeCodeString(sData);
+            var sText = EDcode.DeCodeString(sData);
             var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, new[] { "/" });
             m_nRunServerPort = Convert.ToInt32(sRunPort);
             //ClientSocket.Disconnect();
             m_ConnectionStep = TConnectionStep.cnsPlay;
             MainOutMessage($"[{m_sLoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
-            ClientSocket.Close();
+            //ClientSocket.Close();
             ClientSocket.Host = m_sRunServerAddr;
             ClientSocket.Port = m_nRunServerPort;
             ClientSocket.Connect();
@@ -328,11 +331,11 @@ namespace MakePlayer
             MainOutMessage("-----------------------------------------------");
         }
 
-        public void ClientLoginSay()
+        public void ClientLoginSay(string message)
         {
             m_dwSayTick = HUtil32.GetTickCount();
             var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SAY, 0, 0, 0, 0);
-            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeString("压力测试工具."));
+            SendSocket(EDcode.EncodeMessage(Msg) + EDcode.EncodeString(message));
         }
 
         private void ClientGetAbility(ClientPacket DefMsg, string sData)
@@ -393,7 +396,8 @@ namespace MakePlayer
             switch (nFailCode)
             {
                 case 0:
-                    MainOutMessage(string.Format("[{0}] 帐号已被其他的玩家使用了。请选择其它帐号名注册。", m_sLoginAccount));
+                    MainOutMessage($"[{m_sLoginAccount}] 帐号已被其他的玩家使用了。请选择其它帐号名注册，尝试使用该账号登陆游戏。");
+                    SendLogin(m_sLoginAccount, m_sLoginPasswd);
                     break;
                 case 1:
                     MainOutMessage($"[{m_sLoginAccount}] 验证码输入错误，请重新输入！！！");
@@ -402,15 +406,15 @@ namespace MakePlayer
                     MainOutMessage($"[{m_sLoginAccount}] 此帐号名被禁止使用！");
                     break;
                 default:
-                    MainOutMessage(string.Format("[{0}] 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: " + nFailCode.ToString(), m_sLoginAccount));
+                    MainOutMessage(string.Format("[{0}] 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: " + nFailCode, m_sLoginAccount));
                     break;
             }
         }
 
         private void ClientGetPasswdSuccess(string sData)
         {
-            string sSelChrPort = string.Empty;
-            string sCertification = string.Empty;
+            var sSelChrPort = string.Empty;
+            var sCertification = string.Empty;
             MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
             var sText = EDcode.DeCodeString(sData);
             sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, new[] { "/" });
@@ -420,7 +424,7 @@ namespace MakePlayer
             m_nSelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
             m_ConnectionStep = TConnectionStep.cnsQueryChr;
-            ClientSocket.Close();
+            //ClientSocket.Close();
             ClientSocket.Host = m_sSelChrAddr;
             ClientSocket.Port = m_nSelChrPort;
             ClientSocket.Connect();
@@ -498,14 +502,14 @@ namespace MakePlayer
 
         private void ClientGetReceiveChrs(string sData)
         {
-            string sName = string.Empty;
-            string sJob = string.Empty;
-            string sHair = string.Empty;
-            string sLevel = string.Empty;
-            string sSex = string.Empty;
-            string sText = EDcode.DeCodeString(sData);
-            int nChrCount = 0;
-            int nSelect = 0;
+            var sName = string.Empty;
+            var sJob = string.Empty;
+            var sHair = string.Empty;
+            var sLevel = string.Empty;
+            var sSex = string.Empty;
+            var sText = EDcode.DeCodeString(sData);
+            var nChrCount = 0;
+            var nSelect = 0;
             for (var i = m_ChrArr.GetLowerBound(0); i <= m_ChrArr.GetUpperBound(0); i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, new[] { "/" });
@@ -587,10 +591,10 @@ namespace MakePlayer
 
         private void ClientGetServerName(ClientPacket DefMsg, string sBody)
         {
-            string sServerName = string.Empty;
-            string sServerStatus = string.Empty;
+            var sServerName = string.Empty;
+            var sServerStatus = string.Empty;
             sBody = EDcode.DeCodeString(sBody);
-            int nCount = HUtil32._MIN(6, DefMsg.Series);
+            var nCount = HUtil32._MIN(6, DefMsg.Series);
             for (var i = 0; i < nCount; i++)
             {
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerName, new[] { "/" });
@@ -610,9 +614,9 @@ namespace MakePlayer
 
         private void ClientGetPasswordOK(string sData)
         {
-            string sServerName = string.Empty;
+            var sServerName = string.Empty;
             MainOutMessage($"[{m_sLoginAccount}] 帐号登录成功！");
-            string sText = EDcode.DeCodeString(sData);
+            var sText = EDcode.DeCodeString(sData);
             HUtil32.GetValidStr3(sText, ref sServerName, new[] { "/" });
             SendSelectServer(sServerName);
         }
@@ -646,21 +650,21 @@ namespace MakePlayer
             m_boTimerMainBusy = true;
             try
             {
-                var m_sSockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
-                if (!string.IsNullOrEmpty(m_sSockText))
+                var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
+                if (!string.IsNullOrEmpty(sockText))
                 {
-                    while (m_sSockText.Length >= 2)
+                    while (sockText.Length >= 2)
                     {
                         if (m_boMapMovingWait)
                         {
                             break;
                         }
-                        if (m_sSockText.IndexOf("!", StringComparison.Ordinal) <= 0)
+                        if (sockText.IndexOf("!", StringComparison.Ordinal) <= 0)
                         {
                             break;
                         }
-                        string sData = string.Empty;
-                        m_sSockText = HUtil32.ArrestStringEx(m_sSockText, "#", "!", ref sData);
+                        var sData = string.Empty;
+                        sockText = HUtil32.ArrestStringEx(sockText, "#", "!", ref sData);
                         if (string.IsNullOrEmpty(sData))
                         {
                             break;
@@ -691,8 +695,8 @@ namespace MakePlayer
             {
                 return;
             }
-            string sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
-            string sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
+            var sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
+            var sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
             var DefMsg = EDcode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {

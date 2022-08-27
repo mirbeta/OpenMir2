@@ -1,7 +1,9 @@
+using GameSvr.Magic;
 using System.Collections;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {
@@ -225,7 +227,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool ActThink_FindPosOfTarget(TMapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
+        private bool ActThink_FindPosOfTarget(TMapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
         {
             bool result = false;
             byte btDir = 0;

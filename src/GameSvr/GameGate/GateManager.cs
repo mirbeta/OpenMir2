@@ -1,30 +1,35 @@
-﻿using System.Collections.Concurrent;
+﻿using GameSvr.Player;
+using GameSvr.Services;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
-using SystemModule.Packages;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSvr
+namespace GameSvr.GameGate
 {
     public class GateManager
     {
         private static readonly GateManager instance = new GateManager();
         public static GateManager Instance => instance;
-        private readonly ISocketServer _gateSocket = null;
+        private readonly SocketServer _gateSocket = null;
         private readonly object m_RunSocketSection = null;
         private readonly Channel<ReceiveData> _receiveQueue;
-        private readonly object runSocketSection;
-        private readonly ConcurrentDictionary<int, GateService> _gateDataService;
+        private Task _startMessageQueueTask;
+        private readonly ConcurrentDictionary<int, GateService> _gateService;
 
         private GateManager()
         {
             m_RunSocketSection = new object();
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            _gateDataService = new ConcurrentDictionary<int, GateService>();
-            _gateSocket = new ISocketServer(10, 1024);
+            _gateService = new ConcurrentDictionary<int, GateService>();
+            _gateSocket = new SocketServer(10, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
@@ -40,6 +45,7 @@ namespace GameSvr
 
         public void Stop()
         {
+            _startMessageQueueTask.Dispose();
             _gateSocket.Shutdown();
         }
 
@@ -60,7 +66,7 @@ namespace GameSvr
             const string sKickGate = "服务器未就绪: {0}";
             if (M2Share.boStartReady)
             {
-                if (_gateDataService.Count > 20)
+                if (_gateService.Count > 20)
                 {
                     e.Socket.Close();
                     return;
@@ -80,8 +86,8 @@ namespace GameSvr
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
                 M2Share.MainOutMessage(string.Format(sGateOpen, e.EndPoint));
-                _gateDataService.TryAdd(e.ConnectionId, new GateService(e.ConnectionId, gateInfo));
-                _gateDataService[e.ConnectionId].StartQueueService();
+                _gateService.TryAdd(e.SocHandle, new GateService(e.SocHandle, gateInfo));
+                _gateService[e.SocHandle].StartQueueService();
             }
             else
             {
@@ -92,9 +98,9 @@ namespace GameSvr
 
         public void CloseUser(int gateIdx, int nSocket)
         {
-            if (_gateDataService.ContainsKey(gateIdx))
+            if (_gateService.ContainsKey(gateIdx))
             {
-                _gateDataService[gateIdx].CloseUser(nSocket);
+                _gateService[gateIdx].CloseUser(nSocket);
             }
             else
             {
@@ -108,10 +114,10 @@ namespace GameSvr
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
             try
             {
-                var keys = _gateDataService.Keys.ToList();
-                for (int i = 0; i < _gateDataService.Count; i++)
+                var keys = _gateService.Keys.ToList();
+                for (int i = 0; i < _gateService.Count; i++)
                 {
-                    var gateInfo = _gateDataService[keys[i]].GateInfo;
+                    var gateInfo = _gateService[keys[i]].GateInfo;
                     if (gateInfo.boUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -165,10 +171,10 @@ namespace GameSvr
 
         public void CloseAllGate()
         {
-            var keys = _gateDataService.Keys.ToList();
-            for (int i = 0; i < _gateDataService.Count; i++)
+            var keys = _gateService.Keys.ToList();
+            for (int i = 0; i < _gateService.Count; i++)
             {
-                _gateDataService[keys[i]].GateInfo.Socket.Close();
+                _gateService[keys[i]].GateInfo.Socket.Close();
             }
         }
 
@@ -182,48 +188,45 @@ namespace GameSvr
 
         private void CloseGate(AsyncUserToken e)
         {
-            TGateUserInfo GateUser;
-            IList<TGateUserInfo> UserList;
-            TGateInfo Gate;
             const string sGateClose = "游戏网关({0}:{1})已关闭...";
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
-                if (_gateDataService[e.ConnectionId] == null)
+                if (_gateService[e.SocHandle] == null)
                 {
-                    Console.WriteLine("非法请求");
+                    Debug.WriteLine("非法请求");
                     return;
                 }
-                Gate = _gateDataService[e.ConnectionId].GateInfo;
-                if (Gate.Socket == null)
+                var gateInfo = _gateService[e.SocHandle].GateInfo;
+                if (gateInfo.Socket == null)
                 {
-                    Console.WriteLine("Scoket以关闭，无需关闭");
+                    Debug.WriteLine("Scoket为空，无需关闭");
                     return;
                 }
-                if (Gate.SocketId.Equals(e.ConnectionId))
+                if (gateInfo.SocketId.Equals(e.ConnectionId))
                 {
-                    UserList = Gate.UserList;
-                    for (var i = 0; i < UserList.Count; i++)
+                    IList<TGateUserInfo> userList = gateInfo.UserList;
+                    for (var i = 0; i < userList.Count; i++)
                     {
-                        GateUser = UserList[i];
-                        if (GateUser != null)
+                        var gateUser = userList[i];
+                        if (gateUser != null)
                         {
-                            if (GateUser.PlayObject != null)
+                            if (gateUser.PlayObject != null)
                             {
-                                GateUser.PlayObject.m_boEmergencyClose = true;
-                                if (!GateUser.PlayObject.m_boReconnection)
+                                gateUser.PlayObject.m_boEmergencyClose = true;
+                                if (!gateUser.PlayObject.m_boReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.sAccount, GateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.sAccount, gateUser.nSessionID);
                                 }
                             }
-                            UserList[i] = null;
+                            userList[i] = null;
                         }
                     }
-                    Gate.UserList = null;
-                    Gate.boUsed = false;
-                    Gate.Socket = null;
+                    gateInfo.UserList = null;
+                    gateInfo.boUsed = false;
+                    gateInfo.Socket = null;
                     M2Share.ErrorMessage(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
-                    if (_gateDataService.Remove(e.ConnectionId, out var gateService))
+                    if (_gateService.Remove(e.SocHandle, out var gateService))
                     {
                         gateService.Stop();
                     }
@@ -239,13 +242,13 @@ namespace GameSvr
             }
         }
 
-        public void SendOutConnectMsg(int nGateIdx, int nSocket, int nGsIdx)
+        public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
             var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var msgHeader = new PacketHeader();
             msgHeader.PacketCode = Grobal2.RUNGATECODE;
             msgHeader.Socket = nSocket;
-            msgHeader.SocketIdx = (ushort)nGsIdx;
+            msgHeader.SessionId = nGsIdx;
             msgHeader.Ident = Grobal2.GM_DATA;
             msgHeader.PackLength = ClientPacket.PackSize;
             ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
@@ -260,11 +263,11 @@ namespace GameSvr
         /// </summary>
         public void SetGateUserList(int nGateIdx, int nSocket, TPlayObject PlayObject)
         {
-            if (!_gateDataService.ContainsKey(nGateIdx))
+            if (!_gateService.ContainsKey(nGateIdx))
             {
                 return;
             }
-            var dataService = _gateDataService[nGateIdx];
+            var dataService = _gateService[nGateIdx];
             dataService?.SetGateUserList(nSocket, PlayObject);
         }
 
@@ -273,9 +276,9 @@ namespace GameSvr
             var dwRunTick = HUtil32.GetTickCount();
             if (M2Share.boStartReady)
             {
-                if (_gateDataService.Count > 0)
+                if (_gateService.Count > 0)
                 {
-                    var gateServiceList = _gateDataService.Values.ToList();
+                    var gateServiceList = _gateService.Values.ToList();
                     foreach (var gateService in gateServiceList)
                     {
                         var gateInfo = gateService.GateInfo;
@@ -336,7 +339,7 @@ namespace GameSvr
             {
                 return;
             }
-            var MsgHeader = new PacketHeader
+            var msgHeader = new PacketHeader
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -345,7 +348,7 @@ namespace GameSvr
             };
             if (Socket.Connected)
             {
-                var data = MsgHeader.GetBuffer();
+                var data = msgHeader.GetBuffer();
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -358,9 +361,9 @@ namespace GameSvr
         public bool AddGateBuffer(int gateIdx, byte[] buffer)
         {
             var result = false;
-            if (_gateDataService.ContainsKey(gateIdx))
+            if (_gateService.ContainsKey(gateIdx))
             {
-                _gateDataService[gateIdx].HandleSendBuffer(buffer);
+                _gateService[gateIdx].HandleSendBuffer(buffer);
                 result = true;
             }
             return result;
@@ -382,18 +385,18 @@ namespace GameSvr
         /// <summary>
         /// 处理GameGate发过来的消息
         /// </summary>
-        public Task StartMessageQueue(CancellationToken cancellation)
+        public void StartMessageQueue(CancellationToken cancellation)
         {
-            return Task.Factory.StartNew(async () =>
-              {
-                  while (await _receiveQueue.Reader.WaitToReadAsync(cancellation))
-                  {
-                      while (_receiveQueue.Reader.TryRead(out var message))
-                      {
-                         // ExecGateBuffers(message.Packet, message.Data);
-                      }
-                  }
-              });
+            _startMessageQueueTask = Task.Factory.StartNew(async () =>
+            {
+                while (await _receiveQueue.Reader.WaitToReadAsync(cancellation))
+                {
+                    while (_receiveQueue.Reader.TryRead(out var message))
+                    {
+                       // ExecGateBuffers(message.Packet, message.Data);
+                    }
+                }
+            }, cancellation);
         }
 
         #region Socket Events
@@ -416,12 +419,12 @@ namespace GameSvr
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (_gateDataService.ContainsKey(e.ConnectionId))
+            if (_gateService.ContainsKey(e.SocHandle))
             {
                 var nMsgLen = e.BytesReceived;
                 var data = new byte[e.BytesReceived];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-                _gateDataService[e.ConnectionId].HandleReceiveBuffer(nMsgLen, data);
+                _gateService[e.SocHandle].HandleReceiveBuffer(nMsgLen, data);
             }
             else
             {

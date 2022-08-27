@@ -1,10 +1,25 @@
-using GameSvr.CommandSystem;
+using GameSvr.Castle;
+using GameSvr.Command;
 using GameSvr.Configs;
+using GameSvr.DataStores;
+using GameSvr.Event;
+using GameSvr.GameGate;
+using GameSvr.Guild;
+using GameSvr.Items;
+using GameSvr.Magic;
+using GameSvr.Maps;
+using GameSvr.Notices;
+using GameSvr.Npc;
+using GameSvr.Robots;
+using GameSvr.Services;
+using GameSvr.UsrSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -46,7 +61,7 @@ namespace GameSvr
         public static MirLog LogSystem = null;
         public static RandomNumber RandomNumber = null;
         public static DBService DataServer = null;
-        public static ScriptSystem ScriptSystem = null;
+        public static ScriptSystem.ScriptSystem ScriptSystem = null;
         public static GateManager GateManager = null;
         public static ArrayList LogStringList = null;
         public static ArrayList LogonCostLogList = null;
@@ -54,7 +69,7 @@ namespace GameSvr
         public static ItemUnit ItemUnit = null;
         public static MagicManager MagicManager = null;
         public static NoticeManager NoticeManager = null;
-        public static AssociationManager GuildManager = null;
+        public static GuildManager GuildManager = null;
         public static EventManager EventManager = null;
         public static CastleManager CastleManager = null;
         public static TFrontEngine FrontEngine = null;
@@ -365,7 +380,7 @@ namespace GameSvr
         public static string g_sNotWinLotteryMsg = "等下次机会吧!!!";
         public static string g_sWeaptonMakeLuck = "武器被加幸运了...";
         public static string g_sWeaptonNotMakeLuck = "无效!!!";
-        public static string g_sTheWeaponIsCursed = "你的武器被诅咒了!!!";
+        public static string g_sTheWeaponIsCursed = "您的武器被诅咒了。";
         public static string g_sCanotTakeOffItem = "无法取下物品!!!";
         public static string g_sJoinGroup = "{0} 已加入小组.";
         public static string g_sTryModeCanotUseStorage = "试玩模式不可以使用仓库功能!!!";
@@ -1602,15 +1617,15 @@ namespace GameSvr
             OStdItem.Reserved = StdItem.reserved;*/
             OStdItem.NeedIdentify = StdItem.NeedIdentify;
             OStdItem.Looks = StdItem.Looks;
-            OStdItem.DuraMax = (ushort)StdItem.DuraMax;
+            OStdItem.DuraMax = StdItem.DuraMax;
             OStdItem.AC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.AC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.AC)));
             OStdItem.MAC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MAC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MAC)));
             OStdItem.DC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.DC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.DC)));
             OStdItem.MC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MC)));
             OStdItem.SC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.SC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.SC)));
-            OStdItem.Need = (byte)StdItem.Need;
-            OStdItem.NeedLevel = (byte)StdItem.NeedLevel;
-            OStdItem.Price = (int)StdItem.Price;
+            OStdItem.Need = StdItem.Need;
+            OStdItem.NeedLevel = StdItem.NeedLevel;
+            OStdItem.Price = StdItem.Price;
         }
 
         public static bool LoadLineNotice(string FileName)

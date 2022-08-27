@@ -1,3 +1,5 @@
+using SystemModule.Packet.ClientPackets;
+
 namespace SystemModule
 {
     public class Grobal2

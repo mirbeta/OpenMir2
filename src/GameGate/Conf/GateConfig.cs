@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace GameGate
+namespace GameGate.Conf
 {
     /// <summary>
     /// 网关配置类
@@ -17,6 +17,10 @@ namespace GameGate
         /// 是否显示Debug日志
         /// </summary>
         public bool ShowDebugLog;
+        /// <summary>
+        /// 消息线程数
+        /// </summary>
+        public int MessageThread;
         /// <summary>
         /// 网关数
         /// </summary>
@@ -259,7 +263,7 @@ namespace GameGate
             PunishMoveInterval = 150;
             PunishSpellInterval = 150;
             PunishAttackInterval = 150;
-            ChatFilterMethod = TChatFilterMethod.ctReplaceAll;
+            ChatFilterMethod = TChatFilterMethod.ReplaceAll;
             SpeedHackWarnMethod = TOverSpeedMsgMethod.ptSysmsg;
             MaxItemSpeed = 6;
             MaxItemSpeedRate = 60;
@@ -270,6 +274,7 @@ namespace GameGate
             ClientSpellSpeedRate = 0;
             ClientAttackSpeedRate = 0;
             ShowDebugLog = false;
+            MessageThread = 1;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using LoginSvr.Services;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,52 +11,30 @@ namespace LoginSvr
 {
     public class TimedService : BackgroundService
     {
-        private LogQueue _logQueue => LogQueue.Instance;
-        private LoginService _loginService => LoginService.Instance;
-        private MonSocService _monSocService => MonSocService.Instance;
-        private ThreadParseList _threadParseList => ThreadParseList.Instance;
-        private MasSocService _massocService => MasSocService.Instance;
+        private readonly MirLog _logger;
+        private readonly LoginService _loginService;
+        private readonly ThreadParseList _threadParseList;
+        private readonly MasSocService _massocService;
         private int _processMonSocTick = 0;
         private int _processServerStatuTick = 0;
 
-        public TimedService()
+        public TimedService(MirLog logger, LoginService loginService, MasSocService massocService, ThreadParseList threadParseList)
         {
-
+            _logger = logger;
+            _loginService = loginService;
+            _massocService = massocService;
+            _threadParseList = threadParseList;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                OutMianMessage();
                 LoginProcess();
                 ProcessMonSoc();
                 CheckServerStatus();
                 _threadParseList.Execute();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
-            }
-        }
-
-        private void OutMianMessage()
-        {
-            while (!_logQueue.MessageLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-
-                Console.WriteLine(message);
-            }
-
-            while (!_logQueue.DebugLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine(message);
-                Console.ResetColor();
             }
         }
 
@@ -70,23 +49,51 @@ namespace LoginSvr
             if (HUtil32.GetTickCount() - _processMonSocTick > 20000)
             {
                 _processMonSocTick = HUtil32.GetTickCount();
-                _monSocService.ProcessCleanSession();
+                ProcessCleanSession();
             }
         }
 
+        private void ProcessCleanSession()
+        {
+            string sMsg = string.Empty;
+            int nC = _massocService.ServerList.Count;
+            for (var i = 0; i < _massocService.ServerList.Count; i++)
+            {
+                var msgServer = _massocService.ServerList[i];
+                var sServerName = msgServer.sServerName;
+                if (!string.IsNullOrEmpty(sServerName))
+                {
+                    sMsg = sMsg + sServerName + "/" + msgServer.nServerIndex + "/" + msgServer.nOnlineCount + "/";
+                    if ((HUtil32.GetTickCount() - msgServer.dwKeepAliveTick) < 30000)
+                    {
+                        sMsg = sMsg + "正常 ";
+                    }
+                    else
+                    {
+                        sMsg = sMsg + "超时 ";
+                    }
+                }
+                else
+                {
+                    sMsg = "-/-/-/-;";
+                }
+            }
+            _logger.LogDebug(sMsg);
+        }
+        
         private void CheckServerStatus()
         {
             if (HUtil32.GetTickCount() - _processServerStatuTick > 20000)
             {
                 _processServerStatuTick = HUtil32.GetTickCount();
-                IList<TMsgServerInfo> ServerList = _massocService.ServerList;
+                IList<MessageServerInfo> ServerList = _massocService.ServerList;
                 if (!ServerList.Any())
                 {
                     return;
                 }
                 for (var i = 0; i < ServerList.Count; i++)
                 {
-                    TMsgServerInfo MsgServer = ServerList[i];
+                    MessageServerInfo MsgServer = ServerList[i];
                     string sServerName = MsgServer.sServerName;
                     if (!string.IsNullOrEmpty(sServerName))
                     {
@@ -97,22 +104,22 @@ namespace LoginSvr
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logQueue.Enqueue($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"数据库服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logQueue.Enqueue($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                                _logger.Information($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                             }
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logQueue.Enqueue($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
+                                _logger.Information($"游戏服务器[{MsgServer.sIPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logQueue.Enqueue($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                                _logger.Information($"[{sServerName}]游戏服务器响应超时,关闭链接.");
                             }
                         }
                     }

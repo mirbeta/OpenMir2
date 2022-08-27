@@ -1,6 +1,8 @@
-﻿using SystemModule;
+﻿using GameSvr.Event.Events;
+using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     public class MapManager
     {
@@ -59,7 +61,7 @@ namespace GameSvr
             var list = new List<Envirnoment>();
             foreach (var item in m_MapList.Values)
             {
-                if (item.m_DoorList.Count > 0)
+                if (item.MDoorList.Count > 0)
                 {
                     list.Add(item);
                 }
@@ -77,7 +79,7 @@ namespace GameSvr
             }
             else
             {
-                sTempName = HUtil32.ArrestStringEx(sTempName, '<', '>', ref m_sMapFileName);
+                sTempName = HUtil32.ArrestStringEx(sTempName, "<", ">", ref m_sMapFileName);
                 if (m_sMapFileName == "")
                 {
                     m_sMapFileName = sMapName;
@@ -89,16 +91,16 @@ namespace GameSvr
             }
             var envirnoment = new Envirnoment
             {
-                sMapName = sMapName,
-                m_sMapFileName = m_sMapFileName,
-                sMapDesc = sMapDesc,
-                nServerIndex = nServerNumber,
+                SMapName = sMapName,
+                MSMapFileName = m_sMapFileName,
+                SMapDesc = sMapDesc,
+                NServerIndex = nServerNumber,
                 Flag = MapFlag,
-                QuestNPC = QuestNPC
+                QuestNpc = QuestNPC
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.sMapName, out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.SMapName, out var minMap))
             {
-                envirnoment.nMinMap = minMap;
+                envirnoment.NMinMap = minMap;
             }
             if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
             {
@@ -149,7 +151,7 @@ namespace GameSvr
             Envirnoment result = null;
             if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
-                if (envirnoment.nServerIndex == nServerIdx)
+                if (envirnoment.NServerIndex == nServerIdx)
                 {
                     result = envirnoment;
                 }
@@ -166,7 +168,7 @@ namespace GameSvr
         {
             if (m_MapList.TryGetValue(sMapName, out var envirnoment))
             {
-                return envirnoment.nServerIndex;
+                return envirnoment.NServerIndex;
             }
             return 0;
         }

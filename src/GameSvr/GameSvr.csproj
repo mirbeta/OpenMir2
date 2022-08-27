@@ -5,23 +5,31 @@
 		<UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
 		<LangVersion>10</LangVersion>
 		<Nullable>disable</Nullable>
-		<BaseOutputPath>bin\</BaseOutputPath>
 		<PackageId>GameSvr</PackageId>
 		<OutputType>Exe</OutputType>
-		<IsPublishable>True</IsPublishable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-		<OutputPath>D:\Mirserver\Mir200</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<PublishTrimmed>true</PublishTrimmed>
-		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
+	<Choose>
+		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+			<PropertyGroup>
+				<OutputPath>D:\MirServer\Mir200</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/Data/Mirserver/Mir200</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/opt/Mirserver/Mir200</OutputPath>
+			</PropertyGroup>
+		</When>
+	</Choose>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<WarningLevel>4</WarningLevel>
-		<CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-		<Prefer32bit>false</Prefer32bit>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

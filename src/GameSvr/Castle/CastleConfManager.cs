@@ -1,7 +1,7 @@
 using SystemModule;
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Castle
 {
     public class CastleConfManager : IniFile
     {
@@ -33,7 +33,7 @@ namespace GameSvr
             }
             for (var i = 0; i < userCastle.m_EnvirList.Count; i++)
             {
-                userCastle.m_EnvirList[i] = M2Share.MapManager.FindMap(userCastle.m_EnvirList[i]).sMapName;
+                userCastle.m_EnvirList[i] = M2Share.MapManager.FindMap(userCastle.m_EnvirList[i]).SMapName;
             }
             userCastle.m_sMapName = ReadString("Defense", "CastleMap", "3");
             userCastle.m_sHomeMap = ReadString("Defense", "CastleHomeMap", userCastle.m_sHomeMap);

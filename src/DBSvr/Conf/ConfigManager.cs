@@ -1,53 +1,54 @@
-using System.IO;
 using System;
+using System.IO;
 using SystemModule.Common;
 
-namespace DBSvr
+namespace DBSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        public DBConfig Config;
-        private static string sConfitFile = Path.Combine(AppContext.BaseDirectory, "config.conf");
+        private readonly DBConfig _config;
+        private static readonly string ConfitFile = Path.Combine(AppContext.BaseDirectory, "dbsvr.conf");
 
-        private static readonly ConfigManager instance = new ConfigManager(sConfitFile);
+        private static readonly ConfigManager instance = new ConfigManager(ConfitFile);
 
         public static DBConfig GetConfig()
         {
-            return Instance.Config;
+            return Instance._config;
         }
 
         public static ConfigManager Instance => instance;
 
         public ConfigManager(string fileName) : base(fileName)
         {
-            Config = new DBConfig();
+            _config = new DBConfig();
             Load();
         }
 
         public void LoadConfig()
         {
-            Config.DBConnection = ReadString("DataBase", "ConnctionString", Config.DBConnection);
-            Config.nServerPort = ReadInteger("Setup", "ServerPort", Config.nServerPort);
-            Config.sServerAddr = ReadString("Setup", "ServerAddr", Config.sServerAddr);
-            Config.g_nGatePort = ReadInteger("Setup", "GatePort", Config.g_nGatePort);
-            Config.g_sGateAddr = ReadString("Setup", "GateAddr", Config.g_sGateAddr);
-            Config.sIDServerAddr = ReadString("Server", "IDSAddr", Config.sIDServerAddr);
-            Config.nIDServerPort = ReadInteger("Server", "IDSPort", Config.nIDServerPort);
-            Config.sServerName = ReadString("Setup", "ServerName", Config.sServerName);
-            Config.boDenyChrName = ReadBool("Setup", "DenyChrName", Config.boDenyChrName);
-            Config.nDELMaxLevel = ReadInteger("Setup", "DELMaxLevel", Config.nDELMaxLevel);
-            Config.dwInterval = Read<int>("DBClear", "Interval", Config.dwInterval);
-            var LoadInteger = ReadInteger("Setup", "DynamicIPMode", -1);
-            if (LoadInteger < 0)
+            _config.ShowDebugLog = ReadBool("Setup", "ShowDebugLog", _config.ShowDebugLog);
+            _config.DBConnection = ReadString("DataBase", "ConnctionString", _config.DBConnection);
+            _config.ServerPort = ReadInteger("Setup", "ServerPort", _config.ServerPort);
+            _config.ServerAddr = ReadString("Setup", "ServerAddr", _config.ServerAddr);
+            _config.GatePort = ReadInteger("Setup", "GatePort", _config.GatePort);
+            _config.GateAddr = ReadString("Setup", "GateAddr", _config.GateAddr);
+            _config.LoginServerAddr = ReadString("Server", "IDSAddr", _config.LoginServerAddr);
+            _config.LoginServerPort = ReadInteger("Server", "IDSPort", _config.LoginServerPort);
+            _config.ServerName = ReadString("Setup", "ServerName", _config.ServerName);
+            _config.boDenyChrName = ReadBool("Setup", "DenyChrName", _config.boDenyChrName);
+            _config.nDELMaxLevel = ReadInteger("Setup", "DELMaxLevel", _config.nDELMaxLevel);
+            _config.Interval = Read<int>("DBClear", "Interval", _config.Interval);
+            var dynamicIpMode = ReadInteger("Setup", "DynamicIPMode", -1);
+            if (dynamicIpMode < 0)
             {
-                WriteBool("Setup", "DynamicIPMode", Config.g_boDynamicIPMode);
+                WriteBool("Setup", "DynamicIPMode", _config.DynamicIpMode);
             }
             else
             {
-                Config.g_boDynamicIPMode = LoadInteger == 1;
+                _config.DynamicIpMode = dynamicIpMode == 1;
             }
-            Config.g_boEnglishNames = ReadBool("Setup", "EnglishNameOnly", Config.g_boEnglishNames);
-            Config.sMapFile = ReadString("Setup", "MapFile", Config.sMapFile);
+            _config.EnglishNames = ReadBool("Setup", "EnglishNameOnly", _config.EnglishNames);
+            _config.MapFile = ReadString("Setup", "MapFile", _config.MapFile);
         }
     }
 }

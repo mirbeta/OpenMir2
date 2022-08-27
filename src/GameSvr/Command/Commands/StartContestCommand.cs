@@ -1,7 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Actor;
+using GameSvr.Guild;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 开始行会争霸赛
@@ -14,7 +17,7 @@ namespace GameSvr
         {
             IList<TBaseObject> List10;
             IList<TPlayObject> List14;
-            IList<Association> guildList;
+            IList<GuildInfo> guildList;
             TPlayObject m_PlayObject;
             TPlayObject PlayObjectA;
             bool bo19;
@@ -26,7 +29,7 @@ namespace GameSvr
             PlayObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
             List10 = new List<TBaseObject>();
             List14 = new List<TPlayObject>();
-            guildList = new List<Association>();
+            guildList = new List<GuildInfo>();
             M2Share.UserEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, List10);
             for (var i = 0; i < List10.Count; i++)
             {
@@ -56,7 +59,7 @@ namespace GameSvr
             PlayObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
             M2Share.UserEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
-            Association Guild;
+            GuildInfo Guild;
             for (int i = 0; i < guildList.Count; i++)
             {
                 Guild = guildList[i];

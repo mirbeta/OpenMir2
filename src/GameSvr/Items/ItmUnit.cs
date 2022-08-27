@@ -1,7 +1,9 @@
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Items
 {
     public class ItemUnit
     {

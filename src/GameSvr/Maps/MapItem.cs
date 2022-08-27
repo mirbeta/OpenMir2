@@ -1,6 +1,7 @@
 using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     public class MapItem
     {

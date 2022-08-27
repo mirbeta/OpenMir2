@@ -5,15 +5,33 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<DebugType>embedded</DebugType>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
-		<OutputPath>D:\Mirserver\LoginSrv</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
+	<Choose>
+		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+			<PropertyGroup>
+				<OutputPath>D:\MirServer\LoginSrv</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/Data/Mirserver/LoginSrv</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/opt/Mirserver/LoginSrv</OutputPath>
+			</PropertyGroup>
+		</When>
+	</Choose>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-		<PackageReference Include="MySql.Data" Version="8.0.28" />
+		<PackageReference Include="MySql.Data" Version="8.0.30" />
 		<PackageReference Include="Spectre.Console" Version="0.44.0" />
 		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.44.0" />
+		<PackageReference Include="NLog" Version="5.0.2" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,6 +44,19 @@
 
 	<ItemGroup>
 		<None Remove="MySql.Data" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\SystemModule\Packet\ServerPackets\GatePacket.cs">
+	    <Link>Packet\GatePacket.cs</Link>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\nlog.config">
+			<Link>nlog.config</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("ShowDenyIPaddrLogon", "", 10)]
     public class ShowDenyIPaddrLogonCommand : BaseCommond

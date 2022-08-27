@@ -13,7 +13,7 @@
         // 97~99
         // 100..111
         // 112~119
-        public static bool[] MAIGIC_DELAY_ARRAY = { true, true, true, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, false, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, false, false };
+        public static readonly bool[] MaigicDelayArray = { true, true, true, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, false, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, false, false };
         // 120~128
         // 小火球
         // 治愈术
@@ -65,7 +65,7 @@
         // 96..99
         // 100~111
         // 112
-        public static bool[] MAIGIC_ATTACK_ARRAY = { false, true, false, false, false, true, true, false, false, true, true, true, false, true, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, true, true, false, false, true, true, true, true, false, true, false, false, true, true, false, true, false, false, false, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true };
+        public static readonly bool[] MaigicAttackArray = { false, true, false, false, false, true, true, false, false, true, true, true, false, true, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, true, true, false, false, true, true, true, true, false, true, false, false, true, true, false, true, false, false, false, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true };
         // 120~128
         // 魔法的延迟表
         public static int[] MAIGIC_DELAY_TIME_LIST_DEF;
@@ -225,7 +225,10 @@
         // 86
         // 87
         // 100~111
-        public static int[] MAIGIC_DELAY_TIME_LIST = { 60000, 1110 + 60, 1110 + 40, 1110, 1110, 1110 + 60, 1110 + 40, 1110, 1110 + 30, 1110 + 60, 1110 + 100, 1110 + 100, 1110, 1110 + 60, 1110 + 40, 1110 + 40, 1110 + 50, 1110 + 50, 1110 + 50, 1110 + 50, 1110 + 60, 1110 + 50, 1110 + 120, 1110 + 60, 1110 + 60, 1110, 1110, 1110, 1110 + 40, 1110 + 40, 1110 + 120, 1110, 1320 - 90, 1260 - 90, 1240 - 90, 1260 - 90, 1260 - 90, 1320 - 90, 1320 - 90, 1320 - 90, 1110, 1230 - 90, 1110, 1110, 1260 - 90, 1260 - 90, 1260 - 90, 1260 - 90, 1230 - 90, 1240 - 90, 1230 - 90, 1240 - 90, 1240 - 90, 1240 - 90, 1260 - 90, 1260 - 90, 1110, 1260 - 90, 1320 - 90, 1300, 200, 200, 200, 200, 200, 200, 1500 - 90, 1800 - 90, 1110, 1110, 1700 - 90, 1800 - 90, 1110, 1110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 1300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+        /// <summary>
+        /// 魔法的延迟表
+        /// </summary>
+        public static readonly int[] MaigicDelayTimeList = { 60000, 1110 + 60, 1110 + 40, 1110, 1110, 1110 + 60, 1110 + 40, 1110, 1110 + 30, 1110 + 60, 1110 + 100, 1110 + 100, 1110, 1110 + 60, 1110 + 40, 1110 + 40, 1110 + 50, 1110 + 50, 1110 + 50, 1110 + 50, 1110 + 60, 1110 + 50, 1110 + 120, 1110 + 60, 1110 + 60, 1110, 1110, 1110, 1110 + 40, 1110 + 40, 1110 + 120, 1110, 1320 - 90, 1260 - 90, 1240 - 90, 1260 - 90, 1260 - 90, 1320 - 90, 1320 - 90, 1320 - 90, 1110, 1230 - 90, 1110, 1110, 1260 - 90, 1260 - 90, 1260 - 90, 1260 - 90, 1230 - 90, 1240 - 90, 1230 - 90, 1240 - 90, 1240 - 90, 1240 - 90, 1260 - 90, 1260 - 90, 1110, 1260 - 90, 1320 - 90, 1300, 200, 200, 200, 200, 200, 200, 1500 - 90, 1800 - 90, 1110, 1110, 1700 - 90, 1800 - 90, 1110, 1110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 1300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
         // 66
         // 67
         // 68
@@ -236,11 +239,11 @@
         // 84
         // 87
         // 99
-        public static string[] MAIGIC_NAME_LIST = { "", "火球术", "治愈术", "基本剑术", "精神力战法", "大火球", "施毒术", "攻杀剑术", "抗拒火环", "地狱火", "疾光电影", "雷电术", "刺杀剑术", "灵魂火符", "幽灵盾", "神圣战甲术", "困魔咒", "召唤骷髅", "隐身术", "集体隐身术", "诱惑之光", "瞬息移动", "火墙", "爆裂火焰", "地狱雷光", "半月弯刀", "烈火剑法", "野蛮冲撞", "心灵启示", "群体治疗术", "召唤神兽", "魔法盾", "圣言术", "冰咆哮", "解毒术", "老狮子吼", "火焰冰", "群体雷电术", "群体施毒术", "彻地钉", "双龙斩", "狮子吼", "龙影剑法", "雷霆剑法", "寒冰掌", "灭天火", "召唤英雄", "火龙烈焰", "气功波", "净化术", "无极真气", "飓风破", "诅咒术", "血咒", "骷髅咒", "", "逐日剑法", "噬血术", "流星火雨", "", "破魂斩", "劈星斩", "雷霆一击", "噬魂沼泽", "末日审判", "火龙气焰", "开天斩", "神秘解读", "唯我独尊", "", "英雄出击", "擒龙手", "", "", "", "护体神盾", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "追心刺", "三绝杀", "断岳斩", "横扫千军", "凤舞祭", "惊雷爆", "冰天雪地", "双龙破", "虎啸诀", "八卦掌", "三焰咒", "万箭归宗", "旋转风火轮", "断空斩", "倚天辟地", "血魂一击(战)", "血魂一击(法)", "血魂一击(道)", "", "", "", "", "", "", "", "", "", "" };
+        public static readonly string[] MaigicNameList = { "", "火球术", "治愈术", "基本剑术", "精神力战法", "大火球", "施毒术", "攻杀剑术", "抗拒火环", "地狱火", "疾光电影", "雷电术", "刺杀剑术", "灵魂火符", "幽灵盾", "神圣战甲术", "困魔咒", "召唤骷髅", "隐身术", "集体隐身术", "诱惑之光", "瞬息移动", "火墙", "爆裂火焰", "地狱雷光", "半月弯刀", "烈火剑法", "野蛮冲撞", "心灵启示", "群体治疗术", "召唤神兽", "魔法盾", "圣言术", "冰咆哮", "解毒术", "老狮子吼", "火焰冰", "群体雷电术", "群体施毒术", "彻地钉", "双龙斩", "狮子吼", "龙影剑法", "雷霆剑法", "寒冰掌", "灭天火", "召唤英雄", "火龙烈焰", "气功波", "净化术", "无极真气", "飓风破", "诅咒术", "血咒", "骷髅咒", "", "逐日剑法", "噬血术", "流星火雨", "", "破魂斩", "劈星斩", "雷霆一击", "噬魂沼泽", "末日审判", "火龙气焰", "开天斩", "神秘解读", "唯我独尊", "", "英雄出击", "擒龙手", "", "", "", "护体神盾", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "追心刺", "三绝杀", "断岳斩", "横扫千军", "凤舞祭", "惊雷爆", "冰天雪地", "双龙破", "虎啸诀", "八卦掌", "三焰咒", "万箭归宗", "旋转风火轮", "断空斩", "倚天辟地", "血魂一击(战)", "血魂一击(法)", "血魂一击(道)", "", "", "", "", "", "", "", "", "", "" };
 
         public void initialization()
         {
-            MAIGIC_DELAY_TIME_LIST_DEF = MAIGIC_DELAY_TIME_LIST;
+            MAIGIC_DELAY_TIME_LIST_DEF = MaigicDelayTimeList;
         }
     }
 

@@ -1,70 +1,74 @@
-﻿using SystemModule;
+﻿using GameSvr.Guild;
+using GameSvr.Player;
+using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Snaps
 {
-    public class MirrorMessage
+    public class SpapsMessage
     {
         private readonly TPlayObject PlayObject = null;
 
-        public MirrorMessage()
+        public SpapsMessage()
         {
 
         }
 
-        public void ProcessData(int Ident, int serverNum, string Body)
+        public void ProcessData(int ident, int serverNum, string body)
         {
-            switch (Ident)
+            switch (ident)
             {
                 case Grobal2.ISM_GROUPSERVERHEART:
-                    ServerHeartMessage(serverNum, Body);
+                    ServerHeartMessage(serverNum, body);
                     break;
                 case Grobal2.ISM_USERSERVERCHANGE:
-                    MsgGetUserServerChange(serverNum, Body);
+                    MsgGetUserServerChange(serverNum, body);
                     break;
                 case Grobal2.ISM_CHANGESERVERRECIEVEOK:
-                    MsgGetUserChangeServerRecieveOk(serverNum, Body);
+                    MsgGetUserChangeServerRecieveOk(serverNum, body);
                     break;
                 case Grobal2.ISM_USERLOGON:
-                    MsgGetUserLogon(serverNum, Body);
+                    MsgGetUserLogon(serverNum, body);
                     break;
                 case Grobal2.ISM_USERLOGOUT:
-                    MsgGetUserLogout(serverNum, Body);
+                    MsgGetUserLogout(serverNum, body);
                     break;
                 case Grobal2.ISM_WHISPER:
-                    MsgGetWhisper(serverNum, Body);
+                    MsgGetWhisper(serverNum, body);
                     break;
                 case Grobal2.ISM_GMWHISPER:
-                    MsgGetGMWhisper(serverNum, Body);
+                    MsgGetGMWhisper(serverNum, body);
                     break;
                 case Grobal2.ISM_LM_WHISPER:
-                    MsgGetLoverWhisper(serverNum, Body);
+                    MsgGetLoverWhisper(serverNum, body);
                     break;
                 case Grobal2.ISM_SYSOPMSG:
-                    MsgGetSysopMsg(serverNum, Body);
+                    MsgGetSysopMsg(serverNum, body);
                     break;
                 case Grobal2.ISM_ADDGUILD:
-                    MsgGetAddGuild(serverNum, Body);
+                    MsgGetAddGuild(serverNum, body);
                     break;
                 case Grobal2.ISM_DELGUILD:
-                    MsgGetDelGuild(serverNum, Body);
+                    MsgGetDelGuild(serverNum, body);
                     break;
                 case Grobal2.ISM_RELOADGUILD:
-                    MsgGetReloadGuild(serverNum, Body);
+                    MsgGetReloadGuild(serverNum, body);
                     break;
                 case Grobal2.ISM_GUILDMSG:
-                    MsgGetGuildMsg(serverNum, Body);
+                    MsgGetGuildMsg(serverNum, body);
                     break;
                 case Grobal2.ISM_GUILDWAR:
-                    MsgGetGuildWarInfo(serverNum, Body);
+                    MsgGetGuildWarInfo(serverNum, body);
                     break;
                 case Grobal2.ISM_CHATPROHIBITION:
-                    MsgGetChatProhibition(serverNum, Body);
+                    MsgGetChatProhibition(serverNum, body);
                     break;
                 case Grobal2.ISM_CHATPROHIBITIONCANCEL:
-                    MsgGetChatProhibitionCancel(serverNum, Body);
+                    MsgGetChatProhibitionCancel(serverNum, body);
                     break;
                 case Grobal2.ISM_CHANGECASTLEOWNER:
-                    MsgGetChangeCastleOwner(serverNum, Body);
+                    MsgGetChangeCastleOwner(serverNum, body);
                     break;
                 case Grobal2.ISM_RELOADCASTLEINFO:
                     MsgGetReloadCastleAttackers(serverNum);
@@ -89,37 +93,37 @@ namespace GameSvr
                 case Grobal2.ISM_FRIEND_RESULT:
                 case Grobal2.ISM_TAG_SEND:
                 case Grobal2.ISM_TAG_RESULT:
-                    MsgGetUserMgr(serverNum, Body, Ident);
+                    MsgGetUserMgr(serverNum, body, ident);
                     break;
                 case Grobal2.ISM_RELOADMAKEITEMLIST:
                     MsgGetReloadMakeItemList();
                     break;
                 case Grobal2.ISM_GUILDMEMBER_RECALL:
-                    MsgGetGuildMemberRecall(serverNum, Body);
+                    MsgGetGuildMemberRecall(serverNum, body);
                     break;
                 case Grobal2.ISM_RELOADGUILDAGIT:
-                    MsgGetReloadGuildAgit(serverNum, Body);
+                    MsgGetReloadGuildAgit(serverNum, body);
                     break;
                 case Grobal2.ISM_LM_LOGIN:
-                    MsgGetLoverLogin(serverNum, Body);
+                    MsgGetLoverLogin(serverNum, body);
                     break;
                 case Grobal2.ISM_LM_LOGOUT:
-                    MsgGetLoverLogout(serverNum, Body);
+                    MsgGetLoverLogout(serverNum, body);
                     break;
                 case Grobal2.ISM_LM_LOGIN_REPLY:
-                    MsgGetLoverLoginReply(serverNum, Body);
+                    MsgGetLoverLoginReply(serverNum, body);
                     break;
                 case Grobal2.ISM_LM_KILLED_MSG:
-                    MsgGetLoverKilledMsg(serverNum, Body);
+                    MsgGetLoverKilledMsg(serverNum, body);
                     break;
                 case Grobal2.ISM_RECALL:
-                    MsgGetRecall(serverNum, Body);
+                    MsgGetRecall(serverNum, body);
                     break;
                 case Grobal2.ISM_REQUEST_RECALL:
-                    MsgGetRequestRecall(serverNum, Body);
+                    MsgGetRequestRecall(serverNum, body);
                     break;
                 case Grobal2.ISM_REQUEST_LOVERRECALL:
-                    MsgGetRequestLoverRecall(serverNum, Body);
+                    MsgGetRequestLoverRecall(serverNum, body);
                     break;
                 case Grobal2.ISM_GRUOPMESSAGE:
                     Console.WriteLine("跨服消息");
@@ -244,7 +248,7 @@ namespace GameSvr
         private void MsgGetReloadGuild(int sNum, string Body)
         {
             var gname = Body;
-            Association guild;
+            GuildInfo guild;
             if (sNum == 0)
             {
                 guild = M2Share.GuildManager.FindGuild(gname);
@@ -288,8 +292,8 @@ namespace GameSvr
             var warguildname = string.Empty;
             var StartTime = string.Empty;
             var remaintime = string.Empty;
-            Association g;
-            Association WarGuild;
+            GuildInfo g;
+            GuildInfo WarGuild;
             TWarGuild pgw;
             if (sNum == 0)
             {
@@ -449,7 +453,7 @@ namespace GameSvr
                     int svidx = 0;
                     if (M2Share.UserEngine.FindOtherServerUser(uname, ref svidx))
                     {
-                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.m_PEnvir.sMapDesc);
+                        M2Share.UserEngine.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.m_PEnvir.SMapDesc);
                     }
                 }
             }

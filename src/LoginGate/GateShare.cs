@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using SystemModule.Common;
 
@@ -7,9 +6,13 @@ namespace LoginGate
     public class GateShare
     {
         /// <summary>
+        /// 最大用户数
+        /// </summary>
+        public const int MaxSession = 10000;
+        /// <summary>
         ///  网关游戏服务器之间检测超时时间长度
         /// </summary>
-        public static int dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public const int CheckServerTimeOutTime = 3 * 60 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -19,7 +22,6 @@ namespace LoginGate
         /// </summary>
         public static IList<string> TempBlockIPList = null;
         public static int nMaxConnOfIPaddr = 50;
-        public static ConcurrentDictionary<int, ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()
         {
@@ -36,7 +38,6 @@ namespace LoginGate
         {
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
-            ServerGateList = new ConcurrentDictionary<int, ClientThread>();
         }
     }
 }

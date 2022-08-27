@@ -1,8 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using System.Reflection;
-using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command
 {
     public class BaseCommond
     {

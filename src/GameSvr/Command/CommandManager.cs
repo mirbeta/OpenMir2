@@ -1,7 +1,8 @@
-﻿using System.Reflection;
-using SystemModule;
+﻿using GameSvr.Player;
+using System.Reflection;
+using SystemModule.Data;
 
-namespace GameSvr.CommandSystem
+namespace GameSvr.Command
 {
     public class CommandManager
     {
