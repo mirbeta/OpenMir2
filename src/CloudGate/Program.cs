@@ -178,7 +178,7 @@ namespace CloudGate
         static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameGate.logo.png");
+            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CloudGate.logo.png");
             var logo = new CanvasImage(logoStream!)
             {
                 MaxWidth = 25
@@ -195,7 +195,7 @@ namespace CloudGate
             {
                 Color = Color.Fuchsia
             };
-            var header2 = new FigletText("Game Gate")
+            var header2 = new FigletText("Cloud Gate")
             {
                 Color = Color.Aqua
             };

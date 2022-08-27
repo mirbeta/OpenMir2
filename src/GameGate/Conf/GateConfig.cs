@@ -18,6 +18,22 @@ namespace GameGate.Conf
         /// </summary>
         public bool ShowDebugLog;
         /// <summary>
+        /// 是否使用云网关
+        /// </summary>
+        public bool UseCloudGate;
+        /// <summary>
+        /// 云网关服务地址
+        /// </summary>
+        public string CloudAddr;
+        /// <summary>
+        /// 云网关服务地址端口
+        /// </summary>
+        public int CloudPort;
+        /// <summary>
+        /// 云网关授权码
+        /// </summary>
+        public string LicenseCode;
+        /// <summary>
         /// 消息线程数
         /// </summary>
         public int MessageThread;
@@ -207,6 +223,7 @@ namespace GameGate.Conf
         public GateConfig()
         {
             CheckNullSession = true;
+            UseCloudGate = false;
             IsOverSpeedSendBack = false;
             IsDefenceCCPacket = false;
             IsKickOverSpeed = false;
