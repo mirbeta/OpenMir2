@@ -17,11 +17,11 @@ namespace GameGate.Services
         private readonly ClientScoket ClientSocket;
         private readonly IPEndPoint _gateEndPoint;
         /// <summary>
-        ///  网关游戏服务器之间检测是否失败（超时）
+        ///  网关游戏与云网关之间检测是否失败（超时）
         /// </summary>
         public bool CheckServerFail = false;
         /// <summary>
-        /// 网关游戏服务器之间检测是否失败次数
+        /// 网关游戏与云网关之间检测是否失败次数
         /// </summary>
         public int CheckServerFailCount = 0;
         /// <summary>
@@ -182,7 +182,7 @@ namespace GameGate.Services
                                         _checkServerTimeMax = _checkServerTimeMin;
                                     }
                                     _checkRecviceTick = HUtil32.GetTickCount();
-                                    SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
+                                    SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, "", 0, 0, "");
                                     break;
                                 case Grobal2.GM_DATA:
                                     var msgBuff = packetHeader.PackLength > 0 ? new byte[packetHeader.PackLength] : new byte[dataBuff.Length - HeaderMessageSize];
@@ -243,19 +243,19 @@ namespace GameGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎[{ClientSocket.EndPoint}]拒绝链接...", 1);
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂[{ClientSocket.EndPoint}]服务器拒绝链接...", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    LogQueue.Enqueue($"游戏引擎[{ClientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint.ToString()}]...", 1);
+                    LogQueue.Enqueue($"云网关智能反外挂服务器[{ClientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint}]...", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接游戏引擎时[{ClientSocket.EndPoint}]超时...", 1);
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂服务器[{ClientSocket.EndPoint}]超时...", 1);
                     break;
             }
             GateReady = false;
         }
 
-        public void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
+        public void SendServerMsg(ushort nIdent, ushort wSocketIndex, string nSocket, ushort nUserListIndex, int nLen,
             string Data)
         {
             if (!string.IsNullOrEmpty(Data))
@@ -270,43 +270,43 @@ namespace GameGate.Services
         }
 
         /// <summary>
-        /// 玩家进入游戏
+        /// 玩家开始链接
         /// </summary>
-        public void UserEnter(ushort socketIndex, int nSocket, string Data)
+        public void UserEnter(ushort socketIndex, string sessionId, string Data)
         {
-            SendServerMsg(Grobal2.GM_OPEN, socketIndex, nSocket, 0, Data.Length, Data);
+            SendServerMsg(Grobal2.GM_OPEN, socketIndex, sessionId, 0, Data.Length, Data);
         }
 
         /// <summary>
-        /// 玩家退出游戏
+        /// 玩家断开游戏
         /// </summary>
-        public void UserLeave(int scoket)
+        public void UserLeave(string sessionId)
         {
-            SendServerMsg(Grobal2.GM_CLOSE, 0, scoket, 0, 0, "");
+            SendServerMsg(Grobal2.GM_CLOSE, 0, sessionId, 0, 0, "");
         }
 
-        private void SendServerMsg(ushort nIdent, ushort wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
+        private void SendServerMsg(ushort nIdent, ushort wSocketIndex, string nSocket, ushort nUserListIndex, int nLen,
             byte[] Data)
         {
-            var GateMsg = new PacketHeader();
-            GateMsg.PacketCode = Grobal2.RUNGATECODE;
-            GateMsg.Socket = nSocket;
-            GateMsg.SessionId = wSocketIndex;
-            GateMsg.Ident = nIdent;
-            GateMsg.ServerIndex = nUserListIndex;
-            GateMsg.PackLength = nLen;
-            var sendBuffer = GateMsg.GetBuffer();
-            if (Data is { Length: > 0 })
-            {
-                var tempBuff = new byte[20 + Data.Length];
-                Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
-                SendBuffer(tempBuff);
-            }
-            else
-            {
-                SendBuffer(sendBuffer);
-            }
+            //var GateMsg = new PacketHeader();
+            //GateMsg.PacketCode = Grobal2.RUNGATECODE;
+            //GateMsg.Socket = nSocket;
+            //GateMsg.SessionId = wSocketIndex;
+            //GateMsg.Ident = nIdent;
+            //GateMsg.ServerIndex = nUserListIndex;
+            //GateMsg.PackLength = nLen;
+            //var sendBuffer = GateMsg.GetBuffer();
+            //if (Data is { Length: > 0 })
+            //{
+            //    var tempBuff = new byte[20 + Data.Length];
+            //    Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+            //    Buffer.BlockCopy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
+            //    SendBuffer(tempBuff);
+            //}
+            //else
+            //{
+            //    SendBuffer(sendBuffer);
+            //}
         }
 
         /// <summary>

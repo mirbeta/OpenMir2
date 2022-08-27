@@ -45,7 +45,7 @@ namespace CloudGate
         {
             if (!GateShare.ShowLog)
                 return;
-            
+
             while (!LogQueue.MessageLog.IsEmpty)
             {
                 string message;
