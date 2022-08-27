@@ -25,7 +25,7 @@ namespace CloudGate.Conf
                 GameGateList[i].ServerAdress = "127.0.0.1";
                 GameGateList[i].ServerPort = 5000;
                 GameGateList[i].GateAddress = "127.0.0.1";
-                GameGateList[i].GatePort = 7200 + i;
+                GameGateList[i].GatePort = 7900 + i;
             }
         }
 
@@ -87,12 +87,10 @@ namespace CloudGate.Conf
             GateConfig.ClientMoveSpeedRate = ReadInteger("Integer", "ClientMoveSpeedRate", GateConfig.ClientMoveSpeedRate);
             GateConfig.ClientSpellSpeedRate = ReadInteger("Integer", "ClientSpellSpeedRate", GateConfig.ClientSpellSpeedRate);
             GateConfig.ClientAttackSpeedRate = ReadInteger("Integer", "ClientAttackSpeedRate", GateConfig.ClientAttackSpeedRate);
-            // Method
             GateConfig.OverSpeedPunishMethod = (TPunishMethod)ReadInteger("Method", "OverSpeedPunishMethod", (int)GateConfig.OverSpeedPunishMethod);
             GateConfig.BlockIPMethod = (TBlockIPMethod)ReadInteger("Method", "BlockIPMethod", (int)GateConfig.BlockIPMethod);
             GateConfig.ChatFilterMethod = (TChatFilterMethod)ReadInteger("Method", "ChatFilterMethod", (int)GateConfig.ChatFilterMethod);
             GateConfig.SpeedHackWarnMethod = (TOverSpeedMsgMethod)ReadInteger("Method", "SpeedHackWarnMethod", (int)GateConfig.SpeedHackWarnMethod);
-            // Boolean
             GateConfig.CheckNullSession = ReadBool("Switch", "CheckNullSession", GateConfig.CheckNullSession);
             GateConfig.IsOverSpeedSendBack = ReadBool("Switch", "OverSpeedSendBack", GateConfig.IsOverSpeedSendBack);
             GateConfig.IsDefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GateConfig.IsDefenceCCPacket);
@@ -119,13 +117,13 @@ namespace CloudGate.Conf
             GateConfig.OpenClientSpeedRate = ReadBool("Switch", "OpenClientSpeedRate", GateConfig.OpenClientSpeedRate);
             GateConfig.SyncClientSpeed = ReadBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadFloat("Switch", "PunishIntervalRate", GateConfig.PunishIntervalRate);
-            GateConfig.GateCount = ReadInteger("GameGate", "Count", GateConfig.GateCount);
+            GateConfig.GateCount = ReadInteger("CloudGate", "Count", GateConfig.GateCount);
             for (var i = 0; i <= GateConfig.GateCount; i++)
             {
-                GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
-                GameGateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
-                GameGateList[i].GateAddress = ReadString("GameGate", "GateAddress" + (i + 1), GameGateList[i].GateAddress);
-                GameGateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
+                GameGateList[i].ServerAdress = ReadString("CloudGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
+                GameGateList[i].ServerPort = ReadInteger("CloudGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
+                GameGateList[i].GateAddress = ReadString("CloudGate", "GateAddress" + (i + 1), GameGateList[i].GateAddress);
+                GameGateList[i].GatePort = ReadInteger("CloudGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
             }
             //魔法间隔控制
             for (var i = 0; i <= TableDef.MaigicDelayTimeList.GetUpperBound(0); i++)
