@@ -5,6 +5,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
     </PropertyGroup>
     <Choose>
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
