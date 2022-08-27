@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 解除指定玩家物品绑定属性

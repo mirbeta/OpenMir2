@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Maps;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物

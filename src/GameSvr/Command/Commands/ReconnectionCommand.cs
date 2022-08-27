@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr.Command
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 此命令用于改变客户端连接网关的

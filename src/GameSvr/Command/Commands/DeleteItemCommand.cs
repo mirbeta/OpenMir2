@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Items;
+using GameSvr.Player;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 删除指定玩家包裹物品

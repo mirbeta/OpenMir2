@@ -1,8 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Castle;
+using GameSvr.Player;
 using System.Collections;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 显示沙巴克收入金币

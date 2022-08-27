@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 移动到某地图XY坐标处
@@ -46,7 +48,7 @@ namespace GameSvr
                 }
                 else
                 {
-                    PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.sMapDesc), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, sMapName, Envir.SMapDesc), MsgColor.Red, MsgType.Hint);
                 }
             }
             catch (Exception e)

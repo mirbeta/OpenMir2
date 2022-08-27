@@ -1,4 +1,4 @@
-namespace GameSvr
+namespace GameSvr.Maps
 {
     /// <summary>
     /// 地图连接

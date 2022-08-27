@@ -1,7 +1,13 @@
-﻿using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Guild;
+using GameSvr.Maps;
+using GameSvr.Monster.Monsters;
+using GameSvr.Player;
+using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Castle
 {
     public class TUserCastle
     {
@@ -9,7 +15,7 @@ namespace GameSvr
         /// <summary>
         /// 攻城行会列表
         /// </summary>
-        private readonly IList<Association> m_AttackGuildList;
+        private readonly IList<GuildInfo> m_AttackGuildList;
         /// <summary>
         /// 攻城列表
         /// </summary>
@@ -51,7 +57,7 @@ namespace GameSvr
         /// <summary>
         /// 所属行会名称
         /// </summary>
-        public Association m_MasterGuild;
+        public GuildInfo m_MasterGuild;
         /// <summary>
         /// 行会回城点X
         /// </summary>
@@ -130,7 +136,7 @@ namespace GameSvr
             m_boUnderWar = false;
             m_boShowOverMsg = false;
             m_AttackWarList = new List<TAttackerInfo>();
-            m_AttackGuildList = new List<Association>();
+            m_AttackGuildList = new List<GuildInfo>();
             m_dwSaveTick = 0;
             m_nWarRangeX = M2Share.g_Config.nCastleWarRangeX;
             m_nWarRangeY = M2Share.g_Config.nCastleWarRangeY;
@@ -243,9 +249,9 @@ namespace GameSvr
                         else
                             M2Share.ErrorMessage("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
-                    for (var i = 0; i < m_MapCastle.m_DoorList.Count; i++)
+                    for (var i = 0; i < m_MapCastle.MDoorList.Count; i++)
                     {
-                        Door = m_MapCastle.m_DoorList[i];
+                        Door = m_MapCastle.MDoorList[i];
                         if (Math.Abs(Door.nX - m_nPalaceDoorX) <= 3 && Math.Abs(Door.nY - m_nPalaceDoorY) <= 3)
                         {
                             m_DoorStatus = Door.Status;
@@ -295,7 +301,7 @@ namespace GameSvr
                 var guild = M2Share.GuildManager.FindGuild(guildName);
                 if (guild == null) continue;
                 var attackerInfo = new TAttackerInfo();
-                HUtil32.ArrestStringEx(s20, '\"', '\"', ref s20);
+                HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                 var time = DateTime.Now;
                 if (DateTime.TryParse(s20, out time))
                 {
@@ -452,7 +458,7 @@ namespace GameSvr
                 Math.Abs(m_nHomeY - nY) < m_nWarRangeY) return true;
             if (envir == m_MapPalace || envir == m_MapSecret) return true;
             for (var i = 0; i < m_EnvirList.Count; i++) // 增加取得城堡所有地图列表
-                if (m_EnvirList[i] == envir.sMapName)
+                if (m_EnvirList[i] == envir.SMapName)
                     return true;
             return false;
         }
@@ -463,9 +469,9 @@ namespace GameSvr
         }
 
         // 检查是否为攻城方行会的联盟行会
-        public bool IsAttackAllyGuild(Association Guild)
+        public bool IsAttackAllyGuild(GuildInfo Guild)
         {
-            Association AttackGuild;
+            GuildInfo AttackGuild;
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
@@ -480,9 +486,9 @@ namespace GameSvr
         }
 
         // 检查是否为攻城方行会
-        public bool IsAttackGuild(Association Guild)
+        public bool IsAttackGuild(GuildInfo Guild)
         {
-            Association AttackGuild;
+            GuildInfo AttackGuild;
             var result = false;
             for (var i = 0; i < m_AttackGuildList.Count; i++)
             {
@@ -496,7 +502,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool CanGetCastle(Association guild)
+        public bool CanGetCastle(GuildInfo guild)
         {
             if ((HUtil32.GetTickCount() - m_dwStartCastleWarTick) <= M2Share.g_Config.dwGetCastleTime)
             {
@@ -518,7 +524,7 @@ namespace GameSvr
             return result;
         }
 
-        public void GetCastle(Association Guild)
+        public void GetCastle(GuildInfo Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
             m_sOwnGuild = Guild.sGuildName;
@@ -578,20 +584,20 @@ namespace GameSvr
             return m_AttackGuildList.Count;
         }
 
-        public bool IsDefenseAllyGuild(Association guild)
+        public bool IsDefenseAllyGuild(GuildInfo guild)
         {
             if (!m_boUnderWar) return false; // 如果未开始攻城，则无效
             return m_MasterGuild != null && m_MasterGuild.IsAllyGuild(guild);
         }
 
         // 检查是否为守城方行会
-        public bool IsDefenseGuild(Association guild)
+        public bool IsDefenseGuild(GuildInfo guild)
         {
             if (!m_boUnderWar) return false;// 如果未开始攻城，则无效
             return guild == m_MasterGuild;
         }
 
-        public bool IsMasterGuild(Association guild)
+        public bool IsMasterGuild(GuildInfo guild)
         {
             return m_MasterGuild != null && m_MasterGuild == guild;
         }
@@ -899,7 +905,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool AddAttackerInfo(Association Guild)
+        public bool AddAttackerInfo(GuildInfo Guild)
         {
             var result = false;
             if (InAttackerList(Guild)) return result;
@@ -914,7 +920,7 @@ namespace GameSvr
             return result;
         }
 
-        private bool InAttackerList(Association Guild)
+        private bool InAttackerList(GuildInfo Guild)
         {
             var result = false;
             for (var i = 0; i < m_AttackWarList.Count; i++)

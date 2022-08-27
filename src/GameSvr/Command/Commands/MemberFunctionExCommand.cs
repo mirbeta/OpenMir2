@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("MemberFunctionEx", "", help: "打开会员功能窗口", 0)]
     public class MemberFunctionExCommand : BaseCommond

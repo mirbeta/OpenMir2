@@ -1,7 +1,9 @@
+using System.Net.Sockets;
 using SystemModule;
-using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
-namespace GameSvr
+namespace GameSvr.Snaps
 {
     /// <summary>
     /// 镜像服务器
@@ -9,8 +11,8 @@ namespace GameSvr
     public class SnapsmClient
     {
         private string sRecvMsg = string.Empty;
-        private readonly IClientScoket _msgClient;
-        private readonly MirrorMessage _groupMessageHandle;
+        private readonly ClientScoket _msgClient;
+        private readonly SpapsMessage _groupMessageHandle;
 
         private static SnapsmClient instance = null;
 
@@ -26,14 +28,14 @@ namespace GameSvr
             }
         }
 
-        public SnapsmClient()
+        private SnapsmClient()
         {
-            _msgClient = new IClientScoket();
+            _msgClient = new ClientScoket();
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.ReceivedDatagram += MsgClientRead;
             _msgClient.OnError += MsgClientError;
             _msgClient.OnDisconnected += MsgClientDisconnected;
-            _groupMessageHandle = new MirrorMessage();
+            _groupMessageHandle = new SpapsMessage();
         }
 
         public void ConnectMsgServer()
@@ -122,21 +124,21 @@ namespace GameSvr
 
         private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            M2Share.MainOutMessage("连接主服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")成功...");
-            //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，从而来保持登录数据同步
+            M2Share.MainOutMessage("连接主服务器(" + e.RemoteEndPoint + ")成功...");
+            //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，保持登录数据同步
         }
 
         private void MsgClientError(object sender, DSCClientErrorEventArgs e)
         {
             switch (e.ErrorCode)
             {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
+                case SocketError.ConnectionRefused:
                     M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]拒绝链接...");
                     break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
+                case SocketError.ConnectionReset:
                     M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]关闭连接...");
                     break;
-                case System.Net.Sockets.SocketError.TimedOut:
+                case SocketError.TimedOut:
                     M2Share.ErrorMessage("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]链接超时...");
                     break;
             }
@@ -144,7 +146,7 @@ namespace GameSvr
 
         private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            M2Share.ErrorMessage("节点服务器(" + e.RemoteAddress + ':' + e.RemotePort + ")断开连接...");
+            M2Share.ErrorMessage("节点服务器(" + e.RemoteEndPoint + ")断开连接...");
         }
 
         /// <summary>

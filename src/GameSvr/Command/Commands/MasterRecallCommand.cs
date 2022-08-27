@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。

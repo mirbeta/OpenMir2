@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 召唤指定怪物为宠物
@@ -43,7 +44,7 @@ namespace GameSvr
                     break;
                 }
                 PlayObject.GetFrontPosition(ref n10, ref n14);
-                mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, n10, n14, sMonName);
+                mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, n10, n14, sMonName);
                 if (mon != null)
                 {
                     mon.m_Master = PlayObject;

@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能

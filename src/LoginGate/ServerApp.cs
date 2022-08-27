@@ -1,4 +1,6 @@
+using LoginGate.Services;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
 
@@ -6,35 +8,37 @@ namespace LoginGate
 {
     public class ServerApp
     {
-        private ServerManager _serverManager => ServerManager.Instance;
-        private ClientManager _clientManager => ClientManager.Instance;
-        private SessionManager _sessionManager => SessionManager.Instance;
-        private LogQueue _logQueue => LogQueue.Instance;
+        private readonly ServerManager _serverManager;
+        private readonly ClientManager _clientManager;
+        private readonly MirLog _logger;
 
-        public ServerApp()
+        public ServerApp(MirLog logger, ServerManager serverManager, ClientManager clientManager)
         {
-
+            _logger = logger;
+            _serverManager = serverManager;
+            _clientManager = clientManager;
         }
 
-        public async Task Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            var gTasks = new Task[2];
-            gTasks[0] = _serverManager.ProcessReviceMessage();
-            gTasks[1] = _sessionManager.ProcessSendMessage();
-            await Task.WhenAll(gTasks);
-        }
-
-        public void StartService()
-        {
-            _clientManager.Initialization();
             _serverManager.Start();
+            _clientManager.Start();
+            _serverManager.ProcessLoginMessage(stoppingToken);
+            _clientManager.ProcessSendMessage(stoppingToken);
+        }
+
+        public void Initialization()
+        {
+            _serverManager.Initialization();
+            _clientManager.Initialization();
         }
 
         public void StopService()
         {
-            _logQueue.Enqueue("正在停止服务...", 2);
+            _logger.LogInformation("正在停止服务...", 2);
             _serverManager.Stop();
-            _logQueue.Enqueue("服务停止成功...", 2);
+            _clientManager.Stop();
+            _logger.LogInformation("服务停止成功...", 2);
         }
 
         private bool IsBlockIP(string sIPaddr)

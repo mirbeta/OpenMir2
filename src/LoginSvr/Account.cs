@@ -1,5 +1,6 @@
 using System;
 using SystemModule.Packet;
+using SystemModule.Packet.ClientPackets;
 
 namespace LoginSvr
 {

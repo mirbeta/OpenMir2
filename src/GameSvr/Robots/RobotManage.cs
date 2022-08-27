@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Robots
 {
     public class RobotManage
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SelGate.Services;
 using Spectre.Console;
@@ -8,12 +9,18 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using SelGate.Conf;
 
 namespace SelGate
 {
     class Program
     {
         private static PeriodicTimer _timer;
+        private static Logger _logger;
+        private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         static async Task Main(string[] args)
@@ -31,19 +38,30 @@ namespace SelGate
                 AnsiConsole.Reset();
             };
 
+            var config = new ConfigurationBuilder().Build();
+
+            _logger = LogManager.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                .GetCurrentClassLogger();
+            
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-                    services.AddSingleton<LogQueue>();
+                    services.AddSingleton<MirLog>();
                     services.AddSingleton<ServerApp>();
                     services.AddSingleton<ServerService>();
                     services.AddSingleton<SessionManager>();
                     services.AddSingleton<ClientManager>();
                     services.AddHostedService<AppService>();
                     services.AddHostedService<TimedService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+            _host = await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
             Stop();
         }
@@ -58,7 +76,7 @@ namespace SelGate
 
         static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
@@ -78,6 +96,7 @@ namespace SelGate
                 {
                     "/s" => ShowServerStatus(),
                     "/c" => ClearConsole(),
+                    "/r" => ReLoadConfig(),
                     "/q" => Exit(),
                     _ => null
                 } is Task task)
@@ -89,6 +108,14 @@ namespace SelGate
             } while (input is not "/exit");
         }
 
+        private static Task ReLoadConfig()
+        {
+            var config = _host.Services.GetService<ConfigManager>();
+            config?.ReLoadConfig();
+            _logger.Info("重新读取配置文件完成...");
+            return Task.CompletedTask;
+        }
+        
         private static Task Exit()
         {
             Environment.Exit(Environment.ExitCode);

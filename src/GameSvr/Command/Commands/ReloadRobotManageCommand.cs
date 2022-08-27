@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("ReloadRobotManage", "重新加载机器人管理列表", 10)]
     public class ReloadRobotManageCommand : BaseCommond

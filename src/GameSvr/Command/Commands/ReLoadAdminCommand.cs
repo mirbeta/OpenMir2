@@ -1,6 +1,7 @@
-using SystemModule;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr.CommandSystem.Commands
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 重新加载管理员列表

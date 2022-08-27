@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 暂时不清楚干啥的

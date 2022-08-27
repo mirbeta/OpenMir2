@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace GameSvr
+namespace GameSvr.GameGate
 {
     public class TGateInfo
     {
@@ -9,7 +9,7 @@ namespace GameSvr
         /// </summary>
         public bool boUsed;
         public Socket Socket;
-        public int SocketId;
+        public string SocketId;
         /// <summary>
         /// 玩家列表
         /// </summary>

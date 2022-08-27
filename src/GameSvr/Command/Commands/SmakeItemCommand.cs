@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Items;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 调整身上装备附加属性

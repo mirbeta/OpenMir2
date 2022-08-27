@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule;
 using SystemModule.Common;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Robots
 {
     public class RobotObject : TPlayObject
     {

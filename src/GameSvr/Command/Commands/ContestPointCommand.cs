@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 查看行会战的得分数

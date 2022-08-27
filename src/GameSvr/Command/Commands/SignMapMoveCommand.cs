@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 回到上次死亡地点

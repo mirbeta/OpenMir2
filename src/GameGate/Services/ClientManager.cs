@@ -1,7 +1,9 @@
+using GameGate.Conf;
+using System;
 using System.Collections.Concurrent;
 using SystemModule;
 
-namespace GameGate
+namespace GameGate.Services
 {
     /// <summary>
     /// GameGate->GameSvr
@@ -10,16 +12,15 @@ namespace GameGate
     {
         private static readonly ClientManager instance = new ClientManager();
         public static ClientManager Instance => instance;
+        private static ServerManager ServerManager => ServerManager.Instance;
+        private static MirLog LogQueue => MirLog.Instance;
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
 
-        private ServerManager ServerManager => ServerManager.Instance;
-        private LogQueue LogQueue => LogQueue.Instance;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
-
-        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<string, ClientThread> _clientThreadMap;
 
         private ClientManager()
         {
-            _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
+            _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
         }
 
         public void Initialization()
@@ -27,21 +28,21 @@ namespace GameGate
             for (var i = 0; i < ConfigManager.GateConfig.GateCount; i++)
             {
                 var gameGate = ConfigManager.GameGateList[i];
-                var serverAddr = gameGate.sServerAdress;
-                var serverPort = gameGate.nServerPort;
+                var serverAddr = gameGate.ServerAdress;
+                var serverPort = gameGate.ServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
                     LogQueue.Enqueue($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
                     return;
                 }
-                ServerManager.AddServer(new ServerService(i, gameGate));
+                ServerManager.AddServer(new ServerService(Guid.NewGuid().ToString("N"), gameGate));
             }
         }
 
         /// <summary>
         /// 添加用户对饮网关
         /// </summary>
-        public void AddClientThread(int connectionId, ClientThread clientThread)
+        public void AddClientThread(string connectionId, ClientThread clientThread)
         {
             _clientThreadMap.TryAdd(connectionId, clientThread); //链接成功后建立对应关系
         }
@@ -50,9 +51,9 @@ namespace GameGate
         /// 获取用户链接对应网关
         /// </summary>
         /// <returns></returns>
-        public ClientThread GetClientThread(int connectionId)
+        public ClientThread GetClientThread(string connectionId)
         {
-            if (connectionId > 0)
+            if (!string.IsNullOrEmpty(connectionId))
             {
                 return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
             }
@@ -62,7 +63,7 @@ namespace GameGate
         /// <summary>
         /// 从字典删除用户和网关对应关系
         /// </summary>
-        public void DeleteClientThread(int connectionId)
+        public void DeleteClientThread(string connectionId)
         {
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }

@@ -1,4 +1,7 @@
-﻿namespace GameSvr
+﻿using GameSvr.Npc;
+using GameSvr.Player;
+
+namespace GameSvr.ScriptSystem
 {
     public class ScriptEngine
     {

@@ -80,8 +80,8 @@ namespace SystemModule
             {
                 var t = Source[c];
                 Target[i] = ((uint)(t | (s[c + 1] << 8)));
-                Target[i] = (uint)(Target[i] | (s[c + 2] << 16));
-                Target[i] = (uint)(Target[i] | (s[c + 3] << 24));
+                Target[i] = (Target[i] | (uint)(s[c + 2] << 16));
+                Target[i] = (Target[i] | (uint)(s[c + 3] << 24));
                 c += 4;
             }
         }

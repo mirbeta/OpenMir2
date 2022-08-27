@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("ClearBagItem", "清理包裹物品", "人物名称", 10)]
     public class ClearBagItemCommand : BaseCommond

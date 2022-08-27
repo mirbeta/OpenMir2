@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     public static partial class Extensions
     {

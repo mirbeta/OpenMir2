@@ -1,6 +1,6 @@
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Notices
 {
     public class NoticeManager
     {

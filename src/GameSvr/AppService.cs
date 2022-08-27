@@ -1,11 +1,13 @@
 using Microsoft.Extensions.Hosting;
 using SystemModule;
+using SystemModule.Data;
 
 namespace GameSvr
 {
     public class AppService : BackgroundService
     {
         private readonly GameApp _mirApp;
+        private readonly TimeSpan DelayTime = TimeSpan.FromMilliseconds(10);
 
         public AppService(GameApp serverApp)
         {
@@ -17,12 +19,12 @@ namespace GameSvr
             if (M2Share.boStartReady)
             {
                 M2Share.GateManager.Start();
-                await M2Share.GateManager.StartMessageQueue(stoppingToken);
+                M2Share.GateManager.StartMessageQueue(stoppingToken);
             }
             while (!stoppingToken.IsCancellationRequested)
             {
                 _mirApp.Run();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                await Task.Delay(DelayTime, stoppingToken);
             }
         }
 

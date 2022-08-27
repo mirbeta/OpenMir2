@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 将指定人物随机传送(支持权限分配)

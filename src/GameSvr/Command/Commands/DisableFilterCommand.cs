@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 启用/禁止文字过滤功能

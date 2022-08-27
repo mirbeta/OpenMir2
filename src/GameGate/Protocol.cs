@@ -12,8 +12,18 @@ namespace GameGate
     public class TSessionInfo
     {
         public Socket Socket;
-        public int SessionId;
+        /// <summary>
+        /// SocketId
+        /// </summary>
         public int SckHandle;
+        /// <summary>
+        /// 会话ID
+        /// </summary>
+        public ushort SessionId;
+        /// <summary>
+        /// Soccket链接ID
+        /// </summary>
+        public string ConnectionId;
         public ushort nUserListIndex;
         public int dwReceiveTick;
         public string sAccount;
@@ -59,9 +69,9 @@ namespace GameGate
 
     public enum TChatFilterMethod
     {
-        ctReplaceAll,
-        ctReplaceOne,
-        ctDropconnect
+        ReplaceAll,
+        ReplaceOne,
+        Dropconnect
     }
 
     public enum TOverSpeedMsgMethod

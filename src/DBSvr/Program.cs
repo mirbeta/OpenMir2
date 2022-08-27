@@ -1,42 +1,54 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DBSvr.DB;
+using DBSvr.DB.impl;
+using DBSvr.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
 
 namespace DBSvr
 {
     class Program
     {
         private static PeriodicTimer _timer;
+        private static IHost _host;
+        private static Logger _logger;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            
-            var sss = EDcode.EncodeBuffer(BitConverter.GetBytes(172));
-            var aaa = BitConverter.ToInt32(EDcode.DecodeBuff(sss));
-            
+
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                //GateShare.ShowLog = true;
+                DBShare.ShowLog = true;
                 if (_timer != null)
                 {
                     _timer.Dispose();
                 }
                 AnsiConsole.Reset();
             };
+
+            var config = new ConfigurationBuilder().Build();
+
+            _logger = LogManager.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                .GetCurrentClassLogger();
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddSingleton<MirLog>();
                     services.AddSingleton<UserSocService>();
                     services.AddSingleton<LoginSvrService>();
                     services.AddSingleton<HumDataService>();
@@ -44,12 +56,16 @@ namespace DBSvr
                     services.AddSingleton<IPlayDataService, MySqlPlayDataService>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+            _host = await builder.StartAsync(cts.Token);
             await ProcessLoopAsync();
             Stop();
         }
-
 
         static void Stop()
         {
@@ -61,7 +77,7 @@ namespace DBSvr
 
         static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
@@ -105,49 +121,49 @@ namespace DBSvr
             return Task.CompletedTask;
         }
 
-        private static Task ShowServerStatus()
+        private static async Task ShowServerStatus()
         {
-            //GateShare.ShowLog = false;
-            //_timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            //var serverList = ServerManager.Instance.GetServerList();
-            //var table = new Table().Expand().BorderColor(Color.Grey);
-            //table.AddColumn("[yellow]Address[/]");
-            //table.AddColumn("[yellow]Port[/]");
-            //table.AddColumn("[yellow]Status[/]");
-            //table.AddColumn("[yellow]Online[/]");
-            //table.AddColumn("[yellow]Send[/]");
-            //table.AddColumn("[yellow]Revice[/]");
-            //table.AddColumn("[yellow]Queue[/]");
+            DBShare.ShowLog = false;
+            var userSoc = _host.Services.GetService<UserSocService>();
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+            var serverList = userSoc?.GateList;
+            var table = new Table().Expand().BorderColor(Color.Grey);
+            table.AddColumn("[yellow]ServerName[/]");
+            table.AddColumn("[yellow]EndPoint[/]");
+            table.AddColumn("[yellow]Status[/]");
+            table.AddColumn("[yellow]Sessions[/]");
+            table.AddColumn("[yellow]Send[/]");
+            table.AddColumn("[yellow]Revice[/]");
+            table.AddColumn("[yellow]Queue[/]");
 
-            //await AnsiConsole.Live(table)
-            //     .AutoClear(true)
-            //     .Overflow(VerticalOverflow.Crop)
-            //     .Cropping(VerticalOverflowCropping.Bottom)
-            //     .StartAsync(async ctx =>
-            //     {
-            //         foreach (var _ in Enumerable.Range(0, 10))
-            //         {
-            //             table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
-            //         }
+            await AnsiConsole.Live(table)
+                 .AutoClear(true)
+                 .Overflow(VerticalOverflow.Crop)
+                 .Cropping(VerticalOverflowCropping.Bottom)
+                 .StartAsync(async ctx =>
+                 {
+                     foreach (var _ in Enumerable.Range(0, 10))
+                     {
+                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
+                     }
 
-            //         while (await _timer.WaitForNextTickAsync(cts.Token))
-            //         {
-            //             for (int i = 0; i < serverList.Count; i++)
-            //             {
-            //                 var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
+                     while (await _timer.WaitForNextTickAsync(cts.Token))
+                     {
+                         for (int i = 0; i < serverList.Count; i++)
+                         {
+                             var (serverIp, status, sessionCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
 
-            //                 table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
-            //                 table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
-            //                 table.UpdateCell(i, 2, ($"[bold]{Status}[/]"));
-            //                 table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
-            //                 table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
-            //                 table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
-            //                 table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
-            //             }
-            //             ctx.Refresh();
-            //         }
-            //     });
-            return Task.CompletedTask;
+                             table.UpdateCell(i, 0, $"[bold][blue]SelGate[/][/]");
+                             table.UpdateCell(i, 1, ($"[bold]{serverIp}[/]"));
+                             table.UpdateCell(i, 2, ($"[bold]{status}[/]"));
+                             table.UpdateCell(i, 3, ($"[bold]{sessionCount}[/]"));
+                             table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
+                             table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
+                             table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
+                         }
+                         ctx.Refresh();
+                     }
+                 });
         }
 
         static void PrintUsage()

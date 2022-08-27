@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr.Command
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 调整指定物品名称

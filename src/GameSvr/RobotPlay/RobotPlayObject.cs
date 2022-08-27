@@ -1,8 +1,16 @@
+using GameSvr.Actor;
+using GameSvr.Configs;
+using GameSvr.Items;
+using GameSvr.Magic;
+using GameSvr.Maps;
+using GameSvr.Player;
 using System.Collections;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     /// <summary>
     /// 假人
@@ -1197,7 +1205,7 @@ namespace GameSvr
             short nY = 0;
             nStep = 0;
             byte btDir;
-            if (nDir >= 0 && nDir <= 7)
+            if (nDir > 0 && nDir < 8)
             {
                 btDir = nDir;
             }
@@ -1229,18 +1237,12 @@ namespace GameSvr
                 if (m_PEnvir.GetNextPosition(nCurrX, nCurrY, btDir, 1, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                 {
                     nStep = nStep + 1;
-                    result = true;
-                    return result;
-                }
-                else
-                {
-                    return result;
+                    return true;
                 }
                 if (m_PEnvir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY) && nX == nTargetX && nY == nTargetY)
                 {
                     nStep = nStep + 1;
-                    result = true;
-                    return result;
+                    return true;
                 }
             }
             return result;
@@ -1250,11 +1252,10 @@ namespace GameSvr
         {
             bool result = false;
             int nStep = 0;
-            PointInfo[] Path;
             //0代替-1
             if (!CanWalk(X1, Y1, X2, Y2, 0, ref nStep, m_btRaceServer != 108))
             {
-                Path = M2Share.g_FindPath.FindPath(m_PEnvir, X1, Y1, X2, Y2, false);
+                PointInfo[] Path = M2Share.g_FindPath.FindPath(m_PEnvir, X1, Y1, X2, Y2, false);
                 if (Path.Length <= 0)
                 {
                     return result;
@@ -1486,7 +1487,7 @@ namespace GameSvr
                 DelTargetCreat();
                 m_nTargetX = nX;
                 m_nTargetY = nY;
-                SpaceMove(m_Master.m_PEnvir.sMapName, m_nTargetX, m_nTargetY, 1);
+                SpaceMove(m_Master.m_PEnvir.SMapName, m_nTargetX, m_nTargetY, 1);
                 result = true;
                 return result;
             }
@@ -2129,7 +2130,7 @@ namespace GameSvr
                 if (HUtil32.GetTickCount() - m_dwThinkTick > 3000)
                 {
                     m_dwThinkTick = HUtil32.GetTickCount();
-                    if (m_PEnvir.GetXYObjCount(m_nCurrX, m_nCurrY) >= 2)
+                    if (m_PEnvir.GetXyObjCount(m_nCurrX, m_nCurrY) >= 2)
                     {
                         m_boDupMode = true;
                     }
@@ -2567,7 +2568,7 @@ namespace GameSvr
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
+                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
                           m_nCurrY > 1 &&
                           (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY - 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
                         (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY - 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
@@ -2578,7 +2579,7 @@ namespace GameSvr
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
+                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY, true) > 0)
@@ -2587,8 +2588,8 @@ namespace GameSvr
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
-                        if (m_nCurrX < m_PEnvir.wWidth - 2 &&
-  m_nCurrY < m_PEnvir.wHeight - 2 &&
+                        if (m_nCurrX < m_PEnvir.WWidth - 2 &&
+  m_nCurrY < m_PEnvir.WHeight - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX + 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX + 2, m_nCurrY + 2, true) > 0)
@@ -2598,7 +2599,7 @@ namespace GameSvr
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (m_nCurrY < m_PEnvir.wHeight - 2 &&
+                        if (m_nCurrY < m_PEnvir.WHeight - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX, m_nCurrY + 2, true) > 0)
@@ -2608,7 +2609,7 @@ namespace GameSvr
                         break;
                     case Grobal2.DR_DOWNLEFT:
                         if (m_nCurrX > 1 &&
-  m_nCurrY < m_PEnvir.wHeight - 2 &&
+  m_nCurrY < m_PEnvir.WHeight - 2 &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 1, m_nCurrY + 1, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
   (m_PEnvir.CanWalkEx(m_nCurrX - 2, m_nCurrY + 2, M2Share.g_Config.boDiableHumanRun || m_btPermission > 9 && M2Share.g_Config.boGMRunAll) || M2Share.g_Config.boSafeAreaLimited && InSafeZone()) &&
     m_PEnvir.MoveToMovingObject(m_nCurrX, m_nCurrY, this, m_nCurrX - 2, m_nCurrY + 2, true) > 0)

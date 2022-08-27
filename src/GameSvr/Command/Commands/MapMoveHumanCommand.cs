@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 将指定地图所有玩家随机移动
@@ -38,7 +39,7 @@ namespace GameSvr
                 return;
             }
             HumanList = new List<TBaseObject>();
-            M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.wWidth / 2, SrcEnvir.wHeight / 2, 1000, HumanList);
+            M2Share.UserEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.WWidth / 2, SrcEnvir.WHeight / 2, 1000, HumanList);
             for (var i = 0; i < HumanList.Count; i++)
             {
                 MoveHuman = (TPlayObject)HumanList[i];

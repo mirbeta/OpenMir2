@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Event.Events;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 调整安全去光环

@@ -1,3 +1,4 @@
+using GameGate.Conf;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using System.Threading;
@@ -8,25 +9,19 @@ namespace GameGate
     public class AppService : BackgroundService
     {
         private readonly ServerApp _serverApp;
-        private LogQueue LogQueue => LogQueue.Instance;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
+        private static MirLog LogQueue => MirLog.Instance;
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
 
         public AppService(ServerApp serverApp)
         {
             _serverApp = serverApp;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
-            LogQueue.Enqueue("服务已启动成功...", 2);
-            LogQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
-            LogQueue.Enqueue("智能反外挂程序已启动...", 0);
-            LogQueue.Enqueue("智能反外挂程序云端已连接...", 0);
-            _serverApp.StartService();
-            await _serverApp.Start();
+            _serverApp.StartService(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

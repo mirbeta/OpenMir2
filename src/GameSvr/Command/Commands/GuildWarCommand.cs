@@ -1,6 +1,6 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("GuildWar", "", 10)]
     public class GuildWarCommand : BaseCommond

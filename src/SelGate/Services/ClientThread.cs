@@ -1,7 +1,12 @@
+using SelGate.Package;
 using System;
+using System.Net;
 using SystemModule;
-using SystemModule.Packages;
+using SystemModule.Packet;
+using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
 namespace SelGate.Services
 {
@@ -10,23 +15,26 @@ namespace SelGate.Services
     /// </summary>
     public class ClientThread
     {
-        private IClientScoket ClientSocket;
+        /// <summary>
+        /// Socket客户端
+        /// </summary>
+        private readonly ClientScoket _clientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
-        public int ClientId = 0;
+        public readonly int ClientId = 0;
         /// <summary>
         /// 最大用户数
         /// </summary>
-        public int MaxSession = 2000;
+        public const int MaxSession = 2000;
         /// <summary>
         /// 用户会话
         /// </summary>
-        public TSessionInfo[] SessionArray;
+        public readonly TSessionInfo[] SessionArray;
         /// <summary>
-        ///  网关游戏服务器之间检测是否失败（超时）
+        ///  网关游戏服务器之间检测是否失败/超时
         /// </summary>
-        public bool boCheckServerFail = false;
+        public bool CheckServerFail = false;
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
@@ -46,23 +54,24 @@ namespace SelGate.Services
         /// 会话管理
         /// </summary>
         private readonly SessionManager _sessionManager;
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private static MirLog _logQueue;
 
-        private readonly LogQueue _logQueue;
-
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,
-            LogQueue logQueue)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,MirLog logQueue)
         {
             ClientId = clientId;
+            _logQueue = logQueue;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _logQueue = logQueue;
-            ClientSocket = new IClientScoket();
-            ClientSocket.OnConnected += ClientSocketConnect;
-            ClientSocket.OnDisconnected += ClientSocketDisconnect;
-            ClientSocket.ReceivedDatagram += ClientSocketRead;
-            ClientSocket.OnError += ClientSocketError;
-            ClientSocket.Host = serverAddr;
-            ClientSocket.Port = serverPort;
+            _clientSocket = new ClientScoket();
+            _clientSocket.OnConnected += ClientSocketConnect;
+            _clientSocket.OnDisconnected += ClientSocketDisconnect;
+            _clientSocket.ReceivedDatagram += ClientSocketRead;
+            _clientSocket.OnError += ClientSocketError;
+            _clientSocket.Host = serverAddr;
+            _clientSocket.Port = serverPort;
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
@@ -70,34 +79,34 @@ namespace SelGate.Services
 
         public bool IsConnected => isConnected;
 
-        public string GetSocketIp()
+        public string GetEndPoint()
         {
-            return $"{ClientSocket.Host}:{ClientSocket.Port}";
+            return _clientSocket.EndPoint.ToString();
         }
 
         public void Start()
         {
-            ClientSocket.Connect();
+            _clientSocket.Connect();
         }
 
         public void ReConnected()
         {
             if (isConnected == false)
             {
-                ClientSocket.Connect();
+                _clientSocket.Connect();
             }
         }
 
         public void Stop()
         {
-            for (int i = 0; i < SessionArray.Length; i++)
+            for (var i = 0; i < SessionArray.Length; i++)
             {
                 if (SessionArray[i] != null && SessionArray[i].Socket != null)
                 {
                     SessionArray[i].Socket.Close();
                 }
             }
-            ClientSocket.Disconnect();
+            _clientSocket.Disconnect();
         }
 
         public TSessionInfo[] GetSession()
@@ -112,10 +121,10 @@ namespace SelGate.Services
             isConnected = true;
             SockThreadStutas = SockThreadStutas.Connected;
             KeepAliveTick = HUtil32.GetTickCount();
-            GateShare.dwCheckServerTick = HUtil32.GetTickCount();
+            GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]链接成功.", 1);
-            _logQueue.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteAddress}:{e.RemotePort} 成功...");
+            _logQueue.LogInformation($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
+            _logQueue.LogDebug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -127,40 +136,46 @@ namespace SelGate.Services
                 {
                     continue;
                 }
-                if (userSession.Socket != null && userSession.Socket == e.socket)
+                if (userSession.Socket != null && userSession.Socket == e.Socket)
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
                 }
             }
             RestSessionArray();
-            boGateReady = false;
             GateShare.ServerGateList.Remove(this);
-            _logQueue.Enqueue($"数据库服务器[{e.RemoteAddress}:{e.RemotePort}]断开链接.", 1);
+            _logQueue.LogInformation($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
+            boGateReady = false;
             isConnected = false;
+            CheckServerFail = true;
         }
 
         /// <summary>
         /// 收到数据库服务器 直接发送给客户端
-        /// todo 优化封包处理
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             if (e.BuffLen <= 0)
             {
                 return;
             }
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-            var sText = string.Empty;
-            int sSessionId = -1;
-            HUtil32.ArrestStringEx(sData, "%", "$", ref sText);
-            HUtil32.GetValidStr3(sText, ref sSessionId, new[] { "/" });
-            var userData = new TMessageData();
-            userData.SessionId = sSessionId;
-            userData.Body = e.Buff;
-            _sessionManager.SendQueue.TryWrite(userData);
+            var packet = Packets.ToPacket<GatePacket>(e.Buff);
+            if (packet == null)
+            {
+                return;
+            }
+            if (packet.PacketType == PacketType.KeepAlive)
+            {
+                _logQueue.LogDebug("DBSvr Heartbeat Response");
+                CheckServerFail = false;
+                boGateReady = true;
+                isConnected = true;
+                return;
+            }
+            var message = new TMessageData();
+            message.SessionId = packet.SocketId;
+            message.Body = packet.Body;
+            _sessionManager.SendQueue.TryWrite(message);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -168,13 +183,13 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]关闭连接...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.Enqueue($"数据库服务器[{ClientSocket.Host}:{ClientSocket.Port}]链接超时...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }
@@ -187,60 +202,34 @@ namespace SelGate.Services
                 {
                     SessionArray[i].Socket = null;
                     SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].SocketId = 0;
+                    SessionArray[i].SocketId = String.Empty;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }
         }
 
-        public void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
-            string Data)
+        public void SendKeepAlive()
         {
-            if (!string.IsNullOrEmpty(Data))
-            {
-                var strBuff = HUtil32.GetBytes(Data);
-                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, strBuff);
-            }
-            else
-            {
-                SendServerMsg(nIdent, wSocketIndex, nSocket, nUserListIndex, nLen, Array.Empty<byte>());
-            }
+            var accountPacket = new GatePacket();
+            accountPacket.Body = Array.Empty<byte>();
+            accountPacket.StartChar = '%';
+            accountPacket.PacketType = PacketType.KeepAlive;
+            accountPacket.SocketId = Guid.NewGuid().ToString("N");
+            accountPacket.EndChar = '$';
+            SendSocket(accountPacket.GetBuffer());
+            _logQueue.LogDebug("Send DBSvr Heartbeat.");
         }
 
-        private void SendServerMsg(ushort nIdent, int wSocketIndex, int nSocket, ushort nUserListIndex, int nLen,
-            byte[] Data)
-        {
-            var GateMsg = new PacketHeader();
-            GateMsg.PacketCode = Grobal2.RUNGATECODE;
-            GateMsg.Socket = nSocket;
-            GateMsg.SocketIdx = (ushort)wSocketIndex;
-            GateMsg.Ident = nIdent;
-            GateMsg.UserIndex = nUserListIndex;
-            GateMsg.PackLength = nLen;
-            var sendBuffer = GateMsg.GetBuffer();
-            if (Data is { Length: > 0 })
-            {
-                var tempBuff = new byte[20 + Data.Length];
-                Array.Copy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
-                Array.Copy(Data, 0, tempBuff, sendBuffer.Length, Data.Length);
-                SendSocket(tempBuff);
-            }
-            else
-            {
-                SendSocket(sendBuffer);
-            }
-        }
-
-        public void SendData(string sendText)
+        public void SendBuffer(string sendText)
         {
             SendSocket(HUtil32.GetBytes(sendText));
         }
 
-        private void SendSocket(byte[] sendBuffer)
+        public void SendSocket(byte[] buffer)
         {
-            if (ClientSocket.IsConnected)
+            if (_clientSocket.IsConnected)
             {
-                ClientSocket.Send(sendBuffer);
+                _clientSocket.Send(buffer);
             }
         }
     }

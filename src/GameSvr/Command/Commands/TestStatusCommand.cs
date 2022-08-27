@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("TestStatus", "", 10)]
     public class TestStatusCommand : BaseCommond

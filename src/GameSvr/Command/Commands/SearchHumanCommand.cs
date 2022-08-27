@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 搜索指定玩家所在地图XY坐标
@@ -31,7 +32,7 @@ namespace GameSvr
                     m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
                     if (m_PlayObject != null)
                     {
-                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.sMapDesc + '(' + m_PlayObject.m_PEnvir.sMapName + ") " + m_PlayObject.m_nCurrX + ':'
+                        PlayObject.SysMsg(sHumanName + " 现在位于 " + m_PlayObject.m_PEnvir.SMapDesc + '(' + m_PlayObject.m_PEnvir.SMapName + ") " + m_PlayObject.m_nCurrX + ':'
                             + PlayObject.m_nCurrY, MsgColor.Blue, MsgType.Hint);
                     }
                     else

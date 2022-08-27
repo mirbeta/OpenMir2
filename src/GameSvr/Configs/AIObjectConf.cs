@@ -1,8 +1,12 @@
+using GameSvr.Actor;
+using GameSvr.Items;
+using GameSvr.RobotPlay;
 using System.Collections;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Configs
 {
     public class AIObjectConf : IniFile
     {

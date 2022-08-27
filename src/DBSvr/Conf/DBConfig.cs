@@ -1,25 +1,52 @@
-﻿namespace DBSvr
+﻿namespace DBSvr.Conf
 {
     public class DBConfig
     {
         public bool ShowDebugLog = false;
         public int ShowLogLevel = 1;
-        public int nServerPort = 6000;
-        public string sServerAddr = "*";
-        public int g_nGatePort = 5100;
-        public string g_sGateAddr = "*";
-        public int nIDServerPort = 5600;
-        public string sIDServerAddr = "127.0.0.1";
-        public bool g_boEnglishNames = false;
-        public string sServerName = "热血传奇";
+        /// <summary>
+        /// 数据库服务端口
+        /// </summary>
+        public int ServerPort = 6000;
+        /// <summary>
+        /// 数据库服务地址
+        /// </summary>
+        public string ServerAddr = "*";
+        /// <summary>
+        /// 数据库网关服务端口
+        /// </summary>
+        public int GatePort = 5100;
+        /// <summary>
+        /// 数据库网关服务地址
+        /// </summary>
+        public string GateAddr = "*";
+        /// <summary>
+        /// 账号服务器端口
+        /// </summary>
+        public int LoginServerPort = 5600;
+        /// <summary>
+        /// 账号服务器地址
+        /// </summary>
+        public string LoginServerAddr = "127.0.0.1";
+        /// <summary>
+        /// 是否禁止全英文名字
+        /// </summary>
+        public bool EnglishNames = false;
+        /// <summary>
+        /// 服务器名称
+        /// </summary>
+        public string ServerName = "热血传奇";
         /// <summary>
         /// 是否禁止检测玩家名字
         /// </summary>
         public bool boDenyChrName = true;
         public int nDELMaxLevel = 30;
-        public string DBConnection = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
-        public int dwInterval = 3000;
-        public bool g_boDynamicIPMode = false;
-        public string sMapFile = string.Empty;
+        public string DBConnection = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
+        public int Interval = 3000;
+        /// <summary>
+        /// 动态IP模式
+        /// </summary>
+        public bool DynamicIpMode = false;
+        public string MapFile = string.Empty;
     }
 }

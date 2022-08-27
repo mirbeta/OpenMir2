@@ -1,4 +1,6 @@
 using System;
+using SystemModule.Packet;
+using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule
 {
@@ -75,6 +77,15 @@ namespace SystemModule
             var bSrc = HUtil32.GetBytes(src);
             var nLen = 0;
             return Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
+        }
+        
+        public static T DecodeBuffer<T>(string src) where T : Packets, new()
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src));
+            var bSrc = HUtil32.GetBytes(src);
+            var nLen = 0;
+            var data = Misc.DecodeBuf(bSrc, bSrc.Length, ref nLen);
+            return Packets.ToPacket<T>(data);
         }
 
         /// <summary>

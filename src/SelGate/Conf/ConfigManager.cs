@@ -1,7 +1,6 @@
-using SelGate.Conf;
 using SystemModule.Common;
 
-namespace SelGate
+namespace SelGate.Conf
 {
     public class ConfigManager : IniFile
     {
@@ -21,10 +20,16 @@ namespace SelGate
             }
         }
 
+        public void ReLoadConfig()
+        {
+            ReLoad();
+            LoadConfig();
+        }
+
         public void LoadConfig()
         {
-            GateConfig.m_nShowLogLevel = ReadInteger("Integer", "ShowLogLevel", GateConfig.m_nShowLogLevel);
-            GateConfig.ShowDebugLog = ReadBool("Integer", "ShowDebugLog", GateConfig.ShowDebugLog);
+            GateConfig.ShowLogLevel = ReadInteger("SelGate", "ShowLogLevel", GateConfig.ShowLogLevel);
+            GateConfig.ShowDebugLog = ReadBool("SelGate", "ShowDebugLog", GateConfig.ShowDebugLog);
             GateConfig.m_nClientTimeOutTime = ReadInteger("Integer", "ClientTimeOutTime", GateConfig.m_nClientTimeOutTime);
             if (GateConfig.m_nClientTimeOutTime < 10 * 1000)
             {
@@ -44,7 +49,7 @@ namespace SelGate
             GateConfig.m_fDefenceCCPacket = ReadBool("Switch", "DefenceCCPacket", GateConfig.m_fDefenceCCPacket);
             GateConfig.m_fKickOverSpeed = ReadBool("Switch", "KickOverSpeed", GateConfig.m_fKickOverSpeed);
             GateConfig.m_fKickOverPacketSize = ReadBool("Switch", "KickOverPacketSize", GateConfig.m_fKickOverPacketSize);
-            //新加角色过滤功能 2018-09-06
+            //???????????? 2018-09-06
             GateConfig.m_fAllowGetBackChr = ReadBool("Switch", "AllowGetBackChr", GateConfig.m_fAllowGetBackChr);
             GateConfig.m_fAllowDeleteChr = ReadBool("Switch", "AllowDeleteChr", GateConfig.m_fAllowDeleteChr);
             GateConfig.m_fNewChrNameFilter = ReadBool("Switch", "NewChrNameFilter", GateConfig.m_fNewChrNameFilter);

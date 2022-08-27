@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     /// <summary>
     /// 权重筛选器

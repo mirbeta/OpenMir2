@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 召唤指定怪物为宠物，宝宝等级直接为1级
@@ -42,7 +43,7 @@ namespace GameSvr
             {
                 nNameColor = 255;
             }
-            mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
+            mon = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.m_Master = PlayObject;

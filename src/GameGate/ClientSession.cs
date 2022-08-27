@@ -1,8 +1,12 @@
+using GameGate.Conf;
+using GameGate.Packet;
+using GameGate.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using SystemModule;
-using SystemModule.Packages;
+using SystemModule.Packet;
+using SystemModule.Packet.ClientPackets;
 
 namespace GameGate
 {
@@ -14,14 +18,14 @@ namespace GameGate
         private readonly GameSpeed _gameSpeed;
         private readonly TSessionInfo _session;
         private readonly object _syncObj;
-        private readonly ClientThread lastGameSvr;
+        private readonly ClientThread _clientThread;
         private readonly HardwareFilter _hwidFilter;
         private readonly SendQueue _sendQueue;
         private readonly IList<TDelayMsg> _msgList;
         private int _lastDirection = -1;
         private byte _handleLogin = 0;
         private bool _fOverClientCount;
-        private bool m_KickFlag = false;
+        private bool _kickFlag = false;
         public int m_nSvrListIdx = 0;
         private int m_nSvrObject = 0;
         private int m_nChrStutas = 0;
@@ -32,12 +36,12 @@ namespace GameGate
         public ClientSession(TSessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
             _session = session;
-            lastGameSvr = clientThread;
+            _clientThread = clientThread;
             _sendQueue = sendQueue;
             _msgList = new List<TDelayMsg>();
             _hwidFilter = GateShare.HWFilter;
             _fOverClientCount = false;
-            m_KickFlag = false;
+            _kickFlag = false;
             m_Stat = TCheckStep.CheckLogin;
             _syncObj = new object();
             _gameSpeed = new GameSpeed();
@@ -50,7 +54,7 @@ namespace GameGate
 
         public TSessionInfo Session => _session;
 
-        private LogQueue _logQueue => LogQueue.Instance;
+        private static MirLog LogQueue => MirLog.Instance;
 
         private GateConfig Config => ConfigManager.Instance.GateConfig;
 
@@ -63,9 +67,9 @@ namespace GameGate
         {
             var sMsg = string.Empty;
             int dwCurrentTick = 0;
-            if (m_KickFlag)
+            if (_kickFlag)
             {
-                m_KickFlag = false;
+                _kickFlag = false;
                 return;
             }
             if (Config.IsDefenceCCPacket && (message.BufferLen >= 5))
@@ -109,10 +113,12 @@ namespace GameGate
                 case 0:
                     {
                         sMsg = HUtil32.GetString(message.Buffer, 2, message.BufferLen - 3);
+                        LogQueue.EnqueueDebugging("Login Packet: " + sMsg);
                         var tempStr = EDcode.DeCodeString(sMsg);
                         HandleLogin(tempStr, message.BufferLen, "", ref success);
                         if (!success)
                         {
+                            LogQueue.Enqueue("客户端登陆消息处理失败，剔除链接", 1);
                             //KickUser("ip");
                         }
                         break;
@@ -124,6 +130,7 @@ namespace GameGate
                             _session.Socket.Close();//直接关闭异常会话
                             return;
                         }
+
                         var tempBuff = message.Buffer[2..^1];//跳过#1....! 只保留消息内容
                         var nDeCodeLen = 0;
                         var packBuff = Misc.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
@@ -135,7 +142,7 @@ namespace GameGate
                             case Grobal2.CM_GUILDUPDATERANKINFO:
                                 if (message.BufferLen > Config.MaxClientPacketSize)
                                 {
-                                    _logQueue.Enqueue("Kick off user,over max client packet size: " + message.BufferLen, 5);
+                                    LogQueue.Enqueue("Kick off user,over max client packet size: " + message.BufferLen, 5);
                                     // Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     return;
                                 }
@@ -143,7 +150,7 @@ namespace GameGate
                             default:
                                 if (message.BufferLen > Config.NomClientPacketSize)
                                 {
-                                    _logQueue.Enqueue("Kick off user,over nom client packet size: " + message.BufferLen, 5);
+                                    LogQueue.Enqueue("Kick off user,over nom client packet size: " + message.BufferLen, 5);
                                     // Misc.KickUser(m_pUserOBJ.nIPAddr);
                                     return;
                                 }
@@ -271,23 +278,23 @@ namespace GameGate
                                     {
                                         return;
                                     }
-                                    if (TableDef.MAIGIC_DELAY_ARRAY[CltCmd.Magic]) // 过滤武士魔法
+                                    if (TableDef.MaigicDelayArray[CltCmd.Magic]) // 过滤武士魔法
                                     {
                                         int nSpellInterval;
                                         if (_gameSpeed.SpeedLimit)
                                         {
-                                            nSpellInterval = TableDef.MAIGIC_DELAY_TIME_LIST[CltCmd.Magic] + Config.PunishSpellInterval;
+                                            nSpellInterval = TableDef.MaigicDelayTimeList[CltCmd.Magic] + Config.PunishSpellInterval;
                                         }
                                         else
                                         {
-                                            nSpellInterval = TableDef.MAIGIC_DELAY_TIME_LIST[CltCmd.Magic];
+                                            nSpellInterval = TableDef.MaigicDelayTimeList[CltCmd.Magic];
                                         }
                                         nInterval = (dwCurrentTick - _gameSpeed.dwSpellTick);
                                         if ((nInterval >= nSpellInterval))
                                         {
                                             int dwNextMove;
                                             int dwNextAtt;
-                                            if (TableDef.MAIGIC_ATTACK_ARRAY[CltCmd.Magic])
+                                            if (TableDef.MaigicAttackArray[CltCmd.Magic])
                                             {
                                                 dwNextMove = Config.SpellNextMoveCompensate;
                                                 dwNextAtt = Config.SpellNextAttackCompensate;
@@ -562,7 +569,7 @@ namespace GameGate
                                             pszSendBuf[0] = (byte)'#';
                                             var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetBuffer(), ClientPacket.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                            lastGameSvr.SendBuffer(pszSendBuf);
+                                            _clientThread.SendBuffer(pszSendBuf);
                                             return;
                                         }
                                     }
@@ -575,7 +582,7 @@ namespace GameGate
                         cmdPack.PacketCode = Grobal2.RUNGATECODE;
                         cmdPack.Socket = _session.SckHandle;
                         cmdPack.Ident = Grobal2.GM_DATA;
-                        cmdPack.UserIndex = m_nSvrListIdx;
+                        cmdPack.ServerIndex = m_nSvrListIdx;
                         if (nDeCodeLen > ClientPacket.PackSize)
                         {
                             var sendBuffer = new byte[message.Buffer.Length - ClientPacket.PackSize + 1];
@@ -592,7 +599,7 @@ namespace GameGate
                             Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, packBuff.Length);
                         }
                         Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, PacketHeader.PacketSize);//复制消息头
-                        lastGameSvr.SendBuffer(BodyBuffer);
+                        _clientThread.SendBuffer(BodyBuffer);
                         break;
                     }
             }
@@ -612,7 +619,7 @@ namespace GameGate
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    lastGameSvr.SendBuffer(delayMsg.Buffer);//发送消息到M2
+                    _clientThread.SendBuffer(delayMsg.Buffer);//发送消息到M2
                     var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
@@ -663,7 +670,7 @@ namespace GameGate
                             _gameSpeed.dwSpellTick = dwCurrentTick;
                             int nNextMov = 0;
                             int nNextAtt = 0;
-                            if (TableDef.MAIGIC_ATTACK_ARRAY[delayMsg.nMag])
+                            if (TableDef.MaigicAttackArray[delayMsg.nMag])
                             {
                                 nNextMov = Config.SpellNextMoveCompensate;
                                 nNextAtt = Config.SpellNextAttackCompensate;
@@ -810,7 +817,7 @@ namespace GameGate
             }
             if (nMid > 0)
             {
-                _logQueue.EnqueueDebugging($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{nMid}] DelayTime:[{dwDelay}]");
+                LogQueue.EnqueueDebugging($"发送延时处理消息:User:[{_session.sChrName}] MagicID:[{nMid}] DelayTime:[{dwDelay}]");
             }
         }
 
@@ -871,10 +878,10 @@ namespace GameGate
                         switch (packet.Series)
                         {
                             case 1:
-                                _logQueue.EnqueueDebugging("封机器码");
+                                LogQueue.EnqueueDebugging("封机器码");
                                 break;
                             case 2:
-                                _logQueue.EnqueueDebugging("清理机器码");
+                                LogQueue.EnqueueDebugging("清理机器码");
                                 _hwidFilter.ClearDeny();
                                 _hwidFilter.SaveDenyList();
                                 break;
@@ -970,7 +977,7 @@ namespace GameGate
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
-                    _logQueue.Enqueue($"[HandleLogin] Kicked 1: {loginData}", 1);
+                    LogQueue.Enqueue($"[HandleLogin] Kicked 1: {loginData}", 1);
                     success = false;
                     return;
                 }
@@ -985,7 +992,7 @@ namespace GameGate
 
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);
-                if ((sAccount.Length > 4) && (sAccount.Length <= 12) && (sHumName.Length > 2) && (sHumName.Length < 15))
+                if ((sAccount.Length >= 4) && (sAccount.Length <= 12) && (sHumName.Length > 2) && (sHumName.Length < 15))
                 {
                     sDataText = HUtil32.GetValidStr3(sDataText, ref szCert, HUtil32.Backslash);
                     sDataText = HUtil32.GetValidStr3(sDataText, ref szClientVerNO, HUtil32.Backslash);
@@ -998,7 +1005,7 @@ namespace GameGate
                     }
                     if (szClientVerNO.Length < 8)
                     {
-                        _logQueue.Enqueue($"[HandleLogin] Kicked 2: {sHumName} clientVer validation failed.", 1);
+                        LogQueue.Enqueue($"[HandleLogin] Kicked 2: {sHumName} clientVer validation failed.", 1);
                         success = false;
                         return;
                     }
@@ -1018,7 +1025,7 @@ namespace GameGate
                     {
                         if (string.IsNullOrEmpty(szHarewareID) || (szHarewareID.Length > 256) || ((szHarewareID.Length % 2) != 0))
                         {
-                            _logQueue.Enqueue($"[HandleLogin] Kicked 3: {sHumName}", 1);
+                            LogQueue.Enqueue($"[HandleLogin] Kicked 3: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
@@ -1067,25 +1074,25 @@ namespace GameGate
                         }
                         if (fMatch)
                         {
-                            _logQueue.Enqueue($"[HandleLogin] Kicked 5: {sHumName}", 1);
+                            LogQueue.Enqueue($"[HandleLogin] Kicked 5: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
                         HardwareHeader pHardwareHeader = new HardwareHeader(dest);
                         //todo session会话里面需要存用户ip
-                        _logQueue.Enqueue($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
+                        LogQueue.Enqueue($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)
                         {
                             if (MD5.MD5Match(MD5.g_MD5EmptyDigest, pHardwareHeader.xMd5Digest))
                             {
-                                _logQueue.Enqueue($"[HandleLogin] Kicked 6: {sHumName}", 1);
+                                LogQueue.Enqueue($"[HandleLogin] Kicked 6: {sHumName}", 1);
                                 SendKickMsg(4);
                                 return;
                             }
                             hardWareDigest = pHardwareHeader.xMd5Digest;
                             if (_hwidFilter.IsFilter(hardWareDigest, ref _fOverClientCount))
                             {
-                                _logQueue.Enqueue($"[HandleLogin] Kicked 7: {sHumName}", 1);
+                                LogQueue.Enqueue($"[HandleLogin] Kicked 7: {sHumName}", 1);
                                 if (_fOverClientCount)
                                 {
                                     SendKickMsg(5);
@@ -1099,7 +1106,7 @@ namespace GameGate
                         }
                         else
                         {
-                            _logQueue.Enqueue($"[HandleLogin] Kicked 8: {sHumName}", 1);
+                            LogQueue.Enqueue($"[HandleLogin] Kicked 8: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
@@ -1116,16 +1123,17 @@ namespace GameGate
                     SendFirstPack(pszLoginPacket, encodelen + 3);
                     _session.sAccount = sAccount;
                     _session.sChrName = sHumName;
+                    success = true;
                 }
                 else
                 {
-                    _logQueue.Enqueue($"[HandleLogin] Kicked 2: {loginData}", 1);
+                    LogQueue.Enqueue($"[HandleLogin] Kicked 2: {loginData}", 1);
                     success = false;
                 }
             }
             else
             {
-                _logQueue.Enqueue($"[HandleLogin] Kicked 0: {loginData}", 1);
+                LogQueue.Enqueue($"[HandleLogin] Kicked 0: {loginData}", 1);
                 success = false;
             }
         }
@@ -1147,9 +1155,9 @@ namespace GameGate
             var GateMsg = new PacketHeader();
             GateMsg.PacketCode = Grobal2.RUNGATECODE;
             GateMsg.Socket = (int)_session.Socket.Handle;
-            GateMsg.SocketIdx = (ushort)_session.SessionId;
+            GateMsg.SessionId = _session.SessionId;
             GateMsg.Ident = Grobal2.GM_DATA;
-            GateMsg.UserIndex = _session.nUserListIndex;
+            GateMsg.ServerIndex = _session.nUserListIndex;
             GateMsg.PackLength = tempBuff.Length - PacketHeader.PacketSize;//只需要发送数据封包大小即可
             var sendBuffer = GateMsg.GetBuffer();
             Buffer.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
@@ -1166,7 +1174,7 @@ namespace GameGate
 
         private void SendSysMsg(string szMsg)
         {
-            if ((lastGameSvr == null) || !lastGameSvr.IsConnected)
+            if ((_clientThread == null) || !_clientThread.IsConnected)
             {
                 return;
             }

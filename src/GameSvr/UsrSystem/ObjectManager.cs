@@ -1,8 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using GameSvr.Actor;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using SystemModule;
 
-namespace GameSvr
+namespace GameSvr.UsrSystem
 {
     /// <summary>
     /// 对象管理系统

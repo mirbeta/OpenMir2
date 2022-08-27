@@ -1,8 +1,8 @@
-namespace SelGate
+namespace SelGate.Package
 {
     public struct TMessageData
     {
-        public int SessionId;
+        public string SessionId;
 
         public byte[] Body;
         public int MsgLen => Body.Length;

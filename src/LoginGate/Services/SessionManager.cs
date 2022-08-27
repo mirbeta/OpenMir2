@@ -1,72 +1,34 @@
-using System;
+using LoginGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using SystemModule;
 
-namespace LoginGate
+namespace LoginGate.Services
 {
+    /// <summary>
+    /// MirClient会话管理
+    /// </summary>
     public class SessionManager
     {
-        /// <summary>
-        /// 发送封包（网关-》客户端）
-        /// </summary>
-        private readonly Channel<TMessageData> _sendQueue = null;
-        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
+        private readonly MirLog _logger;
+        private readonly ConfigManager _configManager;
+        readonly ConcurrentDictionary<string, ClientSession> _sessionMap;
 
-        public SessionManager()
+        public SessionManager(MirLog logger, ConfigManager configManager)
         {
-            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            _sendQueue = Channel.CreateUnbounded<TMessageData>();
+            _logger = logger;
+            _configManager = configManager;
+            _sessionMap = new ConcurrentDictionary<string, ClientSession>();
         }
 
-        public static SessionManager Instance { get; } = new SessionManager();
-
-        public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
-
-        /// <summary>
-        /// 处理LoginSvr发送过来的消息
-        /// </summary>
-        public Task ProcessSendMessage()
+        public void AddSession(TSessionInfo sessionInfo, ClientThread clientThread)
         {
-            return Task.Factory.StartNew(async () =>
-             {
-                 while (await _sendQueue.Reader.WaitToReadAsync())
-                 {
-                     while (_sendQueue.Reader.TryRead(out var message))
-                     {
-                         var userSession = GetSession(message.MessageId);
-                         if (userSession == null)
-                         {
-                             continue;
-                         }
-                         if (message.Body[0] == (byte)'+') //收到DB服务器发过来的关闭会话请求
-                         {
-                             if (message.Body[1] == (byte)'-')
-                             {
-                                 userSession.CloseSession();
-                                 Console.WriteLine("收到LoginSvr关闭会话请求");
-                             }
-                             else
-                             {
-                                 userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
-                             }
-                             return;
-                         }
-                         userSession.ProcessSvrData(message);
-                     }
-                 }
-             });
+            var userSession = new ClientSession(_logger, sessionInfo, clientThread, _configManager);
+            _sessionMap.TryAdd(sessionInfo.ConnectionId, userSession);
+            userSession.UserEnter();
         }
 
-        public void AddSession(int sessionId, ClientSession clientSession)
-        {
-            _sessionMap.TryAdd(sessionId, clientSession);
-        }
-
-        public ClientSession GetSession(int sessionId)
+        public ClientSession GetSession(string sessionId)
         {
             if (_sessionMap.ContainsKey(sessionId))
             {
@@ -75,15 +37,15 @@ namespace LoginGate
             return null;
         }
 
-        public void CloseSession(int sessionId)
+        public void CloseSession(string sessionId)
         {
             if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
-                clientSession.Session.Socket.Close();
+                clientSession.CloseSession();
             }
         }
 
-        public bool CheckSession(int sessionId)
+        public bool CheckSession(string sessionId)
         {
             if (_sessionMap.ContainsKey(sessionId))
             {
@@ -96,5 +58,6 @@ namespace LoginGate
         {
             return _sessionMap.Values.ToList();
         }
+        
     }
 }

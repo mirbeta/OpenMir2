@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("DisableSendMsg", "", "人物名称", 10)]
     public class DisableSendMsgCommand : BaseCommond

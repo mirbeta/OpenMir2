@@ -1,7 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Actor;
+using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 设定怪物集中点

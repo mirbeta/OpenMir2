@@ -1,4 +1,4 @@
-﻿namespace GameSvr.CommandSystem
+﻿namespace GameSvr.Command
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class GameCommandAttribute : Attribute

@@ -1,190 +1,184 @@
+using DBSvr.Conf;
+using DBSvr.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Packet;
+using SystemModule.Packet.ClientPackets;
+using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
-namespace DBSvr
+namespace DBSvr.Services
 {
     public class UsrSocMessage
     {
-        public string Text;
+        public GatePacket Packet;
         public TGateInfo GateInfo;
     }
 
     public class UserSocService
     {
+        private readonly MirLog _logger;
         private IList<TGateInfo> _gateList = null;
         private Dictionary<string, int> _mapList = null;
         private readonly IPlayDataService _playDataService;
         private readonly IPlayRecordService _playRecordService;
-        private readonly ISocketServer _userSocket;
+        private readonly SocketServer _userSocket;
         private readonly LoginSvrService _loginService;
-        private DBConfig Config = ConfigManager.GetConfig();
-        private readonly Channel<UsrSocMessage> _reviceMsgList;
+        private readonly DBConfig _config = ConfigManager.GetConfig();
+        private readonly Channel<UsrSocMessage> _reviceQueue;
+        private CancellationTokenSource _cancellationToken;
 
-        public UserSocService(LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
+        public UserSocService(MirLog logger, LoginSvrService loginService, IPlayRecordService playRecordService, IPlayDataService playDataService)
         {
+            _logger = logger;
             _loginService = loginService;
             _playRecordService = playRecordService;
             _playDataService = playDataService;
             _gateList = new List<TGateInfo>();
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _userSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _reviceQueue = Channel.CreateUnbounded<UsrSocMessage>();
+            _userSocket = new SocketServer(byte.MaxValue, 1024);
             _userSocket.OnClientConnect += UserSocketClientConnect;
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
             _userSocket.OnClientRead += UserSocketClientRead;
             _userSocket.OnClientError += UserSocketClientError;
             _userSocket.Init();
-            LoadServerInfo();
-            LoadChrNameList("DenyChrName.txt");
-            LoadClearMakeIndexList("ClearMakeIndex.txt");
-            _reviceMsgList = Channel.CreateUnbounded<UsrSocMessage>();
+            _cancellationToken = new CancellationTokenSource();
         }
 
         public void Start()
         {
-            _userSocket.Start(Config.g_sGateAddr, Config.g_nGatePort);
+            LoadServerInfo();
+            LoadChrNameList("DenyChrName.txt");
+            LoadClearMakeIndexList("ClearMakeIndex.txt");
             _playRecordService.LoadQuickList();
-            DBShare.MainOutMessage($"数据库服务[{Config.g_sGateAddr}:{Config.g_nGatePort}]已启动.等待链接...");
-        }
-
-        public async Task StartConsumer()
-        {
-            await Task.Run(async () =>
-            {
-                await ProcessReviceMessage();
-            });
-        }
-
-        /// <summary>
-        /// 处理客户端发过来的消息
-        /// </summary>
-        private async Task ProcessReviceMessage()
-        {
-            while (await _reviceMsgList.Reader.WaitToReadAsync())
-            {
-                while (_reviceMsgList.Reader.TryRead(out var message))
-                {
-                    ProcessGateMsg(message.GateInfo, message.Text);
-                }
-            }
-        }
-
-        private void ProcessGateMsg(TGateInfo GateInfo, string sText)
-        {
-            var s0C = string.Empty;
-            var sData = string.Empty;
-            char s19;
-            TUserInfo UserInfo;
-            while (true)
-            {
-                if (sText.IndexOf("$", StringComparison.Ordinal) <= 0)
-                {
-                    break;
-                }
-                sText = HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
-                if (sData != "")
-                {
-                    s19 = sData[0];
-                    sData = sData.Substring(1, sData.Length - 1);
-                    switch (s19)
-                    {
-                        case '-':
-                            SendKeepAlivePacket(GateInfo.Socket);
-                            //dwKeepAliveTick = HUtil32.GetTickCount();
-                            break;
-                        case 'A':
-                            sData = HUtil32.GetValidStr3(sData, ref s0C, HUtil32.Backslash);
-                            for (var i = 0; i < GateInfo.UserList.Count; i++)
-                            {
-                                UserInfo = GateInfo.UserList[i];
-                                if (UserInfo != null)
-                                {
-                                    if (UserInfo.sConnID == s0C)
-                                    {
-                                        UserInfo.sText += sData;
-                                        if (sData.IndexOf("!", StringComparison.Ordinal) < 1)
-                                        {
-                                            continue;
-                                        }
-                                        ProcessUserMsg(GateInfo, ref UserInfo);
-                                        break;
-                                    }
-                                }
-                            }
-                            break;
-                        case 'O':
-                        case 'K':
-                            sData = HUtil32.GetValidStr3(sData, ref s0C, HUtil32.Backslash);
-                            OpenUser(s0C, sData, ref GateInfo);
-                            /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
-                            if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
-                            {
-                                dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
-                                dwCheckUserSocTick = HUtil32.GetTickCount();
-                            }*/
-                            break;
-                        case 'X':
-                        case 'L':
-                            CloseUser(sData, ref GateInfo);
-                            /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
-                            if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
-                            {
-                                dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
-                                dwCheckUserSocTick = HUtil32.GetTickCount();
-                            }*/
-                            break;
-                    }
-                }
-            }
+            _userSocket.Start(_config.GateAddr, _config.GatePort);
+            StartMessageThread();
+            _logger.LogInformation($"数据库服务[{_config.GateAddr}:{_config.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
         {
-            TGateInfo GateInfo;
-            TUserInfo UserInfo;
             for (var i = 0; i < _gateList.Count; i++)
             {
-                GateInfo = _gateList[i];
-                if (GateInfo != null)
+                var gateInfo = _gateList[i];
+                if (gateInfo != null)
                 {
-                    for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
+                    for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
                     {
-                        UserInfo = GateInfo.UserList[ii];
-                        UserInfo = null;
+                        gateInfo.UserList[ii] = null;
                     }
-                    GateInfo.UserList = null;
+                    gateInfo.UserList = null;
                 }
                 _gateList.RemoveAt(i);
-                break;
             }
             _gateList = null;
             _mapList = null;
+            _cancellationToken.Cancel();//停止消息处理线程
+        }
+
+        public IList<TGateInfo> GateList => _gateList;
+
+        /// <summary>
+        /// 处理客户端发过来的消息
+        /// </summary>
+        private void StartMessageThread()
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                while (await _reviceQueue.Reader.WaitToReadAsync(_cancellationToken.Token))
+                {
+                    if (_reviceQueue.Reader.TryRead(out var message))
+                    {
+                        ProcessGateMsg(message.GateInfo, message.Packet);
+                    }
+                }
+            }, _cancellationToken.Token);
+        }
+
+        private void ProcessGateMsg(TGateInfo gateInfo, GatePacket packet)
+        {
+            var s0C = string.Empty;
+            var sData = string.Empty;
+            if (packet.EndChar != '$')
+            {
+                return;
+            }
+            var sText = HUtil32.GetString(packet.Body, 0, packet.BuffLen);
+            HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
+            switch (packet.PacketType)
+            {
+                case PacketType.KeepAlive:
+                    _logger.DebugLog("Received SelGate Heartbeat.");
+                    SendKeepAlivePacket(gateInfo.Socket);
+                    //dwKeepAliveTick = HUtil32.GetTickCount();
+                    break;
+                case PacketType.Data:
+                    for (var i = 0; i < gateInfo.UserList.Count; i++)
+                    {
+                        var userInfo = gateInfo.UserList[i];
+                        if (userInfo != null)
+                        {
+                            if (userInfo.sConnID == packet.SocketId)
+                            {
+                                userInfo.sText += sText;
+                                if (sText.IndexOf("!", StringComparison.Ordinal) < 1)
+                                {
+                                    continue;
+                                }
+                                ProcessUserMsg(gateInfo, ref userInfo);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case PacketType.Enter:
+                    sData = HUtil32.GetValidStr3(sData, ref s0C, HUtil32.Backslash);
+                    OpenUser(packet.SocketId, sData, ref gateInfo);
+                    /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
+                    if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
+                    {
+                        dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
+                        dwCheckUserSocTick = HUtil32.GetTickCount();
+                    }*/
+                    break;
+                case PacketType.Leave:
+                    CloseUser(packet.SocketId, ref gateInfo);
+                    /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
+                    if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
+                    {
+                        dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
+                        dwCheckUserSocTick = HUtil32.GetTickCount();
+                    }*/
+                    break;
+            }
         }
 
         private void UserSocketClientConnect(object sender, AsyncUserToken e)
         {
-            string sIPaddr = e.RemoteIPaddr;
+            var sIPaddr = e.RemoteIPaddr;
             const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
             if (!DBShare.CheckServerIP(sIPaddr))
             {
-                DBShare.MainOutMessage("非法网关连接: " + sIPaddr);
                 e.Socket.Close();
+                _logger.LogWarning("非法网关连接: " + sIPaddr);
                 return;
             }
-            var GateInfo = new TGateInfo();
-            GateInfo.Socket = e.Socket;
-            GateInfo.sGateaddr = sIPaddr;
-            GateInfo.UserList = new List<TUserInfo>();
-            GateInfo.dwTick10 = HUtil32.GetTickCount();
-            GateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            _gateList.Add(GateInfo);
-            DBShare.MainOutMessage(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
+            var gateInfo = new TGateInfo();
+            gateInfo.Socket = e.Socket;
+            gateInfo.RemoteEndPoint = e.EndPoint;
+            gateInfo.UserList = new List<TUserInfo>();
+            gateInfo.nGateID = DBShare.GetGateID(sIPaddr);
+            _gateList.Add(gateInfo);
+            _logger.LogInformation(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -192,16 +186,16 @@ namespace DBSvr
             const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
             for (var i = 0; i < _gateList.Count; i++)
             {
-                var GateInfo = _gateList[i];
-                if (GateInfo != null)
+                var gateInfo = _gateList[i];
+                if (gateInfo != null && gateInfo.UserList != null)
                 {
-                    for (var ii = 0; ii < GateInfo.UserList.Count; ii++)
+                    for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
                     {
-                        GateInfo.UserList[ii] = null;
+                        gateInfo.UserList[ii] = null;
                     }
-                    GateInfo.UserList = null;
+                    gateInfo.UserList = null;
                 }
-                DBShare.MainOutMessage(string.Format(sGateClose, i, e.RemoteIPaddr, e.RemotePort));
+                _logger.LogInformation(string.Format(sGateClose, i, e.RemoteIPaddr, e.RemotePort));
                 _gateList.RemoveAt(i);
                 break;
             }
@@ -216,91 +210,84 @@ namespace DBSvr
         {
             for (var i = 0; i < _gateList.Count; i++)
             {
-                if (_gateList[i].Socket == e.Socket)
+                if (_gateList[i].Socket != e.Socket)
+                    continue;
+                var nReviceLen = e.BytesReceived;
+                var data = new byte[nReviceLen];
+                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
+                var packet = Packets.ToPacket<GatePacket>(data);
+                if (packet == null)
                 {
-                    var nReviceLen = e.BytesReceived;
-                    var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    var sText = HUtil32.GetString(data, 0, data.Length);
-                    if (sText.Length < 81920 && sText.IndexOf("$", StringComparison.Ordinal) > 1)
-                    {
-                        var message = new UsrSocMessage();
-                        message.Text = sText;
-                        message.GateInfo = _gateList[i];
-                        _reviceMsgList.Writer.TryWrite(message);
-                    }
+                    _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
+                    continue;
                 }
+                var message = new UsrSocMessage();
+                message.Packet = Packets.ToPacket<GatePacket>(data);
+                message.GateInfo = _gateList[i];
+                _reviceQueue.Writer.TryWrite(message);
             }
         }
 
         public int GetUserCount()
         {
-            TGateInfo GateInfo;
-            int nUserCount = 0;
+            TGateInfo gateInfo;
+            var nUserCount = 0;
             for (var i = 0; i < _gateList.Count; i++)
             {
-                GateInfo = _gateList[i];
-                nUserCount += GateInfo.UserList.Count;
+                gateInfo = _gateList[i];
+                nUserCount += gateInfo.UserList.Count;
             }
             return nUserCount;
         }
 
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
-            bool result = false;
-            THumDataInfo ChrRecord;
-            try
+            var result = false;
+            if ((_playDataService.Index(sChrName) == -1))
             {
-                if ((_playDataService.Index(sChrName) == -1))
-                {
-                    ChrRecord = new THumDataInfo();
-                    ChrRecord.Header = new TRecordHeader();
-                    ChrRecord.Data = new THumInfoData();
-                    ChrRecord.Data.Initialization();
-                    ChrRecord.Header.sName = sChrName;
-                    ChrRecord.Header.sAccount = sAccount;
-                    ChrRecord.Data.sCharName = sChrName;
-                    ChrRecord.Data.sAccount = sAccount;
-                    ChrRecord.Data.btSex = (byte)nSex;
-                    ChrRecord.Data.btJob = (byte)nJob;
-                    ChrRecord.Data.btHair = (byte)nHair;
-                    _playDataService.Add(ref ChrRecord);
-                    result = true;
-                }
-            }
-            finally
-            {
-
+                var chrRecord = new THumDataInfo();
+                chrRecord.Header = new TRecordHeader();
+                chrRecord.Data = new THumInfoData();
+                chrRecord.Data.Initialization();
+                chrRecord.Header.sName = sChrName;
+                chrRecord.Header.sAccount = sAccount;
+                chrRecord.Data.sCharName = sChrName;
+                chrRecord.Data.sAccount = sAccount;
+                chrRecord.Data.btSex = (byte)nSex;
+                chrRecord.Data.btJob = (byte)nJob;
+                chrRecord.Data.btHair = (byte)nHair;
+                _playDataService.Add(ref chrRecord);
+                result = true;
             }
             return result;
         }
 
         private void LoadServerInfo()
         {
-            string sLineText = string.Empty;
-            string sSelGateIPaddr = string.Empty;
-            string sGameGateIPaddr = string.Empty;
-            string sGameGate = string.Empty;
-            string sGameGatePort = string.Empty;
-            string sMapName = string.Empty;
-            string sMapInfo = string.Empty;
-            string sServerIndex = string.Empty;
-            var LoadList = new StringList();
-            if (!File.Exists(DBShare.sGateConfFileName))
+            var sLineText = string.Empty;
+            var sSelGateIPaddr = string.Empty;
+            var sGameGateIPaddr = string.Empty;
+            var sGameGate = string.Empty;
+            var sGameGatePort = string.Empty;
+            var sMapName = string.Empty;
+            var sMapInfo = string.Empty;
+            var sServerIndex = string.Empty;
+            var loadList = new StringList();
+            if (!File.Exists(DBShare.GateConfFileName))
             {
                 return;
             }
-            LoadList.LoadFromFile(DBShare.sGateConfFileName);
-            if (LoadList.Count <= 0)
+            loadList.LoadFromFile(DBShare.GateConfFileName);
+            if (loadList.Count <= 0)
             {
-                DBShare.MainOutMessage("加载游戏服务配置文件!ServerInfo.txt失败.");
+                _logger.LogError("加载游戏服务配置文件ServerInfo.txt失败.");
                 return;
             }
-            int nRouteIdx = 0;
-            int nGateIdx = 0;
-            for (var i = 0; i < LoadList.Count; i++)
+            var nRouteIdx = 0;
+            var nGateIdx = 0;
+            for (var i = 0; i < loadList.Count; i++)
             {
-                sLineText = LoadList[i].Trim();
+                sLineText = loadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
                     sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
@@ -308,46 +295,47 @@ namespace DBSvr
                     {
                         continue;
                     }
-                    DBShare.g_RouteInfo[nRouteIdx] = new TRouteInfo();
-                    DBShare.g_RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
-                    DBShare.g_RouteInfo[nRouteIdx].nGateCount = 0;
+                    DBShare.RouteInfo[nRouteIdx] = new TRouteInfo();
+                    DBShare.RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
+                    DBShare.RouteInfo[nRouteIdx].nGateCount = 0;
                     nGateIdx = 0;
                     while ((sGameGate != ""))
                     {
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
-                        DBShare.g_RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                        DBShare.g_RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
+                        DBShare.RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                        DBShare.RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.Str_ToInt(sGameGatePort, 0);
                         nGateIdx++;
                     }
-                    DBShare.g_RouteInfo[nRouteIdx].nGateCount = nGateIdx;
+                    DBShare.RouteInfo[nRouteIdx].nGateCount = nGateIdx;
                     nRouteIdx++;
+                    _logger.LogInformation($"读取网关配置信息.GameGateIP:[{sGameGateIPaddr}:{sGameGatePort}]");
                 }
             }
+            _logger.LogInformation($"读取网关配置信息成功.[{loadList.Count}]");
             _mapList.Clear();
-            if (File.Exists(Config.sMapFile))
+            if (File.Exists(_config.MapFile))
             {
-                LoadList.Clear();
-                LoadList.LoadFromFile(Config.sMapFile);
-                for (var i = 0; i < LoadList.Count; i++)
+                loadList.Clear();
+                loadList.LoadFromFile(_config.MapFile);
+                for (var i = 0; i < loadList.Count; i++)
                 {
-                    sLineText = LoadList[i];
+                    sLineText = loadList[i];
                     if ((sLineText != "") && (sLineText[0] == '['))
                     {
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
                         sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
                         sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" }).Trim();
-                        int nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
+                        var nServerIndex = HUtil32.Str_ToInt(sServerIndex, 0);
                         _mapList.Add(sMapName, nServerIndex);
                     }
                 }
             }
-            LoadList = null;
+            loadList = null;
         }
 
-        private bool LoadChrNameList(string sFileName)
+        private void LoadChrNameList(string sFileName)
         {
-            bool result = false;
             int i;
             if (File.Exists(sFileName))
             {
@@ -366,69 +354,64 @@ namespace DBSvr
                     }
                     i++;
                 }
-                result = true;
             }
-            return result;
         }
 
-        private bool LoadClearMakeIndexList(string sFileName)
+        private void LoadClearMakeIndexList(string sFileName)
         {
-            bool result = false;
             if (File.Exists(sFileName))
             {
-                DBShare.g_ClearMakeIndex.LoadFromFile(sFileName);
+                DBShare.ClearMakeIndex.LoadFromFile(sFileName);
                 var i = 0;
                 while (true)
                 {
-                    if (DBShare.g_ClearMakeIndex.Count <= i)
+                    if (DBShare.ClearMakeIndex.Count <= i)
                     {
                         break;
                     }
-                    var sLineText = DBShare.g_ClearMakeIndex[i];
+                    var sLineText = DBShare.ClearMakeIndex[i];
                     var nIndex = HUtil32.Str_ToInt(sLineText, -1);
                     if (nIndex < 0)
                     {
-                        DBShare.g_ClearMakeIndex.RemoveAt(i);
+                        DBShare.ClearMakeIndex.RemoveAt(i);
                         continue;
                     }
-                    DBShare.g_ClearMakeIndex[i] = nIndex.ToString();
+                    DBShare.ClearMakeIndex[i] = nIndex.ToString();
                     i++;
                 }
-                result = true;
-            }
-            return result;
-        }
-
-        private void SendKeepAlivePacket(Socket Socket)
-        {
-            if (Socket.Connected)
-            {
-                Socket.SendText("%++$");
             }
         }
 
-        private void ProcessUserMsg(TGateInfo GateInfo, ref TUserInfo UserInfo)
+        private void SendKeepAlivePacket(Socket socket)
         {
-            string sData = string.Empty;
-            int nC = 0;
-            if (HUtil32.TagCount(UserInfo.sText, '!') <= 0)
+            var gataPacket = new GatePacket();
+            gataPacket.PacketType = PacketType.KeepAlive;
+            gataPacket.SocketId = string.Empty;
+            SendPacket(socket, gataPacket);
+        }
+
+        private void ProcessUserMsg(TGateInfo gateInfo, ref TUserInfo userInfo)
+        {
+            var sData = string.Empty;
+            var nC = 0;
+            if (HUtil32.TagCount(userInfo.sText, '!') <= 0)
             {
                 return;
             }
-            UserInfo.sText = HUtil32.ArrestStringEx(UserInfo.sText, "#", "!", ref sData);
+            userInfo.sText = HUtil32.ArrestStringEx(userInfo.sText, "#", "!", ref sData);
             if (!string.IsNullOrEmpty(sData))
             {
                 sData = sData.Substring(1, sData.Length - 1);
                 if (sData.Length >= Grobal2.DEFBLOCKSIZE)
                 {
-                    DeCodeUserMsg(sData, GateInfo, ref UserInfo);
+                    DeCodeUserMsg(sData, gateInfo, ref userInfo);
                 }
             }
             else
             {
                 if (nC >= 1)
                 {
-                    UserInfo.sText = string.Empty;
+                    userInfo.sText = string.Empty;
                 }
                 nC++;
             }
@@ -437,56 +420,60 @@ namespace DBSvr
         /// <summary>
         /// 打开用户会话
         /// </summary>
-        private void OpenUser(string sID, string sIP, ref TGateInfo GateInfo)
+        private void OpenUser(string sId, string sIp, ref TGateInfo gateInfo)
         {
-            string sUserIPaddr = string.Empty;
-            string sGateIPaddr = HUtil32.GetValidStr3(sIP, ref sUserIPaddr, HUtil32.Backslash);
-            TUserInfo UserInfo;
-            for (var i = 0; i < GateInfo.UserList.Count; i++)
+            var sUserIPaddr = string.Empty;
+            var sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
+            TUserInfo userInfo;
+            var success = false;
+            for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
-                UserInfo = GateInfo.UserList[i];
-                if ((UserInfo != null) && (UserInfo.sConnID == sID))
+                userInfo = gateInfo.UserList[i];
+                if ((userInfo != null) && (userInfo.sConnID == sId))
                 {
-                    return;
+                    success = true;
+                    break;
                 }
             }
-            UserInfo = new TUserInfo();
-            UserInfo.sAccount = string.Empty;
-            UserInfo.sUserIPaddr = sUserIPaddr;
-            UserInfo.sGateIPaddr = sGateIPaddr;
-            UserInfo.sConnID = sID;
-            UserInfo.nSessionID = 0;
-            UserInfo.Socket = GateInfo.Socket;
-            UserInfo.sText = string.Empty;
-            UserInfo.dwTick34 = HUtil32.GetTickCount();
-            UserInfo.dwChrTick = HUtil32.GetTickCount();
-            UserInfo.boChrSelected = false;
-            UserInfo.boChrQueryed = false;
-            UserInfo.nSelGateID = GateInfo.nGateID;
-            GateInfo.UserList.Add(UserInfo);
+            if (!success)
+            {
+                userInfo = new TUserInfo();
+                userInfo.sAccount = string.Empty;
+                userInfo.sUserIPaddr = sUserIPaddr;
+                userInfo.sGateIPaddr = sGateIPaddr;
+                userInfo.sConnID = sId;
+                userInfo.nSessionID = 0;
+                userInfo.Socket = gateInfo.Socket;
+                userInfo.sText = string.Empty;
+                userInfo.dwTick34 = HUtil32.GetTickCount();
+                userInfo.dwChrTick = HUtil32.GetTickCount();
+                userInfo.boChrSelected = false;
+                userInfo.boChrQueryed = false;
+                userInfo.nSelGateID = gateInfo.nGateID;
+                gateInfo.UserList.Add(userInfo);
+            }
         }
 
-        private void CloseUser(string sID, ref TGateInfo GateInfo)
+        private void CloseUser(string connId, ref TGateInfo gateInfo)
         {
-            TUserInfo UserInfo;
-            for (var i = 0; i < GateInfo.UserList.Count; i++)
+            for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
-                UserInfo = GateInfo.UserList[i];
-                if ((UserInfo != null) && (UserInfo.sConnID == sID))
+                var userInfo = gateInfo.UserList[i];
+                if ((userInfo != null) && (userInfo.sConnID == connId))
                 {
-                    if (!_loginService.GetGlobaSessionStatus(UserInfo.nSessionID))
+                    if (!_loginService.GetGlobaSessionStatus(userInfo.nSessionID))
                     {
-                        _loginService.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, UserInfo.sAccount + "/" + UserInfo.nSessionID);
-                        _loginService.CloseSession(UserInfo.sAccount, UserInfo.nSessionID);
+                        _loginService.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, userInfo.sAccount + "/" + userInfo.nSessionID);
+                        _loginService.CloseSession(userInfo.sAccount, userInfo.nSessionID);
                     }
-                    UserInfo = null;
-                    GateInfo.UserList.RemoveAt(i);
+                    userInfo = null;
+                    gateInfo.UserList.RemoveAt(i);
                     break;
                 }
             }
         }
 
-        private void DeCodeUserMsg(string sData, TGateInfo gateInfo, ref TUserInfo UserInfo)
+        private void DeCodeUserMsg(string sData, TGateInfo gateInfo, ref TUserInfo userInfo)
         {
             var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
@@ -494,75 +481,80 @@ namespace DBSvr
             switch (clientPacket.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
-                    if (!UserInfo.boChrQueryed || ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 200))
+                    if (!userInfo.boChrQueryed || ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 200))
                     {
-                        UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if (QueryChr(sText, ref UserInfo, ref gateInfo))
+                        userInfo.dwChrTick = HUtil32.GetTickCount();
+                        if (QueryChr(sText, ref userInfo, ref gateInfo))
                         {
-                            UserInfo.boChrQueryed = true;
+                            userInfo.boChrQueryed = true;
+                            _logger.DebugLog("[QueryChr] Success " + sText);
+                        }
+                        else
+                        {
+                            _logger.DebugLog("[QueryChr] Fail " + sText);
                         }
                     }
                     else
                     {
-                        DBShare.MainOutMessage("[Hacker Attack] QUERYCHR " + UserInfo.sUserIPaddr);
+                        _logger.LogWarning("[Hacker Attack] QueryChr " + userInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_NEWCHR:
-                    if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
+                    if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
-                        UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((!string.IsNullOrEmpty(UserInfo.sAccount)) && _loginService.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        userInfo.dwChrTick = HUtil32.GetTickCount();
+                        if ((!string.IsNullOrEmpty(userInfo.sAccount)) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
-                            NewChr(sText, ref UserInfo);
-                            UserInfo.boChrQueryed = false;
+                            NewChr(sText, ref userInfo);
+                            userInfo.boChrQueryed = false;
                         }
                         else
                         {
-                            OutOfConnect(UserInfo);
+                            OutOfConnect(userInfo);
                         }
                     }
                     else
                     {
-                        DBShare.MainOutMessage("[Hacker Attack] NEWCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        _logger.LogWarning("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_DELCHR:
-                    if ((HUtil32.GetTickCount() - UserInfo.dwChrTick) > 1000)
+                    if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
-                        UserInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((UserInfo.sAccount != "") && _loginService.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        userInfo.dwChrTick = HUtil32.GetTickCount();
+                        if ((userInfo.sAccount != "") && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
-                            DelChr(sText, ref UserInfo);
-                            UserInfo.boChrQueryed = false;
+                            DelChr(sText, ref userInfo);
+                            userInfo.boChrQueryed = false;
                         }
                         else
                         {
-                            OutOfConnect(UserInfo);
+                            OutOfConnect(userInfo);
                         }
                     }
                     else
                     {
-                        DBShare.MainOutMessage("[Hacker Attack] DELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        _logger.LogWarning("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Grobal2.CM_SELCHR:
-                    if (UserInfo.boChrQueryed)
+                    if (userInfo.boChrQueryed)
                     {
-                        if ((UserInfo.sAccount != "") && _loginService.CheckSession(UserInfo.sAccount, UserInfo.sUserIPaddr, UserInfo.nSessionID))
+                        if ((userInfo.sAccount != "") && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
-                            if (SelectChr(sText, gateInfo, ref UserInfo))
+                            if (SelectChr(sText, gateInfo, ref userInfo))
                             {
-                                UserInfo.boChrSelected = true;
+                                userInfo.boChrSelected = true;
                             }
                         }
                         else
                         {
-                            OutOfConnect(UserInfo);
+                            OutOfConnect(userInfo);
                         }
                     }
                     else
                     {
-                        DBShare.MainOutMessage("Double send SELCHR " + UserInfo.sAccount + "/" + UserInfo.sUserIPaddr);
+                        _logger.LogWarning("Double send SELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
             }
@@ -572,46 +564,46 @@ namespace DBSvr
         /// 查询角色
         /// </summary>
         /// <returns></returns>
-        private bool QueryChr(string sData, ref TUserInfo UserInfo, ref TGateInfo CurGate)
+        private bool QueryChr(string sData, ref TUserInfo userInfo, ref TGateInfo curGate)
         {
-            string sAccount = string.Empty;
-            string sSendMsg = string.Empty;
-            bool result = false;
-            string sSessionID = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
-            int nSessionID = HUtil32.Str_ToInt(sSessionID, -2);
-            int nChrCount = 0;
-            if (_loginService.CheckSession(sAccount, UserInfo.sUserIPaddr, nSessionID))
+            var sAccount = string.Empty;
+            var sSendMsg = string.Empty;
+            var result = false;
+            var sSessionId = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
+            var nSessionId = HUtil32.Str_ToInt(sSessionId, -2);
+            var nChrCount = 0;
+            if (_loginService.CheckSession(sAccount, userInfo.sUserIPaddr, nSessionId))
             {
-                _loginService.SetGlobaSessionNoPlay(nSessionID);
-                UserInfo.sAccount = sAccount;
-                UserInfo.nSessionID = nSessionID;
-                IList<TQuickID> ChrList = new List<TQuickID>();
-                if ((_playRecordService.FindByAccount(sAccount, ref ChrList) >= 0))
+                _loginService.SetGlobaSessionNoPlay(nSessionId);
+                userInfo.sAccount = sAccount;
+                userInfo.nSessionID = nSessionId;
+                IList<TQuickID> chrList = new List<TQuickID>();
+                if ((_playRecordService.FindByAccount(sAccount, ref chrList) >= 0))
                 {
-                    for (var i = 0; i < ChrList.Count; i++)
+                    for (var i = 0; i < chrList.Count; i++)
                     {
-                        var quickId = ChrList[i];
-                        if (quickId.nSelectID != UserInfo.nSelGateID) // 如果选择ID不对,则跳过
+                        var quickId = chrList[i];
+                        if (quickId.nSelectID != userInfo.nSelGateID) // 如果选择ID不对,则跳过
                         {
                             continue;
                         }
-                        HumRecordData HumRecord = _playRecordService.GetBy(quickId.nIndex, ref result);
-                        if (result && !HumRecord.boDeleted)
+                        var humRecord = _playRecordService.GetBy(quickId.nIndex, ref result);
+                        if (result && !humRecord.boDeleted)
                         {
-                            string sChrName = quickId.sChrName;
+                            var sChrName = quickId.sChrName;
                             var nIndex = _playDataService.Index(sChrName);
                             if ((nIndex < 0) || (nChrCount >= 2))
                             {
                                 continue;
                             }
-                            THumDataInfo ChrRecord = null;
-                            if (_playDataService.Get(nIndex, ref ChrRecord) >= 0)
+                            THumDataInfo chrRecord = null;
+                            if (_playDataService.Get(nIndex, ref chrRecord) >= 0)
                             {
-                                var btSex = ChrRecord.Data.btSex;
-                                var sJob = ChrRecord.Data.btJob;
-                                var sHair = ChrRecord.Data.btHair;
-                                var sLevel = ChrRecord.Data.Abil.Level;
-                                if (HumRecord.boSelected == 1)
+                                var btSex = chrRecord.Data.btSex;
+                                var sJob = chrRecord.Data.btJob;
+                                var sHair = chrRecord.Data.btHair;
+                                var sLevel = chrRecord.Data.Abil.Level;
+                                if (humRecord.boSelected == 1)
                                 {
                                     sSendMsg = sSendMsg + "*";
                                 }
@@ -621,14 +613,14 @@ namespace DBSvr
                         }
                     }
                 }
-                ChrList = null;
-                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(sSendMsg));
+                chrList = null;
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDcode.EncodeString(sSendMsg));
                 result = true;
             }
             else
             {
-                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
-                CloseUser(UserInfo.sConnID, ref CurGate);
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
+                CloseUser(userInfo.sConnID, ref curGate);
             }
             return result;
         }
@@ -636,89 +628,79 @@ namespace DBSvr
         /// <summary>
         /// 会话错误
         /// </summary>
-        private void OutOfConnect(TUserInfo UserInfo)
+        private void OutOfConnect(TUserInfo userInfo)
         {
-            ClientPacket Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            string sMsg = EDcode.EncodeMessage(Msg);
-            SendUserSocket(UserInfo.Socket, sMsg, UserInfo.sConnID);
+            var msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            var sMsg = EDcode.EncodeMessage(msg);
+            SendUserSocket(userInfo.Socket, sMsg, userInfo.sConnID);
         }
 
         private int DelChrSnameToLevel(string sName)
         {
-            THumDataInfo ChrRecord = null;
-            int result = 0;
-            try
-            {
-                int nIndex = _playDataService.Index(sName);
-                if (nIndex >= 0)
-                {
-                    _playDataService.Get(nIndex, ref ChrRecord);
-                    result = ChrRecord.Data.Abil.Level;
-                }
-            }
-            finally
-            {
-
-            }
-            return result;
+            THumDataInfo chrRecord = null;
+            var nIndex = _playDataService.Index(sName);
+            if (nIndex < 0)
+                return 0;
+            _playDataService.Get(nIndex, ref chrRecord);
+            return chrRecord.Data.Abil.Level;
         }
 
         /// <summary>
         /// 删除角色
         /// </summary>
-        private void DelChr(string sData, ref TUserInfo UserInfo)
+        private void DelChr(string sData, ref TUserInfo userInfo)
         {
-            ClientPacket Msg;
+            ClientPacket msg;
             var sChrName = EDcode.DeCodeString(sData);
             var boCheck = false;
             var nIndex = _playRecordService.Index(sChrName);
             if (nIndex >= 0)
             {
-                var HumRecord = _playRecordService.Get(nIndex, ref boCheck);
+                var humRecord = _playRecordService.Get(nIndex, ref boCheck);
                 if (boCheck)
                 {
-                    if (HumRecord.sAccount == UserInfo.sAccount)
+                    if (humRecord.sAccount == userInfo.sAccount)
                     {
-                        int nLevel = DelChrSnameToLevel(sChrName);
-                        if (nLevel < Config.nDELMaxLevel)
+                        var nLevel = DelChrSnameToLevel(sChrName);
+                        if (nLevel < _config.nDELMaxLevel)
                         {
-                            HumRecord.boDeleted = true;
-                            boCheck = _playRecordService.Update(nIndex, ref HumRecord);
+                            humRecord.boDeleted = true;
+                            boCheck = _playRecordService.Update(nIndex, ref humRecord);
                         }
                     }
                 }
             }
             if (boCheck)
             {
-                Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
-            string sMsg = EDcode.EncodeMessage(Msg);
-            SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
+            var sMsg = EDcode.EncodeMessage(msg);
+            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
         }
 
         /// <summary>
         /// 新建角色
         /// </summary>
-        private void NewChr(string sData, ref TUserInfo UserInfo)
+        private void NewChr(string sData, ref TUserInfo userInfo)
         {
-            string sAccount = string.Empty;
-            string sChrName = string.Empty;
-            string sHair = string.Empty;
-            string sJob = string.Empty;
-            string sSex = string.Empty;
-            ClientPacket Msg;
+            var sAccount = string.Empty;
+            var sChrName = string.Empty;
+            var sHair = string.Empty;
+            var sJob = string.Empty;
+            var sSex = string.Empty;
+            ClientPacket msg;
             var nCode = -1;
-            string Data = EDcode.DeCodeString(sData);
-            Data = HUtil32.GetValidStr3(Data, ref sAccount, HUtil32.Backslash);
-            Data = HUtil32.GetValidStr3(Data, ref sChrName, HUtil32.Backslash);
-            Data = HUtil32.GetValidStr3(Data, ref sHair, HUtil32.Backslash);
-            Data = HUtil32.GetValidStr3(Data, ref sJob, HUtil32.Backslash);
-            Data = HUtil32.GetValidStr3(Data, ref sSex, HUtil32.Backslash);
-            if (!string.IsNullOrEmpty(Data.Trim()))
+            var data = EDcode.DeCodeString(sData);
+            data = HUtil32.GetValidStr3(data, ref sAccount, HUtil32.Backslash);
+            data = HUtil32.GetValidStr3(data, ref sChrName, HUtil32.Backslash);
+            data = HUtil32.GetValidStr3(data, ref sHair, HUtil32.Backslash);
+            data = HUtil32.GetValidStr3(data, ref sJob, HUtil32.Backslash);
+            data = HUtil32.GetValidStr3(data, ref sSex, HUtil32.Backslash);
+            if (!string.IsNullOrEmpty(data.Trim()))
             {
                 nCode = 0;
             }
@@ -727,7 +709,7 @@ namespace DBSvr
             {
                 nCode = 0;
             }
-            if (Config.g_boEnglishNames && !HUtil32.IsEnglishStr(sChrName))
+            if (_config.EnglishNames && !HUtil32.IsEnglishStr(sChrName))
             {
                 nCode = 0;
             }
@@ -762,16 +744,16 @@ namespace DBSvr
                 }
                 if (_playRecordService.ChrCountOfAccount(sAccount) < 2)
                 {
-                    HumRecordData HumRecord = new HumRecordData();
-                    HumRecord.sChrName = sChrName;
-                    HumRecord.sAccount = sAccount;
-                    HumRecord.boDeleted = false;
-                    HumRecord.Header = new TRecordHeader();
-                    HumRecord.Header.sName = sChrName;
-                    HumRecord.Header.nSelectID = UserInfo.nSelGateID;
-                    if (!string.IsNullOrEmpty(HumRecord.Header.sName))
+                    var humRecord = new HumRecordData();
+                    humRecord.sChrName = sChrName;
+                    humRecord.sAccount = sAccount;
+                    humRecord.boDeleted = false;
+                    humRecord.Header = new TRecordHeader();
+                    humRecord.Header.sName = sChrName;
+                    humRecord.Header.nSelectID = userInfo.nSelGateID;
+                    if (!string.IsNullOrEmpty(humRecord.Header.sName))
                     {
-                        if (!_playRecordService.Add(HumRecord))
+                        if (!_playRecordService.Add(humRecord))
                         {
                             nCode = 2;
                         }
@@ -796,115 +778,111 @@ namespace DBSvr
             }
             if (nCode == 1)
             {
-                Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                Msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
-            string sMsg = EDcode.EncodeMessage(Msg);
-            SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sMsg);
+            var sMsg = EDcode.EncodeMessage(msg);
+            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
         }
 
         /// <summary>
         /// 选择角色
         /// </summary>
         /// <returns></returns>
-        private bool SelectChr(string sData, TGateInfo CurGate, ref TUserInfo UserInfo)
+        private bool SelectChr(string sData, TGateInfo curGate, ref TUserInfo userInfo)
         {
-            string sAccount = string.Empty;
-            THumDataInfo ChrRecord = null;
-            string sCurMap = string.Empty;
-            int nRoutePort = 0;
+            var sAccount = string.Empty;
+            var sCurMap = string.Empty;
+            var nRoutePort = 0;
             var result = false;
             var sChrName = HUtil32.GetValidStr3(EDcode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
-            var boDataOK = false;
-            if (UserInfo.sAccount == sAccount)
+            var boDataOk = false;
+            if (userInfo.sAccount == sAccount)
             {
                 int nIndex;
-                IList<TQuickID> ChrList = new List<TQuickID>();
-                if (_playRecordService.FindByAccount(sAccount, ref ChrList) >= 0)
+                IList<TQuickID> chrList = new List<TQuickID>();
+                if (_playRecordService.FindByAccount(sAccount, ref chrList) >= 0)
                 {
-                    for (var i = 0; i < ChrList.Count; i++)
+                    for (var i = 0; i < chrList.Count; i++)
                     {
-                        nIndex = ChrList[i].nIndex;
-                        HumRecordData HumRecord = _playRecordService.GetBy(nIndex, ref result);
+                        nIndex = chrList[i].nIndex;
+                        var humRecord = _playRecordService.GetBy(nIndex, ref result);
                         if (result)
                         {
-                            if (HumRecord.sChrName == sChrName)
+                            if (humRecord.sChrName == sChrName)
                             {
-                                HumRecord.boSelected = 1;
-                                _playRecordService.UpdateBy(nIndex, ref HumRecord);
+                                humRecord.boSelected = 1;
+                                _playRecordService.UpdateBy(nIndex, ref humRecord);
                             }
                             else
                             {
-                                if (HumRecord.boSelected == 1)
+                                if (humRecord.boSelected == 1)
                                 {
-                                    HumRecord.boSelected = 0;
-                                    _playRecordService.UpdateBy(nIndex, ref HumRecord);
+                                    humRecord.boSelected = 0;
+                                    _playRecordService.UpdateBy(nIndex, ref humRecord);
                                 }
                             }
                         }
                     }
                 }
-                ChrList = null;
+                chrList = null;
                 nIndex = _playDataService.Index(sChrName);
                 if (nIndex >= 0)
                 {
-                    _playDataService.Get(nIndex, ref ChrRecord);
-                    sCurMap = ChrRecord.Data.sCurMap;
-                    boDataOK = true;
+                    THumDataInfo chrRecord = null;
+                    _playDataService.Get(nIndex, ref chrRecord);
+                    sCurMap = chrRecord.Data.sCurMap;
+                    boDataOk = true;
                 }
             }
-            if (boDataOK)
+            if (boDataOk)
             {
-                int nMapIndex = GetMapIndex(sCurMap);
-                string sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
-                string sRouteIP = GateRouteIP(CurGate.sGateaddr, ref nRoutePort);
-                if (Config.g_boDynamicIPMode)// 使用动态IP
+                var nMapIndex = GetMapIndex(sCurMap);
+                var sDefMsg = EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
+                var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
+                if (_config.DynamicIpMode)// 使用动态IP
                 {
-                    sRouteIP = UserInfo.sGateIPaddr;
+                    sRouteIp = userInfo.sGateIPaddr;
                 }
-                string sRouteMsg = EDcode.EncodeString(sRouteIP + "/" + (nRoutePort + nMapIndex));
-                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, sDefMsg + sRouteMsg);
-                _loginService.SetGlobaSessionPlay(UserInfo.nSessionID);
+                var sRouteMsg = EDcode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, sDefMsg + sRouteMsg);
+                _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
+                _logger.DebugLog($"发送游戏网关信息: GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {
-                SendUserSocket(UserInfo.Socket, UserInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
+                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDcode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
             }
             return result;
         }
 
-        private int GateRoutePort(string sGateIP)
+        private string GateRouteIP_GetRoute(TRouteInfo routeInfo, ref int nGatePort)
         {
-            return 7200;
-        }
-
-        private string GateRouteIP_GetRoute(TRouteInfo RouteInfo, ref int nGatePort)
-        {
-            var nGateIndex = RandomNumber.GetInstance().Random(RouteInfo.nGateCount);
-            var result = RouteInfo.sGameGateIP[nGateIndex];
-            nGatePort = RouteInfo.nGameGatePort[nGateIndex];
+            var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.nGateCount);
+            var result = routeInfo.sGameGateIP[nGateIndex];
+            nGatePort = routeInfo.nGameGatePort[nGateIndex];
             return result;
         }
 
-        private string GateRouteIP(string sGateIP, ref int nPort)
+        private string GateRouteIp(string sGateIp, ref int nPort)
         {
-            string result = string.Empty;
-            TRouteInfo RouteInfo;
+            var result = string.Empty;
+            TRouteInfo routeInfo;
             nPort = 0;
-            for (var i = DBShare.g_RouteInfo.GetLowerBound(0); i <= DBShare.g_RouteInfo.GetUpperBound(0); i++)
+            for (var i = DBShare.RouteInfo.GetLowerBound(0); i <= DBShare.RouteInfo.GetUpperBound(0); i++)
             {
-                RouteInfo = DBShare.g_RouteInfo[i];
-                if (RouteInfo == null)
+                routeInfo = DBShare.RouteInfo[i];
+                if (routeInfo == null)
                 {
                     continue;
                 }
-                if (RouteInfo.sSelGateIP == sGateIP)
+                if (routeInfo.sSelGateIP == sGateIp)
                 {
-                    result = GateRouteIP_GetRoute(RouteInfo, ref nPort);
+                    result = GateRouteIP_GetRoute(routeInfo, ref nPort);
                     break;
                 }
             }
@@ -917,19 +895,17 @@ namespace DBSvr
             {
                 return 0;
             }
-            if (_mapList.ContainsKey(sMap))
-            {
-                return _mapList[sMap];
-            }
-            return 0;
+            return _mapList.ContainsKey(sMap) ? _mapList[sMap] : 0;
         }
 
-        private void SendUserSocket(Socket Socket, string sSessionID, string sSendMsg)
+        private void SendUserSocket(Socket socket, string sessionId, string sSendMsg)
         {
-            if (Socket.Connected)
-            {
-                Socket.SendText("%" + sSessionID + "/#" + sSendMsg + "!$");
-            }
+            var packet = new GatePacket();
+            packet.SocketId = sessionId;
+            packet.Body = HUtil32.GetBytes("#" + sSendMsg + "!");
+            packet.BuffLen = (short)packet.Body.Length;
+            packet.PacketType = PacketType.Data;
+            SendPacket(socket, packet);
         }
 
         /// <summary>
@@ -939,7 +915,7 @@ namespace DBSvr
         /// <returns></returns>
         private bool CheckDenyChrName(string sChrName)
         {
-            bool result = true;
+            var result = true;
             for (var i = 0; i < DBShare.DenyChrNameList.Count; i++)
             {
                 if (string.Compare(sChrName, DBShare.DenyChrNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
@@ -949,6 +925,15 @@ namespace DBSvr
                 }
             }
             return result;
+        }
+
+        private void SendPacket(Socket socket, GatePacket packet)
+        {
+            if (!socket.Connected)
+                return;
+            packet.StartChar = '%';
+            packet.EndChar = '$';
+            socket.Send(packet.GetBuffer());
         }
     }
 }

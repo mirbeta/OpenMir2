@@ -4,6 +4,7 @@ using Spectre.Console;
 using System.Reflection;
 using System.Runtime;
 using System.Text;
+using SystemModule;
 
 namespace GameSvr
 {
@@ -16,7 +17,7 @@ namespace GameSvr
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-
+            
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
@@ -166,10 +167,10 @@ namespace GameSvr
             };
 
             var sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
+            sb.Append("[bold fuchsia]/s[/] [aqua]鏌ョ湅[/] 缃戝叧鐘跺喌\n");
+            sb.Append("[bold fuchsia]/r[/] [aqua]閲嶈[/] 閰嶇疆鏂囦欢\n");
+            sb.Append("[bold fuchsia]/c[/] [aqua]娓呯┖[/] 娓呴櫎灞忓箷\n");
+            sb.Append("[bold fuchsia]/q[/] [aqua]閫�鍑篬/] 閫�鍑虹▼搴廫n");
             var markup = new Markup(sb.ToString());
 
             table.AddColumn(new TableColumn("Two"));

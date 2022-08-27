@@ -1,6 +1,9 @@
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class TFrontEngine
     {
@@ -52,8 +55,7 @@ namespace GameSvr
 
         private void GetGameTime()
         {
-            var Hour = DateTime.Now.Hour;
-            switch (Hour)
+            switch (DateTime.Now.Hour)
             {
                 case 5:
                 case 6:
@@ -169,7 +171,7 @@ namespace GameSvr
                     {
                         if (SaveRcd.PlayObject != null)
                         {
-                            SaveRcd.PlayObject.m_boRcdSaved = true;
+                            ((TPlayObject)SaveRcd.PlayObject).m_boRcdSaved = true;
                         }
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try
@@ -219,7 +221,7 @@ namespace GameSvr
             m_SaveRcdTempList.Clear();
             for (var i = 0; i < m_LoadRcdTempList.Count; i++)
             {
-                TLoadDBInfo LoadDBInfo = m_LoadRcdTempList[i];
+                var LoadDBInfo = m_LoadRcdTempList[i];
                 if (LoadDBInfo == null)
                 {
                     continue;
@@ -254,7 +256,7 @@ namespace GameSvr
             {
                 for (var i = 0; i < ChangeGoldList.Count; i++)
                 {
-                    TGoldChangeInfo GoldChangeInfo = ChangeGoldList[i];
+                    var GoldChangeInfo = ChangeGoldList[i];
                     if (GoldChangeInfo == null)
                     {
                         continue;
@@ -286,7 +288,7 @@ namespace GameSvr
 
         public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx)
         {
-            TLoadDBInfo LoadRcdInfo = new TLoadDBInfo
+            var LoadRcdInfo = new TLoadDBInfo
             {
                 sAccount = sAccount,
                 sCharName = sChrName,
@@ -335,13 +337,13 @@ namespace GameSvr
             }
             else
             {
-                var UserOpenInfo = new TUserOpenInfo
+                var userOpenInfo = new TUserOpenInfo
                 {
                     sChrName = LoadUser.sCharName,
                     LoadUser = LoadUser,
                     HumanRcd = HumanRcd
                 };
-                M2Share.UserEngine.AddUserOpenInfo(UserOpenInfo);
+                M2Share.UserEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
             }
             return result;
@@ -379,7 +381,7 @@ namespace GameSvr
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            TGoldChangeInfo GoldInfo = new TGoldChangeInfo
+            var GoldInfo = new TGoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,

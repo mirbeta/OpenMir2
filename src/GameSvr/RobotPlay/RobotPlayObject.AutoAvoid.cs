@@ -1,6 +1,7 @@
+using GameSvr.Actor;
 using SystemModule;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {

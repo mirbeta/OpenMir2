@@ -1,4 +1,4 @@
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     public class WeightedItem<T>
     {

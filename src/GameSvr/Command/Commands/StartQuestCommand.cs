@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("StartQuest", "", "问答名称", 10)]
     public class StartQuestCommand : BaseCommond

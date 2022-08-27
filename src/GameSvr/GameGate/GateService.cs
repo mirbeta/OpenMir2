@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+﻿using GameSvr.Player;
+using GameSvr.Services;
+using System.Diagnostics;
 using System.Net.Sockets;
 using SystemModule;
-using SystemModule.Packages;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.GameGate
 {
     public class GateService
     {
@@ -11,8 +14,9 @@ namespace GameSvr
         private readonly TGateInfo _gateInfo;
         private readonly SendQueue _sendQueue;
         private readonly object runSocketSection;
-        private byte[] GameBuffer;
-        private int nBuffLen;
+        private byte[] _gameBuffer;
+        private int _buffLen;
+        private readonly CancellationTokenSource _cancellation;
 
         public GateService(int gateIdx, TGateInfo gateInfo)
         {
@@ -20,20 +24,19 @@ namespace GameSvr
             _gateInfo = gateInfo;
             runSocketSection = new object();
             _sendQueue = new SendQueue(gateInfo.Socket);
+            _cancellation = new CancellationTokenSource();
         }
 
         public TGateInfo GateInfo => _gateInfo;
 
         public void StartQueueService()
         {
-            Task.Run(async () =>
-            {
-                await _sendQueue.ProcessSendQueue();
-            });
+            _sendQueue.ProcessSendQueue(_cancellation);
         }
 
         public void Stop()
         {
+            _cancellation.CancelAfter(3000);
             _sendQueue.Stop();
         }
 
@@ -51,20 +54,20 @@ namespace GameSvr
             }
             try
             {
-                if (nBuffLen > 0)
+                if (_buffLen > 0)
                 {
-                    var buffSize = nBuffLen + nMsgLen;
-                    if (GameBuffer != null && buffSize > nBuffLen)
+                    var buffSize = _buffLen + nMsgLen;
+                    if (_gameBuffer != null && buffSize > _buffLen)
                     {
                         var tempBuff = new byte[buffSize];
-                        Buffer.BlockCopy(GameBuffer, 0, tempBuff, 0, nBuffLen);
-                        Buffer.BlockCopy(data, 0, tempBuff, nBuffLen, nMsgLen);
-                        GameBuffer = tempBuff;
+                        Buffer.BlockCopy(_gameBuffer, 0, tempBuff, 0, _buffLen);
+                        Buffer.BlockCopy(data, 0, tempBuff, _buffLen, nMsgLen);
+                        _gameBuffer = tempBuff;
                     }
                 }
                 else
                 {
-                    GameBuffer = data;
+                    _gameBuffer = data;
                 }
             }
             catch
@@ -73,13 +76,13 @@ namespace GameSvr
             }
             var nLen = 0;
             var buffIndex = 0;
-            byte[] protoBuff = GameBuffer;
+            byte[] protoBuff = _gameBuffer;
             try
             {
-                nLen = nBuffLen + nMsgLen;
+                nLen = _buffLen + nMsgLen;
                 while (nLen >= PacketHeader.PacketSize)
                 {
-                    var msgHeader = Packets.ToPacket<PacketHeader>(protoBuff);
+                    var msgHeader = SystemModule.Packet.Packets.ToPacket<PacketHeader>(protoBuff);
                     if (msgHeader.PacketCode == 0)
                     {
                         return;
@@ -100,13 +103,13 @@ namespace GameSvr
                         //M2Share.GateManager.AddGameGateQueue(_gateIdx, msgHeader, body); //添加到处理队列
                         ExecGateBuffers(msgHeader, body);
                         nLen -= nCheckMsgLen;
-                        if (nLen > 0 && GameBuffer != null)
+                        if (nLen > 0 && _gameBuffer != null)
                         {
                             var tempBuff = new byte[nLen];
-                            Buffer.BlockCopy(GameBuffer, nCheckMsgLen, tempBuff, 0, nLen);
-                            GameBuffer = tempBuff;
+                            Buffer.BlockCopy(_gameBuffer, nCheckMsgLen, tempBuff, 0, nLen);
+                            _gameBuffer = tempBuff;
                             protoBuff = tempBuff;
-                            nBuffLen = nLen;
+                            _buffLen = nLen;
                             buffIndex = 0;
                         }
                     }
@@ -133,13 +136,13 @@ namespace GameSvr
             {
                 var tempBuff = new byte[nLen];
                 Buffer.BlockCopy(protoBuff, 0, tempBuff, 0, nLen);
-                GameBuffer = tempBuff;
-                nBuffLen = nLen;
+                _gameBuffer = tempBuff;
+                _buffLen = nLen;
             }
             else
             {
-                GameBuffer = null;
-                nBuffLen = 0;
+                _gameBuffer = null;
+                _buffLen = 0;
             }
         }
 
@@ -341,7 +344,7 @@ namespace GameSvr
                                 GateUser.SessInfo = SessInfo;
                                 try
                                 {
-                                    M2Share.FrontEngine.AddToLoadRcdList(sAccount, sChrName, GateUser.sIPaddr, boFlag, nSessionID, nPayMent, nPayMode, nClientVersion, nSocket, GateUser.nGSocketIdx, GateIdx);
+                                    M2Share.FrontEngine.AddToLoadRcdList(sAccount, sChrName, GateUser.sIPaddr, boFlag, nSessionID, nPayMent, nPayMode, nClientVersion, nSocket, GateUser.SocketId, GateIdx);
                                 }
                                 catch
                                 {
@@ -422,7 +425,7 @@ namespace GameSvr
             }
         }
 
-        private int OpenNewUser(int nSocket, ushort nGSocketIdx, string sIPaddr, IList<TGateUserInfo> UserList)
+        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<TGateUserInfo> UserList)
         {
             int result;
             var GateUser = new TGateUserInfo
@@ -430,8 +433,8 @@ namespace GameSvr
                 sAccount = string.Empty,
                 sCharName = String.Empty,
                 sIPaddr = sIPaddr,
-                nSocket = nSocket,
-                nGSocketIdx = nGSocketIdx,
+                nSocket = socket,
+                SocketId = socketId,
                 nSessionID = 0,
                 UserEngine = null,
                 FrontEngine = null,
@@ -453,7 +456,7 @@ namespace GameSvr
             return result;
         }
 
-        private void SendNewUserMsg(Socket Socket, int nSocket, int nSocketIndex, int nUserIdex)
+        private void SendNewUserMsg(Socket Socket, int nSocket, ushort socketId, int nUserIdex)
         {
             if (!Socket.Connected)
             {
@@ -462,9 +465,9 @@ namespace GameSvr
             var MsgHeader = new PacketHeader();
             MsgHeader.PacketCode = Grobal2.RUNGATECODE;
             MsgHeader.Socket = nSocket;
-            MsgHeader.SocketIdx = (ushort)nSocketIndex;
+            MsgHeader.SessionId = socketId;
             MsgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
-            MsgHeader.UserIndex = (ushort)nUserIdex;
+            MsgHeader.ServerIndex = (ushort)nUserIdex;
             MsgHeader.PackLength = 0;
             if (Socket.Connected)
             {
@@ -483,8 +486,8 @@ namespace GameSvr
                 {
                     case Grobal2.GM_OPEN:
                         var sIPaddr = HUtil32.GetString(MsgBuff, 0, nMsgLen);
-                        nUserIdx = OpenNewUser(MsgHeader.Socket, MsgHeader.SocketIdx, sIPaddr, Gate.UserList);
-                        SendNewUserMsg(Gate.Socket, MsgHeader.Socket, MsgHeader.SocketIdx, nUserIdx + 1);
+                        nUserIdx = OpenNewUser(MsgHeader.Socket, MsgHeader.SessionId, sIPaddr, Gate.UserList);
+                        SendNewUserMsg(Gate.Socket, MsgHeader.Socket, MsgHeader.SessionId, nUserIdx + 1);
                         Gate.nUserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
@@ -499,9 +502,9 @@ namespace GameSvr
                         break;
                     case Grobal2.GM_DATA:
                         TGateUserInfo GateUser = null;
-                        if (MsgHeader.UserIndex >= 1)
+                        if (MsgHeader.ServerIndex >= 1)
                         {
-                            nUserIdx = MsgHeader.UserIndex - 1;
+                            nUserIdx = MsgHeader.ServerIndex - 1;
                             if (Gate.UserList.Count > nUserIdx)
                             {
                                 GateUser = Gate.UserList[nUserIdx];
@@ -532,7 +535,7 @@ namespace GameSvr
                             {
                                 if (GateUser.boCertification && nMsgLen >= 12)
                                 {
-                                    var defMsg = Packets.ToPacket<ClientPacket>(MsgBuff);
+                                    var defMsg = SystemModule.Packet.Packets.ToPacket<ClientPacket>(MsgBuff);
                                     if (nMsgLen == 12)
                                     {
                                         M2Share.UserEngine.ProcessUserMessage(GateUser.PlayObject, defMsg, null);

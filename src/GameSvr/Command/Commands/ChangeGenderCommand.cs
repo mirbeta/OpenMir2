@@ -1,7 +1,8 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr.Command
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 调整指定玩家性别

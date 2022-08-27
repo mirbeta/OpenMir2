@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SystemModule
+namespace SystemModule.Extensions
 {
     public static class BinaryReaderExtension
     {

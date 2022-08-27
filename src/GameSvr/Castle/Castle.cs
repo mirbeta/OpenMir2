@@ -1,4 +1,7 @@
-﻿namespace GameSvr
+﻿using GameSvr.Actor;
+using GameSvr.Guild;
+
+namespace GameSvr.Castle
 {
     public class Castle
     {
@@ -10,7 +13,7 @@
     {
         public DateTime AttackDate;
         public string sGuildName;
-        public Association Guild;
+        public GuildInfo Guild;
     }
 
     public struct TDefenseUnit

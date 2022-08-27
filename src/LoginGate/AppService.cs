@@ -8,37 +8,40 @@ namespace LoginGate
     public class AppService : BackgroundService
     {
         private readonly ServerApp _serverApp;
-        private readonly LogQueue _logQueue = LogQueue.Instance;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
+        private readonly MirLog _logQueue;
+        private readonly ConfigManager _configManager;
 
-        public AppService(ServerApp serverApp)
+        public AppService(MirLog logQueue,ServerApp serverApp, ConfigManager configManager)
         {
             _serverApp = serverApp;
+            _configManager = configManager;
+            _logQueue = logQueue;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.DebugLog($"GameGate is stopping."));
-            await _serverApp.Start();
+            stoppingToken.Register(() => _logQueue.LogDebug($"GameGate is stopping."));
+            _serverApp.Start(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.DebugLog($"GameGate is starting.");
-            _logQueue.Enqueue("正在启动服务...", 2);
+            _logQueue.LogDebug($"GameGate is starting.");
+            _logQueue.LogInformation("正在启动服务...", 2);
             GateShare.Initialization();
-            ConfigManager.LoadConfig();
-            _serverApp.StartService();
-            _logQueue.Enqueue("服务已启动成功...", 2);
-            _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            _logQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            _logQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
+            _configManager.LoadConfig();
+            _serverApp.Initialization();
+            _logQueue.LogInformation("服务已启动成功...", 2);
+            _logQueue.LogInformation("欢迎使用翎风系列游戏软件...", 0);
+            _logQueue.LogInformation("网站:http://www.gameofmir.com", 0);
+            _logQueue.LogInformation("论坛:http://bbs.gameofmir.com", 0);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.DebugLog($"GameGate is stopping.");
+            _logQueue.LogDebug($"GameGate is stopping.");
             _serverApp.StopService();
             return base.StopAsync(cancellationToken);
         }

@@ -1,7 +1,10 @@
+using GameSvr.Actor;
+using GameSvr.Player;
 using System.Collections;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     public class TMapPoint
     {
@@ -211,15 +214,15 @@ namespace GameSvr
                     m_nCurrX = nX;
                     m_nCurrY = nY;
                 }
-                nIndex = m_PEnvir.m_PointList.Count;
+                nIndex = m_PEnvir.MPointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.m_PointList.Count && m_nCurrX == nX && m_nCurrY == nY))
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.MPointList.Count && m_nCurrX == nX && m_nCurrY == nY))
                 {
                     m_nPostion = 0;
                 }
-                for (var i = m_nPostion; i < m_PEnvir.m_PointList.Count; i++)
+                for (var i = m_nPostion; i < m_PEnvir.MPointList.Count; i++)
                 {
-                    Pt = m_PEnvir.m_PointList[i];
+                    Pt = m_PEnvir.MPointList[i];
                     nCurrX = Pt.nX;
                     nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
@@ -237,7 +240,7 @@ namespace GameSvr
                         }
                     }
                 }
-                if (nIndex >= m_PEnvir.m_PointList.Count - 1)
+                if (nIndex >= m_PEnvir.MPointList.Count - 1)
                 {
                     result = false;
                 }
@@ -246,9 +249,9 @@ namespace GameSvr
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.MPointList.Count; i++)
                         {
-                            Pt = m_PEnvir.m_PointList[i];
+                            Pt = m_PEnvir.MPointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             if (nStep == 0)
@@ -280,9 +283,9 @@ namespace GameSvr
                     }
                     if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.MPointList.Count; i++)
                         {
-                            Pt = m_PEnvir.m_PointList[i];
+                            Pt = m_PEnvir.MPointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             m_nPostion = i;
@@ -501,15 +504,15 @@ namespace GameSvr
                     m_nCurrX = nX;
                     m_nCurrY = nY;
                 }
-                nIndex = m_PEnvir.m_PointList.Count;
+                nIndex = m_PEnvir.MPointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.m_PointList.Count && m_nCurrX == nX && m_nCurrY == nY))
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.MPointList.Count && m_nCurrX == nX && m_nCurrY == nY))
                 {
                     m_nPostion = 0;
                 }
-                for (var i = m_nPostion; i < m_PEnvir.m_PointList.Count; i++)
+                for (var i = m_nPostion; i < m_PEnvir.MPointList.Count; i++)
                 {
-                    Pt = m_PEnvir.m_PointList[i];
+                    Pt = m_PEnvir.MPointList[i];
                     nCurrX = Pt.nX;
                     nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
@@ -527,7 +530,7 @@ namespace GameSvr
                         }
                     }
                 }
-                if (nIndex >= m_PEnvir.m_PointList.Count - 1)
+                if (nIndex >= m_PEnvir.MPointList.Count - 1)
                 {
                     result = false;
                 }
@@ -536,9 +539,9 @@ namespace GameSvr
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.MPointList.Count; i++)
                         {
-                            Pt = m_PEnvir.m_PointList[i];
+                            Pt = m_PEnvir.MPointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             if (nStep == 0)
@@ -570,9 +573,9 @@ namespace GameSvr
                     }
                     if (!((TPlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (var i = m_nPostion + 1; i < m_PEnvir.m_PointList.Count; i++)
+                        for (var i = m_nPostion + 1; i < m_PEnvir.MPointList.Count; i++)
                         {
-                            Pt = m_PEnvir.m_PointList[i];
+                            Pt = m_PEnvir.MPointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             m_nPostion = i;

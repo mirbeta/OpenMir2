@@ -1,3 +1,5 @@
+using DBSvr.Conf;
+using DBSvr.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -21,13 +23,13 @@ namespace DBSvr
             _dataService = dataService;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => _logger.LogDebug($"DBSvr is stopping."));
             _userSocService.Start();
             _loginSvrService.Start();
             _dataService.Start();
-            await _userSocService.StartConsumer();
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -36,13 +38,14 @@ namespace DBSvr
             DBShare.Initialization();
             ConfigManager.LoadConfig();
             DBShare.LoadConfig();
-            DBShare.MainOutMessage("数据库配置文件读取完成...");
+            _logger.LogInformation("数据库配置文件读取完成...");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug($"DBSvr is stopping.");
+            _userSocService.Stop();
             return base.StopAsync(cancellationToken);
         }
     }

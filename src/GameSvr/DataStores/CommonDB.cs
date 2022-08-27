@@ -1,9 +1,13 @@
+using GameSvr.Items;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Text.Json;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Extensions;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.DataStores
 {
     /// <summary>
     /// 数据库查询类
@@ -20,6 +24,7 @@ namespace GameSvr
             const string sSQLString = "SELECT * FROM TBL_StdItems";
             try
             {
+                HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
                 for (var i = 0; i < M2Share.UserEngine.StdItemList.Count; i++)
                 {
                     M2Share.UserEngine.StdItemList[i] = null;

@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("BindUseItem", "", M2Share.g_sGameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : BaseCommond

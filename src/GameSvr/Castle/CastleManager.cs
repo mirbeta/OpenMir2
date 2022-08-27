@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using GameSvr.Actor;
+using GameSvr.Maps;
+using System.Collections;
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Castle
 {
     public class CastleManager
     {
@@ -79,7 +81,7 @@ namespace GameSvr
                 Castle.m_EnvirList.Add("0156");
                 for (var i = 0; i < Castle.m_EnvirList.Count; i++)
                 {
-                    Castle.m_EnvirList[i] = M2Share.MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
+                    Castle.m_EnvirList[i] = M2Share.MapManager.FindMap(Castle.m_EnvirList[i]).SMapName;
                 }
                 Save();
                 return;

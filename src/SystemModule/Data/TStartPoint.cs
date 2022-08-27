@@ -1,4 +1,4 @@
-﻿namespace SystemModule;
+﻿namespace SystemModule.Data;
 
 public class TStartPoint
 {

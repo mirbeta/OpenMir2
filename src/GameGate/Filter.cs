@@ -1,3 +1,4 @@
+using GameGate.Conf;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -63,7 +64,7 @@ namespace GameGate
 
         public static void AddToBlockIPList(string szIP)
         {
-            var nIP = 0l;
+            var nIP = 0L;
             if (g_BlockIPList.IndexOf(szIP) < 0)
             {
                 nIP = HUtil32.IpToInt(szIP);
@@ -98,7 +99,7 @@ namespace GameGate
 
         public static void AddToTempBlockIPList(string szIP)
         {
-            var nIP = 0l;
+            var nIP = 0L;
             if (g_TempBlockIPList.IndexOf(szIP) < 0)
             {
                 nIP = HUtil32.IpToInt(szIP);

@@ -1,30 +1,37 @@
-﻿using System;
+﻿using DBSvr.Conf;
+using DBSvr.DB;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule;
+using SystemModule.Packet;
+using SystemModule.Packet.ClientPackets;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
-namespace DBSvr
+namespace DBSvr.Services
 {
     /// <summary>
     /// 玩家数据服务
     /// </summary>
     public class HumDataService
     {
+        private readonly MirLog _logger;
         private readonly IList<TServerInfo> _serverList = null;
         private readonly IList<THumSession> _humSessionList = null;
         private readonly IPlayDataService _playDataService;
-        private readonly ISocketServer _serverSocket;
+        private readonly SocketServer _serverSocket;
         private readonly LoginSvrService _loginSvrService;
-        private DBConfig Config = ConfigManager.GetConfig();
+        private readonly DBConfig _config = ConfigManager.GetConfig();
 
-        public HumDataService(LoginSvrService loginSvrService, IPlayDataService playDataService)
+        public HumDataService(LoginSvrService loginSvrService, IPlayDataService playDataService, MirLog logger)
         {
             _loginSvrService = loginSvrService;
             _playDataService = playDataService;
+            _logger = logger;
             _serverList = new List<TServerInfo>();
             _humSessionList = new List<THumSession>();
-            _serverSocket = new ISocketServer(ushort.MaxValue, 1024);
+            _serverSocket = new SocketServer(byte.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -34,26 +41,25 @@ namespace DBSvr
 
         public void Start()
         {
-            _serverSocket.Start(Config.sServerAddr, Config.nServerPort);
+            _serverSocket.Start(_config.ServerAddr, _config.ServerPort);
             _playDataService.LoadQuickList();
-            DBShare.MainOutMessage($"数据库角色服务[{Config.sServerAddr}:{Config.nServerPort}]已启动.等待链接...");
+            _logger.LogInformation($"数据库角色服务[{_config.ServerAddr}:{_config.ServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            TServerInfo ServerInfo;
             string sIPaddr = e.RemoteIPaddr;
             if (!DBShare.CheckServerIP(sIPaddr))
             {
-                DBShare.MainOutMessage("非法服务器连接: " + sIPaddr);
+                _logger.LogWarning("非法服务器连接: " + sIPaddr);
                 e.Socket.Close();
                 return;
             }
-            ServerInfo = new TServerInfo();
-            ServerInfo.nSckHandle = (int)e.Socket.Handle;
-            ServerInfo.Data = null;
-            ServerInfo.Socket = e.Socket;
-            _serverList.Add(ServerInfo);
+            var serverInfo = new TServerInfo();
+            serverInfo.nSckHandle = (int)e.Socket.Handle;
+            serverInfo.Data = null;
+            serverInfo.Socket = e.Socket;
+            _serverList.Add(serverInfo);
         }
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
@@ -303,7 +309,7 @@ namespace DBSvr
                 nCheckCode = _loginSvrService.CheckSessionLoadRcd(loadHumanPacket.sAccount, loadHumanPacket.sUserAddr, loadHumanPacket.nSessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    DBShare.MainOutMessage("[非法请求] " + "帐号: " + loadHumanPacket.sAccount + " IP: " + loadHumanPacket.sUserAddr + " 标识: " + loadHumanPacket.nSessionID);
+                    _logger.LogWarning("[非法请求] " + "帐号: " + loadHumanPacket.sAccount + " IP: " + loadHumanPacket.sUserAddr + " 标识: " + loadHumanPacket.nSessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)

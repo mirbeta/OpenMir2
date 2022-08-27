@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
-using SystemModule;
+using SystemModule.Packet.ClientPackets;
 
-namespace DBSvr
+namespace DBSvr.DB
 {
     public interface IPlayDataService
     {

@@ -10,7 +10,7 @@ namespace SystemModule.Sockets
     public class AsyncUserToken : EventArgs
     {
         private Socket m_socket;//Socket
-        private int m_connectionId;//内部连接ID
+        private string m_connectionId;//内部连接ID
         private IPEndPoint m_endPoint;//终结点
         private byte[] m_receiveBuffer;//缓冲区
         private int m_count;
@@ -94,7 +94,7 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 获取或设置通讯中使用的连接ID号
         /// </summary>
-        public int ConnectionId//内部连接ID
+        public string ConnectionId//内部连接ID
         {
             get { return this.m_connectionId; }
             set { this.m_connectionId = value; }

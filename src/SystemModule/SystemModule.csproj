@@ -6,6 +6,7 @@
         <Company />
         <Product />
         <LangVersion>default</LangVersion>
+        <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,7 +21,7 @@
       <None Remove="System.Data.SQLite.Core" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="protobuf-net" Version="3.0.101" />
+      <PackageReference Include="protobuf-net" Version="3.1.17" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LoginSvr
+namespace LoginSvr.Conf
 {
     public class Config
     {
@@ -32,7 +32,6 @@ namespace LoginSvr
         public IList<string> ServerNameList;
         public Dictionary<string, int> AccountCostList;
         public Dictionary<string, int> IPaddrCostList;
-        public bool ShowDetailMsg;
         public int nRouteCount;
         public TGateRoute[] GateRoute;
         public string ConnctionString;
@@ -57,9 +56,8 @@ namespace LoginSvr
             boEnableMakingID = true;
             boDynamicIPMode = false;
             nReadyServers = 0;
-            ShowDetailMsg = false;
             GateRoute = new TGateRoute[60];
-            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
+            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
             ShowDebugLog = false;
             ShowLogLevel = 1;
         }

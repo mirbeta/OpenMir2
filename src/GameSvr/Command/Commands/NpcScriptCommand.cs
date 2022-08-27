@@ -1,8 +1,10 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Npc;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
     public class NpcScriptCommand : BaseCommond

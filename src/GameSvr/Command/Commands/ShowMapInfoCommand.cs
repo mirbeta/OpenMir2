@@ -1,7 +1,7 @@
-﻿using GameSvr.CommandSystem;
-using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     [GameCommand("ShowMapInfo", "显示当前地图信息", 0)]
     public class ShowMapInfoCommand : BaseCommond
@@ -9,8 +9,8 @@ namespace GameSvr
         [DefaultCommand]
         public void ShowMapInfo(TPlayObject PlayObject)
         {
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapInfoMsg, PlayObject.m_PEnvir.sMapName, PlayObject.m_PEnvir.sMapDesc), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapInfoSizeMsg, PlayObject.m_PEnvir.wWidth, PlayObject.m_PEnvir.wHeight), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapInfoMsg, PlayObject.m_PEnvir.SMapName, PlayObject.m_PEnvir.SMapDesc), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandMapInfoSizeMsg, PlayObject.m_PEnvir.WWidth, PlayObject.m_PEnvir.WHeight), MsgColor.Green, MsgType.Hint);
         }
     }
 }

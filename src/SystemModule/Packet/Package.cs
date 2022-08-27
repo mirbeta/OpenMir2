@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SystemModule
+namespace SystemModule.Packet
 {
     /// <summary>
     /// Reads primitive data types from an array of binary data.
@@ -38,6 +38,11 @@ namespace SystemModule
         public int ReadInt32()
         {
             return binaryReader.ReadInt32();
+        }
+
+        public string ReadString()
+        {
+            return binaryReader.ReadString();
         }
 
         public uint ReadUInt32()

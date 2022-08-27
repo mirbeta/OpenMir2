@@ -1,7 +1,9 @@
-﻿using GameSvr.CommandSystem;
+﻿using GameSvr.Actor;
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Command.Commands
 {
     /// <summary>
     /// 刷指定怪物
@@ -38,7 +40,7 @@ namespace GameSvr
             PlayObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.sMapName, nX, nY, sMonName);
+                TBaseObject Monster = M2Share.UserEngine.RegenMonsterByName(PlayObject.m_PEnvir.SMapName, nX, nY, sMonName);
                 if (Monster != null)
                 {
                     Monster.m_btSlaveMakeLevel = nLevel;

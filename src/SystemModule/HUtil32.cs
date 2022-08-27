@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Threading;
+using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule
 {
@@ -73,6 +74,11 @@ namespace SystemModule
             return (ushort)(bLow | (bHigh << 8));
         }
 
+        public static ushort HiWord(ushort dword)
+        {
+            return (ushort)(dword >> 16);
+        }
+        
         public static ushort HiWord(int dword)
         {
             return (ushort)(dword >> 16);
@@ -152,12 +158,12 @@ namespace SystemModule
 
         public static void EnterCriticalSection(object obj)
         {
-            // Monitor.Enter(obj);
+            Monitor.Enter(obj);
         }
 
         public static void LeaveCriticalSection(object obj)
         {
-            //  Monitor.Exit(obj);
+            Monitor.Exit(obj);
         }
 
         public static string GetString(byte[] bytes, int index, int count)
@@ -394,7 +400,6 @@ namespace SystemModule
                 result = "";
                 Dest = "";
             }
-
             return result;
         }
 
@@ -415,62 +420,132 @@ namespace SystemModule
         /// <summary>
         /// 截取字符串 例 ArrestStringEx('[1234]','[',']',str)    str=1234
         /// </summary>
-        /// <param name="Source">源字符串</param>
-        /// <param name="SearchAfter">需要匹配的符号</param>
-        /// <param name="ArrestBefore">需要匹配的符号</param>
-        /// <param name="ArrestStr">截取之后的结果</param>
+        /// <param name="source">源字符串</param>
+        /// <param name="searchAfter">需要匹配的符号</param>
+        /// <param name="arrestBefore">需要匹配的符号</param>
+        /// <param name="arrestStr">截取之后的结果</param>
         /// <returns></returns>
-        public static string ArrestStringEx(string Source, string SearchAfter, string ArrestBefore, ref string ArrestStr)
+        public static string ArrestStringEx(string source, string searchAfter, string arrestBefore, ref string arrestStr)
         {
-            if (string.IsNullOrEmpty(Source))
+            if (string.IsNullOrEmpty(source))
+            {
+                return string.Empty;
+            }
+            ReadOnlySpan<char> sourceSpan = source.AsSpan();
+            var spanLen = sourceSpan.Length;
+            var result = string.Empty;
+            var findData = false;
+            try
+            {
+                if (spanLen >= 2)
+                {
+                    if (source.StartsWith(searchAfter))
+                    {
+                        sourceSpan = sourceSpan[1..spanLen];
+                        findData = true;
+                    }
+                    else
+                    {
+                        var n = sourceSpan.IndexOf(searchAfter, StringComparison.Ordinal);
+                        if (n > 0)
+                        {
+                            sourceSpan = sourceSpan.Slice(n + 1, spanLen - n - 1);
+                            findData = true;
+                        }
+                    }
+                }
+                if (findData)
+                {
+                    var n = sourceSpan.IndexOf(arrestBefore, StringComparison.Ordinal) + 1;
+                    if (n > 0)
+                    {
+                        arrestStr = sourceSpan[..(n - 1)].ToString();
+                        result = sourceSpan[(arrestStr.Length + 1)..].ToString();
+                    }
+                    else
+                    {
+                        result = searchAfter + sourceSpan.ToString();
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < spanLen; i++)
+                    {
+                        if (sourceSpan[i - 1].ToString() == searchAfter)
+                        {
+                            result = sourceSpan.Slice(i - 1, spanLen - i + 1).ToString();
+                            break;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                arrestStr = string.Empty;
+                result = string.Empty;
+            }
+            return result;
+        }
+               
+        /// <summary>
+        /// 截取字符串 例 ArrestStringEx('[1234]','[',']',str)    str=1234
+        /// </summary>
+        /// <param name="Source">源字符串</param>
+        /// <param name="searchAfter">需要匹配的符号</param>
+        /// <param name="arrestBefore">需要匹配的符号</param>
+        /// <param name="arrestStr">截取之后的结果</param>
+        /// <returns></returns>
+        public static string ArrestString(string source, char searchAfter, char arrestBefore, ref string arrestStr)
+        {
+            if (string.IsNullOrEmpty(source))
             {
                 return string.Empty;
             }
             var result = string.Empty;
             bool GoodData = false;
-            ArrestStr = string.Empty;
+            arrestStr = string.Empty;
             try
             {
-                int srclen = Source.Length;
+                int srclen = source.Length;
                 if (srclen >= 2)
                 {
-                    if (Source[0].ToString() == SearchAfter)
+                    if (source[0] == searchAfter)
                     {
-                        Source = Source.Substring(1, srclen - 1);
-                        srclen = Source.Length;
+                        source = source.Substring(1, srclen - 1);
+                        srclen = source.Length;
                         GoodData = true;
                     }
                     else
                     {
-                        var n = Source.IndexOf(SearchAfter, StringComparison.Ordinal) + 1;
+                        var n = source.IndexOf(searchAfter, StringComparison.Ordinal) + 1;
                         if (n > 0)
                         {
-                            Source = Source.Substring(n, srclen - n);
-                            srclen = Source.Length;
+                            source = source.Substring(n, srclen - n);
+                            srclen = source.Length;
                             GoodData = true;
                         }
                     }
                 }
                 if (GoodData)
                 {
-                    var n = Source.IndexOf(ArrestBefore, StringComparison.Ordinal) + 1;
+                    var n = source.IndexOf(arrestBefore, StringComparison.Ordinal) + 1;
                     if (n > 0)
                     {
-                        ArrestStr = Source.Substring(0, n - 1);
-                        result = Source.Substring(n, srclen - n);
+                        arrestStr = source[..(n - 1)];
+                        result = source.Substring(n, srclen - n);
                     }
                     else
                     {
-                        result = SearchAfter + Source;
+                        result = searchAfter + source;
                     }
                 }
                 else
                 {
                     for (var i = 0; i <= srclen; i++)
                     {
-                        if (Source[i - 1].ToString() == SearchAfter)
+                        if (source[i - 1] == searchAfter)
                         {
-                            result = Source.Substring(i - 1, srclen - i + 1);
+                            result = source.Substring(i - 1, srclen - i + 1);
                             break;
                         }
                     }
@@ -478,80 +553,12 @@ namespace SystemModule
             }
             catch
             {
-                ArrestStr = string.Empty;
+                arrestStr = string.Empty;
                 result = string.Empty;
             }
             return result;
         }
-
-        public static string ArrestStringEx(string Source, char SearchAfter, char ArrestBefore, ref string ArrestStr)
-        {
-            var result = string.Empty;
-            int srclen;
-            bool GoodData;
-            int n;
-            ArrestStr = string.Empty;
-            if (Source == "")
-            {
-                result = "";
-                return result;
-            }
-
-            try
-            {
-                srclen = Source.Length;
-                GoodData = false;
-                if (srclen >= 2)
-                {
-                    if (Source[0].ToString() == SearchAfter.ToString())
-                    {
-                        Source = Source.Substring(1, srclen - 1);
-                        srclen = Source.Length;
-                        GoodData = true;
-                    }
-                    else
-                    {
-                        n = Source.IndexOf(SearchAfter) + 1;
-                        if (n > 0)
-                        {
-                            Source = Source.Substring(n, srclen - n);
-                            srclen = Source.Length;
-                            GoodData = true;
-                        }
-                    }
-                }
-
-                if (GoodData)
-                {
-                    n = Source.IndexOf(ArrestBefore) + 1;
-                    if (n > 0)
-                    {
-                        ArrestStr = Source.Substring(0, n - 1);
-                        result = Source.Substring(n, srclen - n);
-                    }
-                    else
-                    {
-                        result = SearchAfter + Source;
-                    }
-                }
-                else
-                {
-                    for (var i = 0; i <= srclen; i++)
-                        if (Source[i - 1].ToString() == SearchAfter.ToString())
-                        {
-                            result = Source.Substring(i - 1, srclen - i + 1);
-                            break;
-                        }
-                }
-            }
-            catch
-            {
-                ArrestStr = "";
-                result = "";
-            }
-            return result;
-        }
-
+        
         public static bool CompareLStr(string src, string targ, int compn)
         {
             var result = false;

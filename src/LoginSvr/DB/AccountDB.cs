@@ -1,47 +1,45 @@
+using LoginSvr.Conf;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using SystemModule;
-using SystemModule.Packet;
+using SystemModule.Extensions;
+using SystemModule.Packet.ClientPackets;
 
-namespace LoginSvr
+namespace LoginSvr.DB
 {
     public class AccountDB
     {
-        private static readonly AccountDB instance = new AccountDB();
-
-        public static AccountDB Instance
-        {
-            get { return instance; }
-        }
-        private LogQueue _logQueue => LogQueue.Instance;
-        private ConfigManager _configManager => ConfigManager.Instance;
+        private readonly MirLog _logger;
+        private readonly ConfigManager _configManager;
         private readonly IList<AccountQuick> _quickList = null;
 
-        public AccountDB()
+        public AccountDB(MirLog logQueue, ConfigManager configManager)
         {
+            _logger = logQueue;
+            _configManager = configManager;
             _quickList = new List<AccountQuick>();
         }
 
-        public Config Config => _configManager.Config;
+        private Config Config => _configManager.Config;
 
         public void Initialization()
         {
-            _logQueue.Enqueue("正在连接SQL服务器...");
+            _logger.Information("正在连接SQL服务器...");
             var dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
                 dbConnection.Open();
-                _logQueue.Enqueue("连接SQL服务器成功...");
+                _logger.Information("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception E)
             {
-                _logQueue.Enqueue("[警告] SQL 连接失败!请检查SQL设置...");
-                _logQueue.Enqueue(Config.ConnctionString);
-                _logQueue.Enqueue(E.StackTrace);
+                _logger.Information("[警告] SQL 连接失败!请检查SQL设置...");
+                _logger.Information(Config.ConnctionString);
+                _logger.Information(E.StackTrace);
             }
         }
 
@@ -64,8 +62,8 @@ namespace LoginSvr
                     }
                     catch (Exception e)
                     {
-                        _logQueue.Enqueue("打开数据库[MySql]失败.");
-                        _logQueue.Enqueue(e);
+                        _logger.Information("打开数据库[MySql]失败.");
+                        _logger.LogError(e);
                         result = false;
                     }
                     break;
@@ -216,7 +214,7 @@ namespace LoginSvr
             catch
             {
                 result = false;
-                _logQueue.Enqueue("[Exception] TFileIDDB.GetRecord (1)");
+                _logger.Information("[Exception] TFileIDDB.GetRecord (1)");
                 return result;
             }
             finally
@@ -281,8 +279,8 @@ namespace LoginSvr
                         }
                         catch (Exception E)
                         {
-                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord");
-                            _logQueue.Enqueue(E.Message);
+                            _logger.Information("[Exception] TFileIDDB.UpdateRecord");
+                            _logger.Information(E.Message);
                             return 0;
                         }
                         break;
@@ -295,7 +293,7 @@ namespace LoginSvr
                         catch
                         {
                             result = 0;
-                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (3)");
+                            _logger.Information("[Exception] TFileIDDB.UpdateRecord (3)");
                         }
                         break;
                     default:
@@ -307,8 +305,8 @@ namespace LoginSvr
                         catch (Exception E)
                         {
                             result = 0;
-                            _logQueue.Enqueue("[Exception] TFileIDDB.UpdateRecord (0)");
-                            _logQueue.Enqueue(E.Message);
+                            _logger.Information("[Exception] TFileIDDB.UpdateRecord (0)");
+                            _logger.Information(E.Message);
                             return result;
                         }
                         break;

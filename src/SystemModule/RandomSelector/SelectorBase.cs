@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     internal abstract class SelectorBase<T>
     {

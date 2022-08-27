@@ -1,6 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packet.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Configs
 {
     public class GameSvrConfig
     {
@@ -1630,12 +1632,12 @@ namespace GameSvr
             dwHeroWarrorAttackTime = 1660;
             dwHeroWizardAttackTime = 1880;
             dwHeroTaoistAttackTime = 1880;
-            sAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
-            sHeroAIConfigListFileName = @"D:\MirServer\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
+            sAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
+            sHeroAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
             nDecUserGameGold = 10000;
             boSpeedHackCheck = true;
-            sConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
+            sConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2;";
             sDBType = "MySQL";
             NpcNameColor = 255;
         }

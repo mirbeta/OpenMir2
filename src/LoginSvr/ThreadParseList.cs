@@ -1,3 +1,5 @@
+using LoginSvr.Conf;
+using LoginSvr.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,24 +11,20 @@ namespace LoginSvr
 {
     public class ThreadParseList
     {
-        private static readonly ThreadParseList instance = new ThreadParseList();
-
-        public static ThreadParseList Instance
-        {
-            get { return instance; }
-        }
-
         private readonly StringList AccountLoadList = null;
         private readonly StringList IPaddrLoadList = null;
         private readonly IList<AccountConst> AccountCostList = null;
         private readonly IList<AccountConst> IPaddrCostList = null;
         private int _threadExecuteTick = 0;
-        private LogQueue _logQueue => LogQueue.Instance;
-        private LoginService _loginService => LoginService.Instance;
-        private ConfigManager _configManager => ConfigManager.Instance;
+        private readonly MirLog _logger;
+        private readonly LoginService _loginService;
+        private readonly ConfigManager _configManager;
 
-        public ThreadParseList()
+        public ThreadParseList(MirLog logger, LoginService loginService, ConfigManager configManager)
         {
+            _loginService = loginService;
+            _logger = logger;
+            _configManager = configManager;
             AccountLoadList = new StringList();
             IPaddrLoadList = new StringList();
             AccountCostList = new List<AccountConst>();
@@ -75,7 +73,7 @@ namespace LoginSvr
                 }
                 catch
                 {
-                    _logQueue.Enqueue("Exception] loading on IDStrList.");
+                    _logger.Information("Exception] loading on IDStrList.");
                 }
                 try
                 {
@@ -106,8 +104,8 @@ namespace LoginSvr
                 }
                 catch (Exception ex)
                 {
-                    _logQueue.Enqueue("Exception] loading on IPStrList.");
-                    _logQueue.Enqueue(ex.StackTrace);
+                    _logger.Information("Exception] loading on IPStrList.");
+                    _logger.Information(ex.StackTrace);
                 }
             }
         }
