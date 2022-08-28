@@ -1,6 +1,5 @@
 using CloudGate.Conf;
 using CloudGate.Packet;
-using CloudGate.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +7,7 @@ using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
-namespace CloudGate
+namespace CloudGate.Services
 {
     /// <summary>
     /// 用户会话封包处理
@@ -18,10 +17,10 @@ namespace CloudGate
         private readonly GameSpeed _gameSpeed;
         private readonly TSessionInfo _session;
         private readonly object _syncObj;
-        private readonly ClientThread _clientThread;
         private readonly HardwareFilter _hwidFilter;
         private readonly SendQueue _sendQueue;
         private readonly IList<TDelayMsg> _msgList;
+        private readonly SessionManager _sessionManager;
         private int _lastDirection = -1;
         private byte _handleLogin = 0;
         private bool _fOverClientCount;
@@ -33,10 +32,10 @@ namespace CloudGate
         private TCheckStep m_Stat;
         private readonly long m_FinishTick = 0;
 
-        public ClientSession(TSessionInfo session, ClientThread clientThread, SendQueue sendQueue)
+        public ClientSession(TSessionInfo session, SessionManager sessionManager, SendQueue sendQueue)
         {
             _session = session;
-            _clientThread = clientThread;
+            _sessionManager = sessionManager;
             _sendQueue = sendQueue;
             _msgList = new List<TDelayMsg>();
             _hwidFilter = GateShare.HWFilter;
@@ -569,7 +568,7 @@ namespace CloudGate
                                             pszSendBuf[0] = (byte)'#';
                                             var nEnCodeLen = Misc.EncodeBuf(eatCmd.GetBuffer(), ClientPacket.PackSize, pszSendBuf);
                                             pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                            _clientThread.SendBuffer(pszSendBuf);
+                                            _sessionManager.SendQueue(pszSendBuf);
                                             return;
                                         }
                                     }
@@ -599,7 +598,7 @@ namespace CloudGate
                             Buffer.BlockCopy(packBuff, 0, BodyBuffer, PacketHeader.PacketSize, packBuff.Length);
                         }
                         Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, PacketHeader.PacketSize);//复制消息头
-                        _clientThread.SendBuffer(BodyBuffer);
+                        _sessionManager.SendQueue(BodyBuffer);
                         break;
                     }
             }
@@ -619,7 +618,7 @@ namespace CloudGate
             {
                 if (delayMsg.nBufLen > 0)
                 {
-                    _clientThread.SendBuffer(delayMsg.Buffer);//发送消息到M2
+                    _sessionManager.SendQueue(delayMsg.Buffer);//发送消息到M2
                     var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.nCmd)
                     {
@@ -1174,7 +1173,7 @@ namespace CloudGate
 
         private void SendSysMsg(string szMsg)
         {
-            if ((_clientThread == null) || !_clientThread.IsConnected)
+            if (_sessionManager == null)
             {
                 return;
             }

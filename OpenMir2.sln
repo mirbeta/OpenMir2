@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BotSvr", "src\BotSvr\BotSvr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudGate", "src\CloudGate\CloudGate.csproj", "{EBF2CE3C-8614-4DF1-910B-513D80976ADD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CloudWay", "CloudWay", "{D1A90098-6CA7-4C99-93F0-AF26E4A15260}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clouds", "Clouds", "{D1A90098-6CA7-4C99-93F0-AF26E4A15260}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

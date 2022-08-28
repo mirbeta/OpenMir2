@@ -1,4 +1,5 @@
 using CloudGate.Conf;
+using CloudGate.Services;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using System.Threading;
@@ -19,14 +20,14 @@ namespace CloudGate
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
+            stoppingToken.Register(() => Debug.WriteLine($"CloudGate is stopping."));
             _serverApp.StartService(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            LogQueue.EnqueueDebugging("GameGate is starting.");
+            LogQueue.EnqueueDebugging("CloudGate is starting.");
             LogQueue.Enqueue("正在启动服务...", 2);
             LogQueue.Enqueue("正在加载配置信息...", 3);
             ConfigManager.LoadConfig();
@@ -37,7 +38,7 @@ namespace CloudGate
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            Debug.WriteLine("GameGate is stopping.");
+            Debug.WriteLine("CloudGate is stopping.");
             LogQueue.Enqueue("正在停止服务...", 2);
             _serverApp.StopService();
             LogQueue.Enqueue("服务停止成功...", 2);

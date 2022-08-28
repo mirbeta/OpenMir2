@@ -35,9 +35,9 @@ namespace CloudGate.Services
         /// 添加到消息处理队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void AddToQueue(TMessageData messageData)
+        public void SendQueue(byte[] messageData)
         {
-            _sendMsgList.Writer.TryWrite(messageData);
+           // _sendMsgList.Writer.TryWrite(messageData);
         }
 
         /// <summary>

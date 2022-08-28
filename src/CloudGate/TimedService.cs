@@ -74,20 +74,11 @@ namespace CloudGate
                     {
                         continue;
                     }
-                    if (serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    if (!serverList[i].ClientThread.IsConnected)
-                    {
-                        continue;
-                    }
                     var cmdPacket = new PacketHeader();
                     cmdPacket.PacketCode = Grobal2.RUNGATECODE;
                     cmdPacket.Socket = 0;
                     cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;
                     cmdPacket.PackLength = 0;
-                    serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
                 }
             }
         }
@@ -107,24 +98,6 @@ namespace CloudGate
                     {
                         continue;
                     }
-                    if (serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    if (serverList[i].ClientThread.SessionArray == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < serverList[i].ClientThread.SessionArray.Length; j++)
-                    {
-                        var session = serverList[i].ClientThread.SessionArray[j];
-                        if (session?.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userClient = SessionManager.GetSession(session.SessionId);
-                        userClient?.HandleDelayMsg();
-                    }
                 }
             }
         }
@@ -142,10 +115,6 @@ namespace CloudGate
                 for (var i = 0; i < serverList.Count; i++)
                 {
                     if (serverList[i] == null)
-                    {
-                        continue;
-                    }
-                    if (serverList[i].ClientThread == null)
                     {
                         continue;
                     }
