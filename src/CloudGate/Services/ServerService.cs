@@ -10,7 +10,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace CloudGate.Services
 {
     /// <summary>
-    /// 客户端服务端(MirClient-GameGate)
+    /// CloudGate服务端
     /// </summary>
     public class ServerService
     {
@@ -45,7 +45,7 @@ namespace CloudGate.Services
             _serverSocket.Start(_gateEndPoint);
             _clientThread.Start();
             _clientThread.RestSessionArray();
-            LogQueue.Enqueue($"网关[{_gateEndPoint}]已启动...", 1);
+            LogQueue.Enqueue($"Cloud智能防外挂网关[{_gateEndPoint}]已启动...", 1);
             return _sendQueue.ProcessSendQueue();
         }
 
@@ -108,19 +108,7 @@ namespace CloudGate.Services
         }
 
         /// <summary>
-        /// 处理等待关闭链接列表
-        /// </summary>
-        public void ProcessCloseList()
-        {
-            while (!_waitCloseQueue.IsEmpty)
-            {
-                _waitCloseQueue.TryDequeue(out int socket);
-                _clientThread.UserLeave(socket); //发送消息给M2断开链接
-            }
-        }
-
-        /// <summary>
-        /// 新玩家链接
+        /// 游戏网关链接成功
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
@@ -163,6 +151,11 @@ namespace CloudGate.Services
             }
         }
 
+        /// <summary>
+        /// 游戏网关断开链接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             var sRemoteAddr = e.RemoteIPaddr;
@@ -200,13 +193,18 @@ namespace CloudGate.Services
             SessionManager.CloseSession(e.SocHandle);
         }
 
+        /// <summary>
+        /// 游戏网关链接异常
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
             LogQueue.EnqueueDebugging($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
         /// <summary>
-        /// 收到客户端消息
+        /// 收到游戏网关消息
         /// </summary>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {

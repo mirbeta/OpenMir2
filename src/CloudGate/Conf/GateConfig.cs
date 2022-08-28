@@ -206,6 +206,7 @@ namespace CloudGate.Conf
 
         public GateConfig()
         {
+            GateCount = 1;
             CheckNullSession = true;
             IsOverSpeedSendBack = false;
             IsDefenceCCPacket = false;
@@ -275,6 +276,7 @@ namespace CloudGate.Conf
             ClientAttackSpeedRate = 0;
             ShowDebugLog = false;
             MessageThread = 1;
+            ShowLogLevel = 1;
         }
     }
 }

@@ -251,9 +251,21 @@ namespace CloudGate.Conf
 
     public class GameGateInfo
     {
+        /// <summary>
+        /// 服务器地址
+        /// </summary>
         public string ServerAdress;
+        /// <summary>
+        /// 服务器端口
+        /// </summary>
         public int ServerPort;
+        /// <summary>
+        /// 网关服务地址
+        /// </summary>
         public string GateAddress;
+        /// <summary>
+        /// 网关服务端口
+        /// </summary>
         public int GatePort;
     }
 }
