@@ -9,12 +9,6 @@ using SystemModule;
 
 namespace CloudGate.Services
 {
-    public enum MessageThreadState
-    {
-        Runing,
-        Stop
-    }
-
     public class ServerManager
     {
         private static readonly ServerManager instance = new ServerManager();
@@ -35,12 +29,11 @@ namespace CloudGate.Services
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<TMessageData> _reviceMsgQueue = null;
-        private Task _processReviceMessageTask;
+        private readonly Channel<TMessageData> _reviceQueue = null;
 
         public ServerManager()
         {
-            _reviceMsgQueue = Channel.CreateUnbounded<TMessageData>();
+            _reviceQueue = Channel.CreateUnbounded<TMessageData>();
             _serverServices = new List<ServerService>();
         }
 
@@ -59,7 +52,7 @@ namespace CloudGate.Services
             _messageThreads = new MessageThreadConsume[4];
             for (int i = 0; i < Config.MessageThread; i++)
             {
-                _messageThreads[i] = new MessageThreadConsume(_reviceMsgQueue.Reader);
+                _messageThreads[i] = new MessageThreadConsume(_reviceQueue.Reader);
             }
 
             var serverQueueTask = new Task[_serverServices.Count];
@@ -88,23 +81,22 @@ namespace CloudGate.Services
         }
 
         /// <summary>
-        /// 客户端消息添加到队列给服务端处理
-        /// GameGate -> GameSvr
+        /// 添加到游戏网关消息队列
         /// </summary>
         /// <param name="messageData"></param>
         public void SendQueue(TMessageData messageData)
         {
-            _reviceMsgQueue.Writer.TryWrite(messageData);
+            _reviceQueue.Writer.TryWrite(messageData);
         }
 
         public int MessageThreadCount => Config.MessageThread;
 
         /// <summary>
-        /// 开启客户端消息消费线程
+        /// 开启游戏网关消息消费线程
         /// </summary>
         public void StartProcessMessage(CancellationToken stoppingToken)
         {
-            _processReviceMessageTask = Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(() =>
             {
                 if (_lastMessageThreadCount == Config.MessageThread)
                 {
@@ -197,22 +189,16 @@ namespace CloudGate.Services
 
         public ClientThread GetClientThread()
         {
-            //TODO 根据配置文件有四种模式  默认随机
-            //1.轮询分配
-            //2.总是分配到最小资源 即网关在线人数最小的那个
-            //3.一直分配到一个 直到当前玩家达到配置上线，则开始分配到其他可用网关
-            //4.按权重分配
-            if (!_serverServices.Any())
-                return null;
-            if (_serverServices.Count == 1)
-            {
-                return _serverServices[0].ClientThread;
-            }
-            var random = RandomNumber.GetInstance().Random(_serverServices.Count);
-            return _serverServices[random].ClientThread;
+            return null;
         }
 
-        public class MessageThreadConsume
+        private enum MessageThreadState
+        {
+            Runing,
+            Stop
+        }
+        
+        private class MessageThreadConsume
         {
             private readonly ManualResetEvent _resetEvent;
             private Task _messageThreads;
@@ -261,6 +247,5 @@ namespace CloudGate.Services
                 LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已停止.");
             }
         }
-
     }
 }

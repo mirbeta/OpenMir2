@@ -15,15 +15,21 @@ namespace CloudGate.Services
     public class ServerService
     {
         private readonly SocketServer _serverSocket;
-        private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
         private readonly SendQueue _sendQueue;
         private readonly ConcurrentQueue<int> _waitCloseQueue;
         private static MirLog LogQueue => MirLog.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
-        private static ClientManager ClientManager => ClientManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
-
+        /// <summary>
+        /// 发送总字节数
+        /// </summary>
+        public int SendBytes;
+        /// <summary>
+        /// 接收总字节数
+        /// </summary>
+        public int ReceiveBytes;
+        
         public ServerService(string clientId, GameGateInfo gameGate)
         {
             _waitCloseQueue = new ConcurrentQueue<int>();
@@ -35,29 +41,23 @@ namespace CloudGate.Services
             _serverSocket.Init();
             _sendQueue = new SendQueue();
             _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
-            _clientThread = new ClientThread(clientId, _gateEndPoint, gameGate);
         }
-
-        public ClientThread ClientThread => _clientThread;
 
         public Task Start()
         {
             _serverSocket.Start(_gateEndPoint);
-            _clientThread.Start();
-            _clientThread.RestSessionArray();
             LogQueue.Enqueue($"Cloud智能防外挂网关[{_gateEndPoint}]已启动...", 1);
             return _sendQueue.ProcessSendQueue();
         }
 
         public void Stop()
         {
-            _clientThread.Stop();
             _serverSocket.Shutdown();
         }
 
         public (string serverIp,  string Status, string playCount, string reviceTotal, string sendTotal, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo(), GetSendQueueCount(), GetThreadCount());
+            return (_gateEndPoint.ToString(), GetConnected(), "0", GetReceiveInfo(), GetSendInfo(), GetSendQueueCount(), GetThreadCount());
         }
 
         /// <summary>
@@ -80,30 +80,30 @@ namespace CloudGate.Services
 
         private string GetConnected()
         {
-            return _clientThread.IsConnected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+            return true ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
         }
 
         private string GetSendInfo()
         {
-            var sendStr = _clientThread.SendBytes switch
+            var sendStr = SendBytes switch
             {
-                > 1024 * 1000 => $"↑{_clientThread.SendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{_clientThread.SendBytes / 1024}K",
-                _ => $"↑{_clientThread.SendBytes}B"
+                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{SendBytes / 1024}K",
+                _ => $"↑{SendBytes}B"
             };
-            _clientThread.SendBytes = 0;
+            SendBytes = 0;
             return sendStr;
         }
 
         private string GetReceiveInfo()
         {
-            var receiveStr = _clientThread.ReceiveBytes switch
+            var receiveStr = ReceiveBytes switch
             {
-                > 1024 * 1000 => $"↓{_clientThread.ReceiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{_clientThread.ReceiveBytes / 1024}K",
-                _ => $"↓{_clientThread.ReceiveBytes}B"
+                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{ReceiveBytes / 1024}K",
+                _ => $"↓{ReceiveBytes}B"
             };
-            _clientThread.ReceiveBytes = 0;
+            ReceiveBytes = 0;
             return receiveStr;
         }
 
@@ -119,7 +119,7 @@ namespace CloudGate.Services
                 return;
             }
             var sRemoteAddress = e.RemoteIPaddr;
-            LogQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            LogQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到游戏数据服务器[{clientThread.ClientId}]");
             TSessionInfo userSession = null;
             for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
@@ -141,8 +141,7 @@ namespace CloudGate.Services
             {
                 LogQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知M2有新玩家进入游戏
-                SessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, clientThread, _sendQueue));
-                ClientManager.AddClientThread(userSession.ConnectionId, clientThread);
+                SessionManager.AddSession(userSession.SessionId, new ClientSession(userSession, SessionManager, _sendQueue));
             }
             else
             {
@@ -160,36 +159,36 @@ namespace CloudGate.Services
         {
             var sRemoteAddr = e.RemoteIPaddr;
             var connectionId = e.ConnectionId;
-            var clientThread = ClientManager.GetClientThread(connectionId);
-            if (clientThread != null && clientThread.GateReady)
-            {
-                for (int i = 0; i < clientThread.SessionArray.Length; i++)
-                {
-                    if (clientThread.SessionArray[i] == null)
-                    {
-                        continue;
-                    }
-                    if (clientThread.SessionArray[i].SckHandle == e.SocHandle)
-                    {
-                        clientThread.SessionArray[i].Socket.Close();
-                        clientThread.SessionArray[i].Socket = null;
-                        clientThread.SessionArray[i].nUserListIndex = 0;
-                        clientThread.SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
-                        clientThread.SessionArray[i].SckHandle = 0;
-                        clientThread.SessionArray[i].SessionId = 0;
-                        clientThread.SessionArray[i] = null;
-                        break;
-                    }
-                }
-                _waitCloseQueue.Enqueue(e.SocHandle); //等待100ms才能发送给M2
-                LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-            }
-            else
-            {
-                LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                LogQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{connectionId}]");
-            }
-            ClientManager.DeleteClientThread(connectionId);
+            //var clientThread = ClientManager.GetClientThread(connectionId);
+            //if (clientThread != null && clientThread.GateReady)
+            //{
+            //    for (int i = 0; i < clientThread.SessionArray.Length; i++)
+            //    {
+            //        if (clientThread.SessionArray[i] == null)
+            //        {
+            //            continue;
+            //        }
+            //        if (clientThread.SessionArray[i].SckHandle == e.SocHandle)
+            //        {
+            //            clientThread.SessionArray[i].Socket.Close();
+            //            clientThread.SessionArray[i].Socket = null;
+            //            clientThread.SessionArray[i].nUserListIndex = 0;
+            //            clientThread.SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
+            //            clientThread.SessionArray[i].SckHandle = 0;
+            //            clientThread.SessionArray[i].SessionId = 0;
+            //            clientThread.SessionArray[i] = null;
+            //            break;
+            //        }
+            //    }
+            //    _waitCloseQueue.Enqueue(e.SocHandle); //等待100ms才能发送给M2
+            //    LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+            //}
+            //else
+            //{
+            //    LogQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
+            //    LogQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{connectionId}]");
+            //}
+            //ClientManager.DeleteClientThread(connectionId);
             SessionManager.CloseSession(e.SocHandle);
         }
 
