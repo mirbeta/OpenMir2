@@ -6,7 +6,6 @@ namespace CloudGate
     public class ServerApp
     {
         private static MirLog LogQueue => MirLog.Instance;
-        private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
 
@@ -23,7 +22,6 @@ namespace CloudGate
             LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
             LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
             GateShare.Initialization();
-            ClientManager.Initialization();
             ServerManager.Start();
             ServerManager.StartProcessMessage(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);

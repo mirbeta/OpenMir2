@@ -14,12 +14,10 @@ namespace CloudGate
     {
         private readonly ILogger<TimedService> _logger;
         private static MirLog LogQueue => MirLog.Instance;
-        private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
 
         private int _processDelayTick = 0;
-        private int _processDelayCloseTick = 0;
         private int _processClearSessionTick = 0;
         private int _kepAliveTick = 0;
 
@@ -109,11 +107,6 @@ namespace CloudGate
                     {
                         continue;
                     }
-                    if (HUtil32.GetTickCount() - _processDelayCloseTick > 2000) //加入网关延时发送关闭消息
-                    {
-                        _processDelayCloseTick = HUtil32.GetTickCount();
-                        serverList[i].ProcessCloseList();
-                    }
                     if (serverList[i].ClientThread == null)
                     {
                         continue;
@@ -156,21 +149,9 @@ namespace CloudGate
                     {
                         continue;
                     }
-                    ClientThread clientThread = serverList[i].ClientThread;
-                    if (clientThread == null)
-                    {
-                        continue;
-                    }
-                    clientThread.CheckTimeOutSession();
-                    ClientManager.CheckSessionStatus(serverList[i].ClientThread);
                 }
                 LogQueue.EnqueueDebugging("清理超时会话工作完成...");
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }
