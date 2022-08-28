@@ -435,5 +435,35 @@ namespace GameGate.Services
                 }
             }
         }
+        
+        public string GetConnected()
+        {
+            return IsConnected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+        }
+
+        public string GetSendInfo()
+        {
+            var sendStr = SendBytes switch
+            {
+                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{SendBytes / 1024}K",
+                _ => $"↑{SendBytes}B"
+            };
+            SendBytes = 0;
+            return sendStr;
+        }
+
+        public string GetReceiveInfo()
+        {
+            var receiveStr = ReceiveBytes switch
+            {
+                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{ReceiveBytes / 1024}K",
+                _ => $"↓{ReceiveBytes}B"
+            };
+            ReceiveBytes = 0;
+            return receiveStr;
+        }
+
     }
 }
