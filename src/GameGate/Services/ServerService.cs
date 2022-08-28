@@ -57,7 +57,7 @@ namespace GameGate.Services
 
         public (string serverIp,  string Status, string playCount, string reviceTotal, string sendTotal, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), GetConnected(), _clientThread.GetSessionCount(), GetReceiveInfo(), GetSendInfo(), GetSendQueueCount(), GetThreadCount());
+            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(), _clientThread.GetReceiveInfo(), _clientThread.GetSendInfo(), GetSendQueueCount(), GetThreadCount());
         }
 
         /// <summary>
@@ -76,35 +76,6 @@ namespace GameGate.Services
         private string GetSendQueueCount()
         {
             return string.Concat(_sendQueue.GetQueueCount, "/", SessionManager.GetQueueCount);
-        }
-
-        private string GetConnected()
-        {
-            return _clientThread.IsConnected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
-        }
-
-        private string GetSendInfo()
-        {
-            var sendStr = _clientThread.SendBytes switch
-            {
-                > 1024 * 1000 => $"↑{_clientThread.SendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{_clientThread.SendBytes / 1024}K",
-                _ => $"↑{_clientThread.SendBytes}B"
-            };
-            _clientThread.SendBytes = 0;
-            return sendStr;
-        }
-
-        private string GetReceiveInfo()
-        {
-            var receiveStr = _clientThread.ReceiveBytes switch
-            {
-                > 1024 * 1000 => $"↓{_clientThread.ReceiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{_clientThread.ReceiveBytes / 1024}K",
-                _ => $"↓{_clientThread.ReceiveBytes}B"
-            };
-            _clientThread.ReceiveBytes = 0;
-            return receiveStr;
         }
 
         /// <summary>
