@@ -30,13 +30,12 @@ namespace GameGate.Services
         /// <summary>
         /// 消息消费者
         /// </summary>
-        private MessageThreadConsume[] _messageThreads;
+        private ServerMessageThread[] _messageThreads;
         private int _lastMessageThreadCount;
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
         private readonly Channel<TMessageData> _reviceMsgQueue = null;
-        private Task _processReviceMessageTask;
 
         public ServerManager()
         {
@@ -54,25 +53,21 @@ namespace GameGate.Services
             _serverServices.Remove(serverService);
         }
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            _messageThreads = new MessageThreadConsume[4];
-            for (int i = 0; i < Config.MessageThread; i++)
+            _messageThreads = new ServerMessageThread[4];
+            for (var i = 0; i < Config.MessageThread; i++)
             {
-                _messageThreads[i] = new MessageThreadConsume(_reviceMsgQueue.Reader);
+                _messageThreads[i] = new ServerMessageThread(_reviceMsgQueue.Reader);
             }
-
-            var serverQueueTask = new Task[_serverServices.Count];
             for (var i = 0; i < _serverServices.Count; i++)
             {
                 if (_serverServices[i] == null)
                 {
                     continue;
                 }
-                serverQueueTask[i] = _serverServices[i].Start();
+                _serverServices[i].Start(stoppingToken);
             }
-
-            Task.WhenAll(serverQueueTask);
         }
 
         public void Stop()
@@ -104,7 +99,7 @@ namespace GameGate.Services
         /// </summary>
         public void StartProcessMessage(CancellationToken stoppingToken)
         {
-            _processReviceMessageTask = Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(() =>
             {
                 if (_lastMessageThreadCount == Config.MessageThread)
                 {
@@ -212,38 +207,38 @@ namespace GameGate.Services
             return _serverServices[random].ClientThread;
         }
 
-        public class MessageThreadConsume
+        private class ServerMessageThread
         {
             private readonly ManualResetEvent _resetEvent;
-            private Task _messageThreads;
             private readonly string _threadId;
-            private SessionManager Session => SessionManager.Instance;
-            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-            private static MirLog LogQueue => MirLog.Instance;
+            private readonly CancellationTokenSource _cts;
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<TMessageData> _reviceMsgList = null;
+            private readonly ChannelReader<TMessageData> _reviceMsgQueue = null;
             public MessageThreadState ThreadState;
-
-            public MessageThreadConsume(ChannelReader<TMessageData> channel)
+            private static SessionManager Session => SessionManager.Instance;
+            private static MirLog LogQueue => MirLog.Instance;
+            
+            public ServerMessageThread(ChannelReader<TMessageData> channel)
             {
-                _reviceMsgList = channel;
-                _resetEvent = new ManualResetEvent(true);
+                _reviceMsgQueue = channel;
                 _threadId = Guid.NewGuid().ToString("N");
+                _resetEvent = new ManualResetEvent(true);
                 ThreadState = MessageThreadState.Stop;
+                _cts = new CancellationTokenSource();
             }
 
             public void Start()
             {
-                _messageThreads = Task.Factory.StartNew(async () =>
+                Task.Factory.StartNew(async () =>
                 {
                     ThreadState = MessageThreadState.Runing;
                     LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已启动.");
-                    while (await _reviceMsgList.WaitToReadAsync(_cts.Token))
+                    while (await _reviceMsgQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
-                        if (_reviceMsgList.TryRead(out var message))
+                        if (_reviceMsgQueue.TryRead(out var message))
                         {
                             var clientSession = Session.GetSession(message.MessageId);
                             clientSession?.HandleSessionPacket(message);
@@ -257,10 +252,8 @@ namespace GameGate.Services
                 ThreadState = MessageThreadState.Stop;
                 _resetEvent.Reset();//暂停
                 _cts.CancelAfter(3000);//延时3秒取消消费，防止消息丢失
-                _messageThreads.Dispose();
                 LogQueue.EnqueueDebugging($"消息消费线程[{_threadId}]已停止.");
             }
         }
-
     }
 }

@@ -96,7 +96,7 @@ namespace LoginGate.Services
                         {
                             continue;
                         }
-                        if (message.Body[0] == (byte)'+')//收到DB服务器发过来的关闭会话请求
+                        if (message.Body[0] == (byte)'+')//收到LoginSvr发过来的关闭会话请求
                         {
                             if (message.Body[1] == (byte)'-')
                             {

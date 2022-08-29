@@ -55,11 +55,11 @@ namespace GameGate.Services
         /// <summary>
         /// 发送总字节数
         /// </summary>
-        public int SendBytes;
+        private int _sendBytes;
         /// <summary>
         /// 接收总字节数
         /// </summary>
-        public int ReceiveBytes;
+        private int _receiveBytes;
         private int _checkRecviceTick = 0;
         private int _checkServerTick = 0;
         private int _checkServerTimeMin = 0;
@@ -83,8 +83,8 @@ namespace GameGate.Services
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.ReceivedDatagram += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
-            ReceiveBytes = 0;
-            SendBytes = 0;
+            _receiveBytes = 0;
+            _sendBytes = 0;
             _gateEndPoint = endPoint;
         }
 
@@ -146,8 +146,8 @@ namespace GameGate.Services
             LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
             LogQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
             _connected = true;
-            ReceiveBytes = 0;
-            SendBytes = 0;
+            _receiveBytes = 0;
+            _sendBytes = 0;
             ClientManager.Instance.AddClientThread(ClientId, this);
         }
 
@@ -180,7 +180,7 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             ProcReceiveBuffer(e.Buff, e.BuffLen);
-            ReceiveBytes += e.BuffLen;
+            _receiveBytes += e.BuffLen;
         }
 
         private const int HeaderMessageSize = 20;
@@ -399,7 +399,7 @@ namespace GameGate.Services
             {
                 return;
             }
-            SendBytes += sendBuffer.Length;
+            _sendBytes += sendBuffer.Length;
             ClientSocket.Send(sendBuffer);
         }
 
@@ -438,30 +438,30 @@ namespace GameGate.Services
         
         public string GetConnected()
         {
-            return IsConnected ? $"[green]Connected[/]" : $"[red]Not Connected[/]";
+            return IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
         }
 
         public string GetSendInfo()
         {
-            var sendStr = SendBytes switch
+            var sendStr = _sendBytes switch
             {
-                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{SendBytes / 1024}K",
-                _ => $"↑{SendBytes}B"
+                > 1024 * 1000 => $"↑{_sendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{_sendBytes / 1024}K",
+                _ => $"↑{_sendBytes}B"
             };
-            SendBytes = 0;
+            _sendBytes = 0;
             return sendStr;
         }
 
         public string GetReceiveInfo()
         {
-            var receiveStr = ReceiveBytes switch
+            var receiveStr = _receiveBytes switch
             {
-                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{ReceiveBytes / 1024}K",
-                _ => $"↓{ReceiveBytes}B"
+                > 1024 * 1000 => $"↓{_receiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{_receiveBytes / 1024}K",
+                _ => $"↓{_receiveBytes}B"
             };
-            ReceiveBytes = 0;
+            _receiveBytes = 0;
             return receiveStr;
         }
 

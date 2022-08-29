@@ -9,7 +9,7 @@ namespace DBSvr
 {
     public class TimedService : BackgroundService
     {
-        private readonly MirLog _logQueue;
+        private readonly MirLog _logger;
         private readonly UserSocService _userSoc;
         private readonly LoginSvrService _loginSoc;
         private readonly HumDataService _dataService;
@@ -17,9 +17,9 @@ namespace DBSvr
         private int _lastKeepTick;
         private int _lastClearTick;
 
-        public TimedService(MirLog logQueue, UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService)
+        public TimedService(MirLog logger, UserSocService userSoc, LoginSvrService loginSoc, HumDataService dataService)
         {
-            _logQueue = logQueue;
+            _logger = logger;
             _userSoc = userSoc;
             _loginSoc = loginSoc;
             _dataService = dataService;
