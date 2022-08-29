@@ -53,7 +53,7 @@ namespace GameSvr.Monster.Monsters
             if ((HUtil32.GetTickCount() - m_dwHitTick) > m_nNextHitTime)
             {
                 m_dwHitTick = HUtil32.GetTickCount();
-                SendAttackMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY);
+                SendAttackMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY);
                 WAbil = m_WAbil;
                 nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
                 for (var i = 0; i < m_VisibleActors.Count; i++)

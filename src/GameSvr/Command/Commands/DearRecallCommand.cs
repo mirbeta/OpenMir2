@@ -25,7 +25,7 @@ namespace GameSvr.Command.Commands
             }
             if (PlayObject.m_DearHuman == null)
             {
-                if (PlayObject.m_btGender == 0)
+                if (PlayObject.Gender == 0)
                 {
                     PlayObject.SysMsg("你的老婆不在线!!!", MsgColor.Red, MsgType.Hint);
                 }

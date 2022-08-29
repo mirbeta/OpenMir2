@@ -41,11 +41,11 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (Math.Abs(m_nTargetX - m_nCurrX) == 1 && Math.Abs(m_nTargetY - m_nCurrY) == 1)
                             {
-                                WalkTo((byte)M2Share.RandomNumber.Random(4), true);
+                                WalkTo(M2Share.RandomNumber.RandomByte(4), true);
                             }
                             else
                             {
-                                WalkTo((byte)M2Share.RandomNumber.Random(7), true);
+                                WalkTo(M2Share.RandomNumber.RandomByte(7), true);
                             }
                         }
                         else

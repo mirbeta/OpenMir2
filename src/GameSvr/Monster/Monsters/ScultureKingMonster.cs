@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             m_nViewRange = 8;
             m_boStoneMode = true;
             m_nCharStatusEx = Grobal2.STATE_STONE_MODE;
-            m_btDirection = 5;
+            Direction = 5;
             m_nDangerLevel = 5;
             m_SlaveObjectList = new List<TBaseObject>();
         }
@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
         {
             m_nCharStatusEx = 0;
             m_nCharStatus = GetCharStatus();
-            SendRefMsg(Grobal2.RM_DIGUP, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
             m_boStoneMode = false;
             var stoneEvent = new MirEvent(m_PEnvir, m_nCurrX, m_nCurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventManager.AddEvent(stoneEvent);
@@ -34,27 +34,25 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            TBaseObject BaseObject;
             var nCount = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref nX, ref nY);
-            for (var i = 0; i <= nCount; i++)
+            for (var i = 0; i < nCount; i++)
             {
                 if (m_SlaveObjectList.Count >= 30)
                 {
                     break;
                 }
-                BaseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, nX, nY, M2Share.g_Config.sZuma[M2Share.RandomNumber.Random(4)]);
-                if (BaseObject != null)
+                var baseObject = M2Share.UserEngine.RegenMonsterByName(m_sMapName, nX, nY, M2Share.g_Config.sZuma[M2Share.RandomNumber.Random(4)]);
+                if (baseObject != null)
                 {
-                    m_SlaveObjectList.Add(BaseObject);
+                    m_SlaveObjectList.Add(baseObject);
                 }
             }
         }
 
         public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
         {
-            var WAbil = m_WAbil;
-            int nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
+            int nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, 0, nPower, true);
         }
 

@@ -159,11 +159,11 @@ namespace GameSvr.Maps
             {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
-                if (FBaseObject.m_btDirection > 8)
+                if (FBaseObject.Direction > 8)
                 {
-                    FBaseObject.m_btDirection = 4;
+                    FBaseObject.Direction = 4;
                 }
-                m_btDirection = FBaseObject.m_btDirection;
+                m_btDirection = FBaseObject.Direction;
                 for (var i = 2; i >= 1; i--)
                 {
                     if (FBaseObject.m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY))
@@ -469,7 +469,7 @@ namespace GameSvr.Maps
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 nC = 0;
-                btDir = ((TPlayObject)FBaseObject).m_btDirection;
+                btDir = ((TPlayObject)FBaseObject).Direction;
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);

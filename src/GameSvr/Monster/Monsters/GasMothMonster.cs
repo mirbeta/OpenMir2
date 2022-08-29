@@ -12,14 +12,12 @@ namespace GameSvr.Monster.Monsters
 
         protected override TBaseObject sub_4A9C78(byte bt05)
         {
-            TBaseObject result;
-            var BaseObject = base.sub_4A9C78(bt05);
-            if (BaseObject != null && M2Share.RandomNumber.Random(3) == 0 && BaseObject.m_boHideMode)
+            var baseObject = base.sub_4A9C78(bt05);
+            if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.m_boHideMode)
             {
-                BaseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
+                baseObject.m_wStatusTimeArr[Grobal2.STATE_TRANSPARENT] = 1;
             }
-            result = BaseObject;
-            return result;
+            return baseObject;
         }
 
         public override void Run()

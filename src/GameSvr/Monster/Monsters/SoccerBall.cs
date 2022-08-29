@@ -24,38 +24,38 @@ namespace GameSvr.Monster.Monsters
             var bo0D = false;
             if (n550 > 0)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 1, ref n08, ref n0C))
+                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, Direction, 1, ref n08, ref n0C))
                 {
                     if (m_PEnvir.CanWalk(n08, n0C, bo0D))
                     {
-                        switch (m_btDirection)
+                        switch (Direction)
                         {
                             case 0:
-                                m_btDirection = 4;
+                                Direction = 4;
                                 break;
                             case 1:
-                                m_btDirection = 7;
+                                Direction = 7;
                                 break;
                             case 2:
-                                m_btDirection = 6;
+                                Direction = 6;
                                 break;
                             case 3:
-                                m_btDirection = 5;
+                                Direction = 5;
                                 break;
                             case 4:
-                                m_btDirection = 0;
+                                Direction = 0;
                                 break;
                             case 5:
-                                m_btDirection = 3;
+                                Direction = 3;
                                 break;
                             case 6:
-                                m_btDirection = 2;
+                                Direction = 2;
                                 break;
                             case 7:
-                                m_btDirection = 1;
+                                Direction = 1;
                                 break;
                         }
-                        m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, n550, ref m_nTargetX, ref m_nTargetY);
+                        m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
                     }
                 }
             }
@@ -80,10 +80,10 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            m_btDirection = hiter.m_btDirection;
+            Direction = hiter.Direction;
             n550 = M2Share.RandomNumber.Random(4) + n550 + 4;
             n550 = HUtil32._MIN(20, n550);
-            m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, n550, ref m_nTargetX, ref m_nTargetY);
+            m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, Direction, n550, ref m_nTargetX, ref m_nTargetY);
         }
     }
 }

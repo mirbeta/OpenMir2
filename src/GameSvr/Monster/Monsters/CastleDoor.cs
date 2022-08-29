@@ -58,8 +58,8 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            m_btDirection = 7;
-            SendRefMsg(Grobal2.RM_DIGUP, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            Direction = 7;
+            SendRefMsg(Grobal2.RM_DIGUP, Direction, m_nCurrX, m_nCurrY, 0, "");
             m_boOpened = true;
             m_boStoneMode = true;
             SetMapXYFlag(0);
@@ -72,12 +72,12 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            m_btDirection = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0));
-            if (m_btDirection - 3 >= 0)
+            Direction = (byte)(3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0));
+            if (Direction - 3 >= 0)
             {
-                m_btDirection = 0;
+                Direction = 0;
             }
-            SendRefMsg(Grobal2.RM_DIGDOWN, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, m_nCurrX, m_nCurrY, 0, "");
             m_boOpened = false;
             m_boStoneMode = false;
             SetMapXYFlag(1);
@@ -103,10 +103,10 @@ namespace GameSvr.Monster.Monsters
             if (!m_boOpened)
             {
                 int n08 = 3 - HUtil32.Round(m_WAbil.HP / m_WAbil.MaxHP * 3.0);
-                if (m_btDirection != n08 && n08 < 3)
+                if (Direction != n08 && n08 < 3)
                 {
-                    m_btDirection = (byte)n08;
-                    SendRefMsg(Grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                    Direction = (byte)n08;
+                    SendRefMsg(Grobal2.RM_TURN, Direction, m_nCurrX, m_nCurrY, 0, "");
                 }
             }
             base.Run();
@@ -119,8 +119,8 @@ namespace GameSvr.Monster.Monsters
             {
                 n08 = 0;
             }
-            m_btDirection = (byte)n08;
-            SendRefMsg(Grobal2.RM_ALIVE, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            Direction = (byte)n08;
+            SendRefMsg(Grobal2.RM_ALIVE, Direction, m_nCurrX, m_nCurrY, 0, "");
         }
 
         public override void Initialize()

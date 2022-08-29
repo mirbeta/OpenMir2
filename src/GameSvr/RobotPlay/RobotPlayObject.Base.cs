@@ -60,7 +60,7 @@ namespace GameSvr.RobotPlay
                                 m_nGotoProtectXYCount++;
                                 if (Math.Abs(m_nCurrX - m_nProtectTargetX) <= 3 && Math.Abs(m_nCurrY - m_nProtectTargetY) <= 3)
                                 {
-                                    m_btDirection = (byte)new System.Random(8).Next();
+                                    Direction = (byte)new System.Random(8).Next();
                                     m_boProtectOK = true;
                                     m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
@@ -69,7 +69,7 @@ namespace GameSvr.RobotPlay
                                     if (Math.Abs(m_nCurrX - m_nProtectTargetX) > 13 || Math.Abs(m_nCurrY - m_nProtectTargetY) > 13)
                                     {
                                         SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);
-                                        m_btDirection = (byte)new System.Random(8).Next();
+                                        Direction = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                     }
@@ -140,7 +140,7 @@ namespace GameSvr.RobotPlay
                                     if (m_boProtectStatus) // 守护状态
                                     {
                                         SpaceMove(m_ManagedEnvir.SMapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
-                                        m_btDirection = (byte)new System.Random(8).Next();
+                                        Direction = (byte)new System.Random(8).Next();
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
                                     }
@@ -710,18 +710,18 @@ namespace GameSvr.RobotPlay
                                             {
                                                 if (BaseObject.m_boSkeleton)
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                                 }
                                                 else
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                                 }
                                             }
                                             else
                                             {
                                                 if (BaseObject != null)
                                                 {
-                                                    SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
+                                                    SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
                                                 }
                                             }
                                         }

@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
             SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 

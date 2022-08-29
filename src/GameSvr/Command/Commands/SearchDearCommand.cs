@@ -21,7 +21,7 @@ namespace GameSvr.Command.Commands
 
             if (PlayObject.m_DearHuman == null)
             {
-                if (PlayObject.m_btGender == 0)
+                if (PlayObject.Gender == 0)
                 {
                     // '你的老婆还没有上线!!!'
                     PlayObject.SysMsg(M2Share.g_sYourWifeNotOnlineMsg, MsgColor.Red, MsgType.Hint);
@@ -35,7 +35,7 @@ namespace GameSvr.Command.Commands
                 return;
             }
 
-            if (PlayObject.m_btGender == 0)
+            if (PlayObject.Gender == 0)
             {
                 // '你的老婆现在位于:'
                 PlayObject.SysMsg(M2Share.g_sYourWifeNowLocateMsg, MsgColor.Green, MsgType.Hint);

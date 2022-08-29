@@ -43,7 +43,7 @@ namespace GameSvr.Monster
                 ElfMon.m_dwTargetFocusTick = OldMon.m_dwTargetFocusTick;
                 ElfMon.m_LastHiter = OldMon.m_LastHiter;
                 ElfMon.m_LastHiterTick = OldMon.m_LastHiterTick;
-                ElfMon.m_btDirection = OldMon.m_btDirection;
+                ElfMon.Direction = OldMon.Direction;
                 result = ElfMon;
             }
             return result;
@@ -73,7 +73,7 @@ namespace GameSvr.Monster
             {
                 int nOldX = m_nCurrX;
                 int nOldY = m_nCurrY;
-                WalkTo((byte)M2Share.RandomNumber.Random(8), false);
+                WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != m_nCurrX || nOldY != m_nCurrY)
                 {
                     m_boDupMode = false;

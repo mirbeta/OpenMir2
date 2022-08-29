@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
         {
             m_dwSearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             m_nViewRange = 8;
-            m_btDirection = 5;
+            Direction = 5;
             m_nDangerLevel = 5;
             m_SlaveObjectList = new List<TBaseObject>();
         }

@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
         {
             TBaseObject BaseObject;
             short wHitMode = 0;
-            GetAttackDir(m_TargetCret, ref m_btDirection);
+            GetAttackDir(m_TargetCret, ref Direction);
             IList<TBaseObject> xTargetList = new List<TBaseObject>();
             GetMapBaseObjects(m_PEnvir, m_nCurrX, m_nCurrY, 1, xTargetList);
             if (xTargetList.Count > 0)
@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
         }
 
         public override void Run()

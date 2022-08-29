@@ -465,7 +465,7 @@ namespace GameSvr.Player
             {
                 int nOldX = m_nCurrX;
                 int nOldY = m_nCurrY;
-                m_btDirection = btDir;
+                Direction = btDir;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -552,7 +552,7 @@ namespace GameSvr.Player
             {
                 n10 = m_nCurrX;
                 n14 = m_nCurrY;
-                m_btDirection = btDir;
+                Direction = btDir;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -1546,7 +1546,7 @@ namespace GameSvr.Player
             var bo35 = true;
             var n24 = nMagicLevel + 1;
             var n28 = n24;
-            this.m_btDirection = nDir;
+            this.Direction = nDir;
             var PoseCreate = GetPoseCreate();
             if (PoseCreate != null)
             {
@@ -1562,17 +1562,17 @@ namespace GameSvr.Player
                         }
                         if (nMagicLevel >= 3)
                         {
-                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref nX, ref nY))
+                            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, Direction, 2, ref nX, ref nY))
                             {
                                 BaseObject_30 = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
                                 if (BaseObject_30 != null && DoMotaebo_CanMotaebo(BaseObject_30, nMagicLevel))
                                 {
-                                    BaseObject_30.CharPushed(m_btDirection, 1);
+                                    BaseObject_30.CharPushed(Direction, 1);
                                 }
                             }
                         }
                         BaseObject_34 = PoseCreate;
-                        if (PoseCreate.CharPushed(m_btDirection, 1) != 1)
+                        if (PoseCreate.CharPushed(Direction, 1) != 1)
                         {
                             break;
                         }
@@ -1634,7 +1634,7 @@ namespace GameSvr.Player
             if (bo35)
             {
                 GetFrontPosition(ref nX, ref nY);
-                SendRefMsg(Grobal2.RM_RUSHKUNG, m_btDirection, nX, nY, 0, "");
+                SendRefMsg(Grobal2.RM_RUSHKUNG, Direction, nX, nY, 0, "");
                 SysMsg(M2Share.sMateDoTooweak, MsgColor.Red, MsgType.Hint);
             }
             if (n28 > 0)
@@ -1734,7 +1734,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            SendRefMsg(Grobal2.RM_HEAVYHIT, m_btDirection, m_nCurrX, m_nCurrY, 0, s1C);
+            SendRefMsg(Grobal2.RM_HEAVYHIT, Direction, m_nCurrX, m_nCurrY, 0, s1C);
             return result;
         }
 
@@ -1832,12 +1832,12 @@ namespace GameSvr.Player
         {
             var result = false;
             TUserCastle Castle;
-            if (StdItem.StdMode == 10 && m_btGender != PlayGender.Man)
+            if (StdItem.StdMode == 10 && Gender != PlayGender.Man)
             {
                 SysMsg(M2Share.sWearNotOfWoMan, MsgColor.Red, MsgType.Hint);
                 return false;
             }
-            if (StdItem.StdMode == 11 && m_btGender != PlayGender.WoMan)
+            if (StdItem.StdMode == 11 && Gender != PlayGender.WoMan)
             {
                 SysMsg(M2Share.sWearNotOfMan, MsgColor.Red, MsgType.Hint);
                 return false;
@@ -2769,9 +2769,9 @@ namespace GameSvr.Player
             HumData.sCurMap = m_sMapName;
             HumData.wCurX = m_nCurrX;
             HumData.wCurY = m_nCurrY;
-            HumData.btDir = m_btDirection;
+            HumData.btDir = Direction;
             HumData.btHair = m_btHair;
-            HumData.btSex = (byte)m_btGender;
+            HumData.btSex = (byte)Gender;
             HumData.btJob = m_btJob;
             HumData.nGold = m_nGold;
             HumData.Abil.Level = m_Abil.Level;
@@ -3087,7 +3087,7 @@ namespace GameSvr.Player
                 if (M2Share.g_Config.dwStruckTime > dwCheckTime)
                 {
                     dwDelayTime = M2Share.g_Config.dwStruckTime - dwCheckTime;
-                    m_btOldDir = m_btDirection;
+                    m_btOldDir = Direction;
                     return false;
                 }
             }
@@ -3110,47 +3110,47 @@ namespace GameSvr.Player
             switch (wIdent)
             {
                 case Grobal2.CM_LONGHIT:
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Grobal2.CM_HIT:
-                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_WALK && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_WALK && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwWalkHitIntervalTime; // 走位攻击
                     }
-                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunHitIntervalTime;// 跑位攻击
                     }
                     break;
                 case Grobal2.CM_RUN:
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
-                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunHitIntervalTime;// 跑位攻击
                     }
-                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_SPELL && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_SPELL && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunMagicIntervalTime;// 跑位魔法
                     }
                     break;
                 case Grobal2.CM_WALK:
-                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlWalkHit && m_wOldIdent == Grobal2.CM_HIT && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwWalkHitIntervalTime;// 走位攻击
                     }
-                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunLongHit && m_wOldIdent == Grobal2.CM_LONGHIT && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Grobal2.CM_SPELL:
-                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != m_btDirection)
+                    if (M2Share.g_Config.boControlRunMagic && m_wOldIdent == Grobal2.CM_RUN && m_btOldDir != Direction)
                     {
                         dwActionIntervalTime = m_dwRunMagicIntervalTime;// 跑位魔法
                     }
@@ -3171,7 +3171,7 @@ namespace GameSvr.Player
                 dwDelayTime = dwActionIntervalTime - dwCheckTime;
             }
             m_wOldIdent = wIdent;
-            m_btOldDir = m_btDirection;
+            m_btOldDir = Direction;
             return result;
         }
 
@@ -3314,7 +3314,7 @@ namespace GameSvr.Player
             }
             if (boIsfound)
             {
-                if (m_btGender == PlayGender.Man)
+                if (Gender == PlayGender.Man)
                 {
                     sSayMsg = string.Format(M2Share.g_sfUnMarryManLoginMsg, m_sDearName, m_sDearName);
                 }
@@ -3330,7 +3330,7 @@ namespace GameSvr.Player
             if (m_DearHuman != null)
             {
                 m_DearHuman.m_DearHuman = this;
-                if (m_btGender == PlayGender.Man)
+                if (Gender == PlayGender.Man)
                 {
                     sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineSelfMsg, m_sDearName, m_sCharName, m_DearHuman.m_PEnvir.SMapDesc, m_DearHuman.m_nCurrX, m_DearHuman.m_nCurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
@@ -3347,7 +3347,7 @@ namespace GameSvr.Player
             }
             else
             {
-                if (m_btGender == PlayGender.Man)
+                if (Gender == PlayGender.Man)
                 {
                     SysMsg(M2Share.g_sManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }

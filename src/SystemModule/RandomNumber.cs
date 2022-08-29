@@ -89,6 +89,21 @@ namespace SystemModule
             }
             throw new Exception("错误的数值");
         }
+        
+        /// <summary>
+        /// 返回一个小于所指定最大值的非负随机数。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public byte RandomByte(byte value)
+        {
+            if (value < byte.MaxValue)
+            {
+                return (byte)random.Next(value);
+            }
+            throw new Exception("错误的数值");
+        }
+
 
         /// <summary>
         /// 返回一个小于所指定最大值的非负随机数。

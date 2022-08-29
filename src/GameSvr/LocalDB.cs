@@ -144,7 +144,7 @@ namespace GameSvr
                                 tGuard = M2Share.UserEngine.RegenMonsterByName(s20, (short)HUtil32.Str_ToInt(s24, 0), (short)HUtil32.Str_ToInt(s28, 0), s1C);
                                 if (tGuard != null)
                                 {
-                                    tGuard.m_btDirection = (byte)HUtil32.Str_ToInt(s2C, 0);
+                                    tGuard.Direction = (byte)HUtil32.Str_ToInt(s2C, 0);
                                 }
                             }
                         }

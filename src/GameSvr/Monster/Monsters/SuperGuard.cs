@@ -25,18 +25,18 @@ namespace GameSvr.Monster.Monsters
                     this.m_dwTargetFocusTick = HUtil32.GetTickCount();
                     nOldX = this.m_nCurrX;
                     nOldY = this.m_nCurrY;
-                    btOldDir = this.m_btDirection;
+                    btOldDir = this.Direction;
                     this.m_TargetCret.GetBackPosition(ref this.m_nCurrX, ref this.m_nCurrY);
-                    this.m_btDirection = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, this.m_TargetCret.m_nCurrX, this.m_TargetCret.m_nCurrY);
-                    this.SendRefMsg(Grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                    this.Direction = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, this.m_TargetCret.m_nCurrX, this.m_TargetCret.m_nCurrY);
+                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
                     wHitMode = 0;
                     this._Attack(ref wHitMode, this.m_TargetCret);
                     this.m_TargetCret.SetLastHiter(this);
                     this.m_TargetCret.m_ExpHitter = null;
                     this.m_nCurrX = nOldX;
                     this.m_nCurrY = nOldY;
-                    this.m_btDirection = btOldDir;
-                    this.TurnTo(this.m_btDirection);
+                    this.Direction = btOldDir;
+                    this.TurnTo(this.Direction);
                     this.BreakHolySeizeMode();
                 }
                 result = true;

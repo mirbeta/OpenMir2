@@ -16,14 +16,14 @@ namespace GameSvr.Monster.Monsters
 
         private void SpitAttack(byte btDir)
         {
-            m_btDirection = btDir;
+            Direction = btDir;
             var WAbil = m_WAbil;
             var nDamage = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (nDamage <= 0)
             {
                 return;
             }
-            SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
             for (var i = 0; i < 4; i++)
             {
                 for (var k = 0; k < 4; k++)

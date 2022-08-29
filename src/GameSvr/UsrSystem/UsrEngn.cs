@@ -1044,7 +1044,7 @@ namespace GameSvr.UsrSystem
                                             }
                                             else
                                             {
-                                                Monster.SearchViewRange_Death();
+                                                Monster.SearchViewRangeDeath();
                                             }
                                         }
                                         Monster.m_nProcessRunCount = 0;
@@ -1752,7 +1752,7 @@ namespace GameSvr.UsrSystem
                 Cert.m_sMapName = sMapName;
                 Cert.m_nCurrX = nX;
                 Cert.m_nCurrY = nY;
-                Cert.m_btDirection = (byte)M2Share.RandomNumber.Random(8);
+                Cert.Direction = M2Share.RandomNumber.RandomByte(8);
                 Cert.m_sCharName = sMonName;
                 Cert.m_WAbil = Cert.m_Abil;
                 Cert.OnEnvirnomentChanged();
@@ -2102,9 +2102,9 @@ namespace GameSvr.UsrSystem
             PlayObject.m_sMapName = HumData.sCurMap;
             PlayObject.m_nCurrX = HumData.wCurX;
             PlayObject.m_nCurrY = HumData.wCurY;
-            PlayObject.m_btDirection = HumData.btDir;
+            PlayObject.Direction = HumData.btDir;
             PlayObject.m_btHair = HumData.btHair;
-            PlayObject.m_btGender = Enum.Parse<PlayGender>(HumData.btSex.ToString());
+            PlayObject.Gender = Enum.Parse<PlayGender>(HumData.btSex.ToString());
             PlayObject.m_btJob = HumData.btJob;
             PlayObject.m_nGold = HumData.nGold;
             PlayObject.m_Abil.Level = HumData.Abil.Level;
@@ -2764,7 +2764,7 @@ namespace GameSvr.UsrSystem
                 Cert.m_sMapName = AI.sMapName;
                 Cert.m_nCurrX = AI.nX;
                 Cert.m_nCurrY = AI.nY;
-                Cert.m_btDirection = (byte)(new System.Random(8)).Next();
+                Cert.Direction = (byte)(new System.Random(8)).Next();
                 Cert.m_sCharName = AI.sCharName;
                 Cert.m_WAbil = Cert.m_Abil;
                 if ((new System.Random(100)).Next() < Cert.m_btCoolEye)

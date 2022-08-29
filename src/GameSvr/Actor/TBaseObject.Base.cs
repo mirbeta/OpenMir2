@@ -1034,7 +1034,7 @@ namespace GameSvr.Actor
                     m_PEnvir.DelObjectCount(this);
                     m_boDelFormMaped = true;
                 }
-                SendRefMsg(Grobal2.RM_DEATH, m_btDirection, m_nCurrX, m_nCurrY, 1, "");
+                SendRefMsg(Grobal2.RM_DEATH, Direction, m_nCurrX, m_nCurrY, 1, "");
             }
             catch
             {
@@ -1045,7 +1045,7 @@ namespace GameSvr.Actor
         internal virtual void ReAlive()
         {
             m_boDeath = false;
-            SendRefMsg(Grobal2.RM_ALIVE, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+            SendRefMsg(Grobal2.RM_ALIVE, Direction, m_nCurrX, m_nCurrY, 0, "");
         }
 
         protected virtual bool IsProtectTarget(TBaseObject BaseObject)

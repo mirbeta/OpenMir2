@@ -14,12 +14,12 @@ namespace GameSvr.Monster.Monsters
         protected virtual TBaseObject sub_4A9C78(byte bt05)
         {
             TBaseObject result = null;
-            m_btDirection = bt05;
+            Direction = bt05;
             var WAbil = m_WAbil;
             var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
-                SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
                 var BaseObject = GetPoseCreate();
                 if (BaseObject != null && IsProperTarget(BaseObject) && M2Share.RandomNumber.Random(BaseObject.m_btSpeedPoint) < m_btHitPoint)
                 {
@@ -45,7 +45,7 @@ namespace GameSvr.Monster.Monsters
             byte btDir = 0;
             if (m_TargetCret == null)
             {
-                return result;
+                return false;
             }
             if (GetAttackDir(m_TargetCret, ref btDir))
             {

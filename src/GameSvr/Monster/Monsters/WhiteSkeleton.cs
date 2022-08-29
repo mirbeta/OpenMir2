@@ -24,9 +24,9 @@ namespace GameSvr.Monster.Monsters
             if (m_boIsFirst)
             {
                 m_boIsFirst = false;
-                this.m_btDirection = 5;
+                this.Direction = 5;
                 this.m_boFixedHideMode = false;
-                this.SendRefMsg(Grobal2.RM_DIGUP, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
             }
             base.Run();
         }

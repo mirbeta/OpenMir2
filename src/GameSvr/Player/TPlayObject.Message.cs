@@ -115,7 +115,7 @@ namespace GameSvr.Player
                     if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 3000) || tObjCount == 2
                         && ((HUtil32.GetTickCount() - m_dwDupObjTick) > 10000)) && ((HUtil32.GetTickCount() - m_dwDupObjTick) < 20000))
                     {
-                        CharPushed((byte)M2Share.RandomNumber.Random(8), 1);
+                        CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
                 var castle = M2Share.CastleManager.InCastleWarArea(this);
@@ -1364,7 +1364,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Grobal2.RM_MOVEFAIL:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ObjectId, m_nCurrX, m_nCurrY, m_btDirection);
+                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ObjectId, m_nCurrX, m_nCurrY, Direction);
                     CharDesc = new TCharDesc();
                     CharDesc.Feature = BaseObject.GetFeatureToLong();
                     CharDesc.Status = BaseObject.m_nCharStatus;
@@ -1802,7 +1802,7 @@ namespace GameSvr.Player
                         MessageBodyWL.lParam2 = M2Share.ObjectManager.Get(ProcessMsg.nParam3).m_nCurrY;
                         MessageBodyWL.lTag1 = ProcessMsg.nParam3;
                         MessageBodyWL.lTag2 = ProcessMsg.wParam;
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.m_btDirection);
+                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.Direction);
                         SendSocket(m_DefMsg, EDcode.EncodeBuffer(MessageBodyWL));
                     }
                     break;

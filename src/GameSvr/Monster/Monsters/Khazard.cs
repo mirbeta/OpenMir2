@@ -11,12 +11,11 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            short nx = 0;
-            short ny = 0;
-            var time1 = -1;
+            short nX = 0;
+            short nY = 0;
             if (!m_boDeath && !bo554 && !m_boGhost && m_wStatusTimeArr[Grobal2.POISON_STONE] == 0)
             {
-                time1 = M2Share.RandomNumber.Random(2);
+                var time1 = M2Share.RandomNumber.Random(2);
                 if (m_TargetCret != null)
                 {
                     m_nTargetX = m_TargetCret.m_nCurrX;
@@ -25,9 +24,9 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (time1 == 0)
                         {
-                            GetFrontPosition(ref nx, ref ny);
+                            GetFrontPosition(ref nX, ref nY);
                             m_TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                            m_TargetCret.SpaceMove(m_sMapName, nx, ny, 0);
+                            m_TargetCret.SpaceMove(m_sMapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(m_TargetCret.m_btAntiPoison + 7) <= 6)
                             {
                                 m_TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 35, 2);
@@ -38,10 +37,10 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (m_TargetCret.m_WAbil.HP <= m_TargetCret.m_WAbil.MaxHP / 2)
                             {
-                                GetFrontPosition(ref nx, ref ny);
+                                GetFrontPosition(ref nX, ref nY);
                             }
                             m_TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
-                            m_TargetCret.SpaceMove(m_sMapName, nx, ny, 0);
+                            m_TargetCret.SpaceMove(m_sMapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(m_TargetCret.m_btAntiPoison + 7) <= 6)
                             {
                                 m_TargetCret.MakePosion(Grobal2.POISON_DECHEALTH, 35, 2);

@@ -18,14 +18,11 @@ namespace GameSvr.Monster.Monsters
 
         private void sub_4A65C4()
         {
-            int n10;
-            TBaseObject BaseObject;
             m_WAbil.HP = 0;
-            var WAbil = m_WAbil;
-            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
+            var nPower = M2Share.RandomNumber.Random(HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC) + 1) + HUtil32.LoWord(m_WAbil.DC);
             for (var i = 0; i < m_VisibleActors.Count; i++)
             {
-                BaseObject = m_VisibleActors[i].BaseObject;
+                var BaseObject = m_VisibleActors[i].BaseObject;
                 if (BaseObject.m_boDeath)
                 {
                     continue;
@@ -34,13 +31,13 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (Math.Abs(m_nCurrX - BaseObject.m_nCurrX) <= 1 && Math.Abs(m_nCurrY - BaseObject.m_nCurrY) <= 1)
                     {
-                        n10 = 0;
-                        n10 += BaseObject.GetHitStruckDamage(this, nPower / 2);
-                        n10 += BaseObject.GetMagStruckDamage(this, nPower / 2);
-                        if (n10 > 0)
+                        var damage = 0;
+                        damage += BaseObject.GetHitStruckDamage(this, nPower / 2);
+                        damage += BaseObject.GetMagStruckDamage(this, nPower / 2);
+                        if (damage > 0)
                         {
-                            BaseObject.StruckDamage(n10);
-                            BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)n10, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "", 700);
+                            BaseObject.StruckDamage(damage);
+                            BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_10101, (short)damage, BaseObject.m_WAbil.HP, BaseObject.m_WAbil.MaxHP, ObjectId, "", 700);
                         }
                     }
                 }
