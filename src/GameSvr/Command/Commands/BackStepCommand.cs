@@ -25,11 +25,11 @@ namespace GameSvr.Command.Commands
             nType = HUtil32._MIN(nType, 8);
             if (nType == 0)
             {
-                PlayObject.CharPushed(PlayObject.GetBackDir(PlayObject.m_btDirection), nCount);
+                PlayObject.CharPushed(PlayObject.GetBackDir(PlayObject.Direction), nCount);
             }
             else
             {
-                PlayObject.CharPushed((byte)M2Share.RandomNumber.Random(nType), nCount);
+                PlayObject.CharPushed(M2Share.RandomNumber.RandomByte((byte)nType), nCount);
             }
         }
     }

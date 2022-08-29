@@ -43,13 +43,13 @@ namespace GameSvr.Npc
         {
             if (M2Share.RandomNumber.Random(40) == 0)
             {
-                this.TurnTo((byte)M2Share.RandomNumber.Random(8));
+                this.TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
             else
             {
                 if (M2Share.RandomNumber.Random(30) == 0)
                 {
-                    this.SendRefMsg(Grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                    this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
                 }
             }
             base.Run();

@@ -140,7 +140,7 @@ namespace GameSvr.Player
                         if (m_btAttackSkillCount <= 0)
                         {
                             m_btAttackSkillCount = (byte)(7 - m_MagicArr[SpellsDef.SKILL_YEDO].btLevel);
-                            m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
+                            m_btAttackSkillPointCount = M2Share.RandomNumber.RandomByte(m_btAttackSkillCount);
                         }
                     }
                     m_nHealthTick -= 30;
@@ -387,7 +387,7 @@ namespace GameSvr.Player
                     if ((HUtil32.GetTickCount() - m_dwDoMotaeboTick) > 3 * 1000)
                     {
                         m_dwDoMotaeboTick = HUtil32.GetTickCount();
-                        m_btDirection = (byte)nTargetX;
+                        Direction = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
                         if (m_WAbil.MP >= nSpellPoint)
                         {
@@ -396,7 +396,7 @@ namespace GameSvr.Player
                                 DamageSpell(nSpellPoint);
                                 HealthSpellChanged();
                             }
-                            if (DoMotaebo(m_btDirection, UserMagic.btLevel))
+                            if (DoMotaebo(Direction, UserMagic.btLevel))
                             {
                                 if (UserMagic.btLevel < 3)
                                 {
@@ -465,7 +465,7 @@ namespace GameSvr.Player
                     result = true;
                     break;
                 default:
-                    m_btDirection = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nTargetX, nTargetY); ;
+                    Direction = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, nTargetX, nTargetY); ;
                     TBaseObject BaseObject = null;
                     if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {

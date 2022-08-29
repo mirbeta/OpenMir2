@@ -59,7 +59,7 @@ namespace GameSvr.Actor
                         wHitMode = Grobal2.RM_HIT;
                     }
                 }
-                m_btDirection = nDir;
+                Direction = nDir;
                 if (TargeTBaseObject == null)
                 {
                     AttackTarget = GetPoseCreate();
@@ -143,7 +143,7 @@ namespace GameSvr.Actor
                             break;
                     }
                 }
-                SendAttackMsg(wIdent, m_btDirection, m_nCurrX, m_nCurrY);
+                SendAttackMsg(wIdent, Direction, m_nCurrX, m_nCurrY);
             }
             catch (Exception e)
             {
@@ -266,7 +266,7 @@ namespace GameSvr.Actor
             short nX = 0;
             short nY = 0;
             nSecPwr = HUtil32.Round(nSecPwr * M2Share.g_Config.nSwordLongPowerRate / 100);
-            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, 2, ref nX, ref nY))
+            if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, Direction, 2, ref nX, ref nY))
             {
                 TBaseObject BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
                 if (BaseObject != null)
@@ -297,7 +297,7 @@ namespace GameSvr.Actor
             TBaseObject BaseObject;
             while (true)
             {
-                n10 = (m_btDirection + M2Share.g_Config.WideAttack[nC]) % 8;
+                n10 = (Direction + M2Share.g_Config.WideAttack[nC]) % 8;
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, n10, 1, ref nX, ref nY))
                 {
                     BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
@@ -326,7 +326,7 @@ namespace GameSvr.Actor
             TBaseObject BaseObject;
             while (true)
             {
-                n10 = (m_btDirection + M2Share.g_Config.CrsAttack[nC]) % 8;
+                n10 = (Direction + M2Share.g_Config.CrsAttack[nC]) % 8;
                 if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, n10, 1, ref nX, ref nY))
                 {
                     BaseObject = (TBaseObject)m_PEnvir.GetMovingObject(nX, nY, true);
@@ -362,12 +362,12 @@ namespace GameSvr.Actor
             short nX = 0;
             short nY = 0;
             TBaseObject BaseObject = null;
-            byte btDir = m_btDirection;
+            byte btDir = Direction;
             m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, 1, ref nX, ref nY);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(m_btDirection, 2);
+            btDir = M2Share.sub_4B2F80(Direction, 2);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
-            btDir = M2Share.sub_4B2F80(m_btDirection, 6);
+            btDir = M2Share.sub_4B2F80(Direction, 6);
             _Attack_sub_4C1E5C_sub_4C1DC0(ref BaseObject, btDir, ref nX, ref nY, nSecPwr);
         }
 

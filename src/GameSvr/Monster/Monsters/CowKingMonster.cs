@@ -26,8 +26,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Attack(TBaseObject TargeTBaseObject, byte nDir)
         {
-            var WAbil = m_WAbil;
-            var nPower = GetAttackPower(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC));
+            var nPower = GetAttackPower(HUtil32.LoWord(m_WAbil.DC), HUtil32.HiWord(m_WAbil.DC) - HUtil32.LoWord(m_WAbil.DC));
             HitMagAttackTarget(TargeTBaseObject, nPower / 2, nPower / 2, true);
         }
 
@@ -95,7 +94,7 @@ namespace GameSvr.Monster.Monsters
             base.Run();
         }
 
-        public int sub_4C3538()
+        private int sub_4C3538()
         {
             int result = 0;
             int nC = -1;

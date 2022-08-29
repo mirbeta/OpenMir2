@@ -226,14 +226,14 @@ namespace GameSvr.Actor
             }
         }
 
-        public virtual void SearchViewRange_Death()
+        public void SearchViewRangeDeath()
         {
             if (m_PEnvir == null)
             {
                 return;
             }
             m_boIsVisibleActive = false;
-            for (int i = 0; i < m_VisibleActors.Count; i++)
+            for (var i = 0; i < m_VisibleActors.Count; i++)
             {
                 m_VisibleActors[i].nVisibleFlag = 0;
             }
@@ -241,23 +241,22 @@ namespace GameSvr.Actor
             var nEndX = m_nCurrX + m_nViewRange;
             var nStartY = m_nCurrY - m_nViewRange;
             var nEndY = m_nCurrY + m_nViewRange;
-            MapCellinfo MapCellInfo;
             for (var n18 = nStartX; n18 <= nEndX; n18++)
             {
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
                 {
                     var mapCell = false;
-                    MapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
-                    if (mapCell && (MapCellInfo.ObjList != null))
+                    var mapCellInfo = m_PEnvir.GetMapCellInfo(n18, n1C, ref mapCell);
+                    if (mapCell && (mapCellInfo.ObjList != null))
                     {
                         var nIdx = 0;
                         while (true)
                         {
-                            if (MapCellInfo.Count <= nIdx)
+                            if (mapCellInfo.Count <= nIdx)
                             {
                                 break;
                             }
-                            var OSObject = MapCellInfo.ObjList[nIdx];
+                            var OSObject = mapCellInfo.ObjList[nIdx];
                             if (OSObject != null)
                             {
                                 if (OSObject.CellType == CellType.OS_MOVINGOBJECT)
@@ -265,12 +264,12 @@ namespace GameSvr.Actor
                                     if ((HUtil32.GetTickCount() - OSObject.dwAddTime) >= 60 * 1000)
                                     {
                                         OSObject = null;
-                                        MapCellInfo.Remove(nIdx);
-                                        if (MapCellInfo.Count > 0)
+                                        mapCellInfo.Remove(nIdx);
+                                        if (mapCellInfo.Count > 0)
                                         {
                                             continue;
                                         }
-                                        MapCellInfo.Dispose();
+                                        mapCellInfo.Dispose();
                                         break;
                                     }
                                 }
@@ -280,12 +279,12 @@ namespace GameSvr.Actor
                                     {
                                         Dispose(OSObject.CellObj);
                                         Dispose(OSObject);
-                                        MapCellInfo.Remove(nIdx);
-                                        if (MapCellInfo.Count > 0)
+                                        mapCellInfo.Remove(nIdx);
+                                        if (mapCellInfo.Count > 0)
                                         {
                                             continue;
                                         }
-                                        MapCellInfo.Dispose();
+                                        mapCellInfo.Dispose();
                                     }
                                 }
                             }

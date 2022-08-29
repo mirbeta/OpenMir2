@@ -54,12 +54,12 @@ namespace GameSvr.Monster.Monsters
         protected virtual void ComeOut()
         {
             this.m_boFixedHideMode = false;
-            this.SendRefMsg(Grobal2.RM_DIGUP, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
         }
 
         protected virtual void ComeDown()
         {
-            this.SendRefMsg(Grobal2.RM_DIGDOWN, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_DIGDOWN, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
             for (var i = 0; i < this.m_VisibleActors.Count; i++)
             {
                 Dispose(m_VisibleActors[i]);

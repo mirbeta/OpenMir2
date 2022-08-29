@@ -173,7 +173,7 @@ namespace GameSvr.Actor
             int nDamage;
             TBaseObject BaseObject;
             IList<TBaseObject> BaseObjectList = new List<TBaseObject>();
-            this.m_btDirection = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
+            this.Direction = M2Share.GetNextDirection(this.m_nCurrX, this.m_nCurrY, TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY);
             this.m_PEnvir.GetBaseObjects(TargeTBaseObject.m_nCurrX, TargeTBaseObject.m_nCurrY, false, BaseObjectList);
             for (var i = 0; i < BaseObjectList.Count; i++)
             {
@@ -192,7 +192,7 @@ namespace GameSvr.Actor
             }
             BaseObjectList.Clear();
             BaseObjectList = null;
-            this.SendRefMsg(Grobal2.RM_HIT, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
         }
 
         protected override void DelTargetCreat()
@@ -265,11 +265,11 @@ namespace GameSvr.Actor
             if (M2Share.RandomNumber.Random(20) != 0) return;
             if (M2Share.RandomNumber.Random(4) == 1)
             {
-                this.TurnTo((byte)M2Share.RandomNumber.Random(8));
+                this.TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
             else
             {
-                this.WalkTo(this.m_btDirection, false);
+                this.WalkTo(this.Direction, false);
             }
         }
     }

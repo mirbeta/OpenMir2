@@ -35,7 +35,7 @@ namespace GameSvr.Configs
             playObject.m_boNoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
             playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率
             playObject.m_btJob = (byte)ReadInteger("Info", "Job", 0);
-            playObject.m_btGender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
+            playObject.Gender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
             playObject.m_btHair = (byte)ReadInteger("Info", "Hair", 0);
             playObject.m_Abil.Level = (byte)ReadInteger("Info", "Level", 1);
             playObject.m_Abil.MaxExp = playObject.GetLevelExp(playObject.m_Abil.Level);

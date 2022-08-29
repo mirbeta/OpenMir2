@@ -28,4 +28,9 @@ namespace GameSvr.Actor
         Man = 0,
         WoMan = 1
     }
+
+    public enum Job
+    {
+        
+    }
 }

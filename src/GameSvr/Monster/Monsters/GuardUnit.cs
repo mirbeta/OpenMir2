@@ -5,11 +5,9 @@ namespace GameSvr.Monster.Monsters
 {
     public class GuardUnit : AnimalObject
     {
-        public int dw54C = 0;
-        public int m_nX550 = 0;
-        public int m_nY554 = 0;
-        public byte m_nDirection = 0;
-
+        public short m_nX550;
+        public short m_nY554;
+        
         public override void Struck(TBaseObject hiter)
         {
             base.Struck(hiter);

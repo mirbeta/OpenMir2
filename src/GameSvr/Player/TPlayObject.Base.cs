@@ -654,7 +654,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var MessageBodyWL = new TMessageBodyWL();
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, m_nCurrX, m_nCurrY, HUtil32.MakeWord(m_btDirection, m_nLight));
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ObjectId, m_nCurrX, m_nCurrY, HUtil32.MakeWord(Direction, m_nLight));
             MessageBodyWL.lParam1 = GetFeatureToLong();
             MessageBodyWL.lParam2 = m_nCharStatus;
             if (m_boAllowGroup)
@@ -760,7 +760,7 @@ namespace GameSvr.Player
                         Dispose(UserItem);
                     }
                     UserItem = new TUserItem();
-                    var sItem = m_btGender == PlayGender.Man
+                    var sItem = Gender == PlayGender.Man
                         ? M2Share.g_Config.sClothsMan
                         : M2Share.g_Config.sClothsWoman;
                     if (M2Share.UserEngine.CopyToUserItemFromName(sItem, ref UserItem))
@@ -1408,16 +1408,16 @@ namespace GameSvr.Player
                             {
                                 if (BaseObject.m_boSkeleton)
                                 {
-                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                    SendMsg(BaseObject, Grobal2.RM_SKELETON, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                 }
                                 else
                                 {
-                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
+                                    SendMsg(BaseObject, Grobal2.RM_DEATH, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, "");
                                 }
                             }
                             else
                             {
-                                SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.m_btDirection, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
+                                SendMsg(BaseObject, Grobal2.RM_TURN, BaseObject.Direction, BaseObject.m_nCurrX, BaseObject.m_nCurrY, 0, BaseObject.GetShowName());
                             }
                         }
                     }
@@ -1546,7 +1546,7 @@ namespace GameSvr.Player
                 }
                 if (!string.IsNullOrEmpty(m_sDearName))
                 {
-                    if (m_btGender == PlayGender.Man)
+                    if (Gender == PlayGender.Man)
                     {
                         sDearName = format(M2Share.g_sManDearName, m_sDearName);
                     }
@@ -1603,7 +1603,7 @@ namespace GameSvr.Player
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 if (m_DearHuman != null)
                 {
-                    if (m_btGender == PlayGender.Man)
+                    if (Gender == PlayGender.Man)
                     {
                         sSayMsg = M2Share.g_sManLongOutDearOnlineMsg.Replace("%d", m_sDearName);
                         sSayMsg = sSayMsg.Replace("%s", m_sCharName);

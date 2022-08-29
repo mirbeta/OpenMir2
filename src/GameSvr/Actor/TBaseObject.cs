@@ -35,11 +35,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 所在方向
         /// </summary>
-        public byte m_btDirection = 0;
+        public byte Direction = 0;
         /// <summary>
         /// 性别
         /// </summary>
-        public PlayGender m_btGender = 0;
+        public PlayGender Gender = 0;
         /// <summary>
         /// 人物的头发
         /// </summary>
@@ -108,18 +108,17 @@ namespace GameSvr.Actor
         public byte[] m_QuestUnitOpen;
         public byte[] m_QuestUnit;
         public byte[] m_QuestFlag;
-        public long m_nCharStatusEx = 0;
+        protected long m_nCharStatusEx = 0;
         /// <summary>
         /// 怪物经验值
         /// </summary>
         public int m_dwFightExp = 0;
         public TAbility m_WAbil = null;
-        public TAddAbility m_AddAbil = null;
+        private TAddAbility m_AddAbil = null;
         /// <summary>
         /// 可视范围大小
         /// </summary>
-        public int m_nViewRange = 0;
-
+        protected int m_nViewRange = 0;
         public ushort[] m_wStatusTimeArr = new ushort[12];
         public int[] m_dwStatusArrTick = new int[12];
         public ushort[] m_wStatusArrValue = null;
@@ -137,8 +136,8 @@ namespace GameSvr.Actor
         /// 人物攻击准确度
         /// </summary>
         public byte m_btHitPoint = 0;
-        public ushort m_nHitPlus = 0;
-        public ushort m_nHitDouble = 0;
+        private ushort m_nHitPlus = 0;
+        private ushort m_nHitDouble = 0;
         /// <summary>
         /// 记忆使用间隔
         /// </summary>
@@ -305,7 +304,6 @@ namespace GameSvr.Actor
         /// </summary>
         public int m_dwReAliveTick = 0;
         public MonGenInfo m_pMonGen = null;
-
         /// <summary>
         /// 怪物所拿的武器
         /// </summary>
@@ -361,12 +359,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 麻痹戒指
         /// </summary>
-        public bool m_boParalysis = false;
+        private bool m_boParalysis = false;
         public bool m_boUnParalysis = false;
         /// <summary>
         /// 复活戒指
         /// </summary>
-        public bool m_boRevival = false;
+        private bool m_boRevival = false;
         /// <summary>
         /// 防复活
         /// </summary>
@@ -382,7 +380,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 治愈戒指
         /// </summary>
-        public bool m_boRecoveryRing = false;
+        private bool m_boRecoveryRing = false;
         /// <summary>
         /// 未知戒指
         /// </summary>
@@ -618,7 +616,7 @@ namespace GameSvr.Actor
             m_boDeath = false;
             m_dwDeathTick = 0;
             m_SendRefMsgTick = HUtil32.GetTickCount();
-            m_btDirection = 4;
+            Direction = 4;
             m_btRaceServer = Grobal2.RC_ANIMAL;
             m_btRaceImg = 0;
             m_btHair = 0;
@@ -1059,7 +1057,7 @@ namespace GameSvr.Actor
             {
                 nOX = m_nCurrX;
                 nOY = m_nCurrY;
-                m_btDirection = btDir;
+                Direction = btDir;
                 nNX = 0;
                 nNY = 0;
                 switch (btDir)
@@ -1106,7 +1104,7 @@ namespace GameSvr.Actor
                     }
                     if (m_Master != null)
                     {
-                        m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.m_btDirection, 1, ref n20, ref n24);
+                        m_Master.m_PEnvir.GetNextPosition(m_Master.m_nCurrX, m_Master.m_nCurrY, m_Master.Direction, 1, ref n20, ref n24);
                         if (nNX == n20 && nNY == n24)
                         {
                             bo29 = false;
@@ -1532,10 +1530,10 @@ namespace GameSvr.Actor
             short nx = 0;
             short ny = 0;
             int result = 0;
-            byte olddir = m_btDirection;
+            byte olddir = Direction;
             int oldx = m_nCurrX;
             int oldy = m_nCurrY;
-            m_btDirection = nDir;
+            Direction = nDir;
             byte nBackDir = GetBackDir(nDir);
             for (var i = 0; i < nPushCount; i++)
             {
@@ -1563,10 +1561,10 @@ namespace GameSvr.Actor
                     break;
                 }
             }
-            m_btDirection = nBackDir;
+            Direction = nBackDir;
             if (result == 0)
             {
-                m_btDirection = olddir;
+                Direction = olddir;
             }
             return result;
         }
@@ -1703,7 +1701,7 @@ namespace GameSvr.Actor
             Envirnoment Envir = m_PEnvir;
             nX = m_nCurrX;
             nY = m_nCurrY;
-            switch (m_btDirection)
+            switch (Direction)
             {
                 case Grobal2.DR_UP:
                     if (nY > 0)
@@ -1864,11 +1862,11 @@ namespace GameSvr.Actor
                         SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, m_sMapFileName);
                         if (nInt == 1)
                         {
-                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW2, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW2, Direction, m_nCurrX, m_nCurrY, 0, "");
                         }
                         else
                         {
-                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW, Direction, m_nCurrX, m_nCurrY, 0, "");
                         }
                         m_dwMapMoveTick = HUtil32.GetTickCount();
                         m_bo316 = true;
@@ -2430,7 +2428,7 @@ namespace GameSvr.Actor
                         }
                         m_nHitPlus = (byte)(M2Share.DEFHIT + UserMagic.btLevel);
                         m_btAttackSkillCount = (byte)(7 - UserMagic.btLevel);
-                        m_btAttackSkillPointCount = (byte)M2Share.RandomNumber.Random(m_btAttackSkillCount);
+                        m_btAttackSkillPointCount = M2Share.RandomNumber.RandomByte(m_btAttackSkillCount);
                         break;
                     case SpellsDef.SKILL_FIRESWORD:// 烈火剑法
                         m_nHitDouble = (byte)(4 + UserMagic.btLevel * 4);
@@ -2486,7 +2484,7 @@ namespace GameSvr.Actor
             }
             if (!m_boFixedHideMode)
             {
-                SendRefMsg(Grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                SendRefMsg(Grobal2.RM_TURN, Direction, m_nCurrX, m_nCurrY, 0, "");
             }
             return result;
         }
@@ -3354,7 +3352,7 @@ namespace GameSvr.Actor
                         nDress = (byte)(StdItem.Shape * 2);
                     }
                 }
-                nDress += (byte)m_btGender;
+                nDress += (byte)Gender;
                 byte nWeapon = 0;
                 if (m_UseItems[Grobal2.U_WEAPON] != null && m_UseItems[Grobal2.U_WEAPON].wIndex > 0)// 武器
                 {
@@ -3364,8 +3362,8 @@ namespace GameSvr.Actor
                         nWeapon = (byte)(StdItem.Shape * 2);
                     }
                 }
-                nWeapon += (byte)m_btGender;
-                byte nHair = (byte)(m_btHair * 2 + (byte)m_btGender);
+                nWeapon += (byte)Gender;
+                byte nHair = (byte)(m_btHair * 2 + (byte)Gender);
                 result = Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
                 return result;
             }
@@ -3599,7 +3597,7 @@ namespace GameSvr.Actor
                 }
                 if (result)
                 {
-                    SendRefMsg(nIdent, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                    SendRefMsg(nIdent, Direction, m_nCurrX, m_nCurrY, 0, "");
                 }
             }
             catch (Exception e)
@@ -3714,7 +3712,7 @@ namespace GameSvr.Actor
 
         protected void TurnTo(byte nDir)
         {
-            m_btDirection = nDir;
+            Direction = nDir;
             SendRefMsg(Grobal2.RM_TURN, nDir, m_nCurrX, m_nCurrY, 0, "");
         }
 
@@ -4695,7 +4693,7 @@ namespace GameSvr.Actor
             Envir = m_PEnvir;
             nX = m_nCurrX;
             nY = m_nCurrY;
-            switch (m_btDirection)
+            switch (Direction)
             {
                 case Grobal2.DR_UP:
                     if (nY < (Envir.WHeight - 1))
@@ -5713,7 +5711,7 @@ namespace GameSvr.Actor
             m_boDeath = false;
             m_boInvisible = false;
 
-            SendRefMsg(Grobal2.RM_TURN, m_btDirection, m_nCurrX, m_nCurrY, GetFeatureToLong(), "");
+            SendRefMsg(Grobal2.RM_TURN, Direction, m_nCurrX, m_nCurrY, GetFeatureToLong(), "");
 
             if (M2Share.g_Config.boMonSayMsg)
             {

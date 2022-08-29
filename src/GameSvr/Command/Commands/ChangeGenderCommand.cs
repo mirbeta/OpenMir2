@@ -41,9 +41,9 @@ namespace GameSvr.Command.Commands
             var m_PlayObject = M2Share.UserEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.m_btGender != playSex)
+                if (m_PlayObject.Gender != playSex)
                 {
-                    m_PlayObject.m_btGender = playSex;
+                    m_PlayObject.Gender = playSex;
                     m_PlayObject.FeatureChanged();
                     PlayObject.SysMsg(m_PlayObject.m_sCharName + " 的性别已改变。", MsgColor.Green, MsgType.Hint);
                 }

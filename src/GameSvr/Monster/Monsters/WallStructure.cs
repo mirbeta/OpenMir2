@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Initialize()
         {
-            this.m_btDirection = 0;
+            this.Direction = 0;
             base.Initialize();
         }
 
@@ -37,8 +37,8 @@ namespace GameSvr.Monster.Monsters
             {
                 n08 = 0;
             }
-            this.m_btDirection = n08;
-            this.SendRefMsg(Grobal2.RM_ALIVE, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+            this.Direction = n08;
+            this.SendRefMsg(Grobal2.RM_ALIVE, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
         }
 
         public override void Die()
@@ -76,10 +76,10 @@ namespace GameSvr.Monster.Monsters
             {
                 n08 = 4;
             }
-            if (this.m_btDirection != n08 && n08 < 5)
+            if (this.Direction != n08 && n08 < 5)
             {
-                this.m_btDirection = (byte)n08;
-                this.SendRefMsg(Grobal2.RM_DIGUP, this.m_btDirection, this.m_nCurrX, this.m_nCurrY, 0, "");
+                this.Direction = (byte)n08;
+                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.m_nCurrX, this.m_nCurrY, 0, "");
             }
             base.Run();
         }

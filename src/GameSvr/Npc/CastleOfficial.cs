@@ -285,7 +285,7 @@ namespace GameSvr.Npc
                                 ObjUnit.BaseObject.m_Castle = this.m_Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
-                                ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
+                                ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }
@@ -334,7 +334,7 @@ namespace GameSvr.Npc
                                 ObjUnit.BaseObject.m_Castle = this.m_Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                                 ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
-                                ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
+                                ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
                             }
                         }

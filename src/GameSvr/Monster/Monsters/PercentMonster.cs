@@ -6,15 +6,12 @@ namespace GameSvr.Monster.Monsters
 {
     public class PercentMonster : AnimalObject
     {
-        public int n54C = 0;
         public int m_dwThinkTick = 0;
-        public bool bo554 = false;
         public bool m_boDupMode = false;
 
         public PercentMonster() : base()
         {
             m_boDupMode = false;
-            bo554 = false;
             m_dwThinkTick = HUtil32.GetTickCount();
             m_nViewRange = 5;
             m_nRunTime = 250;
@@ -30,7 +27,6 @@ namespace GameSvr.Monster.Monsters
 
         private bool Think()
         {
-            var result = false;
             if ((HUtil32.GetTickCount() - m_dwThinkTick) > 3 * 1000)
             {
                 m_dwThinkTick = HUtil32.GetTickCount();
@@ -47,15 +43,15 @@ namespace GameSvr.Monster.Monsters
             {
                 int nOldX = m_nCurrX;
                 int nOldY = m_nCurrY;
-                WalkTo((byte)M2Share.RandomNumber.Random(8), false);
+                WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX == m_nCurrX && nOldY == m_nCurrY)
                 {
-                    return result;
+                    return false;
                 }
                 m_boDupMode = false;
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         protected virtual bool AttackTarget()

@@ -1467,13 +1467,13 @@ namespace GameSvr.Npc
                 switch (QuestConditionInfo.nParam1)
                 {
                     case 1:// 要求相同性别
-                        if (PoseHuman.m_btGender == PlayObject.m_btGender)
+                        if (PoseHuman.Gender == PlayObject.Gender)
                         {
                             result = true;
                         }
                         break;
                     case 2:// 要求不同性别
-                        if (PoseHuman.m_btGender != PlayObject.m_btGender)
+                        if (PoseHuman.Gender != PlayObject.Gender)
                         {
                             result = true;
                         }
@@ -1509,7 +1509,7 @@ namespace GameSvr.Npc
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.m_btRaceServer == Grobal2.RC_PLAYOBJECT))
             {
-                if (PoseHuman.m_btGender == Enum.Parse<PlayGender>(btSex.ToString()))
+                if (PoseHuman.Gender == Enum.Parse<PlayGender>(btSex.ToString()))
                 {
                     result = true;
                 }

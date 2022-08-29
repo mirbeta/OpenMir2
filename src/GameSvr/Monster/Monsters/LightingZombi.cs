@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             short nSY = 0;
             short nTX = 0;
             short nTY = 0;
-            m_btDirection = nDir;
+            Direction = nDir;
             SendRefMsg(Grobal2.RM_LIGHTING, 1, m_nCurrX, m_nCurrY, m_TargetCret.ObjectId, "");
             if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, nDir, 1, ref nSX, ref nSY))
             {

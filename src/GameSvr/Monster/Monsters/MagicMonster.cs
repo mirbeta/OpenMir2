@@ -6,7 +6,6 @@ namespace GameSvr.Monster.Monsters
 {
     public class MagicMonster : AnimalObject
     {
-        public int n54C = 0;
         public int m_dwThinkTick = 0;
         public int m_dwSpellTick = 0;
         public bool bo554 = false;
@@ -48,7 +47,7 @@ namespace GameSvr.Monster.Monsters
             {
                 int nOldX = m_nCurrX;
                 int nOldY = m_nCurrY;
-                WalkTo((byte)M2Share.RandomNumber.Random(8), false);
+                WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != m_nCurrX || nOldY != m_nCurrY)
                 {
                     m_boDupMode = false;
@@ -58,7 +57,7 @@ namespace GameSvr.Monster.Monsters
             return result;
         }
 
-        public virtual bool AttackTarget()
+        protected virtual bool AttackTarget()
         {
             var result = false;
             byte bt06 = 0;

@@ -88,7 +88,7 @@ namespace GameSvr.Npc
                     case 1:
                         if (PlayObject.m_Abil.Exp >= nParam3)
                         {
-                            if ((PlayObject.m_Abil.Exp - nParam3) > (int.MaxValue - PlayObject.m_Abil.Exp))
+                            if (PlayObject.m_Abil.Exp - nParam3 > int.MaxValue - PlayObject.m_Abil.Exp)
                             {
                                 dwInt = int.MaxValue - PlayObject.m_Abil.Exp;
                             }
@@ -99,7 +99,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if ((nParam3 - PlayObject.m_Abil.Exp) > (int.MaxValue - nParam3))
+                            if (nParam3 - PlayObject.m_Abil.Exp > int.MaxValue - nParam3)
                             {
                                 dwInt = int.MaxValue - nParam3;
                             }
@@ -147,7 +147,7 @@ namespace GameSvr.Npc
                     case 1:
                         if (PlayObject.m_Abil.Level >= nParam3)
                         {
-                            if ((PlayObject.m_Abil.Level - nParam3) > (short.MaxValue - PlayObject.m_Abil.Level))
+                            if (PlayObject.m_Abil.Level - nParam3 > short.MaxValue - PlayObject.m_Abil.Level)
                             {
                                 dwInt = short.MaxValue - PlayObject.m_Abil.Level;
                             }
@@ -158,7 +158,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            if ((nParam3 - PlayObject.m_Abil.Level) > (int.MaxValue - nParam3))
+                            if (nParam3 - PlayObject.m_Abil.Level > int.MaxValue - nParam3)
                             {
                                 dwInt = int.MaxValue - nParam3;
                             }
@@ -330,7 +330,7 @@ namespace GameSvr.Npc
                 case "$SERVERRUNTIME":
                     var nSecond = (HUtil32.GetTickCount() - M2Share.g_dwStartTick) / 1000;
                     var wHour = nSecond / 3600;
-                    var wMinute = (nSecond / 60) % 60;
+                    var wMinute = nSecond / 60 % 60;
                     var wSecond = nSecond % 60;
                     sText = format("{0}:{1}:{2}", wHour, wMinute, wSecond);
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
@@ -601,7 +601,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINTIME>", sText);
                     return;
                 case "$LOGINLONG":
-                    sText = ((HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000) + "分钟";
+                    sText = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000 + "分钟";
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
@@ -971,7 +971,7 @@ namespace GameSvr.Npc
                     }
                 case "$BSNAME":// 上次攻击我的名称
                     {
-                        if ((PlayObject.m_LastHiter != null))
+                        if (PlayObject.m_LastHiter != null)
                         {
                             sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.m_LastHiter.m_sCharName);
                         }
@@ -1088,7 +1088,7 @@ namespace GameSvr.Npc
                             for (var j = 0; j < MonGen.CertList.Count; j++)
                             {
                                 BaseObject = MonGen.CertList[j];
-                                if ((BaseObject.m_Master == null) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                if (BaseObject.m_Master == null && !BaseObject.m_boDeath && !BaseObject.m_boGhost)
                                 {
                                     MonGenCount++;
                                 }
@@ -1107,7 +1107,7 @@ namespace GameSvr.Npc
                             for (var j = 0; j < MonGen.CertList.Count; j++)
                             {
                                 BaseObject = MonGen.CertList[j];
-                                if ((BaseObject.m_Master == null) && (string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                if (BaseObject.m_Master == null && string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.m_boDeath && !BaseObject.m_boGhost)
                                 {
                                     MonGenCount++;
                                 }
@@ -1133,7 +1133,7 @@ namespace GameSvr.Npc
                                 for (var j = 0; j < MonGen.CertList.Count; j++)
                                 {
                                     BaseObject = MonGen.CertList[j];
-                                    if ((BaseObject.m_Master == null) && (BaseObject.m_PEnvir == Envir) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                    if (BaseObject.m_Master == null && BaseObject.m_PEnvir == Envir && !BaseObject.m_boDeath && !BaseObject.m_boGhost)
                                     {
                                         MonGenCount++;
                                     }
@@ -1152,7 +1152,7 @@ namespace GameSvr.Npc
                                 for (var j = 0; j < MonGen.CertList.Count; j++)
                                 {
                                     BaseObject = MonGen.CertList[j];
-                                    if ((BaseObject.m_Master == null) && (BaseObject.m_PEnvir == Envir) && (string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0) && (!BaseObject.m_boDeath) && (!BaseObject.m_boGhost))
+                                    if (BaseObject.m_Master == null && BaseObject.m_PEnvir == Envir && string.Compare(BaseObject.m_sCharName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.m_boDeath && !BaseObject.m_boGhost)
                                     {
                                         MonGenCount++;
                                     }
@@ -1300,9 +1300,9 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
-                if ((n18 >= 0 && n18 <= 15) && PlayObject.m_UseItems[n18] != null && (PlayObject.m_UseItems[n18].wIndex > 0))
+                if (n18 >= 0 && n18 <= 15 && PlayObject.m_UseItems[n18] != null && PlayObject.m_UseItems[n18].wIndex > 0)
                 {
-                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_UseItems[n18].MakeIndex).ToString());
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_UseItems[n18].MakeIndex.ToString());
                 }
                 else
                 {
@@ -1314,7 +1314,7 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 var n18 = HUtil32.Str_ToInt(s14, -1);
-                if ((n18 >= 0 && n18 <= 15) && PlayObject.m_UseItems[n18] != null && (PlayObject.m_UseItems[n18].wIndex > 0))
+                if (n18 >= 0 && n18 <= 15 && PlayObject.m_UseItems[n18] != null && PlayObject.m_UseItems[n18].wIndex > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.UserEngine.GetStdItemName(PlayObject.m_UseItems[n18].wIndex));
                 }
@@ -1353,7 +1353,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$CLIENTVERSION")//显示当前用户客户端版本
             {
-                sMsg = ReplaceVariableText(sMsg, "<$CLIENTVERSION>", (PlayObject.m_nSoftVersionDate).ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$CLIENTVERSION>", PlayObject.m_nSoftVersionDate.ToString());
                 return;
             }
             if (sVariable == "$QUERYYBDEALLOG") // 查看元宝交易记录 
@@ -1375,54 +1375,52 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$GOLDCOUNT")// 包裹金币数
             {
-                sText = (PlayObject.m_nGold).ToString();
+                sText = PlayObject.m_nGold.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$GOLDCOUNT>", sText);
                 return;
             }
             if (sVariable == "$GOLDCOUNTX")// 包裹最多可携带金币数
             {
-                sText = (PlayObject.m_nGoldMax).ToString();
+                sText = PlayObject.m_nGoldMax.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$GOLDCOUNTX>", sText);
                 return;
             }
             if (sVariable == "$LUCKY")// 幸运  增加人物暴击
             {
-                sText = (PlayObject.m_nLuck).ToString();
+                sText = PlayObject.m_nLuck.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$LUCKY>", sText);
                 return;
             }
             if (sVariable == "$GAMEGOLD")// 元宝
             {
-                sText = (PlayObject.m_nGameGold).ToString();
+                sText = PlayObject.m_nGameGold.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLD>", sText);
                 return;
             }
             if (sVariable == "$REQUESTCASTLEWARITEM") // 祖玛头像
             {
-                sText = M2Share.g_Config.sZumaPiece;
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", M2Share.g_Config.sZumaPiece);
                 return;
             }
             if (sVariable == "$REQUESTCASTLEWARDAY")// 几天后开始攻城
             {
-                sText = (M2Share.g_Config.nStartCastleWarDays).ToString();
+                sText = M2Share.g_Config.nStartCastleWarDays.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
                 return;
             }
             if (sVariable == "$REQUESTBUILDGUILDITEM")// 沃玛号角
             {
-                sText = M2Share.g_Config.sWomaHorn;
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", M2Share.g_Config.sWomaHorn);
                 return;
             }
             if (sVariable == "$GUILDWARFEE") // 行会战金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", (M2Share.g_Config.nGuildWarPrice).ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", M2Share.g_Config.nGuildWarPrice.ToString());
                 return;
             }
             if (sVariable == "$BUILDGUILDFEE")// 建立行会所需的金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", (M2Share.g_Config.nBuildGuildPrice).ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.g_Config.nBuildGuildPrice.ToString());
                 return;
             }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN(", "$HUMAN(".Length))
@@ -1512,27 +1510,27 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(nVarValue, 0, 99))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nVal[nVarValue]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_nVal[nVarValue].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 100, 199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[nVarValue - 100]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalVal[nVarValue - 100].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 200, 299))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_DyVal[nVarValue - 200]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_DyVal[nVarValue - 200].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 300, 399))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nMval[nVarValue - 300]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_nMval[nVarValue - 300].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 400, 499))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobaDyMval[nVarValue - 400]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobaDyMval[nVarValue - 400].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 500, 599))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_nInteger[nVarValue - 500]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_nInteger[nVarValue - 500].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 600, 699))
                     {
@@ -1544,7 +1542,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 800, 1199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (M2Share.g_Config.GlobalVal[nVarValue - 700]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.g_Config.GlobalVal[nVarValue - 700].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599))
                     {
@@ -1556,7 +1554,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1700, 1799)) //个人服务器字符串变量W
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", (PlayObject.m_ServerIntVal[nVarValue - 1700]).ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.m_ServerIntVal[nVarValue - 1700].ToString());
                     }
                 }
             }
@@ -1630,7 +1628,7 @@ namespace GameSvr.Npc
         {
             string sLabel = string.Empty;
             PlayObject.m_nScriptGotoCount = 0;
-            if ((!string.IsNullOrEmpty(sData)) && (sData[0] == '@'))// 处理脚本命令 @back 返回上级标签内容
+            if (!string.IsNullOrEmpty(sData) && sData[0] == '@')// 处理脚本命令 @back 返回上级标签内容
             {
                 HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
                 if (PlayObject.m_sScriptCurrLable != sLabel)

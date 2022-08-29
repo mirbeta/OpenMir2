@@ -13,12 +13,12 @@ namespace GameSvr.Monster.Monsters
         private void sub_4A9F6C(byte btDir)
         {
             TBaseObject BaseObject;
-            m_btDirection = btDir;
+            Direction = btDir;
             var WAbil = m_WAbil;
             var n10 = M2Share.RandomNumber.Random(HUtil32.HiWord(WAbil.DC) - HUtil32.LoWord(WAbil.DC) + 1) + HUtil32.LoWord(WAbil.DC);
             if (n10 > 0)
             {
-                SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
                 BaseObject = GetPoseCreate();
                 if (BaseObject != null && IsProperTarget(BaseObject) && m_nAntiMagic >= 0)
                 {

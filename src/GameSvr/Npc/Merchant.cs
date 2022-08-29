@@ -1001,13 +1001,13 @@ namespace GameSvr.Npc
                 }
                 if (M2Share.RandomNumber.Random(50) == 0)
                 {
-                    TurnTo((byte)M2Share.RandomNumber.Random(8));
+                    TurnTo(M2Share.RandomNumber.RandomByte(8));
                 }
                 else
                 {
                     if (M2Share.RandomNumber.Random(50) == 0)
                     {
-                        SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                        SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
                 if (m_boCastle && m_Castle != null && m_Castle.m_boUnderWar)
@@ -1023,7 +1023,7 @@ namespace GameSvr.Npc
                     if (m_boFixedHideMode)
                     {
                         m_boFixedHideMode = false;
-                        SendRefMsg(Grobal2.RM_HIT, m_btDirection, m_nCurrX, m_nCurrY, 0, "");
+                        SendRefMsg(Grobal2.RM_HIT, Direction, m_nCurrX, m_nCurrY, 0, "");
                     }
                 }
                 if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick) > m_dwMoveTime * 1000)
