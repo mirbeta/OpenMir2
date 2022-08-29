@@ -11,7 +11,7 @@ namespace GameSvr.Monster.Monsters
             m_nViewRange = 12;
             m_boWantRefMsg = true;
             m_Castle = null;
-            m_nDirection = 0;
+            Direction = 0;
         }
 
         private void sub_4A6B30(TBaseObject TargeTBaseObject)
@@ -79,9 +79,9 @@ namespace GameSvr.Monster.Monsters
                 }
                 else
                 {
-                    if (m_nDirection >= 0 && Direction != m_nDirection)
+                    if (Direction > 0 && Direction != Direction)
                     {
-                        TurnTo(m_nDirection);
+                        TurnTo(Direction);
                     }
                 }
             }

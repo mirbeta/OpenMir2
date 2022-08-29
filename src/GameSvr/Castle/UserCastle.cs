@@ -231,7 +231,7 @@ namespace GameSvr.Castle
                             ObjUnit.BaseObject.m_Castle = this;
                             ((GuardUnit)ObjUnit.BaseObject).m_nX550 = ObjUnit.nX;
                             ((GuardUnit)ObjUnit.BaseObject).m_nY554 = ObjUnit.nY;
-                            ((GuardUnit)ObjUnit.BaseObject).m_nDirection = 3;
+                            ((GuardUnit)ObjUnit.BaseObject).Direction = 3;
                         }
                         else
                         {
