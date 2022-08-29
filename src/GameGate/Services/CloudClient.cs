@@ -14,7 +14,7 @@ namespace GameGate.Services
     /// </summary>
     public class CloudClient
     {
-        private readonly ClientScoket ClientSocket;
+        private readonly ClientScoket _clientSocket;
         private readonly IPEndPoint _gateEndPoint;
         /// <summary>
         ///  网关游戏与云网关之间检测是否失败（超时）
@@ -39,11 +39,11 @@ namespace GameGate.Services
         /// <summary>
         /// 发送总字节数
         /// </summary>
-        public int SendBytes;
+        private int _sendBytes;
         /// <summary>
         /// 接收总字节数
         /// </summary>
-        public int ReceiveBytes;
+        private int _receiveBytes;
         private int _checkRecviceTick = 0;
         private int _checkServerTick = 0;
         private int _checkServerTimeMin = 0;
@@ -59,41 +59,41 @@ namespace GameGate.Services
 
         public CloudClient(IPEndPoint endPoint, GameGateInfo gameGate)
         {
-            ClientSocket = new ClientScoket();
-            ClientSocket.Host = gameGate.ServerAdress;
-            ClientSocket.Port = gameGate.ServerPort;
-            ClientSocket.OnConnected += ClientSocketConnect;
-            ClientSocket.OnDisconnected += ClientSocketDisconnect;
-            ClientSocket.ReceivedDatagram += ClientSocketRead;
-            ClientSocket.OnError += ClientSocketError;
-            ReceiveBytes = 0;
-            SendBytes = 0;
+            _clientSocket = new ClientScoket();
+            _clientSocket.Host = gameGate.ServerAdress;
+            _clientSocket.Port = gameGate.ServerPort;
+            _clientSocket.OnConnected += ClientSocketConnect;
+            _clientSocket.OnDisconnected += ClientSocketDisconnect;
+            _clientSocket.ReceivedDatagram += ClientSocketRead;
+            _clientSocket.OnError += ClientSocketError;
+            _receiveBytes = 0;
+            _sendBytes = 0;
             _gateEndPoint = endPoint;
         }
 
-        public bool IsConnected => ClientSocket.IsConnected;
+        public bool IsConnected => _clientSocket.IsConnected;
 
         public string GetSocketIp()
         {
-            return $"{ClientSocket.Host}:{ClientSocket.Port}";
+            return $"{_clientSocket.Host}:{_clientSocket.Port}";
         }
 
         public void Start()
         {
-            ClientSocket.Connect();
+            _clientSocket.Connect();
         }
 
         public void ReConnected()
         {
             if (GateReady == false)
             {
-                ClientSocket.Connect();
+                _clientSocket.Connect();
             }
         }
 
         public void Stop()
         {
-            ClientSocket.Disconnect();
+            _clientSocket.Disconnect();
         }
 
         private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -105,8 +105,9 @@ namespace GameGate.Services
             _checkServerTimeMax = 0;
             LogQueue.Enqueue($"[{_gateEndPoint.ToString()}] 云网关智能反外挂服务器[{e.RemoteEndPoint}]链接成功.", 1);
             LogQueue.EnqueueDebugging($"线程[{Guid.NewGuid():N}]云网关智能反外挂服务器连接 {e.RemoteEndPoint} 成功...");
-            ReceiveBytes = 0;
-            SendBytes = 0;
+            LogQueue.Enqueue("智能反外挂程序云端已连接...", 0);
+            _receiveBytes = 0;
+            _sendBytes = 0;
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -122,7 +123,7 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             ProcReceiveBuffer(e.Buff, e.BuffLen);
-            ReceiveBytes += e.BuffLen;
+            _receiveBytes += e.BuffLen;
         }
 
         private const int HeaderMessageSize = 20;
@@ -243,13 +244,13 @@ namespace GameGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂[{ClientSocket.EndPoint}]服务器拒绝链接...", 1);
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂[{_clientSocket.EndPoint}]服务器拒绝链接...", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    LogQueue.Enqueue($"云网关智能反外挂服务器[{ClientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint}]...", 1);
+                    LogQueue.Enqueue($"云网关智能反外挂服务器[{_clientSocket.EndPoint}]主动关闭连接游戏网关[{_gateEndPoint}]...", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂服务器[{ClientSocket.EndPoint}]超时...", 1);
+                    LogQueue.Enqueue($"游戏网关[{_gateEndPoint}]链接云网关智能反外挂服务器[{_clientSocket.EndPoint}]超时...", 1);
                     break;
             }
             GateReady = false;
@@ -315,12 +316,12 @@ namespace GameGate.Services
         /// <param name="sendBuffer"></param>
         public void SendBuffer(byte[] sendBuffer)
         {
-            if (!ClientSocket.IsConnected)
+            if (!_clientSocket.IsConnected)
             {
                 return;
             }
-            SendBytes += sendBuffer.Length;
-            ClientSocket.Send(sendBuffer);
+            _sendBytes += sendBuffer.Length;
+            _clientSocket.Send(sendBuffer);
         }
 
         public void CheckServerIsTimeOut()
@@ -332,6 +333,35 @@ namespace GameGate.Services
                 CheckServerFailCount++;
                 LogQueue.EnqueueDebugging($"服务器[{GetSocketIp()}]链接超时.失败次数:[{CheckServerFailCount}]");
             }
+        }
+        
+        public string GetConnected()
+        {
+            return IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
+        }
+
+        public string GetSendInfo()
+        {
+            var sendStr = _sendBytes switch
+            {
+                > 1024 * 1000 => $"↑{_sendBytes / (1024 * 1000)}M",
+                > 1024 => $"↑{_sendBytes / 1024}K",
+                _ => $"↑{_sendBytes}B"
+            };
+            _sendBytes = 0;
+            return sendStr;
+        }
+
+        public string GetReceiveInfo()
+        {
+            var receiveStr = _receiveBytes switch
+            {
+                > 1024 * 1000 => $"↓{_receiveBytes / (1024 * 1000)}M",
+                > 1024 => $"↓{_receiveBytes / 1024}K",
+                _ => $"↓{_receiveBytes}B"
+            };
+            _receiveBytes = 0;
+            return receiveStr;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -34,9 +35,9 @@ namespace GameGate
         /// <summary>
         /// 将队列消息发送到客户端
         /// </summary>
-        public async Task ProcessSendQueue()
+        public async Task ProcessSendQueue(CancellationToken stoppingToken)
         {
-            while (await _sendQueue.Reader.WaitToReadAsync())
+            while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
             {
                 while (_sendQueue.Reader.TryRead(out var queueData))
                 {

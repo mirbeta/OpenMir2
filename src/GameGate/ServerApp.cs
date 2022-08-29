@@ -23,10 +23,9 @@ namespace GameGate
             LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
             LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
             LogQueue.Enqueue("智能反外挂程序已启动...", 0);
-            LogQueue.Enqueue("智能反外挂程序云端已连接...", 0);
             GateShare.Initialization();
             ClientManager.Initialization();
-            ServerManager.Start();
+            ServerManager.Start(stoppingToken);
             ServerManager.StartProcessMessage(stoppingToken);
             SessionManager.ProcessSendMessage(stoppingToken);
         }

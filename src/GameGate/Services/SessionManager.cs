@@ -18,7 +18,6 @@ namespace GameGate.Services
         /// </summary>
         private readonly Channel<TMessageData> _sendMsgList = null;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
-        private Task _processSendMessageTask;
 
         private SessionManager()
         {
@@ -45,7 +44,7 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessSendMessage(CancellationToken stoppingToken)
         {
-            _processSendMessageTask = Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 while (await _sendMsgList.Reader.WaitToReadAsync(stoppingToken))
                 {
