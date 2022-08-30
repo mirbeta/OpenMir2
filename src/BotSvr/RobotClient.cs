@@ -451,16 +451,16 @@ namespace BotSvr
             }
             if ((MShare.g_nTargetX >= 0) && CanNextAction() && ServerAcceptNextAction())
             {
-                if (MShare.g_boOpenAutoPlay && (MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (0 < MShare.g_APMapPath.GetUpperBound(0)))
+                if (MShare.g_boOpenAutoPlay && (MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (0 < MShare.g_APMapPath.Length))
                 {
                     if ((Math.Abs(MShare.g_APMapPath[MShare.g_APStep].X - MShare.g_MySelf.m_nCurrX) <= 3) && (Math.Abs(MShare.g_APMapPath[MShare.g_APStep].X - MShare.g_MySelf.m_nCurrY) <= 3))
                     {
-                        if (MShare.g_APMapPath.GetUpperBound(0) >= 2)// 3点以上
+                        if (MShare.g_APMapPath.Length >= 2)// 3点以上
                         {
-                            if (MShare.g_APStep >= MShare.g_APMapPath.GetUpperBound(0)) // 当前点在终点...
+                            if (MShare.g_APStep >= MShare.g_APMapPath.Length) // 当前点在终点...
                             {
                                 // 终点 <-> 起点 距离过远...
-                                if ((Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.GetUpperBound(0)].X - MShare.g_APMapPath[0].X) >= 36) || (Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.GetUpperBound(0)].X - MShare.g_APMapPath[0].X) >= 36))
+                                if ((Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.Length].X - MShare.g_APMapPath[0].X) >= 36) || (Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.Length].X - MShare.g_APMapPath[0].X) >= 36))
                                 {
                                     MShare.g_APGoBack = true; // 原路返回
                                     MShare.g_APLastPoint = MShare.g_APMapPath[MShare.g_APStep];
@@ -497,7 +497,7 @@ namespace BotSvr
                             // 2点,循环...
                             MShare.g_APLastPoint = MShare.g_APMapPath[MShare.g_APStep];
                             MShare.g_APStep++;
-                            if (MShare.g_APStep > MShare.g_APMapPath.GetUpperBound(0))
+                            if (MShare.g_APStep > MShare.g_APMapPath.Length)
                             {
                                 MShare.g_APStep = 0;
                             }
@@ -1320,7 +1320,7 @@ namespace BotSvr
             if ((sItem != "") && (nType != 0))
             {
                 var boIsUnBindItem = false;
-                for (var i = MShare.g_UnBindItems.GetLowerBound(0); i <= MShare.g_UnBindItems.GetUpperBound(0); i++)
+                for (var i = 0; i < MShare.g_UnBindItems.Length; i++)
                 {
                     if (sItem == MShare.g_UnBindItems[i])
                     {
@@ -1915,7 +1915,7 @@ namespace BotSvr
                 m_dwDuraWarningTick = MShare.GetTickCount();
                 if ((MShare.g_MySelf != null) && !MShare.g_MySelf.m_boDeath)
                 {
-                    for (var i = MShare.g_UseItems.GetUpperBound(0); i >= MShare.g_UseItems.GetLowerBound(0); i--)
+                    for (var i = MShare.g_UseItems.Length; i > 0; i--)
                     {
                         if (MShare.g_UseItems[i].Item.Name != "")
                         {
@@ -2189,7 +2189,7 @@ namespace BotSvr
             //    this.Dispose((TClientMagic)MShare.g_HeroIPMagicList[i]);
             //}
             //MShare.g_HeroIPMagicList.Clear();
-            //for (i = MShare.g_ShopListArr.GetLowerBound(0); i <= MShare.g_ShopListArr.GetUpperBound(0); i++)
+            //for (i = MShare.g_ShopListArr.GetLowerBound(0); i <= MShare.g_ShopListArr..Length; i++)
             //{
             //    List = MShare.g_ShopListArr[i];
             //    for (ii = 0; ii < List.Count; ii++)
@@ -2273,7 +2273,7 @@ namespace BotSvr
             //    this.Dispose((TClientMagic)MShare.g_HeroIPMagicList[i]);
             //}
             //MShare.g_HeroIPMagicList.Clear();
-            //for (i = MShare.g_ShopListArr.GetLowerBound(0); i <= MShare.g_ShopListArr.GetUpperBound(0); i++)
+            //for (i = MShare.g_ShopListArr.GetLowerBound(0); i <= MShare.g_ShopListArr..Length; i++)
             //{
             //    List = MShare.g_ShopListArr[i];
             //    for (ii = 0; ii < List.Count; ii++)
@@ -3628,8 +3628,8 @@ namespace BotSvr
                                     MShare.g_APGoBack2 = MShare.g_APGoBack;
                                     if (MShare.g_APMapPath != null)
                                     {
-                                        MShare.g_APMapPath2 = new Point[MShare.g_APMapPath.GetUpperBound(0) + 1];
-                                        for (i = 0; i <= MShare.g_APMapPath.GetUpperBound(0); i++)
+                                        MShare.g_APMapPath2 = new Point[MShare.g_APMapPath.Length + 1];
+                                        for (i = 0; i <= MShare.g_APMapPath.Length; i++)
                                         {
                                             MShare.g_APMapPath2[i] = MShare.g_APMapPath[i];
                                         }
@@ -4593,7 +4593,7 @@ namespace BotSvr
             {
                 var cu = EDcode.DecodeBuffer<TClientItem>(body);
                 ClFunc.UpdateItemBag(cu);
-                for (var i = MShare.g_UseItems.GetLowerBound(0); i <= MShare.g_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= MShare.g_UseItems.Length; i++)
                 {
                     if ((MShare.g_UseItems[i].Item.Name == cu.Item.Name) && (MShare.g_UseItems[i].MakeIndex == cu.MakeIndex))
                     {
@@ -4632,7 +4632,7 @@ namespace BotSvr
             {
                 var cu = EDcode.DecodeBuffer<TClientItem>(body);
                 ClFunc.DelItemBag(cu.Item.Name, cu.MakeIndex);
-                for (var i = MShare.g_UseItems.GetLowerBound(0); i <= MShare.g_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= MShare.g_UseItems.Length; i++)
                 {
                     if ((MShare.g_UseItems[i].Item.Name == cu.Item.Name) && (MShare.g_UseItems[i].MakeIndex == cu.MakeIndex))
                     {
@@ -4677,7 +4677,7 @@ namespace BotSvr
                     ClFunc.DelItemBag(iname, iindex);
                     if (wOnlyBag == 0)
                     {
-                        for (var i = MShare.g_UseItems.GetLowerBound(0); i <= MShare.g_UseItems.GetUpperBound(0); i++)
+                        for (var i = 0; i <= MShare.g_UseItems.Length; i++)
                         {
                             if ((MShare.g_UseItems[i].Item.Name == iname) && (MShare.g_UseItems[i].MakeIndex == iindex))
                             {
@@ -4841,8 +4841,8 @@ namespace BotSvr
                 MShare.g_APGoBack = MShare.g_APGoBack2;
                 if (MShare.g_APMapPath2 != null)
                 {
-                    MShare.g_APMapPath = new Point[MShare.g_APMapPath2.GetUpperBound(0) + 1];
-                    for (k = 0; k <= MShare.g_APMapPath2.GetUpperBound(0); k++)
+                    MShare.g_APMapPath = new Point[MShare.g_APMapPath2.Length + 1];
+                    for (k = 0; k <= MShare.g_APMapPath2.Length; k++)
                     {
                         MShare.g_APMapPath[k] = MShare.g_APMapPath2[k];
                     }
@@ -5571,7 +5571,7 @@ namespace BotSvr
             //UserState.NameColor = GetRGB(UserState.NameColor);
             //ii = 0;
             //FillChar(Titles, sizeof(Titles), 0);
-            //for (var i = Titles.GetLowerBound(0); i <= Titles.GetUpperBound(0); i++)
+            //for (var i = Titles.GetLowerBound(0); i <= Titles.Length; i++)
             //{
             //    if (UserState.Titles[i].Index > 0)
             //    {
@@ -5921,14 +5921,14 @@ namespace BotSvr
                 }
                 if (CanNextAction() && ServerAcceptNextAction() && IsUnLockAction())
                 {
-                    if (g_MoveStep <= TPathMap.g_MapPath.GetUpperBound(0))
+                    if (g_MoveStep <= TPathMap.g_MapPath.Length)
                     {
                         MShare.g_nTargetX = TPathMap.g_MapPath[g_MoveStep].X;
                         MShare.g_nTargetY = TPathMap.g_MapPath[g_MoveStep].X;
                         while ((Math.Abs(MShare.g_MySelf.m_nCurrX - MShare.g_nTargetX) <= 1) && (Math.Abs(MShare.g_MySelf.m_nCurrY - MShare.g_nTargetY) <= 1))
                         {
                             boCanRun = false;
-                            if (g_MoveStep + 1 <= TPathMap.g_MapPath.GetUpperBound(0))
+                            if (g_MoveStep + 1 <= TPathMap.g_MapPath.Length)
                             {
                                 X1 = MShare.g_MySelf.m_nCurrX;
                                 Y1 = MShare.g_MySelf.m_nCurrY;
@@ -5949,7 +5949,7 @@ namespace BotSvr
                                 g_MoveStep++;
                                 MShare.g_nTargetX = TPathMap.g_MapPath[g_MoveStep].X;
                                 MShare.g_nTargetY = TPathMap.g_MapPath[g_MoveStep].X;
-                                if (g_MoveStep >= TPathMap.g_MapPath.GetUpperBound(0))
+                                if (g_MoveStep >= TPathMap.g_MapPath.Length)
                                 {
                                     break;
                                 }
@@ -6110,9 +6110,9 @@ namespace BotSvr
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 3:
-                    if ((MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (MShare.g_APStep <= MShare.g_APMapPath.GetUpperBound(0)))
+                    if ((MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (MShare.g_APStep <= MShare.g_APMapPath.Length))
                     {
-                        if (MShare.g_APMapPath.GetUpperBound(0) > 0)
+                        if (MShare.g_APMapPath.Length > 0)
                         {
                             MShare.g_nTargetX = MShare.g_APMapPath[MShare.g_APStep].X;
                             MShare.g_nTargetY = MShare.g_APMapPath[MShare.g_APStep].X;
@@ -6147,7 +6147,7 @@ namespace BotSvr
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 4:
-                    if ((MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (MShare.g_APStep <= MShare.g_APMapPath.GetUpperBound(0)))
+                    if ((MShare.g_APMapPath != null) && (MShare.g_APStep >= 0) && (MShare.g_APStep <= MShare.g_APMapPath.Length))
                     {
                         if (MShare.g_APLastPoint.X >= 0)
                         {
@@ -6464,12 +6464,12 @@ namespace BotSvr
 
         private static void GetNearPoint()
         {
-            if ((MShare.g_APMapPath != null) && (MShare.g_APMapPath.GetUpperBound(0) > 0))
+            if ((MShare.g_APMapPath != null) && (MShare.g_APMapPath.Length > 0))
             {
                 var n14 = 0;
                 MShare.g_APLastPoint.X = -1;
                 var n10 = 999;
-                for (var i = MShare.g_APMapPath.GetLowerBound(0); i <= MShare.g_APMapPath.GetUpperBound(0); i++)
+                for (var i = 0; i <= MShare.g_APMapPath.Length; i++)
                 {
                     var nC = Math.Abs(MShare.g_APMapPath[i].X - MShare.g_MySelf.m_nCurrX) + Math.Abs(MShare.g_APMapPath[i].X - MShare.g_MySelf.m_nCurrY);
                     if (nC < n10)
@@ -6733,7 +6733,7 @@ namespace BotSvr
             //    {
             //        ini = new FileStream(".\\Config\\" + MShare.g_sServerName + "." + MShare.g_MySelf.m_sUserName + ".WayPoint.txt");
             //        S = "";
-            //        for (i = MShare.g_APMapPath.GetLowerBound(0); i <= MShare.g_APMapPath.GetUpperBound(0); i++)
+            //        for (i = MShare.g_APMapPath.GetLowerBound(0); i <= MShare.g_APMapPath.Length; i++)
             //        {
             //            S = S + string.Format("%d,%d ", new int[] { MShare.g_APMapPath[i].X, MShare.g_APMapPath[i].X });
             //        }
@@ -6793,9 +6793,9 @@ namespace BotSvr
             //        }
             //        else
             //        {
-            //            MShare.g_APMapPath = new Point[MShare.g_APMapPath.GetUpperBound(0) + 2];
-            //            MShare.g_APMapPath[MShare.g_APMapPath.GetUpperBound(0)].X = Convert.ToInt32(X);
-            //            MShare.g_APMapPath[MShare.g_APMapPath.GetUpperBound(0)].X = Convert.ToInt32(Y);
+            //            MShare.g_APMapPath = new Point[MShare.g_APMapPath.Length + 2];
+            //            MShare.g_APMapPath[MShare.g_APMapPath.Length].X = Convert.ToInt32(X);
+            //            MShare.g_APMapPath[MShare.g_APMapPath.Length].X = Convert.ToInt32(Y);
             //        }
             //    }
             //}

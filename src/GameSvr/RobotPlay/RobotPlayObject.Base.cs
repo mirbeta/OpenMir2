@@ -156,7 +156,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     m_dwAutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
-                                    for (nWhere = m_UseItemNames.GetLowerBound(0); nWhere <= m_UseItemNames.GetUpperBound(0); nWhere++)
+                                    for (nWhere = 0; nWhere < m_UseItemNames.Length; nWhere++)
                                     {
                                         if (string.IsNullOrEmpty(m_UseItemNames[nWhere]))
                                         {
@@ -223,7 +223,7 @@ namespace GameSvr.RobotPlay
                                             }
                                         }
                                     }
-                                    for (nWhere = 0; nWhere <= m_UseItems.GetUpperBound(0); nWhere++)
+                                    for (nWhere = 0; nWhere <= m_UseItems.Length; nWhere++)
                                     {
                                         if (m_UseItems[nWhere] != null && m_UseItems[nWhere].wIndex > 0)
                                         {

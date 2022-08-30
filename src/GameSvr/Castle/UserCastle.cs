@@ -220,7 +220,7 @@ namespace GameSvr.Castle
                     {
                         M2Share.ErrorMessage("[错误信息] 城堡初始化中城墙失败，检查怪物数据库里有没中城墙的设置: " + m_CenterWall.sName);
                     }
-                    for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
+                    for (var i = 0; i < m_Archer.Length; i++)
                     {
                         ObjUnit = m_Archer[i];
                         if (ObjUnit.nHP <= 0) continue;
@@ -238,8 +238,7 @@ namespace GameSvr.Castle
                             M2Share.ErrorMessage("[错误信息] 城堡初始化弓箭手失败，检查怪物数据库里有没弓箭手的设置: " + ObjUnit.sName);
                         }
                     }
-
-                    for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
+                    for (var i = 0; i < m_Guard.Length; i++)
                     {
                         ObjUnit = m_Guard[i];
                         if (ObjUnit.nHP <= 0) continue;
@@ -393,14 +392,14 @@ namespace GameSvr.Castle
                         }
                     }
                 }
-                for (var i = m_Guard.GetLowerBound(0); i <= m_Guard.GetUpperBound(0); i++)
+                for (var i = 0; i < m_Guard.Length; i++)
                 {
                     if (m_Guard[i].BaseObject != null && m_Guard[i].BaseObject.m_boGhost)
                     {
                         m_Guard[i].BaseObject = null;
                     }
                 }
-                for (var i = m_Archer.GetLowerBound(0); i <= m_Archer.GetUpperBound(0); i++)
+                for (var i = 0; i < m_Archer.Length; i++)
                 {
                     if (m_Archer[i].BaseObject != null && m_Archer[i].BaseObject.m_boGhost)
                     {

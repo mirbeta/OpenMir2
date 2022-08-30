@@ -1475,7 +1475,7 @@ namespace BotSvr
             //{
             //    case 1:
             //        result = true;
-            //        for (i = TtSuiteAbil.GetLowerBound(0); i <= TtSuiteAbil.GetUpperBound(0); i++ )
+            //        for (i = TtSuiteAbil.GetLowerBound(0); i <= TtSuiteAbil..Length(0); i++ )
             //        {
             //            if ((g_UseItems[i].s.Name != "") && ((g_UseItems[i].s.Shape == Shape) || (g_UseItems[i].s.AniCount == Shape)))
             //            {
@@ -1485,7 +1485,7 @@ namespace BotSvr
             //        break;
             //    case 2:
             //        result = true;
-            //        for (i = Grobal2.byte.GetLowerBound(0); i <= Grobal2.byte.GetUpperBound(0); i++ )
+            //        for (i = Grobal2.byte.GetLowerBound(0); i <= Grobal2.byte..Length(0); i++ )
             //        {
             //            if ((g_HeroUseItems[i].s.Name != "") && ((g_HeroUseItems[i].s.Shape == Shape) || (g_HeroUseItems[i].s.AniCount == Shape)))
             //            {
@@ -1495,7 +1495,7 @@ namespace BotSvr
             //        break;
             //    case 3:
             //        result = true;
-            //        for (i = Grobal2.byte.GetLowerBound(0); i <= Grobal2.byte.GetUpperBound(0); i++ )
+            //        for (i = Grobal2.byte.GetLowerBound(0); i <= Grobal2.byte..Length(0); i++ )
             //        {
             //            if ((UserState1.UseItems[i].s.Name != "") && ((UserState1.UseItems[i].s.Shape == Shape) || (UserState1.UseItems[i].s.AniCount == Shape)))
             //            {

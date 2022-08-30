@@ -239,7 +239,7 @@ namespace GameSvr.Player
             }
             var boTakeItem = false;
             // 检查身上的装备有没不符合
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -588,7 +588,7 @@ namespace GameSvr.Player
             {
                 m_dwReColorTick = HUtil32.GetTickCount();
                 m_btReColorIdx++;
-                if (m_btReColorIdx > M2Share.g_Config.ReNewNameColor.GetUpperBound(0))
+                if (m_btReColorIdx > M2Share.g_Config.ReNewNameColor.Length)
                 {
                     m_btReColorIdx = 0;
                 }
@@ -2029,7 +2029,7 @@ namespace GameSvr.Player
                     return;
                 }
                 StdItem StdItem;
-                for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= m_UseItems.Length; i++)
                 {
                     if (m_UseItems[i] == null)
                     {
@@ -2054,7 +2054,7 @@ namespace GameSvr.Player
                     }
                 }
                 var nRate = PKLevel() > 2 ? M2Share.g_Config.nDieRedDropUseItemRate : M2Share.g_Config.nDieDropUseItemRate;
-                for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+                for (var i = 0; i <= m_UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)
                     {

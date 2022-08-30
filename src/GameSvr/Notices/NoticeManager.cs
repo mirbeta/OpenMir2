@@ -8,7 +8,7 @@ namespace GameSvr.Notices
 
         public NoticeManager()
         {
-            for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
+            for (var i = 0; i < NoticeList.Length; i++)
             {
                 NoticeList[i].sMsg = string.Empty;
                 NoticeList[i].sList = null;
@@ -18,7 +18,7 @@ namespace GameSvr.Notices
 
         public void LoadingNotice()
         {
-            for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
+            for (var i = 0; i < NoticeList.Length; i++)
             {
                 if (NoticeList[i].sMsg == "")
                 {
@@ -44,7 +44,7 @@ namespace GameSvr.Notices
         public void GetNoticeMsg(string sStr, IList<string> LoadList)
         {
             var bo15 = true;
-            for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
+            for (var i = 0; i < NoticeList.Length; i++)
             {
                 if (string.Compare(NoticeList[i].sMsg, sStr, StringComparison.OrdinalIgnoreCase) != 0) continue;
                 if (NoticeList[i].sList != null)
@@ -60,7 +60,7 @@ namespace GameSvr.Notices
             {
                 return;
             }
-            for (var i = NoticeList.GetLowerBound(0); i <= NoticeList.GetUpperBound(0); i++)
+            for (var i =0; i < NoticeList.Length; i++)
             {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {

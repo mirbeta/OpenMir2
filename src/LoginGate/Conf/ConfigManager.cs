@@ -13,7 +13,7 @@ namespace LoginGate.Conf
             Load();
             GetConfig = new GateConfig();
             GameGates = new GameGateInfo[32];
-            for (var i = GameGates.GetLowerBound(0); i <= GameGates.GetUpperBound(0); i++)
+            for (var i = 0; i < GameGates.Length; i++)
             {
                 GameGates[i].LoginAdress = "127.0.0.1";
                 GameGates[i].LoginPort = 5500;

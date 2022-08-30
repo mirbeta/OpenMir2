@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
                 PlayObject.SysMsg(string.Format(GameCommandConst.g_sNowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i <= m_PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_PlayObject.m_UseItems.Length; i++)
             {
                 UserItem = m_PlayObject.m_UseItems[i];
                 if (UserItem.wIndex == 0)

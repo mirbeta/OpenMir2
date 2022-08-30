@@ -1142,7 +1142,7 @@ namespace GameSvr.Npc
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             var cMethod = QuestConditionInfo.sParam2[0];
             var nAddValue = HUtil32.Str_ToInt(QuestConditionInfo.sParam3, -1);
-            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.GetUpperBound(0)) || (nAddValue < 0))
+            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length) || (nAddValue < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKITEMADDVALUE);
                 return result;
@@ -1153,7 +1153,7 @@ namespace GameSvr.Npc
                 return result;
             }
             var nAddAllValue = 0;
-            for (var i = UserItem.btValue.GetLowerBound(0); i <= UserItem.btValue.GetUpperBound(0); i++)
+            for (var i = 0; i <= UserItem.btValue.Length; i++)
             {
                 nAddAllValue += UserItem.btValue[i];
             }
@@ -1193,7 +1193,7 @@ namespace GameSvr.Npc
             var result = false;
             var nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
             var nType = HUtil32.Str_ToInt(QuestConditionInfo.sParam2, -1);
-            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.GetUpperBound(0)))
+            if (!(nWhere >= 0 && nWhere <= PlayObject.m_UseItems.Length))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKITEMTYPE);
                 return result;
@@ -1948,7 +1948,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             int nWhere = HUtil32.Str_ToInt(QuestConditionInfo.sParam1, -1);
-            if ((nWhere < 0) || (nWhere > PlayObject.m_UseItems.GetUpperBound(0)))
+            if ((nWhere < 0) || (nWhere > PlayObject.m_UseItems.Length))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptDef.sSC_CHECKUSEITEM);
                 return result;

@@ -1677,7 +1677,7 @@ namespace GameSvr.Npc
         {
             string sUserItemName;
             bool boIsHasItem = false;
-            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
             {
                 if (PlayObject.m_UseItems[i].wIndex <= 0)
                 {
@@ -1731,7 +1731,7 @@ namespace GameSvr.Npc
             var nWhere = HUtil32.Str_ToInt(QuestActionInfo.sParam1, -1);
             var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam2, -1);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
-            if (nWhere < 0 || nWhere > PlayObject.m_UseItems.GetUpperBound(0) || nRate < 0 || nPoint < 0 || nPoint > 255)
+            if (nWhere < 0 || nWhere > PlayObject.m_UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sSC_UPGRADEITEMS);
                 return;
@@ -1782,7 +1782,7 @@ namespace GameSvr.Npc
             var nRate = HUtil32.Str_ToInt(QuestActionInfo.sParam3, -1);
             var nPoint = HUtil32.Str_ToInt(QuestActionInfo.sParam4, -1);
             var nUpgradeItemStatus = HUtil32.Str_ToInt(QuestActionInfo.sParam5, -1);
-            if (nValType < 0 || nValType > 14 || nWhere < 0 || nWhere > PlayObject.m_UseItems.GetUpperBound(0) || nRate < 0 || nPoint < 0 || nPoint > 255)
+            if (nValType < 0 || nValType > 14 || nWhere < 0 || nWhere > PlayObject.m_UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptDef.sSC_UPGRADEITEMSEX);
                 return;
@@ -2069,7 +2069,7 @@ namespace GameSvr.Npc
                     PlayObject.m_StorageItemList.RemoveAt(i);
                 }
             }
-            for (var i = 0; i <= PlayObject.m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= PlayObject.m_UseItems.Length; i++)
             {
                 UserItem = PlayObject.m_UseItems[i];
                 if (UserItem.MakeIndex != nMakeIndex)

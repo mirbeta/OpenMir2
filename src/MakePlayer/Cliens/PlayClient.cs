@@ -510,7 +510,7 @@ namespace MakePlayer.Cliens
             var sText = EDcode.DeCodeString(sData);
             var nChrCount = 0;
             var nSelect = 0;
-            for (var i = m_ChrArr.GetLowerBound(0); i <= m_ChrArr.GetUpperBound(0); i++)
+            for (var i = 0; i < m_ChrArr.Length; i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, new[] { "/" });
                 sText = HUtil32.GetValidStr3(sText, ref sJob, new[] { "/" });

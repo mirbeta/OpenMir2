@@ -1657,7 +1657,7 @@ namespace GameSvr.Actor
             ushort nDura;
             ushort tDura;
             TPlayObject PlayObject;
-            for (int i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (int i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] != null && m_UseItems[i].wIndex > 0)
                 {
@@ -2769,7 +2769,7 @@ namespace GameSvr.Actor
             }
             else
             {
-                result = M2Share.g_Config.dwNeedExps[M2Share.g_Config.dwNeedExps.GetUpperBound(0)];
+                result = M2Share.g_Config.dwNeedExps[M2Share.g_Config.dwNeedExps.Length];
             }
             return result;
         }
@@ -3413,7 +3413,7 @@ namespace GameSvr.Actor
         public int GetCharStatus()
         {
             long nStatus = 0;
-            for (int i = m_wStatusTimeArr.GetLowerBound(0); i <= m_wStatusTimeArr.GetUpperBound(0); i++)
+            for (int i = 0; i < m_wStatusTimeArr.Length; i++)
             {
                 if (m_wStatusTimeArr[i] > 0)
                 {
@@ -4633,7 +4633,7 @@ namespace GameSvr.Actor
                     SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, m_UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
                 }
             }
-            for (var i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (var i = 0; i <= m_UseItems.Length; i++)
             {
                 if ((m_UseItems[i] != null) && (m_UseItems[i].wIndex > 0) && (M2Share.RandomNumber.Random(8) == 0))
                 {
@@ -5165,7 +5165,7 @@ namespace GameSvr.Actor
         {
             TUserItem result = null;
             nCount = 0;
-            for (int i = 0; i <= m_UseItems.GetUpperBound(0); i++)
+            for (int i = 0; i <= m_UseItems.Length; i++)
             {
                 if (m_UseItems[i] == null)
                 {

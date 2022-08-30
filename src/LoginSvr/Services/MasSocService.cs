@@ -47,7 +47,7 @@ namespace LoginSvr.Services
         {
             var sRemoteAddr = e.RemoteIPaddr;
             var boAllowed = false;
-            for (var i = LsShare.ServerAddr.GetLowerBound(0); i <= LsShare.ServerAddr.GetUpperBound(0); i++)
+            for (var i = 0; i < LsShare.ServerAddr.Length; i++)
             {
                 if (sRemoteAddr == LsShare.ServerAddr[i])
                 {
@@ -188,7 +188,7 @@ namespace LoginSvr.Services
                     nCount += msgServer.nOnlineCount;
                 }
             }
-            for (var i = UserLimit.GetLowerBound(0); i <= UserLimit.GetUpperBound(0); i++)
+            for (var i = 0; i < UserLimit.Length; i++)
             {
                 if (UserLimit[i].ServerName == sServerName)
                 {
@@ -201,7 +201,7 @@ namespace LoginSvr.Services
         public bool IsNotUserFull(string sServerName)
         {
             var result = true;
-            for (var i = UserLimit.GetLowerBound(0); i <= UserLimit.GetUpperBound(0); i++)
+            for (var i = 0; i < UserLimit.Length; i++)
             {
                 if (UserLimit[i].ServerName == sServerName)
                 {
@@ -383,7 +383,7 @@ namespace LoginSvr.Services
         private string GetLimitName(string sServerName)
         {
             var result = string.Empty;
-            for (var i = UserLimit.GetLowerBound(0); i <= UserLimit.GetUpperBound(0); i++)
+            for (var i = 0; i < UserLimit.Length; i++)
             {
                 if (string.Compare(UserLimit[i].ServerName, sServerName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -452,7 +452,7 @@ namespace LoginSvr.Services
                 {
                     return status;
                 }
-                for (var i = UserLimit.GetLowerBound(0); i <= UserLimit.GetUpperBound(0); i++)
+                for (var i = 0; i < UserLimit.Length; i++)
                 {
                     if (UserLimit[i].ServerName == sServerName)
                     {

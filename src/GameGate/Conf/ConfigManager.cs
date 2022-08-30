@@ -124,7 +124,7 @@ namespace GameGate.Conf
             GateConfig.SyncClientSpeed = ReadBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadFloat("Float", "PunishIntervalRate", GateConfig.PunishIntervalRate);
             GateConfig.GateCount = ReadInteger("GameGate", "Count", GateConfig.GateCount);
-            for (var i = 0; i <= GateConfig.GateCount; i++)
+            for (var i = 0; i < GateConfig.GateCount; i++)
             {
                 GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
                 GameGateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
@@ -132,7 +132,7 @@ namespace GameGate.Conf
                 GameGateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
             }
             //魔法间隔控制
-            for (var i = 0; i <= TableDef.MaigicDelayTimeList.GetUpperBound(0); i++)
+            for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
                 if (!string.IsNullOrEmpty(TableDef.MaigicNameList[i]))
                 {

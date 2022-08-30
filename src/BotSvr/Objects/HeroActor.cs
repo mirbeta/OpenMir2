@@ -322,7 +322,7 @@ namespace BotSvr.Objects
             if (MShare.g_gcAss[4])
             {
                 has = false;
-                for (var i = 0; i <= 45; i++)
+                for (var i = 0; i < 45; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -452,7 +452,7 @@ namespace BotSvr.Objects
                 return result;
             }
             bool has = false;
-            for (var i = 0; i <= 45; i++)
+            for (var i = 0; i < 45; i++)
             {
                 if (MShare.g_ItemArr[i] == null || MShare.g_ItemArr[i].Item.Name == "")
                 {
@@ -469,7 +469,7 @@ namespace BotSvr.Objects
                 result = 4;
                 return result;
             }
-            if (MShare.g_APMapPath != null && MShare.g_APStep >= 0 && MShare.g_APStep <= MShare.g_APMapPath.GetUpperBound(0)) // 正在循路，超出范围。。。
+            if (MShare.g_APMapPath != null && MShare.g_APStep >= 0 && MShare.g_APStep < MShare.g_APMapPath.Length) // 正在循路，超出范围。。。
             {
                 if (MShare.g_APLastPoint.X >= 0)
                 {

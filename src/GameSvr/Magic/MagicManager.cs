@@ -1295,8 +1295,8 @@ namespace GameSvr.Magic
                 int nMakelevel = UserMagic.btLevel;
                 int nExpLevel = UserMagic.btLevel;
                 var nCount = M2Share.g_Config.nDragonCount;
-                var dwRoyaltySec = 10 * 24 * 60 * 60;
-                for (var i = M2Share.g_Config.DragonArray.GetLowerBound(0); i <= M2Share.g_Config.DragonArray.GetUpperBound(0); i++)
+                const int dwRoyaltySec = 10 * 24 * 60 * 60;
+                for (var i = 0; i < M2Share.g_Config.DragonArray.Length; i++)
                 {
                     if (M2Share.g_Config.DragonArray[i].nHumLevel == 0)
                     {
@@ -1330,8 +1330,8 @@ namespace GameSvr.Magic
                 int nMakeLevel = UserMagic.btLevel;
                 int nExpLevel = UserMagic.btLevel;
                 var nCount = M2Share.g_Config.nSkeletonCount;
-                var dwRoyaltySec = 10 * 24 * 60 * 60;//叛变时间
-                for (var i = M2Share.g_Config.SkeletonArray.GetLowerBound(0); i <= M2Share.g_Config.SkeletonArray.GetUpperBound(0); i++)
+                const int dwRoyaltySec = 10 * 24 * 60 * 60;//叛变时间
+                for (var i = 0; i < M2Share.g_Config.SkeletonArray.Length; i++)
                 {
                     if (M2Share.g_Config.SkeletonArray[i].nHumLevel == 0)
                     {

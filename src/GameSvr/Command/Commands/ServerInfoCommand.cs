@@ -30,7 +30,7 @@ namespace GameSvr.Command.Commands
 
             //TGateInfo GateInfo;
             //sb.Clear();
-            //for (int i = TRunSocket.g_GateArr.GetLowerBound(0); i <= TRunSocket.g_GateArr.GetUpperBound(0); i++)
+            //for (int i = TRunSocket.g_GateArr.GetLowerBound(0); i <= TRunSocket.g_GateArr..Length(0); i++)
             //{
             //    GateInfo = TRunSocket.g_GateArr[i];
             //    if (GateInfo.boUsed && (GateInfo.Socket != null))
